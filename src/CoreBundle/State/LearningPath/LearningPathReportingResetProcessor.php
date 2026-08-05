@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -47,6 +48,7 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         private SettingsManager $settingsManager,
         private LearningPathReportingProvider $reportingProvider,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -69,9 +71,9 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->getLearningPath($uriVariables);
         $this->getEditableResourceLink($lp, $course, $session, $group, $this->security);
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);

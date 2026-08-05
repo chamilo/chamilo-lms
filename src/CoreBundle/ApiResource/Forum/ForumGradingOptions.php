@@ -9,8 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\Forum\ForumGradingOptionsProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -18,25 +17,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/forum/grading-options',
-            openapi: new Operation(
-                parameters: [
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_ADMIN')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: ForumGradingOptionsProvider::class,
         ),
     ],

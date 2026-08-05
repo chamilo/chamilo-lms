@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathBuilderProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -19,6 +20,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             requirements: ['lpId' => '\d+'],
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_builder',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             provider: LearningPathBuilderProvider::class,
         ),
     ],

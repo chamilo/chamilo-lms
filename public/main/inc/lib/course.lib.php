@@ -3831,7 +3831,7 @@ class CourseManager
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
-                    $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'];
+                    $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course['real_id'];
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
                            .Display::getMdiIcon('folder-open-outline').'</a>';
@@ -4013,7 +4013,7 @@ class CourseManager
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
+                $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn--plain btn-sm" href="javascript:void(0);">'
                                .Display::getMdiIcon('folder-open-outline').'</a>';
@@ -4315,7 +4315,7 @@ class CourseManager
             Course::HIDDEN != $course_visibility
         ) {
             if ($isAdmin) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
+                $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] .= '<a
                         id="document_preview_'.$course_info['real_id'].'_'.$session_id.'"
@@ -6400,7 +6400,7 @@ class CourseManager
         if (api_is_platform_admin()) {
             if ($loadDirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
-                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>';
                 $params['right_actions'] .= Display::div(
@@ -6412,7 +6412,7 @@ class CourseManager
                 );
             } else {
                 $params['right_actions'] .=
-                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                     Display::getMdiIcon('pencil').'</a>';
             }
         } else {
@@ -6430,7 +6430,7 @@ class CourseManager
                 } else {
                     if (COURSEMANAGER == $course_info['status']) {
                         $params['right_actions'] .= '<a
-                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                             Display::getMdiIcon('pencil').'</a>';
                     }
                 }

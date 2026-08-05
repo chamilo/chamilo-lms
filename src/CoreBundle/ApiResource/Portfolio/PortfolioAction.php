@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Portfolio;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioActionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -23,6 +24,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'post_portfolio_item_action',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: PortfolioActionProcessor::class,
         ),
     ],

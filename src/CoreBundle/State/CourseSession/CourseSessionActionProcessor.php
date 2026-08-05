@@ -29,8 +29,7 @@ final readonly class CourseSessionActionProcessor implements ProcessorInterface
         Operation $operation,
         array $uriVariables = [],
         array $context = [],
-    ): CourseSessionAction
-    {
+    ): CourseSessionAction {
         if (!$data instanceof CourseSessionAction) {
             throw new BadRequestHttpException('Invalid session action payload.');
         }

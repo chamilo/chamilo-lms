@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -33,8 +34,6 @@ use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -51,7 +50,6 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private CLpRepository $lpRepository,
@@ -65,19 +63,15 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         private TranslatorInterface $translator,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): LearningPathConfiguration
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lpId = (int) ($uriVariables['id'] ?? 0);
         $lp = null;

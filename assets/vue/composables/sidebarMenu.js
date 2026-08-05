@@ -217,7 +217,6 @@ export function useSidebarMenu() {
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
   const isMenuTabEnabled = (key) => displayTabs.value?.menu?.[key] === true
-  const isTopbarTabEnabled = (key) => displayTabs.value?.topbar?.[key] === true // kept for completeness
 
   const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
@@ -352,10 +351,8 @@ export function useSidebarMenu() {
         extraMenuFromWebserviceTitle.value = data.title
       }
 
-      extraMenuFromWebserviceItems.value = data.enabled
-        ? normalizeExtraMenuFromWebserviceItems(data.items)
-        : []
-    } catch (error) {
+      extraMenuFromWebserviceItems.value = data.enabled ? normalizeExtraMenuFromWebserviceItems(data.items) : []
+    } catch {
       extraMenuFromWebserviceItems.value = []
     }
   }
@@ -640,7 +637,7 @@ export function useSidebarMenu() {
         const questionAdminItems = [
           {
             label: t("Questions"),
-            url: "/main/admin/questions.php",
+            route: { name: "AdminQuestionBank" },
             icon: "mdi mdi-comment-question-outline",
             class: "pl-4",
           },

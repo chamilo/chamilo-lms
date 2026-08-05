@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
@@ -56,6 +57,7 @@ final readonly class PortfolioListProvider implements ProviderInterface
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -70,8 +72,8 @@ final readonly class PortfolioListProvider implements ProviderInterface
         }
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
         if ($course instanceof Course
             && !$this->canReadPortfolioCourse(

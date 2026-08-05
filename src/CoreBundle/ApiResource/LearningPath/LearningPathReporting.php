@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingProvider;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingRecalculateProcessor;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingResetProcessor;
@@ -22,6 +23,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/learning_paths/{lpId}/reporting',
             requirements: ['lpId' => '\d+'],
             name: 'get_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             provider: LearningPathReportingProvider::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
@@ -34,6 +50,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             output: false,
             denormalizationContext: ['groups' => ['learning_path_reporting_recalculate:write']],
             name: 'recalculate_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: LearningPathReportingRecalculateProcessor::class,
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
         ),
@@ -46,6 +77,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             output: false,
             read: false,
             name: 'reset_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: LearningPathReportingResetProcessor::class,
         ),
     ],

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Portfolio;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioItemProvider;
@@ -24,12 +25,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Read a portfolio item and its visible comments',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'user', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_USER')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             name: 'get_portfolio_item',
             provider: PortfolioItemProvider::class,
         ),

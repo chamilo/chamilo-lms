@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemAddedEvent;
 use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
@@ -54,6 +55,7 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private UploadFilenamePolicy $uploadFilenamePolicy,
         private EventDispatcherInterface $eventDispatcher,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -71,8 +73,8 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, $payload);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($course instanceof Course && !$this->canReadPortfolioCourse(
             $this->security,
             $this->userHelper,

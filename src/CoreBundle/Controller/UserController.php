@@ -31,8 +31,7 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         CourseClassManager $courseClassManager,
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $usergroupId = $request->query->getInt('usergroup');

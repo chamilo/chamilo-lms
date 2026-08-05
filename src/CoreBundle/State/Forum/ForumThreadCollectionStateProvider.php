@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Forum\ForumThreadsByForum;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
@@ -54,6 +55,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly SettingsManager $settingsManager,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -93,9 +95,9 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
     {
         $this->assertForumMemberAccess($this->security, 'You are not allowed to access this forum.');
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $forum = $this->forumRepository->find($forumId);
         if (!$forum instanceof CForum) {
             throw new NotFoundHttpException('Forum not found.');

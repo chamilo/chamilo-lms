@@ -53,6 +53,12 @@ export default {
       component: () => import("../views/admin/UserList.vue"),
     },
     {
+      name: "AdminQuestionBank",
+      path: "questions",
+      meta: { requiresQuestionManager: true, showBreadcrumb: true, breadcrumb: "Questions" },
+      component: () => import("../views/admin/QuestionBank.vue"),
+    },
+    {
       name: "AdminCourseList",
       path: "course-list",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Course list" },

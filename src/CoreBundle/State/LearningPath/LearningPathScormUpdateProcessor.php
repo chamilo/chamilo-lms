@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\LearningPath\ScormPackageImporter;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -35,6 +36,7 @@ final readonly class LearningPathScormUpdateProcessor implements ProcessorInterf
         private CsrfTokenManagerInterface $csrfTokenManager,
         private CLpRepository $learningPathRepository,
         private ScormPackageImporter $packageImporter,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(
@@ -51,15 +53,15 @@ final readonly class LearningPathScormUpdateProcessor implements ProcessorInterf
         $this->assertLearningPathTeacher($this->security);
         $this->validateActionToken($this->csrfTokenManager, $request->request->get('csrfToken'));
 
-        $course = $this->getContextCourse($this->entityManager, $request);
+        $course = $this->getContextCourse($this->cidReqHelper);
         $requestedNodeId = $request->query->getInt('node');
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
         if ($requestedNodeId > 0 && $requestedNodeId !== $courseNodeId) {
             throw new AccessDeniedHttpException('The requested resource node does not belong to this course.');
         }
 
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $learningPathId = (int) ($uriVariables['lpId'] ?? 0);
         if ($learningPathId <= 0) {

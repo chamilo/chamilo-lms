@@ -62,14 +62,23 @@
     </p>
 
     <h3>Release name</h3>
-    <p>Grand Canyon Village is the popular entry point to an awe-inspiring natural monument. We believe version 3.0 will popularize the greatness of Chamilo 2 (in comparison with Chamilo 1.11) as it reintroduces all plugins and settings that were on hold, completing the implementation of Chamilo 2 as a follower of 1.11, making it more accessible (through more complete upgrades from 1.11) and more fun to work with thanks to jaw-dropping (optional and customizable) AI features.</p>
+    <p>Grand Canyon Village is the popular entry point to an awe-inspiring natural monument. We believe version 3.0 will popularize the benefits of Chamilo 2 (in comparison with Chamilo 1.11) as it reintroduces all plugins and settings that were on hold, completing the implementation of Chamilo 2 as a follower of 1.11, and making it more accessible (through more complete upgrades from 1.11) and more fun to work with thanks to jaw-dropping (optional and customizable) AI features.</p>
     <h3>Security fixes</h3>
     <ul aria-live="off">
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/8d41b2c471ddea028b08d75b3b8d49c66cdcd3a0">8d41b2c4</a>) Security: Restrict all ContactCategory CRUD routes to administrators</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bc845f0814c65f5a228c5e9ff14d30993ac6a98">5bc845f0</a>) Security: Force download of HTML social post attachments instead of inline rendering</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/222464914bb02565dac58ea3bd8068195af71f15">22246491</a>) Security: Reflected XSS via access_url_id/add_type attribute breakout in access_url edit admin pages</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/bffd3128db7c185202f32ac269abeba3d844ad3b">bffd3128</a>) Security: Enforce resource-node ownership on resourceFileId and object-level ResourceFile read</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/48c4fdba8f25eb1da29926a23c247be845556567">48c4fdba</a>) Security: Require edit permission and variant check on resource file delete_variant endpoint</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/24be73d5bcbfb9b6fcb31832e40a75eae1990f64">24be73d5</a>) Security: generate password reset and email confirmation tokens with random_bytes()</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/f712693e9c0b9bf49021e06a9c6cb8cdabe03c2c">f712693e</a>) Security: make session expiration warning configurable</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/6e644bc3d5d3fc81b6e1769e010281cf3bf585b7">6e644bc3</a>) Security: scope MessageAttachment item GET to the parent message owner</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/de3409b79b5f9ddd22df215dad68d186fe842d1b">de3409b7</a> - <a href="https://task.beeznest.com/issues/23459">BT#23459</a>) Security: add session expiration warning</li>
         <li>[2026-07-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/c2c1cf847db7ec4745ef0d87aea2d005e17d3953">c2c1cf84</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8752">GH#8752</a>) Security: Add native File Integrity Monitoring (FIM) feature (#8752)</li>
         <li>[2026-07-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/53de4640f43fe39d3f05a8e3a910c47a6b478d78">53de4640</a>) Security: Sanitize course chat messages after Markdown rendering</li>
         <li>[2026-07-12] Security: Learnpath: Drop support for AICC HACP (deprecated, insecure communication protocol)</li>
         <li>[2026-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/33c65951746a71979fb0688284afecc2b51241db">33c65951</a>) Security: Harden OAuth2 invalid-state auto-retry</li>
-        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/d5c6f05b0b5cec52f02f15475c730694c250e370">d5c6f05b</a>) Security: Escape array filter values in ExtraField::get_where_clause()</li>A
+        <li>[2026-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/d5c6f05b0b5cec52f02f15475c730694c250e370">d5c6f05b</a>) Security: Escape array filter values in ExtraField::get_where_clause()</li>
         <li>[2026-06-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/28c3257fd3d7d8bc1f113cd1f6d0d7fe5110634e">28c3257f</a>) Security: Restrict Course Maintenance to teachers of the current course</li>
         <li>[2026-06-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/aa52393608d3ec95d0ee7bfce0b170b1bc9476e6">aa523936</a>) Security: Enforce source-course authorization in Course Maintenance copy endpoints</li>
         <li>[2026-06-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/b80a9373ff45c931bc1d7e820760636d69f81caf">b80a9373</a>) Security: Fix unauthenticated Template deletion</li>
@@ -163,7 +172,13 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
-	<li>[2026-05-30] Plugin: Re-enabled all plugins / re-classified plugins / improved plugins UI</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/81e9429c3831e1d734fca420ff3125079e616312">81e9429c</a> - <a href="https://task.beeznest.com/issues/23599">BT#23599</a>) Learnpath: Add support for post-unload event Chrome + add scorm_complete_on_leave_when_incomplete setting to enable auto-completion of bad SCOs</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/7406c7706131bd2746aebf1a3deaa1d09392a4f1">7406c770</a>) Internal: Add 'Referrer-Policy: strict-origin-when-cross-origin' to registration script to avoid transfering registration-related hashes to other sites</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/5226f4f90b59fad755443ba66151f9da61e85f8d">5226f4f9</a>) User: Add e-mail link invitations to course or session (adds configuration setting allow_invitation_registration) to allow teachers to invite users to register to the platform and get directly subscribed to the course. Works on portals with or without allowed auto-registration</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/069917e6d79095af20621bf76e1399567173250a">069917e6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8785">GH#8785</a>) Plugin: CStudio: Add AI-assisted content generation</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/867225ab58f6b57e1406461ff0a0001cd8f19866">867225ab</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8742">GH#8742</a>) MCP: Add read-only access to tests and questions</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/ecb12f2dc56014a902b731654ba32d31154638ee">ecb12f2d</a>) Internal: add project security-guidance rules for the security review plugin</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/ac68b98dfea801d1b20c75a4278557fa637eae20">ac68b98d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8742">GH#8742</a>) MCP: Add course description services</li>
         <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/e18d61f82e4ed7789d368c903beb20bac2cd8c44">e18d61f8</a>) Display: Add GenAI feature to generate course thumbnails from within the course configuration screen</li>
         <li>[2026-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/90213c0cff5260c0f36f73524e46c13308ac9e65">90213c0c</a>) Learnpath: Add support for SCORM 2004's adl.nav.request (except jump/choice) and cmi.comment_from_* + fix previous LP-related migrations</li>
         <li>[2026-07-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/16cd8e7005d3da017a4f56f0f0f9ee17d7a731c8">16cd8e70</a>) Learnpath: Add support for per-objective progress_measure, cmi.interactions.n.description, cmi.learner_preference.audio_level / delivery_speed / audio_captioning from SCORM 2004</li>
@@ -178,7 +193,7 @@
         <li>[2026-07-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/7203d13a5156720d995a61ccb001747b3e6d7b39">7203d13a</a>) AI: Add terms and conditions translation</li>
         <li>[2026-07-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/6de9dae1ca6bd678bc71ec37d80fa5f8a06d8f63">6de9dae1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8730">GH#8730</a>) Learnpath: Add AI quick-test generation for documents</li>
         <li>[2026-07-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/8de57481d7b18b9c12a924bec67b70d535e85d14">8de57481</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8723">GH#8723</a>) Internal: Enable deprecation reporting in test env (#8723)</li>
-        <li>[2026-07-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/66e147a2d039be910c98ec8f62a445f1ac41f0ed">66e147a2</a>) Search: add Xapian rebuild command</li>
+        <li>[2026-07-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/66e147a2d039be910c98ec8f62a445f1ac41f0ed">66e147a2</a>) Search: Add Xapian rebuild command</li>
         <li>[2026-07-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/0ec4c4f4e2bb5d73a7f582803b29d6b5e4e0c66c">0ec4c4f4</a>) Plugin: BuyCourses: Update invoice/receipt logic to allow both as different items, on demand + minor fixes (2/2)</li>
         <li>[2026-06-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e1b272b82a773de0de05fb4e62c6f833c644b38">2e1b272b</a>) Exercise: Add progressive adaptive mode</li>
         <li>[2026-06-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa24da96fd19f93a73476ab9dff546d6487c08d9">fa24da96</a>) Exercise: Add OnlyOffice runtime editor</li>
@@ -190,6 +205,7 @@
         <li>[2026-05-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/0ac4eb49f32a813997e1b9b09b23df6aec8aee4a">0ac4eb49</a>) Course: Enhance AI course analyzer with lesson context</li>
         <li>[2026-05-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/0f1ac15518ba568bf18ab48d29a83fedff9d4399">0f1ac155</a>) Plugin: Implement TopLinks course shortcuts integration</li>
         <li>[2026-05-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/e09d39019064ca3c959941ff2b4e9eb1048a18d1">e09d3901</a>) Plugin: Add verified plugin list filter</li>
+	<li>[2026-05-19] Plugin: Re-enabled all plugins / improved plugins UI</li>
         <li>[2026-05-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/1a3a47668d06240620daacbe60d1b4b922ab3dd8">1a3a4766</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6346">GH#6346</a>) Learnpath: Add advanced learning path access by date</li>
         <li>[2026-05-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/bfebc071dbfe863f3be85bc06a108217069b6eca">bfebc071</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6395">GH#6395</a>) Admin: Add usergroup members preview page</li>
         <li>[2026-05-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/c7a768c9a5101503b2301624bad2e1d4f6dc7438">c7a768c9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8142">GH#8142</a>) Internal: Add NProgress loading indicator for SPA route transitions</li>
@@ -198,6 +214,52 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/01cc074a1a6dc853033dc52f87da966df1c58d93">01cc074a</a>) Scripts: Add language files merging script</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/76fa2d705c136ba8c6b964ff14c7b9f4c4a0470e">76fa2d70</a>) Scripts: Add plugin lang files support to find_missing_terms.php</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/ebabdefc850989435da7521d4eebe7b9964c4fb2">ebabdefc</a>) Admin: Migrate global question bank to Vue</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/92ccabeaa61e04b05be9737a6ccaefec5a6e4836">92ccabea</a>) Course: Migrate course settings tool to Vue</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/04cafb91924f8f659266a52823173703f2365f37">04cafb91</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8818">GH#8818</a>) Internal: Read course context from CidReqHelper and declare cid/sid/gid in the operations</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/07d649408c5aaa3547bd92355717c174e14628a5">07d64940</a>) Documentation: Update changelog</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/c0ae644882d85b6d2fea72665b045a3ca05c875a">c0ae6448</a>) Internal: Change npmMinimalAgeGate from 1d to 7d</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/bb5a525a4d7f1136575b2adf67d20dff96ce5e3b">bb5a525a</a>) Internal: Improve translation script output</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/415a9f08d0ff4cb63e09fb2421e2c84feb74fd63">415a9f08</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: fix unexisting entity after ->clear()</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/e0c87a0d65b9942fdc7e16af3735c769c30a52ab">e0c87a0d</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: duplicate fill Version20260716130000 migration in Version20201210100013 to avoid errors</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/4161fc908fea484e54383edf1223e5c8e10d97f2">4161fc90</a>) Group: Migrate course groups tool to Vue</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/147771c8842114b6e9ebb18b53b5adc5296cff2f">147771c8</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: Attendance: move the room_id field creation to a prior migration to avoid errors</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/bfb08b47948645f01ad2a3f55be107d0db4e02d6">bfb08b47</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: Attendance: fix previous commit to directly create room_id fields that was only created at the end of the up function with the previous commit</li>
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/f72016cbdb07fef6f297b657a03f510319e36f97">f72016cb</a> - <a href="https://task.beeznest.com/issues/23246">BT#23246</a>) Migration: Attendance: fix missing room_id fields that was created later</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/00d8b7920a91233d2792698323d1132602e00fa3">00d8b792</a>) Migrate course sessions tool to Vue</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0878c0ac692e9cae539110f46434bba98cfcd47">b0878c0a</a>) Migrate course classes tool to Vue</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/ec7912aa986f8c03111fecd6bd1d282d26dcb7c7">ec7912aa</a>) Migrate course users tool to Vue</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/8de35f6cd2c0cfa02d1661a0f07ca1b41da61bf4">8de35f6c</a>) Ticket: restore teacher courses and course context</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/67479080358171f0513c7065a57cbedeb5a34c94">67479080</a>) Display: Replace the .wysiwyg class with .tiny-content</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d283a68417e54d8018e56c19e692677c35d423e">1d283a68</a>) Internal: Move wysiwyg-content mixin to abstracts/_mixins.scss</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e8ef116f476f8d07e83c9a296e1a8a29cace8b7c">e8ef116f</a>) Internal: Do not copy unhashed assets in development builds</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/8a05dad59454b108bd6882ca2d35b6b982f89d7a">8a05dad5</a>) Display: Editor: Apply prose base styles to content while editing in TinyMCE</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/34e5385c2570b49db9b9a30bcde3a860bccb4d59">34e5385c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8455">GH#8455</a>) Auth: Azure: Normalize trailing slash in url_login and url_api</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/e11e78d29b8a30b82a258c1b6067695a03f7b323">e11e78d2</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8528">GH#8528</a>) Auth: Fix error with data correspondence introduced with commit 68912b3d1e1d2 to enable null value for password_attribute sent by @madmoe00</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/a5d3d2009bbf9e687e6b465840682ae7378fcb75">a5d3d200</a>) MCP: Add translation management for fallback questions in survey creation through MCP</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/124f412ad1fa6e9665f1216489a74c54bd40ffce">124f412a</a>) Learnpath: allow ZIP output for SCORM runtime packages</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/bfeb47f780956386b8683a0b3142124c3e1c6539">bfeb47f7</a>) Learnpath: expose authorized SCORM runtime packages</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/af64ea5e504f086966070fd241fd5e8846351426">af64ea5e</a>) Plugin: BuyCourses: Add country info in sales detail</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/0caaf737666feb13983f741f4dd2259427276e5f">0caaf737</a>) MCP: Add endpoint info in authorized apps page</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/1e2e3dacc586d4803a16bdb48aa4a1de577b4d82">1e2e3dac</a>) Class: Respect official code user ordering</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/2d1afc84da7e1169054f694d00a4b7985a48d3a2">2d1afc84</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7498">GH#7498</a>) Exercise: Fix legacy result PDF export</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/728f3f0a2189312935cbb67f1a05fce482548f25">728f3f0a</a>) Exercise: honor category matrix question limits</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/b46a1d91f989d706c59ffedb4d6c966df79fda03">b46a1d91</a>) Migration: remove audited quiz repair migrations</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/e9e896bb096a15c68fd91e9ff2e1dba52633ba3c">e9e896bb</a>) Internal: Fix typo in migration Version20260731000000 in previous commit</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/48539c6e8c385c714ae00b79fad004fe92f8ace4">48539c6e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2941">GH#2941</a>) Internal: fix personalized mail template use to be able to find it and use it correctly</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/b790e8ef744db1accc803db8ea54b34aa9ae8363">b790e8ef</a>) Internal: fix twig syntax error that was generating 500 errors</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ce15d63a0a804448bc1f61341cca8381d3a9a4d">5ce15d63</a> - <a href="https://task.beeznest.com/issues/23607">BT#23607</a>) Plugin: BBB: fix missing CSRF token generation when using direct link to enter the conference</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1b888126a0119b617f9c7ef54ae03cef481ef3d">a1b88812</a>) Documentation: Update changelog</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/5c055c353c9db6b6196877b50b2962159e7c08e9">5c055c35</a>) Internal: enable use-base-components skill and security-guidance plugin project-wide</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/0161df9b6186665e5aad7285140c6d6152bfad85">0161df9b</a>) Display: Social: simplify AuthorizedApplications and McpApiKey views (drop redundant error/date helpers, use useFormatDate)</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/9a1b5baabfc6820a0031b19fbd69044cea9b524a">9a1b5baa</a>) Refactor: remove client-specific migration identifiers</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/684da07e4bc6abadea8b67b45f4ab3f276f8404e">684da07e</a>) Display: Social: navigate profile actions via router/URL instead of window.location in UserProfileCard</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/5f47c5c97fb052a01107c2a24d2c62a2bfbf91fa">5f47c5c9</a>) Migration: restore final quiz question and answer relations</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/eb03500c50ae2dabfa3a10f520fedcab547c3166">eb03500c</a>) Exercise: route migrated runtime from gradebook and learning paths</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/299a084bf9dfa07e4f378623efb73f8e7258fcf6">299a084b</a>) Exercise: handle null quiz notifications</li>
+        <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ed8b1fcc629e01bcc5b585a968e78b46498b739">6ed8b1fc</a>) Social: use Base components (BaseButton/BaseIcon) in UserProfileCard</li>
         <li>[2026-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ee37d64d0963c52f8fafdfa68fdcb41c16f7c9d">5ee37d64</a>) Admin: Fix bug in languages page where disabling all languages except the default disabled all languages including the default if no user was using it</li>
         <li>[2026-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/48e245452d9e14fcfcabcaa520a163ddabcebc29">48e24545</a>) Migration: add safe final certificate processing</li>
         <li>[2026-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/8b96b159423bc6e72974b7fb4aefbc35f583931a">8b96b159</a>) Migration: backfill available Ricky legacy LP evidence</li>
@@ -762,6 +824,13 @@
 
     <h3>Fixed</h3>
     <ul aria-live="off">
+        <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e01a3ba888714c58d76b665a17c8094aa2c2c8b">0e01a3ba</a>) Language: Update translations and add missing terms from tickets, exercise and others' transition to Vue</li>
+        <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/80f818eebfd028086397a46102224fd4a9399a9f">80f818ee</a>) Language: Rename French 'Extensions' to 'Plugins' (over-translation, clearer as 'plugin')</li>
+        <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/5323e0921b364726b821b61b4827cf36f499d353">5323e092</a>) Language: Update missing exercise terms</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2163f0a09086cfe3509ef968e3f6de9cb0ecdae">d2163f0a</a>) Language: Add script to regenerate JSON files. Avoids stale cache versions preventing proper update with chamilo:update_vue_translations</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/bddb1499bd524f52f0055d933604b44419e80491">bddb1499</a>) Language: Update language terms</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/ce55620e2df2cdfb4e2990b158255a329f815b66">ce55620e</a>) Language: Add Maltese, Estonian, Bokmål, Icelandic translations, reach complete EEA countries coverage</li>
+        <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/1b174d5247c68741c48f5f7bdc4ea69af7efc62b">1b174d52</a> - <a href="https://task.beeznest.com/issues/23609">BT#23609</a>) Language: add missing translation for Back to account</li>
         <li>[2026-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/fb7c4398c12854338db4bd2c70433320b8a4a336">fb7c4398</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8723">GH#8723</a>) Fix Doctrine DBAL 4 breaking changes in migrations</li>
         <li>[2026-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/1f29d11d591287c0a2d2c8bcc148e367f6f025fc">1f29d11d</a>) Fix ticket creation validation and assignee fallback</li>
         <li>[2026-07-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/eaa84e9c106cd2e1e9abf6bc54c64c15a0861854">eaa84e9c</a>) Fix stale User admin association</li>

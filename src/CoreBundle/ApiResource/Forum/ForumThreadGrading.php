@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -79,6 +80,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             input: ForumThreadGradingInput::class,
             read: false,
             name: 'update_forum_thread_grading',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: ForumThreadGradingProcessor::class,
         ),
         new Patch(
@@ -105,6 +117,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             input: ForumThreadScoreInput::class,
             read: false,
             name: 'save_forum_thread_score',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: ForumThreadGradingProcessor::class,
         ),
     ],

@@ -81,7 +81,7 @@ final readonly class LearningPathCategoryCollectionProvider implements ProviderI
             }
         }
 
-        $group = $this->getValidatedGroupFromContext($this->entityManager, $this->cidReqHelper, $course);
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $canManage = $this->canManageLearningPaths($this->security)
             && !$this->isStudentViewRequest($this->requestStack);
 

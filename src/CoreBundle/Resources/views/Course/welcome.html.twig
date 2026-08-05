@@ -66,7 +66,7 @@
                 <div class="item">
                     {{ 'tool_reference.png' | icon(64, 'Course settings'|trans ) }}
                     <div class="caption">
-                        <a href="/main/course_info/infocours.php?{{ { 'cid': course.id}|url_encode }}" class="btn btn-outline-primary">
+                        <a href="/resources/course-settings/{{ course.resourceNode.id }}/?{{ { 'cid': course.id, 'sid': 0, 'gid': 0}|url_encode }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Change settings'|trans }}
                         </a>
                     </div>

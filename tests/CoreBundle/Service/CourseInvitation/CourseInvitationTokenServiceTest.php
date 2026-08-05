@@ -26,7 +26,7 @@ final class CourseInvitationTokenServiceTest extends AbstractApiTest
     private CourseInvitationTokenService $service;
     private ValidationTokenRepository $tokenRepository;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

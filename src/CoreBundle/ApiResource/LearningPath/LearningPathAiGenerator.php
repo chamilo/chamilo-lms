@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathAiGeneratorProcessor;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathAiGeneratorProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -19,6 +20,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/learning_paths/ai-generator',
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_ai_generator',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             provider: LearningPathAiGeneratorProvider::class,
         ),
         new Post(
@@ -26,6 +42,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             read: false,
             name: 'create_learning_path_from_ai',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: LearningPathAiGeneratorProcessor::class,
         ),
     ],

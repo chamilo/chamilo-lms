@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathAiGenerator;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,6 +34,7 @@ final readonly class LearningPathAiGeneratorProvider implements ProviderInterfac
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private AiProviderFactory $aiProviderFactory,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -51,9 +53,9 @@ final readonly class LearningPathAiGeneratorProvider implements ProviderInterfac
 
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $this->getContextSession($this->entityManager, $request, $course);
-        $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $result = new LearningPathAiGenerator();
         $result->enabled = $this->isFeatureEnabled($course);

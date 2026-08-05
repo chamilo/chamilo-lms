@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -70,6 +71,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly SettingsManager $settingsManager,
         private readonly MessageHelper $messageHelper,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -113,9 +115,10 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -189,7 +192,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         }
 
         if ($visible) {
-            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user, $this->messageHelper);
+            $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $post, $user, $this->messageHelper, $this->cidReqHelper);
         }
 
         $this->registerForumEventLog('new-thread', 'thread', (string) $thread->getIid());
@@ -221,7 +224,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($data->getResourceNode(), 'edit');
         $this->assertEditableResource($forum->getResourceNode(), 'edit');
 
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $data->setTitle($this->getRequiredText($payload, 'title', 250));
@@ -260,7 +263,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($data->getResourceNode(), 'delete');
         $this->assertEditableResource($forum->getResourceNode(), 'delete');
 
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $threadId = (int) $data->getIid();
@@ -310,7 +313,7 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $data->setLocked(0 === $data->getLocked() ? 1 : 0);
@@ -343,7 +346,7 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
         $data->setThreadSticky(!$data->getThreadSticky());
@@ -377,8 +380,8 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
         $targetVisible = $this->getTargetVisibility($payload, $data, $course, $session);
         $visible = $this->setForumResourceVisibility($data, $this->threadRepository, $course, $session, $targetVisible);
@@ -421,9 +424,9 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
         $this->assertEditableForumResource($targetForum->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
 
@@ -455,7 +458,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $payload = $this->getJsonData($request);
         $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
-        $course = $this->getCourse($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
         if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {
             throw new AccessDeniedHttpException('Forum notifications are disabled for this course.');
         }

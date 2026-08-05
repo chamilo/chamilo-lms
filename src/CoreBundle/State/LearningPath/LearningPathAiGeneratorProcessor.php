@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathAiGenerator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -42,6 +43,7 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
         private SettingsCourseManager $settingsCourseManager,
         private CLpRepository $lpRepository,
         private AiDisclosureHelper $aiDisclosureHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -65,9 +67,9 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
 
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         if (!$this->isFeatureEnabled($course)) {
             throw new AccessDeniedHttpException('AI learning path generation is disabled in this course.');

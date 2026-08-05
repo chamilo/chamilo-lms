@@ -15,10 +15,6 @@
       "type": "github",
       "url": "https://github.com/chamilo/OhGoogleMapFormTypeBundle.git",
       "no-api": true
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/AngelFQC/SyliusSettingsBundle.git"
     }
   ],
   "autoload": {

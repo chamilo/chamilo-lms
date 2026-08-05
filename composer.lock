@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e11fcf2c574191b234c975ce42fcb63",
+    "content-hash": "4fe9118cc726d63bbb4c37567f85f3b3",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -1095,13 +1095,13 @@
             "version": "v1.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AngelFQC/SyliusSettingsBundle.git",
-                "reference": "ed5e307b80a40dc0a5cb56a803d3ab30f7dae698"
+                "url": "https://github.com/chamilo/SyliusSettingsBundle.git",
+                "reference": "fb552c2c2ce5cb54bb2e3d1ebf0db6f6b28069ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AngelFQC/SyliusSettingsBundle/zipball/ed5e307b80a40dc0a5cb56a803d3ab30f7dae698",
-                "reference": "ed5e307b80a40dc0a5cb56a803d3ab30f7dae698",
+                "url": "https://api.github.com/repos/chamilo/SyliusSettingsBundle/zipball/fb552c2c2ce5cb54bb2e3d1ebf0db6f6b28069ce",
+                "reference": "fb552c2c2ce5cb54bb2e3d1ebf0db6f6b28069ce",
                 "shasum": ""
             },
             "require": {
@@ -1134,17 +1134,7 @@
                     "Sylius\\Bundle\\SettingsBundle\\": "src/Bundle/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Sylius\\Bundle\\SettingsBundle\\spec\\": "spec/"
-                }
-            },
-            "scripts": {
-                "analyse": [
-                    "@php vendor/bin/ecs check src",
-                    "@php vendor/bin/phpstan analyse"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1165,17 +1155,17 @@
             "description": "Settings system for Symfony applications, editable via web user interface.",
             "homepage": "http://sylius.org",
             "keywords": [
+                "Settings",
                 "config",
                 "configuration",
                 "ecommerce",
-                "settings",
                 "shop",
                 "webshop"
             ],
             "support": {
-                "source": "https://github.com/AngelFQC/SyliusSettingsBundle/tree/v1.5.0"
+                "source": "https://github.com/chamilo/SyliusSettingsBundle/tree/v1.5.0"
             },
-            "time": "2026-07-25T00:13:16+00:00"
+            "time": "2026-08-04T16:36:38+00:00"
         },
         {
             "name": "clue/graph",

@@ -117,6 +117,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $text = $this->getRequiredHtmlText($data, 'text');
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),

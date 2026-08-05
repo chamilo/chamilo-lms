@@ -95,6 +95,20 @@ trait LearningPathStateHelperTrait
             ?? throw new BadRequestHttpException('Missing course id.');
     }
 
+    /**
+     * SessionVoter proves the course/session pairing for students and course coaches, but not
+     * for general coaches or admins. Assert it before persisting a resource link, so an
+     * unrelated pair can never be written.
+     */
+    private function assertSessionBelongsToCourse(?Session $session, Course $course): void
+    {
+        if (!$session instanceof Session || $session->hasCourse($course)) {
+            return;
+        }
+
+        throw new AccessDeniedHttpException('The requested session is not linked to this course.');
+    }
+
     private function getContextGroup(
         EntityManagerInterface $entityManager,
         CidReqHelper $cidReqHelper,

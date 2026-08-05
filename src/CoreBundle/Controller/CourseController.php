@@ -32,6 +32,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -116,7 +117,8 @@ class CourseController extends ToolBaseController
         LegalRepository $legalTermsRepo,
         LanguageRepository $languageRepository,
         ExtraFieldValuesRepository $extraFieldValuesRepository,
-        SettingsManager $settingsManager
+        SettingsManager $settingsManager,
+        CourseAccessResolver $courseAccessResolver,
     ): Response {
         $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
@@ -126,6 +128,26 @@ class CourseController extends ToolBaseController
             'redirect' => false,
             'url' => '#',
         ];
+
+        if (null !== $course) {
+            $coursePasswordAccepted = true === (bool) $request->getSession()->get(
+                'course_password_'.$course->getId(),
+                false
+            );
+            $session = $sid > 0 ? $this->em->find(Session::class, $sid) : null;
+
+            if (!$coursePasswordAccepted
+                && $courseAccessResolver->requiresRegistrationPassword($course, $user, $session)
+            ) {
+                return new JsonResponse([
+                    'redirect' => true,
+                    'url' => '/main/auth/set_temp_password.php?'.http_build_query([
+                        'course_id' => $course->getId(),
+                        'session_id' => $sid,
+                    ]),
+                ]);
+            }
+        }
 
         if ($user->isStudent()
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)

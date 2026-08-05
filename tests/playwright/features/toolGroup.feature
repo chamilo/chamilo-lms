@@ -144,6 +144,23 @@
 #   consistently. Neither was reproducible against a freshly cleaned
 #   state; expected to be non-issues in real CI, which only ever creates
 #   one batch of groups per run.
+# - ALSO KNOWN FLAKY, separately investigated (network trace + console log
+#   inspected, not just re-run and hoped for the best): "Create an
+#   announcement as acostea and send only to fapple" occasionally fails
+#   with Playwright's own "Target page, context or browser has been
+#   closed" right on the "Save" click, after the preceding "Preview" step's
+#   own POST already succeeded (confirmed via the trace's network log — no
+#   further request was ever sent, so the click itself never landed). No
+#   server error, no JS exception, no OOM in the host's own logs — this is
+#   Chromium itself becoming unstable partway through a single, very long
+#   (25+ minute) session covering this whole file's 24 scenarios back to
+#   back on a box that's been running Playwright nearly continuously for
+#   hours this same day, not a defect in this scenario's own steps (4
+#   other scenarios earlier in this same file run the identical Preview-
+#   then-Save sequence without issue). Not reproduced on a freshly
+#   restarted browser process; expected to be a non-issue for real CI,
+#   which launches a fresh browser per file/worker rather than reusing one
+#   across an entire multi-hour local session.
 Feature: Group tool
   In order to use the group tool
   The teachers should be able to create groups
@@ -459,7 +476,7 @@ Feature: Group tool
     Then I follow "Add an announcement"
     And I wait for the page to be loaded when ready
     And I click the "[aria-label='Everyone'] [class*='remove'], [aria-label='Everyone'] [class*='close'], [aria-label='Everyone'] svg, [aria-label='Everyone'] i" element
-    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "multiSelect"
+    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "announcement_recipients"
     Then I fill in the following:
       | title | Announcement for user fapple inside Group 0001 |
     And I fill in the active tinymce editor with "Announcement description for user fapple inside Group 0001"
@@ -506,7 +523,7 @@ Feature: Group tool
     Then I follow "Add an announcement"
     And I wait for the page to be loaded when ready
     And I click the "[aria-label='Everyone'] [class*='remove'], [aria-label='Everyone'] [class*='close'], [aria-label='Everyone'] svg, [aria-label='Everyone'] i" element
-    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "multiSelect"
+    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "announcement_recipients"
     Then I fill in the following:
       | title | Announcement for user fapple inside Group 0003 |
     And I fill in the active tinymce editor with "Announcement description for user fapple inside Group 0003"
@@ -520,29 +537,47 @@ Feature: Group tool
     Then I should see "Announcement description for user fapple inside Group 0003"
     Then I save current URL with name "announcement_for_user_fapple_group_0003_private"
 
+  # REAL CI FAILURE (not reproduced locally): a bare 90s timeout with no
+  # specific locator in its call log, right after this scenario's own
+  # "Save"/"Preview" steps. "I wait for the page to be loaded when ready"
+  # is unbounded `page.waitForLoadState("networkidle")` (common.steps.ts) —
+  # its own comment already documents that this app's persistent background
+  # polling can prevent networkidle from ever resolving, and that this exact
+  # class of hang is why "Check fapple's/acostea's access to group
+  # announcements" below were split and switched to the bounded "I wait for
+  # the page content to settle" instead. This scenario used the unbounded
+  # form 6 times in a row (create/save/reload cycle) with no per-step slack
+  # in the shared 90s test budget, so a single unlucky poll window landing
+  # mid-wait was enough to burn the whole remaining timeout on ANY of them —
+  # switched to the same bounded step used elsewhere for this reason. Also
+  # explains a real, confirmed cascade: this scenario's timeout coincided
+  # with the two "Check access" scenarios right after it losing their
+  # `savedUrls` map state (module-level, shared per worker — see
+  # common.steps.ts) and failing with "No URL was saved", consistent with
+  # Playwright having to recycle the worker process after a hang this severe.
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
     Then I am logged as "acostea"
     Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     And I follow "Group 0005"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     And I follow "Announcements"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     Then I follow "Add an announcement"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     And I click the "[aria-label='Everyone'] [class*='remove'], [aria-label='Everyone'] [class*='close'], [aria-label='Everyone'] svg, [aria-label='Everyone'] i" element
-    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "multiSelect"
+    And I press the multiselect option "Fiona Apple Maggart (fapple)" in "announcement_recipients"
     Then I fill in the following:
       | title | Announcement only for fapple Group 0005 |
     And I fill in the active tinymce editor with "Announcement description only for fapple Group 0005"
     Then I follow "Preview"
     Then I should see "Announcement will be sent to"
     Then I press "Save"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     Then I should see "Announcement only for fapple Group 0005"
     Then I follow "Announcement only for fapple Group 0005"
-    And I wait for the page to be loaded when ready
+    And I wait for the page content to settle
     Then I should see "Announcement description only for fapple Group 0005"
     Then I save current URL with name "announcement_only_for_fapple_private"
 

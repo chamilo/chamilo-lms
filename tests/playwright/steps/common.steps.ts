@@ -1455,7 +1455,12 @@ Then("I delete the learning path I just created", async ({ page }) => {
   const lpId = match[1]
   await gotoReliably(page, "/main/course_home/redirect.php?cidReq=TEMP")
   await page.getByRole("link", { name: "Learning paths", exact: true }).first().click()
-  await page.waitForLoadState("networkidle")
+  // Real CI failure: an unbounded `waitForLoadState("networkidle")` here can hang for the
+  // whole test timeout if this app's own persistent background polling never lets
+  // networkidle resolve — the same class of hang already documented (and fixed) for
+  // toolGroup.feature's "wait for the page to be loaded when ready" step. Bounded +
+  // tolerant of a timeout, same pattern as "I wait for the page content to settle".
+  await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
   const panel = page.locator(`.lp-panel[data-lp-id="${lpId}"]`)
   await panel.locator('button[title="More actions"]:visible').first().click()
   await page.getByText("Delete", { exact: true }).click()
@@ -1515,13 +1520,28 @@ When("I follow {string}", async ({ page }, link: string) => {
   // tiers below for a link that WOULD have matched a moment later — the
   // same brief-render-delay tolerance the roleLink tier right below
   // already gets via isSoonVisible(), just not applied here until now.
+  //
+  // Real CI failure (2nd occurrence, toolExerciseAdmin.feature's "Import
+  // exercise to test questions categories"): the same toolbar's whole
+  // container is gated behind ExerciseListView.vue's `canManage` ref, which
+  // starts `false` and only flips after an async fetch resolves — confirmed
+  // by reading the component directly. On a loaded/slow CI runner (this
+  // failure's own run took 1.8h vs a prior run's 1.4h) that fetch can
+  // outlast this tier's 2s isSoonVisible() window, so both this tier AND
+  // roleLink below lose the race and execution falls through to the final
+  // exact-text tier — which can NEVER match an icon-only button (no text
+  // node, only a `title` attribute), turning a transient render delay into
+  // a hard 90s timeout instead of a slightly slower click. Widened the
+  // window on both of these two tiers to give that async gate real headroom
+  // without weakening the final tier's semantics for links that genuinely
+  // don't exist.
   const byTitle = page.locator(`a[title="${link}"]:visible`)
-  if (await isSoonVisible(byTitle)) {
+  if (await isSoonVisible(byTitle, 6000)) {
     await byTitle.first().click()
     return
   }
   const roleLink = page.getByRole("link", { name: link })
-  if (await isSoonVisible(roleLink)) {
+  if (await isSoonVisible(roleLink, 6000)) {
     await roleLink.first().click()
     return
   }

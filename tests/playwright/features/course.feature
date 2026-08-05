@@ -250,31 +250,68 @@ Feature: Course tools basic testing
     And I wait for the page to be loaded
     Then I should not see an error
 
+  # Ported from tests/behat/features/course.feature — rewritten, not
+  # verbatim, to match a REAL behavior fix that landed alongside the Behat
+  # rewrite (upstream e56f09bb221, "Course: Fix password-protected course
+  # entry test"). This isn't just a selector-drift port: course entry is now
+  # actually gated. Visiting a public course's modern homepage directly
+  # redirects an unauthorized visitor to /main/auth/set_temp_password.php
+  # (CidReqListener -> CourseAccessResolver::requiresRegistrationPassword())
+  # whenever the course is public (visibility OPEN_WORLD, value 3 — "Public -
+  # access allowed for the whole world") and has a non-empty registration
+  # password, unless the visitor is an admin/teacher/already-subscribed/
+  # session-coach. The PREVIOUS version of this scenario only toggled the
+  # password field via the settings form and asserted no error — it never
+  # actually exercised the gate at all. Uses a dedicated course
+  # ("Password Protected" / code "PASSWORDPROTECTED") instead of reusing
+  # "TEMP" so this genuinely password-gated course doesn't affect any other
+  # scenario that enters TEMP (whose visitors here are always admin/
+  # subscribed anyway, so TEMP itself was never actually a valid test of the
+  # gate, only of the settings form saving without error).
   Scenario: Enter to public password-protected course
-    Given I am on course "TEMP" homepage
+    Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
-    And I click the "button.p-button-icon-only" element
+    And I fill in the following:
+      | title       | Password Protected |
+      | visual_code | PASSWORDPROTECTED  |
+    # Same mandatory-category trap as "Create a course before testing" above
+    # on this box (course.course_creation_form_set_course_category_mandatory
+    # is on here) — an unfilled Categories field silently re-renders the same
+    # form with a validation error instead of creating anything.
+    And I select "Language skills" from the ajax select "update_course_course_categories"
+    And I select "English" from "course_language"
+    And I check the "Public - access allowed for the whole world" radio button
+    And I press "submit"
     And I wait for the page to be loaded
-    Then I follow "Course settings"
+    Then I should see "Password Protected"
+    And I resolve the numeric id of course "PASSWORDPROTECTED"
+
+    Given I am on the course settings page of course "PASSWORDPROTECTED"
     And I wait for the page to be loaded
-    # Original Behat selector targeted a CLASS ("collapse_course_access") on
-    # this toggle; the current markup keeps the same id as a data-target
-    # attribute instead (<a data-toggle="collapse" data-target="#collapse_
-    # course_access">), no class of that name exists anymore. Single-quoted
-    # inside the CSS selector since the whole thing sits inside a
-    # double-quoted Gherkin string.
     And I click the "a[data-target='#collapse_course_access']" element
     And I wait for the page to be loaded
     And I fill in the following:
-      | course_registration_password | abc |
-    # Original Behat button was id/name="submit"; the redesigned Course
-    # settings form's save button is now name="submit_save" with visible
-    # text "Save settings" — pressButton()'s id/name tier no longer matches
-    # "submit" at all, so this falls through to its text-based fallback,
-    # which needs the CURRENT visible label.
+      | course_registration_password | 123456 |
     And I press "Save settings"
     Then I wait for the page to be loaded
     Then I should not see an error
+
+    # As a plain visitor (not admin/teacher/subscribed), the password gate
+    # must actually be enforced.
+    Given I am not logged
+    And I am a student
+    And I am on the modern homepage of course "PASSWORDPROTECTED"
+    Then I should see "This course requires a password"
+    When I fill in "course_password" with "wrong-password"
+    And I press "Accept"
+    And I wait for the page to be loaded
+    Then I should see "The course password is incorrect"
+    When I fill in "course_password" with "123456"
+    And I press "Accept"
+    And I wait for the page to be loaded when ready
+    Then I should be on the modern homepage of course "PASSWORDPROTECTED"
+    And I should see "Password Protected"
+    And I should not see "The course password is incorrect"
 
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"

@@ -1,8 +1,23 @@
 import path from "node:path"
-import { expect, Page } from "@playwright/test"
+import { expect, Page, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
 
-const { Given, When, Then, BeforeAll, AfterAll } = createBdd()
+const { Given, When, Then, BeforeAll, AfterAll, Before } = createBdd()
+
+// Not ported — new. specialCase1PlatformSettings.feature's own scenarios are
+// far larger than anything else in this suite (dozens of settings toggles
+// plus 41/12 extra-field creations each involving a full page navigation),
+// and a real run confirmed even the FIRST two scenarios ("Initial platform
+// searches and basic settings", "Add user extra fields") individually
+// exceed this config's global 90s per-test timeout well before finishing —
+// not a hung step, just genuinely more real work than any other single
+// scenario in this suite does. `test.info().setTimeout()` (a real Playwright
+// API, not a custom fixture) raises the CURRENT test's own timeout from
+// inside a Before hook; scoping it to this file's own tag keeps every other
+// feature's default 90s budget completely unchanged.
+Before({ tags: "@long-scenario" }, async () => {
+  test.info().setTimeout(15 * 60_000)
+})
 
 // Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
 // i.e. repo root) — attachFileToField() paths in .feature files are relative
@@ -57,6 +72,58 @@ Given(
     await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   },
 )
+
+// Ported from FeatureContext::iHaveAPublicPasswordProtectedCourse() /
+// iAmOnTheModernHomepageOfCourse() / iShouldBeOnTheModernHomepageOfCourse()
+// (added upstream by e56f09bb221, "Course: Fix password-protected course
+// entry test" — a real fix, not just a test rewrite: CidReqListener now
+// redirects an unauthorized visitor of a public+passworded course to
+// set_temp_password.php via CourseAccessResolver::requiresRegistrationPassword()).
+// A course code isn't resolvable to its numeric id from Gherkin alone (the
+// modern course routes are id-based), so this map caches it exactly like the
+// Behat original's own $courseIdsByCode, split into 3 composable steps here
+// instead of one big custom step so the mundane form-filling in between
+// (title/visual_code/visibility, then the registration password itself)
+// reuses this file's existing generic "I fill in"/"I check the ... radio
+// button"/"I press" steps rather than duplicating them in raw Playwright code.
+const passwordProtectedCourseIds = new Map<string, number>()
+
+Then(
+  "I resolve the numeric id of course {string}",
+  async ({ page }, courseCode: string) => {
+    await page.goto(`/courses/${encodeURIComponent(courseCode)}/index.php`)
+    await page.waitForLoadState("domcontentloaded")
+    const path = new URL(page.url()).pathname
+    const match = path.match(/^\/course\/(\d+)\/home$/)
+    if (!match) {
+      throw new Error(`Could not resolve the modern course home URL for course ${courseCode} (got ${path}).`)
+    }
+    passwordProtectedCourseIds.set(courseCode, Number(match[1]))
+  },
+)
+
+function getResolvedCourseId(courseCode: string): number {
+  const courseId = passwordProtectedCourseIds.get(courseCode)
+  if (!courseId) {
+    throw new Error(`No resolved course id is available for course ${courseCode}.`)
+  }
+  return courseId
+}
+
+Given("I am on the course settings page of course {string}", async ({ page }, courseCode: string) => {
+  await gotoReliably(page, `/main/course_info/infocours.php?cid=${getResolvedCourseId(courseCode)}`)
+  await page.waitForLoadState("domcontentloaded")
+})
+
+Given("I am on the modern homepage of course {string}", async ({ page }, courseCode: string) => {
+  await gotoReliably(page, `/course/${getResolvedCourseId(courseCode)}/home?sid=0&gid=0`)
+  await page.waitForLoadState("domcontentloaded")
+})
+
+Then("I should be on the modern homepage of course {string}", async ({ page }, courseCode: string) => {
+  const expectedPath = `/course/${getResolvedCourseId(courseCode)}/home`
+  await expect(page).toHaveURL(new RegExp(`${expectedPath.replace(/\//g, "\\/")}(?:[/?#]|$)`))
+})
 
 // Ported from FeatureContext::iAmLoggedAs() / iAmAPlatformAdministrator() /
 // iAmATeacher() / iAmAStudent() / iAmAnHR() / iAmAStudentBoss() /
@@ -171,8 +238,17 @@ Given("I am logged as {string}", async ({ page }, username: string) => {
 })
 
 // Ported from FeatureContext::iAmNotLogged() — just visits /logout.
+// gotoReliably() (not a plain page.goto()) since specialCase1PlatformSettings.
+// feature's dense "Save a setting -> immediately switch user" pattern hit
+// the exact same "Navigation to '/logout' is interrupted by another
+// navigation to '.../search_settings?keyword=...'" race gotoReliably() was
+// already built to absorb for "I am on ..." (see its own comment above) —
+// a settings Save's redirect was still lagging when this step fired right
+// after it. Confirmed live this was a genuine race, not a hung step: the
+// interrupted navigation's target was the PREVIOUS step's own page, not a
+// bug in "I am not logged" itself.
 Given("I am not logged", async ({ page }) => {
-  await page.goto("/logout")
+  await gotoReliably(page, "/logout")
 })
 
 // Mink's fillField/checkField both resolve a field by id, then name, then
@@ -691,6 +767,34 @@ Then("I fill in the active tinymce editor with {string}", async ({ page }, value
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
 Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()
+})
+
+// Not ported — new, symmetric counterpart for toolAssessments.feature's
+// teardown (unchecking "Generate certificates" again after the scenario
+// that turned it on). Mink has no built-in "I uncheck" step; same
+// resolution cascade as "I check" above.
+Then("I uncheck {string}", async ({ page }, field: string) => {
+  await (await resolveField(page, field)).uncheck()
+})
+
+// Not ported — new, for toolAssessments.feature's "Create an evaluation"
+// scenario. gradebook_add_result.php's per-learner score field is
+// genuinely id/name "score[<numeric user id>]" (confirmed live) — the
+// Behat original hardcoded "score[5]", assuming a fixed seed order that
+// doesn't hold on this box (acostea is id 57 here). Same
+// look-up-by-username-instead-of-hardcoding pattern already established
+// for "I have a friend named ..." above, via the same /api/users endpoint
+// used elsewhere in this file.
+When("I fill in the score for {string} with {string}", async ({ page }, username: string, value: string) => {
+  const response = await page.request.get(`/api/users?username=${encodeURIComponent(username)}`, {
+    headers: { Accept: "application/ld+json" },
+  })
+  const { "hydra:member": members } = await response.json()
+  const userId = members?.[0]?.id
+  if (!userId) {
+    throw new Error(`Could not resolve a user id for username "${username}"`)
+  }
+  await page.locator(`[name="score[${userId}]"]`).fill(value)
 })
 
 // Ported from FeatureContext::iCheckTheRadioButton(): resolves a radio input
@@ -1254,6 +1358,37 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
   page.once("dialog", (dialog) => dialog.accept())
   await page.locator(`${selector}:visible`).first().click()
 })
+
+// Ported from FeatureContext::assertElementOnPage() as used via a raw CSS
+// selector (Mink's "I should see the ... element" idiom) — specialCase1
+// PlatformSettings.feature's own porting is the first user of this exact
+// phrase in this suite. Auto-retrying (expect().toBeVisible()) rather than a
+// one-shot count, since several of its callers assert this right after a
+// setting save whose effect (e.g. a profile field newly becoming visible)
+// only reflects once the next page has actually re-rendered.
+Then("I should see the {string} element", async ({ page }, selector: string) => {
+  await expect(page.locator(selector).first()).toBeVisible()
+})
+
+// Ported from FeatureContext::iWaitForTheElementToAppear() — a bounded wait
+// for a CSS selector to become visible, distinct from the id/name-based
+// resolveField() cascade above (this is for arbitrary icons/markers, e.g.
+// "i.mdi-chart-box"/"i.mdi-heart-plus", not form fields). Default Playwright
+// expect() timeout (15s, see playwright.config.ts) applies.
+When(/^(?:|I )wait for the element "([^"]*)" to appear$/, async ({ page }, selector: string) => {
+  await expect(page.locator(selector).first()).toBeVisible()
+})
+
+// Ported from FeatureContext::iWaitUpToSecondsForTheElementToAppear() — same
+// as above with an explicit, longer timeout for slower-to-render elements
+// (e.g. TinyMCE's own ".tox-tinymce" toolbar, which only mounts after its
+// JS bundle initializes).
+When(
+  /^(?:|I )wait up to (\d+) seconds for the element "([^"]*)" to appear$/,
+  async ({ page }, seconds: string, selector: string) => {
+    await expect(page.locator(selector).first()).toBeVisible({ timeout: Number(seconds) * 1000 })
+  },
+)
 
 // Not ported — new, for toolAnnouncement.feature's bulk-delete flow
 // (jqGrid's own "select all" header checkbox, `#cb_<gridName>`). A real CI
@@ -2173,4 +2308,95 @@ When("I press \"Next question\" until {string} appears", async ({ page }, nextTi
   }
   await expect(heading.first()).toBeVisible()
 })
+
+// Not ported — new, for specialCase1Sessions.feature's session_add.php/session_edit.php
+// date fields. These render as a flatpickr-style widget: a real `<input type="hidden"
+// name="access_start_date">` carrying the "Y-m-d H:i" value actually submitted, paired
+// with a separate visible text input the picker itself manages for display. Confirmed
+// live: the hidden field already comes pre-filled with a sensible default (today's date/
+// time) rather than empty, so a raw `.fill()` (which only works on visible, editable
+// elements anyway — this is `type="hidden"`) was never an option here. Setting the DOM
+// value directly and firing both `input` and `change` (mirroring `fillReliably()`'s own
+// event pair elsewhere in this file) is enough for the FormValidator-rendered legacy page
+// to pick up the new value on submit; no visual confirmation from the paired display
+// input is needed since nothing here asserts against it.
+When("I set hidden field {string} to {string}", async ({ page }, fieldName: string, value: string) => {
+  await page.locator(`input[name="${fieldName}"]`).evaluate((el, value) => {
+    ;(el as HTMLInputElement).value = value
+    el.dispatchEvent(new Event("input", { bubbles: true }))
+    el.dispatchEvent(new Event("change", { bubbles: true }))
+  }, value)
+})
+
+// Not ported — new, for specialCase1Sessions.feature's session competency extra fields
+// (extra_ecouter/extra_lire/etc. — CEFR-style "select your level" multi-selects). Every
+// one of these FormValidator::addSelect()-rendered fields has a synthetic index-0
+// "Please select an option" placeholder (confirmed live), so "select index 1" reliably
+// picks the first REAL option regardless of how many meaningful options a given field
+// has — same convention as course_add.php's own category/language selects, just without
+// needing to know or spell out the option's actual (long, French) label text.
+When("I select the first option from {string}", async ({ page }, fieldId: string) => {
+  await page.locator(`#${fieldId}`).evaluate((el) => {
+    const select = el as HTMLSelectElement
+    select.selectedIndex = select.options.length > 1 ? 1 : 0
+    select.dispatchEvent(new Event("change", { bubbles: true }))
+  })
+})
+
+// Not ported — new, for specialCase1Sessions.feature's Learning Path builder. The
+// resource panel (right-hand side of ExerciseLpBuilderView.vue-style pages, listing the
+// course's own documents/exercises/etc. available to add) renders each item as a plain
+// `<button>` with its exact title as text, inside a container confirmed live to be the
+// ONLY element on the page matching this exact class combination
+// (`div.divide-y.divide-gray-20.rounded-lg.border.border-gray-20.bg-white`) — scoping to
+// it avoids also matching the SAME item's name once it's been added to the LP tree on the
+// left (a real ambiguity: both panels can show an identically-labelled button at once).
+// A single click (no drag-and-drop simulation needed) adds the item to the tree,
+// confirmed live via the "Ajouté"/"Added" toast.
+When("I add LP item {string} from the resource panel", async ({ page }, itemName: string) => {
+  await page
+    .locator("div.divide-y.divide-gray-20.rounded-lg.border.border-gray-20.bg-white")
+    .getByRole("button", { name: itemName, exact: true })
+    .click()
+})
+
+// Not ported — new, companion to the step above. The LP builder's resource panel shows
+// one resource TYPE at a time (Documents/Tests/Links/Assignments/Forums/...), switched via
+// a row of icon-only toolbar buttons whose `title` attribute is the (locale-dependent)
+// type name — confirmed live both in English ("Tests") and French ("Exercices") courses.
+// Needed before "I add LP item ... from the resource panel" for any item that isn't a
+// plain document (the panel defaults to the Documents type on first load).
+When("I switch the LP resource panel to {string}", async ({ page }, resourceType: string) => {
+  await page.locator(`[title="${resourceType}"]`).click()
+})
+
+// Not ported — new, for specialCase1Sessions.feature's "final" document prerequisite
+// (must complete the "Open question exercise" first, minimum score 0). Each LP tree item
+// has its own "Prerequisites" icon (confirmed live via a real accessibility snapshot,
+// title="Prerequisites") opening an inline panel below with one radio per EARLIER item in
+// the LP (an item can only require something that precedes it — confirmed live: a later
+// sibling never appears as an option), plus a Minimum/Maximum score pair that only
+// applies — and only renders — for a prerequisite item that actually carries a score
+// (an exercise), not a plain document. The minimum/maximum inputs' ids embed the
+// prerequisite item's own numeric id (`lp-prerequisite-min-<id>`/`-max-<id>`, confirmed
+// live), extracted here from the just-checked radio's own id
+// (`lp-prerequisite-<id>`) rather than hardcoded, since that id is only known at runtime.
+When(
+  "I set the prerequisite of LP item {string} to {string} with minimum score {string}",
+  async ({ page }, targetItem: string, sourceItem: string, minimumScore: string) => {
+    await page
+      .locator(".rounded-lg.border.px-2.py-2", { hasText: targetItem })
+      .locator('[title="Prerequisites"]')
+      .click()
+    const radio = page.getByRole("radio", { name: sourceItem, exact: true })
+    await radio.check()
+    const radioId = await radio.getAttribute("id")
+    const numericId = radioId?.replace("lp-prerequisite-", "")
+    const minimumInput = page.locator(`#lp-prerequisite-min-${numericId}`)
+    if (await minimumInput.count()) {
+      await minimumInput.fill(minimumScore)
+    }
+    await page.getByRole("button", { name: "Save prerequisites settings" }).click()
+  },
+)
 

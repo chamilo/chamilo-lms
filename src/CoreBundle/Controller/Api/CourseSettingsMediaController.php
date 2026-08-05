@@ -80,7 +80,7 @@ final class CourseSettingsMediaController extends AbstractController
             $course,
             $user,
             $file,
-            \trim((string) $request->request->get('crop', '')),
+            trim((string) $request->request->get('crop', '')),
         );
         $this->manager->logMediaUpdate($course, $session, 'course_picture', $file->getClientOriginalName());
 
@@ -118,14 +118,14 @@ final class CourseSettingsMediaController extends AbstractController
         $this->assertImage($file);
         $target = $this->getWatermarkPath($course);
         $directory = \dirname($target);
-        if (!\is_dir($directory) && !\mkdir($directory, 0775, true) && !\is_dir($directory)) {
+        if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
             throw new BadRequestHttpException('The course directory could not be created.');
         }
-        $image = \imagecreatefromstring((string) \file_get_contents($file->getPathname()));
-        if (false === $image || !\imagepng($image, $target)) {
+        $image = imagecreatefromstring((string) file_get_contents($file->getPathname()));
+        if (false === $image || !imagepng($image, $target)) {
             throw new BadRequestHttpException('The watermark image could not be stored.');
         }
-        \imagedestroy($image);
+        imagedestroy($image);
         $this->manager->logMediaUpdate($course, $session, 'pdf_export_watermark_path', $file->getClientOriginalName());
 
         return $this->json(['success' => true]);
@@ -139,8 +139,8 @@ final class CourseSettingsMediaController extends AbstractController
         $this->manager->assertCanEdit($course);
         $this->assertCsrf($request);
         $target = $this->getWatermarkPath($course);
-        if (\is_file($target)) {
-            \unlink($target);
+        if (is_file($target)) {
+            unlink($target);
             $this->manager->logMediaUpdate($course, $session, 'pdf_export_watermark_path', 'deleted');
         }
 
@@ -160,10 +160,10 @@ final class CourseSettingsMediaController extends AbstractController
             ['courseId' => $courseId, 'sessionId' => $sessionId],
             ['courseId' => Types::INTEGER, 'sessionId' => Types::INTEGER],
         );
-        $filename = false === $row ? '' : \basename((string) ($row['filename'] ?? ''));
+        $filename = false === $row ? '' : basename((string) ($row['filename'] ?? ''));
         $path = $this->parameterBag->get('kernel.project_dir')
             .'/var/upload/course_legal/course_'.$courseId.'/session_'.$sessionId.'/'.$filename;
-        if ('' === $filename || !\is_file($path)) {
+        if ('' === $filename || !is_file($path)) {
             throw $this->createNotFoundException('The course agreement file was not found.');
         }
 
@@ -190,10 +190,10 @@ final class CourseSettingsMediaController extends AbstractController
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
         $directory = $this->parameterBag->get('kernel.project_dir').'/var/upload/course_legal/course_'.$courseId.'/session_'.$sessionId;
-        if (!\is_dir($directory) && !\mkdir($directory, 0775, true) && !\is_dir($directory)) {
+        if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
             throw new BadRequestHttpException('The agreement directory could not be created.');
         }
-        $filename = \date('YmdHis').'_'.\bin2hex(\random_bytes(8)).'_'.$this->sanitizeFilename($file->getClientOriginalName());
+        $filename = date('YmdHis').'_'.bin2hex(random_bytes(8)).'_'.$this->sanitizeFilename($file->getClientOriginalName());
         $file->move($directory, $filename);
         $row = $this->connection->fetchAssociative(
             'SELECT id, filename FROM session_rel_course_legal WHERE c_id = :courseId AND session_id = :sessionId LIMIT 1',
@@ -201,9 +201,9 @@ final class CourseSettingsMediaController extends AbstractController
             ['courseId' => Types::INTEGER, 'sessionId' => Types::INTEGER],
         );
         if (false !== $row && !empty($row['filename'])) {
-            $oldPath = $directory.'/'.\basename((string) $row['filename']);
-            if (\is_file($oldPath)) {
-                \unlink($oldPath);
+            $oldPath = $directory.'/'.basename((string) $row['filename']);
+            if (is_file($oldPath)) {
+                unlink($oldPath);
             }
         }
         if (false === $row) {
@@ -251,9 +251,9 @@ final class CourseSettingsMediaController extends AbstractController
         );
         if (false !== $row) {
             $directory = $this->parameterBag->get('kernel.project_dir').'/var/upload/course_legal/course_'.$courseId.'/session_'.$sessionId;
-            $path = $directory.'/'.\basename((string) ($row['filename'] ?? ''));
-            if (\is_file($path)) {
-                \unlink($path);
+            $path = $directory.'/'.basename((string) ($row['filename'] ?? ''));
+            if (is_file($path)) {
+                unlink($path);
             }
             $this->connection->update(
                 'session_rel_course_legal',
@@ -266,7 +266,6 @@ final class CourseSettingsMediaController extends AbstractController
 
         return $this->json(['success' => true]);
     }
-
 
     #[Route('/api/course-settings/custom-certificate-media/{field}', name: 'api_course_settings_certificate_media_download', methods: ['GET'])]
     public function downloadCertificateMedia(string $field, Request $request): BinaryFileResponse
@@ -285,13 +284,13 @@ final class CourseSettingsMediaController extends AbstractController
             ['courseId' => $courseId, 'sessionId' => $sessionId, 'accessUrlId' => $accessUrlId],
             ['courseId' => Types::INTEGER, 'sessionId' => Types::INTEGER, 'accessUrlId' => Types::INTEGER],
         );
-        $relativePath = false === $row ? '' : \ltrim((string) ($row['media_path'] ?? ''), '/');
+        $relativePath = false === $row ? '' : ltrim((string) ($row['media_path'] ?? ''), '/');
         $storagePath = 'customcertificate/certificates/'.$relativePath;
         if ('' === $relativePath || !$this->pluginsFilesystem->fileExists($storagePath)) {
             throw $this->createNotFoundException('The certificate image was not found.');
         }
 
-        $temporaryPath = \tempnam(\sys_get_temp_dir(), 'certificate_media_');
+        $temporaryPath = tempnam(sys_get_temp_dir(), 'certificate_media_');
         if (false === $temporaryPath) {
             throw new BadRequestHttpException('The certificate image could not be prepared.');
         }
@@ -299,19 +298,19 @@ final class CourseSettingsMediaController extends AbstractController
         if (false === $stream) {
             throw new BadRequestHttpException('The certificate image could not be read.');
         }
-        $target = \fopen($temporaryPath, 'wb');
+        $target = fopen($temporaryPath, 'wb');
         if (false === $target) {
-            \fclose($stream);
+            fclose($stream);
 
             throw new BadRequestHttpException('The certificate image could not be prepared.');
         }
-        \stream_copy_to_stream($stream, $target);
-        \fclose($stream);
-        \fclose($target);
+        stream_copy_to_stream($stream, $target);
+        fclose($stream);
+        fclose($target);
 
         $response = new BinaryFileResponse($temporaryPath);
         $response->deleteFileAfterSend();
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, \basename($relativePath));
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, basename($relativePath));
 
         return $response;
     }
@@ -338,16 +337,17 @@ final class CourseSettingsMediaController extends AbstractController
             ['id' => Types::INTEGER],
         ) ?: '');
         $extension = $this->getImageExtension($file);
-        $filename = $field.'_'.\bin2hex(\random_bytes(8)).'.'.$extension;
+        $filename = $field.'_'.bin2hex(random_bytes(8)).'.'.$extension;
         $storedPath = 'customcertificate/certificates/'.$certificateId.'/'.$filename;
-        $stream = \fopen($file->getPathname(), 'rb');
+        $stream = fopen($file->getPathname(), 'rb');
         if (false === $stream) {
             throw new BadRequestHttpException('The certificate image could not be opened.');
         }
+
         try {
             $this->pluginsFilesystem->writeStream($storedPath, $stream);
         } finally {
-            \fclose($stream);
+            fclose($stream);
         }
         $relative = $certificateId.'/'.$filename;
         $this->connection->update(
@@ -408,7 +408,7 @@ final class CourseSettingsMediaController extends AbstractController
 
     private function deleteCertificateFileIfUnused(string $field, string $relativePath, int $currentId): void
     {
-        $relativePath = \ltrim($relativePath, '/');
+        $relativePath = ltrim($relativePath, '/');
         if ('' === $relativePath) {
             return;
         }
@@ -466,7 +466,7 @@ final class CourseSettingsMediaController extends AbstractController
         }
         $mime = (string) $file->getMimeType();
         if (!\in_array($mime, ['image/jpeg', 'image/png', 'image/gif', 'image/webp'], true)
-            || false === @\getimagesize($file->getPathname())) {
+            || false === @getimagesize($file->getPathname())) {
             throw new BadRequestHttpException('Only valid JPG, PNG, GIF or WebP images are allowed.');
         }
     }
@@ -474,16 +474,16 @@ final class CourseSettingsMediaController extends AbstractController
     private function getWatermarkPath(Course $course): string
     {
         $accessUrlId = (int) ($this->accessUrlHelper->getCurrent()?->getId() ?? 0);
-        $directory = \trim((string) $course->getDirectory(), '/');
+        $directory = trim((string) $course->getDirectory(), '/');
 
         return $this->parameterBag->get('kernel.project_dir').'/public/courses/'.$directory.'/'.$accessUrlId.'_pdf_watermark.png';
     }
 
     private function sanitizeFilename(string $filename): string
     {
-        $filename = \preg_replace('/[^A-Za-z0-9._-]+/', '_', \basename($filename));
+        $filename = preg_replace('/[^A-Za-z0-9._-]+/', '_', basename($filename));
 
-        return '' === \trim((string) $filename, '._-') ? 'agreement' : (string) $filename;
+        return '' === trim((string) $filename, '._-') ? 'agreement' : (string) $filename;
     }
 
     private function ensureCertificateRow(Course $course, int $sessionId): int

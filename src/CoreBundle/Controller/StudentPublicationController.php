@@ -660,7 +660,6 @@ class StudentPublicationController extends AbstractController
                     $content = $resourceNodeRepository->getFileSystem()->read($path);
 
                     if ($addFullname) {
-
                         $fullname = $this->cleanFilename(
                             trim(($user->getFirstname() ?? '').' '.($user->getLastname() ?? ''))
                         );

@@ -16,7 +16,9 @@ use const ENT_SUBSTITUTE;
 
 final readonly class AdminQuestionBankPdfService
 {
-    public function __construct(private AdminQuestionBankManager $manager) {}
+    public function __construct(
+        private AdminQuestionBankManager $manager
+    ) {}
 
     public function export(Request $request): Response
     {

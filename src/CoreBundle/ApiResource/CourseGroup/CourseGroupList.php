@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseGroup;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupListProvider;
@@ -22,14 +23,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Course groups and categories in the current course context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_list',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseGroupListProvider::class,
         ),
     ],

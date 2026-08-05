@@ -44,7 +44,7 @@ final readonly class CourseGroupImportProcessor implements ProcessorInterface
         if (!\is_array($rows)) {
             throw new BadRequestHttpException('The CSV file is invalid.');
         }
-        $result = $this->manager->import($request, $rows, $request->request->getBoolean('deleteMissing'));
+        $result = $this->manager->import($rows, $request->request->getBoolean('deleteMissing'));
         $resource = new CourseGroupImport();
         $resource->success = true;
         $resource->message = 'Import completed';

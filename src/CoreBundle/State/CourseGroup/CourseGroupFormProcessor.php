@@ -38,7 +38,7 @@ final readonly class CourseGroupFormProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is not available.');
         }
         $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
-        $data->groupId = $this->manager->saveGroup($data, $request, $groupId);
+        $data->groupId = $this->manager->saveGroup($data, $groupId);
         $data->success = true;
         $data->message = 'Saved';
 

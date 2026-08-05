@@ -40,17 +40,16 @@ final readonly class CourseGroupActionProcessor implements ProcessorInterface
         }
 
         $data->affectedIds = match ($operation->getName()) {
-            'post_course_group_create_groups' => $this->manager->createGroups($request, $data->groups),
+            'post_course_group_create_groups' => $this->manager->createGroups($data->groups),
             'post_course_group_create_subgroups' => $this->createSubgroups($request, $data),
             'post_course_group_create_class_groups' => $this->manager->createClassGroups(
-                $request,
                 $data->categoryId,
                 $data->classIds,
                 $data->consistentLink,
             ),
-            'post_course_group_delete' => $this->manager->deleteGroups($request, $data->groupIds),
-            'post_course_group_empty' => $this->manager->emptyGroups($request, $data->groupIds),
-            'post_course_group_fill' => $this->manager->fillGroups($request, $data->groupIds),
+            'post_course_group_delete' => $this->manager->deleteGroups($data->groupIds),
+            'post_course_group_empty' => $this->manager->emptyGroups($data->groupIds),
+            'post_course_group_fill' => $this->manager->fillGroups($data->groupIds),
             'post_course_group_toggle_visibility' => $this->toggleVisibility($request, $data),
             'post_course_group_self_register' => $this->selfRegister($request, $data),
             'post_course_group_self_unregister' => $this->selfUnregister($request, $data),
@@ -81,49 +80,49 @@ final readonly class CourseGroupActionProcessor implements ProcessorInterface
 
     private function createSubgroups(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->createSubgroups($request, $data->baseGroupId, $data->numberOfGroups);
+        $this->manager->createSubgroups($data->baseGroupId, $data->numberOfGroups);
 
         return [];
     }
 
     private function toggleVisibility(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->toggleVisibility($request, $data->groupId, $data->visible);
+        $this->manager->toggleVisibility($data->groupId, $data->visible);
 
         return [$data->groupId];
     }
 
     private function selfRegister(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->selfRegister($request, $data->groupId);
+        $this->manager->selfRegister($data->groupId);
 
         return [$data->groupId];
     }
 
     private function selfUnregister(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->selfUnregister($request, $data->groupId);
+        $this->manager->selfUnregister($data->groupId);
 
         return [$data->groupId];
     }
 
     private function deleteCategory(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->deleteCategory($request, $data->categoryId);
+        $this->manager->deleteCategory($data->categoryId);
 
         return [$data->categoryId];
     }
 
     private function moveCategory(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->moveCategory($request, $data->categoryId, $data->otherCategoryId);
+        $this->manager->moveCategory($data->categoryId, $data->otherCategoryId);
 
         return [$data->categoryId, $data->otherCategoryId];
     }
 
     private function removeClassLink(Request $request, CourseGroupAction $data): array
     {
-        $this->manager->removeClassLink($request, $data->groupId);
+        $this->manager->removeClassLink($data->groupId);
 
         return [$data->groupId];
     }

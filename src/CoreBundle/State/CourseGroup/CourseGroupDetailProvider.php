@@ -31,7 +31,7 @@ final readonly class CourseGroupDetailProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is not available.');
         }
         $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
-        $data = $this->manager->getDetailData($request, $groupId);
+        $data = $this->manager->getDetailData($groupId);
         $resource = new CourseGroupDetail();
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;

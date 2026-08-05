@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseGroup;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
@@ -41,6 +42,7 @@ final readonly class CourseGroupManager
         private CGroupRepository $groupRepository,
         private CGroupCategoryRepository $categoryRepository,
         private UrlGeneratorInterface $router,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function getCsrfIntention(): string
@@ -51,29 +53,16 @@ final readonly class CourseGroupManager
     /**
      * @return array{0: Course, 1: Session|null}
      */
-    public function resolveContext(Request $request): array
+    public function resolveContext(): array
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
+        $course = $this->cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
 
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('The requested course was not found.');
-        }
-
-        $sessionId = $request->query->getInt('sid');
-        $session = null;
-        if ($sessionId > 0) {
-            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-            if (!$session instanceof Session) {
-                throw new NotFoundHttpException('The requested session was not found.');
-            }
-
-            if (!$session->hasCourse($course)) {
-                throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-            }
+        // SessionVoter only proves the course/session pairing for students and course coaches,
+        // so assert it here for general coaches and admins too.
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
         }
 
         return [$course, $session];
@@ -178,7 +167,7 @@ final readonly class CourseGroupManager
      */
     public function getListData(Request $request): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanRead($course, $session);
 
         $canManage = $this->canManage($course, $session);
@@ -333,7 +322,7 @@ final readonly class CourseGroupManager
      */
     public function getOverviewData(Request $request): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $keyword = trim((string) $request->query->get('search', ''));
         $groups = $this->groupRepository->getResourcesByCourse($course, $session)->getQuery()->getResult();
@@ -378,7 +367,7 @@ final readonly class CourseGroupManager
      */
     public function getGroupFormData(Request $request, int $groupId = 0): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $group = $groupId > 0 ? $this->findGroup($groupId, $course, $session) : null;
         if ($group instanceof CGroup) {
             $this->assertCanManageGroup($group, $course, $session);
@@ -468,9 +457,9 @@ final readonly class CourseGroupManager
         ];
     }
 
-    public function saveGroup(object $data, Request $request, int $groupId = 0): int
+    public function saveGroup(object $data, int $groupId = 0): int
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $group = $groupId > 0 ? $this->findGroup($groupId, $course, $session) : null;
         if ($group instanceof CGroup) {
             $this->assertCanManageGroup($group, $course, $session);
@@ -525,9 +514,9 @@ final readonly class CourseGroupManager
     /**
      * @return array<string, mixed>
      */
-    public function getCategoryFormData(Request $request, int $categoryId = 0): array
+    public function getCategoryFormData(int $categoryId = 0): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ($session instanceof Session) {
             throw new AccessDeniedHttpException('Group categories cannot be managed inside a session.');
@@ -566,9 +555,9 @@ final readonly class CourseGroupManager
         ];
     }
 
-    public function saveCategory(object $data, Request $request, int $categoryId = 0): int
+    public function saveCategory(object $data, int $categoryId = 0): int
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ($session instanceof Session) {
             throw new AccessDeniedHttpException('Group categories cannot be managed inside a session.');
@@ -629,9 +618,9 @@ final readonly class CourseGroupManager
     /**
      * @return array<string, mixed>
      */
-    public function getMembersData(Request $request, int $groupId, string $mode): array
+    public function getMembersData(int $groupId, string $mode): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $group = $this->findGroup($groupId, $course, $session);
         $this->assertCanManageGroup($group, $course, $session);
 
@@ -718,12 +707,12 @@ final readonly class CourseGroupManager
 
     public function saveMembers(Request $request, int $groupId, string $mode, array $selectedIds): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $group = $this->findGroup($groupId, $course, $session);
         $this->assertCanManageGroup($group, $course, $session);
 
         $selectedIds = array_values(array_unique(array_filter(array_map('intval', $selectedIds))));
-        $selectionData = $this->getMembersData($request, $groupId, $mode);
+        $selectionData = $this->getMembersData($groupId, $mode);
         $allowedIds = array_map(
             static fn (array $item): int => (int) $item['id'],
             (array) $selectionData['options'],
@@ -783,9 +772,9 @@ final readonly class CourseGroupManager
     /**
      * @return array<string, mixed>
      */
-    public function getDetailData(Request $request, int $groupId): array
+    public function getDetailData(int $groupId): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanRead($course, $session);
         $group = $this->findGroup($groupId, $course, $session);
         $user = $this->security->getUser();
@@ -869,9 +858,9 @@ final readonly class CourseGroupManager
         ];
     }
 
-    public function createGroups(Request $request, array $groups): array
+    public function createGroups(array $groups): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $ids = [];
         foreach ($groups as $groupData) {
@@ -897,9 +886,9 @@ final readonly class CourseGroupManager
         return $ids;
     }
 
-    public function createSubgroups(Request $request, int $baseGroupId, int $numberOfGroups): void
+    public function createSubgroups(int $baseGroupId, int $numberOfGroups): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $this->findGroup($baseGroupId, $course, $session);
         if ($numberOfGroups <= 0) {
@@ -908,9 +897,9 @@ final readonly class CourseGroupManager
         GroupManager::create_subgroups($baseGroupId, $numberOfGroups);
     }
 
-    public function createClassGroups(Request $request, int $categoryId, array $classIds, bool $consistentLink): array
+    public function createClassGroups(int $categoryId, array $classIds, bool $consistentLink): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ($categoryId > 0) {
             $this->findCategory($categoryId, $course, $session);
@@ -933,9 +922,9 @@ final readonly class CourseGroupManager
             : array_values(array_map('intval', GroupManager::create_class_groups($categoryId, $classIds)));
     }
 
-    public function deleteGroups(Request $request, array $groupIds): array
+    public function deleteGroups(array $groupIds): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $affected = [];
         foreach ($this->normalizeIds($groupIds) as $groupId) {
@@ -947,9 +936,9 @@ final readonly class CourseGroupManager
         return $affected;
     }
 
-    public function emptyGroups(Request $request, array $groupIds): array
+    public function emptyGroups(array $groupIds): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $affected = [];
         foreach ($this->normalizeIds($groupIds) as $groupId) {
@@ -961,9 +950,9 @@ final readonly class CourseGroupManager
         return $affected;
     }
 
-    public function fillGroups(Request $request, array $groupIds): array
+    public function fillGroups(array $groupIds): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $affected = [];
         foreach ($this->normalizeIds($groupIds) as $groupId) {
@@ -975,17 +964,17 @@ final readonly class CourseGroupManager
         return $affected;
     }
 
-    public function toggleVisibility(Request $request, int $groupId, bool $visible): void
+    public function toggleVisibility(int $groupId, bool $visible): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $group = $this->findGroup($groupId, $course, $session);
         $visible ? GroupManager::setVisible($group) : GroupManager::setInvisible($group);
     }
 
-    public function selfRegister(Request $request, int $groupId): void
+    public function selfRegister(int $groupId): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanRead($course, $session);
         $group = $this->findGroup($groupId, $course, $session);
         $user = $this->security->getUser();
@@ -995,9 +984,9 @@ final readonly class CourseGroupManager
         GroupManager::subscribeUsers((int) $user->getId(), $group, (int) $course->getId());
     }
 
-    public function selfUnregister(Request $request, int $groupId): void
+    public function selfUnregister(int $groupId): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanRead($course, $session);
         $group = $this->findGroup($groupId, $course, $session);
         $user = $this->security->getUser();
@@ -1007,9 +996,9 @@ final readonly class CourseGroupManager
         GroupManager::unsubscribeUsers((int) $user->getId(), $group, (int) $course->getId());
     }
 
-    public function deleteCategory(Request $request, int $categoryId): void
+    public function deleteCategory(int $categoryId): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ($session instanceof Session) {
             throw new AccessDeniedHttpException('Categories cannot be deleted inside a session.');
@@ -1024,9 +1013,9 @@ final readonly class CourseGroupManager
         GroupManager::delete_category($categoryId, $course->getCode());
     }
 
-    public function moveCategory(Request $request, int $categoryId, int $otherCategoryId): void
+    public function moveCategory(int $categoryId, int $otherCategoryId): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ($session instanceof Session) {
             throw new AccessDeniedHttpException('Categories cannot be reordered inside a session.');
@@ -1039,9 +1028,9 @@ final readonly class CourseGroupManager
         GroupManager::swap_category_order($categoryId, $otherCategoryId);
     }
 
-    public function removeClassLink(Request $request, int $groupId): void
+    public function removeClassLink(int $groupId): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         $group = $this->findGroup($groupId, $course, $session);
         if (!GroupManager::remove_group_consistent_link($group)) {
@@ -1052,9 +1041,9 @@ final readonly class CourseGroupManager
     /**
      * @return array<string, mixed>
      */
-    public function import(Request $request, array $rows, bool $deleteMissing): array
+    public function import(array $rows, bool $deleteMissing): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if ([] === $rows) {
             throw new BadRequestHttpException('The CSV file is empty or invalid.');
@@ -1066,9 +1055,9 @@ final readonly class CourseGroupManager
     /**
      * @return array<int, array<int, mixed>>
      */
-    public function getExportData(Request $request, ?int $groupId = null, bool $loadUsers = false): array
+    public function getExportData(?int $groupId = null, bool $loadUsers = false): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if (null !== $groupId && $groupId > 0) {
             $this->findGroup($groupId, $course, $session);

@@ -41,7 +41,7 @@ final class CourseGroupExportController extends AbstractController
     public function __invoke(Request $request, string $format): Response
     {
         $groupId = $request->query->getInt('groupId');
-        $rows = $this->manager->getExportData($request, $groupId > 0 ? $groupId : null, true);
+        $rows = $this->manager->getExportData($groupId > 0 ? $groupId : null, true);
         $filename = $groupId > 0 ? 'course-group-'.$groupId : 'course-groups';
 
         return match ($format) {

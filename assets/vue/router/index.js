@@ -33,6 +33,7 @@ import notebook from "./notebook"
 import portfolio from "./portfolio"
 import wiki from "./wiki"
 import courseProgress from "./courseProgress"
+import courseSettings from "./courseSettings"
 import courseUser from "./courseUser"
 import courseSession from "./courseSession"
 import myClass from "./myClass"
@@ -533,6 +534,7 @@ const router = createRouter({
     notebook,
     wiki,
     courseProgress,
+    courseSettings,
     courseUser,
     courseSession,
     myClass,

@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -70,6 +71,7 @@ class CidReqListener
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly CourseFromRequestHelper $courseFromRequest,
+        private readonly CourseAccessResolver $courseAccessResolver,
         private readonly SettingsManager $settingsManager,
         private readonly LegalRepository $legalRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
@@ -192,17 +194,26 @@ class CidReqListener
                 }
             }
 
-            // The dedicated checkLegal.json endpoint computes this redirect itself
-            // and returns it as JSON (consumed by the Vue router guard on SPA-internal
-            // navigation); skip it here to avoid turning that AJAX call into an HTTP redirect.
+            $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
+
+            // The dedicated checkLegal.json endpoint computes redirects itself and
+            // returns them as JSON for the Vue router guard. Direct page requests are
+            // redirected here before the generic course access voter is evaluated.
             if ('chamilo_core_course_check_legal_json' !== $request->attributes->get('_route')) {
+                $passwordRedirect = $this->redirectForRegistrationPassword($course, $sessionId);
+                if (null !== $passwordRedirect) {
+                    $event->setResponse($passwordRedirect);
+
+                    return;
+                }
+
                 $tokenUser = $this->tokenStorage->getToken()?->getUser();
                 if ($tokenUser instanceof User) {
                     $termsRedirect = $this->redirectForPendingTermsAndConditions(
                         $request,
                         $tokenUser,
                         $course,
-                        $this->courseFromRequest->getSessionId($request) ?? 0
+                        $sessionId
                     );
                     if (null !== $termsRedirect) {
                         $event->setResponse($termsRedirect);
@@ -217,8 +228,6 @@ class CidReqListener
 
                 return;
             }
-
-            $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
 
             if (empty($sessionId)) {
                 $sessionHandler->remove('session_name');
@@ -411,6 +420,31 @@ class CidReqListener
 
         // Remove context roles also when leaving the course/session/group
         $this->resetContextRolesOnTokenUser();
+    }
+
+    /**
+     * Redirects a visitor to the course password form before the modern course
+     * home or one of its tools is rendered.
+     */
+    private function redirectForRegistrationPassword(Course $course, int $sessionId): ?RedirectResponse {
+        if (true === (bool) ChamiloSession::read('course_password_'.$course->getId(), false)) {
+            return null;
+        }
+
+        $tokenUser = $this->tokenStorage->getToken()?->getUser();
+        $user = $tokenUser instanceof User ? $tokenUser : null;
+        $session = $sessionId > 0 ? $this->entityManager->find(Session::class, $sessionId) : null;
+
+        if (!$this->courseAccessResolver->requiresRegistrationPassword($course, $user, $session)) {
+            return null;
+        }
+
+        return new RedirectResponse(
+            '/main/auth/set_temp_password.php?'.http_build_query([
+                'course_id' => $course->getId(),
+                'session_id' => $sessionId,
+            ])
+        );
     }
 
     /**

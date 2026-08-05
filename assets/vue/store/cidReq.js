@@ -29,10 +29,10 @@ export const useCidReqStore = defineStore("cidReq", () => {
     courseSettingsStore.resetCourseSettings()
   }
 
-  const setCourseByIri = async (cId, sid = 0) => {
+  const setCourseByIri = async (cId, sid = 0, force = false) => {
     const courseIri = `/api/courses/${cId}`
 
-    if (course.value && courseIri === course.value["@id"]) {
+    if (!force && course.value && courseIri === course.value["@id"]) {
       return
     }
 
@@ -49,6 +49,8 @@ export const useCidReqStore = defineStore("cidReq", () => {
       isCourseLoaded.value = true
     }
   }
+
+  const refreshCourseById = (cId, sid = 0) => setCourseByIri(cId, sid, true)
 
   const setSessionByIri = async (sId, useBasic = true) => {
     const sessionIri = `/api/sessions/${sId}`
@@ -87,6 +89,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
 
     resetCid,
     setCourseAndSessionById,
+    refreshCourseById,
 
     isCourseLoaded,
   }

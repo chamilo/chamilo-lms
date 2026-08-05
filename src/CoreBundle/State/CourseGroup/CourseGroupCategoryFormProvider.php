@@ -31,7 +31,7 @@ final readonly class CourseGroupCategoryFormProvider implements ProviderInterfac
             throw new BadRequestHttpException('The current request is not available.');
         }
         $categoryId = (int) ($uriVariables['categoryId'] ?? $request->attributes->get('categoryId', 0));
-        $data = $this->manager->getCategoryFormData($request, $categoryId);
+        $data = $this->manager->getCategoryFormData($categoryId);
         $resource = new CourseGroupCategoryForm();
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;

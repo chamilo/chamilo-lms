@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathBackupEmptyException;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathBackupResourceException;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathChamiloBackupExportService;
@@ -42,6 +43,7 @@ final class LearningPathChamiloBackupExportAction extends AbstractController
         private readonly SettingsManager $settingsManager,
         private readonly CLpRepository $learningPathRepository,
         private readonly LearningPathChamiloBackupExportService $exportService,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     #[Route(
@@ -56,9 +58,9 @@ final class LearningPathChamiloBackupExportAction extends AbstractController
             throw new AccessDeniedHttpException('Chamilo learning path export is disabled.');
         }
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         if (null !== $group) {
             throw new BadRequestHttpException('Chamilo learning path export is not available in a group context.');
         }

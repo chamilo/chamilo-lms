@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\AbstractTool;
@@ -49,6 +50,7 @@ final class CToolStateProvider implements ProviderInterface
         private readonly ToolChain $toolChain,
         protected RequestStack $requestStack,
         private readonly PluginHelper $pluginHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {
         $this->transformer = new CourseToolDataTranformer(
             $this->requestStack,
@@ -62,8 +64,7 @@ final class CToolStateProvider implements ProviderInterface
         /** @var PartialPaginatorInterface $result */
         $result = $this->provider->provide($operation, $uriVariables, $context);
 
-        $request = $this->requestStack->getMainRequest();
-        $studentView = $request ? $request->getSession()->get('studentview') : 'studentview';
+        $studentView = $this->studentViewHelper->isStudentView() ? 'studentview' : 'teacherview';
 
         /** @var User|null $user */
         $user = $this->security->getUser();

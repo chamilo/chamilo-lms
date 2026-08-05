@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
@@ -56,6 +57,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -112,7 +114,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to access this forum category.');
         }
 
-        $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
+        $showHidden = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);

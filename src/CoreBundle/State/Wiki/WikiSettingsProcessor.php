@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiSettings;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,6 +32,8 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsCourseManager $settingsCourseManager,
+        private StudentViewHelper $studentViewHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -47,14 +51,14 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request) || !$this->canManageWikiCourseSettings($this->security, $course)) {
+        if ($this->studentViewHelper->isStudentView() || !$this->canManageWikiCourseSettings($this->security, $course)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Wiki settings.');
         }
 

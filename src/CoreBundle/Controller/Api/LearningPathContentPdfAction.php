@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathContentPdfService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -56,6 +57,7 @@ final class LearningPathContentPdfAction extends AbstractController
         private readonly LearningPathContentPdfService $contentPdfService,
         #[Autowire('%kernel.cache_dir%')]
         private readonly string $cacheDir,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     #[Route(
@@ -139,9 +141,9 @@ final class LearningPathContentPdfAction extends AbstractController
             throw new AccessDeniedHttpException('Learning path PDF export is disabled.');
         }
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->lpRepository->find($lpId);
         if (!$lp instanceof CLp) {
             throw new NotFoundHttpException('Learning path not found.');

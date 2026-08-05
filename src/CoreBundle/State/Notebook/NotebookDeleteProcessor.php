@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\State\Notebook;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Notebook\NotebookItem;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -37,6 +39,8 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
         private NotebookWriteProtection $writeProtection,
+        private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -50,8 +54,8 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getNotebookCourse($this->entityManager, $request);
-        $session = $this->getNotebookSession($this->entityManager, $request);
+        $course = $this->getNotebookCourse($this->cidReqHelper);
+        $session = $this->getNotebookSession($this->cidReqHelper);
         $this->assertNotebookSessionBelongsToCourse($session, $course);
 
         if (!$this->canReadNotebook(
@@ -64,7 +68,7 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to view Notebook in this context.');
         }
 
-        $studentView = $this->isNotebookStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         if (!$this->canWriteNotebook(
             $this->entityManager,
             $this->security,

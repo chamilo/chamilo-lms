@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicAdvance;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
@@ -56,6 +58,8 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -69,11 +73,11 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->getCourseProgressCourse($this->cidReqHelper);
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->getCourseProgressSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->assertCanManage($course, $session);
 
         $thematicId = isset($uriVariables['thematicId'])
             ? (int) $uriVariables['thematicId']
@@ -91,9 +95,9 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
         return $this->buildResponse($request, $course, $session, $thematic, $advance);
     }
 
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
+    private function assertCanManage(Course $course, ?Session $session): void
     {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
+        if (!$this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             && $this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

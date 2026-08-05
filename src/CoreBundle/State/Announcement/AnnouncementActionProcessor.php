@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -45,6 +46,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -71,7 +73,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         $group = $this->getGroup($request);
         $this->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isStudentView($request) || !$this->canManageAnnouncements(
+        if ($this->studentViewHelper->isStudentView() || !$this->canManageAnnouncements(
             $this->entityManager,
             $this->security,
             $this->settingsManager,

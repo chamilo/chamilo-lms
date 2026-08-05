@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -26,39 +27,30 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 trait WikiAccessHelperTrait
 {
-    private function getWikiCourse(EntityManagerInterface $entityManager, Request $request): Course
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
+    private function getWikiCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
     }
 
-    private function getWikiSession(EntityManagerInterface $entityManager, Request $request): ?Session
+    private function getWikiSession(CidReqHelper $cidReqHelper): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
         if ($sessionId <= 0) {
             return null;
         }
 
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineSessionEntity()
+            ?? throw new BadRequestHttpException('The requested session was not found.');
     }
 
-    private function getWikiGroup(EntityManagerInterface $entityManager, Request $request): ?CGroup
+    private function getWikiGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?CGroup
     {
-        $groupId = $request->query->getInt('gid');
+        $groupId = (int) ($cidReqHelper->getGroupId() ?? 0);
         if ($groupId <= 0) {
             return null;
         }
@@ -366,19 +358,6 @@ trait WikiAccessHelperTrait
         }
 
         return $nodeId;
-    }
-
-    private function isWikiStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 
     private function isWikiCourseSettingEnabled(

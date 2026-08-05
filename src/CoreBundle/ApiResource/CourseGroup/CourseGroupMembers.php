@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupMembersProcessor;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupMembersProvider;
@@ -27,6 +28,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(summary: 'Course group member selection data'),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_members',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseGroupMembersProvider::class,
         ),
         new Post(
@@ -38,6 +50,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'post_course_group_members',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: CourseGroupMembersProcessor::class,
         ),
         new Get(
@@ -48,6 +71,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(summary: 'Course group tutor selection data'),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_tutors',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseGroupMembersProvider::class,
         ),
         new Post(
@@ -59,6 +93,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'post_course_group_tutors',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: CourseGroupMembersProcessor::class,
         ),
     ],

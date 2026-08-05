@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupDetailProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -25,6 +26,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(summary: 'Course group area data'),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_detail',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseGroupDetailProvider::class,
         ),
     ],

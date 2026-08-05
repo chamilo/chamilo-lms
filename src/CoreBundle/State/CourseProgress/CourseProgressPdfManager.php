@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -47,11 +49,13 @@ final readonly class CourseProgressPdfManager
         private Security $security,
         private SettingsManager $settingsManager,
         private TranslatorInterface $translator,
+        private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     public function export(Request $request, ?int $thematicId = null): Response
     {
-        [$course, $session] = $this->resolveWritableContext($request);
+        [$course, $session] = $this->resolveWritableContext();
         $thematics = $this->resolveThematics($course, $session, $thematicId);
         $dateFormatter = $this->createDateFormatter($request);
         $data = [];
@@ -95,14 +99,14 @@ final readonly class CourseProgressPdfManager
     /**
      * @return array{0: Course, 1: ?Session}
      */
-    private function resolveWritableContext(Request $request): array
+    private function resolveWritableContext(): array
     {
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->getCourseProgressCourse($this->cidReqHelper);
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->getCourseProgressSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
+        if ($this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             || !$this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

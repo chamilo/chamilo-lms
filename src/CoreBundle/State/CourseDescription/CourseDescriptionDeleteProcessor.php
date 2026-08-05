@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionItem;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -42,6 +43,7 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -60,7 +62,7 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         $session = $this->getSession($request);
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isStudentView($request) || !$this->canManageCourseDescriptions(
+        if ($this->studentViewHelper->isStudentView() || !$this->canManageCourseDescriptions(
             $this->entityManager,
             $this->security,
             $this->settingsManager,
@@ -178,18 +180,5 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(CourseDescriptionItemProvider::CSRF_TOKEN_ID, $token))) {
             throw new AccessDeniedHttpException('The security token is invalid.');
         }
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 }

@@ -32,7 +32,7 @@ final readonly class CourseGroupMembersProvider implements ProviderInterface
         }
         $mode = str_contains((string) $operation->getName(), 'tutors') ? 'tutors' : 'members';
         $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
-        $data = $this->manager->getMembersData($request, $groupId, $mode);
+        $data = $this->manager->getMembersData($groupId, $mode);
         $resource = new CourseGroupMembers();
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;

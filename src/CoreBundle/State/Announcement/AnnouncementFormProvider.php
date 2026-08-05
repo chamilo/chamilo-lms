@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Controller\AnnouncementAttachmentController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
@@ -49,6 +50,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -71,7 +73,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $group = $this->getGroup($request);
         $this->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isStudentView($request) || !$this->canManageAnnouncements(
+        if ($this->studentViewHelper->isStudentView() || !$this->canManageAnnouncements(
             $this->entityManager,
             $this->security,
             $this->settingsManager,

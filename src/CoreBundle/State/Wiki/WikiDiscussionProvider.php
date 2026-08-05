@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussion;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiDiscuss;
@@ -45,6 +47,8 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiDiscussionScoreCalculator $scoreCalculator,
+        private StudentViewHelper $studentViewHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -58,12 +62,12 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $nodeId = $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
@@ -84,7 +88,7 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested Wiki discussion was not found in the current context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

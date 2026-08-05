@@ -65,11 +65,14 @@ if ($action === 'md_to_html') {
 
         $content = file_get_contents($readmeFile);
         $html = MarkdownExtra::defaultTransform($content);
+        $html = preg_replace('#<script\b[^>]*>.*?</script>#is', '', (string) $html);
+        $html = preg_replace('/\son[a-z]+\s*=\s*(["\']).*?\1/ims', '', (string) $html);
+        $html = preg_replace('/\s(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/ims', ' $1="#"', (string) $html);
 
         if ('' === trim((string) $html)) {
             $html = Display::return_message('README file is empty.', 'warning', false);
         }
-        echo '<div class="prose">'.$html.'</div>';
+        echo '<div class="prose max-w-none">'.$html.'</div>';
     } catch (\Throwable $e) {
         error_log('[plugin.ajax md_to_html] '.$e->getMessage());
         http_response_code(500);
@@ -264,6 +267,8 @@ function plugin_cleanup_imslti_data_before_uninstall(Connection $connection): vo
     }
 }
 
+$pluginActionOutputBufferLevel = null;
+
 try {
     if (!api_is_platform_admin()) {
         http_response_code(403);
@@ -309,6 +314,11 @@ try {
     }
 
     $appPlugin = new AppPlugin();
+
+    // Keep AJAX responses valid JSON even if a legacy plugin emits HTML,
+    // warnings or notices during install/uninstall hooks.
+    $pluginActionOutputBufferLevel = ob_get_level();
+    ob_start();
 
     switch ($action) {
         case 'install':
@@ -413,13 +423,24 @@ try {
             ['pluginId' => $pluginId]
         );
 
-        error_log(
-            sprintf(
-                '[plugin.ajax uninstall] Deleted %d access_url_rel_plugin row(s) for plugin_id %d',
-                $deletedRows,
-                $pluginId
-            )
-        );
+        if ($deletedRows > 0) {
+            error_log(
+                sprintf(
+                    '[plugin.ajax uninstall] Deleted %d access_url_rel_plugin row(s) for plugin_id %d',
+                    $deletedRows,
+                    $pluginId
+                )
+            );
+        }
+    }
+
+    if (null !== $pluginActionOutputBufferLevel && ob_get_level() > $pluginActionOutputBufferLevel) {
+        $pluginActionOutput = (string) ob_get_clean();
+        $pluginActionOutputBufferLevel = null;
+
+        if ('' !== trim($pluginActionOutput)) {
+            error_log('[plugin.ajax legacy output] '.trim(strip_tags($pluginActionOutput)));
+        }
     }
 
     echo json_encode([
@@ -427,6 +448,16 @@ try {
         'message' => "Plugin action '{$action}' applied to '{$pluginTitle}'.",
     ]);
 } catch (\Throwable $e) {
+    if (null !== $pluginActionOutputBufferLevel) {
+        while (ob_get_level() > $pluginActionOutputBufferLevel) {
+            $pluginActionOutput = (string) ob_get_clean();
+
+            if ('' !== trim($pluginActionOutput)) {
+                error_log('[plugin.ajax legacy output] '.trim(strip_tags($pluginActionOutput)));
+            }
+        }
+    }
+
     error_log('[plugin.ajax] '.$e->getMessage().' | '.$e->getTraceAsString());
 
     http_response_code(500);

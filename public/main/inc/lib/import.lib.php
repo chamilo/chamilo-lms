@@ -4,6 +4,7 @@
 
 use League\Csv\Reader;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class Import
@@ -171,5 +172,34 @@ class Import
         }
 
         return $values;
+    }
+
+    /**
+     * Builds a DomCrawler from an XML file, hardened against XXE.
+     *
+     * @param string $file Path to the XML file
+     */
+    public static function xml(string $file): Crawler
+    {
+        return self::xmlFromString(file_get_contents($file));
+    }
+
+    /**
+     * Builds a DomCrawler from an XML string with XXE hardening: external
+     * entity loading is blocked regardless of the libxml runtime default,
+     * and the default loader is restored afterwards.
+     */
+    public static function xmlFromString(string $contents): Crawler
+    {
+        libxml_set_external_entity_loader(static fn () => null);
+
+        try {
+            $crawler = new Crawler();
+            $crawler->addXmlContent($contents);
+
+            return $crawler;
+        } finally {
+            libxml_set_external_entity_loader(null);
+        }
     }
 }

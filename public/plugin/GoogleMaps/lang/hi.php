@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'गूगल मैप्स';
+$strings['plugin_comment'] = 'अतिरिक्त क्षेत्रों में संग्रहीत उपयोगकर्ता स्थानों के साथ एक गूगल मैप दिखाएँ।';
+$strings['enable_api'] = 'गूगल मैप्स API लोड करें';
+$strings['api_key'] = 'API कुंजी';
+$strings['extra_field_name'] = 'अतिरिक्त क्षेत्र का नाम';
+$strings['extra_field_name_help'] = 'एक या अधिक उपयोगकर्ता अतिरिक्त क्षेत्र चर को अल्पविराम से अलग करके दर्ज करें। मैप अधिकतम 5 क्षेत्र प्रदर्शित कर सकता है। उदाहरण: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'उपयोगकर्ताओं का स्थान मानचित्र';
+$strings['UsersCoordinatesMapHelp'] = 'यह मानचित्र कॉन्फ़िगर किए गए उपयोगकर्ता अतिरिक्त क्षेत्रों के आधार पर उपयोगकर्ता स्थानों को प्रदर्शित करता है।';
+$strings['GoogleMapsAdminIntro'] = 'गूगल मैप्स API कुंजी और वे उपयोगकर्ता अतिरिक्त क्षेत्र कॉन्फ़िगर करें जिनमें पते या स्थान हैं।';
+$strings['GoogleMapsApi'] = 'गूगल मैप्स API';
+$strings['ExtraFields'] = 'अतिरिक्त क्षेत्र';
+$strings['Access'] = 'पहुँच';
+$strings['AdministratorsOnly'] = 'केवल प्रशासक';
+$strings['OpenMap'] = 'मानचित्र खोलें';
+$strings['ConfigurePlugin'] = 'प्लगइन कॉन्फ़िगर करें';
+$strings['Configured'] = 'कॉन्फ़िगर किया गया';
+$strings['NotConfigured'] = 'कॉन्फ़िगर नहीं किया गया';
+$strings['GoogleMapsApiDisabledWarning'] = 'प्लगइन कॉन्फ़िगरेशन में गूगल मैप्स API लोड करना अक्षम है।';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'गूगल मैप्स API कुंजी अनुपलब्ध है।';
+$strings['ExtraFieldNameMissingWarning'] = 'कोई उपयोगकर्ता अतिरिक्त क्षेत्र कॉन्फ़िगर नहीं किया गया है।';
+$strings['ExtraFieldsNotFoundWarning'] = 'निम्नलिखित उपयोगकर्ता अतिरिक्त क्षेत्र नहीं मिले: %s।';
+$strings['NoUserCoordinatesFound'] = 'कॉन्फ़िगर किए गए अतिरिक्त क्षेत्रों के लिए कोई उपयोगकर्ता स्थान नहीं मिला।';
+$strings['ConfigureGoogleMapsFirst'] = 'मानचित्र खोलने से पहले गूगल मैप्स API को कॉन्फ़िगर और सक्षम करें।';
+
+$strings['map_provider'] = 'मानचित्र प्रदाता';
+$strings['map_provider_help'] = 'उस मानचित्र प्रदाता का चयन करें जिसका उपयोग प्लगइन और सोशल मानचित्र द्वारा किया जाता है।';
+$strings['GoogleMapsProvider'] = 'गूगल मैप्स';
+$strings['OpenStreetMapProvider'] = 'ओपनस्ट्रीटमैप';
+$strings['MapProvider'] = 'मानचित्र प्रदाता';
+$strings['MapProviderConfiguration'] = 'प्रदाता कॉन्फ़िगरेशन';
+$strings['default_latitude'] = 'डिफ़ॉल्ट अक्षांश';
+$strings['default_latitude_help'] = 'डिफ़ॉल्ट मानचित्र केंद्र अक्षांश। तब उपयोग किया जाता है जब कोई मार्कर उपलब्ध न हो।';
+$strings['default_longitude'] = 'डिफ़ॉल्ट देशांतर';
+$strings['default_longitude_help'] = 'डिफ़ॉल्ट मानचित्र केंद्र देशांतर। तब उपयोग किया जाता है जब कोई मार्कर उपलब्ध न हो।';
+$strings['default_zoom'] = 'डिफ़ॉल्ट ज़ूम';
+$strings['default_zoom_help'] = '1 से 20 के बीच डिफ़ॉल्ट मानचित्र ज़ूम।';
+$strings['OpenStreetMapInfo'] = 'ओपनस्ट्रीटमैप को API कुंजी की आवश्यकता नहीं है। केवल-पता वाले मार्कर खोज लिंक के रूप में प्रदर्शित किए जाते हैं जब तक कि निर्देशांक उपलब्ध न हों।';

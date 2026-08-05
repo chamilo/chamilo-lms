@@ -34,13 +34,6 @@ class GradebookScoreDisplay
     #[ORM\Column(name: 'score_color_percent', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $scoreColorPercent;
 
-    public function setScore(float $score): self
-    {
-        $this->score = $score;
-
-        return $this;
-    }
-
     /**
      * Get score.
      *
@@ -51,9 +44,9 @@ class GradebookScoreDisplay
         return $this->score;
     }
 
-    public function setDisplay(string $display): self
+    public function setScore(float $score): self
     {
-        $this->display = $display;
+        $this->score = $score;
 
         return $this;
     }
@@ -68,9 +61,9 @@ class GradebookScoreDisplay
         return $this->display;
     }
 
-    public function setScoreColorPercent(float $scoreColorPercent): self
+    public function setDisplay(string $display): self
     {
-        $this->scoreColorPercent = $scoreColorPercent;
+        $this->display = $display;
 
         return $this;
     }
@@ -83,6 +76,13 @@ class GradebookScoreDisplay
     public function getScoreColorPercent()
     {
         return $this->scoreColorPercent;
+    }
+
+    public function setScoreColorPercent(float $scoreColorPercent): self
+    {
+        $this->scoreColorPercent = $scoreColorPercent;
+
+        return $this;
     }
 
     /**

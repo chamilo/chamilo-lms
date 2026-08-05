@@ -4,7 +4,6 @@
 $strings['plugin_title'] = '题目选项评估';
 $strings['plugin_comment'] = '允许重新计算题目选项的分数';
 
-$strings['enable'] = '启用';
 $strings['exercise_max_score'] = '练习最高分';
 $strings['exercise_max_score_help'] = '默认为 10。';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = '(正确数 - 错误数) / 3';
 $strings['QuestionsEvaluated'] = '已评估题目';
 $strings['RecalculateQuestionScores'] = '重新计算题目分数';
 $strings['FormulaSavedForExerciseX'] = '练习“%s”的公式已保存。';
+$strings['NoFormulaHelp'] = '对此测试保留默认的 Chamilo 评分行为。';
+$strings['enable'] = '启用';

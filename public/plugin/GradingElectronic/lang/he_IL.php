@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'דירוג אלקטרוני מושבת';
 $strings['StudentId'] = 'מספר סטודנט';
 $strings['ProviderId'] = 'מספר ספק';
 $strings['CourseHours'] = 'שעות קורס';
+
+$strings['GenerateFile'] = 'יצירת קובץ';
+$strings['CourseId'] = 'מזהה קורס';

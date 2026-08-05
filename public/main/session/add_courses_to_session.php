@@ -56,7 +56,7 @@ $form->addCheckBox('copy_evaluation', '', get_lang('Import gradebook from base c
 $form->addCheckBox(
     'import_teachers_as_course_coach',
     '',
-    get_lang('Import course teachers as course coach in the session')
+    get_lang('Import course teachers as course tutors in the session')
 );
 $form->addCheckBox(
     'import_assignments',
@@ -115,12 +115,12 @@ echo '      <div class="min-w-0">';
 echo '        <h1 class="text-lg font-semibold text-gray-90">'.htmlspecialchars($tool_name, ENT_QUOTES, api_get_system_encoding()).'</h1>';
 echo '        <p class="text-sm text-gray-50">'.htmlspecialchars($sessionTitle, ENT_QUOTES, api_get_system_encoding()).'</p>';
 echo '      </div>';
-echo '      <div class="flex items-center gap-2">';
-echo '        <a href="'.$backUrl.'" class="inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10">';
-echo              get_lang('Back');
+echo '      <div class="flex items-center gap-3">';
+echo '        <a href="'.$backUrl.'" class="inline-flex items-center" aria-label="'.api_htmlentities(get_lang('Back'), ENT_QUOTES).'">';
+echo              Display::getMdiIcon('arrow-left', 'ch-tool-icon-gradient', null, 32, get_lang('Back'));
 echo '        </a>';
-echo '        <a href="'.$listUrl.'" class="inline-flex items-center gap-2 rounded-md border border-gray-30 bg-white px-3 py-1.5 text-sm font-medium text-gray-90 shadow-sm hover:bg-gray-10">';
-echo              get_lang('Session list');
+echo '        <a href="'.$listUrl.'" class="inline-flex items-center" aria-label="'.api_htmlentities(get_lang('Session list'), ENT_QUOTES).'">';
+echo              Display::getMdiIcon('format-list-bulleted', 'ch-tool-icon-gradient', null, 32, get_lang('Session list'));
 echo '        </a>';
 echo '      </div>';
 echo '    </div>';

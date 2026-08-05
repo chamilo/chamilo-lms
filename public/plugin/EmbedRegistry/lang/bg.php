@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'В тези дати това вградено
 $strings['HtmlCode'] = 'HTML код';
 $strings['HtmlCodeHelp'] = 'Споделеният HTML код, предоставен от външната услуга, когато се иска споделяне във формат Embedded.';
 $strings['LaunchContent'] = 'Стартиране на съдържанието';
+
+$strings['InvalidDateRange'] = 'Началната дата трябва да бъде по-ранна или равна на крайната дата.';
+
+$strings['InvalidSecurityToken'] = 'Невалиден токен за сигурност. Моля, презаредете страницата и опитайте отново.';

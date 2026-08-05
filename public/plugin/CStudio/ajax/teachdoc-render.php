@@ -61,7 +61,7 @@ $optionsProject = $oel_tools_infos['optionsProject'];
 $optionsProjectCheck = $oel_tools_infos['optionsProjectCheck'];
 $optionsProjectMessKo = $oel_tools_infos['optionsProjectMessKo'];
 $ProjectQuizzTheme = $oel_tools_infos['quizztheme'];
-$optionsProjectLang = $oel_tools_infos['optionsProjectLang'];
+$optionsProjectLang = cstudio_project_lang_to_resource_code($oel_tools_infos['optionsProjectLang']);
 
 if ('' == $local_folder) {
     echo 'KOCS - no folder';

@@ -1,14 +1,19 @@
 <script setup>
+import { computed } from "vue"
 import Dialog from "primevue/dialog"
-import { iconValidator } from "./validators"
+import { useI18n } from "vue-i18n"
+import { buttonTypeValidator, iconValidator } from "./validators"
 import BaseIcon from "./BaseIcon.vue"
+import BaseButton from "./BaseButton.vue"
+
+const { t } = useI18n()
 
 const isVisible = defineModel("isVisible", {
   required: true,
   type: Boolean,
 })
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true,
@@ -23,7 +28,27 @@ defineProps({
       return iconValidator(value)
     },
   },
+  showCloseButton: {
+    type: Boolean,
+    default: true,
+  },
+  closeLabel: {
+    type: String,
+    default: "",
+  },
+  closeIcon: {
+    type: String,
+    default: "close",
+    validator: iconValidator,
+  },
+  closeType: {
+    type: String,
+    default: "black",
+    validator: buttonTypeValidator,
+  },
 })
+
+const innerCloseLabel = computed(() => (props.closeLabel === "" ? t("Cancel") : props.closeLabel))
 </script>
 
 <template>
@@ -44,6 +69,13 @@ defineProps({
     </template>
     <slot></slot>
     <template #footer>
+      <BaseButton
+        v-if="showCloseButton"
+        :icon="closeIcon"
+        :label="innerCloseLabel"
+        :type="closeType"
+        @click="isVisible = false"
+      />
       <slot name="footer"></slot>
     </template>
   </Dialog>

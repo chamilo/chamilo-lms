@@ -106,11 +106,11 @@
         <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
           v-show="sessionState.sessionAsEvent.start"
-          v-text="t('From %s', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
+          v-text="t('From {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
         />
         <p
           v-show="sessionState.sessionAsEvent.end"
-          v-text="t('Until %s', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
+          v-text="t('Until {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
         />
       </div>
 
@@ -406,7 +406,6 @@ watch(
   async ([newCourse, newSession]) => {
     if (newCourse && newCourse.id) {
       const sessionId = newSession ? newSession.id : null
-      await courseSettingsStore.loadCourseSettings(newCourse.id, sessionId)
       const setting = courseSettingsStore.getSetting("allow_user_edit_agenda")
       allowUserEditAgenda.value = setting === "1"
       if (allowUserEditAgenda.value) {
@@ -575,6 +574,10 @@ async function prepareCareerPromotionFieldsForDialog() {
   }
 }
 
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
+
 async function hydrateEventForEdition() {
   const eventIri = item.value?.["@id"]
   if (!eventIri) {
@@ -583,6 +586,11 @@ async function hydrateEventForEdition() {
 
   try {
     const fullEvent = await baseService.get(eventIri)
+
+    const rawReminders = (fullEvent.reminders ?? item.value?.reminders ?? [])
+    const normalizedReminders = rawReminders
+      .map((r) => (r && typeof r === "object" ? { count: r.count ?? 0, period: r.period ?? "i" } : null))
+      .filter(Boolean)
 
     item.value = {
       ...item.value,
@@ -593,8 +601,10 @@ async function hydrateEventForEdition() {
       room: normalizeRelationValueForSelect(fullEvent.room ?? item.value.room),
       career: normalizeRelationValueForSelect(fullEvent.career ?? item.value.career),
       promotion: normalizeRelationValueForSelect(fullEvent.promotion ?? item.value.promotion),
+      language: extractResourceLanguage(fullEvent),
       startDate: fullEvent.startDate ? new Date(fullEvent.startDate) : item.value.startDate,
       endDate: fullEvent.endDate ? new Date(fullEvent.endDate) : item.value.endDate,
+      reminders: normalizedReminders,
     }
   } catch (error) {
     console.error("Failed to hydrate calendar event before editing.", error)
@@ -663,6 +673,25 @@ const calendarOptions = ref({
       return
     }
 
+    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "learning_calendar") {
+      item.value = {
+        ...event.extendedProps,
+        id: event.id,
+        title: event.title,
+        startDate: event.start ? new Date(event.start) : null,
+        endDate: event.end ? new Date(event.end) : null,
+        type: "personal",
+        resourceLinkListFromEntity: [],
+      }
+
+      allowToEdit.value = false
+      allowToSubscribe.value = false
+      allowToUnsubscribe.value = false
+      dialogShow.value = true
+
+      return
+    }
+
     item.value = { ...event.extendedProps }
 
     item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
@@ -670,6 +699,7 @@ const calendarOptions = ref({
     item.value.startDate = event.start ? new Date(event.start) : null
     item.value.endDate = event.end ? new Date(event.end) : null
     item.value.parentResourceNodeId = event.extendedProps?.resourceNode?.creator?.id
+    item.value.language = extractResourceLanguage(event.extendedProps)
 
     const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
     item.value.color = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
@@ -886,19 +916,10 @@ async function onCreateEventForm() {
     if (itemModel["@id"]) {
       await store.dispatch("ccalendarevent/update", itemModel)
     } else {
+      // Course event: bind only the visibility; the course context
+      // (cid/sid/gid) is derived server-side from the gated session course.
       if (course.value) {
-        const gidFromRoute = Number(route.query.gid ?? 0)
-        const gidFromStore = Number(group.value?.id ?? 0)
-        const effectiveGid = gidFromStore > 0 ? gidFromStore : gidFromRoute
-
-        itemModel.resourceLinkList = [
-          {
-            cid: course.value.id,
-            sid: session.value?.id ?? null,
-            gid: effectiveGid > 0 ? effectiveGid : null,
-            visibility: RESOURCE_LINK_PUBLISHED,
-          },
-        ]
+        itemModel.resourceLinkList = [{ visibility: RESOURCE_LINK_PUBLISHED }]
       }
 
       await store.dispatch("ccalendarevent/create", itemModel)

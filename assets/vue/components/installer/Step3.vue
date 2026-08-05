@@ -61,7 +61,7 @@
         <p
           v-html="
             t(
-              'By filling this form, you agree that the editor of Chamilo, the %s company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy.',
+              'By filling this form, you agree that the editor of Chamilo, the {0} company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy.',
               [
                 'BeezNest Belgium'
               ]
@@ -216,7 +216,7 @@
 <script setup>
 import { useI18n } from "vue-i18n"
 import { inject, reactive, ref } from "vue"
-import axios from "axios"
+import installerService from "../../services/installerService"
 
 import Checkbox from "primevue/checkbox"
 import Fieldset from "primevue/fieldset"
@@ -268,9 +268,7 @@ async function sendContactInformation() {
   formData.append("language", contact.contactLanguage)
   formData.append("financial_decision", contact.financialDecision * 1 + "")
 
-  const { data } = await axios.post("/main/inc/ajax/install.ajax.php?a=send_contact_information", formData, {
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-  })
+  const data = await installerService.sendContactInformation(formData)
 
   if ("1" === data + "") {
     alert(t("Contact information has been sent"))

@@ -51,6 +51,23 @@ $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
 $sessionId = api_get_session_id();
 
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')) {
+    $resourceNode = $entity->getResourceNode();
+    if (null !== $resourceNode && null !== $resourceNode->getId()) {
+        $query = http_build_query([
+            'lp_id' => $lpId,
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'isStudentView' => 'false',
+        ]);
+        header(
+            'Location: '.api_get_path(WEB_PATH).'resources/lp/'.(int) $resourceNode->getId().'/advanced-access?'.$query
+        );
+        exit;
+    }
+}
+
 $url = api_get_self().'?'.api_get_cidreq().'&lp_id='.$lpId;
 $em = Database::getManager();
 $courseRepo = Container::getCourseRepository();

@@ -23,3 +23,33 @@ $strings['notification_to_creator_only'] = 'Skicka meddelande endast till använ
 $strings['notification_to_creator_only_help'] = 'Om aktiverat skickas meddelandet endast till användaren som skapade den som skickade intygen och inte till alla administratörer';
 $strings['access_for_session_admin'] = 'Tillåt sessionadministratörer att hantera användare i pluginen';
 $strings['access_for_session_admin_help'] = 'Om aktiverat kan sessionadministratörer komma åt pluginen, användarlistan och hantering av intyg.';
+
+$strings['RequiredDocuments'] = 'Obligatoriska dokument konfigurerade för användarintyg.';
+
+$strings['UserJustificationListHelp'] = 'Dokument uppladdade av den valda användaren.';
+
+$strings['UserJustifications'] = 'Användarintyg';
+$strings['SearchUserJustificationsHelp'] = 'Sök efter en användare för att granska uppladdade intygsdokument.';
+$strings['NoUserJustificationHelp'] = 'Inget dokument har laddats upp för denna användare.';
+$strings['SelectUserJustificationHelp'] = 'Sök och välj en användare för att granska deras intygsdokument.';
+$strings['CreateFirstJustificationHelp'] = 'Skapa det första obligatoriska intygsdokumentet.';
+$strings['AddJustificationDocument'] = 'Lägg till intygsdokument';
+$strings['AddJustificationDocumentHelp'] = 'Skapa en obligatorisk dokumenttyp som användare måste tillhandahålla.';
+$strings['EditJustificationDocument'] = 'Redigera intygsdokument';
+$strings['EditJustificationDocumentHelp'] = 'Uppdatera informationen för den obligatoriska dokumenttypen.';
+$strings['SetNewCourseHelp'] = 'Välj den kurs som används av intygscronen för att prenumerera eller avsluta prenumeration för användare.';
+$strings['EditUserJustification'] = 'Redigera användarintyg';
+$strings['EditUserJustificationHelp'] = 'Uppdatera giltighetsdatumet för detta uppladdade dokument.';
+$strings['SelectUser'] = 'Välj en användare';
+
+$strings['MyJustificationsHelp'] = 'Ladda upp de obligatoriska intygsdokumenten för ditt konto.';
+$strings['NoRequiredJustificationDocuments'] = 'Inga obligatoriska dokument konfigurerade';
+$strings['NoRequiredJustificationDocumentsHelp'] = 'En administratör måste konfigurera obligatoriska dokument innan användare kan ladda upp filer.';
+$strings['Uploaded'] = 'Uppladdat';
+$strings['ValidUntil'] = 'Giltigt till';
+$strings['PendingUpload'] = 'Väntar på uppladdning';
+$strings['SelectFile'] = 'Välj fil';
+$strings['UploadJustification'] = 'Ladda upp dokument';
+$strings['UploadFailed'] = 'Dokumentet kunde inte laddas upp. Kontrollera filtypen och försök igen.';
+$strings['DownloadFile'] = 'Ladda ner fil';
+$strings['AdminList'] = 'Administratörslista';

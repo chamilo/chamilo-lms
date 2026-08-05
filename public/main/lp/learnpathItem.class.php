@@ -26,7 +26,7 @@ class learnpathItem
     public $current_stop_time;
     public $current_data = '';
     public $db_id;
-    public ?int $db_item_view_id;
+    public ?int $db_item_view_id = 0;
     public $description = '';
     public $file;
 
@@ -2410,17 +2410,47 @@ class learnpathItem
                                                 $returnstatus = false;
                                             }
                                         }
+
+                                        if (
+                                            false === $returnstatus &&
+                                            'true' === api_get_setting('lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached') &&
+                                            $this->hasReachedPrerequisiteQuizMaxAttempts(
+                                                (int) $user_id,
+                                                (int) $items[$refs_list[$prereqs_string]]->path,
+                                                (int) $this->lp_id,
+                                                (int) $prereqs_string,
+                                                (int) $courseId
+                                            )
+                                        ) {
+                                            $returnstatus = true;
+                                            $this->prereq_alert = '';
+                                        }
                                     } else {
-                                        // 3. For multiple attempts we check that there are minimum 1 item completed
+                                        // 3. For multiple attempts we check that there are minimum 1 item completed.
                                         // Checking in the database.
+                                        $useLastAttemptOnly = 'true' === api_get_setting(
+                                                'lp.lp_prerequisite_use_last_attempt_only'
+                                            );
+
+                                        $unblockIfMaxAttemptReached = 'true' === api_get_setting(
+                                                'lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached'
+                                            );
+
+                                        $prerequisiteLpItemId = (int) $prereqs_string;
+                                        $prerequisiteQuizId = (int) $items[$refs_list[$prereqs_string]]->path;
+
                                         $sql = 'SELECT score, max_score
-                                                    FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
-                                                    WHERE
-                                                        c_id = '.$courseId.' AND
-                                                        exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
-                                                        exe_user_id = '.$user_id.' AND
-                                                        orig_lp_id = '.$this->lp_id.' AND
-                                                        orig_lp_item_id = '.$prereqs_string;
+                                                FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
+                                                WHERE
+                                                    c_id = '.$courseId.' AND
+                                                    exe_exo_id = '.$prerequisiteQuizId.' AND
+                                                    exe_user_id = '.$user_id.' AND
+                                                    orig_lp_id = '.$this->lp_id.' AND
+                                                    orig_lp_item_id = '.$prerequisiteLpItemId;
+
+                                        if ($useLastAttemptOnly) {
+                                            $sql .= ' ORDER BY exe_date DESC LIMIT 1';
+                                        }
 
                                         $rs_quiz = Database::query($sql);
                                         if (Database::num_rows($rs_quiz) > 0) {
@@ -2431,7 +2461,7 @@ class learnpathItem
                                                 $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
                                                 if (empty($minScore)) {
-                                                    // Try with mastery_score
+                                                    // Try with mastery_score.
                                                     $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
 
                                                     if (!empty($masteryScoreAsMin)) {
@@ -2440,10 +2470,9 @@ class learnpathItem
                                                 }
 
                                                 if (isset($minScore, $minScore)) {
-                                                    // Taking min/max prerequisites values see BT#5776
+                                                    // Taking min/max prerequisites values see BT#5776.
                                                     if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
                                                         $returnstatus = true;
-
                                                         break;
                                                     }
 
@@ -2454,17 +2483,34 @@ class learnpathItem
                                                     $this->prereq_alert = $explanation;
                                                     $returnstatus = false;
                                                 } else {
-                                                    if ($quiz['score'] >=
-                                                        $items[$refs_list[$prereqs_string]]->get_mastery_score()
-                                                    ) {
+                                                    // Classic way.
+                                                    if ($quiz['score'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
                                                         $returnstatus = true;
-
                                                         break;
                                                     }
 
-                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+                                                    $explanation = sprintf(
+                                                        get_lang('Your result at %s blocks this step'),
+                                                        $itemToCheck->get_title()
+                                                    );
+                                                    $this->prereq_alert = $explanation;
                                                     $returnstatus = false;
                                                 }
+                                            }
+
+                                            if (
+                                                false === $returnstatus &&
+                                                $unblockIfMaxAttemptReached &&
+                                                $this->hasReachedPrerequisiteQuizMaxAttempts(
+                                                    (int) $user_id,
+                                                    $prerequisiteQuizId,
+                                                    (int) $this->lp_id,
+                                                    $prerequisiteLpItemId,
+                                                    (int) $courseId
+                                                )
+                                            ) {
+                                                $returnstatus = true;
+                                                $this->prereq_alert = '';
                                             }
                                         } else {
                                             $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
@@ -2722,145 +2768,141 @@ class learnpathItem
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
         if ('sco' === $this->type || 'au' === $this->type) {
-            $status = $this->get_status(true);
-            if (1 == $this->prevent_reinit
-                && $status != $this->possible_status[0] // not attempted
-                && $status != $this->possible_status[1]    // incomplete
-            ) {
+            if ($debug) {
+                error_log(
+                    'learnpathItem::save() - SCORM save request received',
+                    0
+                );
+            }
+
+            if ($from_outside) {
                 if ($debug) {
                     error_log(
-                        'learnpathItem::save() - save reinit blocked by setting',
+                        'learnpathItem::save() - Getting item data from outside',
                         0
                     );
                 }
-            // Do nothing because the status has already been set. Don't allow it to change.
-            // TODO: Check there isn't a special circumstance where this should be saved.
-            } else {
-                if ($debug) {
-                    error_log(
-                        'learnpathItem::save() - SCORM save request received',
-                        0
-                    );
-                }
+                foreach ($_GET as $param => $value) {
+                    switch ($param) {
+                        case 'score':
+                            $this->set_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting score to '.$value,
+                                    0
+                                );
+                            }
 
-                if ($from_outside) {
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Getting item data from outside',
-                            0
-                        );
-                    }
-                    foreach ($_GET as $param => $value) {
-                        switch ($param) {
-                            case 'score':
-                                $this->set_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting score to '.$value,
-                                        0
-                                    );
-                                }
+                            break;
 
-                                break;
+                        case 'max':
+                            $this->set_max_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting view_max_score to '.$value,
+                                    0
+                                );
+                            }
 
-                            case 'max':
-                                $this->set_max_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting view_max_score to '.$value,
-                                        0
-                                    );
-                                }
+                            break;
 
-                                break;
+                        case 'min':
+                            $this->min_score = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting min_score to '.$value,
+                                    0
+                                );
+                            }
 
-                            case 'min':
-                                $this->min_score = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting min_score to '.$value,
-                                        0
-                                    );
-                                }
+                            break;
 
-                                break;
-
-                            case 'lesson_status':
-                                if (!empty($value)) {
-                                    $this->set_status($value);
+                        case 'lesson_status':
+                            if (!empty($value)) {
+                                if ($this->shouldIgnoreStatusUpdateBecausePreventReinit($value)) {
                                     if ($debug) {
                                         error_log(
-                                            'learnpathItem::save() - setting status to '.$value,
+                                            'learnpathItem::save() - keeping completed status because prevent_reinit is enabled',
                                             0
                                         );
                                     }
+
+                                    break;
                                 }
 
-                                break;
-
-                            case 'time':
-                                $this->set_time($value);
+                                $this->set_status($value);
                                 if ($debug) {
                                     error_log(
-                                        'learnpathItem::save() - setting time to '.$value,
+                                        'learnpathItem::save() - setting status to '.$value,
                                         0
                                     );
                                 }
+                            }
 
-                                break;
+                            break;
 
-                            case 'suspend_data':
-                                $this->current_data = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting suspend_data to '.$value,
-                                        0
-                                    );
-                                }
+                        case 'time':
+                            $this->set_time($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting time to '.$value,
+                                    0
+                                );
+                            }
 
-                                break;
+                            break;
 
-                            case 'lesson_location':
-                                $this->set_lesson_location($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting lesson_location to '.$value,
-                                        0
-                                    );
-                                }
+                        case 'suspend_data':
+                            $this->current_data = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting suspend_data to '.$value,
+                                    0
+                                );
+                            }
 
-                                break;
+                            break;
 
-                            case 'core_exit':
-                                $this->set_core_exit($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting core_exit to '.$value,
-                                        0
-                                    );
-                                }
+                        case 'lesson_location':
+                            $this->set_lesson_location($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting lesson_location to '.$value,
+                                    0
+                                );
+                            }
 
-                                break;
+                            break;
 
-                            case 'interactions':
-                                break;
+                        case 'core_exit':
+                            $this->set_core_exit($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting core_exit to '.$value,
+                                    0
+                                );
+                            }
 
-                            case 'objectives':
-                                break;
+                            break;
 
-                            default:
-                                // Ignore.
-                                break;
-                        }
+                        case 'interactions':
+                            break;
+
+                        case 'objectives':
+                            break;
+
+                        default:
+                            // Ignore.
+                            break;
                     }
-                } else {
-                    // Do nothing, just let the local attributes be used.
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Using inside item status',
-                            0
-                        );
-                    }
+                }
+            } else {
+                // Do nothing, just let the local attributes be used.
+                if ($debug) {
+                    error_log(
+                        'learnpathItem::save() - Using inside item status',
+                        0
+                    );
                 }
             }
         } else {
@@ -2994,11 +3036,11 @@ class learnpathItem
     /**
      * Sets the lp_view id this item view is registered to.
      *
-     * @param int $lp_view_id lp_view DB ID
+     * @param int|null $lp_view_id lp_view DB ID
      *
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
-    public function set_lp_view(int $lp_view_id): bool
+    public function set_lp_view(?int $lp_view_id): bool
     {
         $lpItemId = $this->get_id();
 
@@ -3007,8 +3049,13 @@ class learnpathItem
         }
 
         if (empty($lp_view_id)) {
+            $this->view_id = 0;
+            $this->db_item_view_id = 0;
+
             return false;
         }
+
+        $lp_view_id = (int) $lp_view_id;
 
         if (self::DEBUG > 0) {
             error_log('learnpathItem::set_lp_view('.$lp_view_id.')', 0);
@@ -3072,6 +3119,10 @@ class learnpathItem
             if (false !== $res) {
                 $this->objectives_count = Database::num_rows($res);
             }
+        }
+
+        if (empty($this->db_item_view_id)) {
+            $this->db_item_view_id = 0;
         }
 
         return true;
@@ -3639,13 +3690,21 @@ class learnpathItem
             return true;
         }
 
+        if (empty($this->view_id)) {
+            if ($debug) {
+                error_log('learnpathItem::write_to_db() skipped because lp_view_id is empty');
+            }
+
+            return false;
+        }
+
         $courseId = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
         $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
 
-        // Load current state to determine whether saving is allowed.
+        // Load current state to keep previous time data available.
         $sql = 'SELECT status, total_time
                 FROM '.$itemViewTable.'
                 WHERE
@@ -3655,19 +3714,15 @@ class learnpathItem
         $result = Database::query($sql);
         $currentRow = Database::fetch_array($result);
 
-        $save = true;
         if (!empty($currentRow)) {
             $this->oldTotalTime = $currentRow['total_time'];
-            if (isset($currentRow['status']) && in_array($currentRow['status'], $completedStatuses)) {
-                $save = false;
-            }
         }
 
         // For SCO items in no-credit / review / browse mode, skip saving.
         $isSco = 'sco' === $this->type;
         $shouldSkip = $isSco
             && 1 != $this->seriousgame_mode
-            && (!$save || 'no-credit' === $credit || 'review' === $mode || 'browse' === $mode);
+            && ('no-credit' === $credit || 'review' === $mode || 'browse' === $mode);
 
         if ($shouldSkip) {
             if ($debug) {
@@ -3868,7 +3923,14 @@ class learnpathItem
             $result = Database::query($sql);
             $storedRow = Database::fetch_array($result);
 
-            if (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
+            if ($this->shouldIgnoreStatusUpdateBecausePreventReinit(
+                $this->get_status(false),
+                $storedRow['status'] ?? ''
+            ) && 2 == $lpType) {
+                if ($debug) {
+                    error_log('SCORM status regression ignored because prevent_reinit is enabled');
+                }
+            } elseif (!in_array($this->get_status(false), $completedStatuses) && 2 == $lpType) {
                 $total_time = ' total_time = total_time + '.$this->get_total_time().', ';
                 $my_status = " status = '".$this->get_status(false)."' ,";
                 if ($debug) {
@@ -3945,6 +4007,33 @@ class learnpathItem
     }
 
     /**
+     * Prevent a completed SCO from being reset to incomplete/not attempted while
+     * still allowing the SCO to update score, suspend data and other values
+     * before LMSFinish().
+     *
+     * @param string $newStatus
+     * @param string|null $storedStatus
+     */
+    private function shouldIgnoreStatusUpdateBecausePreventReinit($newStatus, $storedStatus = null): bool
+    {
+        if (1 != $this->get_prevent_reinit()) {
+            return false;
+        }
+
+        $completedStatuses = ['completed', 'passed', 'browsed', 'failed'];
+        $newStatus = (string) $newStatus;
+
+        if (null === $storedStatus) {
+            $storedStatus = $this->get_status(true);
+        }
+
+        $storedStatus = (string) $storedStatus;
+
+        return in_array($storedStatus, $completedStatuses, true)
+            && !in_array($newStatus, $completedStatuses, true);
+    }
+
+    /**
      * Persists the SCORM interaction data for the current item view attempt.
      */
     private function saveInteractions(int $courseId, string $itemViewTable): void
@@ -4009,7 +4098,7 @@ class learnpathItem
             $params = [
                 'interaction_id' => $interaction[0],
                 'interaction_type' => $interaction[1],
-                'weighting' => $interaction[3],
+                'weighting' => '' !== (string) $interaction[3] ? (float) $interaction[3] : 0.0,
                 'completion_time' => $interaction[2],
                 'correct_responses' => $correctResp,
                 'student_response' => $interaction[5],
@@ -4030,11 +4119,7 @@ class learnpathItem
                     ['c_id' => $courseId, 'order_id' => $index, 'lp_iv_id' => $lpIvId],
                     $params
                 );
-                $insertId = Database::insert($ivaTable, $params);
-                if ($insertId) {
-                    $sql = "UPDATE $ivaTable SET id = iid WHERE iid = $insertId";
-                    Database::query($sql);
-                }
+                Database::insert($ivaTable, $params);
             }
         }
     }
@@ -4347,5 +4432,52 @@ class learnpathItem
         } catch (Throwable) {
             return $title;
         }
+    }
+
+    private function hasReachedPrerequisiteQuizMaxAttempts(
+        int $userId,
+        int $exerciseId,
+        int $lpId,
+        int $lpItemId,
+        int $courseId
+    ): bool {
+        $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+        $sqlQuiz = "SELECT max_attempt
+                FROM $tableQuiz
+                WHERE iid = $exerciseId";
+
+        $resultQuiz = Database::query($sqlQuiz);
+        $rowQuiz = Database::fetch_assoc($resultQuiz);
+
+        $maxAttempts = (int) ($rowQuiz['max_attempt'] ?? 0);
+
+        if ($maxAttempts <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sessionCondition = api_get_session_condition(api_get_session_id());
+
+        $sql = "SELECT COUNT(*) AS count
+            FROM $table
+            WHERE
+                exe_exo_id = $exerciseId AND
+                exe_user_id = $userId AND
+                status != 'incomplete' AND
+                orig_lp_id = $lpId AND
+                orig_lp_item_id = $lpItemId AND
+                c_id = $courseId
+                $sessionCondition";
+
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) <= 0) {
+            return false;
+        }
+
+        $row = Database::fetch_assoc($result);
+
+        return (int) ($row['count'] ?? 0) >= $maxAttempts;
     }
 }

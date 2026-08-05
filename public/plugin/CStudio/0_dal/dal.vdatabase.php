@@ -261,23 +261,38 @@ class VirtualDatabase
         if ('chamil' === $this->engine) {
             $course = api_get_course_entity();
             if ($course) {
-                $courseLang = $course->getCourseLanguage();
+                $courseLang = trim((string) $course->getCourseLanguage());
                 if ('' !== $courseLang) {
                     $langTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
                     $safe = Database::escape_string($courseLang);
-                    // english_name lookup (e.g. 'french' → 'fr_FR')
+                    $safeLower = Database::escape_string(strtolower(str_replace('-', '_', $courseLang)));
+
+                    // english_name lookup (e.g. 'french' → 'fr_FR') or already stored isocode.
                     $result = Database::query(
-                        "SELECT isocode FROM $langTable WHERE english_name = '$safe' LIMIT 1"
+                        "SELECT isocode FROM $langTable ".
+                        "WHERE english_name = '$safe' ".
+                        "OR LOWER(english_name) = '$safeLower' ".
+                        "OR isocode = '$safe' ".
+                        "OR LOWER(REPLACE(isocode, '-', '_')) = '$safeLower' ".
+                        "LIMIT 1"
                     );
                     if ($row = Database::fetch_assoc($result)) {
                         return $row['isocode'];
                     }
-                    // Already an isocode?
-                    $result2 = Database::query(
-                        "SELECT isocode FROM $langTable WHERE isocode = '$safe' LIMIT 1"
-                    );
-                    if ($row2 = Database::fetch_assoc($result2)) {
-                        return $row2['isocode'];
+
+                    $languageAliases = [
+                        'english' => 'en_US',
+                        'en' => 'en_US',
+                        'en_us' => 'en_US',
+                        'french' => 'fr_FR',
+                        'fr' => 'fr_FR',
+                        'fr_fr' => 'fr_FR',
+                        'spanish' => 'es',
+                        'es' => 'es',
+                        'es_es' => 'es',
+                    ];
+                    if (isset($languageAliases[$safeLower])) {
+                        return $languageAliases[$safeLower];
                     }
                 }
             }

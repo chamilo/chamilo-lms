@@ -53,6 +53,12 @@ export default {
       component: () => import("../views/admin/UserList.vue"),
     },
     {
+      name: "AdminQuestionBank",
+      path: "questions",
+      meta: { requiresQuestionManager: true, showBreadcrumb: true, breadcrumb: "Questions" },
+      component: () => import("../views/admin/QuestionBank.vue"),
+    },
+    {
       name: "AdminCourseList",
       path: "course-list",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Course list" },
@@ -65,16 +71,64 @@ export default {
       component: () => import("../views/admin/ListIcons.vue"),
     },
     {
+      name: "AdminSystemUpdate",
+      path: "system-update",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System update" },
+      component: () => import("../views/admin/SystemUpdate.vue"),
+    },
+    {
       name: "AdminSessionList",
       path: "session-list",
       meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Session list" },
       component: () => import("../views/admin/SessionList.vue"),
     },
     {
+      name: "AdminUsergroupList",
+      path: "usergroups",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Classes" },
+      component: () => import("../views/admin/UsergroupList.vue"),
+    },
+    {
+      name: "AdminUsergroupPreview",
+      path: "usergroups/:id/preview",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Class overview" },
+      component: () => import("../views/admin/UsergroupPreview.vue"),
+    },
+    {
       name: "AdminUsergroupAddUsers",
       path: "usergroups/:id/add-users",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe users to class" },
       component: () => import("../views/admin/UsergroupAddUsers.vue"),
+    },
+    {
+      name: "AdminUsergroupAddCourses",
+      path: "usergroups/:id/add-courses",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe class to courses" },
+      component: () => import("../views/admin/UsergroupAddCourses.vue"),
+    },
+    {
+      name: "AdminUsergroupAddSessions",
+      path: "usergroups/:id/add-sessions",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Subscribe class to sessions" },
+      component: () => import("../views/admin/UsergroupAddSessions.vue"),
+    },
+    {
+      name: "AdminUsergroupUsers",
+      path: "usergroup-users/:id",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Class users" },
+      component: () => import("../views/admin/UsergroupUsers.vue"),
+    },
+    {
+      name: "AdminUsergroupImport",
+      path: "usergroup-import",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Import class list via CSV" },
+      component: () => import("../views/admin/UsergroupImport.vue"),
+    },
+    {
+      name: "AdminUsergroupUserImport",
+      path: "usergroup-user-import",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Add users to a class" },
+      component: () => import("../views/admin/UsergroupUserImport.vue"),
     },
   ],
 }

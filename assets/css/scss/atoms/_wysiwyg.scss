@@ -1,16 +1,4 @@
-.wysiwyg {
-  @apply prose max-w-none space-y-4
-    prose-h1:text-h1
-    prose-h2:text-h2
-    prose-h3:text-h3
-    prose-h4:text-h4
-    prose-h5:text-h5
-    prose-h6:text-h6
-    prose-img:inline-block prose-img:my-2
-    prose-a:text-info
-  ;
-
-  > * {
-    @apply my-0;
-  }
-}
+// The .wysiwyg class was replaced by .tiny-content, which carries the same base
+// typography (abstracts/mixins → wysiwyg-content) plus Chamilo's own rules for
+// editor content. See assets/css/editor_content.scss.
+// Kept as an empty partial so external themes still resolving this path do not break.

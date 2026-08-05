@@ -12,7 +12,10 @@ if (!$isHrm) {
 }
 
 $hrm = api_get_user_entity(api_get_user_id());
-$assignedUsers = UserManager::get_users_followed_by_drh($hrm->getId());
+$assignedUsers = UserManager::get_users_followed_by_drh(
+    $hrm->getId(),
+    applyReportingWorkflowSetting: true
+);
 $users = [];
 
 $courseController = new IndexManager('');

@@ -16,18 +16,44 @@
     <div class="document-show__section">
       <div class="document-show__content-side">
         <div v-if="item.resourceNode.firstResourceFile">
-          <img
+          <div
             v-if="item.resourceNode.firstResourceFile.image"
-            :alt="item.title"
-            :src="item.contentUrl + '?w=500'"
-          />
-
-          <video
-            v-else-if="item.resourceNode.firstResourceFile.video"
-            controls
+            class="relative inline-block max-w-full"
           >
-            <source :src="item['contentUrl']" />
-          </video>
+            <img
+              :alt="item.title"
+              :src="item.contentUrl + '?w=500'"
+              class="block max-w-full"
+            />
+
+            <span
+              v-if="shouldShowAiGeneratedMediaBadge"
+              class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+              style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+            >
+              {{ $t("AI generated") }}
+            </span>
+          </div>
+
+          <div
+            v-else-if="item.resourceNode.firstResourceFile.video"
+            class="relative inline-block max-w-full"
+          >
+            <video
+              controls
+              class="block max-w-full"
+            >
+              <source :src="item['contentUrl']" />
+            </video>
+
+            <span
+              v-if="shouldShowAiGeneratedMediaBadge"
+              class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+              style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+            >
+              {{ $t("AI generated") }}
+            </span>
+          </div>
 
           <iframe
             v-else-if="'text/html' === item.resourceNode.firstResourceFile.mimeType"
@@ -135,6 +161,11 @@ export default {
     ...mapGetters("documents", ["find"]),
     hideDownloadIcon() {
       return this.platformConfigStore.getSetting("document.documents_hide_download_icon") === "true"
+    },
+    shouldShowAiGeneratedMediaBadge() {
+      const file = this.item?.resourceNode?.firstResourceFile
+
+      return !!this.item?.ai_assisted && !!file && (file.image || file.video)
     },
   },
   methods: {

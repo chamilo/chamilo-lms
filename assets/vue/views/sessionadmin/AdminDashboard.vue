@@ -6,11 +6,11 @@
     </p>
 
     <div v-if="loading" class="text-gray-500">
-      {{ t("Loading courses...") }}
+      {{ t("Loading courses") }}
     </div>
 
     <div v-else-if="courses.length === 0" class="text-gray-500">
-      {{ t("No courses available.") }}
+      {{ t("No courses available") }}
     </div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">

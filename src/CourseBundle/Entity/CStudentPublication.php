@@ -13,8 +13,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter as OpenApiParameter;
 use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -44,19 +48,43 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             processor: CStudentPublicationPostStateProcessor::class
         ),
+        new Patch(
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: CStudentPublicationPostStateProcessor::class
+        ),
         new Get(
             normalizationContext: [
                 'groups' => ['student_publication:read', 'student_publication:item:get'],
             ],
             security: "is_granted('VIEW', object.resourceNode)",
         ),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            openapi: new Operation(
+                parameters: [
+                    new OpenApiParameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course identifier',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+            ],
+        ),
         new Delete(
             security: "is_granted('DELETE', object.resourceNode)",
             processor: CStudentPublicationDeleteProcessor::class
         ),
         new Post(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             processor: CStudentPublicationPostStateProcessor::class
         ),
         new Post(
@@ -103,7 +131,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected string $title;
 

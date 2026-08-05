@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -16,6 +17,70 @@ use ChamiloSession as Session;
 
 final class WikiManager
 {
+
+    private static function getResourceLanguageOptions(): array
+    {
+        $options = [
+            '' => get_lang('No specific language'),
+        ];
+
+        $languages = \Database::getManager()
+            ->getRepository(Language::class)
+            ->findBy(['available' => true], ['englishName' => 'ASC'])
+        ;
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+        }
+
+        return $options;
+    }
+
+    private static function getResourceLanguageIsoCode(?CWiki $wiki): string
+    {
+        if (!$wiki instanceof CWiki || null === $wiki->getResourceNode()) {
+            return '';
+        }
+
+        $language = $wiki->getResourceNode()->getLanguage();
+
+        return $language instanceof Language ? $language->getIsocode() : '';
+    }
+
+    private static function applyResourceLanguage(CWiki $wiki, mixed $rawLanguage): void
+    {
+        $resourceNode = $wiki->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        $entityManager = \Database::getManager();
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $entityManager
+                ->getRepository(Language::class)
+                ->findOneBy([
+                    'isocode' => $languageCode,
+                    'available' => true,
+                ])
+            ;
+
+            if (!$language instanceof Language) {
+                return;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $entityManager->persist($resourceNode);
+        $entityManager->flush();
+    }
+
     /** Legacy compat: set from index.php */
     private readonly CWikiRepository $wikiRepo;
     public string $page = 'index';
@@ -511,6 +576,7 @@ final class WikiManager
             'progress'        => (string)($last?->getProgress() ?? ''),
             'comment'         => '',
             'assignment'      => (int)($last?->getAssignment() ?? 0),
+            'language'        => self::getResourceLanguageIsoCode($last),
         ];
 
         // Preselect categories
@@ -630,10 +696,22 @@ final class WikiManager
 
         // Advanced params (only for teachers/admin and not on index)
         if ((api_is_allowed_to_edit(false, true) || api_is_platform_admin())
-            && isset($row['reflink']) && $row['reflink'] !== 'index'
+            && (!isset($row['reflink']) || $row['reflink'] !== 'index')
         ) {
             $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+            $languageOptions = self::getResourceLanguageOptions();
+            if (\count($languageOptions) > 2) {
+                $form->addSelect(
+                    'language',
+                    get_lang('Language'),
+                    $languageOptions,
+                    [
+                        'id' => 'resource_language',
+                    ]
+                );
+            }
 
             // Task description
             $form->addHtmlEditor(
@@ -1148,6 +1226,8 @@ final class WikiManager
 
         $em->persist($w);
         $em->flush();
+
+        self::applyResourceLanguage($w, $values['language'] ?? '');
 
         if (method_exists(__CLASS__, 'dbg')) {
             self::dbg('[SAVE] after first flush iid='.(int)$w->getIid().' pageId='.(int)$w->getPageId().' reflink='.$reflink);
@@ -2655,7 +2735,7 @@ final class WikiManager
 
             $isTutor  = $groupInfo && GroupManager::is_tutor_of_group($uid, $groupInfo);
             $isMember = $groupInfo && GroupManager::is_subscribed($uid, $groupInfo);
-            $status   = ($isTutor && $isMember) ? get_lang('Coach and group member')
+            $status   = ($isTutor && $isMember) ? get_lang('Tutor and group member')
                 : ($isTutor ? get_lang('Group tutor') : ' ');
 
             if ($assignmentType === 1) {
@@ -5299,9 +5379,40 @@ final class WikiManager
 
         // Sanitize title for document/file names
         $safeTitle = trim($title) !== '' ? $title : 'wiki_page';
-        $downloadName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle)).'.pdf';
+        $fileName = preg_replace('/\s+/', '_', (string) api_replace_dangerous_char($safeTitle));
 
-        // Wrap content (keep structure simple for HTML→PDF engines)
+        $body = '<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
+            .'<div class="wiki-content">'.$content.'</div>';
+
+        // Render through the shared PDF class: its mPDF instance routes remote
+        // asset fetches through the SSRF-guarded HTTP client, replacing the
+        // former direct mPDF/Dompdf instantiation (Dompdf's isRemoteEnabled was
+        // the second SSRF sink). complete_style=false keeps the course
+        // header/footer/watermark out of the wiki export, as before.
+        try {
+            $pdf = new PDF('A4', 'P', [
+                'left'   => 12,
+                'right'  => 12,
+                'top'    => 12,
+                'bottom' => 12,
+            ]);
+            // Write the CSS as header CSS: html_to_pdf renders the page content
+            // in body mode (HTML_BODY), which ignores inline <style> blocks.
+            $pdf->pdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            $pdf->html_to_pdf(
+                [['title' => $safeTitle, 'content' => $body]],
+                $fileName,
+                $courseCode,
+                false,
+                false,
+                false
+            );
+        } catch (\Throwable $e) {
+            // Continue to final fallback
+        }
+
+        // --- Final fallback: deliver HTML as download (not PDF) ---
+        $downloadName = $fileName.'.pdf';
         $html = '<!DOCTYPE html><html lang="'.htmlspecialchars(api_get_language_isocode()).'"><head>'
             .'<meta charset="'.htmlspecialchars(api_get_system_encoding()).'">'
             .'<title>'.htmlspecialchars($safeTitle).'</title>'
@@ -5310,48 +5421,6 @@ final class WikiManager
             .'<div class="wiki-title"><h1>'.htmlspecialchars($safeTitle).'</h1></div>'
             .'<div class="wiki-content">'.$content.'</div>'
             .'</body></html>';
-
-        // --- Try mPDF first ---
-        if (class_exists('\\Mpdf\\Mpdf')) {
-            // Use mPDF directly
-            try {
-                $mpdf = new \Mpdf\Mpdf([
-                    'tempDir' => sys_get_temp_dir(),
-                    'mode'    => 'utf-8',
-                    'format'  => 'A4',
-                    'margin_left'   => 12,
-                    'margin_right'  => 12,
-                    'margin_top'    => 12,
-                    'margin_bottom' => 12,
-                ]);
-                $mpdf->SetTitle($safeTitle);
-                $mpdf->WriteHTML($html);
-                // Force download
-                $mpdf->Output($downloadName, 'D');
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to next engine
-            }
-        }
-
-        // --- Try Dompdf fallback ---
-        if (class_exists('\\Dompdf\\Dompdf')) {
-            try {
-                $dompdf = new \Dompdf\Dompdf([
-                    'chroot' => realpath(__DIR__.'/../../..'),
-                    'isRemoteEnabled' => true,
-                ]);
-                $dompdf->loadHtml($html, 'UTF-8');
-                $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-                $dompdf->stream($downloadName, ['Attachment' => true]);
-                exit;
-            } catch (\Throwable $e) {
-                // Continue to final fallback
-            }
-        }
-
-        // --- Final fallback: deliver HTML as download (not PDF) ---
         // Clean buffers to avoid header issues
         if (function_exists('ob_get_level')) {
             while (ob_get_level() > 0) { @ob_end_clean(); }

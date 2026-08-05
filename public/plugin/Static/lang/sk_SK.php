@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Zobraziť statický HTML obsah.';
 $strings['block_title'] = 'Názov bloku';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Obsah';

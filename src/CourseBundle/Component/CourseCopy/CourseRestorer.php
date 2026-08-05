@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -44,8 +45,10 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -57,10 +60,13 @@ use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiDiscuss;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
+use Chamilo\CourseBundle\Repository\CWikiCategoryRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use CourseManager;
 use Database;
@@ -120,6 +126,11 @@ class CourseRestorer
 
     // Track if documents were already restored during this restore run.
     private bool $documentsRestored = false;
+
+    /**
+     * @var array<int, int>
+     */
+    private array $quizQuestionCategoryMap = [];
 
     /**
      * Restore order (keep existing order; docs first).
@@ -1014,15 +1025,37 @@ class CourseRestorer
                 return $this->resourceFileAbsPathFromDocument($srcDoc) ?: null;
             }
 
-            $p = $srcRoot.(string) $item->path;
-            if (is_file($p) && is_readable($p)) {
+            // Defense in depth against path traversal: $item->path comes from the
+            // deserialized backup metadata, so an authenticated user importing a tampered
+            // backup fully controls it. Only accept files that resolve *inside* the
+            // extraction root, so a forged path such as "../../../../etc/passwd" cannot
+            // read files outside the backup directory.
+            $containedRealPath = static function (string $root, string $relPath): ?string {
+                $rootReal = realpath(rtrim($root, '/'));
+                if (false === $rootReal) {
+                    return null;
+                }
+                $candidate = realpath($root.$relPath);
+                if (false === $candidate || !is_file($candidate) || !is_readable($candidate)) {
+                    return null;
+                }
+                $rootReal = rtrim($rootReal, '/').'/';
+                if (!str_starts_with($candidate, $rootReal)) {
+                    return null;
+                }
+
+                return $candidate;
+            };
+
+            $p = $containedRealPath((string) $srcRoot, (string) $item->path);
+            if (null !== $p) {
                 return $p;
             }
 
             $altRoot = rtrim((string) ($this->course->resources['__meta']['archiver_root'] ?? ''), '/').'/';
             if ($altRoot && $altRoot !== $srcRoot) {
-                $p2 = $altRoot.(string) $item->path;
-                if (is_file($p2) && is_readable($p2)) {
+                $p2 = $containedRealPath($altRoot, (string) $item->path);
+                if (null !== $p2) {
                     return $p2;
                 }
             }
@@ -2995,6 +3028,7 @@ class CourseRestorer
 
         // Preload existing by type in SAME scope (session vs base)
         $existingByType = [];
+        $existingCustomByTitle = [];
         $existingTitles = [];
 
         try {
@@ -3019,11 +3053,16 @@ class CourseRestorer
                     $t = CCourseDescription::TYPE_DESCRIPTION;
                 }
 
-                if (!isset($existingByType[$t])) {
+                $ttl = trim((string) $e->getTitle());
+
+                if (CCourseDescription::TYPE_CUSTOM === $t) {
+                    if ('' !== $ttl && !isset($existingCustomByTitle[$ttl])) {
+                        $existingCustomByTitle[$ttl] = $e;
+                    }
+                } elseif (!isset($existingByType[$t])) {
                     $existingByType[$t] = $e;
                 }
 
-                $ttl = trim((string) $e->getTitle());
                 if ('' !== $ttl) {
                     $existingTitles[$ttl] = true;
                 }
@@ -3033,6 +3072,7 @@ class CourseRestorer
                 'error' => $e->getMessage(),
             ]);
             $existingByType = [];
+            $existingCustomByTitle = [];
             $existingTitles = [];
         }
 
@@ -3078,7 +3118,9 @@ class CourseRestorer
                 $progress = 0;
             }
 
-            $existing = $existingByType[$type] ?? null;
+            $existing = CCourseDescription::TYPE_CUSTOM === $type
+                ? ($existingCustomByTitle[$title] ?? null)
+                : ($existingByType[$type] ?? null);
 
             if ($existing instanceof CCourseDescription) {
                 if (1 === $policy) { // SKIP
@@ -3110,6 +3152,7 @@ class CourseRestorer
                     $existing->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
 
                     $em->persist($existing);
+                    $this->applyCourseDescriptionLanguage($existing, $cd, $em);
                     $em->flush();
 
                     $destIid = (int) $existing->getIid();
@@ -3175,10 +3218,18 @@ class CourseRestorer
             $em->persist($entity);
             $em->flush();
 
+            if ($this->applyCourseDescriptionLanguage($entity, $cd, $em)) {
+                $em->flush();
+            }
+
             $destIid = (int) $entity->getIid();
             $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
 
-            $existingByType[$type] = $entity;
+            if (CCourseDescription::TYPE_CUSTOM === $type) {
+                $existingCustomByTitle[$title] = $entity;
+            } else {
+                $existingByType[$type] = $entity;
+            }
 
             $this->dlog('restore_course_descriptions: created', [
                 'src_id' => $oldId,
@@ -3198,6 +3249,45 @@ class CourseRestorer
             'policy' => $policy,
             'session_id' => $sessionId,
         ]);
+    }
+
+    private function applyCourseDescriptionLanguage(
+        CCourseDescription $description,
+        object $source,
+        EntityManagerInterface $em
+    ): bool {
+        if (!property_exists($source, 'language')) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $languageCode = trim((string) ($source->language ?? ''));
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $em->getRepository(Language::class)->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ]);
+
+            if (!$language instanceof Language) {
+                $this->dlog('restore_course_descriptions: language not found, keeping current value', [
+                    'src_id' => (int) ($source->source_id ?? 0),
+                    'language' => $languageCode,
+                ]);
+
+                return false;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $em->persist($resourceNode);
+
+        return true;
     }
 
     /**
@@ -3823,7 +3913,197 @@ class CourseRestorer
             } else {
                 error_log('RESTORE_QUIZ: No questions bound to quiz src_id='.(int) $id.' (title="'.(string) ($quiz->title ?? '').'").');
             }
+
+            $this->restoreQuizQuestionCategoryCounts($entity, $quiz, $courseEntity, $linkSession);
         }
+    }
+
+    private function restoreQuestionCategoriesForQuestion(
+        CQuizQuestion $questionEntity,
+        object $question,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        $categories = $question->categories ?? [];
+        if (!is_iterable($categories)) {
+            return;
+        }
+
+        $em = Database::getManager();
+        $hasChanges = false;
+
+        foreach ($categories as $categoryData) {
+            $category = $this->restoreQuizQuestionCategoryFromBackup($categoryData, $courseEntity, $sessionEntity);
+            if (!$category instanceof CQuizQuestionCategory) {
+                continue;
+            }
+
+            $questionEntity->addCategory($category);
+            $hasChanges = true;
+        }
+
+        if (!$hasChanges) {
+            return;
+        }
+
+        $em->persist($questionEntity);
+        $em->flush();
+    }
+
+    private function restoreQuizQuestionCategoryCounts(
+        CQuiz $quizEntity,
+        object $quiz,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        $counts = $quiz->question_category_counts ?? [];
+        if (!is_iterable($counts)) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        foreach ($counts as $countData) {
+            $row = $this->backupDataToArray($countData);
+            $sourceCategoryId = (int) ($row['category_id'] ?? $row['id'] ?? $row['iid'] ?? 0);
+            $countQuestions = (int) ($row['count_questions'] ?? -1);
+
+            $category = null;
+            if ($sourceCategoryId > 0 && isset($this->quizQuestionCategoryMap[$sourceCategoryId])) {
+                $category = $em->getRepository(CQuizQuestionCategory::class)->find($this->quizQuestionCategoryMap[$sourceCategoryId]);
+            }
+
+            if (!$category instanceof CQuizQuestionCategory) {
+                $category = $this->restoreQuizQuestionCategoryFromBackup($row, $courseEntity, $sessionEntity);
+            }
+
+            if (!$category instanceof CQuizQuestionCategory) {
+                continue;
+            }
+
+            $existing = $em->getRepository(CQuizRelQuestionCategory::class)->findOneBy([
+                'quiz' => $quizEntity,
+                'category' => $category,
+            ]);
+
+            if ($existing instanceof CQuizRelQuestionCategory) {
+                $existing->setCountQuestions($countQuestions);
+                $em->persist($existing);
+                continue;
+            }
+
+            $relCategory = (new CQuizRelQuestionCategory())
+                ->setQuiz($quizEntity)
+                ->setCategory($category)
+                ->setCountQuestions($countQuestions)
+            ;
+
+            $em->persist($relCategory);
+        }
+
+        $em->flush();
+    }
+
+    private function restoreQuizQuestionCategoryFromBackup(
+        mixed $categoryData,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): ?CQuizQuestionCategory {
+        $row = $this->backupDataToArray($categoryData);
+        $sourceCategoryId = (int) ($row['id'] ?? $row['category_id'] ?? $row['iid'] ?? 0);
+
+        if ($sourceCategoryId > 0 && isset($this->quizQuestionCategoryMap[$sourceCategoryId])) {
+            $existingMapped = Database::getManager()
+                ->getRepository(CQuizQuestionCategory::class)
+                ->find($this->quizQuestionCategoryMap[$sourceCategoryId])
+            ;
+
+            if ($existingMapped instanceof CQuizQuestionCategory) {
+                return $existingMapped;
+            }
+        }
+
+        $title = trim((string) ($row['title'] ?? $row['name'] ?? ''));
+        if ('' === $title) {
+            return null;
+        }
+
+        $description = (string) ($row['description'] ?? '');
+        $category = $this->findExistingQuizQuestionCategory($title, $courseEntity, $sessionEntity);
+
+        if (!$category instanceof CQuizQuestionCategory) {
+            $category = (new CQuizQuestionCategory())
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, $sessionEntity, null)
+                ->setTitle($title)
+                ->setDescription($description)
+            ;
+
+            $em = Database::getManager();
+            $em->persist($category);
+            $em->flush();
+        }
+
+        if ($sourceCategoryId > 0) {
+            $this->quizQuestionCategoryMap[$sourceCategoryId] = (int) $category->getIid();
+        }
+
+        return $category;
+    }
+
+    private function findExistingQuizQuestionCategory(
+        string $title,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): ?CQuizQuestionCategory {
+        $qb = Database::getManager()->createQueryBuilder();
+
+        $qb
+            ->select('category')
+            ->from(CQuizQuestionCategory::class, 'category')
+            ->innerJoin('category.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('category.title = :title')
+            ->andWhere('links.course = :course')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('title', $title)
+            ->setParameter('course', $courseEntity)
+            ->setMaxResults(1)
+        ;
+
+        if ($sessionEntity instanceof SessionEntity) {
+            $qb
+                ->andWhere('links.session = :session')
+                ->setParameter('session', $sessionEntity)
+            ;
+        } else {
+            $qb->andWhere('links.session IS NULL');
+        }
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result instanceof CQuizQuestionCategory ? $result : null;
+    }
+
+    private function backupDataToArray(mixed $data): array
+    {
+        if (is_array($data)) {
+            return $data;
+        }
+
+        if (!is_object($data)) {
+            return [];
+        }
+
+        $row = get_object_vars($data);
+
+        if (isset($data->obj) && is_object($data->obj)) {
+            $row = array_merge(get_object_vars($data->obj), $row);
+            unset($row['obj']);
+        }
+
+        return $row;
     }
 
     /**
@@ -3916,6 +4196,8 @@ class CourseRestorer
 
         $em->persist($entity);
         $em->flush();
+
+        $this->restoreQuestionCategoriesForQuestion($entity, $question, $courseEntity, $sessionEntity);
 
         $newId = (int) $entity->getIid();
         if (!$newId) {
@@ -4483,6 +4765,10 @@ class CourseRestorer
      */
     public function restore_scorm_documents(): void
     {
+        if ('true' !== api_get_setting('lp.allow_import_scorm_package_in_course_builder')) {
+            return;
+        }
+
         $logp = 'RESTORE_SCORM_ZIP: ';
 
         $getBucket = function (string $type) {
@@ -5745,6 +6031,12 @@ class CourseRestorer
         /** @var ObjectRepository $confRepo */
         $confRepo = $em->getRepository(CWikiConf::class);
 
+        /** @var CWikiCategoryRepository $categoryRepo */
+        $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+        /** @var ObjectRepository $discussionRepo */
+        $discussionRepo = $em->getRepository(CWikiDiscuss::class);
+
         /** @var CourseEntity|null $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
         if (!$courseEntity instanceof CourseEntity) {
@@ -5764,6 +6056,11 @@ class CourseRestorer
         $logicalPageIdMap = [];
         $basePageIdCache = [];
         $confCreatedForPage = [];
+        $startedSourcePages = [];
+        $destinationReflinks = [];
+        $skippedSourcePages = [];
+        $categoryPathCache = [];
+        $discussionsRestoredForPage = [];
 
         $this->dlog('restore_wiki: begin', [
             'count' => count($bag),
@@ -5799,6 +6096,69 @@ class CourseRestorer
             $basePageIdCache[$key] = $basePid;
 
             return $basePid;
+        };
+
+        $findOrCreateCategory = function (array $path) use (
+            $categoryRepo,
+            $courseEntity,
+            $sessionEntity,
+            $em,
+            $sid,
+            &$categoryPathCache,
+        ): ?CWikiCategory {
+            $parent = null;
+            foreach ($path as $node) {
+                $node = \is_object($node) ? (array) $node : $node;
+                if (!\is_array($node)) {
+                    continue;
+                }
+
+                $title = trim((string) ($node['title'] ?? ''));
+                if ('' === $title) {
+                    continue;
+                }
+
+                $parentId = (int) ($parent?->getId() ?? 0);
+                $cacheKey = $sid.'|'.$parentId.'|'.mb_strtolower($title);
+                if (isset($categoryPathCache[$cacheKey])) {
+                    $parent = $categoryPathCache[$cacheKey];
+                    continue;
+                }
+
+                $qb = $categoryRepo->createQueryBuilder('category')
+                    ->andWhere('category.course = :course')
+                    ->andWhere('category.title = :title')
+                    ->setParameter('course', $courseEntity)
+                    ->setParameter('title', $title)
+                    ->setMaxResults(1);
+                if ($sessionEntity instanceof SessionEntity) {
+                    $qb->andWhere('category.session = :session')->setParameter('session', $sessionEntity);
+                } else {
+                    $qb->andWhere('category.session IS NULL');
+                }
+                if ($parent instanceof CWikiCategory) {
+                    $qb->andWhere('category.parent = :parent')->setParameter('parent', $parent);
+                } else {
+                    $qb->andWhere('category.parent IS NULL');
+                }
+
+                /** @var CWikiCategory|null $category */
+                $category = $qb->getQuery()->getOneOrNullResult();
+                if (!$category instanceof CWikiCategory) {
+                    $category = new CWikiCategory();
+                    $category->setCourse($courseEntity);
+                    $category->setSession($sessionEntity);
+                    $category->setTitle($title);
+                    $category->setParent($parent);
+                    $em->persist($category);
+                    $em->flush();
+                }
+
+                $categoryPathCache[$cacheKey] = $category;
+                $parent = $category;
+            }
+
+            return $parent;
         };
 
         foreach ($bag as $legacyId => $res) {
@@ -5865,6 +6225,13 @@ class CourseRestorer
                     $reflink = $titleSlug;
                 }
 
+                $sourceLogicalKey = $srcPageId.'|'.$groupId;
+                if (isset($destinationReflinks[$sourceLogicalKey])) {
+                    $reflink = $destinationReflinks[$sourceLogicalKey];
+                }
+                if (isset($skippedSourcePages[$sourceLogicalKey])) {
+                    continue;
+                }
                 $logicalKey = $reflink.'|'.$groupId;
 
                 $qbExists = $repo->createQueryBuilder('w')
@@ -5881,9 +6248,10 @@ class CourseRestorer
 
                 $exists = (bool) $qbExists->getQuery()->getOneOrNullResult();
 
-                if ($exists) {
+                if ($exists && !isset($startedSourcePages[$sourceLogicalKey])) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
+                            $skippedSourcePages[$sourceLogicalKey] = true;
                             $qbLast = $repo->createQueryBuilder('w')
                                 ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                 ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
@@ -5948,6 +6316,7 @@ class CourseRestorer
                             $rawTitle = $baseTitle.' ('.$i.')';
                             $logicalKey = $reflink.'|'.$groupId;
 
+                            $destinationReflinks[$sourceLogicalKey] = $reflink;
                             $this->dlog('restore_wiki: renamed', [
                                 'reflink' => $reflink,
                                 'title' => $rawTitle,
@@ -5967,8 +6336,23 @@ class CourseRestorer
                                 $qbAll->andWhere('COALESCE(w.sessionId,0) = 0');
                             }
 
-                            foreach ($qbAll->getQuery()->getResult() as $old) {
-                                $em->remove($old);
+                            /** @var CWiki[] $oldVersions */
+                            $oldVersions = $qbAll->getQuery()->getResult();
+                            $oldPageIds = [];
+                            foreach ($oldVersions as $oldVersion) {
+                                $oldPageId = (int) ($oldVersion->getPageId() ?? 0);
+                                if ($oldPageId > 0) {
+                                    $oldPageIds[$oldPageId] = $oldPageId;
+                                }
+                                $em->remove($oldVersion);
+                            }
+                            foreach ($oldPageIds as $oldPageId) {
+                                foreach ($confRepo->findBy(['cId' => $cid, 'pageId' => $oldPageId]) as $oldConf) {
+                                    $em->remove($oldConf);
+                                }
+                                foreach ($discussionRepo->findBy(['cId' => $cid, 'publicationId' => $oldPageId]) as $oldDiscussion) {
+                                    $em->remove($oldDiscussion);
+                                }
                             }
                             $em->flush();
 
@@ -6056,6 +6440,19 @@ class CourseRestorer
                 }
 
                 $wiki->setPageId($destPageId);
+                $categoryPaths = $src->category_paths ?? $res->category_paths ?? [];
+                if (\is_array($categoryPaths)) {
+                    foreach ($categoryPaths as $categoryPath) {
+                        $categoryPath = \is_object($categoryPath) ? (array) $categoryPath : $categoryPath;
+                        if (!\is_array($categoryPath)) {
+                            continue;
+                        }
+                        $category = $findOrCreateCategory($categoryPath);
+                        if ($category instanceof CWikiCategory) {
+                            $wiki->addCategory($category);
+                        }
+                    }
+                }
                 $em->flush();
 
                 if (!isset($confCreatedForPage[$destPageId])) {
@@ -6103,6 +6500,33 @@ class CourseRestorer
                     $confCreatedForPage[$destPageId] = true;
                 }
 
+                $discussions = $src->discussions ?? $res->discussions ?? [];
+                if (!isset($discussionsRestoredForPage[$sourceLogicalKey]) && \is_array($discussions)) {
+                    foreach ($discussions as $discussionData) {
+                        $discussionData = \is_object($discussionData) ? (array) $discussionData : $discussionData;
+                        if (!\is_array($discussionData)) {
+                            continue;
+                        }
+
+                        $discussion = new CWikiDiscuss();
+                        $discussion->setCId($cid);
+                        $discussion->setPublicationId($destPageId);
+                        $discussion->setUsercId((int) ($discussionData['user_id'] ?? api_get_user_id()));
+                        $discussion->setComment((string) ($discussionData['comment'] ?? ''));
+                        $discussion->setPScore((string) ($discussionData['score'] ?? '-'));
+                        try {
+                            $discussion->setDtime(new DateTime((string) ($discussionData['dtime'] ?? 'now')));
+                        } catch (Throwable) {
+                            $discussion->setDtime(new DateTime('now', new DateTimeZone('UTC')));
+                        }
+                        $em->persist($discussion);
+                    }
+                    $em->flush();
+                    $discussionsRestoredForPage[$sourceLogicalKey] = true;
+                }
+
+                $startedSourcePages[$sourceLogicalKey] = true;
+                $destinationReflinks[$sourceLogicalKey] = $reflink;
                 $destWikiIid = (int) ($wiki->getIid() ?? 0);
 
                 $this->course->resources[$bucketKey][$legacyId] ??= new stdClass();
@@ -7124,6 +7548,12 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
             foreach ($resources[RESOURCE_ASSET] as $asset) {
+                // Security: confine the backup-supplied asset path to prevent a tampered
+                // backup from escaping the course directory (-> arbitrary file write -> RCE).
+                if (!$this->isSafeBackupPath((string) $asset->path)) {
+                    continue;
+                }
+
                 if (is_file($this->course->backup_path.'/'.$asset->path)
                     && is_readable($this->course->backup_path.'/'.$asset->path)
                     && is_dir(\dirname($path.$asset->path))
@@ -7444,6 +7874,28 @@ class CourseRestorer
         return '';
     }
 
+    /**
+     * Validates a relative path coming from an (untrusted) course backup archive
+     * before it is used in a file operation.
+     *
+     * Rejects path traversal ("..") and NUL bytes, and optionally enforces that the
+     * path stays within an expected sub-directory. This prevents a tampered backup
+     * from escaping the extraction directory and writing an arbitrary file
+     * (ZIP-slip -> arbitrary file write -> RCE).
+     */
+    private function isSafeBackupPath(string $path, string $requiredPrefix = ''): bool
+    {
+        if (str_contains($path, '..') || str_contains($path, "\0")) {
+            return false;
+        }
+
+        if ('' !== $requiredPrefix && !str_starts_with($path, $requiredPrefix)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function extractSingleDocumentEntryFromBackupZip(
         string $rel,
         string $srcRoot,
@@ -7536,6 +7988,18 @@ class CourseRestorer
         }
 
         $targetRel = '' !== $normalizedRel ? $normalizedRel : $requestedRel;
+
+        // Security: the target rel comes from the (untrusted) backup ZIP entry name.
+        // Confine it to the "document" sub-tree and reject traversal/NUL bytes so a
+        // crafted entry cannot escape $srcRoot and write an arbitrary file (ZIP-slip -> RCE).
+        if (!$this->isSafeBackupPath($targetRel, 'document')) {
+            $DBG('html.rewrite.zip.unsafe_target', [
+                'rel' => $targetRel,
+            ]);
+
+            return null;
+        }
+
         $target = rtrim($srcRoot, '/').'/'.$targetRel;
         $targetDir = dirname($target);
 
@@ -7558,7 +8022,8 @@ class CourseRestorer
         }
 
         // Keep a legacy alias when the HTML asked for document/t/... but the ZIP stored document/...
-        if ($requestedRel !== $targetRel) {
+        // The alias path also comes from the (untrusted) requested rel — confine it too.
+        if ($requestedRel !== $targetRel && $this->isSafeBackupPath($requestedRel, 'document')) {
             $aliasTarget = rtrim($srcRoot, '/').'/'.$requestedRel;
             $aliasDir = dirname($aliasTarget);
 

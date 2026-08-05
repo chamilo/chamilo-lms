@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Szeretné törölni a speciális diplomát és az 
 $strings['SuccessDelete'] = 'Sikeresen törölve';
 $strings['ProblemDelete'] = 'Probléma a tanúsítvány törlésekor';
 $strings['OnlyCustomCertificates'] = 'Csak a személyre szabott tanúsítvánnyal rendelkező tanfolyamok exportálódnak';
+$strings['CertificateMode'] = 'Tanúsítvány mód';
+$strings['UseCourseCustomCertificate'] = 'Kurzus-specifikus egyéni tanúsítvány használata';
+$strings['UseDefaultCustomCertificate'] = 'Platform alapértelmezett egyéni tanúsítvány használata';
+
+$strings['CreateCertificateWithTags'] = 'Hozza létre a tanúsítványt ezekkel a címkékkel';
+
+$strings['DeleteCertificate'] = 'Tanúsítvány törlése';
+
+$strings['SaveCertificate'] = 'Tanúsítvány mentése';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Válasszon egy opciót és mentse a beállításokat a tanúsítványszerkesztő megnyitása előtt.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Válassza ki, hogyan használja ez a kurzus az egyéni tanúsítványokat.';
+
+$strings['CouldNotSaveCertificate'] = 'Nem sikerült menteni a tanúsítvány konfigurációját.';

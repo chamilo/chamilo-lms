@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronische Bewertung ist deaktiviert';
 $strings['StudentId'] = 'Studenten-ID';
 $strings['ProviderId'] = 'Anbieter-ID';
 $strings['CourseHours'] = 'Kursstunden';
+
+$strings['GenerateFile'] = 'Datei generieren';
+$strings['CourseId'] = 'Kurs-ID';

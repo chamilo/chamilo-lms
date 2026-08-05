@@ -4,15 +4,6 @@
     :handle-reset="resetForm"
   />
 
-  <!-- Quota warning banner -->
-  <div
-    v-if="quotaWarningMessage"
-    class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
-    role="alert"
-  >
-    {{ quotaWarningMessage }}
-  </div>
-
   <div class="documents-layout">
     <div class="template-list-container">
       <TemplateList
@@ -25,7 +16,7 @@
       <DocumentsForm
         ref="createForm"
         :errors="errors"
-        :search-enabled="searchEnabled"
+        :search-enabled="searchEnabled && !isCertificateDocument"
         :values="item"
         @submit="onSendFormData"
       />
@@ -73,7 +64,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
@@ -81,21 +72,16 @@ import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import { useDocumentCreate } from "../../composables/useDocumentCreate"
-import { useNotification } from "../../composables/notification"
 import { useCertificateTags } from "../../composables/useCertificateTags"
 import { useDocumentTemplates } from "../../composables/useDocumentTemplates"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import Panel from "primevue/panel"
 import { usePlatformConfig } from "../../store/platformConfig"
-import documentsService from "../../services/documents"
-
-const QUOTA_WARNING_THRESHOLD_PERCENT = 2
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
-const { showSuccessNotification } = useNotification()
 
 const { isLoading, created, onSendFormData: dispatchCreate, resetForm: dispatchReset } = useDocumentCreate()
 
@@ -105,7 +91,6 @@ const searchEnabled = raw !== "false"
 const createForm = ref(null)
 
 const errors = ref({})
-const quotaWarningMessage = ref("")
 
 const allowedFiletypes = ["file", "video", "certificate"]
 const filetype = allowedFiletypes.includes(route.query.filetype) ? route.query.filetype : "file"
@@ -117,11 +102,16 @@ const item = ref({
   filetype,
   parentResourceNodeId: null,
   resourceLinkList: null,
-  indexDocumentContent: searchEnabled,
+  indexDocumentContent: "certificate" === filetype ? false : searchEnabled,
   searchFieldValues: {},
   ai_assisted: 0,
   ai_assisted_raw: 0,
+  language: "",
 })
+
+const isCertificateDocument = computed(
+  () => "certificate" === String(item.value?.filetype || filetype).trim().toLowerCase(),
+)
 
 const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)
 const { templates, fetchTemplates, addTemplateToEditor } = useDocumentTemplates(item, createForm)
@@ -131,22 +121,17 @@ watch(created, (val) => {
     return
   }
 
+  createForm.value?.clearEditorDrafts?.()
   redirectToDocumentsList()
 })
 
 item.value.parentResourceNodeId = route.params.node ?? route.params.id ?? null
-item.value.resourceLinkList = JSON.stringify([
-  {
-    gid: route.query.gid,
-    sid: route.query.sid,
-    cid: route.query.cid,
-    visibility: RESOURCE_LINK_PUBLISHED,
-  },
-])
+// Course context (cid/sid/gid) is derived server-side from the gated session
+// course; only the visibility needs to travel in the body.
+item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
 onMounted(async () => {
   await fetchTemplates()
-  await showQuotaWarningIfNeeded()
 })
 
 function getRouteNodeId() {
@@ -212,38 +197,6 @@ function normalizeAiAssistedState() {
   item.value.ai_assisted_raw = enabled ? 1 : 0
 }
 
-function toInt(value, fallback = 0) {
-  const n = Number(value)
-
-  return Number.isFinite(n) ? n : fallback
-}
-
-async function showQuotaWarningIfNeeded() {
-  const courseId = toInt(route.query.cid, 0)
-
-  if (!courseId) {
-    return
-  }
-
-  const sid = toInt(route.query.sid, 0)
-  const gid = toInt(route.query.gid, 0)
-
-  try {
-    const msg = await documentsService.fetchQuotaWarningMessage(t, courseId, {
-      sid,
-      gid,
-      force: true,
-      thresholdPercent: QUOTA_WARNING_THRESHOLD_PERCENT,
-    })
-
-    if (msg) {
-      quotaWarningMessage.value = msg
-      showSuccessNotification(msg)
-    }
-  } catch (e) {
-    console.error("[DocumentsCreateFile] Failed to show quota warning:", e)
-  }
-}
 
 function handleBack() {
   router.back()
@@ -254,6 +207,11 @@ function resetForm() {
 }
 
 async function onSendFormData() {
+  if (isCertificateDocument.value) {
+    item.value.indexDocumentContent = false
+    item.value.searchFieldValues = {}
+  }
+
   normalizeAiAssistedState()
   await dispatchCreate(createForm.value)
 }

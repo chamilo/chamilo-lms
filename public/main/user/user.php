@@ -18,11 +18,11 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_USER;
+$current_course_tool = 'member';
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
-api_protect_course_script(true, false, 'user');
+api_protect_course_script(true, false, 'member');
 
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
@@ -44,6 +44,21 @@ $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 $canEditUsers = 'true' === api_get_setting('workflows.allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 $canEdit = api_is_allowed_to_edit(null, true);
 $canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
+
+// Sending a course invitation subscribes to the whole session when one is set,
+// so in session context it is restricted to session admins/general coaches,
+// not the broader course-coach-in-session audience covered by $canEdit.
+$canManageCourseInvitations = api_is_platform_admin();
+if (!$canManageCourseInvitations) {
+    if ($sessionId > 0) {
+        $sessionEntity = api_get_session_entity($sessionId);
+        $currentUserEntity = api_get_user_entity($user_id);
+        $canManageCourseInvitations = api_is_session_admin()
+            || (null !== $sessionEntity && null !== $currentUserEntity && $sessionEntity->hasUserAsGeneralCoach($currentUserEntity));
+    } else {
+        $canManageCourseInvitations = $canEdit;
+    }
+}
 
 // Can't auto unregister from a session
 if (!empty($sessionId)) {
@@ -481,19 +496,26 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-// Global hosting limit: precompute a simple snapshot for UI purposes only.
-$globalLimitUsersPerCourse = 0;
-$currentUsersForGlobalLimit = 0;
-$courseIsFullForGlobalLimit = false;
+// Users-per-course limit: precompute a simple snapshot for UI purposes only.
+$usersPerCourseLimit = 0;
+$currentUsersForCourseLimit = 0;
+$courseIsFullForUsersPerCourseLimit = false;
 
 if ($canEdit && 0 === (int) $sessionId) {
-    // Read the global limit through CourseManager helper to keep logic centralized.
-    $globalLimitUsersPerCourse = (int) CourseManager::getGlobalUsersPerCourseLimit();
+    if (method_exists('CourseManager', 'getEffectiveUsersPerCourseLimit')) {
+        $usersPerCourseLimit = (int) CourseManager::getEffectiveUsersPerCourseLimit($courseId);
+    } else {
+        $usersPerCourseLimit = (int) CourseManager::getGlobalUsersPerCourseLimit();
+    }
 
-    if ($globalLimitUsersPerCourse > 0) {
-        // Count current users for the limit, excluding HR relation type.
-        $currentUsersForGlobalLimit = (int) CourseManager::countUsersForGlobalLimit($courseId);
-        $courseIsFullForGlobalLimit = $currentUsersForGlobalLimit >= $globalLimitUsersPerCourse;
+    if ($usersPerCourseLimit > 0) {
+        if (method_exists('CourseManager', 'countStudentsForUsersPerCourseLimit')) {
+            $currentUsersForCourseLimit = (int) CourseManager::countStudentsForUsersPerCourseLimit($courseId);
+        } else {
+            $currentUsersForCourseLimit = (int) CourseManager::countUsersForGlobalLimit($courseId);
+        }
+
+        $courseIsFullForUsersPerCourseLimit = $currentUsersForCourseLimit >= $usersPerCourseLimit;
     }
 }
 
@@ -602,7 +624,7 @@ if (isset($origin) && 'learnpath' === $origin) {
     Display::display_header($tool_name, 'User');
 }
 
-Display::display_introduction_section(TOOL_USER, 'left');
+Display::display_introduction_section('member');
 $actions = '';
 $selectedTab = 1;
 
@@ -628,10 +650,10 @@ if ($canRead) {
 
     $actionsLeft = '';
     if ($canEdit) {
-        // When the global hosting limit is enabled and already reached (no session),
+        // When the users-per-course limit is enabled and already reached (no session),
         // we hide the "Add" icon to avoid actions that would add more users.
         $canShowAddIcon = true;
-        if (0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
+        if (0 === (int) $sessionId && $usersPerCourseLimit > 0 && $courseIsFullForUsersPerCourseLimit) {
             $canShowAddIcon = false;
         }
 
@@ -650,6 +672,12 @@ if ($canRead) {
     if ($canEditUsers && $canEdit) {
         $actionsLeft .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
             Display::getMdiIcon('import_csv', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import users list')).'</a> ';
+    }
+
+    if ($canManageCourseInvitations) {
+        $invitationUrl = api_get_path(WEB_PATH).'resources/course-invitation/?'.api_get_cidreq();
+        $actionsLeft .= '<a href="'.$invitationUrl.'">'.
+            Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Invite by email')).'</a> ';
     }
 
     if ($canRead) {
@@ -683,15 +711,20 @@ if ($canRead) {
     echo UserManager::getUserSubscriptionTab($selectedTab);
     echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 
-    // When the course is full according to the global limit (no session),
+    // When the course is full according to the effective limit (global or BuyCourses),
     // show an explicit warning so teachers understand why the Add icon is hidden.
-    if ($canEdit && 0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
-        $msg = sprintf(
-            get_lang(
-                'This course already reached the global limit of %d users set by the administrators. To add more users, please ask an administrator to raise this limit or use sessions.'
-            ),
-            $globalLimitUsersPerCourse
-        );
+    if ($canEdit && 0 === (int) $sessionId && $usersPerCourseLimit > 0 && $courseIsFullForUsersPerCourseLimit) {
+        if (method_exists('CourseManager', 'getUsersPerCourseLimitCancelMessage')) {
+            $msg = CourseManager::getUsersPerCourseLimitCancelMessage($courseId);
+        } else {
+            $msg = sprintf(
+                get_lang(
+                    'This operation would exceed the limit of %d users allowed for this course.'
+                ),
+                $usersPerCourseLimit
+            );
+        }
+
         echo Display::return_message($msg, 'warning');
     }
 }
@@ -791,7 +824,7 @@ function get_number_of_users()
  * @param string $lastname
  * @param string $username
  * @param string $official_code
- * @param $keyword
+ * @param string $keyword
  *
  * @return bool
  */

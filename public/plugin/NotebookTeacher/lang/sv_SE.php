@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Inga anteckningar skapade med aktuellt filter';
 $strings['NoNotebook'] = 'Inga anteckningar skapade i systemet';
 $strings['NoNotebookUser'] = 'Inga anteckningar för denna student';
 $strings['NotebookNoStudentAssigned'] = 'Anteckningar utan tilldelade studenter';
+
+$strings['TeacherNotesHelp'] = 'Skapa privata läraranteckningar kopplade till kursdeltagare i denna kurs.';
+$strings['CurrentFilter'] = 'Aktuellt filter';
+$strings['EmptyStateHelp'] = 'Skapa en ny anteckning eller ändra filter för kursdeltagare.';

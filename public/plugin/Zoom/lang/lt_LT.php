@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom vaizdo konferencija';
 $strings['plugin_comment'] = 'Zoom vaizdo konferencijos integracija kursuose ir sesijose';
 
+$strings['accountId'] = 'Paskyros ID';
+$strings['clientId'] = 'Kliento ID';
+$strings['clientSecret'] = 'Kliento slaptoji raktas';
+$strings['webhookSecretToken'] = 'Webhook slaptojo rakto prieigos raktas';
+$strings['apiKey_help'] = 'Pasenusios JWT API raktas. Rekomenduojama naudoti Paskyros ID, Kliento ID ir Kliento slaptajį raktą Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Pasenusi JWT API slaptoji raktas. Rekomenduojama naudoti Paskyros ID, Kliento ID ir Kliento slaptajį raktą Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Pasenęs webhook patvirtinimo prieigos raktas. Rekomenduojama naudoti Webhook slaptojo rakto prieigos raktą.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth paskyros ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth kliento ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth kliento slaptoji raktas.';
+$strings['webhookSecretToken_help'] = 'Slaptas prieigos raktas, naudojamas Zoom webhook užklausoms patvirtinti.';
 $strings['apiKey'] = 'API raktas';
 $strings['apiSecret'] = 'API paslaptis';
 $strings['verificationToken'] = 'Patikrinimo prieigos raktas';

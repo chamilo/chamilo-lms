@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_USER')"),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"), new Delete(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
@@ -40,26 +41,28 @@ class PageCategory
 {
     use TimestampableTypedEntity;
 
-    public const ADMIN_BLOCKS_CATEGORIES = [
-        'block-admin-users',
-        'block-admin-courses',
-        'block-admin-sessions',
-        'block-admin-gradebook',
-        'block-admin-skills',
-        'block-admin-privacy',
-        'block-admin-settings',
-        'block-admin-platform',
-        'block-admin-chamilo',
-    ];
+    public const array ADMIN_BLOCKS_CATEGORIES
+        = [
+            'block-admin-users',
+            'block-admin-courses',
+            'block-admin-sessions',
+            'block-admin-gradebook',
+            'block-admin-skills',
+            'block-admin-privacy',
+            'block-admin-settings',
+            'block-admin-platform',
+            'block-admin-chamilo',
+        ];
 
-    public const ANONYMOUS_CATEGORIES = [
-        'faq',
-        'demo',
-        'home',
-        'public',
-        'footer_public',
-        'index',
-    ];
+    public const array ANONYMOUS_CATEGORIES
+        = [
+            'faq',
+            'demo',
+            'home',
+            'public',
+            'footer_public',
+            'index',
+        ];
 
     #[Groups(['page_category:read', 'page_category:write'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -84,38 +87,46 @@ class PageCategory
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Page::class, cascade: ['persist'])]
     protected Collection $pages;
+
     public function __construct()
     {
         $this->pages = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
     public function getTitle(): string
     {
         return $this->title;
     }
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
+
     public function getCreator(): User
     {
         return $this->creator;
     }
+
     public function setCreator(User $creator): self
     {
         $this->creator = $creator;
 
         return $this;
     }
+
     public function getType(): string
     {
         return $this->type;
     }
+
     public function setType(string $type): self
     {
         $this->type = $type;
@@ -130,6 +141,7 @@ class PageCategory
     {
         return $this->pages;
     }
+
     public function setPages(Collection $pages): self
     {
         $this->pages = $pages;

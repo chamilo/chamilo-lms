@@ -3,12 +3,13 @@ import { computed, onMounted, ref, watchEffect } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
-import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useLocale } from "../../composables/locale"
 import CatalogueRequirementModal from "../course/CatalogueRequirementModal.vue"
 import { useSessionRequirementStatus } from "../../composables/session/useSessionRequirementStatus"
+import sessionRelUserService from "../../services/sessionRelUserService"
+import sessionRelCourseRelUserService from "../../services/sessionRelCourseRelUserService"
 
 const props = defineProps({
   session: Object,
@@ -138,7 +139,7 @@ const subscribeToSession = async () => {
     const userId = securityStore.user.id
     const sessionId = props.session.id
 
-    await axios.post("/api/session_rel_users", {
+    await sessionRelUserService.create({
       user: `/api/users/${userId}`,
       session: `/api/sessions/${sessionId}`,
       relationType: 0,
@@ -146,7 +147,7 @@ const subscribeToSession = async () => {
     })
 
     const promises = (props.session.courses || []).map((c) =>
-      axios.post("/api/session_rel_course_rel_users", {
+      sessionRelCourseRelUserService.create({
         user: `/api/users/${userId}`,
         session: `/api/sessions/${sessionId}`,
         course: `/api/courses/${c.id}`,

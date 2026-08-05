@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Import aus Moodle';
+$strings['plugin_comment'] = 'Führt einen Importprozess aus einer Moodle-Datenbank und -Dateien nach Chamilo aus.';
+
+$strings['MoodlePassword'] = 'Moodle-Passwort';
+$strings['UninstallError'] = 'Beim Deinstallieren des Plugins ist ein Fehler aufgetreten.';
+
+$strings['db_host'] = 'Moodle-DB-Host';
+$strings['db_user'] = 'Moodle-DB-Benutzer';
+$strings['db_password'] = 'Moodle-DB-Passwort';
+$strings['db_name'] = 'Moodle-DB-Name';
+$strings['user_filter'] = 'Filter für Benutzer';
+$strings['user_filter_help'] = 'Importiert nur Benutzer, deren Benutzername mit diesem Präfix beginnt.<br>Die Kursimporte sind ebenfalls von dieser Einstellung betroffen, da nur Kurse importiert werden, in denen Benutzer mit diesem Benutzernamen-Präfix eingeschrieben sind.';
+$strings['url_id'] = 'URL-ID';
+$strings['url_id_help'] = 'Zu speichernde Access-URL-ID für Kurse, Benutzer und Sitzungen (bei Verwendung von Multi-URL).';
+$strings['moodle_path'] = 'Moodledata-Pfad';
+$strings['moodle_path_help'] = 'Pfad zum moodledata-Ordner. Üblicherweise etwas wie <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Benutzer';
+$strings['CourseCategoriesTask'] = 'Kurskategorien';
+$strings['CoursesTask'] = 'Kurse';
+$strings['CourseSectionsTask'] = 'Kursabschnitte';
+$strings['CourseModulesLessonTask'] = 'Kursmodule: Lektionen';
+$strings['LessonPagesTask'] = 'Lektionsseiten';
+$strings['LessonPagesDocumentTask'] = 'Lektionsseiten: Dokumente';
+$strings['FilesForLessonPagesTask'] = 'Dateien für Lektionsseiten';
+$strings['LessonPagesQuizTask'] = 'Lektionsseiten: Fragen';
+$strings['LessonPagesQuizQuestionTask'] = 'Fragen für Frageseiten';
+$strings['LessonAnswersTrueFalseTask'] = 'Antworten für Wahr/Falsch-Fragen';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Antworten für Multiple-Choice-Fragen';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Antworten für Multiple-Answer-Fragen';
+$strings['LessonAnswersMatchingTask'] = 'Antworten für Zuordnungsfragen';
+$strings['LessonAnswersEssayTask'] = 'Antworten für Freitextfragen';
+$strings['LessonAnswersShortAnswerTask'] = 'Antworten für Kurzantwortfragen';
+$strings['FilesForLessonAnswersTask'] = 'Dateien für Lektionsantworten';
+$strings['CourseModulesQuizTask'] = 'Kursmodule: Tests';
+$strings['CQuizTask'] = 'C-Quiz';
+$strings['RoleAssignmentsTask'] = 'Rollenzuweisungen';
+$strings['QuizzesTask'] = 'Tests';
+$strings['FilesForQuizzesTask'] = 'Dateien für Tests';
+$strings['QuestionCategoriesTask'] = 'Fragenkategorien';
+$strings['QuestionsTask'] = 'Fragen';
+$strings['QuestionMultiChoiceSingleTask'] = 'Antworten für Multiple-Choice-Fragen (Einzeln)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Antworten für Multiple-Choice-Fragen (Mehrfach)';
+$strings['QuestionsTrueFalseTask'] = 'Antworten für Wahr/Falsch-Fragen';
+$strings['QuestionShortAnswerTask'] = 'Antworten für Kurzantwortfragen';
+$strings['CourseModulesScormTask'] = 'SCORM-Kurse';
+$strings['ScormScoesTask'] = 'SCORM-Elemente';
+$strings['FilesForScormScoesTask'] = 'Dateien für SCORM-Elemente';
+$strings['UserSessionsTask'] = 'Kurssitzungen für Benutzer';
+$strings['CourseIntroductionsTask'] = 'Kurseinführungen';
+$strings['FilesForCourseIntroductionsTask'] = 'Dateien für Kurseinführungen';
+$strings['FilesForCourseSectionsTask'] = 'Dateien für Kursabschnitte';
+$strings['CourseModulesUrlTask'] = 'Kursmodule: URLs';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'Module in Abschnitt sortieren';
+$strings['UsersScormsViewTask'] = 'SCORM-Aufrufe für Benutzer';
+$strings['UsersScormsProgressTask'] = 'SCORM-Fortschritt';
+$strings['UsersLearnPathsTask'] = 'Lernpfad-Aufrufe der Benutzer';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Unterrichtsdauer bis Startzeit des Lernpfad-Abschnitts';
+$strings['QuizzesScoresTask'] = 'Quiz-Ergebnisse im Lernpfad aktualisieren';
+$strings['QuestionGapselectTask'] = 'Antworten für Lückentext-Auswahl-Fragen';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Unterrichtsverzweigung zur Gesamtdauer in Lernpfad-Dokumenten';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Unterrichtsversuche zur Gesamtdauer in Lernpfad-Tests';
+$strings['UsersLearnPathsQuizzesTask'] = 'Testversuche zu Lernpfad-Testversuchen';
+$strings['UsersQuizzesAttemptsTask'] = 'Testversuche der Benutzer';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Frageversuche der Benutzer für Kurzantwort';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Frageversuche der Benutzer für Lückentext-Auswahl';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Frageversuche der Benutzer für Wahr/Falsch';
+$strings['UsersLastLoginTask'] = 'Letzte Anmeldungen für Benutzer';
+$strings['TrackLoginTask'] = 'Erste Anmeldung und letzte Abmeldung';
+$strings['TrackCourseAccessTask'] = 'Benutzerzugriff auf Kurs';
+$strings['UserLearnPathsProgressScript'] = 'Fortschritt in Lernpfaden für Benutzer aktualisieren.';
+$strings['UserScormsProgressScript'] = 'Fortschritt in SCORMs für Benutzer aktualisieren.';
+
+$strings['InstallError'] = 'Beim Installieren des Plugins ist ein Fehler aufgetreten: %s';
+$strings['AdminIntro'] = 'Führen Sie die Moodle-Migrationsaufgaben der Reihe nach aus. Jeder Schritt ist erst aktiviert, nachdem der übergeordnete Schritt abgeschlossen wurde.';
+$strings['MoodleDatabase'] = 'Moodle-Datenbank';
+$strings['MoodledataPath'] = 'Moodledata-Pfad';
+$strings['AccessUrlId'] = 'Zugriffs-URL-ID';
+$strings['Configured'] = 'Konfiguriert';
+$strings['NotConfigured'] = 'Nicht konfiguriert';
+$strings['ConfigurePlugin'] = 'Plugin konfigurieren';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigurieren Sie den Moodle-Datenbank-Host, Benutzer und Datenbanknamen, bevor Sie die Migrationsaufgaben ausführen.';
+$strings['MissingMoodledataPathWarning'] = 'Der Moodledata-Pfad ist leer. Dateibezogene Aufgaben können fehlschlagen, bis diese Einstellung konfiguriert ist.';
+$strings['InvalidMigrationAction'] = 'Ungültige Migrationsaktion.';
+$strings['InvalidSecurityToken'] = 'Ungültiges Sicherheits-Token. Bitte laden Sie die Seite neu und versuchen Sie es erneut.';
+$strings['MigrationTasks'] = 'Migrationsaufgaben';
+$strings['MaintenanceScripts'] = 'Wartungsskripte';
+$strings['ExecutionOutput'] = 'Ausführungsausgabe';
+$strings['TaskAlreadyExecuted'] = 'Diese Aufgabe oder dieses Skript wurde bereits ausgeführt.';
+$strings['SelectTaskToRun'] = 'Wählen Sie eine Migrationsaufgabe zum Ausführen aus. Die Ausgabe wird hier angezeigt.';

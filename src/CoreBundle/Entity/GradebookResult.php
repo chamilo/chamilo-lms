@@ -38,13 +38,6 @@ class GradebookResult
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
 
-    public function setCreatedAt(DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     /**
      * Get createdAt.
      *
@@ -55,9 +48,9 @@ class GradebookResult
         return $this->createdAt;
     }
 
-    public function setScore(float $score): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
-        $this->score = $score;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -70,6 +63,13 @@ class GradebookResult
     public function getScore()
     {
         return $this->score;
+    }
+
+    public function setScore(float $score): self
+    {
+        $this->score = $score;
+
+        return $this;
     }
 
     /**

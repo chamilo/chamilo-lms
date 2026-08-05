@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
@@ -45,7 +48,8 @@ class AttendanceController extends AbstractController
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
         private readonly EntityManagerInterface $em,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     #[Route('/full-data', name: 'chamilo_core_attendance_get_full_data', methods: ['GET'])]
@@ -57,26 +61,14 @@ class AttendanceController extends AbstractController
             return $this->json(['error' => 'Attendance ID is required'], 400);
         }
 
-        $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
-
-        if (isset($data['attendanceDates']) && \is_array($data['attendanceDates'])) {
-            foreach ($data['attendanceDates'] as &$date) {
-                if (!isset($date['id'])) {
-                    continue;
-                }
-
-                $calendar = $this->attendanceCalendarRepository->find((int) $date['id']);
-                if (!$calendar instanceof CAttendanceCalendar) {
-                    continue;
-                }
-
-                $duration = $calendar->getDuration();
-                if (null !== $duration) {
-                    $date['duration'] = $duration;
-                }
-            }
-            unset($date);
+        $attendance = $this->em->getRepository(CAttendance::class)->find($attendanceId);
+        if (!$attendance) {
+            return $this->json(['error' => 'Attendance not found'], 404);
         }
+        // Only members of the attendance's course may read it.
+        $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
+
+        $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
 
         return $this->json($data, 200);
     }
@@ -97,13 +89,16 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             return $this->json(['error' => 'Attendance not found'], 404);
         }
+        // Roster + PII: teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
 
         $users = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
 
-        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars) {
+        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars, $showOfficialCode) {
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -124,15 +119,21 @@ class AttendanceController extends AbstractController
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
 
-            return [
+            $formattedUser = [
                 'id' => $user->getId(),
                 'firstname' => $user->getFirstname(),
                 'lastname' => $user->getLastname(),
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'photo' => $userRepository->getUserPicture($user->getId()),
-                'notAttended' => $absences.'/'.$totalCalendars." ({$percentage}%)",
+                'notAttended' => $absences.'/'.$totalCalendars.' ('.$percentage.'%)',
             ];
+
+            if ($showOfficialCode) {
+                $formattedUser['officialCode'] = $user->getOfficialCode() ?? '';
+            }
+
+            return $formattedUser;
         }, $users);
 
         return $this->json($formattedUsers, 200);
@@ -180,6 +181,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
@@ -208,9 +211,15 @@ class AttendanceController extends AbstractController
                 : null;
         }
 
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
+
         // Header
         $dataTable = [];
-        $header = ['#', 'Last Name', 'First Name', 'Not Attended'];
+        $header = ['#'];
+        if ($showOfficialCode) {
+            $header[] = 'Official code';
+        }
+        $header = array_merge($header, ['Last Name', 'First Name', 'Not Attended']);
         foreach ($calendars as $calendar) {
             $header[] = $calendar->getDateTime()->format('d/m H:i');
         }
@@ -223,10 +232,15 @@ class AttendanceController extends AbstractController
         foreach ($students as $student) {
             $row = [
                 $count++,
+            ];
+            if ($showOfficialCode) {
+                $row[] = $student->getOfficialCode() ?? '';
+            }
+            $row = array_merge($row, [
                 $student->getLastname(),
                 $student->getFirstname(),
                 '',
-            ];
+            ]);
 
             $absences = 0;
             foreach ($calendars as $calendar) {
@@ -250,7 +264,8 @@ class AttendanceController extends AbstractController
             }
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
-            $row[3] = "$absences/$totalCalendars ($percentage%)";
+            $notAttendedIndex = $showOfficialCode ? 4 : 3;
+            $row[$notAttendedIndex] = $absences.'/'.$totalCalendars.' ('.$percentage.'%)';
             $dataTable[] = $row;
         }
 
@@ -296,7 +311,7 @@ class AttendanceController extends AbstractController
             $mpdf = new Mpdf([
                 'orientation' => 'L',
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]);
+            ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
 
             return new Response(
@@ -323,6 +338,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $calendars = $attendance->getCalendars();
         $totalCalendars = \count($calendars);
@@ -330,13 +347,18 @@ class AttendanceController extends AbstractController
         $sheetRepo = $this->em->getRepository(CAttendanceSheet::class);
 
         $stateLabels = CAttendanceSheet::getPresenceLabels();
+        $showOfficialCode = $this->showOfficialCodeInAttendance();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Attendance');
 
         // Header
-        $headers = ['#', 'Last Name', 'First Name', 'Not Attended'];
+        $headers = ['#'];
+        if ($showOfficialCode) {
+            $headers[] = 'Official code';
+        }
+        $headers = array_merge($headers, ['Last Name', 'First Name', 'Not Attended']);
         foreach ($calendars as $calendar) {
             $headers[] = $calendar->getDateTime()->format('d/m H:i');
         }
@@ -346,7 +368,11 @@ class AttendanceController extends AbstractController
         $rowNumber = 2;
         $count = 1;
         foreach ($students as $student) {
-            $row = [$count++, $student->getLastname(), $student->getFirstname()];
+            $row = [$count++];
+            if ($showOfficialCode) {
+                $row[] = $student->getOfficialCode() ?? '';
+            }
+            $row = array_merge($row, [$student->getLastname(), $student->getFirstname()]);
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -370,7 +396,8 @@ class AttendanceController extends AbstractController
             }
 
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
-            array_splice($row, 3, 0, "$absences/$totalCalendars ($percentage%)");
+            $notAttendedIndex = $showOfficialCode ? 4 : 3;
+            array_splice($row, $notAttendedIndex, 0, $absences.'/'.$totalCalendars.' ('.$percentage.'%)');
 
             $sheet->fromArray($row, null, 'A'.$rowNumber++);
         }
@@ -396,6 +423,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             throw $this->createNotFoundException('Attendance not found');
         }
+        // Teacher of the attendance's course only.
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
 
         $resourceNodeId = $attendance->getResourceNode()?->getParent()?->getId();
         if (!$resourceNodeId) {
@@ -446,12 +475,24 @@ class AttendanceController extends AbstractController
         $usersInCourse = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
         $userIdsInCourse = array_map(fn (User $user) => $user->getId(), $usersInCourse);
 
+        // Only a teacher of the target course/session may write attendance.
+        $course = $this->em->getRepository(Course::class)->find($courseId);
+        if (!$course instanceof Course) {
+            return $this->json(['error' => 'Course not found'], 404);
+        }
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $affectedRows = 0;
 
         try {
             foreach ($attendanceData as $entry) {
                 $userId = (int) $entry['userId'];
                 $calendarId = (int) $entry['calendarId'];
+
+                // Never write attendance for a user who is not in the target course.
+                if (!\in_array($userId, $userIdsInCourse, true)) {
+                    continue;
+                }
                 $presence = \array_key_exists('presence', $entry) ? $entry['presence'] : null;
                 $signature = $entry['signature'] ?? null;
                 $comment = $entry['comment'] ?? null;
@@ -657,6 +698,8 @@ class AttendanceController extends AbstractController
         if (!$attendance) {
             return $this->json(['error' => 'Attendance not found'], 404);
         }
+        // Self-view of the caller's own attendance; require course membership.
+        $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
 
         $dates = $attendance->getCalendars()->map(function (CAttendanceCalendar $calendar) use ($user) {
             $sheet = $calendar->getSheets()->filter(
@@ -671,6 +714,7 @@ class AttendanceController extends AbstractController
                 'sheetId' => $sheet?->getIid(),
                 'signature' => $sheet?->getSignature(),
                 'duration' => $calendar->getDuration(),
+                'effectiveRoom' => CAttendance::formatRoomData($calendar->getEffectiveRoom()),
             ];
         })->toArray();
 
@@ -699,6 +743,7 @@ class AttendanceController extends AbstractController
                     'dateTime' => $d['dateTime'],
                     'done' => $d['done'],
                     'duration' => $d['duration'],
+                    'effectiveRoom' => $d['effectiveRoom'],
                 ],
                 $dates
             ),
@@ -725,6 +770,8 @@ class AttendanceController extends AbstractController
         if (!$calendar || $calendar->getAttendance()?->getIid() !== $attendanceId) {
             return $this->json(['error' => 'Calendar not found'], 404);
         }
+        // Teacher-only: exposes every student's presence + signature for the date.
+        $this->denyAccessUnlessGranted('EDIT', $calendar->getAttendance()->getResourceNode());
 
         $users = $userRepository->findUsersByContext($cid, $sid, $gid);
         $presence = [];
@@ -754,6 +801,7 @@ class AttendanceController extends AbstractController
             'presence' => $presence,
             'comments' => $comments,
             'signatures' => $signatures,
+            'effectiveRoom' => CAttendance::formatRoomData($calendar->getEffectiveRoom()),
         ]);
     }
 
@@ -802,5 +850,9 @@ class AttendanceController extends AbstractController
         ;
 
         $this->em->persist($log);
+    }
+    private function showOfficialCodeInAttendance(): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('attendance.attendance_add_official_code', true);
     }
 }

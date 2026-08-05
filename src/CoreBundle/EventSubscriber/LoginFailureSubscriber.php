@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Security\LoginCaptchaManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,6 +25,7 @@ class LoginFailureSubscriber implements EventSubscriberInterface
         private readonly LoginAttemptLoggerHelper $loginAttemptLoggerHelper,
         private readonly SettingsManager $settingsManager,
         private readonly EntityManagerInterface $entityManager,
+        private readonly LoginCaptchaManager $loginCaptchaManager,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -39,14 +41,19 @@ class LoginFailureSubscriber implements EventSubscriberInterface
         $userIp = $request ? $request->getClientIp() : 'unknown';
 
         $passport = $event->getPassport();
+        $username = 'unknown';
 
-        /** @var UserBadge $userBadge */
-        $userBadge = $passport->getBadge(UserBadge::class);
-        $username = $userBadge->getUserIdentifier();
+        if (null !== $passport) {
+            $userBadge = $passport->getBadge(UserBadge::class);
+            if ($userBadge instanceof UserBadge) {
+                $username = $userBadge->getUserIdentifier();
+            }
+        }
 
         // Log of connection attempts
         $this->trackELoginRecordingRepository->addTrackLogin($username, $userIp, false);
         $this->loginAttemptLoggerHelper->logAttempt(false, $username, $userIp);
+        $this->loginCaptchaManager->registerFailedLogin($username);
 
         $this->checkAndBlockAccount($username);
     }

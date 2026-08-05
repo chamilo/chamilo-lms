@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -52,13 +53,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/links/{iid}/toggle_visibility',
             controller: UpdateVisibilityLink::class,
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/links/{iid}/move',
             controller: UpdatePositionLink::class,
             security: "is_granted('EDIT', object.resourceNode)",
@@ -99,7 +100,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'link:write']],
             deserialize: false
         ),
@@ -157,7 +158,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
@@ -204,7 +205,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer'],
                     ),
                 ],
-            )
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
     ],
     normalizationContext: [
@@ -233,7 +235,7 @@ class CLink extends AbstractResource implements ResourceInterface, ResourceShowC
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]

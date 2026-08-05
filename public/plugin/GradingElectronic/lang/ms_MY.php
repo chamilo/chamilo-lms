@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Penilaian Elektronik dilumpuhkan';
 $strings['StudentId'] = 'ID Pelajar';
 $strings['ProviderId'] = 'ID Penyedia';
 $strings['CourseHours'] = 'Jam kursus';
+
+$strings['GenerateFile'] = 'Jana fail';
+$strings['CourseId'] = 'ID Kursus';

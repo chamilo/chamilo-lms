@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
@@ -58,12 +58,25 @@ if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
   router.replace(`/${redirectValue}`)
 }
 
-const showCatalogue = computed(
-  () => platformConfigStore.getSetting("catalog.course_catalog_display_in_home") === "true",
+function isEnabledSetting(value) {
+  if (value === true || value === 1) {
+    return true
+  }
+
+  if (typeof value === "string") {
+    return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase())
+  }
+
+  return false
+}
+
+
+const showCatalogue = computed(() =>
+  isEnabledSetting(platformConfigStore.getSetting("catalog.course_catalog_display_in_home")),
 )
 
-const showCategories = computed(
-  () => platformConfigStore.getSetting("display.display_categories_on_homepage") === "true",
+const showCategories = computed(() =>
+  isEnabledSetting(platformConfigStore.getSetting("display.display_categories_on_homepage")),
 )
 
 const allCourses = ref([])

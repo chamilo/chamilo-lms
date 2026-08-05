@@ -2,36 +2,40 @@
 
 /* For licensing terms, see /license.txt */
 
-use Zend\Feed\Reader\Feed\FeedInterface;
-use Zend\Feed\Reader\Reader;
+if (!function_exists('api_get_path')) {
+    require_once __DIR__.'/../../main/inc/global.inc.php';
+}
+
+require_once __DIR__.'/lib/rss_plugin.class.php';
 
 $plugin = RssPlugin::create();
 
-$url = $plugin->get_rss();
-$title = $plugin->get_block_title();
-$title = $title ? "<h4>$title</h4>" : '';
-$css = $plugin->get_css();
+$isDirectRequest = isset($_SERVER['SCRIPT_FILENAME'])
+    && realpath((string) $_SERVER['SCRIPT_FILENAME']) === realpath(__FILE__);
 
-if (empty($url)) {
-    echo Display::return_message(get_lang('NoRSSItem'), 'warning');
+$isRenderingOwnFullPage = defined('RSS_FULL_PAGE_RENDERING') && RSS_FULL_PAGE_RENDERING;
+
+if (!$plugin->isEnabled()) {
+    if ($isDirectRequest && !$isRenderingOwnFullPage) {
+        api_not_allowed(true);
+    }
 
     return;
 }
 
-try {
-    $channel = Reader::import($url);
-    if (!empty($channel)) {
-        /** @var FeedInterface $item */
-        foreach ($channel as $item) {
-            $title = $item->getTitle();
-            $link = $item->getLink();
-            if (!empty($link)) {
-                $title = Display::url($title, $link, ['target' => '_blank']);
-            }
-            echo Display::panel($item->getDescription(), $title);
-        }
-    }
-} catch (Exception $e) {
-    echo Display::return_message($plugin->get_lang('no_valid_rss'), 'warning');
-    error_log($e->getMessage());
+if ($isRenderingOwnFullPage) {
+    return;
 }
+
+if (!$isDirectRequest) {
+    echo $plugin->renderBlock();
+
+    return;
+}
+
+define('RSS_FULL_PAGE_RENDERING', true);
+
+$template = new Template($plugin->get_title());
+$template->assign('header', $plugin->get_title());
+$template->assign('content', $plugin->renderFullPage());
+$template->display_one_col_template();

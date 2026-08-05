@@ -91,8 +91,8 @@ import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { ref } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import userRelUserService from "../../services/userreluser"
+import relUserService from "../../services/userRelUserService"
 import { useNotification } from "../../composables/notification"
-import axios from "axios"
 import { useI18n } from "vue-i18n"
 
 const emit = defineEmits(["accept-friend"])
@@ -138,8 +138,8 @@ const loadRequests = () => {
 }
 
 function acceptFriendRequest(request) {
-  axios
-    .put(request["@id"], { relationType: 3 })
+  relUserService
+    .update(request["@id"], { relationType: 3 })
     .then(() => {
       emit("accept-friend", request)
       notification.showSuccessNotification(t("Friend added successfully"))
@@ -149,8 +149,8 @@ function acceptFriendRequest(request) {
 }
 
 function rejectFriendRequest(request) {
-  axios
-    .delete(request["@id"])
+  relUserService
+    .remove(request["@id"])
     .then(() => {
       notification.showSuccessNotification(t("Friend request rejected"))
       loadRequests()

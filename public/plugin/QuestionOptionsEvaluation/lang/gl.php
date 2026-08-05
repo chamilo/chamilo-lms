@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Avaliación de opcións da pregunta';
 $strings['plugin_comment'] = 'Permitir recalcular as puntuacións das opcións nas preguntas';
 
-$strings['enable'] = 'Activar';
 $strings['exercise_max_score'] = 'Puntuación máxima nos exercicios';
 $strings['exercise_max_score_help'] = 'Por defecto é 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = '(Éxitos - Fallos) / 3';
 $strings['QuestionsEvaluated'] = 'Preguntas avaliadas';
 $strings['RecalculateQuestionScores'] = 'Recalcular puntuacións das preguntas';
 $strings['FormulaSavedForExerciseX'] = 'Fórmula gardada para o exercicio "%s".';
+$strings['NoFormulaHelp'] = 'Manter o comportamento predeterminado de puntuación de Chamilo para esta proba.';
+$strings['enable'] = 'Activar';

@@ -20,10 +20,7 @@ trait CourseControllerTrait
     protected ?Course $course = null;
     protected ?Session $session = null;
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
     /**
      * Gets the current Chamilo course based in the "_real_cid" session variable.
@@ -37,7 +34,7 @@ trait CourseControllerTrait
      * if (empty($courseId)) {
      * return null;
      * }
-     * return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Course', $courseId);
+     * return $this->getDoctrine()->getManager()->find('Chamilo\CoreBundle\Entity\Course', $courseId);
      * }.
      */
 

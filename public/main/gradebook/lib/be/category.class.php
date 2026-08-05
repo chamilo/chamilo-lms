@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -40,6 +41,9 @@ class Category implements GradebookItem
     /** @var int */
     private $gradeBooksToValidateInDependence;
     private $locked;
+    private int $allowSkillsBySubcategory;
+    private static ?CourseCompletionRuleEvaluator $courseCompletionRuleEvaluator = null;
+    private static array $courseCompletionRuleEvaluationCache = [];
 
     /**
      * Consctructor.
@@ -62,6 +66,7 @@ class Category implements GradebookItem
         $this->courseDependency = [];
         $this->documentId = 0;
         $this->minimumToValidate = null;
+        $this->allowSkillsBySubcategory = 1;
     }
 
     /**
@@ -293,6 +298,33 @@ class Category implements GradebookItem
     public function getMinimumToValidate()
     {
         return $this->minimumToValidate;
+    }
+
+    public function setAllowSkillBySubCategory($value): self
+    {
+        $this->allowSkillsBySubcategory = (int) $value;
+
+        return $this;
+    }
+
+    public function getAllowSkillBySubCategory(?int $parentId = null): bool
+    {
+        $categoryId = $parentId ?? (int) $this->id;
+
+        if (empty($categoryId)) {
+            return true;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = "SELECT allow_skills_by_subcategory FROM $table WHERE id = ".(int) $categoryId;
+        $result = Database::query($sql);
+        $value = Database::result($result, 0, 0);
+
+        if (null === $value || '' === (string) $value) {
+            return true;
+        }
+
+        return 1 === (int) $value;
     }
 
     /**
@@ -535,6 +567,16 @@ class Category implements GradebookItem
             }
 
             $category->setIsRequirement($this->isRequirement);
+
+            if (
+                'true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')
+                && 0 === (int) $this->get_parent_id()
+            ) {
+                $this->setAllowSkillBySubCategory(
+                    !empty($_POST['allow_skills_by_subcategory']) ? 1 : 0
+                );
+            }
+            $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
             $category->setLocked(0);
 
             $em->persist($category);
@@ -629,6 +671,16 @@ class Category implements GradebookItem
 
         $category->setIsRequirement($this->isRequirement);
 
+        if (
+            'true' === api_get_setting('gradebook.gradebook_enable_subcategory_skills_independant_assignement')
+            && 0 === (int) $this->get_parent_id()
+        ) {
+            $this->setAllowSkillBySubCategory(
+                !empty($_POST['allow_skills_by_subcategory']) ? 1 : 0
+            );
+        }
+
+        $category->setAllowSkillsBySubcategory((int) $this->allowSkillsBySubcategory);
         $em->persist($category);
         $em->flush();
 
@@ -768,6 +820,22 @@ class Category implements GradebookItem
      */
     public function is_certificate_available($user_id)
     {
+        $courseId = (int) $this->getCourseId();
+        $minimumScore = (float) ($this->getCertificateMinScore() ?? 0.0);
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            (int) $user_id,
+            $courseId,
+            (string) $this->get_course_code(),
+            $minimumScore,
+            (int) $this->get_session_id()
+        );
+
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            return !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+                && (float) $configuredEvaluation['score'] >= $minimumScore;
+        }
+
         $score = $this->calc_score(
             $user_id,
             null,
@@ -807,6 +875,31 @@ class Category implements GradebookItem
         ?int $courseId = 0,
         ?int $session_id = null
     ): ?array {
+        $effectiveCourseId = !empty($courseId) ? (int) $courseId : (int) $this->getCourseId();
+        $effectiveSessionId = null === $session_id ? (int) $this->get_session_id() : (int) $session_id;
+
+        if (!empty($studentId)
+            && (null === $type || '' === $type)
+            && $this->is_course()
+            && $effectiveCourseId > 0
+        ) {
+            $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+                (int) $studentId,
+                $effectiveCourseId,
+                (string) $this->get_course_code(),
+                (float) ($this->getCertificateMinScore() ?? 0.0),
+                $effectiveSessionId
+            );
+
+            if (is_array($configuredEvaluation)
+                && !empty($configuredEvaluation['supported'])
+                && !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+            ) {
+                return [(float) $configuredEvaluation['score'], 100.0];
+            }
+        }
+
         $key = 'category:'.$this->id.'student:'.(int) $studentId.'type:'.$type.'course:'.$courseId.'session:'.(int) $session_id;
         $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
@@ -2017,7 +2110,8 @@ class Category implements GradebookItem
         GradebookCategory $category,
         int $user_id,
         bool $sendNotification = false,
-        bool $skipGenerationIfExists = false
+        bool $skipGenerationIfExists = false,
+        array $notification = []
     ) {
         $categoryId = (int) $category->getId();
         $sessionId  = $category->getSession() ? (int) $category->getSession()->getId() : 0;
@@ -2027,13 +2121,27 @@ class Category implements GradebookItem
         $catArr = Category::load($categoryId);
         $catObj = $catArr[0] ?? null;
 
+        $minCertificationScore = (float) $category->getCertifMinScore();
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            $user_id,
+            $courseId,
+            (string) $category->getCourse()->getCode(),
+            $minCertificationScore,
+            $sessionId
+        );
+
         $scoreForCertificate = 0.0;
-        if ($catObj) {
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            if (empty($configuredEvaluation['complete']) || null === $configuredEvaluation['score']) {
+                return false;
+            }
+
+            $scoreForCertificate = (float) $configuredEvaluation['score'];
+        } elseif ($catObj) {
             $scoreForCertificate = (float) self::calculateFlatViewTotalPercent($catObj, $user_id);
         }
 
         // Guard: never generate certificate OR award skills if the global certificate threshold is not met.
-        $minCertificationScore = (float) $category->getCertifMinScore();
         if ($minCertificationScore > 0.0 && $scoreForCertificate < $minCertificationScore) {
             return false;
         }
@@ -2087,25 +2195,36 @@ class Category implements GradebookItem
         $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
         if (!empty($my_certificate)) {
-            $pathToCertificate = $category
-                ->getDocument()
-                ->getResourceNode()
-                ->getResourceFiles()
-                ->first()
-                ->getFile()
-                ->getPathname();
+            $pathToCertificate = '';
+            try {
+                $document = $category->getDocument();
+                if ($document && $document->getResourceNode()) {
+                    $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
+                    if ($resourceFile && method_exists($resourceFile, 'getFile') && $resourceFile->getFile()) {
+                        $pathToCertificate = $resourceFile->getFile()->getPathname();
+                    }
+                }
+            } catch (\Throwable $e) {
+                $pathToCertificate = '';
+            }
 
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
                 0,
                 $sendNotification,
                 true,
-                $pathToCertificate
+                $pathToCertificate,
+                $notification
             );
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
-            if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
+            $customCertificatePluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+            if (is_file($customCertificatePluginFile)) {
+                require_once $customCertificatePluginFile;
+            }
+
+            if (class_exists('CustomCertificatePlugin')) {
                 $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
                 if (!empty($infoCertificate)) {
                     $fileWasGenerated = true;
@@ -2360,6 +2479,24 @@ class Category implements GradebookItem
         ?int $courseId = null,
         ?int $sessionId = null
     ): bool {
+        $resolvedCourseId = $courseId ?? (int) $category->getCourse()->getId();
+        $resolvedSessionId = $sessionId
+            ?? ($category->getSession() ? (int) $category->getSession()->getId() : 0);
+        $minCertificateScore = (float) $category->getCertifMinScore();
+        $configuredEvaluation = self::getConfiguredCourseCompletionEvaluation(
+            $userId,
+            $resolvedCourseId,
+            (string) $category->getCourse()->getCode(),
+            $minCertificateScore,
+            $resolvedSessionId
+        );
+
+        if (is_array($configuredEvaluation) && !empty($configuredEvaluation['supported'])) {
+            return !empty($configuredEvaluation['complete'])
+                && null !== $configuredEvaluation['score']
+                && (float) $configuredEvaluation['score'] >= $minCertificateScore;
+        }
+
         $currentScore = self::getCurrentScore(
             $userId,
             $category,
@@ -2560,7 +2697,7 @@ class Category implements GradebookItem
     public static function findByCertificate($id)
     {
         $category = Database::getManager()
-            ->createQuery('SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id')
+            ->createQuery('SELECT c.catId FROM Chamilo\CoreBundle\Entity\GradebookCertificate c WHERE c.id = :id')
             ->setParameters(['id' => $id])
             ->getOneOrNullResult();
 
@@ -2692,7 +2829,7 @@ class Category implements GradebookItem
                 $cat->set_locked($data['locked']);
                 $cat->setGenerateCertificates($data['generate_certificates']);
                 $cat->setIsRequirement($data['is_requirement']);
-                //$cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
+                $cat->setAllowSkillBySubCategory($data['allow_skills_by_subcategory'] ?? 1);
                 $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
                 $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
                 $cat->setDocumentId($data['document_id']);
@@ -2810,6 +2947,86 @@ class Category implements GradebookItem
         }
 
         return $targets;
+    }
+
+    /**
+     * Return the configured course-completion evaluation for one user.
+     *
+     * This method intentionally exposes only the generic persisted rule result.
+     * Courses without a complete configured rule keep the standard gradebook flow.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getConfiguredCourseCompletionEvaluationForUser(int $userId): ?array
+    {
+        if (!$this->is_course()) {
+            return null;
+        }
+
+        return self::getConfiguredCourseCompletionEvaluation(
+            $userId,
+            (int) $this->getCourseId(),
+            (string) $this->get_course_code(),
+            (float) ($this->getCertificateMinScore() ?? 0.0),
+            (int) $this->get_session_id()
+        );
+    }
+
+    /**
+     * Evaluate a configured course-completion rule once per request.
+     *
+     * @return array<string, mixed>|null
+     */
+    private static function getConfiguredCourseCompletionEvaluation(
+        int $userId,
+        int $courseId,
+        string $courseCode,
+        float $minimumScore,
+        int $sessionId
+    ): ?array {
+        if ($userId <= 0 || $courseId <= 0) {
+            return null;
+        }
+
+        $cacheKey = implode(':', [
+            $userId,
+            $courseId,
+            $sessionId,
+            number_format($minimumScore, 4, '.', ''),
+        ]);
+
+        if (array_key_exists($cacheKey, self::$courseCompletionRuleEvaluationCache)) {
+            return self::$courseCompletionRuleEvaluationCache[$cacheKey];
+        }
+
+        try {
+            if (null === self::$courseCompletionRuleEvaluator) {
+                self::$courseCompletionRuleEvaluator = new CourseCompletionRuleEvaluator(
+                    Container::getEntityManager()->getConnection()
+                );
+            }
+
+            $evaluation = self::$courseCompletionRuleEvaluator->evaluate(
+                $userId,
+                $courseId,
+                $courseCode,
+                $minimumScore,
+                $sessionId
+            );
+        } catch (\Throwable $exception) {
+            error_log(sprintf(
+                '[CourseCompletionRule] Could not evaluate course %d for user %d: %s',
+                $courseId,
+                $userId,
+                $exception->getMessage()
+            ));
+
+            return null;
+        }
+
+        self::$courseCompletionRuleEvaluationCache[$cacheKey] = $evaluation;
+
+        return $evaluation;
     }
 
     /**

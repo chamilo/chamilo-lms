@@ -206,7 +206,7 @@ switch ($action) {
                 );
 
                 $json['type'] = api_htmlentities($file['type']);
-                $json['size'] = format_file_size($file['size']);
+                $json['size'] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file['size']);
             }
 
             if (isset($result['url'])) {

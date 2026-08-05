@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nicio notă creată cu filtrul curent';
 $strings['NoNotebook'] = 'Nicio notă creată în sistem';
 $strings['NoNotebookUser'] = 'Nicio notă pentru acest student';
 $strings['NotebookNoStudentAssigned'] = 'Note fără studenți alocați';
+
+$strings['TeacherNotesHelp'] = 'Creați note private pentru profesori legate de cursanții din acest curs.';
+$strings['CurrentFilter'] = 'Filtru curent';
+$strings['EmptyStateHelp'] = 'Creați o notă nouă sau modificați filtrul de cursanți.';

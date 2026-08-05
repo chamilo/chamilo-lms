@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 
@@ -13,6 +14,12 @@ use Chamilo\CourseBundle\Entity\CQuiz;
  */
 class ExerciseLink extends AbstractLink
 {
+    private const COURSE_COMPLETION_RULE_FIELD_VARIABLE = 'course_completion_rule';
+    private const COURSE_COMPLETION_RULE_VERSION = 1;
+
+    /** @var array<int, array<int, list<int>>> */
+    private static array $completionTrackingIdsByCourse = [];
+
     public $checkBaseExercises = false;
     private $exercise_table;
     private $exercise_data = [];
@@ -189,9 +196,15 @@ class ExerciseLink extends AbstractLink
             return null;
         }
 
+        $completionTrackingIds = $this->getConfiguredCompletionTrackingIds($courseId, $exerciseId);
+        $completionCacheKey = empty($completionTrackingIds)
+            ? 'standard'
+            : 'configured:'.implode('-', $completionTrackingIds);
+
         $key = 'exercise_link_id:'.
             $this->get_id().
-            'exerciseId:'.$exerciseId.'student:'.$studentId.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
+            'exerciseId:'.$exerciseId.'student:'.$studentId.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type.
+            'completion:'.$completionCacheKey;
 
         $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
@@ -207,7 +220,19 @@ class ExerciseLink extends AbstractLink
         $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
-            if (false == $exercise->exercise_was_added_in_lp) {
+            if (!empty($completionTrackingIds)) {
+                $trackingIdList = implode(', ', array_map('intval', $completionTrackingIds));
+                $sessionCondition = $sessionId > 0
+                    ? 'session_id = '.(int) $sessionId
+                    : '(session_id IS NULL OR session_id = 0)';
+                $sql = "SELECT * FROM $tblStats
+                        WHERE
+                            exe_exo_id IN ($trackingIdList) AND
+                            status <> 'incomplete' AND
+                            c_id = $courseId AND
+                            $sessionCondition
+                        ";
+            } elseif (false == $exercise->exercise_was_added_in_lp) {
                 $sessionCondition = api_get_session_condition($sessionId);
                 $sql = "SELECT * FROM $tblStats
                         WHERE
@@ -260,7 +285,11 @@ class ExerciseLink extends AbstractLink
             if (!empty($studentId) && 'ranking' !== $type) {
                 $sql .= " AND exe_user_id = $studentId ";
             }
-            $sql .= ' ORDER BY exe_id DESC';
+            if (!empty($completionTrackingIds)) {
+                $sql .= ' ORDER BY CASE WHEN max_score > 0 THEN score / max_score ELSE 0 END DESC, exe_id DESC';
+            } else {
+                $sql .= ' ORDER BY exe_id DESC';
+            }
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
@@ -402,23 +431,65 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Get URL where to go to if the user clicks on the link.
-     * First we go to exercise_jump.php and then to the result page.
-     * Check this php file for more info.
+     * Get the migrated exercise or learning path URL used by the gradebook.
+     * The legacy jump page remains available only as a compatibility fallback.
      */
     public function get_link()
     {
-        $sessionId = $this->get_session_id();
+        $sessionId = (int) $this->get_session_id();
+        $courseId = (int) $this->getCourseId();
         $data = $this->get_exercise_data();
-        $exerciseId = $data['iid'];
-        $path = isset($data['path']) ? $data['path'] : '';
+        $exerciseId = (int) ($data['iid'] ?? 0);
+        $path = (string) ($data['path'] ?? '');
+        $course = api_get_course_entity($courseId);
+        $courseNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+        if ($courseNodeId > 0 && $exerciseId > 0) {
+            $lpList = Exercise::getLpListFromExercise($exerciseId, $courseId);
+            if (1 === count($lpList)) {
+                $firstLp = reset($lpList);
+                $lpId = (int) ($firstLp['lp_id'] ?? 0);
+                $itemId = (int) ($firstLp['item_id'] ?? 0);
+
+                if ($lpId > 0) {
+                    $params = [
+                        'cid' => $courseId,
+                        'sid' => $sessionId,
+                        'gid' => (int) api_get_group_id(),
+                        'gradebook' => 1,
+                        'origin' => 'gradebook',
+                        'isStudentView' => 'true',
+                    ];
+                    if ($itemId > 0) {
+                        $params['item_id'] = $itemId;
+                    }
+
+                    return rtrim(api_get_path(WEB_PATH), '/').'/resources/lp/'
+                        .$courseNodeId.'/'.$lpId.'/runtime?'.http_build_query($params);
+                }
+            }
+
+            $vueUrl = ExerciseLib::buildVueOverviewUrl(
+                $exerciseId,
+                [
+                    'gradebook' => 'view',
+                    'origin' => 'gradebook',
+                ],
+                $courseId,
+                $sessionId,
+                (int) api_get_group_id()
+            );
+            if (null !== $vueUrl) {
+                return $vueUrl;
+            }
+        }
 
         return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
             .http_build_query(
                 [
                     'path' => $path,
                     'sid' => $sessionId,
-                    'cid' => $this->getCourseId(),
+                    'cid' => $courseId,
                     'gradebook' => 'view',
                     'exerciseId' => $exerciseId,
                     'type' => $this->get_type(),
@@ -530,6 +601,99 @@ class ExerciseLink extends AbstractLink
             case 'best':
                 break;
         }
+    }
+
+
+    /**
+     * Check whether this exercise link uses completion-rule tracking IDs.
+     */
+    public function hasConfiguredCompletionTrackingIds(): bool
+    {
+        $courseId = (int) $this->getCourseId();
+        $exerciseData = $this->get_exercise_data();
+        $exerciseId = isset($exerciseData['iid']) ? (int) $exerciseData['iid'] : 0;
+
+        return [] !== $this->getConfiguredCompletionTrackingIds($courseId, $exerciseId);
+    }
+
+    /**
+     * Return all tracking exercise IDs configured for the current gradebook
+     * exercise. The current and legacy IDs can coexist after a normalized
+     * migration, so configured completion rules define the accepted set.
+     *
+     * @return list<int>
+     */
+    private function getConfiguredCompletionTrackingIds(int $courseId, int $exerciseId): array
+    {
+        if ($courseId <= 0 || $exerciseId <= 0) {
+            return [];
+        }
+
+        if (!array_key_exists($courseId, self::$completionTrackingIdsByCourse)) {
+            self::$completionTrackingIdsByCourse[$courseId] = $this->loadCompletionTrackingIds($courseId);
+        }
+
+        return self::$completionTrackingIdsByCourse[$courseId][$exerciseId] ?? [];
+    }
+
+    /** @return array<int, list<int>> */
+    private function loadCompletionTrackingIds(int $courseId): array
+    {
+        $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tableExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $variable = Database::escape_string(self::COURSE_COMPLETION_RULE_FIELD_VARIABLE);
+
+        $sql = "SELECT value.field_value
+                FROM $tableExtraField field
+                INNER JOIN $tableExtraFieldValue value
+                    ON value.field_id = field.id
+                WHERE field.item_type = ".ExtraField::COURSE_FIELD_TYPE."
+                  AND field.variable = '$variable'
+                  AND value.item_id = $courseId
+                ORDER BY value.id";
+        $result = Database::query($sql);
+
+        if (1 !== Database::num_rows($result)) {
+            return [];
+        }
+
+        $row = Database::fetch_assoc($result);
+        $rule = json_decode((string) ($row['field_value'] ?? ''), true);
+
+        if (!is_array($rule)
+            || self::COURSE_COMPLETION_RULE_VERSION !== (int) ($rule['version'] ?? 0)
+            || true !== ($rule['migration_complete'] ?? false)
+            || !isset($rule['components'])
+            || !is_array($rule['components'])
+        ) {
+            return [];
+        }
+
+        $trackingIdsByExercise = [];
+        foreach ($rule['components'] as $component) {
+            if (!is_array($component) || 'exercise' !== ($component['type'] ?? null)) {
+                continue;
+            }
+
+            $resourceId = (int) ($component['resource_id'] ?? 0);
+            if ($resourceId <= 0) {
+                continue;
+            }
+
+            $trackingIds = [$resourceId];
+            if (isset($component['tracking_resource_ids']) && is_array($component['tracking_resource_ids'])) {
+                foreach ($component['tracking_resource_ids'] as $trackingId) {
+                    $trackingId = (int) $trackingId;
+                    if ($trackingId > 0) {
+                        $trackingIds[] = $trackingId;
+                    }
+                }
+            }
+
+            $trackingIdsByExercise[$resourceId] = array_values(array_unique($trackingIds));
+        }
+
+        return $trackingIdsByExercise;
     }
 
     /**

@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Amosar conteníu HTML estática.';
 $strings['block_title'] = 'Títulu del bloqué';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Conteníu';

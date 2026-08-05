@@ -11,7 +11,31 @@ use League\Flysystem\FilesystemOperator;
  */
 require_once __DIR__.'/../global.inc.php';
 
-api_protect_admin_script();
+if (!api_is_platform_admin()) {
+    $acceptHeader = (string) ($_SERVER['HTTP_ACCEPT'] ?? '');
+    $expectsJson = str_contains($acceptHeader, 'application/json');
+
+    http_response_code(403);
+
+    if ($expectsJson) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'access_denied',
+            'message' => get_lang('You are not allowed to see this page.'),
+        ]);
+        exit;
+    }
+
+    header('Content-Type: text/html; charset=utf-8');
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page.'),
+        'error',
+        false
+    );
+    exit;
+}
+
+api_block_inactive_user();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;

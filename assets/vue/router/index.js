@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import NProgress from "nprogress"
 import adminRoutes from "./admin"
 import sessionAdminRoutes from "./sessionAdmin"
 import courseRoutes from "./course"
@@ -20,11 +21,24 @@ import accessUrlRoutes from "./accessurl"
 import branchRoutes from "./branch"
 import roomRoutes from "./room"
 import buycoursesRoutes from "./buycourses"
-
-//import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
 import assignments from "./assignments"
 import links from "./links"
+import forum from "./forum"
+import survey from "./survey"
+import exercise from "./exercise"
+import courseDescription from "./courseDescription"
+import courseInvitation from "./courseInvitation"
+import notebook from "./notebook"
+import portfolio from "./portfolio"
+import wiki from "./wiki"
+import courseProgress from "./courseProgress"
+import courseSettings from "./courseSettings"
+import courseUser from "./courseUser"
+import courseSession from "./courseSession"
+import myClass from "./myClass"
+import announcement from "./announcement"
+import ticket from "./ticket"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -33,30 +47,121 @@ import blogRoutes from "./blog"
 import blogAdminRoute from "./blogAdmin"
 import courseMaintenanceRoute from "./coursemaintenance"
 import catalogue from "./catalogue"
-import { useSecurityStore } from "../store/securityStore"
-import { usePlatformConfig } from "../store/platformConfig"
+import CourseHome from "../views/course/CourseHome.vue"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
 import MySessionListUpcoming from "../views/user/sessions/SessionsUpcoming.vue"
-
 import MyCoursesLayout from "../layouts/MyCourses.vue"
-
-import CourseHome from "../views/course/CourseHome.vue"
-
 import AppIndex from "../pages/AppIndex.vue"
 import CustomAppIndex from "../../../var/vue_templates/pages/AppIndex.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
-
 import { useCidReqStore } from "../store/cidReq"
-import courseService from "../services/courseService"
-
-import { customVueTemplateEnabled } from "../config/env"
 import { useCourseSettings } from "../store/courseSettingStore"
-import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
+import { useSecurityStore } from "../store/securityStore"
+import { usePlatformConfig } from "../store/platformConfig"
+import courseService from "../services/courseService"
+import { checkIsAllowedToEdit } from "../composables/userPermissions"
+import securityService from "../services/securityService"
+import { customVueTemplateEnabled } from "../config/env"
+import { resolveCourseIdFromRoute } from "../utils/courseContext"
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+// Parses an internal (same-origin) URL and appends the course context
+// (cid, and sid when present) without overriding params already there.
+// Returns an origin-relative URL, or null for external/malformed URLs —
+// the result is assigned to window.location.href, so rejecting foreign
+// origins here is the open-redirect defense.
+function appendCourseContext(url, courseId, sessionId) {
+  if (!url || typeof url !== "string") {
+    return null
+  }
+
+  let parsedUrl
+
+  try {
+    parsedUrl = new URL(url, window.location.origin)
+  } catch {
+    return null
+  }
+
+  if (parsedUrl.origin !== window.location.origin) {
+    return null
+  }
+
+  if (!parsedUrl.searchParams.has("cid")) {
+    parsedUrl.searchParams.set("cid", courseId)
+  }
+
+  if (sessionId && !parsedUrl.searchParams.has("sid")) {
+    parsedUrl.searchParams.set("sid", sessionId)
+  }
+
+  return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
+}
+
+function isForumCourseTool(tool) {
+  const title = String(tool?.title || tool?.tool?.title || "").toLowerCase()
+
+  return title === "forum"
+}
+
+function buildForumToolUrlFromResourceNode(tool, courseId, sessionId) {
+  const nodeId = parseInt(tool?.resourceNode?.id || tool?.resourceNodeId || 0)
+
+  if (!nodeId) {
+    return null
+  }
+
+  const query = new URLSearchParams({ cid: String(courseId) })
+
+  if (sessionId) {
+    query.set("sid", String(sessionId))
+  }
+
+  return `/resources/forum/${nodeId}/?${query.toString()}`
+}
+
+async function resolveForumAutoLaunchUrl(courseId, sessionId, course) {
+  try {
+    const cTools = await courseService.loadCTools(courseId, sessionId || 0)
+    const forumTool = Array.isArray(cTools) ? cTools.find(isForumCourseTool) : null
+
+    if (forumTool) {
+      const toolUrl = appendCourseContext(forumTool.url, courseId, sessionId)
+
+      if (toolUrl && !toolUrl.includes("/main/forum/")) {
+        return toolUrl
+      }
+
+      const resourceNodeUrl = buildForumToolUrlFromResourceNode(forumTool, courseId, sessionId)
+
+      if (resourceNodeUrl) {
+        return resourceNodeUrl
+      }
+    }
+  } catch (error) {
+    console.error("[CourseHome] Failed to resolve forum tool URL", error)
+  }
+
+  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode(
+    { resourceNode: course?.resourceNode },
+    courseId,
+    sessionId,
+  )
+
+  if (courseResourceNodeUrl) {
+    return courseResourceNodeUrl
+  }
+
+  return null
+}
 
 /**
  * Applies "page-*" marker classes on both the DOM marker and the <body>.
@@ -69,7 +174,10 @@ function applyPageTypeClasses(classes) {
   const body = document.body
 
   const clearPageClasses = (el) => {
-    if (!el) return
+    if (!el) {
+      return
+    }
+
     ;[...el.classList].forEach((c) => {
       if (c.startsWith("page-")) el.classList.remove(c)
     })
@@ -78,8 +186,14 @@ function applyPageTypeClasses(classes) {
   clearPageClasses(marker)
   clearPageClasses(body)
   ;(classes || []).forEach((c) => {
-    if (!c || typeof c !== "string") return
-    if (marker) marker.classList.add(c)
+    if (!c || typeof c !== "string") {
+      return
+    }
+
+    if (marker) {
+      marker.classList.add(c)
+    }
+
     body.classList.add(c)
   })
 }
@@ -94,27 +208,186 @@ function derivePageTypeClasses(to) {
   const p = String(to?.path || "/")
 
   // Canonical aliases requested by the issue
-  if (p === "/" || p.startsWith("/home")) return ["page-home"]
-  if (p.startsWith("/courses")) return ["page-my-courses"]
-  if (p.startsWith("/catalogue")) return ["page-catalogue"]
-  if (p.startsWith("/social")) return ["page-social"]
-  if (p.startsWith("/account")) return ["page-account-security"]
-  if (p.startsWith("/admin-dashboard")) return ["page-administration-session"]
-  if (p.startsWith("/admin")) return ["page-administration", "page-administration-platform"]
-  if (p.startsWith("/tracking")) return ["page-tracking"]
+  if (p === "/" || p.startsWith("/home")) {
+    return ["page-home"]
+  }
+
+  if (p.startsWith("/courses")) {
+    return ["page-my-courses"]
+  }
+
+  if (p.startsWith("/catalogue")) {
+    return ["page-catalogue"]
+  }
+
+  if (p.startsWith("/social")) {
+    return ["page-social"]
+  }
+
+  if (p.startsWith("/account")) {
+    return ["page-account-security"]
+  }
+
+  if (p.startsWith("/admin-dashboard")) {
+    return ["page-administration-session"]
+  }
+
+  if (p.startsWith("/admin")) {
+    return ["page-administration", "page-administration-platform"]
+  }
+
+  if (p.startsWith("/tracking")) {
+    return ["page-tracking"]
+  }
 
   // Vue "resources" module routes -> optional tool markers (documents, lp, attendance, etc.)
   if (p.startsWith("/resources/")) {
     const segs = p.split("/").filter(Boolean) // ["resources", "<tool>", ...]
     const tool = segs[1] || "generic"
     const toolSlug = tool.replace(/[^a-z0-9\-_]+/gi, "-").toLowerCase()
+
     return ["page-tool", `page-tool-${toolSlug}`]
   }
 
   // Generic fallback: page-<first segment>
   const seg0 = p.split("/").filter(Boolean)[0] || "generic"
+
   return [`page-${seg0.replace(/[^a-z0-9\-_]+/gi, "-").toLowerCase()}`]
 }
+
+// ---------------------------------------------------------------------------
+// CourseHome route guard
+// ---------------------------------------------------------------------------
+
+/**
+ * Handles legal redirect, course/settings loading, and auto-launch logic
+ * before the CourseHome component mounts.
+ *
+ * Runs as beforeEnter (before beforeResolve), so cidReq is not yet populated.
+ * setCourseAndSessionById is called here to load course + settings in one shot;
+ * the beforeResolve call becomes a no-op thanks to cidReq's same-course guard.
+ */
+async function courseHomeBeforeEnter(to) {
+  const courseId = parseInt(to.params.id)
+  const sessionId = parseInt(to.query?.sid ?? 0) || 0
+  const autoLaunchKey = `course_autolaunch_${courseId}`
+
+  if (sessionStorage.getItem(autoLaunchKey) === "true") {
+    return true
+  }
+
+  try {
+    const check = await courseService.checkLegal(courseId, sessionId)
+
+    if (check.redirect) {
+      window.location.href = check.url
+
+      return false
+    }
+
+    const cidReqStore = useCidReqStore()
+    await cidReqStore.setCourseAndSessionById(courseId, sessionId)
+
+    if (!cidReqStore.course) {
+      return false
+    }
+
+    const isAllowedToEdit = await checkIsAllowedToEdit(true, true, true)
+
+    if (isAllowedToEdit) {
+      return true
+    }
+
+    const courseSettingsStore = useCourseSettings()
+    const sid = sessionId ? `&sid=${sessionId}` : ""
+    const courseContextQuery = {
+      cid: courseId,
+      sid: sessionId || 0,
+      gid: 0,
+    }
+
+    // Document auto-launch
+    const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
+
+    if (documentAutoLaunch === 1 && cidReqStore.course?.resourceNode?.id) {
+      sessionStorage.setItem(autoLaunchKey, "true")
+      window.location.href = `/resources/document/${cidReqStore.course.resourceNode.id}/?cid=${courseId}` + sid
+
+      return false
+    }
+
+    // Exercise auto-launch
+    const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+    const exerciseResourceNodeId = cidReqStore.course?.resourceNode?.id
+
+    if (exerciseAutoLaunch === 2 && exerciseResourceNodeId) {
+      sessionStorage.setItem(autoLaunchKey, "true")
+
+      return {
+        name: "ExerciseList",
+        params: { node: exerciseResourceNodeId },
+        query: courseContextQuery,
+      }
+    } else if (exerciseAutoLaunch === 1) {
+      const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
+
+      if (exerciseId && exerciseResourceNodeId) {
+        sessionStorage.setItem(autoLaunchKey, "true")
+
+        return {
+          name: "ExerciseOverview",
+          params: { node: exerciseResourceNodeId, exerciseId },
+          query: courseContextQuery,
+        }
+      }
+    }
+
+    // Learning path auto-launch
+    const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+    const learningPathNodeId = Number(cidReqStore.course?.resourceNode?.id || 0)
+
+    if (lpAutoLaunch === 2 && learningPathNodeId > 0) {
+      sessionStorage.setItem(autoLaunchKey, "true")
+      window.location.href = `/resources/lp/${learningPathNodeId}?cid=${courseId}` + sid
+
+      return false
+    } else if (lpAutoLaunch === 1 && learningPathNodeId > 0) {
+      const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
+
+      if (lpId) {
+        sessionStorage.setItem(autoLaunchKey, "true")
+        window.location.href =
+          `/resources/lp/${learningPathNodeId}/${lpId}/runtime?cid=${courseId}&isStudentView=true` + sid
+
+        return false
+      }
+    }
+
+    // Forum auto-launch
+    const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
+
+    if (forumAutoLaunch === 1) {
+      const forumAutoLaunchUrl = await resolveForumAutoLaunchUrl(courseId, sessionId, cidReqStore.course)
+
+      if (forumAutoLaunchUrl) {
+        sessionStorage.setItem(autoLaunchKey, "true")
+        window.location.href = forumAutoLaunchUrl
+
+        return false
+      }
+
+      console.warn("[CourseHome] Forum auto-launch is enabled but the Vue forum URL could not be resolved.")
+    }
+  } catch (error) {
+    console.error("Error during CourseHome route guard:", error)
+  }
+
+  return true
+}
+
+// ---------------------------------------------------------------------------
+// Router
+// ---------------------------------------------------------------------------
 
 const router = createRouter({
   history: createWebHistory(),
@@ -176,94 +449,7 @@ const router = createRouter({
       meta: {
         breadcrumb: "Course home",
       },
-      beforeEnter: async (to) => {
-        const courseId = to.params.id
-        const sessionId = to.query?.sid
-        const autoLaunchKey = `course_autolaunch_${courseId}`
-        const hasAutoLaunched = sessionStorage.getItem(autoLaunchKey)
-
-        if (hasAutoLaunched === "true") {
-          return true
-        }
-
-        try {
-          const check = await courseService.checkLegal(courseId, sessionId)
-          if (check.redirect) {
-            window.location.href = check.url
-
-            return false
-          }
-
-          const course = await courseService.findById(courseId, { sid: sessionId })
-          if (!course) {
-            return false
-          }
-
-          const isAllowedToEdit = await checkIsAllowedToEdit(true, true, true)
-          if (isAllowedToEdit) {
-            return true
-          }
-
-          const courseSettingsStore = useCourseSettings()
-          await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-
-          // Document auto-launch
-          const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
-          if (documentAutoLaunch === 1 && course.resourceNode?.id) {
-            sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href =
-              `/resources/document/${course.resourceNode.id}/?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
-            return false
-          }
-
-          // Exercise auto-launch
-          const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
-          if (exerciseAutoLaunch === 2) {
-            sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href =
-              `/main/exercise/exercise.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
-            return false
-          } else if (exerciseAutoLaunch === 1) {
-            const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
-            if (exerciseId) {
-              sessionStorage.setItem(autoLaunchKey, "true")
-              window.location.href =
-                `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` +
-                (sessionId ? `&sid=${sessionId}` : "")
-              return false
-            }
-          }
-
-          // Learning path auto-launch
-          const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
-          if (lpAutoLaunch === 2) {
-            sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href = `/main/lp/lp_controller.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
-            return false
-          } else if (lpAutoLaunch === 1) {
-            const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
-            if (lpId) {
-              sessionStorage.setItem(autoLaunchKey, "true")
-              window.location.href =
-                `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true` +
-                (sessionId ? `&sid=${sessionId}` : "")
-              return false
-            }
-          }
-
-          // Forum auto-launch
-          const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
-          if (forumAutoLaunch === 1) {
-            sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href = `/main/forum/index.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
-            return false
-          }
-        } catch (error) {
-          console.error("Error during CourseHome route guard:", error)
-        }
-
-        return true
-      },
+      beforeEnter: courseHomeBeforeEnter,
     },
     {
       path: "/courses",
@@ -275,11 +461,30 @@ const router = createRouter({
           component: MyCourseList,
           meta: { requiresAuth: true },
         },
+        {
+          path: "exercise/pending-attempts",
+          name: "ExercisePendingAttempts",
+          component: () => import("../views/exercise/ExercisePendingAttemptsView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Pending attempts",
+          },
+        },
+        {
+          path: "exercise/global-report",
+          name: "ExerciseGlobalReport",
+          component: () => import("../views/exercise/ExerciseGlobalReportView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Exercises global report",
+          },
+        },
       ],
     },
     {
       path: "/sessions",
-      //redirect: '/sessions/now',
       component: MySessionList,
       children: [
         {
@@ -302,15 +507,39 @@ const router = createRouter({
       component: MySessionListUpcoming,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/survey/pending",
+      name: "SurveyPending",
+      component: () => import("../views/survey/SurveyPendingView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Pending surveys",
+      },
+    },
     fileManagerRoutes,
+    ...portfolio,
     socialNetworkRoutes,
     catalogue,
     adminRoutes,
     courseRoutes,
-    //courseCategoryRoutes,
     documents,
     assignments,
     links,
+    forum,
+    survey,
+    exercise,
+    courseDescription,
+    courseInvitation,
+    notebook,
+    wiki,
+    courseProgress,
+    courseSettings,
+    courseUser,
+    courseSession,
+    myClass,
+    announcement,
+    ticket,
     glossary,
     attendance,
     lpRoutes,
@@ -338,11 +567,60 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from, next) => {
+// ---------------------------------------------------------------------------
+// Route loading indicator
+// ---------------------------------------------------------------------------
+
+NProgress.configure({
+  showSpinner: false,
+  trickleSpeed: 120,
+})
+
+const loadingTitlePrefix = "⏳ "
+let previousDocumentTitle = null
+
+function startRouteLoading() {
+  NProgress.start()
   document.body.classList.add("cursor-wait")
 
+  if (null === previousDocumentTitle) {
+    previousDocumentTitle = document.title
+
+    if (!document.title.startsWith(loadingTitlePrefix)) {
+      document.title = loadingTitlePrefix + (document.title || "Loading")
+    }
+  }
+}
+
+function stopRouteLoading() {
+  NProgress.done()
+  document.body.classList.remove("cursor-wait")
+
+  if (null !== previousDocumentTitle) {
+    const currentTitle = document.title
+    const expectedLoadingTitle = loadingTitlePrefix + previousDocumentTitle
+
+    if (currentTitle === expectedLoadingTitle || currentTitle.startsWith(loadingTitlePrefix)) {
+      document.title = previousDocumentTitle
+    }
+
+    previousDocumentTitle = null
+  }
+}
+
+router.onError(() => {
+  stopRouteLoading()
+})
+
+// ---------------------------------------------------------------------------
+// Guards — in lifecycle order: beforeEach → beforeResolve → afterEach
+// ---------------------------------------------------------------------------
+
+router.beforeEach(async (to, from, next) => {
+  startRouteLoading()
+
   const securityStore = useSecurityStore()
-  const preservedParams = ["origin", "isStudentView"]
+  const preservedParams = ["origin"]
   const mergedQuery = { ...to.query }
 
   let shouldRedirect = false
@@ -355,33 +633,29 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (shouldRedirect) {
-    next({
-      ...to,
-      query: mergedQuery,
-    })
+    next({ ...to, query: mergedQuery })
+
     return
   }
 
-  let cid = parseInt(to.query?.cid ?? 0)
-
-  if ("CourseHome" === to.name) {
-    cid = parseInt(to.params?.id ?? 0)
-  }
+  const cid = resolveCourseIdFromRoute(to)
 
   if (!cid) {
-    for (const key in sessionStorage) {
-      if (key.startsWith("course_autolaunch_")) {
-        sessionStorage.removeItem(key)
-      }
-    }
+    Object.keys(sessionStorage)
+      .filter((k) => k.startsWith("course_autolaunch_"))
+      .forEach((k) => sessionStorage.removeItem(k))
   }
 
   // Determine what the route requires
+  const allowsAnonymousAccess = to.matched.some((record) => record.meta?.allowAnonymousAccess === true)
   const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
   const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
+  const wantsHR = to.matched.some((record) => record.meta?.requiresHR === true)
+  const wantsQuestionManager = to.matched.some((record) => record.meta?.requiresQuestionManager === true)
 
-  const mustBeLogged = needsAuth || wantsAdmin || wantsSessionAdmin
+  const mustBeLogged =
+    !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
     await securityStore.checkSession()
@@ -390,44 +664,68 @@ router.beforeEach(async (to, from, next) => {
   // If user must be logged but is not, send to login
   if (mustBeLogged && !securityStore.isAuthenticated) {
     sessionStorage.clear()
-    next({
-      path: "/login",
-      query: { redirect: to.fullPath },
-    })
+    next({ path: "/login", query: { redirect: to.fullPath } })
+
     return
   }
 
-  // Role-based access control: admin / session-admin
-  if (wantsAdmin || wantsSessionAdmin) {
+  // Role-based access control: admin / session-admin / HR / question manager
+  if (wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager) {
     let allowed = true
 
     if (wantsAdmin && wantsSessionAdmin) {
       // Route can be accessed by platform admins OR session admins
-      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+      allowed = securityStore.isGranted("ROLE_SESSION_MANAGER")
+    } else if (wantsAdmin && wantsHR) {
+      // Route can be accessed by platform admins OR HR users
+      allowed = !!securityStore.isAdmin || !!securityStore.isHRM
     } else if (wantsAdmin) {
       // Only platform admins
       allowed = !!securityStore.isAdmin
     } else if (wantsSessionAdmin) {
       // Only session admins
       allowed = !!securityStore.isSessionAdmin
+    } else if (wantsHR) {
+      // Only HR users
+      allowed = !!securityStore.isHRM
+    } else if (wantsQuestionManager) {
+      // Platform administrators and dedicated question managers.
+      allowed = !!securityStore.isAdmin || securityStore.isGranted("ROLE_QUESTION_MANAGER")
     }
 
     if (!allowed) {
       // Authenticated but not enough privileges
       next({ name: "Home", replace: true })
+
       return
     }
   }
 
+  // Course-context guard: routes flagged with requiresCourseContext need a cid
+  // (query param, or path param on CourseHome — see utils/courseContext.js).
+  // sid/gid stay optional. Blocking here, before beforeResolve, keeps the
+  // cidReq store from being fed a course-less context.
+  const requiresCourseContext = to.matched.some((record) => record.meta?.requiresCourseContext === true)
+
+  if (requiresCourseContext && !cid) {
+    next({ name: "Home", replace: true })
+
+    return
+  }
+
   // Feature-flag guard: platform.allow_my_files
   const requiresMyFiles = to.matched.some((record) => record.meta?.requiresMyFiles === true)
+
   if (requiresMyFiles) {
     const platformConfigStore = usePlatformConfig()
+
     if (null === platformConfigStore.getSetting("platform.allow_my_files")) {
       await platformConfigStore.initialize()
     }
+
     if ("false" === platformConfigStore.getSetting("platform.allow_my_files")) {
       next({ name: "Home", replace: true })
+
       return
     }
   }
@@ -436,9 +734,54 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// Tracks the last course context for which contextual roles were loaded, so we
+// skip the backend round-trip when navigating between tools of the same course.
+let lastCourseContextKey = null
+
+router.beforeResolve(async (to) => {
+  const cidReqStore = useCidReqStore()
+  const securityStore = useSecurityStore()
+
+  const cid = resolveCourseIdFromRoute(to)
+  const sid = parseInt(to.query?.sid ?? 0) || 0
+  const gid = parseInt(to.query?.gid ?? 0) || 0
+
+  if (!cid) {
+    // Leaving the course context resets both the cid and the contextual roles,
+    // keeping the personal/global roles intact.
+    cidReqStore.resetCid()
+    securityStore.setContextRoles([])
+    lastCourseContextKey = ""
+
+    return
+  }
+
+  await cidReqStore.setCourseAndSessionById(cid, sid)
+
+  // Skip the backend round-trip when navigating between tools of the same course.
+  const courseContextKey = `${cid}:${sid}:${gid}`
+
+  if (courseContextKey === lastCourseContextKey) {
+    return
+  }
+
+  lastCourseContextKey = courseContextKey
+
+  // The backend (CourseAccessResolver) is the single source of truth for the
+  // ROLE_CURRENT_COURSE_* roles; replace the contextual roles with its result.
+  try {
+    const roles = await securityService.getCourseContextRoles({ cid, sid, gid })
+
+    securityStore.setContextRoles(roles)
+  } catch (error) {
+    console.error("[Router] Failed to load course context roles", error)
+    securityStore.setContextRoles([])
+  }
+})
+
 router.afterEach((to) => {
-  // Always remove the loading cursor.
-  document.body.classList.remove("cursor-wait")
+  // Always remove the loading indicator.
+  stopRouteLoading()
 
   // Keep page marker classes in sync for SPA navigation.
   // This is required because Twig/PageHelper does not run on client-side route changes.
@@ -447,47 +790,6 @@ router.afterEach((to) => {
   } catch (e) {
     // Never block navigation because of marker updates.
     console.error("Error applying page marker classes:", e)
-  }
-})
-
-router.beforeResolve(async (to) => {
-  const cidReqStore = useCidReqStore()
-  const securityStore = useSecurityStore()
-
-  let cid = parseInt(to.query?.cid ?? 0)
-  const sid = parseInt(to.query?.sid ?? 0)
-
-  if ("CourseHome" === to.name) {
-    cid = parseInt(to.params?.id ?? 0)
-  }
-
-  if (cid) {
-    await cidReqStore.setCourseAndSessionById(cid, sid)
-
-    if (cidReqStore.session) {
-      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
-
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-
-      if (isGeneralCoach.value || isCourseCoach.value) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-      }
-    } else {
-      const isTeacher = cidReqStore.course.teachers.some((userSubscription) => {
-        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
-      })
-
-      if (isTeacher) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
-      }
-    }
-  } else {
-    cidReqStore.resetCid()
   }
 })
 

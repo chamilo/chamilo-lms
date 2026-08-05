@@ -466,19 +466,19 @@ class TicketManager
                 '<table>
                         <tr>
                             <td width="100px"><b>'.get_lang('User').'</b></td>
-                            <td width="400px">'.$currentUserInfo['complete_name'].'</td>
+                            <td width="400px">'.($currentUserInfo['complete_name'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Username').'</b></td>
-                            <td width="400px">'.$currentUserInfo['username'].'</td>
+                            <td width="400px">'.($currentUserInfo['username'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('E-mail').'</b></td>
-                            <td width="400px">'.$currentUserInfo['email'].'</td>
+                            <td width="400px">'.($currentUserInfo['email'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Phone').'</b></td>
-                            <td width="400px">'.$currentUserInfo['phone'].'</td>
+                            <td width="400px">'.($currentUserInfo['phone'] ?? '').'</td>
                         </tr>
                         <tr>
                             <td width="100px"><b>'.get_lang('Date').'</b></td>
@@ -896,7 +896,7 @@ class TicketManager
         }
 
         // Search simple
-        if (isset($_GET['submit_simple']) && '' != $_GET['keyword']) {
+        if (!empty($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (
                       ticket.id LIKE '%$keyword%' OR
@@ -1102,18 +1102,16 @@ class TicketManager
         }
 
         // Search simple
-        if (isset($_GET['submit_simple'])) {
-            if ('' != $_GET['keyword']) {
-                $keyword = Database::escape_string(trim($_GET['keyword']));
-                $sql .= " AND (
-                          ticket.code LIKE '%$keyword%' OR
-                          ticket.subject LIKE '%$keyword%' OR
-                          ticket.message LIKE '%$keyword%' OR
-                          ticket.keyword LIKE '%$keyword%' OR
-                          ticket.personal_email LIKE '%$keyword%' OR
-                          ticket.source LIKE '%$keyword%'
-                )";
-            }
+        if (!empty($_GET['keyword'])) {
+            $keyword = Database::escape_string(trim($_GET['keyword']));
+            $sql .= " AND (
+                      ticket.code LIKE '%$keyword%' OR
+                      ticket.subject LIKE '%$keyword%' OR
+                      ticket.message LIKE '%$keyword%' OR
+                      ticket.keyword LIKE '%$keyword%' OR
+                      ticket.personal_email LIKE '%$keyword%' OR
+                      ticket.source LIKE '%$keyword%'
+            )";
         }
 
         $keywords = [
@@ -1128,7 +1126,9 @@ class TicketManager
         foreach ($keywords as $keyword => $sqlLabel) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $sqlLabel = '$data' ";
+                }
             }
         }
 
@@ -1299,8 +1299,8 @@ class TicketManager
                 }
 
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
-                $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.$userInfo['user_id'].'">
-                '.$userInfo['complete_name'].'</a>';
+                $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.($userInfo['user_id'] ?? '').'">
+                '.($userInfo['complete_name'] ?? '').'</a>';
                 $ticket['user'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
@@ -1554,7 +1554,6 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         $user_info = api_get_user_info();
         $userId = $user_info['user_id'];
         $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
@@ -1567,9 +1566,10 @@ class TicketManager
                     user.user_id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
             $sql .= " AND ticket.request_user = '$userId'
-                      AND user_id IN (SELECT user_id FROM $table_main_admin)  ";
+                      AND (user.roles LIKE '%ROLE_ADMIN%' OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
         } else {
-            $sql .= " AND user_id NOT IN (SELECT user_id FROM $table_main_admin)
+            $sql .= " AND user.roles NOT LIKE '%ROLE_ADMIN%'
+                      AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
                       AND ticket.status_id != '".self::STATUS_FORWARDED."'";
         }
         $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
@@ -2543,8 +2543,11 @@ class TicketManager
 
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
-        // Check if a role was set to the project.
-        // Project 1 is considered the default and is accessible to all users
+        // Roles allowed for this project are read from the ticket.ticket_project_user_roles
+        // platform setting (Configuration > Ticket). When that setting is empty (the default)
+        // or has no entry for this project, no non-admin role is granted and only ROLE_ADMIN
+        // (checked above) can access it — so an admin must populate that setting to open the
+        // project to teachers, students, etc.
         if (!empty($allowRoleList)) {
             $result = false;
             foreach ($allowRoleList as $role) {

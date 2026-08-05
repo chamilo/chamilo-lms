@@ -89,7 +89,7 @@ if (isset($_POST['formSent'])) {
             $cvs = true;
             $sessionListToExport[] = [
                 'SessionName',
-                'Coach',
+                'Tutor',
                 'DateStart',
                 'DateEnd',
                 'Visibility',
@@ -130,7 +130,7 @@ if (isset($_POST['formSent'])) {
                     FROM $tblUser
                     INNER JOIN $tblSessionRelUser
                     ON
-                        $tblUser.user_id = $tblSessionRelUser.user_id AND
+                        $tblUser.id = $tblSessionRelUser.user_id AND
                         $tblSessionRelUser.relation_type = ".Session::STUDENT." AND
                         $tblSessionRelUser.session_id = '".$row['id']."'";
 
@@ -182,7 +182,7 @@ if (isset($_POST['formSent'])) {
                 } else {
                     $courses .= "\t\t<Course>\n";
                     $courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
-                    $courses .= "\t\t\t<Coach>$coachs</Coach>\n";
+                    $courses .= "\t\t\t<Tutor>$coachs</Tutor>\n";
                 }
 
                 // rel user courses
@@ -243,7 +243,7 @@ if (isset($_POST['formSent'])) {
             } else {
                 $add = "\t<Session>\n"
                          ."\t\t<SessionName>$row[title]</SessionName>\n"
-                         ."\t\t<Coach>$row[username]</Coach>\n"
+                         ."\t\t<Tutor>$row[username]</Tutor>\n"
                          ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
                          ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
                          ."\t\t<Visibility>$row[visibility]</Visibility>\n"

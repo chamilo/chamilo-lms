@@ -146,7 +146,7 @@ function save_courses_data($courses)
     }
 
     if (!empty($msg)) {
-        echo Display::return_message($msg, 'normal', false);
+        Display::addFlash(Display::return_message($msg, 'normal', false));
     }
 }
 
@@ -180,53 +180,9 @@ $tool_name = get_lang('Import courses list').' CSV';
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
-$csvCustomError = '';
-$topStaticErrorHtml = '';
-$delimiterError = false;
-$errors = [];
-Display::display_header($tool_name);
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
-    if (empty($_FILES['import_file']['tmp_name'])) {
-        $error_message = get_lang('The file upload has failed.');
-        echo Display::return_message($error_message, 'error', false);
-    } else {
-        $allowed_file_mimetype = ['csv'];
-
-        $ext_import_file = substr($_FILES['import_file']['name'], strrpos($_FILES['import_file']['name'], '.') + 1);
-
-        if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            echo Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error');
-        } else {
-            $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
-            if (true !== $check) {
-                $csvCustomError = $check;
-                $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
-                $delimiterError = true;
-            } else {
-                $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
-                $errors = validate_courses_data($courses);
-                if (0 == count($errors)) {
-                    save_courses_data($courses);
-                }
-            }
-        }
-    }
-}
-if (!empty($topStaticErrorHtml)) {
-    echo $topStaticErrorHtml;
-}
-if (isset($errors) && 0 != count($errors)) {
-    $error_message = '<ul>';
-    foreach ($errors as $index => $error_course) {
-        $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';
-        $error_message .= get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')';
-        $error_message .= '</li>';
-    }
-    $error_message .= '</ul>';
-    echo Display::return_message($error_message, 'error', false);
-}
-
+// Build the form first and protect it: FormValidator::protect() adds the CSRF
+// token and $form->validate() verifies it before any processing runs.
 $form = new FormValidator(
     'import',
     'post',
@@ -234,11 +190,54 @@ $form = new FormValidator(
     null,
     ['enctype' => 'multipart/form-data']
 );
+$form->protect();
 $form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('CSV file import location'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('Add me as teacher in the imported courses.'));
 $form->addButtonImport(get_lang('Import'), 'save');
-$form->addElement('hidden', 'formSent', 1);
+
+if ($form->validate()) {
+    if (empty($_FILES['import_file']['tmp_name'])) {
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error', false));
+    } else {
+        $allowed_file_mimetype = ['csv'];
+
+        $ext_import_file = substr($_FILES['import_file']['name'], strrpos($_FILES['import_file']['name'], '.') + 1);
+
+        if (!in_array($ext_import_file, $allowed_file_mimetype)) {
+            Display::addFlash(Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error'));
+        } else {
+            $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+            if (true !== $check) {
+                Display::addFlash(Display::return_message($check, 'error', false));
+            } else {
+                $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
+                $errors = validate_courses_data($courses);
+                if (0 == count($errors)) {
+                    save_courses_data($courses);
+                } else {
+                    $error_message = '<ul>';
+                    foreach ($errors as $error_course) {
+                        $error_message .= '<li>'.get_lang('Line').' '.$error_course['line'].': <strong>'.$error_course['error'].'</strong>: ';
+                        $error_message .= get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')';
+                        $error_message .= '</li>';
+                    }
+                    $error_message .= '</ul>';
+                    Display::addFlash(Display::return_message($error_message, 'error', false));
+                }
+            }
+        }
+    }
+
+    // Post/Redirect/Get: the CSRF token is single-use (validate() clears it),
+    // so redirect to render the form again with a fresh token. All messages are
+    // queued as flashes above and survive the redirect.
+    header('Location: '.api_get_self());
+    exit;
+}
+
+Display::display_header($tool_name);
+
 $form->display();
 
 $content = '

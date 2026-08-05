@@ -1,5 +1,5 @@
 <template>
-  <form class="flex flex-col gap-2 mt-6">
+  <form class="mt-6 flex flex-col gap-2">
     <BaseInputTextWithVuelidate
       v-model="formData.url"
       :label="t('URL')"
@@ -13,77 +13,86 @@
     <BaseTextArea
       v-model="formData.description"
       :label="t('Description')"
-      class="w-full min-h-[120px]"
+      class="min-h-[120px] w-full"
       rows="6"
     />
 
-    <BaseSelect
-      v-model="formData.category"
-      :label="t('Select a category')"
-      :options="categories"
-      hast-empty-value
-      option-label="title"
-      option-value="iid"
-    />
-
-    <BaseSelect
-      v-model="formData.target"
-      :label="t('Link\'s target')"
-      :options="[
-        { label: 'Open self', value: '_self' },
-        { label: 'Open blank', value: '_blank' },
-        { label: 'Open parent', value: '_parent' },
-        { label: 'Open top', value: '_top' },
-      ]"
-    />
-
-    <BaseCheckbox
-      id="show-link-on-home-page"
-      v-model="formData.showOnHomepage"
-      :label="t('Show link on course homepage')"
-      name="show-link-on-home-page"
-    />
-
-    <div
-      v-if="formData.showOnHomepage"
-      class="mt-4 space-y-4"
-    >
-      <div v-if="currentPreviewImage">
-        <p class="text-gray-600 font-semibold">{{ t("Current icon") }}</p>
-        <img
-          :src="currentPreviewImage"
-          alt="Custom Image"
-          class="w-24 h-24 object-cover rounded-xl border shadow"
+    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <div class="flex flex-col gap-4">
+        <ResourceLanguageSelector
+          id="link-language"
+          v-model="formData.language"
         />
-        <BaseButton
-          class="mt-2"
-          :label="t('Remove current icon')"
-          icon="trash"
-          type="danger"
-          size="small"
-          @click="removeCurrentImage"
+
+        <BaseSelect
+          v-model="formData.category"
+          :label="t('Select a category')"
+          :options="categories"
+          hast-empty-value
+          option-label="title"
+          option-value="iid"
         />
+
+        <BaseSelect
+          v-model="formData.target"
+          :label="t('Link\'s target')"
+          :options="[
+            { label: 'Open self', value: '_self' },
+            { label: 'Open blank', value: '_blank' },
+            { label: 'Open parent', value: '_parent' },
+            { label: 'Open top', value: '_top' },
+          ]"
+        />
+
+        <BaseCheckbox
+          id="show-link-on-home-page"
+          v-model="formData.showOnHomepage"
+          :label="t('Show link on course homepage')"
+          name="show-link-on-home-page"
+        />
+
+        <div
+          v-if="formData.showOnHomepage"
+          class="space-y-4"
+        >
+          <div v-if="currentPreviewImage">
+            <p class="font-semibold text-gray-600">{{ t("Current icon") }}</p>
+            <img
+              :src="currentPreviewImage"
+              alt="Custom Image"
+              class="h-24 w-24 rounded-xl border object-cover shadow"
+            />
+            <BaseButton
+              class="mt-2"
+              :label="t('Remove current icon')"
+              icon="trash"
+              type="danger"
+              size="small"
+              @click="removeCurrentImage"
+            />
+          </div>
+
+          <Dashboard
+            class="w-full max-w-3xl"
+            :uppy="uppy"
+            :props="{
+              proudlyDisplayPoweredByUppy: false,
+              height: 350,
+              hideUploadButton: true,
+              autoOpenFileEditor: true,
+              note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended)'),
+            }"
+          />
+
+          <p class="text-sm text-gray-600">
+            {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
+          </p>
+          <p class="text-sm text-gray-600">
+            {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}
+          </p>
+        </div>
       </div>
-
-      <Dashboard
-        class="w-full max-w-3xl"
-        :uppy="uppy"
-        :props="{
-          proudlyDisplayPoweredByUppy: false,
-          height: 350,
-          hideUploadButton: true,
-          autoOpenFileEditor: true,
-          note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended).'),
-        }"
-      />
-
-      <p class="text-sm text-gray-600">
-        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
-      </p>
-      <p class="text-sm text-gray-600">
-        {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}
-      </p>
-    </div>
+    </BaseAdvancedSettingsButton>
 
     <LayoutFormButtons>
       <BaseButton
@@ -105,10 +114,10 @@
 <script setup>
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import linkService from "../../services/linkService"
+import lpService from "../../services/lpService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, onMounted, reactive, ref, watch } from "vue"
-import { useCidReq } from "../../composables/cidReq"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { required, url } from "@vuelidate/validators"
 import useVuelidate from "@vuelidate/core"
@@ -116,6 +125,8 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useNotification } from "../../composables/notification"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import "@uppy/core/dist/style.css"
@@ -124,13 +135,20 @@ import "@uppy/image-editor/dist/style.css"
 import Uppy from "@uppy/core"
 import ImageEditor from "@uppy/image-editor"
 import { Dashboard } from "@uppy/vue"
+import { useUppyLocale } from "../../composables/uppyLocale"
 
 const notification = useNotification()
 const { t } = useI18n()
-const { cid, sid } = useCidReq()
+const { uppyLocale } = useUppyLocale()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
+const showAdvancedSettings = ref(false)
+const learningPathId = computed(() => Number(route.query.lp_id || 0))
+const isLearningPathContext = computed(
+  () => "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId.value > 0,
+)
+
 const objectUrl = ref(null)
 
 const currentPreviewImage = computed(() => {
@@ -145,6 +163,7 @@ const currentPreviewImage = computed(() => {
 const uppy = new Uppy({
   restrictions: { maxNumberOfFiles: 1, allowedFileTypes: ["image/*"] },
   autoProceed: false,
+  locale: uppyLocale.value,
   debug: false,
 })
   .use(ImageEditor, {
@@ -197,16 +216,73 @@ const props = defineProps({
 const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 const categories = ref([])
+
+const courseContextParams = computed(() => {
+  const params = {}
+  const cid = Number(route.query.cid || 0)
+  const sid = Number(route.query.sid || 0)
+  const gid = Number(route.query.gid || 0)
+
+  if (cid > 0) {
+    params.cid = cid
+  }
+
+  if (sid > 0) {
+    params.sid = sid
+  }
+
+  if (gid > 0) {
+    params.gid = gid
+  }
+
+  return params
+})
+
+function extractResourceId(resource) {
+  const directId = Number(resource?.iid || resource?.id || 0)
+  if (directId > 0) {
+    return directId
+  }
+
+  const iri = String(resource?.["@id"] || "")
+  const match = iri.match(/\/(\d+)\/?$/)
+
+  return match ? Number(match[1]) : 0
+}
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
+  }
+}
+
+async function addCreatedLinkToLearningPath(linkId) {
+  const builder = await lpService.getBuilder(learningPathId.value, courseContextParams.value)
+
+  await lpService.addBuilderResource(learningPathId.value, courseContextParams.value, {
+    resourceType: "link",
+    resourceId: linkId,
+    parentId: Number(route.query.parent || 0) || null,
+    exportAllowed: false,
+    csrfToken: builder.csrfToken,
+  })
+
+  await router.push(buildLearningPathBuilderRoute())
+}
 
 const formData = reactive({
   url: "https://",
@@ -218,6 +294,7 @@ const formData = reactive({
   customImage: null,
   customImageUrl: null,
   removeImage: false,
+  language: "",
 })
 const rules = {
   url: { required, url },
@@ -237,14 +314,40 @@ watch(selectedFile, (file, oldFile) => {
 })
 
 onMounted(() => {
+  if (!props.linkId && isLearningPathContext.value) {
+    formData.language = String(route.query.language || "").trim()
+  }
+
   fetchCategories()
   fetchLink()
 })
 
 const fetchCategories = async () => {
+  const params = {
+    cid: courseContextParams.value.cid || null,
+    sid: courseContextParams.value.sid || null,
+  }
+
   try {
-    categories.value = await linkService.getCategories(parentResourceNodeId.value)
+    const data = await linkService.getLinks(params)
+    categories.value = Object.values(data.categories || {})
+      .map((category) => {
+        const info = category.info || category
+        const id = Number(info.iid || info.id || 0)
+
+        if (!id) {
+          return null
+        }
+
+        return {
+          ...info,
+          iid: id,
+          title: info.title || "",
+        }
+      })
+      .filter(Boolean)
   } catch (error) {
+    categories.value = []
     console.error("Error fetching categories:", error)
   }
 }
@@ -259,7 +362,15 @@ const fetchLink = async () => {
       formData.showOnHomepage = response.onHomepage
       formData.target = response.target
       formData.parentResourceNodeId = response.parentResourceNodeId
-      formData.resourceLinkList = response.resourceLinkList
+
+      const fetchedResourceLinks = Array.isArray(response.resourceLinkList)
+        ? response.resourceLinkList
+        : []
+      resourceLinkList.value = JSON.stringify(
+        fetchedResourceLinks.length > 0
+          ? fetchedResourceLinks
+          : [{ visibility: RESOURCE_LINK_PUBLISHED }],
+      )
 
       if (response.customImageUrl) {
         formData.customImageUrl = response.customImageUrl
@@ -268,6 +379,8 @@ const fetchLink = async () => {
       if (response.category) {
         formData.category = response.category
       }
+
+      formData.language = String(response.language || "").trim()
     } catch (error) {
       console.error("Error fetching link:", error)
     }
@@ -300,15 +413,19 @@ const submitForm = async () => {
     target: formData.target,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
+    language: formData.language || "",
   }
   try {
-    let linkId = props.linkId
+    let linkId = Number(props.linkId || 0)
 
     if (props.linkId) {
       await linkService.updateLink(props.linkId, postData)
     } else {
       const newLink = await linkService.createLink(postData)
-      linkId = newLink.iid
+      linkId = extractResourceId(newLink)
+      if (linkId <= 0) {
+        throw new Error("Invalid link identifier.")
+      }
     }
 
     if (formData.showOnHomepage && (formData.removeImage || selectedFile.value)) {
@@ -324,6 +441,16 @@ const submitForm = async () => {
     }
 
     notification.showSuccessNotification(t("Link saved"))
+
+    if (isLearningPathContext.value) {
+      if (!props.linkId) {
+        await addCreatedLinkToLearningPath(linkId)
+      } else {
+        await router.push(buildLearningPathBuilderRoute())
+      }
+
+      return
+    }
 
     await router.push({
       name: "LinksList",

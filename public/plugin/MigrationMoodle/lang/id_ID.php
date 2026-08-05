@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Impor dari Moodle';
+$strings['plugin_comment'] = 'Jalankan proses impor dari basis data dan berkas Moodle ke Chamilo.';
+
+$strings['MoodlePassword'] = 'Kata sandi Moodle';
+$strings['UninstallError'] = 'Terjadi kesalahan saat menghapus plugin.';
+
+$strings['db_host'] = 'Host basis data Moodle';
+$strings['db_user'] = 'Pengguna basis data Moodle';
+$strings['db_password'] = 'Kata sandi basis data Moodle';
+$strings['db_name'] = 'Nama basis data Moodle';
+$strings['user_filter'] = 'Filter untuk pengguna';
+$strings['user_filter_help'] = 'Hanya impor pengguna yang memiliki nama pengguna dengan awalan string ini.<br>Impor kursus juga dipengaruhi oleh konfigurasi ini, karena hanya mengimpor kursus di mana pengguna dengan awalan nama pengguna ini terdaftar.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID URL Akses untuk menyimpan kursus, pengguna, dan sesi (jika menggunakan multi-url).';
+$strings['moodle_path'] = 'Path moodledata';
+$strings['moodle_path_help'] = 'Path folder moodledata. Biasanya seperti <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Pengguna';
+$strings['CourseCategoriesTask'] = 'Kategori kursus';
+$strings['CoursesTask'] = 'Kursus';
+$strings['CourseSectionsTask'] = 'Bagian kursus';
+$strings['CourseModulesLessonTask'] = 'Modul kursus: Pelajaran';
+$strings['LessonPagesTask'] = 'Halaman pelajaran';
+$strings['LessonPagesDocumentTask'] = 'Halaman pelajaran: Dokumen';
+$strings['FilesForLessonPagesTask'] = 'Berkas untuk halaman pelajaran';
+$strings['LessonPagesQuizTask'] = 'Halaman pelajaran: Pertanyaan';
+$strings['LessonPagesQuizQuestionTask'] = 'Pertanyaan untuk halaman pertanyaan';
+$strings['LessonAnswersTrueFalseTask'] = 'Jawaban untuk pertanyaan Benar/Salah';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Jawaban untuk pertanyaan Pilihan Ganda';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Jawaban untuk pertanyaan Jawaban Ganda';
+$strings['LessonAnswersMatchingTask'] = 'Jawaban untuk pertanyaan Pencocokan';
+$strings['LessonAnswersEssayTask'] = 'Jawaban untuk pertanyaan Esai';
+$strings['LessonAnswersShortAnswerTask'] = 'Jawaban untuk pertanyaan Jawaban Singkat';
+$strings['FilesForLessonAnswersTask'] = 'Berkas untuk jawaban pelajaran';
+$strings['CourseModulesQuizTask'] = 'Modul kursus: Kuis';
+$strings['CQuizTask'] = 'Kuis C';
+$strings['RoleAssignmentsTask'] = 'Penugasan peran';
+$strings['QuizzesTask'] = 'Kuis';
+$strings['FilesForQuizzesTask'] = 'Berkas untuk kuis';
+$strings['QuestionCategoriesTask'] = 'Kategori pertanyaan';
+$strings['QuestionsTask'] = 'Pertanyaan';
+$strings['QuestionMultiChoiceSingleTask'] = 'Jawaban untuk pertanyaan multichoice (tunggal)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Jawaban untuk pertanyaan multichoice (ganda)';
+$strings['QuestionsTrueFalseTask'] = 'Jawaban untuk pertanyaan truefalse';
+$strings['QuestionShortAnswerTask'] = 'Jawaban untuk pertanyaan shortanswers';
+$strings['CourseModulesScormTask'] = 'Kursus SCORM';
+$strings['ScormScoesTask'] = 'Item SCORM';
+$strings['FilesForScormScoesTask'] = 'Berkas untuk item SCORM';
+$strings['UserSessionsTask'] = 'Sesi Kursus untuk pengguna';
+$strings['CourseIntroductionsTask'] = 'Pengantar kursus';
+$strings['FilesForCourseIntroductionsTask'] = 'Berkas untuk pengantar kursus';
+$strings['FilesForCourseSectionsTask'] = 'Berkas untuk bagian kursus';
+$strings['CourseModulesUrlTask'] = 'Modul kursus: URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = 'Urutkan modul dalam bagian';
+$strings['UsersScormsViewTask'] = 'Tampilan SCORM untuk pengguna';
+$strings['UsersScormsProgressTask'] = 'Kemajuan SCORM';
+$strings['UsersLearnPathsTask'] = 'Tampilan jalur pembelajaran pengguna';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Timer pelajaran ke waktu mulai bagian jalur pembelajaran';
+$strings['QuizzesScoresTask'] = 'Perbarui skor kuis dalam jalur pembelajaran';
+$strings['QuestionGapselectTask'] = 'Jawaban untuk pertanyaan gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Cabang pelajaran ke total waktu dalam dokumen jalur pembelajaran';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Upaya pelajaran ke total waktu dalam kuis jalur pembelajaran';
+$strings['UsersLearnPathsQuizzesTask'] = 'Upaya kuis ke upaya kuis jalur pembelajaran';
+$strings['UsersQuizzesAttemptsTask'] = 'Upaya kuis pengguna';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Upaya pertanyaan pengguna untuk shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Upaya pertanyaan pengguna untuk gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Upaya pertanyaan pengguna untuk truefalse';
+$strings['UsersLastLoginTask'] = 'Login terakhir pengguna';
+$strings['TrackLoginTask'] = 'Login pertama dan logout terakhir';
+$strings['TrackCourseAccessTask'] = 'Akses pengguna ke kursus';
+$strings['UserLearnPathsProgressScript'] = 'Perbarui kemajuan dalam jalur pembelajaran untuk pengguna.';
+$strings['UserScormsProgressScript'] = 'Perbarui kemajuan dalam SCORM untuk pengguna.';
+
+$strings['InstallError'] = 'Terjadi kesalahan saat memasang plugin: %s';
+$strings['AdminIntro'] = 'Jalankan tugas migrasi Moodle secara berurutan. Setiap langkah hanya diaktifkan setelah langkah induknya selesai.';
+$strings['MoodleDatabase'] = 'Basis data Moodle';
+$strings['MoodledataPath'] = 'Path Moodledata';
+$strings['AccessUrlId'] = 'ID URL Akses';
+$strings['Configured'] = 'Telah dikonfigurasi';
+$strings['NotConfigured'] = 'Belum dikonfigurasi';
+$strings['ConfigurePlugin'] = 'Konfigurasi plugin';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigurasikan host basis data Moodle, pengguna, dan nama basis data sebelum menjalankan tugas migrasi.';
+$strings['MissingMoodledataPathWarning'] = 'Path Moodledata kosong. Tugas terkait berkas mungkin gagal hingga pengaturan ini dikonfigurasi.';
+$strings['InvalidMigrationAction'] = 'Tindakan migrasi tidak valid.';
+$strings['InvalidSecurityToken'] = 'Token keamanan tidak valid. Silakan muat ulang halaman dan coba lagi.';
+$strings['MigrationTasks'] = 'Tugas migrasi';
+$strings['MaintenanceScripts'] = 'Skrip pemeliharaan';
+$strings['ExecutionOutput'] = 'Keluaran eksekusi';
+$strings['TaskAlreadyExecuted'] = 'Tugas atau skrip ini telah dijalankan sebelumnya.';
+$strings['SelectTaskToRun'] = 'Pilih tugas migrasi untuk dijalankan. Keluaran akan muncul di sini.';

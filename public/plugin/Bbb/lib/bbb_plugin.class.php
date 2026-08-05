@@ -489,9 +489,37 @@ class BbbPlugin extends Plugin
         $call     = 'hooks/list';
         $query    = ''; // no params
         $checksum = sha1($call . $query . $salt);
-        $url      = $host . '/api/' . $call . '?checksum=' . $checksum;
+        $url = $host . '/api/' . $call . '?checksum=' . $checksum;
 
-        $xml = @simplexml_load_file($url);
+        // Fetch XML over HTTP(S) using cURL to avoid allowing the XML parser
+        // to perform network requests or entity resolution (prevents XXE/SSRF).
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        $content = curl_exec($ch);
+        $curlErr = curl_errno($ch);
+        curl_close($ch);
+
+        if ($content === false || $curlErr) {
+            return ['enabled' => true, 'ok' => false, 'reason' => 'connection_failed'];
+        }
+
+        // Disable external entity loader when available (PHP 8+ deprecates it,
+        // so check for existence). Also use internal errors and LIBXML_NONET.
+        $prevEntityLoader = null;
+        if (function_exists('libxml_disable_entity_loader')) {
+            $prevEntityLoader = libxml_disable_entity_loader(true);
+        }
+        libxml_use_internal_errors(true);
+        $xml = @simplexml_load_string($content, \SimpleXMLElement::class, LIBXML_NONET);
+        if ($prevEntityLoader !== null) {
+            libxml_disable_entity_loader($prevEntityLoader);
+        }
+        libxml_clear_errors();
+
         if ($xml && (string)($xml->returncode ?? '') === 'SUCCESS') {
             return ['enabled' => true, 'ok' => true];
         }

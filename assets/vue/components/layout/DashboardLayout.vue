@@ -7,6 +7,7 @@
     class="app-main"
   >
     <Breadcrumb v-if="showBreadcrumb" />
+    <CourseToolShortcuts />
     <router-view />
     <slot />
   </div>
@@ -16,6 +17,7 @@
 import Breadcrumb from "../../components/Breadcrumb.vue"
 import Topbar from "../../components/layout/Topbar.vue"
 import Sidebar from "../../components/layout/Sidebar.vue"
+import CourseToolShortcuts from "../../components/course/CourseToolShortcuts.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePageBackground } from "../../composables/pageBackground"
 

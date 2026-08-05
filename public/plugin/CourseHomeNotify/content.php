@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
-
 use Chamilo\PluginBundle\CourseHomeNotify\Entity\Notification;
 use Chamilo\PluginBundle\CourseHomeNotify\Entity\NotificationRelUser;
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_block_anonymous_users(true);
 api_protect_course_script(true);
@@ -16,7 +16,7 @@ $courseId = api_get_course_int_id();
 if (
     empty($courseId) ||
     empty($userId) ||
-    'true' !== $plugin->get(CourseHomeNotifyPlugin::SETTING_ENABLED)
+    !$plugin->isEnabled()
 ) {
     api_not_allowed(true);
 }
@@ -28,15 +28,15 @@ $hash = isset($_GET['hash']) ? Security::remove_XSS($_GET['hash']) : null;
 $em = Database::getManager();
 /** @var Notification $notification */
 $notification = $em
-    ->getRepository('ChamiloPluginBundle:CourseHomeNotify\Notification')
+    ->getRepository(Notification::class)
     ->findOneBy(['course' => $course, 'hash' => $hash]);
 
-if (!$notification) {
+if (!$notification || empty($notification->getExpirationLink())) {
     api_not_allowed(true);
 }
 
 $notificationUser = $em
-    ->getRepository('ChamiloPluginBundle:CourseHomeNotify\NotificationRelUser')
+    ->getRepository(NotificationRelUser::class)
     ->findOneBy(['notification' => $notification, 'user' => $user]);
 
 if (!$notificationUser) {
@@ -50,3 +50,4 @@ if (!$notificationUser) {
 }
 
 header('Location: '.$notification->getExpirationLink());
+exit;

@@ -65,29 +65,22 @@
             label=""
           />
         </div>
-        <div class="self-end text-right">
-          <BaseButton
-            type="black"
-            icon="close"
-            class="mr-2"
-            :label="t('Close')"
-            @click="close"
-          />
-          <BaseButton
-            type="primary"
-            icon="check"
-            :label="t('Update')"
-            :disabled="saving || (!pickedFile && categoryId === initialCategoryId)"
-            :isLoading="saving"
-            @click="submit"
-          />
-        </div>
       </div>
 
       <p class="text-xs text-gray-500">
         {{ t("You can replace the file, move it to another folder, or both.") }}
       </p>
     </div>
+    <template #footer>
+      <BaseButton
+        type="primary"
+        icon="check"
+        :label="t('Update')"
+        :disabled="saving || (!pickedFile && categoryId === initialCategoryId)"
+        :isLoading="saving"
+        @click="submit"
+      />
+    </template>
   </BaseDialog>
 </template>
 

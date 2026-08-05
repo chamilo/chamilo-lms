@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Prikaži Google mapu sa lokacijama korisnika pohranjenim u dodatnim poljima.';
+$strings['enable_api'] = 'Učitaj Google Maps API';
+$strings['api_key'] = 'API ključ';
+$strings['extra_field_name'] = 'Naziv dodatnog polja';
+$strings['extra_field_name_help'] = 'Unesite jednu ili više varijabli korisničkih dodatnih polja odvojenih zarezima. Mapa može prikazati do 5 polja. Primjer: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Mapa lokacija korisnika';
+$strings['UsersCoordinatesMapHelp'] = 'Ova mapa prikazuje lokacije korisnika na osnovu konfiguriranih korisničkih dodatnih polja.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurirajte Google Maps API ključ i korisnička dodatna polja koja sadrže adrese ili lokacije.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Dodatna polja';
+$strings['Access'] = 'Pristup';
+$strings['AdministratorsOnly'] = 'Samo administratori';
+$strings['OpenMap'] = 'Otvori mapu';
+$strings['ConfigurePlugin'] = 'Konfiguriraj dodatak';
+$strings['Configured'] = 'Konfigurirano';
+$strings['NotConfigured'] = 'Nije konfigurirano';
+$strings['GoogleMapsApiDisabledWarning'] = 'Učitavanje Google Maps API-ja je onemogućeno u konfiguraciji dodatka.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Nedostaje Google Maps API ključ.';
+$strings['ExtraFieldNameMissingWarning'] = 'Nijedno korisničko dodatno polje nije konfigurirano.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Sljedeća korisnička dodatna polja nisu pronađena: %s.';
+$strings['NoUserCoordinatesFound'] = 'Nisu pronađene lokacije korisnika za konfigurirana dodatna polja.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurirajte i omogućite Google Maps API prije otvaranja mape.';
+
+$strings['map_provider'] = 'Pružatelj mape';
+$strings['map_provider_help'] = 'Odaberite pružatelja mape kojeg koristi dodatak i društvena mapa.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Pružatelj mape';
+$strings['MapProviderConfiguration'] = 'Konfiguracija pružatelja';
+$strings['default_latitude'] = 'Zadana geografska širina';
+$strings['default_latitude_help'] = 'Zadana geografska širina centra mape. Koristi se kada nema dostupnih markera.';
+$strings['default_longitude'] = 'Zadana geografska dužina';
+$strings['default_longitude_help'] = 'Zadana geografska dužina centra mape. Koristi se kada nema dostupnih markera.';
+$strings['default_zoom'] = 'Zadano zumiranje';
+$strings['default_zoom_help'] = 'Zadano zumiranje mape između 1 i 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap ne zahtijeva API ključ. Markeri samo s adresom prikazuju se kao linkovi za pretragu osim ako nisu dostupne koordinate.';

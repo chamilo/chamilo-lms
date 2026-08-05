@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Kérdésopciók értékelése';
 $strings['plugin_comment'] = 'Opciópontszámok újraszámításának engedélyezése kérdésekben';
 
-$strings['enable'] = 'Engedélyezés';
 $strings['exercise_max_score'] = 'Max pontszám gyakorlatokban';
 $strings['exercise_max_score_help'] = 'Alapértelmezett 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Sikerek - Sikertelenek / 3';
 $strings['QuestionsEvaluated'] = 'Értékelt kérdések';
 $strings['RecalculateQuestionScores'] = 'Kérdéspontszámok újraszámítása';
 $strings['FormulaSavedForExerciseX'] = 'Képlet mentve a "%s" gyakorlathoz.';
+$strings['NoFormulaHelp'] = 'Az alapértelmezett Chamilo pontozási viselkedés megtartása ennél a tesztnél.';
+$strings['enable'] = 'Engedélyezés';

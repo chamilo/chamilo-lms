@@ -147,7 +147,12 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
 
     public function getResourceName(): string
     {
-        return $this->getTitle();
+        $title = $this->getTitle();
+        if ('' !== $title) {
+            return $title;
+        }
+
+        return 'announcement-'.($this->iid ?? 'unknown');
     }
 
     public function setResourceName(string $name): self

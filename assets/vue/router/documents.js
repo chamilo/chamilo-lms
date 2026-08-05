@@ -1,6 +1,11 @@
 export default {
   path: "/resources/document/:node/",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: {
+    requiresAuth: true,
+    requiresCourseContext: true,
+    showBreadcrumb: true,
+    tool: "document",
+  },
   name: "documents",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   redirect: { name: "DocumentsList" },
@@ -30,15 +35,19 @@ export default {
       component: () => import("../views/documents/DocumentsUpload.vue"),
     },
     {
+      name: "DocumentsSvgEditor",
+      path: "draw",
+      meta: { breadcrumb: "New drawing" },
+      component: () => import("../views/documents/SvgEditor.vue"),
+    },
+    {
       name: "DocumentsUpdate",
-      //path: ':id/edit',
       path: "edit",
       meta: { breadcrumb: "Edit" },
       component: () => import("../views/documents/Update.vue"),
     },
     {
       name: "DocumentsUpdateFile",
-      //path: ':id/edit',
       path: "edit_file",
       meta: { breadcrumb: "Edit" },
       component: () => import("../views/documents/UpdateFile.vue"),

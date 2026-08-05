@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Показване на Google карта с местоположения на потребители, съхранени в допълнителни полета.';
+$strings['enable_api'] = 'Зареждане на Google Maps API';
+$strings['api_key'] = 'API ключ';
+$strings['extra_field_name'] = 'Име на допълнително поле';
+$strings['extra_field_name_help'] = 'Въведете една или повече променливи за допълнителни полета на потребители, разделени със запетаи. Картата може да показва до 5 полета. Пример: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Карта на местоположенията на потребителите';
+$strings['UsersCoordinatesMapHelp'] = 'Тази карта показва местоположенията на потребителите въз основа на конфигурираните допълнителни полета.';
+$strings['GoogleMapsAdminIntro'] = 'Конфигурирайте API ключа за Google Maps и допълнителните полета на потребители, които съдържат адреси или местоположения.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Допълнителни полета';
+$strings['Access'] = 'Достъп';
+$strings['AdministratorsOnly'] = 'Само за администратори';
+$strings['OpenMap'] = 'Отвори карта';
+$strings['ConfigurePlugin'] = 'Конфигуриране на добавката';
+$strings['Configured'] = 'Конфигурирано';
+$strings['NotConfigured'] = 'Не е конфигурирано';
+$strings['GoogleMapsApiDisabledWarning'] = 'Зареждането на Google Maps API е деактивирано в конфигурацията на добавката.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Липсва API ключ за Google Maps.';
+$strings['ExtraFieldNameMissingWarning'] = 'Не е конфигурирано допълнително поле за потребители.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Следните допълнителни полета за потребители не бяха намерени: %s.';
+$strings['NoUserCoordinatesFound'] = 'Не са намерени местоположения на потребители за конфигурираните допълнителни полета.';
+$strings['ConfigureGoogleMapsFirst'] = 'Конфигурирайте и активирайте Google Maps API преди отваряне на картата.';
+
+$strings['map_provider'] = 'Доставчик на карта';
+$strings['map_provider_help'] = 'Изберете доставчика на карта, използван от добавката и от Социалната карта.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Доставчик на карта';
+$strings['MapProviderConfiguration'] = 'Конфигурация на доставчика';
+$strings['default_latitude'] = 'Стандартна географска ширина';
+$strings['default_latitude_help'] = 'Стандартна географска ширина на центъра на картата. Използва се, когато няма маркер.';
+$strings['default_longitude'] = 'Стандартна географска дължина';
+$strings['default_longitude_help'] = 'Стандартна географска дължина на центъра на картата. Използва се, когато няма маркер.';
+$strings['default_zoom'] = 'Стандартно приближение';
+$strings['default_zoom_help'] = 'Стандартно приближение на картата между 1 и 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap не изисква API ключ. Маркерите само с адрес се показват като връзки за търсене, освен ако не са налични координати.';

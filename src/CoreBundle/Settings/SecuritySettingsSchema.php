@@ -11,6 +11,7 @@ use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {
@@ -40,6 +41,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'password_requirements' => '',
             'allow_online_users_by_status' => '',
             'security_session_cookie_samesite_none' => 'false',
+            'session_expiration_warning_enabled' => 'false',
+            'session_expiration_warning_seconds' => '180',
             'anonymous_autoprovisioning' => 'false',
             'access_to_personal_file_for_all' => 'false',
             'password_rotation_days' => '0',
@@ -48,6 +51,10 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'login_max_attempt_before_blocking_account' => '0',
             'force_renew_password_at_first_login' => 'false',
             'hide_breadcrumb_if_not_allowed' => 'false',
+            'file_integrity_check_notify_admins' => '',
+            'oauth_server_enabled' => 'false',
+            'mcp_enabled' => 'false',
+            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"DRH":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
         ]);
 
         $allowedTypes = [
@@ -82,6 +89,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('password_requirements', TextareaType::class)
             ->add('allow_online_users_by_status', TextareaType::class)
             ->add('security_session_cookie_samesite_none', YesNoType::class)
+            ->add('session_expiration_warning_enabled', YesNoType::class)
+            ->add('session_expiration_warning_seconds', TextType::class)
             ->add('anonymous_autoprovisioning', YesNoType::class)
             ->add('access_to_personal_file_for_all', YesNoType::class)
             ->add('password_rotation_days', TextType::class)
@@ -90,6 +99,12 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('login_max_attempt_before_blocking_account', TextType::class)
             ->add('force_renew_password_at_first_login', YesNoType::class)
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
+            ->add('file_integrity_check_notify_admins', TextareaType::class)
+            ->add('oauth_server_enabled', YesNoType::class)
+            ->add('mcp_enabled', YesNoType::class)
+            ->add('mcp_allowed_roles', TextareaType::class, [
+                'constraints' => [new Json()],
+            ])
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

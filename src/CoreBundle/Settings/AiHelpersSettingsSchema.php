@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -19,6 +20,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->setDefaults([
                 'enable_ai_helpers' => 'false',
                 'ai_providers' => '',
+                'wysiwyg_translation_all_languages' => 'false',
                 'learning_path_generator' => 'false',
                 'exercise_generator' => 'false',
                 'open_answers_grader' => 'false',
@@ -45,18 +47,33 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                     'style' => 'font-family: monospace;',
                 ],
             ])
-            ->add('learning_path_generator', YesNoType::class)
-            ->add('exercise_generator', YesNoType::class)
-            ->add('open_answers_grader', YesNoType::class)
-            ->add('tutor_chatbot', YesNoType::class)
-            ->add('task_grader', YesNoType::class)
-            ->add('content_analyser', YesNoType::class)
-            ->add('image_generator', YesNoType::class)
-            ->add('glossary_terms_generator', YesNoType::class)
-            ->add('video_generator', YesNoType::class)
-            ->add('course_analyser', YesNoType::class)
-            ->add('disclose_ai_assistance', YesNoType::class)
+            ->add('wysiwyg_translation_all_languages', YesNoType::class)
         ;
+
+        $featureChoices = [
+            'Yes' => 'true',
+            'No' => 'false',
+            'Plugin-defined' => 'plugin_defined',
+        ];
+
+        foreach ([
+            'learning_path_generator',
+            'exercise_generator',
+            'open_answers_grader',
+            'tutor_chatbot',
+            'task_grader',
+            'content_analyser',
+            'image_generator',
+            'glossary_terms_generator',
+            'video_generator',
+            'course_analyser',
+        ] as $feature) {
+            $builder->add($feature, ChoiceType::class, [
+                'choices' => $featureChoices,
+            ]);
+        }
+
+        $builder->add('disclose_ai_assistance', YesNoType::class);
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

@@ -55,7 +55,7 @@ import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import axios from "axios"
+import usergroupService from "../../services/usergroupService"
 import { useRoute } from "vue-router"
 
 const { t } = useI18n()
@@ -70,10 +70,8 @@ onMounted(() => {
 })
 const performSearch = async () => {
   try {
-    const response = await axios.get("/api/usergroups/search", {
-      params: { search: searchTerm.value },
-    })
-    searchResults.value = response.data["hydra:member"]
+    const { items } = await usergroupService.search(searchTerm.value)
+    searchResults.value = items
   } catch (error) {
     console.error("Error performing search:", error)
     searchResults.value = []

@@ -84,15 +84,14 @@
           class="block"
           v-text="extension.title"
         />
-
-        <Tag
+        <BaseTag
           :icon="{
             'mdi mdi-check': 'success' === extension.status.severity,
             'mdi mdi-alert': 'warning' === extension.status.severity,
             'mdi mdi-close': 'danger' === extension.status.severity,
           }"
-          :severity="extension.status.severity"
-          :value="extension.status.message"
+          :label="extension.status.message"
+          :type="extension.status.severity"
         />
       </p>
     </div>
@@ -212,12 +211,17 @@
         <FloatLabel variant="on">
           <InputText
             id="updatePath"
-            :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
-            name="updatePath"
+            v-model="updatePathInput"
+            autocomplete="off"
             size="50"
           />
           <label v-text="t('Old version\'s root path')" />
         </FloatLabel>
+        <input
+          :value="updatePathInput"
+          name="updatePath"
+          type="hidden"
+        />
       </div>
 
       <div class="formgroup-inline">
@@ -280,7 +284,7 @@
           :closable="false"
           severity="warning"
         >
-          {{ t("Warning! The installer has detected an existing Chamilo platform on your system.") }}
+          {{ t("Warning! The installer has detected an existing Chamilo platform on your system") }}
         </Message>
       </div>
 
@@ -289,7 +293,7 @@
           class="text-error"
           v-html="
             t(
-              'Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>.',
+              'Because the <code>newscorm</code> and <code>exercice</code> directories were renamed to <code>lp</code> and <code>exercise</code> respectively, is necessary to delete or rename to <code>newscorm_old</code> and <code>exercice_old</code>',
             )
           "
         />
@@ -348,7 +352,7 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
-import { inject } from "vue"
+import { inject, ref, watch } from "vue"
 
 import Message from "primevue/message"
 import Tag from "primevue/tag"
@@ -356,10 +360,19 @@ import FloatLabel from "primevue/floatlabel"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseTag from "../basecomponents/BaseTag.vue"
 
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+const updatePathInput = ref(installerData.value?.updatePath || "")
+
+watch(
+  () => installerData.value?.updatePath,
+  (value) => {
+    updatePathInput.value = value || ""
+  },
+)
 
 function goToUpgrade() {
   window.location = `/main/install/index.php?running=1&installType=${installerData.installType || "update"}&step=step2_update_8`

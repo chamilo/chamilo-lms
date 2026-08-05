@@ -109,14 +109,6 @@ final class DocumentXapianIndexer
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if (null !== $existingDocId) {
-            try {
-                $this->xapianIndexService->deleteDocument($existingDocId);
-            } catch (Throwable $e) {
-                error_log('[Xapian] indexDocument: failed to delete previous docId='.$existingDocId.' error='.$e->getMessage());
-            }
-        }
-
         // Get raw input from request (might be keyed by code OR by field_id)
         $rawInput = $this->extractSearchFieldValuesFromRequest();
 
@@ -138,7 +130,8 @@ final class DocumentXapianIndexer
                 $fields,
                 $terms,
                 $languageIso,
-                $searchFieldValuesByCode
+                $searchFieldValuesByCode,
+                replaceDocumentId: $existingDocId,
             );
         } catch (Throwable $e) {
             error_log('[Xapian] indexDocument: Xapian indexing failed: '.$e->getMessage());
@@ -449,7 +442,7 @@ final class DocumentXapianIndexer
         }
 
         // Standard multipart parsed array: searchFieldValues[t]=...
-        $fromForm = $req->get('searchFieldValues');
+        $fromForm = $req->request->all()['searchFieldValues'] ?? null;
         if (\is_array($fromForm)) {
             $out = [];
             foreach ($fromForm as $k => $v) {

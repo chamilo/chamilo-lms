@@ -7,7 +7,7 @@ import baseService from "./baseService"
  * @returns {Promise<Object>}
  */
 async function update(iri, params) {
-  return await baseService.put(iri, params)
+  return await baseService.patch(iri, params)
 }
 
 export default makeService("message_rel_users", {

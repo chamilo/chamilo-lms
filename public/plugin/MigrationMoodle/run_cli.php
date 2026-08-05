@@ -20,61 +20,21 @@ $outputBuffering = false;
 
 $plugin = MigrationMoodlePlugin::create();
 
-$taskNames = [
-    'course_categories',
-    'courses',
-    'course_introductions',
-    'files_for_course_introductions',
-    'course_sections',
-    'files_for_course_sections',
-    'course_modules_lesson',
-    'lesson_pages',
-    'lesson_pages_document',
-    'files_for_lesson_pages',
-    'lesson_pages_quiz',
-    'lesson_pages_quiz_question',
-    'lesson_answers_true_false',
-    'lesson_answers_multiple_choice',
-    'lesson_answers_multiple_answer',
-    'lesson_answers_matching',
-    'lesson_answers_essay',
-    'lesson_answers_short_answer',
-    'files_for_lesson_answers',
-    'course_modules_quiz',
-    'quizzes',
-    'files_for_quizzes',
-    'question_categories',
-    'questions',
-    'question_multi_choice_single',
-    'question_multi_choice_multiple',
-    'questions_true_false',
-    'question_short_answer',
-    'question_gapselect',
-    'quizzes_scores',
-    'course_modules_url',
-    'urls',
-    'sort_section_modules',
-    'course_modules_scorm',
-    'scorm_scoes',
-    'files_for_scorm_scoes',
-    'users',
-    'users_last_login',
-    'track_login',
-    'user_sessions',
-    'users_learn_paths',
-    'users_learn_paths_lesson_timer',
-    'users_learn_paths_lesson_branch',
-    'users_learn_paths_lesson_attempts',
-    'users_learn_paths_quizzes',
-    'users_quizzes_attempts',
-    'user_question_attempts_shortanswer',
-    'user_question_attempts_gapselect',
-    'user_question_attempts_truefalse',
-    'users_scorms_view',
-    'track_course_access',
-];
+if (!$plugin->isEnabled()) {
+    echo 'MigrationMoodle plugin is disabled.'.PHP_EOL;
+    exit(1);
+}
 
-foreach ($taskNames as $i => $taskName) {
+if (!$plugin->hasRequiredDatabaseConfiguration()) {
+    echo 'Missing Moodle database configuration.'.PHP_EOL;
+    exit(1);
+}
+
+if ('' === $plugin->getMoodledataPath()) {
+    echo 'Warning: moodledata path is empty. File-related tasks may fail.'.PHP_EOL;
+}
+
+foreach ($plugin->getCliTaskNames() as $i => $taskName) {
     $taskClass = api_underscore_to_camel_case($taskName).'Task';
     $taskClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Task\\'.$taskClass;
 
@@ -85,21 +45,26 @@ foreach ($taskNames as $i => $taskName) {
         continue;
     }
 
-    echo "Executing \"$taskClass.\"".PHP_EOL;
+    if (!class_exists($taskClass)) {
+        echo "Task class not found \"$taskClass\"".PHP_EOL;
+        continue;
+    }
 
-    /** @var BaseTask $task */
-    $task = new $taskClass();
-    $task->execute();
+    echo "Executing \"$taskClass\".".PHP_EOL;
+
+    try {
+        /** @var BaseTask $task */
+        $task = new $taskClass();
+        $task->execute();
+    } catch (Throwable $throwable) {
+        echo "Task failed \"$taskClass\": ".$throwable->getMessage().PHP_EOL;
+        exit(1);
+    }
 
     echo '['.date(DateTime::ATOM)."] End \"$taskClass\"".PHP_EOL;
 }
 
-$scriptNames = [
-    'user_learn_paths_progress',
-    'user_scorms_progress',
-];
-
-foreach ($scriptNames as $i => $scriptName) {
+foreach ($plugin->getCliScriptNames() as $i => $scriptName) {
     $scriptClass = api_underscore_to_camel_case($scriptName).'Script';
     $scriptClass = 'Chamilo\\PluginBundle\\MigrationMoodle\\Script\\'.$scriptClass;
 
@@ -110,11 +75,21 @@ foreach ($scriptNames as $i => $scriptName) {
         continue;
     }
 
-    echo "Executing \"$scriptClass.\"".PHP_EOL;
+    if (!class_exists($scriptClass)) {
+        echo "Script class not found \"$scriptClass\"".PHP_EOL;
+        continue;
+    }
 
-    /** @var BaseScript $script */
-    $script = new $scriptClass();
-    $script->run();
+    echo "Executing \"$scriptClass\".".PHP_EOL;
+
+    try {
+        /** @var BaseScript $script */
+        $script = new $scriptClass();
+        $script->run();
+    } catch (Throwable $throwable) {
+        echo "Script failed \"$scriptClass\": ".$throwable->getMessage().PHP_EOL;
+        exit(1);
+    }
 
     echo '['.date(DateTime::ATOM)."] End \"$scriptClass\"".PHP_EOL;
 }

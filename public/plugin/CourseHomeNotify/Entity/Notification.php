@@ -13,16 +13,16 @@ class Notification
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    private ?int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'content', type: 'text')]
-    private string $content;
+    private string $content = '';
 
     #[ORM\Column(name: 'expiration_link', type: 'string')]
-    private string $expirationLink;
+    private string $expirationLink = '';
 
     #[ORM\Column(name: 'hash', type: 'string')]
-    private string $hash;
+    private string $hash = '';
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]

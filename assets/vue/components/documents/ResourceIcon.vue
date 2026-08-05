@@ -4,6 +4,10 @@
     icon="folder-generic"
   />
   <BaseIcon
+    v-else-if="resourceData.filetype === 'link'"
+    icon="link"
+  />
+  <BaseIcon
     v-else-if="isImage(resourceData)"
     icon="file-image"
   />

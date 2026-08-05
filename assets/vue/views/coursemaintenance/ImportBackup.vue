@@ -52,6 +52,7 @@
             <input
               type="radio"
               class="peer"
+              name="backup_type"
               value="local"
               v-model="backupType"
             />
@@ -76,25 +77,21 @@
             <input
               type="radio"
               class="peer"
+              name="backup_type"
               value="server"
               v-model="backupType"
             />
             <span class="text-sm text-gray-90">{{ t("server file") }}</span>
           </label>
-          <select
+          <BaseSelect
             v-if="backupType === 'server'"
+            id="import-backup-server"
             v-model="serverFilename"
-            class="w-full rounded border border-gray-25 p-2 text-sm"
-          >
-            <option value="">{{ t("Select a backup file") }}</option>
-            <option
-              v-for="b in backups"
-              :key="b.file"
-              :value="b.file"
-            >
-              {{ b.label }}
-            </option>
-          </select>
+            :label="t('Backup file')"
+            :options="serverOptions"
+            name="backup_server"
+            :placeholder="t('Select a backup file')"
+          />
         </div>
       </div>
 
@@ -106,6 +103,7 @@
           <label class="flex items-center gap-2">
             <input
               type="radio"
+              name="import_option"
               value="full_backup"
               v-model="importOption"
             />
@@ -114,6 +112,7 @@
           <label class="flex items-center gap-2">
             <input
               type="radio"
+              name="import_option"
               value="select_items"
               v-model="importOption"
             />
@@ -128,6 +127,7 @@
               <label class="flex items-center gap-2">
                 <input
                   type="radio"
+                  name="same_file_name_option"
                   :value="1"
                   v-model.number="sameFileNameOption"
                 />
@@ -136,6 +136,7 @@
               <label class="flex items-center gap-2">
                 <input
                   type="radio"
+                  name="same_file_name_option"
                   :value="2"
                   v-model.number="sameFileNameOption"
                 />
@@ -144,6 +145,7 @@
               <label class="flex items-center gap-2">
                 <input
                   type="radio"
+                  name="same_file_name_option"
                   :value="3"
                   v-model.number="sameFileNameOption"
                 />
@@ -155,20 +157,20 @@
       </div>
 
       <div class="col-span-full flex justify-end gap-3">
-        <button
-          class="btn-secondary"
-          @click="resetAll"
+        <BaseButton
+          :label="t('Reset')"
+          icon="refresh"
+          type="tertiary-alternative"
           :disabled="loading"
-        >
-          <i class="mdi mdi-refresh"></i> {{ t("Reset") }}
-        </button>
-        <button
-          class="btn-primary"
-          @click="nextFromStep1"
+          @click="resetAll"
+        />
+        <BaseButton
+          :label="t('Continue')"
+          icon="arrow-right"
+          type="primary"
           :disabled="loading || !canContinueFromStep1"
-        >
-          <i class="mdi mdi-arrow-right"></i> {{ t("Continue") }}
-        </button>
+          @click="nextFromStep1"
+        />
       </div>
     </section>
 
@@ -185,20 +187,20 @@
         </template>
       </CMInfo>
       <div class="flex justify-between">
-        <button
-          class="btn-secondary"
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
+          :disabled="loading"
           @click="step = 1"
+        />
+        <BaseButton
+          :label="t('Import backup')"
+          icon="import"
+          type="success"
           :disabled="loading"
-        >
-          <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
-        </button>
-        <button
-          class="btn-primary"
           @click="doRestore"
-          :disabled="loading"
-        >
-          <i class="mdi mdi-database-import-outline"></i> {{ t("Import backup") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -222,20 +224,20 @@
       />
 
       <div class="flex justify-between">
-        <button
-          class="btn-secondary"
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
+          :disabled="loading"
           @click="step = 1"
+        />
+        <BaseButton
+          :label="t('Import selection')"
+          icon="import"
+          type="success"
           :disabled="loading"
-        >
-          <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
-        </button>
-        <button
-          class="btn-primary"
           @click="doRestore"
-          :disabled="loading"
-        >
-          <i class="mdi mdi-database-import-outline"></i> {{ t("Import selection") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -254,6 +256,8 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import svc from "../../services/courseMaintenance"
 import ResourceSelector from "../../components/coursemaintenance/ResourceSelector.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -284,6 +288,9 @@ const canContinueFromStep1 = computed(() => {
   if (backupType.value === "server") return !!serverFilename.value
   return false
 })
+
+/* Server backups as BaseSelect options ({ label, value }) */
+const serverOptions = computed(() => backups.value.map((b) => ({ label: b.label, value: b.file })))
 
 watch(backupType, (v) => {
   if (v === "local") serverFilename.value = ""

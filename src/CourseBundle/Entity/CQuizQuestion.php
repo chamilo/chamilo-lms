@@ -16,6 +16,9 @@ use Stringable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 /**
  * CQuizQuestion.
  */
@@ -332,6 +335,13 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
         return $this->mandatory;
     }
 
+    public function setMandatory(int $mandatory): self
+    {
+        $this->mandatory = $mandatory;
+
+        return $this;
+    }
+
     /**
      * @return CQuizQuestionOption[]|Collection
      */
@@ -389,7 +399,22 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
 
     public function getResourceName(): string
     {
-        return $this->getQuestion();
+        $question = html_entity_decode(
+            strip_tags($this->getQuestion()),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
+        $question = preg_replace('/\s+/u', ' ', trim($question));
+
+        if (null === $question || '' === $question) {
+            return 'question-'.($this->iid ?? 'unknown');
+        }
+
+        if (mb_strlen($question) > 255) {
+            return mb_substr($question, 0, 252).'...';
+        }
+
+        return $question;
     }
 
     public function setResourceName(string $name): self

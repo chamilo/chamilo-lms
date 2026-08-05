@@ -226,7 +226,11 @@ class EvalForm extends FormValidator
 		      <td align="left" >'.$user['official_code'].'</td>
 		      <td align="left" >'.$user['username'].'</td>
 		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
+		       <td align="right">
+                   <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
+                       {element}
+                       <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                   </div>
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
 		   </tr>';
@@ -238,6 +242,9 @@ class EvalForm extends FormValidator
                     false,
                     [
                         'maxlength' => 5,
+                        'size' => 4,
+                        'style' => 'width: 6rem; max-width: 6rem;',
+                        'class' => 'text-right',
                     ],
                     false,
                     0,
@@ -352,7 +359,12 @@ class EvalForm extends FormValidator
         $firstUser = true;
         foreach ($users as $user) {
             $element_name = 'score['.$user[0].']';
-            $scoreColumnProperties = ['maxlength' => 5];
+            $scoreColumnProperties = [
+                'maxlength' => 5,
+                'size' => 4,
+                'style' => 'width: 6rem; max-width: 6rem;',
+                'class' => 'text-right',
+            ];
             if ($firstUser) {
                 $scoreColumnProperties['autofocus'] = '';
                 $firstUser = false;
@@ -382,7 +394,11 @@ class EvalForm extends FormValidator
                 <td align="left" >'.$user[4].'</td>
                 <td align="left" >'.$user[1].'</td>
                 '.$user_info.'
-                <td align="left">{element} / '.$this->evaluation_object->get_max().'
+                <td align="right">
+                    <div class="inline-flex w-full items-center justify-end gap-1 whitespace-nowrap">
+                        {element}
+                        <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                    </div>
                     <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
                 </td>
             </tr>';
@@ -410,24 +426,34 @@ class EvalForm extends FormValidator
         $userInfo = api_get_user_info($this->result_object->get_user_id());
         $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
+        $renderer = &$this->defaultRenderer();
         $model = ExerciseLib::getCourseScoreModel();
 
         if (empty($model)) {
             $this->addFloat(
                 'score',
-                [
-                    get_lang('Score'),
-                    null,
-                    '/ '.$this->evaluation_object->get_max(),
-                ],
+                get_lang('Score'),
                 false,
                 [
                     'size' => '4',
                     'maxlength' => '5',
+                    'style' => 'width: 6rem; max-width: 6rem;',
+                    'class' => 'text-right',
                 ],
                 false,
                 0,
                 $this->evaluation_object->get_max()
+            );
+            $renderer->setElementTemplate(
+                '<div class="field">
+                    <label class="form-label">{label}</label>
+                    <div class="inline-flex items-center justify-start gap-1 whitespace-nowrap">
+                        {element}
+                        <span class="text-sm text-gray-700">/ '.$this->evaluation_object->get_max().'</span>
+                    </div>
+                    <!-- BEGIN error --><div class="mt-1 text-sm text-danger">{error}</div><!-- END error -->
+                </div>',
+                'score'
             );
             $this->setDefaults(
                 [

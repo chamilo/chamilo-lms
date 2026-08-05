@@ -12,6 +12,7 @@
  * @author Bert Steppé
  */
 require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__.'/../inc/lib/exercise.lib.php';
 api_block_anonymous_users();
 $this_section = SECTION_COURSES;
 
@@ -45,40 +46,57 @@ if (!empty($doExerciseUrl)) {
     $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
         .http_build_query(['sid' => $session_id, 'cid' => $courseId]);
     if (isset($_GET['gradebook'])) {
-        $url .= '&gradebook=view&exerciseId='.((int) $_GET['exerciseId']);
+        $exerciseId = (int) $_GET['exerciseId'];
+        $legacyOverviewUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
+            [
+                'sid' => $session_id,
+                'cid' => $courseId,
+                'gradebook' => $gradebook,
+                'origin' => '',
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+                'exerciseId' => $exerciseId,
+            ]
+        );
+        $url = ExerciseLib::buildVueOverviewUrl(
+            $exerciseId,
+            [
+                'gradebook' => $gradebook,
+                'origin' => '',
+                'learnpath_id' => '',
+                'learnpath_item_id' => '',
+            ],
+            (int) $courseId,
+            (int) $session_id,
+            isset($_GET['gid']) ? (int) $_GET['gid'] : (int) api_get_group_id()
+        ) ?? $legacyOverviewUrl;
 
-        // Check if exercise is inserted inside a LP, if that's the case
-        $exerciseId = $_GET['exerciseId'];
-        $exercise = new Exercise();
-        $exercise->read($exerciseId);
-        if (!empty($exercise->id)) {
-            if ($exercise->exercise_was_added_in_lp) {
-                if (!empty($exercise->lpList)) {
-                    // If the exercise was added once redirect to the LP
-                    $firstLp = $exercise->getLpBySession($session_id);
-                    if (isset($firstLp['lp_id'])) {
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'
-                            .http_build_query(
-                                [
-                                    'lp_id' => $firstLp['lp_id'],
-                                    'action' => 'view',
-                                    'isStudentView' => 'true',
-                                ]
-                            );
-                    }
+        // Exercise IDs can be reused by migrated LP items from other courses.
+        // Redirect only when exactly one LP in the current course contains it.
+        $lpList = Exercise::getLpListFromExercise($exerciseId, (int) $courseId);
+
+        if (1 === count($lpList)) {
+            $firstLp = reset($lpList);
+            $lpId = (int) ($firstLp['lp_id'] ?? 0);
+            $itemId = (int) ($firstLp['item_id'] ?? 0);
+            $course = api_get_course_entity((int) $courseId);
+            $courseNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+            if ($lpId > 0 && $courseNodeId > 0) {
+                $params = [
+                    'cid' => (int) $courseId,
+                    'sid' => (int) $session_id,
+                    'gid' => isset($_GET['gid']) ? (int) $_GET['gid'] : (int) api_get_group_id(),
+                    'gradebook' => 1,
+                    'origin' => 'gradebook',
+                    'isStudentView' => 'true',
+                ];
+                if ($itemId > 0) {
+                    $params['item_id'] = $itemId;
                 }
-            } else {
-                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.http_build_query(
-                    [
-                        'sid' => $session_id,
-                        'cid' => $courseId,
-                        'gradebook' => $gradebook,
-                        'origin' => '',
-                        'learnpath_id' => '',
-                        'learnpath_item_id' => '',
-                        'exerciseId' => (int) $_GET['exerciseId'],
-                    ]
-                );
+
+                $url = rtrim(api_get_path(WEB_PATH), '/').'/resources/lp/'
+                    .$courseNodeId.'/'.$lpId.'/runtime?'.http_build_query($params);
             }
         }
     }

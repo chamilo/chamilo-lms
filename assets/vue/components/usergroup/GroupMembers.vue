@@ -51,7 +51,7 @@
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import BaseButton from "../basecomponents/BaseButton.vue"
-import axios from "axios"
+import usergroupService from "../../services/usergroupService"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 
 const route = useRoute()
@@ -61,8 +61,8 @@ const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
 const fetchMembers = async (groupId) => {
   if (groupId.value) {
     try {
-      const response = await axios.get(`/api/usergroups/${groupId.value}/members`)
-      members.value = response.data["hydra:member"].map((member) => ({
+      const { items } = await usergroupService.getMembers(groupId.value)
+      members.value = items.map((member) => ({
         id: member.id,
         name: member.username,
         role: member.relationType === 1 ? "Admin" : "Member",

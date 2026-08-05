@@ -405,6 +405,9 @@ class SortableTable extends HTML_Table
                 method="post"
                 action="'.api_get_self().'?'.$params.'"
                 name="form_'.$this->table_name.'">';
+            // CSRF token for the bulk-action POST. Kept in the request body only
+            // (not the action URL) to avoid leaking it through Referer/logs.
+            $html .= '<input type="hidden" name="sec_token" value="'.Security::get_existing_token().'" />';
         }
 
         //$html .= '<div class="table-responsive">'.$content.'</div>';
@@ -798,13 +801,24 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
+        $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;" data-no-autofocus="1">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
         $param[$this->param_prefix.'column'] = $this->column;
 
         if (is_array($this->additional_parameters)) {
             $param = array_merge($param, $this->additional_parameters);
+        }
+
+        // Preserve course/session context so the form submission doesn't lose access rights
+        $cidreq = api_get_cidreq();
+        if (!empty($cidreq)) {
+            parse_str($cidreq, $cidreqParams);
+            foreach ($cidreqParams as $key => $value) {
+                if (!isset($param[$key])) {
+                    $param[$key] = $value;
+                }
+            }
         }
 
         foreach ($param as $key => $value) {

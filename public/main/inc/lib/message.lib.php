@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -40,12 +41,11 @@ class MessageManager
 
                 $deleteLink = '';
                 if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
-                    $deleteLink = '<button title="'.addslashes(get_lang('Delete message')).'"
-                       onclick="event.stopPropagation(); if(confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) {
-                       window.location.href=\''.$url.'&action=delete_message&message_id='.$messageId.'\';
-                       } return false;"
-                       class="ml-2 inline-flex items-center">'.
-                        Display::returnPrimeIcon('trash', 'lg').'</button>';
+                    $deleteLink = '<a title="'.addslashes(get_lang('Delete message')).'"
+                       href="'.$url.'&action=delete_message&message_id='.$messageId.'"
+                       onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) { return false; }"
+                       class="ml-2">'.
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete message')).'</a>';
                 }
 
                 $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.
@@ -174,7 +174,7 @@ class MessageManager
         // Disabling messages depending the pausetraining plugin (only relevant if email notifications are enabled).
         $allowPauseFormation =
             $sendEmail &&
-            Container::getPluginHelper()->isPluginEnabled('PauseTraining') &&
+            PauseTraining::create()->isEnabled() &&
             'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         if ($allowPauseFormation) {
@@ -264,7 +264,7 @@ class MessageManager
         } elseif ($totalFileSize > (int) api_get_setting('message_max_upload_filesize')) {
             $warning = sprintf(
                 get_lang('Files size exceeds'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
+                \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(api_get_setting('message_max_upload_filesize'))
             );
 
             Display::addFlash(Display::return_message($warning, 'warning'));
@@ -1270,7 +1270,7 @@ class MessageManager
             $attachIcon = Display::getMdiIcon('paperclip');
             $repo = Container::getMessageAttachmentRepository();
             foreach ($files as $file) {
-                $size = format_file_size($file->getSize());
+                $size = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file->getSize());
                 $comment = Security::remove_XSS($file->getComment());
                 $filename = Security::remove_XSS($file->getFilename());
                 $url = $repo->getResourceFileUrl($file);
@@ -1492,12 +1492,12 @@ class MessageManager
         $layoutContent = '';
         $emailbody = '';
         $mailTemplateManager = new MailTemplateManager();
-        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
-        if (empty($templateText)) {
-        } else {
-            // custom procedure to load a template as a string (doesn't use cache so may slow down)
-            $template = $tplMailBody->twig->createTemplate($templateText);
-            $emailbody = $template->render($tplMailBody->params);
+        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.html.twig');
+        if (!empty($templateText)) {
+            // Stored mail templates are admin-edited and therefore untrusted: render
+            // them through a sandboxed Twig environment instead of compiling the raw
+            // string with the full application Twig (which would allow SSTI → RCE).
+            $emailbody = MailTemplateManager::renderSandboxedTemplate($templateText, $tplMailBody->params);
         }
         if (empty($emailbody)) {
             $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin_approval.tpl');

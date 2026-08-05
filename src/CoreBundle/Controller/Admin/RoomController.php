@@ -7,8 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -16,13 +20,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class RoomController extends BaseController
 {
     #[Route('/admin/rooms/with-counts', name: 'admin_rooms_with_counts', methods: ['GET'])]
-    public function withCounts(EntityManagerInterface $em): JsonResponse
+    public function withCounts(EntityManagerInterface $em, AccessUrlHelper $accessUrlHelper): JsonResponse
     {
+        $accessUrlId = $accessUrlHelper->getCurrent()?->getId();
+        if (null === $accessUrlId) {
+            return $this->json([]);
+        }
         $qb = $em->createQueryBuilder();
-        $qb->select('r.id, r.title, r.description, b.id AS branchId, b.title AS branchTitle, COUNT(c.id) AS courseCount')
+        $qb->select('r.id, r.title, r.description, r.floorNumber, r.capacity, b.id AS branchId, b.title AS branchTitle, COUNT(c.id) AS courseCount')
             ->from('Chamilo\CoreBundle\Entity\Room', 'r')
             ->leftJoin('r.branch', 'b')
             ->leftJoin('Chamilo\CoreBundle\Entity\Course', 'c', 'WITH', 'c.room = r.id')
+            ->where('IDENTITY(b.url) = :accessUrlId')
+            ->setParameter('accessUrlId', $accessUrlId)
             ->groupBy('r.id')
             ->orderBy('r.title', 'ASC')
         ;
@@ -34,6 +44,8 @@ class RoomController extends BaseController
                 'id' => $row['id'],
                 'title' => $row['title'],
                 'description' => $row['description'],
+                'floorNumber' => $row['floorNumber'],
+                'capacity' => $row['capacity'],
                 'branch' => [
                     'id' => $row['branchId'],
                     'title' => $row['branchTitle'],
@@ -46,13 +58,16 @@ class RoomController extends BaseController
     }
 
     #[Route('/admin/rooms/{id}/courses', name: 'admin_room_courses', methods: ['GET'])]
-    public function courses(int $id, EntityManagerInterface $em): JsonResponse
+    public function courses(Room $room, EntityManagerInterface $em, RoomAccessUrlHelper $roomAccessUrlHelper): JsonResponse
     {
+        if (!$roomAccessUrlHelper->isRoomAllowed($room)) {
+            throw new NotFoundHttpException();
+        }
         $qb = $em->createQueryBuilder();
         $qb->select('c.id, c.title, c.code')
             ->from('Chamilo\CoreBundle\Entity\Course', 'c')
             ->where('c.room = :roomId')
-            ->setParameter('roomId', $id)
+            ->setParameter('roomId', $room->getId())
             ->orderBy('c.title', 'ASC')
         ;
 

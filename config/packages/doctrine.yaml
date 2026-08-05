@@ -1,6 +1,5 @@
 doctrine:
     dbal:
-        server-version: 'mariadb-10.4.14'
         dbname: '%env(DATABASE_NAME)%'
         user: '%env(DATABASE_USER)%'
         password: '%env(DATABASE_PASSWORD)%'
@@ -15,8 +14,8 @@ doctrine:
             collate: utf8mb4_unicode_ci
             row_format: DYNAMIC
         types:
-            json: Doctrine\DBAL\Types\JsonType
-            json_array: Doctrine\DBAL\Types\JsonType
+            json: Chamilo\CoreBundle\Doctrine\Type\TolerantJsonType
+            json_array: Chamilo\CoreBundle\Doctrine\Type\TolerantJsonType
             uuid: Symfony\Bridge\Doctrine\Types\UuidType
             datetime: SimPod\DoctrineUtcDateTime\UTCDateTimeType
             datetimetz: SimPod\DoctrineUtcDateTime\UTCDateTimeType
@@ -94,6 +93,8 @@ when@test:
         dbal:
             # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # dama/doctrine-test-bundle >=8 wraps each test in a nested transaction via savepoints
+            use_savepoints: true
 
 when@prod:
     doctrine:

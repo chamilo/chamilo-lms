@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Trong khoảng thời gian này, nội dung nh
 $strings['HtmlCode'] = 'Mã HTML';
 $strings['HtmlCodeHelp'] = 'Mã HTML được chia sẻ, do dịch vụ bên ngoài cung cấp khi yêu cầu chia sẻ ở định dạng Nhúng.';
 $strings['LaunchContent'] = 'Khởi chạy nội dung';
+
+$strings['InvalidDateRange'] = 'Ngày bắt đầu phải sớm hơn hoặc bằng ngày kết thúc.';
+
+$strings['InvalidSecurityToken'] = 'Mã thông báo bảo mật không hợp lệ. Vui lòng tải lại trang và thử lại.';

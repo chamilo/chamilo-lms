@@ -89,7 +89,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_category ADD c_id INT DEFAULT NULL');
-            $this->addSql('UPDATE gradebook_category SET c_id = (SELECT id FROM course WHERE code = course_code)');
+            $this->addSql('UPDATE gradebook_category category LEFT JOIN course course ON course.code = category.course_code SET category.c_id = course.id');
             $this->addSql('ALTER TABLE gradebook_category DROP course_code');
             $this->addSql(
                 'ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C70591D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
@@ -141,7 +141,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $table = $schema->getTable('gradebook_evaluation');
         if (!$table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_evaluation ADD c_id INT DEFAULT NULL');
-            $this->addSql('UPDATE gradebook_evaluation SET c_id = (SELECT id FROM course WHERE code = course_code)');
+            $this->addSql('UPDATE gradebook_evaluation evaluation LEFT JOIN course course ON course.code = evaluation.course_code SET evaluation.c_id = course.id');
             $this->addSql('ALTER TABLE gradebook_evaluation DROP course_code');
             $this->addSql(
                 'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
@@ -190,7 +190,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $table = $schema->getTable('gradebook_link');
         if (false === $table->hasColumn('c_id')) {
             $this->addSql('ALTER TABLE gradebook_link ADD c_id INT DEFAULT NULL');
-            $this->addSql('UPDATE gradebook_link SET c_id = (SELECT id FROM course WHERE code = course_code)');
+            $this->addSql('UPDATE gradebook_link link_row LEFT JOIN course course ON course.code = link_row.course_code SET link_row.c_id = course.id');
             $this->addSql('ALTER TABLE gradebook_link DROP course_code');
             $this->addSql(
                 'ALTER TABLE gradebook_link ADD CONSTRAINT FK_4F0F595F91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
@@ -294,11 +294,14 @@ class Version20181025064351 extends AbstractMigrationChamilo
         if (false === $table->hasColumn('downloaded_at')) {
             $this->addSql('ALTER TABLE gradebook_certificate ADD downloaded_at DATETIME DEFAULT NULL;');
             $this->addSql(
-                'UPDATE gradebook_certificate gc SET downloaded_at = (
-                        SELECT field_value from extra_field e
-                        INNER JOIN extra_field_values v on v.field_id = e.id
-                        WHERE variable = "downloaded_at" and item_type = 11 and item_id = gc.id
-                    )'
+                'UPDATE gradebook_certificate certificate
+                 INNER JOIN extra_field ef
+                    ON ef.variable = "downloaded_at"
+                   AND ef.item_type = 11
+                 INNER JOIN extra_field_values efv
+                    ON efv.field_id = ef.id
+                   AND efv.item_id = certificate.id
+                 SET certificate.downloaded_at = efv.field_value'
             );
         }
 

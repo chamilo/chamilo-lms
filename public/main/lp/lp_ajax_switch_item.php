@@ -14,9 +14,11 @@
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 echo ScormApi::switchItem(
     $_REQUEST['lid'],
-    $_REQUEST['uid'],
+    api_get_user_id(),
     $_REQUEST['vid'],
     $_REQUEST['iid'],
     $_REQUEST['next']

@@ -48,7 +48,10 @@ class SessionCategory implements Stringable
     protected AccessUrl $url;
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'category')]
     protected Collection $sessions;
-    #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read', 'user_subscriptions:sessions'])]
+    #[Groups([
+        'session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read',
+        'user_subscriptions:sessions',
+    ])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false, unique: false)]
     protected string $title;
@@ -56,23 +59,27 @@ class SessionCategory implements Stringable
     protected ?DateTime $dateStart = null;
     #[ORM\Column(name: 'date_end', type: 'date', nullable: true, unique: false)]
     protected ?DateTime $dateEnd = null;
+
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
     }
+
     public function __toString(): string
     {
         return $this->title;
     }
+
+    public function getUrl(): AccessUrl
+    {
+        return $this->url;
+    }
+
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 
         return $this;
-    }
-    public function getUrl(): AccessUrl
-    {
-        return $this->url;
     }
 
     /**
@@ -84,19 +91,15 @@ class SessionCategory implements Stringable
     {
         return $this->id;
     }
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
 
-        return $this;
-    }
     public function getTitle(): string
     {
         return $this->title;
     }
-    public function setDateStart(DateTime $dateStart): self
+
+    public function setTitle(string $title): self
     {
-        $this->dateStart = $dateStart;
+        $this->title = $title;
 
         return $this;
     }
@@ -110,9 +113,10 @@ class SessionCategory implements Stringable
     {
         return $this->dateStart;
     }
-    public function setDateEnd(DateTime $dateEnd): self
+
+    public function setDateStart(DateTime $dateStart): self
     {
-        $this->dateEnd = $dateEnd;
+        $this->dateStart = $dateStart;
 
         return $this;
     }
@@ -125,5 +129,12 @@ class SessionCategory implements Stringable
     public function getDateEnd()
     {
         return $this->dateEnd;
+    }
+
+    public function setDateEnd(DateTime $dateEnd): self
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
     }
 }

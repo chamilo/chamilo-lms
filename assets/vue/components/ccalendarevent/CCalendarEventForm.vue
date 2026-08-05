@@ -8,20 +8,36 @@
       :label="t('Title')"
     />
 
-    <BaseCalendar
-      id="calendar-id"
-      v-model="dateRange"
-      :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
-      :label="t('Date')"
-      show-time
-      type="range"
-    />
+    <div class="grid gap-4 md:grid-cols-2">
+      <BaseCalendar
+        id="calendar-start-date"
+        v-model="item.startDate"
+        :is-invalid="v$.item.startDate.$invalid"
+        :label="t('Start date')"
+        show-time
+      />
+
+      <BaseCalendar
+        id="calendar-end-date"
+        v-model="item.endDate"
+        :is-invalid="v$.item.endDate.$invalid"
+        :label="t('End date')"
+        show-time
+      />
+    </div>
 
     <BaseTinyEditor
       v-model="item.content"
       :required="false"
       editor-id="calendar-event-content"
     />
+
+    <BaseAdvancedSettingsButton v-if="showResourceLanguageAdvancedSettings" v-model="showAdvancedSettings">
+      <ResourceLanguageSelector
+        id="calendar-event-language"
+        v-model="item.language"
+      />
+    </BaseAdvancedSettingsButton>
 
     <div class="m-4 flex flex-col gap-2">
       <label
@@ -86,7 +102,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, onMounted, watchEffect } from "vue"
+import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -95,15 +111,46 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const roomOptions = ref([])
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
+})
 
 const props = defineProps({
   values: {
@@ -189,13 +236,6 @@ const v$ = useVuelidate(rules, { item })
 
 defineExpose({
   v$,
-})
-
-const dateRange = ref([item.value?.startDate, item.value?.endDate])
-
-watchEffect(() => {
-  item.value.startDate = dateRange.value[0] ?? null
-  item.value.endDate = dateRange.value[1] ?? null
 })
 
 watch(

@@ -85,16 +85,18 @@ switch ($action) {
         exit;
     case 'disable_all_except_default':
         $allLanguages = SubLanguageManager::getAllLanguages();
+        $platformLanguageIsocode = api_get_setting('language.platform_language');
         $failedDisabledLanguages = '';
         $checkFailed = false;
         foreach ($allLanguages as $language) {
+            if ($language['isocode'] === $platformLanguageIsocode) {
+                continue;
+            }
             if (false == SubLanguageManager::check_if_language_is_used((int) $language['id'])) {
                 SubLanguageManager::make_unavailable_language((int) $language['id']);
             } else {
-                if ((int) SubLanguageManager::get_platform_language_id() !== (int) $language['id']) {
-                    $failedDisabledLanguages .= ' - '.$language['english_name'].'<br />';
-                    $checkFailed = true;
-                }
+                $failedDisabledLanguages .= ' - '.$language['english_name'].'<br />';
+                $checkFailed = true;
             }
         }
 
@@ -282,15 +284,16 @@ while ($row = Database::fetch_array($result_select)) {
             $checked = ' checked="checked" ';
         }
 
+        $originalName = htmlspecialchars($row['original_name'], ENT_QUOTES, 'UTF-8');
         $row_td[] = '
             <input type="hidden" name="edit_id" value="'.$id.'" />
-            <input type="text" name="txt_name" value="'.$row['original_name'].'" />
+            <input type="text" name="txt_name" value="'.$originalName.'" />
             <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['isocode'].'" />
-            <label for="platformlanguage">'.sprintf(get_lang('%s as platform language'), $row['original_name']).'</label>
+            <label for="platformlanguage">'.sprintf(get_lang('%s as platform language'), $originalName).'</label>
             <input class="btn btn--primary" type="submit" name="Submit" value="'.get_lang('Validate').'" />
             <a name="value" />';
     } else {
-        $row_td[] = $row['original_name'];
+        $row_td[] = htmlspecialchars($row['original_name'], ENT_QUOTES, 'UTF-8');
     }
 
     $row_td[] = $row['english_name'].' ('.$row['isocode'].')';

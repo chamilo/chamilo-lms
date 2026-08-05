@@ -138,6 +138,11 @@ if ($form->validate()) {
                     $plugin->getSubscriptionSuccessMessage($sale)
                 );
                 $plugin->storePayouts((int) $sale['id']);
+
+                $paypalTransactionId = trim((string) ($confirmPayments['PAYMENTINFO_0_TRANSACTIONID'] ?? ''));
+                if ('' !== $paypalTransactionId) {
+                    $plugin->updateSaleGatewayTransactionId((int) $sale['id'], $paypalTransactionId);
+                }
             } else {
                 Display::addFlash(
                     Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')

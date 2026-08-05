@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Montaĵo de statika html-enhavo.';
 $strings['block_title'] = 'Titolo de la bloko';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Enhavo';

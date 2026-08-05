@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Wyświetl statyczną zawartość HTML.';
 $strings['block_title'] = 'Tytuł bloku';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Treść';

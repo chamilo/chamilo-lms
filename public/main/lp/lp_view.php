@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
@@ -19,6 +20,7 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
 
 api_protect_course_script();
 $origin = api_get_origin();
@@ -56,18 +58,83 @@ if (!$lp) {
 }
 /** @var learnpath $oLP */
 $oLP = Session::read('oLP');
-// Check if the learning path is visible for student - (LP requisites)
+// Check if the learning path is visible for student - (LP requisites).
 if (!api_is_allowed_to_create_course()) {
-    if (!api_is_allowed_to_edit(null, true, false, false) &&
-        !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
-    ) {
+    $canEditLp = api_is_allowed_to_edit(null, true, false, false);
+
+    if (!$canEditLp && !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)) {
+        $showUnavailableLpWithDates = 'true' === api_get_setting(
+                'lp.lp_start_and_end_date_visible_in_student_view'
+            );
+
+        if ($showUnavailableLpWithDates && $lp->getDisplayNotAllowedLp()) {
+            $publishedOn = $lp->getPublishedOn();
+            $expiredOn = $lp->getExpiredOn();
+            $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
+            $isUnavailableByDate = false;
+            $availabilityDates = [];
+
+            if ($publishedOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available from %s'),
+                    api_get_local_time($publishedOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($publishedOn > $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($expiredOn instanceof DateTimeInterface) {
+                $availabilityDates[] = sprintf(
+                    get_lang('Available until %s'),
+                    api_get_local_time($expiredOn->format('Y-m-d H:i:s'))
+                );
+
+                if ($expiredOn < $now) {
+                    $isUnavailableByDate = true;
+                }
+            }
+
+            if ($isUnavailableByDate) {
+                Display::addFlash(
+                    Display::return_message(
+                        implode('<br>', $availabilityDates),
+                        'warning'
+                    )
+                );
+
+                header(
+                    'Location: '.api_get_path(WEB_PATH)
+                    .'resources/lp/'
+                    .api_get_course_entity($course_id)->getResourceNode()->getId()
+                    .'?'.api_get_cidreq()
+                );
+                exit;
+            }
+        }
+
         api_not_allowed(true);
     }
 }
 
 // Checking visibility (eye icon)
 $visibility = $lp->isVisible($course, $session);
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
 
+if (!$canEditLp) {
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lp->getPublishedOn();
+    $expiredOn = $lp->getExpiredOn();
+
+    if (
+        ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) ||
+        ($expiredOn instanceof DateTimeInterface && $expiredOn < $now)
+    ) {
+        api_not_allowed(true);
+    }
+}
 if (false === $visibility &&
     !api_is_allowed_to_edit(false, true, false, false)
 ) {
@@ -260,6 +327,30 @@ foreach ($get_toc_list as $toc) {
         $type_quiz = 'quiz' === $toc['type'];
     }
 }
+
+$aiProviders = json_decode((string) api_get_setting('ai_helpers.ai_providers'), true);
+$aiProviders = \is_array($aiProviders) ? $aiProviders : [];
+$hasAiTextProvider = false;
+foreach ($aiProviders as $providerConfig) {
+    if (!\is_array($providerConfig)) {
+        continue;
+    }
+
+    if (isset($providerConfig['text']) && \is_array($providerConfig['text'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+
+    if (isset($providerConfig['model']) || isset($providerConfig['url'])) {
+        $hasAiTextProvider = true;
+        break;
+    }
+}
+$aiLearningHelperEnabled = (
+    'document' === $itemType
+    && $aiFeatureAccessHelper->isFeatureEnabledForCourse('content_analyser', api_get_course_int_id())
+    && $hasAiTextProvider
+);
 
 if (!isset($src)) {
     $src = null;
@@ -603,7 +694,6 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
     $template->assign('time_progress_perc', $time_progress_perc);
     $template->assign('time_progress_value', $time_progress_value);
-    // Cronometro
     $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
     $template->assign('hour', $hour);
     $template->assign('minute', date('i', $lpTime));
@@ -611,6 +701,69 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
     $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
 }
 
+$lpFlowNextButton = '';
+$canEditLp = api_is_allowed_to_edit(false, true, false, false);
+$isLpAvailableForCurrentUser = static function (CLp $lpToCheck) use ($course, $session, $canEditLp): bool {
+    if ($canEditLp) {
+        return true;
+    }
+
+    if (!$lpToCheck->isVisible($course, $session)) {
+        return false;
+    }
+
+    if (!learnpath::is_lp_visible_for_student($lpToCheck, api_get_user_id(), $course)) {
+        return false;
+    }
+
+    $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    $publishedOn = $lpToCheck->getPublishedOn();
+    $expiredOn = $lpToCheck->getExpiredOn();
+
+    if ($publishedOn instanceof DateTimeInterface && $publishedOn > $now) {
+        return false;
+    }
+
+    if ($expiredOn instanceof DateTimeInterface && $expiredOn < $now) {
+        return false;
+    }
+
+    return true;
+};
+
+if ('true' === api_get_setting('lp.lp_enable_flow')) {
+    $nextLpId = (int) $lp->getNextLpId();
+    $nextLpInfo = learnpath::getFlowNextLpInfo((int) $lp->getIid(), $nextLpId);
+
+    if (!empty($nextLpInfo)) {
+        $nextLpEntity = $lpRepo->find((int) $nextLpInfo['iid']);
+
+        if ($nextLpEntity && $isLpAvailableForCurrentUser($nextLpEntity)) {
+            $params = [
+                'action' => 'view',
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
+                'gid' => api_get_group_id(),
+                'isStudentView' => $canEditLp ? 'false' : 'true',
+                'lp_id' => (int) $nextLpInfo['iid'],
+            ];
+
+            $nextLpUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query($params);
+
+            $lpFlowNextButton = Display::url(
+                get_lang('Next learning path'),
+                $nextLpUrl,
+                [
+                    'class' => 'btn btn--primary',
+                    'title' => Security::remove_XSS((string) $nextLpInfo['title']),
+                    'target' => '_top',
+                ]
+            );
+        }
+    }
+}
+
+$template->assign('lp_flow_next_button', $lpFlowNextButton);
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', stripslashes($lp->getTitle()));
@@ -630,6 +783,12 @@ $template->assign('data_list', $oLP->getListArrayToc());
 
 $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $lpCurrentItemId);
+
+$template->assign('ai_learning_helper_enabled', (int) $aiLearningHelperEnabled);
+$template->assign('ai_learning_helper_endpoint', api_get_path(WEB_PATH).'ai/lp_learning_helper');
+$template->assign('ai_learning_helper_language', (string) ($courseInfo['language'] ?? 'en'));
+$template->assign('ai_learning_helper_course_id', (int) $course_id);
+$template->assign('ai_learning_helper_session_id', (int) $sessionId);
 
 $menuLocation = 'left';
 if ('false' !== api_get_setting('lp.lp_menu_location')) {

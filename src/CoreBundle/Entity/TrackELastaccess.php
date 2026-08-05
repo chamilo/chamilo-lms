@@ -40,18 +40,6 @@ class TrackELastaccess
     protected int $accessId;
 
     /**
-     * Set accessUserId.
-     *
-     * @return TrackELastaccess
-     */
-    public function setAccessUserId(int $accessUserId)
-    {
-        $this->accessUserId = $accessUserId;
-
-        return $this;
-    }
-
-    /**
      * Get accessUserId.
      *
      * @return int
@@ -62,13 +50,13 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessDate.
+     * Set accessUserId.
      *
      * @return TrackELastaccess
      */
-    public function setAccessDate(DateTime $accessDate)
+    public function setAccessUserId(int $accessUserId)
     {
-        $this->accessDate = $accessDate;
+        $this->accessUserId = $accessUserId;
 
         return $this;
     }
@@ -84,13 +72,13 @@ class TrackELastaccess
     }
 
     /**
-     * Set cId.
+     * Set accessDate.
      *
      * @return TrackELastaccess
      */
-    public function setCId(int $cId)
+    public function setAccessDate(DateTime $accessDate)
     {
-        $this->cId = $cId;
+        $this->accessDate = $accessDate;
 
         return $this;
     }
@@ -106,13 +94,13 @@ class TrackELastaccess
     }
 
     /**
-     * Set accessTool.
+     * Set cId.
      *
      * @return TrackELastaccess
      */
-    public function setAccessTool(string $accessTool)
+    public function setCId(int $cId)
     {
-        $this->accessTool = $accessTool;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -128,13 +116,13 @@ class TrackELastaccess
     }
 
     /**
-     * Set sessionId.
+     * Set accessTool.
      *
      * @return TrackELastaccess
      */
-    public function setSessionId(int $sessionId)
+    public function setAccessTool(string $accessTool)
     {
-        $this->sessionId = $sessionId;
+        $this->accessTool = $accessTool;
 
         return $this;
     }
@@ -147,6 +135,18 @@ class TrackELastaccess
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+
+    /**
+     * Set sessionId.
+     *
+     * @return TrackELastaccess
+     */
+    public function setSessionId(int $sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
 
     /**

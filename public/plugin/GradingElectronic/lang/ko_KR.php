@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = '전자 채점이 비활성화되었습니다';
 $strings['StudentId'] = '학생 ID';
 $strings['ProviderId'] = '제공자 ID';
 $strings['CourseHours'] = '강좌 시간';
+
+$strings['GenerateFile'] = '파일 생성';
+$strings['CourseId'] = '강좌 ID';

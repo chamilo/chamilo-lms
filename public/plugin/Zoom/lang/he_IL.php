@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'וידאו כנס זום';
 $strings['plugin_comment'] = 'שילוב וידאו כנס זום בקורסים ומפגשים';
 
+$strings['accountId'] = 'מזהה חשבון';
+$strings['clientId'] = 'מזהה לקוח';
+$strings['clientSecret'] = 'סוד לקוח';
+$strings['webhookSecretToken'] = 'אסימון סודי של Webhook';
+$strings['apiKey_help'] = 'מפתח API JWT ישן. מומלץ להשתמש במזהה חשבון, מזהה לקוח וסוד לקוח עבור Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'סוד API JWT ישן. מומלץ להשתמש במזהה חשבון, מזהה לקוח וסוד לקוח עבור Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'אסימון אימות Webhook ישן. מומלץ להשתמש באסימון סודי של Webhook.';
+$strings['accountId_help'] = 'מזהה חשבון Zoom Server-to-Server OAuth.';
+$strings['clientId_help'] = 'מזהה לקוח Zoom Server-to-Server OAuth.';
+$strings['clientSecret_help'] = 'סוד לקוח Zoom Server-to-Server OAuth.';
+$strings['webhookSecretToken_help'] = 'אסימון סודי המשמש לאימות בקשות Webhook של Zoom.';
 $strings['apiKey'] = 'מפתח API';
 $strings['apiSecret'] = 'סוד API';
 $strings['verificationToken'] = 'אסימון אימות';

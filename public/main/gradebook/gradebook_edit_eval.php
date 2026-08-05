@@ -63,7 +63,7 @@ if ($form->validate()) {
     $evaluation->setVisible(1);
 
     if (isset($values['min_score'])) {
-        $evaluation->setMinScore($values['min_score']);
+        $evaluation->setMinScore((float) $values['min_score']);
     }
 
     $entityManager->flush();

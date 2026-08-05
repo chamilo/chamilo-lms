@@ -66,7 +66,7 @@ class CForumPostRepository extends ResourceRepository
      * (p.status IS NULL AND p.posterId = {$userId})";
      * }
      * $dql = "SELECT p
-     * FROM ChamiloCourseBundle:CForumPost p
+     * FROM Chamilo\CourseBundle\Entity\CForumPost p
      * WHERE
      * p.thread = :thread AND
      * p.cId = :course AND
@@ -86,9 +86,15 @@ class CForumPostRepository extends ResourceRepository
     public function delete(ResourceInterface $resource): void
     {
         /** @var CForumPost $resource */
+        $thread = $resource->getThread();
+        if (null !== $thread) {
+            $resource->setParent($thread);
+        }
+
         $attachments = $resource->getAttachments();
 
         foreach ($attachments as $attachment) {
+            $attachment->setParent($resource);
             $this->getEntityManager()->remove($attachment);
         }
 

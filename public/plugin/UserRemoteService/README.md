@@ -1,10 +1,44 @@
 User Remote Service Plugin
 ==========================
 
-Appends site-specific iframe-targeted user-identifying links to the menu bar.
-You can also hide the link from the menu and use the redirect link to use it as a link in a course.
+This plugin exposes signed user-specific links to external services.
 
-After activation, configure a __salt__ then select region __menu_administrator__.
+Flow
+----
 
-In the __Administration__ menu, in block __Plugins__,
-you will find a link __User Remote Services__ to manage the services in the main menu (title and URL) and also get the redirect URL to use in a course.
+1. Enable the plugin from the plugin list.
+2. Configure the plugin settings:
+   - Salt: required to generate signed hashes.
+   - Hide links from navigation menu: optional.
+3. Open the plugin administration page and create remote services with HTTP/HTTPS URLs.
+4. Authenticated users can open the service through:
+   - iframe.php?serviceId=ID
+   - redirect.php?serviceId=ID
+
+Generated parameters
+--------------------
+
+Iframe URLs receive:
+
+- username
+- hash
+
+Redirect URLs receive:
+
+- uid
+- hash
+
+The remote service can verify the hash with:
+
+```php
+password_verify($salt.$userId, $hash)
+```
+
+Security notes
+--------------
+
+- Only authenticated Chamilo users can open service links.
+- Service URLs must use HTTP or HTTPS.
+- Empty or invalid service IDs are rejected.
+- The plugin does not create or update Chamilo users.
+- The plugin only signs the current authenticated user and redirects/embeds the configured service.

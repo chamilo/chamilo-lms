@@ -318,13 +318,11 @@ if (isset($_REQUEST['comments']) &&
     }
 
     $useEvaluationPlugin = false;
-    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-        $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
-
-        if (!empty($formula)) {
-            $useEvaluationPlugin = true;
+    if (class_exists('QuestionOptionsEvaluationPlugin')) {
+        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+        if ($pluginEvaluation->isEnabled()) {
+            $formula = $pluginEvaluation->getFormulaForExercise($exerciseId);
+            $useEvaluationPlugin = $pluginEvaluation->shouldApplyFormula($formula);
         }
     }
 
@@ -910,6 +908,7 @@ $gridJs = Display::grid_js(
                 {height:280,reloadAfterSubmit:false}, // edit options
                 {height:280,reloadAfterSubmit:false}, // add options
                 {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
+                {width:750}, // search options
             );
 
             var sgrid = $("#results")[0];

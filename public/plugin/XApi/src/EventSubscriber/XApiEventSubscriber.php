@@ -81,7 +81,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 
@@ -101,7 +101,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onExerciseQuestionAnswered(ExerciseQuestionAnsweredEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_QUESTION_ACTIVE)
         ) {
             return;
@@ -140,7 +140,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onExerciseEnded(ExerciseEndedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_ACTIVE)
         ) {
             return;
@@ -172,7 +172,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onLpItemViewed(LearningPathItemViewedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ITEM_ACTIVE)
         ) {
             return;
@@ -211,7 +211,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onLpEnded(LearningPathEndedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ACTIVE)
         ) {
             return;
@@ -248,7 +248,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -271,7 +271,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -294,7 +294,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemViewed(PortfolioItemViewedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -317,7 +317,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemCommented(PortfolioItemCommentedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -336,7 +336,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemHighlighted(PortfolioItemHighlightedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -359,7 +359,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemDownloaded(PortfolioItemDownloadedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -378,7 +378,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioItemScored(PortfolioItemScoredEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -401,7 +401,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioCommentScored(PortfolioCommentScoredEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;
@@ -424,7 +424,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public function onPortfolioCommentEdited(PortfolioCommentEditedEvent $event): void
     {
         if (
-            !$this->plugin->isEnabled(true)
+            !$this->plugin->isEnabled()
             || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
         ) {
             return;

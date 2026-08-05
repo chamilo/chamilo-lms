@@ -1,7 +1,10 @@
 <template>
   <div>
     <SectionHeader :title="t('Links')" />
-    <BaseToolbar v-if="securityStore.isAuthenticated && canEditLinks">
+    <BaseToolbar
+      v-if="securityStore.isAuthenticated && canEditLinks"
+      class="sticky top-0 z-20 -mx-2 mb-4 rounded-xl border border-gray-20 bg-white/95 px-2 py-2 shadow-sm backdrop-blur"
+    >
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -19,6 +22,20 @@
         icon="file-pdf"
         type="black"
         @click="exportToPDF"
+      />
+      <BaseButton
+        v-if="categories.length"
+        :label="t('Expand all')"
+        icon="unfold"
+        type="secondary"
+        @click="expandAllCategories"
+      />
+      <BaseButton
+        v-if="categories.length"
+        :label="t('Collapse all')"
+        icon="fold"
+        type="secondary"
+        @click="collapseAllCategories"
       />
     </BaseToolbar>
 
@@ -127,51 +144,71 @@
           :showHeader="true"
         >
           <template #header>
-            <div class="flex justify-between gap-4">
-              <div class="flex items-center">
-                <BaseIcon
-                  class="mr-2"
-                  icon="folder-generic"
-                  size="normal"
-                />
-                <h5>{{ category.info.title }}</h5>
+            <div class="flex flex-col gap-2">
+              <div class="flex justify-between gap-4">
+                <button
+                  type="button"
+                  class="flex min-w-0 items-center gap-2 text-left"
+                  :aria-expanded="!isCategoryCollapsed(category.info.id)"
+                  @click="toggleCategoryCollapse(category.info.id)"
+                >
+                  <BaseIcon
+                    :icon="isCategoryCollapsed(category.info.id) ? 'unfold' : 'fold'"
+                    size="small"
+                  />
+                  <BaseIcon
+                    icon="folder-generic"
+                    size="normal"
+                  />
+                  <h5 class="truncate">{{ category.info.title }}</h5>
+                  <span class="shrink-0 text-xs text-gray-500">
+                    ({{ (category.links || []).length }})
+                  </span>
+                </button>
+
+                <div
+                  v-if="securityStore.isAuthenticated && canEditLinks"
+                  class="flex items-center gap-3 text-gray-700"
+                >
+                  <BaseButton
+                    :label="t('Edit')"
+                    icon="edit"
+                    only-icon
+                    size="small"
+                    type="secondary"
+                    @click="editCategory(category)"
+                  />
+                  <BaseButton
+                    :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
+                    :label="t('Change visibility')"
+                    only-icon
+                    size="small"
+                    type="black"
+                    @click="toggleCategoryVisibility(category)"
+                  />
+                  <BaseButton
+                    :label="t('Delete')"
+                    icon="delete"
+                    only-icon
+                    size="small"
+                    type="danger"
+                    @click="confirmDeleteCategory(category)"
+                  />
+                </div>
               </div>
 
-              <div
-                v-if="securityStore.isAuthenticated && canEditLinks"
-                class="flex items-center gap-3 text-gray-700"
+              <p
+                v-if="category.info.description"
+                class="text-sm text-gray-600"
+                :class="{ 'line-clamp-2': isCategoryCollapsed(category.info.id) }"
               >
-                <BaseButton
-                  :label="t('Edit')"
-                  icon="edit"
-                  only-icon
-                  size="small"
-                  type="secondary"
-                  @click="editCategory(category)"
-                />
-                <BaseButton
-                  :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
-                  :label="t('Change visibility')"
-                  only-icon
-                  size="small"
-                  type="black"
-                  @click="toggleCategoryVisibility(category)"
-                />
-                <BaseButton
-                  :label="t('Delete')"
-                  icon="delete"
-                  only-icon
-                  size="small"
-                  type="danger"
-                  @click="confirmDeleteCategory(category)"
-                />
-              </div>
+                {{ category.info.description }}
+              </p>
             </div>
-
-            <p v-if="category.info.description">{{ category.info.description }}</p>
           </template>
 
           <Draggable
+            v-if="!isCategoryCollapsed(category.info.id)"
             tag="ul"
             class="min-h-[48px] py-2"
             :list="category.links"
@@ -205,7 +242,7 @@
           </Draggable>
 
           <p
-            v-if="!category.links || category.links.length === 0"
+            v-if="!isCategoryCollapsed(category.info.id) && (!category.links || category.links.length === 0)"
             class="text-sm text-gray-600"
           >
             {{ t("There are no links in this category") }}
@@ -272,6 +309,7 @@
             </template>
 
             <Draggable
+              v-if="!isCategoryCollapsed(category.info.id)"
               tag="ul"
               class="min-h-[48px] py-2"
               :list="category.links"
@@ -305,7 +343,7 @@
             </Draggable>
 
             <p
-              v-if="!category.links || category.links.length === 0"
+              v-if="!isCategoryCollapsed(category.info.id) && (!category.links || category.links.length === 0)"
               class="text-sm text-gray-600"
             >
               {{ t("There are no links in this category") }}
@@ -358,7 +396,7 @@ import linkService from "../../services/linkService"
 import { useNotification } from "../../composables/notification"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -366,13 +404,14 @@ const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const platform = usePlatformConfig()
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 const { t } = useI18n()
 const notifications = useNotification()
 
 const linksWithoutCategory = ref([])
 const categories = ref([])
+const collapsedCategoryIds = ref(new Set())
 
 const isDeleteLinkDialogVisible = ref(false)
 const linkToDelete = ref(null)
@@ -406,12 +445,72 @@ const showGeneralCard = computed(() => {
   return Boolean(canEditLinks.value)
 })
 
-onMounted(() => fetchLinks())
+const collapsedCategoryStorageKey = computed(
+  () => `chamilo-links-collapsed-categories-${cidValue.value || 0}-${sidValue.value || 0}`,
+)
+
+onMounted(() => {
+  restoreCollapsedCategories()
+  fetchLinks()
+})
 
 watch(
   () => platform.isStudentViewActive,
   () => fetchLinks(),
 )
+
+watch(
+  () => collapsedCategoryStorageKey.value,
+  () => restoreCollapsedCategories(),
+)
+
+function isCategoryCollapsed(categoryId) {
+  return collapsedCategoryIds.value.has(Number(categoryId || 0))
+}
+
+function toggleCategoryCollapse(categoryId) {
+  const normalizedCategoryId = Number(categoryId || 0)
+  const nextCollapsedCategoryIds = new Set(collapsedCategoryIds.value)
+
+  if (nextCollapsedCategoryIds.has(normalizedCategoryId)) {
+    nextCollapsedCategoryIds.delete(normalizedCategoryId)
+  } else {
+    nextCollapsedCategoryIds.add(normalizedCategoryId)
+  }
+
+  collapsedCategoryIds.value = nextCollapsedCategoryIds
+  persistCollapsedCategories()
+}
+
+function collapseAllCategories() {
+  collapsedCategoryIds.value = new Set(categories.value.map((category) => Number(category.info.id || 0)))
+  persistCollapsedCategories()
+}
+
+function expandAllCategories() {
+  collapsedCategoryIds.value = new Set()
+  persistCollapsedCategories()
+}
+
+function restoreCollapsedCategories() {
+  try {
+    const rawValue = window.localStorage.getItem(collapsedCategoryStorageKey.value)
+    const parsedValue = rawValue ? JSON.parse(rawValue) : []
+
+    collapsedCategoryIds.value = new Set(
+      Array.isArray(parsedValue) ? parsedValue.map((categoryId) => Number(categoryId || 0)) : [],
+    )
+  } catch (error) {
+    collapsedCategoryIds.value = new Set()
+  }
+}
+
+function persistCollapsedCategories() {
+  window.localStorage.setItem(
+    collapsedCategoryStorageKey.value,
+    JSON.stringify(Array.from(collapsedCategoryIds.value)),
+  )
+}
 
 async function fetchLinks() {
   isLoading.value = true

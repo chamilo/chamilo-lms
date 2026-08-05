@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'خرائط جوجل';
+$strings['plugin_comment'] = 'عرض خريطة جوجل مع مواقع المستخدمين المخزنة في الحقول الإضافية.';
+$strings['enable_api'] = 'تحميل واجهة برمجة تطبيقات خرائط جوجل';
+$strings['api_key'] = 'مفتاح API';
+$strings['extra_field_name'] = 'اسم الحقل الإضافي';
+$strings['extra_field_name_help'] = 'أدخل اسم متغير واحد أو أكثر من الحقول الإضافية للمستخدم مفصولة بفواصل. يمكن للخريطة عرض حتى 5 حقول. مثال: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'خريطة مواقع المستخدمين';
+$strings['UsersCoordinatesMapHelp'] = 'تعرض هذه الخريطة مواقع المستخدمين بناءً على الحقول الإضافية المُعدة.';
+$strings['GoogleMapsAdminIntro'] = 'قم بإعداد مفتاح API لخرائط جوجل والحقول الإضافية للمستخدم التي تحتوي على العناوين أو المواقع.';
+$strings['GoogleMapsApi'] = 'واجهة برمجة تطبيقات خرائط جوجل';
+$strings['ExtraFields'] = 'الحقول الإضافية';
+$strings['Access'] = 'الوصول';
+$strings['AdministratorsOnly'] = 'المديرون فقط';
+$strings['OpenMap'] = 'فتح الخريطة';
+$strings['ConfigurePlugin'] = 'إعداد الإضافة';
+$strings['Configured'] = 'تم الإعداد';
+$strings['NotConfigured'] = 'لم يتم الإعداد';
+$strings['GoogleMapsApiDisabledWarning'] = 'تم تعطيل تحميل واجهة برمجة تطبيقات خرائط جوجل في إعدادات الإضافة.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'مفتاح API لخرائط جوجل غير موجود.';
+$strings['ExtraFieldNameMissingWarning'] = 'لم يتم إعداد أي حقل إضافي للمستخدم.';
+$strings['ExtraFieldsNotFoundWarning'] = 'لم يتم العثور على الحقول الإضافية التالية للمستخدم: %s.';
+$strings['NoUserCoordinatesFound'] = 'لم يتم العثور على أي مواقع للمستخدمين في الحقول الإضافية المُعدة.';
+$strings['ConfigureGoogleMapsFirst'] = 'يرجى إعداد وتمكين واجهة برمجة تطبيقات خرائط جوجل قبل فتح الخريطة.';
+
+$strings['map_provider'] = 'مزود الخريطة';
+$strings['map_provider_help'] = 'اختر مزود الخريطة المستخدم من قبل الإضافة وخريطة الشبكة الاجتماعية.';
+$strings['GoogleMapsProvider'] = 'خرائط جوجل';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'مزود الخريطة';
+$strings['MapProviderConfiguration'] = 'إعدادات المزود';
+$strings['default_latitude'] = 'خط العرض الافتراضي';
+$strings['default_latitude_help'] = 'خط العرض الافتراضي لمركز الخريطة. يُستخدم عند عدم توفر أي علامة.';
+$strings['default_longitude'] = 'خط الطول الافتراضي';
+$strings['default_longitude_help'] = 'خط الطول الافتراضي لمركز الخريطة. يُستخدم عند عدم توفر أي علامة.';
+$strings['default_zoom'] = 'مستوى التكبير الافتراضي';
+$strings['default_zoom_help'] = 'مستوى التكبير الافتراضي للخريطة بين 1 و 20.';
+$strings['OpenStreetMapInfo'] = 'لا يتطلب OpenStreetMap مفتاح API. تُعرض العلامات التي تحتوي على العنوان فقط كروابط بحث ما لم تتوفر الإحداثيات.';

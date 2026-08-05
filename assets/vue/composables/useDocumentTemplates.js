@@ -1,6 +1,6 @@
 import { ref } from "vue"
 import { useRoute } from "vue-router"
-import documentsService from "../services/documents"
+import baseService from "../services/baseService"
 
 /**
  * Composable for loading and inserting document templates.
@@ -12,12 +12,20 @@ export function useDocumentTemplates(itemRef, formRef) {
   const templates = ref([])
 
   async function fetchTemplates() {
-    const courseId = route.query.cid
+    const courseId = Number(route.query.cid || 0)
+
+    if (!courseId) {
+      templates.value = []
+
+      return
+    }
 
     try {
-      templates.value = await documentsService.getTemplates(courseId)
-    } catch (e) {
-      console.error("[Documents] Failed to fetch templates:", e)
+      const response = await baseService.get(`/template/all-templates/${courseId}`)
+      templates.value = Array.isArray(response) ? response : []
+    } catch (error) {
+      templates.value = []
+      console.warn("[Documents] Failed to fetch templates. Continuing without document templates.", error)
     }
   }
 

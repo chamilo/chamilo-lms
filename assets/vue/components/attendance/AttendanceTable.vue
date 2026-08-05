@@ -90,13 +90,11 @@
 import { useRoute } from "vue-router"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useSecurityStore } from "../../store/securityStore"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import DOMPurify from "dompurify"
 import { useLocale } from "../../composables/locale"
 
 const route = useRoute()
-const securityStore = useSecurityStore()
 
 const props = defineProps({
   attendances: { type: Array, required: true },
@@ -107,8 +105,9 @@ const props = defineProps({
 
 const emit = defineEmits(["edit", "view", "delete", "pageChange"])
 
-const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
-const showActions = computed(() => !props.readonly && isAdminOrTeacher.value)
+// The parent (AttendanceList) already sets `readonly` from the edit capability,
+// so it is the single source of truth for whether row actions are shown.
+const showActions = computed(() => !props.readonly)
 
 const onEdit = (attendance) => emit("edit", attendance)
 const onView = (attendance) => emit("view", attendance)

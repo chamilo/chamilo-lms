@@ -187,7 +187,7 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
 
 echo initializeItem(
     $_REQUEST['lid'],
-    $_REQUEST['uid'],
+    api_get_user_id(),
     $_REQUEST['vid'],
     $_REQUEST['iid'],
     $_REQUEST['start_time'] ?? 0

@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = "Mostra un mapa de Google amb les ubicacions d'usuaris emmagatzemades en camps extres.";
+$strings['enable_api'] = "Carrega l'API de Google Maps";
+$strings['api_key'] = "Clau de l'API";
+$strings['extra_field_name'] = 'Nom del camp extra';
+$strings['extra_field_name_help'] = "Introduïu una o més variables de camps extres d'usuari separades per comes. El mapa pot mostrar fins a 5 camps. Exemple: address, office_address, city";
+$strings['UsersCoordinatesMap'] = "Mapa d'ubicacions d'usuaris";
+$strings['UsersCoordinatesMapHelp'] = "Aquest mapa mostra les ubicacions dels usuaris basant-se en els camps extres d'usuari configurats.";
+$strings['GoogleMapsAdminIntro'] = "Configureu la clau de l'API de Google Maps i els camps extres d'usuari que contenen adreces o ubicacions.";
+$strings['GoogleMapsApi'] = 'API de Google Maps';
+$strings['ExtraFields'] = 'Camps extres';
+$strings['Access'] = 'Accés';
+$strings['AdministratorsOnly'] = 'Només administradors';
+$strings['OpenMap'] = 'Obre el mapa';
+$strings['ConfigurePlugin'] = 'Configura el connector';
+$strings['Configured'] = 'Configurat';
+$strings['NotConfigured'] = 'No configurat';
+$strings['GoogleMapsApiDisabledWarning'] = "La càrrega de l'API de Google Maps està desactivada a la configuració del connector.";
+$strings['GoogleMapsApiKeyMissingWarning'] = "Falta la clau de l'API de Google Maps.";
+$strings['ExtraFieldNameMissingWarning'] = "No s'ha configurat cap camp extra d'usuari.";
+$strings['ExtraFieldsNotFoundWarning'] = "Els següents camps extres d'usuari no s'han trobat: %s.";
+$strings['NoUserCoordinatesFound'] = "No s'han trobat ubicacions d'usuaris per als camps extres configurats.";
+$strings['ConfigureGoogleMapsFirst'] = "Configureu i activeu l'API de Google Maps abans d'obrir el mapa.";
+
+$strings['map_provider'] = 'Proveïdor de mapes';
+$strings['map_provider_help'] = 'Seleccioneu el proveïdor de mapes utilitzat pel connector i pel mapa social.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Proveïdor de mapes';
+$strings['MapProviderConfiguration'] = 'Configuració del proveïdor';
+$strings['default_latitude'] = 'Latitud per defecte';
+$strings['default_latitude_help'] = "Latitud central del mapa per defecte. S'utilitza quan no hi ha cap marcador disponible.";
+$strings['default_longitude'] = 'Longitud per defecte';
+$strings['default_longitude_help'] = "Longitud central del mapa per defecte. S'utilitza quan no hi ha cap marcador disponible.";
+$strings['default_zoom'] = 'Zoom per defecte';
+$strings['default_zoom_help'] = 'Zoom del mapa per defecte entre 1 i 20.';
+$strings['OpenStreetMapInfo'] = "OpenStreetMap no requereix una clau d'API. Els marcadors només d'adreça es mostren com a enllaços de cerca tret que hi hagi coordenades disponibles.";

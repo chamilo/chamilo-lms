@@ -1588,7 +1588,7 @@ msgstr "Està segur de voler eliminar aquests elements?"
 msgid "Authoring tool"
 msgstr "Origen"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Arxiu a enviar"
 
 msgid "Course location"
@@ -2030,7 +2030,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":sí:copyright,, no:sense copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpeta,, application/msword:MsWord,, application/octet-stream:Flux d'octets,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Carpeta,, application\/msword:MsWord,, application\/octet-stream:Flux d'octets,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:exercici,, simulation:simulació,, questionnaire:questionari,, diagram:diagrama,, figure:figura,, graph:gràfica,, index:índex,, slide:diapositiva,, table:taula,, narrative text:text narratiu,, exam:examen,, experiment:experiència,, problem statement:problema,, self assessment:autoavaluació,, lecture:presentació"
@@ -8560,6 +8560,9 @@ msgstr "Organització"
 msgid "Reporting"
 msgstr "Informes"
 
+msgid "Analytics"
+msgstr "Analítiques"
+
 msgid "Update"
 msgstr "Actualitzar"
 
@@ -8736,6 +8739,15 @@ msgstr "Mostrar"
 
 msgid "My courses"
 msgstr "La meva llista de cursos"
+
+msgid "Shop"
+msgstr "Botiga"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "Request invoice"
+msgstr "Sol·licitar factura"
 
 msgid "View my progress"
 msgstr "Veure les meves estadístiques"
@@ -9739,6 +9751,9 @@ msgstr "Resultats de cerca per a:"
 msgid "Select a file"
 msgstr "Seleccioni un arxiu"
 
+msgid "Select a file to insert into the editor."
+msgstr "Seleccioneu un fitxer per inserir-lo a l'editor."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Atenció - L'arxiu FAQ localitzat en el directori /home/ de la seva plataforma, no és un arxiu en el qual es pugui escriure. El seu text no serà guardat fins que no canviï els permisos de l'arxiu."
 
@@ -9751,8 +9766,8 @@ msgstr "Ho sentim, no li està permès accedir a aquesta pàgina. Per a tornar a
 msgid "Result"
 msgstr "Resultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Intentar identificar-se com %s %s (aneu %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Intentar identificar-se com %s (aneu %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Identificació realitzada. Vagi a %s"
@@ -15919,6 +15934,9 @@ msgstr "Data i hora"
 msgid "Item"
 msgstr "Element"
 
+msgid "Items"
+msgstr "Elements"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Configura el connector del Tauler de control"
 
@@ -17172,6 +17190,18 @@ msgstr "Sessions de l'aula"
 
 msgid "Courses in group"
 msgstr "Cursos del grup"
+
+msgid "Courses on the platform"
+msgstr "Cursos de la plataforma"
+
+msgid "%s courses"
+msgstr "%s cursos"
+
+msgid "%s sessions"
+msgstr "%s sessions"
+
+msgid "Search by title or code"
+msgstr "Cerca per títol o codi"
 
 msgid "Users in group"
 msgstr "Usuaris del grup"
@@ -32182,6 +32212,9 @@ msgstr "Treball"
 msgid "Allowed file formats: %s"
 msgstr "Formats de fitxer permesos: %s"
 
+msgid "File manager"
+msgstr "Gestor de fitxers"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Tipus de fitxer no permès. Extensions permeses: %s"
 
@@ -33895,6 +33928,5022 @@ msgstr "Benvingut"
 msgid "Welcome to Chamilo"
 msgstr "Benvingut a Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Comprova totes les preguntes sense resposta a continuació"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Si és la primera vegada que utilitzeu Chamilo, assegureu-vos de consultar el menú lateral per trobar el camí a través de les seves moltes funcionalitats. Si necessiteu ajuda, trobareu que <a href=\"https://docs.chamilo.org\">la nostra documentació oficial</a> us pot ajudar per a la documentació estàndard, mentre que el nostre <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">fòrum en línia</a> us pot ajudar a compartir idees i trobar respostes d'altres usuaris de Chamilo."
+
+msgid "Change password"
+msgstr "Canvia la contrasenya"
+
+msgid "Newest first"
+msgstr "Més nous primer"
+
+msgid "Oldest first"
+msgstr "Més antics primer"
+
+msgid "Title A–Z"
+msgstr "Títol A–Z"
+
+msgid "Title Z–A"
+msgstr "Títol Z–A"
+
+msgid "Send test email"
+msgstr "Envia un correu de prova"
+
+msgid "Show teachers"
+msgstr "Mostra els professors"
+
+msgid "Hide teachers"
+msgstr "Oculta els professors"
+
+msgid "Delete exercise attempts"
+msgstr "Suprimeix els intents de l'exercici"
+
+msgid "Message sent successfully."
+msgstr "Missatge enviat correctament."
+
+msgid "You cannot create a new course right now."
+msgstr "No podeu crear un curs nou ara mateix."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "No s'ha pogut comprovar si podeu crear un curs nou ara mateix."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Torneu-ho a provar més tard o poseu-vos en contacte amb l'administrador."
+
+msgid "You cannot create more courses at this time."
+msgstr "No podeu crear més cursos en aquest moment."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Ja gestioneu %d cursos i el vostre servei actiu permet fins a %d. Per crear un altre curs, necessiteu un límit de servei més alt o reduir els cursos actius actuals."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Ja gestioneu %d cursos i la plataforma permet actualment fins a %d per al vostre compte. No podeu crear més cursos ara mateix."
+
+msgid "Add a class"
+msgstr "Afegeix una classe"
+
+msgid "Search classes"
+msgstr "Cerca classes"
+
+msgid "No classes found"
+msgstr "No s'han trobat classes"
+
+msgid "Import classes"
+msgstr "Importa classes"
+
+msgid "Class users"
+msgstr "Usuaris de la classe"
+
+msgid "%s classes imported"
+msgstr "%s classes importades"
+
+msgid "%s user-class links imported"
+msgstr "%s enllaços usuari-classe importats"
+
+msgid "Hide comments"
+msgstr "Oculta els comentaris"
+
+msgid "Loading comments..."
+msgstr "S'estan carregant els comentaris..."
+
+msgid "No comments yet."
+msgstr "Encara no hi ha comentaris."
+
+msgid "A user with this username already exists"
+msgstr "Ja existeix un usuari amb aquest nom d'usuari"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Gestioneu reunions, reviseu enregistraments i actualitzeu la configuració de BBB de tot el curs des d'un sol lloc."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Reviseu els valors per defecte actuals i propagueu-los a tots els cursos quan calgui."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtreu la llista per interval de dates de reunió."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Reviseu l'historial de reunions, els participants i les accions d'enregistrament."
+
+msgid "Participants"
+msgstr "Participants"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "No s'han trobat dades"
+
+msgid "My justifications"
+msgstr "Les meves justificacions"
+
+msgid "My services"
+msgstr "Els meus serveis"
+
+msgid "Extra menu"
+msgstr "Menú extra"
+
+msgid "Pending tests"
+msgstr "Proves pendents"
+
+msgid "No specific language"
+msgstr "Sense idioma específic"
+
+msgid "Source Chamilo version"
+msgstr "Versió de Chamilo d'origen"
+
+msgid "Exporting..."
+msgstr "S'està exportant..."
+
+msgid "Autosaved drafts available"
+msgstr "Esborranys desats automàticament disponibles"
+
+msgid "Hide drafts"
+msgstr "Oculta els esborranys"
+
+msgid "Show drafts"
+msgstr "Mostra els esborranys"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Els esborranys només es desen en aquest navegador i s'eliminen després de desar el document."
+
+msgid "Last saved"
+msgstr "Darrer desat"
+
+msgid "Restore draft"
+msgstr "Restaura l'esborrany"
+
+msgid "Delete draft"
+msgstr "Suprimeix l'esborrany"
+
+msgid "Information about indexing document content"
+msgstr "Informació sobre la indexació del contingut del document"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Quan està activat, el text del document s'indexa al motor de cerca perquè els usuaris el puguin trobar des de la cerca de la plataforma."
+
+msgid "The editor is not available."
+msgstr "L'editor no està disponible."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Primer, situeu el cursor dins d'un paràgraf."
+
+msgid "The selected paragraph is empty."
+msgstr "El paràgraf seleccionat és buit."
+
+msgid "Loading failed."
+msgstr "La càrrega ha fallat."
+
+msgid "Add introduction"
+msgstr "Afegeix una introducció"
+
+msgid "Course type"
+msgstr "Tipus de curs"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Trieu si aquest curs utilitza els límits estàndard de la plataforma o es beneficia d'un servei adquirit."
+
+msgid "Standard course"
+msgstr "Curs estàndard"
+
+msgid "Use the standard platform limits."
+msgstr "Utilitza els límits estàndard de la plataforma."
+
+msgid "Selected"
+msgstr "Seleccionat"
+
+msgid "Hosting limit"
+msgstr "Límit d'allotjament"
+
+msgid "Document quota"
+msgstr "Quota de documents"
+
+msgid "The standard course limit has been reached."
+msgstr "S'ha assolit el límit del curs estàndard."
+
+msgid "Use the benefits granted by this service."
+msgstr "Utilitza els avantatges concedits per aquest servei."
+
+msgid "Courses with these benefits"
+msgstr "Cursos amb aquests avantatges"
+
+msgid "Active service"
+msgstr "Servei actiu"
+
+msgid "Buy service"
+msgstr "Compra el servei"
+
+msgid "Select an available course type before creating the course."
+msgstr "Seleccioneu un tipus de curs disponible abans de crear el curs."
+
+msgid "users"
+msgstr "usuaris"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Heu de comprar aquest servei abans d'utilitzar aquests avantatges."
+
+msgid "You already used all courses available with this service."
+msgstr "Ja heu utilitzat tots els cursos disponibles amb aquest servei."
+
+msgid "This option is not available."
+msgstr "Aquesta opció no està disponible."
+
+msgid "This field is required"
+msgstr "Aquest camp és obligatori"
+
+msgid "Show less"
+msgstr "Mostra'n menys"
+
+msgid "Show full description"
+msgstr "Mostra la descripció completa"
+
+msgid "Virtual keyboard"
+msgstr "Teclat virtual"
+
+msgid "Backspace"
+msgstr "Retrocés"
+
+msgid "Space"
+msgstr "Espai"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Itinerari d'aprenentatge visible només per als estudiants seleccionats"
+
+msgid "Create course"
+msgstr "Crea un curs"
+
+msgid "Tour"
+msgstr "Tour"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Segur que voleu suprimir aquest comentari?"
+
+msgid "No posts found"
+msgstr "No s'han trobat publicacions"
+
+msgid "No communities"
+msgstr "No hi ha comunitats"
+
+msgid "No friends found"
+msgstr "No s'han trobat amics"
+
+msgid "Visual overview of your skills"
+msgstr "Visió general visual de les vostres competències"
+
+msgid "Compare your progress"
+msgstr "Compara el vostre progrés"
+
+msgid "Please enter a search term."
+msgstr "Introduïu un terme de cerca."
+
+msgid "Enter captcha code"
+msgstr "Introduïu el codi captcha"
+
+msgid "Refresh captcha"
+msgstr "Refresca el captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "El captcha està bloquejat temporalment. Torneu-ho a provar més tard."
+
+msgid "Item Details"
+msgstr "Detalls de l'element"
+
+msgid "Open File"
+msgstr "Obre el fitxer"
+
+msgid "Selection"
+msgstr "Selecció"
+
+msgid "Remove selection context"
+msgstr "Elimina el context de selecció"
+
+msgid "Source document"
+msgstr "Document d'origen"
+
+msgid "Use the current course context"
+msgstr "Utilitza el context del curs actual"
+
+msgid "Loading documents..."
+msgstr "S'estan carregant els documents..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "No s'ha trobat cap document PDF o TXT compatible en aquest curs."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Seleccioneu un document PDF o TXT per generar termes només a partir d'aquest document."
+
+msgid "Confidentiality warning"
+msgstr "Avís de confidencialitat"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Quan se selecciona un document, el prompt queda fixat perquè la generació utilitzi només el contingut d'aquest document."
+
+msgid "No document-processing AI providers available."
+msgstr "No hi ha proveïdors d'IA per al processament de documents disponibles."
+
+msgid "Failed to save signature. Please try again."
+msgstr "No s'ha pogut desar la signatura. Torneu-ho a provar."
+
+msgid "Select and move"
+msgstr "Selecciona i mou"
+
+msgid "Freehand"
+msgstr "A mà alçada"
+
+msgid "Stroke"
+msgstr "Traç"
+
+msgid "Fill"
+msgstr "Farciment"
+
+msgid "Import SVG"
+msgstr "Importa SVG"
+
+msgid "Import image"
+msgstr "Importa imatge"
+
+msgid "Click the drawing area to place this text"
+msgstr "Feu clic a l'àrea de dibuix per col·locar aquest text"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Dibuixeu un SVG nou, importeu un SVG existent o incrusteu una imatge i després deseu-lo com a document reutilitzable."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Utilitzeu Selecciona i mou per reposicionar o canviar la mida dels elements afegits en aquest editor."
+
+msgid "Stroke width"
+msgstr "Amplada del traç"
+
+msgid "Transparent fill"
+msgstr "Farciment transparent"
+
+msgid "Invalid id"
+msgstr "ID no vàlid"
+
+msgid "Unable to load the drawing"
+msgstr "No s'ha pogut carregar el dibuix"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Només s'admeten imatges PNG, JPG, WEBP o GIF."
+
+msgid "Unable to read the image file."
+msgstr "No s'ha pogut llegir el fitxer d'imatge."
+
+msgid "Only SVG files are supported."
+msgstr "Només s'admeten fitxers SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "El fitxer SVG és buit o no és vàlid."
+
+msgid "Unable to read the SVG file."
+msgstr "No es pot llegir el fitxer SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "El dibuix és buit o no és vàlid."
+
+msgid "Unable to save the drawing"
+msgstr "No es pot desar el dibuix"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informació sobre documents assistits per IA"
+
+msgid "Location"
+msgstr "Ubicació"
+
+msgid "Cloud link"
+msgstr "Enllaç al núvol"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Afegeix un enllaç a un document al núvol, com ara Google Drive o Google Docs."
+
+msgid "Add cloud link"
+msgstr "Afegeix un enllaç al núvol"
+
+msgid "Document title"
+msgstr "Títol del document"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Les opcions del document canvien com es processen els fitxers pujats després de desar."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informació sobre la descompressió de fitxers zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Quan està activat, els fitxers ZIP s'extrauen a la carpeta de documents actual després de la pujada."
+
+msgid "The title is required."
+msgstr "El títol és obligatori."
+
+msgid "The URL is required."
+msgstr "L'URL és obligatori."
+
+msgid "The destination folder is missing."
+msgstr "Falta la carpeta de destinació."
+
+msgid "Unable to create cloud link."
+msgstr "No es pot crear l'enllaç al núvol."
+
+msgid "Copy to My Files"
+msgstr "Copia als meus fitxers"
+
+msgid "Used space"
+msgstr "Espai utilitzat"
+
+msgid "Available space"
+msgstr "Espai disponible"
+
+msgid "Available percentage"
+msgstr "Percentatge disponible"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Els enllaços al núvol no es poden baixar."
+
+msgid "Could not copy the file to My Files"
+msgstr "No s'ha pogut copiar el fitxer als meus fitxers"
+
+msgid "File copied to My Files"
+msgstr "Fitxer copiat als meus fitxers"
+
+msgid "Checking course creation options..."
+msgstr "Comprovant les opcions de creació del curs..."
+
+msgid "You cannot create more courses right now."
+msgstr "Ara mateix no podeu crear més cursos."
+
+msgid "AI analyzer"
+msgstr "Analitzador d'IA"
+
+msgid "Expand all"
+msgstr "Expandeix-ho tot"
+
+msgid "Collapse all"
+msgstr "Redueix-ho tot"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Reviseu els beneficis dels serveis actius, l'historial de compres i els rebuts disponibles."
+
+msgid "Active services"
+msgstr "Serveis actius"
+
+msgid "No active services"
+msgstr "Cap servei actiu"
+
+msgid "Valid until"
+msgstr "Vàlid fins"
+
+msgid "Recurring payment"
+msgstr "Pagament recurrent"
+
+msgid "Next charge"
+msgstr "Pròxim càrrec"
+
+msgid "Enable auto billing"
+msgstr "Activa la facturació automàtica"
+
+msgid "Cancel auto billing"
+msgstr "Cancel·la la facturació automàtica"
+
+msgid "Granted benefits"
+msgstr "Beneficis concedits"
+
+msgid "Purchase history"
+msgstr "Historial de compres"
+
+msgid "No purchases yet"
+msgstr "Encara no hi ha compres"
+
+msgid "Product"
+msgstr "Producte"
+
+msgid "Reference"
+msgstr "Referència"
+
+msgid "Amount"
+msgstr "Import"
+
+msgid "Receipt"
+msgstr "Rebut"
+
+msgid "Unable to load your services right now."
+msgstr "Ara mateix no es poden carregar els serveis."
+
+msgid "Auto billing enabled"
+msgstr "Facturació automàtica activada"
+
+msgid "Auto billing suspended"
+msgstr "Facturació automàtica suspesa"
+
+msgid "Auto billing cancelled"
+msgstr "Facturació automàtica cancel·lada"
+
+msgid "Auto billing disabled"
+msgstr "Facturació automàtica desactivada"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Voleu cancel·lar la facturació automàtica d'aquest servei?"
+
+msgid "Preview class members and courses"
+msgstr "Previsualitza els membres de la classe i els cursos"
+
+msgid "Please select a CSV file to import."
+msgstr "Seleccioneu un fitxer CSV per importar."
+
+msgid "%d user-class links imported"
+msgstr "%d enllaços usuari-classe importats"
+
+msgid "The following errors occurred during import:"
+msgstr "S'han produït els següents errors durant la importació:"
+
+msgid "CSV file"
+msgstr "Fitxer CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Elimina l'usuari de totes les entitats relacionades amb grups si no és a la llista"
+
+msgid "UserName"
+msgstr "Nom d'usuari"
+
+msgid "ClassName"
+msgstr "Nom de la classe"
+
+msgid "are required for each row."
+msgstr "són obligatoris per a cada fila."
+
+msgid "title"
+msgstr "títol"
+
+msgid "is required."
+msgstr "és obligatori."
+
+msgid "description"
+msgstr "descripció"
+
+msgid "are optional."
+msgstr "són opcionals."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Esteu segur que voleu eliminar aquest usuari de la classe?"
+
+msgid "Users in class"
+msgstr "Usuaris de la classe"
+
+msgid "Remove user"
+msgstr "Elimina l'usuari"
+
+msgid "Class not found"
+msgstr "Classe no trobada"
+
+msgid "Class overview"
+msgstr "Resum de la classe"
+
+msgid "Back to classes"
+msgstr "Torna a les classes"
+
+msgid "Search members or courses"
+msgstr "Cerca membres o cursos"
+
+msgid "Search by name, email, username or course title"
+msgstr "Cerca per nom, correu electrònic, nom d'usuari o títol del curs"
+
+msgid "Class members"
+msgstr "Membres de la classe"
+
+msgid "No email"
+msgstr "Sense correu electrònic"
+
+msgid "No members found"
+msgstr "No s'han trobat membres"
+
+msgid "No courses found"
+msgstr "No s'han trobat cursos"
+
+msgid "The end date must be after the start date."
+msgstr "La data de finalització ha de ser posterior a la data d'inici."
+
+msgid "Always visible"
+msgstr "Sempre visible"
+
+msgid "No end date"
+msgstr "Sense data de finalització"
+
+msgid "No restriction"
+msgstr "Sense restriccions"
+
+msgid "Missing learning path or course identifier"
+msgstr "Falta el camí d'aprenentatge o l'identificador del curs"
+
+msgid "Select a user or a group first"
+msgstr "Seleccioneu primer un usuari o un grup"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Voleu eliminar totes les restriccions de data d'aquest camí d'aprenentatge?"
+
+msgid "Advanced learning path access"
+msgstr "Accés avançat al camí d'aprenentatge"
+
+msgid "Remove date restrictions"
+msgstr "Elimina les restriccions de data"
+
+msgid "Search by name, email, username or group"
+msgstr "Cerca per nom, correu electrònic, nom d'usuari o grup"
+
+msgid "Edit user restriction"
+msgstr "Edita la restricció de l'usuari"
+
+msgid "Edit group restriction"
+msgstr "Edita la restricció del grup"
+
+msgid "Select a user or group"
+msgstr "Seleccioneu un usuari o un grup"
+
+msgid "Save restriction"
+msgstr "Desa la restricció"
+
+msgid "members"
+msgstr "membres"
+
+msgid "Create Assignment"
+msgstr "Crea una tasca"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "El termini d'entrega ha passat. Ja no podeu enviar."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "El correu no es pot combinar amb altres destinataris."
+
+msgid "Social map"
+msgstr "Mapa social"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "El connector de mapes no està habilitat o configurat."
+
+msgid "Some configured extra fields were not found"
+msgstr "Alguns camps addicionals configurats no s'han trobat"
+
+msgid "No user locations were found."
+msgstr "No s'han trobat ubicacions d'usuaris."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap necessita coordenades per mostrar un marcador incrustat. Les ubicacions només amb adreça es llisten a continuació."
+
+msgid "Locations"
+msgstr "Ubicacions"
+
+msgid "Open map"
+msgstr "Obre el mapa"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Proveïdor: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Proveïdor: Google Maps"
+
+msgid "Personal files"
+msgstr "Fitxers personals"
+
+msgid "Upload image"
+msgstr "Pujar imatge"
+
+msgid "Upload media"
+msgstr "Pujar mitjà"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Només es permeten fitxers d'imatge en aquesta pantalla de pujada."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Només es permeten fitxers d'àudio i vídeo en aquesta pantalla de pujada."
+
+msgid "Upload files to your personal storage."
+msgstr "Pengeu fitxers al vostre emmagatzematge personal."
+
+msgid "Linked"
+msgstr "Enllaçat"
+
+msgid "No audio or video files were found in this folder."
+msgstr "No s'han trobat fitxers d'àudio o vídeo en aquesta carpeta."
+
+msgid "No image files were found in this folder."
+msgstr "No s'han trobat fitxers d'imatge en aquesta carpeta."
+
+msgid "No matching files were found in this folder."
+msgstr "No s'han trobat fitxers coincidents en aquesta carpeta."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Aquest tipus de fitxer no està permès en aquesta pantalla de pujada."
+
+msgid "Manage your personal files and course documents."
+msgstr "Gestioneu els vostres fitxers personals i documents del curs."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Enviament"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Utilitzeu els filtres superiors per restringir la llista."
+
+msgid "You are not allowed to see this page."
+msgstr "No teniu permís per veure aquesta pàgina."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Detalls de seguiment del curs"
+
+msgid "Course activity statistics"
+msgstr "Estadístiques d'activitat del curs"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Sintaxi de plantilla permesa"
+
+msgid "Functions"
+msgstr "Funcions"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Les variables disponibles depenen del tipus de plantilla, per exemple {{ user.getUsername() }} o {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Per motius de seguretat, qualsevol altra funció de Twig, filtre (com ara filter, map, reduce o sort) o crida PHP està bloquejada."
+
+msgid "Global administrator"
+msgstr "Administrador global"
+
+msgid "Session manager"
+msgstr "Gestor de sessions"
+
+msgid "Human resources manager"
+msgstr "Gestor de recursos humans"
+
+msgid "Course teacher"
+msgstr "Professor del curs"
+
+msgid "Course student"
+msgstr "Estudiant del curs"
+
+msgid "Platform reports"
+msgstr "Informes de la plataforma"
+
+msgid "Security reports"
+msgstr "Informes de seguretat"
+
+msgid "Course reports"
+msgstr "Informes del curs"
+
+msgid "Gradebook reports"
+msgstr "Informes del llibre de qualificacions"
+
+msgid "Social reports"
+msgstr "Informes socials"
+
+msgid "Exports"
+msgstr "Exportacions"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Informes sobre l'ús de la plataforma, usuaris, cursos i sessions."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Informes d'auditoria i sensibles a la seguretat."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Informes limitats als cursos gestionats per l'usuari."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Informes relacionats amb l'activitat i el seguiment dels estudiants."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Informes relacionats amb puntuacions, certificats i dades del llibre de qualificacions."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Informes i exportacions que generen fitxers descarregables."
+
+msgid "Main platform statistics dashboard."
+msgstr "Tauler principal d'estadístiques de la plataforma."
+
+msgid "Number of courses and course distribution report."
+msgstr "Nombre de cursos i informe de distribució de cursos."
+
+msgid "Platform-wide access to course tools."
+msgstr "Accés a les eines del curs a tota la plataforma."
+
+msgid "Number of resources per tool."
+msgstr "Nombre de recursos per eina."
+
+msgid "Latest access to courses."
+msgstr "Últim accés als cursos."
+
+msgid "Course distribution by language."
+msgstr "Distribució dels cursos per idioma."
+
+msgid "Course usage report."
+msgstr "Informe d'ús dels cursos."
+
+msgid "Platform user count report."
+msgstr "Informe del nombre d'usuaris de la plataforma."
+
+msgid "Recent logins chart."
+msgstr "Gràfic d'inicis de sessió recents."
+
+msgid "Login distribution by month."
+msgstr "Distribució d'inicis de sessió per mes."
+
+msgid "Login distribution by day."
+msgstr "Distribució d'inicis de sessió per dia."
+
+msgid "Login distribution by hour."
+msgstr "Distribució d'inicis de sessió per hora."
+
+msgid "Users with profile picture."
+msgstr "Usuaris amb imatge de perfil."
+
+msgid "Login report filtered by date."
+msgstr "Informe d'inicis de sessió filtrat per data."
+
+msgid "Users who have not logged in recently."
+msgstr "Usuaris que no han iniciat sessió recentment."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Informe de comptes d'usuari inactius o sospitosos."
+
+msgid "Users activity statistics."
+msgstr "Estadístiques d'activitat dels usuaris."
+
+msgid "Currently online users report."
+msgstr "Informe d'usuaris connectats actualment."
+
+msgid "New user registrations over time."
+msgstr "Nous registres d'usuaris al llarg del temps."
+
+msgid "Course and session subscriptions over time."
+msgstr "Subscripcions a cursos i sessions al llarg del temps."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Informe de detecció i manteniment d'usuaris duplicats."
+
+msgid "Platform user/session statistics."
+msgstr "Estadístiques d'usuaris i sessions de la plataforma."
+
+msgid "Quarterly platform report."
+msgstr "Informe trimestral de la plataforma."
+
+msgid "Activities audit"
+msgstr "Auditoria d'activitats"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Informe d'auditoria per a activitats administratives i de plataforma importants."
+
+msgid "Social messages received report."
+msgstr "Informe de missatges socials rebuts."
+
+msgid "Social messages sent report."
+msgstr "Informe de missatges socials enviats."
+
+msgid "Social contacts count report."
+msgstr "Informe del nombre de contactes socials."
+
+msgid "Sessions created over time."
+msgstr "Sessions creades al llarg del temps."
+
+msgid "Learning analytics dashboard."
+msgstr "Tauler d'analítiques d'aprenentatge."
+
+msgid "Teacher time report."
+msgstr "Informe de temps del professorat."
+
+msgid "Teachers time by session report"
+msgstr "Informe de temps del professorat per sessió"
+
+msgid "Teacher time report grouped by session."
+msgstr "Informe de temps del professorat agrupat per sessió."
+
+msgid "Corporate learning analytics report."
+msgstr "Informe d'analítiques d'aprenentatge corporatiu."
+
+msgid "Course learners tracking report."
+msgstr "Informe de seguiment dels estudiants del curs."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Estadístiques d'activitat del curs amb usuaris connectats i inactius."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Informe de seguiment detallat d'un estudiant dins d'un curs."
+
+msgid "Course gradebook overview."
+msgstr "Visió general del llibre de qualificacions del curs."
+
+msgid "Gradebook statistics"
+msgstr "Estadístiques del llibre de qualificacions"
+
+msgid "Gradebook statistics report."
+msgstr "Informe d'estadístiques del llibre de qualificacions."
+
+msgid "Certificate report"
+msgstr "Informe de certificats"
+
+msgid "Certificate report for course gradebook."
+msgstr "Informe de certificats per al llibre de qualificacions del curs."
+
+msgid "User statistics"
+msgstr "Estadístiques d'usuari"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Estadístiques del llibre de qualificacions del curs per a un usuari."
+
+msgid "Personal statistics"
+msgstr "Estadístiques personals"
+
+msgid "Personal gradebook statistics."
+msgstr "Estadístiques personals del llibre de qualificacions."
+
+msgid "Reports catalog"
+msgstr "Catàleg d'informes"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Catàleg central d'informes disponibles, rols i categories de permisos."
+
+msgid "Course log events"
+msgstr "Esdeveniments del registre del curs"
+
+msgid "Detailed course tracking events."
+msgstr "Esdeveniments de seguiment detallat del curs."
+
+msgid "Course tool usage"
+msgstr "Ús de les eines del curs"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Informe de seguiment del curs agrupat per eines."
+
+msgid "Course resource usage"
+msgstr "Ús dels recursos del curs"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Informe de seguiment del curs agrupat per recursos."
+
+msgid "Course group tracking"
+msgstr "Seguiment de grups del curs"
+
+msgid "Tracking report for course groups."
+msgstr "Informe de seguiment per als grups del curs."
+
+msgid "Course session report"
+msgstr "Informe de sessions del curs"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Informe de seguiment d’un curs dins de sessions."
+
+msgid "Learning path report"
+msgstr "Informe d’itinerari d’aprenentatge"
+
+msgid "Learning path tracking report."
+msgstr "Informe de seguiment de l’itinerari d’aprenentatge."
+
+msgid "Learning path results by user"
+msgstr "Resultats de l’itinerari d’aprenentatge per usuari"
+
+msgid "Learning path results grouped by user."
+msgstr "Resultats de l’itinerari d’aprenentatge agrupats per usuari."
+
+msgid "Exercises report"
+msgstr "Informe d’exercicis"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Informe de seguiment d’exercicis i exàmens del curs."
+
+msgid "Question report"
+msgstr "Informe de preguntes"
+
+msgid "Course question tracking report."
+msgstr "Informe de seguiment de preguntes del curs."
+
+msgid "Messages report"
+msgstr "Informe de missatges"
+
+msgid "Course messages tracking report."
+msgstr "Informe de seguiment de missatges del curs."
+
+msgid "Total time tracking report for course learners."
+msgstr "Informe de seguiment del temps total dels estudiants del curs."
+
+msgid "Gradebook summary"
+msgstr "Resum del llibre de qualificacions"
+
+msgid "Summary view of gradebook results."
+msgstr "Vista resumida dels resultats del llibre de qualificacions."
+
+msgid "Flat view"
+msgstr "Vista plana"
+
+msgid "Flat gradebook results view."
+msgstr "Vista plana dels resultats del llibre de qualificacions."
+
+msgid "Evaluation log"
+msgstr "Registre d’avaluacions"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Registre de canvis de les avaluacions del llibre de qualificacions."
+
+msgid "Link log"
+msgstr "Registre d’enllaços"
+
+msgid "Change log for gradebook links."
+msgstr "Registre de canvis dels enllaços del llibre de qualificacions."
+
+msgid "Result details"
+msgstr "Detalls del resultat"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Vista detallada d’un resultat del llibre de qualificacions."
+
+msgid "Personal certificates report."
+msgstr "Informe de certificats personals."
+
+msgid "User move statistics"
+msgstr "Estadístiques de moviment d’usuaris"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Informe d’estadístiques de moviment i transferència d’usuaris."
+
+msgid "User consent list"
+msgstr "Llista de consentiments d’usuaris"
+
+msgid "Report of users and consent status."
+msgstr "Informe d’usuaris i estat de consentiment."
+
+msgid "Special platform exports."
+msgstr "Exportacions especials de la plataforma."
+
+msgid "Export certificates"
+msgstr "Exportar certificats"
+
+msgid "Export platform certificates."
+msgstr "Exportar certificats de la plataforma."
+
+msgid "Export exercise results"
+msgstr "Exportar resultats d’exercicis"
+
+msgid "Export exercise results from the platform."
+msgstr "Exportar resultats d’exercicis de la plataforma."
+
+msgid "Course survey results and reporting."
+msgstr "Resultats i informes d’enquestes del curs."
+
+msgid "Attendance report"
+msgstr "Informe d’assistència"
+
+msgid "Course attendance tracking and reports."
+msgstr "Seguiment i informes d’assistència al curs."
+
+msgid "Exercises global report"
+msgstr "Informe global d’exercicis"
+
+msgid "Global exercise results report for the course."
+msgstr "Informe global de resultats d’exercicis del curs."
+
+msgid "Exercise report"
+msgstr "Informe d’exercici"
+
+msgid "Detailed exercise report."
+msgstr "Informe detallat d’exercici."
+
+msgid "Exercise history"
+msgstr "Historial d’exercicis"
+
+msgid "Exercise attempt history."
+msgstr "Historial d’intents d’exercici."
+
+msgid "Exercise results"
+msgstr "Resultats d’exercici"
+
+msgid "Exercise results and corrections."
+msgstr "Resultats i correccions d’exercici."
+
+msgid "Question-level exercise statistics."
+msgstr "Estadístiques d’exercici a nivell de pregunta."
+
+msgid "Exercise statistics"
+msgstr "Estadístiques d’exercici"
+
+msgid "Exercise statistics page."
+msgstr "Pàgina d’estadístiques d’exercici."
+
+msgid "Live exercise statistics"
+msgstr "Estadístiques d'exercicis en directe"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Estadístiques d'exercicis en directe per als docents."
+
+msgid "Learning path statistics"
+msgstr "Estadístiques de la ruta d'aprenentatge"
+
+msgid "Learning path item statistics."
+msgstr "Estadístiques dels elements de la ruta d'aprenentatge."
+
+msgid "Learning path report inside a course."
+msgstr "Informe de la ruta d'aprenentatge dins d'un curs."
+
+msgid "User skills report."
+msgstr "Informe de competències de l'usuari."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Configuració d'exportació programada o periòdica."
+
+msgid "User export"
+msgstr "Exportació d'usuaris"
+
+msgid "Export users from the platform."
+msgstr "Exporta usuaris de la plataforma."
+
+msgid "Not classified"
+msgstr "Sense classificar"
+
+msgid "You have acquired the skill %s"
+msgstr "Heu adquirit la competència %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Heu adquirit la competència %s."
+
+msgid "Recover your password"
+msgstr "Recupera la contrasenya"
+
+msgid "Disclaimer"
+msgstr "Avís legal"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Aquesta operació excediria el límit de %d usuaris permesos per a aquest curs."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Trieu com pot autenticar-se aquest usuari a la plataforma."
+
+msgid "Authentication methods"
+msgstr "Mètodes d'autenticació"
+
+msgid "Set password manually"
+msgstr "Estableix la contrasenya manualment"
+
+msgid "Report role matrix"
+msgstr "Informe de la matriu de rols"
+
+msgid "Report permission categories"
+msgstr "Informe de categories de permisos"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Aquest registre llista les pàgines d'informes conegudes, la seva categoria, URL canònica, URL heretada i públic objectiu esperat. Les URL canòniques reforcen la matriu de rols d'informes documentada."
+
+msgid "reports"
+msgstr "informes"
+
+msgid "Canonical URL"
+msgstr "URL canònica"
+
+msgid "Legacy URL"
+msgstr "URL heretada"
+
+msgid "Permission category"
+msgstr "Categoria de permisos"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Aquesta matriu documenta el públic objectiu esperat per a cada informe i és reforçada pel punt d'entrada de l'informe canònic."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Aquestes claus agrupen els informes per abast d'accés i són utilitzades pel registre d'informes. Posteriorment es poden assignar a permisos més granulars de la plataforma."
+
+msgid "Permission"
+msgstr "Permís"
+
+msgid "Clear active session"
+msgstr "Esborra la sessió activa"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Esteu segur que voleu esborrar la sessió activa d'aquest usuari?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Previsualització mostrada sense context de curs. Algunes dades específiques del curs poden no estar disponibles."
+
+msgid "Preview is not available for this question."
+msgstr "La previsualització no està disponible per a aquesta pregunta."
+
+msgid "Edition is not allowed without a course context."
+msgstr "L'edició no està permesa sense un context de curs."
+
+msgid "This plugin does not use regions."
+msgstr "Aquest connector no utilitza regions."
+
+msgid "No plugins with regions were found."
+msgstr "No s'han trobat connectors amb regions."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Servei comercial"
+
+msgid "Commercial"
+msgstr "Comercial"
+
+msgid "100% free"
+msgstr "100% gratuït"
+
+msgid "Displayed above the public login form."
+msgstr "Es mostra a sobre del formulari d'inici de sessió públic."
+
+msgid "Displayed below the public login form."
+msgstr "Es mostra a sota del formulari d'inici de sessió públic."
+
+msgid "Displayed before the footer area."
+msgstr "Es mostra abans de l'àrea de peu de pàgina."
+
+msgid "Displayed in the left footer column."
+msgstr "Es mostra a la columna esquerra del peu de pàgina."
+
+msgid "Displayed in the center footer column."
+msgstr "Es mostra a la columna central del peu de pàgina."
+
+msgid "Displayed in the right footer column."
+msgstr "Es mostra a la columna dreta del peu de pàgina."
+
+msgid "Showing all plugins."
+msgstr "Mostrant tots els connectors."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Alguns connectors encara estan pendents de verificació funcional."
+
+msgid "Show verified plugins only"
+msgstr "Mostra només els connectors verificats"
+
+msgid "Showing verified plugins only."
+msgstr "Es mostren només els connectors verificats."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Els connectors pendents estan temporalment ocults fins que s'adaptin i es provin."
+
+msgid "Show all plugins"
+msgstr "Mostra tots els connectors"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Els connectors oficials i gratuïts es llisten per separat dels connectors que poden dependre de serveis comercials o ofertes de pagament."
+
+msgid "Included free plugins"
+msgstr "Connectors gratuïts inclosos"
+
+msgid "Commercial and freemium plugins"
+msgstr "Connectors comercials i freemium"
+
+msgid "All plugins"
+msgstr "Tots els connectors"
+
+msgid "No plugins were found for this category."
+msgstr "No s'han trobat connectors per a aquesta categoria."
+
+msgid "Search plugins"
+msgstr "Cerca connectors"
+
+msgid "Search by name or description"
+msgstr "Cerca per nom o descripció"
+
+msgid "Advanced filters"
+msgstr "Filtres avançats"
+
+msgid "All statuses"
+msgstr "Tots els estats"
+
+msgid "All sources"
+msgstr "Totes les fonts"
+
+msgid "All types"
+msgstr "Tots els tipus"
+
+msgid "Installed plugins are shown first"
+msgstr "Els connectors instal·lats es mostren primer"
+
+msgid "No plugins match the current filters."
+msgstr "Cap connector coincideix amb els filtres actuals."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Prova de netejar la cerca o canviar els filtres."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Testimoni de seguretat no vàlid"
+
+msgid "Please select a destination session"
+msgstr "Seleccioneu una sessió de destinació"
+
+msgid "Cannot move this to the same session"
+msgstr "No es pot moure a la mateixa sessió"
+
+msgid "The destination session must include the selected course"
+msgstr "La sessió de destinació ha d'incloure el curs seleccionat"
+
+msgid "The source session must include the selected course"
+msgstr "La sessió d'origen ha d'incloure el curs seleccionat"
+
+msgid "No learners found"
+msgstr "No s'han trobat aprenents"
+
+msgid "Will be subscribed"
+msgstr "Es subscriurà"
+
+msgid "Subscribed"
+msgstr "Subscrit"
+
+msgid "The move process has finished"
+msgstr "El procés de moviment ha finalitzat"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Comparació finalitzada. No s'han mogut dades."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Mou les dades de seguiment del curs base o d'una sessió d'origen a una altra sessió. Utilitza primer la comparació per revisar les dades dels aprenents afectats."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Cerca un curs o utilitza el camp d'identificador manual de curs a continuació."
+
+msgid "Fallback when the course search is not available."
+msgstr "Alternativa quan la cerca de cursos no està disponible."
+
+msgid "Load sessions"
+msgstr "Carrega sessions"
+
+msgid "Selected course"
+msgstr "Curs seleccionat"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Tria el curs base o la sessió on actualment existeixen les dades de seguiment."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Tria la sessió que rebrà les dades de seguiment."
+
+msgid "Important"
+msgstr "Important"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "L'acció de moure actualitza les dades de seguiment existents. Executa primer la comparació i prova aquesta eina amb un curs no productiu abans de moure dades reals d'aprenents."
+
+msgid "No sessions found for this course"
+msgstr "No s'han trobat sessions per a aquest curs"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "S'han ignorat alguns usuaris perquè no estan subscrits a aquesta sessió."
+
+msgid "Remove selected user"
+msgstr "Elimina l'usuari seleccionat"
+
+msgid "Add selected user"
+msgstr "Afegeix l'usuari seleccionat"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Cap usuari de la llista seleccionada està subscrit a aquesta sessió."
+
+msgid "No image"
+msgstr "Sense imatge"
+
+msgid "Invalid URL."
+msgstr "URL no vàlida."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Aquest document al núvol no es pot incrustar."
+
+msgid "Document not found"
+msgstr "Document no trobat"
+
+msgid "File not found"
+msgstr "Fitxer no trobat"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Aquest itinerari d'aprenentatge no està disponible per al vostre usuari en aquest moment."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Següent itinerari d'aprenentatge"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Seleccioneu el camí d'aprenentatge que estarà disponible després d'aquest."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Creeu un altre camí d'aprenentatge en aquest curs per habilitar el flux de camins d'aprenentatge."
+
+msgid "Available from %s"
+msgstr "Disponible des de %s"
+
+msgid "Available until %s"
+msgstr "Disponible fins a %s"
+
+msgid "Statistics reset date"
+msgstr "Data de reinicialització de les estadístiques"
+
+msgid "Last 24 hours"
+msgstr "Darreres 24 hores"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Aquesta data de reinicialització s'utilitza com a data de referència per a l'informe. No suprimeix les dades històriques de seguiment."
+
+msgid "Since reset date"
+msgstr "Des de la data de reinicialització"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Usuaris connectats les darreres 24 hores"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Estudiants amb almenys un accés al curs durant les darreres 24 hores."
+
+msgid "Users connected in the last week"
+msgstr "Usuaris connectats la darrera setmana"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Estudiants amb almenys un accés al curs durant els darrers 7 dies."
+
+msgid "Users connected in the last month"
+msgstr "Usuaris connectats el darrer mes"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Estudiants amb almenys un accés al curs durant els darrers 30 dies."
+
+msgid "Not recently connected users"
+msgstr "Usuaris no connectats recentment"
+
+msgid "Learners without course access since %s."
+msgstr "Estudiants sense accés al curs des de %s."
+
+msgid "Recently used resources"
+msgstr "Recursos utilitzats recentment"
+
+msgid "Course tools/resources used since %s."
+msgstr "Eines o recursos del curs utilitzats des de %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% d'estudiants"
+
+msgid "Connections"
+msgstr "Connexions"
+
+msgid "Total connections"
+msgstr "Total de connexions"
+
+msgid "Downloaded documents"
+msgstr "Documents baixats"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Llista de documents baixats per aquest estudiant en aquest curs."
+
+msgid "Forum topics"
+msgstr "Temes del fòrum"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Temes del fòrum oberts per aquest estudiant en aquest curs."
+
+msgid "Forum posts"
+msgstr "Missatges del fòrum"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Missatges del fòrum escrits per aquest estudiant en aquest curs."
+
+msgid "Course connections"
+msgstr "Connexions al curs"
+
+msgid "Connection history for this learner in this course."
+msgstr "Historial de connexions d'aquest estudiant en aquest curs."
+
+msgid "Resources used"
+msgstr "Recursos utilitzats"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Darreres eines o recursos utilitzats per aquest estudiant en aquest curs."
+
+msgid "Logout date"
+msgstr "Data de tancament de sessió"
+
+msgid "Imported Aiken quiz"
+msgstr "Test Aiken importat"
+
+msgid "Only supported documents will be listed here."
+msgstr "Només es mostraran aquí els documents compatibles."
+
+msgid "Generated Aiken content"
+msgstr "Contingut Aiken generat"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Reviseu el contingut generat abans d'importar-lo com a nou exercici."
+
+msgid "No documents available."
+msgstr "No hi ha documents disponibles."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Arctangent hiperbòlica:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Exercici"
+
+msgid "OfficialCode"
+msgstr "CodiOficial"
+
+msgid "FirstName"
+msgstr "Nom"
+
+msgid "LastName"
+msgstr "Cognoms"
+
+msgid "LoginName"
+msgstr "Nom d'usuari"
+
+msgid "MinMinute"
+msgstr "MinutMínim"
+
+msgid "StartDate"
+msgstr "DataInici"
+
+msgid "EndDate"
+msgstr "DataFi"
+
+msgid "CorrectionDate"
+msgstr "DataCorrecció"
+
+msgid "NotValidated"
+msgstr "NoValidat"
+
+msgid "PendingAttempts"
+msgstr "IntentsPendents"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Llista d'intents pendents de proves als vostres cursos."
+
+msgid "User ID"
+msgstr "ID d'usuari"
+
+msgid "QuestionType"
+msgstr "TipusDePregunta"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "PreguntesSenseCorreccióAutomàtica"
+
+msgid "There are no pending tests."
+msgstr "No hi ha proves pendents."
+
+msgid "%s results"
+msgstr "%s resultats"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemple d'activitat de formulari : calcula l'índex de massa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edat</strong></td>            <td width=\"75%\" style=\"\">[25] anys</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sexe</strong></td>            <td style=\"\" text-align:=\"\">[H] (H o D)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pes</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Alçada</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Índex de massa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC = Pes/Alçada<sup>2</sup> (Vegeu <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">article de la Viquipèdia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Eliminat"
+
+msgid "NoUsersInTheList"
+msgstr "CapUsuariALlista"
+
+msgid "Are you sure?"
+msgstr "Esteu segur?"
+
+msgid "NoResultsAvailable"
+msgstr "CapResultatDisponible"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importa grups des d'un fitxer CSV i, opcionalment, elimina els elements que no hi siguin presents."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Utilitzeu aquesta opció amb precaució perquè els elements que falten al CSV poden ser eliminats durant el procés d'importació."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Pengeu un fitxer CSV amb les dades dels grups que voleu importar."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Podeu baixar el fitxer d'exemple per utilitzar el format esperat."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Si activeu l'eliminació, els elements que no siguin al fitxer poden ser eliminats."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "El fitxer CSV és obligatori per iniciar la importació."
+
+msgid "Please select at least one class."
+msgstr "Seleccioneu com a mínim una classe."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definiu les propietats de cada grup abans de crear-los."
+
+msgid "Apply the first row values"
+msgstr "Aplica els valors de la primera fila"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Creeu grups manualment o genereu-los a partir de les classes inscrites en aquest curs."
+
+msgid "Create manual groups"
+msgstr "Crea grups manuals"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Utilitzeu aquest formulari quan vulgueu crear grups de curs buits manualment."
+
+msgid "Configure manual groups"
+msgstr "Configura grups manuals"
+
+msgid "Create groups from subscribed classes"
+msgstr "Crea grups a partir de les classes inscrites"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Utilitzeu aquest formulari quan vulgueu crear un grup de curs per a cada classe seleccionada."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Mantén els grups creats enllaçats a les seves classes d'origen"
+
+msgid "Create groups from selected classes"
+msgstr "Crea grups a partir de les classes seleccionades"
+
+msgid "You must be logged in to access this page."
+msgstr "Heu d'iniciar sessió per accedir a aquesta pàgina."
+
+msgid "Invalid user"
+msgstr "Usuari no vàlid"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UtilitzaCertificatPersonalitzatDelCurs"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UtilitzaCertificatPersonalitzatPerDefecte"
+
+msgid "CertificateSetting"
+msgstr "ConfiguracióDelCertificat"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SeleccioneuUnaOpcióAbansDObirL'Editor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "TrieuElModeDeCertificatPersonalitzatAjuda"
+
+msgid "CertificateMode"
+msgstr "ModeDelCertificat"
+
+msgid "Enable student to validate own attendance"
+msgstr "Permet que l'estudiant validi la seva pròpia assistència"
+
+msgid "Course block"
+msgstr "Bloc del curs"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Afegeix blocs de contingut personalitzat a les regions del peu de pàgina del curs."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Abans del peu de pàgina"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Peu de pàgina esquerre"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Peu de pàgina central"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Peu de pàgina dret"
+
+msgid "SetNotification"
+msgstr "DefineixNotificació"
+
+msgid "CourseLegal"
+msgstr "LegalDelCurs"
+
+msgid "Certificates search is not available"
+msgstr "La cerca de certificats no està disponible"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Permet l'adquisició de competències per subcategories"
+
+msgid "Allow skills by subcategories"
+msgstr "Permet habilitats per subcategories"
+
+msgid "Minimum score for skills"
+msgstr "Puntuació mínima per a les habilitats"
+
+msgid "The gradebook table is hidden."
+msgstr "La taula del llibre de qualificacions està oculta."
+
+msgid "Invalid token"
+msgstr "Testimoni no vàlid"
+
+msgid "Unable to save the item"
+msgstr "No es pot desar l'element"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Només es permeten URL HTTP i HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Amfitrió d'URL no vàlid."
+
+msgid "This cloud provider is not allowed."
+msgstr "Aquest proveïdor de núvol no està permès."
+
+msgid "Documents used"
+msgstr "Documents utilitzats"
+
+msgid "No document usage"
+msgstr "Cap ús de documents"
+
+msgid "Invalid action."
+msgstr "Acció no vàlida."
+
+msgid "No users selected."
+msgstr "No s'ha seleccionat cap usuari."
+
+msgid "%s user(s) processed."
+msgstr "%s usuari(s) processat(s)."
+
+msgid "Invalid CSRF token."
+msgstr "Testimoni CSRF no vàlid."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Canvieu la vostra contrasenya"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Benvolgut/da %s,\n\nEl nostre procés de seguretat mostra que utilitzeu una contrasenya que és habitual a Internet, la qual cosa significa que el vostre compte pot ser robat fàcilment. Probablement és una seqüència senzilla o una paraula molt comuna, no ho sabem amb certesa (no podem veure la vostra contrasenya), però us demanem que us connecteu a la plataforma i sol·liciteu un canvi de contrasenya. Podeu seguir aquest enllaç: %s per fer-ho ara.\n\nTingueu en compte que mai us demanarem la contrasenya en aquest procés. Només heu d'introduir el vostre nom d'usuari o correu electrònic i us enviarem un enllaç. Si us demanen que introduïu la contrasenya actual per fer-ho, algú probablement està intentant fer phishing al vostre compte. Protegiu-vos, canvieu la contrasenya ara!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] La vostra contrasenya s'ha restablert"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Benvolgut/da %s,\n\nEl nostre procés de seguretat us ha marcat com a usuari d'una contrasenya que és habitual a Internet, la qual cosa significa que el vostre compte pot ser robat fàcilment. Com a mesura preventiva, hem decidit iniciar un procés de restabliment de contrasenya. La vostra nova contrasenya generada automàticament és ara:\n\n%s\n\nInicieu sessió a la plataforma aviat (utilitzant aquesta nova contrasenya) per establir la vostra pròpia contrasenya personal i segura.\n\nProtegiu-vos.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Signatura desada correctament"
+
+msgid "Invalid request payload."
+msgstr "Càrrega de la sol·licitud no vàlida."
+
+msgid "Authentication required."
+msgstr "Autenticació requerida."
+
+msgid "The course title is required."
+msgstr "El títol del curs és obligatori."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Només els formadors i els administradors poden crear cursos."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "La creació de cursos per part dels formadors està desactivada en aquesta plataforma."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "El servei BuyCourses seleccionat no es pot utilitzar per crear aquest curs."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Heu assolit el nombre màxim de cursos permesos (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "El servei BuyCourses seleccionat no és vàlid."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses no està disponible en aquest moment."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses no pot validar el servei seleccionat ara mateix."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "No es pot validar el servei BuyCourses seleccionat ara mateix."
+
+msgid "External tool removed from course"
+msgstr "Eina externa eliminada del curs"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "L'eina externa s'ha eliminat del curs, però s'ha mantingut internament perquè està vinculada al llibre de qualificacions"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "No hi ha eines externes disponibles per afegir al llibre de qualificacions"
+
+msgid "The evaluation could not be created"
+msgstr "No s'ha pogut crear l'avaluació"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "No s'ha pogut vincular l'avaluació del llibre de qualificacions"
+
+msgid "Survey questions"
+msgstr "Preguntes de l'enquesta"
+
+msgid "Back to survey list"
+msgstr "Tornar a la llista d'enquestes"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Aquesta enquesta ja té respostes. L'edició de preguntes està desactivada per configuració."
+
+msgid "Choose the type of question you want to add."
+msgstr "Trieu el tipus de pregunta que voleu afegir."
+
+msgid "The free text option is added automatically."
+msgstr "L'opció de text lliure s'afegeix automàticament."
+
+msgid "No questions found"
+msgstr "No s'han trobat preguntes"
+
+msgid "Mandatory"
+msgstr "Obligatòria"
+
+msgid "Unsupported question type"
+msgstr "Tipus de pregunta no admès"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Podeu utilitzar les etiquetes {%s} i {%s} a la pregunta."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Aquesta pregunta es mostra de manera condicional mentre es respon l'enquesta."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Les opcions de percentatge de l'1 al 100 es generen automàticament."
+
+msgid "Could not load survey questions"
+msgstr "No s'han pogut carregar les preguntes de l'enquesta"
+
+msgid "The question text is required."
+msgstr "El text de la pregunta és obligatori."
+
+msgid "The maximum score is required."
+msgstr "La puntuació màxima és obligatòria."
+
+msgid "Please select a parent option."
+msgstr "Seleccioneu una opció pare."
+
+msgid "Please fill all answer options."
+msgstr "Empleneu totes les opcions de resposta."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "No s'ha pogut desar la pregunta de l'enquesta"
+
+msgid "Could not delete survey question"
+msgstr "No s'ha pogut suprimir la pregunta de l'enquesta"
+
+msgid "Could not move survey question"
+msgstr "No s'ha pogut moure la pregunta de l'enquesta"
+
+msgid "Could not copy survey question"
+msgstr "No s'ha pogut copiar la pregunta de l'enquesta"
+
+msgid "Hide search"
+msgstr "Oculta la cerca"
+
+msgid "Showing results for: %s"
+msgstr "Mostrant resultats per a: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cerca per títol, codi o descripció de l'enquesta."
+
+msgid "Search surveys"
+msgstr "Cerca d'enquestes"
+
+msgid "%s surveys selected"
+msgstr "%s enquestes seleccionades"
+
+msgid "Clear selection"
+msgstr "Neteja la selecció"
+
+msgid "No surveys found"
+msgstr "No s'han trobat enquestes"
+
+msgid "Unsupported"
+msgstr "No admès"
+
+msgid "Could not load surveys"
+msgstr "No s'han pogut carregar les enquestes"
+
+msgid "Delete selected surveys"
+msgstr "Suprimeix les enquestes seleccionades"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Les enquestes seleccionades i les seves preguntes seran suprimides. Aquesta acció no es pot desfer."
+
+msgid "Could not delete selected surveys"
+msgstr "No s'han pogut suprimir les enquestes seleccionades"
+
+msgid "Survey action"
+msgstr "Acció de l'enquesta"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Es crearà una còpia d'aquesta enquesta: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "S'eliminaran totes les respostes i invitacions d'aquesta enquesta: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Les preguntes multiplicades generades s'eliminaran d'aquesta enquesta: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Aquesta enquesta es publicarà per als tutors del grup enllaçat: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Aquesta enquesta i les seves preguntes seran suprimides: %s"
+
+msgid "Could not complete survey action"
+msgstr "No s'ha pogut completar l'acció de l'enquesta"
+
+msgid "Not started"
+msgstr "No iniciada"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Les enquestes de reunió permeten als usuaris convidats seleccionar les dates en què estan disponibles."
+
+msgid "Back to surveys"
+msgstr "Torna a les enquestes"
+
+msgid "Edit meeting poll"
+msgstr "Edita l'enquesta de reunió"
+
+msgid "View meeting poll"
+msgstr "Visualitza l'enquesta de reunió"
+
+msgid "Basic information"
+msgstr "Informació bàsica"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Això crearà una enquesta de tipus enquesta de reunió. Les respostes i invitacions es gestionen per separat."
+
+msgid "Availability"
+msgstr "Disponibilitat"
+
+msgid "Meeting dates"
+msgstr "Dates de la reunió"
+
+msgid "Meeting poll"
+msgstr "Enquesta de reunió"
+
+msgid "My availability"
+msgstr "La meva disponibilitat"
+
+msgid "Meeting poll results"
+msgstr "Resultats de l'enquesta de reunió"
+
+msgid "No invitations found"
+msgstr "No s'han trobat invitacions"
+
+msgid "available"
+msgstr "disponible"
+
+msgid "Could not load meeting poll"
+msgstr "No s'ha pogut carregar l'enquesta de reunió"
+
+msgid "Please complete the required fields"
+msgstr "Completeu els camps obligatoris"
+
+msgid "Could not save meeting poll"
+msgstr "No s'ha pogut desar l'enquesta de reunió"
+
+msgid "Could not save meeting availability"
+msgstr "No s'ha pogut desar la disponibilitat de la reunió"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copia aquesta enquesta a un altre curs o sessió"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "L'enquesta es copiarà sense respostes ni invitacions."
+
+msgid "No target courses found"
+msgstr "No s'han trobat cursos de destinació"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cerca per títol de curs, codi de curs o nom de sessió."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Utilitzeu Duplica l'enquesta quan vulgueu una còpia al mateix curs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Les preguntes i opcions es copiaran. Les respostes, invitacions i informes romandran només a l'enquesta original."
+
+msgid "Selected target"
+msgstr "Destinació seleccionada"
+
+msgid "Could not load copy form"
+msgstr "No s'ha pogut carregar el formulari de còpia"
+
+msgid "The survey will be copied to: %s"
+msgstr "L'enquesta es copiarà a: %s"
+
+msgid "Survey copied."
+msgstr "Enquesta copiada."
+
+msgid "Could not copy survey"
+msgstr "No s'ha pogut copiar l'enquesta"
+
+msgid "Answer survey"
+msgstr "Respon l'enquesta"
+
+msgid "Preview mode does not save answers."
+msgstr "El mode de previsualització no desa les respostes."
+
+msgid "Survey completed"
+msgstr "Enquesta completada"
+
+msgid "Thank you for answering the survey."
+msgstr "Gràcies per respondre l'enquesta."
+
+msgid "Profile information"
+msgstr "Informació del perfil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Reviseu els camps de perfil sol·licitats abans de respondre l'enquesta."
+
+msgid "This profile field is read-only."
+msgstr "Aquest camp de perfil és només de lectura."
+
+msgid "You already filled this survey."
+msgstr "Ja heu omplert aquesta enquesta."
+
+msgid "Please specify"
+msgstr "Especifiqueu-ho"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Aquest tipus de pregunta no és compatible amb la vista moderna de l'enquesta."
+
+msgid "Preview only"
+msgstr "Només previsualització"
+
+msgid "Submit answers"
+msgstr "Envia les respostes"
+
+msgid "Could not load survey"
+msgstr "No s'ha pogut carregar l'enquesta"
+
+msgid "Please complete the required profile fields."
+msgstr "Completeu els camps de perfil obligatoris."
+
+msgid "Please answer all mandatory questions."
+msgstr "Responeu totes les preguntes obligatòries."
+
+msgid "Could not save survey answers"
+msgstr "No s'han pogut desar les respostes de l'enquesta"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configureu la informació principal de l'enquesta abans de gestionar les preguntes i les invitacions."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "El codi de l'enquesta no es pot canviar després de la creació."
+
+msgid "Survey behavior"
+msgstr "Comportament de l'enquesta"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilitzeu 0 per no establir cap límit de temps."
+
+msgid "Survey messages"
+msgstr "Missatges de l'enquesta"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Els camps de perfil seleccionats aquí es mostraran abans de les preguntes de l'enquesta."
+
+msgid "No profile fields are currently available."
+msgstr "Actualment no hi ha cap camp de perfil disponible."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "La selecció de camps de perfil només està disponible per a enquestes no anònimes."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "L'enllaç a les competències es migrarà en un procés per lots dedicat."
+
+msgid "Could not load survey configuration"
+msgstr "No s'ha pogut carregar la configuració de l'enquesta"
+
+msgid "The survey code is required."
+msgstr "El codi de l'enquesta és obligatori."
+
+msgid "The survey title is required."
+msgstr "El títol de l'enquesta és obligatori."
+
+msgid "The survey has been saved successfully"
+msgstr "L'enquesta s'ha desat correctament"
+
+msgid "Could not save survey configuration"
+msgstr "No s'ha pogut desar la configuració de l'enquesta"
+
+msgid "Course users"
+msgstr "Usuaris del curs"
+
+msgid "Already invited"
+msgstr "Ja convidat"
+
+msgid "No users found"
+msgstr "No s'han trobat usuaris"
+
+msgid "No groups found"
+msgstr "No s'han trobat grups"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilitzeu **link** on ha d'aparèixer l'enllaç de l'enquesta."
+
+msgid "Remind all selected users"
+msgstr "Recorda a tots els usuaris seleccionats"
+
+msgid "Anonymous access link"
+msgstr "Enllaç d'accés anònim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Els usuaris que no han estat convidats poden utilitzar aquest enllaç per respondre l'enquesta."
+
+msgid "Answered anonymously"
+msgstr "Respost de manera anònima"
+
+msgid "Could not load survey invitations"
+msgstr "No s'han pogut carregar les invitacions de l'enquesta"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "L'assumpte i el missatge del correu són obligatoris quan s'envia un correu."
+
+msgid "Could not publish survey"
+msgstr "No s'ha pogut publicar l'enquesta"
+
+msgid "Could not copy the link"
+msgstr "No s'ha pogut copiar l'enllaç"
+
+msgid "Please answer this survey using the following link"
+msgstr "Responeu aquesta enquesta utilitzant l'enllaç següent"
+
+msgid "Export CSV"
+msgstr "Exporta CSV"
+
+msgid "Export compact CSV"
+msgstr "Exporta CSV compacte"
+
+msgid "Export Excel"
+msgstr "Exporta Excel"
+
+msgid "Export package"
+msgstr "Exporta paquet"
+
+msgid "Results summary"
+msgstr "Resum de resultats"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Aquesta vista mostra les dades d'informes migrades d'aquesta enquesta."
+
+msgid "Select user"
+msgstr "Selecciona usuari"
+
+msgid "No answers found"
+msgstr "No s'han trobat respostes"
+
+msgid "answers"
+msgstr "respostes"
+
+msgid "Could not load survey reporting"
+msgstr "No s'ha pogut carregar l'informe de l'enquesta"
+
+msgid "Back to threads"
+msgstr "Torna als fils"
+
+msgid "Back to learning path"
+msgstr "Torna al camí d'aprenentatge"
+
+msgid "Remove sticky"
+msgstr "Elimina l'adhesiu"
+
+msgid "Make sticky"
+msgstr "Fes adhesiu"
+
+msgid "Open thread"
+msgstr "Obrir fil"
+
+msgid "Close thread"
+msgstr "Tancar fil"
+
+msgid "Delete thread"
+msgstr "Suprimir fil"
+
+msgid "This thread is hidden from learners."
+msgstr "Aquest fil està ocult per als estudiants."
+
+msgid "Revision requested"
+msgstr "Revisió sol·licitada"
+
+msgid "Revision"
+msgstr "Revisió"
+
+msgid "Approve post"
+msgstr "Aprovar publicació"
+
+msgid "Reject post"
+msgstr "Rebutjar publicació"
+
+msgid "Cancel revision request"
+msgstr "Cancel·lar sol·licitud de revisió"
+
+msgid "Delete post"
+msgstr "Suprimir publicació"
+
+msgid "Message is required"
+msgstr "El missatge és obligatori"
+
+msgid "Target thread is required"
+msgstr "El fil de destinació és obligatori"
+
+msgid "Could not retrieve posts"
+msgstr "No s'han pogut recuperar les publicacions"
+
+msgid "Thread shown"
+msgstr "Fil mostrat"
+
+msgid "Thread hidden"
+msgstr "Fil ocult"
+
+msgid "Could not update thread"
+msgstr "No s'ha pogut actualitzar el fil"
+
+msgid "Thread closed"
+msgstr "Fil tancat"
+
+msgid "Thread opened"
+msgstr "Fil obert"
+
+msgid "Thread marked as sticky"
+msgstr "Fil marcat com a fixat"
+
+msgid "Thread unmarked as sticky"
+msgstr "Fil desmarcat com a fixat"
+
+msgid "Thread notifications enabled"
+msgstr "Notificacions del fil activades"
+
+msgid "Thread notifications disabled"
+msgstr "Notificacions del fil desactivades"
+
+msgid "Could not update thread notification"
+msgstr "No s'ha pogut actualitzar la notificació del fil"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Segur que voleu suprimir aquest fil?"
+
+msgid "Could not delete thread"
+msgstr "No s'ha pogut suprimir el fil"
+
+msgid "Post approved"
+msgstr "Publicació aprovada"
+
+msgid "Could not approve post"
+msgstr "No s'ha pogut aprovar la publicació"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Segur que voleu rebutjar aquesta publicació?"
+
+msgid "Post rejected"
+msgstr "Publicació rebutjada"
+
+msgid "Could not reject post"
+msgstr "No s'ha pogut rebutjar la publicació"
+
+msgid "Post shown"
+msgstr "Publicació mostrada"
+
+msgid "Post hidden"
+msgstr "Publicació oculta"
+
+msgid "Could not update post"
+msgstr "No s'ha pogut actualitzar la publicació"
+
+msgid "Post updated"
+msgstr "Publicació actualitzada"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Segur que voleu suprimir aquesta publicació?"
+
+msgid "Post deleted"
+msgstr "Publicació suprimida"
+
+msgid "Could not delete post"
+msgstr "No s'ha pogut suprimir la publicació"
+
+msgid "Untitled thread"
+msgstr "Fil sense títol"
+
+msgid "Could not retrieve threads"
+msgstr "No s'han pogut recuperar els fils"
+
+msgid "Post moved"
+msgstr "Publicació moguda"
+
+msgid "Could not move post"
+msgstr "No s'ha pogut moure la publicació"
+
+msgid "Revision request removed"
+msgstr "Sol·licitud de revisió eliminada"
+
+msgid "Could not update revision request"
+msgstr "No s'ha pogut actualitzar la sol·licitud de revisió"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Segur que voleu informar d'aquesta publicació?"
+
+msgid "Could not report post"
+msgstr "No s'ha pogut informar de la publicació"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Segur que voleu suprimir aquest adjunt?"
+
+msgid "Attachment deleted"
+msgstr "Adjunt suprimit"
+
+msgid "Could not delete attachment"
+msgstr "No s'ha pogut suprimir l'adjunt"
+
+msgid "Thread title"
+msgstr "Títol del fil"
+
+msgid "Sticky thread"
+msgstr "Fil fixat"
+
+msgid "Attach files"
+msgstr "Adjunta fitxers"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Els fitxers adjunts estan desactivats per a aquest fòrum"
+
+msgid "The forum is not open yet."
+msgstr "El fòrum encara no està obert."
+
+msgid "The forum is closed."
+msgstr "El fòrum està tancat."
+
+msgid "The forum is locked."
+msgstr "El fòrum està bloquejat."
+
+msgid "New threads are not allowed in this forum."
+msgstr "No es permeten nous fils en aquest fòrum."
+
+msgid "Thread created"
+msgstr "Fil creat"
+
+msgid "Could not create thread"
+msgstr "No s'ha pogut crear el fil"
+
+msgid "Back to posts"
+msgstr "Torna als missatges"
+
+msgid "This reply will be stored as a revision."
+msgstr "Aquesta resposta es desarà com a revisió."
+
+msgid "Post reply"
+msgstr "Publica resposta"
+
+msgid "The thread is locked."
+msgstr "El fil està bloquejat."
+
+msgid "Reply added"
+msgstr "Resposta afegida"
+
+msgid "Could not add reply"
+msgstr "No s'ha pogut afegir la resposta"
+
+msgid "Add forum"
+msgstr "Afegeix fòrum"
+
+msgid "No forums found"
+msgstr "No s'han trobat fòrums"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Creeu la vostra primera categoria de fòrum o fòrum per iniciar discussions."
+
+msgid "Locked"
+msgstr "Bloquejat"
+
+msgid "No forums in this category"
+msgstr "No hi ha fòrums en aquesta categoria"
+
+msgid "Posts require approval"
+msgstr "Les publicacions requereixen aprovació"
+
+msgid "Forum for current group"
+msgstr "Fòrum per al grup actual"
+
+msgid "Group forum visibility"
+msgstr "Visibilitat del fòrum del grup"
+
+msgid "No category"
+msgstr "Sense categoria"
+
+msgid "Could not retrieve forums"
+msgstr "No s'han pogut obtenir els fòrums"
+
+msgid "Forum category updated"
+msgstr "Categoria de fòrum actualitzada"
+
+msgid "Forum category created"
+msgstr "Categoria de fòrum creada"
+
+msgid "Could not save forum category"
+msgstr "No s'ha pogut desar la categoria de fòrum"
+
+msgid "Forum updated"
+msgstr "Fòrum actualitzat"
+
+msgid "Forum created"
+msgstr "Fòrum creat"
+
+msgid "Could not save forum"
+msgstr "No s'ha pogut desar el fòrum"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Segur que voleu suprimir aquesta categoria de fòrum?"
+
+msgid "Could not delete forum category"
+msgstr "No s'ha pogut suprimir la categoria de fòrum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Segur que voleu suprimir aquest fòrum?"
+
+msgid "Could not delete forum"
+msgstr "No s'ha pogut suprimir el fòrum"
+
+msgid "Forum category unlocked"
+msgstr "Categoria de fòrum desbloquejada"
+
+msgid "Forum category locked"
+msgstr "Categoria de fòrum bloquejada"
+
+msgid "Could not update forum category"
+msgstr "No s'ha pogut actualitzar la categoria de fòrum"
+
+msgid "Forum category shown"
+msgstr "Categoria de fòrum mostrada"
+
+msgid "Forum category hidden"
+msgstr "Categoria de fòrum oculta"
+
+msgid "Forum unlocked"
+msgstr "Fòrum desbloquejat"
+
+msgid "Forum locked"
+msgstr "Fòrum bloquejat"
+
+msgid "Could not update forum"
+msgstr "No s'ha pogut actualitzar el fòrum"
+
+msgid "Forum shown"
+msgstr "Fòrum mostrat"
+
+msgid "Forum hidden"
+msgstr "Fòrum ocult"
+
+msgid "Forum notifications enabled"
+msgstr "Notificacions del fòrum activades"
+
+msgid "Forum notifications disabled"
+msgstr "Notificacions del fòrum desactivades"
+
+msgid "Could not update forum notification"
+msgstr "No s'ha pogut actualitzar la notificació del fòrum"
+
+msgid "Forum category moved"
+msgstr "Categoria de fòrum moguda"
+
+msgid "Could not move forum category"
+msgstr "No s'ha pogut moure la categoria de fòrum"
+
+msgid "Forum moved"
+msgstr "Fòrum mogut"
+
+msgid "Could not move forum"
+msgstr "No s'ha pogut moure el fòrum"
+
+msgid "Back to forums"
+msgstr "Torna als fòrums"
+
+msgid "New thread"
+msgstr "Nou fil"
+
+msgid "No threads found"
+msgstr "No s'han trobat fils"
+
+msgid "Sticky"
+msgstr "Destacat"
+
+msgid "Graded"
+msgstr "Qualificat"
+
+msgid "Grade peers"
+msgstr "Qualificar companys"
+
+msgid "Move thread"
+msgstr "Mou el fil"
+
+msgid "Target forum"
+msgstr "Fòrum de destinació"
+
+msgid "Target forum is required"
+msgstr "El fòrum de destinació és obligatori"
+
+msgid "Students"
+msgstr "Estudiants"
+
+msgid "No students found"
+msgstr "No s'han trobat estudiants"
+
+msgid "No peers available to grade."
+msgstr "No hi ha companys disponibles per qualificar."
+
+msgid "Qualified"
+msgstr "Qualificat"
+
+msgid "Not qualified"
+msgstr "No qualificat"
+
+msgid "Could not retrieve thread grading"
+msgstr "No s'ha pogut obtenir la qualificació del fil"
+
+msgid "Thread grading updated"
+msgstr "Qualificació del fil actualitzada"
+
+msgid "Could not update thread grading"
+msgstr "No s'ha pogut actualitzar la qualificació del fil"
+
+msgid "Thread score saved"
+msgstr "Puntuació del fil desada"
+
+msgid "Could not save thread score"
+msgstr "No s'ha pogut desar la puntuació del fil"
+
+msgid "Could not move thread"
+msgstr "No s'ha pogut moure el fil"
+
+msgid "Thread updated"
+msgstr "Fil actualitzat"
+
+msgid "Search term is too short"
+msgstr "El terme de cerca és massa curt"
+
+msgid "Could not search forums"
+msgstr "No s'han pogut cercar els fòrums"
+
+msgid "Moderated"
+msgstr "Moderat"
+
+msgid "View threads"
+msgstr "Mostra els fils"
+
+msgid "No auth source"
+msgstr "Cap font d'autenticació"
+
+msgid "You must add at least one question"
+msgstr "Heu d'afegir com a mínim una pregunta"
+
+msgid "Advanced actions"
+msgstr "Accions avançades"
+
+msgid "Application path"
+msgstr "Camí de l'aplicació"
+
+msgid "Apply files details"
+msgstr "Aplica detalls dels fitxers"
+
+msgid "Apply plan details"
+msgstr "Aplica detalls del pla"
+
+msgid "Apply plan failed"
+msgstr "L'aplicació del pla ha fallat"
+
+msgid "Apply plan ready"
+msgstr "Pla d'aplicació preparat"
+
+msgid "Apply preparation"
+msgstr "Preparació de l'aplicació"
+
+msgid "Apply staged files"
+msgstr "Aplica fitxers en preparació"
+
+msgid "Applying files..."
+msgstr "Aplicant fitxers..."
+
+msgid "Audit file"
+msgstr "Fitxer d'auditoria"
+
+msgid "Backup directory"
+msgstr "Directori de còpia de seguretat"
+
+msgid "Baseline clean"
+msgstr "Línia base neta"
+
+msgid "Baseline warnings"
+msgstr "Avisos de la línia base"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Crea un pla d'aplicació segur a partir del paquet en preparació. Això només comprova fitxers, permisos, camí de còpia de seguretat i estat de bloqueig. No substitueix fitxers."
+
+msgid "Build production frontend assets."
+msgstr "Construeix els actius del frontend de producció."
+
+msgid "Building plan..."
+msgstr "Creant el pla..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Comprova"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Comprova si hi ha actualitzacions de Chamilo disponibles, verifica paquets, prepara fitxers i executa passos controlats després de l'actualització."
+
+msgid "Check manifest"
+msgstr "Comprova el manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Comprovant accions posteriors a l'aplicació..."
+
+msgid "Checking..."
+msgstr "Comprovant..."
+
+msgid "Composer install"
+msgstr "Instal·lació de Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Les accions de Composer, Yarn i migració de base de dades poden modificar dependències, actius generats o la base de dades. Seleccioneu-les només després de confirmar les còpies de seguretat i els permisos."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configureu CHAMILO_UPDATE_MANIFEST_URL al servidor o proporcioneu un URL HTTPS del manifest."
+
+msgid "Configured"
+msgstr "Configurat"
+
+msgid "Current migration"
+msgstr "Migració actual"
+
+msgid "Database baseline"
+msgstr "Línia base de la base de dades"
+
+msgid "Database migration safety review"
+msgstr "Revisió de seguretat de la migració de la base de dades"
+
+msgid "Database migrations"
+msgstr "Migracions de la base de dades"
+
+msgid "Development mode"
+msgstr "Mode de desenvolupament"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "No activeu això llevat que s'hagi revisat la còpia de seguretat de l'actualització i els permisos del servidor."
+
+msgid "Doctrine dry-run command"
+msgstr "Ordre de simulació de Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine ha informat d'advertències de la línia base històrica. L'actualitzador executarà només les migracions V210 preparades després de la confirmació explícita."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine executarà només les migracions V210 preparades explícitament després que la revisió de seguretat sigui correcta."
+
+msgid "Dry-run exit code"
+msgstr "Codi de sortida de la simulació"
+
+msgid "Executed unavailable migrations"
+msgstr "Migracions no disponibles executades"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extreu el paquet d'actualització verificat en un directori d'assaig per a la inspecció. Això no substitueix fitxers, executa migracions ni modifica la base de dades."
+
+msgid "File apply available"
+msgstr "Aplicació de fitxers disponible"
+
+msgid "Files to replace"
+msgstr "Fitxers a substituir"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confirmo que existeix una còpia de seguretat de la base de dades i que s'ha verificat abans d'executar les migracions."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Entenc que les accions avançades poden modificar dependències, actius generats o la base de dades."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Entenc que això substituirà fitxers a la instal·lació de Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Entenc que això executarà ordres d'actualització al servidor."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instal·leu les dependències de frontend abans de reconstruir els actius."
+
+msgid "Installed version"
+msgstr "Versió instal·lada"
+
+msgid "Latest migration"
+msgstr "Última migració"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Deixeu buits els camins del paquet i de la signatura per baixar-los des de les URL del manifest verificat. Els camins locals només estan disponibles per a proves de desenvolupament."
+
+msgid "Live command log"
+msgstr "Registre d'ordres en directe"
+
+msgid "Live update log"
+msgstr "Registre d'actualització en directe"
+
+msgid "Local test options"
+msgstr "Opcions de prova local"
+
+msgid "Local test update notice link"
+msgstr "Enllaç de notificació d'actualització de prova local"
+
+msgid "Local update notice simulation"
+msgstr "Simulació de notificació d'actualització local"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "La simulació de notificació d'actualització local només està disponible en mode de desenvolupament."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Font del manifest"
+
+msgid "Migration safety details"
+msgstr "Detalls de la revisió de seguretat de la migració"
+
+msgid "Migration safety review failed"
+msgstr "La revisió de seguretat de la migració ha fallat"
+
+msgid "Migration safety review ready"
+msgstr "Revisió de seguretat de la migració preparada"
+
+msgid "Migration target"
+msgstr "Destinació de la migració"
+
+msgid "New files"
+msgstr "Fitxers nous"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Noves migracions informades per Doctrine"
+
+msgid "Next migration"
+msgstr "Propera migració"
+
+msgid "No executed unavailable migration was reported."
+msgstr "No s'ha informat de cap migració no disponible executada."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Encara no s'ha configurat cap URL de manifest oficial. Utilitzeu una URL HTTPS o un camí local per a proves de desenvolupament."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "No s'ha detectat cap migració pendent abans de la destinació d'actualització preparada."
+
+msgid "Not configured"
+msgstr "No configurat"
+
+msgid "Not detected"
+msgstr "No detectat"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal oficial d'actualització de Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 del paquet"
+
+msgid "Package URL"
+msgstr "URL del paquet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Els fitxers del paquet i de la signatura es baixaran des del manifest. Els camins locals estan desactivats en aquest entorn."
+
+msgid "Package path"
+msgstr "Camí del paquet"
+
+msgid "Package staged successfully"
+msgstr "Paquet preparat correctament"
+
+msgid "Package staging failed"
+msgstr "Preparació del paquet fallida"
+
+msgid "Package verification"
+msgstr "Verificació del paquet"
+
+msgid "Package verification failed"
+msgstr "Verificació del paquet fallida"
+
+msgid "Package verified successfully"
+msgstr "Paquet verificat correctament"
+
+msgid "Pending migrations before this update"
+msgstr "Migracions pendents abans d'aquesta actualització"
+
+msgid "Planned backup path"
+msgstr "Camí de còpia de seguretat planificada"
+
+msgid "Post-apply actions completed"
+msgstr "Accions post-aplicació completades"
+
+msgid "Post-apply actions failed"
+msgstr "Accions post-aplicació fallides"
+
+msgid "Post-apply actions ready"
+msgstr "Accions post-aplicació preparades"
+
+msgid "Post-apply checks"
+msgstr "Comprovacions post-aplicació"
+
+msgid "Post-apply checks failed"
+msgstr "Comprovacions post-aplicació fallides"
+
+msgid "Post-apply details"
+msgstr "Detalls post-aplicació"
+
+msgid "Post-apply run details"
+msgstr "Detalls d'execució post-aplicació"
+
+msgid "Preflight checks"
+msgstr "Comprovacions prèvies"
+
+msgid "Preflight checks completed"
+msgstr "Comprovacions prèvies completades"
+
+msgid "Preflight checks failed"
+msgstr "Comprovacions prèvies fallides"
+
+msgid "Preflight details"
+msgstr "Detalls prèvies"
+
+msgid "Prepare staging"
+msgstr "Preparar entorn de proves"
+
+msgid "Preparing staging..."
+msgstr "Preparant entorn de proves..."
+
+msgid "Production mode"
+msgstr "Mode de producció"
+
+msgid "Released at"
+msgstr "Publicat el"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Substitueix els fitxers de Chamilo del paquet preparat utilitzant el pla d'aplicació revisat. Això no executa migracions de base de dades, Composer, Yarn ni ordres de memòria cau."
+
+msgid "Review apply plan"
+msgstr "Revisar el pla d'aplicació"
+
+msgid "Review database migrations"
+msgstr "Revisar migracions de base de dades"
+
+msgid "Review post-apply actions"
+msgstr "Revisar accions post-aplicació"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Revisa les ordres manuals recomanades després d'aplicar els fitxers d'actualització. Aquest pas no executa Composer, Yarn, migracions ni ordres de memòria cau."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Revisa les migracions de Doctrine preparades i la sortida de prova abans d'executar les migracions de base de dades."
+
+msgid "Reviewing database migrations..."
+msgstr "Revisant migracions de base de dades..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Executa i supera la revisió de seguretat de migracions abans d'executar les migracions de base de dades."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Executa comprovacions d'entorn abans de qualsevol pas futur d'aplicació d'actualització. Això no modifica fitxers ni la base de dades."
+
+msgid "Run post-apply actions"
+msgstr "Executar accions post-aplicació"
+
+msgid "Run preflight checks"
+msgstr "Executar comprovacions prèvies"
+
+msgid "Run selected post-apply actions"
+msgstr "Executar accions post-aplicació seleccionades"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Executa les ordres post-aplicació seleccionades des del servidor utilitzant una llista permesa controlada. No s'accepten ordres de shell personalitzades."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Executa aquestes ordres manualment des del servidor després de confirmar el resultat de l'actualització de fitxers i les còpies de seguretat."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "L'execució d'accions post-aplicació des de la interfície està desactivada en mode de producció."
+
+msgid "Running post-apply actions..."
+msgstr "Executant accions post-aplicació..."
+
+msgid "Safe actions"
+msgstr "Accions segures"
+
+msgid "Signature path"
+msgstr "Camí de la signatura"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "La verificació de la signatura no es pot ometre en aquest entorn."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Omet la verificació de la signatura per a proves de desenvolupament local"
+
+msgid "Staged file application failed"
+msgstr "L'aplicació de fitxers preparats ha fallat"
+
+msgid "Staged files applied successfully"
+msgstr "Fitxers preparats aplicats correctament"
+
+msgid "Staging details"
+msgstr "Detalls de preparació"
+
+msgid "Staging directory"
+msgstr "Directori de preparació"
+
+msgid "Staging extraction"
+msgstr "Extracció de preparació"
+
+msgid "Symfony cache clear"
+msgstr "Neteja de la memòria cau de Symfony"
+
+msgid "System update"
+msgstr "Actualització del sistema"
+
+msgid "Target version"
+msgstr "Versió objectiu"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "L'URL del manifest oficial configurat està predefinit. Podeu canviar-lo a un altre manifest HTTPS si cal."
+
+msgid "The database migration baseline is clean."
+msgstr "La línia base de migracions de la base de dades està neta."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "La resposta HTTP final ha fallat després que l'operació s'hagués completat. Normalment és causat per permisos de memòria cau en temps d'execució o un reinici del servidor web durant la petició."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "El registre d'operacions indica que les accions post-aplicació s'han completat correctament."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Les ordres post-aplicació seleccionades s'han completat correctament, però la resposta HTTP final ha fallat. Refresqueu la pàgina i verifiqueu els permisos de la memòria cau d'execució si la pàgina no es carrega correctament."
+
+msgid "The updater does not create or restore database backups."
+msgstr "L'actualitzador no crea ni restaura còpies de seguretat de la base de dades."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Aquestes accions són segures per executar des de la interfície després de revisar el resultat de l'actualització."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Aquestes ordres poden modificar dependències, actius generats, memòria cau o la base de dades. Confirmeu les còpies de seguretat abans de continuar."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Aquesta acció modifica fitxers de la instal·lació de Chamilo. Assegureu-vos que el pla d'aplicació s'ha revisat i que les còpies de seguretat estan habilitades abans de continuar."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Aquesta entrada de desenvolupament simula el futur avís d'actualització de Chamilo.org utilitzant rutes de paquets de prova locals."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Aquesta pantalla s'ha obert des d'un avís d'actualització oficial, però encara no s'ha configurat cap font de manifest oficial."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Aquesta pantalla s'ha obert des d'un avís d'actualització. Només es inicia automàticament la comprovació del manifest."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Aquest pas prepara només una revisió. La substitució de fitxers es produeix més endavant al pas Aplica fitxers en fase, amb bloqueig, còpia de seguretat i protecció de reversió."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Aquest actualitzador no crea una còpia de seguretat de la base de dades. Creeu i verifiqueu una còpia de seguretat abans d'executar migracions."
+
+msgid "Trusted public key"
+msgstr "Clau pública de confiança"
+
+msgid "Trusted signing key"
+msgstr "Clau de signatura de confiança"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Escriviu APLICA FITXERS D'ACTUALITZACIÓ per confirmar"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Escriviu EXECUTA MIGRACIONS DE BASE DE DADES per confirmar les migracions de la base de dades"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Escriviu EXECUTA ACCIONS POST-ACTUALITZACIÓ per confirmar"
+
+msgid "Unknown update notice source."
+msgstr "Font desconeguda de l'avís d'actualització."
+
+msgid "Update availability"
+msgstr "Disponibilitat d'actualització"
+
+msgid "Update directory"
+msgstr "Directori d'actualització"
+
+msgid "Update lock path"
+msgstr "Camí de bloqueig d'actualització"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilitzeu el directori de preparació generat pel pas anterior. El backend només accepta directoris dins de var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilitzeu aquest enllaç per simular el futur avís d'actualització de Chamilo.org durant les proves de desenvolupament."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilitzeu això només per a proves de desenvolupament locals. Les actualitzacions de producció han d'utilitzar la clau configurada al servidor."
+
+msgid "Verification details"
+msgstr "Detalls de verificació"
+
+msgid "Verify package"
+msgstr "Verificar paquet"
+
+msgid "Verifying..."
+msgstr "Verificant..."
+
+msgid "Waiting for command progress events..."
+msgstr "Esperant esdeveniments de progrés de l'ordre..."
+
+msgid "Waiting for update progress events..."
+msgstr "Esperant esdeveniments de progrés de l'actualització..."
+
+msgid "Yarn build"
+msgstr "Construcció Yarn"
+
+msgid "Yarn install"
+msgstr "Instal·lació Yarn"
+
+msgid "A comment is required"
+msgstr "Cal un comentari"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Ja existeix una base de dades amb el mateix nom. Si conté taules, s'eliminaran; si està buida, es reutilitzarà."
+
+msgid "AI generated"
+msgstr "Generat per IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Afegiu almenys una pregunta abans de tornar al camí d'aprenentatge."
+
+msgid "Add attachments"
+msgstr "Afegir adjunts"
+
+msgid "Additional fields"
+msgstr "Camps addicionals"
+
+msgid "Allow comments"
+msgstr "Permetre comentaris"
+
+msgid "Allow new pages"
+msgstr "Permetre pàgines noves"
+
+msgid "Allow ratings"
+msgstr "Permetre valoracions"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Esteu segur que voleu suprimir tots els elements?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Esteu segur que voleu restaurar la renovació automàtica?"
+
+msgid "Attachment has been deleted"
+msgstr "L'adjunt s'ha suprimit"
+
+msgid "Backup file"
+msgstr "Fitxer de còpia de seguretat"
+
+msgid "Block comments"
+msgstr "Bloquejar comentaris"
+
+msgid "Block new pages"
+msgstr "Bloquejar pàgines noves"
+
+msgid "Block ratings"
+msgstr "Bloquejar valoracions"
+
+msgid "Cancel renewal"
+msgstr "Cancel·lar renovació"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Els enllaços de categoria s'eliminaran de %s pàgines del Wiki."
+
+msgid "Change"
+msgstr "Canviar"
+
+msgid "Clear group"
+msgstr "Netejar grup"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Feu clic en una etiqueta per inserir-la a l'editor. Aquests marcadors de posició es reemplaçaran en generar el certificat."
+
+msgid "Comment added"
+msgstr "Comentari afegit"
+
+msgid "Comment is required"
+msgstr "El comentari és obligatori"
+
+msgid "Comment score"
+msgstr "Puntuació del comentari"
+
+msgid "Compare selected versions line by line"
+msgstr "Compara les versions seleccionades línia per línia"
+
+msgid "Compare selected versions word by word"
+msgstr "Compara les versions seleccionades paraula per paraula"
+
+msgid "Compare versions"
+msgstr "Compara versions"
+
+msgid "Copy completed"
+msgstr "Còpia completada"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Crea pàgines de treball Wiki individuals per als aprenents"
+
+msgid "Current view mode"
+msgstr "Mode de visualització actual"
+
+msgid "Delete Wiki"
+msgstr "Suprimeix el Wiki"
+
+msgid "Delete page"
+msgstr "Suprimeix la pàgina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "No es recomana suprimir la pàgina d'inici del Wiki. Podeu recrear-la més endavant."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "En desactivar el Wiki, es bloquegen les pàgines i accions normals del Wiki. Aquesta pàgina de configuració continua disponible per als professors del curs."
+
+msgid "Discussion"
+msgstr "Discussió"
+
+msgid "Edit Comment"
+msgstr "Edita el comentari"
+
+msgid "Edit page"
+msgstr "Edita la pàgina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "La data de finalització ha de ser posterior o igual a la data de caducitat"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Introduïu un terme de cerca per trobar pàgines Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "La data de caducitat ha de ser anterior o igual a la data de finalització"
+
+msgid "Failed email recipients"
+msgstr "Destinataris de correu electrònic fallits"
+
+msgid "Finish and return to learning path"
+msgstr "Finalitza i torna al camí d'aprenentatge"
+
+msgid "Forum image"
+msgstr "Imatge del fòrum"
+
+msgid "Hide discussion"
+msgstr "Oculta la discussió"
+
+msgid "Hide page"
+msgstr "Oculta la pàgina"
+
+msgid "I changed my mind"
+msgstr "He canviat d'opinió"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Si no està marcat, aquests fitxers continuaran disponibles per a l'administrador de la plataforma mitjançant l'eina 'Informació de fitxers'."
+
+msgid "Internal message failures"
+msgstr "Errors de missatges interns"
+
+msgid "Internal messages available"
+msgstr "Missatges interns disponibles"
+
+msgid "Internal messages created now"
+msgstr "Missatges interns creats ara"
+
+msgid "Item score"
+msgstr "Puntuació de l'element"
+
+msgid "Last post"
+msgstr "Última publicació"
+
+msgid "Lock page"
+msgstr "Bloqueja la pàgina"
+
+msgid "Manage categories"
+msgstr "Gestiona les categories"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marca aquest document com a assistit per IA. Utilitzeu-lo quan el contingut s'hagi creat o modificat significativament amb eines d'IA."
+
+msgid "Maximum score is required"
+msgstr "La puntuació màxima és obligatòria"
+
+msgid "Metric"
+msgstr "Mètrica"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Els nous comentaris estan bloquejats en aquesta discussió"
+
+msgid "No Wiki categories are available yet."
+msgstr "Encara no hi ha categories Wiki disponibles."
+
+msgid "No categories found"
+msgstr "No s'han trobat categories"
+
+msgid "No content"
+msgstr "Sense contingut"
+
+msgid "No parent category"
+msgstr "Sense categoria pare"
+
+msgid "Number of comments scored"
+msgstr "Nombre de comentaris puntuats"
+
+msgid "Old version"
+msgstr "Versió antiga"
+
+msgid "Only image files are allowed."
+msgstr "Només es permeten fitxers d'imatge."
+
+msgid "Please fill all required fields"
+msgstr "Empleneu tots els camps obligatoris"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Les preguntes amb marcadors de classe o estudiant es generaran per a classes o grups del curs: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Les valoracions estan bloquejades en aquesta discussió"
+
+msgid "Remove image"
+msgstr "Elimina la imatge"
+
+msgid "Restore renewal"
+msgstr "Restaura la renovació"
+
+msgid "Restore version"
+msgstr "Restaura la versió"
+
+msgid "Search in"
+msgstr "Cerca a"
+
+msgid "Select group"
+msgstr "Selecciona grup"
+
+msgid "Select image"
+msgstr "Selecciona imatge"
+
+msgid "Selected image"
+msgstr "Imatge seleccionada"
+
+msgid "Show discussion"
+msgstr "Mostra discussió"
+
+msgid "Show page"
+msgstr "Mostra pàgina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Alguns fitxers o carpetes no tenen permís d'escriptura. Per poder instal·lar Chamilo primer heu de canviar els seus permisos (utilitzant CHMOD). Llegiu el"
+
+msgid "Subcategories"
+msgstr "Subcategories"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Toqueu a l'esquerra o a la dreta per navegar"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "El termini de lliurament de la tasca Wiki ha passat, però es permet l'entrega amb retard."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "El termini de lliurament de la tasca Wiki ha passat."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "La tasca Wiki encara no ha començat."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Cal bloquejar l'edició de la pàgina Wiki abans de desar."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "L'anunci s'ha desat, però no s'ha pogut pujar un adjunt."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "L'anunci s'ha desat, però ha fallat l'enviament per correu electrònic."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "L'anunci s'ha desat, però no s'ha pogut enviar cap correu electrònic."
+
+msgid "The category has been created"
+msgstr "La categoria s'ha creat"
+
+msgid "The category has been deleted"
+msgstr "La categoria s'ha suprimit"
+
+msgid "The category has been updated"
+msgstr "La categoria s'ha actualitzat"
+
+msgid "The end date is invalid"
+msgstr "La data de finalització no és vàlida"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "El nombre màxim de versions ha de ser un enter no negatiu"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "El nombre màxim de paraules ha de ser un enter no negatiu"
+
+msgid "The print window could not be opened"
+msgstr "No s'ha pogut obrir la finestra d'impressió"
+
+msgid "The start date is invalid"
+msgstr "La data d'inici no és vàlida"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Aquesta configuració s'aplica a tot el curs, incloses les seves sessions i grups."
+
+msgid "This announcement has already been sent by email."
+msgstr "Aquest anunci ja s'ha enviat per correu electrònic."
+
+msgid "This discussion is hidden from learners"
+msgstr "Aquesta discussió està oculta per als estudiants"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Aquesta eina d'IA generativa us permet crear imatges i vídeos curts per il·lustrar el vostre curs. En explicar (en text) el que voleu a la secció del prompt, donareu al model d'IA configurat els elements necessaris per generar una imatge o un vídeo. Tingueu paciència. El model d'IA trigarà una mica i generarà un resultat, que potser voldreu conservar desant el mitjà a la vostra carpeta de documents i incrustant-lo després en un document HTML. No tots els models d'IA són iguals pel que fa a velocitat o qualitat. El model d'IA també us pot proporcionar un prompt modificat, que és una interpretació més detallada de la vostra petició. Podeu utilitzar aquest prompt modificat per ajustar la vostra petició. Tingueu en compte que aquesta eina, especialment per als vídeos, pot generar costos considerables per a la vostra organització, encara que decidiu no desar el mitjà generat. Utilitzeu-la adequadament. Si teniu problemes per obtenir el que busqueu, dediqueu una estona a investigar trucs de prompt en línia per al model d'IA que teniu a la vostra disposició."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Aquest historial pertany al curs base. La restauració està disponible després de crear una versió de sessió."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Aquesta imatge substitueix la icona per defecte del fòrum que es mostra al costat del títol del fòrum."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Aquesta pàgina prové del curs base. En desar-la es crearà una versió per a la sessió actual."
+
+msgid "This will also delete %s subcategories."
+msgstr "Això també suprimirà %s subcategories."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Això crearà pàgines de treball individuals per a %s estudiants."
+
+msgid "Thread history"
+msgstr "Historial del fil"
+
+msgid "Title and content"
+msgstr "Títol i contingut"
+
+msgid "Unable to cancel renewal right now."
+msgstr "No es pot cancel·lar la renovació ara mateix."
+
+msgid "Unable to restore renewal right now."
+msgstr "No es pot restaurar la renovació ara mateix."
+
+msgid "Unlock page"
+msgstr "Desbloqueja pàgina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilitzeu [[Pàgina]] o [[Pàgina|Text visible]] per crear enllaços Wiki interns."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Utilitzeu la barra espaiadora o les tecles de fletxa per navegar"
+
+msgid "View version"
+msgstr "Visualitza versió"
+
+msgid "Visible only to teachers"
+msgstr "Visible només per als professors"
+
+msgid "Weight is required"
+msgstr "El pes és obligatori"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Les categories Wiki estan desactivades per a aquest curs."
+
+msgid "Wiki categories enabled"
+msgstr "Categories Wiki activades"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtratge estricte d'HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Configuració Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Configuració Wiki actualitzada"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Esteu veient una versió històrica d'aquesta pàgina"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Podeu adjuntar un o més fitxers a aquesta resposta."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Podeu editar aquesta pàgina de tasques, però les pàgines de treball dels estudiants no es modificaran."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Podeu utilitzar les etiquetes {{class_name}} i {{student_full_name}} a la pregunta."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Teniu 20 minuts per editar aquesta pàgina abans que expiri el bloqueig d'edició."
+
+msgid "by"
+msgstr "per"
+
+msgid "required"
+msgstr "obligatori"
+
+msgid "Incorrect password."
+msgstr "Contrasenya incorrecta."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alerta d'integritat de fitxers pausada durant 1 hora."
+
+msgid "New baseline established: %s files."
+msgstr "Nova línia base establerta: %s fitxers."
+
+msgid "Scan complete: changes were detected."
+msgstr "Escaneig completat: s'han detectat canvis."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Escaneig completat: no s'han detectat canvis."
+
+msgid "File integrity"
+msgstr "Integritat de fitxers"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Aquest informe compara els fitxers instal·lats (tots excepte var/ i .git/, tot i que .git/config encara es supervisa per detectar un remot segrestat) amb una línia base de confiança, per detectar addicions, modificacions o supressions inesperades."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Podeu revisar l'últim informe a continuació. Executar un escaneig, pausar l'alerta o establir una nova línia base requereix un administrador global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "L'alerta està actualment pausada per manteniment. Es reprendrà automàticament el %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Encara no s'ha executat cap escaneig. Executeu-ne un des d'aquí o des de la línia d'ordres amb app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Últim escaneig"
+
+msgid "Files scanned"
+msgstr "Fitxers escanejats"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Encara no existia cap línia base: aquest escaneig n'ha establert una. Els canvis es reportaran a partir del següent escaneig."
+
+msgid "No changes detected since the baseline."
+msgstr "No s'han detectat canvis des de la línia base."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "La configuració remota de Git (.git/config) ha canviat. Verifiqueu que era esperat."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "L'escaneig s'ha aturat abans d'hora perquè no s'ha pogut llegir un subdirectori (comproveu els permisos dels fitxers). Els resultats a continuació poden ser parcials."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Massa canvis per mostrar-los complets; només es mostren les primeres entrades de cada categoria. Consulteu el registre CEF per veure la llista completa."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fitxer(s) no s'han pogut llegir (permisos) i s'han omès."
+
+msgid "Run a scan now"
+msgstr "Executa un escaneig ara"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Pausa l'alerta durant 1 hora (per manteniment)"
+
+msgid "Pause for 1 hour"
+msgstr "Pausa durant 1 hora"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Confia en l'arbre de fitxers actual com a nova línia base"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Això confiarà en cada fitxer actual com a correcte, incloent-hi qualsevol canvi no revisat. Voleu continuar?"
+
+msgid "Establish new baseline"
+msgstr "Estableix una nova línia base"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programa l'escaneig des d'un crontab del sistema, per exemple"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alerta d'integritat de fitxers a %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Un escaneig d'integritat de fitxers ha detectat canvis a la plataforma:"
+
+msgid "Added files"
+msgstr "Fitxers afegits"
+
+msgid "Modified files"
+msgstr "Fitxers modificats"
+
+msgid "Deleted files"
+msgstr "Fitxers suprimits"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Reviseu l'informe complet des d'Administració > Seguretat > Integritat de fitxers."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Contrasenya per confirmar la pausa de les alertes"
+
+msgid "Password to confirm the new baseline"
+msgstr "Contrasenya per confirmar la nova línia base"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Ja s'està executant un escaneig. Espereu que acabi abans d'iniciar-ne un altre."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "S'està executant un escaneig (iniciat el %date%). Un escaneig complet pot trigar diversos minuts; aquesta pàgina es pot recarregar amb seguretat per comprovar el progrés."
+
+msgid "Currently processing"
+msgstr "Processant actualment"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Un escaneig anterior (iniciat el %date%) es va interrompre abans d'acabar — el procés ja no s'està executant. Podeu iniciar-ne un de nou amb seguretat."
+
+msgid "files"
+msgstr "fitxers"
+
+msgid "Permissions changed"
+msgstr "Permisos canviats"
+
+msgid "Files with changed permissions"
+msgstr "Fitxers amb permisos canviats"
+
+msgid "Alert history"
+msgstr "Historial d'alertes"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Cada escaneig que ha trobat alguna cosa es conserva fins i tot després que es resolgui la desviació o s'estableixi una nova línia base — a diferència de l'informe anterior, un escaneig net o una nova línia base mai no esborra aquest historial."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Aquesta entrada es va truncar en el moment de la captura; consulteu el registre CEF per veure la llista completa."
+
+msgid "No alert has been recorded yet."
+msgstr "Encara no s'ha registrat cap alerta."
+
+msgid "Git remote changed"
+msgstr "El repositori remot de Git ha canviat"
+
+msgid "Press enter to select"
+msgstr "Premeu Intro per seleccionar"
+
+msgid "Press enter to remove"
+msgstr "Premeu Intro per eliminar"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "No s'han trobat elements. Proveu de canviar la consulta de cerca."
+
+msgid "List is empty."
+msgstr "La llista és buida."
+
+msgid "Your session has expired. Please try again."
+msgstr "La vostra sessió ha caducat. Torneu-ho a provar."
+
+msgid "Generate with AI"
+msgstr "Genera amb IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Una il·lustració moderna i acollidora que representa el tema d'aquest curs, en un estil de disseny pla net, utilitzant els colors de la meva plataforma com a accents."
+
+msgid "Back to account"
+msgstr "Torna al compte"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Els vostres comentaris ens ajudaran a millorar les futures sessions de formació."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Gràcies per compartir els vostres comentaris."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Quin grau de satisfacció teniu amb la qualitat general de la formació?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Quin grau de satisfacció teniu amb la rellevància del contingut?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Quin grau de satisfacció teniu amb la claredat de les explicacions?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Quin grau de satisfacció teniu amb l’organització i el ritme de la formació?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Quin grau de satisfacció teniu amb la utilitat pràctica del que heu après?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Recomanaríeu aquesta formació a altres persones?"
+
+msgid "What should we improve in future editions?"
+msgstr "Què hauríem de millorar en futures edicions?"
+
+msgid "Very satisfied"
+msgstr "Molt satisfet"
+
+msgid "Satisfied"
+msgstr "Satisfet"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "Insatisfet"
+
+msgid "Very dissatisfied"
+msgstr "Molt insatisfet"
+
+msgid "Add destination"
+msgstr "Afegeix destinació"
+
+msgid "Add this test to the assessment tool"
+msgstr "Afegeix aquesta prova a l'eina d'avaluació"
+
+msgid "Attempts and timing"
+msgstr "Intents i temps"
+
+msgid "Available questions"
+msgstr "Preguntes disponibles"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel·la i torna al camí d'aprenentatge"
+
+msgid "Category destinations"
+msgstr "Destinacions de categoria"
+
+msgid "Classification"
+msgstr "Classificació"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "No s'ha pogut carregar la configuració de l'exercici"
+
+msgid "Could not save exercise"
+msgstr "No s'ha pogut desar l'exercici"
+
+msgid "Display and learning path"
+msgstr "Visualització i camí d'aprenentatge"
+
+msgid "Edit test"
+msgstr "Edita la prova"
+
+msgid "Exercise settings saved."
+msgstr "Configuració de l'exercici desada."
+
+msgid "Extra settings"
+msgstr "Configuració addicional"
+
+msgid "Feedback and results"
+msgstr "Retroalimentació i resultats"
+
+msgid "Finish exercise"
+msgstr "Finalitza l'exercici"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifica l'idioma d'aquest exercici com a metadades del recurs. No activa la indexació de cerca per si mateix."
+
+msgid "Maximum score (%)"
+msgstr "Puntuació màxima (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Les metadades contenen competències i camps addicionals configurats per als exercicis. És opcional i roman ocult fins que s'obre."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Encara no hi ha categories de preguntes disponibles per a aquest exercici."
+
+msgid "Question categories matrix"
+msgstr "Matriu de categories de preguntes"
+
+msgid "Questions behavior"
+msgstr "Comportament de les preguntes"
+
+msgid "Random by category"
+msgstr "Aleatori per categoria"
+
+msgid "Remove destination"
+msgstr "Elimina destinació"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Les regles s'avaluen per percentatge de puntuació en ordre ascendent. Seleccioneu Finalitza l'exercici per acabar la prova."
+
+msgid "Score and final messages"
+msgstr "Puntuació i missatges finals"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Algunes opcions queden bloquejades després que s'hagi creat l'exercici."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Aquest valor s'emmagatzema com a durada total en minuts."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Utilitzeu 0 per mantenir totes les preguntes disponibles. Utilitzeu -1 quan es permetin totes les preguntes disponibles."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Utilitzeu aquests camps per classificar l'exercici independentment de les seves opcions de visualització."
+
+msgid "Invite by email"
+msgstr "Convidar per correu electrònic"
+
+msgid "Invitation has been sent"
+msgstr "S'ha enviat la invitació"
+
+msgid "Sent on"
+msgstr "Enviat el"
+
+msgid "Accepted on"
+msgstr "Acceptat el"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Aquest curs està obert en una sessió. Enviar una invitació aquí subscriurà el destinatari a tota la sessió %s, no només a aquest curs."
+
+msgid "Revoke"
+msgstr "Revocar"
+
+msgid "Revoked"
+msgstr "Revocat"
+
+msgid "Invitation has been revoked"
+msgstr "S'ha revocat la invitació"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Esteu segur que voleu revocar la invitació enviada a %s?"
+
+msgid "No default room"
+msgstr "Sense aula per defecte"
+
+msgid "Floor"
+msgstr "Planta"
+
+msgid "Capacity"
+msgstr "Capacitat"
+
+msgid "Use attendance default room"
+msgstr "Utilitzar l'aula per defecte d'assistència"
+
+msgid "Floor number"
+msgstr "Número de planta"
+
+msgid "Copy to students"
+msgstr "Copiar als estudiants"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generar una prova ràpida sobre aquest tema"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "El contingut del document desat s'enviarà a un model d'IA per al seu processament."
+
+msgid "MCP API key"
+msgstr "Clau API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicacions autoritzades"
+
+msgid "Your session is about to expire"
+msgstr "La vostra sessió està a punt d'expirar"
+
+msgid "Do you want to continue your session?"
+msgstr "Voleu continuar la sessió?"
+
+msgid "Stay connected"
+msgstr "Mantenir la connexió"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Se us desconnectarà en %s segons."
+
+msgid "No descriptions available yet."
+msgstr "Encara no hi ha descripcions disponibles."
+
+msgid "%s users selected"
+msgstr "%s usuaris seleccionats"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Els usuaris seleccionats s'han subscrit al curs"
+
+msgid "Import teachers"
+msgstr "Importar professors"
+
+msgid "Import learners"
+msgstr "Importar alumnes"
+
+msgid "Select CSV file"
+msgstr "Selecciona un fitxer CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Alguns usuaris no s'han pogut subscriure"
+
+msgid "Browse available classes"
+msgstr "Explora les classes disponibles"
+
+msgid "Back to linked classes"
+msgstr "Torna a les classes enllaçades"
+
+msgid "No classes are currently linked to this course."
+msgstr "Actualment no hi ha cap classe enllaçada amb aquest curs."
+
+msgid "No available classes were found for this course."
+msgstr "No s'han trobat classes disponibles per a aquest curs."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Segur que vols cancel·lar la subscripció dels usuaris seleccionats?"
+
+msgid "Learning path access"
+msgstr "Accés al itinerari d'aprenentatge"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Només els usuaris i grups seleccionats poden accedir a aquest itinerari d'aprenentatge. Gestiona'ls després de desar."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tots els usuaris actuals i futurs del curs poden accedir a aquest itinerari d'aprenentatge."
+
+msgid "All course users"
+msgstr "Tots els usuaris del curs"
+
+msgid "Selected users and groups"
+msgstr "Usuaris i grups seleccionats"
+
+msgid "No access"
+msgstr "Sense accés"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Només els usuaris i grups afegits aquí poden accedir a aquest itinerari d'aprenentatge."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Nombre de preguntes limitat a un màxim de %s"
+
+msgid "Open exercise player"
+msgstr "Obre el reproductor d'exercicis"
+
+msgid "The score is hidden for this exercise."
+msgstr "La puntuació està oculta per a aquest exercici."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Les correccions estan ocultes segons la configuració dels resultats de l'exercici."
+
+msgid "Progressive adaptive result"
+msgstr "Resultat adaptatiu progressiu"
+
+msgid "Achieved level"
+msgstr "Nivell assolit"
+
+msgid "Correction history"
+msgstr "Historial de correccions"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historial de correccions manuals fetes per a aquest intent."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Aquest exercici utilitza el mode de resultat de radar/xarxa d'aranya. El gràfic no està disponible en aquesta pàgina."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Els detalls de les preguntes estan ocults segons la configuració dels resultats de l'exercici."
+
+msgid "Media question"
+msgstr "Pregunta multimèdia"
+
+msgid "Pending correction"
+msgstr "Correcció pendent"
+
+msgid "No answer"
+msgstr "Sense resposta"
+
+msgid "Blank %s"
+msgstr "Blanc %s"
+
+msgid "Your order"
+msgstr "El teu ordre"
+
+msgid "Correct order"
+msgstr "Ordre correcte"
+
+msgid "Delineation review"
+msgstr "Revisió de la delineació"
+
+msgid "Learner clicks"
+msgstr "Clics de l'alumne"
+
+msgid "Question image"
+msgstr "Imatge de la pregunta"
+
+msgid "No hotspot image available"
+msgstr "No hi ha cap imatge de punt calent disponible"
+
+msgid "Learner delineation"
+msgstr "Delineació de l'alumne"
+
+msgid "Expected delineation"
+msgstr "Delineació esperada"
+
+msgid "Expected zones"
+msgstr "Zones esperades"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Anotació de l'alumne"
+
+msgid "No annotation image available"
+msgstr "No hi ha cap imatge d'anotació disponible"
+
+msgid "This answer is pending teacher correction."
+msgstr "Aquesta resposta està pendent de correcció pel professor."
+
+msgid "Teacher comment"
+msgstr "Comentari del professor"
+
+msgid "Teacher correction"
+msgstr "Correcció del professor"
+
+msgid "Save correction"
+msgstr "Desa la correcció"
+
+msgid "Learner audio"
+msgstr "Àudio de l'alumne"
+
+msgid "Download audio"
+msgstr "Descarrega l'àudio"
+
+msgid "No uploaded audio"
+msgstr "Cap àudio pujat"
+
+msgid "Learner Office document"
+msgstr "Document d'Office de l'alumne"
+
+msgid "Learner file"
+msgstr "Fitxer de l'alumne"
+
+msgid "Download Office document"
+msgstr "Descarrega el document d'Office"
+
+msgid "No submitted document"
+msgstr "Cap document lliurat"
+
+msgid "No uploaded file"
+msgstr "Cap fitxer pujat"
+
+msgid "Content item"
+msgstr "Element de contingut"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Aquest tipus de pregunta no es pot revisar en aquesta pàgina."
+
+msgid "Exercise completed"
+msgstr "Exercici completat"
+
+msgid "Could not start the attempt"
+msgstr "No s'ha pogut iniciar l'intent"
+
+msgid "Invalid exercise attempt"
+msgstr "Intent d'exercici no vàlid"
+
+msgid "Could not load exercise result"
+msgstr "No s'ha pogut carregar el resultat de l'exercici"
+
+msgid "Could not load AI providers"
+msgstr "No s'han pogut carregar els proveïdors d'IA"
+
+msgid "Could not generate AI suggestion"
+msgstr "No s'ha pogut generar el suggeriment d'IA"
+
+msgid "Correction saved"
+msgstr "Correcció desada"
+
+msgid "Could not save correction"
+msgstr "No s'ha pogut desar la correcció"
+
+msgid "Create exercise"
+msgstr "Crea exercici"
+
+msgid "Exercise categories"
+msgstr "Categories d'exercicis"
+
+msgid "Question categories"
+msgstr "Categories de preguntes"
+
+msgid "Search by exercise title or description."
+msgstr "Cerca per títol o descripció de l'exercici."
+
+msgid "Search exercises"
+msgstr "Cerca exercicis"
+
+msgid "No exercises found"
+msgstr "No s'han trobat exercicis"
+
+msgid "Open exercise"
+msgstr "Obre exercici"
+
+msgid "Disable autolaunch"
+msgstr "Desactiva llançament automàtic"
+
+msgid "Enable autolaunch"
+msgstr "Activa llançament automàtic"
+
+msgid "Export QTI2"
+msgstr "Exporta QTI2"
+
+msgid "Bulk actions"
+msgstr "Accions massives"
+
+msgid "Selected exercises"
+msgstr "Exercicis seleccionats"
+
+msgid "No exercises selected"
+msgstr "Cap exercici seleccionat"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Esteu segur que voleu aplicar aquesta acció als exercicis seleccionats?"
+
+msgid "Bulk action completed"
+msgstr "Acció massiva completada"
+
+msgid "Could not update exercises"
+msgstr "No s'han pogut actualitzar els exercicis"
+
+msgid "Could not update exercise"
+msgstr "No s'ha pogut actualitzar l'exercici"
+
+msgid "Copy exercise"
+msgstr "Copia exercici"
+
+msgid "Delete exercise"
+msgstr "Suprimeix exercici"
+
+msgid "Could not load exercises"
+msgstr "No s'han pogut carregar els exercicis"
+
+msgid "No limit"
+msgstr "Sense límit"
+
+msgid "Add selected questions to the test"
+msgstr "Afegeix les preguntes seleccionades a la prova"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Aquesta pregunta s'utilitza en una prova activa i no es pot editar aquí."
+
+msgid "This question cannot be edited here."
+msgstr "Aquesta pregunta no es pot editar aquí."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Aquesta pregunta s'utilitza en una prova activa i no es pot suprimir aquí."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Aquesta pregunta no es pot suprimir perquè el vostre accés està limitat per la configuració de la plataforma."
+
+msgid "Already in test"
+msgstr "Ja és a la prova"
+
+msgid "Select at least one question."
+msgstr "Seleccioneu com a mínim una pregunta."
+
+msgid "Question bank updated"
+msgstr "Banc de preguntes actualitzat"
+
+msgid "Could not update the question bank"
+msgstr "No s'ha pogut actualitzar el banc de preguntes"
+
+msgid "Could not load the question bank"
+msgstr "No s'ha pogut carregar el banc de preguntes"
+
+msgid "Total score"
+msgstr "Puntuació total"
+
+msgid "Starting"
+msgstr "Iniciant"
+
+msgid "Attempt history"
+msgstr "Historial d'intents"
+
+msgid "No attempts yet"
+msgstr "Encara no hi ha intents"
+
+msgid "Invalid exercise"
+msgstr "Exercici no vàlid"
+
+msgid "Could not load exercise overview"
+msgstr "No s'ha pogut carregar la visió general de l'exercici"
+
+msgid "Open test"
+msgstr "Obre prova"
+
+msgid "Random answers"
+msgstr "Respostes aleatòries"
+
+msgid "Prevent moving backwards"
+msgstr "Impedir retrocedir"
+
+msgid "Previous button hidden"
+msgstr "Botó anterior ocult"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Aquest exercici utilitza opcions que requereixen un reproductor de proves diferent."
+
+msgid "Continue test"
+msgstr "Continuar la prova"
+
+msgid "Attempt started"
+msgstr "Intent iniciat"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "La previsualització del professor no crea un intent registrat."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Inicieu o repreneu un intent d'exercici. Les respostes esborrany es poden desar abans de l'enviament final."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Límit de temps assolit. Finalitzant l'intent."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Temps de la pregunta assolit. Desant la resposta."
+
+msgid "Finishing"
+msgstr "Finalitzant"
+
+msgid "Draft saved"
+msgstr "Esborrany desat"
+
+msgid "Statement"
+msgstr "Enunciat"
+
+msgid "Drop each option on the matching answer"
+msgstr "Arrossegueu cada opció a la resposta corresponent"
+
+msgid "Clear match"
+msgstr "Esborrar coincidència"
+
+msgid "Click to place the selected option here"
+msgstr "Feu clic per col·locar l'opció seleccionada aquí"
+
+msgid "Select an option, then click here"
+msgstr "Seleccioneu una opció i després feu clic aquí"
+
+msgid "Already matched"
+msgstr "Ja coincidit"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Podeu arrossegar una opció a una resposta, o seleccionar una opció i després fer clic en un quadre de destinació."
+
+msgid "Put the items in the correct order."
+msgstr "Col·loqueu els elements en l'ordre correcte."
+
+msgid "Move left"
+msgstr "Moure a l'esquerra"
+
+msgid "Move right"
+msgstr "Moure a la dreta"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Podeu arrossegar elements a l'esquerra o a la dreta, o utilitzar els botons de moviment per canviar l'ordre."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Podeu arrossegar elements o utilitzar els botons de moviment per canviar l'ordre."
+
+msgid "Or upload an audio file"
+msgstr "O pujar un fitxer d'àudio"
+
+msgid "Selected audio"
+msgstr "Àudio seleccionat"
+
+msgid "Uploaded audio"
+msgstr "Àudio pujat"
+
+msgid "Office document"
+msgstr "Document d'ofimàtica"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Completeu el document a l'editor següent. El fitxer s'adjuntarà a aquest intent per a la correcció del professor."
+
+msgid "Reload Office editor"
+msgstr "Recarregar l'editor d'ofimàtica"
+
+msgid "Prepare Office document"
+msgstr "Preparar document d'ofimàtica"
+
+msgid "Open in new tab"
+msgstr "Obrir en una pestanya nova"
+
+msgid "Preparing Office document"
+msgstr "Preparant document d'ofimàtica"
+
+msgid "Submitted document"
+msgstr "Document enviat"
+
+msgid "Annotation tools"
+msgstr "Eines d'anotació"
+
+msgid "Text to place"
+msgstr "Text a col·locar"
+
+msgid "Click the image to place the text annotation."
+msgstr "Feu clic a la imatge per col·locar l'anotació de text."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Feu clic a la imatge per afegir punts de camí. Utilitzeu Iniciar camí nou per separar camins."
+
+msgid "Start new path"
+msgstr "Iniciar camí nou"
+
+msgid "Current annotations"
+msgstr "Anotacions actuals"
+
+msgid "Remove point"
+msgstr "Eliminar punt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Feu clic a la imatge per dibuixar el polígon de delineació."
+
+msgid "Click a marker to remove it."
+msgstr "Feu clic en un marcador per eliminar-lo."
+
+msgid "Placed"
+msgstr "Col·locat"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Seleccioneu una resposta i després feu clic a la imatge per marcar-la."
+
+msgid "Reading speed"
+msgstr "Velocitat de lectura"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Aquest tipus de pregunta no es pot mostrar en aquest reproductor."
+
+msgid "Save draft"
+msgstr "Desar esborrany"
+
+msgid "I confirm that my answers were saved."
+msgstr "Confirmo que les meves respostes s'han desat."
+
+msgid "Finish test"
+msgstr "Finalitzar prova"
+
+msgid "Attempt finished"
+msgstr "Intent finalitzat"
+
+msgid "Question category"
+msgstr "Categoria de pregunta"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Heu finalitzat les preguntes relacionades amb aquesta categoria de pregunta. Aquesta és la vostra última oportunitat per tornar enrere i revisar-les."
+
+msgid "Question time left"
+msgstr "Temps restant de la pregunta"
+
+msgid "Time left"
+msgstr "Temps restant"
+
+msgid "Current attempt"
+msgstr "Intent actual"
+
+msgid "Could not save draft answer"
+msgstr "No s'ha pogut desar l'esborrany de resposta"
+
+msgid "Could not load exercise"
+msgstr "No s'ha pogut carregar l'exercici"
+
+msgid "Draft answer saved"
+msgstr "Esborrany de resposta desat"
+
+msgid "Could not finish the attempt"
+msgstr "No s'ha pogut finalitzar l'intent"
+
+msgid "Could not prepare Office document"
+msgstr "No s'ha pogut preparar el document d'Office"
+
+msgid "Back to learner score"
+msgstr "Torna a la puntuació de l'alumne"
+
+msgid "Disable auto refresh"
+msgstr "Desactiva l'actualització automàtica"
+
+msgid "Enable auto refresh"
+msgstr "Activa l'actualització automàtica"
+
+msgid "Live window"
+msgstr "Finestra en directe"
+
+msgid "Ongoing attempts"
+msgstr "Intents en curs"
+
+msgid "Completed attempts"
+msgstr "Intents completats"
+
+msgid "Started"
+msgstr "Iniciat"
+
+msgid "Last activity"
+msgstr "Última activitat"
+
+msgid "Could not load live results"
+msgstr "No s'han pogut carregar els resultats en directe"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Aquest exercici és de només lectura perquè està inclòs en un itinerari d'aprenentatge."
+
+msgid "Select a question type to create a question."
+msgstr "Seleccioneu un tipus de pregunta per crear-ne una."
+
+msgid "Click to preview"
+msgstr "Feu clic per previsualitzar"
+
+msgid "Hide preview"
+msgstr "Oculta la previsualització"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Coordenades"
+
+msgid "Blanks"
+msgstr "Buits"
+
+msgid "Switchable blanks"
+msgstr "Buits commutables"
+
+msgid "Blank"
+msgstr "Buit"
+
+msgid "Input width"
+msgstr "Amplada del camp"
+
+msgid "Orientation"
+msgstr "Orientació"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "No disponible amb el mode de retroalimentació actual de l'exercici"
+
+msgid "Not available in the learning path creation flow"
+msgstr "No disponible en el procés de creació d'itineraris d'aprenentatge"
+
+msgid "Delete question"
+msgstr "Suprimeix la pregunta"
+
+msgid "Could not update exercise questions"
+msgstr "No s'han pogut actualitzar les preguntes de l'exercici"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "No s'ha pogut afegir l'exercici a l'itinerari d'aprenentatge"
+
+msgid "A valid exercise id is required."
+msgstr "Cal un identificador d'exercici vàlid."
+
+msgid "Could not load exercise questions"
+msgstr "No s'han pogut carregar les preguntes de l'exercici"
+
+msgid "Delete selected attempts"
+msgstr "Suprimeix els intents seleccionats"
+
+msgid "Before date"
+msgstr "Abans de la data"
+
+msgid "Pending corrections"
+msgstr "Correccions pendents"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Aquest exercici està bloquejat pel llibre de qualificacions. Les accions de neteja d'intents estan desactivades."
+
+msgid "No attempts found"
+msgstr "No s'han trobat intents"
+
+msgid "Review"
+msgstr "Revisa"
+
+msgid "Print/PDF"
+msgstr "Imprimeix/PDF"
+
+msgid "Could not load exercise report"
+msgstr "No s'ha pogut carregar l'informe de l'exercici"
+
+msgid "Select at least one attempt"
+msgstr "Seleccioneu com a mínim un intent"
+
+msgid "Delete selected attempts?"
+msgstr "Voleu suprimir els intents seleccionats?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Voleu enviar els correus electrònics amb els resultats dels intents revisats?"
+
+msgid "Could not send emails"
+msgstr "No s'han pogut enviar els correus electrònics"
+
+msgid "Exercise result emails sent"
+msgstr "Correus de resultats d'exercicis enviats"
+
+msgid "Skipped"
+msgstr "Omesos"
+
+msgid "Close attempt?"
+msgstr "Tancar l'intent?"
+
+msgid "Attempt closed"
+msgstr "Intent tancat"
+
+msgid "Could not close attempt"
+msgstr "No s'ha pogut tancar l'intent"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Voleu enviar el resultat d'aquest intent per correu electrònic a l'alumne?"
+
+msgid "Email sent"
+msgstr "Correu electrònic enviat"
+
+msgid "Could not send email"
+msgstr "No s'ha pogut enviar el correu electrònic"
+
+msgid "Attempt deleted"
+msgstr "Intent suprimit"
+
+msgid "Could not delete attempt"
+msgstr "No s'ha pogut suprimir l'intent"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Seleccioneu un fitxer CSV que contingui columnes de títol i descripció."
+
+msgid "Manage categories used to classify questions."
+msgstr "Gestiona les categories utilitzades per classificar preguntes."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gestiona les categories utilitzades per classificar exercicis."
+
+msgid "Could not load categories"
+msgstr "No s'han pogut carregar les categories"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categories importades: %s. Files omeses: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categories importades: %s."
+
+msgid "Could not import categories"
+msgstr "No s'han pogut importar les categories"
+
+msgid "Could not save category"
+msgstr "No s'ha pogut desar la categoria"
+
+msgid "Answer distribution"
+msgstr "Distribució de respostes"
+
+msgid "Configured answers"
+msgstr "Respostes configurades"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "El recompte detallat de respostes per a alguns tipus de preguntes encara no està disponible a l'informe migrat."
+
+msgid "No report by question data found"
+msgstr "No s'han trobat dades d'informe per pregunta"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "El recompte detallat de respostes per a aquest tipus de pregunta encara no està disponible a l'informe migrat."
+
+msgid "No answer distribution found"
+msgstr "No s'ha trobat cap distribució de respostes"
+
+msgid "Could not load report by question"
+msgstr "No s'ha pogut carregar l'informe per pregunta"
+
+msgid "Question settings"
+msgstr "Configuració de la pregunta"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Deixeu-ho buit o 0 per no establir límit de temps."
+
+msgid "Time limit in seconds"
+msgstr "Límit de temps en segons"
+
+msgid "Attached questions"
+msgstr "Preguntes adjuntades"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Aquí només es llisten les preguntes adjuntades a aquesta pregunta de mitjans dins de l'exercici actual."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "No hi ha cap pregunta adjuntada a aquesta pregunta de mitjans a l'exercici actual."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Pengeu la plantilla de document d'Office que els alumnes editaran amb OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Substitueix el document d'Office"
+
+msgid "Current Office document"
+msgstr "Document d'Office actual"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Aquesta pregunta es corregeix manualment després que l'alumne enviï el document editat."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "La puntuació total es calcula com la suma de les puntuacions dels punts calents."
+
+msgid "Global score"
+msgstr "Puntuació global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Seleccioneu una fila de punt calent, trieu la seva forma i després dibuixeu sobre la imatge. Per als polígons, feu clic a cada punt i acabeu el polígon, o feu doble clic per acabar."
+
+msgid "Finish polygon"
+msgstr "Acaba el polígon"
+
+msgid "Calculated answer"
+msgstr "Resposta calculada"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Escriviu el text a continuació i utilitzeu claudàtors [...] per definir un o més buits."
+
+msgid "Lowest value"
+msgstr "Valor més baix"
+
+msgid "Highest value"
+msgstr "Valor més alt"
+
+msgid "Fill in blanks"
+msgstr "Omplir buits"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Utilitzeu els marcadors seleccionats per definir els buits. Exemple: La capital del Perú és [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Introduïu les opcions del desplegable, una resposta per línia. Després marqueu les respostes esperades a continuació, com a l'eina antiga."
+
+msgid "Refresh answers"
+msgstr "Actualitza les respostes"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Aquesta pregunta de combinació de desplegables utilitza una puntuació global, com l'antiga."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Introduïu com a mínim dues opcions de desplegable."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Creeu primer les opcions de destinació i després enllaceu cada element amb l'opció correcta."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Aquesta pregunta de combinació de correspondència utilitza una puntuació global, com a l'antic sistema."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Creeu els passos i trieu la posició esperada per a cadascun, com a l'antic sistema d'arrossegar."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Els estudiants triaran Vertader o Fals i després seleccionaran el seu grau de certesa durant l'intent. L'editor emmagatzema les mateixes puntuacions Correcte/Incorrecte i nivells de certesa que l'antic sistema."
+
+msgid "Hotspot combination"
+msgstr "Combinació de punts calents"
+
+msgid "Add delineation"
+msgstr "Afegeix delimitació"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta de document d'Office no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta de càrrega no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta d'expressió oral no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Aquesta pregunta oberta no té opcions de resposta. La seva puntuació s'assigna durant la correcció/revisió de resultats."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Afegeix un text de lectura amb configuració de velocitat de desplaçament."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Afegeix contingut, mitjans o context de lectura sense afegir puntuació."
+
+msgid "Insert a page break without adding score."
+msgstr "Insereix un salt de pàgina sense afegir puntuació."
+
+msgid "Could not save question"
+msgstr "No s'ha pogut desar la pregunta"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Només es permeten documents DOC, DOCX, XLS o XLSX."
+
+msgid "Please select an Office document."
+msgstr "Seleccioneu un document d'Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Dibuixeu com a mínim un punt calent."
+
+msgid "Please draw at least one delineation."
+msgstr "Dibuixeu com a mínim una delimitació."
+
+msgid "The fill in blanks text is required."
+msgstr "El text per omplir els buits és obligatori."
+
+msgid "At least one expected answer is required."
+msgstr "Cal com a mínim una resposta esperada."
+
+msgid "At least two draggable items are required."
+msgstr "Cal com a mínim dos elements arrossegables."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Cada element arrossegable ha d'estar enllaçat a una posició de destinació vàlida."
+
+msgid "At least two matching options are required."
+msgstr "Cal com a mínim dues opcions de correspondència."
+
+msgid "At least two matching pairs are required."
+msgstr "Cal com a mínim dos parells de correspondència."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Cada parell de correspondència ha d'estar enllaçat a una opció vàlida."
+
+msgid "At least two answers are required."
+msgstr "Cal com a mínim dues respostes."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Cada resposta de vertader/fals ha de tenir seleccionat Vertader o Fals."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Una pregunta de resposta única ha de tenir exactament una resposta correcta."
+
+msgid "At least one correct answer is required."
+msgstr "Cal com a mínim una resposta correcta."
+
+msgid "Could not load question"
+msgstr "No s'ha pogut carregar la pregunta"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Seleccioneu un curs i exporteu l'informe global de resultats de l'exercici com a CSV."
+
+msgid "Back to reports catalog"
+msgstr "Torna al catàleg d'informes"
+
+msgid "Could not load exercise global report"
+msgstr "No s'ha pogut carregar l'informe global de l'exercici"
+
+msgid "Imported questions"
+msgstr "Preguntes importades"
+
+msgid "Aiken content"
+msgstr "Contingut Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "No s'ha pogut carregar el generador AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "No s'ha pogut generar el contingut Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "No s'ha pogut importar el contingut Aiken generat"
+
+msgid "Back to my courses"
+msgstr "Torna als meus cursos"
+
+msgid "Open report"
+msgstr "Obre l'informe"
+
+msgid "Questions with no automatic correction"
+msgstr "Preguntes sense correcció automàtica"
+
+msgid "Could not load pending attempts"
+msgstr "No s'ha pogut carregar els intents pendents"
+
+msgid "Skipped questions"
+msgstr "Preguntes omeses"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "La importació Aiken distribueix aquest pes total entre les preguntes importades, llevat que una pregunta defineixi SCORE."
+
+msgid "Import warnings"
+msgstr "Avisos d'importació"
+
+msgid "Could not import questions"
+msgstr "No s'han pogut importar les preguntes"
+
+msgid "No question statistics found"
+msgstr "No s'han trobat estadístiques de preguntes"
+
+msgid "Could not load question statistics"
+msgstr "No s'han pogut carregar les estadístiques de preguntes"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "També podeu connectar un client MCP directament apuntant-lo al punt final següent:"
+
+msgid "No applications are currently connected to your account."
+msgstr "No hi ha cap aplicació connectada actualment al vostre compte."
+
+msgid "Connected on"
+msgstr "Connectat el"
+
+msgid "Last used"
+msgstr "Darrer ús"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ja no podrà accedir al vostre compte de Chamilo. Voleu continuar?"
+
+msgid "Application revoked"
+msgstr "Aplicació revocada"
+
+msgid "Copied to clipboard"
+msgstr "Copiat al porta-retalls"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "No s'ha pogut copiar el punt final MCP"
+
+msgid "MCP endpoint"
+msgstr "Punt final MCP"
+
+msgid "API key"
+msgstr "Clau API"
+
+msgid "Last used at"
+msgstr "Darrer ús a"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copieu aquesta clau ara. No es tornarà a mostrar."
+
+msgid "Rotate API key"
+msgstr "Rotar clau API"
+
+msgid "Revoke API key"
+msgstr "Revocar clau API"
+
+msgid "Remote MCP connection"
+msgstr "Connexió MCP remota"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configureu el vostre client MCP amb els valors següents:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "La clau actual deixarà de funcionar immediatament. Voleu continuar?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Es generarà una nova clau API MCP personal. Voleu continuar?"
+
+msgid "MCP API key generated"
+msgstr "Clau API MCP generada"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Els clients MCP connectats que utilitzin aquesta clau deixaran de funcionar immediatament. Voleu continuar?"
+
+msgid "MCP API key revoked"
+msgstr "Clau API MCP revocada"
+
+msgid "Could not copy the API key"
+msgstr "No s'ha pogut copiar la clau API"
+
+msgid "Project"
+msgstr "Projecte"
+
+msgid "Close old tickets"
+msgstr "Tancar tiquets antics"
+
+msgid "Close tickets older than seven days?"
+msgstr "Tancar tiquets de més de set dies?"
+
+msgid "Assignment history"
+msgstr "Historial d'assignacions"
+
+msgid "Translate with AI"
+msgstr "Traduir amb IA"
+
+msgid "Target language"
+msgstr "Llengua de destinació"
+
+msgid "Please select a provider"
+msgstr "Seleccioneu un proveïdor"
+
+msgid "Generate translation"
+msgstr "Generar traducció"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Almenys una secció de termes i condicions ha de contenir text."
+
+msgid "No active target languages are available."
+msgstr "No hi ha llengües de destinació actives disponibles."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Dates d'accés"
+
+msgid "Coach access dates"
+msgstr "Dates d'accés del tutor"
+
+msgid "No sessions found"
+msgstr "No s'han trobat sessions"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Seleccioneu els cursos als quals aquest usuari no ha de poder accedir en aquesta sessió."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Un usuari no pot ser bloquejat de tots els cursos de la sessió. Cancel·leu la subscripció de l'usuari."
+
+msgid "Users subscribed to this session"
+msgstr "Usuaris subscrits a aquesta sessió"
+
+msgid "No available users found"
+msgstr "No s'han trobat usuaris disponibles"
+
+msgid "Subscribe this user to the session?"
+msgstr "Voleu subscriure aquest usuari a la sessió?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Voleu subscriure els usuaris seleccionats a la sessió?"
+
+msgid "General tutor planning"
+msgstr "Planificació general del tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "L'usuari ja està registrat per un altre tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Esteu rebent una còpia perquè sou tutor del curs"
+
+msgid "General tutor"
+msgstr "Tutor general"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Tingueu en compte els cursos, els tutors, el servei d'assistència tècnica, els professors i/o els materials disponibles."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutors subscrits com a professors al curs %s"
+
+msgid "Tutor name"
+msgstr "Nom del tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Els tutors de sessió són coordinadors de la sessió i poden actuar com a tutors de cada curs de la sessió. Només es poden seleccionar com a tutors de sessió els usuaris amb rol de professor."
+
+msgid "Access start date for tutors"
+msgstr "Data d'inici d'accés per als tutors"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data en què la sessió està disponible per als tutors, perquè puguin preparar-la abans que es connectin els estudiants"
+
+msgid "Access end date for tutors"
+msgstr "Data de final d'accés per als tutors"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data en què la sessió es tanca per als tutors. El retard addicional els permetrà exportar tota la informació de seguiment rellevant"
+
+msgid "Tutor and student"
+msgstr "Tutor i estudiant"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Aquest informe mostra la distribució setmanal de les sessions per tutor general en el període seleccionat."
+
+msgid "User is general tutor in some sessions"
+msgstr "L'usuari és tutor general en algunes sessions"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Els professors s'afegiran com a tutors en totes les sessions del curs."
+
+msgid "Delete failed: invalid question id."
+msgstr "Error en suprimir: identificador de pregunta no vàlid."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Nombre mitjà de sessions per tutor general de sessió"
+
+msgid "No room"
+msgstr "Sense aula"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importar els professors del curs com a tutors del curs a la sessió"
+
+msgid "Clean and update course tutors"
+msgstr "Netejar i actualitzar els tutors del curs"
+
+msgid "Add me as tutor"
+msgstr "Afegir-me com a tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "No s'ha pogut afegir l'enquesta a la ruta d'aprenentatge"
+
+msgid "Access dates for tutors"
+msgstr "Dates d'accés per als tutors"
+
+msgid "Tutor and group member"
+msgstr "Tutor i membre del grup"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "S'ha assolit el límit diari de fitxes d'IA. Torneu-ho a provar demà."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "S'ha assolit el límit mensual de fitxes d'IA. Torneu-ho a provar el mes vinent."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Aquest codi de curs ja existeix, trieu-ne un altre."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Aquest títol de curs ja existeix, trieu-ne un altre."
+
+msgid "This tool visibility cannot be changed"
+msgstr "No es pot canviar la visibilitat d'aquesta eina"
+
+msgid "Invalid visibility"
+msgstr "Visibilitat no vàlida"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Rebeu una còpia perquè sou un dels tutors del curs"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Rebeu una còpia perquè sou el tutor del curs"
+
+msgid "Manual completion"
+msgstr "Finalització manual"
+
+msgid "Send to tutors"
+msgstr "Envia als tutors"
+
+msgid "Lab title"
+msgstr "Títol del laboratori"
+
+msgid "Lab week"
+msgstr "Setmana del laboratori"
+
+msgid "Final exam access rule"
+msgstr "Regla d'accés a l'examen final"
+
+msgid "Course completion rule"
+msgstr "Regla de finalització del curs"
+
+msgid "You have been invited to join a course"
+msgstr "Heu estat convidat a unir-vos a un curs"
+
+msgid "No user has been found"
+msgstr "No s'ha trobat cap usuari"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "L'usuari seleccionat no es pot subscriure en aquest context"
+
+msgid "No change has been made"
+msgstr "No s'ha fet cap canvi"
+
+msgid "Back to group list"
+msgstr "Tornar a la llista de grups"
+
+msgid "Remove class link"
+msgstr "Suprimir l'enllaç de classe"
+
+msgid "Group settings"
+msgstr "Configuració del grup"
+
+msgid "Self-registration allowed"
+msgstr "Permesa l'autoinscripció"
+
+msgid "Self-unregistration allowed"
+msgstr "Permesa la baixa automàtica"
+
+msgid "This group is linked to the class"
+msgstr "Aquest grup està enllaçat amb la classe"
+
+msgid "Create one or more empty course groups"
+msgstr "Crea un o més grups de curs buits"
+
+msgid "Number of places"
+msgstr "Nombre de places"
+
+msgid "Base group"
+msgstr "Grup base"
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Collaboration"
+msgstr "Col·laboració"
+
+msgid "The group title is required."
+msgstr "El títol del grup és obligatori."
+
+msgid "Back to group area"
+msgstr "Tornar a l'àrea de grups"
+
+msgid "Members are managed by the linked class"
+msgstr "Els membres són gestionats per la classe enllaçada"
+
+msgid "%s groups selected"
+msgstr "%s grups seleccionats"
+
+msgid "Fill selected groups"
+msgstr "Omplir els grups seleccionats"
+
+msgid "Empty selected groups"
+msgstr "Buidar els grups seleccionats"
+
+msgid "Fill group"
+msgstr "Omplir grup"
+
+msgid "Empty group"
+msgstr "Buidar grup"
+
+msgid "Groups per user"
+msgstr "Grups per usuari"
+
+msgid "No tutors"
+msgstr "Sense tutors"
+
+msgid "No users"
+msgstr "Sense usuaris"
 

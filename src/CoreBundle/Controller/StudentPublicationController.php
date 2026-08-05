@@ -8,15 +8,18 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTaskGraderService;
+use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -37,6 +40,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -106,16 +111,95 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/{assignmentId}/detail', name: 'chamilo_core_assignment_mobile_detail', methods: ['GET'])]
+    public function getAssignmentMobileDetail(
+        int $assignmentId,
+        SerializerInterface $serializer,
+        CStudentPublicationRepository $repo,
+        Security $security,
+        MobileAssignmentSubmissionAccess $submissionAccess
+    ): JsonResponse {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $assignment = null;
+
+        try {
+            $managementContext = $submissionAccess->resolveCourseContext(
+                $course->getId(),
+                $session?->getId(),
+            );
+            $assignment = $submissionAccess->resolveVisibleAssignment(
+                $assignmentId,
+                $managementContext['course'],
+                $managementContext['session'],
+            );
+        } catch (AccessDeniedHttpException $exception) {
+            $assignment = $repo->find($assignmentId);
+
+            if (
+                !$assignment instanceof CStudentPublication
+                || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
+            ) {
+                throw new NotFoundHttpException('Assignment not found in the current course context.');
+            }
+
+            if (!$security->isGranted('VIEW', $assignment->getResourceNode())) {
+                throw $exception;
+            }
+        }
+
+        $data = json_decode($serializer->serialize(
+            $assignment,
+            'json',
+            [
+                'groups' => [
+                    'student_publication:read',
+                    'student_publication:item:get',
+                ],
+            ],
+        ), true);
+
+        return new JsonResponse($data);
+    }
+
     #[Route('/{assignmentId}/submissions', name: 'chamilo_core_assignment_student_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissions(
         int $assignmentId,
         Request $request,
         SerializerInterface $serializer,
         CStudentPublicationRepository $repo,
-        Security $security
+        Security $security,
+        MobileAssignmentSubmissionAccess $submissionAccess
     ): JsonResponse {
         /** @var User $user */
         $user = $security->getUser();
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $assignment = $repo->find($assignmentId);
+
+        if (
+            !$assignment instanceof CStudentPublication
+            || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
+        ) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $managementContext = null;
+
+        try {
+            $managementContext = $submissionAccess->resolveCourseContext(
+                $course->getId(),
+                $session?->getId(),
+            );
+            $submissionAccess->resolveVisibleAssignment(
+                $assignmentId,
+                $managementContext['course'],
+                $managementContext['session'],
+            );
+        } catch (AccessDeniedHttpException|NotFoundHttpException) {
+            // Reading the assignment remains available to teachers and administrators.
+            // Management capabilities are exposed only when the student context is valid.
+        }
 
         $page = (int) $request->query->get('page', 1);
         $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
@@ -135,6 +219,24 @@ class StudentPublicationController extends AbstractController
             ['groups' => ['student_publication:read']]
         ), true);
 
+        if (null !== $managementContext) {
+            foreach ($submissions as $index => $submission) {
+                if (!$submission instanceof CStudentPublication || !isset($data[$index])) {
+                    continue;
+                }
+
+                $data[$index] = array_merge(
+                    $data[$index],
+                    $submissionAccess->capabilities(
+                        $submission,
+                        $managementContext['user'],
+                        $managementContext['course'],
+                        $managementContext['session'],
+                    ),
+                );
+            }
+        }
+
         return new JsonResponse([
             'hydra:member' => $data,
             'hydra:totalItems' => $total,
@@ -148,6 +250,13 @@ class StudentPublicationController extends AbstractController
         SerializerInterface $serializer,
         CStudentPublicationRepository $repo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only listing: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $page = (int) $request->query->get('page', 1);
         $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
         $order = $request->query->all('order');
@@ -346,6 +455,13 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         CourseRelUserRepository $courseRelUserRepo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
@@ -382,6 +498,13 @@ class StudentPublicationController extends AbstractController
         MessageHelper $messageHelper,
         Security $security
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: only a teacher of the assignment's course may message students.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
@@ -428,6 +551,9 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment not found');
         }
 
+        // Teacher-only export: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         [$submissions] = $repo->findAllSubmissionsByAssignment(
             assignmentId: $assignment->getIid(),
             page: 1,
@@ -444,7 +570,7 @@ class StudentPublicationController extends AbstractController
         try {
             $mpdf = new Mpdf([
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
-            ]);
+            ], SafeMpdfHttpClient::container());
             $mpdf->WriteHTML($html);
 
             return new Response(
@@ -463,6 +589,13 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em,
         CStudentPublicationRepository $repo
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Destructive teacher-only op: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $submissions = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000)[0];
 
         $count = 0;
@@ -503,6 +636,9 @@ class StudentPublicationController extends AbstractController
         }
 
         $addFullname = 'true' === $settingsManager->getSetting('work.add_fullname_in_file_download');
+        // Teacher-only: downloading every student's submission requires edit rights on
+        // the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
         $zipPath = api_get_path(SYS_ARCHIVE_PATH).uniqid('assignment_', true).'.zip';
@@ -554,6 +690,14 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em,
         TranslatorInterface $translator
     ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment) {
+            return new JsonResponse(['error' => 'Assignment not found.'], 404);
+        }
+        // Teacher-only: uploading corrections mutates grading state (qualification,
+        // accepted, dateOfQualification) for the whole class. Authorize before any work.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
         $file = $request->files->get('file');
         if (!$file || 'zip' !== $file->getClientOriginalExtension()) {
             return new JsonResponse(['error' => 'Invalid file'], 400);
@@ -690,7 +834,8 @@ class StudentPublicationController extends AbstractController
     public function getAiTaskGraderDefaultPrompt(
         int $id,
         Request $request,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -699,6 +844,13 @@ class StudentPublicationController extends AbstractController
 
         // Only editors should request the prompt (same rule as grading).
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse(['error' => 'AI task grader is not enabled for this course.'], 403);
+        }
 
         $language = (string) ($request->query->get('language') ?? 'en');
 
@@ -711,7 +863,8 @@ class StudentPublicationController extends AbstractController
     public function aiTaskGradeCapabilities(
         int $id,
         CStudentPublicationRepository $repo,
-        ResourceNodeRepository $resourceNodeRepository
+        ResourceNodeRepository $resourceNodeRepository,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -719,6 +872,16 @@ class StudentPublicationController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'AI task grader is not enabled for this course.',
+            ], 403);
+        }
 
         $studentText = trim((string) ($submission->getDescription() ?? ''));
         $hasText = '' !== $this->toPlainText($studentText);
@@ -794,7 +957,8 @@ class StudentPublicationController extends AbstractController
         int $id,
         Request $request,
         CStudentPublicationRepository $repo,
-        AiTaskGraderService $aiTaskGraderService
+        AiTaskGraderService $aiTaskGraderService,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
     ): JsonResponse {
         $submission = $repo->find($id);
         if (!$submission) {
@@ -802,6 +966,16 @@ class StudentPublicationController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'task_grader',
+            $this->getCourseIdFromResourceNode($submission->getResourceNode())
+        )) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'AI task grader is not enabled for this course.',
+            ], 403);
+        }
 
         $teacher = $this->getUser();
         if (!$teacher instanceof User) {
@@ -863,6 +1037,18 @@ class StudentPublicationController extends AbstractController
         $name = preg_replace('/_+/', '_', $name);
 
         return trim($name, '_');
+    }
+
+    private function getCourseIdFromResourceNode(ResourceNode $resourceNode): int
+    {
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $courseId = (int) ($resourceLink->getCourse()?->getId() ?? 0);
+            if ($courseId > 0) {
+                return $courseId;
+            }
+        }
+
+        return 0;
     }
 
     private function buildDefaultTaskGraderPrompt(CStudentPublication $submission, string $language): string

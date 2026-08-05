@@ -1112,3 +1112,33 @@ body{
         left:0%!important;
     }
 }
+
+
+/* CStudio quiz feedback states. */
+.fixed-top-message.cstudio-message-error {
+    background-color: #CD6155 !important;
+    border-color: #d43f3a !important;
+}
+
+.fixed-top-message.cstudio-message-success {
+    background-color: #2e7d32 !important;
+    border-color: #1b5e20 !important;
+}
+
+.cstudio-quiz-check-button {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: 1px solid #2f80ed;
+    background: #2f80ed;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.cstudio-quiz-check-button:hover,
+.cstudio-quiz-check-button:focus {
+    background: #1f6fd1;
+    border-color: #1f6fd1;
+    color: #fff;
+}

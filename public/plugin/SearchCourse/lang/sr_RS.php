@@ -1,8 +1,18 @@
 <?php
-/**
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
- */
+/* For licensing terms, see /license.txt */
+
 $strings['plugin_title'] = 'Pretraži kurseve';
 $strings['plugin_comment'] = 'Omogućava pretragu kataloga kurseva i upis na kurseve.';
+$strings['CourseCatalog'] = 'Katalog kurseva';
+$strings['Search courses'] = 'Pretraži kurseve';
+$strings['SearchCourseIntro'] = 'Pretražite javne i dostupne kurseve na platformi po naslovu, kodu ili nastavniku.';
+$strings['SearchByCourseTitleCodeOrTeacher'] = 'Naslov kursa, kod ili nastavnik';
+$strings['SearchResults'] = 'Rezultati pretrage';
+$strings['Search results for:'] = 'Rezultati pretrage za: %s';
+$strings['CoursesFound'] = 'Pronađeno %d kurs(eva).';
+$strings['Already subscribed'] = 'Već prijavljen';
+$strings['Subscribing not allowed'] = 'Prijavljivanje nije dozvoljeno';
+$strings['Public'] = 'Javno';
+$strings['PlatformUsers'] = 'Korisnici platforme';
+$strings['RegistrationAllowed'] = 'Registracija dozvoljena';
+$strings['SearchCourseRegionHelp'] = 'Unesite ključnu reč da otvorite stranicu pretrage kurseva sa odgovarajućim rezultatima.';

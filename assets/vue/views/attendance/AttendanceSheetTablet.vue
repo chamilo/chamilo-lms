@@ -163,12 +163,6 @@
             type="success"
             @click="saveComment"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showCommentDialog = false"
-          />
         </template>
       </BaseDialog>
 
@@ -198,12 +192,6 @@
             type="success"
             @click="saveSignature"
           />
-          <BaseButton
-            :label="t('Close')"
-            icon="close"
-            type="danger"
-            @click="showSignatureDialog = false"
-          />
         </template>
       </BaseDialog>
     </div>
@@ -221,21 +209,19 @@ import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceS
 import SignaturePad from "signature_pad"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useFormatDate } from "../../composables/formatDate"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { abbreviatedDatetime } = useFormatDate()
 
 // --------------------------- Permissions / flags -----------------------------
 const securityStore = useSecurityStore()
 const platformConfig = usePlatformConfig()
-const isTeacherUser = computed(
-  () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
-)
+const isTeacherUser = computed(() => securityStore.isGranted("ROLE_TEACHER") || securityStore.isCourseAdmin)
 const isStudentView = computed(() => platformConfig.isStudentViewActive)
 const canEdit = computed(() => isTeacherUser.value && !isStudentView.value && route.query.readonly !== "1")
 

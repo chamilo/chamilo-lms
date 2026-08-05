@@ -2,10 +2,12 @@
 
 /* For license terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\TopLinks\Entity;
 
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\TopLinks\Repository\TopLinkRepository\Entity;
+use Chamilo\PluginBundle\TopLinks\Entity\Repository\TopLinkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,27 +19,25 @@ class TopLink
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    private ?int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'title', type: 'string')]
-    private string $title;
+    private string $title = '';
 
     #[ORM\Column(name: 'url', type: 'text')]
-    private string $url;
+    private string $url = '';
 
     #[ORM\Column(name: 'target', type: 'string', length: 10, options: ['default' => '_blank'])]
-    private string $target;
+    private string $target = '_blank';
 
     #[ORM\Column(name: 'icon', type: 'string', nullable: true)]
-    private ?string $icon;
+    private ?string $icon = null;
 
     #[ORM\OneToMany(mappedBy: 'link', targetEntity: TopLinkRelTool::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $tools;
 
     public function __construct()
     {
-        $this->target = '_blank';
-        $this->icon = null;
         $this->tools = new ArrayCollection();
     }
 
@@ -53,7 +53,7 @@ class TopLink
 
     public function setTitle(string $title): static
     {
-        $this->title = $title;
+        $this->title = trim($title);
 
         return $this;
     }
@@ -65,7 +65,7 @@ class TopLink
 
     public function setUrl(string $url): static
     {
-        $this->url = $url;
+        $this->url = trim($url);
 
         return $this;
     }
@@ -77,7 +77,7 @@ class TopLink
 
     public function setTarget(string $target): static
     {
-        $this->target = $target;
+        $this->target = '_self' === $target ? '_self' : '_blank';
 
         return $this;
     }
@@ -87,7 +87,7 @@ class TopLink
         return $this->icon;
     }
 
-    public function setIcon(string $icon = null): static
+    public function setIcon(?string $icon = null): static
     {
         $this->icon = $icon;
 
@@ -104,7 +104,8 @@ class TopLink
         $linkTool = new TopLinkRelTool();
         $linkTool
             ->setTool($tool)
-            ->setLink($this);
+            ->setLink($this)
+        ;
 
         $this->tools->add($linkTool);
     }

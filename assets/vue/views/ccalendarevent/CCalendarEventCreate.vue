@@ -60,6 +60,10 @@ const effectiveAllowCareerPromotionFields = computed(() => {
   return effectiveIsGlobal.value && "true" === platformConfigStore.getSetting("agenda.allow_careers_in_global_agenda")
 })
 
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
+
 let id = route.params.id
 if (isEmpty(id)) {
   id = route.query.id
@@ -121,6 +125,8 @@ onMounted(async () => {
       item.value.promotion = null
     }
 
+    item.value.language = extractResourceLanguage(item.value)
+
     await loadCareerAndPromotionOptions()
   } catch (e) {
     notification.showErrorNotification(e)
@@ -156,18 +162,12 @@ const onClickCreateEvent = async () => {
   const itemModel = { ...createForm.value.v$.item.$model }
 
   const cid = Number(route.query.cid ?? 0)
-  const sid = Number(route.query.sid ?? 0)
-  const gid = Number(route.query.gid ?? 0)
 
+  // Course event: bind only the visibility; the course context (cid/sid/gid) is
+  // derived server-side from the gated session course. Personal/global events
+  // (cid === 0) send no link at all.
   if (cid > 0) {
-    itemModel.resourceLinkList = [
-      {
-        cid,
-        sid: sid > 0 ? sid : null,
-        gid: gid > 0 ? gid : null,
-        visibility: RESOURCE_LINK_PUBLISHED,
-      },
-    ]
+    itemModel.resourceLinkList = [{ visibility: RESOURCE_LINK_PUBLISHED }]
   }
 
   itemModel.isGlobal = effectiveIsGlobal.value

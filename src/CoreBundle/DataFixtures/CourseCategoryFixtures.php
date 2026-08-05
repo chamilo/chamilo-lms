@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -29,7 +30,7 @@ class CourseCategoryFixtures extends Fixture
             ],
         ];
 
-        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
+        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE, AccessUrl::class);
 
         foreach ($list as $key => $data) {
             $courseCategory = (new CourseCategory())

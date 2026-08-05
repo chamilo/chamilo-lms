@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Main script for the links tool.
  *
@@ -77,8 +79,67 @@ $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
 $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : 'all';
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
+$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+$lpBuilderUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
 $content = '';
 $token = Security::get_existing_token();
+
+$addCreatedLinkToLearningPath = static function (
+    int $lpId,
+    int $linkId,
+    array $formValues,
+    array $courseInfo
+): bool {
+    if ($lpId <= 0 || $linkId <= 0) {
+        return false;
+    }
+
+    if (!class_exists('learnpath')) {
+        require_once __DIR__.'/../lp/learnpath.class.php';
+    }
+
+    $lp = Container::getLpRepository()->find($lpId);
+    if (empty($lp)) {
+        return false;
+    }
+
+    $learningPath = new learnpath($lp, $courseInfo, api_get_user_id());
+    if (empty($learningPath)) {
+        return false;
+    }
+
+    $parent = Container::getLpItemRepository()->getRootItem($lpId);
+    $title = trim((string) ($formValues['title'] ?? ''));
+    if ('' === $title) {
+        $title = trim((string) ($formValues['url'] ?? ''));
+    }
+
+    $learningPath->set_modified_on();
+    $itemId = $learningPath->add_item(
+        $parent,
+        0,
+        TOOL_LINK,
+        $linkId,
+        $title,
+        (string) ($formValues['description'] ?? '')
+    );
+
+    if (empty($itemId)) {
+        return false;
+    }
+
+    ChamiloSession::write('refresh', 1);
+
+    return true;
+};
+
+$getLinkRedirectUrl = static function (int $lpId) use ($linkListUrl, $lpBuilderUrl): string {
+    if ($lpId > 0) {
+        return $lpBuilderUrl;
+    }
+
+    return $linkListUrl;
+};
 
 $protectedActions = [
     'addlink',
@@ -106,13 +167,18 @@ switch ($action) {
     case 'addlink':
         $form = Link::getLinkForm(null, 'addlink', $token);
         if ($form->validate() && Security::check_token('get')) {
+            $formValues = $form->exportValues();
+
             $link = new Link();
             $link->setCourse($courseInfo);
-            $linkId = $link->save($form->exportValues());
-            SkillModel::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+            $linkId = $link->save($formValues);
+            if (!empty($linkId)) {
+                SkillModel::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+                $addCreatedLinkToLearningPath($lpId, (int) $linkId, $formValues, $courseInfo);
+            }
 
             Security::clear_token();
-            header('Location: '.$linkListUrl);
+            header('Location: '.$getLinkRedirectUrl($lpId));
             exit;
         }
         $content = $form->returnForm();

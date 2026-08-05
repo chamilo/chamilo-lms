@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Hội nghị video Zoom';
 $strings['plugin_comment'] = 'Tích hợp hội nghị video Zoom trong khóa học và buổi học';
 
+$strings['accountId'] = 'ID tài khoản';
+$strings['clientId'] = 'ID máy khách';
+$strings['clientSecret'] = 'Bí mật máy khách';
+$strings['webhookSecretToken'] = 'Mã thông báo bí mật Webhook';
+$strings['apiKey_help'] = 'Khóa API JWT cũ. Ưu tiên sử dụng ID tài khoản, ID máy khách và Bí mật máy khách cho OAuth Server-to-Server của Zoom.';
+$strings['apiSecret_help'] = 'Bí mật API JWT cũ. Ưu tiên sử dụng ID tài khoản, ID máy khách và Bí mật máy khách cho OAuth Server-to-Server của Zoom.';
+$strings['verificationToken_help'] = 'Mã thông báo xác thực webhook cũ. Ưu tiên sử dụng Mã thông báo bí mật Webhook.';
+$strings['accountId_help'] = 'ID tài khoản OAuth Server-to-Server của Zoom.';
+$strings['clientId_help'] = 'ID máy khách OAuth Server-to-Server của Zoom.';
+$strings['clientSecret_help'] = 'Bí mật máy khách OAuth Server-to-Server của Zoom.';
+$strings['webhookSecretToken_help'] = 'Mã thông báo bí mật dùng để xác thực các yêu cầu webhook của Zoom.';
 $strings['apiKey'] = 'Khóa API';
 $strings['apiSecret'] = 'Mã bí mật API';
 $strings['verificationToken'] = 'Mã xác thực';

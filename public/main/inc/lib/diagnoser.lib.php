@@ -804,13 +804,12 @@ class Diagnoser
         $em = Database::getManager();
         $connection = $em->getConnection();
 
-        // Prefer platform name (mysql, postgresql, sqlite, …)
+        // Prefer platform name (mysql, mariadb, postgresql, sqlite, …)
         try {
-            $driver = $connection->getDatabasePlatform()->getName();
+            $platform = $connection->getDatabasePlatform();
+            $driver = strtolower(str_replace('Platform', '', (new \ReflectionClass($platform))->getShortName()));
         } catch (Throwable $e) {
-            $driver = (method_exists($connection, 'getDriver') && method_exists($connection->getDriver(), 'getName'))
-                ? $connection->getDriver()->getName()
-                : 'unknown';
+            $driver = 'unknown';
         }
 
         $params = method_exists($connection, 'getParams') ? (array) $connection->getParams() : [];

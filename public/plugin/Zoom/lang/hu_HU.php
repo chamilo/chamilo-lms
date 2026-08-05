@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom Videokonferencia';
 $strings['plugin_comment'] = 'Zoom Videokonferencia integráció kurzusokban és foglalkozásokban';
 
+$strings['accountId'] = 'Fiókazonosító';
+$strings['clientId'] = 'Ügyfélazonosító';
+$strings['clientSecret'] = 'Ügyféltitok';
+$strings['webhookSecretToken'] = 'Webhook titkos token';
+$strings['apiKey_help'] = 'Örökölt JWT API kulcs. A Zoom Szerver–Szerver OAuth esetén előnyben részesítendő: Fiókazonosító, Ügyfélazonosító és Ügyféltitok.';
+$strings['apiSecret_help'] = 'Örökölt JWT API titok. A Zoom Szerver–Szerver OAuth esetén előnyben részesítendő: Fiókazonosító, Ügyfélazonosító és Ügyféltitok.';
+$strings['verificationToken_help'] = 'Örökölt webhook ellenőrző token. Előnyben részesítendő: Webhook titkos token.';
+$strings['accountId_help'] = 'Zoom Szerver–Szerver OAuth fiókazonosító.';
+$strings['clientId_help'] = 'Zoom Szerver–Szerver OAuth ügyfélazonosító.';
+$strings['clientSecret_help'] = 'Zoom Szerver–Szerver OAuth ügyféltitok.';
+$strings['webhookSecretToken_help'] = 'Titkos token a Zoom webhook kérések érvényesítéséhez.';
 $strings['apiKey'] = 'API kulcs';
 $strings['apiSecret'] = 'API titok';
 $strings['verificationToken'] = 'Ellenőrzési token';

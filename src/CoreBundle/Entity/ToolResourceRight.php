@@ -32,9 +32,43 @@ class ToolResourceRight implements Stringable
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected ?Tool $tool = null;
 
+    public static function getDefaultRoles(): array
+    {
+        return [
+            'Students' => 'ROLE_STUDENT',
+            'Teachers' => 'ROLE_TEACHER',
+        ];
+    }
+
+    public static function getMaskList(): array
+    {
+        $readerMask = ResourceNodeVoter::getReaderMask();
+        $editorMask = ResourceNodeVoter::getEditorMask();
+
+        return [
+            'Can read' => $readerMask,
+            'Can edit' => $editorMask,
+        ];
+    }
+
     public function __toString(): string
     {
         return (string) $this->getMask();
+    }
+
+    /**
+     * @return int
+     */
+    public function getMask()
+    {
+        return $this->mask;
+    }
+
+    public function setMask(int $mask): self
+    {
+        $this->mask = $mask;
+
+        return $this;
     }
 
     public function getTool(): Tool
@@ -64,42 +98,8 @@ class ToolResourceRight implements Stringable
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getMask()
-    {
-        return $this->mask;
-    }
-
-    public function setMask(int $mask): self
-    {
-        $this->mask = $mask;
-
-        return $this;
-    }
-
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public static function getDefaultRoles(): array
-    {
-        return [
-            'Students' => 'ROLE_STUDENT',
-            'Teachers' => 'ROLE_TEACHER',
-        ];
-    }
-
-    public static function getMaskList(): array
-    {
-        $readerMask = ResourceNodeVoter::getReaderMask();
-        $editorMask = ResourceNodeVoter::getEditorMask();
-
-        return [
-            'Can read' => $readerMask,
-            'Can edit' => $editorMask,
-        ];
     }
 }

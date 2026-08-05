@@ -24,7 +24,7 @@ use const PCLZIP_OPT_PATH;
 
 class Imscc13Import
 {
-    public const FORMAT_IMSCC13 = 'imscc13';
+    public const string FORMAT_IMSCC13 = 'imscc13';
 
     public function log(string $message, string|int $level = 'info', $a = null, $depth = null, bool $display = false): void
     {
@@ -167,7 +167,7 @@ class Imscc13Import
         $dom->formatOutput = false;
 
         // Load as XML (NOT HTML); suppress warnings but we control edits
-        if (!@$dom->loadXML($xml)) {
+        if (!@$dom->loadXML($xml, LIBXML_NONET)) {
             // If DOM fails, just write normalized string to a temp file
             return self::writeTempValidatedCopy($xml);
         }

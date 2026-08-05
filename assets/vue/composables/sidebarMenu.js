@@ -1,5 +1,5 @@
 import { useI18n } from "vue-i18n"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
@@ -31,6 +31,7 @@ const KNOWN_MENU_TABS = [
   "session_admin",
   "search",
   "question_manager",
+  "extra_menu_from_webservice",
 ]
 
 // Topbar keys (new + legacy alias)
@@ -163,12 +164,11 @@ function mergeConfig(baseCfg, overrideCfg) {
 }
 
 function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
-  // display.show_tabs (default)
+  // display.show_tabs is the Chamilo 2 setting whose title is "Main menu entries".
   const showTabsRaw = platformConfigStore.getSetting("display.show_tabs")
   let defaultCfg = makeEmptyConfig()
 
   if (Array.isArray(showTabsRaw)) {
-    // Very old installations may still provide an array
     defaultCfg = configFromLegacyList(showTabsRaw)
   } else if ("string" === typeof showTabsRaw && showTabsRaw.trim() !== "") {
     const parsed = safeParseJson(showTabsRaw, "[Sidebar] Invalid JSON in display.show_tabs")
@@ -217,15 +217,20 @@ export function useSidebarMenu() {
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
   const isMenuTabEnabled = (key) => displayTabs.value?.menu?.[key] === true
-  const isTopbarTabEnabled = (key) => displayTabs.value?.topbar?.[key] === true // kept for completeness
 
   const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
   const isAnonymous = !securityStore.isAuthenticated
-  const isPrivilegedUser =
-    securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+  // ROLE_TEACHER covers admin and HR through the hierarchy; ROLE_SESSION_MANAGER covers session admins.
+  const isPrivilegedUser = securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+  const searchCourseConfig = computed(() => platformConfigStore.plugins?.searchcourse || {})
+  const rssConfig = computed(() => platformConfigStore.plugins?.rss || {})
+  const dictionaryConfig = computed(() => platformConfigStore.plugins?.dictionary || {})
+  const extraMenuFromWebserviceItems = ref([])
+  const extraMenuFromWebserviceTitle = ref(t("Extra menu"))
+  const extraMenuFromWebserviceLoaded = ref(false)
 
   const showBuyCoursesMenuItem = computed(() => {
     if (!securityStore.isAuthenticated) {
@@ -238,6 +243,119 @@ export function useSidebarMenu() {
   const buyCoursesIndexPath = computed(() => {
     return buyCoursesConfig.value?.indexPath || "/plugin/BuyCourses/index.php"
   })
+
+  const showSearchCourseMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(searchCourseConfig.value?.enabled)
+  })
+
+  const searchCourseIndexPath = computed(() => {
+    return searchCourseConfig.value?.indexPath || "/plugin/SearchCourse/index.php"
+  })
+
+  const searchCourseMenuTitle = computed(() => {
+    return searchCourseConfig.value?.title || t("Search courses")
+  })
+
+  const showRssMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(rssConfig.value?.enabled)
+  })
+
+  const rssIndexPath = computed(() => {
+    return rssConfig.value?.indexPath || "/plugin/Rss/index.php"
+  })
+
+  const rssMenuTitle = computed(() => {
+    return rssConfig.value?.title || t("RSS feed")
+  })
+
+  const showDictionaryMenuItem = computed(() => {
+    if (!securityStore.isAuthenticated) {
+      return false
+    }
+
+    return normalizeBooleanFlag(dictionaryConfig.value?.enabled)
+  })
+
+  const dictionaryIndexPath = computed(() => {
+    return dictionaryConfig.value?.indexPath || "/plugin/Dictionary/index.php"
+  })
+
+  const dictionaryMenuTitle = computed(() => {
+    return dictionaryConfig.value?.title || t("Dictionary")
+  })
+
+  const showExtraMenuFromWebserviceMenuItem = computed(() => {
+    return securityStore.isAuthenticated && isMenuTabEnabled("extra_menu_from_webservice")
+  })
+
+  const normalizeExtraMenuFromWebserviceItems = (items) => {
+    if (!Array.isArray(items)) {
+      return []
+    }
+
+    return items
+      .filter((item) => item && typeof item.title === "string" && typeof item.url === "string")
+      .map((item) => {
+        const menuItem = {
+          label: item.title,
+          url: item.url,
+          icon: item.icon ? `mdi ${item.icon}` : "mdi mdi-menu-right",
+          class: "pl-4",
+        }
+
+        if (item.target === "_blank") {
+          menuItem.target = "_blank"
+        }
+
+        if (Array.isArray(item.children) && item.children.length > 0) {
+          const children = normalizeExtraMenuFromWebserviceItems(item.children)
+          if (children.length > 0) {
+            menuItem.items = children
+          }
+        }
+
+        return menuItem
+      })
+  }
+
+  async function loadExtraMenuFromWebserviceItems() {
+    if (extraMenuFromWebserviceLoaded.value || !showExtraMenuFromWebserviceMenuItem.value) {
+      return
+    }
+
+    extraMenuFromWebserviceLoaded.value = true
+
+    try {
+      const response = await fetch("/plugin/ExtraMenuFromWebservice/menu.php", {
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+
+      if (!response.ok) {
+        return
+      }
+
+      const data = await response.json()
+
+      if (typeof data.title === "string" && data.title.trim()) {
+        extraMenuFromWebserviceTitle.value = data.title
+      }
+
+      extraMenuFromWebserviceItems.value = data.enabled ? normalizeExtraMenuFromWebserviceItems(data.items) : []
+    } catch {
+      extraMenuFromWebserviceItems.value = []
+    }
+  }
 
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
@@ -295,6 +413,28 @@ export function useSidebarMenu() {
     const items = []
 
     if (securityStore.isAuthenticated && isMenuTabEnabled("my_courses")) {
+      const defaultCourseItems = [
+        {
+          label: t("My courses"),
+          route: { name: "MyCourses" },
+        },
+        {
+          label: t("My sessions"),
+          route: { name: "MySessions" },
+        },
+      ]
+
+      if (!enrolledStore.isInitialized) {
+        items.push({
+          icon: "mdi mdi-book-open-page-variant",
+          label: t("My courses"),
+          items: defaultCourseItems,
+          expanded: isActive({ items: defaultCourseItems }),
+        })
+
+        return items
+      }
+
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -314,7 +454,7 @@ export function useSidebarMenu() {
       if (courseItems.length > 0) {
         items.push({
           icon: "mdi mdi-book-open-page-variant",
-          label: courseItems.length > 1 ? t("Courses") : courseItems[0].label,
+          label: enrolledStore.isEnrolledInCourses ? t("My courses") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
@@ -343,8 +483,41 @@ export function useSidebarMenu() {
     if (showBuyCoursesMenuItem.value) {
       items.push({
         icon: "mdi mdi-cart-outline",
-        label: t("Buy courses"),
+        label: t("Shop"),
         url: buyCoursesIndexPath.value,
+      })
+    }
+
+    if (showSearchCourseMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-book-search-outline",
+        label: searchCourseMenuTitle.value,
+        url: searchCourseIndexPath.value,
+      })
+    }
+
+    if (showDictionaryMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-book-open-page-variant-outline",
+        label: dictionaryMenuTitle.value,
+        url: dictionaryIndexPath.value,
+      })
+    }
+
+    if (showRssMenuItem.value) {
+      items.push({
+        icon: "mdi mdi-rss",
+        label: rssMenuTitle.value,
+        url: rssIndexPath.value,
+      })
+    }
+
+    if (showExtraMenuFromWebserviceMenuItem.value && extraMenuFromWebserviceItems.value.length > 0) {
+      items.push({
+        icon: "mdi mdi-menu-open",
+        label: extraMenuFromWebserviceTitle.value,
+        items: extraMenuFromWebserviceItems.value,
+        expanded: isActive({ items: extraMenuFromWebserviceItems.value }),
       })
     }
 
@@ -361,7 +534,7 @@ export function useSidebarMenu() {
     if (isMenuTabEnabled("reporting")) {
       const subItems = []
 
-      if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         subItems.push({
           label: securityStore.isHRM ? t("Course sessions") : t("Reporting"),
           url: "/main/my_space/" + (securityStore.isHRM ? "session.php" : "index.php"),
@@ -458,14 +631,13 @@ export function useSidebarMenu() {
     }
 
     {
-      const roles = securityStore.user?.roles || []
-      const isQuestionManager = securityStore.isAdmin || roles.includes("ROLE_QUESTION_MANAGER")
+      const isQuestionManager = securityStore.isGranted("ROLE_QUESTION_MANAGER")
 
       if (isQuestionManager && isMenuTabEnabled("question_manager")) {
         const questionAdminItems = [
           {
             label: t("Questions"),
-            url: "/main/admin/questions.php",
+            route: { name: "AdminQuestionBank" },
             icon: "mdi mdi-comment-question-outline",
             class: "pl-4",
           },
@@ -480,7 +652,7 @@ export function useSidebarMenu() {
       }
     }
 
-    if (isMenuTabEnabled("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
+    if (isMenuTabEnabled("session_admin") && securityStore.isGranted("ROLE_SESSION_MANAGER")) {
       const sessionAdminItems = [
         {
           label: t("Dashboard"),
@@ -523,7 +695,7 @@ export function useSidebarMenu() {
     }
 
     if (isMenuTabEnabled("platform_administration")) {
-      if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },
           ...(securityStore.isSessionAdmin &&
@@ -569,6 +741,7 @@ export function useSidebarMenu() {
 
   async function initialize() {
     await enrolledStore.initialize()
+    await loadExtraMenuFromWebserviceItems()
   }
 
   return {

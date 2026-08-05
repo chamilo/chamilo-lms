@@ -54,6 +54,7 @@ use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
+use Chamilo\CoreBundle\Security\Authorization\LoginAsAuthorizationChecker;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -259,6 +260,11 @@ class Container
     public static function getSettingsManager(): SettingsManager
     {
         return self::$container->get(SettingsManager::class);
+    }
+
+    public static function getLoginAsAuthorizationChecker(): LoginAsAuthorizationChecker
+    {
+        return self::$container->get(LoginAsAuthorizationChecker::class);
     }
 
     public static function getCourseSettingsManager(): SettingsCourseManager

@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(false, 'true' === api_get_setting('allow_hr_skills_management'));
 SkillModel::isAllowed();
 
 //Adds the JS needed to use the jqgrid
@@ -21,7 +21,8 @@ $tree = $skill->getSkillsTree(null, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 
 $html = $skill_visualizer->return_html();
-$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
+$token = Security::get_token();
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1&sec_token='.$token;
 
 $tpl = new Template(null, false, false);
 $tpl->assign('url', $url);

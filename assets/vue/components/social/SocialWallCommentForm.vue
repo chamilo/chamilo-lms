@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref } from "vue"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { SOCIAL_TYPE_WALL_COMMENT } from "./constants"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -68,15 +68,15 @@ function sendComment() {
   }
   isLoading.value = true
 
-  axios
-    .post("/api/social_posts", {
+  socialService
+    .createPost({
       content: comment.value,
       type: SOCIAL_TYPE_WALL_COMMENT,
       sender: securityStore.user["@id"],
       parent: props.post["@id"],
     })
-    .then((response) => {
-      emit("comment-posted", response.data)
+    .then((data) => {
+      emit("comment-posted", data)
       comment.value = ""
       error.value = ""
     })

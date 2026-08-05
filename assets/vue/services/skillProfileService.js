@@ -24,7 +24,7 @@ export async function createProfile({ title, description, skills }) {
  * @returns {Promise<Object>}
  */
 export async function updateProfile({ iri, title, description }) {
-  return baseService.put(iri, { title, description })
+  return baseService.patch(iri, { title, description })
 }
 
 /**

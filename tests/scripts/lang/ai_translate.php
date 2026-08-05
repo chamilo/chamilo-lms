@@ -96,6 +96,7 @@ function getLanguageName(string $code): string {
         'eo'    => 'Esperanto',
         'es'    => 'Spanish',
         'es_MX' => 'Spanish (Mexico)',
+	'et'    => 'Estonian',
         'eu_ES' => 'Basque (Spain)',
         'fa_AF' => 'Persian (Afghanistan)',
         'fa_IR' => 'Persian (Iran)',
@@ -111,15 +112,19 @@ function getLanguageName(string $code): string {
         'hu_HU' => 'Hungarian',
         'hy'    => 'Armenian',
         'id_ID' => 'Indonesian',
+	'is_IS' => 'Icelandic',
         'it'    => 'Italian',
         'ja'    => 'Japanese',
         'ka_GE' => 'Georgian',
         'ko_KR' => 'Korean',
+	'lo'    => 'Lao',
         'lt_LT' => 'Lithuanian',
         'lv_LV' => 'Latvian',
         'mk_MK' => 'Macedonian',
         'ms_MY' => 'Malay (Malaysia)',
+	'mt'    => 'Maltese',
         'my_MM' => 'Burmese (Myanmar)',
+	'nb_NO' => 'Bokmal (Norway)',
         'ne'    => 'Nepali (Nepal)',
         'nl'    => 'Dutch',
         'nn_NO' => 'Norwegian Nynorsk',
@@ -230,8 +235,10 @@ function parseBasePoFile(string $filePath): array {
     $entries = [];
     $currentLines = [];
     $firstEntry = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry) {
+    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -289,14 +296,36 @@ function parseBasePoFile(string $filePath): array {
         $entries[] = $entry;
         $currentLines = [];
         $firstEntry = false;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: entries should be separated by a blank line, but some
+        // generated/hand-edited .po files are missing it. If we already have a
+        // complete entry buffered (msgid AND msgstr both seen) and this line
+        // looks like the start of a new one (a comment or a fresh msgid), flush
+        // the buffered entry first. Without this, the new msgid/comment would
+        // simply be appended into the same buffer and silently overwrite the
+        // previous entry's msgid when it is parsed, discarding it entirely.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 
@@ -338,8 +367,10 @@ function parseTargetPoFile(string $filePath): array {
     $currentLines = [];
     $entryIndex = 0;
     $inHeader = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader) {
+    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -399,14 +430,32 @@ function parseTargetPoFile(string $filePath): array {
 
         $currentLines = [];
         $entryIndex++;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: see the matching comment in parseBasePoFile() — some .po
+        // files are missing the blank line between entries, which would
+        // otherwise silently merge two entries and discard the first one.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 
@@ -822,8 +871,21 @@ foreach ($langCodes as $lang) {
 
     $entryIndex = 0;
 
+    // Progress is noisy when printed on every 50-entry batch even though most
+    // batches make no change (nothing needed translating). Only print it as an
+    // occasional heartbeat (every 1000 entries) or right before an API call is
+    // about to be made, so the log shows where we were when something actually happened.
+    $lastProgressLoggedAt = 0;
+    $logProgress = function () use (&$lastProgressLoggedAt, &$processedCount, $totalTerms, $lang) {
+        if ($processedCount === $lastProgressLoggedAt) {
+            return;
+        }
+        $lastProgressLoggedAt = $processedCount;
+        eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+    };
+
     // Helper to write current state to disk (used on success AND on failure)
-    $writeCurrentState = function () use (
+    $writeCurrentState = function (?Throwable $error = null) use (
         &$targetTranslations,
         &$keepRawSingular,
         $baseEntries,
@@ -832,10 +894,15 @@ foreach ($langCodes as $lang) {
         $lang
     ) {
         $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
-        if (file_put_contents($targetFile, $newContent) !== false) {
-            eprintln("[{$lang}] Partial translation file successfully written after error.", true);
-        } else {
+        if (file_put_contents($targetFile, $newContent) === false) {
             eprintln("[{$lang}] WARNING: Failed to write partial file!", true);
+            return;
+        }
+
+        if ($error !== null) {
+            eprintln("[{$lang}] Partial translation file successfully written after error: ".$error->getMessage(), true);
+        } else {
+            eprintln("[{$lang}] Translation file written successfully.", true);
         }
     };
 
@@ -845,9 +912,8 @@ foreach ($langCodes as $lang) {
 
             if ($entry['isHeader'] || $entry['hasPlural']) {
                 $processedCount++;
-                if ($processedCount % 50 === 0) {
-                    eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).",
-                        true);
+                if ($processedCount % 1000 === 0) {
+                    $logProgress();
                 }
                 continue;
             }
@@ -887,6 +953,7 @@ foreach ($langCodes as $lang) {
                 // Send batch when full
                 if (count($pendingBatch) >= $batchSize) {
                     $apiBatchCount++;
+                    $logProgress();
                     eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
                         .count($pendingBatch)." terms).", true);
 
@@ -956,14 +1023,15 @@ foreach ($langCodes as $lang) {
             }
 
             $processedCount++;
-            if ($processedCount % 50 === 0) {
-                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+            if ($processedCount % 1000 === 0) {
+                $logProgress();
             }
         }
 
         // Final batch (if any)
         if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
             $apiBatchCount++;
+            $logProgress();
             eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
                 .count($pendingBatch)." terms).", true);
 
@@ -1021,7 +1089,7 @@ foreach ($langCodes as $lang) {
         // Any unexpected fatal error outside batch processing
         eprintln("[{$lang}] FATAL ERROR: ".$fatal->getMessage(), true);
         eprintln("[{$lang}] Attempting to save partial progress...", true);
-        $writeCurrentState();
+        $writeCurrentState($fatal);
         throw $fatal; // re-throw so you know something went very wrong
     }
 }

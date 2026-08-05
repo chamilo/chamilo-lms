@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'HTML eduki statikoa erakutsi.';
 $strings['block_title'] = 'Bloke izenburua';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Edukia';

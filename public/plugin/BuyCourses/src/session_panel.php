@@ -48,7 +48,7 @@ $toolbar = Display::toolbarButton(
 );
 
 
-$templateName = get_lang('TabsDashboard');
+$templateName = get_lang('Shop');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('sessions_are_included', $includeSessions);

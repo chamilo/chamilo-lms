@@ -10,7 +10,7 @@ $em = Container::getEntityManager();
 $request = Container::getRequest();
 $requestRoute = $request->query->get('_route');
 
-$isEnabled = $plugin->isEnabled(true);
+$isEnabled = $plugin->isEnabled();
 $showOverviewRegion = $isEnabled && '/main/exercise/overview.php' === $requestRoute;
 $showSubmitRegion = $isEnabled && '/main/exercise/exercise_submit.php' === $requestRoute;
 

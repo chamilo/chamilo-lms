@@ -30,30 +30,30 @@
           </button>
         </div>
 
-        <button
-          class="btn-secondary"
+        <BaseButton
+          :label="$t('Expand')"
+          icon="unfold"
+          type="tertiary-alternative"
           @click="expandAll(true)"
-        >
-          <i class="mdi mdi-arrow-expand-vertical"></i> {{ $t("Expand") }}
-        </button>
-        <button
-          class="btn-secondary"
+        />
+        <BaseButton
+          :label="$t('Collapse')"
+          icon="fold"
+          type="tertiary-alternative"
           @click="expandAll(false)"
-        >
-          <i class="mdi mdi-arrow-collapse-vertical"></i> {{ $t("Collapse") }}
-        </button>
-        <button
-          class="btn-secondary"
+        />
+        <BaseButton
+          :label="$t('Select all')"
+          icon="select-all"
+          type="tertiary-alternative"
           @click="checkAll(true)"
-        >
-          <i class="mdi mdi-check-all"></i> {{ $t("Select all") }}
-        </button>
-        <button
-          class="btn-secondary"
+        />
+        <BaseButton
+          :label="$t('Clear')"
+          icon="unselect-all"
+          type="tertiary-alternative"
           @click="checkAll(false)"
-        >
-          <i class="mdi mdi-close-thick"></i> {{ $t("Clear") }}
-        </button>
+        />
       </div>
     </div>
 
@@ -89,6 +89,7 @@
 <script setup>
 import { watch, toRefs } from "vue"
 import useResourceSelection from "../../composables/coursemaintenance/useResourceSelection"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const props = defineProps({
   /** Array of groups from backend (will be normalized) */
@@ -296,6 +297,7 @@ export default {
       },
       emits: ["select-group"],
       components: {
+        BaseButton,
         /* <-- Tree node item (no type badge; uses folder/file icon) */
         TreeNode: {
           name: "TreeNode",
@@ -442,8 +444,8 @@ export default {
               <span class="text-xs text-gray-50">· {{ selectedLeafCount }} / {{ totalLeafCount }}</span>
             </div>
             <div class="flex gap-2">
-              <button class="btn-secondary" @click="selectAll"><i class="mdi mdi-check-all"></i> Select group</button>
-              <button class="btn-secondary" @click="selectNone"><i class="mdi mdi-close-thick"></i> Clear group</button>
+              <BaseButton :label="$t('Select group')" icon="select-all" type="tertiary-alternative" @click="selectAll" />
+              <BaseButton :label="$t('Clear group')" icon="unselect-all" type="tertiary-alternative" @click="selectNone" />
             </div>
           </header>
 

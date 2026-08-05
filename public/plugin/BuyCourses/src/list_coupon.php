@@ -76,6 +76,10 @@ foreach ($coupons as &$coupon) {
         $coupon['discount_value'] = $plugin->getPriceWithCurrencyFromIsoCode($coupon['discount_amount'], $coupon['iso_code']);
     }
     $coupon['discount_type'] = $discountTypes[$coupon['discount_type']];
+    $timesApplied = (int) ($coupon['times_applied'] ?? 0);
+    $coupon['times_applied_label'] = $timesApplied > 0
+        ? (string) $timesApplied
+        : $plugin->get_lang('CouponTimesAppliedUnlimited');
 }
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];

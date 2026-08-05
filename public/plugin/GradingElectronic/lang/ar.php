@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'التدريس الإلكتروني معطل';
 $strings['StudentId'] = 'رقم الطالب';
 $strings['ProviderId'] = 'رقم المزود';
 $strings['CourseHours'] = 'ساعات المقرر';
+
+$strings['GenerateFile'] = 'إنشاء ملف';
+$strings['CourseId'] = 'معرّف المقرر';

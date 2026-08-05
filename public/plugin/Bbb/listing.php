@@ -305,7 +305,7 @@ function bbb_listing_build_header_html(BbbPlugin $plugin, bool $status, int $use
     $meetingsLabel = htmlspecialchars((string) $meetingsCount, ENT_QUOTES);
 
     return '
-<div class="mx-auto max-w-7xl px-4 pt-6">
+<div class="mx-auto w-full max-w-none px-4 pt-6 lg:px-6 xl:px-8">
     <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-2">
@@ -805,110 +805,229 @@ if ($conferenceManager && $allowToEdit) {
         $title
     );
 
-    $preuploadHtml = '
-<div class="bbb-preupload" style="position:relative;">
+    $preuploadConfigJson = json_encode(
+        [
+            'ajaxUrl' => $ajaxUrl,
+            'maxTotalMb' => $maxTotalMb,
+            'loadingText' => $loadingTxt.'…',
+            'noDocsText' => $noDocsTxt,
+            'failText' => $failTxt,
+        ],
+        JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    );
+    if (false === $preuploadConfigJson) {
+        $preuploadConfigJson = '{}';
+    }
+
+    $preuploadHtml = <<<HTML
+<div class="bbb-preupload" style="position:relative; min-height:3rem;">
   <button type="button" id="bbb-pre-btn"
           class="btn btn--icon"
-          title="'.$title.'"
+          title="{$title}"
           style="position:absolute; right:0; top:-8px;">
-    '.$iconHtml.'
+    {$iconHtml}
   </button>
 
-  <div id="bbb-pre-pop" class="hidden"
-       style="position:absolute; right:0; top:28px; z-index:50;
-              width:340px; background:#fff; border:1px solid #e5e7eb;
-              border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
-              padding:10px;">
-    <div class="text-sm" style="margin-bottom:6px; color:#475569;">'.$help.'</div>
+  <div id="bbb-pre-pop" class="hidden rounded-2xl border border-gray-25 bg-white p-4 shadow-xl"
+       style="position:absolute; right:0; top:40px; z-index:50;
+              width:min(820px, calc(100vw - 4rem));
+              max-width:calc(100vw - 4rem);">
+    <div class="mb-3 text-body-2 text-gray-50">{$help}</div>
     <div id="preupload-list"
-         class="text-sm"
-         style="max-height:220px; overflow:auto; border:1px solid #eef2f7;
-                border-radius:6px; padding:8px; color:#0f172a;">
-      '.$loadingTxt.'…
+         class="overflow-auto rounded-xl border border-gray-25 bg-support-2 p-3 text-body-2 text-gray-90"
+         style="max-height:380px;">
+      {$loadingTxt}…
     </div>
-    <div class="text-xs" style="margin-top:6px; color:#64748b;">
-      '.$maxLabel.' — <span id="preupload-total">0</span> MB
+    <div class="mt-3 flex items-center justify-between gap-3 text-caption text-gray-50">
+      <span>{$maxLabel}</span>
+      <span><span id="preupload-total">0</span> MB</span>
     </div>
   </div>
 </div>
 
 <script>
 (function(){
-  var btn   = document.getElementById("bbb-pre-btn");
-  var pop   = document.getElementById("bbb-pre-pop");
-  var list  = document.getElementById("preupload-list");
+  var config = {$preuploadConfigJson};
+  var btn = document.getElementById('bbb-pre-btn');
+  var pop = document.getElementById('bbb-pre-pop');
+  var list = document.getElementById('preupload-list');
   var loaded = false;
-  var ajax   = "'.$ajaxUrl.'";
-  var maxMb  = '.$maxTotalMb.';
 
-  function esc(t){
-    return String(t).replace(/[&<>\"\\\']/g, function(s){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;","\\\'":"&#39;"}[s];
+  if (!btn || !pop || !list) {
+    return;
+  }
+
+  function setListMessage(text, className) {
+    list.innerHTML = '';
+    var message = document.createElement('p');
+    message.className = className || 'text-sm text-gray-50';
+    message.textContent = text || '';
+    list.appendChild(message);
+  }
+
+  function formatSize(bytes) {
+    var size = Number(bytes || 0);
+
+    if (size <= 0) {
+      return '';
+    }
+
+    return (size / 1048576).toFixed(1) + ' MB';
+  }
+
+  function buildRow(doc, index) {
+    var filename = doc && doc.filename ? String(doc.filename) : '';
+    var size = doc && doc.size ? Number(doc.size) : 0;
+
+    var row = document.createElement('div');
+    row.className = 'bbb-preupload-row grid w-full cursor-pointer rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 transition hover:bg-gray-15';
+    row.setAttribute('data-bbb-preupload-row', '1');
+    row.style.display = 'grid';
+    row.style.gridTemplateColumns = '1.25rem minmax(0, 1fr) 5.5rem';
+    row.style.alignItems = 'center';
+    row.style.columnGap = '.75rem';
+    row.style.margin = '.375rem 0';
+
+    var checkbox = document.createElement('input');
+    checkbox.id = 'bbb-pre-doc-' + index;
+    checkbox.type = 'checkbox';
+    checkbox.name = 'documents[]';
+    checkbox.className = 'h-4 w-4 rounded border-gray-25 text-primary focus:ring-primary';
+    checkbox.style.gridColumn = '1';
+    checkbox.style.margin = '0';
+    checkbox.value = JSON.stringify({
+      url: doc && doc.url ? doc.url : '',
+      filename: filename,
+      size: size
     });
+
+    var nameNode = document.createElement('span');
+    nameNode.className = 'min-w-0 truncate font-medium';
+    nameNode.style.gridColumn = '2';
+    nameNode.style.display = 'block';
+    nameNode.style.minWidth = '0';
+    nameNode.style.overflow = 'hidden';
+    nameNode.style.textOverflow = 'ellipsis';
+    nameNode.style.whiteSpace = 'nowrap';
+    nameNode.style.textAlign = 'left';
+    nameNode.title = filename;
+    nameNode.textContent = filename;
+
+    var sizeNode = document.createElement('span');
+    sizeNode.className = 'whitespace-nowrap text-caption text-gray-50';
+    sizeNode.style.gridColumn = '3';
+    sizeNode.style.textAlign = 'right';
+    sizeNode.textContent = formatSize(size);
+
+    row.appendChild(checkbox);
+    row.appendChild(nameNode);
+    row.appendChild(sizeNode);
+
+    return row;
   }
 
-  function togglePop(){
-    if (pop.classList.contains("hidden")) {
-      pop.classList.remove("hidden");
-      if (!loaded) {
-        loaded = true;
-        fetch(ajax, {credentials:"same-origin"})
-          .then(function(r){ return r.json(); })
-          .then(renderList)
-          .catch(function(){
-            list.innerHTML = \'<p class="text-sm" style="color:#dc2626">'.$failTxt.'</p>\';
-          });
-      }
-    } else {
-      pop.classList.add("hidden");
-    }
-  }
-
-  function clickOutside(e){
-    if (!pop.contains(e.target) && !btn.contains(e.target)) {
-      pop.classList.add("hidden");
-    }
-  }
-
-  function renderList(docs){
-    var items = Array.isArray(docs) ? docs.filter(function(d){
-      return (d.filename||"").match(/\\.(pdf|ppt|pptx|odp)$/i);
+  function renderList(docs) {
+    var items = Array.isArray(docs) ? docs.filter(function(doc) {
+      return (doc.filename || '').match(/\.(pdf|ppt|pptx|odp)$/i);
     }) : [];
 
+    list.innerHTML = '';
+
     if (!items.length) {
-      list.innerHTML = \'<p class="text-sm" style="color:#64748b">'.$noDocsTxt.'</p>\';
+      setListMessage(config.noDocsText, 'text-sm text-gray-50');
       return;
     }
 
-    list.innerHTML = items.map(function(doc){
-      var data = JSON.stringify({url:doc.url, filename:doc.filename, size:doc.size}).replace(/"/g,"&quot;");
-      return \'<label class="flex items-center gap-2" style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0;">\'
-           + \'<input type="checkbox" class="h-4 w-4" name="documents[]" value="\' + data + \'" />\'
-           + \'<span class="truncate">\' + esc(doc.filename||"") + \'</span>\'
-           + \'</label>\';
-    }).join("");
-
-    list.addEventListener("change", recalcTotal, true);
-  }
-
-  function recalcTotal(){
-    var boxes = list.querySelectorAll(\'input[type="checkbox"]:checked\');
-    var total = 0;
-    boxes.forEach(function(b){
-      try { var o = JSON.parse(b.value.replace(/&quot;/g, \'"\')); total += (o.size||0); } catch(e){}
+    items.forEach(function(doc, index) {
+      list.appendChild(buildRow(doc, index));
     });
-    var mb = (total/1048576).toFixed(1);
-    var out = document.getElementById("preupload-total");
-    if (out) out.textContent = mb;
 
-    var submit = document.querySelector(\'form[name="start_conference"] [type="submit"]\');
-    if (submit) submit.disabled = (total > maxMb * 1048576);
+    recalcTotal();
   }
 
-  if (btn) btn.addEventListener("click", togglePop);
-  document.addEventListener("click", clickOutside);
+  function recalcTotal() {
+    var boxes = list.querySelectorAll('input[type="checkbox"]:checked');
+    var total = 0;
+
+    boxes.forEach(function(box) {
+      try {
+        var data = JSON.parse(box.value);
+        total += Number(data.size || 0);
+      } catch (error) {
+        total += 0;
+      }
+    });
+
+    var out = document.getElementById('preupload-total');
+    if (out) {
+      out.textContent = (total / 1048576).toFixed(1);
+    }
+
+    var submit = document.querySelector('form[name="start_conference"] [type="submit"]');
+    if (submit) {
+      submit.disabled = total > config.maxTotalMb * 1048576;
+    }
+  }
+
+  function togglePop() {
+    if (pop.classList.contains('hidden')) {
+      pop.classList.remove('hidden');
+
+      if (!loaded) {
+        loaded = true;
+        fetch(config.ajaxUrl, {credentials: 'same-origin'})
+          .then(function(response) {
+            return response.json();
+          })
+          .then(renderList)
+          .catch(function() {
+            setListMessage(config.failText, 'text-sm text-danger');
+          });
+      }
+
+      return;
+    }
+
+    pop.classList.add('hidden');
+  }
+
+  btn.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    togglePop();
+  });
+
+  list.addEventListener('change', recalcTotal, true);
+
+  list.addEventListener('click', function(event) {
+    var target = event.target;
+
+    if (!target || ('input' === target.tagName.toLowerCase())) {
+      return;
+    }
+
+    var row = target.closest ? target.closest('[data-bbb-preupload-row]') : null;
+    if (!row) {
+      return;
+    }
+
+    var checkbox = row.querySelector('input[type="checkbox"]');
+    if (!checkbox) {
+      return;
+    }
+
+    checkbox.checked = !checkbox.checked;
+    checkbox.dispatchEvent(new Event('change', {bubbles: true}));
+  }, true);
+
+  document.addEventListener('click', function(event) {
+    if (!pop.contains(event.target) && !btn.contains(event.target)) {
+      pop.classList.add('hidden');
+    }
+  });
 })();
-</script>';
+</script>
+HTML;
 
     $form->addElement('html', $preuploadHtml);
     $form->addElement('html', '<script>
@@ -979,7 +1098,7 @@ if (api_is_platform_admin()) {
     }
 
     if (!empty($actionButtons)) {
-        $actionsHtml = '<div class="mx-auto max-w-7xl px-4 pt-4"><div class="flex flex-wrap gap-3">'.implode('', $actionButtons).'</div></div>';
+        $actionsHtml = '<div class="mx-auto w-full max-w-none px-4 py-4 lg:px-6 xl:px-8"><div class="flex flex-wrap gap-3">'.implode('', $actionButtons).'</div></div>';
     }
 }
 

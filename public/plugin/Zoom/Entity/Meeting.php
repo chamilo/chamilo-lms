@@ -33,60 +33,60 @@ use ZoomPlugin;
 class Meeting
 {
     /** @var string meeting type name */
-    public string $typeName;
+    public string $typeName = '';
 
     /**
      * meeting start time as a DateTime instance
      */
-    public ?DateTime $startDateTime;
+    public ?DateTime $startDateTime = null;
 
     /** @var string meeting formatted start time */
-    public string $formattedStartTime;
+    public string $formattedStartTime = '';
 
     /**
      * Meeting duration as a DateInterval instance
      */
-    public ?DateInterval $durationInterval;
+    public ?DateInterval $durationInterval = null;
 
     /** @var string meeting formatted duration */
-    public string $formattedDuration;
+    public string $formattedDuration = '';
 
     /** @var string */
-    public string $statusName;
+    public string $statusName = '';
 
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'meeting_id', type: 'string')]
-    protected ?int $meetingId;
+    protected ?int $meetingId = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    protected ?User $user;
+    protected ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
-    protected ?Course $course;
+    protected ?Course $course = null;
 
     #[ORM\ManyToOne(targetEntity: CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid')]
-    protected ?CGroup $group;
+    protected ?CGroup $group = null;
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
-    protected ?Session $session;
+    protected ?Session $session = null;
 
     #[ORM\Column(name: 'meeting_list_item_json', type: 'text', nullable: true)]
-    protected ?string $meetingListItemJson;
+    protected ?string $meetingListItemJson = null;
 
     #[ORM\Column(name: 'meeting_info_get_json', type: 'text', nullable: true)]
-    protected ?string $meetingInfoGetJson;
+    protected ?string $meetingInfoGetJson = null;
 
-    protected ?MeetingListItem $meetingListItem;
+    protected ?MeetingListItem $meetingListItem = null;
 
-    protected ?MeetingInfoGet $meetingInfoGet;
+    protected ?MeetingInfoGet $meetingInfoGet = null;
 
     /**
      * @var Collection<int, MeetingActivity>
@@ -239,21 +239,30 @@ class Meeting
         return $this->meetingInfoGet;
     }
 
-    public function setUser(User $user): static
+    public function getStatus(): string
+    {
+        if (null === $this->meetingInfoGet || empty($this->meetingInfoGet->status)) {
+            return '';
+        }
+
+        return (string) $this->meetingInfoGet->status;
+    }
+
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function setCourse(Course $course): static
+    public function setCourse(?Course $course): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    public function setSession(Session $session): static
+    public function setSession(?Session $session): static
     {
         $this->session = $session;
 
@@ -265,7 +274,7 @@ class Meeting
         return $this->group;
     }
 
-    public function setGroup(CGroup $group): static
+    public function setGroup(?CGroup $group): static
     {
         $this->group = $group;
 
@@ -325,7 +334,12 @@ class Meeting
 
     public function setStatus($status): void
     {
+        if (null === $this->meetingInfoGet) {
+            return;
+        }
+
         $this->meetingInfoGet->status = $status;
+        $this->initializeDisplayableProperties();
     }
 
     /**
@@ -443,6 +457,17 @@ class Meeting
      */
     private function initializeDisplayableProperties(): void
     {
+        $this->typeName = '';
+        $this->statusName = '';
+        $this->startDateTime = null;
+        $this->formattedStartTime = '';
+        $this->durationInterval = null;
+        $this->formattedDuration = '';
+
+        if (null === $this->meetingInfoGet) {
+            return;
+        }
+
         $zoomPlugin = new ZoomPlugin();
 
         $typeList = [
@@ -451,20 +476,21 @@ class Meeting
             API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithNoFixedTime'),
             API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithFixedTime'),
         ];
-        $this->typeName = $typeList[$this->meetingInfoGet->type];
 
-        if (property_exists($this, 'status')) {
+        if (isset($this->meetingInfoGet->type, $typeList[$this->meetingInfoGet->type])) {
+            $this->typeName = $typeList[$this->meetingInfoGet->type];
+        }
+
+        if (!empty($this->meetingInfoGet->status)) {
             $statusList = [
                 'waiting' => $zoomPlugin->get_lang('Waiting'),
                 'started' => $zoomPlugin->get_lang('Started'),
                 'finished' => $zoomPlugin->get_lang('Finished'),
+                'ended' => $zoomPlugin->get_lang('Finished'),
             ];
-            $this->statusName = $statusList[$this->meetingInfoGet->status];
+            $this->statusName = $statusList[$this->meetingInfoGet->status] ?? (string) $this->meetingInfoGet->status;
         }
-        $this->startDateTime = null;
-        $this->formattedStartTime = '';
-        $this->durationInterval = null;
-        $this->formattedDuration = '';
+
         if (!empty($this->meetingInfoGet->start_time)) {
             $this->startDateTime = new DateTime($this->meetingInfoGet->start_time);
             $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));

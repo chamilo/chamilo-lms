@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Moodle에서 가져오기';
+$strings['plugin_comment'] = 'Moodle 데이터베이스와 파일에서 Chamilo로 가져오기 프로세스를 실행합니다.';
+
+$strings['MoodlePassword'] = 'Moodle 비밀번호';
+$strings['UninstallError'] = '플러그인 제거 중 오류가 발생했습니다.';
+
+$strings['db_host'] = 'Moodle DB 호스트';
+$strings['db_user'] = 'Moodle DB 사용자';
+$strings['db_password'] = 'Moodle DB 비밀번호';
+$strings['db_name'] = 'Moodle DB 이름';
+$strings['user_filter'] = '사용자 필터';
+$strings['user_filter_help'] = '이 문자열로 시작하는 사용자 이름만 가져옵니다.<br>이 설정은 코스 가져오기에도 영향을 미치며, 해당 사용자 이름 접두사를 가진 사용자가 수강신청한 코스만 가져옵니다.';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = '코스, 사용자, 세션을 저장할 접근 URL ID (멀티 URL 사용 시)';
+$strings['moodle_path'] = 'Moodledata 경로';
+$strings['moodle_path_help'] = 'moodledata 폴더 경로입니다. 일반적으로 <pre>/var/www/moodledata</pre>와 같습니다.';
+
+// Tasks
+$strings['UsersTask'] = '사용자';
+$strings['CourseCategoriesTask'] = '코스 카테고리';
+$strings['CoursesTask'] = '코스';
+$strings['CourseSectionsTask'] = '코스 섹션';
+$strings['CourseModulesLessonTask'] = '코스 모듈: 레슨';
+$strings['LessonPagesTask'] = '레슨 페이지';
+$strings['LessonPagesDocumentTask'] = '레슨 페이지: 문서';
+$strings['FilesForLessonPagesTask'] = '레슨 페이지용 파일';
+$strings['LessonPagesQuizTask'] = '레슨 페이지: 질문';
+$strings['LessonPagesQuizQuestionTask'] = '질문 페이지용 질문';
+$strings['LessonAnswersTrueFalseTask'] = '참/거짓 질문에 대한 답변';
+$strings['LessonAnswersMultipleChoiceTask'] = '객관식 질문에 대한 답변';
+$strings['LessonAnswersMultipleAnswerTask'] = '다중 답변 질문에 대한 답변';
+$strings['LessonAnswersMatchingTask'] = '연결형 질문에 대한 답변';
+$strings['LessonAnswersEssayTask'] = '서술형 질문에 대한 답변';
+$strings['LessonAnswersShortAnswerTask'] = '단답형 질문에 대한 답변';
+$strings['FilesForLessonAnswersTask'] = '레슨 답변용 파일';
+$strings['CourseModulesQuizTask'] = '코스 모듈: 퀴즈';
+$strings['CQuizTask'] = 'C 퀴즈';
+$strings['RoleAssignmentsTask'] = '역할 할당';
+$strings['QuizzesTask'] = '퀴즈';
+$strings['FilesForQuizzesTask'] = '퀴즈용 파일';
+$strings['QuestionCategoriesTask'] = '질문 카테고리';
+$strings['QuestionsTask'] = '질문';
+$strings['QuestionMultiChoiceSingleTask'] = '객관식 질문(단일 선택)에 대한 답변';
+$strings['QuestionMultiChoiceMultipleTask'] = '객관식 질문(복수 선택)에 대한 답변';
+$strings['QuestionsTrueFalseTask'] = '참/거짓 질문에 대한 답변';
+$strings['QuestionShortAnswerTask'] = '단답형 질문에 대한 답변';
+$strings['CourseModulesScormTask'] = 'SCORM 코스';
+$strings['ScormScoesTask'] = 'SCORM 항목';
+$strings['FilesForScormScoesTask'] = 'SCORM 항목용 파일';
+$strings['UserSessionsTask'] = '사용자를 위한 코스 세션';
+$strings['CourseIntroductionsTask'] = '코스 소개';
+$strings['FilesForCourseIntroductionsTask'] = '코스 소개용 파일';
+$strings['FilesForCourseSectionsTask'] = '코스 섹션용 파일';
+$strings['CourseModulesUrlTask'] = '코스 모듈: URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = '섹션 내 모듈 정렬';
+$strings['UsersScormsViewTask'] = '사용자 SCORM 조회';
+$strings['UsersScormsProgressTask'] = 'SCORM 진행률';
+$strings['UsersLearnPathsTask'] = '사용자 학습 경로 조회';
+$strings['UsersLearnPathsLessonTimerTask'] = '학습 경로 섹션 시작 시간에 대한 수업 타이머';
+$strings['QuizzesScoresTask'] = '학습 경로 퀴즈 점수 업데이트';
+$strings['QuestionGapselectTask'] = '빈칸 선택형 질문 답변';
+$strings['UsersLearnPathsLessonBranchTask'] = '학습 경로 문서의 총 시간에 대한 수업 분기';
+$strings['UsersLearnPathsLessonAttemptsTask'] = '학습 경로 퀴즈의 총 시간에 대한 수업 시도';
+$strings['UsersLearnPathsQuizzesTask'] = '퀴즈 시도를 학습 경로 퀴즈 시도로 변환';
+$strings['UsersQuizzesAttemptsTask'] = '사용자 퀴즈 시도';
+$strings['UserQuestionAttemptsShortanswerTask'] = '단답형 질문에 대한 사용자 질문 시도';
+$strings['UserQuestionAttemptsGapselectTask'] = '빈칸 선택형 질문에 대한 사용자 질문 시도';
+$strings['UserQuestionAttemptsTruefalseTask'] = '참/거짓 질문에 대한 사용자 질문 시도';
+$strings['UsersLastLoginTask'] = '사용자 마지막 로그인';
+$strings['TrackLoginTask'] = '첫 로그인 및 마지막 로그아웃';
+$strings['TrackCourseAccessTask'] = '사용자 코스 접근';
+$strings['UserLearnPathsProgressScript'] = '사용자 학습 경로 진행률 업데이트';
+$strings['UserScormsProgressScript'] = '사용자 SCORM 진행률 업데이트';
+
+$strings['InstallError'] = '플러그인 설치 중 오류가 발생했습니다: %s';
+$strings['AdminIntro'] = 'Moodle 마이그레이션 작업을 순서대로 실행합니다. 각 단계는 상위 단계가 완료된 후에만 활성화됩니다.';
+$strings['MoodleDatabase'] = 'Moodle 데이터베이스';
+$strings['MoodledataPath'] = 'Moodledata 경로';
+$strings['AccessUrlId'] = '접근 URL ID';
+$strings['Configured'] = '설정됨';
+$strings['NotConfigured'] = '설정되지 않음';
+$strings['ConfigurePlugin'] = '플러그인 설정';
+$strings['MissingRequiredDatabaseConfiguration'] = '마이그레이션 작업을 실행하기 전에 Moodle 데이터베이스 호스트, 사용자 및 데이터베이스 이름을 설정하십시오.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata 경로가 비어 있습니다. 이 설정을 구성할 때까지 파일 관련 작업이 실패할 수 있습니다.';
+$strings['InvalidMigrationAction'] = '잘못된 마이그레이션 작업입니다.';
+$strings['InvalidSecurityToken'] = '잘못된 보안 토큰입니다. 페이지를 새로고침한 후 다시 시도하십시오.';
+$strings['MigrationTasks'] = '마이그레이션 작업';
+$strings['MaintenanceScripts'] = '유지보수 스크립트';
+$strings['ExecutionOutput'] = '실행 출력';
+$strings['TaskAlreadyExecuted'] = '이 작업 또는 스크립트는 이미 실행되었습니다.';
+$strings['SelectTaskToRun'] = '실행할 마이그레이션 작업을 선택하십시오. 출력이 여기에 표시됩니다.';

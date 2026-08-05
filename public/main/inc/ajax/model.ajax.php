@@ -58,7 +58,6 @@ $courseActions = [
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',
-    'get_work_pending_list',
     'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
@@ -129,14 +128,35 @@ if ($isDiagnosisLoadSearch) {
     if (!$canViewUsergroupFromCourse) {
         $usergroupAjax->protectScript($userGroupInfoAjax, true, true);
     }
+} elseif ('get_work_pending_list' === $action) {
+    api_block_anonymous_users();
+
+    if (!api_is_platform_admin(false, true) && false === api_is_teacher()) {
+        api_not_allowed(true);
+    }
 } elseif (in_array($action, $courseActions, true)) {
     api_protect_course_script();
 
-    if (!api_is_allowed_to_edit(null, true)) {
+    $studentAllowedActions = [
+        'get_course_announcements',
+    ];
+
+    if (
+        !in_array($action, $studentAllowedActions, true)
+        && !api_is_allowed_to_edit(null, true)
+    ) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
-    api_protect_admin_script(true);
+    // Admin actions whose result sets are already scoped to the entities the HR manager
+    // (DRH) actually follows. Only these may be opened to DRH; the rest (e.g. get_sessions,
+    // which lists every session on the platform) stay admin / session-admin only.
+    $drhScopedActions = [
+        'get_sessions_tracking',
+        'get_user_course_report',
+        'get_user_course_report_resumed',
+    ];
+    api_protect_admin_script(true, in_array($action, $drhScopedActions, true));
 } else {
     api_protect_admin_script(true);
 }
@@ -227,6 +247,11 @@ if (($search || $forceSearch) && ('false' !== $search)) {
     ) : false;
     if (isset($_REQUEST['filters2'])) {
         $filters = json_decode($_REQUEST['filters2']);
+    }
+
+    if (!empty($filters) && isset($filters->groupOp)) {
+        $op = strtoupper((string) $filters->groupOp);
+        $filters->groupOp = in_array($op, ['AND', 'OR'], true) ? $op : 'AND';
     }
 
     if (!empty($filters)) {
@@ -371,6 +396,24 @@ if (!$sidx) {
 }
 $options = [];
 
+// Pre-compute announcement title search term from all possible sources:
+// 1. title_to_search (external PHP form, sent in the grid URL)
+// 2. searchField/searchString (jqGrid single-field toolbar search)
+// 3. filters JSON rules (jqGrid multi-field search popup)
+$announcementTitleSearch = strtolower(trim($_REQUEST['title_to_search'] ?? ''));
+if ('' === $announcementTitleSearch && 'title' === $searchField && !empty($searchString)) {
+    $announcementTitleSearch = strtolower(trim((string) $searchString));
+}
+$filtersForAnnouncement = isset($filters) ? $filters : false;
+if ('' === $announcementTitleSearch && !empty($filtersForAnnouncement) && isset($filtersForAnnouncement->rules)) {
+    foreach ($filtersForAnnouncement->rules as $rule) {
+        if ('title' === ($rule->field ?? '') && '' !== trim((string) ($rule->data ?? ''))) {
+            $announcementTitleSearch = strtolower(trim((string) $rule->data));
+            break;
+        }
+    }
+}
+
 //2. Selecting the count FIRST
 //@todo rework this
 
@@ -441,7 +484,9 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
-        $userNotAllowed = !api_is_student_boss() && !api_is_platform_admin(false, true);
+        $userNotAllowed = !api_is_drh()
+            && !api_is_student_boss()
+            && !api_is_platform_admin(false, true);
 
         if ($userNotAllowed) {
             exit;
@@ -476,7 +521,10 @@ switch ($action) {
                     }
                 }
             } else {
-                $userList = UserManager::get_users_followed_by_drh(api_get_user_id());
+                $userList = UserManager::get_users_followed_by_drh(
+                    api_get_user_id(),
+                    applyReportingWorkflowSetting: true
+                );
                 if (!empty($userList)) {
                     $userIdList = array_keys($userList);
                 }
@@ -647,7 +695,14 @@ switch ($action) {
         $courseId = !empty($cid) ? $cid : api_get_course_int_id();
         $sessionId = !empty($sid) ? $sid : api_get_session_id();
         $groupId = !empty($gid) ? $gid : api_get_group_id();
-        $count = AnnouncementManager::getNumberAnnouncements($courseId, $sessionId, $groupId);
+        if ('' !== $announcementTitleSearch) {
+            $allForCount = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
+            $count = count(array_filter($allForCount, static function (array $r) use ($announcementTitleSearch): bool {
+                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
+            }));
+        } else {
+            $count = AnnouncementManager::getNumberAnnouncements($courseId, $sessionId, $groupId);
+        }
         break;
     case 'get_work_teacher':
         $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
@@ -665,9 +720,10 @@ switch ($action) {
         $count = get_count_work($work_id);
         break;
     case 'get_work_pending_list':
-        $courseId = $_REQUEST['course'] ?? 0;
-        $status = $_REQUEST['status'] ?? 0;
-        $count = getAllWork(
+        $courseId = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+        $status = !empty($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+
+        $count = getPendingWorkList(
             null,
             null,
             null,
@@ -738,7 +794,7 @@ switch ($action) {
             exit;
         }
 
-        $courseId = $_REQUEST['course_id'] ?? 0;
+        $courseId = (int) ($_REQUEST['course_id'] ?? 0);
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
@@ -782,7 +838,7 @@ switch ($action) {
     case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
 
-        $courseId = $_REQUEST['course_id'] ?? 0;
+        $courseId = (int) ($_REQUEST['course_id'] ?? 0);
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
@@ -1542,10 +1598,13 @@ switch ($action) {
         $sessionId = !empty($sid) ? $sid : api_get_session_id();
         $groupId = !empty($gid) ? $gid : api_get_group_id();
 
-        $titleToSearch = $_REQUEST['title_to_search'] ?? '';
-        $userIdToSearch = $_REQUEST['user_id_to_search'] ?? 0;
-
-        $result = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
+        $allResults = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
+        if ('' !== $announcementTitleSearch) {
+            $allResults = array_values(array_filter($allResults, static function (array $r) use ($announcementTitleSearch): bool {
+                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
+            }));
+        }
+        $result = array_slice($allResults, $start, $limit);
         break;
     case 'get_work_teacher':
         $columns = [
@@ -1648,13 +1707,14 @@ switch ($action) {
         break;
     case 'get_work_pending_list':
         api_block_anonymous_users();
-        if (false === api_is_teacher()) {
+
+        if (!api_is_platform_admin(false, true) && false === api_is_teacher()) {
             exit;
         }
-        $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
-            $plagiarismColumns = ['compilatio'];
-        }
+
+        $courseId = !empty($_REQUEST['course']) ? (int) $_REQUEST['course'] : null;
+        $status = !empty($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+
         $columns = [
             'course',
             'work_name',
@@ -1664,11 +1724,12 @@ switch ($action) {
             'sent_date',
             'qualificator_id',
             'correction',
+            'actions',
         ];
-        $columns = array_merge($columns, $plagiarismColumns);
-        $columns[] = 'actions';
-        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
-        $result = getAllWork(
+
+        $sidx = in_array($sidx, $columns, true) ? $sidx : 'sent_date';
+
+        $result = getPendingWorkList(
             $start,
             $limit,
             $sidx,
@@ -2764,7 +2825,7 @@ switch ($action) {
         $currentUserId = api_get_user_id();
         $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
-            $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
+            $urlUserGroup = '/admin/usergroup-users/';
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;

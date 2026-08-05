@@ -40,9 +40,8 @@ class CidFilter extends AbstractFilter
     {
         return [
             'cid' => [
-                'property' => null,
-                'type' => 'int',
-                'required' => false,
+                'type' => 'string',
+                'required' => $this->isRequired(),
                 'description' => 'Course identifier',
             ],
         ];
@@ -75,5 +74,10 @@ class CidFilter extends AbstractFilter
             )
             ->setParameter('course', $course->getId())
         ;
+    }
+
+    public function isRequired(): bool
+    {
+        return true;
     }
 }

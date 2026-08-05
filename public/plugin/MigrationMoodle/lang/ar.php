@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'استيراد من Moodle';
+$strings['plugin_comment'] = 'تنفيذ عملية استيراد من قاعدة بيانات وملفات Moodle إلى Chamilo.';
+
+$strings['MoodlePassword'] = 'كلمة مرور Moodle';
+$strings['UninstallError'] = 'حدث خطأ أثناء إلغاء تثبيت الإضافة.';
+
+$strings['db_host'] = 'مضيف قاعدة بيانات Moodle';
+$strings['db_user'] = 'مستخدم قاعدة بيانات Moodle';
+$strings['db_password'] = 'كلمة مرور قاعدة بيانات Moodle';
+$strings['db_name'] = 'اسم قاعدة بيانات Moodle';
+$strings['user_filter'] = 'تصفية المستخدمين';
+$strings['user_filter_help'] = 'استيراد المستخدمين الذين يبدأ اسم المستخدم الخاص بهم بهذه السلسلة فقط.<br>يتأثر استيراد المقررات الدراسية بهذا الإعداد أيضًا، حيث يستورد فقط المقررات التي يكون فيها المستخدمون الذين لديهم هذا البادئة مسجلين.';
+$strings['url_id'] = 'معرّف URL';
+$strings['url_id_help'] = 'معرّف URL الوصول لحفظ المقررات والمستخدمين والجلسات (في حال استخدام multi-url).';
+$strings['moodle_path'] = 'مسار Moodledata';
+$strings['moodle_path_help'] = 'مسار مجلد moodledata. عادةً شيء مثل <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'المستخدمون';
+$strings['CourseCategoriesTask'] = 'تصنيفات المقررات';
+$strings['CoursesTask'] = 'المقررات الدراسية';
+$strings['CourseSectionsTask'] = 'أقسام المقرر';
+$strings['CourseModulesLessonTask'] = 'وحدات المقرر: الدروس';
+$strings['LessonPagesTask'] = 'صفحات الدرس';
+$strings['LessonPagesDocumentTask'] = 'صفحات الدرس: المستندات';
+$strings['FilesForLessonPagesTask'] = 'ملفات صفحات الدرس';
+$strings['LessonPagesQuizTask'] = 'صفحات الدرس: الأسئلة';
+$strings['LessonPagesQuizQuestionTask'] = 'أسئلة صفحات الأسئلة';
+$strings['LessonAnswersTrueFalseTask'] = 'إجابات أسئلة صح/خطأ';
+$strings['LessonAnswersMultipleChoiceTask'] = 'إجابات أسئلة الاختيار من متعدد';
+$strings['LessonAnswersMultipleAnswerTask'] = 'إجابات أسئلة الاختيار المتعدد';
+$strings['LessonAnswersMatchingTask'] = 'إجابات أسئلة المطابقة';
+$strings['LessonAnswersEssayTask'] = 'إجابات أسئلة المقال';
+$strings['LessonAnswersShortAnswerTask'] = 'إجابات أسئلة الإجابة القصيرة';
+$strings['FilesForLessonAnswersTask'] = 'ملفات إجابات الدرس';
+$strings['CourseModulesQuizTask'] = 'وحدات المقرر: الاختبارات';
+$strings['CQuizTask'] = 'اختبار C';
+$strings['RoleAssignmentsTask'] = 'تعيينات الأدوار';
+$strings['QuizzesTask'] = 'الاختبارات';
+$strings['FilesForQuizzesTask'] = 'ملفات الاختبارات';
+$strings['QuestionCategoriesTask'] = 'تصنيفات الأسئلة';
+$strings['QuestionsTask'] = 'الأسئلة';
+$strings['QuestionMultiChoiceSingleTask'] = 'إجابات أسئلة الاختيار من متعدد (مفرد)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'إجابات أسئلة الاختيار من متعدد (متعدد)';
+$strings['QuestionsTrueFalseTask'] = 'إجابات أسئلة صح/خطأ';
+$strings['QuestionShortAnswerTask'] = 'إجابات أسئلة الإجابة القصيرة';
+$strings['CourseModulesScormTask'] = 'مقررات SCORM';
+$strings['ScormScoesTask'] = 'عناصر SCORM';
+$strings['FilesForScormScoesTask'] = 'ملفات عناصر SCORM';
+$strings['UserSessionsTask'] = 'جلسات المقرر للمستخدمين';
+$strings['CourseIntroductionsTask'] = 'مقدمات المقرر';
+$strings['FilesForCourseIntroductionsTask'] = 'ملفات مقدمات المقرر';
+$strings['FilesForCourseSectionsTask'] = 'ملفات أقسام المقرر';
+$strings['CourseModulesUrlTask'] = 'وحدات المقرر: الروابط';
+$strings['UrlsTask'] = 'عناوين URL';
+$strings['SortSectionModulesTask'] = 'ترتيب الوحدات في القسم';
+$strings['UsersScormsViewTask'] = 'مشاهدات SCORM للمستخدمين';
+$strings['UsersScormsProgressTask'] = 'تقدم SCORM';
+$strings['UsersLearnPathsTask'] = 'مشاهدات مسارات التعلم للمستخدمين';
+$strings['UsersLearnPathsLessonTimerTask'] = 'مؤقت الدرس لبدء وقت قسم مسارات التعلم';
+$strings['QuizzesScoresTask'] = 'تحديث درجات الاختبار في مسار التعلم';
+$strings['QuestionGapselectTask'] = 'الإجابات لأسئلة gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'فرع الدرس إلى الوقت الإجمالي في وثائق مسارات التعلم';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'محاولات الدرس إلى الوقت الإجمالي في اختبارات مسارات التعلم';
+$strings['UsersLearnPathsQuizzesTask'] = 'محاولات الاختبارات إلى محاولات اختبارات مسارات التعلم';
+$strings['UsersQuizzesAttemptsTask'] = 'محاولات الاختبار للمستخدمين';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'محاولات الأسئلة للمستخدمين لنوع shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'محاولات الأسئلة للمستخدمين لنوع gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'محاولات الأسئلة للمستخدمين لنوع truefalse';
+$strings['UsersLastLoginTask'] = 'آخر تسجيلات الدخول للمستخدمين';
+$strings['TrackLoginTask'] = 'أول تسجيل دخول وآخر تسجيل خروج';
+$strings['TrackCourseAccessTask'] = 'وصول المستخدم إلى المقرر';
+$strings['UserLearnPathsProgressScript'] = 'تحديث التقدم في مسارات التعلم للمستخدمين.';
+$strings['UserScormsProgressScript'] = 'تحديث التقدم في SCORMs للمستخدمين.';
+
+$strings['InstallError'] = 'حدث خطأ أثناء تثبيت الإضافة: %s';
+$strings['AdminIntro'] = 'تشغيل مهام ترحيل Moodle بالترتيب. يتم تفعيل كل خطوة فقط بعد اكتمال الخطوة الأصلية.';
+$strings['MoodleDatabase'] = 'قاعدة بيانات Moodle';
+$strings['MoodledataPath'] = 'مسار Moodledata';
+$strings['AccessUrlId'] = 'معرف عنوان URL للوصول';
+$strings['Configured'] = 'تم الإعداد';
+$strings['NotConfigured'] = 'لم يتم الإعداد';
+$strings['ConfigurePlugin'] = 'إعداد الإضافة';
+$strings['MissingRequiredDatabaseConfiguration'] = 'قم بإعداد مضيف قاعدة بيانات Moodle والمستخدم واسم قاعدة البيانات قبل تشغيل مهام الترحيل.';
+$strings['MissingMoodledataPathWarning'] = 'مسار Moodledata فارغ. قد تفشل المهام المتعلقة بالملفات حتى يتم إعداد هذا الإعداد.';
+$strings['InvalidMigrationAction'] = 'إجراء الترحيل غير صالح.';
+$strings['InvalidSecurityToken'] = 'رمز الأمان غير صالح. يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى.';
+$strings['MigrationTasks'] = 'مهام الترحيل';
+$strings['MaintenanceScripts'] = 'سكريبتات الصيانة';
+$strings['ExecutionOutput'] = 'مخرجات التنفيذ';
+$strings['TaskAlreadyExecuted'] = 'تم تنفيذ هذه المهمة أو السكريبت بالفعل.';
+$strings['SelectTaskToRun'] = 'اختر مهمة ترحيل لتشغيلها. ستظهر المخرجات هنا.';

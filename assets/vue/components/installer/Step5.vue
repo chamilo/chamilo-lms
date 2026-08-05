@@ -47,14 +47,14 @@
         <FloatLabel variant="on">
           <InputText
             v-model="installerData.stepData.systemVersion"
-            input-id="loginForm"
+            input-id="systemVersion"
             maxlength="80"
-            name="loginForm"
+            name="systemVersion"
             type="text"
           />
           <label
-            v-text="t('Path')"
-            for="loginForm"
+            v-text="t('Source Chamilo version')"
+            for="systemVersion"
           />
         </FloatLabel>
       </div>

@@ -137,6 +137,16 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
+              v-if="getSubmissionPreviewUrl(data)"
+              icon="link-external"
+              size="small"
+              only-icon
+              :label="t('Preview')"
+              :class="actionBtnClass"
+              @click="openSubmissionPreview(data)"
+              type="primary-text"
+            />
+            <BaseButton
               icon="download"
               size="small"
               only-icon
@@ -297,29 +307,6 @@ const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) return
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Assignments] loadCourseSettings FAILED:", err)
-  }
-}
-
-onMounted(async () => {
-  await loadCourseSettingsIfPossible()
-})
-
-watch(
-  () => [course.value?.id, session.value?.id],
-  async () => {
-    await loadCourseSettingsIfPossible()
-  },
-)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
@@ -333,7 +320,7 @@ const taskGraderEnabled = computed(() => {
 
 const canUseAiTaskGrader = computed(() => {
   // Only teachers/admins and not in student view
-  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isAdmin)
+  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin)
   const notStudentView = !platform.isStudentViewActive
   return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
@@ -487,6 +474,31 @@ async function viewSubmission(item) {
   } catch (e) {
     notification.showErrorNotification(e)
   }
+}
+
+function getSubmissionPreviewUrl(item) {
+  const contentUrl = String(item?.contentUrl || "").trim()
+  if (contentUrl) {
+    return contentUrl
+  }
+
+  const downloadUrl = String(item?.downloadUrl || "").trim()
+  if (!downloadUrl) {
+    return ""
+  }
+
+  return downloadUrl.replace(/\/download(\?.*)?$/, "/view$1")
+}
+
+function openSubmissionPreview(item) {
+  const previewUrl = getSubmissionPreviewUrl(item)
+
+  if (!previewUrl) {
+    notification.showErrorNotification(t("No download available"))
+    return
+  }
+
+  window.open(previewUrl, "_blank", "noopener,noreferrer")
 }
 
 function saveCorrection(item) {

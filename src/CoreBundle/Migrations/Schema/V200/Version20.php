@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 class Version20 extends AbstractMigrationChamilo
 {
     // List of sublanguages to be excluded from updates, except those explicitly allowed.
-    public const ALLOWED_SUBLANGUAGES = [
+    public const array ALLOWED_SUBLANGUAGES = [
         'ast',
         'ast_ES',
         'ca',
@@ -63,7 +63,14 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('set foreign_key_checks=0');
 
         // Basic checks.
-        $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
+        // Raw SQL only: the current User entity mapping expects columns
+        // (e.g. api_token) that later migrations in this sequence haven't
+        // created yet, so ORM hydration via getAdmin() cannot run here.
+        $adminExists = $this->connection->createSchemaManager()->tablesExist(['admin'])
+            && false !== $this->connection->fetchOne(
+                'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1'
+            );
+        $this->abortIf(!$adminExists, 'Admin not found in the system');
 
         $table = $schema->getTable('user');
         if (false === $table->hasColumn('uuid')) {

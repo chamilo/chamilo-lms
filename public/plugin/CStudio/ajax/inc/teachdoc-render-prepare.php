@@ -4,6 +4,36 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 
+function cstudio_project_lang_to_resource_code($projectLang): string
+{
+    $lang = str_replace('-', '_', trim((string) $projectLang));
+
+    if ('' === $lang) {
+        return 'en';
+    }
+
+    $aliases = [
+        'en_US' => 'en',
+        'fr_FR' => 'fr',
+        'es_ES' => 'es',
+        'pt_BR' => 'pt',
+        'pt_PT' => 'pt',
+        'zh_CN' => 'zh',
+        'zh_TW' => 'zh',
+        'nn_NO' => 'no',
+    ];
+
+    if (isset($aliases[$lang])) {
+        return $aliases[$lang];
+    }
+
+    if (str_contains($lang, '_')) {
+        return strtolower((string) strstr($lang, '_', true));
+    }
+
+    return strtolower($lang);
+}
+
 function scormPrepareFilesProcess($courseSys, $projectLang): void
 {
     $fileSystem = Container::getAssetRepository()->getFileSystem();

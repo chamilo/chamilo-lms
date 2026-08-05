@@ -13,6 +13,8 @@
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Writes an item's new values into the database and returns the operation result.
  *
@@ -55,7 +57,7 @@ if (isset($_REQUEST['objectives'])) {
 
 echo save_objectives(
     $_REQUEST['lid'],
-    $_REQUEST['uid'],
+    api_get_user_id(),
     $_REQUEST['vid'],
     $_REQUEST['iid'],
     $objectives

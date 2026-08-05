@@ -73,3 +73,18 @@ $strings['QuestionDelete'] = 'Voleu suprimir el diploma específic i utilitzar e
 $strings['SuccessDelete'] = 'Suprimit correctament';
 $strings['ProblemDelete'] = 'Problema en suprimir el certificat';
 $strings['OnlyCustomCertificates'] = "Només s'exporten els cursos amb un certificat personalitzat";
+$strings['CertificateMode'] = 'Mode de certificat';
+$strings['UseCourseCustomCertificate'] = 'Utilitzar certificat personalitzat específic del curs';
+$strings['UseDefaultCustomCertificate'] = 'Utilitzar certificat personalitzat per defecte de la plataforma';
+
+$strings['CreateCertificateWithTags'] = 'Crear el certificat utilitzant aquestes etiquetes';
+
+$strings['DeleteCertificate'] = 'Suprimir certificat';
+
+$strings['SaveCertificate'] = 'Desar certificat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = "Seleccioneu una opció i deseu la configuració abans d'obrir l'editor de certificats.";
+
+$strings['ChooseCustomCertificateModeHelp'] = "Trieu com ha d'utilitzar aquest curs els certificats personalitzats.";
+
+$strings['CouldNotSaveCertificate'] = "No s'ha pogut desar la configuració del certificat.";

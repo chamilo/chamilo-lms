@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "Cordial"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplu formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplu de formulă: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Domenii de variabile"
@@ -1589,7 +1589,7 @@ msgstr "Sunteți sigur că doriți să ștergeți aceste elemente?"
 msgid "Authoring tool"
 msgstr "Origine"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "Fișier pentru trimitere"
 
 msgid "Course location"
@@ -2031,7 +2031,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":da:copyright,, nu:fara copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Flux octet,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr "exercise:exercitiu,, simulation:simulare,, questionnaire:chestionare,, diagram:diagrama,, figure:figura,, graph:grafic,, index:index,, slide:slide,, table:tabel,, narrative text:text narativ,, exam:examen,, experiment:experiment,, problem statement:problema,, self assessment:realizari personale,, lecture:lectura"
@@ -8561,6 +8561,9 @@ msgstr "Companie"
 msgid "Reporting"
 msgstr "Reportaj"
 
+msgid "Analytics"
+msgstr "Analiză"
+
 msgid "Update"
 msgstr "Actualizeaza"
 
@@ -8737,6 +8740,15 @@ msgstr "Arata"
 
 msgid "My courses"
 msgstr "Cursurile mele"
+
+msgid "Shop"
+msgstr "Magazin"
+
+msgid "Invoice"
+msgstr "Factură"
+
+msgid "Request invoice"
+msgstr "Solicită factură"
 
 msgid "View my progress"
 msgstr "Vezi statisticile"
@@ -9740,6 +9752,9 @@ msgstr "Rezultatele cautarii"
 msgid "Select a file"
 msgstr "Selectează un fişier"
 
+msgid "Select a file to insert into the editor."
+msgstr "Selectați un fișier pentru a-l insera în editor."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Atentie - FAQ fisier in folderul / home / de pe platforma dvs. nu are drepturi de scriere. Textul dvs. nu va fi salvata pana cand nu modificati permisiunile de fisiere."
 
@@ -9752,8 +9767,8 @@ msgstr "Ne pare rau, nu aveti suficiente privilegii pentru a vizualiza aceasta p
 msgid "Result"
 msgstr "Rezultat"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Incearca sa te loghezi ca %s %s (id%s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Incearca sa te loghezi ca %s (id%d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Logat cu succes. Mergi la %s"
@@ -15920,6 +15935,9 @@ msgstr "Data și ora"
 msgid "Item"
 msgstr "Ítem"
 
+msgid "Items"
+msgstr "Elemente"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Configurarea Control Panel plugin"
 
@@ -17173,6 +17191,18 @@ msgstr "Sesiuni de clasă"
 
 msgid "Courses in group"
 msgstr "Cursuri ale grupului"
+
+msgid "Courses on the platform"
+msgstr "Cursuri pe platformă"
+
+msgid "%s courses"
+msgstr "%s cursuri"
+
+msgid "%s sessions"
+msgstr "%s sesiuni"
+
+msgid "Search by title or code"
+msgstr "Căutați după titlu sau cod"
 
 msgid "Users in group"
 msgstr "Utilizatorii grupului"
@@ -32183,6 +32213,9 @@ msgstr "Sarcină"
 msgid "Allowed file formats: %s"
 msgstr "Formate de fișiere permise: %s"
 
+msgid "File manager"
+msgstr "Manager fișiere"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Tip fișier nepermis. Extensii permise: %s"
 
@@ -33896,6 +33929,5022 @@ msgstr "Bine ați venit"
 msgid "Welcome to Chamilo"
 msgstr "Bine ați venit la Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Verificați toate întrebările fără răspuns de mai jos"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Dacă este prima dată când folosiți Chamilo, asigurați-vă că verificați meniul lateral pentru a vă familiariza cu numeroasele sale funcționalități. Dacă aveți nevoie de ajutor, veți găsi <a href=\"https://docs.chamilo.org\">documentația oficială</a> utilă pentru documentație standard, în timp ce <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forumul nostru online</a> vă poate ajuta să împărtășiți idei și să găsiți răspunsuri de la alți utilizatori Chamilo."
+
+msgid "Change password"
+msgstr "Schimbați parola"
+
+msgid "Newest first"
+msgstr "Cele mai noi întâi"
+
+msgid "Oldest first"
+msgstr "Cele mai vechi întâi"
+
+msgid "Title A–Z"
+msgstr "Titlu A–Z"
+
+msgid "Title Z–A"
+msgstr "Titlu Z–A"
+
+msgid "Send test email"
+msgstr "Trimiteți e-mail de test"
+
+msgid "Show teachers"
+msgstr "Afișați profesorii"
+
+msgid "Hide teachers"
+msgstr "Ascundeți profesorii"
+
+msgid "Delete exercise attempts"
+msgstr "Ștergeți încercările la exerciții"
+
+msgid "Message sent successfully."
+msgstr "Mesaj trimis cu succes."
+
+msgid "You cannot create a new course right now."
+msgstr "Nu puteți crea un curs nou acum."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Nu se poate verifica dacă puteți crea un curs nou acum."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Încercați din nou mai târziu sau contactați administratorul."
+
+msgid "You cannot create more courses at this time."
+msgstr "Nu puteți crea mai multe cursuri în acest moment."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Gestionați deja %d cursuri și serviciul dvs. activ permite până la %d. Pentru a crea un alt curs, aveți nevoie de o limită de serviciu mai mare sau reduceți cursurile active actuale."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Gestionați deja %d cursuri și platforma permite în prezent până la %d pentru contul dvs. Nu puteți crea mai multe cursuri acum."
+
+msgid "Add a class"
+msgstr "Adaugă o clasă"
+
+msgid "Search classes"
+msgstr "Caută clase"
+
+msgid "No classes found"
+msgstr "Nicio clasă găsită"
+
+msgid "Import classes"
+msgstr "Importă clase"
+
+msgid "Class users"
+msgstr "Utilizatori ai clasei"
+
+msgid "%s classes imported"
+msgstr "%s clase importate"
+
+msgid "%s user-class links imported"
+msgstr "%s legături utilizator-clasă importate"
+
+msgid "Hide comments"
+msgstr "Ascunde comentariile"
+
+msgid "Loading comments..."
+msgstr "Se încarcă comentariile..."
+
+msgid "No comments yet."
+msgstr "Niciun comentariu încă."
+
+msgid "A user with this username already exists"
+msgstr "Un utilizator cu acest nume de utilizator există deja"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Gestionează întâlnirile, revizuiește înregistrările și actualizează setările BBB la nivel de curs dintr-un singur loc."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Revizuiește valorile implicite curente și propagă-le la fiecare curs atunci când este necesar."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtrează lista după intervalul de date al întâlnirilor."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Revizuiește istoricul întâlnirilor, participanții și acțiunile de înregistrare."
+
+msgid "Participants"
+msgstr "Participanți"
+
+msgid "CountUsers"
+msgstr "NumărUtilizatori"
+
+msgid "No data found"
+msgstr "Nu s-au găsit date"
+
+msgid "My justifications"
+msgstr "Justificările mele"
+
+msgid "My services"
+msgstr "Serviciile mele"
+
+msgid "Extra menu"
+msgstr "Meniu suplimentar"
+
+msgid "Pending tests"
+msgstr "Teste în așteptare"
+
+msgid "No specific language"
+msgstr "Nicio limbă specifică"
+
+msgid "Source Chamilo version"
+msgstr "Versiunea Chamilo sursă"
+
+msgid "Exporting..."
+msgstr "Se exportă..."
+
+msgid "Autosaved drafts available"
+msgstr "Schițe salvate automat disponibile"
+
+msgid "Hide drafts"
+msgstr "Ascunde schițele"
+
+msgid "Show drafts"
+msgstr "Arată schițele"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Schițele sunt stocate doar în acest browser și sunt eliminate după salvarea documentului."
+
+msgid "Last saved"
+msgstr "Ultima salvare"
+
+msgid "Restore draft"
+msgstr "Restaurează schița"
+
+msgid "Delete draft"
+msgstr "Șterge schița"
+
+msgid "Information about indexing document content"
+msgstr "Informații despre indexarea conținutului documentului"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Când este activată, textul documentului este indexat de motorul de căutare astfel încât utilizatorii să îl poată găsi din căutarea platformei."
+
+msgid "The editor is not available."
+msgstr "Editorul nu este disponibil."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Plasați cursorul în interiorul unui paragraf mai întâi."
+
+msgid "The selected paragraph is empty."
+msgstr "Paragraful selectat este gol."
+
+msgid "Loading failed."
+msgstr "Încărcarea a eșuat."
+
+msgid "Add introduction"
+msgstr "Adaugă introducere"
+
+msgid "Course type"
+msgstr "Tip curs"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Alegeți dacă acest curs utilizează limitele standard ale platformei sau beneficiază de un serviciu achiziționat."
+
+msgid "Standard course"
+msgstr "Curs standard"
+
+msgid "Use the standard platform limits."
+msgstr "Utilizați limitele standard ale platformei."
+
+msgid "Selected"
+msgstr "Selectat"
+
+msgid "Hosting limit"
+msgstr "Limită de găzduire"
+
+msgid "Document quota"
+msgstr "Cotă documente"
+
+msgid "The standard course limit has been reached."
+msgstr "Limita standard a cursului a fost atinsă."
+
+msgid "Use the benefits granted by this service."
+msgstr "Utilizați beneficiile acordate de acest serviciu."
+
+msgid "Courses with these benefits"
+msgstr "Cursuri cu aceste beneficii"
+
+msgid "Active service"
+msgstr "Serviciu activ"
+
+msgid "Buy service"
+msgstr "Cumpără serviciu"
+
+msgid "Select an available course type before creating the course."
+msgstr "Selectați un tip de curs disponibil înainte de a crea cursul."
+
+msgid "users"
+msgstr "utilizatori"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Trebuie să cumpărați acest serviciu înainte de a utiliza aceste beneficii."
+
+msgid "You already used all courses available with this service."
+msgstr "Ați utilizat deja toate cursurile disponibile cu acest serviciu."
+
+msgid "This option is not available."
+msgstr "Această opțiune nu este disponibilă."
+
+msgid "This field is required"
+msgstr "Acest câmp este obligatoriu"
+
+msgid "Show less"
+msgstr "Afișează mai puțin"
+
+msgid "Show full description"
+msgstr "Afișează descrierea completă"
+
+msgid "Virtual keyboard"
+msgstr "Tastatură virtuală"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Spațiu"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Parcurs de învățare vizibil doar pentru cursanții selectați"
+
+msgid "Create course"
+msgstr "Creează curs"
+
+msgid "Tour"
+msgstr "Tur"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Sigur doriți să ștergeți acest comentariu?"
+
+msgid "No posts found"
+msgstr "Nu s-au găsit postări"
+
+msgid "No communities"
+msgstr "Nu există comunități"
+
+msgid "No friends found"
+msgstr "Nu s-au găsit prieteni"
+
+msgid "Visual overview of your skills"
+msgstr "Prezentare vizuală a competențelor dvs."
+
+msgid "Compare your progress"
+msgstr "Comparați-vă progresul"
+
+msgid "Please enter a search term."
+msgstr "Introduceți un termen de căutare."
+
+msgid "Enter captcha code"
+msgstr "Introduceți codul captcha"
+
+msgid "Refresh captcha"
+msgstr "Reîmprospătează captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha este blocat temporar. Încercați din nou mai târziu."
+
+msgid "Item Details"
+msgstr "Detalii element"
+
+msgid "Open File"
+msgstr "Deschide fișier"
+
+msgid "Selection"
+msgstr "Selecție"
+
+msgid "Remove selection context"
+msgstr "Elimină contextul selecției"
+
+msgid "Source document"
+msgstr "Document sursă"
+
+msgid "Use the current course context"
+msgstr "Utilizați contextul cursului curent"
+
+msgid "Loading documents..."
+msgstr "Se încarcă documentele..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Nu s-a găsit niciun document PDF sau TXT compatibil în acest curs."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Selectați un document PDF sau TXT pentru a genera termeni doar din acel document."
+
+msgid "Confidentiality warning"
+msgstr "Avertisment de confidențialitate"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Când este selectat un document, promptul este fixat astfel încât generarea să folosească doar conținutul acelui document."
+
+msgid "No document-processing AI providers available."
+msgstr "Nu sunt disponibili furnizori AI pentru procesarea documentelor."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Salvarea semnăturii a eșuat. Încercați din nou."
+
+msgid "Select and move"
+msgstr "Selectare și mutare"
+
+msgid "Freehand"
+msgstr "Mână liberă"
+
+msgid "Stroke"
+msgstr "Contur"
+
+msgid "Fill"
+msgstr "Umplere"
+
+msgid "Import SVG"
+msgstr "Importă SVG"
+
+msgid "Import image"
+msgstr "Importă imagine"
+
+msgid "Click the drawing area to place this text"
+msgstr "Faceți clic pe zona de desen pentru a plasa acest text"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Desenați un nou SVG, importați un SVG existent sau încorporați o imagine, apoi salvați-l ca document reutilizabil."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Utilizați Selectare și mutare pentru a repoziționa sau redimensiona elementele adăugate în acest editor."
+
+msgid "Stroke width"
+msgstr "Lățime contur"
+
+msgid "Transparent fill"
+msgstr "Umplere transparentă"
+
+msgid "Invalid id"
+msgstr "ID invalid"
+
+msgid "Unable to load the drawing"
+msgstr "Imposibil de încărcat desenul"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Sunt acceptate doar imagini PNG, JPG, WEBP sau GIF."
+
+msgid "Unable to read the image file."
+msgstr "Imposibil de citit fișierul imagine."
+
+msgid "Only SVG files are supported."
+msgstr "Sunt acceptate doar fișiere SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Fișierul SVG este gol sau invalid."
+
+msgid "Unable to read the SVG file."
+msgstr "Imposibil de citit fișierul SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Desenul este gol sau invalid."
+
+msgid "Unable to save the drawing"
+msgstr "Imposibil de salvat desenul"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informații despre documentele asistate de IA"
+
+msgid "Location"
+msgstr "Locație"
+
+msgid "Cloud link"
+msgstr "Link cloud"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Adaugă un link către un document cloud, cum ar fi Google Drive sau Google Docs."
+
+msgid "Add cloud link"
+msgstr "Adaugă link cloud"
+
+msgid "Document title"
+msgstr "Titlu document"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Opțiunile documentului modifică modul în care fișierele încărcate sunt procesate după salvare."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informații despre decomprimarea fișierelor zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Când este activată, fișierele ZIP sunt extrase în folderul curent de documente după încărcare."
+
+msgid "The title is required."
+msgstr "Titlul este obligatoriu."
+
+msgid "The URL is required."
+msgstr "URL-ul este obligatoriu."
+
+msgid "The destination folder is missing."
+msgstr "Folderul destinație lipsește."
+
+msgid "Unable to create cloud link."
+msgstr "Imposibil de creat link cloud."
+
+msgid "Copy to My Files"
+msgstr "Copiază în Fișierele mele"
+
+msgid "Used space"
+msgstr "Spațiu utilizat"
+
+msgid "Available space"
+msgstr "Spațiu disponibil"
+
+msgid "Available percentage"
+msgstr "Procent disponibil"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Link-urile cloud nu pot fi descărcate."
+
+msgid "Could not copy the file to My Files"
+msgstr "Nu s-a putut copia fișierul în Fișierele mele"
+
+msgid "File copied to My Files"
+msgstr "Fișier copiat în Fișierele mele"
+
+msgid "Checking course creation options..."
+msgstr "Se verifică opțiunile de creare a cursului..."
+
+msgid "You cannot create more courses right now."
+msgstr "Nu poți crea mai multe cursuri momentan."
+
+msgid "AI analyzer"
+msgstr "Analizor IA"
+
+msgid "Expand all"
+msgstr "Extinde tot"
+
+msgid "Collapse all"
+msgstr "Restrânge tot"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Revizuiește beneficiile serviciilor active, istoricul achizițiilor și chitanțele disponibile."
+
+msgid "Active services"
+msgstr "Servicii active"
+
+msgid "No active services"
+msgstr "Niciun serviciu activ"
+
+msgid "Valid until"
+msgstr "Valabil până la"
+
+msgid "Recurring payment"
+msgstr "Plată recurentă"
+
+msgid "Next charge"
+msgstr "Următoarea taxare"
+
+msgid "Enable auto billing"
+msgstr "Activează facturarea automată"
+
+msgid "Cancel auto billing"
+msgstr "Anulează facturarea automată"
+
+msgid "Granted benefits"
+msgstr "Beneficii acordate"
+
+msgid "Purchase history"
+msgstr "Istoric achiziții"
+
+msgid "No purchases yet"
+msgstr "Nicio achiziție încă"
+
+msgid "Product"
+msgstr "Produs"
+
+msgid "Reference"
+msgstr "Referință"
+
+msgid "Amount"
+msgstr "Sumă"
+
+msgid "Receipt"
+msgstr "Chitanță"
+
+msgid "Unable to load your services right now."
+msgstr "Imposibil de încărcat serviciile momentan."
+
+msgid "Auto billing enabled"
+msgstr "Facturare automată activată"
+
+msgid "Auto billing suspended"
+msgstr "Facturare automată suspendată"
+
+msgid "Auto billing cancelled"
+msgstr "Facturare automată anulată"
+
+msgid "Auto billing disabled"
+msgstr "Facturare automată dezactivată"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Anulați facturarea automată pentru acest serviciu?"
+
+msgid "Preview class members and courses"
+msgstr "Previzualizați membrii clasei și cursurile"
+
+msgid "Please select a CSV file to import."
+msgstr "Vă rugăm să selectați un fișier CSV pentru import."
+
+msgid "%d user-class links imported"
+msgstr "%d legături utilizator-clasă importate"
+
+msgid "The following errors occurred during import:"
+msgstr "Au apărut următoarele erori în timpul importului:"
+
+msgid "CSV file"
+msgstr "Fișier CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Eliminați utilizatorul din toate entitățile legate de grup dacă nu este în listă"
+
+msgid "UserName"
+msgstr "NumeUtilizator"
+
+msgid "ClassName"
+msgstr "NumeClasă"
+
+msgid "are required for each row."
+msgstr "sunt obligatorii pentru fiecare rând."
+
+msgid "title"
+msgstr "titlu"
+
+msgid "is required."
+msgstr "este obligatoriu."
+
+msgid "description"
+msgstr "descriere"
+
+msgid "are optional."
+msgstr "sunt opționale."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Sigur doriți să eliminați acest utilizator din clasă?"
+
+msgid "Users in class"
+msgstr "Utilizatori în clasă"
+
+msgid "Remove user"
+msgstr "Eliminați utilizatorul"
+
+msgid "Class not found"
+msgstr "Clasa nu a fost găsită"
+
+msgid "Class overview"
+msgstr "Prezentare generală a clasei"
+
+msgid "Back to classes"
+msgstr "Înapoi la clase"
+
+msgid "Search members or courses"
+msgstr "Căutați membri sau cursuri"
+
+msgid "Search by name, email, username or course title"
+msgstr "Căutați după nume, e-mail, nume de utilizator sau titlu curs"
+
+msgid "Class members"
+msgstr "Membri ai clasei"
+
+msgid "No email"
+msgstr "Fără e-mail"
+
+msgid "No members found"
+msgstr "Nu s-au găsit membri"
+
+msgid "No courses found"
+msgstr "Nu s-au găsit cursuri"
+
+msgid "The end date must be after the start date."
+msgstr "Data de încheiere trebuie să fie după data de începere."
+
+msgid "Always visible"
+msgstr "Întotdeauna vizibil"
+
+msgid "No end date"
+msgstr "Fără dată de încheiere"
+
+msgid "No restriction"
+msgstr "Fără restricție"
+
+msgid "Missing learning path or course identifier"
+msgstr "Lipsește calea de învățare sau identificatorul cursului"
+
+msgid "Select a user or a group first"
+msgstr "Selectați mai întâi un utilizator sau un grup"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Eliminați toate restricțiile de dată pentru această cale de învățare?"
+
+msgid "Advanced learning path access"
+msgstr "Acces avansat la calea de învățare"
+
+msgid "Remove date restrictions"
+msgstr "Eliminați restricțiile de dată"
+
+msgid "Search by name, email, username or group"
+msgstr "Căutați după nume, e-mail, nume de utilizator sau grup"
+
+msgid "Edit user restriction"
+msgstr "Editați restricția utilizator"
+
+msgid "Edit group restriction"
+msgstr "Editați restricția grup"
+
+msgid "Select a user or group"
+msgstr "Selectați un utilizator sau un grup"
+
+msgid "Save restriction"
+msgstr "Salvați restricția"
+
+msgid "members"
+msgstr "membri"
+
+msgid "Create Assignment"
+msgstr "Creați temă"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Termenul limită de trimitere a trecut. Nu mai puteți trimite."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Corespondența nu poate fi combinată cu alți destinatari."
+
+msgid "Social map"
+msgstr "Hartă socială"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Plugin-ul de hartă nu este activat sau configurat."
+
+msgid "Some configured extra fields were not found"
+msgstr "Unele câmpuri suplimentare configurate nu au fost găsite"
+
+msgid "No user locations were found."
+msgstr "Nu s-au găsit locații pentru utilizatori."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap are nevoie de coordonate pentru a afișa un marker încorporat. Locațiile cu doar adresă sunt listate mai jos."
+
+msgid "Locations"
+msgstr "Locații"
+
+msgid "Open map"
+msgstr "Deschide harta"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Furnizor: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Furnizor: Google Maps"
+
+msgid "Personal files"
+msgstr "Fișiere personale"
+
+msgid "Upload image"
+msgstr "Încarcă imagine"
+
+msgid "Upload media"
+msgstr "Încarcă media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "În acest ecran de încărcare sunt permise doar fișiere imagine."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "În acest ecran de încărcare sunt permise doar fișiere audio și video."
+
+msgid "Upload files to your personal storage."
+msgstr "Încarcă fișiere în spațiul tău de stocare personal."
+
+msgid "Linked"
+msgstr "Legat"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Nu s-au găsit fișiere audio sau video în acest folder."
+
+msgid "No image files were found in this folder."
+msgstr "Nu s-au găsit fișiere imagine în acest folder."
+
+msgid "No matching files were found in this folder."
+msgstr "Nu s-au găsit fișiere corespunzătoare în acest folder."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Acest tip de fișier nu este permis în acest ecran de încărcare."
+
+msgid "Manage your personal files and course documents."
+msgstr "Gestionează fișierele tale personale și documentele cursului."
+
+msgid "DateValidity"
+msgstr "DataValiditate"
+
+msgid "JustificationSaved"
+msgstr "JustificareSalvat"
+
+msgid "ValidityDate"
+msgstr "DataValiditate"
+
+msgid "MyJustifications"
+msgstr "JustificărileMele"
+
+msgid "Submission"
+msgstr "Trimitere"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Folosește filtrele de mai sus pentru a restrânge lista."
+
+msgid "You are not allowed to see this page."
+msgstr "Nu ai permisiunea să vezi această pagină."
+
+msgid "plugin_title"
+msgstr "titlu_plugin"
+
+msgid "plugin_comment"
+msgstr "comentariu_plugin"
+
+msgid "Course tracking details"
+msgstr "Detalii urmărire curs"
+
+msgid "Course activity statistics"
+msgstr "Statistici activitate curs"
+
+msgid "mobile_phone_number"
+msgstr "numar_telefon_mobil"
+
+msgid "Allowed template syntax"
+msgstr "Sintaxă permisă în șablon"
+
+msgid "Functions"
+msgstr "Funcții"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Variabilele disponibile depind de tipul șablonului, de exemplu {{ user.getUsername() }} sau {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Din motive de securitate, orice altă funcție Twig, filtru (cum ar fi filter, map, reduce sau sort) sau apel PHP este blocat."
+
+msgid "Global administrator"
+msgstr "Administrator global"
+
+msgid "Session manager"
+msgstr "Manager sesiune"
+
+msgid "Human resources manager"
+msgstr "Manager resurse umane"
+
+msgid "Course teacher"
+msgstr "Profesor curs"
+
+msgid "Course student"
+msgstr "Student curs"
+
+msgid "Platform reports"
+msgstr "Rapoarte platformă"
+
+msgid "Security reports"
+msgstr "Rapoarte securitate"
+
+msgid "Course reports"
+msgstr "Rapoarte curs"
+
+msgid "Gradebook reports"
+msgstr "Rapoarte catalog"
+
+msgid "Social reports"
+msgstr "Rapoarte sociale"
+
+msgid "Exports"
+msgstr "Exporturi"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Rapoarte despre utilizarea platformei, utilizatori, cursuri și sesiuni."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Rapoarte de audit și sensibile la securitate."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Rapoarte limitate la cursurile gestionate de utilizator."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Rapoarte legate de activitatea și urmărirea cursanților."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Rapoarte legate de scoruri, certificate și date din catalog."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Rapoarte și exporturi care generează fișiere descărcabile."
+
+msgid "Main platform statistics dashboard."
+msgstr "Tablou de bord cu statisticile principale ale platformei."
+
+msgid "Number of courses and course distribution report."
+msgstr "Raport privind numărul de cursuri și distribuția acestora."
+
+msgid "Platform-wide access to course tools."
+msgstr "Acces la nivel de platformă la instrumentele cursurilor."
+
+msgid "Number of resources per tool."
+msgstr "Număr de resurse pe instrument."
+
+msgid "Latest access to courses."
+msgstr "Ultimul acces la cursuri."
+
+msgid "Course distribution by language."
+msgstr "Distribuția cursurilor pe limbi."
+
+msgid "Course usage report."
+msgstr "Raport de utilizare a cursurilor."
+
+msgid "Platform user count report."
+msgstr "Raport privind numărul de utilizatori ai platformei."
+
+msgid "Recent logins chart."
+msgstr "Grafic al autentificărilor recente."
+
+msgid "Login distribution by month."
+msgstr "Distribuția autentificărilor pe luni."
+
+msgid "Login distribution by day."
+msgstr "Distribuția autentificărilor pe zile."
+
+msgid "Login distribution by hour."
+msgstr "Distribuția autentificărilor pe ore."
+
+msgid "Users with profile picture."
+msgstr "Utilizatori cu poză de profil."
+
+msgid "Login report filtered by date."
+msgstr "Raport de autentificări filtrat după dată."
+
+msgid "Users who have not logged in recently."
+msgstr "Utilizatori care nu s-au autentificat recent."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Raport privind conturile de utilizatori inactive sau suspecte."
+
+msgid "Users activity statistics."
+msgstr "Statistici privind activitatea utilizatorilor."
+
+msgid "Currently online users report."
+msgstr "Raport privind utilizatorii online în prezent."
+
+msgid "New user registrations over time."
+msgstr "Înregistrări noi de utilizatori de-a lungul timpului."
+
+msgid "Course and session subscriptions over time."
+msgstr "Abonamente la cursuri și sesiuni de-a lungul timpului."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Raport de detectare și întreținere a utilizatorilor duplicat."
+
+msgid "Platform user/session statistics."
+msgstr "Statistici privind utilizatorii și sesiunile platformei."
+
+msgid "Quarterly platform report."
+msgstr "Raport trimestrial al platformei."
+
+msgid "Activities audit"
+msgstr "Audit al activităților"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Raport de audit pentru activități administrative și de platformă importante."
+
+msgid "Social messages received report."
+msgstr "Raport privind mesajele sociale primite."
+
+msgid "Social messages sent report."
+msgstr "Raport privind mesajele sociale trimise."
+
+msgid "Social contacts count report."
+msgstr "Raport privind numărul de contacte sociale."
+
+msgid "Sessions created over time."
+msgstr "Sesiuni create de-a lungul timpului."
+
+msgid "Learning analytics dashboard."
+msgstr "Tablou de bord pentru analizele de învățare."
+
+msgid "Teacher time report."
+msgstr "Raport privind timpul profesorilor."
+
+msgid "Teachers time by session report"
+msgstr "Raport privind timpul profesorilor pe sesiune"
+
+msgid "Teacher time report grouped by session."
+msgstr "Raport privind timpul profesorilor grupat pe sesiune."
+
+msgid "Corporate learning analytics report."
+msgstr "Raport de analize de învățare corporativă."
+
+msgid "Course learners tracking report."
+msgstr "Raport de urmărire a cursanților din curs."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Statistici de activitate a cursului cu utilizatori conectați și inactivi."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Raport detaliat de urmărire a unui cursant într-un curs."
+
+msgid "Course gradebook overview."
+msgstr "Prezentare generală a catalogului de note al cursului."
+
+msgid "Gradebook statistics"
+msgstr "Statistici catalog de note"
+
+msgid "Gradebook statistics report."
+msgstr "Raport de statistici ale catalogului de note."
+
+msgid "Certificate report"
+msgstr "Raport certificate"
+
+msgid "Certificate report for course gradebook."
+msgstr "Raport de certificate pentru catalogul de note al cursului."
+
+msgid "User statistics"
+msgstr "Statistici utilizator"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Statistici ale catalogului de note al cursului pentru un utilizator."
+
+msgid "Personal statistics"
+msgstr "Statistici personale"
+
+msgid "Personal gradebook statistics."
+msgstr "Statistici personale ale catalogului de note."
+
+msgid "Reports catalog"
+msgstr "Catalog de rapoarte"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Catalog central al rapoartelor disponibile, rolurilor și categoriilor de permisiuni."
+
+msgid "Course log events"
+msgstr "Evenimente jurnal curs"
+
+msgid "Detailed course tracking events."
+msgstr "Evenimente detaliate de urmărire a cursului."
+
+msgid "Course tool usage"
+msgstr "Utilizarea instrumentelor cursului"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Raport de urmărire a cursului grupat pe instrumente."
+
+msgid "Course resource usage"
+msgstr "Utilizarea resurselor cursului"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Raport de urmărire a cursului grupat pe resurse."
+
+msgid "Course group tracking"
+msgstr "Urmărirea grupurilor de curs"
+
+msgid "Tracking report for course groups."
+msgstr "Raport de urmărire pentru grupurile de curs."
+
+msgid "Course session report"
+msgstr "Raportul sesiunii de curs"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Raport de urmărire pentru un curs în sesiuni."
+
+msgid "Learning path report"
+msgstr "Raportul traseului de învățare"
+
+msgid "Learning path tracking report."
+msgstr "Raport de urmărire a traseului de învățare."
+
+msgid "Learning path results by user"
+msgstr "Rezultatele traseului de învățare pe utilizator"
+
+msgid "Learning path results grouped by user."
+msgstr "Rezultatele traseului de învățare grupate pe utilizator."
+
+msgid "Exercises report"
+msgstr "Raportul exercițiilor"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Raport de urmărire a exercițiilor și examenelor din curs."
+
+msgid "Question report"
+msgstr "Raportul întrebărilor"
+
+msgid "Course question tracking report."
+msgstr "Raport de urmărire a întrebărilor din curs."
+
+msgid "Messages report"
+msgstr "Raportul mesajelor"
+
+msgid "Course messages tracking report."
+msgstr "Raport de urmărire a mesajelor din curs."
+
+msgid "Total time tracking report for course learners."
+msgstr "Raport de urmărire a timpului total pentru cursanții cursului."
+
+msgid "Gradebook summary"
+msgstr "Sumarul catalogului"
+
+msgid "Summary view of gradebook results."
+msgstr "Vizualizare sumară a rezultatelor din catalog."
+
+msgid "Flat view"
+msgstr "Vizualizare simplă"
+
+msgid "Flat gradebook results view."
+msgstr "Vizualizare simplă a rezultatelor din catalog."
+
+msgid "Evaluation log"
+msgstr "Jurnalul evaluărilor"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Jurnalul modificărilor pentru evaluările din catalog."
+
+msgid "Link log"
+msgstr "Jurnalul legăturilor"
+
+msgid "Change log for gradebook links."
+msgstr "Jurnalul modificărilor pentru legăturile din catalog."
+
+msgid "Result details"
+msgstr "Detalii rezultat"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Vizualizare detaliată a unui rezultat din catalog."
+
+msgid "Personal certificates report."
+msgstr "Raportul certificatelor personale."
+
+msgid "User move statistics"
+msgstr "Statistici de mutare a utilizatorilor"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Raport pentru statisticile de mutare și transfer ale utilizatorilor."
+
+msgid "User consent list"
+msgstr "Lista consimțămintelor utilizatorilor"
+
+msgid "Report of users and consent status."
+msgstr "Raport privind utilizatorii și starea consimțământului."
+
+msgid "Special platform exports."
+msgstr "Exporturi speciale ale platformei."
+
+msgid "Export certificates"
+msgstr "Export certificate"
+
+msgid "Export platform certificates."
+msgstr "Export certificate ale platformei."
+
+msgid "Export exercise results"
+msgstr "Export rezultate exerciții"
+
+msgid "Export exercise results from the platform."
+msgstr "Export rezultate exerciții din platformă."
+
+msgid "Course survey results and reporting."
+msgstr "Rezultate și rapoarte ale sondajelor de curs."
+
+msgid "Attendance report"
+msgstr "Raportul prezenței"
+
+msgid "Course attendance tracking and reports."
+msgstr "Urmărirea prezenței la curs și rapoarte."
+
+msgid "Exercises global report"
+msgstr "Raport global al exercițiilor"
+
+msgid "Global exercise results report for the course."
+msgstr "Raport global al rezultatelor exercițiilor pentru curs."
+
+msgid "Exercise report"
+msgstr "Raportul exercițiului"
+
+msgid "Detailed exercise report."
+msgstr "Raport detaliat al exercițiului."
+
+msgid "Exercise history"
+msgstr "Istoric exerciții"
+
+msgid "Exercise attempt history."
+msgstr "Istoric încercări exerciții."
+
+msgid "Exercise results"
+msgstr "Rezultate exerciții"
+
+msgid "Exercise results and corrections."
+msgstr "Rezultate și corecții ale exercițiilor."
+
+msgid "Question-level exercise statistics."
+msgstr "Statistici ale exercițiilor la nivel de întrebare."
+
+msgid "Exercise statistics"
+msgstr "Statistici ale exercițiilor"
+
+msgid "Exercise statistics page."
+msgstr "Pagina de statistici ale exercițiilor."
+
+msgid "Live exercise statistics"
+msgstr "Statistici live ale exercițiilor"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Statistici live ale exercițiilor pentru profesori."
+
+msgid "Learning path statistics"
+msgstr "Statistici ale traseului de învățare"
+
+msgid "Learning path item statistics."
+msgstr "Statistici ale elementelor din traseul de învățare."
+
+msgid "Learning path report inside a course."
+msgstr "Raport al traseului de învățare în cadrul unui curs."
+
+msgid "User skills report."
+msgstr "Raport privind competențele utilizatorului."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Configurație de export programat sau periodic."
+
+msgid "User export"
+msgstr "Export utilizatori"
+
+msgid "Export users from the platform."
+msgstr "Exportă utilizatorii din platformă."
+
+msgid "Not classified"
+msgstr "Neclasificat"
+
+msgid "You have acquired the skill %s"
+msgstr "Ați dobândit competența %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Ați dobândit competența %s."
+
+msgid "Recover your password"
+msgstr "Recuperați parola"
+
+msgid "Disclaimer"
+msgstr "Declinarea responsabilității"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Această operațiune ar depăși limita de %d utilizatori permisă pentru acest curs."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Alegeți modul în care acest utilizator se poate autentifica pe platformă."
+
+msgid "Authentication methods"
+msgstr "Metode de autentificare"
+
+msgid "Set password manually"
+msgstr "Setați parola manual"
+
+msgid "Report role matrix"
+msgstr "Matricea rolurilor din rapoarte"
+
+msgid "Report permission categories"
+msgstr "Categorii de permisiuni pentru rapoarte"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Acest registru listează paginile de raportare cunoscute, categoria acestora, URL-ul canonic, URL-ul legacy și publicul țintă așteptat pentru rol. URL-urile canonice impun matricea rolurilor documentată pentru rapoarte."
+
+msgid "reports"
+msgstr "rapoarte"
+
+msgid "Canonical URL"
+msgstr "URL canonic"
+
+msgid "Legacy URL"
+msgstr "URL legacy"
+
+msgid "Permission category"
+msgstr "Categorie de permisiuni"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Această matrice documentează publicul țintă așteptat pentru fiecare raport și este impusă de punctul de intrare canonic al raportului."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Aceste chei grupează rapoartele după domeniul de acces și sunt utilizate de registrul rapoartelor. Ulterior, acestea pot fi mapate la permisiuni mai detaliate ale platformei."
+
+msgid "Permission"
+msgstr "Permisiune"
+
+msgid "Clear active session"
+msgstr "Ștergeți sesiunea activă"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Sunteți sigur că doriți să ștergeți sesiunea activă a acestui utilizator?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Previzualizare afișată fără contextul cursului. Unele date specifice cursului pot fi indisponibile."
+
+msgid "Preview is not available for this question."
+msgstr "Previzualizarea nu este disponibilă pentru această întrebare."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Editarea nu este permisă fără un context de curs."
+
+msgid "This plugin does not use regions."
+msgstr "Acest plugin nu utilizează regiuni."
+
+msgid "No plugins with regions were found."
+msgstr "Nu s-au găsit pluginuri cu regiuni."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Serviciu comercial"
+
+msgid "Commercial"
+msgstr "Comercial"
+
+msgid "100% free"
+msgstr "100% gratuit"
+
+msgid "Displayed above the public login form."
+msgstr "Afișat deasupra formularului public de autentificare."
+
+msgid "Displayed below the public login form."
+msgstr "Afișat sub formularul public de autentificare."
+
+msgid "Displayed before the footer area."
+msgstr "Afișat înaintea zonei de subsol."
+
+msgid "Displayed in the left footer column."
+msgstr "Afișat în coloana din stânga a subsolului."
+
+msgid "Displayed in the center footer column."
+msgstr "Afișat în coloana centrală a subsolului."
+
+msgid "Displayed in the right footer column."
+msgstr "Afișat în coloana dreaptă a notei de subsol."
+
+msgid "Showing all plugins."
+msgstr "Se afișează toate pluginurile."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Unele pluginuri sunt încă în așteptarea verificării funcționale."
+
+msgid "Show verified plugins only"
+msgstr "Afișează doar pluginurile verificate"
+
+msgid "Showing verified plugins only."
+msgstr "Se afișează doar pluginurile verificate."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Pluginurile în așteptare sunt temporar ascunse până când sunt adaptate și testate."
+
+msgid "Show all plugins"
+msgstr "Afișează toate pluginurile"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Pluginurile oficiale și gratuite sunt listate separat de pluginurile care pot depinde de servicii comerciale sau oferte plătite."
+
+msgid "Included free plugins"
+msgstr "Pluginuri gratuite incluse"
+
+msgid "Commercial and freemium plugins"
+msgstr "Pluginuri comerciale și freemium"
+
+msgid "All plugins"
+msgstr "Toate pluginurile"
+
+msgid "No plugins were found for this category."
+msgstr "Nu s-au găsit pluginuri pentru această categorie."
+
+msgid "Search plugins"
+msgstr "Caută pluginuri"
+
+msgid "Search by name or description"
+msgstr "Caută după nume sau descriere"
+
+msgid "Advanced filters"
+msgstr "Filtre avansate"
+
+msgid "All statuses"
+msgstr "Toate stările"
+
+msgid "All sources"
+msgstr "Toate sursele"
+
+msgid "All types"
+msgstr "Toate tipurile"
+
+msgid "Installed plugins are shown first"
+msgstr "Pluginurile instalate sunt afișate primele"
+
+msgid "No plugins match the current filters."
+msgstr "Niciun plugin nu corespunde filtrelor curente."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Încercați să ștergeți căutarea sau să modificați filtrele."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Token de securitate invalid"
+
+msgid "Please select a destination session"
+msgstr "Vă rugăm să selectați o sesiune destinație"
+
+msgid "Cannot move this to the same session"
+msgstr "Nu se poate muta în aceeași sesiune"
+
+msgid "The destination session must include the selected course"
+msgstr "Sesiunea destinație trebuie să includă cursul selectat"
+
+msgid "The source session must include the selected course"
+msgstr "Sesiunea sursă trebuie să includă cursul selectat"
+
+msgid "No learners found"
+msgstr "Nu s-au găsit cursanți"
+
+msgid "Will be subscribed"
+msgstr "Va fi abonat"
+
+msgid "Subscribed"
+msgstr "Abonat"
+
+msgid "The move process has finished"
+msgstr "Procesul de mutare s-a încheiat"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Comparare finalizată. Nu au fost mutate date."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Mută datele de urmărire din cursul de bază sau dintr-o sesiune sursă într-o altă sesiune. Utilizați mai întâi comparația pentru a revizui datele cursanților afectați."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Căutați un curs sau utilizați câmpul manual de ID al cursului de mai jos."
+
+msgid "Fallback when the course search is not available."
+msgstr "Soluție de rezervă atunci când căutarea cursului nu este disponibilă."
+
+msgid "Load sessions"
+msgstr "Încarcă sesiunile"
+
+msgid "Selected course"
+msgstr "Curs selectat"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Alegeți cursul de bază sau sesiunea în care există în prezent datele de urmărire."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Alegeți sesiunea care va primi datele de urmărire."
+
+msgid "Important"
+msgstr "Important"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Acțiunea de mutare actualizează datele de urmărire existente. Executați mai întâi comparația și testați acest instrument cu un curs non-producție înainte de a muta date reale ale cursanților."
+
+msgid "No sessions found for this course"
+msgstr "Nu s-au găsit sesiuni pentru acest curs"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Unii utilizatori au fost ignorați deoarece nu sunt abonați la această sesiune."
+
+msgid "Remove selected user"
+msgstr "Elimină utilizatorul selectat"
+
+msgid "Add selected user"
+msgstr "Adaugă utilizatorul selectat"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Niciun utilizator din lista selectată nu este abonat la această sesiune."
+
+msgid "No image"
+msgstr "Nicio imagine"
+
+msgid "Invalid URL."
+msgstr "URL invalid."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Acest document cloud nu poate fi încorporat."
+
+msgid "Document not found"
+msgstr "Documentul nu a fost găsit"
+
+msgid "File not found"
+msgstr "Fișier negăsit"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Această cale de învățare nu este disponibilă pentru utilizatorul dvs. în acest moment."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Calea de învățare următoare"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Selectați calea de învățare care va fi disponibilă după aceasta."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Creați o altă cale de învățare în acest curs pentru a activa fluxul de căi de învățare."
+
+msgid "Available from %s"
+msgstr "Disponibil de la %s"
+
+msgid "Available until %s"
+msgstr "Disponibil până la %s"
+
+msgid "Statistics reset date"
+msgstr "Data resetării statisticilor"
+
+msgid "Last 24 hours"
+msgstr "Ultimele 24 de ore"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Această dată de resetare este utilizată ca dată de referință pentru raport. Nu șterge datele istorice de urmărire."
+
+msgid "Since reset date"
+msgstr "De la data resetării"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Utilizatori conectați în ultimele 24 de ore"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Cursanți cu cel puțin o accesare a cursului în ultimele 24 de ore."
+
+msgid "Users connected in the last week"
+msgstr "Utilizatori conectați în ultima săptămână"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Cursanți cu cel puțin o accesare a cursului în ultimele 7 zile."
+
+msgid "Users connected in the last month"
+msgstr "Utilizatori conectați în ultima lună"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Cursanți cu cel puțin o accesare a cursului în ultimele 30 de zile."
+
+msgid "Not recently connected users"
+msgstr "Utilizatori neconectați recent"
+
+msgid "Learners without course access since %s."
+msgstr "Cursanți fără acces la curs de la %s."
+
+msgid "Recently used resources"
+msgstr "Resurse utilizate recent"
+
+msgid "Course tools/resources used since %s."
+msgstr "Instrumente/resurse de curs utilizate de la %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% din cursanți"
+
+msgid "Connections"
+msgstr "Conectări"
+
+msgid "Total connections"
+msgstr "Total conectări"
+
+msgid "Downloaded documents"
+msgstr "Documente descărcate"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Listă a documentelor descărcate de acest cursant în acest curs."
+
+msgid "Forum topics"
+msgstr "Subiecte forum"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Subiecte de forum deschise de acest cursant în acest curs."
+
+msgid "Forum posts"
+msgstr "Postări forum"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Postări de forum scrise de acest cursant în acest curs."
+
+msgid "Course connections"
+msgstr "Conectări la curs"
+
+msgid "Connection history for this learner in this course."
+msgstr "Istoric de conectare al acestui cursant în acest curs."
+
+msgid "Resources used"
+msgstr "Resurse utilizate"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Cele mai recente instrumente sau resurse utilizate de acest cursant în acest curs."
+
+msgid "Logout date"
+msgstr "Data deconectării"
+
+msgid "Imported Aiken quiz"
+msgstr "Test Aiken importat"
+
+msgid "Only supported documents will be listed here."
+msgstr "Doar documentele acceptate vor fi listate aici."
+
+msgid "Generated Aiken content"
+msgstr "Conținut Aiken generat"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Revizuiți conținutul generat înainte de a-l importa ca exercițiu nou."
+
+msgid "No documents available."
+msgstr "Nu există documente disponibile."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "arctangenta hiperbolică:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Exercițiu"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "StartDate"
+
+msgid "EndDate"
+msgstr "EndDate"
+
+msgid "CorrectionDate"
+msgstr "DataCorectare"
+
+msgid "NotValidated"
+msgstr "Nevalidat"
+
+msgid "PendingAttempts"
+msgstr "ÎncercăriÎnAșteptare"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Listă a încercărilor de test în așteptare din cursurile dvs."
+
+msgid "User ID"
+msgstr "ID Utilizator"
+
+msgid "QuestionType"
+msgstr "TipÎntrebare"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "ÎntrebăriFărăCorectareAutomată"
+
+msgid "There are no pending tests."
+msgstr "Nu există teste în așteptare."
+
+msgid "%s results"
+msgstr "%s rezultate"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemplu de activitate de completare a formularului: calculați Indicele de Masă Corporală</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vârstă</strong></td>            <td width=\"75%\" style=\"\">[25] ani</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M sau F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Greutate</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Înălțime</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indice de Masă Corporală</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Greutate/Înălțime<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> articol Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Eliminat"
+
+msgid "NoUsersInTheList"
+msgstr "NiciunUtilizatorÎnListă"
+
+msgid "Are you sure?"
+msgstr "Sunteți sigur?"
+
+msgid "NoResultsAvailable"
+msgstr "NiciunRezultatDisponibil"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importați grupuri dintr-un fișier CSV și, opțional, eliminați elementele care nu sunt prezente în fișier."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Utilizați această opțiune cu atenție deoarece elementele lipsă din CSV pot fi eliminate în timpul procesului de import."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Încărcați un fișier CSV cu datele grupurilor pe care doriți să le importați."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Puteți descărca fișierul exemplu pentru a utiliza formatul așteptat."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Dacă activați ștergerea, elementele care nu sunt prezente în fișier pot fi eliminate."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Fișierul CSV este obligatoriu pentru a începe importul."
+
+msgid "Please select at least one class."
+msgstr "Vă rugăm să selectați cel puțin o clasă."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Definiți proprietățile fiecărui grup înainte de a-l crea."
+
+msgid "Apply the first row values"
+msgstr "Aplicați valorile primului rând"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Creați grupuri manual sau generați-le din clasele înscrise la acest curs."
+
+msgid "Create manual groups"
+msgstr "Creați grupuri manuale"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Utilizați acest formular atunci când doriți să creați manual grupuri de curs goale."
+
+msgid "Configure manual groups"
+msgstr "Configurați grupuri manuale"
+
+msgid "Create groups from subscribed classes"
+msgstr "Creați grupuri din clasele înscrise"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Utilizați acest formular atunci când doriți să creați un grup de curs pentru fiecare clasă selectată."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Păstrați grupurile create legate de clasele lor sursă"
+
+msgid "Create groups from selected classes"
+msgstr "Creați grupuri din clasele selectate"
+
+msgid "You must be logged in to access this page."
+msgstr "Trebuie să fiți autentificat pentru a accesa această pagină."
+
+msgid "Invalid user"
+msgstr "Utilizator nevalid"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UtilizațiCertificatPersonalizatCurs"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UtilizațiCertificatPersonalizatImplicit"
+
+msgid "CertificateSetting"
+msgstr "SetareCertificat"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectațiOPțiuneÎnainteDeDeschidereaEditorului"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "AlegeAjutorModCertificatPersonalizat"
+
+msgid "CertificateMode"
+msgstr "ModCertificat"
+
+msgid "Enable student to validate own attendance"
+msgstr "Permiteți elevului să-și valideze propria prezență"
+
+msgid "Course block"
+msgstr "Bloc curs"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Adăugați blocuri de conținut personalizat în regiunile de subsol ale cursului."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Înainte de subsol"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Subsol stânga"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Subsol centru"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Subsol dreapta"
+
+msgid "SetNotification"
+msgstr "SetareNotificare"
+
+msgid "CourseLegal"
+msgstr "LegalCurs"
+
+msgid "Certificates search is not available"
+msgstr "Căutarea certificatelor nu este disponibilă"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Permite dobândirea competențelor pe subcategorii"
+
+msgid "Allow skills by subcategories"
+msgstr "Permite competențe pe subcategorii"
+
+msgid "Minimum score for skills"
+msgstr "Scor minim pentru competențe"
+
+msgid "The gradebook table is hidden."
+msgstr "Tabelul catalogului este ascuns."
+
+msgid "Invalid token"
+msgstr "Token invalid"
+
+msgid "Unable to save the item"
+msgstr "Imposibil de salvat elementul"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Sunt permise doar adrese URL HTTP și HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Gazdă URL invalidă."
+
+msgid "This cloud provider is not allowed."
+msgstr "Acest furnizor cloud nu este permis."
+
+msgid "Documents used"
+msgstr "Documente utilizate"
+
+msgid "No document usage"
+msgstr "Nicio utilizare a documentelor"
+
+msgid "Invalid action."
+msgstr "Acțiune invalidă."
+
+msgid "No users selected."
+msgstr "Niciun utilizator selectat."
+
+msgid "%s user(s) processed."
+msgstr "%s utilizator(i) procesat(i)."
+
+msgid "Invalid CSRF token."
+msgstr "Token CSRF invalid."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Vă rugăm să vă schimbați parola"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Stimate %s,\n\nProcesul nostru de securitate arată că utilizați o parolă frecvent utilizată pe internet, ceea ce înseamnă că contul dvs. poate fi ușor furat. Este probabil o secvență simplă sau un cuvânt foarte comun, nu știm cu exactitate (nu putem vedea parola dvs.), dar vă rugăm să vă conectați la platformă și să solicitați o schimbare a parolei. Puteți urma linkul de aici: %s pentru a face acest lucru acum.\n\nVă rugăm să rețineți că nu vă vom solicita niciodată parola în acest proces. Introduceți doar numele de utilizator sau adresa de e-mail și vă vom trimite un link. Dacă vi se cere să introduceți parola existentă pentru a face acest lucru, cineva încearcă probabil să vă fure contul prin phishing. Fiți în siguranță, schimbați-vă parola acum!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Parola dvs. a fost resetată"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Stimate %s,\n\nProcesul nostru de securitate v-a semnalat că utilizați o parolă frecvent utilizată pe internet, ceea ce înseamnă că contul dvs. poate fi ușor furat. Ca măsură de prevenție, am decis să inițiem un proces de resetare a parolei. Noua dvs. parolă generată automat este acum:\n\n%s\n\nVă rugăm să vă conectați la platformă în curând (folosind această parolă nouă) pentru a vă seta propria parolă personală și sigură.\n\nFiți în siguranță.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Semnătură salvată cu succes"
+
+msgid "Invalid request payload."
+msgstr "Sarcină de solicitare invalidă."
+
+msgid "Authentication required."
+msgstr "Autentificare necesară."
+
+msgid "The course title is required."
+msgstr "Titlul cursului este obligatoriu."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Doar formatorii și administratorii pot crea cursuri."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Crearea cursurilor de către formatori este dezactivată pe această platformă."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Serviciul BuyCourses selectat nu poate fi folosit pentru a crea acest curs."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Ați atins numărul maxim de cursuri permis (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Serviciul BuyCourses selectat este invalid."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses nu este disponibil momentan."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses nu poate valida serviciul selectat momentan."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Imposibil de validat serviciul BuyCourses selectat momentan."
+
+msgid "External tool removed from course"
+msgstr "Instrument extern eliminat din curs"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Instrumentul extern a fost eliminat din curs, dar păstrat intern deoarece este legat de catalog"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Nu există instrumente externe disponibile pentru a fi adăugate la catalog"
+
+msgid "The evaluation could not be created"
+msgstr "Evaluarea nu a putut fi creată"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Evaluarea catalogului nu a putut fi legată"
+
+msgid "Survey questions"
+msgstr "Întrebări chestionar"
+
+msgid "Back to survey list"
+msgstr "Înapoi la lista de chestionare"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Acest chestionar are deja răspunsuri. Editarea întrebărilor este dezactivată de configurație."
+
+msgid "Choose the type of question you want to add."
+msgstr "Alegeți tipul de întrebare pe care doriți să-l adăugați."
+
+msgid "The free text option is added automatically."
+msgstr "Opțiunea text liber este adăugată automat."
+
+msgid "No questions found"
+msgstr "Nu s-au găsit întrebări"
+
+msgid "Mandatory"
+msgstr "Obligatoriu"
+
+msgid "Unsupported question type"
+msgstr "Tip de întrebare neacceptat"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Puteți utiliza etichetele {%s} și {%s} în întrebare."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Această întrebare este afișată condiționat în timpul completării chestionarului."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Opțiunile procentuale de la 1 la 100 sunt generate automat."
+
+msgid "Could not load survey questions"
+msgstr "Nu s-au putut încărca întrebările chestionarului"
+
+msgid "The question text is required."
+msgstr "Textul întrebării este obligatoriu."
+
+msgid "The maximum score is required."
+msgstr "Scorul maxim este obligatoriu."
+
+msgid "Please select a parent option."
+msgstr "Vă rugăm să selectați o opțiune părinte."
+
+msgid "Please fill all answer options."
+msgstr "Vă rugăm să completați toate opțiunile de răspuns."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nu s-a putut salva întrebarea chestionarului"
+
+msgid "Could not delete survey question"
+msgstr "Nu s-a putut șterge întrebarea chestionarului"
+
+msgid "Could not move survey question"
+msgstr "Nu s-a putut muta întrebarea chestionarului"
+
+msgid "Could not copy survey question"
+msgstr "Nu s-a putut copia întrebarea chestionarului"
+
+msgid "Hide search"
+msgstr "Ascunde căutarea"
+
+msgid "Showing results for: %s"
+msgstr "Se afișează rezultatele pentru: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Căutați după titlul chestionarului, cod sau descriere."
+
+msgid "Search surveys"
+msgstr "Caută sondaje"
+
+msgid "%s surveys selected"
+msgstr "%s sondaje selectate"
+
+msgid "Clear selection"
+msgstr "Șterge selecția"
+
+msgid "No surveys found"
+msgstr "Nu s-au găsit sondaje"
+
+msgid "Unsupported"
+msgstr "Neacceptat"
+
+msgid "Could not load surveys"
+msgstr "Nu s-au putut încărca sondajele"
+
+msgid "Delete selected surveys"
+msgstr "Șterge sondajele selectate"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Sondajele selectate și întrebările lor vor fi șterse. Această acțiune nu poate fi anulată."
+
+msgid "Could not delete selected surveys"
+msgstr "Nu s-au putut șterge sondajele selectate"
+
+msgid "Survey action"
+msgstr "Acțiune sondaj"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Va fi creată o copie a acestui sondaj: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Toate răspunsurile și invitațiile vor fi șterse pentru acest sondaj: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Întrebările generate multiplu vor fi eliminate din acest sondaj: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Acest sondaj va fi publicat pentru tutorii grupului asociat: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Acest sondaj și întrebările sale vor fi șterse: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nu s-a putut finaliza acțiunea sondajului"
+
+msgid "Not started"
+msgstr "Neînceput"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Sondajele de întâlnire permit utilizatorilor invitați să selecteze datele la care sunt disponibili."
+
+msgid "Back to surveys"
+msgstr "Înapoi la sondaje"
+
+msgid "Edit meeting poll"
+msgstr "Editează sondajul de întâlnire"
+
+msgid "View meeting poll"
+msgstr "Vizualizează sondajul de întâlnire"
+
+msgid "Basic information"
+msgstr "Informații de bază"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Aceasta va crea un sondaj de tip sondaj de întâlnire. Răspunsurile și invitațiile sunt gestionate separat."
+
+msgid "Availability"
+msgstr "Disponibilitate"
+
+msgid "Meeting dates"
+msgstr "Datele întâlnirii"
+
+msgid "Meeting poll"
+msgstr "Sondaj de întâlnire"
+
+msgid "My availability"
+msgstr "Disponibilitatea mea"
+
+msgid "Meeting poll results"
+msgstr "Rezultatele sondajului de întâlnire"
+
+msgid "No invitations found"
+msgstr "Nu s-au găsit invitații"
+
+msgid "available"
+msgstr "disponibil"
+
+msgid "Could not load meeting poll"
+msgstr "Nu s-a putut încărca sondajul de întâlnire"
+
+msgid "Please complete the required fields"
+msgstr "Vă rugăm să completați câmpurile obligatorii"
+
+msgid "Could not save meeting poll"
+msgstr "Nu s-a putut salva sondajul de întâlnire"
+
+msgid "Could not save meeting availability"
+msgstr "Nu s-a putut salva disponibilitatea la întâlnire"
+
+msgid "Copy this survey to another course or session"
+msgstr "Copiază acest sondaj într-un alt curs sau sesiune"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Sondajul va fi copiat fără răspunsuri sau invitații."
+
+msgid "No target courses found"
+msgstr "Nu s-au găsit cursuri țintă"
+
+msgid "Search by course title, course code or session name."
+msgstr "Caută după titlul cursului, codul cursului sau numele sesiunii."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Folosește Duplicare sondaj atunci când dorești o copie în același curs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Întrebările și opțiunile vor fi copiate. Răspunsurile, invitațiile și rapoartele vor rămâne doar în sondajul original."
+
+msgid "Selected target"
+msgstr "Țintă selectată"
+
+msgid "Could not load copy form"
+msgstr "Nu s-a putut încărca formularul de copiere"
+
+msgid "The survey will be copied to: %s"
+msgstr "Sondajul va fi copiat în: %s"
+
+msgid "Survey copied."
+msgstr "Sondaj copiat."
+
+msgid "Could not copy survey"
+msgstr "Nu s-a putut copia sondajul"
+
+msgid "Answer survey"
+msgstr "Răspunde la sondaj"
+
+msgid "Preview mode does not save answers."
+msgstr "Modul de previzualizare nu salvează răspunsurile."
+
+msgid "Survey completed"
+msgstr "Sondaj completat"
+
+msgid "Thank you for answering the survey."
+msgstr "Vă mulțumim pentru răspunsurile la sondaj."
+
+msgid "Profile information"
+msgstr "Informații de profil"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Vă rugăm să revizuiți câmpurile de profil solicitate înainte de a răspunde la sondaj."
+
+msgid "This profile field is read-only."
+msgstr "Acest câmp de profil este doar pentru citire."
+
+msgid "You already filled this survey."
+msgstr "Ați completat deja acest sondaj."
+
+msgid "Please specify"
+msgstr "Vă rugăm să specificați"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Acest tip de întrebare nu este acceptat în vizualizarea modernă a sondajului."
+
+msgid "Preview only"
+msgstr "Doar previzualizare"
+
+msgid "Submit answers"
+msgstr "Trimite răspunsurile"
+
+msgid "Could not load survey"
+msgstr "Nu s-a putut încărca sondajul"
+
+msgid "Please complete the required profile fields."
+msgstr "Vă rugăm să completați câmpurile de profil obligatorii."
+
+msgid "Please answer all mandatory questions."
+msgstr "Vă rugăm să răspundeți la toate întrebările obligatorii."
+
+msgid "Could not save survey answers"
+msgstr "Nu s-au putut salva răspunsurile la sondaj"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Configurați informațiile principale ale sondajului înainte de a gestiona întrebările și invitațiile."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Codul sondajului nu poate fi modificat după creare."
+
+msgid "Survey behavior"
+msgstr "Comportamentul sondajului"
+
+msgid "Use 0 for no time limit."
+msgstr "Utilizați 0 pentru nicio limită de timp."
+
+msgid "Survey messages"
+msgstr "Mesaje sondaj"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Câmpurile de profil selectate aici vor fi afișate înaintea întrebărilor sondajului."
+
+msgid "No profile fields are currently available."
+msgstr "Nu sunt disponibile câmpuri de profil în prezent."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Selecția câmpurilor de profil este disponibilă doar pentru sondaje non-anonime."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Legătura cu competențele va fi migrată într-un lot dedicat."
+
+msgid "Could not load survey configuration"
+msgstr "Nu s-a putut încărca configurația sondajului"
+
+msgid "The survey code is required."
+msgstr "Codul sondajului este obligatoriu."
+
+msgid "The survey title is required."
+msgstr "Titlul sondajului este obligatoriu."
+
+msgid "The survey has been saved successfully"
+msgstr "Sondajul a fost salvat cu succes"
+
+msgid "Could not save survey configuration"
+msgstr "Nu s-a putut salva configurația sondajului"
+
+msgid "Course users"
+msgstr "Utilizatori curs"
+
+msgid "Already invited"
+msgstr "Deja invitat"
+
+msgid "No users found"
+msgstr "Niciun utilizator găsit"
+
+msgid "No groups found"
+msgstr "Niciun grup găsit"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Utilizați **link** unde trebuie să apară linkul sondajului."
+
+msgid "Remind all selected users"
+msgstr "Reamintește tuturor utilizatorilor selectați"
+
+msgid "Anonymous access link"
+msgstr "Link de acces anonim"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Utilizatorii care nu sunt invitați pot folosi acest link pentru a completa sondajul."
+
+msgid "Answered anonymously"
+msgstr "Răspuns anonim"
+
+msgid "Could not load survey invitations"
+msgstr "Nu s-au putut încărca invitațiile la sondaj"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Subiectul și mesajul e-mailului sunt obligatorii la trimiterea e-mailului."
+
+msgid "Could not publish survey"
+msgstr "Nu s-a putut publica sondajul"
+
+msgid "Could not copy the link"
+msgstr "Nu s-a putut copia linkul"
+
+msgid "Please answer this survey using the following link"
+msgstr "Vă rugăm să răspundeți la acest sondaj utilizând următorul link"
+
+msgid "Export CSV"
+msgstr "Export CSV"
+
+msgid "Export compact CSV"
+msgstr "Export CSV compact"
+
+msgid "Export Excel"
+msgstr "Export Excel"
+
+msgid "Export package"
+msgstr "Export pachet"
+
+msgid "Results summary"
+msgstr "Rezumat rezultate"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Această vizualizare afișează datele de raportare migrate pentru acest sondaj."
+
+msgid "Select user"
+msgstr "Selectați utilizator"
+
+msgid "No answers found"
+msgstr "Niciun răspuns găsit"
+
+msgid "answers"
+msgstr "răspunsuri"
+
+msgid "Could not load survey reporting"
+msgstr "Nu s-a putut încărca raportarea sondajului"
+
+msgid "Back to threads"
+msgstr "Înapoi la fire"
+
+msgid "Back to learning path"
+msgstr "Înapoi la traseul de învățare"
+
+msgid "Remove sticky"
+msgstr "Elimină fixare"
+
+msgid "Make sticky"
+msgstr "Fixează"
+
+msgid "Open thread"
+msgstr "Deschide subiect"
+
+msgid "Close thread"
+msgstr "Închide subiect"
+
+msgid "Delete thread"
+msgstr "Șterge subiect"
+
+msgid "This thread is hidden from learners."
+msgstr "Acest subiect este ascuns de la cursanți."
+
+msgid "Revision requested"
+msgstr "Revizuire solicitată"
+
+msgid "Revision"
+msgstr "Revizuire"
+
+msgid "Approve post"
+msgstr "Aprobă postare"
+
+msgid "Reject post"
+msgstr "Respinge postare"
+
+msgid "Cancel revision request"
+msgstr "Anulează solicitarea de revizuire"
+
+msgid "Delete post"
+msgstr "Șterge postare"
+
+msgid "Message is required"
+msgstr "Mesajul este obligatoriu"
+
+msgid "Target thread is required"
+msgstr "Subiectul țintă este obligatoriu"
+
+msgid "Could not retrieve posts"
+msgstr "Nu s-au putut prelua postările"
+
+msgid "Thread shown"
+msgstr "Subiect afișat"
+
+msgid "Thread hidden"
+msgstr "Subiect ascuns"
+
+msgid "Could not update thread"
+msgstr "Nu s-a putut actualiza subiectul"
+
+msgid "Thread closed"
+msgstr "Subiect închis"
+
+msgid "Thread opened"
+msgstr "Subiect deschis"
+
+msgid "Thread marked as sticky"
+msgstr "Subiect marcat ca fixat"
+
+msgid "Thread unmarked as sticky"
+msgstr "Subiect demarcat ca fixat"
+
+msgid "Thread notifications enabled"
+msgstr "Notificările subiectului activate"
+
+msgid "Thread notifications disabled"
+msgstr "Notificările subiectului dezactivate"
+
+msgid "Could not update thread notification"
+msgstr "Nu s-a putut actualiza notificarea subiectului"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Sigur doriți să ștergeți acest subiect?"
+
+msgid "Could not delete thread"
+msgstr "Nu s-a putut șterge subiectul"
+
+msgid "Post approved"
+msgstr "Postare aprobată"
+
+msgid "Could not approve post"
+msgstr "Nu s-a putut aproba postarea"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Sigur doriți să respingeți această postare?"
+
+msgid "Post rejected"
+msgstr "Postare respinsă"
+
+msgid "Could not reject post"
+msgstr "Nu s-a putut respinge postarea"
+
+msgid "Post shown"
+msgstr "Postare afișată"
+
+msgid "Post hidden"
+msgstr "Postare ascunsă"
+
+msgid "Could not update post"
+msgstr "Nu s-a putut actualiza postarea"
+
+msgid "Post updated"
+msgstr "Postare actualizată"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Sigur doriți să ștergeți această postare?"
+
+msgid "Post deleted"
+msgstr "Postare ștearsă"
+
+msgid "Could not delete post"
+msgstr "Nu s-a putut șterge postarea"
+
+msgid "Untitled thread"
+msgstr "Subiect fără titlu"
+
+msgid "Could not retrieve threads"
+msgstr "Nu s-au putut prelua subiectele"
+
+msgid "Post moved"
+msgstr "Postare mutată"
+
+msgid "Could not move post"
+msgstr "Nu s-a putut muta postarea"
+
+msgid "Revision request removed"
+msgstr "Solicitarea de revizuire eliminată"
+
+msgid "Could not update revision request"
+msgstr "Nu s-a putut actualiza solicitarea de revizuire"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Sigur doriți să raportați această postare?"
+
+msgid "Could not report post"
+msgstr "Nu s-a putut raporta postarea"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Sigur doriți să ștergeți acest atașament?"
+
+msgid "Attachment deleted"
+msgstr "Atașament șters"
+
+msgid "Could not delete attachment"
+msgstr "Nu s-a putut șterge atașamentul"
+
+msgid "Thread title"
+msgstr "Titlu subiect"
+
+msgid "Sticky thread"
+msgstr "Subiect fixat"
+
+msgid "Attach files"
+msgstr "Atașare fișiere"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Atașamentele sunt dezactivate pentru acest forum"
+
+msgid "The forum is not open yet."
+msgstr "Forumul nu este încă deschis."
+
+msgid "The forum is closed."
+msgstr "Forumul este închis."
+
+msgid "The forum is locked."
+msgstr "Forumul este blocat."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Subiectele noi nu sunt permise în acest forum."
+
+msgid "Thread created"
+msgstr "Subiect creat"
+
+msgid "Could not create thread"
+msgstr "Nu s-a putut crea subiectul"
+
+msgid "Back to posts"
+msgstr "Înapoi la postări"
+
+msgid "This reply will be stored as a revision."
+msgstr "Acest răspuns va fi salvat ca revizuire."
+
+msgid "Post reply"
+msgstr "Postare răspuns"
+
+msgid "The thread is locked."
+msgstr "Subiectul este blocat."
+
+msgid "Reply added"
+msgstr "Răspuns adăugat"
+
+msgid "Could not add reply"
+msgstr "Nu s-a putut adăuga răspunsul"
+
+msgid "Add forum"
+msgstr "Adăugare forum"
+
+msgid "No forums found"
+msgstr "Nu s-au găsit forumuri"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Creați prima categorie de forum sau forum pentru a începe discuțiile."
+
+msgid "Locked"
+msgstr "Blocat"
+
+msgid "No forums in this category"
+msgstr "Nu există forumuri în această categorie"
+
+msgid "Posts require approval"
+msgstr "Postările necesită aprobare"
+
+msgid "Forum for current group"
+msgstr "Forum pentru grupul curent"
+
+msgid "Group forum visibility"
+msgstr "Vizibilitate forum grup"
+
+msgid "No category"
+msgstr "Fără categorie"
+
+msgid "Could not retrieve forums"
+msgstr "Nu s-au putut prelua forumurile"
+
+msgid "Forum category updated"
+msgstr "Categorie de forum actualizată"
+
+msgid "Forum category created"
+msgstr "Categorie de forum creată"
+
+msgid "Could not save forum category"
+msgstr "Nu s-a putut salva categoria de forum"
+
+msgid "Forum updated"
+msgstr "Forum actualizat"
+
+msgid "Forum created"
+msgstr "Forum creat"
+
+msgid "Could not save forum"
+msgstr "Nu s-a putut salva forumul"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Sigur doriți să ștergeți această categorie de forum?"
+
+msgid "Could not delete forum category"
+msgstr "Nu s-a putut șterge categoria de forum"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Sigur doriți să ștergeți acest forum?"
+
+msgid "Could not delete forum"
+msgstr "Nu s-a putut șterge forumul"
+
+msgid "Forum category unlocked"
+msgstr "Categorie de forum deblocată"
+
+msgid "Forum category locked"
+msgstr "Categorie de forum blocată"
+
+msgid "Could not update forum category"
+msgstr "Nu s-a putut actualiza categoria de forum"
+
+msgid "Forum category shown"
+msgstr "Categorie de forum afișată"
+
+msgid "Forum category hidden"
+msgstr "Categorie de forum ascunsă"
+
+msgid "Forum unlocked"
+msgstr "Forum deblocat"
+
+msgid "Forum locked"
+msgstr "Forum blocat"
+
+msgid "Could not update forum"
+msgstr "Nu s-a putut actualiza forumul"
+
+msgid "Forum shown"
+msgstr "Forum afișat"
+
+msgid "Forum hidden"
+msgstr "Forum ascuns"
+
+msgid "Forum notifications enabled"
+msgstr "Notificări forum activate"
+
+msgid "Forum notifications disabled"
+msgstr "Notificări forum dezactivate"
+
+msgid "Could not update forum notification"
+msgstr "Nu s-a putut actualiza notificarea forumului"
+
+msgid "Forum category moved"
+msgstr "Categorie forum mutată"
+
+msgid "Could not move forum category"
+msgstr "Nu s-a putut muta categoria de forum"
+
+msgid "Forum moved"
+msgstr "Forum mutat"
+
+msgid "Could not move forum"
+msgstr "Nu s-a putut muta forumul"
+
+msgid "Back to forums"
+msgstr "Înapoi la forumuri"
+
+msgid "New thread"
+msgstr "Subiect nou"
+
+msgid "No threads found"
+msgstr "Nu s-au găsit subiecte"
+
+msgid "Sticky"
+msgstr "Fixat"
+
+msgid "Graded"
+msgstr "Evaluat"
+
+msgid "Grade peers"
+msgstr "Evaluare colegi"
+
+msgid "Move thread"
+msgstr "Mută subiectul"
+
+msgid "Target forum"
+msgstr "Forum destinație"
+
+msgid "Target forum is required"
+msgstr "Forumul destinație este obligatoriu"
+
+msgid "Students"
+msgstr "Studenți"
+
+msgid "No students found"
+msgstr "Nu s-au găsit studenți"
+
+msgid "No peers available to grade."
+msgstr "Nu sunt colegi disponibili pentru evaluare."
+
+msgid "Qualified"
+msgstr "Calificat"
+
+msgid "Not qualified"
+msgstr "Ne calificat"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nu s-a putut prelua evaluarea subiectului"
+
+msgid "Thread grading updated"
+msgstr "Evaluarea subiectului a fost actualizată"
+
+msgid "Could not update thread grading"
+msgstr "Nu s-a putut actualiza evaluarea subiectului"
+
+msgid "Thread score saved"
+msgstr "Scorul subiectului a fost salvat"
+
+msgid "Could not save thread score"
+msgstr "Nu s-a putut salva scorul subiectului"
+
+msgid "Could not move thread"
+msgstr "Nu s-a putut muta subiectul"
+
+msgid "Thread updated"
+msgstr "Subiect actualizat"
+
+msgid "Search term is too short"
+msgstr "Termenul de căutare este prea scurt"
+
+msgid "Could not search forums"
+msgstr "Nu s-au putut căuta forumurile"
+
+msgid "Moderated"
+msgstr "Moderat"
+
+msgid "View threads"
+msgstr "Vizualizare subiecte"
+
+msgid "No auth source"
+msgstr "Nicio sursă de autentificare"
+
+msgid "You must add at least one question"
+msgstr "Trebuie să adăugați cel puțin o întrebare"
+
+msgid "Advanced actions"
+msgstr "Acțiuni avansate"
+
+msgid "Application path"
+msgstr "Cale aplicație"
+
+msgid "Apply files details"
+msgstr "Aplică detalii fișiere"
+
+msgid "Apply plan details"
+msgstr "Aplică detalii plan"
+
+msgid "Apply plan failed"
+msgstr "Aplicare plan eșuată"
+
+msgid "Apply plan ready"
+msgstr "Aplicare plan gata"
+
+msgid "Apply preparation"
+msgstr "Aplicare pregătire"
+
+msgid "Apply staged files"
+msgstr "Aplică fișiere pregătite"
+
+msgid "Applying files..."
+msgstr "Se aplică fișierele..."
+
+msgid "Audit file"
+msgstr "Fișier audit"
+
+msgid "Backup directory"
+msgstr "Director backup"
+
+msgid "Baseline clean"
+msgstr "Linie de bază curată"
+
+msgid "Baseline warnings"
+msgstr "Avertismente linie de bază"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Creează un plan de aplicare sigur din pachetul pregătit. Aceasta verifică doar fișierele, permisiunile, calea de backup și starea de blocare. Nu înlocuiește fișierele."
+
+msgid "Build production frontend assets."
+msgstr "Construiește activele frontend de producție."
+
+msgid "Building plan..."
+msgstr "Se construiește planul..."
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Check"
+msgstr "Verifică"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Verifică actualizări Chamilo disponibile, verifică pachete, pregătește fișiere și execută pași controlați post-actualizare."
+
+msgid "Check manifest"
+msgstr "Verifică manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Se verifică acțiunile post-aplicare..."
+
+msgid "Checking..."
+msgstr "Se verifică..."
+
+msgid "Composer install"
+msgstr "Instalare Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Acțiunile Composer, Yarn și migrarea bazei de date pot modifica dependențele, activele generate sau baza de date. Selectați-le doar după confirmarea backup-urilor și a permisiunilor."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Configurați CHAMILO_UPDATE_MANIFEST_URL pe server sau furnizați un URL HTTPS pentru manifest."
+
+msgid "Configured"
+msgstr "Configurat"
+
+msgid "Current migration"
+msgstr "Migrare curentă"
+
+msgid "Database baseline"
+msgstr "Linie de bază a bazei de date"
+
+msgid "Database migration safety review"
+msgstr "Revizuire de siguranță a migrării bazei de date"
+
+msgid "Database migrations"
+msgstr "Migrări ale bazei de date"
+
+msgid "Development mode"
+msgstr "Mod dezvoltare"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Nu activați această opțiune decât dacă backup-ul actualizării și permisiunile serverului au fost revizuite."
+
+msgid "Doctrine dry-run command"
+msgstr "Comanda Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine a raportat avertismente privind linia de bază istorică. Actualizatorul va executa totuși doar migrările V210 etapizate după confirmare explicită."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine va executa doar migrările V210 etapizate explicit după ce revizuirea de siguranță este validată."
+
+msgid "Dry-run exit code"
+msgstr "Cod de ieșire dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrări indisponibile executate"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Extrageți pachetul de actualizare verificat într-un director de etapizare pentru inspecție. Aceasta nu înlocuiește fișiere, nu rulează migrări și nu modifică baza de date."
+
+msgid "File apply available"
+msgstr "Aplicare fișier disponibilă"
+
+msgid "Files to replace"
+msgstr "Fișiere de înlocuit"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Confirm că există o copie de rezervă a bazei de date și a fost verificată înainte de rularea migrărilor."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Înțeleg că acțiunile avansate pot modifica dependențele, activele generate sau baza de date."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Înțeleg că aceasta va înlocui fișierele din instalarea Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Înțeleg că aceasta va rula comenzi de actualizare pe server."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalați dependențele frontend înainte de a reconstrui activele."
+
+msgid "Installed version"
+msgstr "Versiune instalată"
+
+msgid "Latest migration"
+msgstr "Ultima migrare"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lăsați căile pachetului și semnăturii goale pentru a le descărca din URL-urile manifestului verificat. Căile locale sunt disponibile doar pentru teste de dezvoltare."
+
+msgid "Live command log"
+msgstr "Jurnal de comenzi live"
+
+msgid "Live update log"
+msgstr "Jurnal de actualizare live"
+
+msgid "Local test options"
+msgstr "Opțiuni de test local"
+
+msgid "Local test update notice link"
+msgstr "Link de notificare actualizare test local"
+
+msgid "Local update notice simulation"
+msgstr "Simulare notificare actualizare locală"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simularea notificării de actualizare locală este disponibilă doar în modul dezvoltare."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Sursă manifest"
+
+msgid "Migration safety details"
+msgstr "Detalii revizuire de siguranță a migrării"
+
+msgid "Migration safety review failed"
+msgstr "Revizuirea de siguranță a migrării a eșuat"
+
+msgid "Migration safety review ready"
+msgstr "Revizuirea de siguranță a migrării este gata"
+
+msgid "Migration target"
+msgstr "Țintă migrare"
+
+msgid "New files"
+msgstr "Fișiere noi"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migrări noi raportate de Doctrine"
+
+msgid "Next migration"
+msgstr "Următoarea migrare"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Nu a fost raportată nicio migrare indisponibilă executată."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Nu este configurat încă niciun URL oficial de manifest. Utilizați un URL HTTPS sau o cale locală pentru teste de dezvoltare."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Nu a fost detectată nicio migrare în așteptare înainte de ținta de actualizare etapizată."
+
+msgid "Not configured"
+msgstr "Neconfigurat"
+
+msgid "Not detected"
+msgstr "Nedetectat"
+
+msgid "Official Chamilo update channel"
+msgstr "Canal oficial de actualizare Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 pachet"
+
+msgid "Package URL"
+msgstr "URL pachet"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Fișierele pachetului și ale semnăturii vor fi descărcate din manifest. Căile locale sunt dezactivate în acest mediu."
+
+msgid "Package path"
+msgstr "Cale pachet"
+
+msgid "Package staged successfully"
+msgstr "Pachet pregătit cu succes"
+
+msgid "Package staging failed"
+msgstr "Pregătirea pachetului a eșuat"
+
+msgid "Package verification"
+msgstr "Verificare pachet"
+
+msgid "Package verification failed"
+msgstr "Verificarea pachetului a eșuat"
+
+msgid "Package verified successfully"
+msgstr "Pachet verificat cu succes"
+
+msgid "Pending migrations before this update"
+msgstr "Migrații în așteptare înainte de această actualizare"
+
+msgid "Planned backup path"
+msgstr "Cale planificată pentru backup"
+
+msgid "Post-apply actions completed"
+msgstr "Acțiuni post-aplicare finalizate"
+
+msgid "Post-apply actions failed"
+msgstr "Acțiunile post-aplicare au eșuat"
+
+msgid "Post-apply actions ready"
+msgstr "Acțiuni post-aplicare gata"
+
+msgid "Post-apply checks"
+msgstr "Verificări post-aplicare"
+
+msgid "Post-apply checks failed"
+msgstr "Verificările post-aplicare au eșuat"
+
+msgid "Post-apply details"
+msgstr "Detalii post-aplicare"
+
+msgid "Post-apply run details"
+msgstr "Detalii execuție post-aplicare"
+
+msgid "Preflight checks"
+msgstr "Verificări preliminare"
+
+msgid "Preflight checks completed"
+msgstr "Verificările preliminare finalizate"
+
+msgid "Preflight checks failed"
+msgstr "Verificările preliminare au eșuat"
+
+msgid "Preflight details"
+msgstr "Detalii preliminare"
+
+msgid "Prepare staging"
+msgstr "Pregătește staging"
+
+msgid "Preparing staging..."
+msgstr "Se pregătește staging..."
+
+msgid "Production mode"
+msgstr "Mod producție"
+
+msgid "Released at"
+msgstr "Lansat la"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Înlocuiește fișierele Chamilo din pachetul pregătit utilizând planul de aplicare revizuit. Aceasta nu rulează migrații de baze de date, Composer, Yarn sau comenzi de cache."
+
+msgid "Review apply plan"
+msgstr "Revizuiește planul de aplicare"
+
+msgid "Review database migrations"
+msgstr "Revizuiește migrațiile bazei de date"
+
+msgid "Review post-apply actions"
+msgstr "Revizuiește acțiunile post-aplicare"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Revizuiește comenzile manuale recomandate după aplicarea fișierelor de actualizare. Această etapă nu rulează Composer, Yarn, migrații sau comenzi de cache."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Revizuiește migrațiile Doctrine pregătite și rezultatul dry-run înainte de a rula migrațiile bazei de date."
+
+msgid "Reviewing database migrations..."
+msgstr "Se revizuiesc migrațiile bazei de date..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Rulează și trece revizuirea de siguranță a migrațiilor înainte de a executa migrațiile bazei de date."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Rulează verificările de mediu înainte de orice etapă viitoare de aplicare a actualizării. Aceasta nu modifică fișiere sau baza de date."
+
+msgid "Run post-apply actions"
+msgstr "Rulează acțiuni post-aplicare"
+
+msgid "Run preflight checks"
+msgstr "Rulează verificări preliminare"
+
+msgid "Run selected post-apply actions"
+msgstr "Rulează acțiunile post-aplicare selectate"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Rulează comenzile post-aplicare selectate de pe server utilizând o listă de permisiuni controlată. Nu sunt acceptate comenzi shell personalizate."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Rulează aceste comenzi manual de pe server după confirmarea rezultatului actualizării fișierelor și a backup-urilor."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Rularea acțiunilor post-aplicare din interfață este dezactivată în modul producție."
+
+msgid "Running post-apply actions..."
+msgstr "Se rulează acțiunile post-aplicare..."
+
+msgid "Safe actions"
+msgstr "Acțiuni sigure"
+
+msgid "Signature path"
+msgstr "Cale semnătură"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Verificarea semnăturii nu poate fi omisă în acest mediu."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Omite verificarea semnăturii pentru teste de dezvoltare locală"
+
+msgid "Staged file application failed"
+msgstr "Aplicarea fișierelor pregătite a eșuat"
+
+msgid "Staged files applied successfully"
+msgstr "Fișierele pregătite au fost aplicate cu succes"
+
+msgid "Staging details"
+msgstr "Detalii staging"
+
+msgid "Staging directory"
+msgstr "Director staging"
+
+msgid "Staging extraction"
+msgstr "Extragere staging"
+
+msgid "Symfony cache clear"
+msgstr "Golire cache Symfony"
+
+msgid "System update"
+msgstr "Actualizare sistem"
+
+msgid "Target version"
+msgstr "Versiune țintă"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL-ul manifestului oficial configurat este precompletat. Îl puteți modifica cu un alt manifest HTTPS, dacă este necesar."
+
+msgid "The database migration baseline is clean."
+msgstr "Linia de bază a migrării bazei de date este curată."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Răspunsul HTTP final a eșuat după finalizarea operațiunii. Aceasta este de obicei cauzată de permisiunile cache-ului de runtime sau de o repornire a serverului web în timpul cererii."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Jurnalul operațiunii indică faptul că acțiunile post-aplicare s-au finalizat cu succes."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Comenzile post-aplicare selectate s-au finalizat cu succes, dar răspunsul HTTP final a eșuat. Reîmprospătați pagina și verificați permisiunile cache-ului de runtime dacă pagina nu se încarcă corect."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Acest instrument de actualizare nu creează sau restaurează copii de rezervă ale bazei de date."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Aceste acțiuni pot fi rulate în siguranță din interfață după revizuirea rezultatului actualizării."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Aceste comenzi pot modifica dependențe, active generate, cache sau baza de date. Confirmați copiile de rezervă înainte de a continua."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Această acțiune modifică fișierele din instalarea Chamilo. Asigurați-vă că planul de aplicare a fost revizuit și că copiile de rezervă sunt activate înainte de a continua."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Această intrare de dezvoltare simulează notificarea viitoare de actualizare Chamilo.org utilizând căi locale de pachete de test."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Acest ecran a fost deschis dintr-o notificare oficială de actualizare, dar nu este configurată încă nicio sursă oficială de manifest."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Acest ecran a fost deschis dintr-o notificare de actualizare. Doar verificarea manifestului este pornită automat."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Acest pas pregătește doar o revizuire. Înlocuirea fișierelor are loc ulterior în pasul Aplicare fișiere în etapă, cu protecție prin blocare, copie de rezervă și revenire."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Acest instrument de actualizare nu creează o copie de rezervă a bazei de date. Creați și verificați o copie de rezervă înainte de a rula migrările."
+
+msgid "Trusted public key"
+msgstr "Cheie publică de încredere"
+
+msgid "Trusted signing key"
+msgstr "Cheie de semnare de încredere"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Tastați APLICARE FIȘIERE ACTUALIZARE pentru a confirma"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Tastați RULARE MIGRĂRI BAZĂ DE DATE pentru a confirma migrările bazei de date"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Tastați RULARE ACȚIUNI POST-ACTUALIZARE pentru a confirma"
+
+msgid "Unknown update notice source."
+msgstr "Sursă necunoscută a notificării de actualizare."
+
+msgid "Update availability"
+msgstr "Disponibilitate actualizare"
+
+msgid "Update directory"
+msgstr "Director actualizare"
+
+msgid "Update lock path"
+msgstr "Cale blocare actualizare"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Utilizați directorul de etapă generat de pasul anterior. Backend-ul acceptă doar directoare din interiorul var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Utilizați acest link pentru a simula notificarea viitoare de actualizare Chamilo.org în timpul testelor de dezvoltare."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Utilizați acest lucru doar pentru teste locale de dezvoltare. Actualizările de producție trebuie să utilizeze cheia configurată pe server."
+
+msgid "Verification details"
+msgstr "Detalii verificare"
+
+msgid "Verify package"
+msgstr "Verificare pachet"
+
+msgid "Verifying..."
+msgstr "Se verifică..."
+
+msgid "Waiting for command progress events..."
+msgstr "Se așteaptă evenimente de progres ale comenzii..."
+
+msgid "Waiting for update progress events..."
+msgstr "Se așteaptă evenimente de progres ale actualizării..."
+
+msgid "Yarn build"
+msgstr "Compilare Yarn"
+
+msgid "Yarn install"
+msgstr "Instalare Yarn"
+
+msgid "A comment is required"
+msgstr "Este necesar un comentariu"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "O bază de date cu același nume există deja. Dacă conține tabele, acestea vor fi șterse; dacă este goală, va fi refolosită."
+
+msgid "AI generated"
+msgstr "Generat de IA"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Adăugați cel puțin o întrebare înainte de a reveni la calea de învățare."
+
+msgid "Add attachments"
+msgstr "Adăugați atașamente"
+
+msgid "Additional fields"
+msgstr "Câmpuri suplimentare"
+
+msgid "Allow comments"
+msgstr "Permite comentarii"
+
+msgid "Allow new pages"
+msgstr "Permite pagini noi"
+
+msgid "Allow ratings"
+msgstr "Permite evaluări"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Sigur doriți să ștergeți toate elementele?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Sigur doriți să restaurați reînnoirea automată?"
+
+msgid "Attachment has been deleted"
+msgstr "Atașamentul a fost șters"
+
+msgid "Backup file"
+msgstr "Fișier de rezervă"
+
+msgid "Block comments"
+msgstr "Blochează comentarii"
+
+msgid "Block new pages"
+msgstr "Blochează pagini noi"
+
+msgid "Block ratings"
+msgstr "Blochează evaluări"
+
+msgid "Cancel renewal"
+msgstr "Anulează reînnoirea"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Linkurile de categorie vor fi eliminate din paginile Wiki %s."
+
+msgid "Change"
+msgstr "Modifică"
+
+msgid "Clear group"
+msgstr "Golește grupul"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Faceți clic pe o etichetă pentru a o insera în editor. Aceste marcaje vor fi înlocuite la generarea certificatului."
+
+msgid "Comment added"
+msgstr "Comentariu adăugat"
+
+msgid "Comment is required"
+msgstr "Comentariul este obligatoriu"
+
+msgid "Comment score"
+msgstr "Scor comentariu"
+
+msgid "Compare selected versions line by line"
+msgstr "Compară versiunile selectate linie cu linie"
+
+msgid "Compare selected versions word by word"
+msgstr "Compară versiunile selectate cuvânt cu cuvânt"
+
+msgid "Compare versions"
+msgstr "Compară versiunile"
+
+msgid "Copy completed"
+msgstr "Copiere finalizată"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Creează pagini individuale de lucru Wiki pentru cursanți"
+
+msgid "Current view mode"
+msgstr "Mod de vizualizare curent"
+
+msgid "Delete Wiki"
+msgstr "Șterge Wiki"
+
+msgid "Delete page"
+msgstr "Șterge pagina"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ștergerea paginii principale Wiki nu este recomandată. O puteți recrea ulterior."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Dezactivarea Wiki blochează paginile și acțiunile Wiki normale. Această pagină de setări rămâne disponibilă profesorilor cursului."
+
+msgid "Discussion"
+msgstr "Discuție"
+
+msgid "Edit Comment"
+msgstr "Editează comentariul"
+
+msgid "Edit page"
+msgstr "Editează pagina"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Data de încheiere trebuie să fie după sau egală cu data de expirare"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Introduceți un termen de căutare pentru a găsi pagini Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Data de expirare trebuie să fie înainte sau egală cu data de încheiere"
+
+msgid "Failed email recipients"
+msgstr "Destinatari e-mail eșuați"
+
+msgid "Finish and return to learning path"
+msgstr "Finalizează și revino la calea de învățare"
+
+msgid "Forum image"
+msgstr "Imagine forum"
+
+msgid "Hide discussion"
+msgstr "Ascunde discuția"
+
+msgid "Hide page"
+msgstr "Ascunde pagina"
+
+msgid "I changed my mind"
+msgstr "M-am răzgândit"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Dacă nu este bifat, aceste fișiere vor rămâne disponibile administratorului platformei prin instrumentul „Informații fișier”."
+
+msgid "Internal message failures"
+msgstr "Eșecuri mesaje interne"
+
+msgid "Internal messages available"
+msgstr "Mesaje interne disponibile"
+
+msgid "Internal messages created now"
+msgstr "Mesaje interne create acum"
+
+msgid "Item score"
+msgstr "Scor element"
+
+msgid "Last post"
+msgstr "Ultima postare"
+
+msgid "Lock page"
+msgstr "Blochează pagina"
+
+msgid "Manage categories"
+msgstr "Gestionează categoriile"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marchează acest document ca asistat de IA. Utilizați-l atunci când conținutul a fost creat sau modificat semnificativ cu instrumente IA."
+
+msgid "Maximum score is required"
+msgstr "Scorul maxim este obligatoriu"
+
+msgid "Metric"
+msgstr "Metrică"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Comentariile noi sunt blocate în această discuție"
+
+msgid "No Wiki categories are available yet."
+msgstr "Nu există încă categorii Wiki disponibile."
+
+msgid "No categories found"
+msgstr "Nicio categorie găsită"
+
+msgid "No content"
+msgstr "Fără conținut"
+
+msgid "No parent category"
+msgstr "Nicio categorie părinte"
+
+msgid "Number of comments scored"
+msgstr "Număr de comentarii evaluate"
+
+msgid "Old version"
+msgstr "Versiune veche"
+
+msgid "Only image files are allowed."
+msgstr "Sunt permise doar fișiere imagine."
+
+msgid "Please fill all required fields"
+msgstr "Vă rugăm să completați toate câmpurile obligatorii"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Întrebările cu substituenți de clasă sau student vor fi generate pentru clasele sau grupurile cursului: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Evaluările sunt blocate în această discuție"
+
+msgid "Remove image"
+msgstr "Elimină imaginea"
+
+msgid "Restore renewal"
+msgstr "Restaurează reînnoirea"
+
+msgid "Restore version"
+msgstr "Restaurează versiunea"
+
+msgid "Search in"
+msgstr "Caută în"
+
+msgid "Select group"
+msgstr "Selectează grupul"
+
+msgid "Select image"
+msgstr "Selectează imaginea"
+
+msgid "Selected image"
+msgstr "Imagine selectată"
+
+msgid "Show discussion"
+msgstr "Afișează discuția"
+
+msgid "Show page"
+msgstr "Afișează pagina"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Unele fișiere sau foldere nu au permisiuni de scriere. Pentru a putea instala Chamilo, trebuie mai întâi să schimbați permisiunile acestora (folosind CHMOD). Vă rugăm să citiți"
+
+msgid "Subcategories"
+msgstr "Subcategorii"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Apasă pe stânga sau dreapta pentru a naviga"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Termenul limită pentru sarcina Wiki a trecut, dar este permisă trimiterea cu întârziere."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Termenul limită pentru sarcina Wiki a trecut."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Sarcina Wiki nu a început încă."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Blocarea editării paginii Wiki este necesară înainte de salvare."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Anunțul a fost salvat, dar un atașament nu a putut fi încărcat."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Anunțul a fost salvat, dar livrarea prin e-mail a eșuat."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Anunțul a fost salvat, dar nu a putut fi livrat niciun e-mail."
+
+msgid "The category has been created"
+msgstr "Categoria a fost creată"
+
+msgid "The category has been deleted"
+msgstr "Categoria a fost ștearsă"
+
+msgid "The category has been updated"
+msgstr "Categoria a fost actualizată"
+
+msgid "The end date is invalid"
+msgstr "Data de încheiere este invalidă"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Numărul maxim de versiuni trebuie să fie un număr întreg non-negativ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Numărul maxim de cuvinte trebuie să fie un număr întreg non-negativ"
+
+msgid "The print window could not be opened"
+msgstr "Fereastra de imprimare nu a putut fi deschisă"
+
+msgid "The start date is invalid"
+msgstr "Data de începere este invalidă"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Aceste setări se aplică întregului curs, inclusiv sesiunilor și grupurilor sale."
+
+msgid "This announcement has already been sent by email."
+msgstr "Acest anunț a fost deja trimis prin e-mail."
+
+msgid "This discussion is hidden from learners"
+msgstr "Această discuție este ascunsă de la cursanți"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Acest instrument de inteligență artificială generativă vă permite să creați imagini și videoclipuri scurte pentru a ilustra cursul. Explicând (în text) ce doriți în secțiunea prompt, veți oferi modelului AI configurat elementele necesare pentru a genera o imagine sau un videoclip. Vă rugăm să aveți răbdare. Modelul AI va dura ceva timp și va genera un rezultat, pe care s-ar putea să doriți să îl păstrați salvând media în folderul de documente și apoi să îl încorporați într-un document HTML. Nu toate modelele AI sunt egale în ceea ce privește viteza sau calitatea. Modelul AI vă poate oferi, de asemenea, un prompt modificat, care este o interpretare mai detaliată a cererii dumneavoastră. Puteți apoi utiliza acest prompt modificat pentru a vă rafina cererea. Vă rugăm să rețineți că acest instrument, în special pentru videoclipuri, ar putea genera costuri considerabile pentru organizația dumneavoastră, chiar dacă decideți să nu salvați media generată. Vă rugăm să îl utilizați în consecință. Dacă aveți probleme în obținerea a ceea ce căutați, vă rugăm să acordați timp pentru a cerceta trucuri de promptare online pentru modelul AI de care dispuneți."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Acest istoric aparține cursului de bază. Restaurarea este disponibilă după crearea unei versiuni de sesiune."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Această imagine înlocuiește pictograma implicită a forumului afișată lângă titlul forumului."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Această pagină provine din cursul de bază. Salvarea acesteia va crea o versiune pentru sesiunea curentă."
+
+msgid "This will also delete %s subcategories."
+msgstr "Aceasta va șterge, de asemenea, %s subcategorii."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Aceasta va crea pagini de lucru individuale pentru %s cursanți."
+
+msgid "Thread history"
+msgstr "Istoric fir"
+
+msgid "Title and content"
+msgstr "Titlu și conținut"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Nu se poate anula reînnoirea momentan."
+
+msgid "Unable to restore renewal right now."
+msgstr "Nu se poate restaura reînnoirea momentan."
+
+msgid "Unlock page"
+msgstr "Deblochează pagina"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Utilizați [[Pagină]] sau [[Pagină|Text vizibil]] pentru a crea linkuri Wiki interne."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Folosiți bara de spațiu sau tastele săgeată pentru a naviga"
+
+msgid "View version"
+msgstr "Vizualizează versiune"
+
+msgid "Visible only to teachers"
+msgstr "Vizibil doar pentru profesori"
+
+msgid "Weight is required"
+msgstr "Ponderea este obligatorie"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Categoriile Wiki sunt dezactivate pentru acest curs."
+
+msgid "Wiki categories enabled"
+msgstr "Categoriile Wiki activate"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtrare strictă HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Setări Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Setări Wiki actualizate"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Vizualizați o versiune istorică a acestei pagini"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Puteți atașa unul sau mai multe fișiere la acest răspuns."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Puteți edita această pagină de temă, dar paginile de lucru ale cursanților nu vor fi modificate."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Puteți utiliza etichetele {{class_name}} și {{student_full_name}} în întrebare."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Aveți 20 de minute pentru a edita această pagină înainte ca blocarea editării să expire."
+
+msgid "by"
+msgstr "de"
+
+msgid "required"
+msgstr "obligatoriu"
+
+msgid "Incorrect password."
+msgstr "Parolă incorectă."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Alertarea integrității fișierelor a fost întreruptă pentru 1 oră."
+
+msgid "New baseline established: %s files."
+msgstr "Noua linie de bază stabilită: %s fișiere."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scanare finalizată: au fost detectate modificări."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scanare finalizată: nu au fost detectate modificări."
+
+msgid "File integrity"
+msgstr "Integritate fișiere"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Acest raport compară fișierele instalate (totul cu excepția var/ și .git/, deși .git/config este totuși monitorizat pentru a detecta o preluare neautorizată a remote-ului) cu o linie de bază de încredere, pentru a detecta adăugări, modificări sau ștergeri neașteptate."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Puteți consulta cel mai recent raport mai jos. Executarea unei scanări, întreruperea alertării sau stabilirea unei noi linii de bază necesită un administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Alertarea este momentan întreruptă pentru întreținere. Va relua automat la %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Nu a fost executată nicio scanare încă. Executați una de aici sau din linia de comandă cu app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Ultima scanare"
+
+msgid "Files scanned"
+msgstr "Fișiere scanate"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Nu exista încă nicio linie de bază: această scanare a stabilit una. Modificările vor fi raportate începând cu următoarea scanare."
+
+msgid "No changes detected since the baseline."
+msgstr "Nu au fost detectate modificări față de linia de bază."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Configurația remote Git (.git/config) a fost modificată. Verificați dacă acest lucru era așteptat."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Scanarea s-a oprit prematur deoarece un subdirector nu a putut fi citit (verificați permisiunile fișierelor). Rezultatele de mai jos pot fi parțiale."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Prea multe modificări pentru a fi afișate integral; doar primele intrări din fiecare categorie sunt afișate mai jos. Consultați jurnalul CEF pentru lista completă."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% fișier(e) nu au putut fi citite (permisiuni) și au fost omise."
+
+msgid "Run a scan now"
+msgstr "Executați o scanare acum"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Întrerupeți alertarea pentru 1 oră (pentru întreținere)"
+
+msgid "Pause for 1 hour"
+msgstr "Întrerupeți pentru 1 oră"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Încredeți-vă în arborele de fișiere curent ca nouă linie de bază"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Aceasta va considera fiecare fișier curent ca fiind corect, inclusiv orice modificare nerevizuită. Continuați?"
+
+msgid "Establish new baseline"
+msgstr "Stabiliți o nouă linie de referință"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Programați scanarea dintr-un crontab de sistem, de exemplu"
+
+msgid "File integrity alert on %platform%"
+msgstr "Alertă de integritate a fișierelor pe %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "O scanare de integritate a fișierelor a detectat modificări pe platformă:"
+
+msgid "Added files"
+msgstr "Fișiere adăugate"
+
+msgid "Modified files"
+msgstr "Fișiere modificate"
+
+msgid "Deleted files"
+msgstr "Fișiere șterse"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Consultați raportul complet din Administrare > Securitate > Integritate fișiere."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Parolă pentru confirmarea întreruperii alertelor"
+
+msgid "Password to confirm the new baseline"
+msgstr "Parolă pentru confirmarea noii linii de referință"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "O scanare este deja în curs. Vă rugăm să așteptați finalizarea acesteia înainte de a începe alta."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "O scanare este în curs de desfășurare (începută la %date%). O scanare completă poate dura câteva minute; această pagină poate fi reîncărcată în siguranță pentru a verifica progresul."
+
+msgid "Currently processing"
+msgstr "Se procesează în prezent"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "O scanare anterioară (începută la %date%) a fost întreruptă înainte de a se finaliza — procesul nu mai rulează. Puteți începe în siguranță una nouă."
+
+msgid "files"
+msgstr "fișiere"
+
+msgid "Permissions changed"
+msgstr "Permisiuni modificate"
+
+msgid "Files with changed permissions"
+msgstr "Fișiere cu permisiuni modificate"
+
+msgid "Alert history"
+msgstr "Istoric alerte"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Fiecare scanare care a găsit ceva este păstrată chiar și după rezolvarea abaterii sau stabilirea unei noi linii de referință — spre deosebire de raportul de mai sus, o scanare curată sau o reinițializare nu șterge niciodată acest istoric."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Această intrare a fost trunchiată la momentul capturării; consultați jurnalul CEF pentru lista completă."
+
+msgid "No alert has been recorded yet."
+msgstr "Nu a fost înregistrată nicio alertă încă."
+
+msgid "Git remote changed"
+msgstr "Remote Git modificat"
+
+msgid "Press enter to select"
+msgstr "Apăsați Enter pentru a selecta"
+
+msgid "Press enter to remove"
+msgstr "Apăsați Enter pentru a elimina"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Nu s-au găsit elemente. Încercați să modificați interogarea de căutare."
+
+msgid "List is empty."
+msgstr "Lista este goală."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesiunea dvs. a expirat. Vă rugăm să încercați din nou."
+
+msgid "Generate with AI"
+msgstr "Generare cu IA"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "O ilustrație modernă și primitoare care reprezintă tema acestui curs, într-un stil plat curat, folosind culorile platformei mele ca accente."
+
+msgid "Back to account"
+msgstr "Înapoi la cont"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Feedback-ul dvs. ne va ajuta să îmbunătățim sesiunile viitoare de formare."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Vă mulțumim pentru feedback-ul dvs."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cât de mulțumit sunteți de calitatea generală a formării?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cât de mulțumit sunteți de relevanța conținutului?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cât de mulțumit sunteți de claritatea explicațiilor?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cât de mulțumit sunteți de organizarea și ritmul formării?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cât de mulțumit sunteți de utilitatea practică a celor învățate?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ați recomanda această formare altor persoane?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ce ar trebui să îmbunătățim în edițiile viitoare?"
+
+msgid "Very satisfied"
+msgstr "Foarte mulțumit"
+
+msgid "Satisfied"
+msgstr "Mulțumit"
+
+msgid "Neutral"
+msgstr "Neutru"
+
+msgid "Dissatisfied"
+msgstr "Nemulțumit"
+
+msgid "Very dissatisfied"
+msgstr "Foarte nemulțumit"
+
+msgid "Add destination"
+msgstr "Adaugă destinație"
+
+msgid "Add this test to the assessment tool"
+msgstr "Adaugă acest test la instrumentul de evaluare"
+
+msgid "Attempts and timing"
+msgstr "Încercări și durată"
+
+msgid "Available questions"
+msgstr "Întrebări disponibile"
+
+msgid "Cancel and return to learning path"
+msgstr "Anulează și revino la traseul de învățare"
+
+msgid "Category destinations"
+msgstr "Destinații de categorie"
+
+msgid "Classification"
+msgstr "Clasificare"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "Nu s-a putut încărca configurația exercițiului"
+
+msgid "Could not save exercise"
+msgstr "Nu s-a putut salva exercițiul"
+
+msgid "Display and learning path"
+msgstr "Afișare și traseu de învățare"
+
+msgid "Edit test"
+msgstr "Editează testul"
+
+msgid "Exercise settings saved."
+msgstr "Setările exercițiului au fost salvate."
+
+msgid "Extra settings"
+msgstr "Setări suplimentare"
+
+msgid "Feedback and results"
+msgstr "Feedback și rezultate"
+
+msgid "Finish exercise"
+msgstr "Finalizează exercițiul"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifică limba acestui exercițiu ca metadate ale resursei. Nu activează indexarea pentru căutare de unul singur."
+
+msgid "Maximum score (%)"
+msgstr "Scor maxim (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatele conțin competențe și câmpuri suplimentare configurate pentru exerciții. Este opțional și rămâne ascuns până la deschidere."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Nu există încă categorii de întrebări disponibile pentru acest exercițiu."
+
+msgid "Question categories matrix"
+msgstr "Matricea categoriilor de întrebări"
+
+msgid "Questions behavior"
+msgstr "Comportamentul întrebărilor"
+
+msgid "Random by category"
+msgstr "Aleatoriu pe categorie"
+
+msgid "Remove destination"
+msgstr "Elimină destinația"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Regulile sunt evaluate în funcție de procentajul de punctaj în ordine crescătoare. Selectați Termină exercițiul pentru a încheia testul."
+
+msgid "Score and final messages"
+msgstr "Punctaj și mesaje finale"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Unele opțiuni sunt blocate după crearea exercițiului."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Această valoare este stocată ca durată totală în minute."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Utilizați 0 pentru a păstra toate întrebările disponibile. Utilizați -1 acolo unde sunt permise toate întrebările disponibile."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Utilizați aceste câmpuri pentru a clasifica exercițiul independent de opțiunile sale de afișare."
+
+msgid "Invite by email"
+msgstr "Invită prin e-mail"
+
+msgid "Invitation has been sent"
+msgstr "Invitația a fost trimisă"
+
+msgid "Sent on"
+msgstr "Trimis la"
+
+msgid "Accepted on"
+msgstr "Acceptat la"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Acest curs este deschis într-o sesiune. Trimiterea unei invitații aici va abona destinatarul la întreaga sesiune %s, nu doar la acest curs."
+
+msgid "Revoke"
+msgstr "Revocă"
+
+msgid "Revoked"
+msgstr "Revocat"
+
+msgid "Invitation has been revoked"
+msgstr "Invitația a fost revocată"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Sigur doriți să revocați invitația trimisă către %s?"
+
+msgid "No default room"
+msgstr "Nicio sală implicită"
+
+msgid "Floor"
+msgstr "Etaj"
+
+msgid "Capacity"
+msgstr "Capacitate"
+
+msgid "Use attendance default room"
+msgstr "Folosește sala implicită pentru prezență"
+
+msgid "Floor number"
+msgstr "Număr etaj"
+
+msgid "Copy to students"
+msgstr "Copiază la studenți"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generează un test rapid pe acest subiect"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Conținutul documentului salvat va fi trimis unui model AI pentru procesare."
+
+msgid "MCP API key"
+msgstr "Cheie API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicații autorizate"
+
+msgid "Your session is about to expire"
+msgstr "Sesiunea dvs. este pe cale să expire"
+
+msgid "Do you want to continue your session?"
+msgstr "Doriți să continuați sesiunea?"
+
+msgid "Stay connected"
+msgstr "Rămâneți conectat"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Veți fi deconectat în %s secunde."
+
+msgid "No descriptions available yet."
+msgstr "Nu există descrieri disponibile încă."
+
+msgid "%s users selected"
+msgstr "%s utilizatori selectați"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Utilizatorii selectați au fost înscriși la curs"
+
+msgid "Import teachers"
+msgstr "Import profesori"
+
+msgid "Import learners"
+msgstr "Import cursanți"
+
+msgid "Select CSV file"
+msgstr "Selectați fișierul CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Anumiți utilizatori nu au putut fi înscriși"
+
+msgid "Browse available classes"
+msgstr "Răsfoiți clasele disponibile"
+
+msgid "Back to linked classes"
+msgstr "Înapoi la clasele asociate"
+
+msgid "No classes are currently linked to this course."
+msgstr "Nu există clase asociate acestui curs."
+
+msgid "No available classes were found for this course."
+msgstr "Nu s-au găsit clase disponibile pentru acest curs."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Sigur doriți să dezabonați utilizatorii selectați?"
+
+msgid "Learning path access"
+msgstr "Acces la parcursul de învățare"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Doar utilizatorii și grupurile selectate pot accesa acest parcurs de învățare. Gestionați-le după salvare."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Toți utilizatorii actuali și viitori ai cursului pot accesa acest parcurs de învățare."
+
+msgid "All course users"
+msgstr "Toți utilizatorii cursului"
+
+msgid "Selected users and groups"
+msgstr "Utilizatori și grupuri selectate"
+
+msgid "No access"
+msgstr "Fără acces"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Doar utilizatorii și grupurile adăugate aici pot accesa acest parcurs de învățare."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Numărul de întrebări este limitat la maximum %s"
+
+msgid "Open exercise player"
+msgstr "Deschide player-ul de exerciții"
+
+msgid "The score is hidden for this exercise."
+msgstr "Scorul este ascuns pentru acest exercițiu."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Corectările sunt ascunse conform setărilor rezultatelor exercițiului."
+
+msgid "Progressive adaptive result"
+msgstr "Rezultat adaptiv progresiv"
+
+msgid "Achieved level"
+msgstr "Nivel atins"
+
+msgid "Correction history"
+msgstr "Istoric corecții"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Istoric al corecțiilor manuale efectuate pentru această încercare."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Acest exercițiu folosește modul de rezultat radar/păianjen. Graficul nu este disponibil pe această pagină."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Detaliile întrebărilor sunt ascunse conform setărilor rezultatelor exercițiului."
+
+msgid "Media question"
+msgstr "Întrebare media"
+
+msgid "Pending correction"
+msgstr "Corecție în așteptare"
+
+msgid "No answer"
+msgstr "Fără răspuns"
+
+msgid "Blank %s"
+msgstr "Spațiu gol %s"
+
+msgid "Your order"
+msgstr "Ordinea dvs."
+
+msgid "Correct order"
+msgstr "Ordinea corectă"
+
+msgid "Delineation review"
+msgstr "Revizuire delimitare"
+
+msgid "Learner clicks"
+msgstr "Clicuri cursant"
+
+msgid "Question image"
+msgstr "Imagine întrebare"
+
+msgid "No hotspot image available"
+msgstr "Nu există imagine hotspot disponibilă"
+
+msgid "Learner delineation"
+msgstr "Delimitare cursant"
+
+msgid "Expected delineation"
+msgstr "Delimitare așteptată"
+
+msgid "Expected zones"
+msgstr "Zone așteptate"
+
+msgid "Zone"
+msgstr "Zonă"
+
+msgid "Learner annotation"
+msgstr "Adnotare cursant"
+
+msgid "No annotation image available"
+msgstr "Nu există imagine de adnotare disponibilă"
+
+msgid "This answer is pending teacher correction."
+msgstr "Acest răspuns așteaptă corecția profesorului."
+
+msgid "Teacher comment"
+msgstr "Comentariu profesor"
+
+msgid "Teacher correction"
+msgstr "Corecție profesor"
+
+msgid "Save correction"
+msgstr "Salvează corecția"
+
+msgid "Learner audio"
+msgstr "Audio cursant"
+
+msgid "Download audio"
+msgstr "Descarcă audio"
+
+msgid "No uploaded audio"
+msgstr "Niciun audio încărcat"
+
+msgid "Learner Office document"
+msgstr "Document Office al cursantului"
+
+msgid "Learner file"
+msgstr "Fișier al cursantului"
+
+msgid "Download Office document"
+msgstr "Descarcă document Office"
+
+msgid "No submitted document"
+msgstr "Niciun document depus"
+
+msgid "No uploaded file"
+msgstr "Niciun fișier încărcat"
+
+msgid "Content item"
+msgstr "Element de conținut"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Acest tip de întrebare nu poate fi revizuit pe această pagină."
+
+msgid "Exercise completed"
+msgstr "Exercițiu finalizat"
+
+msgid "Could not start the attempt"
+msgstr "Nu s-a putut începe încercarea"
+
+msgid "Invalid exercise attempt"
+msgstr "Încercare de exercițiu invalidă"
+
+msgid "Could not load exercise result"
+msgstr "Nu s-a putut încărca rezultatul exercițiului"
+
+msgid "Could not load AI providers"
+msgstr "Nu s-au putut încărca furnizorii AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nu s-a putut genera sugestia AI"
+
+msgid "Correction saved"
+msgstr "Corectare salvată"
+
+msgid "Could not save correction"
+msgstr "Nu s-a putut salva corectarea"
+
+msgid "Create exercise"
+msgstr "Creează exercițiu"
+
+msgid "Exercise categories"
+msgstr "Categorii de exerciții"
+
+msgid "Question categories"
+msgstr "Categorii de întrebări"
+
+msgid "Search by exercise title or description."
+msgstr "Caută după titlul sau descrierea exercițiului."
+
+msgid "Search exercises"
+msgstr "Caută exerciții"
+
+msgid "No exercises found"
+msgstr "Niciun exercițiu găsit"
+
+msgid "Open exercise"
+msgstr "Deschide exercițiul"
+
+msgid "Disable autolaunch"
+msgstr "Dezactivează lansarea automată"
+
+msgid "Enable autolaunch"
+msgstr "Activează lansarea automată"
+
+msgid "Export QTI2"
+msgstr "Export QTI2"
+
+msgid "Bulk actions"
+msgstr "Acțiuni în masă"
+
+msgid "Selected exercises"
+msgstr "Exerciții selectate"
+
+msgid "No exercises selected"
+msgstr "Niciun exercițiu selectat"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Sigur doriți să aplicați această acțiune exercițiilor selectate?"
+
+msgid "Bulk action completed"
+msgstr "Acțiune în masă finalizată"
+
+msgid "Could not update exercises"
+msgstr "Nu s-au putut actualiza exercițiile"
+
+msgid "Could not update exercise"
+msgstr "Nu s-a putut actualiza exercițiul"
+
+msgid "Copy exercise"
+msgstr "Copiază exercițiul"
+
+msgid "Delete exercise"
+msgstr "Șterge exercițiul"
+
+msgid "Could not load exercises"
+msgstr "Nu s-au putut încărca exercițiile"
+
+msgid "No limit"
+msgstr "Fără limită"
+
+msgid "Add selected questions to the test"
+msgstr "Adaugă întrebările selectate la test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Această întrebare este utilizată într-un test activ și nu poate fi editată aici."
+
+msgid "This question cannot be edited here."
+msgstr "Această întrebare nu poate fi editată aici."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Această întrebare este utilizată într-un test activ și nu poate fi ștearsă aici."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Această întrebare nu poate fi ștearsă deoarece accesul dvs. este limitat de setările platformei."
+
+msgid "Already in test"
+msgstr "Deja în test"
+
+msgid "Select at least one question."
+msgstr "Selectați cel puțin o întrebare."
+
+msgid "Question bank updated"
+msgstr "Banca de întrebări actualizată"
+
+msgid "Could not update the question bank"
+msgstr "Nu s-a putut actualiza banca de întrebări"
+
+msgid "Could not load the question bank"
+msgstr "Nu s-a putut încărca banca de întrebări"
+
+msgid "Total score"
+msgstr "Scor total"
+
+msgid "Starting"
+msgstr "Începe"
+
+msgid "Attempt history"
+msgstr "Istoric încercări"
+
+msgid "No attempts yet"
+msgstr "Nicio încercare încă"
+
+msgid "Invalid exercise"
+msgstr "Exercițiu invalid"
+
+msgid "Could not load exercise overview"
+msgstr "Nu s-a putut încărca prezentarea exercițiului"
+
+msgid "Open test"
+msgstr "Deschide testul"
+
+msgid "Random answers"
+msgstr "Răspunsuri aleatorii"
+
+msgid "Prevent moving backwards"
+msgstr "Prevenire revenire"
+
+msgid "Previous button hidden"
+msgstr "Butonul precedent ascuns"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Acest exercițiu folosește opțiuni ce necesită un alt player de test."
+
+msgid "Continue test"
+msgstr "Continuă testul"
+
+msgid "Attempt started"
+msgstr "Încercare începută"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Previzualizarea profesorului nu creează o încercare urmărită."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Începe sau reia o încercare la exercițiu. Răspunsurile preliminare pot fi salvate înainte de trimiterea finală."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Timpul limită a fost atins. Se finalizează încercarea."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Timpul pentru întrebare a fost atins. Se salvează răspunsul."
+
+msgid "Finishing"
+msgstr "Se finalizează"
+
+msgid "Draft saved"
+msgstr "Ciornă salvată"
+
+msgid "Statement"
+msgstr "Enunț"
+
+msgid "Drop each option on the matching answer"
+msgstr "Plasați fiecare opțiune pe răspunsul corespunzător"
+
+msgid "Clear match"
+msgstr "Șterge asocierea"
+
+msgid "Click to place the selected option here"
+msgstr "Faceți clic pentru a plasa opțiunea selectată aici"
+
+msgid "Select an option, then click here"
+msgstr "Selectați o opțiune, apoi faceți clic aici"
+
+msgid "Already matched"
+msgstr "Deja asociat"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Puteți trage o opțiune pe un răspuns sau selectați o opțiune și apoi faceți clic pe o casetă țintă."
+
+msgid "Put the items in the correct order."
+msgstr "Puneți elementele în ordinea corectă."
+
+msgid "Move left"
+msgstr "Mută la stânga"
+
+msgid "Move right"
+msgstr "Mută la dreapta"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Puteți trage elementele la stânga sau la dreapta sau folosiți butoanele de mutare pentru a schimba ordinea."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Puteți trage elementele sau folosiți butoanele de mutare pentru a schimba ordinea."
+
+msgid "Or upload an audio file"
+msgstr "Sau încărcați un fișier audio"
+
+msgid "Selected audio"
+msgstr "Audio selectat"
+
+msgid "Uploaded audio"
+msgstr "Audio încărcat"
+
+msgid "Office document"
+msgstr "Document Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Completați documentul în editorul de mai jos. Fișierul va fi atașat la această încercare pentru corectare de către profesor."
+
+msgid "Reload Office editor"
+msgstr "Reîncarcă editorul Office"
+
+msgid "Prepare Office document"
+msgstr "Pregătește documentul Office"
+
+msgid "Open in new tab"
+msgstr "Deschide într-o filă nouă"
+
+msgid "Preparing Office document"
+msgstr "Se pregătește documentul Office"
+
+msgid "Submitted document"
+msgstr "Document trimis"
+
+msgid "Annotation tools"
+msgstr "Instrumente de adnotare"
+
+msgid "Text to place"
+msgstr "Text de plasat"
+
+msgid "Click the image to place the text annotation."
+msgstr "Faceți clic pe imagine pentru a plasa adnotarea text."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Faceți clic pe imagine pentru a adăuga puncte de traseu. Folosiți „Începe traseu nou” pentru a separa traseele."
+
+msgid "Start new path"
+msgstr "Începe traseu nou"
+
+msgid "Current annotations"
+msgstr "Adnotări curente"
+
+msgid "Remove point"
+msgstr "Elimină punct"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Faceți clic pe imagine pentru a desena poligonul de delimitare."
+
+msgid "Click a marker to remove it."
+msgstr "Faceți clic pe un marcator pentru a-l elimina."
+
+msgid "Placed"
+msgstr "Plasat"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Selectați un răspuns, apoi faceți clic pe imagine pentru a-l marca."
+
+msgid "Reading speed"
+msgstr "Viteză de citire"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Acest tip de întrebare nu poate fi afișat în acest player."
+
+msgid "Save draft"
+msgstr "Salvează ciornă"
+
+msgid "I confirm that my answers were saved."
+msgstr "Confirm că răspunsurile mele au fost salvate."
+
+msgid "Finish test"
+msgstr "Finalizează testul"
+
+msgid "Attempt finished"
+msgstr "Încercare finalizată"
+
+msgid "Question category"
+msgstr "Categorie de întrebări"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Ați terminat întrebările legate de această categorie de întrebări, este ultima șansă de a reveni și de a revizui acele întrebări."
+
+msgid "Question time left"
+msgstr "Timp rămas pentru întrebare"
+
+msgid "Time left"
+msgstr "Timp rămas"
+
+msgid "Current attempt"
+msgstr "Încercare curentă"
+
+msgid "Could not save draft answer"
+msgstr "Nu s-a putut salva răspunsul ciornă"
+
+msgid "Could not load exercise"
+msgstr "Nu s-a putut încărca exercițiul"
+
+msgid "Draft answer saved"
+msgstr "Răspuns ciornă salvat"
+
+msgid "Could not finish the attempt"
+msgstr "Nu s-a putut finaliza încercarea"
+
+msgid "Could not prepare Office document"
+msgstr "Nu s-a putut pregăti documentul Office"
+
+msgid "Back to learner score"
+msgstr "Înapoi la scorul cursantului"
+
+msgid "Disable auto refresh"
+msgstr "Dezactivează reîmprospătarea automată"
+
+msgid "Enable auto refresh"
+msgstr "Activează reîmprospătarea automată"
+
+msgid "Live window"
+msgstr "Fereastră live"
+
+msgid "Ongoing attempts"
+msgstr "Încercări în curs"
+
+msgid "Completed attempts"
+msgstr "Încercări finalizate"
+
+msgid "Started"
+msgstr "Început"
+
+msgid "Last activity"
+msgstr "Ultima activitate"
+
+msgid "Could not load live results"
+msgstr "Nu s-au putut încărca rezultatele live"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Acest exercițiu este doar pentru citire deoarece este inclus într-o cale de învățare."
+
+msgid "Select a question type to create a question."
+msgstr "Selectați un tip de întrebare pentru a crea o întrebare."
+
+msgid "Click to preview"
+msgstr "Faceți clic pentru previzualizare"
+
+msgid "Hide preview"
+msgstr "Ascunde previzualizarea"
+
+msgid "Shape"
+msgstr "Formă"
+
+msgid "Coordinates"
+msgstr "Coordonate"
+
+msgid "Blanks"
+msgstr "Spații libere"
+
+msgid "Switchable blanks"
+msgstr "Spații libere comutabile"
+
+msgid "Blank"
+msgstr "Spațiu liber"
+
+msgid "Input width"
+msgstr "Lățime câmp de introducere"
+
+msgid "Orientation"
+msgstr "Orientare"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Indisponibil cu modul actual de feedback al exercițiului"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Indisponibil în fluxul de creare a căii de învățare"
+
+msgid "Delete question"
+msgstr "Șterge întrebarea"
+
+msgid "Could not update exercise questions"
+msgstr "Nu s-au putut actualiza întrebările exercițiului"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nu s-a putut adăuga exercițiul la calea de învățare"
+
+msgid "A valid exercise id is required."
+msgstr "Este necesar un ID de exercițiu valid."
+
+msgid "Could not load exercise questions"
+msgstr "Nu s-au putut încărca întrebările exercițiului"
+
+msgid "Delete selected attempts"
+msgstr "Șterge încercările selectate"
+
+msgid "Before date"
+msgstr "Înainte de data"
+
+msgid "Pending corrections"
+msgstr "Corectări în așteptare"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Acest exercițiu este blocat de catalogul de note. Acțiunile de curățare a încercărilor sunt dezactivate."
+
+msgid "No attempts found"
+msgstr "Nu s-au găsit încercări"
+
+msgid "Review"
+msgstr "Revizuire"
+
+msgid "Print/PDF"
+msgstr "Imprimare/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nu s-a putut încărca raportul exercițiului"
+
+msgid "Select at least one attempt"
+msgstr "Selectați cel puțin o încercare"
+
+msgid "Delete selected attempts?"
+msgstr "Ștergeți încercările selectate?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Trimiteți e-mailuri cu rezultatele încercărilor evaluate?"
+
+msgid "Could not send emails"
+msgstr "Nu s-au putut trimite e-mailurile"
+
+msgid "Exercise result emails sent"
+msgstr "E-mailurile cu rezultatele exercițiilor au fost trimise"
+
+msgid "Skipped"
+msgstr "Omis"
+
+msgid "Close attempt?"
+msgstr "Închideți încercarea?"
+
+msgid "Attempt closed"
+msgstr "Încercare închisă"
+
+msgid "Could not close attempt"
+msgstr "Nu s-a putut închide încercarea"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Trimiteți rezultatul acestei încercări prin e-mail cursantului?"
+
+msgid "Email sent"
+msgstr "E-mail trimis"
+
+msgid "Could not send email"
+msgstr "Nu s-a putut trimite e-mailul"
+
+msgid "Attempt deleted"
+msgstr "Încercare ștearsă"
+
+msgid "Could not delete attempt"
+msgstr "Nu s-a putut șterge încercarea"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Selectați un fișier CSV care conține coloanele titlu și descriere."
+
+msgid "Manage categories used to classify questions."
+msgstr "Gestionați categoriile utilizate pentru clasificarea întrebărilor."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gestionați categoriile utilizate pentru clasificarea exercițiilor."
+
+msgid "Could not load categories"
+msgstr "Nu s-au putut încărca categoriile"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categorii importate: %s. Rânduri omise: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categorii importate: %s."
+
+msgid "Could not import categories"
+msgstr "Nu s-au putut importa categoriile"
+
+msgid "Could not save category"
+msgstr "Nu s-a putut salva categoria"
+
+msgid "Answer distribution"
+msgstr "Distribuția răspunsurilor"
+
+msgid "Configured answers"
+msgstr "Răspunsuri configurate"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Numărarea detaliată a răspunsurilor pentru anumite tipuri de întrebări nu este disponibilă încă în raportul migrat."
+
+msgid "No report by question data found"
+msgstr "Nu s-au găsit date pentru raportul pe întrebări"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Numărarea detaliată a răspunsurilor pentru acest tip de întrebare nu este disponibilă încă în raportul migrat."
+
+msgid "No answer distribution found"
+msgstr "Nu s-a găsit nicio distribuție a răspunsurilor"
+
+msgid "Could not load report by question"
+msgstr "Nu s-a putut încărca raportul pe întrebări"
+
+msgid "Question settings"
+msgstr "Setări întrebare"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Lăsați gol sau 0 pentru nicio limită de timp."
+
+msgid "Time limit in seconds"
+msgstr "Limită de timp în secunde"
+
+msgid "Attached questions"
+msgstr "Întrebări atașate"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Aici sunt listate doar întrebările atașate la această întrebare media din exercițiul curent."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Nicio întrebare nu este atașată la această întrebare media în exercițiul curent."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Încărcați șablonul de document Office pe care cursanții îl vor edita cu OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Înlocuiți documentul Office"
+
+msgid "Current Office document"
+msgstr "Documentul Office curent"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Această întrebare este corectată manual după ce cursantul trimite documentul editat."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Scorul total se calculează ca suma scorurilor hotspot."
+
+msgid "Global score"
+msgstr "Scor global"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Selectați un rând hotspot, alegeți forma acestuia, apoi desenați pe imagine. Pentru poligoane, faceți clic pe fiecare punct și finalizați poligonul sau faceți dublu clic pentru a finaliza."
+
+msgid "Finish polygon"
+msgstr "Finalizați poligonul"
+
+msgid "Calculated answer"
+msgstr "Răspuns calculat"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Tastați textul mai jos și utilizați paranteze pătrate [...] pentru a defini unul sau mai multe spații libere."
+
+msgid "Lowest value"
+msgstr "Valoarea minimă"
+
+msgid "Highest value"
+msgstr "Valoarea maximă"
+
+msgid "Fill in blanks"
+msgstr "Completare spații libere"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Utilizați marcatorii selectați pentru a defini spațiile libere. Exemplu: Capitala Peru este [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Introduceți opțiunile dropdown, câte un răspuns pe linie. Apoi marcați răspunsurile așteptate mai jos, similar instrumentului legacy."
+
+msgid "Refresh answers"
+msgstr "Reîmprospătează răspunsurile"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Această întrebare de tip dropdown combinat utilizează un scor global unic, similar instrumentului legacy."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Introduceți cel puțin două opțiuni dropdown."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Creați mai întâi opțiunile destinație, apoi asociați fiecare element cu opțiunea corectă."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Această întrebare de tip asociere combinată utilizează un scor global unic, similar instrumentului legacy."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Creați pașii și alegeți poziția așteptată pentru fiecare, similar instrumentului legacy Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Cursanții vor alege Adevărat sau Fals și apoi vor selecta gradul de certitudine în timpul încercării. Editorul stochează aceleași scoruri Corect/Greșit și niveluri de certitudine ca instrumentul legacy."
+
+msgid "Hotspot combination"
+msgstr "Combinație hotspot"
+
+msgid "Add delineation"
+msgstr "Adaugă delimitare"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Această întrebare de tip document Office nu are opțiuni de răspuns. Scorul este atribuit în timpul corectării/revizuirii rezultatelor."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Această întrebare de tip încărcare nu are opțiuni de răspuns. Scorul este atribuit în timpul corectării/revizuirii rezultatelor."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Această întrebare de tip expresie orală nu are opțiuni de răspuns. Scorul este atribuit în timpul corectării/revizuirii rezultatelor."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Această întrebare deschisă nu are opțiuni de răspuns. Scorul este atribuit în timpul corectării/revizuirii rezultatelor."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Adaugă un text de lectură cu setări de viteză de derulare."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Adaugă conținut, media sau context de lectură fără a adăuga punctaj."
+
+msgid "Insert a page break without adding score."
+msgstr "Inserează o întrerupere de pagină fără a adăuga punctaj."
+
+msgid "Could not save question"
+msgstr "Nu s-a putut salva întrebarea"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Sunt permise doar documente DOC, DOCX, XLS sau XLSX."
+
+msgid "Please select an Office document."
+msgstr "Selectați un document Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Desenați cel puțin un hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Desenați cel puțin o delimitare."
+
+msgid "The fill in blanks text is required."
+msgstr "Textul pentru completarea spațiilor libere este obligatoriu."
+
+msgid "At least one expected answer is required."
+msgstr "Este necesar cel puțin un răspuns așteptat."
+
+msgid "At least two draggable items are required."
+msgstr "Sunt necesare cel puțin două elemente glisabile."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Fiecare element glisabil trebuie asociat cu o poziție țintă validă."
+
+msgid "At least two matching options are required."
+msgstr "Sunt necesare cel puțin două opțiuni de asociere."
+
+msgid "At least two matching pairs are required."
+msgstr "Sunt necesare cel puțin două perechi de asociere."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Fiecare pereche de asociere trebuie legată de o opțiune validă."
+
+msgid "At least two answers are required."
+msgstr "Sunt necesare cel puțin două răspunsuri."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Fiecare răspuns adevărat/fals trebuie să aibă selectat Adevărat sau Fals."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "O întrebare cu răspuns unic trebuie să aibă exact un răspuns corect."
+
+msgid "At least one correct answer is required."
+msgstr "Este necesar cel puțin un răspuns corect."
+
+msgid "Could not load question"
+msgstr "Nu s-a putut încărca întrebarea"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Selectați un curs și exportați raportul global al rezultatelor exercițiului ca CSV."
+
+msgid "Back to reports catalog"
+msgstr "Înapoi la catalogul de rapoarte"
+
+msgid "Could not load exercise global report"
+msgstr "Nu s-a putut încărca raportul global al exercițiului"
+
+msgid "Imported questions"
+msgstr "Întrebări importate"
+
+msgid "Aiken content"
+msgstr "Conținut Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Nu s-a putut încărca generatorul AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Nu s-a putut genera conținut Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Nu s-a putut importa conținutul Aiken generat"
+
+msgid "Back to my courses"
+msgstr "Înapoi la cursurile mele"
+
+msgid "Open report"
+msgstr "Deschide raportul"
+
+msgid "Questions with no automatic correction"
+msgstr "Întrebări fără corectare automată"
+
+msgid "Could not load pending attempts"
+msgstr "Nu s-a putut încărca încercările în așteptare"
+
+msgid "Skipped questions"
+msgstr "Întrebări omise"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Importul Aiken distribuie această greutate totală între întrebările importate, cu excepția cazului în care o întrebare definește SCORE."
+
+msgid "Import warnings"
+msgstr "Avertismente la import"
+
+msgid "Could not import questions"
+msgstr "Nu s-au putut importa întrebările"
+
+msgid "No question statistics found"
+msgstr "Nu s-au găsit statistici pentru întrebări"
+
+msgid "Could not load question statistics"
+msgstr "Nu s-au putut încărca statisticile întrebărilor"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "De asemenea, puteți conecta direct un client MCP indicând următorul punct final:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Nu există aplicații conectate la contul dvs. în prezent."
+
+msgid "Connected on"
+msgstr "Conectat la"
+
+msgid "Last used"
+msgstr "Ultima utilizare"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s nu va mai putea accesa contul dvs. Chamilo. Continuați?"
+
+msgid "Application revoked"
+msgstr "Aplicație revocată"
+
+msgid "Copied to clipboard"
+msgstr "Copiat în clipboard"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nu s-a putut copia punctul final MCP"
+
+msgid "MCP endpoint"
+msgstr "Punct final MCP"
+
+msgid "API key"
+msgstr "Cheie API"
+
+msgid "Last used at"
+msgstr "Ultima utilizare la"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copiați această cheie acum. Nu va mai fi afișată."
+
+msgid "Rotate API key"
+msgstr "Rotire cheie API"
+
+msgid "Revoke API key"
+msgstr "Revocare cheie API"
+
+msgid "Remote MCP connection"
+msgstr "Conexiune MCP la distanță"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configurați clientul MCP cu următoarele valori:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Cheia actuală va înceta să funcționeze imediat. Continuați?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Va fi generată o nouă cheie API personală MCP. Continuați?"
+
+msgid "MCP API key generated"
+msgstr "Cheie API MCP generată"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Clienții MCP conectați care folosesc această cheie vor înceta să funcționeze imediat. Continuați?"
+
+msgid "MCP API key revoked"
+msgstr "Cheie API MCP revocată"
+
+msgid "Could not copy the API key"
+msgstr "Nu s-a putut copia cheia API"
+
+msgid "Project"
+msgstr "Proiect"
+
+msgid "Close old tickets"
+msgstr "Închide biletele vechi"
+
+msgid "Close tickets older than seven days?"
+msgstr "Închide biletele mai vechi de șapte zile?"
+
+msgid "Assignment history"
+msgstr "Istoric atribuiri"
+
+msgid "Translate with AI"
+msgstr "Traduceți cu IA"
+
+msgid "Target language"
+msgstr "Limba țintă"
+
+msgid "Please select a provider"
+msgstr "Vă rugăm să selectați un furnizor"
+
+msgid "Generate translation"
+msgstr "Generează traducere"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Cel puțin o secțiune de termeni și condiții trebuie să conțină text."
+
+msgid "No active target languages are available."
+msgstr "Nu sunt disponibile limbi țintă active."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Date de acces"
+
+msgid "Coach access dates"
+msgstr "Date de acces ale antrenorului"
+
+msgid "No sessions found"
+msgstr "Nu s-au găsit sesiuni"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Selectați cursurile la care acest utilizator nu trebuie să aibă acces în această sesiune."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Un utilizator nu poate fi blocat de la toate cursurile din sesiune. Dezabonați utilizatorul în schimb."
+
+msgid "Users subscribed to this session"
+msgstr "Utilizatori abonați la această sesiune"
+
+msgid "No available users found"
+msgstr "Nu s-au găsit utilizatori disponibili"
+
+msgid "Subscribe this user to the session?"
+msgstr "Abonați acest utilizator la sesiune?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Abonați utilizatorii selectați la sesiune?"
+
+msgid "General tutor planning"
+msgstr "Planificare generală tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "Utilizatorul este deja înregistrat de un alt tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Primiți o copie deoarece sunteți tutor al cursului"
+
+msgid "General tutor"
+msgstr "Tutor general"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Luați în considerare cursurile, tutorii, un helpdesk tehnic, profesorii și/sau materialele disponibile."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutori abonați ca profesori în cursul %s"
+
+msgid "Tutor name"
+msgstr "Nume tutore"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Tutorii de sesiune sunt coordonatori ai sesiunii și pot acționa ca tutori pentru fiecare curs din sesiune. Doar utilizatorii cu rol de profesor pot fi selectați ca tutori de sesiune."
+
+msgid "Access start date for tutors"
+msgstr "Data de început a accesului pentru tutori"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data la care sesiunea devine disponibilă pentru tutori, astfel încât aceștia să o poată pregăti înainte ca studenții să se conecteze"
+
+msgid "Access end date for tutors"
+msgstr "Data de încheiere a accesului pentru tutori"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data la care sesiunea este închisă pentru tutori. Întârzierea suplimentară le va permite să exporte toate informațiile relevante de monitorizare"
+
+msgid "Tutor and student"
+msgstr "Tutore și student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Acest raport arată distribuția săptămânală a sesiunilor pe tutore general în intervalul de date selectat."
+
+msgid "User is general tutor in some sessions"
+msgstr "Utilizatorul este tutore general în unele sesiuni"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Profesorii vor fi adăugați ca tutori în toate sesiunile de curs."
+
+msgid "Delete failed: invalid question id."
+msgstr "Ștergerea a eșuat: ID întrebare invalid."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Număr mediu de sesiuni pe tutore general de sesiune"
+
+msgid "No room"
+msgstr "Fără sală"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importă profesorii cursului ca tutori de curs în sesiune"
+
+msgid "Clean and update course tutors"
+msgstr "Curăță și actualizează tutorii de curs"
+
+msgid "Add me as tutor"
+msgstr "Adaugă-mă ca tutore"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Imposibil de adăugat chestionarul la calea de învățare"
+
+msgid "Access dates for tutors"
+msgstr "Date de acces pentru tutori"
+
+msgid "Tutor and group member"
+msgstr "Tutore și membru al grupului"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Limita zilnică de tokeni AI a fost atinsă. Încercați din nou mâine."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Limita lunară de tokeni AI a fost atinsă. Încercați din nou luna viitoare."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Acest cod de curs există deja, alegeți alt cod."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Acest titlu de curs există deja, alegeți alt titlu."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Vizibilitatea acestui instrument nu poate fi modificată"
+
+msgid "Invalid visibility"
+msgstr "Vizibilitate invalidă"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Primiți o copie deoarece sunteți unul dintre tutorii cursului"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Primiți o copie deoarece sunteți tutorele cursului"
+
+msgid "Manual completion"
+msgstr "Finalizare manuală"
+
+msgid "Send to tutors"
+msgstr "Trimite tutorilor"
+
+msgid "Lab title"
+msgstr "Titlu laborator"
+
+msgid "Lab week"
+msgstr "Săptămâna laboratorului"
+
+msgid "Final exam access rule"
+msgstr "Regula de acces la examenul final"
+
+msgid "Course completion rule"
+msgstr "Regula de finalizare a cursului"
+
+msgid "You have been invited to join a course"
+msgstr "Ați fost invitat să vă alăturați unui curs"
+
+msgid "No user has been found"
+msgstr "Nu a fost găsit niciun utilizator"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Utilizatorul selectat nu poate fi înscris în acest context"
+
+msgid "No change has been made"
+msgstr "Nu a fost efectuată nicio modificare"
+
+msgid "Back to group list"
+msgstr "Înapoi la lista grupurilor"
+
+msgid "Remove class link"
+msgstr "Elimină legătura cu clasa"
+
+msgid "Group settings"
+msgstr "Setări grup"
+
+msgid "Self-registration allowed"
+msgstr "Auto-înregistrare permisă"
+
+msgid "Self-unregistration allowed"
+msgstr "Auto-dezînregistrare permisă"
+
+msgid "This group is linked to the class"
+msgstr "Acest grup este legat de clasă"
+
+msgid "Create one or more empty course groups"
+msgstr "Creează unul sau mai multe grupuri de curs goale"
+
+msgid "Number of places"
+msgstr "Număr de locuri"
+
+msgid "Base group"
+msgstr "Grup de bază"
+
+msgid "Share"
+msgstr "Partajează"
+
+msgid "Collaboration"
+msgstr "Colaborare"
+
+msgid "The group title is required."
+msgstr "Titlul grupului este obligatoriu."
+
+msgid "Back to group area"
+msgstr "Înapoi la zona grupului"
+
+msgid "Members are managed by the linked class"
+msgstr "Membrii sunt gestionați de clasa asociată"
+
+msgid "%s groups selected"
+msgstr "%s grupuri selectate"
+
+msgid "Fill selected groups"
+msgstr "Completează grupurile selectate"
+
+msgid "Empty selected groups"
+msgstr "Golește grupurile selectate"
+
+msgid "Fill group"
+msgstr "Completează grupul"
+
+msgid "Empty group"
+msgstr "Golește grupul"
+
+msgid "Groups per user"
+msgstr "Grupuri per utilizator"
+
+msgid "No tutors"
+msgstr "Niciun tutore"
+
+msgid "No users"
+msgstr "Niciun utilizator"
 

@@ -15,7 +15,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
@@ -37,7 +36,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_blog')]
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+        ),
         new Post(
             controller: CreateCBlogAction::class,
             openapi: new Operation(
@@ -65,14 +66,14 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'blog:write']],
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Patch(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER')"),
-        new Put(
+        new Patch(security: "is_granted('EDIT', object.resourceNode)"),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Patch(
             uriTemplate: '/c_blogs/{iid}/toggle_visibility',
             controller: UpdateVisibilityBlog::class,
             security: "is_granted('EDIT', object.resourceNode)",

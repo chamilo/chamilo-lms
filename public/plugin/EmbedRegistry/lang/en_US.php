@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Within those dates, this embedded content will
 $strings['HtmlCode'] = 'HTML code';
 $strings['HtmlCodeHelp'] = 'The shared HTML code, as provided by the external service, when asking to share in Embedded format.';
 $strings['LaunchContent'] = 'Launch content';
+
+$strings['InvalidDateRange'] = 'The start date must be earlier than or equal to the end date.';
+
+$strings['InvalidSecurityToken'] = 'Invalid security token. Please reload the page and try again.';

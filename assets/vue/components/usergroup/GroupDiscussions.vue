@@ -18,10 +18,7 @@
         @click="selectDiscussion(discussion)"
       >
         <div class="discussion-content">
-          <div
-            class="discussion-title"
-            v-html="discussion.title"
-          ></div>
+          <div class="discussion-title">{{ discussion.title }}</div>
           <div class="discussion-details">
             <i class="mdi mdi-message-reply-text icon"></i>
             <span>{{ discussion.repliesCount }} {{ t("Replies") }}</span>
@@ -84,7 +81,8 @@
 <script setup>
 import { onMounted, reactive, ref, toRefs } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import socialService from "../../services/socialService"
+import usergroupService from "../../services/usergroupService"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useSocialInfo } from "../../composables/useSocialInfo"
@@ -138,9 +136,7 @@ async function handleSubmit() {
   }
 
   try {
-    const response = await axios.post("/social-network/group-action", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
+    await socialService.groupAction(formData)
   } catch (error) {
     console.error("Error when making request", error)
   }
@@ -149,8 +145,8 @@ async function handleSubmit() {
 onMounted(async () => {
   if (groupId.value) {
     try {
-      const response = await axios.get(`/api/messages/by-group/list?groupId=${groupId.value}`)
-      discussions.value = response.data["hydra:member"].map((discussion) => ({
+      const { items } = await usergroupService.getMessages(groupId.value)
+      discussions.value = items.map((discussion) => ({
         ...discussion,
         repliesCount: discussion.receiversTo.length + discussion.receiversCc.length,
       }))

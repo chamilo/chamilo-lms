@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Nėra pastabų, sukurtų su einamuoju filtru';
 $strings['NoNotebook'] = 'Sistemoje nėra sukurtų pastabų';
 $strings['NoNotebookUser'] = 'Šiam studentui nėra pastabų';
 $strings['NotebookNoStudentAssigned'] = 'Pastabos be priskirtų studentų';
+
+$strings['TeacherNotesHelp'] = 'Kurti privačias mokytojo pastabas, susietas su besimokančiaisiais šiame kurse.';
+$strings['CurrentFilter'] = 'Dabartinis filtras';
+$strings['EmptyStateHelp'] = 'Sukurti naują pastabą arba pakeisti besimokančiųjų filtrą.';

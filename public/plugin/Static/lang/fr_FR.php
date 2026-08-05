@@ -7,3 +7,6 @@
 $strings['plugin_title'] = 'Statique';
 $strings['plugin_comment'] = 'Affiche du contenu html.';
 $strings['block_title'] = 'Titre du bloc';
+
+//$strings['title'] = "Title";
+$strings['content'] = 'Contenu';

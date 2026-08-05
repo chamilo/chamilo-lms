@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'მომხმარებლების მდებარეობის ჩვენება Google რუკაზე, რომელიც ინახება დამატებით ველებში.';
+$strings['enable_api'] = 'Google Maps API-ის ჩატვირთვა';
+$strings['api_key'] = 'API გასაღები';
+$strings['extra_field_name'] = 'დამატებითი ველის სახელი';
+$strings['extra_field_name_help'] = 'შეიყვანეთ ერთი ან მეტი მომხმარებლის დამატებითი ველის ცვლადი, გამოყოფილი მძიმეებით. რუკაზე შესაძლებელია 5 ველის ჩვენება. მაგალითი: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'მომხმარებლების მდებარეობის რუკა';
+$strings['UsersCoordinatesMapHelp'] = 'ეს რუკა აჩვენებს მომხმარებლების მდებარეობას კონფიგურირებული დამატებითი ველების საფუძველზე.';
+$strings['GoogleMapsAdminIntro'] = 'კონფიგურირება გაუკეთეთ Google Maps API გასაღებს და მომხმარებლის დამატებით ველებს, რომლებიც შეიცავს მისამართებს ან მდებარეობებს.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'დამატებითი ველები';
+$strings['Access'] = 'წვდომა';
+$strings['AdministratorsOnly'] = 'მხოლოდ ადმინისტრატორებისთვის';
+$strings['OpenMap'] = 'რუკის გახსნა';
+$strings['ConfigurePlugin'] = 'მოდულის კონფიგურაცია';
+$strings['Configured'] = 'კონფიგურირებულია';
+$strings['NotConfigured'] = 'არ არის კონფიგურირებული';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps API-ის ჩატვირთვა გამორთულია მოდულის კონფიგურაციაში.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API გასაღები არ არის მითითებული.';
+$strings['ExtraFieldNameMissingWarning'] = 'მომხმარებლის არცერთი დამატებითი ველი არ არის კონფიგურირებული.';
+$strings['ExtraFieldsNotFoundWarning'] = 'შემდეგი მომხმარებლის დამატებითი ველები ვერ მოიძებნა: %s.';
+$strings['NoUserCoordinatesFound'] = 'კონფიგურირებული დამატებითი ველებისთვის მომხმარებლის მდებარეობა ვერ მოიძებნა.';
+$strings['ConfigureGoogleMapsFirst'] = 'გახსენით რუკა Google Maps API-ის კონფიგურაციისა და ჩართვის შემდეგ.';
+
+$strings['map_provider'] = 'რუკის პროვაიდერი';
+$strings['map_provider_help'] = 'აირჩიეთ მოდულისა და სოციალური რუკის მიერ გამოყენებული რუკის პროვაიდერი.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'რუკის პროვაიდერი';
+$strings['MapProviderConfiguration'] = 'პროვაიდერის კონფიგურაცია';
+$strings['default_latitude'] = 'ნაგულისხმევი განედი';
+$strings['default_latitude_help'] = 'რუკის ცენტრის ნაგულისხმევი განედი. გამოიყენება, როდესაც მარკერი არ არის ხელმისაწვდომი.';
+$strings['default_longitude'] = 'ნაგულისხმევი გრძედი';
+$strings['default_longitude_help'] = 'რუკის ცენტრის ნაგულისხმევი გრძედი. გამოიყენება, როდესაც მარკერი არ არის ხელმისაწვდომი.';
+$strings['default_zoom'] = 'ნაგულისხმევი მასშტაბი';
+$strings['default_zoom_help'] = 'რუკის ნაგულისხმევი მასშტაბი 1-დან 20-მდე.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap-ს API გასაღები არ სჭირდება. მისამართის მარკერები ნაჩვენებია საძიებო ბმულებად, თუ კოორდინატები არ არის ხელმისაწვდომი.';

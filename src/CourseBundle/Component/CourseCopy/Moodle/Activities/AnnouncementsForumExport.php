@@ -14,7 +14,7 @@ use const PHP_EOL;
  */
 class AnnouncementsForumExport extends ActivityExport
 {
-    public const DEFAULT_MODULE_ID = 48000001;
+    public const int DEFAULT_MODULE_ID = 48000001;
 
     private static int $attachmentFileSeq = 0;
 

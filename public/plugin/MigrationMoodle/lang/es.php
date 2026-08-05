@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importar desde Moodle';
+$strings['plugin_comment'] = 'Ejecutar un proceso de importación desde una base de datos y archivos de Moodle a Chamilo.';
+
+$strings['MoodlePassword'] = 'Contraseña de Moodle';
+$strings['UninstallError'] = 'Ocurrió un error al desinstalar el complemento.';
+
+$strings['db_host'] = 'Servidor de BD de Moodle';
+$strings['db_user'] = 'Usuario de BD de Moodle';
+$strings['db_password'] = 'Contraseña de BD de Moodle';
+$strings['db_name'] = 'Nombre de BD de Moodle';
+$strings['user_filter'] = 'Filtro para usuarios';
+$strings['user_filter_help'] = 'Importar solo usuarios cuyo nombre de usuario tenga este prefijo.<br>La importación de cursos también se ve afectada por esta configuración, ya que solo importa los cursos en los que están inscritos usuarios con este prefijo de nombre de usuario.';
+$strings['url_id'] = 'ID de URL';
+$strings['url_id_help'] = 'ID de URL de acceso donde guardar cursos, usuarios y sesiones (si se usa multi-url).';
+$strings['moodle_path'] = 'Ruta de moodledata';
+$strings['moodle_path_help'] = 'Ruta de la carpeta moodledata. Normalmente algo como <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Usuarios';
+$strings['CourseCategoriesTask'] = 'Categorías de cursos';
+$strings['CoursesTask'] = 'Cursos';
+$strings['CourseSectionsTask'] = 'Secciones de curso';
+$strings['CourseModulesLessonTask'] = 'Módulos de curso: Lecciones';
+$strings['LessonPagesTask'] = 'Páginas de lección';
+$strings['LessonPagesDocumentTask'] = 'Páginas de lección: Documentos';
+$strings['FilesForLessonPagesTask'] = 'Archivos para páginas de lección';
+$strings['LessonPagesQuizTask'] = 'Páginas de lección: Preguntas';
+$strings['LessonPagesQuizQuestionTask'] = 'Preguntas para páginas de preguntas';
+$strings['LessonAnswersTrueFalseTask'] = 'Respuestas para preguntas Verdadero/Falso';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Respuestas para preguntas de Opción Múltiple';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Respuestas para preguntas de Respuesta Múltiple';
+$strings['LessonAnswersMatchingTask'] = 'Respuestas para preguntas de Emparejamiento';
+$strings['LessonAnswersEssayTask'] = 'Respuestas para preguntas de Ensayo';
+$strings['LessonAnswersShortAnswerTask'] = 'Respuestas para preguntas de Respuesta Corta';
+$strings['FilesForLessonAnswersTask'] = 'Archivos para respuestas de lecciones';
+$strings['CourseModulesQuizTask'] = 'Módulos de curso: Cuestionarios';
+$strings['CQuizTask'] = 'Cuestionario C';
+$strings['RoleAssignmentsTask'] = 'Asignaciones de roles';
+$strings['QuizzesTask'] = 'Cuestionarios';
+$strings['FilesForQuizzesTask'] = 'Archivos para cuestionarios';
+$strings['QuestionCategoriesTask'] = 'Categorías de preguntas';
+$strings['QuestionsTask'] = 'Preguntas';
+$strings['QuestionMultiChoiceSingleTask'] = 'Respuestas para preguntas de opción múltiple (única)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Respuestas para preguntas de opción múltiple (múltiples)';
+$strings['QuestionsTrueFalseTask'] = 'Respuestas para preguntas verdadero/falso';
+$strings['QuestionShortAnswerTask'] = 'Respuestas para preguntas de respuesta corta';
+$strings['CourseModulesScormTask'] = 'Cursos SCORM';
+$strings['ScormScoesTask'] = 'Elementos SCORM';
+$strings['FilesForScormScoesTask'] = 'Archivos para elementos SCORM';
+$strings['UserSessionsTask'] = 'Sesiones de curso para usuarios';
+$strings['CourseIntroductionsTask'] = 'Introducciones de curso';
+$strings['FilesForCourseIntroductionsTask'] = 'Archivos para introducciones de curso';
+$strings['FilesForCourseSectionsTask'] = 'Archivos para secciones de curso';
+$strings['CourseModulesUrlTask'] = 'Módulos de curso: URLs';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'Ordenar módulos en la sección';
+$strings['UsersScormsViewTask'] = 'Vistas SCORM por usuarios';
+$strings['UsersScormsProgressTask'] = 'Progreso SCORM';
+$strings['UsersLearnPathsTask'] = 'Vistas de itinerarios de aprendizaje por usuarios';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Temporizador de lección para hora de inicio de la sección de itinerarios de aprendizaje';
+$strings['QuizzesScoresTask'] = 'Actualizar puntuaciones de exámenes en itinerario de aprendizaje';
+$strings['QuestionGapselectTask'] = 'Respuestas para preguntas de completar huecos';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Rama de lección a tiempo total en documentos de itinerarios de aprendizaje';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Intentos de lección a tiempo total en exámenes de itinerarios de aprendizaje';
+$strings['UsersLearnPathsQuizzesTask'] = 'Intentos de exámenes a intentos de exámenes en itinerarios de aprendizaje';
+$strings['UsersQuizzesAttemptsTask'] = 'Intentos de exámenes por usuarios';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Intentos de preguntas por usuarios para respuesta corta';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Intentos de preguntas por usuarios para completar huecos';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Intentos de preguntas por usuarios para verdadero/falso';
+$strings['UsersLastLoginTask'] = 'Últimos inicios de sesión de usuarios';
+$strings['TrackLoginTask'] = 'Primer inicio de sesión y último cierre de sesión';
+$strings['TrackCourseAccessTask'] = 'Acceso de usuario al curso';
+$strings['UserLearnPathsProgressScript'] = 'Actualizar progreso en itinerarios de aprendizaje para usuarios.';
+$strings['UserScormsProgressScript'] = 'Actualizar progreso en SCORM para usuarios.';
+
+$strings['InstallError'] = 'Ocurrió un error al instalar el complemento: %s';
+$strings['AdminIntro'] = 'Ejecutar las tareas de migración de Moodle en orden. Cada paso se habilita solo después de que su paso padre se haya completado.';
+$strings['MoodleDatabase'] = 'Base de datos de Moodle';
+$strings['MoodledataPath'] = 'Ruta de Moodledata';
+$strings['AccessUrlId'] = 'ID de URL de acceso';
+$strings['Configured'] = 'Configurado';
+$strings['NotConfigured'] = 'No configurado';
+$strings['ConfigurePlugin'] = 'Configurar complemento';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Configure el servidor, usuario y nombre de la base de datos de Moodle antes de ejecutar las tareas de migración.';
+$strings['MissingMoodledataPathWarning'] = 'La ruta de Moodledata está vacía. Las tareas relacionadas con archivos pueden fallar hasta que se configure esta opción.';
+$strings['InvalidMigrationAction'] = 'Acción de migración no válida.';
+$strings['InvalidSecurityToken'] = 'Token de seguridad no válido. Por favor, recargue la página e inténtelo de nuevo.';
+$strings['MigrationTasks'] = 'Tareas de migración';
+$strings['MaintenanceScripts'] = 'Scripts de mantenimiento';
+$strings['ExecutionOutput'] = 'Salida de ejecución';
+$strings['TaskAlreadyExecuted'] = 'Esta tarea o script ya ha sido ejecutada.';
+$strings['SelectTaskToRun'] = 'Seleccione una tarea de migración para ejecutar. La salida aparecerá aquí.';

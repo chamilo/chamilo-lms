@@ -626,6 +626,14 @@ class SubLanguageManager
      */
     public static function updateOrAddMsgid($filename, $msgid, $content): array
     {
+        // Strip any directory component and enforce the expected .po naming so a
+        // crafted filename (e.g. "../../public/shell.php") cannot escape the
+        // translations directory and overwrite an arbitrary file.
+        $filename = basename((string) $filename);
+        if (1 !== preg_match('/^messages\.[A-Za-z0-9_]+\.po$/', $filename)) {
+            return ['success' => false, 'error' => 'Invalid filename'];
+        }
+
         $filePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  $filename;
 
         if (!file_exists($filePath)) {

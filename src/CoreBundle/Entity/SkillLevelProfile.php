@@ -47,14 +47,6 @@ class SkillLevelProfile implements Stringable
         return $this->getTitle();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
@@ -65,6 +57,14 @@ class SkillLevelProfile implements Stringable
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

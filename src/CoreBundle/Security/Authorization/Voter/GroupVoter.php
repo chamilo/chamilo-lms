@@ -13,9 +13,10 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use GroupManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -24,11 +25,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class GroupVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
-    private Security $security;
+    private AccessDecisionManagerInterface $accessDecisionManager;
     private RequestStack $requestStack;
 
     public function __construct(
@@ -36,12 +37,12 @@ class GroupVoter extends Voter
         // CourseRepository $courseManager,
         // CGroupRepository $groupManager,
         RequestStack $requestStack,
-        Security $security
+        AccessDecisionManagerInterface $accessDecisionManager
     ) {
         // $this->entityManager = $entityManager;
         // $this->courseManager = $courseManager;
         // $this->groupManager = $groupManager;
-        $this->security = $security;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->requestStack = $requestStack;
     }
 
@@ -56,7 +57,7 @@ class GroupVoter extends Voter
         return $subject instanceof CGroup && \in_array($attribute, $options, true);
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -71,7 +72,7 @@ class GroupVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
@@ -93,8 +94,6 @@ class GroupVoter extends Voter
         }
 
         if ($course->hasUserAsTeacher($user)) {
-            $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
             return true;
         }
 
@@ -105,8 +104,6 @@ class GroupVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 if ($isTutor) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
                     return true;
                 }
 
@@ -115,10 +112,6 @@ class GroupVoter extends Voter
                 }
 
                 $userIsInGroup = $group->hasMember($user);
-
-                if ($userIsInGroup) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_STUDENT);
-                }
 
                 $requestUri = '';
                 // Check if user has access in legacy tool.
@@ -133,6 +126,7 @@ class GroupVoter extends Voter
                     '/main/calendar/' => $group->getCalendarState(),
                     '/main/announcements/' => $group->getAnnouncementsState(),
                     '/main/work/' => $group->getWorkState(),
+                    '/resources/wiki/' => $group->getWikiState(),
                     '/main/wiki/' => $group->getWikiState(),
                     /*'/main/group/group_space' => GroupManager::TOOL_PUBLIC,
                     '/main/inc/ajax/model.ajax.php' => GroupManager::TOOL_PUBLIC,
@@ -177,8 +171,6 @@ class GroupVoter extends Voter
             case self::EDIT:
             case self::DELETE:
                 if ($isTutor) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
                     return true;
                 }
 

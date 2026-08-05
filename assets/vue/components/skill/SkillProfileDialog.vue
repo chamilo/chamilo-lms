@@ -66,12 +66,6 @@ async function saveProfile() {
 
     <template #footer>
       <BaseButton
-        :label="t('Cancel')"
-        icon="close"
-        type="black"
-        @click="isVisible = false"
-      />
-      <BaseButton
         :label="t('Save')"
         icon="save"
         type="primary"

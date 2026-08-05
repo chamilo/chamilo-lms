@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'मूडल से आयात करें';
+$strings['plugin_comment'] = 'मूडल डेटाबेस और फ़ाइलों से चमीलो में आयात प्रक्रिया निष्पादित करें।';
+
+$strings['MoodlePassword'] = 'मूडल पासवर्ड';
+$strings['UninstallError'] = 'प्लगइन को अनइंस्टॉल करते समय त्रुटि हुई।';
+
+$strings['db_host'] = 'मूडल डीबी होस्ट';
+$strings['db_user'] = 'मूडल डीबी उपयोगकर्ता';
+$strings['db_password'] = 'मूडल डीबी पासवर्ड';
+$strings['db_name'] = 'मूडल डीबी नाम';
+$strings['user_filter'] = 'उपयोगकर्ताओं के लिए फ़िल्टर';
+$strings['user_filter_help'] = 'केवल उन उपयोगकर्ताओं को आयात करें जिनका उपयोगकर्ता नाम इस स्ट्रिंग से शुरू होता है।<br>पाठ्यक्रमों का आयात भी इस कॉन्फ़िगरेशन से प्रभावित होता है, क्योंकि यह केवल उन पाठ्यक्रमों को आयात करता है जिनमें इस उपयोगकर्ता नाम उपसर्ग वाले उपयोगकर्ता नामांकित हैं।';
+$strings['url_id'] = 'यूआरएल आईडी';
+$strings['url_id_help'] = 'पाठ्यक्रम, उपयोगकर्ता और सत्र सहेजने के लिए एक्सेस यूआरएल आईडी (यदि मल्टी-यूआरएल का उपयोग कर रहे हैं)।';
+$strings['moodle_path'] = 'मूडलडेटा पथ';
+$strings['moodle_path_help'] = 'मूडलडेटा फ़ोल्डर का पथ। आमतौर पर कुछ इस प्रकार <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'उपयोगकर्ता';
+$strings['CourseCategoriesTask'] = 'पाठ्यक्रम श्रेणियाँ';
+$strings['CoursesTask'] = 'पाठ्यक्रम';
+$strings['CourseSectionsTask'] = 'पाठ्यक्रम अनुभाग';
+$strings['CourseModulesLessonTask'] = 'पाठ्यक्रम मॉड्यूल: पाठ';
+$strings['LessonPagesTask'] = 'पाठ पृष्ठ';
+$strings['LessonPagesDocumentTask'] = 'पाठ पृष्ठ: दस्तावेज़';
+$strings['FilesForLessonPagesTask'] = 'पाठ पृष्ठों के लिए फ़ाइलें';
+$strings['LessonPagesQuizTask'] = 'पाठ पृष्ठ: प्रश्न';
+$strings['LessonPagesQuizQuestionTask'] = 'प्रश्न पृष्ठों के लिए प्रश्न';
+$strings['LessonAnswersTrueFalseTask'] = 'सही/गलत प्रश्नों के उत्तर';
+$strings['LessonAnswersMultipleChoiceTask'] = 'बहुविकल्पीय प्रश्नों के उत्तर';
+$strings['LessonAnswersMultipleAnswerTask'] = 'बहु-उत्तर प्रश्नों के उत्तर';
+$strings['LessonAnswersMatchingTask'] = 'मिलान प्रश्नों के उत्तर';
+$strings['LessonAnswersEssayTask'] = 'निबंध प्रश्नों के उत्तर';
+$strings['LessonAnswersShortAnswerTask'] = 'लघु उत्तर प्रश्नों के उत्तर';
+$strings['FilesForLessonAnswersTask'] = 'पाठ उत्तरों के लिए फ़ाइलें';
+$strings['CourseModulesQuizTask'] = 'पाठ्यक्रम मॉड्यूल: क्विज़';
+$strings['CQuizTask'] = 'सी क्विज़';
+$strings['RoleAssignmentsTask'] = 'भूमिका आवंटन';
+$strings['QuizzesTask'] = 'क्विज़';
+$strings['FilesForQuizzesTask'] = 'क्विज़ के लिए फ़ाइलें';
+$strings['QuestionCategoriesTask'] = 'प्रश्न श्रेणियाँ';
+$strings['QuestionsTask'] = 'प्रश्न';
+$strings['QuestionMultiChoiceSingleTask'] = 'बहुविकल्पीय प्रश्नों के उत्तर (एकल)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'बहुविकल्पीय प्रश्नों के उत्तर (बहु)';
+$strings['QuestionsTrueFalseTask'] = 'सही/गलत प्रश्नों के उत्तर';
+$strings['QuestionShortAnswerTask'] = 'लघु उत्तर प्रश्नों के उत्तर';
+$strings['CourseModulesScormTask'] = 'एससीओआरएम पाठ्यक्रम';
+$strings['ScormScoesTask'] = 'एससीओआरएम आइटम';
+$strings['FilesForScormScoesTask'] = 'एससीओआरएम आइटम के लिए फ़ाइलें';
+$strings['UserSessionsTask'] = 'उपयोगकर्ताओं के लिए पाठ्यक्रम सत्र';
+$strings['CourseIntroductionsTask'] = 'पाठ्यक्रम परिचय';
+$strings['FilesForCourseIntroductionsTask'] = 'पाठ्यक्रम परिचय के लिए फ़ाइलें';
+$strings['FilesForCourseSectionsTask'] = 'पाठ्यक्रम अनुभागों के लिए फ़ाइलें';
+$strings['CourseModulesUrlTask'] = 'पाठ्यक्रम मॉड्यूल: यूआरएल';
+$strings['UrlsTask'] = 'यूआरएल';
+$strings['SortSectionModulesTask'] = 'खंड में मॉड्यूल क्रमबद्ध करें';
+$strings['UsersScormsViewTask'] = 'उपयोगकर्ताओं के लिए SCORM दृश्य';
+$strings['UsersScormsProgressTask'] = 'SCORM प्रगति';
+$strings['UsersLearnPathsTask'] = 'उपयोगकर्ताओं के लर्निंग पाथ दृश्य';
+$strings['UsersLearnPathsLessonTimerTask'] = 'लर्निंग पाथ खंड के प्रारंभ समय के लिए पाठ टाइमर';
+$strings['QuizzesScoresTask'] = 'लर्निंग पाथ में क्विज़ स्कोर अपडेट करें';
+$strings['QuestionGapselectTask'] = 'गैपसिलेक्ट प्रश्नों के उत्तर';
+$strings['UsersLearnPathsLessonBranchTask'] = 'लर्निंग पाथ दस्तावेज़ों में कुल समय के लिए पाठ शाखा';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'लर्निंग पाथ क्विज़ में कुल समय के लिए पाठ प्रयास';
+$strings['UsersLearnPathsQuizzesTask'] = 'क्विज़ प्रयास से लर्निंग पाथ क्विज़ प्रयास';
+$strings['UsersQuizzesAttemptsTask'] = 'उपयोगकर्ताओं के क्विज़ प्रयास';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'शॉर्टआंसर के लिए उपयोगकर्ताओं के प्रश्न प्रयास';
+$strings['UserQuestionAttemptsGapselectTask'] = 'गैपसिलेक्ट के लिए उपयोगकर्ताओं के प्रश्न प्रयास';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'ट्रूफॉल्स के लिए उपयोगकर्ताओं के प्रश्न प्रयास';
+$strings['UsersLastLoginTask'] = 'उपयोगकर्ताओं के अंतिम लॉगिन';
+$strings['TrackLoginTask'] = 'पहला लॉगिन और अंतिम लॉगआउट';
+$strings['TrackCourseAccessTask'] = 'पाठ्यक्रम तक उपयोगकर्ता पहुंच';
+$strings['UserLearnPathsProgressScript'] = 'उपयोगकर्ताओं के लिए लर्निंग पाथ में प्रगति अपडेट करें।';
+$strings['UserScormsProgressScript'] = 'उपयोगकर्ताओं के लिए SCORM में प्रगति अपडेट करें।';
+
+$strings['InstallError'] = 'प्लगइन स्थापित करने में त्रुटि हुई: %s';
+$strings['AdminIntro'] = 'मूडल माइग्रेशन कार्यों को क्रम में चलाएं। प्रत्येक चरण केवल तभी सक्षम होता है जब उसका पैरेंट चरण पूरा हो चुका हो।';
+$strings['MoodleDatabase'] = 'मूडल डेटाबेस';
+$strings['MoodledataPath'] = 'मूडलडेटा पथ';
+$strings['AccessUrlId'] = 'एक्सेस यूआरएल आईडी';
+$strings['Configured'] = 'कॉन्फ़िगर किया गया';
+$strings['NotConfigured'] = 'कॉन्फ़िगर नहीं किया गया';
+$strings['ConfigurePlugin'] = 'प्लगइन कॉन्फ़िगर करें';
+$strings['MissingRequiredDatabaseConfiguration'] = 'माइग्रेशन कार्य चलाने से पहले मूडल डेटाबेस होस्ट, उपयोगकर्ता और डेटाबेस नाम कॉन्फ़िगर करें।';
+$strings['MissingMoodledataPathWarning'] = 'मूडलडेटा पथ खाली है। जब तक यह सेटिंग कॉन्फ़िगर नहीं की जाती, फ़ाइल संबंधित कार्य विफल हो सकते हैं।';
+$strings['InvalidMigrationAction'] = 'अमान्य माइग्रेशन क्रिया।';
+$strings['InvalidSecurityToken'] = 'अमान्य सुरक्षा टोकन। कृपया पृष्ठ पुनः लोड करें और पुनः प्रयास करें।';
+$strings['MigrationTasks'] = 'माइग्रेशन कार्य';
+$strings['MaintenanceScripts'] = 'मेंटेनेंस स्क्रिप्ट';
+$strings['ExecutionOutput'] = 'निष्पादन आउटपुट';
+$strings['TaskAlreadyExecuted'] = 'यह कार्य या स्क्रिप्ट पहले ही निष्पादित की जा चुकी है।';
+$strings['SelectTaskToRun'] = 'चलाने के लिए एक माइग्रेशन कार्य चुनें। आउटपुट यहां दिखाई देगा।';

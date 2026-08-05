@@ -206,7 +206,7 @@ trait ReportingFilterTrait
         $courseId = api_get_course_int_id();
 
         $pluginMonitoring = ExerciseMonitoringPlugin::create();
-        $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled(true);
+        $isPluginMonitoringEnabled = $pluginMonitoring->isEnabled();
 
         $detailIcon = Display::getMdiIcon(ActionIcon::LIST);
 

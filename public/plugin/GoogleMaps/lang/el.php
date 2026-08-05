@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Εμφάνιση χάρτη Google με τοποθεσίες χρηστών που είναι αποθηκευμένες σε επιπλέον πεδία.';
+$strings['enable_api'] = 'Φόρτωση Google Maps API';
+$strings['api_key'] = 'Κλειδί API';
+$strings['extra_field_name'] = 'Όνομα επιπλέον πεδίου';
+$strings['extra_field_name_help'] = 'Εισάγετε μία ή περισσότερες μεταβλητές επιπλέον πεδίων χρήστη διαχωρισμένες με κόμματα. Ο χάρτης μπορεί να εμφανίσει έως και 5 πεδία. Παράδειγμα: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Χάρτης τοποθεσιών χρηστών';
+$strings['UsersCoordinatesMapHelp'] = 'Αυτός ο χάρτης εμφανίζει τις τοποθεσίες των χρηστών βάσει των ρυθμισμένων επιπλέον πεδίων χρήστη.';
+$strings['GoogleMapsAdminIntro'] = 'Ρυθμίστε το κλειδί Google Maps API και τα επιπλέον πεδία χρήστη που περιέχουν διευθύνσεις ή τοποθεσίες.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Επιπλέον πεδία';
+$strings['Access'] = 'Πρόσβαση';
+$strings['AdministratorsOnly'] = 'Μόνο διαχειριστές';
+$strings['OpenMap'] = 'Άνοιγμα χάρτη';
+$strings['ConfigurePlugin'] = 'Ρύθμιση πρόσθετου';
+$strings['Configured'] = 'Ρυθμισμένο';
+$strings['NotConfigured'] = 'Μη ρυθμισμένο';
+$strings['GoogleMapsApiDisabledWarning'] = 'Η φόρτωση του Google Maps API είναι απενεργοποιημένη στη ρύθμιση του πρόσθετου.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Λείπει το κλειδί Google Maps API.';
+$strings['ExtraFieldNameMissingWarning'] = 'Δεν έχει ρυθμιστεί κανένα επιπλέον πεδίο χρήστη.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Τα ακόλουθα επιπλέον πεδία χρήστη δεν βρέθηκαν: %s.';
+$strings['NoUserCoordinatesFound'] = 'Δεν βρέθηκαν τοποθεσίες χρηστών για τα ρυθμισμένα επιπλέον πεδία.';
+$strings['ConfigureGoogleMapsFirst'] = 'Ρυθμίστε και ενεργοποιήστε το Google Maps API πριν ανοίξετε τον χάρτη.';
+
+$strings['map_provider'] = 'Πάροχος χάρτη';
+$strings['map_provider_help'] = 'Επιλέξτε τον πάροχο χάρτη που χρησιμοποιείται από το πρόσθετο και από τον Κοινωνικό χάρτη.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Πάροχος χάρτη';
+$strings['MapProviderConfiguration'] = 'Διαμόρφωση παρόχου';
+$strings['default_latitude'] = 'Προεπιλεγμένο γεωγραφικό πλάτος';
+$strings['default_latitude_help'] = 'Προεπιλεγμένο γεωγραφικό πλάτος κέντρου χάρτη. Χρησιμοποιείται όταν δεν υπάρχει διαθέσιμος δείκτης.';
+$strings['default_longitude'] = 'Προεπιλεγμένο γεωγραφικό μήκος';
+$strings['default_longitude_help'] = 'Προεπιλεγμένο γεωγραφικό μήκος κέντρου χάρτη. Χρησιμοποιείται όταν δεν υπάρχει διαθέσιμος δείκτης.';
+$strings['default_zoom'] = 'Προεπιλεγμένη εστίαση';
+$strings['default_zoom_help'] = 'Προεπιλεγμένη εστίαση χάρτη μεταξύ 1 και 20.';
+$strings['OpenStreetMapInfo'] = 'Το OpenStreetMap δεν απαιτεί κλειδί API. Οι δείκτες μόνο με διεύθυνση εμφανίζονται ως σύνδεσμοι αναζήτησης εκτός αν υπάρχουν διαθέσιμες συντεταγμένες.';

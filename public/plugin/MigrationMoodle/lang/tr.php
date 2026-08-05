@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = "Moodle'dan İçe Aktar";
+$strings['plugin_comment'] = "Moodle veritabanı ve dosyalarından Chamilo'ya bir içe aktarma işlemi gerçekleştirin.";
+
+$strings['MoodlePassword'] = 'Moodle şifresi';
+$strings['UninstallError'] = 'Eklenti kaldırılırken bir hata oluştu.';
+
+$strings['db_host'] = 'Moodle DB sunucusu';
+$strings['db_user'] = 'Moodle DB kullanıcısı';
+$strings['db_password'] = 'Moodle DB şifresi';
+$strings['db_name'] = 'Moodle DB adı';
+$strings['user_filter'] = 'Kullanıcılar için filtre';
+$strings['user_filter_help'] = 'Kullanıcı adları bu dizeyle başlayan kullanıcıları yalnızca içe aktarın.<br>Derslerin içe aktarılması da bu yapılandırmadan etkilenir, çünkü yalnızca bu kullanıcı adı öneki olan kullanıcıların kayıtlı olduğu dersleri içe aktarır.';
+$strings['url_id'] = 'URL Kimliği';
+$strings['url_id_help'] = "Dersleri, kullanıcıları ve oturumları kaydetmek için erişim URL'si kimliği (çoklu URL kullanılıyorsa).";
+$strings['moodle_path'] = 'Moodledata yolu';
+$strings['moodle_path_help'] = 'Moodledata klasörünün yolu. Genellikle şöyle bir şey: <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Kullanıcılar';
+$strings['CourseCategoriesTask'] = 'Ders kategorileri';
+$strings['CoursesTask'] = 'Dersler';
+$strings['CourseSectionsTask'] = 'Ders bölümleri';
+$strings['CourseModulesLessonTask'] = 'Ders modülleri: Dersler';
+$strings['LessonPagesTask'] = 'Ders sayfaları';
+$strings['LessonPagesDocumentTask'] = 'Ders sayfaları: Belgeler';
+$strings['FilesForLessonPagesTask'] = 'Ders sayfaları için dosyalar';
+$strings['LessonPagesQuizTask'] = 'Ders sayfaları: Sorular';
+$strings['LessonPagesQuizQuestionTask'] = 'Soru sayfaları için sorular';
+$strings['LessonAnswersTrueFalseTask'] = 'Doğru/Yanlış soruları için cevaplar';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Çoktan Seçmeli sorular için cevaplar';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Çoklu Cevap sorular için cevaplar';
+$strings['LessonAnswersMatchingTask'] = 'Eşleştirme soruları için cevaplar';
+$strings['LessonAnswersEssayTask'] = 'Deneme soruları için cevaplar';
+$strings['LessonAnswersShortAnswerTask'] = 'Kısa Cevap soruları için cevaplar';
+$strings['FilesForLessonAnswersTask'] = 'Ders cevapları için dosyalar';
+$strings['CourseModulesQuizTask'] = 'Ders modülleri: Sınavlar';
+$strings['CQuizTask'] = 'C Sınavı';
+$strings['RoleAssignmentsTask'] = 'Rol atamaları';
+$strings['QuizzesTask'] = 'Sınavlar';
+$strings['FilesForQuizzesTask'] = 'Sınavlar için dosyalar';
+$strings['QuestionCategoriesTask'] = 'Soru kategorileri';
+$strings['QuestionsTask'] = 'Sorular';
+$strings['QuestionMultiChoiceSingleTask'] = 'Çoktan seçmeli sorular için cevaplar (tekli)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Çoktan seçmeli sorular için cevaplar (çoklu)';
+$strings['QuestionsTrueFalseTask'] = 'Doğru/Yanlış soruları için cevaplar';
+$strings['QuestionShortAnswerTask'] = 'Kısa cevap soruları için cevaplar';
+$strings['CourseModulesScormTask'] = 'SCORM dersleri';
+$strings['ScormScoesTask'] = 'SCORM öğeleri';
+$strings['FilesForScormScoesTask'] = 'SCORM öğeleri için dosyalar';
+$strings['UserSessionsTask'] = 'Kullanıcılar için Ders Oturumları';
+$strings['CourseIntroductionsTask'] = 'Ders tanıtımları';
+$strings['FilesForCourseIntroductionsTask'] = 'Ders tanıtımları için dosyalar';
+$strings['FilesForCourseSectionsTask'] = 'Ders bölümleri için dosyalar';
+$strings['CourseModulesUrlTask'] = "Ders modülleri: URL'ler";
+$strings['UrlsTask'] = "URL'ler";
+$strings['SortSectionModulesTask'] = 'Bölümdeki modülleri sırala';
+$strings['UsersScormsViewTask'] = 'Kullanıcılar için SCORM görüntülemeleri';
+$strings['UsersScormsProgressTask'] = 'SCORM ilerlemesi';
+$strings['UsersLearnPathsTask'] = 'Kullanıcıların öğrenme yolu görüntülemeleri';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Öğrenme yolları bölümünde ders zamanlayıcısından başlama zamanına';
+$strings['QuizzesScoresTask'] = 'Öğrenme yolunda test puanlarını güncelle';
+$strings['QuestionGapselectTask'] = 'Boşluk doldurma soruları için cevaplar';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Öğrenme yolları belgelerinde ders dalından toplam süreye';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Öğrenme yolları testlerinde ders denemelerinden toplam süreye';
+$strings['UsersLearnPathsQuizzesTask'] = 'Test denemelerinden öğrenme yolları test denemelerine';
+$strings['UsersQuizzesAttemptsTask'] = 'Kullanıcıların test denemeleri';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Kullanıcıların kısa cevap soruları için deneme sayısı';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Kullanıcıların boşluk doldurma soruları için deneme sayısı';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Kullanıcıların doğru/yanlış soruları için deneme sayısı';
+$strings['UsersLastLoginTask'] = 'Kullanıcılar için son girişler';
+$strings['TrackLoginTask'] = 'İlk giriş ve son çıkış';
+$strings['TrackCourseAccessTask'] = 'Kullanıcının derse erişimi';
+$strings['UserLearnPathsProgressScript'] = 'Kullanıcılar için öğrenme yollarında ilerlemeyi güncelle.';
+$strings['UserScormsProgressScript'] = "Kullanıcılar için SCORM'larda ilerlemeyi güncelle.";
+
+$strings['InstallError'] = 'Eklenti kurulurken bir hata oluştu: %s';
+$strings['AdminIntro'] = 'Moodle geçiş görevlerini sırayla çalıştırın. Her adım, yalnızca üst adım tamamlandıktan sonra etkinleştirilir.';
+$strings['MoodleDatabase'] = 'Moodle veritabanı';
+$strings['MoodledataPath'] = 'Moodledata yolu';
+$strings['AccessUrlId'] = 'Erişim URL Kimliği';
+$strings['Configured'] = 'Yapılandırıldı';
+$strings['NotConfigured'] = 'Yapılandırılmadı';
+$strings['ConfigurePlugin'] = 'Eklentiyi yapılandır';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Geçiş görevlerini çalıştırmadan önce Moodle veritabanı sunucusunu, kullanıcısını ve veritabanı adını yapılandırın.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata yolu boş. Bu ayar yapılandırılana kadar dosya ile ilgili görevler başarısız olabilir.';
+$strings['InvalidMigrationAction'] = 'Geçersiz geçiş işlemi.';
+$strings['InvalidSecurityToken'] = 'Geçersiz güvenlik belirteci. Lütfen sayfayı yeniden yükleyin ve tekrar deneyin.';
+$strings['MigrationTasks'] = 'Geçiş görevleri';
+$strings['MaintenanceScripts'] = 'Bakım betikleri';
+$strings['ExecutionOutput'] = 'Çalıştırma çıktısı';
+$strings['TaskAlreadyExecuted'] = 'Bu görev veya betik zaten çalıştırılmış.';
+$strings['SelectTaskToRun'] = 'Çalıştırılacak bir geçiş görevi seçin. Çıktı burada görünecektir.';

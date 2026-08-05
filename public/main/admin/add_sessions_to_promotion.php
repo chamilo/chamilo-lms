@@ -70,7 +70,7 @@ $form_sent = 0;
 $users = $sessions = [];
 $promotion = new Promotion();
 $id = (int) ($_GET['id']);
-if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent'] && Security::check_token('post')) {
     $form_sent = $_POST['form_sent'];
     $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
@@ -135,6 +135,7 @@ echo Display::toolbarAction(
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
+echo Security::get_HTML_token();
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

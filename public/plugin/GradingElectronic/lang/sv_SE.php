@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronisk betygsättning är inaktiverad';
 $strings['StudentId'] = 'Student-ID';
 $strings['ProviderId'] = 'Leverantör-ID';
 $strings['CourseHours'] = 'Kursens timmar';
+
+$strings['GenerateFile'] = 'Generera fil';
+$strings['CourseId'] = 'Kurs-ID';

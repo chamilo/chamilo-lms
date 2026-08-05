@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Näyttää Google-kartan käyttäjien sijainneista, jotka on tallennettu lisäkenttiin.';
+$strings['enable_api'] = 'Lataa Google Maps API';
+$strings['api_key'] = 'API-avain';
+$strings['extra_field_name'] = 'Lisäkentän nimi';
+$strings['extra_field_name_help'] = 'Anna yksi tai useampi käyttäjän lisäkentän muuttuja pilkulla erotettuna. Kartta voi näyttää enintään 5 kenttää. Esimerkki: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Käyttäjien sijaintikartta';
+$strings['UsersCoordinatesMapHelp'] = 'Tämä kartta näyttää käyttäjien sijainnit määritettyjen käyttäjän lisäkenttien perusteella.';
+$strings['GoogleMapsAdminIntro'] = 'Määritä Google Maps API -avain ja käyttäjän lisäkentät, jotka sisältävät osoitteita tai sijainteja.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Lisäkentät';
+$strings['Access'] = 'Käyttöoikeus';
+$strings['AdministratorsOnly'] = 'Vain ylläpitäjille';
+$strings['OpenMap'] = 'Avaa kartta';
+$strings['ConfigurePlugin'] = 'Määritä liitännäinen';
+$strings['Configured'] = 'Määritetty';
+$strings['NotConfigured'] = 'Ei määritetty';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps API:n lataus on poistettu käytöstä liitännäisen asetuksissa.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API -avain puuttuu.';
+$strings['ExtraFieldNameMissingWarning'] = 'Yhtään käyttäjän lisäkenttää ei ole määritetty.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Seuraavia käyttäjän lisäkenttiä ei löytynyt: %s.';
+$strings['NoUserCoordinatesFound'] = 'Määritetyille lisäkentille ei löytynyt käyttäjien sijainteja.';
+$strings['ConfigureGoogleMapsFirst'] = 'Määritä ja ota käyttöön Google Maps API ennen kartan avaamista.';
+
+$strings['map_provider'] = 'Karttapalveluntarjoaja';
+$strings['map_provider_help'] = 'Valitse liitännäisen ja sosiaalisen kartan käyttämä karttapalveluntarjoaja.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Karttapalveluntarjoaja';
+$strings['MapProviderConfiguration'] = 'Palveluntarjoajan asetukset';
+$strings['default_latitude'] = 'Oletusleveysaste';
+$strings['default_latitude_help'] = 'Kartan oletuskeskipisteen leveysaste. Käytetään, kun merkkiä ei ole saatavilla.';
+$strings['default_longitude'] = 'Oletuspituusaste';
+$strings['default_longitude_help'] = 'Kartan oletuskeskipisteen pituusaste. Käytetään, kun merkkiä ei ole saatavilla.';
+$strings['default_zoom'] = 'Oletuszoomaus';
+$strings['default_zoom_help'] = 'Kartan oletuszoomaustaso välillä 1–20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap ei vaadi API-avainta. Vain osoitteeseen perustuvat merkit näytetään hakulinkkeinä, ellei koordinaatteja ole saatavilla.';

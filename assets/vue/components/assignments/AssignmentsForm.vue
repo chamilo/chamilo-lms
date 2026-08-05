@@ -14,6 +14,10 @@
     />
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+      <ResourceLanguageSelector
+        id="assignment-language"
+        v-model="assignment.language"
+      />
       <BaseInputNumber
         id="qualification"
         v-model="assignment.qualification"
@@ -150,11 +154,11 @@ import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"
-import { maxValue, minValue, required } from "@vuelidate/validators"
+import { helpers, required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
 import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
@@ -172,7 +176,6 @@ const props = defineProps({
 const emit = defineEmits(["submit"])
 
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
 const route = useRoute()
 
 const showAdvancedSettings = ref(false)
@@ -210,7 +213,12 @@ const assignment = reactive({
   allowTextAssignment: 2,
   allowedExtensions: [],
   customExtensions: "",
+  language: "",
 })
+
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
 
 function extractGradebookCategoryId(def) {
   // Support multiple possible backend shapes.
@@ -254,6 +262,7 @@ watchEffect(() => {
   }
 
   assignment.allowTextAssignment = def.allowTextAssignment
+  assignment.language = extractResourceLanguage(def)
 
   if (def.extensions) {
     const extensionsArray = def.extensions
@@ -292,6 +301,26 @@ watchEffect(() => {
   }
 })
 
+function truncateToMinute(date) {
+  const d = new Date(date)
+  d.setSeconds(0, 0)
+  return d
+}
+
+function maxDateByMinute(max) {
+  return helpers.withMessage(
+    t("Expiration date must be before or equal to end date"),
+    (value) => !value || !max || +truncateToMinute(value) <= +truncateToMinute(max),
+  )
+}
+
+function minDateByMinute(min) {
+  return helpers.withMessage(
+    t("End date must be after or equal to expiration date"),
+    (value) => !value || !min || +truncateToMinute(value) >= +truncateToMinute(min),
+  )
+}
+
 const rules = computed(() => {
   const r = { title: { required, $autoDirty: true } }
   if (showAdvancedSettings.value) {
@@ -301,11 +330,11 @@ const rules = computed(() => {
     }
     if (chkExpiresOn.value) {
       r.expiresOn = { required, $autoDirty: true }
-      if (chkEndsOn.value) r.expiresOn.maxValue = maxValue(assignment.endsOn)
+      if (chkEndsOn.value) r.expiresOn.maxValue = maxDateByMinute(assignment.endsOn)
     }
     if (chkEndsOn.value) {
       r.endsOn = { required, $autoDirty: true }
-      if (chkExpiresOn.value) r.endsOn.minValue = minValue(assignment.expiresOn)
+      if (chkExpiresOn.value) r.endsOn.minValue = minDateByMinute(assignment.expiresOn)
     }
     r.allowTextAssignment = { required }
   }
@@ -322,10 +351,12 @@ async function onSubmit() {
     title: assignment.title,
     description: assignment.description,
     parentResourceNode: Number(route.params.node),
-    resourceLinkList: [{ cid, sid, gid, visibility: RESOURCE_LINK_PUBLISHED }],
+    // Course context derived server-side from the gated session course.
+    resourceLinkList: [{ visibility: RESOURCE_LINK_PUBLISHED }],
     qualification: assignment.qualification,
     addToCalendar: assignment.addToCalendar,
     allowTextAssignment: assignment.allowTextAssignment,
+    language: assignment.language || "",
   }
 
   if (chkAddToGradebook.value) {

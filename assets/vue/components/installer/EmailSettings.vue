@@ -66,7 +66,7 @@ import { useI18n } from "vue-i18n"
 import InputText from "primevue/inputtext"
 import InputGroup from "primevue/inputgroup"
 import InputGroupAddon from "primevue/inputgroupaddon"
-import axios from "axios"
+import installerService from "../../services/installerService"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 
@@ -92,7 +92,7 @@ async function testSmtp() {
     formData.append("mailerFromName", installerData.value.stepData.mailerFromName)
     formData.append("mailerTestDestination", mailerTestDestination.value)
 
-    const { data } = await axios.post("/main/inc/ajax/install.ajax.php?a=test_mailer", formData)
+    const data = await installerService.testMailer(formData)
 
     if (data.success) {
       alert(t("Test email sent successfully"))

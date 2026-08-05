@@ -607,8 +607,8 @@ if ($editingCourse) {
     $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Teachers'));
 } elseif ($editingSession) {
     $courseCoachesOptions = api_unique_multidim_array($courseCoachesOptions, 'value');
-    $beneficiariesSelect->addOptGroup($generalCoachesOptions, get_lang('Session general coaches'));
-    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
+    $beneficiariesSelect->addOptGroup($generalCoachesOptions, get_lang('General tutor'));
+    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('Course tutor'));
 }
 
 if ('true' === $commissionsEnable) {

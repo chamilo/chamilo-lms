@@ -151,6 +151,7 @@ class ScoreDisplayForm extends FormValidator
         if ($displayscore->is_custom()) {
             $this->addButtonSave(get_lang('Validate'));
         }
+        $this->protect();
     }
 
     public function validate()

@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Hiển thị bản đồ Google với vị trí người dùng được lưu trong trường bổ sung.';
+$strings['enable_api'] = 'Tải Google Maps API';
+$strings['api_key'] = 'Khóa API';
+$strings['extra_field_name'] = 'Tên trường bổ sung';
+$strings['extra_field_name_help'] = 'Nhập một hoặc nhiều biến trường bổ sung của người dùng cách nhau bằng dấu phẩy. Bản đồ có thể hiển thị tối đa 5 trường. Ví dụ: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Bản đồ vị trí người dùng';
+$strings['UsersCoordinatesMapHelp'] = 'Bản đồ này hiển thị vị trí người dùng dựa trên các trường bổ sung của người dùng đã cấu hình.';
+$strings['GoogleMapsAdminIntro'] = 'Cấu hình khóa Google Maps API và các trường bổ sung của người dùng chứa địa chỉ hoặc vị trí.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Trường bổ sung';
+$strings['Access'] = 'Truy cập';
+$strings['AdministratorsOnly'] = 'Chỉ quản trị viên';
+$strings['OpenMap'] = 'Mở bản đồ';
+$strings['ConfigurePlugin'] = 'Cấu hình plugin';
+$strings['Configured'] = 'Đã cấu hình';
+$strings['NotConfigured'] = 'Chưa cấu hình';
+$strings['GoogleMapsApiDisabledWarning'] = 'Việc tải Google Maps API đã bị tắt trong cấu hình plugin.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Thiếu khóa Google Maps API.';
+$strings['ExtraFieldNameMissingWarning'] = 'Chưa cấu hình trường bổ sung nào cho người dùng.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Không tìm thấy các trường bổ sung sau: %s.';
+$strings['NoUserCoordinatesFound'] = 'Không tìm thấy vị trí người dùng nào cho các trường bổ sung đã cấu hình.';
+$strings['ConfigureGoogleMapsFirst'] = 'Hãy cấu hình và kích hoạt Google Maps API trước khi mở bản đồ.';
+
+$strings['map_provider'] = 'Nhà cung cấp bản đồ';
+$strings['map_provider_help'] = 'Chọn nhà cung cấp bản đồ được sử dụng bởi plugin và bởi Social map.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Nhà cung cấp bản đồ';
+$strings['MapProviderConfiguration'] = 'Cấu hình nhà cung cấp';
+$strings['default_latitude'] = 'Vĩ độ mặc định';
+$strings['default_latitude_help'] = 'Vĩ độ trung tâm bản đồ mặc định. Được sử dụng khi không có điểm đánh dấu nào.';
+$strings['default_longitude'] = 'Kinh độ mặc định';
+$strings['default_longitude_help'] = 'Kinh độ trung tâm bản đồ mặc định. Được sử dụng khi không có điểm đánh dấu nào.';
+$strings['default_zoom'] = 'Thu phóng mặc định';
+$strings['default_zoom_help'] = 'Mức thu phóng bản đồ mặc định từ 1 đến 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap không yêu cầu khóa API. Điểm đánh dấu chỉ có địa chỉ sẽ được hiển thị dưới dạng liên kết tìm kiếm trừ khi có tọa độ.';

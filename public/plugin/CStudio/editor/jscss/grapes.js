@@ -291,7 +291,7 @@ function getMenuR(){
 	h += '<div class="uPIcon minIcon" onClick="upContextMenuSub(0);" ></div>';
 	h += '<div class="dowNIcon minIcon" onClick="upContextMenuSub(1);" ></div>';
 
-	h += '<input onClick="deleteContextMenuSub();" ';
+	h += '<input title="Delete page" onClick="deleteContextMenuSub();" ';
 	h += ' style="position:absolute;bottom:10px;left:10px;border:solid 1px gray;cursor:pointer;" ';
 	h += ' class="gjs-one-bg ludiButtonDelete" type="button" value="Delete" />';
 

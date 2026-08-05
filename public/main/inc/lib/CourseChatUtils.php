@@ -42,6 +42,7 @@ class CourseChatUtils
 
     private bool $restrictToCoachSetting = false;
     private bool $savePrivateConversationsInDocuments = false;
+    private bool $hideUsernameInCourseChat = false;
 
     public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {
@@ -54,6 +55,7 @@ class CourseChatUtils
 
         $this->restrictToCoachSetting = ('true' === api_get_setting('chat.course_chat_restrict_to_coach'));
         $this->savePrivateConversationsInDocuments = ('true' === api_get_setting('chat.save_private_conversations_in_documents'));
+        $this->hideUsernameInCourseChat = ('true' === api_get_setting('profile.hide_username_in_course_chat'));
 
         $this->dbg('construct', [
             'courseId'     => $courseId,
@@ -185,7 +187,6 @@ class CourseChatUtils
 
         $message = trim($message);
         $message = nl2br($message);
-        $message = Security::remove_XSS($message);
 
         // url -> anchor
         $message = preg_replace(
@@ -201,6 +202,10 @@ class CourseChatUtils
         );
 
         $message = MarkdownExtra::defaultTransform($message);
+
+        // Sanitize last, after Markdown produced the final HTML, so HTMLPurifier
+        // strips javascript: links and other payloads Markdown may have generated.
+        $message = Security::remove_XSS($message);
 
         return $message;
     }
@@ -452,14 +457,15 @@ class CourseChatUtils
             $timeNow   = date('d/m/y H:i:s');
             $userPhoto = \UserManager::getUserPicture($this->userId);
             $htmlMsg   = self::prepareMessage($message);
+            $displayName = $user instanceof User ? $this->getUserChatDisplayName($user) : '';
 
             $bubble = $isMaster
                 ? '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'
-                .\UserManager::formatUserFullName($user).'</div><div class="chat-message-block-content">'
+                .$displayName.'</div><div class="chat-message-block-content">'
                 .$htmlMsg.'</div><div class="message-date">'.$timeNow
                 .'</div></div><div class="icon-message"></div><img class="chat-image" src="'.$userPhoto.'"></div>'
                 : '<div class="message-student"><img class="chat-image" src="'.$userPhoto.'"><div class="icon-message"></div>'
-                .'<div class="content-message"><div class="chat-message-block-name">'.\UserManager::formatUserFullName($user)
+                .'<div class="content-message"><div class="chat-message-block-name">'.$displayName
                 .'</div><div class="chat-message-block-content">'.$htmlMsg.'</div><div class="message-date">'
                 .$timeNow.'</div></div></div>';
 
@@ -543,7 +549,7 @@ class CourseChatUtils
         $rows = Database::getManager()
             ->createQuery("
             SELECT ccc.userId AS uid
-            FROM ChamiloCourseBundle:CChatConnected ccc
+            FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
             WHERE ccc.lastConnection > :date
               AND ccc.cId = :course
               $extraCondition
@@ -647,7 +653,7 @@ class CourseChatUtils
         foreach ($listCourse as $course) {
             Database::getManager()
                 ->createQuery('
-                    DELETE FROM ChamiloCourseBundle:CChatConnected ccc
+                    DELETE FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                     WHERE ccc.cId = :course AND ccc.userId = :user
                 ')
                 ->execute([
@@ -667,7 +673,7 @@ class CourseChatUtils
 
         $connectedUsers = $em
             ->createQuery("
-                SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT ccc FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.cId = :course $extraCondition
             ")
             ->setParameter('course', $this->courseId)
@@ -687,7 +693,7 @@ class CourseChatUtils
             }
 
             $em->createQuery('
-                DELETE FROM ChamiloCourseBundle:CChatConnected ccc
+                DELETE FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.cId = :course
                   AND ccc.userId = :user
                   AND ccc.sessionId = :sid
@@ -714,7 +720,7 @@ class CourseChatUtils
         /** @var CChatConnected|null $connection */
         $connection = $em
             ->createQuery("
-                SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT ccc FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
@@ -771,7 +777,7 @@ class CourseChatUtils
 
         $number = Database::getManager()
             ->createQuery("
-                SELECT COUNT(ccc.userId) FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT COUNT(ccc.userId) FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.lastConnection > :date AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
@@ -810,9 +816,21 @@ class CourseChatUtils
         return $usersInfo;
     }
 
-    /** Normalize user card info */
+    /**
+     * Normalize user card info.
+     */
     private function formatUser(User $user, $status, array $connectedSet): array
     {
+        $completeName = $this->getUserChatDisplayName($user);
+
+        /*
+         * Keep the "username" key for frontend compatibility, but when the setting
+         * is enabled do not expose the real username in the course chat payload.
+         */
+        $username = $this->hideUsernameInCourseChat
+            ? $completeName
+            : (string) $user->getUsername();
+
         return [
             'id'            => $user->getId(),
             'firstname'     => $user->getFirstname(),
@@ -820,8 +838,8 @@ class CourseChatUtils
             'status'        => $status,
             'image_url'     => UserManager::getUserPicture($user->getId()),
             'profile_url'   => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-            'complete_name' => UserManager::formatUserFullName($user),
-            'username'      => $user->getUsername(),
+            'complete_name' => $completeName,
+            'username'      => $username,
             'email'         => $user->getEmail(),
             'isConnected'   => isset($connectedSet[$user->getId()]),
         ];
@@ -835,8 +853,8 @@ class CourseChatUtils
         if ($this->groupId) {
             $students = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloCoreBundle:User u
-                     INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
+                    'SELECT u FROM Chamilo\CoreBundle\Entity\User u
+                     INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gru
                         WITH u.id = gru.userId AND gru.cId = :course
                      WHERE u.id != :user AND gru.groupId = :group
                        AND u.active = true'
@@ -846,8 +864,8 @@ class CourseChatUtils
 
             $tutors = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloCoreBundle:User u
-                     INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
+                    'SELECT u FROM Chamilo\CoreBundle\Entity\User u
+                     INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelTutor grt
                         WITH u.id = grt.userId AND grt.cId = :course
                      WHERE u.id != :user AND grt.groupId = :group
                        AND u.active = true'
@@ -902,7 +920,7 @@ class CourseChatUtils
 
         $number = Database::getManager()
             ->createQuery("
-                SELECT COUNT(ccc.userId) FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT COUNT(ccc.userId) FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.lastConnection > :date AND ccc.cId = :course AND ccc.userId = :user $extraCondition
             ")
             ->setParameters([
@@ -913,5 +931,22 @@ class CourseChatUtils
             ->getSingleScalarResult();
 
         return (int) $number;
+    }
+
+    private function getUserChatDisplayName(User $user): string
+    {
+        $displayName = trim((string) UserManager::formatUserFullName($user));
+
+        if ('' !== $displayName) {
+            return $displayName;
+        }
+
+        $displayName = trim((string) $user->getFirstname().' '.(string) $user->getLastname());
+
+        if ('' !== $displayName) {
+            return $displayName;
+        }
+
+        return (string) $user->getUsername();
     }
 }

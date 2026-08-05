@@ -22,7 +22,7 @@ class CourseProgress extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/course_progress/index.php';
+        return '/resources/course-progress/:nodeId/';
     }
 
     public function getCategory(): string

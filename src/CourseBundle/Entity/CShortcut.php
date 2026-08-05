@@ -26,7 +26,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     #[Assert\NotBlank]
     #[Groups(['cshortcut:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\ManyToOne(targetEntity: ResourceNode::class, inversedBy: 'shortCuts')]

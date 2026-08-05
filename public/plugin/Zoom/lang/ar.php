@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'مؤتمر فيديو زووم';
 $strings['plugin_comment'] = 'تكامل مؤتمر فيديو زووم في الدورات والجلسات';
 
+$strings['accountId'] = 'معرّف الحساب';
+$strings['clientId'] = 'معرّف العميل';
+$strings['clientSecret'] = 'سر العميل';
+$strings['webhookSecretToken'] = 'رمز سر Webhook';
+$strings['apiKey_help'] = 'مفتاح API لـ JWT القديم. يُفضل استخدام معرّف الحساب ومعرّف العميل وسر العميل لـ Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'سر API لـ JWT القديم. يُفضل استخدام معرّف الحساب ومعرّف العميل وسر العميل لـ Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'رمز التحقق من Webhook القديم. يُفضل استخدام رمز سر Webhook.';
+$strings['accountId_help'] = 'معرّف حساب Zoom Server-to-Server OAuth.';
+$strings['clientId_help'] = 'معرّف عميل Zoom Server-to-Server OAuth.';
+$strings['clientSecret_help'] = 'سر عميل Zoom Server-to-Server OAuth.';
+$strings['webhookSecretToken_help'] = 'الرمز السري المستخدم للتحقق من طلبات webhook في Zoom.';
 $strings['apiKey'] = 'مفتاح API';
 $strings['apiSecret'] = 'سر API';
 $strings['verificationToken'] = 'رمز التحقق';

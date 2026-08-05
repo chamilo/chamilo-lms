@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
@@ -24,8 +25,8 @@ use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Chamilo\CoreBundle\Entity\Room;
-use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\GlobalEventFilter;
+use Chamilo\CoreBundle\Filter\OptionalCourseLinkFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CalendarEventStateProvider;
 use Chamilo\CoreBundle\State\CCalendarEventStateProcessor;
@@ -46,6 +47,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Put(
+            controller: UpdateCCalendarEventAction::class,
+            security: "is_granted('EDIT', object)",
+            deserialize: false
+        ),
+        new Patch(
             controller: UpdateCCalendarEventAction::class,
             security: "is_granted('EDIT', object)",
             deserialize: false
@@ -73,19 +79,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CCalendarEventRepository::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['allDay' => 'boolean'])]
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
-#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: OptionalCourseLinkFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
 #[ApiFilter(GlobalEventFilter::class, properties: ['type'])]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, ResourceRestrictToGroupContextInterface, Stringable
 {
-    public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
+    public const string COLOR_STUDENT_PUBLICATION = '#FF8C00';
 
-    public const TYPE_INVITATION = 'invitation';
-    public const TYPE_SUBSCRIPTION = 'subscription';
+    public const string TYPE_INVITATION = 'invitation';
+    public const string TYPE_SUBSCRIPTION = 'subscription';
 
-    public const SUBSCRIPTION_VISIBILITY_NO = 0;
-    public const SUBSCRIPTION_VISIBILITY_ALL = 1;
-    public const SUBSCRIPTION_VISIBILITY_CLASS = 2;
+    public const int SUBSCRIPTION_VISIBILITY_NO = 0;
+    public const int SUBSCRIPTION_VISIBILITY_ALL = 1;
+    public const int SUBSCRIPTION_VISIBILITY_CLASS = 2;
 
     #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -95,7 +101,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Reso
 
     #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['calendar_event:write', 'calendar_event:read'])]

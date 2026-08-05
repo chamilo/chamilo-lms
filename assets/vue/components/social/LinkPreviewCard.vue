@@ -38,7 +38,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue"
-import axios from "axios"
+import socialService from "../../services/socialService"
 
 const props = defineProps({
   url: {
@@ -53,7 +53,7 @@ async function fetchPreview() {
   if (!props.url) return
 
   try {
-    const { data } = await axios.post("/social-network/opengraph", { url: props.url })
+    const data = await socialService.fetchOpenGraphPreview(props.url)
     if (data && !data.error) {
       preview.value = data
     }

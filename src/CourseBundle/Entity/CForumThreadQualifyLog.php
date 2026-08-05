@@ -32,7 +32,7 @@ class CForumThreadQualifyLog
     #[ORM\Column(name: 'thread_id', type: 'integer', nullable: false)]
     protected int $threadId;
 
-    #[ORM\Column(name: 'qualify', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(name: '`qualify`', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $qualify;
 
     #[ORM\Column(name: 'qualify_user_id', type: 'integer', nullable: true)]

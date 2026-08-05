@@ -214,19 +214,28 @@
           >
             <h3 class="font-semibold">{{ t("Preview") }}</h3>
 
-            <img
-              v-if="selectedType === 'image'"
-              :src="previewUrl"
-              class="max-w-full rounded border border-gray-200"
-              alt="Generated preview"
-            />
+            <div class="relative inline-block max-w-full">
+              <img
+                v-if="selectedType === 'image'"
+                :src="previewUrl"
+                class="block max-w-full rounded border border-gray-200"
+                alt="Generated preview"
+              />
 
-            <video
-              v-else
-              :src="previewUrl"
-              class="max-w-full rounded border border-gray-200"
-              controls
-            />
+              <video
+                v-else
+                :src="previewUrl"
+                class="block max-w-full rounded border border-gray-200"
+                controls
+              />
+
+              <span
+                class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+                style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+              >
+                {{ t("AI generated") }}
+              </span>
+            </div>
           </div>
 
           <div
@@ -279,19 +288,20 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
-import axios from "axios"
 import Dialog from "primevue/dialog"
 import Dropdown from "primevue/dropdown"
 import InputText from "primevue/inputtext"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import documentsService from "../../services/documents"
+import aiService from "../../services/aiService"
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -306,7 +316,7 @@ const emit = defineEmits(["update:visible", "accepted"])
 
 const route = useRoute()
 const { t, locale } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
@@ -569,8 +579,9 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
+// Course context derived server-side from the gated session course.
 function buildResourceLinkList() {
-  return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
+  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
 function canvasMimeFromContentType(contentType) {
@@ -642,6 +653,32 @@ function applyDefaultFileName() {
   fileName.value = sanitizeFilenameBase(combined)
 }
 
+function drawAiGeneratedWatermark(ctx, canvas) {
+  const label = t("AI generated")
+  const smallerSide = Math.max(1, Math.min(canvas.width, canvas.height))
+  const fontSize = Math.max(14, Math.round(smallerSide * 0.035))
+  const paddingX = Math.max(10, Math.round(fontSize * 0.75))
+  const paddingY = Math.max(6, Math.round(fontSize * 0.45))
+  const margin = Math.max(12, Math.round(fontSize * 0.8))
+
+  ctx.save()
+  ctx.font = `600 ${fontSize}px sans-serif`
+
+  const textMetrics = ctx.measureText(label)
+  const boxWidth = Math.ceil(textMetrics.width + paddingX * 2)
+  const boxHeight = Math.ceil(fontSize + paddingY * 2)
+  const x = Math.max(margin, canvas.width - boxWidth - margin)
+  const y = Math.max(margin, canvas.height - boxHeight - margin)
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.72)"
+  ctx.fillRect(x, y, boxWidth, boxHeight)
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.96)"
+  ctx.textBaseline = "middle"
+  ctx.fillText(label, x + paddingX, y + boxHeight / 2)
+  ctx.restore()
+}
+
 function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -662,6 +699,8 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
         const sy = (img.height - sh) / 2
 
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH)
+
+        drawAiGeneratedWatermark(ctx, canvas)
 
         const preferredMime = canvasMimeFromContentType(inContentType)
         let dataUrl = canvas.toDataURL(preferredMime)
@@ -706,11 +745,9 @@ async function createFolder(title, parentNodeId) {
   formData.append("parentResourceNodeId", String(parentNodeId))
   formData.append("resourceLinkList", buildResourceLinkList())
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
+  const data = await documentsService.uploadDocumentFile(formData)
 
-  return response?.data || {}
+  return data || {}
 }
 
 async function fetchFolders(nodeId = null) {
@@ -736,20 +773,18 @@ async function fetchFolders(nodeId = null) {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentsService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid,
+        sid,
+        gid,
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
@@ -832,11 +867,7 @@ async function saveToDocuments(file) {
   formData.append("fileExistsOption", "rename")
   formData.append("ai_assisted", "1")
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  const data = response?.data || {}
+  const data = (await documentsService.uploadDocumentFile(formData)) || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
   return data
 }
@@ -856,8 +887,7 @@ async function resolveSavedDocument(savedDoc) {
   }
 
   try {
-    const response = await axios.get(iri)
-    const fresh = response?.data || {}
+    const fresh = (await documentsService.getDocumentByIri(iri)) || {}
     const freshUrl = String(fresh?.contentUrl || fresh?.downloadUrl || fresh?.url || "").trim()
 
     return {
@@ -875,7 +905,7 @@ async function loadCapabilities() {
   isLoadingCaps.value = true
 
   try {
-    const { data } = await axios.get("/ai/capabilities")
+    const data = await aiService.getCapabilities()
 
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
@@ -923,10 +953,7 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: { ai_provider: providerCode || null },
-  })
-  return response?.data
+  return aiService.getVideoJob(jobId, providerCode)
 }
 
 function isTerminalVideoStatus(status) {
@@ -1089,9 +1116,7 @@ async function generate() {
       payload.height = parsedHeight.value
     }
 
-    const { data } = await axios.post(endpoint, payload, {
-      headers: { "Content-Type": "application/json" },
-    })
+    const data = await aiService.generateMedia(endpoint, payload)
 
     if (!data?.success) {
       const msg = String(data?.text || "")
@@ -1209,12 +1234,6 @@ async function bootDialog() {
   bootError.value = ""
 
   try {
-    try {
-      await courseSettingsStore.loadCourseSettings(cid, sid)
-    } catch (e) {
-      console.error("[AI Media Dialog] loadCourseSettings failed:", e)
-    }
-
     try {
       let allowed = await checkIsAllowedToEdit(true, true, true, false)
 

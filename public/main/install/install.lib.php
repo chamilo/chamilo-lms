@@ -881,6 +881,11 @@ function display_license_agreement(): array
     ];
 }
 
+function installerHtmlAttributeValue(mixed $value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 /**
  * Displays a parameter in a table row.
  * Used by the display_database_settings_form function.
@@ -901,36 +906,56 @@ function displayDatabaseParameter(
     $extra_notice,
     $displayWhenUpdate = true
 ) {
-    echo "<dt class='col-sm-4'>$parameterName</dt>";
+    $escapedParameterName = installerHtmlAttributeValue($parameterName);
+    $escapedFormFieldName = installerHtmlAttributeValue($formFieldName);
+    $escapedParameterValue = installerHtmlAttributeValue($parameterValue);
+
+    echo '<dt class="col-sm-4">'.$escapedParameterName.'</dt>';
     echo '<dd class="col-sm-8">';
+
     if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
         echo '<input
                 type="hidden"
-                name="'.$formFieldName.'"
-                id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
-    } else {
-        $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
-        //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxLength = 'dbPrefixForm' === $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
-        if (INSTALL_TYPE_UPDATE == $installType) {
-            echo '<input
-                type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'"
-                value="'.api_htmlentities($parameterValue).'" />';
-            echo api_htmlentities($parameterValue);
-        } else {
-            echo '<input
-                        type="'.$inputType.'"
-                        class="form-control"
-                        size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
-                        maxlength="'.$maxLength.'"
-                        name="'.$formFieldName.'"
-                        id="'.$formFieldName.'"
-                        value="'.api_htmlentities($parameterValue).'" />
-                    '.$extra_notice.'
-                  ';
-        }
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />'.$escapedParameterValue;
+        echo '</dd>';
+
+        return;
     }
+
+    $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
+
+    $maxLength = MAX_FORM_FIELD_LENGTH;
+    if ('dbPrefixForm' === $formFieldName) {
+        $maxLength = 15;
+    } elseif ('dbPassForm' === $formFieldName) {
+        $maxLength = 255;
+    }
+
+    if (INSTALL_TYPE_UPDATE == $installType) {
+        echo '<input
+                type="hidden"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />';
+        echo $escapedParameterValue;
+        echo '</dd>';
+
+        return;
+    }
+
+    echo '<input
+                type="'.$inputType.'"
+                class="form-control"
+                size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
+                maxlength="'.$maxLength.'"
+                name="'.$escapedFormFieldName.'"
+                id="'.$escapedFormFieldName.'"
+                value="'.$escapedParameterValue.'" />
+            '.$extra_notice.'
+          ';
+
     echo '</dd>';
 }
 
@@ -971,20 +996,16 @@ function display_database_settings_form(
 
             $manager = Database::getManager();
             $connection = $manager->getConnection();
-            $connection->connect();
-            $schemaManager = $connection->getSchemaManager();
+            $schemaManager = $connection->createSchemaManager();
 
-            // Test create/alter/drop table
             $table = 'zXxTESTxX_'.mt_rand(0, 1000);
             $sql = "CREATE TABLE $table (id INT AUTO_INCREMENT NOT NULL, name varchar(255), PRIMARY KEY(id))";
             $connection->executeQuery($sql);
-            $tableCreationWorks = false;
-            $tableDropWorks = false;
+
             if ($schemaManager->tablesExist($table)) {
                 $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
                 $connection->executeQuery($sql);
                 $schemaManager->dropTable($table);
-                $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
             connectToDatabase(
@@ -1302,7 +1323,7 @@ function migrate(EntityManager $manager)
     $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
     // Check if old "version" table exists from 1.11.x, use new version.
-    $schema = $manager->getConnection()->getSchemaManager();
+    $schema = $manager->getConnection()->createSchemaManager();
     $dropOldVersionTable = false;
     if ($schema->tablesExist('version')) {
         $columns = $schema->listTableColumns('version');
@@ -1372,6 +1393,21 @@ function migrate(EntityManager $manager)
  * @param string $envFile
  * @param array  $params
  */
+function escapeInstallerEnvValue(mixed $value): string
+{
+    $value = (string) $value;
+
+    if (str_contains($value, "\n") || str_contains($value, "\r")) {
+        throw new \InvalidArgumentException('Installer .env values cannot contain line breaks.');
+    }
+
+    return str_replace(
+        ['\\', "'"],
+        ['\\\\', "\\'"],
+        $value
+    );
+}
+
 function updateEnvFile($distFile, $envFile, $params)
 {
     $requirements = [
@@ -1400,8 +1436,13 @@ function updateEnvFile($distFile, $envFile, $params)
         }
     }
 
+    $escapedParams = [];
+    foreach ($params as $key => $value) {
+        $escapedParams[$key] = escapeInstallerEnvValue($value);
+    }
+
     $contents = file_get_contents($distFile);
-    $contents = str_replace(array_keys($params), array_values($params), $contents);
+    $contents = str_replace(array_keys($escapedParams), array_values($escapedParams), $contents);
     file_put_contents($envFile, $contents);
     error_log("File env saved here: $envFile");
 }
@@ -1955,34 +1996,57 @@ function initializeEntityManager(): EntityManager
 function isVersionTableValid($connection): bool
 {
     $schema = $connection->createSchemaManager();
-    if ($schema->tablesExist('version')) {
-        $columns = $schema->listTableColumns('version');
 
-        $requiredColumns = ['version', 'executed_at', 'execution_time'];
-        foreach ($requiredColumns as $column) {
-            if (!isset($columns[$column])) {
-                return false;
-            }
-        }
+    if (!$schema->tablesExist(['version'])) {
+        return true;
+    }
 
-        $query = $connection->createQueryBuilder()
-            ->select('*')
-            ->from('version')
-            ->orderBy('executed_at', 'DESC')
-            ->setMaxResults(1);
-        $result = $query->execute()->fetchAll();
+    $columns = $schema->listTableColumns('version');
+    $requiredColumns = ['version', 'executed_at', 'execution_time'];
 
-        if (!empty($result)) {
-            $latestMigrationDate = new DateTime($result[0]['executed_at']);
-            $now = new DateTime();
-
-            if ($latestMigrationDate->diff($now)->days < 1) {
-                return true;
-            }
+    foreach ($requiredColumns as $column) {
+        if (!isset($columns[$column])) {
+            return false;
         }
     }
 
-    return false;
+    return true;
+}
+
+function getLegacyVersionBackupTableName(Connection $connection): string
+{
+    $schema = $connection->createSchemaManager();
+    $backupTable = 'version_1_11';
+
+    if (!$schema->tablesExist([$backupTable])) {
+        return $backupTable;
+    }
+
+    $baseBackupTable = $backupTable.'_'.date('YmdHis');
+    $backupTable = $baseBackupTable;
+    $suffix = 1;
+
+    while ($schema->tablesExist([$backupTable])) {
+        $backupTable = $baseBackupTable.'_'.$suffix;
+        $suffix++;
+    }
+
+    return $backupTable;
+}
+
+function moveLegacyVersionTable(Connection $connection): void
+{
+    $schema = $connection->createSchemaManager();
+
+    if (!$schema->tablesExist(['version']) || isVersionTableValid($connection)) {
+        return;
+    }
+
+    $backupTable = getLegacyVersionBackupTableName($connection);
+
+    $connection->executeStatement(
+        'RENAME TABLE '.$connection->quoteIdentifier('version').' TO '.$connection->quoteIdentifier($backupTable)
+    );
 }
 
 /**
@@ -1994,12 +2058,19 @@ function isVersionTableValid($connection): bool
  */
 function getLastExecutedMigration(Connection $connection): string
 {
+    $schema = $connection->createSchemaManager();
+
+    if (!$schema->tablesExist(['version'])) {
+        return '';
+    }
+
     $query = $connection->createQueryBuilder()
         ->select('version')
         ->from('version')
         ->orderBy('executed_at', 'DESC')
         ->setMaxResults(1);
     $result = $query->execute()->fetchAssociative();
+
     return $result['version'] ?? '';
 }
 
@@ -2026,10 +2097,7 @@ function executeMigration(): array
         $config = new PhpFile(api_get_path(SYS_CODE_PATH) . 'install/migrations.php');
         $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-        if (!isVersionTableValid($connection)) {
-            $schema = $connection->createSchemaManager();
-            $schema->dropTable('version');
-        }
+        moveLegacyVersionTable($connection);
 
         $dependency->getMetadataStorage()->ensureInitialized();
 

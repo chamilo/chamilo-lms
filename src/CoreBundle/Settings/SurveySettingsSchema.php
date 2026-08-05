@@ -37,7 +37,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('survey_email_sender_noreply', ChoiceType::class, [
                 'choices' => [
-                    'Course coach email sender' => 'coach',
+                    'Course tutor email sender' => 'coach',
                     'No reply email sender' => 'noreply',
                 ],
             ])

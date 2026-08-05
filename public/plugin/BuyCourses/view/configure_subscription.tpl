@@ -9,7 +9,7 @@
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-3">
                 <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                    {{ 'Buy courses'|get_plugin_lang('BuyCoursesPlugin') }}
+                    {{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}
                 </span>
                 <div>
                     <h1 class="text-3xl font-semibold tracking-tight text-gray-90">
@@ -22,7 +22,7 @@
             </div>
 
             <a href="{{ back_url }}" class="{{ btnBack }}">
-                <em class="fa fa-arrow-left"></em>
+                <em class="mdi mdi-arrow-left"></em>
                 {{ 'Back'|get_lang }}
             </a>
         </div>
@@ -123,13 +123,13 @@
                                         method="post"
                                         action="{{ delete_action_url }}"
                                         class="inline-flex"
-                                        onsubmit="return confirm('Are you sure you want to remove this subscription period?');"
+                                        onsubmit="return confirm('{{ 'ConfirmRemoveSubscriptionPeriod'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}');"
                                     >
                                         <input type="hidden" name="action" value="delete_frequency">
                                         <input type="hidden" name="duration" value="{{ subscription.duration }}">
 
                                         <button type="submit" class="{{ btnDanger }}">
-                                            <em class="fa fa-remove"></em>
+                                            <em class="mdi mdi-close"></em>
                                             {{ 'Delete'|get_lang }}
                                         </button>
                                     </form>

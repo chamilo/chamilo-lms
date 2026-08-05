@@ -238,8 +238,9 @@ class SurveyManager
             }
 
             try {
-                $start = new \DateTime($values['start_date']);
-                $end   = new \DateTime($values['end_date']);
+                $platformTz = new \DateTimeZone(api_get_timezone());
+                $start = (new \DateTime($values['start_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'));
+                $end   = (new \DateTime($values['end_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'));
             } catch (\Exception $e) {
                 Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
                 return ['type' => 'error', 'id' => 0];
@@ -335,8 +336,13 @@ class SurveyManager
             $showFormProfile         = !empty($values['show_form_profile']) ? 1 : 0;
 
             try {
-                $start = !empty($values['start_date']) ? new \DateTime($values['start_date']) : $survey->getAvailFrom();
-                $end   = !empty($values['end_date'])   ? new \DateTime($values['end_date'])   : $survey->getAvailTill();
+                $platformTz = new \DateTimeZone(api_get_timezone());
+                $start = !empty($values['start_date'])
+                    ? (new \DateTime($values['start_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'))
+                    : $survey->getAvailFrom();
+                $end   = !empty($values['end_date'])
+                    ? (new \DateTime($values['end_date'], $platformTz))->setTimezone(new \DateTimeZone('UTC'))
+                    : $survey->getAvailTill();
             } catch (\Exception $e) {
                 Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
                 return ['type' => 'error', 'id' => $surveyId];
@@ -1466,11 +1472,11 @@ class SurveyManager
             /** @var CSurveyInvitation $invitation */
             $invitation = Database::getManager()
                 ->createQuery("
-                    SELECT i FROM ChamiloCourseBundle:CSurveyInvitation i
-                    INNER JOIN ChamiloCourseBundle:CSurvey s
+                    SELECT i FROM Chamilo\CourseBundle\Entity\CSurveyInvitation i
+                    INNER JOIN Chamilo\CourseBundle\Entity\CSurvey s
                         WITH (s.code = i.surveyCode AND s.cId = i.cId AND s.sessionId = i.sessionId)
-                    INNER JOIN ChamiloCoreBundle:ExtraFieldValues efv WITH efv.itemId = s.iid
-                    INNER JOIN ChamiloCoreBundle:ExtraField ef WITH efv.field = ef.id
+                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraFieldValues efv WITH efv.itemId = s.iid
+                    INNER JOIN Chamilo\CoreBundle\Entity\ExtraField ef WITH efv.field = ef.id
                     WHERE
                         i.answered = 0 AND
                         i.cId = :course AND

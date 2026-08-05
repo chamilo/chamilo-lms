@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -52,7 +53,10 @@ class SecurityController extends AbstractController
      * Prefix used to identify HKDF-based encryption format for MFA secrets.
      * Legacy secrets have no prefix and remain readable for backward compatibility.
      */
-    private const MFA_SECRET_V2_PREFIX = 'v2:';
+    private const string MFA_SECRET_V2_PREFIX = 'v2:';
+
+    private const int SESSION_EXPIRATION_WARNING_SECONDS = 180;
+    private const string SESSION_KEEP_ALIVE_KEY = '_session_keep_alive_at';
 
     public function __construct(
         private SerializerInterface $serializer,
@@ -190,6 +194,29 @@ class SecurityController extends AbstractController
             }
         }
 
+        if ($this->mustRenewPasswordAtFirstLogin($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'first_login' => true,
+                'message' => $translator->trans(
+                    'This is your first login. Please update your password to something you will remember.'
+                ),
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'first_login' => 1,
+                ]),
+            ]);
+        }
+
+        if ($this->mustRotatePassword($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'rotate_password' => true,
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
+                    'rotate' => 1,
+                ]),
+            ]);
+        }
+
         $redirectUrl = $this->calculateRedirectUrl(
             $user,
             $this->entityManager->getRepository(Course::class),
@@ -199,24 +226,6 @@ class SecurityController extends AbstractController
             return $this->json([
                 'redirect' => $redirectUrl,
             ]);
-        }
-
-        // Password rotation check
-        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
-        if ($days > 0) {
-            $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
-            $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
-
-            if ($diffDays > $days) {
-                // Clean token and session before forcing password rotation.
-                $tokenStorage->setToken(null);
-                $request->getSession()->invalidate();
-
-                return $this->json([
-                    'rotate_password' => true,
-                    'redirect' => '/account/change-password?rotate=1&userId='.$user->getId(),
-                ]);
-            }
         }
 
         $data = null;
@@ -274,6 +283,107 @@ class SecurityController extends AbstractController
         $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
 
         return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
+    }
+
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    #[Route('/session/expiration', name: 'session_expiration_status', methods: ['GET'])]
+    public function sessionExpirationStatus(Request $request): JsonResponse
+    {
+        return $this->createSessionExpirationResponse($request);
+    }
+
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    #[Route('/session/keep-alive', name: 'session_keep_alive', methods: ['POST'])]
+    public function sessionKeepAlive(Request $request): JsonResponse
+    {
+        return $this->createSessionExpirationResponse($request);
+    }
+
+    private function createSessionExpirationResponse(Request $request): JsonResponse
+    {
+        $featureEnabled = 'true' === $this->settingsManager->getSetting(
+            'security.session_expiration_warning_enabled',
+            true
+        );
+
+        if (!$featureEnabled) {
+            $response = new JsonResponse([
+                'enabled' => false,
+                'isAuthenticated' => true,
+                'lifetime' => 0,
+                'warningSeconds' => 0,
+                'expiresAt' => 0,
+                'logoutUrl' => '/logout',
+            ]);
+
+            $response->headers->set('Cache-Control', 'no-store, private');
+            $response->headers->set('Pragma', 'no-cache');
+
+            return $response;
+        }
+
+        $session = $request->getSession();
+
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        $now = time();
+        $session->set(self::SESSION_KEEP_ALIVE_KEY, $now);
+
+        $lifetime = max(0, (int) $session->getMetadataBag()->getLifetime());
+
+        // A cookie lifetime of 0 means "until the browser closes" and does not
+        // describe the server-side inactivity limit. In that standard Symfony
+        // configuration, use PHP's session retention lifetime instead.
+        if ($lifetime <= 1) {
+            $lifetime = max(0, (int) \ini_get('session.gc_maxlifetime'));
+        }
+
+        $configuredWarningSeconds = (int) $this->settingsManager->getSetting(
+            'security.session_expiration_warning_seconds',
+            true
+        );
+
+        if ($configuredWarningSeconds <= 0) {
+            $configuredWarningSeconds = self::SESSION_EXPIRATION_WARNING_SECONDS;
+        }
+
+        $warningSeconds = $lifetime > 1
+            ? min($configuredWarningSeconds, $lifetime - 1)
+            : 0;
+
+        $response = new JsonResponse([
+            'enabled' => $lifetime > 1 && $warningSeconds > 0,
+            'isAuthenticated' => true,
+            'lifetime' => $lifetime,
+            'warningSeconds' => $warningSeconds,
+            'expiresAt' => $lifetime > 0 ? $now + $lifetime : 0,
+            'logoutUrl' => '/logout',
+        ]);
+
+        $response->headers->set('Cache-Control', 'no-store, private');
+        $response->headers->set('Pragma', 'no-cache');
+
+        return $response;
+    }
+
+    /**
+     * Returns the contextual ROLE_CURRENT_COURSE_* roles the current user holds
+     * for the course/session/group context resolved from the cid/sid/gid query
+     * parameters. CidReqListener resolves the context into the session and
+     * CourseContextRoleListener publishes the roles on the token before this
+     * controller runs, so we only expose the contextual subset of the token roles.
+     */
+    #[Route('/course-context-roles', name: 'course_context_roles', methods: ['GET'])]
+    public function courseContextRoles(): JsonResponse
+    {
+        $token = $this->tokenStorage->getToken();
+        $roles = null !== $token
+            ? array_values(array_intersect($token->getRoleNames(), User::CONTEXT_ROLES))
+            : [];
+
+        return new JsonResponse(['roles' => $roles], Response::HTTP_OK);
     }
 
     #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
@@ -413,6 +523,30 @@ class SecurityController extends AbstractController
 
             return '';
         }
+    }
+
+    private function mustRenewPasswordAtFirstLogin(User $user): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('security.force_renew_password_at_first_login', true)
+            && null !== $user->getPasswordRequestedAt()
+            && null === $user->getConfirmationToken();
+    }
+
+    private function mustRotatePassword(User $user): bool
+    {
+        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
+        if ($days <= 0) {
+            return false;
+        }
+
+        $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
+        if (!$lastUpdate instanceof DateTimeInterface) {
+            return false;
+        }
+
+        $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
+
+        return $diffDays > $days;
     }
 
     private function calculateRedirectUrl(

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
@@ -30,25 +32,28 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['access_url:write', 'course_category:write'],
     ],
-    security: "is_granted('ROLE_ADMIN')"
+    security: "is_granted('ROLE_ADMIN')",
+    paginationEnabled: false,
 )]
+#[ApiFilter(OrderFilter::class, properties: ['url', 'description'])]
 #[ORM\Table(name: 'access_url')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: AccessUrlRepository::class)]
 #[ORM\EntityListeners([AccessUrlListener::class, ResourceListener::class])]
 #[ApiResource(
     uriTemplate: '/users/{id}/access_urls',
+    shortName: 'UserAccessUrl',
     operations: [new GetCollection(controller: UserAccessUrlsController::class)],
     uriVariables: [
         'id' => new Link(description: 'User identifier'),
     ],
     normalizationContext: ['groups' => ['user_access_url:read']],
     paginationEnabled: false,
-    security: "is_granted('ROLE_ADMIN')",
+    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_USER') and request.attributes.get('id') == user.getId())",
 )]
 class AccessUrl extends AbstractResource implements ResourceInterface, Stringable
 {
-    public const DEFAULT_ACCESS_URL = 'http://localhost/';
+    public const string DEFAULT_ACCESS_URL = 'http://localhost/';
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]

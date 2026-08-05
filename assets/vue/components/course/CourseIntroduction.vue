@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from "vue-i18n"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
 import EmptyState from "../EmptyState.vue"
@@ -9,152 +9,191 @@ import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
-import courseService from "../../services/courseService"
 import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
-const { t } = useI18n()
-const router = useRouter()
-
-const cidReqStore = useCidReqStore()
-
-const { course, session } = storeToRefs(cidReqStore)
-
-const intro = ref(null)
-const currentSessionId = session.value?.id
-const hasMismatchedSidLinks = computed(() => {
-  if (!intro.value?.introText || !currentSessionId) return false
-
-  const regex = /sid=(\d+)/g
-  const matches = intro.value.introText.match(regex)
-  return matches?.some((match) => match !== `sid=${currentSessionId}`) || false
-})
-
-defineProps({
-  isAllowedToEdit: {
+const props = defineProps({
+  tool: {
+    type: String,
+    default: "course_homepage",
+  },
+  compact: {
     type: Boolean,
-    required: true,
+    default: false,
+  },
+  emptySummary: {
+    type: String,
+    default: "",
+  },
+  emptyDetail: {
+    type: String,
+    default: "",
   },
 })
 
+const { t } = useI18n()
+const router = useRouter()
+const cidReqStore = useCidReqStore()
+const { course, session } = storeToRefs(cidReqStore)
 const platformConfigStore = usePlatformConfig()
+const { isAllowedToEdit } = useIsAllowedToEdit()
 
-courseService.loadHomeIntro(course.value.id, session.value?.id).then((data) => (intro.value = data))
+const intro = ref(null)
+const isLoading = ref(false)
+
+const isCourseHomepage = computed(() => props.tool === "course_homepage")
+const isEnabled = computed(() => {
+  if (isCourseHomepage.value) {
+    return true
+  }
+
+  const value = platformConfigStore.getSetting("course.enable_tool_introduction")
+
+  return value === true || value === "true" || value === 1 || value === "1"
+})
+
+const currentSessionId = computed(() => session.value?.id || 0)
+
+const hasIntroContent = computed(() => {
+  const html = String(intro.value?.introText || "").trim()
+
+  if (!html) {
+    return false
+  }
+
+  const plainText = html
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, "")
+    .trim()
+
+  return plainText.length > 0 || /<(img|video|audio|iframe|embed|object)\b/i.test(html)
+})
 
 const displayedIntroText = computed(() => {
   const text = intro.value?.introText
-  if (!text) return null
 
-  if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
+  if (!text || !hasIntroContent.value) {
+    return null
+  }
+
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
     return filterTranslatedHtml(text, window.user?.locale)
   }
 
   return text
 })
 
-async function updateIntroLinks() {
-  if (!intro.value?.introText || !currentSessionId) return
-
-  const updatedIntroText = intro.value.introText.replace(/sid=\d+/g, `sid=${currentSessionId}`)
-
-  const payload = {
-    introText: updatedIntroText,
-    iid: intro.value.c_tool.iid,
-    resourceLinkList: [
-      {
-        sid: currentSessionId,
-        cid: course.value.id,
-        introText: updatedIntroText,
-        visibility: "published",
-      },
-    ],
-    ...(intro.value.iid && { iid: intro.value.iid }),
-  }
-
-  try {
-    const response = await cToolIntroService.addToolIntro(course.value.id, payload)
-
-    if (intro.value.iid) {
-      alert(t("Introduction updated successfully!"))
-    } else {
-      intro.value.iid = response.data.iid
-      alert(t("Introduction created successfully!"))
-    }
-
-    intro.value.introText = updatedIntroText
-  } catch (error) {
-    console.error("Error updating or creating the introduction:", error)
-    alert(t("An error occurred."))
-  }
-}
-
-const goToIntroCreate = () => {
-  router.push({
-    name: "ToolIntroCreate",
-    params: {
-      courseTool: intro.value.c_tool.iid,
-    },
-    query: {
-      cid: course.value.id,
-      sid: session.value?.id,
-      parentResourceNodeId: course.value.resourceNode.id,
-      ctoolIntroId: intro.value.iid,
-    },
-  })
-}
-
-const goToIntroUpdate = () => {
-  router.push({
-    name: "ToolIntroUpdate",
-    params: {
-      id: `/api/c_tool_intros/${intro.value.iid}`,
-    },
-    query: {
-      cid: course.value.id,
-      sid: session.value?.id,
-      ctoolintroIid: intro.value.iid,
-      ctoolId: intro.value.c_tool.iid,
-      parentResourceNodeId: course.value.resourceNode.id,
-      id: `/api/c_tool_intros/${intro.value.iid}`,
-    },
-  })
-}
-
-const goToCreateOrUpdate = () => {
-  if (intro.value.createInSession) {
-    goToIntroCreate()
-
+async function loadIntro() {
+  if (!isEnabled.value || !course.value?.id) {
+    intro.value = null
     return
   }
 
-  goToIntroUpdate()
+  isLoading.value = true
+
+  try {
+    intro.value = await cToolIntroService.findCourseHomeInro(props.tool)
+  } catch (error) {
+    console.error("Error loading tool introduction:", error)
+    intro.value = null
+  } finally {
+    isLoading.value = false
+  }
 }
 
-defineExpose({
-  introduction: intro,
-  goToCreateOrUpdate,
-})
+async function createEmptyIntroIfNeeded() {
+  // If an intro already exists for the CURRENT context, nothing to create. In a
+  // session, an intro inherited from the base course (createInSession) must be
+  // forked into a session-specific one before editing, so it does not short-circuit.
+  if (intro.value?.iid && !intro.value?.createInSession) {
+    return
+  }
+
+  intro.value = await cToolIntroService.addToolIntro(course.value.id, {
+    toolName: props.tool,
+    introText: intro.value?.introText || "",
+  })
+}
+
+async function openEditor() {
+  await createEmptyIntroIfNeeded()
+
+  if (!intro.value?.iid) {
+    console.error("Cannot open tool introduction editor.", intro.value)
+    return
+  }
+
+  router.push({
+    name: "ToolIntroUpdate",
+    query: {
+      cid: course.value.id,
+      sid: currentSessionId.value || undefined,
+      id: `/api/c_tool_intros/${intro.value.iid}`,
+    },
+  })
+}
+
+watch(
+  () => [isEnabled.value, course.value?.id, currentSessionId.value, props.tool],
+  () => loadIntro(),
+  { immediate: true },
+)
 </script>
 
 <template>
-  <div
-    v-if="intro"
-    class="mb-4"
-  >
-    <div v-if="intro.introText">
-      <div v-html="displayedIntroText" />
-      <BaseButton
-        v-if="isAllowedToEdit && hasMismatchedSidLinks"
-        :label="t('Update introduction links')"
-        class="mt-2"
-        icon="refresh"
-        type="primary"
-        @click="updateIntroLinks"
+  <div v-if="isEnabled">
+    <template v-if="compact">
+      <div
+        v-if="!isLoading && isAllowedToEdit"
+        class="mb-2 flex justify-end items-center"
+      >
+        <BaseButton
+          :label="hasIntroContent ? t('Edit introduction') : t('Add introduction')"
+          :icon="hasIntroContent ? 'pencil' : 'plus'"
+          type="success"
+          only-icon
+          size="small"
+          :title="hasIntroContent ? t('Edit introduction') : t('Add introduction')"
+          @click="openEditor"
+        />
+      </div>
+
+      <div
+        v-if="!isLoading && hasIntroContent"
+        class="mb-4"
+        v-html="displayedIntroText"
       />
-    </div>
-    <div v-else-if="isAllowedToEdit">
+    </template>
+
+    <template v-else>
+      <div
+        v-if="!isLoading && hasIntroContent"
+        class="mb-4"
+      >
+        <div
+          v-if="isAllowedToEdit"
+          class="mb-2 flex justify-end items-center"
+        >
+          <BaseButton
+            :label="t('Edit introduction')"
+            icon="pencil"
+            type="success"
+            only-icon
+            size="small"
+            :title="t('Edit introduction')"
+            @click="openEditor"
+          />
+        </div>
+
+        <div v-html="displayedIntroText" />
+      </div>
+
       <EmptyState
-        :detail="t('Add a course introduction to display to your students.')"
-        :summary="t('You don\'t have any course content yet.')"
+        v-else-if="!isLoading && isAllowedToEdit"
+        :detail="emptyDetail || t('Add a course introduction to display to your students.')"
+        :summary="emptySummary || t('You don\'t have any course content yet.')"
         icon="courses"
       >
         <BaseButton
@@ -162,14 +201,24 @@ defineExpose({
           class="mt-4"
           icon="plus"
           type="success"
-          @click="goToIntroCreate"
+          @click="openEditor"
         />
       </EmptyState>
-    </div>
+
+      <div
+        v-else-if="isLoading"
+        aria-busy="true"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <Skeleton
+          height="1rem"
+          width="70%"
+        />
+        <Skeleton
+          height="1rem"
+          width="45%"
+        />
+      </div>
+    </template>
   </div>
-  <Skeleton
-    v-else
-    class="mb-4"
-    height="21.5rem"
-  />
 </template>

@@ -14,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AiTutorConversationRepository::class)]
 #[ORM\Table(name: 'ai_tutor_conversation')]
-#[ORM\UniqueConstraint(name: 'uniq_ai_tutor_conv_user_course_provider', columns: ['user_id', 'course_id', 'ai_provider'])]
+#[ORM\UniqueConstraint(name: 'uniq_ai_tutor_conv_user_course_provider', columns: [
+    'user_id', 'course_id', 'ai_provider',
+])]
 #[ORM\Index(columns: ['user_id', 'course_id'], name: 'idx_ai_tutor_conv_user_course')]
 #[ORM\Index(columns: ['course_id'], name: 'idx_ai_tutor_conv_course')]
 #[ORM\Index(columns: ['last_message_at'], name: 'idx_ai_tutor_conv_last_message')]
@@ -161,15 +163,6 @@ class AiTutorConversation
         return $this;
     }
 
-    public function touchLastMessageAt(): self
-    {
-        $now = new DateTime();
-        $this->lastMessageAt = $now;
-        $this->updatedAt = $now;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, AiTutorMessage>
      */
@@ -185,6 +178,15 @@ class AiTutorConversation
             $message->setConversation($this);
             $this->touchLastMessageAt();
         }
+
+        return $this;
+    }
+
+    public function touchLastMessageAt(): self
+    {
+        $now = new DateTime();
+        $this->lastMessageAt = $now;
+        $this->updatedAt = $now;
 
         return $this;
     }

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use Stripe\Stripe;
 
 /**
  * Process purchase confirmation script for the Buy Courses plugin.
@@ -18,7 +19,6 @@ require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
 $serviceSaleId = (int) Session::read('bc_service_sale_id');
-$couponId = (int) Session::read('bc_coupon_id');
 
 if (empty($serviceSaleId)) {
     api_not_allowed(true);
@@ -30,22 +30,79 @@ if (empty($serviceSale)) {
     api_not_allowed(true);
 }
 
-$userInfo = api_get_user_info($serviceSale['buyer']['id']);
-
-if (!empty($couponId)) {
-    $coupon = $plugin->getCouponService($couponId, $serviceSale['service_id']);
-
-    if (!empty($coupon)) {
-        $serviceSale['item'] = $plugin->getService($serviceSale['service_id'], $coupon);
-    }
+$currentUserId = api_get_user_id();
+$saleBuyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+if ($currentUserId <= 0 || $currentUserId !== $saleBuyerId) {
+    api_not_allowed(true);
 }
 
-if (empty($serviceSale['item'])) {
-    $serviceSale['item'] = $plugin->getService($serviceSale['service_id']);
-}
+$userInfo = api_get_user_info($saleBuyerId);
 
 $service = $serviceSale['service'];
-$serviceItem = $serviceSale['item'];
+if (!$plugin->isServiceActive($service)) {
+    if (BuyCoursesPlugin::SERVICE_STATUS_PENDING === (int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING)) {
+        $plugin->cancelServiceSale(
+            $serviceSaleId,
+            BuyCoursesPlugin::AUDIT_SOURCE_SYSTEM,
+            $currentUserId,
+            [
+                'trigger' => 'inactive_service_checkout',
+            ]
+        );
+    }
+
+    Session::erase('bc_service_sale_id');
+    Session::erase('bc_coupon_id');
+
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServiceInactiveForPurchase'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
+$purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock(
+    (int) ($service['id'] ?? 0),
+    $currentUserId
+);
+if (null !== $purchaseUpsaleChainBlock) {
+    if (BuyCoursesPlugin::SERVICE_STATUS_PENDING === (int) ($serviceSale['status'] ?? BuyCoursesPlugin::SERVICE_STATUS_PENDING)) {
+        $plugin->cancelServiceSale($serviceSaleId);
+    }
+
+    Session::erase('bc_service_sale_id');
+    Session::erase('bc_coupon_id');
+
+    Display::addFlash(
+        Display::return_message(
+            $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.(int) ($service['id'] ?? 0));
+    exit;
+}
+
+$upgradeSourceSaleId = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0);
+$upgradeSourceSale = $upgradeSourceSaleId > 0
+    ? $plugin->getServiceSale($upgradeSourceSaleId)
+    : [];
+$isExistingRecurringUpgrade = !empty($upgradeSourceSale)
+    && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED
+        === (int) ($upgradeSourceSale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED)
+    && '' !== trim((string) (
+        $upgradeSourceSale['gateway_subscription_id']
+        ?? $upgradeSourceSale['recurring_profile_id']
+        ?? ''
+    ));
+$serviceItem = $plugin->buildServiceSaleVatSummary($serviceSale);
 $currency = $plugin->getCurrency($serviceSale['currency_id']);
 $globalParameters = $plugin->getGlobalParameters();
 $terms = $globalParameters['terms_and_conditions'] ?? '';
@@ -56,6 +113,155 @@ $interbreadcrumb[] = [
     'url' => 'service_catalog.php',
     'name' => $plugin->get_lang('ListOfServicesOnSale'),
 ];
+
+
+if (!function_exists('buycoursesGetStripeRecurringPriceDataInterval')) {
+    /**
+     * Map the service duration to a Stripe recurring interval.
+     * Stripe Checkout requires a fixed recurring interval when using dynamic price_data.
+     */
+    function buycoursesGetStripeRecurringPriceDataInterval(array $service): array
+    {
+        $durationDays = max(0, (int) ($service['duration_days'] ?? 0));
+
+        if ($durationDays >= 360) {
+            return [
+                'interval' => 'year',
+                'interval_count' => max(1, (int) round($durationDays / 365)),
+            ];
+        }
+
+        if ($durationDays >= 28) {
+            return [
+                'interval' => 'month',
+                'interval_count' => max(1, (int) round($durationDays / 30)),
+            ];
+        }
+
+        if ($durationDays >= 7) {
+            return [
+                'interval' => 'week',
+                'interval_count' => max(1, (int) round($durationDays / 7)),
+            ];
+        }
+
+        return [
+            'interval' => 'day',
+            'interval_count' => max(1, $durationDays ?: 1),
+        ];
+    }
+}
+
+if (!function_exists('buycoursesGetStripeObjectId')) {
+    function buycoursesGetStripeObjectId(mixed $value): string
+    {
+        if (is_string($value)) {
+            return trim($value);
+        }
+
+        if (is_object($value) && isset($value->id)) {
+            return trim((string) $value->id);
+        }
+
+        return '';
+    }
+}
+
+if (!function_exists('buycoursesStripeCheckoutMatchesServiceSale')) {
+    function buycoursesStripeCheckoutMatchesServiceSale(
+        mixed $checkoutSession,
+        array $serviceSale,
+        int $currentUserId
+    ): bool {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        $saleBuyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+        $checkoutSessionId = trim((string) ($checkoutSession->id ?? ''));
+        $storedCheckoutSessionId = trim((string) ($serviceSale['gateway_checkout_session_id'] ?? ''));
+        $clientReferenceId = (int) ($checkoutSession->client_reference_id ?? 0);
+        $metadataSaleId = (int) ($checkoutSession->metadata->service_sale_id ?? 0);
+        $metadataBuyerId = (int) ($checkoutSession->metadata->buyer_id ?? 0);
+
+        if ($serviceSaleId <= 0
+            || $currentUserId <= 0
+            || $currentUserId !== $saleBuyerId
+            || '' === $checkoutSessionId
+            || $serviceSaleId !== $clientReferenceId
+            || $serviceSaleId !== $metadataSaleId
+            || $currentUserId !== $metadataBuyerId
+        ) {
+            return false;
+        }
+
+        return '' === $storedCheckoutSessionId
+            || hash_equals($storedCheckoutSessionId, $checkoutSessionId);
+    }
+}
+
+if (!function_exists('buycoursesCompleteStripeServiceCheckout')) {
+    function buycoursesCompleteStripeServiceCheckout(
+        BuyCoursesPlugin $plugin,
+        array $serviceSale,
+        mixed $checkoutSession
+    ): bool {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        $checkoutSessionId = trim((string) ($checkoutSession->id ?? ''));
+        if ($serviceSaleId <= 0 || '' === $checkoutSessionId) {
+            return false;
+        }
+
+        $subscriptionId = buycoursesGetStripeObjectId($checkoutSession->subscription ?? null);
+        $customerId = buycoursesGetStripeObjectId($checkoutSession->customer ?? null);
+        $paymentIntentId = buycoursesGetStripeObjectId($checkoutSession->payment_intent ?? null);
+        $gatewayData = [];
+
+        if ('' !== $customerId) {
+            $gatewayData['gateway_customer_id'] = $customerId;
+        }
+
+        if ('' !== $paymentIntentId) {
+            $gatewayData['gateway_transaction_id'] = $paymentIntentId;
+        }
+
+        if ('' !== $subscriptionId) {
+            $gatewayData['gateway_subscription_id'] = $subscriptionId;
+            $gatewayData['recurring_profile_id'] = $subscriptionId;
+            $gatewayData['recurring_gateway'] = 'stripe';
+            $gatewayData['recurring_payment'] = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED;
+        }
+
+        if ([] !== $gatewayData) {
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
+        }
+
+        $saleBuyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+        if (!$plugin->completeServiceSale(
+            $serviceSaleId,
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+            $saleBuyerId > 0 ? $saleBuyerId : null,
+            [
+                'gateway' => 'stripe',
+                'checkout_session_id' => $checkoutSessionId,
+                'subscription_id' => $subscriptionId,
+                'transaction_id' => $paymentIntentId,
+                'trigger' => 'checkout_reconciliation',
+            ]
+        )) {
+            return false;
+        }
+
+        $completedServiceSale = $plugin->getServiceSale($serviceSaleId);
+        $nextChargeDate = trim((string) ($completedServiceSale['date_end'] ?? ''));
+        if ('' !== $subscriptionId && '' !== $nextChargeDate) {
+            $plugin->updateServiceSaleGatewayData($serviceSaleId, [
+                'next_charge_date' => $nextChargeDate,
+            ]);
+        }
+
+        $plugin->markGatewayEventProcessed($serviceSaleId, $checkoutSessionId);
+
+        return true;
+    }
+}
 
 switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -331,6 +537,414 @@ switch ($serviceSale['payment_type']) {
         $template->assign('catalog_url', $catalogUrl);
         $template->assign('culqi_amount_cents', $amountInCents);
         $template->assign('culqi_currency_code', $currencyCode);
+
+        $content = $template->fetch('BuyCourses/view/process_confirm.tpl');
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+        exit;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_STRIPE:
+        $stripeParams = $plugin->getStripeParams();
+        $stripeSecretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+
+        if ('' === $stripeSecretKey) {
+            Display::addFlash(
+                Display::return_message(
+                    $plugin->get_lang('StripeSecretKeyMissing'),
+                    'error',
+                    false
+                )
+            );
+
+            $plugin->cancelServiceSale((int) $serviceSale['id']);
+            header('Location: '.$catalogUrl);
+            exit;
+        }
+
+        if ('POST' === $_SERVER['REQUEST_METHOD']) {
+            $action = trim((string) ($_POST['action'] ?? ''));
+
+            if ('cancel' === $action) {
+                $plugin->cancelServiceSale((int) $serviceSale['id']);
+                unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
+
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('OrderCancelled'),
+                        'warning',
+                        false
+                    )
+                );
+
+                header('Location: '.$catalogUrl);
+                exit;
+            }
+
+            if ('confirm' === $action) {
+                $currencyCode = strtolower(trim((string) ($currency['iso_code'] ?? 'eur')));
+                $amountInCents = (int) round((float) ($serviceSale['price'] ?? 0) * 100);
+                $recurringAmountInCents = (int) round(
+                    (float) ($serviceSale['recurring_amount'] ?? $serviceSale['price'] ?? 0) * 100
+                );
+                $isRenewable = !empty($service['renewable']) && !$isExistingRecurringUpgrade;
+                $serviceName = (string) ($service['name'] ?? $serviceSale['service']['name'] ?? 'Service');
+
+                if ($amountInCents <= 0) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('InvalidServiceSaleAmount'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                Stripe::setApiKey($stripeSecretKey);
+                Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+                $storedCheckoutSessionId = trim((string) ($serviceSale['gateway_checkout_session_id'] ?? ''));
+                $checkoutAttemptSeed = 'initial';
+
+                if ('' !== $storedCheckoutSessionId) {
+                    try {
+                        $storedCheckoutSession = \Stripe\Checkout\Session::retrieve($storedCheckoutSessionId);
+                    } catch (Throwable $exception) {
+                        error_log(
+                            '[BuyCourses][Stripe] Stored Checkout Session could not be retrieved for service sale '.
+                            (int) $serviceSale['id'].
+                            ': '.
+                            $exception->getMessage()
+                        );
+
+                        Display::addFlash(
+                            Display::return_message(
+                                $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                                'error',
+                                false
+                            )
+                        );
+
+                        header('Location: '.$catalogUrl);
+                        exit;
+                    }
+
+                    if (!buycoursesStripeCheckoutMatchesServiceSale(
+                        $storedCheckoutSession,
+                        $serviceSale,
+                        $currentUserId
+                    )) {
+                        error_log(
+                            '[BuyCourses][Stripe] Stored Checkout Session does not match service sale '.
+                            (int) $serviceSale['id'].
+                            '.'
+                        );
+
+                        Display::addFlash(
+                            Display::return_message(
+                                $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                                'error',
+                                false
+                            )
+                        );
+
+                        header('Location: '.$catalogUrl);
+                        exit;
+                    }
+
+                    $storedSessionStatus = strtolower(trim((string) ($storedCheckoutSession->status ?? '')));
+                    $storedPaymentStatus = strtolower(trim((string) ($storedCheckoutSession->payment_status ?? '')));
+                    $storedSessionIsPaid = in_array(
+                        $storedPaymentStatus,
+                        ['paid', 'no_payment_required'],
+                        true
+                    );
+
+                    if ('complete' === $storedSessionStatus && $storedSessionIsPaid) {
+                        if (buycoursesCompleteStripeServiceCheckout($plugin, $serviceSale, $storedCheckoutSession)) {
+                            unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id']);
+
+                            Display::addFlash(
+                                Display::return_message(
+                                    sprintf(
+                                        $plugin->get_lang('SubscriptionToServiceXSuccessful'),
+                                        htmlspecialchars($serviceName, ENT_QUOTES, 'UTF-8')
+                                    ),
+                                    'success',
+                                    false
+                                )
+                            );
+
+                            header('Location: '.$catalogUrl);
+                            exit;
+                        }
+
+                        error_log(
+                            '[BuyCourses][Stripe] Paid Checkout Session could not complete service sale '.
+                            (int) $serviceSale['id'].
+                            ': '.
+                            $plugin->getLastServiceSaleError()
+                        );
+
+                        Display::addFlash(
+                            Display::return_message(
+                                $plugin->get_lang('UpgradeCouldNotBeCompleted'),
+                                'error',
+                                false
+                            )
+                        );
+
+                        header('Location: '.$catalogUrl);
+                        exit;
+                    }
+
+                    $storedCheckoutUrl = trim((string) ($storedCheckoutSession->url ?? ''));
+                    if ('open' === $storedSessionStatus && '' !== $storedCheckoutUrl) {
+                        header('HTTP/1.1 303 See Other');
+                        header('Location: '.$storedCheckoutUrl);
+                        exit;
+                    }
+
+                    if ('expired' !== $storedSessionStatus) {
+                        Display::addFlash(
+                            Display::return_message(
+                                $plugin->get_lang('StripeCheckoutCompletedPendingConfirmation'),
+                                'warning',
+                                false
+                            )
+                        );
+
+                        header('Location: '.$catalogUrl);
+                        exit;
+                    }
+
+                    $checkoutAttemptSeed = $storedCheckoutSessionId;
+                }
+
+                $checkoutIdempotencyKey = 'buycourses-service-sale-'.
+                    (int) $serviceSale['id'].
+                    '-checkout-'.
+                    substr(hash('sha256', $checkoutAttemptSeed), 0, 24);
+                $serviceSaleCouponUsage = $plugin->getServiceSaleCouponUsage((int) $serviceSale['id']);
+                $couponTimesApplied = max(0, (int) ($serviceSaleCouponUsage['times_applied'] ?? 0));
+                $useLimitedRecurringCoupon = $couponTimesApplied > 1 && $upgradeSourceSaleId <= 0;
+                $successUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_success.php?service_sale_id='.(int) $serviceSale['id'].'&session_id={CHECKOUT_SESSION_ID}';
+                $cancelUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_stripe_cancel.php?service_sale_id='.(int) $serviceSale['id'];
+
+                $checkoutPayload = [
+                    'payment_method_types' => ['card'],
+                    'customer_email' => $userInfo['email'] ?? '',
+                    'client_reference_id' => (string) $serviceSale['id'],
+                    'success_url' => $successUrl,
+                    'cancel_url' => $cancelUrl,
+                    'metadata' => [
+                        'source' => 'BuyCourses',
+                        'sale_type' => 'service',
+                        'service_sale_id' => (string) $serviceSale['id'],
+                        'service_id' => (string) $serviceSale['service_id'],
+                        'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
+                        'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                        'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                        'coupon_times_applied' => (string) $couponTimesApplied,
+                    ],
+                ];
+
+                $priceData = [
+                    'unit_amount' => $amountInCents,
+                    'currency' => $currencyCode,
+                    'product_data' => [
+                        'name' => $serviceName,
+                        'metadata' => [
+                            'source' => 'BuyCourses',
+                            'sale_type' => 'service',
+                            'service_id' => (string) $serviceSale['service_id'],
+                        ],
+                    ],
+                ];
+
+                if ($isRenewable) {
+                    if ($recurringAmountInCents <= 0) {
+                        Display::addFlash(
+                            Display::return_message(
+                                $plugin->get_lang('InvalidServiceSaleAmount'),
+                                'error',
+                                false
+                            )
+                        );
+
+                        header('Location: '.$catalogUrl);
+                        exit;
+                    }
+
+                    $priceData['unit_amount'] = $recurringAmountInCents;
+                    $recurringInterval = buycoursesGetStripeRecurringPriceDataInterval($service);
+                    $priceData['recurring'] = [
+                        'interval' => $recurringInterval['interval'],
+                        'interval_count' => $recurringInterval['interval_count'],
+                    ];
+
+                    $checkoutPayload['mode'] = 'subscription';
+                    $checkoutPayload['line_items'] = [[
+                        'price_data' => $priceData,
+                        'quantity' => 1,
+                    ]];
+                    $initialDiscountInCents = max(0, $recurringAmountInCents - $amountInCents);
+                    if ($initialDiscountInCents > 0) {
+                        try {
+                            $stripeCoupon = \Stripe\Coupon::create(
+                                [
+                                    'amount_off' => $initialDiscountInCents,
+                                    'currency' => $currencyCode,
+                                    'duration' => $useLimitedRecurringCoupon ? 'forever' : 'once',
+                                    'name' => '' !== trim((string) ($serviceSaleCouponUsage['code'] ?? ''))
+                                        ? (string) $serviceSaleCouponUsage['code']
+                                        : $plugin->get_lang('UpgradeProratedCredit'),
+                                    'metadata' => [
+                                        'source' => 'BuyCourses',
+                                        'service_sale_id' => (string) $serviceSale['id'],
+                                        'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                                        'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                                        'coupon_times_applied' => (string) $couponTimesApplied,
+                                        'limited_recurring_coupon' => $useLimitedRecurringCoupon ? '1' : '0',
+                                    ],
+                                ],
+                                [
+                                    'idempotency_key' => $checkoutIdempotencyKey.'-coupon',
+                                ]
+                            );
+                            $checkoutPayload['discounts'] = [[
+                                'coupon' => (string) $stripeCoupon->id,
+                            ]];
+                        } catch (Throwable $exception) {
+                            error_log(
+                                '[BuyCourses][Stripe] Checkout discount creation failed for service sale '.
+                                (int) $serviceSale['id'].
+                                ': '.
+                                $exception->getMessage()
+                            );
+
+                            Display::addFlash(
+                                Display::return_message(
+                                    $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                                    'error',
+                                    false
+                                )
+                            );
+
+                            header('Location: '.$catalogUrl);
+                            exit;
+                        }
+                    }
+
+                    $checkoutPayload['subscription_data'] = [
+                        'metadata' => [
+                            'source' => 'BuyCourses',
+                            'sale_type' => 'service',
+                            'service_sale_id' => (string) $serviceSale['id'],
+                            'service_id' => (string) $serviceSale['service_id'],
+                            'buyer_id' => (string) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0),
+                            'upgrade_from_sale_id' => (string) $upgradeSourceSaleId,
+                            'coupon_id' => (string) ((int) ($serviceSaleCouponUsage['id'] ?? 0)),
+                            'coupon_times_applied' => (string) $couponTimesApplied,
+                            'vat_treatment' => (string) ($serviceSale['vat_treatment'] ?? ''),
+                            'vat_rate' => (string) ($serviceSale['vat_rate'] ?? ''),
+                            'tax_amount' => (string) ($serviceSale['tax_amount'] ?? ''),
+                            'price_without_tax' => (string) ($serviceSale['price_without_tax'] ?? ''),
+                        ],
+                    ];
+                } else {
+                    $checkoutPayload['mode'] = 'payment';
+                    $checkoutPayload['line_items'] = [[
+                        'price_data' => $priceData,
+                        'quantity' => 1,
+                    ]];
+                }
+
+                try {
+                    $checkoutSession = \Stripe\Checkout\Session::create(
+                        $checkoutPayload,
+                        [
+                            'idempotency_key' => $checkoutIdempotencyKey,
+                        ]
+                    );
+                } catch (Throwable $exception) {
+                    error_log('[BuyCourses][Stripe] Checkout Session creation failed for service sale '.(int) $serviceSale['id'].': '.$exception->getMessage());
+
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                if (empty($checkoutSession->id) || empty($checkoutSession->url)) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                $gatewayData = [
+                    'gateway_checkout_session_id' => (string) $checkoutSession->id,
+                ];
+                if ($isRenewable) {
+                    $gatewayData['recurring_gateway'] = 'stripe';
+                }
+
+                if (!$plugin->updateServiceSaleGatewayData((int) $serviceSale['id'], $gatewayData)) {
+                    error_log(
+                        '[BuyCourses][Stripe] Checkout Session could not be stored for service sale '.
+                        (int) $serviceSale['id'].
+                        '.'
+                    );
+
+                    Display::addFlash(
+                        Display::return_message(
+                            $plugin->get_lang('StripeCheckoutCouldNotBeInitialized'),
+                            'error',
+                            false
+                        )
+                    );
+
+                    header('Location: '.$catalogUrl);
+                    exit;
+                }
+
+                unset($_SESSION['bc_coupon_id']);
+
+                header('HTTP/1.1 303 See Other');
+                header('Location: '.$checkoutSession->url);
+                exit;
+            }
+        }
+
+        $template = new Template($templateName);
+        $template->assign('header', $templateName);
+        $template->assign('back_url', $catalogUrl);
+        $template->assign('confirm_url', api_get_self());
+        $template->assign('terms', $terms);
+        $template->assign('service_sale', $serviceSale);
+        $template->assign('service', $service);
+        $template->assign('service_item', $serviceItem);
+        $template->assign('currency', $currency);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', []);
+        $template->assign('is_bank_transfer', false);
+        $template->assign('is_culqi_payment', false);
+        $template->assign('is_cecabank_payment', false);
 
         $content = $template->fetch('BuyCourses/view/process_confirm.tpl');
         $template->assign('content', $content);

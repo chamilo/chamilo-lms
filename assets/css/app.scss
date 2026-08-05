@@ -978,3 +978,26 @@ img.course-tool__icon {
   max-width: 100%;
   height: auto;
 }
+
+
+/* -------------------------------------------------------------------------
+ * SPA route loading indicator (NProgress)
+ * ---------------------------------------------------------------------- */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  @apply fixed left-0 top-0 z-[999999] h-1 w-full bg-primary;
+}
+
+#nprogress .peg {
+  @apply absolute right-0 block h-full w-24 opacity-100;
+  box-shadow: 0 0 10px rgb(var(--color-primary-base) / 0.45), 0 0 5px rgb(var(--color-primary-base) / 0.35);
+  transform: rotate(3deg) translate(0, -4px);
+}
+
+#nprogress .spinner {
+  @apply hidden;
+}
+

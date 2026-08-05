@@ -16,6 +16,7 @@
         class="w-full"
         panelClass="cm-searchselect-panel"
         @change="emitChange"
+        @filter="emitFilter"
       >
         <!-- Item template: label on one line, optional sublabel on second line -->
         <template #option="slotProps">
@@ -66,7 +67,7 @@ const props = defineProps({
   errorText: { type: String, default: "" },
 })
 
-const emit = defineEmits(["update:modelValue", "change"])
+const emit = defineEmits(["update:modelValue", "change", "filter"])
 
 const innerValue = ref(props.modelValue)
 const localOptions = ref([...props.options])
@@ -83,6 +84,10 @@ watch(
 function emitChange() {
   emit("update:modelValue", innerValue.value)
   emit("change", innerValue.value)
+}
+
+function emitFilter(event) {
+  emit("filter", event?.value || "")
 }
 </script>
 

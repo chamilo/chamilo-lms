@@ -20,13 +20,17 @@ class SecurityCaptchaController extends AbstractController
     {
         $username = trim((string) $request->query->get('username', ''));
 
+        $captchaRequired = $loginCaptchaManager->shouldRequireCaptcha($username);
+        $blocked = '' !== $username && $loginCaptchaManager->isBlocked($username);
+
         return $this->json([
-            'enabled' => $loginCaptchaManager->isEnabled(),
-            'blocked' => '' !== $username && $loginCaptchaManager->isBlocked($username),
+            'enabled' => $captchaRequired,
+            'configured' => $loginCaptchaManager->isEnabled(),
+            'blocked' => $blocked,
             'remainingSeconds' => '' !== $username
                 ? $loginCaptchaManager->getRemainingBlockedSeconds($username)
                 : 0,
-            'imageUrl' => $loginCaptchaManager->isEnabled()
+            'imageUrl' => $captchaRequired
                 ? '/login/captcha/image?ts='.time()
                 : null,
         ]);

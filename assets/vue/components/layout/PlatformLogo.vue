@@ -7,28 +7,70 @@ import { useSecurityStore } from "../../store/securityStore"
 const platformConfigStore = usePlatformConfig()
 const securityStore = useSecurityStore()
 
-const siteName = platformConfigStore.getSetting("platform.site_name")
-
+const siteName = computed(() => platformConfigStore.getSetting("platform.site_name") || "Chamilo")
 const theme = computed(() => platformConfigStore.visualTheme || "chamilo")
 const bust = ref(Date.now())
+const showImg = ref(true)
 
-/**
- * It will always serve the best available logo (svg/png) and fallback to default theme.
- * This avoids strict=1 probing and prevents 404 noise in the console.
- */
+const allowedLogoExtensions = ["svg", "png", "jpg", "jpeg", "gif", "webp"]
+
+const configuredLogoUrl = computed(() => {
+  const value = platformConfigStore.getSetting?.("platform.platform_logo_url")
+  const url = String(value || "").trim()
+
+  if (!isValidLogoUrl(url)) {
+    return ""
+  }
+
+  return url
+})
+
 const logoUrl = computed(() => {
+  if (configuredLogoUrl.value) {
+    return configuredLogoUrl.value
+  }
+
   return `/themes/${encodeURIComponent(theme.value)}/logo/header?t=${bust.value}`
 })
 
-const showImg = ref(true)
-
 watch(
-  () => platformConfigStore.visualTheme,
+  () => [platformConfigStore.visualTheme, configuredLogoUrl.value],
   () => {
     bust.value = Date.now()
     showImg.value = true
   },
 )
+
+function isValidLogoUrl(url) {
+  if (!url) {
+    return false
+  }
+
+  if (url.startsWith("/")) {
+    return hasAllowedLogoExtension(url)
+  }
+
+  try {
+    const parsedUrl = new URL(url)
+
+    if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+      return false
+    }
+
+    return hasAllowedLogoExtension(parsedUrl.pathname)
+  } catch {
+    return false
+  }
+}
+
+function hasAllowedLogoExtension(path) {
+  const cleanPath = String(path || "")
+    .split("?")[0]
+    .split("#")[0]
+  const extension = cleanPath.split(".").pop()?.toLowerCase()
+
+  return allowedLogoExtensions.includes(extension)
+}
 
 function onError(e) {
   showImg.value = false

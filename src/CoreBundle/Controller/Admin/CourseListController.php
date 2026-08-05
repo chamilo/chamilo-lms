@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/course-list-data')]
 class CourseListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'title' => 'c.title',
         'code' => 'c.code',
         'courseLanguage' => 'c.courseLanguage',
@@ -34,7 +34,7 @@ class CourseListController extends AbstractController
         'visibility' => 'c.visibility',
     ];
 
-    private const VISIBILITY_LABELS = [
+    private const array VISIBILITY_LABELS = [
         Course::CLOSED => 'Closed - the account is not active',
         Course::REGISTERED => 'Private access (access authorized to group members only)',
         Course::OPEN_PLATFORM => 'Open - access allowed for users registered on the platform',
@@ -125,7 +125,7 @@ class CourseListController extends AbstractController
         $total = (int) $countQb->select('COUNT(DISTINCT c.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate')
+            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -158,6 +158,7 @@ class CourseListController extends AbstractController
             $courseId = (int) $row['id'];
             $item = [
                 'id' => $courseId,
+                'resourceNodeId' => isset($row['resourceNodeId']) ? (int) $row['resourceNodeId'] : null,
                 'title' => $row['title'] ?? '',
                 'code' => $row['code'] ?? '',
                 'courseLanguage' => $row['courseLanguage'] ?? '',

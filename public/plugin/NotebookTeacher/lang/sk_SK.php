@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Žiadne poznámky vytvorené s aktuálnym filtro
 $strings['NoNotebook'] = 'Žiadne poznámky vytvorené v systéme';
 $strings['NoNotebookUser'] = 'Žiadne poznámky pre tohto študenta';
 $strings['NotebookNoStudentAssigned'] = 'Poznámky bez priradených študentov';
+
+$strings['TeacherNotesHelp'] = 'Vytvoriť súkromné poznámky učiteľa prepojené s účastníkmi v tomto kurze.';
+$strings['CurrentFilter'] = 'Aktuálny filter';
+$strings['EmptyStateHelp'] = 'Vytvoriť novú poznámku alebo zmeniť filter účastníkov.';

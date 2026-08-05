@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importi el Moodle';
+$strings['plugin_comment'] = 'Plenumi importan procezon el Moodle-datumbazo kaj dosieroj al Chamilo.';
+
+$strings['MoodlePassword'] = 'Moodle-pasvorto';
+$strings['UninstallError'] = 'Eraro okazis dum malinstalado de la kromprogramo.';
+
+$strings['db_host'] = 'Moodle-datumbaza gastiganto';
+$strings['db_user'] = 'Moodle-datumbaza uzanto';
+$strings['db_password'] = 'Moodle-datumbaza pasvorto';
+$strings['db_name'] = 'Moodle-datumbaza nomo';
+$strings['user_filter'] = 'Filtro por uzantoj';
+$strings['user_filter_help'] = 'Importi nur uzantojn kies uzantnomo komenciĝas per ĉi tiu ĉeno.<br>La importo de kursoj ankaŭ estas tuŝita de ĉi tiu agordo, ĉar ĝi importas nur kursojn en kiuj uzantoj kun ĉi tiu uzantnoma prefikso estas enskribitaj.';
+$strings['url_id'] = 'URL-identigilo';
+$strings['url_id_help'] = 'Aliro al URL-identigilo por konservi kursojn, uzantojn kaj sesiojn (se uzante plur-URL).';
+$strings['moodle_path'] = 'Moodledata vojo';
+$strings['moodle_path_help'] = 'La moodledata dosieruja vojo. Kutime io kiel <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Uzantoj';
+$strings['CourseCategoriesTask'] = 'Kursspecifaj kategorioj';
+$strings['CoursesTask'] = 'Kursoj';
+$strings['CourseSectionsTask'] = 'Kursspecifaj sekcioj';
+$strings['CourseModulesLessonTask'] = 'Kursaj moduloj: Lecionoj';
+$strings['LessonPagesTask'] = 'Lecionaj paĝoj';
+$strings['LessonPagesDocumentTask'] = 'Lecionaj paĝoj: Dokumentoj';
+$strings['FilesForLessonPagesTask'] = 'Dosieroj por lecionaj paĝoj';
+$strings['LessonPagesQuizTask'] = 'Lecionaj paĝoj: Demandoj';
+$strings['LessonPagesQuizQuestionTask'] = 'Demandoj por demandaj paĝoj';
+$strings['LessonAnswersTrueFalseTask'] = 'Respondoj por VERA/FALSA demandoj';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Respondoj por Mult-elektaj demandoj';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Respondoj por Mult-respondecaj demandoj';
+$strings['LessonAnswersMatchingTask'] = 'Respondoj por Parigaj demandoj';
+$strings['LessonAnswersEssayTask'] = 'Respondoj por Eseaj demandoj';
+$strings['LessonAnswersShortAnswerTask'] = 'Respondoj por Mallongaj Respondoj demandoj';
+$strings['FilesForLessonAnswersTask'] = 'Dosieroj por lecionaj respondoj';
+$strings['CourseModulesQuizTask'] = 'Kursaj moduloj: Kvizoj';
+$strings['CQuizTask'] = 'C-Kvizo';
+$strings['RoleAssignmentsTask'] = 'Roloj asignoj';
+$strings['QuizzesTask'] = 'Kvizoj';
+$strings['FilesForQuizzesTask'] = 'Dosieroj por kvizoj';
+$strings['QuestionCategoriesTask'] = 'Demandaj kategorioj';
+$strings['QuestionsTask'] = 'Demandoj';
+$strings['QuestionMultiChoiceSingleTask'] = 'Respondoj por mult-elektaj demandoj (unuopa)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Respondoj por mult-elektaj demandoj (multoblaj)';
+$strings['QuestionsTrueFalseTask'] = 'Respondoj por verafalsa demandoj';
+$strings['QuestionShortAnswerTask'] = 'Respondoj por mallongaj respondoj demandoj';
+$strings['CourseModulesScormTask'] = 'SCORM-kursoj';
+$strings['ScormScoesTask'] = 'SCORM-elementoj';
+$strings['FilesForScormScoesTask'] = 'Dosieroj por SCORM-elementoj';
+$strings['UserSessionsTask'] = 'Kurssesioj por uzantoj';
+$strings['CourseIntroductionsTask'] = 'Kursaj enkondukoj';
+$strings['FilesForCourseIntroductionsTask'] = 'Dosieroj por kursaj enkondukoj';
+$strings['FilesForCourseSectionsTask'] = 'Dosieroj por kursspecifaj sekcioj';
+$strings['CourseModulesUrlTask'] = 'Kursaj moduloj: URL-oj';
+$strings['UrlsTask'] = 'URL-oj';
+$strings['SortSectionModulesTask'] = 'Ordigi modulojn en sekcio';
+$strings['UsersScormsViewTask'] = 'SCORM-vidoj por uzantoj';
+$strings['UsersScormsProgressTask'] = 'SCORM-progreso';
+$strings['UsersLearnPathsTask'] = 'Vidoj de lernovojoj de uzantoj';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Leciona tempo por komenci la tempon de lernovoja sekcio';
+$strings['QuizzesScoresTask'] = 'Ĝisdatigi kvizajn poentarojn en lernovojo';
+$strings['QuestionGapselectTask'] = 'Respondoj por gapselect-demandoj';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Leciona branĉo al totala tempo en lernovoja dokumentoj';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Lecionaj provoj al totala tempo en lernovoja kvizoj';
+$strings['UsersLearnPathsQuizzesTask'] = 'Kvizaj provoj al lernovoja kvizaj provoj';
+$strings['UsersQuizzesAttemptsTask'] = 'Kvizaj provoj de uzantoj';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Demando-provoj de uzantoj por shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Demando-provoj de uzantoj por gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Demando-provoj de uzantoj por truefalse';
+$strings['UsersLastLoginTask'] = 'Lastaj ensalutoj por uzantoj';
+$strings['TrackLoginTask'] = 'Unua ensaluto kaj lasta elsaluto';
+$strings['TrackCourseAccessTask'] = 'Uzanta aliro al kurso';
+$strings['UserLearnPathsProgressScript'] = 'Ĝisdatigi progreson en lernovojoj por uzantoj.';
+$strings['UserScormsProgressScript'] = 'Ĝisdatigi progreson en SCORM-oj por uzantoj.';
+
+$strings['InstallError'] = 'Eraro okazis dum instalado de la kromprogramo: %s';
+$strings['AdminIntro'] = 'Ruli Moodle-migradajn taskojn laŭ ordo. Ĉiu paŝo estas ebligita nur post kiam ĝia patra paŝo estas kompletigita.';
+$strings['MoodleDatabase'] = 'Moodle-datumbazo';
+$strings['MoodledataPath'] = 'Moodledata-vojo';
+$strings['AccessUrlId'] = 'Aliro-URL-identigilo';
+$strings['Configured'] = 'Agordita';
+$strings['NotConfigured'] = 'Ne agordita';
+$strings['ConfigurePlugin'] = 'Agordi kromprogramon';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Agordu la gastiganton, uzanton kaj nomon de la Moodle-datumbazo antaŭ ruli migradajn taskojn.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata-vojo estas malplena. Taskoj rilataj al dosieroj eble malsukcesos ĝis ĉi tiu agordo estos agordita.';
+$strings['InvalidMigrationAction'] = 'Nevalida migrada ago.';
+$strings['InvalidSecurityToken'] = 'Nevalida sekureca ĵetono. Bonvolu reŝarĝi la paĝon kaj provi denove.';
+$strings['MigrationTasks'] = 'Migradaj taskoj';
+$strings['MaintenanceScripts'] = 'Funkciado-skriptoj';
+$strings['ExecutionOutput'] = 'Plenumiga eligo';
+$strings['TaskAlreadyExecuted'] = 'Ĉi tiu tasko aŭ skripto jam estis plenumita.';
+$strings['SelectTaskToRun'] = 'Elektu migradan taskon por ruli. La eligo aperos ĉi tie.';

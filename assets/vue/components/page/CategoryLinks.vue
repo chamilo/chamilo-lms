@@ -19,6 +19,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import baseService from "../../services/baseService"
 
 const props = defineProps({
   category: { type: String, required: true },
@@ -29,14 +30,12 @@ const items = ref([])
 
 const load = async () => {
   const loc = (locale.value || "").toString()
-  const url = `/pages/_category-links?category=${encodeURIComponent(props.category)}&locale=${encodeURIComponent(loc)}`
-  const res = await fetch(url, { headers: { Accept: "application/json" } })
-  if (!res.ok) {
+  try {
+    const data = await baseService.get("/pages/_category-links", { category: props.category, locale: loc })
+    items.value = Array.isArray(data.items) ? data.items : []
+  } catch {
     items.value = []
-    return
   }
-  const data = await res.json()
-  items.value = Array.isArray(data.items) ? data.items : []
 }
 
 onMounted(load)

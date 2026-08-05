@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektroniskā atzīmēšana ir atspējota';
 $strings['StudentId'] = 'Studentu ID';
 $strings['ProviderId'] = 'Piegādātāja ID';
 $strings['CourseHours'] = 'Kursa stundas';
+
+$strings['GenerateFile'] = 'Ģenerēt failu';
+$strings['CourseId'] = 'Kursa ID';

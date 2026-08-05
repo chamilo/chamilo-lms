@@ -18,6 +18,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class GrokProvider implements AiProviderInterface, AiImageProviderInterface, AiDocumentProviderInterface, AiVideoJobProviderInterface
 {
     private string $apiKey;
+    private ?string $lastTextError = null;
 
     // Text
     private string $textApiUrl;
@@ -249,9 +250,10 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $topic
         );
 
+        $this->lastTextError = null;
         $lpStructure = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $tocPrompt, 'learnpath');
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => $this->buildTextFailureMessage('Grok')];
         }
 
         $lpItems = [];
@@ -359,6 +361,16 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         );
     }
 
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
+    }
+
     private function filterValidAikenQuestions(string $quizContent): array
     {
         $questions = preg_split('/\n{2,}/', trim($quizContent)) ?: [];
@@ -384,9 +396,13 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
     private function requestText(string $url, string $model, float $temperature, int $maxTokens, string $prompt, string $toolName): ?string
     {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $system = 'You are a helpful AI assistant that generates structured educational content.';
@@ -406,13 +422,17 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $data = json_decode($rawBody, true);
 
             if (200 !== $status || !\is_array($data)) {
-                error_log('[AI][Grok][Text] Invalid response (status='.$status.').');
+                $message = \is_array($data) ? ($data['error']['message'] ?? 'Invalid response.') : 'Invalid JSON response.';
+                $message = \is_string($message) ? trim($message) : 'Invalid response.';
+                $this->lastTextError = 'HTTP '.$status.': '.$message;
+                error_log('[AI][Grok][Text] Invalid response (status='.$status.'): '.$message);
 
                 return null;
             }
 
             $generated = $this->extractTextContent($data);
             if (null === $generated || '' === trim($generated)) {
+                $this->lastTextError = 'HTTP '.$status.': Empty content returned.';
                 error_log('[AI][Grok][Text] Empty content returned by API.');
 
                 return null;
@@ -424,6 +444,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
             return $generated;
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Grok][Text] Exception: '.$e->getMessage());
 
             return null;

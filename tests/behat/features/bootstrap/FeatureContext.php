@@ -8,6 +8,9 @@ use Behat\MinkExtension\Context\MinkContext;
  */
 class FeatureContext extends MinkContext
 {
+    /** @var array<string, int> */
+    private array $courseIdsByCode = [];
+
     /**
      * Initializes context.
      * Every scenario gets its own context object.
@@ -209,7 +212,7 @@ class FeatureContext extends MinkContext
     /**
      * @Given /^I have a public password-protected course named "([^"]*)" with password "([^"]*)"$/
      */
-    public function iHaveAPublicPasswordProtectedCourse($code, $password)
+    public function iHaveAPublicPasswordProtectedCourse($code, $password): void
     {
         $this->visit('/main/admin/course_add.php');
         $this->fillFields(
@@ -222,11 +225,71 @@ class FeatureContext extends MinkContext
             )
         );
         $this->pressButton('submit');
-        $this->visit('/main/course_info/infocours.php?cidReq='.$code);
+        $this->waitForThePageToBeLoadedWhenReady();
+
+        // Resolve the numeric course id through Chamilo 2's compatibility route,
+        // which redirects the course code to /course/{cid}/home.
+        $this->visit('/courses/'.$code.'/index.php');
+        $this->waitForThePageToBeLoadedWhenReady();
+
+        $path = (string) parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH);
+        if (1 !== preg_match('#^/course/(\d+)/home$#', $path, $matches)) {
+            throw new RuntimeException('Could not resolve the modern course home URL for course '.$code.'.');
+        }
+
+        $courseId = (int) $matches[1];
+        $this->courseIdsByCode[$code] = $courseId;
+
+        $this->visit('/main/course_info/infocours.php?cid='.$courseId);
+        $this->waitForThePageToBeLoadedWhenReady();
+        $this->iClickTheElement('#card_course_access a');
+        $this->getSession()->wait(
+            5000,
+            'var panel = document.querySelector("#collapse_course_access"); panel && panel.classList.contains("active")'
+        );
         $this->assertPageContainsText('Course registration password');
         $this->fillField('course_registration_password', $password);
         $this->pressButton('submit_save');
+        $this->waitForThePageToBeLoadedWhenReady();
         $this->assertFieldContains('course_registration_password', $password);
+    }
+
+    /**
+     * @Given /^I am on the modern homepage of course "([^"]*)"$/
+     */
+    public function iAmOnTheModernHomepageOfCourse(string $courseCode): void
+    {
+        $courseId = $this->getCreatedCourseId($courseCode);
+
+        $this->visit('/course/'.$courseId.'/home?sid=0&gid=0');
+        $this->waitForThePageToBeLoadedWhenReady();
+    }
+
+    /**
+     * @Then /^I should be on the modern homepage of course "([^"]*)"$/
+     */
+    public function iShouldBeOnTheModernHomepageOfCourse(string $courseCode): void
+    {
+        $courseId = $this->getCreatedCourseId($courseCode);
+        $actualPath = (string) parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH);
+        $expectedPath = '/course/'.$courseId.'/home';
+
+        if ($expectedPath !== $actualPath) {
+            throw new RuntimeException(
+                sprintf('Expected current path "%s", got "%s".', $expectedPath, $actualPath)
+            );
+        }
+    }
+
+    private function getCreatedCourseId(string $courseCode): int
+    {
+        $courseId = $this->courseIdsByCode[$courseCode] ?? 0;
+
+        if ($courseId <= 0) {
+            throw new RuntimeException('No created course id is available for course '.$courseCode.'.');
+        }
+
+        return $courseId;
     }
 
     /**

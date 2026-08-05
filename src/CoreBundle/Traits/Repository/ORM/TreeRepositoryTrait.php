@@ -58,7 +58,7 @@ trait TreeRepositoryTrait
     public function initializeTreeRepository(EntityManagerInterface $em, ClassMetadata $class)
     {
         $treeListener = null;
-        foreach ($em->getEventManager()->getListeners() as $listeners) {
+        foreach ($em->getEventManager()->getAllListeners() as $listeners) {
             foreach ($listeners as $listener) {
                 if ($listener instanceof TreeListener) {
                     $treeListener = $listener;

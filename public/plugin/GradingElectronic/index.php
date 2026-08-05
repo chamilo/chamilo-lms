@@ -2,7 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
-if (false === strpos($_SERVER['SCRIPT_NAME'], 'gradebook/index.php')) {
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+$route = $_GET['_route'] ?? '';
+
+if (
+    false === strpos($scriptName, 'gradebook/index.php')
+    && false === strpos($requestUri, 'gradebook/index.php')
+    && false === strpos((string) $route, 'gradebook/index.php')
+) {
     return;
 }
 
@@ -14,4 +22,17 @@ if (!$gradingElectronic->isAllowed()) {
 
 $_template['show'] = true;
 $_template['plugin_title'] = $gradingElectronic->get_title();
-$_template['form'] = $gradingElectronic->getForm();
+
+if ($gradingElectronic->isGenerateRequest()) {
+    $_template['generation_result'] = $gradingElectronic->generateFromRequest();
+
+    return;
+}
+
+$generateUrl = $gradingElectronic->getGenerateUrl();
+
+$_template['form_html'] = $gradingElectronic->renderFormHtml(
+    $generateUrl,
+    'grading-electronic-template-result'
+);
+$_template['generate_url'] = $generateUrl;

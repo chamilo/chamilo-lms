@@ -4,7 +4,7 @@
     :title="dialogTitleComputed"
     :header-icon="headerIconComputed"
     :width="'680px'"
-    @close="$emit('close')"
+    @update:isVisible="$emit('close')"
   >
     <div class="space-y-3">
       <BaseInputText
@@ -41,7 +41,6 @@
     </div>
 
     <template #footer>
-      <BaseButton type="black" icon="close" :label="t('Cancel')" @click="$emit('close')" />
       <BaseButton
         :disabled="submitting || !title.trim()"
         type="primary"

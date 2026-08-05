@@ -16,7 +16,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -73,10 +75,8 @@ class SessionRepository extends ServiceEntityRepository
             ->leftJoin('s.urls', 'urls')
             ->where($qb->expr()->eq('sru.user', ':user'))
             ->andWhere($qb->expr()->eq('urls.url', ':url'))
-            ->setParameters([
-                'user' => $user,
-                'url' => $url,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('url', $url)
         ;
 
         // When manual session ordering is enabled, position is the primary sort
@@ -380,7 +380,7 @@ class SessionRepository extends ServiceEntityRepository
             $parameters['url'] = $url;
         }
 
-        $qb->setParameters($parameters);
+        $qb->setParameters(new ArrayCollection(array_map(static fn ($name, $value) => new Parameter($name, $value), array_keys($parameters), array_values($parameters))));
 
         return $qb->getQuery()->getResult();
     }
@@ -428,7 +428,7 @@ class SessionRepository extends ServiceEntityRepository
             $parameters['url'] = $url;
         }
 
-        $qb->setParameters($parameters);
+        $qb->setParameters(new ArrayCollection(array_map(static fn ($name, $value) => new Parameter($name, $value), array_keys($parameters), array_values($parameters))));
 
         return $qb->getQuery()->getResult();
     }
@@ -442,10 +442,8 @@ class SessionRepository extends ServiceEntityRepository
             ->innerJoin('sru.user', 'u')
             ->innerJoin('u.portals', 'p')
             ->andWhere('sru.session = :session AND p.url = :url')
-            ->setParameters([
-                'session' => $session,
-                'url' => $url,
-            ])
+            ->setParameter('session', $session)
+            ->setParameter('url', $url)
         ;
 
         return $qb;

@@ -1575,8 +1575,8 @@ msgstr "Ви впевнені, що хочете видалити ці крок�
 msgid "Authoring tool"
 msgstr "Інструмент авторства"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Файл SCORM або AICC для завантаження"
+msgid "SCORM file to upload"
+msgstr "Файл SCORM для завантаження"
 
 msgid "Course location"
 msgstr "Розташування курсу"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:авторське право,, no:без авторського права"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Потік октетів,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Папка,, application\/msword:MsWord,, application\/octet-stream:Потік октетів,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:вправа,,      simulation:симуляція,,      questionnaire:опитувальник,,      diagram:діаграма,,      figure:фігура,,      graph:графік,,      index:індекс,,      slide:слайд,,      table:таблиця,,      narrative text:оповідний текст,,      exam:іспит,,      experiment:експеримент,,      problem statement:формулювання задачі,,      self assessment:самооцінка,,      lecture:лекція"
@@ -8547,6 +8547,9 @@ msgstr "Організація"
 msgid "Reporting"
 msgstr "Звітування"
 
+msgid "Analytics"
+msgstr "Аналітика"
+
 msgid "Update"
 msgstr "Оновити"
 
@@ -8723,6 +8726,15 @@ msgstr "Показати"
 
 msgid "My courses"
 msgstr "Мої курси"
+
+msgid "Shop"
+msgstr "Магазин"
+
+msgid "Invoice"
+msgstr "Рахунок"
+
+msgid "Request invoice"
+msgstr "Запросити рахунок"
 
 msgid "View my progress"
 msgstr "Переглянути мою статистику"
@@ -9726,6 +9738,9 @@ msgstr "Результати пошуку для:"
 msgid "Select a file"
 msgstr "Вибрати файл"
 
+msgid "Select a file to insert into the editor."
+msgstr "Виберіть файл для вставки в редактор."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Увага - файл FAQ, розташований у каталозі /home/ вашого порталу, недоступний для запису. Ваш текст не буде збережено, доки не змінено дозволи файлу."
 
@@ -9738,8 +9753,8 @@ msgstr "Вибачте, вам не дозволено доступ до ціє�
 msgid "Result"
 msgstr "Результат"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Спроба входу як %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Спроба входу як %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Вхід успішний. Перейти до %s"
@@ -15906,6 +15921,9 @@ msgstr "Дата та час"
 msgid "Item"
 msgstr "Елемент"
 
+msgid "Items"
+msgstr "Елементи"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Налаштувати плагін панелі приладів"
 
@@ -17159,6 +17177,18 @@ msgstr "Сесії в групі"
 
 msgid "Courses in group"
 msgstr "Курси в групі"
+
+msgid "Courses on the platform"
+msgstr "Курси на платформі"
+
+msgid "%s courses"
+msgstr "%s курсів"
+
+msgid "%s sessions"
+msgstr "%s сесій"
+
+msgid "Search by title or code"
+msgstr "Пошук за назвою або кодом"
 
 msgid "Users in group"
 msgstr "Користувачі в групі"
@@ -32163,6 +32193,9 @@ msgstr "Завдання"
 msgid "Allowed file formats: %s"
 msgstr "Дозволені формати файлів: %s"
 
+msgid "File manager"
+msgstr "Файловий менеджер"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Тип файлу не дозволено. Дозволені розширення: %s"
 
@@ -33876,6 +33909,5022 @@ msgstr "Ласкаво просимо"
 msgid "Welcome to Chamilo"
 msgstr "Ласкаво просимо до Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Перевірити всі невідповідені запитання нижче"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Якщо це ваш перший раз у Chamilo, переконайтеся, що ви перевірили бокове меню, щоб знайти шлях через його численні функції. Якщо вам потрібна допомога, ви знайдете <a href=\"https://docs.chamilo.org\">нашу офіційну документацію</a> для стандартної документації, тоді як наш <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">онлайн-форум</a> може допомогти ділитися ідеями та знаходити відповіді від інших користувачів Chamilo."
+
+msgid "Change password"
+msgstr "Змінити пароль"
+
+msgid "Newest first"
+msgstr "Спочатку новіші"
+
+msgid "Oldest first"
+msgstr "Спочатку старіші"
+
+msgid "Title A–Z"
+msgstr "Назва А–Я"
+
+msgid "Title Z–A"
+msgstr "Назва Я–А"
+
+msgid "Send test email"
+msgstr "Надіслати тестовий лист"
+
+msgid "Show teachers"
+msgstr "Показати викладачів"
+
+msgid "Hide teachers"
+msgstr "Приховати викладачів"
+
+msgid "Delete exercise attempts"
+msgstr "Видалити спроби виконання вправи"
+
+msgid "Message sent successfully."
+msgstr "Повідомлення успішно надіслано."
+
+msgid "You cannot create a new course right now."
+msgstr "Ви не можете створити новий курс зараз."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Неможливо перевірити, чи можете ви створити новий курс зараз."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Будь ласка, спробуйте пізніше або зверніться до адміністратора."
+
+msgid "You cannot create more courses at this time."
+msgstr "Ви не можете створити більше курсів зараз."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Ви вже керуєте %d курсами, а ваш активний сервіс дозволяє до %d. Щоб створити ще один курс, вам потрібен вищий ліміт сервісу або зменшити кількість поточних активних курсів."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Ви вже керуєте %d курсами, а платформа зараз дозволяє до %d для вашого облікового запису. Ви не можете створити більше курсів зараз."
+
+msgid "Add a class"
+msgstr "Додати клас"
+
+msgid "Search classes"
+msgstr "Пошук класів"
+
+msgid "No classes found"
+msgstr "Класів не знайдено"
+
+msgid "Import classes"
+msgstr "Імпортувати класи"
+
+msgid "Class users"
+msgstr "Користувачі класу"
+
+msgid "%s classes imported"
+msgstr "%s класів імпортовано"
+
+msgid "%s user-class links imported"
+msgstr "%s зв’язків користувач-клас імпортовано"
+
+msgid "Hide comments"
+msgstr "Приховати коментарі"
+
+msgid "Loading comments..."
+msgstr "Завантаження коментарів..."
+
+msgid "No comments yet."
+msgstr "Коментарів ще немає."
+
+msgid "A user with this username already exists"
+msgstr "Користувач із таким іменем уже існує"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Керуйте нарадами, переглядайте записи та оновлюйте налаштування BBB для всього курсу з одного місця."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Перегляньте поточні значення за замовчуванням і за потреби застосуйте їх до кожного курсу."
+
+msgid "Filter the list by meeting date range."
+msgstr "Фільтруйте список за діапазоном дат нарад."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Переглядайте історію нарад, учасників та дії із записами."
+
+msgid "Participants"
+msgstr "Учасники"
+
+msgid "CountUsers"
+msgstr "Кількість користувачів"
+
+msgid "No data found"
+msgstr "Дані не знайдено"
+
+msgid "My justifications"
+msgstr "Мої виправдання"
+
+msgid "My services"
+msgstr "Мої послуги"
+
+msgid "Extra menu"
+msgstr "Додаткове меню"
+
+msgid "Pending tests"
+msgstr "Тести, що очікують"
+
+msgid "No specific language"
+msgstr "Без конкретної мови"
+
+msgid "Source Chamilo version"
+msgstr "Версія Chamilo-джерела"
+
+msgid "Exporting..."
+msgstr "Експортування..."
+
+msgid "Autosaved drafts available"
+msgstr "Доступні автозбережені чернетки"
+
+msgid "Hide drafts"
+msgstr "Приховати чернетки"
+
+msgid "Show drafts"
+msgstr "Показати чернетки"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Чернетки зберігаються лише в цьому браузері та видаляються після збереження документа."
+
+msgid "Last saved"
+msgstr "Останнє збереження"
+
+msgid "Restore draft"
+msgstr "Відновити чернетку"
+
+msgid "Delete draft"
+msgstr "Видалити чернетку"
+
+msgid "Information about indexing document content"
+msgstr "Інформація про індексування вмісту документа"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Якщо ввімкнено, текст документа індексується пошуковою системою, щоб користувачі могли знайти його через пошук платформи."
+
+msgid "The editor is not available."
+msgstr "Редактор недоступний."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Спочатку помістіть курсор у абзац."
+
+msgid "The selected paragraph is empty."
+msgstr "Вибраний абзац порожній."
+
+msgid "Loading failed."
+msgstr "Не вдалося завантажити."
+
+msgid "Add introduction"
+msgstr "Додати вступ"
+
+msgid "Course type"
+msgstr "Тип курсу"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Виберіть, чи цей курс використовує стандартні обмеження платформи, чи отримує переваги придбаної послуги."
+
+msgid "Standard course"
+msgstr "Стандартний курс"
+
+msgid "Use the standard platform limits."
+msgstr "Використовувати стандартні обмеження платформи."
+
+msgid "Selected"
+msgstr "Вибрано"
+
+msgid "Hosting limit"
+msgstr "Ліміт хостингу"
+
+msgid "Document quota"
+msgstr "Квота документів"
+
+msgid "The standard course limit has been reached."
+msgstr "Досягнуто стандартного ліміту курсу."
+
+msgid "Use the benefits granted by this service."
+msgstr "Використовувати переваги, надані цією послугою."
+
+msgid "Courses with these benefits"
+msgstr "Курси з цими перевагами"
+
+msgid "Active service"
+msgstr "Активна послуга"
+
+msgid "Buy service"
+msgstr "Придбати послугу"
+
+msgid "Select an available course type before creating the course."
+msgstr "Виберіть доступний тип курсу перед створенням курсу."
+
+msgid "users"
+msgstr "користувачі"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Спочатку придбайте цю послугу, щоб скористатися цими перевагами."
+
+msgid "You already used all courses available with this service."
+msgstr "Ви вже використали всі курси, доступні з цією послугою."
+
+msgid "This option is not available."
+msgstr "Ця опція недоступна."
+
+msgid "This field is required"
+msgstr "Це поле обов’язкове"
+
+msgid "Show less"
+msgstr "Згорнути"
+
+msgid "Show full description"
+msgstr "Показати повний опис"
+
+msgid "Virtual keyboard"
+msgstr "Віртуальна клавіатура"
+
+msgid "Backspace"
+msgstr "Backspace"
+
+msgid "Space"
+msgstr "Пробіл"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Шлях навчання видимий лише для вибраних слухачів"
+
+msgid "Create course"
+msgstr "Створити курс"
+
+msgid "Tour"
+msgstr "Тур"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Ви впевнені, що хочете видалити цей коментар?"
+
+msgid "No posts found"
+msgstr "Пости не знайдено"
+
+msgid "No communities"
+msgstr "Спільноти відсутні"
+
+msgid "No friends found"
+msgstr "Друзів не знайдено"
+
+msgid "Visual overview of your skills"
+msgstr "Візуальний огляд ваших навичок"
+
+msgid "Compare your progress"
+msgstr "Порівняти ваш прогрес"
+
+msgid "Please enter a search term."
+msgstr "Будь ласка, введіть пошуковий запит."
+
+msgid "Enter captcha code"
+msgstr "Введіть код captcha"
+
+msgid "Refresh captcha"
+msgstr "Оновити captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha тимчасово заблоковано. Спробуйте пізніше."
+
+msgid "Item Details"
+msgstr "Деталі елемента"
+
+msgid "Open File"
+msgstr "Відкрити файл"
+
+msgid "Selection"
+msgstr "Вибір"
+
+msgid "Remove selection context"
+msgstr "Видалити контекст вибору"
+
+msgid "Source document"
+msgstr "Вихідний документ"
+
+msgid "Use the current course context"
+msgstr "Використовувати поточний контекст курсу"
+
+msgid "Loading documents..."
+msgstr "Завантаження документів..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "У цьому курсі не знайдено сумісного документа PDF або TXT."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Виберіть документ PDF або TXT, щоб генерувати терміни лише з цього документа."
+
+msgid "Confidentiality warning"
+msgstr "Попередження про конфіденційність"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Після вибору документа запит фіксується, тому генерація використовує лише вміст цього документа."
+
+msgid "No document-processing AI providers available."
+msgstr "Немає доступних постачальників ШІ для обробки документів."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Не вдалося зберегти підпис. Спробуйте ще раз."
+
+msgid "Select and move"
+msgstr "Вибрати та перемістити"
+
+msgid "Freehand"
+msgstr "Від руки"
+
+msgid "Stroke"
+msgstr "Штрих"
+
+msgid "Fill"
+msgstr "Заливка"
+
+msgid "Import SVG"
+msgstr "Імпортувати SVG"
+
+msgid "Import image"
+msgstr "Імпортувати зображення"
+
+msgid "Click the drawing area to place this text"
+msgstr "Клацніть область малювання, щоб розмістити цей текст"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Створіть новий SVG, імпортуйте наявний SVG або вставте зображення, а потім збережіть його як повторно використовуваний документ."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Використовуйте «Вибрати та перемістити», щоб перемістити або змінити розмір елементів, доданих у цьому редакторі."
+
+msgid "Stroke width"
+msgstr "Товщина штриха"
+
+msgid "Transparent fill"
+msgstr "Прозора заливка"
+
+msgid "Invalid id"
+msgstr "Недійсний ідентифікатор"
+
+msgid "Unable to load the drawing"
+msgstr "Не вдалося завантажити малюнок"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Підтримуються лише зображення PNG, JPG, WEBP або GIF."
+
+msgid "Unable to read the image file."
+msgstr "Не вдалося прочитати файл зображення."
+
+msgid "Only SVG files are supported."
+msgstr "Підтримуються лише файли SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Файл SVG порожній або недійсний."
+
+msgid "Unable to read the SVG file."
+msgstr "Не вдалося прочитати файл SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Малюнок порожній або недійсний."
+
+msgid "Unable to save the drawing"
+msgstr "Не вдалося зберегти малюнок"
+
+msgid "Information about AI-assisted documents"
+msgstr "Інформація про документи з підтримкою ШІ"
+
+msgid "Location"
+msgstr "Розташування"
+
+msgid "Cloud link"
+msgstr "Хмарне посилання"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Додайте посилання на хмарний документ, наприклад Google Drive або Google Docs."
+
+msgid "Add cloud link"
+msgstr "Додати хмарне посилання"
+
+msgid "Document title"
+msgstr "Назва документа"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Параметри документа визначають, як завантажені файли оброблятимуться після збереження."
+
+msgid "Information about uncompressing zip files"
+msgstr "Інформація про розпакування ZIP-файлів"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Якщо увімкнено, ZIP-файли розпаковуються в поточну теку документів після завантаження."
+
+msgid "The title is required."
+msgstr "Назва є обов’язковою."
+
+msgid "The URL is required."
+msgstr "URL-адреса є обов’язковою."
+
+msgid "The destination folder is missing."
+msgstr "Відсутня папка призначення."
+
+msgid "Unable to create cloud link."
+msgstr "Не вдалося створити хмарне посилання."
+
+msgid "Copy to My Files"
+msgstr "Копіювати до «Мої файли»"
+
+msgid "Used space"
+msgstr "Використаний простір"
+
+msgid "Available space"
+msgstr "Доступний простір"
+
+msgid "Available percentage"
+msgstr "Відсоток доступного простору"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Хмарні посилання не можна завантажити."
+
+msgid "Could not copy the file to My Files"
+msgstr "Не вдалося скопіювати файл до «Мої файли»"
+
+msgid "File copied to My Files"
+msgstr "Файл скопійовано до «Мої файли»"
+
+msgid "Checking course creation options..."
+msgstr "Перевірка параметрів створення курсу..."
+
+msgid "You cannot create more courses right now."
+msgstr "Ви не можете створювати більше курсів зараз."
+
+msgid "AI analyzer"
+msgstr "Аналізатор ШІ"
+
+msgid "Expand all"
+msgstr "Розгорнути все"
+
+msgid "Collapse all"
+msgstr "Згорнути все"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Перегляньте активні переваги сервісу, історію покупок та доступні квитанції."
+
+msgid "Active services"
+msgstr "Активні сервіси"
+
+msgid "No active services"
+msgstr "Немає активних сервісів"
+
+msgid "Valid until"
+msgstr "Дійсний до"
+
+msgid "Recurring payment"
+msgstr "Періодичний платіж"
+
+msgid "Next charge"
+msgstr "Наступне списання"
+
+msgid "Enable auto billing"
+msgstr "Увімкнути автоматичну оплату"
+
+msgid "Cancel auto billing"
+msgstr "Скасувати автоматичну оплату"
+
+msgid "Granted benefits"
+msgstr "Надані переваги"
+
+msgid "Purchase history"
+msgstr "Історія покупок"
+
+msgid "No purchases yet"
+msgstr "Покупок ще немає"
+
+msgid "Product"
+msgstr "Продукт"
+
+msgid "Reference"
+msgstr "Референс"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "Receipt"
+msgstr "Квитанція"
+
+msgid "Unable to load your services right now."
+msgstr "Не вдалося завантажити ваші сервіси зараз."
+
+msgid "Auto billing enabled"
+msgstr "Автоматичну оплату увімкнено"
+
+msgid "Auto billing suspended"
+msgstr "Автоматичну оплату призупинено"
+
+msgid "Auto billing cancelled"
+msgstr "Автоматичну оплату скасовано"
+
+msgid "Auto billing disabled"
+msgstr "Автоматичну оплату вимкнено"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Скасувати автоматичну оплату для цього сервісу?"
+
+msgid "Preview class members and courses"
+msgstr "Попередній перегляд учасників класу та курсів"
+
+msgid "Please select a CSV file to import."
+msgstr "Будь ласка, виберіть CSV-файл для імпорту."
+
+msgid "%d user-class links imported"
+msgstr "%d зв’язків класів користувачів імпортовано"
+
+msgid "The following errors occurred during import:"
+msgstr "Під час імпорту сталися такі помилки:"
+
+msgid "CSV file"
+msgstr "CSV-файл"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Вилучити користувача з усіх пов’язаних із групою сутностей, якщо його немає в списку"
+
+msgid "UserName"
+msgstr "Ім’я користувача"
+
+msgid "ClassName"
+msgstr "Назва класу"
+
+msgid "are required for each row."
+msgstr "обов’язкові для кожного рядка."
+
+msgid "title"
+msgstr "заголовок"
+
+msgid "is required."
+msgstr "обов’язковий."
+
+msgid "description"
+msgstr "опис"
+
+msgid "are optional."
+msgstr "необов’язкові."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Ви впевнені, що хочете вилучити цього користувача з класу?"
+
+msgid "Users in class"
+msgstr "Користувачі в класі"
+
+msgid "Remove user"
+msgstr "Вилучити користувача"
+
+msgid "Class not found"
+msgstr "Клас не знайдено"
+
+msgid "Class overview"
+msgstr "Огляд класу"
+
+msgid "Back to classes"
+msgstr "Повернутися до класів"
+
+msgid "Search members or courses"
+msgstr "Пошук учасників або курсів"
+
+msgid "Search by name, email, username or course title"
+msgstr "Пошук за іменем, електронною поштою, іменем користувача або назвою курсу"
+
+msgid "Class members"
+msgstr "Учасники класу"
+
+msgid "No email"
+msgstr "Немає електронної пошти"
+
+msgid "No members found"
+msgstr "Учасників не знайдено"
+
+msgid "No courses found"
+msgstr "Курсів не знайдено"
+
+msgid "The end date must be after the start date."
+msgstr "Дата завершення має бути після дати початку."
+
+msgid "Always visible"
+msgstr "Завжди видимий"
+
+msgid "No end date"
+msgstr "Без дати завершення"
+
+msgid "No restriction"
+msgstr "Без обмежень"
+
+msgid "Missing learning path or course identifier"
+msgstr "Відсутній навчальний шлях або ідентифікатор курсу"
+
+msgid "Select a user or a group first"
+msgstr "Спочатку виберіть користувача або групу"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Вилучити всі обмеження дати для цього навчального шляху?"
+
+msgid "Advanced learning path access"
+msgstr "Розширений доступ до навчального шляху"
+
+msgid "Remove date restrictions"
+msgstr "Вилучити обмеження дати"
+
+msgid "Search by name, email, username or group"
+msgstr "Пошук за іменем, електронною поштою, іменем користувача або групою"
+
+msgid "Edit user restriction"
+msgstr "Редагувати обмеження користувача"
+
+msgid "Edit group restriction"
+msgstr "Редагувати обмеження групи"
+
+msgid "Select a user or group"
+msgstr "Виберіть користувача або групу"
+
+msgid "Save restriction"
+msgstr "Зберегти обмеження"
+
+msgid "members"
+msgstr "учасники"
+
+msgid "Create Assignment"
+msgstr "Створити завдання"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Кінцевий термін подання минув. Ви більше не можете надсилати."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Розсилку не можна поєднувати з іншими одержувачами."
+
+msgid "Social map"
+msgstr "Соціальна карта"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Плагін карти не ввімкнено або не налаштовано."
+
+msgid "Some configured extra fields were not found"
+msgstr "Деякі налаштовані додаткові поля не знайдено"
+
+msgid "No user locations were found."
+msgstr "Місцезнаходження користувачів не знайдено."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap потребує координат для відображення вбудованої позначки. Місця лише з адресою наведено нижче."
+
+msgid "Locations"
+msgstr "Місця"
+
+msgid "Open map"
+msgstr "Відкрити карту"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Постачальник: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Постачальник: Google Maps"
+
+msgid "Personal files"
+msgstr "Особисті файли"
+
+msgid "Upload image"
+msgstr "Завантажити зображення"
+
+msgid "Upload media"
+msgstr "Завантажити медіа"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "У цьому вікні завантаження дозволені лише файли зображень."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "У цьому вікні завантаження дозволені лише аудіо- та відеофайли."
+
+msgid "Upload files to your personal storage."
+msgstr "Завантажте файли до вашого особистого сховища."
+
+msgid "Linked"
+msgstr "Пов’язано"
+
+msgid "No audio or video files were found in this folder."
+msgstr "У цій папці не знайдено аудіо- або відеофайлів."
+
+msgid "No image files were found in this folder."
+msgstr "У цій папці не знайдено файлів зображень."
+
+msgid "No matching files were found in this folder."
+msgstr "У цій папці не знайдено відповідних файлів."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Цей тип файлу не дозволений у цьому вікні завантаження."
+
+msgid "Manage your personal files and course documents."
+msgstr "Керуйте особистими файлами та документами курсу."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Надсилання"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Використовуйте фільтри вище, щоб звузити список."
+
+msgid "You are not allowed to see this page."
+msgstr "Ви не маєте дозволу переглядати цю сторінку."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Деталі відстеження курсу"
+
+msgid "Course activity statistics"
+msgstr "Статистика активності курсу"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Дозволений синтаксис шаблону"
+
+msgid "Functions"
+msgstr "Функції"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Доступні змінні залежать від типу шаблону, наприклад {{ user.getUsername() }} або {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "З міркувань безпеки будь-які інші функції Twig, фільтри (такі як filter, map, reduce або sort) або виклики PHP заблоковані."
+
+msgid "Global administrator"
+msgstr "Глобальний адміністратор"
+
+msgid "Session manager"
+msgstr "Менеджер сесій"
+
+msgid "Human resources manager"
+msgstr "Менеджер з людських ресурсів"
+
+msgid "Course teacher"
+msgstr "Викладач курсу"
+
+msgid "Course student"
+msgstr "Студент курсу"
+
+msgid "Platform reports"
+msgstr "Звіти платформи"
+
+msgid "Security reports"
+msgstr "Звіти безпеки"
+
+msgid "Course reports"
+msgstr "Звіти курсу"
+
+msgid "Gradebook reports"
+msgstr "Звіти журналу оцінок"
+
+msgid "Social reports"
+msgstr "Соціальні звіти"
+
+msgid "Exports"
+msgstr "Експорт"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Звіти про використання платформи, користувачів, курсів та сесій."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Аудит та звіти, чутливі до безпеки."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Звіти, обмежені курсами, якими керує користувач."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Звіти, пов’язані з активністю слухачів та подальшим супроводом."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Звіти, пов’язані з балами, сертифікатами та даними журналу оцінок."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Звіти та експорти, що генерують файли для завантаження."
+
+msgid "Main platform statistics dashboard."
+msgstr "Головна інформаційна панель статистики платформи."
+
+msgid "Number of courses and course distribution report."
+msgstr "Звіт про кількість курсів та їх розподіл."
+
+msgid "Platform-wide access to course tools."
+msgstr "Доступ до інструментів курсу на рівні платформи."
+
+msgid "Number of resources per tool."
+msgstr "Кількість ресурсів на інструмент."
+
+msgid "Latest access to courses."
+msgstr "Останній доступ до курсів."
+
+msgid "Course distribution by language."
+msgstr "Розподіл курсів за мовами."
+
+msgid "Course usage report."
+msgstr "Звіт про використання курсів."
+
+msgid "Platform user count report."
+msgstr "Звіт про кількість користувачів платформи."
+
+msgid "Recent logins chart."
+msgstr "Діаграма останніх входів."
+
+msgid "Login distribution by month."
+msgstr "Розподіл входів за місяцями."
+
+msgid "Login distribution by day."
+msgstr "Розподіл входів за днями."
+
+msgid "Login distribution by hour."
+msgstr "Розподіл входів за годинами."
+
+msgid "Users with profile picture."
+msgstr "Користувачі з аватаром профілю."
+
+msgid "Login report filtered by date."
+msgstr "Звіт про входи з фільтром за датою."
+
+msgid "Users who have not logged in recently."
+msgstr "Користувачі, які не входили недавно."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Звіт про неактивні або підозрілі облікові записи."
+
+msgid "Users activity statistics."
+msgstr "Статистика активності користувачів."
+
+msgid "Currently online users report."
+msgstr "Звіт про користувачів, які зараз онлайн."
+
+msgid "New user registrations over time."
+msgstr "Нові реєстрації користувачів з часом."
+
+msgid "Course and session subscriptions over time."
+msgstr "Підписки на курси та сесії з часом."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Звіт про виявлення та усунення дублікатів користувачів."
+
+msgid "Platform user/session statistics."
+msgstr "Статистика користувачів/сесій платформи."
+
+msgid "Quarterly platform report."
+msgstr "Квартальний звіт платформи."
+
+msgid "Activities audit"
+msgstr "Аудит дій"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Звіт про аудит важливих адміністративних дій та дій платформи."
+
+msgid "Social messages received report."
+msgstr "Звіт про отримані соціальні повідомлення."
+
+msgid "Social messages sent report."
+msgstr "Звіт про надіслані соціальні повідомлення."
+
+msgid "Social contacts count report."
+msgstr "Звіт про кількість соціальних контактів."
+
+msgid "Sessions created over time."
+msgstr "Створені сесії з часом."
+
+msgid "Learning analytics dashboard."
+msgstr "Панель аналітики навчання."
+
+msgid "Teacher time report."
+msgstr "Звіт про час викладача."
+
+msgid "Teachers time by session report"
+msgstr "Звіт про час викладачів за сесіями"
+
+msgid "Teacher time report grouped by session."
+msgstr "Звіт про час викладача, згрупований за сесіями."
+
+msgid "Corporate learning analytics report."
+msgstr "Звіт корпоративної аналітики навчання."
+
+msgid "Course learners tracking report."
+msgstr "Звіт про відстеження слухачів курсу."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Статистика активності курсу з підключеними та неактивними користувачами."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Детальний звіт про відстеження слухача в курсі."
+
+msgid "Course gradebook overview."
+msgstr "Огляд журналу оцінок курсу."
+
+msgid "Gradebook statistics"
+msgstr "Статистика журналу оцінок"
+
+msgid "Gradebook statistics report."
+msgstr "Звіт про статистику журналу оцінок."
+
+msgid "Certificate report"
+msgstr "Звіт про сертифікати"
+
+msgid "Certificate report for course gradebook."
+msgstr "Звіт про сертифікати для журналу оцінок курсу."
+
+msgid "User statistics"
+msgstr "Статистика користувача"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Статистика журналу оцінок курсу для користувача."
+
+msgid "Personal statistics"
+msgstr "Особиста статистика"
+
+msgid "Personal gradebook statistics."
+msgstr "Особиста статистика журналу оцінок."
+
+msgid "Reports catalog"
+msgstr "Каталог звітів"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Центральний каталог доступних звітів, ролей та категорій дозволів."
+
+msgid "Course log events"
+msgstr "Події журналу курсу"
+
+msgid "Detailed course tracking events."
+msgstr "Детальні події відстеження курсу."
+
+msgid "Course tool usage"
+msgstr "Використання інструментів курсу"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Звіт про відстеження курсу, згрупований за інструментами."
+
+msgid "Course resource usage"
+msgstr "Використання ресурсів курсу"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Звіт про відстеження курсу, згрупований за ресурсами."
+
+msgid "Course group tracking"
+msgstr "Відстеження груп курсу"
+
+msgid "Tracking report for course groups."
+msgstr "Звіт відстеження для груп курсу."
+
+msgid "Course session report"
+msgstr "Звіт сесії курсу"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Звіт відстеження курсу в межах сесій."
+
+msgid "Learning path report"
+msgstr "Звіт навчального шляху"
+
+msgid "Learning path tracking report."
+msgstr "Звіт відстеження навчального шляху."
+
+msgid "Learning path results by user"
+msgstr "Результати навчального шляху за користувачем"
+
+msgid "Learning path results grouped by user."
+msgstr "Результати навчального шляху, згруповані за користувачем."
+
+msgid "Exercises report"
+msgstr "Звіт вправ"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Звіт відстеження вправ і іспитів курсу."
+
+msgid "Question report"
+msgstr "Звіт питань"
+
+msgid "Course question tracking report."
+msgstr "Звіт відстеження питань курсу."
+
+msgid "Messages report"
+msgstr "Звіт повідомлень"
+
+msgid "Course messages tracking report."
+msgstr "Звіт відстеження повідомлень курсу."
+
+msgid "Total time tracking report for course learners."
+msgstr "Загальний звіт відстеження часу для слухачів курсу."
+
+msgid "Gradebook summary"
+msgstr "Зведення журналу оцінок"
+
+msgid "Summary view of gradebook results."
+msgstr "Зведений перегляд результатів журналу оцінок."
+
+msgid "Flat view"
+msgstr "Плоский перегляд"
+
+msgid "Flat gradebook results view."
+msgstr "Плоский перегляд результатів журналу оцінок."
+
+msgid "Evaluation log"
+msgstr "Журнал оцінювання"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Журнал змін оцінювань журналу оцінок."
+
+msgid "Link log"
+msgstr "Журнал посилань"
+
+msgid "Change log for gradebook links."
+msgstr "Журнал змін посилань журналу оцінок."
+
+msgid "Result details"
+msgstr "Деталі результату"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Детальний перегляд результату журналу оцінок."
+
+msgid "Personal certificates report."
+msgstr "Звіт персональних сертифікатів."
+
+msgid "User move statistics"
+msgstr "Статистика переміщення користувача"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Звіт статистики переміщення та переведення користувача."
+
+msgid "User consent list"
+msgstr "Список згоди користувачів"
+
+msgid "Report of users and consent status."
+msgstr "Звіт користувачів і статусу згоди."
+
+msgid "Special platform exports."
+msgstr "Спеціальні експорти платформи."
+
+msgid "Export certificates"
+msgstr "Експорт сертифікатів"
+
+msgid "Export platform certificates."
+msgstr "Експорт сертифікатів платформи."
+
+msgid "Export exercise results"
+msgstr "Експорт результатів вправ"
+
+msgid "Export exercise results from the platform."
+msgstr "Експорт результатів вправ з платформи."
+
+msgid "Course survey results and reporting."
+msgstr "Результати опитувань курсу та звітування."
+
+msgid "Attendance report"
+msgstr "Звіт відвідуваності"
+
+msgid "Course attendance tracking and reports."
+msgstr "Відстеження відвідуваності курсу та звіти."
+
+msgid "Exercises global report"
+msgstr "Глобальний звіт вправ"
+
+msgid "Global exercise results report for the course."
+msgstr "Глобальний звіт результатів вправ для курсу."
+
+msgid "Exercise report"
+msgstr "Звіт вправи"
+
+msgid "Detailed exercise report."
+msgstr "Детальний звіт вправи."
+
+msgid "Exercise history"
+msgstr "Історія вправи"
+
+msgid "Exercise attempt history."
+msgstr "Історія спроб вправи."
+
+msgid "Exercise results"
+msgstr "Результати вправи"
+
+msgid "Exercise results and corrections."
+msgstr "Результати вправи та виправлення."
+
+msgid "Question-level exercise statistics."
+msgstr "Статистика вправи на рівні питань."
+
+msgid "Exercise statistics"
+msgstr "Статистика вправи"
+
+msgid "Exercise statistics page."
+msgstr "Сторінка статистики вправи."
+
+msgid "Live exercise statistics"
+msgstr "Статистика вправи в реальному часі"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Статистика вправ у реальному часі для викладачів."
+
+msgid "Learning path statistics"
+msgstr "Статистика навчального шляху"
+
+msgid "Learning path item statistics."
+msgstr "Статистика елементів навчального шляху."
+
+msgid "Learning path report inside a course."
+msgstr "Звіт про навчальний шлях у межах курсу."
+
+msgid "User skills report."
+msgstr "Звіт про навички користувача."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Налаштування запланованого або періодичного експорту."
+
+msgid "User export"
+msgstr "Експорт користувачів"
+
+msgid "Export users from the platform."
+msgstr "Експорт користувачів з платформи."
+
+msgid "Not classified"
+msgstr "Не класифіковано"
+
+msgid "You have acquired the skill %s"
+msgstr "Ви здобули навичку %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Ви здобули навичку %s."
+
+msgid "Recover your password"
+msgstr "Відновити пароль"
+
+msgid "Disclaimer"
+msgstr "Відмова від відповідальності"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ця операція перевищить ліміт у %d користувачів, дозволених для цього курсу."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Виберіть спосіб автентифікації користувача на платформі."
+
+msgid "Authentication methods"
+msgstr "Методи автентифікації"
+
+msgid "Set password manually"
+msgstr "Встановити пароль вручну"
+
+msgid "Report role matrix"
+msgstr "Матриця ролей звітів"
+
+msgid "Report permission categories"
+msgstr "Категорії дозволів звітів"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Цей реєстр містить відомі сторінки звітів, їх категорію, канонічну URL-адресу, застарілу URL-адресу та очікувану рольову аудиторію. Канонічні URL-адреси забезпечують задокументовану матрицю ролей звітів."
+
+msgid "reports"
+msgstr "звіти"
+
+msgid "Canonical URL"
+msgstr "Канонічна URL-адреса"
+
+msgid "Legacy URL"
+msgstr "Застаріла URL-адреса"
+
+msgid "Permission category"
+msgstr "Категорія дозволів"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Ця матриця документує очікувану аудиторію для кожного звіту та забезпечується канонічною точкою входу звітів."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Ці ключі групують звіти за областю доступу та використовуються реєстром звітів. Пізніше їх можна зіставити з детальнішими дозволами платформи."
+
+msgid "Permission"
+msgstr "Дозвіл"
+
+msgid "Clear active session"
+msgstr "Очистити активну сесію"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Ви впевнені, що хочете очистити активну сесію цього користувача?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Попередній перегляд показано без контексту курсу. Деякі дані, специфічні для курсу, можуть бути недоступні."
+
+msgid "Preview is not available for this question."
+msgstr "Попередній перегляд недоступний для цього запитання."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Редагування недоступне без контексту курсу."
+
+msgid "This plugin does not use regions."
+msgstr "Цей плагін не використовує регіони."
+
+msgid "No plugins with regions were found."
+msgstr "Плагінів з регіонами не знайдено."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Комерційна послуга"
+
+msgid "Commercial"
+msgstr "Комерційний"
+
+msgid "100% free"
+msgstr "100% безкоштовно"
+
+msgid "Displayed above the public login form."
+msgstr "Відображається над публічною формою входу."
+
+msgid "Displayed below the public login form."
+msgstr "Відображається під публічною формою входу."
+
+msgid "Displayed before the footer area."
+msgstr "Відображається перед областю нижнього колонтитула."
+
+msgid "Displayed in the left footer column."
+msgstr "Відображається в лівій колонці нижнього колонтитула."
+
+msgid "Displayed in the center footer column."
+msgstr "Відображається в центральній колонці нижнього колонтитула."
+
+msgid "Displayed in the right footer column."
+msgstr "Відображається в правій колонці нижнього колонтитула."
+
+msgid "Showing all plugins."
+msgstr "Показ усіх плагінів."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Деякі плагіни ще очікують функціональної перевірки."
+
+msgid "Show verified plugins only"
+msgstr "Показувати лише перевірені плагіни"
+
+msgid "Showing verified plugins only."
+msgstr "Показ лише перевірених плагінів."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Очікувані плагіни тимчасово приховані, доки їх не буде адаптовано та перевірено."
+
+msgid "Show all plugins"
+msgstr "Показати всі плагіни"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Офіційні та безкоштовні плагіни перелічено окремо від плагінів, які можуть залежати від комерційних сервісів або платних пропозицій."
+
+msgid "Included free plugins"
+msgstr "Включені безкоштовні плагіни"
+
+msgid "Commercial and freemium plugins"
+msgstr "Комерційні та freemium-плагіни"
+
+msgid "All plugins"
+msgstr "Усі плагіни"
+
+msgid "No plugins were found for this category."
+msgstr "Для цієї категорії плагінів не знайдено."
+
+msgid "Search plugins"
+msgstr "Пошук плагінів"
+
+msgid "Search by name or description"
+msgstr "Пошук за назвою або описом"
+
+msgid "Advanced filters"
+msgstr "Розширені фільтри"
+
+msgid "All statuses"
+msgstr "Усі статуси"
+
+msgid "All sources"
+msgstr "Усі джерела"
+
+msgid "All types"
+msgstr "Усі типи"
+
+msgid "Installed plugins are shown first"
+msgstr "Спочатку відображаються встановлені плагіни"
+
+msgid "No plugins match the current filters."
+msgstr "Немає плагінів, що відповідають поточним фільтрам."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Спробуйте очистити пошук або змінити фільтри."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Недійсний токен безпеки"
+
+msgid "Please select a destination session"
+msgstr "Будь ласка, виберіть цільову сесію"
+
+msgid "Cannot move this to the same session"
+msgstr "Неможливо перемістити це до тієї ж сесії"
+
+msgid "The destination session must include the selected course"
+msgstr "Цільова сесія повинна містити вибраний курс"
+
+msgid "The source session must include the selected course"
+msgstr "Вихідна сесія повинна містити вибраний курс"
+
+msgid "No learners found"
+msgstr "Учні не знайдені"
+
+msgid "Will be subscribed"
+msgstr "Буде підписано"
+
+msgid "Subscribed"
+msgstr "Підписано"
+
+msgid "The move process has finished"
+msgstr "Процес переміщення завершено"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Порівняння завершено. Дані не переміщено."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Перемістити дані відстеження з базового курсу або вихідної сесії до іншої сесії. Спочатку виконайте порівняння, щоб переглянути дані учнів, яких це стосується."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Знайдіть курс або скористайтеся полем ручного введення ID курсу нижче."
+
+msgid "Fallback when the course search is not available."
+msgstr "Запасний варіант, коли пошук курсу недоступний."
+
+msgid "Load sessions"
+msgstr "Завантажити сесії"
+
+msgid "Selected course"
+msgstr "Вибраний курс"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Виберіть базовий курс або сесію, де наразі існують дані відстеження."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Виберіть сесію, яка отримає дані відстеження."
+
+msgid "Important"
+msgstr "Важливо"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Дія переміщення оновлює наявні дані відстеження. Спочатку запустіть порівняння та протестуйте цей інструмент на невиробничому курсі, перш ніж переміщувати реальні дані учнів."
+
+msgid "No sessions found for this course"
+msgstr "Для цього курсу не знайдено сесій"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Деяких користувачів проігноровано, оскільки вони не підписані на цю сесію."
+
+msgid "Remove selected user"
+msgstr "Видалити вибраного користувача"
+
+msgid "Add selected user"
+msgstr "Додати вибраного користувача"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Жоден користувач зі списку не підписаний на цю сесію."
+
+msgid "No image"
+msgstr "Немає зображення"
+
+msgid "Invalid URL."
+msgstr "Недійсна URL-адреса."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Цей хмарний документ не можна вбудувати."
+
+msgid "Document not found"
+msgstr "Документ не знайдено"
+
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Цей навчальний шлях наразі недоступний для вашого користувача."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Наступний навчальний шлях"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Виберіть навчальний шлях, який буде доступний після цього."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Створіть інший навчальний шлях у цьому курсі, щоб увімкнути потік навчальних шляхів."
+
+msgid "Available from %s"
+msgstr "Доступно з %s"
+
+msgid "Available until %s"
+msgstr "Доступно до %s"
+
+msgid "Statistics reset date"
+msgstr "Дата скидання статистики"
+
+msgid "Last 24 hours"
+msgstr "Останні 24 години"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Ця дата скидання використовується як опорна дата для звіту. Вона не видаляє історичні дані відстеження."
+
+msgid "Since reset date"
+msgstr "З дати скидання"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Користувачі, підключені за останні 24 години"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Здобувачі, які мали принаймні один доступ до курсу за останні 24 години."
+
+msgid "Users connected in the last week"
+msgstr "Користувачі, підключені за останній тиждень"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Здобувачі, які мали принаймні один доступ до курсу за останні 7 днів."
+
+msgid "Users connected in the last month"
+msgstr "Користувачі, підключені за останній місяць"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Здобувачі, які мали принаймні один доступ до курсу за останні 30 днів."
+
+msgid "Not recently connected users"
+msgstr "Користувачі, які нещодавно не підключалися"
+
+msgid "Learners without course access since %s."
+msgstr "Здобувачі без доступу до курсу з %s."
+
+msgid "Recently used resources"
+msgstr "Нещодавно використані ресурси"
+
+msgid "Course tools/resources used since %s."
+msgstr "Інструменти/ресурси курсу, використані з %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% здобувачів"
+
+msgid "Connections"
+msgstr "Підключення"
+
+msgid "Total connections"
+msgstr "Загальна кількість підключень"
+
+msgid "Downloaded documents"
+msgstr "Завантажені документи"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Список документів, завантажених цим здобувачем у цьому курсі."
+
+msgid "Forum topics"
+msgstr "Теми форуму"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Теми форуму, відкриті цим здобувачем у цьому курсі."
+
+msgid "Forum posts"
+msgstr "Повідомлення форуму"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Повідомлення форуму, написані цим здобувачем у цьому курсі."
+
+msgid "Course connections"
+msgstr "Підключення до курсу"
+
+msgid "Connection history for this learner in this course."
+msgstr "Історія підключень цього здобувача в цьому курсі."
+
+msgid "Resources used"
+msgstr "Використані ресурси"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Останні інструменти або ресурси, використані цим здобувачем у цьому курсі."
+
+msgid "Logout date"
+msgstr "Дата виходу"
+
+msgid "Imported Aiken quiz"
+msgstr "Імпортований тест Aiken"
+
+msgid "Only supported documents will be listed here."
+msgstr "Тут буде показано лише підтримувані документи."
+
+msgid "Generated Aiken content"
+msgstr "Згенерований вміст Aiken"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Перегляньте згенерований вміст перед імпортуванням його як нову вправу."
+
+msgid "No documents available."
+msgstr "Немає доступних документів."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Гіперболічний арктангенс:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Вправа"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "LastName"
+
+msgid "LoginName"
+msgstr "LoginName"
+
+msgid "MinMinute"
+msgstr "MinMinute"
+
+msgid "StartDate"
+msgstr "StartDate"
+
+msgid "EndDate"
+msgstr "EndDate"
+
+msgid "CorrectionDate"
+msgstr "CorrectionDate"
+
+msgid "NotValidated"
+msgstr "NotValidated"
+
+msgid "PendingAttempts"
+msgstr "PendingAttempts"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Список незавершених спроб тестування в усіх ваших курсах."
+
+msgid "User ID"
+msgstr "ID користувача"
+
+msgid "QuestionType"
+msgstr "Тип питання"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Питання без автоматичної перевірки"
+
+msgid "There are no pending tests."
+msgstr "Немає незавершених тестів."
+
+msgid "%s results"
+msgstr "%s результатів"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Приклад діяльності із заповнення форми: розрахунок індексу маси тіла</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Вік</strong></td>            <td width=\"75%\" style=\"\">[25] років</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Стать</strong></td>            <td style=\"\" text-align:=\"\">[Ч] (Ч або Ж)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Вага</strong></td>            <td style=\"\" text-align:=\"\">95 кг</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Зріст</strong></td>            <td style=\"vertical-align: top;\">1,81 м</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Індекс маси тіла</strong></td>            <td style=\"vertical-align: top;\">[29] ІМТ = Вага / Зріст<sup>2</sup> (див. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">статтю у Вікіпедії</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Видалено"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "Ви впевнені?"
+
+msgid "NoResultsAvailable"
+msgstr "Немає доступних результатів"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Імпортувати групи з CSV-файлу та за бажанням видалити елементи, яких немає у файлі."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Використовуйте цю опцію обережно, оскільки елементи, відсутні в CSV, можуть бути видалені під час імпорту."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Завантажте CSV-файл із даними груп, які потрібно імпортувати."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Ви можете завантажити приклад файлу, щоб використати очікуваний формат."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Якщо увімкнути видалення, елементи, яких немає у файлі, можуть бути видалені."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "CSV-файл є обов’язковим для початку імпорту."
+
+msgid "Please select at least one class."
+msgstr "Виберіть принаймні один клас."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Визначте властивості кожної групи перед їх створенням."
+
+msgid "Apply the first row values"
+msgstr "Застосувати значення першого рядка"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Створіть групи вручну або згенеруйте їх із класів, підписаних на цей курс."
+
+msgid "Create manual groups"
+msgstr "Створити групи вручну"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Використовуйте цю форму, коли потрібно створити порожні групи курсу вручну."
+
+msgid "Configure manual groups"
+msgstr "Налаштувати групи вручну"
+
+msgid "Create groups from subscribed classes"
+msgstr "Створити групи з підписаних класів"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Використовуйте цю форму, коли потрібно створити одну групу курсу для кожного вибраного класу."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Залишити створені групи пов’язаними з їхніми вихідними класами"
+
+msgid "Create groups from selected classes"
+msgstr "Створити групи з вибраних класів"
+
+msgid "You must be logged in to access this page."
+msgstr "Ви повинні увійти в систему, щоб отримати доступ до цієї сторінки."
+
+msgid "Invalid user"
+msgstr "Недійсний користувач"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Дозволити студентам самостійно підтверджувати свою присутність"
+
+msgid "Course block"
+msgstr "Блок курсу"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Додати власні блоки контенту в нижні області курсу."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Перед футером"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Нижній колонтитул зліва"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Нижній колонтитул по центру"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Нижній колонтитул справа"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Пошук сертифікатів недоступний"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Дозволяє здобуття навичок за підкатегоріями"
+
+msgid "Allow skills by subcategories"
+msgstr "Дозволити навички за підкатегоріями"
+
+msgid "Minimum score for skills"
+msgstr "Мінімальний бал для навичок"
+
+msgid "The gradebook table is hidden."
+msgstr "Таблицю журналу оцінок приховано."
+
+msgid "Invalid token"
+msgstr "Недійсний токен"
+
+msgid "Unable to save the item"
+msgstr "Не вдалося зберегти елемент"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Дозволено лише URL-адреси HTTP та HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Недійсний хост URL."
+
+msgid "This cloud provider is not allowed."
+msgstr "Цей хмарний провайдер не дозволений."
+
+msgid "Documents used"
+msgstr "Використані документи"
+
+msgid "No document usage"
+msgstr "Немає використання документів"
+
+msgid "Invalid action."
+msgstr "Недійсна дія."
+
+msgid "No users selected."
+msgstr "Не вибрано жодного користувача."
+
+msgid "%s user(s) processed."
+msgstr "Оброблено %s користувач(ів)."
+
+msgid "Invalid CSRF token."
+msgstr "Недійсний CSRF-токен."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Будь ласка, змініть свій пароль"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "Шановний(а) %s,\n\nНаш процес забезпечення безпеки показує, що ви використовуєте пароль, який часто використовується в Інтернеті, а це означає, що ваш обліковий запис може бути легко викрадено. Ймовірно, це проста послідовність або дуже поширене слово, ми точно не знаємо (ми не можемо бачити ваш пароль), але просимо вас підключитися до платформи та запросити зміну пароля. Ви можете перейти за посиланням тут: %s, щоб зробити це зараз.\n\nЗверніть увагу, що ми ніколи не просимо ваш пароль у цьому процесі. Ви просто вводите своє ім’я користувача або електронну пошту, і ми надсилаємо вам посилання. Якщо вас просять ввести ваш поточний пароль для цього, хтось, ймовірно, намагається здійснити фішинг вашого облікового запису. Будьте обережні, змініть пароль зараз!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Ваш пароль було скинуто"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "Шановний(а) %s,\n\nНаш процес забезпечення безпеки позначив вас як користувача пароля, який часто використовується в Інтернеті, а це означає, що ваш обліковий запис може бути легко викрадено. Як запобіжний захід ми вирішили ініціювати процес скидання пароля. Ваш новий автоматично згенерований пароль тепер:\n\n%s\n\nБудь ласка, увійдіть на платформу найближчим часом (використовуючи цей новий пароль), щоб встановити власний особистий і безпечний пароль.\n\nБудьте обережні.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Підпис успішно збережено"
+
+msgid "Invalid request payload."
+msgstr "Недійсне корисне навантаження запиту."
+
+msgid "Authentication required."
+msgstr "Потрібна автентифікація."
+
+msgid "The course title is required."
+msgstr "Назва курсу є обов’язковою."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Лише тренери та адміністратори можуть створювати курси."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Створення курсів тренерами вимкнено на цій платформі."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Вибрану службу BuyCourses не можна використовувати для створення цього курсу."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Ви досягли максимально дозволеної кількості курсів (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Вибрана служба BuyCourses недійсна."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses зараз недоступний."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses не може перевірити вибрану службу зараз."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Не вдалося перевірити вибрану службу BuyCourses зараз."
+
+msgid "External tool removed from course"
+msgstr "Зовнішній інструмент видалено з курсу"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Зовнішній інструмент видалено з курсу, але збережено внутрішньо, оскільки він пов’язаний з журналом оцінок"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Немає доступних зовнішніх інструментів для додавання до журналу оцінок"
+
+msgid "The evaluation could not be created"
+msgstr "Не вдалося створити оцінювання"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Не вдалося пов’язати оцінювання журналу оцінок"
+
+msgid "Survey questions"
+msgstr "Питання опитування"
+
+msgid "Back to survey list"
+msgstr "Повернутися до списку опитувань"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Це опитування вже має відповіді. Редагування питань вимкнено налаштуваннями."
+
+msgid "Choose the type of question you want to add."
+msgstr "Виберіть тип питання, яке хочете додати."
+
+msgid "The free text option is added automatically."
+msgstr "Варіант вільної відповіді додається автоматично."
+
+msgid "No questions found"
+msgstr "Питань не знайдено"
+
+msgid "Mandatory"
+msgstr "Обов’язкове"
+
+msgid "Unsupported question type"
+msgstr "Непідтримуваний тип питання"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Ви можете використовувати теги {%s} та {%s} у питанні."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Це питання відображається умовно під час проходження опитування."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Варіанти відсотків від 1 до 100 генеруються автоматично."
+
+msgid "Could not load survey questions"
+msgstr "Не вдалося завантажити питання опитування"
+
+msgid "The question text is required."
+msgstr "Текст питання є обов’язковим."
+
+msgid "The maximum score is required."
+msgstr "Максимальний бал є обов’язковим."
+
+msgid "Please select a parent option."
+msgstr "Будь ласка, виберіть батьківський варіант."
+
+msgid "Please fill all answer options."
+msgstr "Будь ласка, заповніть усі варіанти відповідей."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Не вдалося зберегти питання опитування"
+
+msgid "Could not delete survey question"
+msgstr "Не вдалося видалити питання опитування"
+
+msgid "Could not move survey question"
+msgstr "Не вдалося перемістити питання опитування"
+
+msgid "Could not copy survey question"
+msgstr "Не вдалося скопіювати питання опитування"
+
+msgid "Hide search"
+msgstr "Приховати пошук"
+
+msgid "Showing results for: %s"
+msgstr "Показ результатів для: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Пошук за назвою, кодом або описом опитування."
+
+msgid "Search surveys"
+msgstr "Пошук опитувань"
+
+msgid "%s surveys selected"
+msgstr "%s опитувань вибрано"
+
+msgid "Clear selection"
+msgstr "Очистити вибір"
+
+msgid "No surveys found"
+msgstr "Опитувань не знайдено"
+
+msgid "Unsupported"
+msgstr "Не підтримується"
+
+msgid "Could not load surveys"
+msgstr "Не вдалося завантажити опитування"
+
+msgid "Delete selected surveys"
+msgstr "Видалити вибрані опитування"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Вибрані опитування та їхні запитання буде видалено. Цю дію не можна скасувати."
+
+msgid "Could not delete selected surveys"
+msgstr "Не вдалося видалити вибрані опитування"
+
+msgid "Survey action"
+msgstr "Дія з опитуванням"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Буде створено копію цього опитування: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Усі відповіді та запрошення для цього опитування буде видалено: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Згенеровані множинні запитання буде видалено з цього опитування: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Це опитування буде опубліковано для пов’язаних тьюторів групи: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Це опитування та його запитання буде видалено: %s"
+
+msgid "Could not complete survey action"
+msgstr "Не вдалося виконати дію з опитуванням"
+
+msgid "Not started"
+msgstr "Не розпочато"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Опитування про зустріч дозволяють запрошеним користувачам вибрати дати, коли вони доступні."
+
+msgid "Back to surveys"
+msgstr "Повернутися до опитувань"
+
+msgid "Edit meeting poll"
+msgstr "Редагувати опитування про зустріч"
+
+msgid "View meeting poll"
+msgstr "Переглянути опитування про зустріч"
+
+msgid "Basic information"
+msgstr "Основна інформація"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Це створить опитування типу «опитування про зустріч». Відповіді та запрошення обробляються окремо."
+
+msgid "Availability"
+msgstr "Доступність"
+
+msgid "Meeting dates"
+msgstr "Дати зустрічі"
+
+msgid "Meeting poll"
+msgstr "Опитування про зустріч"
+
+msgid "My availability"
+msgstr "Моя доступність"
+
+msgid "Meeting poll results"
+msgstr "Результати опитування про зустріч"
+
+msgid "No invitations found"
+msgstr "Запрошень не знайдено"
+
+msgid "available"
+msgstr "доступний"
+
+msgid "Could not load meeting poll"
+msgstr "Не вдалося завантажити опитування про зустріч"
+
+msgid "Please complete the required fields"
+msgstr "Будь ласка, заповніть обов’язкові поля"
+
+msgid "Could not save meeting poll"
+msgstr "Не вдалося зберегти опитування про зустріч"
+
+msgid "Could not save meeting availability"
+msgstr "Не вдалося зберегти доступність для зустрічі"
+
+msgid "Copy this survey to another course or session"
+msgstr "Копіювати це опитування в інший курс або сесію"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Опитування буде скопійовано без відповідей чи запрошень."
+
+msgid "No target courses found"
+msgstr "Цільових курсів не знайдено"
+
+msgid "Search by course title, course code or session name."
+msgstr "Пошук за назвою курсу, кодом курсу або назвою сесії."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Використовуйте «Дублювати опитування», якщо потрібна копія в тому самому курсі."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Запитання та варіанти буде скопійовано. Відповіді, запрошення та звіти залишаться лише в оригінальному опитуванні."
+
+msgid "Selected target"
+msgstr "Вибрана ціль"
+
+msgid "Could not load copy form"
+msgstr "Не вдалося завантажити форму копіювання"
+
+msgid "The survey will be copied to: %s"
+msgstr "Опитування буде скопійовано до: %s"
+
+msgid "Survey copied."
+msgstr "Опитування скопійовано."
+
+msgid "Could not copy survey"
+msgstr "Не вдалося скопіювати опитування"
+
+msgid "Answer survey"
+msgstr "Відповісти на опитування"
+
+msgid "Preview mode does not save answers."
+msgstr "Режим попереднього перегляду не зберігає відповіді."
+
+msgid "Survey completed"
+msgstr "Опитування завершено"
+
+msgid "Thank you for answering the survey."
+msgstr "Дякуємо за відповіді на опитування."
+
+msgid "Profile information"
+msgstr "Інформація профілю"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Будь ласка, перегляньте запитані поля профілю перед відповіддю на опитування."
+
+msgid "This profile field is read-only."
+msgstr "Це поле профілю доступне лише для читання."
+
+msgid "You already filled this survey."
+msgstr "Ви вже заповнили це опитування."
+
+msgid "Please specify"
+msgstr "Будь ласка, вкажіть"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Цей тип запитання не підтримується в сучасному перегляді опитування."
+
+msgid "Preview only"
+msgstr "Лише попередній перегляд"
+
+msgid "Submit answers"
+msgstr "Надіслати відповіді"
+
+msgid "Could not load survey"
+msgstr "Не вдалося завантажити опитування"
+
+msgid "Please complete the required profile fields."
+msgstr "Будь ласка, заповніть обов’язкові поля профілю."
+
+msgid "Please answer all mandatory questions."
+msgstr "Будь ласка, дайте відповіді на всі обов’язкові запитання."
+
+msgid "Could not save survey answers"
+msgstr "Не вдалося зберегти відповіді опитування"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Налаштуйте основну інформацію опитування перед керуванням запитаннями та запрошеннями."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Код опитування не можна змінити після створення."
+
+msgid "Survey behavior"
+msgstr "Поведінка опитування"
+
+msgid "Use 0 for no time limit."
+msgstr "Використовуйте 0, щоб не обмежувати час."
+
+msgid "Survey messages"
+msgstr "Повідомлення опитування"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Поля профілю, вибрані тут, буде показано перед запитаннями опитування."
+
+msgid "No profile fields are currently available."
+msgstr "Наразі немає доступних полів профілю."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Вибір полів профілю доступний лише для неанонімних опитувань."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Зв’язок навичок буде перенесено в окремому пакетному процесі."
+
+msgid "Could not load survey configuration"
+msgstr "Не вдалося завантажити конфігурацію опитування"
+
+msgid "The survey code is required."
+msgstr "Потрібен код опитування."
+
+msgid "The survey title is required."
+msgstr "Потрібна назва опитування."
+
+msgid "The survey has been saved successfully"
+msgstr "Опитування успішно збережено"
+
+msgid "Could not save survey configuration"
+msgstr "Не вдалося зберегти конфігурацію опитування"
+
+msgid "Course users"
+msgstr "Користувачі курсу"
+
+msgid "Already invited"
+msgstr "Вже запрошені"
+
+msgid "No users found"
+msgstr "Користувачів не знайдено"
+
+msgid "No groups found"
+msgstr "Груп не знайдено"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Використовуйте **link**, де має з’явитися посилання на опитування."
+
+msgid "Remind all selected users"
+msgstr "Нагадати всім вибраним користувачам"
+
+msgid "Anonymous access link"
+msgstr "Посилання для анонімного доступу"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Користувачі, яких не запрошено, можуть скористатися цим посиланням для проходження опитування."
+
+msgid "Answered anonymously"
+msgstr "Відповіли анонімно"
+
+msgid "Could not load survey invitations"
+msgstr "Не вдалося завантажити запрошення опитування"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Тема та текст листа обов’язкові для надсилання."
+
+msgid "Could not publish survey"
+msgstr "Не вдалося опублікувати опитування"
+
+msgid "Could not copy the link"
+msgstr "Не вдалося скопіювати посилання"
+
+msgid "Please answer this survey using the following link"
+msgstr "Будь ласка, дайте відповіді на це опитування за таким посиланням"
+
+msgid "Export CSV"
+msgstr "Експорт у CSV"
+
+msgid "Export compact CSV"
+msgstr "Експорт компактного CSV"
+
+msgid "Export Excel"
+msgstr "Експорт у Excel"
+
+msgid "Export package"
+msgstr "Експорт пакета"
+
+msgid "Results summary"
+msgstr "Підсумок результатів"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Цей перегляд показує перенесені дані звітності для цього опитування."
+
+msgid "Select user"
+msgstr "Вибрати користувача"
+
+msgid "No answers found"
+msgstr "Відповідей не знайдено"
+
+msgid "answers"
+msgstr "відповіді"
+
+msgid "Could not load survey reporting"
+msgstr "Не вдалося завантажити звітність опитування"
+
+msgid "Back to threads"
+msgstr "Назад до тем"
+
+msgid "Back to learning path"
+msgstr "Назад до навчального шляху"
+
+msgid "Remove sticky"
+msgstr "Зняти закріплення"
+
+msgid "Make sticky"
+msgstr "Закріпити"
+
+msgid "Open thread"
+msgstr "Відкрити тему"
+
+msgid "Close thread"
+msgstr "Закрити тему"
+
+msgid "Delete thread"
+msgstr "Видалити тему"
+
+msgid "This thread is hidden from learners."
+msgstr "Ця тема прихована від слухачів."
+
+msgid "Revision requested"
+msgstr "Запит на перегляд"
+
+msgid "Revision"
+msgstr "Перегляд"
+
+msgid "Approve post"
+msgstr "Схвалити допис"
+
+msgid "Reject post"
+msgstr "Відхилити допис"
+
+msgid "Cancel revision request"
+msgstr "Скасувати запит на перегляд"
+
+msgid "Delete post"
+msgstr "Видалити допис"
+
+msgid "Message is required"
+msgstr "Повідомлення є обов’язковим"
+
+msgid "Target thread is required"
+msgstr "Цільова тема є обов’язковою"
+
+msgid "Could not retrieve posts"
+msgstr "Не вдалося отримати дописи"
+
+msgid "Thread shown"
+msgstr "Тему показано"
+
+msgid "Thread hidden"
+msgstr "Тему приховано"
+
+msgid "Could not update thread"
+msgstr "Не вдалося оновити тему"
+
+msgid "Thread closed"
+msgstr "Тему закрито"
+
+msgid "Thread opened"
+msgstr "Тему відкрито"
+
+msgid "Thread marked as sticky"
+msgstr "Тему позначено як прикріплену"
+
+msgid "Thread unmarked as sticky"
+msgstr "Тему знято з прикріплених"
+
+msgid "Thread notifications enabled"
+msgstr "Сповіщення про тему ввімкнено"
+
+msgid "Thread notifications disabled"
+msgstr "Сповіщення про тему вимкнено"
+
+msgid "Could not update thread notification"
+msgstr "Не вдалося оновити сповіщення теми"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Ви впевнені, що хочете видалити цю тему?"
+
+msgid "Could not delete thread"
+msgstr "Не вдалося видалити тему"
+
+msgid "Post approved"
+msgstr "Допис схвалено"
+
+msgid "Could not approve post"
+msgstr "Не вдалося схвалити допис"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Ви впевнені, що хочете відхилити цей допис?"
+
+msgid "Post rejected"
+msgstr "Допис відхилено"
+
+msgid "Could not reject post"
+msgstr "Не вдалося відхилити допис"
+
+msgid "Post shown"
+msgstr "Допис показано"
+
+msgid "Post hidden"
+msgstr "Допис приховано"
+
+msgid "Could not update post"
+msgstr "Не вдалося оновити допис"
+
+msgid "Post updated"
+msgstr "Допис оновлено"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Ви впевнені, що хочете видалити цей допис?"
+
+msgid "Post deleted"
+msgstr "Допис видалено"
+
+msgid "Could not delete post"
+msgstr "Не вдалося видалити допис"
+
+msgid "Untitled thread"
+msgstr "Тема без назви"
+
+msgid "Could not retrieve threads"
+msgstr "Не вдалося отримати теми"
+
+msgid "Post moved"
+msgstr "Допис переміщено"
+
+msgid "Could not move post"
+msgstr "Не вдалося перемістити допис"
+
+msgid "Revision request removed"
+msgstr "Запит на перегляд видалено"
+
+msgid "Could not update revision request"
+msgstr "Не вдалося оновити запит на перегляд"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Ви впевнені, що хочете поскаржитися на цей допис?"
+
+msgid "Could not report post"
+msgstr "Не вдалося поскаржитися на допис"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Ви впевнені, що хочете видалити це вкладення?"
+
+msgid "Attachment deleted"
+msgstr "Вкладення видалено"
+
+msgid "Could not delete attachment"
+msgstr "Не вдалося видалити вкладення"
+
+msgid "Thread title"
+msgstr "Назва теми"
+
+msgid "Sticky thread"
+msgstr "Прикріплена тема"
+
+msgid "Attach files"
+msgstr "Прикріпити файли"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Вкладення вимкнено для цього форуму"
+
+msgid "The forum is not open yet."
+msgstr "Форум ще не відкрито."
+
+msgid "The forum is closed."
+msgstr "Форум закрито."
+
+msgid "The forum is locked."
+msgstr "Форум заблоковано."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Створення нових тем у цьому форумі заборонено."
+
+msgid "Thread created"
+msgstr "Тему створено"
+
+msgid "Could not create thread"
+msgstr "Не вдалося створити тему"
+
+msgid "Back to posts"
+msgstr "Назад до повідомлень"
+
+msgid "This reply will be stored as a revision."
+msgstr "Цю відповідь буде збережено як ревізію."
+
+msgid "Post reply"
+msgstr "Відповісти"
+
+msgid "The thread is locked."
+msgstr "Тему заблоковано."
+
+msgid "Reply added"
+msgstr "Відповідь додано"
+
+msgid "Could not add reply"
+msgstr "Не вдалося додати відповідь"
+
+msgid "Add forum"
+msgstr "Додати форум"
+
+msgid "No forums found"
+msgstr "Форумів не знайдено"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Створіть першу категорію форуму або форум, щоб почати обговорення."
+
+msgid "Locked"
+msgstr "Заблоковано"
+
+msgid "No forums in this category"
+msgstr "У цій категорії немає форумів"
+
+msgid "Posts require approval"
+msgstr "Повідомлення потребують схвалення"
+
+msgid "Forum for current group"
+msgstr "Форум поточної групи"
+
+msgid "Group forum visibility"
+msgstr "Видимість групового форуму"
+
+msgid "No category"
+msgstr "Без категорії"
+
+msgid "Could not retrieve forums"
+msgstr "Не вдалося отримати форуми"
+
+msgid "Forum category updated"
+msgstr "Категорію форуму оновлено"
+
+msgid "Forum category created"
+msgstr "Категорію форуму створено"
+
+msgid "Could not save forum category"
+msgstr "Не вдалося зберегти категорію форуму"
+
+msgid "Forum updated"
+msgstr "Форум оновлено"
+
+msgid "Forum created"
+msgstr "Форум створено"
+
+msgid "Could not save forum"
+msgstr "Не вдалося зберегти форум"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Ви впевнені, що хочете видалити цю категорію форуму?"
+
+msgid "Could not delete forum category"
+msgstr "Не вдалося видалити категорію форуму"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Ви впевнені, що хочете видалити цей форум?"
+
+msgid "Could not delete forum"
+msgstr "Не вдалося видалити форум"
+
+msgid "Forum category unlocked"
+msgstr "Категорію форуму розблоковано"
+
+msgid "Forum category locked"
+msgstr "Категорію форуму заблоковано"
+
+msgid "Could not update forum category"
+msgstr "Не вдалося оновити категорію форуму"
+
+msgid "Forum category shown"
+msgstr "Категорію форуму показано"
+
+msgid "Forum category hidden"
+msgstr "Категорію форуму приховано"
+
+msgid "Forum unlocked"
+msgstr "Форум розблоковано"
+
+msgid "Forum locked"
+msgstr "Форум заблоковано"
+
+msgid "Could not update forum"
+msgstr "Не вдалося оновити форум"
+
+msgid "Forum shown"
+msgstr "Форум показано"
+
+msgid "Forum hidden"
+msgstr "Форум приховано"
+
+msgid "Forum notifications enabled"
+msgstr "Сповіщення форуму ввімкнено"
+
+msgid "Forum notifications disabled"
+msgstr "Сповіщення форуму вимкнено"
+
+msgid "Could not update forum notification"
+msgstr "Не вдалося оновити сповіщення форуму"
+
+msgid "Forum category moved"
+msgstr "Категорію форуму переміщено"
+
+msgid "Could not move forum category"
+msgstr "Не вдалося перемістити категорію форуму"
+
+msgid "Forum moved"
+msgstr "Форум переміщено"
+
+msgid "Could not move forum"
+msgstr "Не вдалося перемістити форум"
+
+msgid "Back to forums"
+msgstr "Назад до форумів"
+
+msgid "New thread"
+msgstr "Нова тема"
+
+msgid "No threads found"
+msgstr "Теми не знайдено"
+
+msgid "Sticky"
+msgstr "Закріплена"
+
+msgid "Graded"
+msgstr "Оцінено"
+
+msgid "Grade peers"
+msgstr "Оцінити одногрупників"
+
+msgid "Move thread"
+msgstr "Перемістити тему"
+
+msgid "Target forum"
+msgstr "Цільовий форум"
+
+msgid "Target forum is required"
+msgstr "Необхідно вказати цільовий форум"
+
+msgid "Students"
+msgstr "Студенти"
+
+msgid "No students found"
+msgstr "Студентів не знайдено"
+
+msgid "No peers available to grade."
+msgstr "Немає одногрупників для оцінювання."
+
+msgid "Qualified"
+msgstr "Кваліфікований"
+
+msgid "Not qualified"
+msgstr "Не кваліфікований"
+
+msgid "Could not retrieve thread grading"
+msgstr "Не вдалося отримати оцінювання теми"
+
+msgid "Thread grading updated"
+msgstr "Оцінювання теми оновлено"
+
+msgid "Could not update thread grading"
+msgstr "Не вдалося оновити оцінювання теми"
+
+msgid "Thread score saved"
+msgstr "Оцінку теми збережено"
+
+msgid "Could not save thread score"
+msgstr "Не вдалося зберегти оцінку теми"
+
+msgid "Could not move thread"
+msgstr "Не вдалося перемістити тему"
+
+msgid "Thread updated"
+msgstr "Тему оновлено"
+
+msgid "Search term is too short"
+msgstr "Пошуковий запит занадто короткий"
+
+msgid "Could not search forums"
+msgstr "Не вдалося виконати пошук у форумах"
+
+msgid "Moderated"
+msgstr "Модерований"
+
+msgid "View threads"
+msgstr "Переглянути теми"
+
+msgid "No auth source"
+msgstr "Без джерела автентифікації"
+
+msgid "You must add at least one question"
+msgstr "Ви повинні додати принаймні одне запитання"
+
+msgid "Advanced actions"
+msgstr "Розширені дії"
+
+msgid "Application path"
+msgstr "Шлях до застосунку"
+
+msgid "Apply files details"
+msgstr "Застосувати деталі файлів"
+
+msgid "Apply plan details"
+msgstr "Застосувати деталі плану"
+
+msgid "Apply plan failed"
+msgstr "Не вдалося застосувати план"
+
+msgid "Apply plan ready"
+msgstr "План готовий до застосування"
+
+msgid "Apply preparation"
+msgstr "Підготовка до застосування"
+
+msgid "Apply staged files"
+msgstr "Застосувати підготовлені файли"
+
+msgid "Applying files..."
+msgstr "Застосування файлів..."
+
+msgid "Audit file"
+msgstr "Аудит файлу"
+
+msgid "Backup directory"
+msgstr "Каталог резервних копій"
+
+msgid "Baseline clean"
+msgstr "Базова чистота"
+
+msgid "Baseline warnings"
+msgstr "Базові попередження"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Створити безпечний план застосування з підготовленого пакета. Це лише перевіряє файли, дозволи, шлях резервного копіювання та статус блокування. Файли не замінюються."
+
+msgid "Build production frontend assets."
+msgstr "Зібрати фронтенд-ресурси для продакшену."
+
+msgid "Building plan..."
+msgstr "Створення плану..."
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Check"
+msgstr "Перевірити"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Перевірити наявність оновлень Chamilo, верифікувати пакети, підготувати файли та виконати контрольовані кроки після оновлення."
+
+msgid "Check manifest"
+msgstr "Перевірити маніфест"
+
+msgid "Checking post-apply actions..."
+msgstr "Перевірка дій після застосування..."
+
+msgid "Checking..."
+msgstr "Перевірка..."
+
+msgid "Composer install"
+msgstr "Встановлення Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Дії Composer, Yarn та міграції бази даних можуть змінювати залежності, згенеровані ресурси або базу даних. Вибирайте їх лише після підтвердження резервних копій та дозволів."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Налаштуйте CHAMILO_UPDATE_MANIFEST_URL на сервері або вкажіть HTTPS-адресу маніфесту."
+
+msgid "Configured"
+msgstr "Налаштовано"
+
+msgid "Current migration"
+msgstr "Поточна міграція"
+
+msgid "Database baseline"
+msgstr "Базова база даних"
+
+msgid "Database migration safety review"
+msgstr "Перевірка безпеки міграції бази даних"
+
+msgid "Database migrations"
+msgstr "Міграції бази даних"
+
+msgid "Development mode"
+msgstr "Режим розробки"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Не вмикайте, доки не перевірено резервну копію оновлення та права доступу сервера."
+
+msgid "Doctrine dry-run command"
+msgstr "Команда Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine виявив попередження щодо історичного baseline. Оновлювач усе одно виконає лише поетапні міграції V210 після явного підтвердження."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine виконає лише поетапні міграції V210 явно після проходження перевірки безпеки."
+
+msgid "Dry-run exit code"
+msgstr "Код завершення dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Виконані недоступні міграції"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Розпакуйте перевірений пакет оновлення в каталог проміжного зберігання для перевірки. Це не замінює файли, не запускає міграції та не змінює базу даних."
+
+msgid "File apply available"
+msgstr "Доступне застосування файлів"
+
+msgid "Files to replace"
+msgstr "Файли для заміни"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Підтверджую, що резервна копія бази даних існує та була перевірена перед запуском міграцій."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Розумію, що розширені дії можуть змінювати залежності, згенеровані ресурси або базу даних."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Розумію, що це замінить файли в інсталяції Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Розумію, що це запустить команди оновлення на сервері."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Встановіть залежності фронтенду перед перебудовою ресурсів."
+
+msgid "Installed version"
+msgstr "Встановлена версія"
+
+msgid "Latest migration"
+msgstr "Остання міграція"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Залиште шляхи до пакета та підпису порожніми, щоб завантажити їх із перевірених URL маніфесту. Локальні шляхи доступні лише для тестів розробки."
+
+msgid "Live command log"
+msgstr "Журнал команд у реальному часі"
+
+msgid "Live update log"
+msgstr "Журнал оновлення в реальному часі"
+
+msgid "Local test options"
+msgstr "Параметри локального тестування"
+
+msgid "Local test update notice link"
+msgstr "Посилання на сповіщення про локальне тестування оновлення"
+
+msgid "Local update notice simulation"
+msgstr "Симуляція локального сповіщення про оновлення"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Симуляція локального сповіщення про оновлення доступна лише в режимі розробки."
+
+msgid "Manifest"
+msgstr "Маніфест"
+
+msgid "Manifest source"
+msgstr "Джерело маніфесту"
+
+msgid "Migration safety details"
+msgstr "Деталі перевірки безпеки міграцій"
+
+msgid "Migration safety review failed"
+msgstr "Перевірка безпеки міграцій не пройдена"
+
+msgid "Migration safety review ready"
+msgstr "Перевірка безпеки міграцій готова"
+
+msgid "Migration target"
+msgstr "Ціль міграції"
+
+msgid "New files"
+msgstr "Нові файли"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Нові міграції, виявлені Doctrine"
+
+msgid "Next migration"
+msgstr "Наступна міграція"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Не виявлено жодної виконаної недоступної міграції."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Офіційний URL маніфесту ще не налаштовано. Використовуйте HTTPS-URL або локальний шлях для тестів розробки."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Перед поетапною ціллю оновлення не виявлено жодної незавершеної міграції."
+
+msgid "Not configured"
+msgstr "Не налаштовано"
+
+msgid "Not detected"
+msgstr "Не виявлено"
+
+msgid "Official Chamilo update channel"
+msgstr "Офіційний канал оновлень Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 пакета"
+
+msgid "Package URL"
+msgstr "URL пакета"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Файли пакета та підпису буде завантажено з маніфесту. Локальні шляхи в цьому середовищі вимкнено."
+
+msgid "Package path"
+msgstr "Шлях до пакета"
+
+msgid "Package staged successfully"
+msgstr "Пакет успішно розміщено в проміжному сховищі"
+
+msgid "Package staging failed"
+msgstr "Не вдалося розмістити пакет у проміжному сховищі"
+
+msgid "Package verification"
+msgstr "Перевірка пакета"
+
+msgid "Package verification failed"
+msgstr "Перевірка пакета не вдалася"
+
+msgid "Package verified successfully"
+msgstr "Пакет успішно перевірено"
+
+msgid "Pending migrations before this update"
+msgstr "Незавершені міграції перед цим оновленням"
+
+msgid "Planned backup path"
+msgstr "Запланований шлях резервної копії"
+
+msgid "Post-apply actions completed"
+msgstr "Дії після застосування виконано"
+
+msgid "Post-apply actions failed"
+msgstr "Дії після застосування не вдалися"
+
+msgid "Post-apply actions ready"
+msgstr "Дії після застосування готові"
+
+msgid "Post-apply checks"
+msgstr "Перевірки після застосування"
+
+msgid "Post-apply checks failed"
+msgstr "Перевірки після застосування не вдалися"
+
+msgid "Post-apply details"
+msgstr "Деталі після застосування"
+
+msgid "Post-apply run details"
+msgstr "Деталі виконання після застосування"
+
+msgid "Preflight checks"
+msgstr "Попередні перевірки"
+
+msgid "Preflight checks completed"
+msgstr "Попередні перевірки виконано"
+
+msgid "Preflight checks failed"
+msgstr "Попередні перевірки не вдалися"
+
+msgid "Preflight details"
+msgstr "Деталі попередніх перевірок"
+
+msgid "Prepare staging"
+msgstr "Підготовка проміжного середовища"
+
+msgid "Preparing staging..."
+msgstr "Підготовка проміжного середовища..."
+
+msgid "Production mode"
+msgstr "Режим продакшн"
+
+msgid "Released at"
+msgstr "Випущено"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Замінити файли Chamilo з проміжного пакета за допомогою переглянутого плану застосування. Це не запускає міграції бази даних, Composer, Yarn або команди кешу."
+
+msgid "Review apply plan"
+msgstr "Переглянути план застосування"
+
+msgid "Review database migrations"
+msgstr "Переглянути міграції бази даних"
+
+msgid "Review post-apply actions"
+msgstr "Переглянути дії після застосування"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Переглянути рекомендовані команди вручну після застосування файлів оновлення. Цей крок не запускає Composer, Yarn, міграції або команди кешу."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Переглянути міграції Doctrine та результат сухого запуску перед виконанням міграцій бази даних."
+
+msgid "Reviewing database migrations..."
+msgstr "Перегляд міграцій бази даних..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Виконати та пройти перевірку безпеки міграцій перед запуском міграцій бази даних."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Виконати перевірки середовища перед будь-яким наступним кроком застосування оновлення. Це не змінює файли чи базу даних."
+
+msgid "Run post-apply actions"
+msgstr "Виконати дії після застосування"
+
+msgid "Run preflight checks"
+msgstr "Виконати попередні перевірки"
+
+msgid "Run selected post-apply actions"
+msgstr "Виконати вибрані дії після застосування"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Виконати вибрані команди після застосування з сервера за допомогою контрольованого списку дозволених. Користувацькі shell-команди не приймаються."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Виконати ці команди вручну з сервера після підтвердження результату оновлення файлів та резервних копій."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Виконання дій після застосування з інтерфейсу вимкнено в режимі продакшн."
+
+msgid "Running post-apply actions..."
+msgstr "Виконання дій після застосування..."
+
+msgid "Safe actions"
+msgstr "Безпечні дії"
+
+msgid "Signature path"
+msgstr "Шлях до підпису"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Перевірку підпису не можна пропустити в цьому середовищі."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Пропустити перевірку підпису для локальних тестів розробки"
+
+msgid "Staged file application failed"
+msgstr "Застосування файлів з проміжного середовища не вдалося"
+
+msgid "Staged files applied successfully"
+msgstr "Файли з проміжного середовища успішно застосовано"
+
+msgid "Staging details"
+msgstr "Деталі проміжного середовища"
+
+msgid "Staging directory"
+msgstr "Каталог проміжного середовища"
+
+msgid "Staging extraction"
+msgstr "Розпакування проміжного середовища"
+
+msgid "Symfony cache clear"
+msgstr "Очищення кешу Symfony"
+
+msgid "System update"
+msgstr "Оновлення системи"
+
+msgid "Target version"
+msgstr "Цільова версія"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Налаштовану URL-адресу офіційного маніфесту заповнено автоматично. За потреби ви можете змінити її на інший HTTPS-маніфест."
+
+msgid "The database migration baseline is clean."
+msgstr "Базова лінія міграцій бази даних чиста."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Остаточна HTTP-відповідь не вдалася після завершення операції. Зазвичай це спричинено правами доступу до кешу виконання або перезапуском веб-сервера під час запиту."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Журнал операцій повідомляє, що дії після застосування виконано успішно."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Вибрані команди після застосування виконано успішно, але остаточна HTTP-відповідь не вдалася. Оновіть сторінку та перевірте права доступу до кешу виконання, якщо сторінка не завантажується правильно."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Засіб оновлення не створює та не відновлює резервні копії бази даних."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Ці дії безпечно виконувати з інтерфейсу після перегляду результату оновлення."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Ці команди можуть змінювати залежності, згенеровані ресурси, кеш або базу даних. Підтвердіть наявність резервних копій перед продовженням."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ця дія змінює файли в інсталяції Chamilo. Переконайтеся, що план застосування переглянуто та резервні копії увімкнено перед продовженням."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Цей запис розробки імітує майбутнє повідомлення про оновлення Chamilo.org з використанням локальних тестових шляхів пакетів."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Цей екран відкрито з офіційного повідомлення про оновлення, але офіційне джерело маніфесту ще не налаштовано."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Цей екран відкрито з повідомлення про оновлення. Автоматично запускається лише перевірка маніфесту."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Цей крок готує лише перегляд. Заміна файлів відбудеться пізніше на кроці «Застосувати підготовлені файли» із блокуванням, резервуванням та захистом відкату."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Цей оновлювач не створює резервну копію бази даних. Створіть і перевірте резервну копію перед запуском міграцій."
+
+msgid "Trusted public key"
+msgstr "Довірений відкритий ключ"
+
+msgid "Trusted signing key"
+msgstr "Довірений ключ підпису"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Введіть APPLY UPDATE FILES для підтвердження"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Введіть RUN DATABASE MIGRATIONS для підтвердження міграцій бази даних"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Введіть RUN POST UPDATE ACTIONS для підтвердження"
+
+msgid "Unknown update notice source."
+msgstr "Невідоме джерело повідомлення про оновлення."
+
+msgid "Update availability"
+msgstr "Доступність оновлення"
+
+msgid "Update directory"
+msgstr "Каталог оновлення"
+
+msgid "Update lock path"
+msgstr "Шлях блокування оновлення"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Використовуйте каталог підготовки, створений на попередньому кроці. Бекенд приймає лише каталоги всередині var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Використовуйте це посилання для імітації майбутнього повідомлення про оновлення Chamilo.org під час тестів розробки."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Використовуйте це лише для локальних тестів розробки. Оновлення у продакшені мають використовувати ключ, налаштований на сервері."
+
+msgid "Verification details"
+msgstr "Деталі перевірки"
+
+msgid "Verify package"
+msgstr "Перевірити пакет"
+
+msgid "Verifying..."
+msgstr "Перевірка..."
+
+msgid "Waiting for command progress events..."
+msgstr "Очікування подій прогресу команди..."
+
+msgid "Waiting for update progress events..."
+msgstr "Очікування подій прогресу оновлення..."
+
+msgid "Yarn build"
+msgstr "Збірка Yarn"
+
+msgid "Yarn install"
+msgstr "Встановлення Yarn"
+
+msgid "A comment is required"
+msgstr "Потрібен коментар"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "База даних з такою назвою вже існує. Якщо вона містить таблиці, їх буде видалено; якщо порожня — буде повторно використана."
+
+msgid "AI generated"
+msgstr "Згенеровано ШІ"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Додайте принаймні одне запитання перед поверненням до навчального шляху."
+
+msgid "Add attachments"
+msgstr "Додати вкладення"
+
+msgid "Additional fields"
+msgstr "Додаткові поля"
+
+msgid "Allow comments"
+msgstr "Дозволити коментарі"
+
+msgid "Allow new pages"
+msgstr "Дозволити нові сторінки"
+
+msgid "Allow ratings"
+msgstr "Дозволити рейтинги"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Ви впевнені, що хочете видалити всі елементи?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Ви впевнені, що хочете відновити автоматичне поновлення?"
+
+msgid "Attachment has been deleted"
+msgstr "Вкладення видалено"
+
+msgid "Backup file"
+msgstr "Файл резервної копії"
+
+msgid "Block comments"
+msgstr "Заблокувати коментарі"
+
+msgid "Block new pages"
+msgstr "Заблокувати нові сторінки"
+
+msgid "Block ratings"
+msgstr "Заблокувати рейтинги"
+
+msgid "Cancel renewal"
+msgstr "Скасувати поновлення"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Посилання категорії буде видалено зі сторінок Wiki %s."
+
+msgid "Change"
+msgstr "Змінити"
+
+msgid "Clear group"
+msgstr "Очистити групу"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Натисніть тег, щоб вставити його в редактор. Ці заповнювачі буде замінено під час створення сертифіката."
+
+msgid "Comment added"
+msgstr "Коментар додано"
+
+msgid "Comment is required"
+msgstr "Потрібен коментар"
+
+msgid "Comment score"
+msgstr "Оцінка коментаря"
+
+msgid "Compare selected versions line by line"
+msgstr "Порівняти вибрані версії рядок за рядком"
+
+msgid "Compare selected versions word by word"
+msgstr "Порівняти вибрані версії слово за словом"
+
+msgid "Compare versions"
+msgstr "Порівняти версії"
+
+msgid "Copy completed"
+msgstr "Копіювання завершено"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Створити окремі сторінки Wiki для учасників"
+
+msgid "Current view mode"
+msgstr "Поточний режим перегляду"
+
+msgid "Delete Wiki"
+msgstr "Видалити Wiki"
+
+msgid "Delete page"
+msgstr "Видалити сторінку"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Видаляти головну сторінку Wiki не рекомендується. Ви зможете створити її пізніше."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Вимкнення Wiki блокує звичайні сторінки та дії Wiki. Ця сторінка налаштувань залишається доступною для викладачів курсу."
+
+msgid "Discussion"
+msgstr "Обговорення"
+
+msgid "Edit Comment"
+msgstr "Редагувати коментар"
+
+msgid "Edit page"
+msgstr "Редагувати сторінку"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Дата завершення має бути після або дорівнювати даті закінчення терміну"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Введіть пошуковий запит, щоб знайти сторінки Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Дата закінчення терміну має бути до або дорівнювати даті завершення"
+
+msgid "Failed email recipients"
+msgstr "Неотримані одержувачі електронної пошти"
+
+msgid "Finish and return to learning path"
+msgstr "Завершити та повернутися до навчального шляху"
+
+msgid "Forum image"
+msgstr "Зображення форуму"
+
+msgid "Hide discussion"
+msgstr "Приховати обговорення"
+
+msgid "Hide page"
+msgstr "Приховати сторінку"
+
+msgid "I changed my mind"
+msgstr "Я передумав(-ла)"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Якщо не позначено, ці файли залишаться доступними для адміністратора платформи через інструмент «Інформація про файл»."
+
+msgid "Internal message failures"
+msgstr "Помилки внутрішніх повідомлень"
+
+msgid "Internal messages available"
+msgstr "Доступні внутрішні повідомлення"
+
+msgid "Internal messages created now"
+msgstr "Створені внутрішні повідомлення"
+
+msgid "Item score"
+msgstr "Оцінка елемента"
+
+msgid "Last post"
+msgstr "Останнє повідомлення"
+
+msgid "Lock page"
+msgstr "Заблокувати сторінку"
+
+msgid "Manage categories"
+msgstr "Керувати категоріями"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Позначити цей документ як створений за допомогою ШІ. Використовуйте, коли вміст створено або суттєво змінено за допомогою інструментів ШІ."
+
+msgid "Maximum score is required"
+msgstr "Максимальна оцінка є обов’язковою"
+
+msgid "Metric"
+msgstr "Метрика"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Нові коментарі в цьому обговоренні заблоковано"
+
+msgid "No Wiki categories are available yet."
+msgstr "Категорії Wiki ще недоступні."
+
+msgid "No categories found"
+msgstr "Категорії не знайдено"
+
+msgid "No content"
+msgstr "Немає вмісту"
+
+msgid "No parent category"
+msgstr "Немає батьківської категорії"
+
+msgid "Number of comments scored"
+msgstr "Кількість оцінених коментарів"
+
+msgid "Old version"
+msgstr "Стара версія"
+
+msgid "Only image files are allowed."
+msgstr "Дозволено лише файли зображень."
+
+msgid "Please fill all required fields"
+msgstr "Будь ласка, заповніть усі обов’язкові поля"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Питання з плейсхолдерами класу або студента буде згенеровано для класів або груп курсу: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Оцінювання в цьому обговоренні заблоковано"
+
+msgid "Remove image"
+msgstr "Видалити зображення"
+
+msgid "Restore renewal"
+msgstr "Відновити поновлення"
+
+msgid "Restore version"
+msgstr "Відновити версію"
+
+msgid "Search in"
+msgstr "Шукати в"
+
+msgid "Select group"
+msgstr "Вибрати групу"
+
+msgid "Select image"
+msgstr "Вибрати зображення"
+
+msgid "Selected image"
+msgstr "Вибране зображення"
+
+msgid "Show discussion"
+msgstr "Показати обговорення"
+
+msgid "Show page"
+msgstr "Показати сторінку"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Деякі файли або папки не мають дозволу на запис. Щоб встановити Chamilo, спочатку змініть їхні дозволи (використовуючи CHMOD). Будь ласка, прочитайте"
+
+msgid "Subcategories"
+msgstr "Підкатегорії"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Натисніть ліворуч або праворуч для навігації"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Термін здачі завдання Wiki минув, але запізніле подання дозволено."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Термін здачі завдання Wiki минув."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Завдання Wiki ще не розпочалося."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Перед збереженням потрібно заблокувати редагування сторінки Wiki."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Оголошення збережено, але вкладення не вдалося завантажити."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Оголошення збережено, але доставка електронною поштою не вдалася."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Оголошення збережено, але жодне повідомлення не вдалося доставити."
+
+msgid "The category has been created"
+msgstr "Категорію створено"
+
+msgid "The category has been deleted"
+msgstr "Категорію видалено"
+
+msgid "The category has been updated"
+msgstr "Категорію оновлено"
+
+msgid "The end date is invalid"
+msgstr "Недійсна дата завершення"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Максимальна кількість версій має бути невід’ємним цілим числом"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Максимальна кількість слів має бути невід’ємним цілим числом"
+
+msgid "The print window could not be opened"
+msgstr "Не вдалося відкрити вікно друку"
+
+msgid "The start date is invalid"
+msgstr "Недійсна дата початку"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Ці налаштування застосовуються до всього курсу, включно з його сесіями та групами."
+
+msgid "This announcement has already been sent by email."
+msgstr "Це оголошення вже надіслано електронною поштою."
+
+msgid "This discussion is hidden from learners"
+msgstr "Це обговорення приховано від слухачів"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Цей інструмент генеративного ШІ дозволяє створювати зображення та короткі відео для ілюстрації вашого курсу. Пояснюючи (текстом) те, що ви хочете в розділі запиту, ви надасте налаштованій моделі ШІ елементи, необхідні для генерації зображення або відео. Будь ласка, будьте терплячі. Моделі ШІ знадобиться деякий час для генерації результату, який ви можете зберегти, додавши медіа до папки документів, а потім вставити в HTML-документ. Не всі моделі ШІ однакові за швидкістю чи якістю. Модель ШІ також може надати вам модифікований запит, який є детальнішою інтерпретацією вашого запиту. Потім ви можете використати цей модифікований запит для уточнення запиту. Будь ласка, майте на увазі, що цей інструмент, особливо для відео, може спричинити значні витрати для вашої організації, навіть якщо ви вирішите не зберігати згенероване медіа. Використовуйте його відповідно. Якщо у вас виникають проблеми з отриманням бажаного результату, будь ласка, витратьте час на пошук підказок щодо запитів в Інтернеті для доступної вам моделі ШІ."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ця історія належить базовому курсу. Відновлення доступне після створення версії для сесії."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Це зображення замінює стандартну піктограму форуму, що відображається поруч із назвою форуму."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Ця сторінка походить із базового курсу. Її збереження створить версію для поточної сесії."
+
+msgid "This will also delete %s subcategories."
+msgstr "Це також видалить %s підкатегорій."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Це створить окремі робочі сторінки для %s слухачів."
+
+msgid "Thread history"
+msgstr "Історія обговорення"
+
+msgid "Title and content"
+msgstr "Заголовок і зміст"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Наразі неможливо скасувати поновлення."
+
+msgid "Unable to restore renewal right now."
+msgstr "Наразі неможливо відновити право на поновлення."
+
+msgid "Unlock page"
+msgstr "Розблокувати сторінку"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Використовуйте [[Сторінка]] або [[Сторінка|Видимий текст]] для створення внутрішніх посилань Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Використовуйте пробіл або клавіші зі стрілками для навігації"
+
+msgid "View version"
+msgstr "Переглянути версію"
+
+msgid "Visible only to teachers"
+msgstr "Видимо лише викладачам"
+
+msgid "Weight is required"
+msgstr "Вага є обов’язковою"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Категорії Wiki вимкнено для цього курсу."
+
+msgid "Wiki categories enabled"
+msgstr "Категорії Wiki увімкнено"
+
+msgid "Wiki html strict filtering"
+msgstr "Суворе фільтрування HTML у Wiki"
+
+msgid "Wiki settings"
+msgstr "Налаштування Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Налаштування Wiki оновлено"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Ви переглядаєте історичну версію цієї сторінки"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Ви можете прикріпити один або кілька файлів до цієї відповіді."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Ви можете редагувати цю сторінку завдання, але робочі сторінки слухачів не будуть змінені."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Ви можете використовувати теги {{class_name}} та {{student_full_name}} у запитанні."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "У вас є 20 хвилин на редагування цієї сторінки до закінчення терміну блокування редагування."
+
+msgid "by"
+msgstr "від"
+
+msgid "required"
+msgstr "обов’язково"
+
+msgid "Incorrect password."
+msgstr "Неправильний пароль."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Сповіщення про цілісність файлів призупинено на 1 годину."
+
+msgid "New baseline established: %s files."
+msgstr "Встановлено нову базову лінію: %s файлів."
+
+msgid "Scan complete: changes were detected."
+msgstr "Сканування завершено: виявлено зміни."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Сканування завершено: змін не виявлено."
+
+msgid "File integrity"
+msgstr "Цілісність файлів"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Цей звіт порівнює встановлені файли (усе, крім var/ та .git/, хоча .git/config все одно відстежується для виявлення захопленого віддаленого репозиторію) з довіреною базовою лінією, щоб виявити несподівані додавання, зміни чи видалення."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Ви можете переглянути останній звіт нижче. Запуск сканування, призупинення сповіщень або встановлення нової базової лінії потребує глобального адміністратора."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Сповіщення наразі призупинено для обслуговування. Воно автоматично відновиться о %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Сканування ще не виконувалося. Запустіть його звідси або з командного рядка за допомогою app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Останнє сканування"
+
+msgid "Files scanned"
+msgstr "Відскановано файлів"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Базової лінії ще не існувало: це сканування її встановило. Зміни будуть повідомлятися, починаючи з наступного сканування."
+
+msgid "No changes detected since the baseline."
+msgstr "З моменту встановлення базової лінії змін не виявлено."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Конфігурація віддаленого репозиторію Git (.git/config) змінилася. Перевірте, чи це очікувалося."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Сканування зупинилося достроково, оскільки не вдалося прочитати підкаталог (перевірте права доступу до файлів). Результати нижче можуть бути неповними."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Занадто багато змін для повного списку; нижче показано лише перші записи кожної категорії. Повний список дивіться в журналі CEF."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% файл(ів) не вдалося прочитати (права доступу) і їх пропущено."
+
+msgid "Run a scan now"
+msgstr "Запустити сканування зараз"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Призупинити сповіщення на 1 годину (для обслуговування)"
+
+msgid "Pause for 1 hour"
+msgstr "Призупинити на 1 годину"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Вважати поточне дерево файлів новою базовою лінією"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Це довірить усі поточні файли як правильні, включно з будь-якими непереглянутими змінами. Продовжити?"
+
+msgid "Establish new baseline"
+msgstr "Встановити нову базову лінію"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Запланувати сканування через системний crontab, наприклад"
+
+msgid "File integrity alert on %platform%"
+msgstr "Сповіщення про цілісність файлів на %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Сканування цілісності файлів виявило зміни на платформі:"
+
+msgid "Added files"
+msgstr "Додані файли"
+
+msgid "Modified files"
+msgstr "Змінені файли"
+
+msgid "Deleted files"
+msgstr "Видалені файли"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Перегляньте повний звіт у розділі Адміністрування > Безпека > Цілісність файлів."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Пароль для підтвердження призупинення сповіщень"
+
+msgid "Password to confirm the new baseline"
+msgstr "Пароль для підтвердження нової базової лінії"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Сканування вже виконується. Зачекайте його завершення, перш ніж починати нове."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Сканування зараз виконується (почалося %date%). Повне сканування може тривати кілька хвилин; цю сторінку можна безпечно перезавантажити, щоб перевірити прогрес."
+
+msgid "Currently processing"
+msgstr "Поточна обробка"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Попереднє сканування (почалося %date%) було перервано до завершення — процес більше не виконується. Ви можете безпечно почати нове."
+
+msgid "files"
+msgstr "файли"
+
+msgid "Permissions changed"
+msgstr "Змінено дозволи"
+
+msgid "Files with changed permissions"
+msgstr "Файли зі зміненими дозволами"
+
+msgid "Alert history"
+msgstr "Історія сповіщень"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Кожне сканування, яке виявило щось, зберігається навіть після усунення відхилень або встановлення нової базової лінії — на відміну від звіту вище, чисте сканування або повторне встановлення базової лінії ніколи не очищає цю історію."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Цей запис було скорочено під час захоплення; повний список дивіться в журналі CEF."
+
+msgid "No alert has been recorded yet."
+msgstr "Сповіщень ще не зафіксовано."
+
+msgid "Git remote changed"
+msgstr "Змінено віддалений репозиторій Git"
+
+msgid "Press enter to select"
+msgstr "Натисніть Enter, щоб вибрати"
+
+msgid "Press enter to remove"
+msgstr "Натисніть Enter, щоб видалити"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Елементи не знайдено. Спробуйте змінити пошуковий запит."
+
+msgid "List is empty."
+msgstr "Список порожній."
+
+msgid "Your session has expired. Please try again."
+msgstr "Ваша сесія завершилася. Будь ласка, спробуйте ще раз."
+
+msgid "Generate with AI"
+msgstr "Згенерувати за допомогою ШІ"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Сучасна, приваблива ілюстрація, що представляє тему цього курсу, у чистому плоскому стилі з використанням кольорів вашої платформи як акцентів."
+
+msgid "Back to account"
+msgstr "Повернутися до облікового запису"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ваш відгук допоможе нам покращити майбутні навчальні сесії."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Дякуємо, що поділилися своїм відгуком."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Наскільки ви задоволені загальною якістю навчання?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Наскільки ви задоволені релевантністю контенту?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Наскільки ви задоволені зрозумілістю пояснень?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Наскільки ви задоволені організацією та темпом навчання?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Наскільки ви задоволені практичною корисністю отриманих знань?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Чи порекомендуєте ви це навчання іншим?"
+
+msgid "What should we improve in future editions?"
+msgstr "Що ми можемо покращити в майбутніх випусках?"
+
+msgid "Very satisfied"
+msgstr "Дуже задоволений(-на)"
+
+msgid "Satisfied"
+msgstr "Задоволений(-на)"
+
+msgid "Neutral"
+msgstr "Нейтрально"
+
+msgid "Dissatisfied"
+msgstr "Незадоволений(-на)"
+
+msgid "Very dissatisfied"
+msgstr "Дуже незадоволений(-на)"
+
+msgid "Add destination"
+msgstr "Додати призначення"
+
+msgid "Add this test to the assessment tool"
+msgstr "Додати цей тест до інструменту оцінювання"
+
+msgid "Attempts and timing"
+msgstr "Спроби та час"
+
+msgid "Available questions"
+msgstr "Доступні запитання"
+
+msgid "Cancel and return to learning path"
+msgstr "Скасувати та повернутися до навчального шляху"
+
+msgid "Category destinations"
+msgstr "Призначення категорій"
+
+msgid "Classification"
+msgstr "Класифікація"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Could not load exercise configuration"
+msgstr "Не вдалося завантажити конфігурацію вправи"
+
+msgid "Could not save exercise"
+msgstr "Не вдалося зберегти вправу"
+
+msgid "Display and learning path"
+msgstr "Відображення та навчальний шлях"
+
+msgid "Edit test"
+msgstr "Редагувати тест"
+
+msgid "Exercise settings saved."
+msgstr "Налаштування вправи збережено."
+
+msgid "Extra settings"
+msgstr "Додаткові налаштування"
+
+msgid "Feedback and results"
+msgstr "Зворотний зв'язок та результати"
+
+msgid "Finish exercise"
+msgstr "Завершити вправу"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Визначає мову цієї вправи як метадані ресурсу. Самостійно не вмикає індексацію пошуку."
+
+msgid "Maximum score (%)"
+msgstr "Максимальний бал (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Метадані містять навички та додаткові поля, налаштовані для вправ. Це необов’язково і залишається прихованим до відкриття."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Для цієї вправи ще немає доступних категорій запитань."
+
+msgid "Question categories matrix"
+msgstr "Матриця категорій запитань"
+
+msgid "Questions behavior"
+msgstr "Поведінка запитань"
+
+msgid "Random by category"
+msgstr "Випадково за категорією"
+
+msgid "Remove destination"
+msgstr "Видалити призначення"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Правила оцінюються за відсотком балів у порядку зростання. Натисніть Завершити вправу, щоб закінчити тест."
+
+msgid "Score and final messages"
+msgstr "Бали та підсумкові повідомлення"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Деякі параметри блокуються після створення вправи."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Це значення зберігається як загальна тривалість у хвилинах."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Використовуйте 0, щоб зберегти всі доступні запитання. Використовуйте -1, де дозволені всі доступні запитання."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Використовуйте ці поля для класифікації вправи незалежно від параметрів відображення."
+
+msgid "Invite by email"
+msgstr "Запросити електронною поштою"
+
+msgid "Invitation has been sent"
+msgstr "Запрошення надіслано"
+
+msgid "Sent on"
+msgstr "Надіслано"
+
+msgid "Accepted on"
+msgstr "Прийнято"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Цей курс відкрито в сесії. Надсилання запрошення тут підпише отримувача на всю сесію %s, а не лише на цей курс."
+
+msgid "Revoke"
+msgstr "Відкликати"
+
+msgid "Revoked"
+msgstr "Відкликано"
+
+msgid "Invitation has been revoked"
+msgstr "Запрошення відкликано"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Ви впевнені, що хочете відкликати запрошення, надіслане %s?"
+
+msgid "No default room"
+msgstr "Немає стандартної кімнати"
+
+msgid "Floor"
+msgstr "Поверх"
+
+msgid "Capacity"
+msgstr "Місткість"
+
+msgid "Use attendance default room"
+msgstr "Використовувати стандартну кімнату для відвідуваності"
+
+msgid "Floor number"
+msgstr "Номер поверху"
+
+msgid "Copy to students"
+msgstr "Копіювати студентам"
+
+msgid "Generate a quick test on this topic"
+msgstr "Створити швидкий тест на цю тему"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Збережений вміст документа буде надіслано до моделі ШІ для обробки."
+
+msgid "MCP API key"
+msgstr "Ключ API MCP"
+
+msgid "Authorized applications"
+msgstr "Авторизовані застосунки"
+
+msgid "Your session is about to expire"
+msgstr "Ваша сесія скоро завершиться"
+
+msgid "Do you want to continue your session?"
+msgstr "Бажаєте продовжити сесію?"
+
+msgid "Stay connected"
+msgstr "Залишитися підключеним"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Ви вийдете з системи через %s секунд."
+
+msgid "No descriptions available yet."
+msgstr "Описів ще немає."
+
+msgid "%s users selected"
+msgstr "Вибрано %s користувачів"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Вибраних користувачів підписано на курс"
+
+msgid "Import teachers"
+msgstr "Імпортувати викладачів"
+
+msgid "Import learners"
+msgstr "Імпортувати слухачів"
+
+msgid "Select CSV file"
+msgstr "Вибрати файл CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Деяких користувачів не вдалося підписати"
+
+msgid "Browse available classes"
+msgstr "Переглянути доступні класи"
+
+msgid "Back to linked classes"
+msgstr "Повернутися до пов’язаних класів"
+
+msgid "No classes are currently linked to this course."
+msgstr "Наразі немає класів, пов’язаних із цим курсом."
+
+msgid "No available classes were found for this course."
+msgstr "Для цього курсу не знайдено доступних класів."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ви впевнені, що хочете відписати вибраних користувачів?"
+
+msgid "Learning path access"
+msgstr "Доступ до навчального шляху"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Лише вибрані користувачі та групи можуть отримати доступ до цього навчального шляху. Керуйте ними після збереження."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Усі поточні та майбутні користувачі курсу можуть отримати доступ до цього навчального шляху."
+
+msgid "All course users"
+msgstr "Усі користувачі курсу"
+
+msgid "Selected users and groups"
+msgstr "Вибрані користувачі та групи"
+
+msgid "No access"
+msgstr "Немає доступу"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Лише користувачі та групи, додані тут, можуть отримати доступ до цього навчального шляху."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Кількість питань обмежена максимум %s"
+
+msgid "Open exercise player"
+msgstr "Відкрити програвач вправ"
+
+msgid "The score is hidden for this exercise."
+msgstr "Оцінка для цієї вправи прихована."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Виправлення приховані відповідно до налаштувань результатів вправи."
+
+msgid "Progressive adaptive result"
+msgstr "Прогресивний адаптивний результат"
+
+msgid "Achieved level"
+msgstr "Досягнутий рівень"
+
+msgid "Correction history"
+msgstr "Історія виправлень"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Історія ручних виправлень для цієї спроби."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Ця вправа використовує режим результатів радар/павутинка. Діаграма недоступна на цій сторінці."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Деталі питання приховані відповідно до налаштувань результатів вправи."
+
+msgid "Media question"
+msgstr "Медіапитання"
+
+msgid "Pending correction"
+msgstr "Очікує виправлення"
+
+msgid "No answer"
+msgstr "Немає відповіді"
+
+msgid "Blank %s"
+msgstr "Порожнє %s"
+
+msgid "Your order"
+msgstr "Ваш порядок"
+
+msgid "Correct order"
+msgstr "Правильний порядок"
+
+msgid "Delineation review"
+msgstr "Перегляд розмежування"
+
+msgid "Learner clicks"
+msgstr "Кліки учня"
+
+msgid "Question image"
+msgstr "Зображення питання"
+
+msgid "No hotspot image available"
+msgstr "Зображення гарячої зони недоступне"
+
+msgid "Learner delineation"
+msgstr "Розмежування учня"
+
+msgid "Expected delineation"
+msgstr "Очікуване розмежування"
+
+msgid "Expected zones"
+msgstr "Очікувані зони"
+
+msgid "Zone"
+msgstr "Зона"
+
+msgid "Learner annotation"
+msgstr "Анотація учня"
+
+msgid "No annotation image available"
+msgstr "Зображення анотації недоступне"
+
+msgid "This answer is pending teacher correction."
+msgstr "Ця відповідь очікує виправлення викладача."
+
+msgid "Teacher comment"
+msgstr "Коментар викладача"
+
+msgid "Teacher correction"
+msgstr "Виправлення викладача"
+
+msgid "Save correction"
+msgstr "Зберегти виправлення"
+
+msgid "Learner audio"
+msgstr "Аудіозапис учня"
+
+msgid "Download audio"
+msgstr "Завантажити аудіо"
+
+msgid "No uploaded audio"
+msgstr "Аудіо не завантажено"
+
+msgid "Learner Office document"
+msgstr "Документ Office учня"
+
+msgid "Learner file"
+msgstr "Файл учня"
+
+msgid "Download Office document"
+msgstr "Завантажити документ Office"
+
+msgid "No submitted document"
+msgstr "Документ не надіслано"
+
+msgid "No uploaded file"
+msgstr "Файл не завантажено"
+
+msgid "Content item"
+msgstr "Елемент контенту"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Це тип запитання не можна переглянути на цій сторінці."
+
+msgid "Exercise completed"
+msgstr "Вправу завершено"
+
+msgid "Could not start the attempt"
+msgstr "Не вдалося почати спробу"
+
+msgid "Invalid exercise attempt"
+msgstr "Недійсна спроба виконання вправи"
+
+msgid "Could not load exercise result"
+msgstr "Не вдалося завантажити результат вправи"
+
+msgid "Could not load AI providers"
+msgstr "Не вдалося завантажити постачальників ШІ"
+
+msgid "Could not generate AI suggestion"
+msgstr "Не вдалося згенерувати пропозицію ШІ"
+
+msgid "Correction saved"
+msgstr "Виправлення збережено"
+
+msgid "Could not save correction"
+msgstr "Не вдалося зберегти виправлення"
+
+msgid "Create exercise"
+msgstr "Створити вправу"
+
+msgid "Exercise categories"
+msgstr "Категорії вправ"
+
+msgid "Question categories"
+msgstr "Категорії запитань"
+
+msgid "Search by exercise title or description."
+msgstr "Пошук за назвою або описом вправи."
+
+msgid "Search exercises"
+msgstr "Пошук вправ"
+
+msgid "No exercises found"
+msgstr "Вправ не знайдено"
+
+msgid "Open exercise"
+msgstr "Відкрити вправу"
+
+msgid "Disable autolaunch"
+msgstr "Вимкнути автозапуск"
+
+msgid "Enable autolaunch"
+msgstr "Увімкнути автозапуск"
+
+msgid "Export QTI2"
+msgstr "Експортувати QTI2"
+
+msgid "Bulk actions"
+msgstr "Масові дії"
+
+msgid "Selected exercises"
+msgstr "Вибрані вправи"
+
+msgid "No exercises selected"
+msgstr "Вправи не вибрано"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ви впевнені, що хочете застосувати цю дію до вибраних вправ?"
+
+msgid "Bulk action completed"
+msgstr "Масову дію завершено"
+
+msgid "Could not update exercises"
+msgstr "Не вдалося оновити вправи"
+
+msgid "Could not update exercise"
+msgstr "Не вдалося оновити вправу"
+
+msgid "Copy exercise"
+msgstr "Копіювати вправу"
+
+msgid "Delete exercise"
+msgstr "Видалити вправу"
+
+msgid "Could not load exercises"
+msgstr "Не вдалося завантажити вправи"
+
+msgid "No limit"
+msgstr "Без обмежень"
+
+msgid "Add selected questions to the test"
+msgstr "Додати вибрані запитання до тесту"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Це запитання використовується в активному тесті і не може бути відредаговане тут."
+
+msgid "This question cannot be edited here."
+msgstr "Це запитання не можна редагувати тут."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Це запитання використовується в активному тесті і не може бути видалене тут."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Це запитання не можна видалити, оскільки ваш доступ обмежено налаштуваннями платформи."
+
+msgid "Already in test"
+msgstr "Уже в тесті"
+
+msgid "Select at least one question."
+msgstr "Виберіть принаймні одне запитання."
+
+msgid "Question bank updated"
+msgstr "Банк запитань оновлено"
+
+msgid "Could not update the question bank"
+msgstr "Не вдалося оновити банк запитань"
+
+msgid "Could not load the question bank"
+msgstr "Не вдалося завантажити банк запитань"
+
+msgid "Total score"
+msgstr "Загальний бал"
+
+msgid "Starting"
+msgstr "Початок"
+
+msgid "Attempt history"
+msgstr "Історія спроб"
+
+msgid "No attempts yet"
+msgstr "Спроб ще немає"
+
+msgid "Invalid exercise"
+msgstr "Недійсна вправа"
+
+msgid "Could not load exercise overview"
+msgstr "Не вдалося завантажити огляд вправи"
+
+msgid "Open test"
+msgstr "Відкрити тест"
+
+msgid "Random answers"
+msgstr "Випадкові відповіді"
+
+msgid "Prevent moving backwards"
+msgstr "Заборонити повернення назад"
+
+msgid "Previous button hidden"
+msgstr "Кнопка «Попередня» прихована"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Ця вправа використовує параметри, які потребують іншого тестового плеєра."
+
+msgid "Continue test"
+msgstr "Продовжити тест"
+
+msgid "Attempt started"
+msgstr "Спроба розпочата"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Попередній перегляд учителя не створює відстежуваної спроби."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Почніть або поновіть спробу виконання вправи. Чернетки відповідей можна зберегти до остаточного надсилання."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Час вийшов. Завершення спроби."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Час на запитання вичерпано. Збереження відповіді."
+
+msgid "Finishing"
+msgstr "Завершення"
+
+msgid "Draft saved"
+msgstr "Чернетку збережено"
+
+msgid "Statement"
+msgstr "Умова"
+
+msgid "Drop each option on the matching answer"
+msgstr "Перетягніть кожен варіант на відповідну відповідь"
+
+msgid "Clear match"
+msgstr "Очистити відповідність"
+
+msgid "Click to place the selected option here"
+msgstr "Натисніть, щоб розмістити вибраний варіант тут"
+
+msgid "Select an option, then click here"
+msgstr "Виберіть варіант, потім натисніть тут"
+
+msgid "Already matched"
+msgstr "Вже зіставлено"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Ви можете перетягнути варіант на відповідь або вибрати варіант, а потім натиснути на цільове поле."
+
+msgid "Put the items in the correct order."
+msgstr "Розмістіть елементи в правильному порядку."
+
+msgid "Move left"
+msgstr "Перемістити ліворуч"
+
+msgid "Move right"
+msgstr "Перемістити праворуч"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Ви можете перетягувати елементи ліворуч або праворуч або використовувати кнопки переміщення для зміни порядку."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Ви можете перетягувати елементи або використовувати кнопки переміщення для зміни порядку."
+
+msgid "Or upload an audio file"
+msgstr "Або завантажте аудіофайл"
+
+msgid "Selected audio"
+msgstr "Вибране аудіо"
+
+msgid "Uploaded audio"
+msgstr "Завантажене аудіо"
+
+msgid "Office document"
+msgstr "Документ Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Заповніть документ у редакторі нижче. Файл буде додано до цієї спроби для перевірки викладачем."
+
+msgid "Reload Office editor"
+msgstr "Перезавантажити редактор Office"
+
+msgid "Prepare Office document"
+msgstr "Підготувати документ Office"
+
+msgid "Open in new tab"
+msgstr "Відкрити в новій вкладці"
+
+msgid "Preparing Office document"
+msgstr "Підготовка документа Office"
+
+msgid "Submitted document"
+msgstr "Надісланий документ"
+
+msgid "Annotation tools"
+msgstr "Інструменти анотування"
+
+msgid "Text to place"
+msgstr "Текст для розміщення"
+
+msgid "Click the image to place the text annotation."
+msgstr "Натисніть на зображення, щоб розмістити текстову анотацію."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Натисніть на зображення, щоб додати точки шляху. Використовуйте «Почати новий шлях», щоб розділити шляхи."
+
+msgid "Start new path"
+msgstr "Почати новий шлях"
+
+msgid "Current annotations"
+msgstr "Поточні анотації"
+
+msgid "Remove point"
+msgstr "Видалити точку"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Натисніть на зображення, щоб намалювати контурний полігон."
+
+msgid "Click a marker to remove it."
+msgstr "Натисніть на маркер, щоб видалити його."
+
+msgid "Placed"
+msgstr "Розміщено"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Виберіть відповідь, потім натисніть на зображення, щоб позначити її."
+
+msgid "Reading speed"
+msgstr "Швидкість читання"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Цей тип запитання не можна відобразити в цьому плеєрі."
+
+msgid "Save draft"
+msgstr "Зберегти чернетку"
+
+msgid "I confirm that my answers were saved."
+msgstr "Я підтверджую, що мої відповіді збережено."
+
+msgid "Finish test"
+msgstr "Завершити тест"
+
+msgid "Attempt finished"
+msgstr "Спробу завершено"
+
+msgid "Question category"
+msgstr "Категорія запитання"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Ви завершили питання, пов’язані з цією категорією питань. Це ваш останній шанс повернутися та переглянути ці питання."
+
+msgid "Question time left"
+msgstr "Час на питання"
+
+msgid "Time left"
+msgstr "Залишилось часу"
+
+msgid "Current attempt"
+msgstr "Поточна спроба"
+
+msgid "Could not save draft answer"
+msgstr "Не вдалося зберегти чернетку відповіді"
+
+msgid "Could not load exercise"
+msgstr "Не вдалося завантажити вправу"
+
+msgid "Draft answer saved"
+msgstr "Чернетку відповіді збережено"
+
+msgid "Could not finish the attempt"
+msgstr "Не вдалося завершити спробу"
+
+msgid "Could not prepare Office document"
+msgstr "Не вдалося підготувати документ Office"
+
+msgid "Back to learner score"
+msgstr "Повернутися до результатів учня"
+
+msgid "Disable auto refresh"
+msgstr "Вимкнути автооновлення"
+
+msgid "Enable auto refresh"
+msgstr "Увімкнути автооновлення"
+
+msgid "Live window"
+msgstr "Вікно в реальному часі"
+
+msgid "Ongoing attempts"
+msgstr "Поточні спроби"
+
+msgid "Completed attempts"
+msgstr "Завершені спроби"
+
+msgid "Started"
+msgstr "Почато"
+
+msgid "Last activity"
+msgstr "Остання активність"
+
+msgid "Could not load live results"
+msgstr "Не вдалося завантажити результати в реальному часі"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ця вправа доступна лише для читання, оскільки вона включена до навчального шляху."
+
+msgid "Select a question type to create a question."
+msgstr "Виберіть тип питання, щоб створити питання."
+
+msgid "Click to preview"
+msgstr "Натисніть, щоб переглянути"
+
+msgid "Hide preview"
+msgstr "Приховати попередній перегляд"
+
+msgid "Shape"
+msgstr "Фігура"
+
+msgid "Coordinates"
+msgstr "Координати"
+
+msgid "Blanks"
+msgstr "Пропуски"
+
+msgid "Switchable blanks"
+msgstr "Перемикані пропуски"
+
+msgid "Blank"
+msgstr "Пропуск"
+
+msgid "Input width"
+msgstr "Ширина поля"
+
+msgid "Orientation"
+msgstr "Орієнтація"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Недоступно в поточному режимі зворотного зв’язку вправи"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Недоступно під час створення навчального шляху"
+
+msgid "Delete question"
+msgstr "Видалити питання"
+
+msgid "Could not update exercise questions"
+msgstr "Не вдалося оновити питання вправи"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Не вдалося додати вправу до навчального шляху"
+
+msgid "A valid exercise id is required."
+msgstr "Потрібен дійсний ідентифікатор вправи."
+
+msgid "Could not load exercise questions"
+msgstr "Не вдалося завантажити питання вправи"
+
+msgid "Delete selected attempts"
+msgstr "Видалити вибрані спроби"
+
+msgid "Before date"
+msgstr "До дати"
+
+msgid "Pending corrections"
+msgstr "Очікують виправлення"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Ця вправа заблокована журналом оцінок. Дії з очищення спроб вимкнено."
+
+msgid "No attempts found"
+msgstr "Спроб не знайдено"
+
+msgid "Review"
+msgstr "Переглянути"
+
+msgid "Print/PDF"
+msgstr "Друк/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Не вдалося завантажити звіт вправи"
+
+msgid "Select at least one attempt"
+msgstr "Виберіть принаймні одну спробу"
+
+msgid "Delete selected attempts?"
+msgstr "Видалити вибрані спроби?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Надіслати листи з результатами переглянутих спроб?"
+
+msgid "Could not send emails"
+msgstr "Не вдалося надіслати листи"
+
+msgid "Exercise result emails sent"
+msgstr "Листи з результатами вправи надіслано"
+
+msgid "Skipped"
+msgstr "Пропущено"
+
+msgid "Close attempt?"
+msgstr "Закрити спробу?"
+
+msgid "Attempt closed"
+msgstr "Спробу закрито"
+
+msgid "Could not close attempt"
+msgstr "Не вдалося закрити спробу"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Надіслати результат цієї спроби електронною поштою учню?"
+
+msgid "Email sent"
+msgstr "Електронний лист надіслано"
+
+msgid "Could not send email"
+msgstr "Не вдалося надіслати електронний лист"
+
+msgid "Attempt deleted"
+msgstr "Спробу видалено"
+
+msgid "Could not delete attempt"
+msgstr "Не вдалося видалити спробу"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Виберіть CSV-файл, що містить стовпці з назвою та описом."
+
+msgid "Manage categories used to classify questions."
+msgstr "Керування категоріями для класифікації запитань."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Керування категоріями для класифікації вправ."
+
+msgid "Could not load categories"
+msgstr "Не вдалося завантажити категорії"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Імпортовано категорій: %s. Пропущено рядків: %s."
+
+msgid "Imported categories: %s."
+msgstr "Імпортовано категорій: %s."
+
+msgid "Could not import categories"
+msgstr "Не вдалося імпортувати категорії"
+
+msgid "Could not save category"
+msgstr "Не вдалося зберегти категорію"
+
+msgid "Answer distribution"
+msgstr "Розподіл відповідей"
+
+msgid "Configured answers"
+msgstr "Налаштовані відповіді"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Детальний підрахунок відповідей для деяких типів запитань у перенесеному звіті поки недоступний."
+
+msgid "No report by question data found"
+msgstr "Дані звіту за запитаннями не знайдено"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Детальний підрахунок відповідей для цього типу запитань у перенесеному звіті поки недоступний."
+
+msgid "No answer distribution found"
+msgstr "Розподіл відповідей не знайдено"
+
+msgid "Could not load report by question"
+msgstr "Не вдалося завантажити звіт за запитаннями"
+
+msgid "Question settings"
+msgstr "Налаштування запитання"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Залиште порожнім або вкажіть 0, щоб не обмежувати час."
+
+msgid "Time limit in seconds"
+msgstr "Обмеження часу в секундах"
+
+msgid "Attached questions"
+msgstr "Прикріплені запитання"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Тут перелічено лише запитання, прикріплені до цього медіа-запитання в межах поточної вправи."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "До цього медіа-запитання в поточній вправі не прикріплено жодного запитання."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Завантажте шаблон документа Office, який учні редагуватимуть у OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Замінити документ Office"
+
+msgid "Current Office document"
+msgstr "Поточний документ Office"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Це запитання оцінюється вручну після надсилання учнем відредагованого документа."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Загальний бал обчислюється як сума балів за гарячі точки."
+
+msgid "Global score"
+msgstr "Загальний бал"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Виберіть рядок гарячої точки, оберіть її форму, а потім намалюйте на зображенні. Для багатокутників клацайте кожну точку та завершіть багатокутник або двічі клацніть для завершення."
+
+msgid "Finish polygon"
+msgstr "Завершити багатокутник"
+
+msgid "Calculated answer"
+msgstr "Обчислювана відповідь"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Введіть текст нижче та використовуйте квадратні дужки [...] для позначення одного або кількох пропусків."
+
+msgid "Lowest value"
+msgstr "Найнижче значення"
+
+msgid "Highest value"
+msgstr "Найвище значення"
+
+msgid "Fill in blanks"
+msgstr "Заповнити пропуски"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Використовуйте вибрані маркери для позначення пропусків. Приклад: Столиця Перу — [Ліма]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Введіть варіанти для випадаючого списку, по одній відповіді в рядок. Потім позначте очікувані відповіді нижче, як у застарілому інструменті."
+
+msgid "Refresh answers"
+msgstr "Оновити відповіді"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Це запитання з комбінацією випадаючих списків використовує один глобальний бал, як у застарілому варіанті."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Будь ласка, введіть принаймні два варіанти для випадаючого списку."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Спочатку створіть варіанти призначення, а потім пов’яжіть кожен елемент із правильним варіантом."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Це запитання з комбінацією відповідностей використовує один глобальний бал, як у застарілому варіанті."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Створіть кроки та виберіть очікувану позицію для кожного з них, як у застарілому Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Здобувачі обиратимуть «Правильно» або «Неправильно», а потім вказуватимуть ступінь впевненості під час спроби. Редактор зберігає ті самі бали «Правильно/Неправильно» та рівні впевненості, що й у попередній версії."
+
+msgid "Hotspot combination"
+msgstr "Комбінація гарячих точок"
+
+msgid "Add delineation"
+msgstr "Додати розмежування"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Це питання на основі документа Office не має варіантів відповідей. Його оцінка призначається під час перевірки/перегляду результатів."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Це питання на завантаження файлу не має варіантів відповідей. Його оцінка призначається під час перевірки/перегляду результатів."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Це питання на усне висловлювання не має варіантів відповідей. Його оцінка призначається під час перевірки/перегляду результатів."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Це відкрите питання не має варіантів відповідей. Його оцінка призначається під час перевірки/перегляду результатів."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Додати текст для читання з налаштуваннями швидкості прокручування."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Додати вміст, медіа або контекст для читання без нарахування балів."
+
+msgid "Insert a page break without adding score."
+msgstr "Вставити розрив сторінки без нарахування балів."
+
+msgid "Could not save question"
+msgstr "Не вдалося зберегти питання"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Дозволено лише документи DOC, DOCX, XLS або XLSX."
+
+msgid "Please select an Office document."
+msgstr "Будь ласка, виберіть документ Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Будь ласка, намалюйте принаймні одну гарячу точку."
+
+msgid "Please draw at least one delineation."
+msgstr "Будь ласка, намалюйте принаймні одне розмежування."
+
+msgid "The fill in blanks text is required."
+msgstr "Потрібен текст із пропусками для заповнення."
+
+msgid "At least one expected answer is required."
+msgstr "Потрібна принаймні одна очікувана відповідь."
+
+msgid "At least two draggable items are required."
+msgstr "Потрібно принаймні два перетягувані елементи."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Кожен перетягуваний елемент має бути пов’язаний із дійсною цільовою позицією."
+
+msgid "At least two matching options are required."
+msgstr "Потрібно принаймні два варіанти для зіставлення."
+
+msgid "At least two matching pairs are required."
+msgstr "Потрібно принаймні дві пари для зіставлення."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Кожна пара для зіставлення має бути пов’язана з дійсним варіантом."
+
+msgid "At least two answers are required."
+msgstr "Потрібно принаймні дві відповіді."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Для кожної відповіді «Правильно/Неправильно» має бути вибрано «Правильно» або «Неправильно»."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Питання з єдиною правильною відповіддю повинно мати рівно одну правильну відповідь."
+
+msgid "At least one correct answer is required."
+msgstr "Потрібна принаймні одна правильна відповідь."
+
+msgid "Could not load question"
+msgstr "Не вдалося завантажити питання"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Виберіть курс і експортуйте глобальний звіт результатів тестування у форматі CSV."
+
+msgid "Back to reports catalog"
+msgstr "Повернутися до каталогу звітів"
+
+msgid "Could not load exercise global report"
+msgstr "Не вдалося завантажити глобальний звіт тестування"
+
+msgid "Imported questions"
+msgstr "Імпортовані питання"
+
+msgid "Aiken content"
+msgstr "Вміст Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Не вдалося завантажити генератор AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Не вдалося згенерувати вміст Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Не вдалося імпортувати згенерований вміст Aiken"
+
+msgid "Back to my courses"
+msgstr "Повернутися до моїх курсів"
+
+msgid "Open report"
+msgstr "Відкрити звіт"
+
+msgid "Questions with no automatic correction"
+msgstr "Питання без автоматичної перевірки"
+
+msgid "Could not load pending attempts"
+msgstr "Не вдалося завантажити незавершені спроби"
+
+msgid "Skipped questions"
+msgstr "Пропущені питання"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Імпорт Aiken розподіляє цю загальну вагу між імпортованими питаннями, якщо питання не визначає SCORE."
+
+msgid "Import warnings"
+msgstr "Попередження імпорту"
+
+msgid "Could not import questions"
+msgstr "Не вдалося імпортувати питання"
+
+msgid "No question statistics found"
+msgstr "Статистику питань не знайдено"
+
+msgid "Could not load question statistics"
+msgstr "Не вдалося завантажити статистику питань"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Ви також можете підключити клієнт MCP безпосередньо, вказавши йому на таку кінцеву точку:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Наразі немає програм, підключених до вашого облікового запису."
+
+msgid "Connected on"
+msgstr "Підключено"
+
+msgid "Last used"
+msgstr "Останнє використання"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s більше не матиме доступу до вашого облікового запису Chamilo. Продовжити?"
+
+msgid "Application revoked"
+msgstr "Додаток відкликано"
+
+msgid "Copied to clipboard"
+msgstr "Скопійовано в буфер обміну"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Не вдалося скопіювати кінцеву точку MCP"
+
+msgid "MCP endpoint"
+msgstr "Кінцева точка MCP"
+
+msgid "API key"
+msgstr "Ключ API"
+
+msgid "Last used at"
+msgstr "Останнє використання"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Скопіюйте цей ключ зараз. Він більше не буде показаний."
+
+msgid "Rotate API key"
+msgstr "Замінити ключ API"
+
+msgid "Revoke API key"
+msgstr "Відкликати ключ API"
+
+msgid "Remote MCP connection"
+msgstr "Віддалене з’єднання MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Налаштуйте клієнт MCP за допомогою таких значень:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Поточний ключ негайно перестане працювати. Продовжити?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Буде створено новий особистий ключ API MCP. Продовжити?"
+
+msgid "MCP API key generated"
+msgstr "Ключ API MCP створено"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Підключені клієнти MCP, що використовують цей ключ, негайно перестануть працювати. Продовжити?"
+
+msgid "MCP API key revoked"
+msgstr "Ключ API MCP відкликано"
+
+msgid "Could not copy the API key"
+msgstr "Не вдалося скопіювати ключ API"
+
+msgid "Project"
+msgstr "Проєкт"
+
+msgid "Close old tickets"
+msgstr "Закрити старі заявки"
+
+msgid "Close tickets older than seven days?"
+msgstr "Закрити заявки старше семи днів?"
+
+msgid "Assignment history"
+msgstr "Історія призначень"
+
+msgid "Translate with AI"
+msgstr "Перекласти за допомогою ШІ"
+
+msgid "Target language"
+msgstr "Цільова мова"
+
+msgid "Please select a provider"
+msgstr "Виберіть постачальника"
+
+msgid "Generate translation"
+msgstr "Згенерувати переклад"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Принаймні один розділ правил і умов має містити текст."
+
+msgid "No active target languages are available."
+msgstr "Немає доступних активних цільових мов."
+
+msgid "Tutor"
+msgstr "Тьютор"
+
+msgid "Access dates"
+msgstr "Дати доступу"
+
+msgid "Coach access dates"
+msgstr "Дати доступу викладача"
+
+msgid "No sessions found"
+msgstr "Сесії не знайдено"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Виберіть курси, до яких цей користувач не матиме доступу в цій сесії."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Користувача не можна заблокувати для всіх курсів у сесії. Замість цього відпишіть користувача."
+
+msgid "Users subscribed to this session"
+msgstr "Користувачі, підписані на цю сесію"
+
+msgid "No available users found"
+msgstr "Доступних користувачів не знайдено"
+
+msgid "Subscribe this user to the session?"
+msgstr "Підписати цього користувача на сесію?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Підписати вибраних користувачів на сесію?"
+
+msgid "General tutor planning"
+msgstr "Загальне планування тьютора"
+
+msgid "User is already registered by another tutor."
+msgstr "Користувач уже зареєстрований іншим тьютором."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Ви отримуєте копію, оскільки ви тьютор курсу"
+
+msgid "General tutor"
+msgstr "Загальний тьютор"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Врахуйте курси, тьюторів, технічну підтримку, викладачів та/або доступні матеріали."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Тьютори, підписані як викладачі курсу %s"
+
+msgid "Tutor name"
+msgstr "Ім’я тьютора"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Тьютори сесії є координаторами сесії та можуть виступати тьюторами для кожного курсу в сесії. Як тьюторів сесії можна вибрати лише користувачів із роллю викладача."
+
+msgid "Access start date for tutors"
+msgstr "Дата початку доступу для тьюторів"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Дата, з якої сесія стає доступною для тьюторів, щоб вони могли підготувати її до підключення студентів"
+
+msgid "Access end date for tutors"
+msgstr "Дата закінчення доступу для тьюторів"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Дата, з якої сесія закривається для тьюторів. Додатковий час дозволить їм експортувати всю необхідну інформацію відстеження"
+
+msgid "Tutor and student"
+msgstr "Тьютор і студент"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Цей звіт показує тижневий розподіл сесій за загальним тьютором у вибраному діапазоні дат."
+
+msgid "User is general tutor in some sessions"
+msgstr "Користувач є загальним тьютором у деяких сесіях"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Викладачі будуть додані як тьютори в усіх сесіях курсу."
+
+msgid "Delete failed: invalid question id."
+msgstr "Не вдалося видалити: недійсний ідентифікатор запитання."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Середня кількість сесій на загального тьютора сесії"
+
+msgid "No room"
+msgstr "Немає аудиторії"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Імпортувати викладачів курсу як тьюторів курсу в сесії"
+
+msgid "Clean and update course tutors"
+msgstr "Очистити та оновити тьюторів курсу"
+
+msgid "Add me as tutor"
+msgstr "Додати мене як тьютора"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Не вдалося додати опитування до навчального шляху"
+
+msgid "Access dates for tutors"
+msgstr "Дати доступу для тьюторів"
+
+msgid "Tutor and group member"
+msgstr "Тьютор і член групи"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Ваш денний ліміт токенів ШІ вичерпано. Спробуйте завтра."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Ваш місячний ліміт токенів ШІ вичерпано. Спробуйте наступного місяця."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Цей код курсу вже існує, оберіть інший код."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Ця назва курсу вже існує, оберіть іншу назву."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Видимість цього інструменту не можна змінити"
+
+msgid "Invalid visibility"
+msgstr "Недійсна видимість"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Ви отримуєте копію, оскільки є одним із тьюторів курсу"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Ви отримуєте копію, оскільки є тьютором курсу"
+
+msgid "Manual completion"
+msgstr "Ручне завершення"
+
+msgid "Send to tutors"
+msgstr "Надіслати тьюторам"
+
+msgid "Lab title"
+msgstr "Назва лабораторної"
+
+msgid "Lab week"
+msgstr "Тиждень лабораторної"
+
+msgid "Final exam access rule"
+msgstr "Правило доступу до підсумкового іспиту"
+
+msgid "Course completion rule"
+msgstr "Правило завершення курсу"
+
+msgid "You have been invited to join a course"
+msgstr "Вас запрошено приєднатися до курсу"
+
+msgid "No user has been found"
+msgstr "Користувача не знайдено"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Вибраного користувача не можна зареєструвати в цьому контексті"
+
+msgid "No change has been made"
+msgstr "Змін не внесено"
+
+msgid "Back to group list"
+msgstr "Повернутися до списку груп"
+
+msgid "Remove class link"
+msgstr "Видалити зв’язок із класом"
+
+msgid "Group settings"
+msgstr "Налаштування групи"
+
+msgid "Self-registration allowed"
+msgstr "Дозволена самореєстрація"
+
+msgid "Self-unregistration allowed"
+msgstr "Дозволена самостійна відписка"
+
+msgid "This group is linked to the class"
+msgstr "Ця група пов’язана з класом"
+
+msgid "Create one or more empty course groups"
+msgstr "Створити одну або кілька порожніх груп курсу"
+
+msgid "Number of places"
+msgstr "Кількість місць"
+
+msgid "Base group"
+msgstr "Базова група"
+
+msgid "Share"
+msgstr "Поділитися"
+
+msgid "Collaboration"
+msgstr "Співпраця"
+
+msgid "The group title is required."
+msgstr "Назва групи обов’язкова."
+
+msgid "Back to group area"
+msgstr "Повернутися до розділу груп"
+
+msgid "Members are managed by the linked class"
+msgstr "Учасниками керує пов’язаний клас"
+
+msgid "%s groups selected"
+msgstr "%s груп вибрано"
+
+msgid "Fill selected groups"
+msgstr "Заповнити вибрані групи"
+
+msgid "Empty selected groups"
+msgstr "Очистити вибрані групи"
+
+msgid "Fill group"
+msgstr "Заповнити групу"
+
+msgid "Empty group"
+msgstr "Очистити групу"
+
+msgid "Groups per user"
+msgstr "Груп на користувача"
+
+msgid "No tutors"
+msgstr "Немає викладачів"
+
+msgid "No users"
+msgstr "Немає користувачів"
 

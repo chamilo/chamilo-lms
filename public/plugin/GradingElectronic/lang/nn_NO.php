@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronisk karaktersetting er deaktivert';
 $strings['StudentId'] = 'Student-ID';
 $strings['ProviderId'] = 'Leverandør-ID';
 $strings['CourseHours'] = 'Kurstimer';
+
+$strings['GenerateFile'] = 'Generer fil';
+$strings['CourseId'] = 'Kurs-ID';

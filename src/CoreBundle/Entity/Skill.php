@@ -41,9 +41,10 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'groups' => ['skill:tree:read'],
             ],
             output: SkillTreeNode::class,
-            provider: SkillTreeStateProvider::class
+            provider: SkillTreeStateProvider::class,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR')"
         ),
-        new GetCollection(),
+        new GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR')"),
         new Get(),
     ],
     normalizationContext: [
@@ -57,8 +58,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill implements Stringable, Translatable
 {
-    public const STATUS_DISABLED = 0;
-    public const STATUS_ENABLED = 1;
+    public const int STATUS_DISABLED = 0;
+    public const int STATUS_ENABLED = 1;
 
     #[Groups(['skill:read', 'skill_profile:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -166,16 +167,16 @@ class Skill implements Stringable, Translatable
         return $this->getTitle();
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 
     public function getShortCode(): string
@@ -190,21 +191,14 @@ class Skill implements Stringable, Translatable
         return $this;
     }
 
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setAccessUrlId(int $accessUrlId): static
+    public function setDescription(string $description): self
     {
-        $this->accessUrlId = $accessUrlId;
+        $this->description = $description;
 
         return $this;
     }
@@ -214,9 +208,9 @@ class Skill implements Stringable, Translatable
         return $this->accessUrlId;
     }
 
-    public function setIcon(string $icon): self
+    public function setAccessUrlId(int $accessUrlId): static
     {
-        $this->icon = $icon;
+        $this->accessUrlId = $accessUrlId;
 
         return $this;
     }
@@ -226,9 +220,9 @@ class Skill implements Stringable, Translatable
         return $this->icon;
     }
 
-    public function setCriteria(string $criteria): self
+    public function setIcon(string $icon): self
     {
-        $this->criteria = $criteria;
+        $this->icon = $icon;
 
         return $this;
     }
@@ -238,9 +232,9 @@ class Skill implements Stringable, Translatable
         return $this->criteria;
     }
 
-    public function setStatus(int $status): self
+    public function setCriteria(string $criteria): self
     {
-        $this->status = $status;
+        $this->criteria = $criteria;
 
         return $this;
     }
@@ -250,9 +244,9 @@ class Skill implements Stringable, Translatable
         return $this->status;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): static
+    public function setStatus(int $status): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->status = $status;
 
         return $this;
     }
@@ -262,9 +256,11 @@ class Skill implements Stringable, Translatable
         return $this->updatedAt;
     }
 
-    public function getId(): ?int
+    public function setUpdatedAt(DateTime $updatedAt): static
     {
-        return $this->id;
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getLevelProfile(): ?SkillLevelProfile
@@ -309,21 +305,6 @@ class Skill implements Stringable, Translatable
         return $this;
     }
 
-    /**
-     * @return Collection<int, SkillRelItem>
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function setItems(ArrayCollection $items): self
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
     public function hasItem(int $typeId, int $itemId): bool
     {
         if (0 !== $this->getItems()->count()) {
@@ -344,40 +325,25 @@ class Skill implements Stringable, Translatable
         return false;
     }
 
+    /**
+     * @return Collection<int, SkillRelItem>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function setItems(ArrayCollection $items): self
+    {
+        $this->items = $items;
+
+        return $this;
+    }
+
     public function addItem(SkillRelItem $skillRelItem): void
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
-    }
-
-    public function getCourses(): Collection
-    {
-        return $this->courses;
-    }
-
-    public function setCourses(ArrayCollection $courses): self
-    {
-        $this->courses = $courses;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SkillRelSkill>
-     */
-    public function getSkills(): Collection
-    {
-        return $this->skills;
-    }
-
-    /**
-     * @param Collection<int, SkillRelSkill> $skills
-     */
-    public function setSkills(Collection $skills): self
-    {
-        $this->skills = $skills;
-
-        return $this;
     }
 
     /**
@@ -442,6 +408,23 @@ class Skill implements Stringable, Translatable
         return false;
     }
 
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function setCourses(ArrayCollection $courses): self
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function addToCourse(SkillRelCourse $item): void
     {
         $item->setSkill($this);
@@ -464,6 +447,24 @@ class Skill implements Stringable, Translatable
             ->getSkills()
             ->map(fn (SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
         ;
+    }
+
+    /**
+     * @return Collection<int, SkillRelSkill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param Collection<int, SkillRelSkill> $skills
+     */
+    public function setSkills(Collection $skills): self
+    {
+        $this->skills = $skills;
+
+        return $this;
     }
 
     /**

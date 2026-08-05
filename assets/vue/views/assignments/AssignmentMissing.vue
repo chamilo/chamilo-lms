@@ -63,7 +63,7 @@
       v-else
       class="text-gray-500"
     >
-      {{ t("No missing submissions found for this assignment or data is not available.") }}
+      {{ t("No missing submissions found for this assignment or data is not available") }}
     </div>
   </div>
 </template>
@@ -76,7 +76,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import Column from "primevue/column"
 import ProgressSpinner from "primevue/progressspinner"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useNotification } from "../../composables/notification"
 
 const props = defineProps({
@@ -90,7 +90,7 @@ const loading = ref(true)
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const notification = useNotification()
 
 onMounted(async () => {
@@ -120,9 +120,9 @@ async function sendEmailToAll() {
       ...(sid && { sid }),
       ...(gid && { gid }),
     })
-    notification.showSuccessNotification(t("Email sent to all unsubmitted users."))
+    notification.showSuccessNotification(t("Email sent to all unsubmitted users"))
   } catch (error) {
-    notification.showErrorNotification(t("Failed to send email."))
+    notification.showErrorNotification(t("Failed to send email"))
   }
 }
 </script>

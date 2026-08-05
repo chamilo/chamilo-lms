@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importer frå Moodle';
+$strings['plugin_comment'] = 'Køyr ein importprosess frå ein Moodle-database og filer til Chamilo.';
+
+$strings['MoodlePassword'] = 'Moodle-passord';
+$strings['UninstallError'] = 'Det oppstod ein feil under avinstallering av programtillegget.';
+
+$strings['db_host'] = 'Moodle DB-vert';
+$strings['db_user'] = 'Moodle DB-brukar';
+$strings['db_password'] = 'Moodle DB-passord';
+$strings['db_name'] = 'Moodle DB-namn';
+$strings['user_filter'] = 'Filter for brukarar';
+$strings['user_filter_help'] = 'Importer berre brukarar som har eit brukarnamn med dette prefikset.<br>Importen av kurs vert òg påverka av denne innstillinga, då det berre importerer kurs der brukarar med dette brukarnamn-prefikset er påmelde.';
+$strings['url_id'] = 'URL-ID';
+$strings['url_id_help'] = 'Tilgangs-URL-ID der kurs, brukarar og sesjonar skal lagrast (ved bruk av multi-url).';
+$strings['moodle_path'] = 'Moodledata-sti';
+$strings['moodle_path_help'] = 'Stien til moodledata-mappa. Vanlegvis noko som <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Brukarar';
+$strings['CourseCategoriesTask'] = 'Kurskategoriar';
+$strings['CoursesTask'] = 'Kurs';
+$strings['CourseSectionsTask'] = 'Kursdelar';
+$strings['CourseModulesLessonTask'] = 'Kursmodular: Leksjonar';
+$strings['LessonPagesTask'] = 'Leksjonssider';
+$strings['LessonPagesDocumentTask'] = 'Leksjonssider: Dokument';
+$strings['FilesForLessonPagesTask'] = 'Filer for leksjonssider';
+$strings['LessonPagesQuizTask'] = 'Leksjonssider: Spørsmål';
+$strings['LessonPagesQuizQuestionTask'] = 'Spørsmål for spørsmålssider';
+$strings['LessonAnswersTrueFalseTask'] = 'Svar for sannt/falskt-spørsmål';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Svar for fleirvals-spørsmål';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Svar for fleirsvars-spørsmål';
+$strings['LessonAnswersMatchingTask'] = 'Svar for paringsspørsmål';
+$strings['LessonAnswersEssayTask'] = 'Svar for essay-spørsmål';
+$strings['LessonAnswersShortAnswerTask'] = 'Svar for kortsvars-spørsmål';
+$strings['FilesForLessonAnswersTask'] = 'Filer for leksjonssvar';
+$strings['CourseModulesQuizTask'] = 'Kursmodular: Quizzar';
+$strings['CQuizTask'] = 'C Quiz';
+$strings['RoleAssignmentsTask'] = 'Rolletildelingar';
+$strings['QuizzesTask'] = 'Quizzar';
+$strings['FilesForQuizzesTask'] = 'Filer for quizzar';
+$strings['QuestionCategoriesTask'] = 'Spørsmålskategoriar';
+$strings['QuestionsTask'] = 'Spørsmål';
+$strings['QuestionMultiChoiceSingleTask'] = 'Svar for fleirvals-spørsmål (enkelt)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Svar for fleirvals-spørsmål (fleire)';
+$strings['QuestionsTrueFalseTask'] = 'Svar for sannt/falskt-spørsmål';
+$strings['QuestionShortAnswerTask'] = 'Svar for kortsvars-spørsmål';
+$strings['CourseModulesScormTask'] = 'SCORM-kurs';
+$strings['ScormScoesTask'] = 'SCORM-element';
+$strings['FilesForScormScoesTask'] = 'Filer for SCORM-element';
+$strings['UserSessionsTask'] = 'Kursøkter for brukarar';
+$strings['CourseIntroductionsTask'] = 'Kursintroduksjonar';
+$strings['FilesForCourseIntroductionsTask'] = 'Filer for kursintroduksjonar';
+$strings['FilesForCourseSectionsTask'] = 'Filer for kursdelar';
+$strings['CourseModulesUrlTask'] = 'Kursmodular: URL-ar';
+$strings['UrlsTask'] = 'URL-ar';
+$strings['SortSectionModulesTask'] = 'Sorter modular i seksjon';
+$strings['UsersScormsViewTask'] = 'SCORM-visingar for brukarar';
+$strings['UsersScormsProgressTask'] = 'SCORM-framgang';
+$strings['UsersLearnPathsTask'] = 'Læringsløp-visingar for brukarar';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Øktetid til starttid for læringsløp-seksjon';
+$strings['QuizzesScoresTask'] = 'Oppdater spørjeprogram-skår i læringsløp';
+$strings['QuestionGapselectTask'] = 'Svar for gapselect-spørsmål';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Øktgrein til total tid i læringsløp-dokument';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Øktforsøk til total tid i læringsløp-spørjeprogram';
+$strings['UsersLearnPathsQuizzesTask'] = 'Spørjeprogram-forsøk til læringsløp-spørjeprogram-forsøk';
+$strings['UsersQuizzesAttemptsTask'] = 'Spørjeprogram-forsøk for brukarar';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Spørsmålsforsøk for brukarar ved shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Spørsmålsforsøk for brukarar ved gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Spørsmålsforsøk for brukarar ved truefalse';
+$strings['UsersLastLoginTask'] = 'Siste innloggingar for brukarar';
+$strings['TrackLoginTask'] = 'Første innlogging og siste utlogging';
+$strings['TrackCourseAccessTask'] = 'Brukartilgang til emne';
+$strings['UserLearnPathsProgressScript'] = 'Oppdater framgang i læringsløp for brukarar.';
+$strings['UserScormsProgressScript'] = 'Oppdater framgang i SCORM-ar for brukarar.';
+
+$strings['InstallError'] = 'Det oppstod ein feil under installasjon av programtillegget: %s';
+$strings['AdminIntro'] = 'Køyr Moodle-migreringsoppgåver i rekkefølge. Kvart steg er berre aktivert etter at overordna steg er fullført.';
+$strings['MoodleDatabase'] = 'Moodle-database';
+$strings['MoodledataPath'] = 'Moodledata-sti';
+$strings['AccessUrlId'] = 'Tilgangs-URL-ID';
+$strings['Configured'] = 'Konfigurert';
+$strings['NotConfigured'] = 'Ikkje konfigurert';
+$strings['ConfigurePlugin'] = 'Konfigurer programtillegg';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigurer Moodle-databasevert, brukar og databasenamn før du køyrer migreringsoppgåver.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata-sti er tom. Filrelaterte oppgåver kan mislykkast inntil denne innstillinga er konfigurert.';
+$strings['InvalidMigrationAction'] = 'Ugyldig migreringshandling.';
+$strings['InvalidSecurityToken'] = 'Ugyldig sikkerheitstoken. Last inn sida på nytt og prøv igjen.';
+$strings['MigrationTasks'] = 'Migreringsoppgåver';
+$strings['MaintenanceScripts'] = 'Vedlikehaldsskript';
+$strings['ExecutionOutput'] = 'Køyringsutdata';
+$strings['TaskAlreadyExecuted'] = 'Denne oppgåva eller skriptet er allereie køyrt.';
+$strings['SelectTaskToRun'] = 'Vel ein migreringsoppgåve å køyre. Utdata vil visast her.';

@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Εμφάνιση στατικού περιεχομ
 $strings['block_title'] = 'Τίτλος μπλοκ';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Περιεχόμενο';

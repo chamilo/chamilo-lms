@@ -207,7 +207,14 @@ if (!empty($questions)) {
         }
 
         $js .= survey_question::getQuestionJs($question);
-        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-50">');
+        $questionDisplay = strtolower(trim((string) ($question['display'] ?? 'horizontal')));
+        if ('vertical' !== $questionDisplay) {
+            $questionDisplay = 'horizontal';
+        }
+
+        $form->addHtml(
+            '<div class="survey_question '.$ch_type.' survey-question-display-'.$questionDisplay.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-50" data-display="'.$questionDisplay.'">'
+        );
         if ($showNumber && $survey->isDisplayQuestionNumber()) {
             $form->addHtml('<div class="font-semibold text-blue-700 mb-1"> '.$counter.'. </div>');
         }

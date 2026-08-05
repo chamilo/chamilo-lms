@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
@@ -29,7 +31,8 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         private readonly ProcessorInterface $persistProcessor,
         private readonly EntityManagerInterface $entityManager,
         private readonly CAttendanceCalendarRepository $calendarRepo,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly RoomAccessUrlHelper $roomAccessUrlHelper,
     ) {}
 
     /**
@@ -111,9 +114,10 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
         $groupId = isset($data['group']) ? (int) $data['group'] : 0;
         $duration = isset($data['duration']) ? (int) $data['duration'] : null;
+        $room = $this->resolveRoom($data['room'] ?? null);
 
         // Save the first calendar
-        $this->saveCalendar($attendance, $startDate, $groupId, $duration);
+        $this->saveCalendar($attendance, $startDate, $groupId, $duration, $room);
 
         // Save repetitions (never create dates beyond endDate)
         if ($repeatDate && $repeatType && $endDate) {
@@ -129,7 +133,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
                     break;
                 }
 
-                $this->saveCalendar($attendance, DateTime::createFromImmutable($next), $groupId, $duration);
+                $this->saveCalendar($attendance, DateTime::createFromImmutable($next), $groupId, $duration, $room);
                 $current = $next;
             }
         }
@@ -166,8 +170,13 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         return $dt;
     }
 
-    private function saveCalendar(CAttendance $attendance, DateTime $date, ?int $groupId, ?int $duration = null): void
-    {
+    private function saveCalendar(
+        CAttendance $attendance,
+        DateTime $date,
+        ?int $groupId,
+        ?int $duration = null,
+        ?Room $room = null,
+    ): void {
         $existingCalendar = $this->calendarRepo->findOneBy([
             'attendance' => $attendance->getIid(),
             'dateTime' => $date,
@@ -183,6 +192,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         $calendar->setDoneAttendance(false);
         $calendar->setBlocked(false);
         $calendar->setDuration($duration);
+        $calendar->setRoom($room);
 
         $this->entityManager->persist($calendar);
         $this->entityManager->flush();
@@ -190,6 +200,30 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         if (!empty($groupId)) {
             $this->addAttendanceCalendarToGroup($calendar, $groupId);
         }
+    }
+
+    private function resolveRoom(mixed $value): ?Room
+    {
+        if (null === $value || '' === $value) {
+            return null;
+        }
+
+        if (\is_int($value) || (\is_string($value) && ctype_digit($value))) {
+            $roomId = (int) $value;
+        } elseif (\is_string($value) && preg_match('~/api/rooms/(\d+)$~', $value, $matches)) {
+            $roomId = (int) $matches[1];
+        } else {
+            throw new BadRequestHttpException('[Attendance] Invalid room identifier.');
+        }
+
+        $room = $this->entityManager->getRepository(Room::class)->find($roomId);
+        if (!$room instanceof Room) {
+            throw new BadRequestHttpException('[Attendance] Room not found.');
+        }
+
+        $this->roomAccessUrlHelper->assertRoomAllowed($room);
+
+        return $room;
     }
 
     private function addAttendanceCalendarToGroup(CAttendanceCalendar $calendar, int $groupId): void

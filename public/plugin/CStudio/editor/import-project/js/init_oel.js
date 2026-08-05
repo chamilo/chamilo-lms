@@ -1,6 +1,17 @@
 
 bigUpload = new bigUpload();
 bigUpload.scormid = document.getElementById("scormid").value;
+// Forward the per-user CSRF token (cotk) and the caller-declared uploadKind on
+// every chunked-upload XHR so big-upload.php can validate the request and pick
+// the correct extension allowlist (zip vs asset).
+var cstudioExtraParams = '';
+if (typeof window.cstudioCotk !== 'undefined' && window.cstudioCotk) {
+    cstudioExtraParams += '&cotk=' + encodeURIComponent(window.cstudioCotk);
+}
+if (typeof window.cstudioUploadKind !== 'undefined' && window.cstudioUploadKind) {
+    cstudioExtraParams += '&uploadKind=' + encodeURIComponent(window.cstudioUploadKind);
+}
+bigUpload.settings.scriptPathParams = cstudioExtraParams;
 
 function upload() {
     

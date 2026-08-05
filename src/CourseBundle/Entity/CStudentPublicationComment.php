@@ -28,12 +28,12 @@ use Symfony\Component\Uid\Uuid;
     operations: [
         new GetCollection(
             uriTemplate: '/c_student_publication_comments',
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Post(
             uriTemplate: '/c_student_publication_comments/upload',
             controller: CreateStudentPublicationCommentAction::class,
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             deserialize: false,
         ),
         new Delete(

@@ -3,15 +3,28 @@
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class QuestionOptionsEvaluationPlugin.
  */
 class QuestionOptionsEvaluationPlugin extends Plugin
 {
-    public const SETTING_ENABLE     = 'enable';
-    public const SETTING_MAX_SCORE  = 'exercise_max_score';
+    /**
+     * Backward-compatible alias used by legacy exercise code.
+     * The Plugin base class maps tool_enable to the real plugin active state.
+     */
+    public const SETTING_ENABLE = 'tool_enable';
+    public const SETTING_MAX_SCORE = 'exercise_max_score';
     public const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
+    public const TEACHER_MODIFY_ACTION_CALLBACK = 'QuestionOptionsEvaluationPlugin::filterModify';
+
+    public const FORMULA_NONE = -1;
+    public const FORMULA_RECALCULATE = 0;
+    public const FORMULA_SUCCESS_MINUS_FAILURES = 1;
+    public const FORMULA_SUCCESS_MINUS_HALF_FAILURES = 2;
+    public const FORMULA_SUCCESS_MINUS_THIRD_FAILURES = 3;
 
     /** Use C2 handler only. Do NOT use "quiz" to avoid warnings. */
     private const EF_HANDLER = 'exercise';
@@ -28,7 +41,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             $version,
             $author,
             [
-                self::SETTING_ENABLE    => 'boolean',
                 self::SETTING_MAX_SCORE => 'text',
             ]
         );
@@ -52,21 +64,32 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public static function filterModify($exerciseId, $iconSize = ICON_SIZE_SMALL)
     {
-        $directory = basename(__DIR__);
-        $title     = get_plugin_lang('plugin_title', self::class);
-        $enabled   = api_get_plugin_setting('questionoptionsevaluation', 'enable');
-
-        if ('true' !== $enabled) {
+        $exerciseId = (int) $exerciseId;
+        if ($exerciseId <= 0) {
             return '';
         }
 
+        $plugin = self::create();
+        if (!$plugin->isEnabled()) {
+            return '';
+        }
+
+        $directory = basename(__DIR__);
+        $title = get_plugin_lang('plugin_title', self::class);
+        $url = api_get_path(WEB_PLUGIN_PATH).$directory.'/evaluation.php?exercise='.$exerciseId;
+        $courseRequest = api_get_cidreq();
+
+        if (!empty($courseRequest)) {
+            $url .= '&'.$courseRequest;
+        }
+
         return Display::url(
-            Display::return_icon('options_evaluation.png', $title, [], $iconSize),
-            api_get_path(WEB_PATH)."plugin/$directory/evaluation.php?exercise=$exerciseId",
+            Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, $iconSize, $title),
+            $url,
             [
-                'class'      => 'ajax',
-                'data-size'  => 'md',
-                'data-title' => get_plugin_lang('plugin_title', self::class),
+                'class' => 'ajax',
+                'data-size' => 'md',
+                'data-title' => $title,
             ]
         );
     }
@@ -74,10 +97,12 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     public function install()
     {
         $this->createExtraField();
+        $this->registerTeacherModifyAction();
     }
 
     public function uninstall()
     {
+        $this->unregisterTeacherModifyAction();
         $this->removeExtraField();
     }
 
@@ -86,7 +111,49 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public function performActionsAfterConfigure()
     {
+        $this->registerTeacherModifyAction();
+
         return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return parent::isEnabled();
+    }
+
+    public function shouldApplyFormula(int $formula): bool
+    {
+        return \in_array(
+            $formula,
+            [
+                self::FORMULA_SUCCESS_MINUS_FAILURES,
+                self::FORMULA_SUCCESS_MINUS_HALF_FAILURES,
+                self::FORMULA_SUCCESS_MINUS_THIRD_FAILURES,
+            ],
+            true
+        );
+    }
+
+    private function normalizeFormula($formula): int
+    {
+        if (null === $formula) {
+            return self::FORMULA_NONE;
+        }
+
+        if (is_string($formula) && '' === trim($formula)) {
+            return self::FORMULA_NONE;
+        }
+
+        $formula = (int) $formula;
+        $allowed = [
+            self::FORMULA_NONE,
+            self::FORMULA_RECALCULATE,
+            self::FORMULA_SUCCESS_MINUS_FAILURES,
+            self::FORMULA_SUCCESS_MINUS_HALF_FAILURES,
+            self::FORMULA_SUCCESS_MINUS_THIRD_FAILURES,
+        ];
+
+        return \in_array($formula, $allowed, true) ? $formula : self::FORMULA_NONE;
     }
 
     /**
@@ -97,19 +164,32 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public function saveFormulaForExercise($formula, Exercise $exercise)
     {
-        $formula = (int) $formula;
+        $formula = $this->normalizeFormula($formula);
+        $exerciseId = $this->getExerciseId($exercise);
 
-        $this->recalculateQuestionScore($formula, $exercise);
+        if ($exerciseId <= 0) {
+            return;
+        }
 
-        // Write using the C2 handler to avoid "Undefined array key 'quiz'" warnings
+        // Do not rewrite question or answer ponderations here.
+        // The plugin stores only the selected formula and applies score overrides at result time.
+        // This keeps the original Chamilo scoring available when the plugin is disabled.
+
+        $this->createExtraField();
+
+        // Use the current Chamilo extra-field API first. In Chamilo 2 the
+        // submitted field key must be prefixed with "extra_".
         $extraFieldValue = new ExtraFieldValue(self::EF_HANDLER);
-        $extraFieldValue->save(
+        $extraFieldValue->saveFieldValues(
             [
-                'item_id'  => (int) $exercise->iid,
-                'variable' => self::EXTRAFIELD_FORMULA,
-                'value'    => $formula,
+                'item_id' => $exerciseId,
+                'extra_'.self::EXTRAFIELD_FORMULA => (string) $formula,
             ]
         );
+
+        // Keep a direct write fallback because ExtraFieldValue::save() can create
+        // the row without filling field_value when called with a legacy payload.
+        $this->saveFormulaValueDirectly($exerciseId, (string) $formula);
     }
 
     /**
@@ -119,16 +199,48 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      *
      * @return int
      */
-    public function getFormulaForExercise($exerciseId)
+    public function getStoredFormulaForExercise($exerciseId): int
     {
-        $efv   = new ExtraFieldValue(self::EF_HANDLER);
-        $value = $efv->get_values_by_handler_and_field_variable((int) $exerciseId, self::EXTRAFIELD_FORMULA);
-
-        if (empty($value)) {
-            return 0;
+        $exerciseId = (int) $exerciseId;
+        if ($exerciseId <= 0) {
+            return self::FORMULA_NONE;
         }
 
-        return (int) $value['value'];
+        $value = $this->getStoredFormulaValueDirectly($exerciseId);
+        if (null !== $value) {
+            return $this->normalizeFormula($value);
+        }
+
+        $efv = new ExtraFieldValue(self::EF_HANDLER);
+        $value = $efv->get_values_by_handler_and_field_variable($exerciseId, self::EXTRAFIELD_FORMULA);
+
+        if (empty($value) || !is_array($value)) {
+            return self::FORMULA_NONE;
+        }
+
+        if (array_key_exists('field_value', $value)) {
+            return $this->normalizeFormula($value['field_value']);
+        }
+
+        if (array_key_exists('value', $value)) {
+            return $this->normalizeFormula($value['value']);
+        }
+
+        return self::FORMULA_NONE;
+    }
+
+    /**
+     * Return only formulas that must alter the final exercise score.
+     *
+     * Legacy exercise.lib.php checks this value with !empty(). Returning null
+     * for "No formula" and "Recalculate question scores" prevents those
+     * options from being treated as final-score formulas.
+     */
+    public function getFormulaForExercise($exerciseId): ?int
+    {
+        $formula = $this->getStoredFormulaForExercise($exerciseId);
+
+        return $this->shouldApplyFormula($formula) ? $formula : null;
     }
 
     /**
@@ -136,13 +248,9 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public function getMaxScore()
     {
-        $max = $this->get(self::SETTING_MAX_SCORE);
+        $max = (int) $this->get(self::SETTING_MAX_SCORE);
 
-        if (!empty($max)) {
-            return (int) $max;
-        }
-
-        return 10;
+        return $max > 0 ? $max : 10;
     }
 
     /**
@@ -159,6 +267,11 @@ class QuestionOptionsEvaluationPlugin extends Plugin
      */
     public function getResultWithFormula($trackId, $formula)
     {
+        $formula = $this->normalizeFormula($formula);
+        if (!$this->shouldApplyFormula($formula)) {
+            return 0;
+        }
+
         $em = Database::getManager();
 
         /** @var TrackEExercise|null $eTrack */
@@ -167,75 +280,172 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             return 0;
         }
 
-        $qTracks = $em
-            ->createQuery(
-                'SELECT a FROM ChamiloCoreBundle:TrackEAttempt a
-                 WHERE a.exeId = :id AND a.userId = :user AND a.cId = :course AND a.sessionId = :session'
+        $questionIds = array_values(
+            array_filter(
+                array_map(
+                    'trim',
+                    explode(',', $eTrack->getDataTracking())
+                ),
+                'strlen'
             )
-            ->setParameters(
-                [
-                    'id'      => $eTrack->getExeId(),
-                    'course'  => $eTrack->getCourse(),
-                    'session' => $eTrack->getSession(),
-                    'user'    => $eTrack->getUser(),
-                ]
-            )
-            ->getResult();
+        );
 
-        // Guard: avoid division by zero if there are no attempts
-        if (!$qTracks) {
+        $totalQuestions = count($questionIds);
+        if (0 === $totalQuestions) {
+            $totalQuestions = $eTrack->getAttempts()->count();
+        }
+
+        if (0 === $totalQuestions) {
             return 0;
         }
 
         $counts = ['correct' => 0, 'incorrect' => 0];
 
         /** @var TrackEAttempt $qTrack */
-        foreach ($qTracks as $qTrack) {
+        foreach ($eTrack->getAttempts() as $qTrack) {
             if ($qTrack->getMarks() > 0) {
                 $counts['correct']++;
-            } elseif ($qTrack->getMarks() < 0) {
-                $counts['incorrect']++;
+
+                continue;
             }
+
+            if ('' === trim($qTrack->getAnswer())) {
+                continue;
+            }
+
+            // In Chamilo's default scoring, a wrong single-choice answer is usually stored as 0.
+            // Count non-positive answered attempts as failures without changing the original answer weights.
+            $counts['incorrect']++;
         }
 
-        // Safe default then apply formula
-        $formula = (int) $formula;
-        $result  = $counts['correct'];
+        $result = $counts['correct'];
 
         switch ($formula) {
-            case 1:
+            case self::FORMULA_SUCCESS_MINUS_FAILURES:
                 $result = $counts['correct'] - $counts['incorrect'];
                 break;
-            case 2:
+            case self::FORMULA_SUCCESS_MINUS_HALF_FAILURES:
                 $result = $counts['correct'] - $counts['incorrect'] / 2;
                 break;
-            case 3:
+            case self::FORMULA_SUCCESS_MINUS_THIRD_FAILURES:
                 $result = $counts['correct'] - $counts['incorrect'] / 3;
                 break;
             default:
-                // Keep default = only positives counted
+                // Keep default = only positives counted.
                 break;
         }
 
-        $score = ($result / count($qTracks)) * $this->getMaxScore();
+        $maxScore = $eTrack->getMaxScore();
+        if ($maxScore <= 0) {
+            $maxScore = $this->getMaxScore();
+        }
+
+        $score = ($result / $totalQuestions) * $maxScore;
 
         return $score >= 0 ? $score : 0;
     }
 
+    private function saveFormulaValueDirectly(int $exerciseId, string $formula): void
+    {
+        $fieldId = $this->getFormulaExtraFieldId();
+        if ($fieldId <= 0) {
+            return;
+        }
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $formula = Database::escape_string($formula);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT id FROM $table WHERE field_id = $fieldId AND item_id = $exerciseId ORDER BY id DESC LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        if (!empty($row['id'])) {
+            $id = (int) $row['id'];
+            Database::query(
+                "UPDATE $table SET field_value = '$formula', updated_at = '$now' WHERE id = $id"
+            );
+
+            return;
+        }
+
+        Database::query(
+            "INSERT INTO $table (field_id, item_id, field_value, created_at, updated_at)
+             VALUES ($fieldId, $exerciseId, '$formula', '$now', '$now')"
+        );
+    }
+
+    private function getStoredFormulaValueDirectly(int $exerciseId): ?string
+    {
+        $fieldId = $this->getFormulaExtraFieldId();
+        if ($fieldId <= 0) {
+            return null;
+        }
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $sql = "SELECT field_value FROM $table WHERE field_id = $fieldId AND item_id = $exerciseId ORDER BY id DESC LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        if (empty($row) || !array_key_exists('field_value', $row)) {
+            return null;
+        }
+
+        if ('' === (string) $row['field_value']) {
+            return null;
+        }
+
+        return (string) $row['field_value'];
+    }
+
+    private function getFormulaExtraFieldId(): int
+    {
+        $extraField = new ExtraField(self::EF_HANDLER);
+        $field = $extraField->get_handler_field_info_by_field_variable(self::EXTRAFIELD_FORMULA);
+
+        if (empty($field['id'])) {
+            return 0;
+        }
+
+        return (int) $field['id'];
+    }
+
+    private function getExerciseId(Exercise $exercise): int
+    {
+        if (method_exists($exercise, 'getId')) {
+            return (int) $exercise->getId();
+        }
+
+        if (property_exists($exercise, 'iId')) {
+            return (int) $exercise->iId;
+        }
+
+        return 0;
+    }
+
     /**
-     * Recalculate question scores according to the selected formula.
+     * Legacy helper kept only for backward compatibility.
+     *
+     * It is intentionally not called from saveFormulaForExercise(), because changing
+     * c_quiz_question/c_quiz_answer ponderations would alter the original Chamilo
+     * behavior even after disabling the plugin.
      *
      * @param int      $formula
      * @param Exercise $exercise
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {
+        $formula = $this->normalizeFormula($formula);
+        if (self::FORMULA_NONE === $formula) {
+            return;
+        }
+
         $tblQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $tblAnswer   = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         foreach ($exercise->questionList as $questionId) {
             $question = Question::read($questionId, $exercise->course, false);
-            if (!in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER], true)) {
+            if (!$question || !\in_array($question->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER], true)) {
                 continue;
             }
 
@@ -255,7 +465,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
                 $iid = (int) $questionAnswers->iid[$i];
 
-                if ($question->selectType() === MULTIPLE_ANSWER || 0 === (int) $formula) {
+                if ($question->selectType() === MULTIPLE_ANSWER || self::FORMULA_RECALCULATE === $formula) {
                     // Multiple-answer or formula 0 distributes weights across options.
                     // Use max(1, totalX) to avoid division by zero.
                     $ponderation = (1 == $isCorrect)
@@ -275,6 +485,117 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
             Database::query(
                 "UPDATE $tblQuestion SET ponderation = ".(float)$questionPonderation." WHERE iid = ".(int)$question->iid
+            );
+        }
+    }
+
+    private function registerTeacherModifyAction()
+    {
+        $actions = $this->getAdditionalTeacherModifyActions();
+
+        if ($this->hasTeacherModifyAction($actions)) {
+            return;
+        }
+
+        $actions[] = self::TEACHER_MODIFY_ACTION_CALLBACK;
+        $this->saveAdditionalTeacherModifyActions($actions);
+    }
+
+    private function unregisterTeacherModifyAction()
+    {
+        $actions = $this->getAdditionalTeacherModifyActions();
+
+        if (!$this->hasTeacherModifyAction($actions)) {
+            return;
+        }
+
+        $actions = array_values(
+            array_filter(
+                $actions,
+                function ($action) {
+                    return !$this->isTeacherModifyAction($action);
+                }
+            )
+        );
+
+        $this->saveAdditionalTeacherModifyActions($actions);
+    }
+
+    private function getAdditionalTeacherModifyActions(): array
+    {
+        $actions = api_get_setting('exercise.exercise_additional_teacher_modify_actions', true);
+
+        return $this->normalizeTeacherModifyActions($actions);
+    }
+
+    private function normalizeTeacherModifyActions($actions): array
+    {
+        if (empty($actions)) {
+            return [];
+        }
+
+        if (is_array($actions)) {
+            return array_values($actions);
+        }
+
+        if (!is_string($actions)) {
+            return [];
+        }
+
+        $decoded = json_decode($actions, true);
+        if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+            return array_values($decoded);
+        }
+
+        $unserialized = @unserialize($actions, ['allowed_classes' => false]);
+        if (is_array($unserialized)) {
+            return array_values($unserialized);
+        }
+
+        return array_values(
+            array_filter(
+                array_map(
+                    'trim',
+                    preg_split('/\s*,\s*/', $actions) ?: []
+                )
+            )
+        );
+    }
+
+    private function hasTeacherModifyAction(array $actions): bool
+    {
+        foreach ($actions as $action) {
+            if ($this->isTeacherModifyAction($action)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isTeacherModifyAction($action): bool
+    {
+        if (self::TEACHER_MODIFY_ACTION_CALLBACK === $action) {
+            return true;
+        }
+
+        return is_array($action)
+            && isset($action[0], $action[1])
+            && self::class === $action[0]
+            && 'filterModify' === $action[1];
+    }
+
+    private function saveAdditionalTeacherModifyActions(array $actions)
+    {
+        try {
+            Container::getSettingsManager()->updateSetting(
+                'exercise.exercise_additional_teacher_modify_actions',
+                implode(',', array_values($actions))
+            );
+        } catch (Throwable $exception) {
+            error_log(
+                '[QuestionOptionsEvaluation] Failed to update exercise_additional_teacher_modify_actions: '.
+                $exception->getMessage()
             );
         }
     }
@@ -312,7 +633,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             'visible_to_self' => 0,
             'changeable'      => 0,
             'value_type'      => $valueType,
-            'default_value'   => '0',
+            'default_value'   => (string) self::FORMULA_NONE,
         ];
 
         $extraField->save($payload);

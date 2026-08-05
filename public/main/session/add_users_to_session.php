@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
+use Chamilo\CoreBundle\Framework\Container;
 
 // resetting the course id
 $cidReset = true;
@@ -28,6 +32,17 @@ $interbreadcrumb[] = [
 
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+$resubscriptionPlugin = null;
+$resubscriptionPluginConfigPath = __DIR__.'/../../plugin/Resubscription/config.php';
+if (is_file($resubscriptionPluginConfigPath)) {
+    require_once $resubscriptionPluginConfigPath;
+
+    if (class_exists('Resubscription', false)) {
+        $resubscriptionPlugin = Resubscription::create();
+    }
+}
+
 
 // setting the name of the tool
 $tool_name = get_lang('Subscribe users to this session');
@@ -63,6 +78,41 @@ $contentForm = $form->returnForm();
 if ($form->validate()) {
     $data = $form->getSubmitValues();
     $users = $data['users'] ?? [];
+
+    $subscriptionAllowed = true;
+
+    foreach ($users as $userId) {
+        $userId = (int) $userId;
+
+        if (empty($userId)) {
+            continue;
+        }
+
+        try {
+            if ($resubscriptionPlugin instanceof Resubscription && $resubscriptionPlugin->isEnabled()) {
+                $resubscriptionPlugin->assertUserCanResubscribe($userId, $sessionId);
+            } else {
+                Container::getEventDispatcher()->dispatch(
+                    new SessionResubscriptionEvent(
+                        [
+                            'session_id' => $sessionId,
+                            'user_id' => $userId,
+                        ],
+                        AbstractEvent::TYPE_PRE
+                    ),
+                    Events::SESSION_RESUBSCRIPTION
+                );
+            }
+        } catch (Throwable $exception) {
+            $subscriptionAllowed = false;
+            Display::addFlash($exception->getMessage());
+        }
+    }
+
+    if (!$subscriptionAllowed) {
+        header('Location: '.api_get_self().'?id_session='.$sessionId);
+        exit;
+    }
 
     SessionManager::subscribeUsersToSession(
         $sessionId,

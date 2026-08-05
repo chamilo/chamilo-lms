@@ -19,6 +19,27 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+function is_safe_password_reminder_custom_link(string $url): bool
+{
+    $url = trim($url);
+
+    if ('' === $url || preg_match('/[\r\n]/', $url)) {
+        return false;
+    }
+
+    if (str_starts_with($url, '/')) {
+        return !str_starts_with($url, '//');
+    }
+
+    $parts = parse_url($url);
+
+    if (false === $parts || empty($parts['scheme']) || empty($parts['host'])) {
+        return false;
+    }
+
+    return in_array(strtolower((string) $parts['scheme']), ['http', 'https'], true);
+}
+
 // Custom pages
 // Had to move the form handling in here, because otherwise there would
 // already be some display output.
@@ -35,6 +56,18 @@ if (!api_is_anonymous()) {
 
 $reset = $_REQUEST['reset'] ?? '';
 $userId = $_REQUEST['id'] ?? '';
+
+$customPasswordReminderLink = trim((string) api_get_setting('profile.pass_reminder_custom_link'));
+
+if (
+    '' !== $customPasswordReminderLink
+    && empty($reset)
+    && empty($userId)
+    && is_safe_password_reminder_custom_link($customPasswordReminderLink)
+) {
+    header('Location: '.$customPasswordReminderLink);
+    exit;
+}
 
 $this_section = SECTION_CAMPUS;
 
@@ -75,7 +108,6 @@ if ($allowCaptcha) {
             'font_size' => 20,
             'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
             'font_file' => 'OpenSans-Regular.ttf',
-            //'output' => 'gif'
         ],
     ];
 

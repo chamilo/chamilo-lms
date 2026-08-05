@@ -427,7 +427,7 @@ if ('add' != $action) {
                     Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')).
                     '</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
                 $file_size = $dropbox_file->filesize;
-                $dropbox_file_data[] = format_file_size($file_size);
+                $dropbox_file_data[] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file_size);
                 $authorInfo = api_get_user_info($dropbox_file->uploader_id);
                 if ($authorInfo) {
                     $dropbox_file_data[] = $authorInfo['complete_name'];
@@ -606,7 +606,7 @@ if ('add' != $action) {
                     $dropbox_file->title.
                     '</a><br />'.$dropbox_file->description;
                 $file_size = $dropbox_file->filesize;
-                $dropbox_file_data[] = format_file_size($file_size);
+                $dropbox_file_data[] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file_size);
                 $receivers_celldata = '';
                 foreach ($dropbox_file->recipients as $recipient) {
                     if (isset($recipient['user_id'])) {

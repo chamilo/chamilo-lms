@@ -51,26 +51,6 @@ class GradebookScoreLog
     }
 
     /**
-     * Get the datetime of register.
-     *
-     * @return DateTime
-     */
-    public function getRegisteredAt()
-    {
-        return $this->registeredAt;
-    }
-
-    /**
-     * Get the id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set the achieved score.
      *
      * @return $this
@@ -83,6 +63,16 @@ class GradebookScoreLog
     }
 
     /**
+     * Get the datetime of register.
+     *
+     * @return DateTime
+     */
+    public function getRegisteredAt()
+    {
+        return $this->registeredAt;
+    }
+
+    /**
      * Set the datetime of register.
      *
      * @return $this
@@ -92,5 +82,15 @@ class GradebookScoreLog
         $this->registeredAt = $registeredAt;
 
         return $this;
+    }
+
+    /**
+     * Get the id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

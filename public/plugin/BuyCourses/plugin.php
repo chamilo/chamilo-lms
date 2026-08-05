@@ -12,3 +12,6 @@ declare(strict_types=1);
  */
 require_once __DIR__.'/config.php';
 $plugin_info = BuyCoursesPlugin::create()->get_info();
+
+$plugin_info['commercial_model'] = 'commercial';
+$plugin_info['commercial_model_reason'] = 'Paid offers and payment workflows for course/session sales.';

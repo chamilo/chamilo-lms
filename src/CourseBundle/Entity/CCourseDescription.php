@@ -19,14 +19,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CCourseDescriptionRepository::class)]
 class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
-    public const TYPE_DESCRIPTION = 1;
-    public const TYPE_OBJECTIVES = 2;
-    public const TYPE_TOPICS = 3;
-    public const TYPE_METHODOLOGY = 4;
-    public const TYPE_COURSE_MATERIAL = 5;
-    public const TYPE_RESOURCES = 6;
-    public const TYPE_ASSESSMENT = 7;
-    public const TYPE_CUSTOM = 8;
+    public const int TYPE_DESCRIPTION = 1;
+    public const int TYPE_OBJECTIVES = 2;
+    public const int TYPE_TOPICS = 3;
+    public const int TYPE_METHODOLOGY = 4;
+    public const int TYPE_COURSE_MATERIAL = 5;
+    public const int TYPE_RESOURCES = 6;
+    public const int TYPE_ASSESSMENT = 7;
+    public const int TYPE_CUSTOM = 8;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

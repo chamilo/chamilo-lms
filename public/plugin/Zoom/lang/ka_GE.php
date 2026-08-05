@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom ვიდეოკონფერენცია';
 $strings['plugin_comment'] = 'Zoom ვიდეოკონფერენციის ინტეგრაცია კურსებსა და სესიებში';
 
+$strings['accountId'] = 'ანგარიშის ID';
+$strings['clientId'] = 'კლიენტის ID';
+$strings['clientSecret'] = 'კლიენტის საიდუმლო';
+$strings['webhookSecretToken'] = 'Webhook-ის საიდუმლო ტოკენი';
+$strings['apiKey_help'] = 'ძველი JWT API გასაღები. რეკომენდებულია Account ID, Client ID და Client Secret Zoom Server-to-Server OAuth-ისთვის.';
+$strings['apiSecret_help'] = 'ძველი JWT API საიდუმლო. რეკომენდებულია Account ID, Client ID და Client Secret Zoom Server-to-Server OAuth-ისთვის.';
+$strings['verificationToken_help'] = 'ძველი webhook-ის გადამოწმების ტოკენი. რეკომენდებულია Webhook Secret Token.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth ანგარიშის ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth კლიენტის ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth კლიენტის საიდუმლო.';
+$strings['webhookSecretToken_help'] = 'საიდუმლო ტოკენი Zoom-ის webhook მოთხოვნების გადამოწმებისთვის.';
 $strings['apiKey'] = 'API გასაღები';
 $strings['apiSecret'] = 'API საიდუმლო';
 $strings['verificationToken'] = 'ვერიფიკაციის ნიშანი';

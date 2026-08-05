@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronické hodnotenie je vypnuté';
 $strings['StudentId'] = 'ID študenta';
 $strings['ProviderId'] = 'ID poskytovateľa';
 $strings['CourseHours'] = 'Hodiny kurzu';
+
+$strings['GenerateFile'] = 'Generovať súbor';
+$strings['CourseId'] = 'ID kurzu';

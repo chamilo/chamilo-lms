@@ -1,11 +1,17 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * Config the plugin.
- *
- * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- */
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once __DIR__.'/config.php';
 
-$googleMapsPlugin = GoogleMapsPlugin::create();
+api_protect_admin_script();
+
+$plugin = GoogleMapsPlugin::create();
+
+if (!$plugin->isEnabled()) {
+    api_not_allowed(true);
+}
+
+header('Location: '.$plugin->getMapUrl());
+exit;

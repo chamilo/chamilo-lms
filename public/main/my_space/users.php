@@ -47,7 +47,7 @@ if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) 
 }
 
 if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
 }
 
 function get_count_users()

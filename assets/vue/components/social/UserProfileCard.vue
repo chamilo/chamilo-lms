@@ -3,38 +3,37 @@
     plain
     class="overflow-hidden"
   >
-    <div class="user-profile-card flex flex-col items-center p-5">
-      <div class="mb-4">
-        <div
-          v-if="avatarState === 'loading'"
-          class="flex h-24 w-24 items-center justify-center rounded-full border border-gray-25 bg-gray-20 shadow-sm"
-        >
-          <i
-            class="mdi mdi-loading mdi-spin text-3xl text-gray-50"
-            aria-hidden="true"
-          ></i>
-        </div>
+    <div class="user-profile-card flex flex-col items-center space-y-4">
+      <div
+        v-if="avatarState === 'loading'"
+        class="flex h-24 w-24 items-center justify-center rounded-full border border-gray-25 bg-gray-20 shadow-sm"
+      >
+        <i
+          class="mdi mdi-loading mdi-spin text-3xl text-gray-50"
+          aria-hidden="true"
+        ></i>
+      </div>
 
-        <div
-          v-else-if="avatarState === 'ready'"
-          class="rounded-full border border-gray-25 bg-white p-1 shadow-sm"
-        >
-          <BaseUserAvatar
-            :alt="t('Picture')"
-            :image-url="user.illustrationUrl"
-            size="xlarge"
-          />
-        </div>
+      <div
+        v-else-if="avatarState === 'ready'"
+        class="flex rounded-full border border-gray-25 bg-white p-1 shadow-sm"
+      >
+        <BaseUserAvatar
+          :alt="t('Picture')"
+          :image-url="user.illustrationUrl"
+          size="xlarge"
+        />
+      </div>
 
-        <div
-          v-else
-          class="flex h-24 w-24 items-center justify-center rounded-full border border-gray-25 bg-gray-15 shadow-sm"
-        >
-          <i
-            class="mdi mdi-account-outline text-4xl text-gray-50"
-            aria-hidden="true"
-          ></i>
-        </div>
+      <div
+        v-else
+        class="flex h-24 w-24 items-center justify-center rounded-full border border-gray-25 bg-gray-15 shadow-sm"
+      >
+        <BaseIcon
+          icon="account-outline"
+          size="custom"
+          class="text-4xl text-gray-50"
+        />
       </div>
       <div
         v-if="visibility.firstname && visibility.lastname"
@@ -63,34 +62,30 @@
           href="/resources/messages/new"
           class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-gray-15 px-3 py-2 text-body-2 text-gray-90 transition hover:bg-support-2"
         >
-          <i
-            class="mdi mdi-email-outline"
-            aria-hidden="true"
-          ></i>
+          <BaseIcon
+            icon="email-outline"
+            size="custom"
+          />
           <span class="truncate">{{ user.email }}</span>
         </a>
 
-        <a
+        <BaseButton
           v-if="vCardUserLink"
-          :href="vCardUserLink"
-          target="_blank"
-          class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-gray-15 px-4 py-2 text-body-2 font-medium text-gray-90 transition hover:bg-support-2"
-        >
-          <i
-            class="mdi mdi-card-account-details-outline"
-            aria-hidden="true"
-          ></i>
-          <span>{{ t("Business card") }}</span>
-        </a>
+          :label="t('Business card')"
+          icon="card-account-details-outline"
+          type="tertiary-alternative"
+          :to-url="vCardUserLink"
+          class="w-full"
+        />
 
         <div
           v-if="user.skype"
           class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-gray-15 px-3 py-2 text-body-2 text-gray-90"
         >
-          <i
-            class="mdi mdi-skype"
-            aria-hidden="true"
-          ></i>
+          <BaseIcon
+            icon="skype"
+            size="custom"
+          />
           <span class="truncate">Skype: {{ user.skype }}</span>
         </div>
 
@@ -98,10 +93,10 @@
           v-if="user.linkedin"
           class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-gray-15 px-3 py-2 text-body-2 text-gray-90"
         >
-          <i
-            class="mdi mdi-linkedin"
-            aria-hidden="true"
-          ></i>
+          <BaseIcon
+            icon="linkedin"
+            size="custom"
+          />
           <span class="truncate">LinkedIn: {{ user.linkedin }}</span>
         </div>
       </div>
@@ -140,13 +135,12 @@
         v-if="chatEnabled && isUserOnline && !userOnlyInChat"
         class="mt-4"
       >
-        <button
-          type="button"
-          class="inline-flex items-center justify-center rounded-xl border border-success bg-support-2 px-4 py-2 text-body-2 font-semibold text-gray-90 transition hover:bg-gray-15"
+        <BaseButton
+          :label="`${t('Chat')} (${t('Online')})`"
+          icon="comment"
+          type="success"
           @click="chatWith(user.id, user.fullName, user.isOnline, user.illustrationUrl)"
-        >
-          {{ t("Chat") }} ({{ t("Online") }})
-        </button>
+        />
       </div>
 
       <div
@@ -161,7 +155,7 @@
             class="mdi mdi-loading mdi-spin"
             aria-hidden="true"
           ></i>
-          {{ t("Checking push subscription...") }}
+          {{ t("Checking push subscription") }}
         </p>
 
         <div
@@ -171,14 +165,15 @@
           <template v-if="isSubscribed">
             <div class="flex flex-col items-center">
               <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
-                <i
-                  class="mdi mdi-bell-ring-outline text-3xl text-success"
-                  aria-hidden="true"
-                ></i>
+                <BaseIcon
+                  icon="bell-ring-outline"
+                  size="custom"
+                  class="text-3xl text-success"
+                />
               </div>
 
               <p class="mt-2 text-caption font-semibold text-gray-90">
-                {{ t("You're subscribed to push notifications in this browser.") }}
+                {{ t("You're subscribed to push notifications in this browser") }}
               </p>
               <BaseButton
                 :label="t('Unsubscribe')"
@@ -190,13 +185,13 @@
                 @click="handleUnsubscribe"
               />
 
-              <button
-                type="button"
-                class="text-caption text-white hover:underline"
+              <BaseButton
+                :label="showDetails ? t('Hide') : t('Show')"
+                :icon="showDetails ? 'eye-off' : 'eye-on'"
+                type="primary-text"
+                size="small"
                 @click="toggleDetails"
-              >
-                {{ showDetails ? t("Hide") : t("Show") }}
-              </button>
+              />
 
               <div
                 v-if="showDetails"
@@ -212,14 +207,15 @@
           <template v-else>
             <div class="flex flex-col items-center">
               <div class="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
-                <i
-                  class="mdi mdi-bell-off-outline text-3xl text-gray-50"
-                  aria-hidden="true"
-                ></i>
+                <BaseIcon
+                  icon="bell-off-outline"
+                  size="custom"
+                  class="text-3xl text-gray-50"
+                />
               </div>
 
               <p class="mt-2 text-caption text-gray-90">
-                {{ t("Push notifications are not enabled in this browser.") }}
+                {{ t("Push notifications are not enabled in this browser") }}
               </p>
               <BaseButton
                 :label="t('Enable notifications')"
@@ -237,55 +233,41 @@
 
       <div
         v-if="isCurrentUser || securityStore.isAdmin"
-        class="mt-5 w-full max-w-xs rounded-2xl border border-gray-25 bg-gray-15 p-3"
+        class="flex flex-col gap-2"
       >
-        <div class="flex flex-col gap-2">
-          <button
-            type="button"
-            class="group flex min-h-[56px] w-full items-center rounded-xl bg-primary px-4 py-3 text-left text-white shadow-sm transition hover:opacity-95 hover:shadow-xl"
-            @click="editProfile"
-          >
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
-              <i
-                class="mdi mdi-pencil text-lg"
-                aria-hidden="true"
-              ></i>
-            </span>
+        <BaseButton
+          :label="t('Edit profile')"
+          icon="pencil"
+          type="primary-alternative"
+          class="w-full"
+          to-url="/account/edit"
+        />
 
-            <span class="ml-3 min-w-0 flex-1 text-body-2 font-semibold leading-snug">
-              {{ t("Edit profile") }}
-            </span>
+        <BaseButton
+          :label="t('Change Password')"
+          icon="lock-outline"
+          type="secondary"
+          class="w-full"
+          to-url="/account/change-password"
+        />
 
-            <i
-              class="mdi mdi-chevron-right ml-2 text-lg opacity-80 transition group-hover:translate-x-0.5"
-              aria-hidden="true"
-            ></i>
-          </button>
+        <BaseButton
+          v-if="isCurrentUser && canManageMcpApiKey"
+          :label="t('MCP API key')"
+          icon="lock-outline"
+          type="secondary"
+          class="w-full"
+          :route="{ name: 'McpApiKey' }"
+        />
 
-          <button
-            type="button"
-            class="group flex min-h-[56px] w-full items-center rounded-xl bg-secondary px-4 py-3 text-left text-secondary-button-text shadow-sm transition hover:opacity-95 hover:shadow-xl"
-            @click="changePassword"
-          >
-            <span
-              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-secondary shadow-sm"
-            >
-              <i
-                class="mdi mdi-lock-outline text-lg"
-                aria-hidden="true"
-              ></i>
-            </span>
-
-            <span class="ml-3 min-w-0 flex-1 text-body-2 font-semibold leading-snug">
-              {{ t("Change Password") }}
-            </span>
-
-            <i
-              class="mdi mdi-chevron-right ml-2 text-lg opacity-80 transition group-hover:translate-x-0.5"
-              aria-hidden="true"
-            ></i>
-          </button>
-        </div>
+        <BaseButton
+          v-if="isCurrentUser && isOAuthServerEnabled"
+          :label="t('Authorized applications')"
+          icon="shield-key-outline"
+          type="secondary"
+          class="w-full"
+          :route="{ name: 'AuthorizedApplications' }"
+        />
       </div>
     </div>
   </BaseCard>
@@ -295,14 +277,17 @@
 import { computed, inject, ref, watch } from "vue"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { usePushSubscription } from "../../composables/usePushSubscription"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const extraInfo = ref([])
@@ -329,6 +314,14 @@ const {
 
 const showDetails = ref(false)
 
+const canManageMcpApiKey = computed(() => {
+  return isCurrentUser.value && true === platformConfigStore.getSetting("security.mcp_access_allowed")
+})
+
+const isOAuthServerEnabled = computed(() => {
+  return "true" === platformConfigStore.getSetting("security.oauth_server_enabled")
+})
+
 const hasExtraInfo = computed(() => {
   return Array.isArray(extraInfo.value) && extraInfo.value.some((item) => item?.value)
 })
@@ -346,17 +339,9 @@ function toggleDetails() {
   showDetails.value = !showDetails.value
 }
 
-function editProfile() {
-  window.location.href = "/account/edit"
-}
-
-function changePassword() {
-  window.location.href = "/account/change-password"
-}
-
 async function fetchUserProfile(userId) {
   try {
-    const { data } = await axios.get(`/social-network/user-profile/${userId}`)
+    const data = await socialService.getUserProfile(userId)
 
     languageInfo.value = data.language
     vCardUserLink.value = data.vCardUserLink

@@ -14,11 +14,22 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
     exit;
 }
 
-// @todo handle non-apache installations
-$authorizationHeaderValue = apache_request_headers()['Authorization'];
+$authorizationHeaderValue = '';
+if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    $authorizationHeaderValue = (string) ($headers['Authorization'] ?? $headers['authorization'] ?? '');
+}
 
-if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
-    error_log('verificationToken not valid, please check your zoom configuration');
+if ('' === $authorizationHeaderValue) {
+    $authorizationHeaderValue = (string) ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
+}
+
+$verificationToken = trim((string) api_get_plugin_setting('Zoom', 'webhookSecretToken'));
+if ('' === $verificationToken) {
+    $verificationToken = trim((string) api_get_plugin_setting('Zoom', 'verificationToken'));
+}
+if ('' === $verificationToken || !hash_equals($verificationToken, trim($authorizationHeaderValue))) {
+    error_log('Zoom webhook authorization failed. Check the verification token configuration.');
     http_response_code(Response::HTTP_UNAUTHORIZED);
     exit;
 }
@@ -32,13 +43,20 @@ if (is_null($decoded) || !is_object($decoded) || !isset($decoded->event) || !iss
 }
 
 $object = $decoded->payload->object;
-list($objectType, $action) = explode('.', $decoded->event);
+$eventParts = explode('.', (string) $decoded->event, 2);
+if (2 !== count($eventParts) || '' === $eventParts[0] || '' === $eventParts[1]) {
+    error_log(sprintf('Invalid Zoom event name: %s', (string) $decoded->event));
+    http_response_code(Response::HTTP_UNPROCESSABLE_ENTITY);
+    exit;
+}
+
+[$objectType, $action] = $eventParts;
 
 $em = Database::getManager();
 
 $meetingRepository = $em->getRepository(Meeting::class);
 $meeting = null;
-if ($object->id) {
+if (isset($object->id) && $object->id) {
     /** @var Meeting $meeting */
     $meeting = $meetingRepository->findOneBy(['meetingId' => $object->id]);
 }
@@ -81,7 +99,7 @@ switch ($objectType) {
         $recordingRepository = $em->getRepository(Recording::class);
 
         $recordingEntity = null;
-        if ($object->uuid) {
+        if (isset($object->uuid) && $object->uuid) {
             /** @var Recording $recordingEntity */
             $recordingEntity = $recordingRepository->findOneBy(['uuid' => $object->uuid, 'meeting' => $meeting]);
         }

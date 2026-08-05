@@ -1,42 +1,71 @@
-$(document).ready(function(){
-    // Reset Font Size
-    var originalFontSize = $('body').css('font-size');
-    
-    var original_head1 = $('h1').css('font-size');
-    var original_head2 = $('h2').css('font-size');
-    var original_head3 = $('h3').css('font-size');
-    var original_head4 = $('h4').css('font-size');
-    var original_head5 = $('h5').css('font-size');
-    var original_head6 = $('h9').css('font-size');
-    
-    
-    $(".reset_font").click(function() {
-        $('body').css('font-size', originalFontSize);
-        $('h1').css('font-size', original_head1);
-        $('h2').css('font-size', original_head2);
-        $('h3').css('font-size', original_head3);
-        $('h4').css('font-size', original_head4);
-        $('h5').css('font-size', original_head5);
-        $('h6').css('font-size', original_head6);        
-    });
-    
-    // Increase Font Size
-    $(".increase_font").click(function(){
-        var currentFontSize = $('body').css('font-size');
-        var currentFontSizeNum = parseFloat(currentFontSize, 10);
-        var newFontSize = currentFontSizeNum*1.2;
-        $('body').css('font-size', newFontSize);
-        $('h1, h2, h3, h4, h5, h6').css('font-size', newFontSize);
-        return false;
-    });
-    
-    // Decrease Font Size
-    $(".decrease_font").click(function(){
-        var currentFontSize = $('body').css('font-size');
-        var currentFontSizeNum = parseFloat(currentFontSize, 10);
-        var newFontSize = currentFontSizeNum*0.8;
-        $('body').css('font-size', newFontSize);
-        $('h1, h2, h3, h4, h5, h6').css('font-size', newFontSize);
-        return false;
-    });
-});
+(function () {
+  var storageKey = "chamiloFontResizeStep";
+  var minStep = -2;
+  var maxStep = 4;
+  var stepPercent = 10;
+
+  function getStep() {
+    var storedStep = parseInt(window.localStorage.getItem(storageKey) || "0", 10);
+
+    if (Number.isNaN(storedStep)) {
+      return 0;
+    }
+
+    return clampStep(storedStep);
+  }
+
+  function setStep(step) {
+    step = clampStep(step);
+
+    if (0 === step) {
+      document.documentElement.style.fontSize = "";
+      window.localStorage.setItem(storageKey, "0");
+
+      return;
+    }
+
+    document.documentElement.style.fontSize = 100 + step * stepPercent + "%";
+    window.localStorage.setItem(storageKey, String(step));
+  }
+
+  function clampStep(step) {
+    if (step < minStep) {
+      return minStep;
+    }
+
+    if (step > maxStep) {
+      return maxStep;
+    }
+
+    return step;
+  }
+
+  function handleResizeClick(event) {
+    var decreaseButton = event.target.closest(".decrease_font");
+    var resetButton = event.target.closest(".reset_font");
+    var increaseButton = event.target.closest(".increase_font");
+
+    if (!decreaseButton && !resetButton && !increaseButton) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (decreaseButton) {
+      setStep(getStep() - 1);
+
+      return;
+    }
+
+    if (increaseButton) {
+      setStep(getStep() + 1);
+
+      return;
+    }
+
+    setStep(0);
+  }
+
+  setStep(getStep());
+  document.addEventListener("click", handleResizeClick);
+})();

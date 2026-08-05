@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Neniu noto kreita kun la nuna filtro';
 $strings['NoNotebook'] = 'Neniu noto kreita en la sistemo';
 $strings['NoNotebookUser'] = 'Neniu noto por ĉi tiu studento';
 $strings['NotebookNoStudentAssigned'] = 'Notoj sen asignitaj studentoj';
+
+$strings['TeacherNotesHelp'] = 'Krei privatajn notojn de instruisto ligitajn al lernantoj en ĉi tiu kurso.';
+$strings['CurrentFilter'] = 'Aktuala filtrilo';
+$strings['EmptyStateHelp'] = 'Krei novan noton aŭ ŝanĝi la lernantan filtrilon.';

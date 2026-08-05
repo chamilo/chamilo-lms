@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Nestes feches, esti conteníu incrustáu amosa
 $strings['HtmlCode'] = 'Códigu HTML';
 $strings['HtmlCodeHelp'] = 'El códigu HTML compartíu, proporcionáu pol serviciu esternu, cuando se pide compartir en formatu Incrustáu.';
 $strings['LaunchContent'] = 'Llancar conteníu';
+
+$strings['InvalidDateRange'] = "La fecha d'entamu tien de ser anterior o igual a la fecha de fin.";
+
+$strings['InvalidSecurityToken'] = 'Token de seguridá inválidu. Por favor, recarga la páxina y vuelvi a intentalo.';

@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Näytä staattista HTML-sisältöä.';
 $strings['block_title'] = 'Lohkon otsikko';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Sisältö';

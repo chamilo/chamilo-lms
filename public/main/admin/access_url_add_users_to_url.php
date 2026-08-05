@@ -46,7 +46,7 @@ echo '</div>';
 
 Display::page_subheader2($tool_name);
 
-if (!empty($_POST['form_sent'])) {
+if (!empty($_POST['form_sent']) && Security::check_token('post')) {
     $form_sent = $_POST['form_sent'];
     $users = isset($_POST['user_list']) && is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
     $url_list = isset($_POST['url_list']) && is_array($_POST['url_list']) ? $_POST['url_list'] : [];
@@ -85,7 +85,7 @@ $first_letter_user_lower = Database::escape_string(api_strtolower($first_letter_
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
 $sql = "SELECT id, lastname, firstname, username FROM $tbl_user
-	    WHERE active <> ".USER_SOFT_DELETED." AND ".$target_name." LIKE '".$first_letter_user_lower."%' OR ".$target_name." LIKE '".$first_letter_user_lower."%'
+	    WHERE active <> ".USER_SOFT_DELETED." AND ".$target_name." LIKE '".$first_letter_user_lower."%'
 		ORDER BY ".(count($users) > 0 ? '(id IN('.implode(',', $users).')) DESC,' : '').' '.$target_name;
 $result = Database::query($sql);
 $db_users = Database::store_result($result);
@@ -99,6 +99,7 @@ unset($result);
 
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" class="space-y-6" onsubmit="return confirmSubmission(event)">
     <input type="hidden" name="form_sent" value="1" />
+    <?php echo Security::get_HTML_token(); ?>
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">

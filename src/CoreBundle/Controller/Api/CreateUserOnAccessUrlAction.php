@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
@@ -42,6 +43,14 @@ readonly class CreateUserOnAccessUrlAction
     public function __invoke(AccessUrl $url, CreateUserOnAccessUrlInput $data): User
     {
         $this->validator->validate($data);
+
+        if (null !== $this->userRepository->findByUsernameCaseInsensitive($data->getUsername())) {
+            throw new ConflictHttpException('username_already_exists');
+        }
+
+        if (null !== $this->userRepository->findByEmailCaseInsensitive($data->getEmail())) {
+            throw new ConflictHttpException('email_already_exists');
+        }
 
         $locale = $data->getLocale();
         if (empty($locale)) {

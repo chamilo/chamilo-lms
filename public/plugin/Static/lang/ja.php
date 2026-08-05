@@ -9,3 +9,4 @@ $strings['plugin_comment'] = '静的HTMLコンテンツを表示します。';
 $strings['block_title'] = 'ブロックタイトル';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'コンテンツ';

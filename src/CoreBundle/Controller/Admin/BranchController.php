@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,12 +17,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class BranchController extends BaseController
 {
     #[Route('/admin/branches/with-counts', name: 'admin_branches_with_counts', methods: ['GET'])]
-    public function withCounts(EntityManagerInterface $em): JsonResponse
+    public function withCounts(EntityManagerInterface $em, AccessUrlHelper $accessUrlHelper): JsonResponse
     {
+        $accessUrlId = $accessUrlHelper->getCurrent()?->getId();
+        if (null === $accessUrlId) {
+            return $this->json([]);
+        }
         $qb = $em->createQueryBuilder();
         $qb->select('b.id, b.title, b.description, COUNT(r.id) AS roomCount')
             ->from('Chamilo\CoreBundle\Entity\BranchSync', 'b')
             ->leftJoin('Chamilo\CoreBundle\Entity\Room', 'r', 'WITH', 'r.branch = b.id')
+            ->where('IDENTITY(b.url) = :accessUrlId')
+            ->setParameter('accessUrlId', $accessUrlId)
             ->groupBy('b.id')
             ->orderBy('b.title', 'ASC')
         ;

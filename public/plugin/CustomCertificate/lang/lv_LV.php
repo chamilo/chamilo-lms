@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Vai vēlaties dzēst specifisko diplomu un izmanto
 $strings['SuccessDelete'] = 'Veiksmīgi dzēsts';
 $strings['ProblemDelete'] = 'Problēma dzēšot sertifikātu';
 $strings['OnlyCustomCertificates'] = 'Eksportēti tikai kursi ar personalizētiem sertifikātiem';
+$strings['CertificateMode'] = 'Sertifikāta režīms';
+$strings['UseCourseCustomCertificate'] = 'Izmantot kursam specifisku pielāgotu sertifikātu';
+$strings['UseDefaultCustomCertificate'] = 'Izmantot platformas noklusējuma pielāgoto sertifikātu';
+
+$strings['CreateCertificateWithTags'] = 'Izveidot sertifikātu, izmantojot šīs atzīmes';
+
+$strings['DeleteCertificate'] = 'Dzēst sertifikātu';
+
+$strings['SaveCertificate'] = 'Saglabāt sertifikātu';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Izvēlieties vienu opciju un saglabājiet iestatījumus pirms sertifikātu redaktora atvēršanas.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Izvēlieties, kā šim kursam izmantot pielāgotos sertifikātus.';
+
+$strings['CouldNotSaveCertificate'] = 'Neizdevās saglabāt sertifikāta konfigurāciju.';

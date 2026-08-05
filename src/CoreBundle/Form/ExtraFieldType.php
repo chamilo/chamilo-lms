@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
@@ -38,14 +37,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ExtraFieldType extends AbstractType
 {
-    private const PAUSE_TRAINING_LABELS = [
+    private const array PAUSE_TRAINING_LABELS = [
         'pause_formation' => 'Pause training',
         'start_pause_date' => 'Start pause date',
         'end_pause_date' => 'End pause date',
         'disable_emails' => 'Disable automatic emails',
     ];
 
-    private const PAUSE_TRAINING_HELP = [
+    private const array PAUSE_TRAINING_HELP = [
         'pause_formation' => 'Temporarily pause inactivity follow-up for your account.',
         'start_pause_date' => 'Use your local date and time.',
         'end_pause_date' => 'Use your local date and time.',
@@ -57,7 +56,6 @@ class ExtraFieldType extends AbstractType
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly TagRepository $tagRepository,
         private readonly Security $security,
-        private readonly PluginHelper $pluginHelper
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -107,8 +105,8 @@ class ExtraFieldType extends AbstractType
             }
         }
 
-        $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
         $gMapsPlugin = GoogleMapsPlugin::create();
+        $pluginEnabled = $gMapsPlugin->isEnabled();
         $apiEnabled = 'true' === $gMapsPlugin->get('enable_api');
 
         $existingVariables = array_map(

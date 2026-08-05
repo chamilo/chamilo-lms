@@ -21,14 +21,16 @@ final class Version20200922224343 extends AbstractMigrationChamilo
         $table = $schema->getTable('sys_announcement');
 
         if (!$table->hasColumn('roles')) {
-            $this->addSql("ALTER TABLE sys_announcement ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'");
-            $this->addSql('UPDATE sys_announcement SET roles = "a:0:{}"');
+            $this->addSql("ALTER TABLE sys_announcement ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:json)'");
+            $this->addSql('UPDATE sys_announcement SET roles = "[]"');
         }
 
         if (!$table->hasColumn('career_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD career_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id)  ON DELETE CASCADE');
         } else {
+            // Replace 0 with NULL so the FK constraint can be added without integrity errors.
+            $this->addSql('UPDATE sys_announcement SET career_id = NULL WHERE career_id = 0');
             if (!$table->hasForeignKey('FK_E4A3EAD4B58CDA09')) {
                 $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id)  ON DELETE CASCADE');
             }
@@ -38,6 +40,8 @@ final class Version20200922224343 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id)  ON DELETE CASCADE');
         } else {
+            // Replace 0 with NULL so the FK constraint can be added without integrity errors.
+            $this->addSql('UPDATE sys_announcement SET promotion_id = NULL WHERE promotion_id = 0');
             if (!$table->hasForeignKey('FK_E4A3EAD4139DF194')) {
                 $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id)  ON DELETE CASCADE');
             }

@@ -23,6 +23,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\ArrayAccessorTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -33,7 +34,7 @@ class GenericAuthenticator extends AbstractAuthenticator
 {
     use ArrayAccessorTrait;
 
-    public const EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
+    public const string EXTRA_FIELD_OAUTH2_ID = 'oauth2_id';
 
     protected string $providerName = 'generic';
 
@@ -44,6 +45,7 @@ class GenericAuthenticator extends AbstractAuthenticator
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         protected readonly AccessUrlRepository $accessUrlRepository,
@@ -55,6 +57,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             $authenticationConfigHelper,
             $urlHelper,
             $entityManager,
+            $logger,
         );
     }
 
@@ -70,7 +73,22 @@ class GenericAuthenticator extends AbstractAuthenticator
         /** @var GenericResourceOwner $resourceOwner */
         $resourceOwner = $this->client->fetchUserFromToken($accessToken);
         $resourceOwnerData = $resourceOwner->toArray();
-        $resourceOwnerId = $resourceOwner->getId();
+
+        // OIDC providers such as ADFS only return {sub} from the UserInfo endpoint.
+        // Decode the ID token JWT (included in the token response) to get the full
+        // set of claims, then merge: UserInfo data wins over ID token on conflicts.
+        $idTokenClaims = $this->decodeIdTokenClaims($accessToken);
+        if (!empty($idTokenClaims)) {
+            $resourceOwnerData = array_merge($idTokenClaims, $resourceOwnerData);
+        }
+
+        // Read the owner ID from the merged data so that keys present only in the
+        // ID token (e.g. 'upn') are found. GenericResourceOwner::getId() reads the
+        // original UserInfo response and would trigger "Undefined array key" otherwise.
+        $idKey = $providerParams['provider_options']['responseResourceOwnerId'] ?? null;
+        $resourceOwnerId = $idKey
+            ? ($resourceOwnerData[$idKey] ?? null)
+            : $resourceOwner->getId();
 
         if (empty($resourceOwnerId)) {
             throw new UnexpectedValueException('Value for the resource owner identifier not found at the configured key');
@@ -283,5 +301,36 @@ class GenericAuthenticator extends AbstractAuthenticator
     protected function getCustomBadge(): ?BadgeInterface
     {
         return new OAuth2Badge(UserAuthSource::OAUTH2);
+    }
+
+    private function decodeIdTokenClaims(AccessToken $accessToken): array
+    {
+        $idToken = $accessToken->getValues()['id_token'] ?? null;
+
+        if (!\is_string($idToken)) {
+            return [];
+        }
+
+        $parts = explode('.', $idToken);
+
+        if (3 !== \count($parts)) {
+            return [];
+        }
+
+        $base64 = strtr($parts[1], '-_', '+/');
+        $mod4 = \strlen($base64) % 4;
+        if ($mod4) {
+            $base64 .= str_repeat('=', 4 - $mod4);
+        }
+
+        $decoded = base64_decode($base64, true);
+
+        if (false === $decoded) {
+            return [];
+        }
+
+        $claims = json_decode($decoded, true);
+
+        return \is_array($claims) ? $claims : [];
     }
 }

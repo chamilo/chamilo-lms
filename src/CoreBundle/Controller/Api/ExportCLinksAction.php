@@ -36,7 +36,7 @@ readonly class ExportCLinksAction
         CLinkCategoryRepository $repoCategory,
         EntityManager $em,
     ): Response {
-        $format = (string) $request->get('format');
+        $format = (string) $request->query->get('format');
         $cid = (int) $request->request->get('cid', 0);
         $sid = (int) $request->request->get('sid', 0);
 

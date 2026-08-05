@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'นำเข้าจาก Moodle';
+$strings['plugin_comment'] = 'ดำเนินการนำเข้าข้อมูลจากฐานข้อมูลและไฟล์ของ Moodle ไปยัง Chamilo';
+
+$strings['MoodlePassword'] = 'รหัสผ่าน Moodle';
+$strings['UninstallError'] = 'เกิดข้อผิดพลาดในการถอนการติดตั้งปลั๊กอิน';
+
+$strings['db_host'] = 'โฮสต์ฐานข้อมูล Moodle';
+$strings['db_user'] = 'ผู้ใช้ฐานข้อมูล Moodle';
+$strings['db_password'] = 'รหัสผ่านฐานข้อมูล Moodle';
+$strings['db_name'] = 'ชื่อฐานข้อมูล Moodle';
+$strings['user_filter'] = 'ตัวกรองสำหรับผู้ใช้';
+$strings['user_filter_help'] = 'นำเข้าผู้ใช้ที่มีชื่อผู้ใช้ขึ้นต้นด้วยสตริงนี้เท่านั้น<br>การนำเข้าวิชาเรียนจะได้รับผลกระทบจากการตั้งค่านี้ด้วย เนื่องจากจะนำเข้าวิชาเรียนที่ผู้ใช้ที่มีคำนำหน้าชื่อผู้ใช้ดังกล่าวลงทะเบียนเรียนเท่านั้น';
+$strings['url_id'] = 'รหัส URL';
+$strings['url_id_help'] = 'รหัส URL การเข้าถึงเพื่อบันทึกวิชาเรียน ผู้ใช้ และเซสชัน (หากใช้ multi-url)';
+$strings['moodle_path'] = 'เส้นทาง moodledata';
+$strings['moodle_path_help'] = 'เส้นทางโฟลเดอร์ moodledata โดยทั่วไปจะเป็นรูปแบบเช่น <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'ผู้ใช้';
+$strings['CourseCategoriesTask'] = 'หมวดหมู่วิชาเรียน';
+$strings['CoursesTask'] = 'วิชาเรียน';
+$strings['CourseSectionsTask'] = 'ส่วนของวิชาเรียน';
+$strings['CourseModulesLessonTask'] = 'โมดูลวิชาเรียน: บทเรียน';
+$strings['LessonPagesTask'] = 'หน้าในบทเรียน';
+$strings['LessonPagesDocumentTask'] = 'หน้าในบทเรียน: เอกสาร';
+$strings['FilesForLessonPagesTask'] = 'ไฟล์สำหรับหน้าในบทเรียน';
+$strings['LessonPagesQuizTask'] = 'หน้าในบทเรียน: คำถาม';
+$strings['LessonPagesQuizQuestionTask'] = 'คำถามสำหรับหน้าคำถาม';
+$strings['LessonAnswersTrueFalseTask'] = 'คำตอบสำหรับคำถาม True/False';
+$strings['LessonAnswersMultipleChoiceTask'] = 'คำตอบสำหรับคำถาม Multiple Choice';
+$strings['LessonAnswersMultipleAnswerTask'] = 'คำตอบสำหรับคำถาม Multiple Answer';
+$strings['LessonAnswersMatchingTask'] = 'คำตอบสำหรับคำถาม Matching';
+$strings['LessonAnswersEssayTask'] = 'คำตอบสำหรับคำถาม Essay';
+$strings['LessonAnswersShortAnswerTask'] = 'คำตอบสำหรับคำถาม Short Answer';
+$strings['FilesForLessonAnswersTask'] = 'ไฟล์สำหรับคำตอบในบทเรียน';
+$strings['CourseModulesQuizTask'] = 'โมดูลวิชาเรียน: แบบทดสอบ';
+$strings['CQuizTask'] = 'แบบทดสอบ C';
+$strings['RoleAssignmentsTask'] = 'การกำหนดบทบาท';
+$strings['QuizzesTask'] = 'แบบทดสอบ';
+$strings['FilesForQuizzesTask'] = 'ไฟล์สำหรับแบบทดสอบ';
+$strings['QuestionCategoriesTask'] = 'หมวดหมู่คำถาม';
+$strings['QuestionsTask'] = 'คำถาม';
+$strings['QuestionMultiChoiceSingleTask'] = 'คำตอบสำหรับคำถาม multichoice (แบบเลือกเดียว)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'คำตอบสำหรับคำถาม multichoice (แบบเลือกหลายข้อ)';
+$strings['QuestionsTrueFalseTask'] = 'คำตอบสำหรับคำถาม truefalse';
+$strings['QuestionShortAnswerTask'] = 'คำตอบสำหรับคำถาม shortanswers';
+$strings['CourseModulesScormTask'] = 'วิชาเรียน SCORM';
+$strings['ScormScoesTask'] = 'รายการ SCORM';
+$strings['FilesForScormScoesTask'] = 'ไฟล์สำหรับรายการ SCORM';
+$strings['UserSessionsTask'] = 'เซสชันวิชาเรียนสำหรับผู้ใช้';
+$strings['CourseIntroductionsTask'] = 'คำนำหน้าวิชาเรียน';
+$strings['FilesForCourseIntroductionsTask'] = 'ไฟล์สำหรับคำนำหน้าวิชาเรียน';
+$strings['FilesForCourseSectionsTask'] = 'ไฟล์สำหรับส่วนของวิชาเรียน';
+$strings['CourseModulesUrlTask'] = 'โมดูลวิชาเรียน: URL';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'เรียงลำดับโมดูลในส่วน';
+$strings['UsersScormsViewTask'] = 'การดู SCORM ของผู้ใช้';
+$strings['UsersScormsProgressTask'] = 'ความคืบหน้า SCORM';
+$strings['UsersLearnPathsTask'] = 'การดูเส้นทางการเรียนรู้ของผู้ใช้';
+$strings['UsersLearnPathsLessonTimerTask'] = 'ตัวจับเวลาบทเรียนเพื่อเริ่มเวลาของส่วนเส้นทางการเรียนรู้';
+$strings['QuizzesScoresTask'] = 'อัปเดตคะแนนแบบทดสอบในเส้นทางการเรียนรู้';
+$strings['QuestionGapselectTask'] = 'คำตอบสำหรับคำถามช่องว่าง';
+$strings['UsersLearnPathsLessonBranchTask'] = 'การแตก branches ของบทเรียนเป็นเวลารวมในเอกสารเส้นทางการเรียนรู้';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'การพยายามทำบทเรียนเป็นเวลารวมในแบบทดสอบเส้นทางการเรียนรู้';
+$strings['UsersLearnPathsQuizzesTask'] = 'การพยายามทำแบบทดสอบเป็นการพยายามทำแบบทดสอบเส้นทางการเรียนรู้';
+$strings['UsersQuizzesAttemptsTask'] = 'การพยายามทำแบบทดสอบของผู้ใช้';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'การพยายามตอบคำถามของผู้ใช้สำหรับคำตอบสั้น';
+$strings['UserQuestionAttemptsGapselectTask'] = 'การพยายามตอบคำถามของผู้ใช้สำหรับช่องว่าง';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'การพยายามตอบคำถามของผู้ใช้สำหรับถูก/ผิด';
+$strings['UsersLastLoginTask'] = 'การล็อกอินล่าสุดของผู้ใช้';
+$strings['TrackLoginTask'] = 'การล็อกอินครั้งแรกและการล็อกเอาท์ครั้งสุดท้าย';
+$strings['TrackCourseAccessTask'] = 'การเข้าถึงรายวิชาของผู้ใช้';
+$strings['UserLearnPathsProgressScript'] = 'อัปเดตความคืบหน้าในเส้นทางการเรียนรู้สำหรับผู้ใช้';
+$strings['UserScormsProgressScript'] = 'อัปเดตความคืบหน้าใน SCORM สำหรับผู้ใช้';
+
+$strings['InstallError'] = 'เกิดข้อผิดพลาดในการติดตั้งปลั๊กอิน: %s';
+$strings['AdminIntro'] = 'เรียกใช้ภารกิจการย้ายข้อมูล Moodle ตามลำดับ แต่ละขั้นตอนจะเปิดใช้งานได้หลังจากขั้นตอนหลักเสร็จสมบูรณ์แล้วเท่านั้น';
+$strings['MoodleDatabase'] = 'ฐานข้อมูล Moodle';
+$strings['MoodledataPath'] = 'เส้นทาง Moodledata';
+$strings['AccessUrlId'] = 'รหัส URL การเข้าถึง';
+$strings['Configured'] = 'กำหนดค่าแล้ว';
+$strings['NotConfigured'] = 'ยังไม่ได้กำหนดค่า';
+$strings['ConfigurePlugin'] = 'กำหนดค่าปลั๊กอิน';
+$strings['MissingRequiredDatabaseConfiguration'] = 'กำหนดค่าฮอสต์ฐานข้อมูล Moodle, ผู้ใช้ และชื่อฐานข้อมูลก่อนเรียกใช้ภารกิจการย้ายข้อมูล';
+$strings['MissingMoodledataPathWarning'] = 'เส้นทาง Moodledata ว่างเปล่า งานที่เกี่ยวข้องกับไฟล์อาจล้มเหลวจนกว่าจะกำหนดค่านี้';
+$strings['InvalidMigrationAction'] = 'การกระทำการย้ายข้อมูลไม่ถูกต้อง';
+$strings['InvalidSecurityToken'] = 'โทเค็นความปลอดภัยไม่ถูกต้อง โปรดโหลดหน้าใหม่แล้วลองอีกครั้ง';
+$strings['MigrationTasks'] = 'ภารกิจการย้ายข้อมูล';
+$strings['MaintenanceScripts'] = 'สคริปต์บำรุงรักษา';
+$strings['ExecutionOutput'] = 'ผลลัพธ์การทำงาน';
+$strings['TaskAlreadyExecuted'] = 'งานหรือสคริปต์นี้ได้ถูกเรียกใช้ไปแล้ว';
+$strings['SelectTaskToRun'] = 'เลือกภารกิจการย้ายข้อมูลที่จะเรียกใช้ ผลลัพธ์จะปรากฏที่นี่';

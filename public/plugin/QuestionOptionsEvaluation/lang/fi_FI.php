@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Kysymysvaihtoehtojen arviointi';
 $strings['plugin_comment'] = 'Salli vaihtoehtojen pisteiden uudelleenlaskenta kysymyksissä';
 
-$strings['enable'] = 'Ota käyttöön';
 $strings['exercise_max_score'] = 'Harjoitusten enimmäispisteet';
 $strings['exercise_max_score_help'] = 'Oletusarvo on 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Onnistumiset - Epäonnistumiset / 3';
 $strings['QuestionsEvaluated'] = 'Arvioidut kysymykset';
 $strings['RecalculateQuestionScores'] = 'Laske kysymysten pisteet uudelleen';
 $strings['FormulaSavedForExerciseX'] = 'Kaava tallennettu harjoitukselle "%s".';
+$strings['NoFormulaHelp'] = 'Käytä Chamilon oletusarvoista pisteytyskäyttäytymistä tässä testissä.';
+$strings['enable'] = 'Ota käyttöön';

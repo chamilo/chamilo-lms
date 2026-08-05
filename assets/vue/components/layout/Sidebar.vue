@@ -12,30 +12,9 @@
         <BaseSidebarPanelMenu v-model="menuItemsBeforeMyCourse" />
 
         <BaseSidebarPanelMenu
-          v-if="menuItemMyCourse.length > 0 && enrolledStore.isInitialized"
+          v-if="menuItemMyCourse.length > 0"
           v-model="menuItemMyCourse"
         />
-        <div
-          v-else-if="!hasOnlyOneItem && !enrolledStore.isInitialized"
-          class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
-        >
-          <BaseIcon
-            class="text-sm"
-            icon="courses"
-            size="small"
-          />
-          <div
-            v-if="sidebarIsOpen"
-            class="font-bold text-sm self-center"
-          >
-            {{ t("Course") }}
-          </div>
-          <BaseIcon
-            class="text-sm animate-spin"
-            icon="sync"
-            size="small"
-          />
-        </div>
 
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
       </div>
@@ -43,12 +22,22 @@
         <CategoryLinks category="menu_links" />
         <PageList category-title="footer_private" />
 
+        <p
+          v-if="institutionAddress"
+          class="app-sidebar__institution-address"
+        >
+          {{ institutionAddress }}
+        </p>
+
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
         v-if="securityStore.isAuthenticated && !isAnonymous && !hideLogoutButton"
         class="app-sidebar__logout-link"
-        href="/logout"
+        :class="{ 'opacity-60': externalLogoutBehaviour?.disabled }"
+        :href="sidebarLogoutUrl"
+        :title="sidebarLogoutTitle"
+        @click="handleLogoutClick"
       >
         <span class="mdi mdi-logout-variant" />
         <span class="logout-text">{{ t("Sign out") }}</span>
@@ -74,19 +63,20 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch, computed } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
 import { usePlatformConfig } from "../../store/platformConfig"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
-import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
 import CategoryLinks from "../page/CategoryLinks.vue"
 
 const { t } = useI18n()
+const route = useRoute()
 const securityStore = useSecurityStore()
 const enrolledStore = useEnrolledStore()
 const platformConfigStore = usePlatformConfig()
@@ -94,21 +84,37 @@ const platformConfigStore = usePlatformConfig()
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
 
-const isMobile = () => window.innerWidth < 640
+const MOBILE_BREAKPOINT = 640
+
+const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
 
 const storedSidebarState = window.localStorage.getItem("sidebarIsOpen")
 
 const sidebarIsOpen = ref(isMobile() ? false : storedSidebarState === null ? true : storedSidebarState === "true")
+const wasMobileViewport = ref(isMobile())
 
 if (!isMobile() && storedSidebarState === null) {
   window.localStorage.setItem("sidebarIsOpen", "true")
 }
 const expandingDueToPanelClick = ref(false)
+const externalLogoutBehaviour = ref(null)
 
 const currentYear = new Date().getFullYear()
 
 const hideLogoutButton = computed(() => {
   return platformConfigStore.getSetting("display.hide_logout_button") === "true"
+})
+
+const sidebarLogoutUrl = computed(() => {
+  return externalLogoutBehaviour.value?.logoutUrl || "/logout"
+})
+
+const sidebarLogoutTitle = computed(() => {
+  return externalLogoutBehaviour.value?.tooltip || ""
+})
+
+const institutionAddress = computed(() => {
+  return String(platformConfigStore.getSetting("platform.institution_address") || "").trim()
 })
 
 const isAnonymous = computed(() => {
@@ -127,7 +133,10 @@ watch(
     if (!isMobile()) {
       window.localStorage.setItem("sidebarIsOpen", newValue.toString())
     }
-    appEl.classList.toggle("app--sidebar-inactive", !newValue)
+
+    if (appEl) {
+      appEl.classList.toggle("app--sidebar-inactive", !newValue)
+    }
 
     if (!newValue) {
       if (!expandingDueToPanelClick.value) {
@@ -143,6 +152,93 @@ watch(
   },
   { immediate: true },
 )
+
+function normalizeExternalLogoutBehaviour(data) {
+  if (!data || data.active !== true) {
+    return null
+  }
+
+  const logoutUrl = typeof data.logoutUrl === "string" && data.logoutUrl.trim() ? data.logoutUrl.trim() : "/logout"
+
+  return {
+    logoutUrl,
+    tooltip: typeof data.tooltip === "string" ? data.tooltip : "",
+    showAlert: data.showAlert === true,
+    alertText: typeof data.alertText === "string" ? data.alertText : "",
+    disabled: data.disabled === true || logoutUrl === "#",
+  }
+}
+
+async function fetchExternalLogoutBehaviour() {
+  try {
+    const response = await fetch("/plugin/ExtAuthChamiloLogoutButtonBehaviour/logout-config.php", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return normalizeExternalLogoutBehaviour(await response.json())
+  } catch (e) {
+    console.warn("[ExtAuthChamiloLogoutButtonBehaviour] Unable to load logout behavior", e)
+
+    return null
+  }
+}
+
+function handleLogoutClick(event) {
+  const behaviour = externalLogoutBehaviour.value
+
+  if (!behaviour) {
+    return
+  }
+
+  event.preventDefault()
+
+  if (behaviour.showAlert && behaviour.alertText) {
+    window.alert(behaviour.alertText)
+  }
+
+  if (!behaviour.disabled) {
+    window.location.href = behaviour.logoutUrl || "/logout"
+  }
+}
+
+function closeSidebarOnMobile() {
+  if (isMobile()) {
+    sidebarIsOpen.value = false
+  }
+}
+
+function getStoredDesktopSidebarState() {
+  const storedState = window.localStorage.getItem("sidebarIsOpen")
+
+  if (storedState === null) {
+    window.localStorage.setItem("sidebarIsOpen", "true")
+
+    return true
+  }
+
+  return storedState === "true"
+}
+
+function handleViewportResize() {
+  const mobile = isMobile()
+
+  if (mobile && !wasMobileViewport.value) {
+    sidebarIsOpen.value = false
+  }
+
+  if (!mobile && wasMobileViewport.value) {
+    sidebarIsOpen.value = getStoredDesktopSidebarState()
+  }
+
+  wasMobileViewport.value = mobile
+}
 
 const handlePanelHeaderClick = (event) => {
   const header = event.target.closest(".p-panelmenu-header")
@@ -161,14 +257,28 @@ const handlePanelHeaderClick = (event) => {
     }
   }
 
-  if (isMobile() && event.target.closest("a[href]")) {
-    sidebarIsOpen.value = false
+  if (event.target.closest("a[href]")) {
+    closeSidebarOnMobile()
   }
 }
 
+watch(
+  () => route.fullPath,
+  () => {
+    closeSidebarOnMobile()
+  },
+)
+
 onMounted(async () => {
-  if (!isAnonymous.value) {
+  window.addEventListener("resize", handleViewportResize)
+
+  if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
+    externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleViewportResize)
 })
 </script>

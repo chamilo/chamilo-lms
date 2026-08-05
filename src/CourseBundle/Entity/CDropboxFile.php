@@ -23,7 +23,7 @@ use Stringable;
     new Post(
         uriTemplate: '/c_dropbox_files/upload',
         controller: CreateDropboxFileAction::class,
-        security: "is_granted('IS_AUTHENTICATED_REMEMBERED')",
+        security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         validationContext: ['groups' => ['Default']],
         output: false,
         deserialize: false
@@ -48,7 +48,7 @@ class CDropboxFile extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $filesize = 0;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: true)]

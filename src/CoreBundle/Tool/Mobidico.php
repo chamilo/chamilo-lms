@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-class Mobidico extends AbstractTool implements ToolInterface
+class Mobidico extends AbstractPlugin
 {
     public function getTitle(): string
     {
@@ -18,24 +18,13 @@ class Mobidico extends AbstractTool implements ToolInterface
         return 'Mobidico';
     }
 
-    public function getIcon(): string
-    {
-        return 'mdi-book-alphabet';
-    }
-
     public function getLink(): string
     {
         return '/plugin/Mobidico/start.php';
     }
 
-    public function getCategory(): string
+    public function getIcon(): string
     {
-        return 'plugin';
-    }
-
-    public function getResourceTypes(): ?array
-    {
-        return [
-        ];
+        return 'mdi-book-alphabet';
     }
 }

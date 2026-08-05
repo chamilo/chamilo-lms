@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'V tem obdobju bo ta vstavljena vsebina prikaza
 $strings['HtmlCode'] = 'HTML koda';
 $strings['HtmlCodeHelp'] = 'Deljena HTML koda, kot jo zagotavlja zunanja storitev pri zahtevi za deljenje v vstavljeni obliki.';
 $strings['LaunchContent'] = 'Zaženi vsebino';
+
+$strings['InvalidDateRange'] = 'Datum začetka mora biti enak ali pred datumom konca.';
+
+$strings['InvalidSecurityToken'] = 'Neveljaven varnostni žeton. Ponovno naložite stran in poskusite znova.';

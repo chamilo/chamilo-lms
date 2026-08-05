@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Показати карту Google з місцезнаходженнями користувачів, збереженими в додаткових полях.';
+$strings['enable_api'] = 'Завантажити API Google Maps';
+$strings['api_key'] = 'Ключ API';
+$strings['extra_field_name'] = 'Назва додаткового поля';
+$strings['extra_field_name_help'] = 'Введіть одну або кілька змінних додаткових полів користувача, розділених комами. Карта може відображати до 5 полів. Приклад: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Карта місцезнаходжень користувачів';
+$strings['UsersCoordinatesMapHelp'] = 'Ця карта відображає місцезнаходження користувачів на основі налаштованих додаткових полів користувача.';
+$strings['GoogleMapsAdminIntro'] = 'Налаштуйте ключ API Google Maps та додаткові поля користувача, які містять адреси або місцезнаходження.';
+$strings['GoogleMapsApi'] = 'API Google Maps';
+$strings['ExtraFields'] = 'Додаткові поля';
+$strings['Access'] = 'Доступ';
+$strings['AdministratorsOnly'] = 'Лише для адміністраторів';
+$strings['OpenMap'] = 'Відкрити карту';
+$strings['ConfigurePlugin'] = 'Налаштувати плагін';
+$strings['Configured'] = 'Налаштовано';
+$strings['NotConfigured'] = 'Не налаштовано';
+$strings['GoogleMapsApiDisabledWarning'] = 'Завантаження API Google Maps вимкнено в налаштуваннях плагіна.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Відсутній ключ API Google Maps.';
+$strings['ExtraFieldNameMissingWarning'] = 'Додаткове поле користувача не налаштовано.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Наступні додаткові поля користувача не знайдено: %s.';
+$strings['NoUserCoordinatesFound'] = 'Не знайдено місцезнаходжень користувачів для налаштованих додаткових полів.';
+$strings['ConfigureGoogleMapsFirst'] = 'Налаштуйте та увімкніть API Google Maps перед відкриттям карти.';
+
+$strings['map_provider'] = 'Постачальник карт';
+$strings['map_provider_help'] = 'Виберіть постачальника карт, який використовується плагіном та соціальною картою.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Постачальник карт';
+$strings['MapProviderConfiguration'] = 'Налаштування постачальника';
+$strings['default_latitude'] = 'Широта за замовчуванням';
+$strings['default_latitude_help'] = 'Широта центру карти за замовчуванням. Використовується, коли маркер недоступний.';
+$strings['default_longitude'] = 'Довгота за замовчуванням';
+$strings['default_longitude_help'] = 'Довгота центру карти за замовчуванням. Використовується, коли маркер недоступний.';
+$strings['default_zoom'] = 'Масштаб за замовчуванням';
+$strings['default_zoom_help'] = 'Масштаб карти за замовчуванням від 1 до 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap не потребує ключа API. Маркери лише з адресою відображаються як посилання на пошук, якщо координати недоступні.';

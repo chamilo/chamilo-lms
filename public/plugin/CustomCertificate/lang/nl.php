@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Wilt u het specifieke diploma verwijderen en het s
 $strings['SuccessDelete'] = 'Succesvol verwijderd';
 $strings['ProblemDelete'] = 'Probleem bij het verwijderen van het certificaat';
 $strings['OnlyCustomCertificates'] = 'Alleen cursussen met een gepersonaliseerd certificaat worden geëxporteerd';
+$strings['CertificateMode'] = 'Certificaatmodus';
+$strings['UseCourseCustomCertificate'] = 'Gebruik cursus-specifiek aangepast certificaat';
+$strings['UseDefaultCustomCertificate'] = 'Gebruik platform-standaard aangepast certificaat';
+
+$strings['CreateCertificateWithTags'] = 'Maak het certificaat met deze tags';
+
+$strings['DeleteCertificate'] = 'Certificaat verwijderen';
+
+$strings['SaveCertificate'] = 'Certificaat opslaan';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Selecteer een optie en sla de instellingen op voordat u de certificaat-editor opent.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Kies hoe deze cursus aangepaste certificaten moet gebruiken.';
+
+$strings['CouldNotSaveCertificate'] = 'Kon de certificaatconfiguratie niet opslaan.';

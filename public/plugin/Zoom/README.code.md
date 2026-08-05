@@ -1,4 +1,4 @@
-The Chamilo Zoom plugin class itself is defined in _plugin/zoom/lib/ZoomPlugin.php_
+The Chamilo Zoom plugin class itself is defined in _plugin/Zoom/lib/ZoomPlugin.php_
 
 It manipulates both **remote Zoom server objects** and **local database entities**:
 

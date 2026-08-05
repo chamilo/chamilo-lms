@@ -31,8 +31,6 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    Chamilo\CoreBundle\Hook\HookFactory: ~
-
     # Form types
     # Custom yes/no form type, use in the platform settings
     Chamilo\CoreBundle\Form\Type\YesNoType:
@@ -67,11 +65,6 @@ services:
           cache: '@oneup_flysystem.asset_cache_filesystem'
           driver: 'gd'
         $filters: [ ]
-
-    Chamilo\CoreBundle\Helpers\GlideAssetUtil:
-        arguments:
-            - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
-            - '%glide_media_filters%'
 
     # Check if users are online
 #    chamilo_core.listener.online:

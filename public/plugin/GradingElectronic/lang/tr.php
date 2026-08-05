@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronik Notlandırma devre dışı';
 $strings['StudentId'] = 'Öğrenci Kimliği';
 $strings['ProviderId'] = 'Sağlayıcı Kimliği';
 $strings['CourseHours'] = 'Ders saatleri';
+
+$strings['GenerateFile'] = 'Dosya oluştur';
+$strings['CourseId'] = 'Ders ID';

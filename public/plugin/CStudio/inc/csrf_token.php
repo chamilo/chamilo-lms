@@ -76,12 +76,23 @@ function generateCSRFToken($iduser)
 
 function validateCSRFToken($oel_token, $iduser)
 {
-    $ctr_token = savedCSRFToken($iduser);
-    if ($ctr_token == $oel_token) {
-        return true;
+    $iduser = (int) $iduser;
+    $oel_token = (string) $oel_token;
+
+    // Reject anonymous callers and empty / sentinel tokens outright.
+    // Without this guard, savedCSRFToken(0) returns the literal '-2',
+    // letting any request that ships cotk=-2 satisfy the CSRF check.
+    if ($iduser <= 0 || '' === $oel_token || '-1' === $oel_token || '-2' === $oel_token) {
+        return false;
     }
 
-    return false;
+    $ctr_token = savedCSRFToken($iduser);
+
+    if ('' === (string) $ctr_token || '-1' === (string) $ctr_token || '-2' === (string) $ctr_token) {
+        return false;
+    }
+
+    return hash_equals((string) $ctr_token, $oel_token);
 }
 
 function uuidToken($length)

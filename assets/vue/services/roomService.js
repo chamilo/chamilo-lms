@@ -34,4 +34,43 @@ roomService.exists = async () => {
   return totalItems > 0
 }
 
+roomService.getOptions = async ({
+  includeDefault = false,
+  defaultLabel = "Use default room",
+  floorLabel = "Floor",
+  capacityLabel = "Capacity",
+} = {}) => {
+  const { items } = await baseService.getCollection("/api/rooms", { itemsPerPage: 1000 })
+
+  const options = items.map((room) => {
+    const details = []
+
+    if (room.branch?.title) {
+      details.push(room.branch.title)
+    }
+
+    details.push(room.title)
+
+    if (room.floorNumber !== null && room.floorNumber !== undefined) {
+      details.push(`${floorLabel} ${room.floorNumber}`)
+    }
+
+    if (room.capacity !== null && room.capacity !== undefined) {
+      details.push(`${capacityLabel} ${room.capacity}`)
+    }
+
+    return {
+      label: details.join(" — "),
+      value: room["@id"],
+      room,
+    }
+  })
+
+  if (includeDefault) {
+    options.unshift({ label: defaultLabel, value: null, room: null })
+  }
+
+  return options
+}
+
 export default roomService

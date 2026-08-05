@@ -57,6 +57,10 @@ class LoginCaptchaRequestSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if (!$this->loginCaptchaManager->shouldRequireCaptcha($username)) {
+            return;
+        }
+
         if ($this->loginCaptchaManager->isBlocked($username)) {
             $remaining = $this->loginCaptchaManager->getRemainingBlockedSeconds($username);
 

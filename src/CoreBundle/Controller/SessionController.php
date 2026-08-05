@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Component\Essence\SafeEssenceHttpClient;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -15,6 +16,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
@@ -235,7 +237,9 @@ class SessionController extends AbstractController
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
             : $redirectToSession;
 
-        $essence = new Essence();
+        // SSRF protection: route Essence's server-side OEmbed/OpenGraph fetches
+        // of the teacher-set course video URL through an IP-filtered HTTP client.
+        $essence = new Essence(['Http' => new SafeEssenceHttpClient()]);
 
         $params = [
             'session' => $session,
@@ -315,6 +319,23 @@ class SessionController extends AbstractController
                 $rel->setUrl($accessUrl);
 
                 $em->persist($rel);
+
+                // Copy the user's first auth source to the new URL so they can log in on it,
+                // mirroring the behaviour of access_url_edit_users_to_url.php.
+                $alreadyHasAuthSource = $user->getAuthSourcesByUrl($accessUrl)->count() > 0;
+                if (!$alreadyHasAuthSource) {
+                    $firstAuthSource = $user->getAuthSources()->first();
+                    $authentication = $firstAuthSource
+                        ? $firstAuthSource->getAuthentication()
+                        : UserAuthSource::PLATFORM;
+
+                    $userAuthSource = new UserAuthSource();
+                    $userAuthSource->setUser($user);
+                    $userAuthSource->setUrl($accessUrl);
+                    $userAuthSource->setAuthentication($authentication);
+
+                    $em->persist($userAuthSource);
+                }
             }
         }
 

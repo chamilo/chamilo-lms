@@ -1579,8 +1579,8 @@ msgstr "An bhfuil tú cinnte gur mhaith leat na céimeanna seo a scriosadh?"
 msgid "Authoring tool"
 msgstr "Uirlis údaráis"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Comhad SCORM nó AICC le huaslódáil"
+msgid "SCORM file to upload"
+msgstr "Comhad SCORM le huaslódáil"
 
 msgid "Course location"
 msgstr "Suíomh an chúrsa"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:cóipcheart,, no:gan cóipcheart"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Fillteán,, application/msword:MsWord,, application/octet-stream:Sruth octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Fillteán,, application\/msword:MsWord,, application\/octet-stream:Sruth ochtánach,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:cleachtadh,,      simulation:insamhal,,      questionnaire:fiosrúchán,,      diagram:léaráid,,      figure:figiúr,,      graph:graf,,      index:innéacs,,      slide:sleamhnán,,      table:tábla,,      narrative text:téacs insinte,,      exam:scrúdú,,      experiment:turgnamh,,      problem statement:ráiteas fadhb,,      self assessment:féimmeasúnú,,      lecture:léacht"
@@ -3308,7 +3308,7 @@ msgid "(recommended)"
 msgstr "(molta)"
 
 msgid "SCORM DB"
-msgstr "SCORM DB"
+msgstr "Bunachar sonraí SCORM"
 
 msgid "Administrator last name"
 msgstr "Sloinneadh an riarthóra"
@@ -4808,7 +4808,7 @@ msgid "AWStats allows you to consult the statistics of your platform : visitors,
 msgstr "Ligeann AWStats duit staitisticí do phlatfhoirm a fhiosrú : cuairteoirí, amhairc leathanaigh, tagairtí..."
 
 msgid "Chamilo LIBRARY"
-msgstr "Chamilo LIBRARY"
+msgstr "Leabharlann Chamilo"
 
 msgid "Chamilo LIBRARY is a Search Engine offering multi-criteria indexing and research. It is part of the Chamilo Medical features."
 msgstr "Is Leabharlann Chamilo Inneall Cuardaigh a thairgeann innéacsú agus taighde ilchreidmheasa. Tá sé mar chuid de ghnéithe Leighis Chamilo."
@@ -8551,6 +8551,9 @@ msgstr "Cuideachta"
 msgid "Reporting"
 msgstr "Tuairisciú"
 
+msgid "Analytics"
+msgstr "Anailísíocht"
+
 msgid "Update"
 msgstr "Nuashonraigh"
 
@@ -8727,6 +8730,15 @@ msgstr "Taispeáin"
 
 msgid "My courses"
 msgstr "Mo chúrsaí"
+
+msgid "Shop"
+msgstr "Siopa"
+
+msgid "Invoice"
+msgstr "Sonrasc"
+
+msgid "Request invoice"
+msgstr "Iarr sonrasc"
 
 msgid "View my progress"
 msgstr "Féach ar mo dhul chun cinn"
@@ -9730,6 +9742,9 @@ msgstr "Torthaí cuardaigh le haghaidh:"
 msgid "Select a file"
 msgstr "Roghnaigh comhad"
 
+msgid "Select a file to insert into the editor."
+msgstr "Roghnaigh comhad le cur isteach san eagarthóir."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Rabhadh - Níl an comhad FAQ, atá suite i gcrích /home/ do phortail, inscríobha. Ní shábhálfar do théacs go dtí go n-athraítear ceadanna an chomhaid."
 
@@ -9742,8 +9757,8 @@ msgstr "Tá brón orainn, níl cead agat an leathanach seo a rochtain, nó b'fh�
 msgid "Result"
 msgstr "Toradh"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Ag iarraidh logáil isteach mar %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Ag iarraidh logáil isteach mar %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Logáil isteach rathúil. Téigh go %s"
@@ -15910,6 +15925,9 @@ msgstr "Dáta & am"
 msgid "Item"
 msgstr "Mír"
 
+msgid "Items"
+msgstr "Míreanna"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Cumraigh Plugáil Painéal Riar"
 
@@ -17163,6 +17181,18 @@ msgstr "Seisiúin sa ghrúpa"
 
 msgid "Courses in group"
 msgstr "Cúrsaí sa ghrúpa"
+
+msgid "Courses on the platform"
+msgstr "Cúrsaí ar an ardán"
+
+msgid "%s courses"
+msgstr "%s cúrsa"
+
+msgid "%s sessions"
+msgstr "%s seisiún"
+
+msgid "Search by title or code"
+msgstr "Cuardaigh de réir teidil nó cóid"
 
 msgid "Users in group"
 msgstr "Úsáideoirí sa ghrúpa"
@@ -32167,6 +32197,9 @@ msgstr "Tasc"
 msgid "Allowed file formats: %s"
 msgstr "Formáidí comhaid ceadaithe: %s"
 
+msgid "File manager"
+msgstr "Bainisteoir comhad"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Cineál comhaid nach bhfuil ceadaithe. Eisíontais ceadaithe: %s"
 
@@ -33880,6 +33913,5022 @@ msgstr "Fáilte"
 msgid "Welcome to Chamilo"
 msgstr "Fáilte chuig Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Seiceáil gach ceist gan freagra thíos"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Más é seo an chéad uair duit Chamilo a úsáid, déan cinnte go n-athraíonn tú an roghchlár taobh chun do bhealach a fháil trína ilghnéitheacha go leor. Má theastaíonn cabhair uait, gheobhaidh tú <a href=\"https://docs.chamilo.org\">ár gcáipéisí oifigiúla</a> in ann cabhrú le cáipéisíocht chaighdeánach, agus is féidir lenár <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">fóram ar líne</a> smaointe a roinnt agus freagraí a fháil ó úsáideoirí Chamilo eile."
+
+msgid "Change password"
+msgstr "Athraigh an focal faire"
+
+msgid "Newest first"
+msgstr "Is nuaí ar dtús"
+
+msgid "Oldest first"
+msgstr "Is sine ar dtús"
+
+msgid "Title A–Z"
+msgstr "Teideal A–Z"
+
+msgid "Title Z–A"
+msgstr "Teideal Z–A"
+
+msgid "Send test email"
+msgstr "Seol ríomhphost tástála"
+
+msgid "Show teachers"
+msgstr "Taispeáin múinteoirí"
+
+msgid "Hide teachers"
+msgstr "Folaigh múinteoirí"
+
+msgid "Delete exercise attempts"
+msgstr "Scrios iarrachtaí cleachtaidh"
+
+msgid "Message sent successfully."
+msgstr "Seoladh an teachtaireacht go rathúil."
+
+msgid "You cannot create a new course right now."
+msgstr "Ní féidir leat cúrsa nua a chruthú faoi láthair."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Ní féidir a fhíorú an féidir leat cúrsa nua a chruthú faoi láthair."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Bain triail eile as níos déanaí nó déan teagmháil leis an riarthóir."
+
+msgid "You cannot create more courses at this time."
+msgstr "Ní féidir leat níos mó cúrsaí a chruthú ag an am seo."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Tá %d cúrsa á mbainistiú agat cheana agus ceadaíonn do sheirbhís ghníomhach suas le %d. Chun cúrsa eile a chruthú, teastaíonn teorainn seirbhíse níos airde uait nó laghdaigh do chúrsaí gníomhacha reatha."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Tá %d cúrsa á mbainistiú agat cheana agus ceadaíonn an t-ardán suas le %d do do chuntas faoi láthair. Ní féidir leat níos mó cúrsaí a chruthú faoi láthair."
+
+msgid "Add a class"
+msgstr "Cuir rang leis"
+
+msgid "Search classes"
+msgstr "Cuardaigh ranganna"
+
+msgid "No classes found"
+msgstr "Níor aimsíodh aon ranganna"
+
+msgid "Import classes"
+msgstr "Iompórtáil ranganna"
+
+msgid "Class users"
+msgstr "Úsáideoirí an ranga"
+
+msgid "%s classes imported"
+msgstr "%s rang iompórtáilte"
+
+msgid "%s user-class links imported"
+msgstr "%s nasc úsáideora-ranga iompórtáilte"
+
+msgid "Hide comments"
+msgstr "Folaigh nótaí"
+
+msgid "Loading comments..."
+msgstr "Ag luchtú nótaí..."
+
+msgid "No comments yet."
+msgstr "Níl aon nótaí fós."
+
+msgid "A user with this username already exists"
+msgstr "Tá úsáideoir leis an ainm úsáideora seo ann cheana"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Bainistigh cruinnithe, athbhreithnigh taifeadtaí agus nuashonraigh socruithe BBB ar fud an chúrsa in aon áit amháin."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Athbhreithnigh na réamhshocruithe reatha agus iompair iad chuig gach cúrsa nuair is gá."
+
+msgid "Filter the list by meeting date range."
+msgstr "Scag an liosta de réir raon dátaí na gcruinnithe."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Athbhreithnigh stair na gcruinnithe, na rannpháirtithe agus gníomhartha taifeadta."
+
+msgid "Participants"
+msgstr "Rannpháirtithe"
+
+msgid "CountUsers"
+msgstr "CountUsers"
+
+msgid "No data found"
+msgstr "Níor aimsíodh aon sonraí"
+
+msgid "My justifications"
+msgstr "Mo chuid údaruithe"
+
+msgid "My services"
+msgstr "Mo chuid seirbhísí"
+
+msgid "Extra menu"
+msgstr "Roghchlár breise"
+
+msgid "Pending tests"
+msgstr "Trialacha ar feitheamh"
+
+msgid "No specific language"
+msgstr "Gan teanga shainiúil"
+
+msgid "Source Chamilo version"
+msgstr "Leagan foinseach Chamilo"
+
+msgid "Exporting..."
+msgstr "Á onnmhairiú..."
+
+msgid "Autosaved drafts available"
+msgstr "Dréachtaí uathshábháilte ar fáil"
+
+msgid "Hide drafts"
+msgstr "Folaigh dréachtaí"
+
+msgid "Show drafts"
+msgstr "Taispeáin dréachtaí"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Stóráiltear na dréachtaí sa bhrabhsálaí seo amháin agus baintear iad tar éis an doiciméad a shábháil."
+
+msgid "Last saved"
+msgstr "Sábháilte go deireanach"
+
+msgid "Restore draft"
+msgstr "Athchóirigh dréacht"
+
+msgid "Delete draft"
+msgstr "Scrios dréacht"
+
+msgid "Information about indexing document content"
+msgstr "Eolas faoi innéacsú ábhar doiciméad"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Nuair atá sé cumasaithe, innéacsann an t-inneall cuardaigh téacs an doiciméid ionas gur féidir le húsáideoirí é a aimsiú ó chuardach an ardáin."
+
+msgid "The editor is not available."
+msgstr "Níl an t-eagarthóir ar fáil."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Cuir an cúrsóir taobh istigh de mhír ar dtús."
+
+msgid "The selected paragraph is empty."
+msgstr "Tá an mhír roghnaithe folamh."
+
+msgid "Loading failed."
+msgstr "Theip ar luchtú."
+
+msgid "Add introduction"
+msgstr "Cuir réamhrá leis"
+
+msgid "Course type"
+msgstr "Cineál cúrsa"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Roghnaigh an úsáideann an cúrsa seo na teorainneacha caighdeánacha ardáin nó an mbaineann sé leas as seirbhís a ceannaíodh."
+
+msgid "Standard course"
+msgstr "Cúrsa caighdeánach"
+
+msgid "Use the standard platform limits."
+msgstr "Úsáid na teorainneacha caighdeánacha ardáin."
+
+msgid "Selected"
+msgstr "Roghnaithe"
+
+msgid "Hosting limit"
+msgstr "Teorainn óstála"
+
+msgid "Document quota"
+msgstr "Cuóta doiciméad"
+
+msgid "The standard course limit has been reached."
+msgstr "Tá teorainn an chúrsa chaighdeánaigh sroichte."
+
+msgid "Use the benefits granted by this service."
+msgstr "Úsáid na sochair a deonaíodh leis an tseirbhís seo."
+
+msgid "Courses with these benefits"
+msgstr "Cúrsaí leis na sochair seo"
+
+msgid "Active service"
+msgstr "Seirbhís ghníomhach"
+
+msgid "Buy service"
+msgstr "Ceannaigh seirbhís"
+
+msgid "Select an available course type before creating the course."
+msgstr "Roghnaigh cineál cúrsa atá ar fáil sula gcruthaítear an cúrsa."
+
+msgid "users"
+msgstr "úsáideoirí"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Caithfidh tú an tseirbhís seo a cheannach sula n-úsáideann tú na sochair seo."
+
+msgid "You already used all courses available with this service."
+msgstr "D’úsáid tú gach cúrsa atá ar fáil leis an tseirbhís seo cheana."
+
+msgid "This option is not available."
+msgstr "Níl an rogha seo ar fáil."
+
+msgid "This field is required"
+msgstr "Tá an réimse seo riachtanach"
+
+msgid "Show less"
+msgstr "Taispeáin níos lú"
+
+msgid "Show full description"
+msgstr "Taispeáin cur síos iomlán"
+
+msgid "Virtual keyboard"
+msgstr "Méarchlár fíorúil"
+
+msgid "Backspace"
+msgstr "Cúlspás"
+
+msgid "Space"
+msgstr "Spás"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Conair foghlama infheicthe do mhic léinn roghnaithe amháin"
+
+msgid "Create course"
+msgstr "Cruthaigh cúrsa"
+
+msgid "Tour"
+msgstr "Turas"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "An bhfuil tú cinnte gur mian leat an nóta seo a scriosadh?"
+
+msgid "No posts found"
+msgstr "Níor aimsíodh aon phost"
+
+msgid "No communities"
+msgstr "Níl aon phobal"
+
+msgid "No friends found"
+msgstr "Níor aimsíodh aon chairde"
+
+msgid "Visual overview of your skills"
+msgstr "Forbhreathnú amhairc ar do scileanna"
+
+msgid "Compare your progress"
+msgstr "Déan comparáid idir do dhul chun cinn"
+
+msgid "Please enter a search term."
+msgstr "Iontráil téarma cuardaigh, le do thoil."
+
+msgid "Enter captcha code"
+msgstr "Iontráil cód captcha"
+
+msgid "Refresh captcha"
+msgstr "Athnuaigh captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Tá captcha blocáilte go sealadach. Bain triail eile as níos déanaí."
+
+msgid "Item Details"
+msgstr "Sonraí an Mhíre"
+
+msgid "Open File"
+msgstr "Oscail Comhad"
+
+msgid "Selection"
+msgstr "Roghnú"
+
+msgid "Remove selection context"
+msgstr "Bain comhthéacs an roghnaithe"
+
+msgid "Source document"
+msgstr "Doiciméad foinse"
+
+msgid "Use the current course context"
+msgstr "Úsáid comhthéacs reatha an chúrsa"
+
+msgid "Loading documents..."
+msgstr "Doiciméid á luchtú..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Níor aimsíodh aon doiciméad PDF nó TXT comhoiriúnach sa chúrsa seo."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Roghnaigh doiciméad PDF nó TXT chun téarmaí a ghiniúint ón doiciméad sin amháin."
+
+msgid "Confidentiality warning"
+msgstr "Rabhadh rúndachta"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Nuair a roghnaítear doiciméad, socraítear an leid ionas nach n-úsáidtear ach ábhar an doiciméid sin sa ghiniúint."
+
+msgid "No document-processing AI providers available."
+msgstr "Níl aon sholáthraithe AI próiseála doiciméad ar fáil."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Theip ar shábháil an tsínithe. Bain triail eile as."
+
+msgid "Select and move"
+msgstr "Roghnaigh agus bog"
+
+msgid "Freehand"
+msgstr "Saorláimh"
+
+msgid "Stroke"
+msgstr "Stróc"
+
+msgid "Fill"
+msgstr "Líon"
+
+msgid "Import SVG"
+msgstr "Iompórtáil SVG"
+
+msgid "Import image"
+msgstr "Iompórtáil íomhá"
+
+msgid "Click the drawing area to place this text"
+msgstr "Cliceáil an limistéar líníochta chun an téacs seo a chur"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Tarraing SVG nua, iompórtáil SVG atá ann cheana nó leabaigh íomhá, agus sábháil é mar dhoiciméad in-athúsáidte."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Úsáid Roghnaigh agus Bog chun eilimintí a cuireadh leis san eagarthóir seo a athshuíomh nó a athrú."
+
+msgid "Stroke width"
+msgstr "Leithead stróice"
+
+msgid "Transparent fill"
+msgstr "Líon trédhearcach"
+
+msgid "Invalid id"
+msgstr "ID neamhbhailí"
+
+msgid "Unable to load the drawing"
+msgstr "Ní féidir an líníochta a luchtú"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Ní thacaítear ach le híomhánna PNG, JPG, WEBP nó GIF."
+
+msgid "Unable to read the image file."
+msgstr "Ní féidir an comhad íomhá a léamh."
+
+msgid "Only SVG files are supported."
+msgstr "Ní thacaítear ach le comhaid SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Tá an comhad SVG folamh nó neamhbhailí."
+
+msgid "Unable to read the SVG file."
+msgstr "Ní féidir an comhad SVG a léamh."
+
+msgid "The drawing is empty or invalid."
+msgstr "Tá an líníochta folamh nó neamhbhailí."
+
+msgid "Unable to save the drawing"
+msgstr "Ní féidir an líníochta a shábháil"
+
+msgid "Information about AI-assisted documents"
+msgstr "Eolas faoi dhoiciméid le cúnamh AI"
+
+msgid "Location"
+msgstr "Suíomh"
+
+msgid "Cloud link"
+msgstr "Nasc néil"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Cuir nasc le doiciméad néil, mar Google Drive nó Google Docs."
+
+msgid "Add cloud link"
+msgstr "Cuir nasc néil leis"
+
+msgid "Document title"
+msgstr "Teideal an doiciméid"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Athraíonn roghanna an doiciméid an chaoi a bpróiseáiltear comhaid uaslódáilte tar éis iad a shábháil."
+
+msgid "Information about uncompressing zip files"
+msgstr "Eolas faoi dhí-chomhbhrú comhad zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Nuair atá sé cumasaithe, baintear comhaid ZIP isteach san fhillteán doiciméad reatha tar éis uaslódála."
+
+msgid "The title is required."
+msgstr "Tá an teideal riachtanach."
+
+msgid "The URL is required."
+msgstr "Tá an URL riachtanach."
+
+msgid "The destination folder is missing."
+msgstr "Tá an fillteán sprioce in easnamh."
+
+msgid "Unable to create cloud link."
+msgstr "Ní féidir nasc néil a chruthú."
+
+msgid "Copy to My Files"
+msgstr "Cóipeáil chuig Mo Chomhaid"
+
+msgid "Used space"
+msgstr "Spás úsáidte"
+
+msgid "Available space"
+msgstr "Spás atá ar fáil"
+
+msgid "Available percentage"
+msgstr "Céatadán atá ar fáil"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Ní féidir naisc néil a íoslódáil."
+
+msgid "Could not copy the file to My Files"
+msgstr "Níorbh fhéidir an comhad a chóipeáil chuig Mo Chomhaid"
+
+msgid "File copied to My Files"
+msgstr "Cóipeáladh an comhad chuig Mo Chomhaid"
+
+msgid "Checking course creation options..."
+msgstr "Ag seiceáil roghanna cruthaithe an chúrsa..."
+
+msgid "You cannot create more courses right now."
+msgstr "Ní féidir leat tuilleadh cúrsaí a chruthú faoi láthair."
+
+msgid "AI analyzer"
+msgstr "Anailísí AI"
+
+msgid "Expand all"
+msgstr "Leathnaigh gach rud"
+
+msgid "Collapse all"
+msgstr "Laghdaigh gach rud"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Athbhreithnigh na sochair seirbhíse gníomhacha atá agat, stair na gceannachán agus na hadmhálacha atá ar fáil."
+
+msgid "Active services"
+msgstr "Seirbhísí gníomhacha"
+
+msgid "No active services"
+msgstr "Gan seirbhísí gníomhacha"
+
+msgid "Valid until"
+msgstr "Bailí go dtí"
+
+msgid "Recurring payment"
+msgstr "Íocaíocht athfhillteach"
+
+msgid "Next charge"
+msgstr "An chéad mhuirear eile"
+
+msgid "Enable auto billing"
+msgstr "Cumasaigh billeáil uathoibríoch"
+
+msgid "Cancel auto billing"
+msgstr "Cealaigh billeáil uathoibríoch"
+
+msgid "Granted benefits"
+msgstr "Sochair deonaithe"
+
+msgid "Purchase history"
+msgstr "Stair na gceannachán"
+
+msgid "No purchases yet"
+msgstr "Gan ceannacháin fós"
+
+msgid "Product"
+msgstr "Táirge"
+
+msgid "Reference"
+msgstr "Tagairt"
+
+msgid "Amount"
+msgstr "Méid"
+
+msgid "Receipt"
+msgstr "Admháil"
+
+msgid "Unable to load your services right now."
+msgstr "Ní féidir do sheirbhísí a luchtú faoi láthair."
+
+msgid "Auto billing enabled"
+msgstr "Billeáil uathoibríoch cumasaithe"
+
+msgid "Auto billing suspended"
+msgstr "Billeáil uathoibríoch fionraí"
+
+msgid "Auto billing cancelled"
+msgstr "Billeáil uathoibríoch cealaithe"
+
+msgid "Auto billing disabled"
+msgstr "Billeáil uathoibríoch díchumasaithe"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Cealaigh billeáil uathoibríoch don tseirbhís seo?"
+
+msgid "Preview class members and courses"
+msgstr "Réamhamharc ar bhaill an ranga agus ar chúrsaí"
+
+msgid "Please select a CSV file to import."
+msgstr "Roghnaigh comhad CSV le hiompórtáil."
+
+msgid "%d user-class links imported"
+msgstr "%d nasc úsáideora-ranga iompórtáilte"
+
+msgid "The following errors occurred during import:"
+msgstr "Tharla na hearráidí seo a leanas le linn an iompórtála:"
+
+msgid "CSV file"
+msgstr "Comhad CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Bain an t-úsáideoir ó gach aonán a bhaineann le grúpa mura bhfuil sé/sí ar an liosta"
+
+msgid "UserName"
+msgstr "AinmÚsáideora"
+
+msgid "ClassName"
+msgstr "AinmRanga"
+
+msgid "are required for each row."
+msgstr "riachtanach do gach ró."
+
+msgid "title"
+msgstr "teideal"
+
+msgid "is required."
+msgstr "riachtanach."
+
+msgid "description"
+msgstr "cur síos"
+
+msgid "are optional."
+msgstr "roghnach."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "An bhfuil tú cinnte gur mian leat an t-úsáideoir seo a bhaint den rang?"
+
+msgid "Users in class"
+msgstr "Úsáideoirí sa rang"
+
+msgid "Remove user"
+msgstr "Bain úsáideoir"
+
+msgid "Class not found"
+msgstr "Rang gan aimsiú"
+
+msgid "Class overview"
+msgstr "Forbhreathnú an ranga"
+
+msgid "Back to classes"
+msgstr "Ar ais go ranganna"
+
+msgid "Search members or courses"
+msgstr "Cuardaigh baill nó cúrsaí"
+
+msgid "Search by name, email, username or course title"
+msgstr "Cuardaigh de réir ainm, ríomhphost, ainm úsáideora nó teideal an chúrsa"
+
+msgid "Class members"
+msgstr "Baill an ranga"
+
+msgid "No email"
+msgstr "Gan ríomhphost"
+
+msgid "No members found"
+msgstr "Níor aimsíodh aon bhall"
+
+msgid "No courses found"
+msgstr "Níor aimsíodh aon chúrsa"
+
+msgid "The end date must be after the start date."
+msgstr "Caithfidh an dáta deiridh a bheith tar éis an dáta tosaithe."
+
+msgid "Always visible"
+msgstr "Infheicthe i gcónaí"
+
+msgid "No end date"
+msgstr "Gan dáta deiridh"
+
+msgid "No restriction"
+msgstr "Gan srian"
+
+msgid "Missing learning path or course identifier"
+msgstr "Cosán foghlama nó aitheantóir an chúrsa in easnamh"
+
+msgid "Select a user or a group first"
+msgstr "Roghnaigh úsáideoir nó grúpa ar dtús"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Bain gach srian dáta don chosán foghlama seo?"
+
+msgid "Advanced learning path access"
+msgstr "Rochtain chun cinn ar an gcosán foghlama"
+
+msgid "Remove date restrictions"
+msgstr "Bain srianta dáta"
+
+msgid "Search by name, email, username or group"
+msgstr "Cuardaigh de réir ainm, ríomhphost, ainm úsáideora nó grúpa"
+
+msgid "Edit user restriction"
+msgstr "Cuir srian úsáideora in eagar"
+
+msgid "Edit group restriction"
+msgstr "Cuir srian grúpa in eagar"
+
+msgid "Select a user or group"
+msgstr "Roghnaigh úsáideoir nó grúpa"
+
+msgid "Save restriction"
+msgstr "Sábháil an srian"
+
+msgid "members"
+msgstr "baill"
+
+msgid "Create Assignment"
+msgstr "Cruthaigh Tasc"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Tá an spriocdháta curtha isteach thart. Ní féidir leat cur isteach a thuilleadh."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Ní féidir postáil a chomhcheangal le faighteoirí eile."
+
+msgid "Social map"
+msgstr "Léarscáil shóisialta"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Níl an breiseán léarscáile cumasaithe nó cumraithe."
+
+msgid "Some configured extra fields were not found"
+msgstr "Níor aimsíodh roinnt réimsí breise cumraithe"
+
+msgid "No user locations were found."
+msgstr "Níor aimsíodh aon suíomh úsáideora."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "Teastaíonn comhordanáidí ó OpenStreetMap chun marcóir leabaithe a thaispeáint. Tá suíomhanna seoltaí amháin liostaithe thíos."
+
+msgid "Locations"
+msgstr "Suíomhanna"
+
+msgid "Open map"
+msgstr "Oscail léarscáil"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Soláthraí: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Soláthraí: Google Maps"
+
+msgid "Personal files"
+msgstr "Comhaid phearsanta"
+
+msgid "Upload image"
+msgstr "Uaslódáil íomhá"
+
+msgid "Upload media"
+msgstr "Uaslódáil meáin"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Ní cheadaítear ach comhaid íomhá ar an scáileán uaslódála seo."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Ní cheadaítear ach comhaid fuaime agus físe ar an scáileán uaslódála seo."
+
+msgid "Upload files to your personal storage."
+msgstr "Uaslódáil comhaid chuig do stóras pearsanta."
+
+msgid "Linked"
+msgstr "Nasctha"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Níor aimsíodh aon chomhaid fuaime nó físe sa fhillteán seo."
+
+msgid "No image files were found in this folder."
+msgstr "Níor aimsíodh aon chomhaid íomhá sa fhillteán seo."
+
+msgid "No matching files were found in this folder."
+msgstr "Níor aimsíodh aon chomhaid mheaitseála sa fhillteán seo."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Ní cheadaítear an cineál comhaid seo ar an scáileán uaslódála seo."
+
+msgid "Manage your personal files and course documents."
+msgstr "Bainistigh do chomhaid phearsanta agus doiciméid chúrsa."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Aighneacht"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Úsáid na scagairí thuas chun an liosta a chaolú."
+
+msgid "You are not allowed to see this page."
+msgstr "Níl cead agat an leathanach seo a fheiceáil."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Sonraí rianaithe an chúrsa"
+
+msgid "Course activity statistics"
+msgstr "Staitisticí gníomhaíochta an chúrsa"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Comhréir teimpléid a cheadaítear"
+
+msgid "Functions"
+msgstr "Feidhmeanna"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Braitheann na hathróga atá ar fáil ar chineál an teimpléid, mar shampla {{ user.getUsername() }} nó {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Ar chúiseanna slándála, tá aon fheidhm Twig eile, scagaire (mar shampla filter, map, reduce nó sort) nó glao PHP blocáilte."
+
+msgid "Global administrator"
+msgstr "Riarthóir domhanda"
+
+msgid "Session manager"
+msgstr "Bainisteoir seisiúin"
+
+msgid "Human resources manager"
+msgstr "Bainisteoir acmhainní daonna"
+
+msgid "Course teacher"
+msgstr "Múinteoir an chúrsa"
+
+msgid "Course student"
+msgstr "Mac léinn an chúrsa"
+
+msgid "Platform reports"
+msgstr "Tuarascálacha an ardáin"
+
+msgid "Security reports"
+msgstr "Tuarascálacha slándála"
+
+msgid "Course reports"
+msgstr "Tuarascálacha cúrsa"
+
+msgid "Gradebook reports"
+msgstr "Tuarascálacha leabhar grád"
+
+msgid "Social reports"
+msgstr "Tuarascálacha sóisialta"
+
+msgid "Exports"
+msgstr "Easpórtálacha"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Tuarascálacha faoi úsáid an ardáin, úsáideoirí, cúrsaí agus seisiúin."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Tuarascálacha iniúchta agus íogaire ó thaobh slándála de."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Tuarascálacha atá teoranta do chúrsaí atá á mbainistiú ag an úsáideoir."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Tuarascálacha a bhaineann le gníomhaíocht agus leantóireacht foghlamaí."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Tuarascálacha a bhaineann le scóir, teastais agus sonraí leabhar grád."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Tuarascálacha agus easpórtálacha a ghineann comhaid íoslódáilte."
+
+msgid "Main platform statistics dashboard."
+msgstr "Príomhdheais staitisticí an ardáin."
+
+msgid "Number of courses and course distribution report."
+msgstr "Tuarascáil ar líon na gcúrsaí agus ar dháileadh na gcúrsaí."
+
+msgid "Platform-wide access to course tools."
+msgstr "Rochtain ar fud an ardáin ar uirlisí cúrsa."
+
+msgid "Number of resources per tool."
+msgstr "Líon na n-acmhainní in aghaidh an uirlis."
+
+msgid "Latest access to courses."
+msgstr "An rochtain is déanaí ar chúrsaí."
+
+msgid "Course distribution by language."
+msgstr "Dáileadh cúrsaí de réir teanga."
+
+msgid "Course usage report."
+msgstr "Tuarascáil ar úsáid an chúrsa."
+
+msgid "Platform user count report."
+msgstr "Tuarascáil ar líon úsáideoirí an ardáin."
+
+msgid "Recent logins chart."
+msgstr "Cairt logálaí isteach le déanaí."
+
+msgid "Login distribution by month."
+msgstr "Dáileadh logálaí isteach de réir míosa."
+
+msgid "Login distribution by day."
+msgstr "Dáileadh logálaí isteach de réir lae."
+
+msgid "Login distribution by hour."
+msgstr "Dáileadh logálaí isteach de réir uaire."
+
+msgid "Users with profile picture."
+msgstr "Úsáideoirí a bhfuil pictiúr próifíle acu."
+
+msgid "Login report filtered by date."
+msgstr "Tuarascáil logálaí isteach scagtha de réir dáta."
+
+msgid "Users who have not logged in recently."
+msgstr "Úsáideoirí nár logáil isteach le déanaí."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Tuarascáil ar chuntais úsáideoirí neamhghníomhacha nó amhrasacha."
+
+msgid "Users activity statistics."
+msgstr "Staitisticí gníomhaíochta úsáideoirí."
+
+msgid "Currently online users report."
+msgstr "Tuarascáil ar úsáideoirí atá ar líne faoi láthair."
+
+msgid "New user registrations over time."
+msgstr "Clárú úsáideoirí nua le himeacht ama."
+
+msgid "Course and session subscriptions over time."
+msgstr "Síntiúis cúrsaí agus seisiún le himeacht ama."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Tuarascáil ar bhrath agus cothabháil úsáideoirí dúblacha."
+
+msgid "Platform user/session statistics."
+msgstr "Staitisticí úsáideoirí/seisiún an ardáin."
+
+msgid "Quarterly platform report."
+msgstr "Tuarascáil ráithiúil an ardáin."
+
+msgid "Activities audit"
+msgstr "Iniúchadh gníomhaíochtaí"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Tuarascáil iniúchta ar ghníomhaíochtaí riaracháin agus ardáin tábhachtacha."
+
+msgid "Social messages received report."
+msgstr "Tuarascáil ar theachtaireachtaí sóisialta a fuarthas."
+
+msgid "Social messages sent report."
+msgstr "Tuarascáil ar theachtaireachtaí sóisialta a seoladh."
+
+msgid "Social contacts count report."
+msgstr "Tuarascáil ar líon na dteagmhálacha sóisialta."
+
+msgid "Sessions created over time."
+msgstr "Seisiúin a cruthaíodh le himeacht ama."
+
+msgid "Learning analytics dashboard."
+msgstr "Painéal anailísíochta foghlama."
+
+msgid "Teacher time report."
+msgstr "Tuarascáil ama múinteora."
+
+msgid "Teachers time by session report"
+msgstr "Tuarascáil ama múinteoirí de réir seisiúin"
+
+msgid "Teacher time report grouped by session."
+msgstr "Tuarascáil ama múinteora grúpáilte de réir seisiúin."
+
+msgid "Corporate learning analytics report."
+msgstr "Tuarascáil anailísíochta foghlama corparáidigh."
+
+msgid "Course learners tracking report."
+msgstr "Tuarascáil rianaithe foghlaimeoirí cúrsa."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Staitisticí gníomhaíochta cúrsa le húsáideoirí nasctha agus neamhghníomhacha."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Tuarascáil rianaithe mionsonraithe d’fhoghlaimeoir laistigh de chúrsa."
+
+msgid "Course gradebook overview."
+msgstr "Forbhreathnú ar leabhar grád an chúrsa."
+
+msgid "Gradebook statistics"
+msgstr "Staitisticí leabhar grád"
+
+msgid "Gradebook statistics report."
+msgstr "Tuarascáil staitisticí leabhar grád."
+
+msgid "Certificate report"
+msgstr "Tuarascáil teastais"
+
+msgid "Certificate report for course gradebook."
+msgstr "Tuarascáil teastais do leabhar grád an chúrsa."
+
+msgid "User statistics"
+msgstr "Staitisticí úsáideora"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Staitisticí leabhar grád an chúrsa d’úsáideoir."
+
+msgid "Personal statistics"
+msgstr "Staitisticí pearsanta"
+
+msgid "Personal gradebook statistics."
+msgstr "Staitisticí pearsanta leabhar grád."
+
+msgid "Reports catalog"
+msgstr "Catalóg tuarascálacha"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Catalóg lárnach na dtuarascálacha, na róil agus na gcatagóirí ceadanna atá ar fáil."
+
+msgid "Course log events"
+msgstr "Imeachtaí loga an chúrsa"
+
+msgid "Detailed course tracking events."
+msgstr "Imeachtaí rianaithe mionsonraithe an chúrsa."
+
+msgid "Course tool usage"
+msgstr "Úsáid uirlisí an chúrsa"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Tuarascáil rianaithe an chúrsa grúpáilte de réir uirlisí."
+
+msgid "Course resource usage"
+msgstr "Úsáid acmhainní an chúrsa"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Tuarascáil rianaithe an chúrsa grúpáilte de réir acmhainní."
+
+msgid "Course group tracking"
+msgstr "Rianú grúpaí an chúrsa"
+
+msgid "Tracking report for course groups."
+msgstr "Tuarascáil rianaithe do ghrúpaí an chúrsa."
+
+msgid "Course session report"
+msgstr "Tuarascáil seisiúin an chúrsa"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Tuarascáil rianaithe do chúrsa laistigh de sheisiúin."
+
+msgid "Learning path report"
+msgstr "Tuarascáil conair foghlama"
+
+msgid "Learning path tracking report."
+msgstr "Tuarascáil rianaithe conair foghlama."
+
+msgid "Learning path results by user"
+msgstr "Torthaí conair foghlama de réir úsáideora"
+
+msgid "Learning path results grouped by user."
+msgstr "Torthaí conair foghlama grúpáilte de réir úsáideora."
+
+msgid "Exercises report"
+msgstr "Tuarascáil cleachtaí"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Tuarascáil rianaithe cleachtaí agus scrúduithe an chúrsa."
+
+msgid "Question report"
+msgstr "Tuarascáil ceiste"
+
+msgid "Course question tracking report."
+msgstr "Tuarascáil rianaithe ceisteanna an chúrsa."
+
+msgid "Messages report"
+msgstr "Tuarascáil teachtaireachtaí"
+
+msgid "Course messages tracking report."
+msgstr "Tuarascáil rianaithe teachtaireachtaí an chúrsa."
+
+msgid "Total time tracking report for course learners."
+msgstr "Tuarascáil rianaithe ama iomláin d’fhoghlaimeoirí an chúrsa."
+
+msgid "Gradebook summary"
+msgstr "Achoimre an leabhar grád"
+
+msgid "Summary view of gradebook results."
+msgstr "Amharc achoimre ar thorthaí an leabhar grád."
+
+msgid "Flat view"
+msgstr "Amharc cothrom"
+
+msgid "Flat gradebook results view."
+msgstr "Amharc cothrom ar thorthaí an leabhar grád."
+
+msgid "Evaluation log"
+msgstr "Logáil meastóireachta"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Log athruithe do mheastóireachtaí an leabhar grád."
+
+msgid "Link log"
+msgstr "Logáil nasc"
+
+msgid "Change log for gradebook links."
+msgstr "Log athruithe do nascanna an leabhar grád."
+
+msgid "Result details"
+msgstr "Sonraí torthaí"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Amharc mionsonraithe ar thoradh an leabhar grád."
+
+msgid "Personal certificates report."
+msgstr "Tuarascáil teastais phearsanta."
+
+msgid "User move statistics"
+msgstr "Staitisticí gluaiseachta úsáideora"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Tuarascáil do staitisticí gluaiseachta agus aistrithe úsáideora."
+
+msgid "User consent list"
+msgstr "Liosta toilithe úsáideora"
+
+msgid "Report of users and consent status."
+msgstr "Tuarascáil úsáideoirí agus stádas toilithe."
+
+msgid "Special platform exports."
+msgstr "Easpórtálacha speisialta an ardáin."
+
+msgid "Export certificates"
+msgstr "Easpórtáil teastais"
+
+msgid "Export platform certificates."
+msgstr "Easpórtáil teastais an ardáin."
+
+msgid "Export exercise results"
+msgstr "Easpórtáil torthaí cleachtaí"
+
+msgid "Export exercise results from the platform."
+msgstr "Easpórtáil torthaí cleachtaí ón ardán."
+
+msgid "Course survey results and reporting."
+msgstr "Torthaí agus tuairisciú suirbhé an chúrsa."
+
+msgid "Attendance report"
+msgstr "Tuarascáil tinrimh"
+
+msgid "Course attendance tracking and reports."
+msgstr "Rianú agus tuairiscí tinrimh an chúrsa."
+
+msgid "Exercises global report"
+msgstr "Tuarascáil dhomhanda cleachtaí"
+
+msgid "Global exercise results report for the course."
+msgstr "Tuarascáil dhomhanda ar thorthaí cleachtaí an chúrsa."
+
+msgid "Exercise report"
+msgstr "Tuarascáil cleachtaí"
+
+msgid "Detailed exercise report."
+msgstr "Tuarascáil mhionsonraithe cleachtaí."
+
+msgid "Exercise history"
+msgstr "Stair cleachtaí"
+
+msgid "Exercise attempt history."
+msgstr "Stair iarrachtaí cleachtaí."
+
+msgid "Exercise results"
+msgstr "Torthaí cleachtaí"
+
+msgid "Exercise results and corrections."
+msgstr "Torthaí agus ceartúcháin cleachtaí."
+
+msgid "Question-level exercise statistics."
+msgstr "Staitisticí cleachtaí ar leibhéal na ceiste."
+
+msgid "Exercise statistics"
+msgstr "Staitisticí cleachtaí"
+
+msgid "Exercise statistics page."
+msgstr "Leathanach staitisticí cleachtaí."
+
+msgid "Live exercise statistics"
+msgstr "Staitisticí cleachtaí beo"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Staitisticí cleachtaí beo do mhúinteoirí."
+
+msgid "Learning path statistics"
+msgstr "Staitisticí conair foghlama"
+
+msgid "Learning path item statistics."
+msgstr "Staitisticí míreanna conair foghlama."
+
+msgid "Learning path report inside a course."
+msgstr "Tuarascáil an chosáin foghlama laistigh de chúrsa."
+
+msgid "User skills report."
+msgstr "Tuarascáil scileanna an úsáideora."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Cumraíocht onnmhairithe sceidealaithe nó thréimhsiúil."
+
+msgid "User export"
+msgstr "Onnmhairiú úsáideora"
+
+msgid "Export users from the platform."
+msgstr "Onnmhairigh úsáideoirí ón ardán."
+
+msgid "Not classified"
+msgstr "Gan aicmiú"
+
+msgid "You have acquired the skill %s"
+msgstr "Tá an scil %s faighte agat"
+
+msgid "You have acquired the skill %s."
+msgstr "Tá an scil %s faighte agat."
+
+msgid "Recover your password"
+msgstr "Aisghabh do phasfhocal"
+
+msgid "Disclaimer"
+msgstr "Séanadh"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Sháródh an oibríocht seo an teorainn de %d úsáideoirí a cheadaítear don chúrsa seo."
+
+msgid "DefaultGroupCategory"
+msgstr "CatagóirGhrúpaRéamhshocraithe"
+
+msgid "LearningCalendar"
+msgstr "FéilireFoghlama"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Roghnaigh conas is féidir leis an úsáideoir seo fíordheimhniú a dhéanamh ar an ardán."
+
+msgid "Authentication methods"
+msgstr "Modhanna fíordheimhnithe"
+
+msgid "Set password manually"
+msgstr "Socraigh pasfhocal de láimh"
+
+msgid "Report role matrix"
+msgstr "Maitrís róil tuairiscithe"
+
+msgid "Report permission categories"
+msgstr "Catagóirí ceadanna tuairiscithe"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Liostaíonn an clár seo leathanaigh tuairiscithe aitheanta, a gcatagóir, URL canónach, URL oidhreachta agus lucht féachana róil ionchais. Cuireann URLanna canónacha an mhaitrís róil tuairiscithe doiciméadaithe i bhfeidhm."
+
+msgid "reports"
+msgstr "tuairiscí"
+
+msgid "Canonical URL"
+msgstr "URL Canónach"
+
+msgid "Legacy URL"
+msgstr "URL Oidhreachta"
+
+msgid "Permission category"
+msgstr "Catagóir ceadanna"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Doiciméadaíonn an mhaitrís seo an lucht féachana ionchais do gach tuairisc agus cuireann pointe iontrála tuairiscithe canónach i bhfeidhm é."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Grúpálann na heochracha seo tuairiscí de réir raon feidhme rochtana agus úsáideann an clár tuairiscithe iad. Is féidir iad a mhapáil níos déanaí chuig ceadanna ardáin níos míne."
+
+msgid "Permission"
+msgstr "Cead"
+
+msgid "Clear active session"
+msgstr "Glan an seisiún gníomhach"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "An bhfuil tú cinnte gur mian leat seisiún gníomhach an úsáideora seo a ghlanadh?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Taispeántar an réamhamharc gan comhthéacs cúrsa. D’fhéadfadh roinnt sonraí a bhaineann go sonrach leis an gcúrsa a bheith neamhfháil."
+
+msgid "Preview is not available for this question."
+msgstr "Níl réamhamharc ar fáil don cheist seo."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Ní cheadaítear eagarthóireacht gan comhthéacs cúrsa."
+
+msgid "This plugin does not use regions."
+msgstr "Ní úsáideann an breiseán seo réigiúin."
+
+msgid "No plugins with regions were found."
+msgstr "Níor aimsíodh aon bhreiseáin le réigiúin."
+
+msgid "Freemium"
+msgstr "Saorleibhéal"
+
+msgid "Commercial service"
+msgstr "Seirbhís tráchtála"
+
+msgid "Commercial"
+msgstr "Tráchtála"
+
+msgid "100% free"
+msgstr "100% saor in aisce"
+
+msgid "Displayed above the public login form."
+msgstr "Taispeántar é os cionn an fhoirm logála isteach phoiblí."
+
+msgid "Displayed below the public login form."
+msgstr "Taispeántar é faoi bhun an fhoirm logála isteach phoiblí."
+
+msgid "Displayed before the footer area."
+msgstr "Taispeántar é roimh an limistéar buntásc."
+
+msgid "Displayed in the left footer column."
+msgstr "Taispeántar é sa cholún buntásc clé."
+
+msgid "Displayed in the center footer column."
+msgstr "Taispeántar é sa cholún buntásc lár."
+
+msgid "Displayed in the right footer column."
+msgstr "Taispeántar é sa cholún buntásc ar dheis."
+
+msgid "Showing all plugins."
+msgstr "Ag taispeáint gach breiseáin."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Tá roinnt breiseán fós ag fanacht le fíorú feidhmiúil."
+
+msgid "Show verified plugins only"
+msgstr "Taispeáin breiseáin fíoraithe amháin"
+
+msgid "Showing verified plugins only."
+msgstr "Ag taispeáint breiseáin fíoraithe amháin."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Folaítear breiseáin atá ar feitheamh go sealadach go dtí go ndéantar iad a oiriúnú agus a thástáil."
+
+msgid "Show all plugins"
+msgstr "Taispeáin gach breiseán"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Liostaítear breiseáin oifigiúla agus saor in aisce ar leithligh ó bhreiseáin a d’fhéadfadh a bheith ag brath ar sheirbhísí tráchtála nó tairiscintí íoctha."
+
+msgid "Included free plugins"
+msgstr "Breiseáin saor in aisce san áireamh"
+
+msgid "Commercial and freemium plugins"
+msgstr "Breiseáin tráchtála agus saor in aisce"
+
+msgid "All plugins"
+msgstr "Gach breiseán"
+
+msgid "No plugins were found for this category."
+msgstr "Níor aimsíodh aon bhreiseán don chatagóir seo."
+
+msgid "Search plugins"
+msgstr "Cuardaigh breiseáin"
+
+msgid "Search by name or description"
+msgstr "Cuardaigh de réir ainm nó tuairisc"
+
+msgid "Advanced filters"
+msgstr "Scagairí casta"
+
+msgid "All statuses"
+msgstr "Gach stádas"
+
+msgid "All sources"
+msgstr "Gach foinse"
+
+msgid "All types"
+msgstr "Gach cineál"
+
+msgid "Installed plugins are shown first"
+msgstr "Taispeántar breiseáin suiteáilte ar dtús"
+
+msgid "No plugins match the current filters."
+msgstr "Níl aon bhreiseán ag teacht leis na scagairí reatha."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Bain triail as an cuardach a ghlanadh nó na scagairí a athrú."
+
+msgid "README"
+msgstr "LÉAMH"
+
+msgid "Invalid security token"
+msgstr "Taiscí slándála neamhbhailí"
+
+msgid "Please select a destination session"
+msgstr "Roghnaigh seisiún sprioc"
+
+msgid "Cannot move this to the same session"
+msgstr "Ní féidir é seo a bhogadh chuig an seisiún céanna"
+
+msgid "The destination session must include the selected course"
+msgstr "Caithfidh an seisiún sprioc an cúrsa roghnaithe a áireamh"
+
+msgid "The source session must include the selected course"
+msgstr "Caithfidh an seisiún foinse an cúrsa roghnaithe a áireamh"
+
+msgid "No learners found"
+msgstr "Níor aimsíodh aon fhoghlaimeoirí"
+
+msgid "Will be subscribed"
+msgstr "Beidh sé liostaithe"
+
+msgid "Subscribed"
+msgstr "Liostaithe"
+
+msgid "The move process has finished"
+msgstr "Tá an próiseas bogtha críochnaithe"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Tá an chomparáid críochnaithe. Níor bogadh aon sonraí."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Bog sonraí rianaithe ón mbunchúrsa nó ó sheisiún foinse go seisiún eile. Úsáid an chomparáid ar dtús chun athbhreithniú a dhéanamh ar na sonraí foghlaimeora a bhfuil tionchar orthu."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Cuardaigh cúrsa nó úsáid an réimse aitheantais chúrsa láimhe thíos."
+
+msgid "Fallback when the course search is not available."
+msgstr "Cúltaca nuair nach bhfuil cuardach an chúrsa ar fáil."
+
+msgid "Load sessions"
+msgstr "Luchtaigh seisiúin"
+
+msgid "Selected course"
+msgstr "Cúrsa roghnaithe"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Roghnaigh an bunchúrsa nó an seisiún ina bhfuil na sonraí rianaithe faoi láthair."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Roghnaigh an seisiún a gheobhaidh na sonraí rianaithe."
+
+msgid "Important"
+msgstr "Tábhachtach"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Nuashonraíonn an gníomh bogtha sonraí rianaithe atá ann cheana. Rith an chomparáid ar dtús agus tástáil an uirlis seo le cúrsa neamhléiriúcháin sula mbogann tú sonraí foghlaimeora fíor."
+
+msgid "No sessions found for this course"
+msgstr "Níor aimsíodh aon seisiúin don chúrsa seo"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Rinneadh neamhaird de roinnt úsáideoirí toisc nach bhfuil siad liostaithe leis an seisiún seo."
+
+msgid "Remove selected user"
+msgstr "Bain an t-úsáideoir roghnaithe"
+
+msgid "Add selected user"
+msgstr "Cuir an t-úsáideoir roghnaithe leis"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Níl aon úsáideoirí ón liosta roghnaithe liostaithe leis an seisiún seo."
+
+msgid "No image"
+msgstr "Gan íomhá"
+
+msgid "Invalid URL."
+msgstr "URL neamhbhailí."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Ní féidir an doiciméad scamall seo a leabú."
+
+msgid "Document not found"
+msgstr "Níor aimsíodh an doiciméad"
+
+msgid "File not found"
+msgstr "Níor aimsíodh an comhad"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Níl an conair foghlama seo ar fáil do d’úsáideoir faoi láthair."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "An chéad chonair foghlama eile"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Roghnaigh an chonair foghlama a bheidh ar fáil tar éis an ceann seo."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Cruthaigh conair foghlama eile sa chúrsa seo chun sreabhadh conaire foghlama a chumasú."
+
+msgid "Available from %s"
+msgstr "Ar fáil ó %s"
+
+msgid "Available until %s"
+msgstr "Ar fáil go dtí %s"
+
+msgid "Statistics reset date"
+msgstr "Dáta athshocraithe staitisticí"
+
+msgid "Last 24 hours"
+msgstr "An 24 uair an chloig seo caite"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Úsáidtear an dáta athshocraithe seo mar dháta tagartha don tuarascáil. Ní scriosann sé sonraí stairiúla rianaithe."
+
+msgid "Since reset date"
+msgstr "Ó dháta an athshocraithe"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Úsáideoirí atá ceangailte le 24 uair an chloig anuas"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Foghlaimeoirí a bhfuil rochtain amháin ar a laghad acu ar chúrsa le 24 uair an chloig anuas."
+
+msgid "Users connected in the last week"
+msgstr "Úsáideoirí atá ceangailte leis an tseachtain seo caite"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Foghlaimeoirí a bhfuil rochtain amháin ar a laghad acu ar chúrsa le 7 lá anuas."
+
+msgid "Users connected in the last month"
+msgstr "Úsáideoirí atá ceangailte leis an mhí seo caite"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Foghlaimeoirí a bhfuil rochtain amháin ar a laghad acu ar chúrsa le 30 lá anuas."
+
+msgid "Not recently connected users"
+msgstr "Úsáideoirí nach bhfuil ceangailte le déanaí"
+
+msgid "Learners without course access since %s."
+msgstr "Foghlaimeoirí gan rochtain ar chúrsa ó %s."
+
+msgid "Recently used resources"
+msgstr "Acmhainní a úsáideadh le déanaí"
+
+msgid "Course tools/resources used since %s."
+msgstr "Uirlisí/acmhainní an chúrsa a úsáideadh ó %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% de na foghlaimeoirí"
+
+msgid "Connections"
+msgstr "Ceangail"
+
+msgid "Total connections"
+msgstr "Iomlán na gceangal"
+
+msgid "Downloaded documents"
+msgstr "Doiciméid íoslódáilte"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Liosta de na doiciméid a d’íoslódáil an foghlaimeoir seo sa chúrsa seo."
+
+msgid "Forum topics"
+msgstr "Ábhair an fhóraim"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Ábhair an fhóraim a d’oscail an foghlaimeoir seo sa chúrsa seo."
+
+msgid "Forum posts"
+msgstr "Postálacha an fhóraim"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Postálacha an fhóraim a scríobh an foghlaimeoir seo sa chúrsa seo."
+
+msgid "Course connections"
+msgstr "Ceangail an chúrsa"
+
+msgid "Connection history for this learner in this course."
+msgstr "Stair na gceangal don fhoghlaimeoir seo sa chúrsa seo."
+
+msgid "Resources used"
+msgstr "Acmhainní a úsáideadh"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Na huirlisí nó na hacmhainní is déanaí a d’úsáid an foghlaimeoir seo sa chúrsa seo."
+
+msgid "Logout date"
+msgstr "Dáta logála amach"
+
+msgid "Imported Aiken quiz"
+msgstr "Tráth na gceist Aiken allmhairithe"
+
+msgid "Only supported documents will be listed here."
+msgstr "Ní liostófar anseo ach doiciméid a dtacaítear leo."
+
+msgid "Generated Aiken content"
+msgstr "Ábhar Aiken ginte"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Athbhreithnigh an t-ábhar ginte sula n-allmhairítear é mar chleachtadh nua."
+
+msgid "No documents available."
+msgstr "Níl aon doiciméid ar fáil."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "Tadhgán hipearbóileach:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Cleachtadh"
+
+msgid "OfficialCode"
+msgstr "Cód Oifigiúil"
+
+msgid "FirstName"
+msgstr "Céadainm"
+
+msgid "LastName"
+msgstr "Sloinne"
+
+msgid "LoginName"
+msgstr "Ainm Logála Isteach"
+
+msgid "MinMinute"
+msgstr "Nóiméad Íosta"
+
+msgid "StartDate"
+msgstr "Dáta Tosaigh"
+
+msgid "EndDate"
+msgstr "Dáta Deiridh"
+
+msgid "CorrectionDate"
+msgstr "Dáta Ceartaithe"
+
+msgid "NotValidated"
+msgstr "Gan Bailíochtú"
+
+msgid "PendingAttempts"
+msgstr "Iarrachtaí ar Feitheamh"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Liosta d’iarrachtaí tástála atá ar feitheamh ar fud do chúrsaí."
+
+msgid "User ID"
+msgstr "Aitheantas Úsáideora"
+
+msgid "QuestionType"
+msgstr "Cineál Ceiste"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Ceisteanna Gan Cheartú Uathoibríoch"
+
+msgid "There are no pending tests."
+msgstr "Níl aon tástálacha ar feitheamh."
+
+msgid "%s results"
+msgstr "%s torthaí"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Sampla gníomhaíochta líon an fhoirm : ríomh an tInnéacs Meáchan Coirp</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Aois</strong></td>            <td width=\"75%\" style=\"\">[25] bliain d'aois</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Inscne</strong></td>            <td style=\"\" text-align:=\"\">[M] (F nó B)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Meáchan</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Airde</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Innéacs Meáchan Coirp</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Meáchan/Airde<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> alt Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Bainte"
+
+msgid "NoUsersInTheList"
+msgstr "NoUsersInTheList"
+
+msgid "Are you sure?"
+msgstr "An bhfuil tú cinnte?"
+
+msgid "NoResultsAvailable"
+msgstr "NoResultsAvailable"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Iompórtáil grúpaí ó chomhad CSV agus, más gá, bain míreanna nach bhfuil sa chomhad."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Bain úsáid as an rogha seo go cúramach mar is féidir míreanna atá in easnamh ón CSV a bhaint le linn an phróisis iompórtála."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Uaslódáil comhad CSV leis na sonraí grúpa is mian leat a iompórtáil."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Is féidir leat an comhad samplach a íoslódáil chun an fhormáid ionchais a úsáid."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Má chumasaíonn tú scriosadh, féadfar míreanna nach bhfuil sa chomhad a bhaint."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Tá an comhad CSV riachtanach chun an t-iompórtáil a thosú."
+
+msgid "Please select at least one class."
+msgstr "Roghnaigh aon rang amháin ar a laghad."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Sainmhínigh airíonna gach grúpa sula gcruthaítear iad."
+
+msgid "Apply the first row values"
+msgstr "Cuir luachanna an chéad ró i bhfeidhm"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Cruthaigh grúpaí de láimh nó gineadh iad ó na ranganna atá cláraithe sa chúrsa seo."
+
+msgid "Create manual groups"
+msgstr "Cruthaigh grúpaí de láimh"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Úsáid an fhoirm seo nuair is mian leat grúpaí cúrsa folmha a chruthú de láimh."
+
+msgid "Configure manual groups"
+msgstr "Cumraigh grúpaí de láimh"
+
+msgid "Create groups from subscribed classes"
+msgstr "Cruthaigh grúpaí ó ranganna cláraithe"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Úsáid an fhoirm seo nuair is mian leat grúpa cúrsa amháin a chruthú do gach rang roghnaithe."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Coinnigh na grúpaí cruthaithe nasctha lena ranganna foinseacha"
+
+msgid "Create groups from selected classes"
+msgstr "Cruthaigh grúpaí ó ranganna roghnaithe"
+
+msgid "You must be logged in to access this page."
+msgstr "Caithfidh tú a bheith logáilte isteach chun an leathanach seo a rochtain."
+
+msgid "Invalid user"
+msgstr "Úsáideoir neamhbhailí"
+
+msgid "UseCourseCustomCertificate"
+msgstr "UseCourseCustomCertificate"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "UseDefaultCustomCertificate"
+
+msgid "CertificateSetting"
+msgstr "CertificateSetting"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "SelectOneOptionBeforeOpeningEditor"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ChooseCustomCertificateModeHelp"
+
+msgid "CertificateMode"
+msgstr "CertificateMode"
+
+msgid "Enable student to validate own attendance"
+msgstr "Lig don mhac léinn a fhreastal féin a bhailíochtú"
+
+msgid "Course block"
+msgstr "Bloc cúrsa"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Cuir bloic ábhair shaincheaptha le réigiúin bhuntáisc an chúrsa."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Roimh an mbuntásc"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Buntásc ar chlé"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Buntásc sa lár"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Buntásc ar dheis"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Níl cuardach na dteastais ar fáil"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Ceadaíonn sé scileanna a fháil de réir fhochatagóirí"
+
+msgid "Allow skills by subcategories"
+msgstr "Ceadaigh scileanna de réir fhochatagóirí"
+
+msgid "Minimum score for skills"
+msgstr "Íosscór do scileanna"
+
+msgid "The gradebook table is hidden."
+msgstr "Tá an tábla leabhar grád i bhfolach."
+
+msgid "Invalid token"
+msgstr "Taisce neamhbhailí"
+
+msgid "Unable to save the item"
+msgstr "Ní féidir an mír a shábháil"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Ní cheadaítear ach URLanna HTTP agus HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Óstach URL neamhbhailí."
+
+msgid "This cloud provider is not allowed."
+msgstr "Ní cheadaítear an soláthraí scamall seo."
+
+msgid "Documents used"
+msgstr "Doiciméid a úsáideadh"
+
+msgid "No document usage"
+msgstr "Gan úsáid doiciméad"
+
+msgid "Invalid action."
+msgstr "Gníomh neamhbhailí."
+
+msgid "No users selected."
+msgstr "Níl aon úsáideoirí roghnaithe."
+
+msgid "%s user(s) processed."
+msgstr "%s úsáideoir(í) próiseáilte."
+
+msgid "Invalid CSRF token."
+msgstr "Comhartha CSRF neamhbhailí."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Athraigh do phasfhocal le do thoil"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "A chara %s,\n\nLéiríonn ár bpróiseas forfheidhmithe slándála go bhfuil pasfhocal á úsáid agat atá coitianta ar an idirlíon, rud a chiallaíonn go bhféadfaí do chuntas a ghoid go héasca. Is dócha gur seicheamh simplí nó focal an-choitianta é, nílimid cinnte (ní féidir linn do phasfhocal a fheiceáil), ach iarraimid ort logáil isteach ar an ardán agus pasfhocal nua a iarraidh. Is féidir leat an nasc seo a leanúint: %s chun é sin a dhéanamh anois.\n\nTabhair faoi deara nach n-iarrfaimid do phasfhocal riamh sa phróiseas seo. Níl ort ach d’ainm úsáideora nó do ríomhphost a chur isteach agus seolfaimid nasc chugat. Má iarrtar ort do phasfhocal reatha a chur isteach chun é sin a dhéanamh, is dócha go bhfuil duine éigin ag iarraidh Phishing a dhéanamh ar do chuntas. Bí sábháilte, athraigh do phasfhocal anois!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Athshocraíodh do phasfhocal"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "A chara %s,\n\nChuir ár bpróiseas forfheidhmithe slándála in iúl duit go bhfuil pasfhocal á úsáid agat atá coitianta ar an idirlíon, rud a chiallaíonn go bhféadfaí do chuntas a ghoid go héasca. Mar bheart coisctheach, shocraigh muid tús a chur le próiseas athshocraithe pasfhocail. Is é do phasfhocal nua, a ghintear go huathoibríoch anois:\n\n%s\n\nLogáil isteach ar an ardán go luath (ag úsáid an phasfhocail nua seo) chun do phasfhocal pearsanta agus slán féin a shocrú.\n\nBí sábháilte.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Sínithe sábháilte go rathúil"
+
+msgid "Invalid request payload."
+msgstr "Lasta iarratais neamhbhailí."
+
+msgid "Authentication required."
+msgstr "Fíordheimhniú ag teastáil."
+
+msgid "The course title is required."
+msgstr "Tá teideal an chúrsa ag teastáil."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Ní féidir ach le traenálaithe agus riarthóirí cúrsaí a chruthú."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Tá cruthú cúrsaí ag traenálaithe díchumasaithe ar an ardán seo."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Ní féidir an tseirbhís BuyCourses roghnaithe a úsáid chun an cúrsa seo a chruthú."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Tá tú tar éis uasmhéid na gcúrsaí a cheadaítear (%d) a bhaint amach."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Tá an tseirbhís BuyCourses roghnaithe neamhbhailí."
+
+msgid "BuyCourses is not available right now."
+msgstr "Níl BuyCourses ar fáil faoi láthair."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "Ní féidir le BuyCourses an tseirbhís roghnaithe a bhailíochtú faoi láthair."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Ní féidir an tseirbhís BuyCourses roghnaithe a bhailíochtú faoi láthair."
+
+msgid "External tool removed from course"
+msgstr "Uirlis sheachtrach bainte den chúrsa"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Baineadh an uirlis sheachtrach den chúrsa, ach coimeádadh go hinmheánach í toisc go bhfuil sí nasctha leis an leabhar grád"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Níl aon uirlisí seachtracha ar fáil le cur leis an leabhar grád"
+
+msgid "The evaluation could not be created"
+msgstr "Níorbh fhéidir an mheastóireacht a chruthú"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Níorbh fhéidir an mheastóireacht leabhar grád a nascadh"
+
+msgid "Survey questions"
+msgstr "Ceisteanna suirbhé"
+
+msgid "Back to survey list"
+msgstr "Ar ais go liosta na suirbhéanna"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Tá freagraí ag an suirbhé seo cheana. Tá eagarthóireacht ceisteanna díchumasaithe de réir chumraíochta."
+
+msgid "Choose the type of question you want to add."
+msgstr "Roghnaigh an cineál ceiste is mian leat a chur leis."
+
+msgid "The free text option is added automatically."
+msgstr "Cuirtear an rogha téacs saor in aisce leis go huathoibríoch."
+
+msgid "No questions found"
+msgstr "Níor aimsíodh aon cheisteanna"
+
+msgid "Mandatory"
+msgstr "Éigeantach"
+
+msgid "Unsupported question type"
+msgstr "Cineál ceiste nach dtacaítear leis"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Is féidir leat na clibeanna {%s} agus {%s} a úsáid sa cheist."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Taispeántar an cheist seo go coinníollach agus an suirbhé á fhreagairt."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Gintear na roghanna céatadáin ó 1 go 100 go huathoibríoch."
+
+msgid "Could not load survey questions"
+msgstr "Níorbh fhéidir ceisteanna an tsuirbhé a luchtú"
+
+msgid "The question text is required."
+msgstr "Tá téacs na ceiste riachtanach."
+
+msgid "The maximum score is required."
+msgstr "Tá an scór uasta riachtanach."
+
+msgid "Please select a parent option."
+msgstr "Roghnaigh rogha tuismitheora le do thoil."
+
+msgid "Please fill all answer options."
+msgstr "Líon gach rogha freagra le do thoil."
+
+msgid "QuestionUpdated"
+msgstr "CeistNuashonraithe"
+
+msgid "Could not save survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a shábháil"
+
+msgid "Could not delete survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a scriosadh"
+
+msgid "Could not move survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a bhogadh"
+
+msgid "Could not copy survey question"
+msgstr "Níorbh fhéidir ceist an tsuirbhé a chóipeáil"
+
+msgid "Hide search"
+msgstr "Folaigh an cuardach"
+
+msgid "Showing results for: %s"
+msgstr "Ag taispeáint torthaí do: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Cuardaigh de réir teideal an tsuirbhé, cód nó cur síos."
+
+msgid "Search surveys"
+msgstr "Cuardaigh suirbhéanna"
+
+msgid "%s surveys selected"
+msgstr "%s suirbhé roghnaithe"
+
+msgid "Clear selection"
+msgstr "Glan an roghnú"
+
+msgid "No surveys found"
+msgstr "Níor aimsíodh aon suirbhéanna"
+
+msgid "Unsupported"
+msgstr "Gan tacaíocht"
+
+msgid "Could not load surveys"
+msgstr "Níorbh fhéidir na suirbhéanna a luchtú"
+
+msgid "Delete selected surveys"
+msgstr "Scrios na suirbhéanna roghnaithe"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Scriosfar na suirbhéanna roghnaithe agus a gcuid ceisteanna. Ní féidir an gníomh seo a chealú."
+
+msgid "Could not delete selected surveys"
+msgstr "Níorbh fhéidir na suirbhéanna roghnaithe a scriosadh"
+
+msgid "Survey action"
+msgstr "Gníomh suirbhé"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Cruthófar cóip den suirbhé seo: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Scriosfar gach freagra agus cuireadh don suirbhé seo: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Bainfear na ceisteanna iolracha ginte ón suirbhé seo: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Foilseofar an suirbhé seo do na teagascóirí grúpa nasctha: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Scriosfar an suirbhé seo agus a cheisteanna: %s"
+
+msgid "Could not complete survey action"
+msgstr "Níorbh fhéidir gníomh an tsuirbhé a chur i gcrích"
+
+msgid "Not started"
+msgstr "Gan tosú"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Ligeann pobalbhreitheanna cruinnithe d’úsáideoirí cuireadh na dátaí a roghnú nuair atá siad ar fáil."
+
+msgid "Back to surveys"
+msgstr "Ar ais chuig na suirbhéanna"
+
+msgid "Edit meeting poll"
+msgstr "Cuir pobalbhreith cruinnithe in eagar"
+
+msgid "View meeting poll"
+msgstr "Féach ar phobalbhreith an chruinnithe"
+
+msgid "Basic information"
+msgstr "Eolas bunúsach"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Cruthóidh sé seo suirbhé de chineál pobalbhreith cruinnithe. Láimhseáiltear freagraí agus cuirí ar leithligh."
+
+msgid "Availability"
+msgstr "Infhaighteacht"
+
+msgid "Meeting dates"
+msgstr "Dátaí an chruinnithe"
+
+msgid "Meeting poll"
+msgstr "Pobalbhreith cruinnithe"
+
+msgid "My availability"
+msgstr "Mo infhaighteacht"
+
+msgid "Meeting poll results"
+msgstr "Torthaí phobalbhreith an chruinnithe"
+
+msgid "No invitations found"
+msgstr "Níor aimsíodh aon chuirí"
+
+msgid "available"
+msgstr "ar fáil"
+
+msgid "Could not load meeting poll"
+msgstr "Níorbh fhéidir an vótaíocht cruinnithe a luchtú"
+
+msgid "Please complete the required fields"
+msgstr "Comhlánaigh na réimsí riachtanacha"
+
+msgid "Could not save meeting poll"
+msgstr "Níorbh fhéidir an vótaíocht cruinnithe a shábháil"
+
+msgid "Could not save meeting availability"
+msgstr "Níorbh fhéidir infhaighteacht an chruinnithe a shábháil"
+
+msgid "Copy this survey to another course or session"
+msgstr "Cóipeáil an suirbhé seo go cúrsa nó seisiún eile"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Cóipeálfar an suirbhé gan freagraí ná cuireadh."
+
+msgid "No target courses found"
+msgstr "Níor aimsíodh aon chúrsaí spriocdhírithe"
+
+msgid "Search by course title, course code or session name."
+msgstr "Cuardaigh de réir teideal an chúrsa, cód an chúrsa nó ainm an tseisiúin."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Úsáid 'Cóipeáil an suirbhé' nuair is mian leat cóip sa chúrsa céanna."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Cóipeálfar na ceisteanna agus na roghanna. Fanfaidh na freagraí, na cuirí agus na tuairiscí sa suirbhé bunaidh amháin."
+
+msgid "Selected target"
+msgstr "Sprioc roghnaithe"
+
+msgid "Could not load copy form"
+msgstr "Níorbh fhéidir an fhoirm chóipeála a luchtú"
+
+msgid "The survey will be copied to: %s"
+msgstr "Cóipeálfar an suirbhé chuig: %s"
+
+msgid "Survey copied."
+msgstr "Suirbhé cóipeáilte."
+
+msgid "Could not copy survey"
+msgstr "Níorbh fhéidir an suirbhé a chóipeáil"
+
+msgid "Answer survey"
+msgstr "Freagair an suirbhé"
+
+msgid "Preview mode does not save answers."
+msgstr "Ní shábhálann mód réamhamhairc na freagraí."
+
+msgid "Survey completed"
+msgstr "Suirbhé curtha i gcrích"
+
+msgid "Thank you for answering the survey."
+msgstr "Go raibh maith agat as an suirbhé a fhreagairt."
+
+msgid "Profile information"
+msgstr "Eolas próifíle"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Athbhreithnigh na réimsí próifíle iarrtha sula bhfreagraíonn tú an suirbhé."
+
+msgid "This profile field is read-only."
+msgstr "Tá an réimse próifíle seo inléite amháin."
+
+msgid "You already filled this survey."
+msgstr "Tá an suirbhé seo líonta agat cheana."
+
+msgid "Please specify"
+msgstr "Sonraigh le do thoil"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ní thacaítear leis an gcineál ceiste seo sa radharc suirbhé nua-aimseartha."
+
+msgid "Preview only"
+msgstr "Réamhamharc amháin"
+
+msgid "Submit answers"
+msgstr "Cuir na freagraí isteach"
+
+msgid "Could not load survey"
+msgstr "Níorbh fhéidir an suirbhé a luchtú"
+
+msgid "Please complete the required profile fields."
+msgstr "Comhlánaigh na réimsí próifíle riachtanacha."
+
+msgid "Please answer all mandatory questions."
+msgstr "Freagair gach ceist éigeantach."
+
+msgid "Could not save survey answers"
+msgstr "Níorbh fhéidir freagraí an tsuirbhé a shábháil"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Cumraigh príomhfhaisnéis an tsuirbhé sula mbainistíonn tú na ceisteanna agus na cuirí."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Ní féidir cód an tsuirbhé a athrú tar éis a chruthaithe."
+
+msgid "Survey behavior"
+msgstr "Iompar an tsuirbhé"
+
+msgid "Use 0 for no time limit."
+msgstr "Úsáid 0 mura bhfuil aon teorainn ama."
+
+msgid "Survey messages"
+msgstr "Teachtaireachtaí an tsuirbhé"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Taispeánfar na réimsí próifíle a roghnaítear anseo roimh cheisteanna an tsuirbhé."
+
+msgid "No profile fields are currently available."
+msgstr "Níl aon réimsí próifíle ar fáil faoi láthair."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Níl roghnú réimsí próifíle ar fáil ach amháin do shuirbhéanna neamhanainmneacha."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Déanfar nascáil scileanna a aistriú i mbaisce tiomnaithe."
+
+msgid "Could not load survey configuration"
+msgstr "Níorbh fhéidir cumraíocht an tsuirbhé a luchtú"
+
+msgid "The survey code is required."
+msgstr "Tá cód an tsuirbhé riachtanach."
+
+msgid "The survey title is required."
+msgstr "Tá teideal an tsuirbhé riachtanach."
+
+msgid "The survey has been saved successfully"
+msgstr "Sábháladh an suirbhé go rathúil"
+
+msgid "Could not save survey configuration"
+msgstr "Níorbh fhéidir cumraíocht an tsuirbhé a shábháil"
+
+msgid "Course users"
+msgstr "Úsáideoirí an chúrsa"
+
+msgid "Already invited"
+msgstr "Cuireadh cheana"
+
+msgid "No users found"
+msgstr "Níor aimsíodh aon úsáideoirí"
+
+msgid "No groups found"
+msgstr "Níor aimsíodh aon ghrúpaí"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Úsáid **nasc** mar áit a mbeidh nasc an tsuirbhé le feiceáil."
+
+msgid "Remind all selected users"
+msgstr "Cuir i gcuimhne do gach úsáideoir roghnaithe"
+
+msgid "Anonymous access link"
+msgstr "Nasc rochtana gan ainm"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Is féidir le húsáideoirí nach bhfuil cuireadh faighte acu an nasc seo a úsáid chun an suirbhé a dhéanamh."
+
+msgid "Answered anonymously"
+msgstr "Freagartha gan ainm"
+
+msgid "Could not load survey invitations"
+msgstr "Níorbh fhéidir cuirí an tsuirbhé a luchtú"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Tá ábhar agus teachtaireacht an ríomhphoist riachtanach agus ríomhphost á sheoladh."
+
+msgid "Could not publish survey"
+msgstr "Níorbh fhéidir an suirbhé a fhoilsiú"
+
+msgid "Could not copy the link"
+msgstr "Níorbh fhéidir an nasc a chóipeáil"
+
+msgid "Please answer this survey using the following link"
+msgstr "Freagair an suirbhé seo ag úsáid an naisc seo a leanas"
+
+msgid "Export CSV"
+msgstr "Easpórtáil CSV"
+
+msgid "Export compact CSV"
+msgstr "Easpórtáil CSV dlúth"
+
+msgid "Export Excel"
+msgstr "Easpórtáil Excel"
+
+msgid "Export package"
+msgstr "Easpórtáil pacáiste"
+
+msgid "Results summary"
+msgstr "Achoimre torthaí"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Taispeánann an t-amharc seo na sonraí tuairiscithe imirceacha don suirbhé seo."
+
+msgid "Select user"
+msgstr "Roghnaigh úsáideoir"
+
+msgid "No answers found"
+msgstr "Níor aimsíodh aon fhreagraí"
+
+msgid "answers"
+msgstr "freagraí"
+
+msgid "Could not load survey reporting"
+msgstr "Níorbh fhéidir tuairisciú an tsuirbhé a luchtú"
+
+msgid "Back to threads"
+msgstr "Ar ais go dtí na snáitheanna"
+
+msgid "Back to learning path"
+msgstr "Ar ais go dtí an chonair foghlama"
+
+msgid "Remove sticky"
+msgstr "Bain greamaitheacht"
+
+msgid "Make sticky"
+msgstr "Déan greamaithe"
+
+msgid "Open thread"
+msgstr "Oscail snáithe"
+
+msgid "Close thread"
+msgstr "Dún snáithe"
+
+msgid "Delete thread"
+msgstr "Scrios snáithe"
+
+msgid "This thread is hidden from learners."
+msgstr "Tá an snáithe seo folaithe ó fhoghlaimeoirí."
+
+msgid "Revision requested"
+msgstr "Athbhreithniú iarrtha"
+
+msgid "Revision"
+msgstr "Athbhreithniú"
+
+msgid "Approve post"
+msgstr "Ceadaigh postáil"
+
+msgid "Reject post"
+msgstr "Diúltaigh postáil"
+
+msgid "Cancel revision request"
+msgstr "Cealaigh iarratas athbhreithnithe"
+
+msgid "Delete post"
+msgstr "Scrios postáil"
+
+msgid "Message is required"
+msgstr "Tá teachtaireacht riachtanach"
+
+msgid "Target thread is required"
+msgstr "Tá snáithe sprioc riachtanach"
+
+msgid "Could not retrieve posts"
+msgstr "Níorbh fhéidir na postálacha a aisghabháil"
+
+msgid "Thread shown"
+msgstr "Snáithe taispeánta"
+
+msgid "Thread hidden"
+msgstr "Snáithe folaithe"
+
+msgid "Could not update thread"
+msgstr "Níorbh fhéidir an snáithe a nuashonrú"
+
+msgid "Thread closed"
+msgstr "Snáithe dúnta"
+
+msgid "Thread opened"
+msgstr "Snáithe oscailte"
+
+msgid "Thread marked as sticky"
+msgstr "Snáithe marcáilte mar ghreamaithe"
+
+msgid "Thread unmarked as sticky"
+msgstr "Snáithe gan mharcáil mar ghreamaithe"
+
+msgid "Thread notifications enabled"
+msgstr "Fógraí snáithe cumasaithe"
+
+msgid "Thread notifications disabled"
+msgstr "Fógraí snáithe díchumasaithe"
+
+msgid "Could not update thread notification"
+msgstr "Níorbh fhéidir fógra an tsnáithe a nuashonrú"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "An bhfuil tú cinnte gur mian leat an snáithe seo a scriosadh?"
+
+msgid "Could not delete thread"
+msgstr "Níorbh fhéidir an snáithe a scriosadh"
+
+msgid "Post approved"
+msgstr "Postáil ceadaithe"
+
+msgid "Could not approve post"
+msgstr "Níorbh fhéidir an post a cheadú"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a dhiúltú?"
+
+msgid "Post rejected"
+msgstr "Post diúltaithe"
+
+msgid "Could not reject post"
+msgstr "Níorbh fhéidir an post a dhiúltú"
+
+msgid "Post shown"
+msgstr "Post taispeánta"
+
+msgid "Post hidden"
+msgstr "Post folaithe"
+
+msgid "Could not update post"
+msgstr "Níorbh fhéidir an post a nuashonrú"
+
+msgid "Post updated"
+msgstr "Post nuashonraithe"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a scriosadh?"
+
+msgid "Post deleted"
+msgstr "Post scriosta"
+
+msgid "Could not delete post"
+msgstr "Níorbh fhéidir an post a scriosadh"
+
+msgid "Untitled thread"
+msgstr "Snáithe gan teideal"
+
+msgid "Could not retrieve threads"
+msgstr "Níorbh fhéidir na snáitheanna a aisghabháil"
+
+msgid "Post moved"
+msgstr "Post bogtha"
+
+msgid "Could not move post"
+msgstr "Níorbh fhéidir an post a bhogadh"
+
+msgid "Revision request removed"
+msgstr "Iarratas athbhreithnithe bainte"
+
+msgid "Could not update revision request"
+msgstr "Níorbh fhéidir an t-iarratas athbhreithnithe a nuashonrú"
+
+msgid "Are you sure you want to report this post?"
+msgstr "An bhfuil tú cinnte gur mian leat an post seo a thuairisciú?"
+
+msgid "Could not report post"
+msgstr "Níorbh fhéidir an post a thuairisciú"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "An bhfuil tú cinnte gur mian leat an ceangaltán seo a scriosadh?"
+
+msgid "Attachment deleted"
+msgstr "Ceangaltán scriosta"
+
+msgid "Could not delete attachment"
+msgstr "Níorbh fhéidir an ceangaltán a scriosadh"
+
+msgid "Thread title"
+msgstr "Teideal an tsnáithe"
+
+msgid "Sticky thread"
+msgstr "Snáithe greamaitheach"
+
+msgid "Attach files"
+msgstr "Ceangail comhaid"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Tá ceangaltáin díchumasaithe don fhóram seo"
+
+msgid "The forum is not open yet."
+msgstr "Níl an fóram oscailte fós."
+
+msgid "The forum is closed."
+msgstr "Tá an fóram dúnta."
+
+msgid "The forum is locked."
+msgstr "Tá an fóram faoi ghlas."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Ní cheadaítear snáitheanna nua sa bhfóram seo."
+
+msgid "Thread created"
+msgstr "Snáithe cruthaithe"
+
+msgid "Could not create thread"
+msgstr "Níorbh fhéidir an snáithe a chruthú"
+
+msgid "Back to posts"
+msgstr "Ar ais chuig na poist"
+
+msgid "This reply will be stored as a revision."
+msgstr "Stórálfar an freagra seo mar athbhreithniú."
+
+msgid "Post reply"
+msgstr "Freagra a phostáil"
+
+msgid "The thread is locked."
+msgstr "Tá an snáithe faoi ghlas."
+
+msgid "Reply added"
+msgstr "Freagra curtha leis"
+
+msgid "Could not add reply"
+msgstr "Níorbh fhéidir freagra a chur leis"
+
+msgid "Add forum"
+msgstr "Cuir fóram leis"
+
+msgid "No forums found"
+msgstr "Níor aimsíodh aon fhóraim"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Cruthaigh do chéad chatagóir fóraim nó fóram chun tús a chur le díospóireachtaí."
+
+msgid "Locked"
+msgstr "Faoi ghlas"
+
+msgid "No forums in this category"
+msgstr "Níl aon fhóraim sa chatagóir seo"
+
+msgid "Posts require approval"
+msgstr "Éilíonn poist ceadú"
+
+msgid "Forum for current group"
+msgstr "Fóram don ghrúpa reatha"
+
+msgid "Group forum visibility"
+msgstr "Infheictheacht fhóraim an ghrúpa"
+
+msgid "No category"
+msgstr "Gan chatagóir"
+
+msgid "Could not retrieve forums"
+msgstr "Níorbh fhéidir na fóraim a aisghabháil"
+
+msgid "Forum category updated"
+msgstr "Catagóir fóraim nuashonraithe"
+
+msgid "Forum category created"
+msgstr "Catagóir fóraim cruthaithe"
+
+msgid "Could not save forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a shábháil"
+
+msgid "Forum updated"
+msgstr "Fóram nuashonraithe"
+
+msgid "Forum created"
+msgstr "Fóram cruthaithe"
+
+msgid "Could not save forum"
+msgstr "Níorbh fhéidir an fóram a shábháil"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "An bhfuil tú cinnte gur mian leat an chatagóir fóraim seo a scriosadh?"
+
+msgid "Could not delete forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a scriosadh"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "An bhfuil tú cinnte gur mian leat an fóram seo a scriosadh?"
+
+msgid "Could not delete forum"
+msgstr "Níorbh fhéidir an fóram a scriosadh"
+
+msgid "Forum category unlocked"
+msgstr "Catagóir fóraim díghlasáilte"
+
+msgid "Forum category locked"
+msgstr "Catagóir fóraim glasáilte"
+
+msgid "Could not update forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a nuashonrú"
+
+msgid "Forum category shown"
+msgstr "Catagóir fóraim taispeáinte"
+
+msgid "Forum category hidden"
+msgstr "Catagóir fóraim folaithe"
+
+msgid "Forum unlocked"
+msgstr "Fóram díghlasáilte"
+
+msgid "Forum locked"
+msgstr "Fóram glasáilte"
+
+msgid "Could not update forum"
+msgstr "Níorbh fhéidir an fóram a nuashonrú"
+
+msgid "Forum shown"
+msgstr "Fóram taispeáinte"
+
+msgid "Forum hidden"
+msgstr "Fóram folaithe"
+
+msgid "Forum notifications enabled"
+msgstr "Fógraí fóraim cumasaithe"
+
+msgid "Forum notifications disabled"
+msgstr "Fógraí fóraim díchumasaithe"
+
+msgid "Could not update forum notification"
+msgstr "Níorbh fhéidir fógra an fhóraim a nuashonrú"
+
+msgid "Forum category moved"
+msgstr "Catagóir fóraim bogtha"
+
+msgid "Could not move forum category"
+msgstr "Níorbh fhéidir an chatagóir fóraim a bhogadh"
+
+msgid "Forum moved"
+msgstr "Fóram bogtha"
+
+msgid "Could not move forum"
+msgstr "Níorbh fhéidir an fóram a bhogadh"
+
+msgid "Back to forums"
+msgstr "Ar ais chuig na fóraim"
+
+msgid "New thread"
+msgstr "Snáithe nua"
+
+msgid "No threads found"
+msgstr "Níor aimsíodh aon snáithe"
+
+msgid "Sticky"
+msgstr "Greamaithe"
+
+msgid "Graded"
+msgstr "Grádaithe"
+
+msgid "Grade peers"
+msgstr "Piaraí a ghrádú"
+
+msgid "Move thread"
+msgstr "Snáithe a bhogadh"
+
+msgid "Target forum"
+msgstr "Spriocfhóram"
+
+msgid "Target forum is required"
+msgstr "Tá an spriocfhóram riachtanach"
+
+msgid "Students"
+msgstr "Mic léinn"
+
+msgid "No students found"
+msgstr "Níor aimsíodh aon mhac léinn"
+
+msgid "No peers available to grade."
+msgstr "Níl aon phiaraí ar fáil le grádú."
+
+msgid "Qualified"
+msgstr "Cáilithe"
+
+msgid "Not qualified"
+msgstr "Gan cháiliú"
+
+msgid "Could not retrieve thread grading"
+msgstr "Níorbh fhéidir grádú an tsnáithe a aisghabháil"
+
+msgid "Thread grading updated"
+msgstr "Grádú an tsnáithe nuashonraithe"
+
+msgid "Could not update thread grading"
+msgstr "Níorbh fhéidir grádú an tsnáithe a nuashonrú"
+
+msgid "Thread score saved"
+msgstr "Scór an tsnáithe sábháilte"
+
+msgid "Could not save thread score"
+msgstr "Níorbh fhéidir scór an tsnáithe a shábháil"
+
+msgid "Could not move thread"
+msgstr "Níorbh fhéidir an snáithe a bhogadh"
+
+msgid "Thread updated"
+msgstr "Snáithe nuashonraithe"
+
+msgid "Search term is too short"
+msgstr "Tá an téarma cuardaigh ró-ghearr"
+
+msgid "Could not search forums"
+msgstr "Níorbh fhéidir na fóraim a chuardach"
+
+msgid "Moderated"
+msgstr "Modhnaithe"
+
+msgid "View threads"
+msgstr "Snáitheanna a fheiceáil"
+
+msgid "No auth source"
+msgstr "Gan fhoinse fíordheimhnithe"
+
+msgid "You must add at least one question"
+msgstr "Caithfidh tú ceist amháin ar a laghad a chur leis"
+
+msgid "Advanced actions"
+msgstr "Gníomhartha casta"
+
+msgid "Application path"
+msgstr "Conair an fheidhmchláir"
+
+msgid "Apply files details"
+msgstr "Cuir sonraí na gcomhad i bhfeidhm"
+
+msgid "Apply plan details"
+msgstr "Cuir sonraí an phlean i bhfeidhm"
+
+msgid "Apply plan failed"
+msgstr "Theip ar phlean a chur i bhfeidhm"
+
+msgid "Apply plan ready"
+msgstr "Plean réidh le cur i bhfeidhm"
+
+msgid "Apply preparation"
+msgstr "Ullmhúchán a chur i bhfeidhm"
+
+msgid "Apply staged files"
+msgstr "Cuir comhaid stáitseáilte i bhfeidhm"
+
+msgid "Applying files..."
+msgstr "Comhaid á gcur i bhfeidhm..."
+
+msgid "Audit file"
+msgstr "Comhad iniúchta"
+
+msgid "Backup directory"
+msgstr "Eolaire cúltaca"
+
+msgid "Baseline clean"
+msgstr "Bunlíne glan"
+
+msgid "Baseline warnings"
+msgstr "Rabhaidh bunlíne"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Tóg plean sábháilte cur i bhfeidhm ón bpacáiste stáitseáilte. Ní dhéanann sé seo ach comhaid, ceadanna, conair chúltaca agus stádas glais a sheiceáil. Ní chuireann sé comhaid in ionad."
+
+msgid "Build production frontend assets."
+msgstr "Tóg sócmhainní tosaigh táirgeachta."
+
+msgid "Building plan..."
+msgstr "Plean á thógáil..."
+
+msgid "Channel"
+msgstr "Cainéal"
+
+msgid "Check"
+msgstr "Seiceáil"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Seiceáil le haghaidh nuashonruithe Chamilo atá ar fáil, fíoraigh pacáistí, stáitseáil comhaid agus rith céimeanna rialaithe iar-nuashonraithe."
+
+msgid "Check manifest"
+msgstr "Seiceáil an fhorléiriú"
+
+msgid "Checking post-apply actions..."
+msgstr "Gníomhartha iar-chur i bhfeidhm á seiceáil..."
+
+msgid "Checking..."
+msgstr "Á sheiceáil..."
+
+msgid "Composer install"
+msgstr "Suiteáil Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Is féidir le gníomhartha Composer, Yarn agus imirce bunachar sonraí spleáchais, sócmhainní ginte nó an bunachar sonraí a mhodhnú. Ná roghnaigh iad ach tar éis cúltacaí agus ceadanna a dheimhniú."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Cumraigh CHAMILO_UPDATE_MANIFEST_URL ar an bhfreastalaí nó cuir URL forléiriú HTTPS ar fáil."
+
+msgid "Configured"
+msgstr "Cumraithe"
+
+msgid "Current migration"
+msgstr "Imirce reatha"
+
+msgid "Database baseline"
+msgstr "Bunlíne bunachair sonraí"
+
+msgid "Database migration safety review"
+msgstr "Athbhreithniú sábháilteachta imirce bunachair sonraí"
+
+msgid "Database migrations"
+msgstr "Imirce bunachair sonraí"
+
+msgid "Development mode"
+msgstr "Mód forbartha"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Ná cumasaigh é seo mura ndearnadh athbhreithniú ar chúltaca an nuashonraithe agus ar cheadanna an fhreastalaí."
+
+msgid "Doctrine dry-run command"
+msgstr "Ordú triail-tirim Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Thuairiscigh Doctrine rabhaidh stairiúla bunlíne. Ní dhéanfaidh an nuashonraitheoir ach imirceanna V210 stáitseáilte a fhorghníomhú tar éis deimhnithe sainráite."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Ní dhéanfaidh Doctrine ach na himirceanna V210 stáitseáilte a fhorghníomhú go sainráite tar éis don athbhreithniú sábháilteachta pas a fháil."
+
+msgid "Dry-run exit code"
+msgstr "Cód scortha triail-rith"
+
+msgid "Executed unavailable migrations"
+msgstr "Imirceanna neamhfhorghníomhaithe forghníomhaithe"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Bain an pacáiste nuashonraithe fíoraithe amach go dtí eolaire stáitse le haghaidh iniúchta. Ní athraíonn sé seo comhaid, ní ritheann sé imirceanna, ná ní mionathraíonn sé an bunachar sonraí."
+
+msgid "File apply available"
+msgstr "Comhad iarratais ar fáil"
+
+msgid "Files to replace"
+msgstr "Comhaid le hathsholáthar"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Deimhním go bhfuil cúltaca bunachair sonraí ann agus gur fíoraíodh é sular ritheadh na himirceanna."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Tuigim gur féidir le gníomhartha casta spleáchais, sócmhainní ginte nó an bunachar sonraí a mhodhnú."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Tuigim go n-athróidh sé seo comhaid i suiteáil Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Tuigim go rithfidh sé seo orduithe nuashonraithe ar an bhfreastalaí."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Suiteáil spleáchais an chéadtaobh sula ndéantar sócmhainní a atógáil."
+
+msgid "Installed version"
+msgstr "Leagan suiteáilte"
+
+msgid "Latest migration"
+msgstr "Imirce is déanaí"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Fág cosáin an phacáiste agus an tsínithe folamh chun iad a íoslódáil ó URLanna fíoraithe an fhorléaráis. Níl cosáin áitiúla ar fáil ach amháin le haghaidh tástálacha forbartha."
+
+msgid "Live command log"
+msgstr "Log ordaithe beo"
+
+msgid "Live update log"
+msgstr "Log nuashonraithe beo"
+
+msgid "Local test options"
+msgstr "Roghanna tástála áitiúla"
+
+msgid "Local test update notice link"
+msgstr "Nasc fógra nuashonraithe tástála áitiúil"
+
+msgid "Local update notice simulation"
+msgstr "Ionsamhlú fógra nuashonraithe áitiúil"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Níl ionsamhlú fógra nuashonraithe áitiúil ar fáil ach amháin i mód forbartha."
+
+msgid "Manifest"
+msgstr "Forléargas"
+
+msgid "Manifest source"
+msgstr "Foinse an fhorléaráis"
+
+msgid "Migration safety details"
+msgstr "Sonraí sábháilteachta imirce"
+
+msgid "Migration safety review failed"
+msgstr "Theip ar athbhreithniú sábháilteachta imirce"
+
+msgid "Migration safety review ready"
+msgstr "Athbhreithniú sábháilteachta imirce réidh"
+
+msgid "Migration target"
+msgstr "Sprioc imirce"
+
+msgid "New files"
+msgstr "Comhaid nua"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Imirceanna nua a thuairiscigh Doctrine"
+
+msgid "Next migration"
+msgstr "An chéad imirce eile"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Níor tuairiscíodh aon imirce neamhfhorghníomhaithe forghníomhaithe."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Níl aon URL oifigiúil forléaráis cumraithe fós. Úsáid URL HTTPS nó cosán áitiúil le haghaidh tástálacha forbartha."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Níor braitheadh aon imirce ar feitheamh roimh sprioc an nuashonraithe stáitse."
+
+msgid "Not configured"
+msgstr "Gan chumrú"
+
+msgid "Not detected"
+msgstr "Gan bhrath"
+
+msgid "Official Chamilo update channel"
+msgstr "Cainéal nuashonraithe oifigiúil Chamilo"
+
+msgid "Package SHA-256"
+msgstr "Pacáiste SHA-256"
+
+msgid "Package URL"
+msgstr "URL an phacáiste"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Íoslódálfar comhaid an phacáiste agus an tsínithe ón bhforléargas. Tá cosáin áitiúla díchumasaithe sa timpeallacht seo."
+
+msgid "Package path"
+msgstr "Cosán an phacáiste"
+
+msgid "Package staged successfully"
+msgstr "Pacáiste stáitse go rathúil"
+
+msgid "Package staging failed"
+msgstr "Theip ar stáitse an phacáiste"
+
+msgid "Package verification"
+msgstr "Fíorú an phacáiste"
+
+msgid "Package verification failed"
+msgstr "Theip ar fhíorú an phacáiste"
+
+msgid "Package verified successfully"
+msgstr "Pacáiste fíoraithe go rathúil"
+
+msgid "Pending migrations before this update"
+msgstr "Imirceanna ar feitheamh roimh an nuashonrú seo"
+
+msgid "Planned backup path"
+msgstr "Cosán cúltaca pleanáilte"
+
+msgid "Post-apply actions completed"
+msgstr "Gníomhartha iar-iarratais críochnaithe"
+
+msgid "Post-apply actions failed"
+msgstr "Theip ar ghníomhartha iar-iarratais"
+
+msgid "Post-apply actions ready"
+msgstr "Gníomhartha iar-iarratais réidh"
+
+msgid "Post-apply checks"
+msgstr "Seiceálacha iar-iarratais"
+
+msgid "Post-apply checks failed"
+msgstr "Theip ar sheiceálacha iar-iarratais"
+
+msgid "Post-apply details"
+msgstr "Sonraí iar-fheidhmithe"
+
+msgid "Post-apply run details"
+msgstr "Sonraí rith iar-fheidhmithe"
+
+msgid "Preflight checks"
+msgstr "Seiceálacha réamh-eitilte"
+
+msgid "Preflight checks completed"
+msgstr "Seiceálacha réamh-eitilte críochnaithe"
+
+msgid "Preflight checks failed"
+msgstr "Theip ar na seiceálacha réamh-eitilte"
+
+msgid "Preflight details"
+msgstr "Sonraí réamh-eitilte"
+
+msgid "Prepare staging"
+msgstr "Ullmhaigh an stáitse"
+
+msgid "Preparing staging..."
+msgstr "Ag ullmhú an stáitse..."
+
+msgid "Production mode"
+msgstr "Mód táirgthe"
+
+msgid "Released at"
+msgstr "Scaoileadh ag"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Ionadaigh comhaid Chamilo ón bpacáiste stáitse ag úsáid an phlean feidhmithe athbhreithnithe. Ní ritheann sé imirceanna bunachar sonraí, Composer, Yarn ná orduithe taisce."
+
+msgid "Review apply plan"
+msgstr "Athbhreithnigh an plean feidhmithe"
+
+msgid "Review database migrations"
+msgstr "Athbhreithnigh imirceanna bunachar sonraí"
+
+msgid "Review post-apply actions"
+msgstr "Athbhreithnigh gníomhartha iar-fheidhmithe"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Athbhreithnigh orduithe láimhe molta tar éis comhaid an nuashonraithe a fheidhmiú. Ní ritheann an chéim seo Composer, Yarn, imirceanna ná orduithe taisce."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Athbhreithnigh imirceanna Doctrine stáitse agus aschur triail-rith sula rithtear imirceanna bunachar sonraí."
+
+msgid "Reviewing database migrations..."
+msgstr "Ag athbhreithniú imirceanna bunachar sonraí..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Rith agus pasáil an t-athbhreithniú sábháilteachta imirce sula ndéantar imirceanna bunachar sonraí."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Rith seiceálacha timpeallachta roimh aon chéim feidhmithe nuashonraithe amach anseo. Ní athraíonn sé seo comhaid ná an bunachar sonraí."
+
+msgid "Run post-apply actions"
+msgstr "Rith gníomhartha iar-fheidhmithe"
+
+msgid "Run preflight checks"
+msgstr "Rith seiceálacha réamh-eitilte"
+
+msgid "Run selected post-apply actions"
+msgstr "Rith gníomhartha iar-fheidhmithe roghnaithe"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Rith orduithe iar-fheidhmithe roghnaithe ón bhfreastalaí ag úsáid liosta ceadaithe rialaithe. Ní ghlactar le horduithe bhlaosc saincheaptha."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Rith na horduithe seo de láimh ón bhfreastalaí tar éis toradh an nuashonraithe comhaid agus na gcúltacaí a dheimhniú."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Tá rith gníomhartha iar-fheidhmithe ón gcomhéadan díchumasaithe i mód táirgthe."
+
+msgid "Running post-apply actions..."
+msgstr "Ag rith gníomhartha iar-fheidhmithe..."
+
+msgid "Safe actions"
+msgstr "Gníomhartha sábháilte"
+
+msgid "Signature path"
+msgstr "Conair an tsínithe"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Ní féidir fíorú sínithe a scipeáil sa timpeallacht seo."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Scipeáil fíorú sínithe do thástálacha forbartha áitiúla"
+
+msgid "Staged file application failed"
+msgstr "Theip ar fheidhmiú na gcomhad stáitse"
+
+msgid "Staged files applied successfully"
+msgstr "D’éirigh le feidhmiú na gcomhad stáitse"
+
+msgid "Staging details"
+msgstr "Sonraí stáitse"
+
+msgid "Staging directory"
+msgstr "Eolaire stáitse"
+
+msgid "Staging extraction"
+msgstr "Eastóscadh stáitse"
+
+msgid "Symfony cache clear"
+msgstr "Glanadh taisce Symfony"
+
+msgid "System update"
+msgstr "Nuashonrú córais"
+
+msgid "Target version"
+msgstr "Spiroch spriocthe"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "Tá URL an fhorógra oifigiúil réamh-líonta. Is féidir leat é a athrú go forógra HTTPS eile más gá."
+
+msgid "The database migration baseline is clean."
+msgstr "Tá bunlíne imirce an bhunachair sonraí glan."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Theip ar an bhfreagra HTTP deiridh tar éis don oibríocht a bheith críochnaithe. De ghnáth is de bharr ceadanna taisce am-rith nó atosú freastalaí gréasáin le linn an iarratais is cúis leis seo."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Tuairiscíonn an log oibríochta gur éirigh le gníomhartha iar-fheidhmithe a chríochnú."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "D’éirigh leis na horduithe iar-fheidhmithe roghnaithe, ach theip ar an bhfreagra HTTP deiridh. Athnuaigh an leathanach agus fíoraigh ceadanna taisce am-rith má ní luchtaíonn an leathanach i gceart."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Ní chruthaíonn ná ní athchóiríonn an nuashonraitheoir cúltacaí bunachair sonraí."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Tá na gníomhartha seo sábháilte le rith ón gcomhéadan tar éis toradh an nuashonraithe a athbhreithniú."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Is féidir leis na horduithe seo spleáchais, sócmhainní ginte, taisce nó an bunachar sonraí a mhodhnú. Deimhnigh cúltacaí sula leanann tú ar aghaidh."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Athraíonn an gníomh seo comhaid i suiteáil Chamilo. Cinntigh go ndearnadh athbhreithniú ar an bplean feidhmithe agus go bhfuil cúltacaí cumasaithe sula leanann tú ar aghaidh."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Déanann an iontráil forbartha seo fógra nuashonraithe Chamilo.org sa todhchaí a insamhladh ag úsáid conairí pacáiste tástála áitiúla."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Osclaíodh an scáileán seo ó fhógra nuashonraithe oifigiúil, ach níl foinse fhorógra oifigiúil cumraithe fós."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Osclaíodh an scáileán seo ó fhógra nuashonraithe. Ní thosaítear ach an seiceáil fhorógra go huathoibríoch."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ullmhaíonn an chéim seo athbhreithniú amháin. Tarlaíonn athsholáthar comhaid níos déanaí sa chéim Comhaid stáitse a chur i bhfeidhm, le cosaint frithdhúnta, cúltaca agus ais-rolla."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ní chruthaíonn an nuashonraitheoir seo cúltaca bunachar sonraí. Cruthaigh agus fíoraigh cúltaca sula rithfidh tú imirceanna."
+
+msgid "Trusted public key"
+msgstr "Eochair phoiblí iontaofa"
+
+msgid "Trusted signing key"
+msgstr "Eochair shínithe iontaofa"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Clóscríobh APPLY UPDATE FILES chun deimhniú"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Clóscríobh RUN DATABASE MIGRATIONS chun imirceanna bunachar sonraí a dheimhniú"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Clóscríobh RUN POST UPDATE ACTIONS chun deimhniú"
+
+msgid "Unknown update notice source."
+msgstr "Foinse fógra nuashonraithe anaithnid."
+
+msgid "Update availability"
+msgstr "Infhaighteacht nuashonraithe"
+
+msgid "Update directory"
+msgstr "Eolaire nuashonraithe"
+
+msgid "Update lock path"
+msgstr "Conair frithdhúnta nuashonraithe"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Úsáid an t-eolaire stáitse a ghintear sa chéim roimhe seo. Ní ghlacann an t-inneall ach le heolairí laistigh de var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Úsáid an nasc seo chun fógra nuashonraithe Chamilo.org sa todhchaí a insamhladh le linn tástálacha forbartha."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Úsáid é seo amháin le haghaidh tástálacha forbartha áitiúla. Caithfidh nuashonruithe táirgeachta an eochair atá cumraithe ag an bhfreastalaí a úsáid."
+
+msgid "Verification details"
+msgstr "Sonraí fíoraithe"
+
+msgid "Verify package"
+msgstr "Fíoraigh an pacáiste"
+
+msgid "Verifying..."
+msgstr "Á fhíorú..."
+
+msgid "Waiting for command progress events..."
+msgstr "Ag fanacht le himeachtaí dul chun cinn an ordaithe..."
+
+msgid "Waiting for update progress events..."
+msgstr "Ag fanacht le himeachtaí dul chun cinn an nuashonraithe..."
+
+msgid "Yarn build"
+msgstr "Tógáil Yarn"
+
+msgid "Yarn install"
+msgstr "Suiteáil Yarn"
+
+msgid "A comment is required"
+msgstr "Tá trácht ag teastáil"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Tá bunachar sonraí leis an ainm céanna ann cheana. Má tá táblaí ann, scriosfar iad; má tá sé folamh, athúsáidfear é."
+
+msgid "AI generated"
+msgstr "Ginte ag AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Cuir ceist amháin ar a laghad leis sula bhfillfidh tú ar an gconair foghlama."
+
+msgid "Add attachments"
+msgstr "Cuir iatáin leis"
+
+msgid "Additional fields"
+msgstr "Réimsí breise"
+
+msgid "Allow comments"
+msgstr "Ceadaigh tráchtanna"
+
+msgid "Allow new pages"
+msgstr "Ceadaigh leathanaigh nua"
+
+msgid "Allow ratings"
+msgstr "Ceadaigh rátálacha"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "An bhfuil tú cinnte gur mian leat gach mír a scriosadh?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "An bhfuil tú cinnte gur mian leat athnuachan uathoibríoch a athbhunú?"
+
+msgid "Attachment has been deleted"
+msgstr "Scriosadh an iatán"
+
+msgid "Backup file"
+msgstr "Comhad cúltaca"
+
+msgid "Block comments"
+msgstr "Cuir bac ar thráchtanna"
+
+msgid "Block new pages"
+msgstr "Cuir bac ar leathanaigh nua"
+
+msgid "Block ratings"
+msgstr "Cuir bac ar rátálacha"
+
+msgid "Cancel renewal"
+msgstr "Cealaigh athnuachan"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Bainfear naisc chatagóirí ó leathanaigh Wiki %s."
+
+msgid "Change"
+msgstr "Athraigh"
+
+msgid "Clear group"
+msgstr "Glan an grúpa"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Cliceáil clib chun é a chur isteach san eagarthóir. Cuirfear na sealbhóirí áite seo ina n-ionad nuair a ghintear an teastas."
+
+msgid "Comment added"
+msgstr "Cuireadh trácht leis"
+
+msgid "Comment is required"
+msgstr "Tá trácht ag teastáil"
+
+msgid "Comment score"
+msgstr "Scór tráchta"
+
+msgid "Compare selected versions line by line"
+msgstr "Déan comparáid idir na leaganacha roghnaithe líne ar líne"
+
+msgid "Compare selected versions word by word"
+msgstr "Déan comparáid idir na leaganacha roghnaithe focal ar fhocal"
+
+msgid "Compare versions"
+msgstr "Déan comparáid idir leaganacha"
+
+msgid "Copy completed"
+msgstr "Cóipeáil críochnaithe"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Cruthaigh leathanaigh oibre Wiki aonair do na foghlaimeoirí"
+
+msgid "Current view mode"
+msgstr "Mód amhairc reatha"
+
+msgid "Delete Wiki"
+msgstr "Scrios Wiki"
+
+msgid "Delete page"
+msgstr "Scrios leathanach"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Ní mholtar leathanach baile an Wiki a scriosadh. Is féidir é a athchruthú níos déanaí."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Má dhéantar an Wiki a dhíchumasú, cuirfear deireadh le gnáthleathanaigh agus gníomhartha Wiki. Fanfaidh an leathanach socruithe seo ar fáil do mhúinteoirí an chúrsa."
+
+msgid "Discussion"
+msgstr "Plé"
+
+msgid "Edit Comment"
+msgstr "Cuir Trácht in Eagar"
+
+msgid "Edit page"
+msgstr "Cuir leathanach in eagar"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Caithfidh an dáta deiridh a bheith tar éis nó cothrom leis an dáta éaga"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Iontráil téarma cuardaigh chun leathanaigh Wiki a aimsiú"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Caithfidh an dáta éaga a bheith roimh nó cothrom leis an dáta deiridh"
+
+msgid "Failed email recipients"
+msgstr "Faighteoirí ríomhphoist ar theip orthu"
+
+msgid "Finish and return to learning path"
+msgstr "Críochnaigh agus fill ar an gconair foghlama"
+
+msgid "Forum image"
+msgstr "Íomhá an fhóraim"
+
+msgid "Hide discussion"
+msgstr "Folaigh an plé"
+
+msgid "Hide page"
+msgstr "Folaigh an leathanach"
+
+msgid "I changed my mind"
+msgstr "D'athraigh mé mo mheon"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Mura bhfuil sé ticáilte, fanfaidh na comhaid sin ar fáil do riarthóir an ardáin tríd an uirlis 'Eolas comhaid'."
+
+msgid "Internal message failures"
+msgstr "Teipeanna teachtaireachtaí inmheánacha"
+
+msgid "Internal messages available"
+msgstr "Teachtaireachtaí inmheánacha ar fáil"
+
+msgid "Internal messages created now"
+msgstr "Teachtaireachtaí inmheánacha cruthaithe anois"
+
+msgid "Item score"
+msgstr "Scór an mhíre"
+
+msgid "Last post"
+msgstr "An post is déanaí"
+
+msgid "Lock page"
+msgstr "Cuir glas ar an leathanach"
+
+msgid "Manage categories"
+msgstr "Bainistigh catagóirí"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Marcáil an doiciméad seo mar chúnamh AI. Úsáid é nuair a cruthaíodh nó nuair a athraíodh an t-ábhar go suntasach le huirlisí AI."
+
+msgid "Maximum score is required"
+msgstr "Tá scór uasta ag teastáil"
+
+msgid "Metric"
+msgstr "Méadrach"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Tá tráchtanna nua blocáilte sa phlé seo"
+
+msgid "No Wiki categories are available yet."
+msgstr "Níl aon chatagóirí Wiki ar fáil fós."
+
+msgid "No categories found"
+msgstr "Níor aimsíodh aon chatagóirí"
+
+msgid "No content"
+msgstr "Gan ábhar"
+
+msgid "No parent category"
+msgstr "Gan chatagóir mháthair"
+
+msgid "Number of comments scored"
+msgstr "Líon na dtráchtaí a scóráladh"
+
+msgid "Old version"
+msgstr "Seánleagan"
+
+msgid "Only image files are allowed."
+msgstr "Ní cheadaítear ach comhaid íomhá."
+
+msgid "Please fill all required fields"
+msgstr "Líon gach réimse riachtanach"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Ginfear ceisteanna le háitsealbhóirí ranga nó mac léinn do ranganna nó grúpaí an chúrsa: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Tá rátálacha blocáilte sa phlé seo"
+
+msgid "Remove image"
+msgstr "Bain an íomhá"
+
+msgid "Restore renewal"
+msgstr "Athchóirigh an athnuachan"
+
+msgid "Restore version"
+msgstr "Athchóirigh an leagan"
+
+msgid "Search in"
+msgstr "Cuardaigh i"
+
+msgid "Select group"
+msgstr "Roghnaigh grúpa"
+
+msgid "Select image"
+msgstr "Roghnaigh íomhá"
+
+msgid "Selected image"
+msgstr "Íomhá roghnaithe"
+
+msgid "Show discussion"
+msgstr "Taispeáin an plé"
+
+msgid "Show page"
+msgstr "Taispeáin an leathanach"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Níl cead scríofa ag roinnt comhad nó fillteán. Chun Chamilo a shuiteáil, ní mór duit a gceadanna a athrú ar dtús (ag úsáid CHMOD). Léigh an"
+
+msgid "Subcategories"
+msgstr "Fo-chatagóirí"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Tapáil ar chlé nó ar dheis chun nascleanúint a dhéanamh"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Tá spriocdháta an tasc Wiki thart, ach ceadaítear aighneacht mhoillithe."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Tá spriocdháta an tasc Wiki thart."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Níl tús curtha le tasc Wiki fós."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Caithfear an glas eagarthóireachta leathanach Wiki a chur i bhfeidhm sula sábhálfar."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Sábháladh an fógra, ach níorbh fhéidir ceangaltán a uaslódáil."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Sábháladh an fógra, ach theip ar sheachadadh ríomhphoist."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Sábháladh an fógra, ach níorbh fhéidir aon ríomhphost a sheachadadh."
+
+msgid "The category has been created"
+msgstr "Cruthaíodh an chatagóir"
+
+msgid "The category has been deleted"
+msgstr "Scriosadh an chatagóir"
+
+msgid "The category has been updated"
+msgstr "Nuashonraíodh an chatagóir"
+
+msgid "The end date is invalid"
+msgstr "Tá an dáta deiridh neamhbhailí"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Caithfidh líon uasta na leaganacha a bheith ina slánuimhir neamhdhiúltach"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Caithfidh líon uasta na bhfocal a bheith ina slánuimhir neamhdhiúltach"
+
+msgid "The print window could not be opened"
+msgstr "Níorbh fhéidir an fhuinneog priontála a oscailt"
+
+msgid "The start date is invalid"
+msgstr "Tá an dáta tosaigh neamhbhailí"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Baineann na socruithe seo leis an gcúrsa ar fad, lena n-áirítear a sheisiúin agus a ghrúpaí."
+
+msgid "This announcement has already been sent by email."
+msgstr "Tá an fógra seo seolta cheana féin trí ríomhphost."
+
+msgid "This discussion is hidden from learners"
+msgstr "Tá an plé seo folaithe ó fhoghlaimeoirí"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ligeann an uirlis ghiniúna AI seo duit íomhánna agus físeáin ghearra a chruthú chun do chúrsa a léiriú. Trí mhíniú (i dtéacs) a thabhairt ar an méid atá uait sa chuid leid, tabharfaidh tú na heilimintí riachtanacha don mhúnla AI chun íomhá nó físeán a ghiniúint. Bí foighneach. Tógfaidh an múnla AI roinnt ama agus ginfidh sé toradh éigin, a bhféadfá a bheith ag iarraidh a choinneáil trí na meáin a shábháil i d’fhillteán doiciméad, agus ansin iad a leabú laistigh de dhoiciméad HTML. Níl gach múnla AI comhionann ó thaobh luais nó cáilíochta de. D’fhéadfadh an múnla AI leid mhodhnaithe a thabhairt duit freisin, ar léiriú níos mionsonraithe é ar d’iarratas. Is féidir leat an leid mhodhnaithe sin a úsáid ansin chun d’iarratas a fhíneáil. Bí ar an eolas go bhféadfadh an uirlis seo, go háirithe maidir le físeáin, costais shuntasacha a ghiniúint do d’eagraíocht, fiú má shocraíonn tú gan na meáin ghinte a shábháil. Úsáid í dá réir sin. Má bhíonn deacrachtaí agat an rud atá á lorg agat a fháil, caith roinnt ama ag déanamh taighde ar chleasanna leidithe ar líne don mhúnla AI atá ar fáil agat."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Baineann an stair seo leis an mbunchúrsa. Tá athchóiriú ar fáil tar éis leagan seisiúin a chruthú."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Cuireann an íomhá seo ionad an deilbhín fóraim réamhshocraithe a thaispeántar in aice le teideal an fhóraim."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Tagann an leathanach seo ón mbunchúrsa. Má shábháiltear é, cruthófar leagan don seisiún reatha."
+
+msgid "This will also delete %s subcategories."
+msgstr "Scriosfaidh sé seo %s fochatagóir freisin."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Cruthóidh sé seo leathanaigh oibre aonair do %s foghlaimeoir."
+
+msgid "Thread history"
+msgstr "Stair an tsnáithe"
+
+msgid "Title and content"
+msgstr "Teideal agus ábhar"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Ní féidir an ceart athnuachana a chealú faoi láthair."
+
+msgid "Unable to restore renewal right now."
+msgstr "Ní féidir an ceart athnuachana a athchóiriú faoi láthair."
+
+msgid "Unlock page"
+msgstr "Díghlasáil leathanach"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Úsáid [[Leathanach]] nó [[Leathanach|Téacs infheicthe]] chun naisc Wiki inmheánacha a chruthú."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Úsáid barra spáis nó eochracha saighde chun nascleanúint a dhéanamh"
+
+msgid "View version"
+msgstr "Féach ar an leagan"
+
+msgid "Visible only to teachers"
+msgstr "Infheicthe do mhúinteoirí amháin"
+
+msgid "Weight is required"
+msgstr "Tá meáchan riachtanach"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Tá catagóirí Wiki díchumasaithe don chúrsa seo."
+
+msgid "Wiki categories enabled"
+msgstr "Catagóirí Wiki cumasaithe"
+
+msgid "Wiki html strict filtering"
+msgstr "Scagadh dian HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Socruithe Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Nuashonraíodh socruithe Wiki"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Tá tú ag féachaint ar leagan stairiúil den leathanach seo"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Is féidir leat comhad amháin nó níos mó a cheangal leis an bhfreagra seo."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Is féidir leat an leathanach tasc seo a chur in eagar, ach ní athrófar leathanaigh oibre na bhfoghlaimeoirí."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Is féidir leat na clibeanna {{class_name}} agus {{student_full_name}} a úsáid sa cheist."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Tá 20 nóiméad agat chun an leathanach seo a chur in eagar sula rachaidh an glas eagarthóireachta in éag."
+
+msgid "by"
+msgstr "ag"
+
+msgid "required"
+msgstr "riachtanach"
+
+msgid "Incorrect password."
+msgstr "Focal faire mícheart."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Foláireamh sláine comhaid curtha ar sos ar feadh 1 uair."
+
+msgid "New baseline established: %s files."
+msgstr "Bunlíne nua bunaithe: %s comhad."
+
+msgid "Scan complete: changes were detected."
+msgstr "Scanadh críochnaithe: athruithe braite."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Scanadh críochnaithe: gan aon athrú braite."
+
+msgid "File integrity"
+msgstr "Sláine comhaid"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Déanann an tuarascáil seo comparáid idir na comhaid suiteáilte (gach rud seachas var/ agus .git/, cé go bhfuil .git/config fós á fhaire chun cianfhostaíocht a bhrath) agus bunlíne iontaofa, chun breiseanna, modhnuithe nó scriosadh gan choinne a bhrath."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Is féidir leat an tuarascáil is déanaí a athbhreithniú thíos. Teastaíonn riarthóir domhanda chun scanadh a rith, foláireamh a chur ar sos, nó bunlíne nua a bhunú."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Tá an foláireamh curtha ar sos faoi láthair le haghaidh cothabhála. Atosóidh sé go huathoibríoch ag %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Níl aon scanadh déanta fós. Rith ceann anseo, nó ón líne ordaithe le app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "An scanadh is déanaí"
+
+msgid "Files scanned"
+msgstr "Comhaid scanta"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Ní raibh aon bhunlíne ann fós: bhunaigh an scanadh seo ceann. Tuairisceofar athruithe ón gcéad scanadh eile."
+
+msgid "No changes detected since the baseline."
+msgstr "Níor braitheadh aon athrú ón mbunlíne."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Tá cumraíocht chianfhostaíochta Git (.git/config) athraithe. Deimhnigh go raibh sé seo ag súil leis."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Stop an scanadh go luath mar níorbh fhéidir fo-eolaire a léamh (seiceáil ceadanna comhaid). D’fhéadfadh na torthaí thíos a bheith páirteach."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "An iomarca athruithe le liostú go hiomlán; ní thaispeántar ach na chéad iontrálacha i ngach catagóir thíos. Féach loga CEF chun an liosta iomlán a fheiceáil."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "Níorbh fhéidir %count% comhad a léamh (ceadanna) agus rinneadh iad a scipeáil."
+
+msgid "Run a scan now"
+msgstr "Rith scanadh anois"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Cuir foláireamh ar sos ar feadh 1 uair (le haghaidh cothabhála)"
+
+msgid "Pause for 1 hour"
+msgstr "Cuir ar sos ar feadh 1 uair"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Iontaobh an crann comhaid reatha mar an mbunlíne nua"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Iontaobhfaidh sé seo gach comhad reatha mar cheart, lena n-áirítear aon athrú nach bhfuil athbhreithnithe. Lean ar aghaidh?"
+
+msgid "Establish new baseline"
+msgstr "Bunaigh bunlíne nua"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Sceideal an scanadh ó crontab córais, mar shampla"
+
+msgid "File integrity alert on %platform%"
+msgstr "Foláireamh sláine comhaid ar %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Bhraith scanadh sláine comhaid athruithe ar an ardán:"
+
+msgid "Added files"
+msgstr "Comhaid curtha leis"
+
+msgid "Modified files"
+msgstr "Comhaid modhnaithe"
+
+msgid "Deleted files"
+msgstr "Comhaid scriosta"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Athbhreithnigh an tuarascáil iomlán ó Riarachán > Slándáil > Sláine comhaid."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Focal faire chun foláireamh a chur ar sos"
+
+msgid "Password to confirm the new baseline"
+msgstr "Focal faire chun an bhunlíne nua a dheimhniú"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Tá scanadh ar siúl cheana. Fan go gcríochnaíonn sé sula dtosaíonn tú ceann eile."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Tá scanadh ar siúl faoi láthair (tosaíodh ag %date%). Féadfaidh scanadh iomlán roinnt nóiméad a ghlacadh; is féidir an leathanach seo a athlódáil go sábháilte chun dul chun cinn a sheiceáil."
+
+msgid "Currently processing"
+msgstr "Á phróiseáil faoi láthair"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Cuireadh isteach ar scan roimhe seo (a tosaíodh ag %date%) sula raibh sé críochnaithe — níl an próiseas ag rith a thuilleadh. Is féidir leat ceann nua a thosú go sábháilte."
+
+msgid "files"
+msgstr "comhaid"
+
+msgid "Permissions changed"
+msgstr "Ceadanna athraithe"
+
+msgid "Files with changed permissions"
+msgstr "Comhaid le ceadanna athraithe"
+
+msgid "Alert history"
+msgstr "Stair na bhfoláirimh"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Gach scan a fuair rud éigin, coimeádta fiú tar éis an sruth a réiteach nó bunlíne nua a bhunú — murab ionann agus an tuarascáil thuas, ní ghlanann scan glan nó athbhunú an liosta seo riamh."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Truncáilíodh an iontráil seo ag am an ghabhála; féach an log CEF chun an liosta iomlán a fheiceáil."
+
+msgid "No alert has been recorded yet."
+msgstr "Níl aon fholáireamh taifeadta fós."
+
+msgid "Git remote changed"
+msgstr "Athraíodh an cianstóras Git"
+
+msgid "Press enter to select"
+msgstr "Brúigh Enter chun roghnú"
+
+msgid "Press enter to remove"
+msgstr "Brúigh Enter chun baint"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Níor aimsíodh aon eilimintí. Smaoinigh ar an iarratas cuardaigh a athrú."
+
+msgid "List is empty."
+msgstr "Tá an liosta folamh."
+
+msgid "Your session has expired. Please try again."
+msgstr "Tá do sheisiún as feidhm. Bain triail eile as."
+
+msgid "Generate with AI"
+msgstr "Gin le AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Léaráid nua-aimseartha, fáilteach a léiríonn ábhar an chúrsa seo, i stíl dhearaidh réidh ghlan, ag úsáid dathanna mo phlátaform mar bhéim."
+
+msgid "Back to account"
+msgstr "Ar ais chuig an gcuntas"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Cabhróidh do fhaisnéis linn seisiúin oiliúna amach anseo a fheabhsú."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Go raibh maith agat as do fhaisnéis a roinnt."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cén leibhéal sástachta atá agat le cáilíocht iomlán na hoiliúna?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cén leibhéal sástachta atá agat le hábharthacht an ábhair?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cén leibhéal sástachta atá agat le soiléire na mínithe?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cén leibhéal sástachta atá agat le heagrú agus luas na hoiliúna?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cén leibhéal sástachta atá agat le húsáid phraiticiúil an méid a d'fhoghlaim tú?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "An molfá an oiliúint seo do dhaoine eile?"
+
+msgid "What should we improve in future editions?"
+msgstr "Céard ba chóir dúinn a fheabhsú in eagráin amach anseo?"
+
+msgid "Very satisfied"
+msgstr "An-sásta"
+
+msgid "Satisfied"
+msgstr "Sásta"
+
+msgid "Neutral"
+msgstr "Neodrach"
+
+msgid "Dissatisfied"
+msgstr "Neamhshásta"
+
+msgid "Very dissatisfied"
+msgstr "An-neamhshásta"
+
+msgid "Add destination"
+msgstr "Cuir ceann scríbe leis"
+
+msgid "Add this test to the assessment tool"
+msgstr "Cuir an triail seo leis an uirlis mheasúnaithe"
+
+msgid "Attempts and timing"
+msgstr "Iarrachtaí agus amú"
+
+msgid "Available questions"
+msgstr "Ceisteanna atá ar fáil"
+
+msgid "Cancel and return to learning path"
+msgstr "Cealaigh agus fill ar an gcosán foghlama"
+
+msgid "Category destinations"
+msgstr "Ceann scríbe na gcatagóirí"
+
+msgid "Classification"
+msgstr "Aicmiú"
+
+msgid "Context"
+msgstr "Comhthéacs"
+
+msgid "Could not load exercise configuration"
+msgstr "Níorbh fhéidir cumraíocht an chleachtaidh a luchtú"
+
+msgid "Could not save exercise"
+msgstr "Níorbh fhéidir an cleachtadh a shábháil"
+
+msgid "Display and learning path"
+msgstr "Taispeáint agus cosán foghlama"
+
+msgid "Edit test"
+msgstr "Cuir an triail in eagar"
+
+msgid "Exercise settings saved."
+msgstr "Socruithe an chleachtaidh sábháilte."
+
+msgid "Extra settings"
+msgstr "Socruithe breise"
+
+msgid "Feedback and results"
+msgstr "Aiseolas agus torthaí"
+
+msgid "Finish exercise"
+msgstr "Críochnaigh an cleachtadh"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Aithníonn sé teanga an chleachtaidh seo mar mheitidháta acmhainne. Ní chumasaíonn sé innéacsú cuardaigh leis féin."
+
+msgid "Maximum score (%)"
+msgstr "Scór uasta (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Tá scileanna agus réimsí breise atá cumraithe do chleachtaí i meitidháta. Tá sé roghnach agus fanann sé folaithe go dtí go n-osclaítear é."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Níl aon chatagóir ceisteanna ar fáil don chleachtadh seo fós."
+
+msgid "Question categories matrix"
+msgstr "Maitrís chatagóirí ceisteanna"
+
+msgid "Questions behavior"
+msgstr "Iompar ceisteanna"
+
+msgid "Random by category"
+msgstr "Randamach de réir catagóire"
+
+msgid "Remove destination"
+msgstr "Bain an ceann scríbe"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Déantar na rialacha a mheas de réir scór faoin gcéad in ord ardaitheach. Roghnaigh Críochnaigh an cleachtadh chun deireadh a chur leis an triail."
+
+msgid "Score and final messages"
+msgstr "Scór agus teachtaireachtaí deiridh"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Tá roinnt roghanna faoi ghlas tar éis an cleachtadh a chruthú."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Stóráiltear an luach seo mar ré iomlán i nóiméid."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Úsáid 0 chun gach ceist atá ar fáil a choinneáil. Úsáid -1 nuair a cheadaítear gach ceist atá ar fáil."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Úsáid na réimsí seo chun an cleachtadh a aicmiú go neamhspleách ar a roghanna taispeána."
+
+msgid "Invite by email"
+msgstr "Cuireadh trí ríomhphost"
+
+msgid "Invitation has been sent"
+msgstr "Seoladh an cuireadh"
+
+msgid "Sent on"
+msgstr "Seolta ar"
+
+msgid "Accepted on"
+msgstr "Glactha ar"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Tá an cúrsa seo oscailte i seisiún. Má sheoltar cuireadh anseo, déanfar an faighteoir a chlárú sa seisiún iomlán %s, ní sa chúrsa seo amháin."
+
+msgid "Revoke"
+msgstr "Cúlghair"
+
+msgid "Revoked"
+msgstr "Cúlghairthe"
+
+msgid "Invitation has been revoked"
+msgstr "Tá an cuireadh cúlghairthe"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "An bhfuil tú cinnte gur mian leat an cuireadh a seoladh chuig %s a chúlghairm?"
+
+msgid "No default room"
+msgstr "Níl seomra réamhshocraithe ann"
+
+msgid "Floor"
+msgstr "Urlár"
+
+msgid "Capacity"
+msgstr "Toilleadh"
+
+msgid "Use attendance default room"
+msgstr "Úsáid seomra réamhshocraithe tinrimh"
+
+msgid "Floor number"
+msgstr "Uimhir urláir"
+
+msgid "Copy to students"
+msgstr "Cóipeáil chuig mic léinn"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gin triail thapa ar an ábhar seo"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Seolfar ábhar an doiciméid shábháilte chuig samhail AI le haghaidh próiseála."
+
+msgid "MCP API key"
+msgstr "Eochair API MCP"
+
+msgid "Authorized applications"
+msgstr "Feidhmchláir údaraithe"
+
+msgid "Your session is about to expire"
+msgstr "Tá do sheisiún ar tí dul in éag"
+
+msgid "Do you want to continue your session?"
+msgstr "An bhfuil fonn ort leanúint le do sheisiún?"
+
+msgid "Stay connected"
+msgstr "Fan ceangailte"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Beidh tú logáilte amach i %s soicind."
+
+msgid "No descriptions available yet."
+msgstr "Níl aon tuairiscí ar fáil fós."
+
+msgid "%s users selected"
+msgstr "%s úsáideoir roghnaithe"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Tá na húsáideoirí roghnaithe cláraithe sa chúrsa"
+
+msgid "Import teachers"
+msgstr "Iompórtáil múinteoirí"
+
+msgid "Import learners"
+msgstr "Iompórtáil foghlaimeoirí"
+
+msgid "Select CSV file"
+msgstr "Roghnaigh comhad CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Níorbh fhéidir roinnt úsáideoirí a chlárú"
+
+msgid "Browse available classes"
+msgstr "Brabhsáil ranganna atá ar fáil"
+
+msgid "Back to linked classes"
+msgstr "Ar ais chuig ranganna nasctha"
+
+msgid "No classes are currently linked to this course."
+msgstr "Níl aon ranganna nasctha leis an gcúrsa seo faoi láthair."
+
+msgid "No available classes were found for this course."
+msgstr "Níor aimsíodh aon ranganna atá ar fáil don chúrsa seo."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "An bhfuil tú cinnte gur mian leat na húsáideoirí roghnaithe a dhíliostáil?"
+
+msgid "Learning path access"
+msgstr "Rochtain ar chonair foghlama"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Ní féidir ach le húsáideoirí agus grúpaí roghnaithe rochtain a fháil ar an gconair foghlama seo. Bainistigh iad tar éis iad a shábháil."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Is féidir le gach úsáideoir cúrsa reatha agus amach anseo rochtain a fháil ar an gconair foghlama seo."
+
+msgid "All course users"
+msgstr "Gach úsáideoir cúrsa"
+
+msgid "Selected users and groups"
+msgstr "Úsáideoirí agus grúpaí roghnaithe"
+
+msgid "No access"
+msgstr "Gan rochtain"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Ní féidir ach le húsáideoirí agus grúpaí a chuirtear leis anseo rochtain a fháil ar an gconair foghlama seo."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Líon na gceisteanna teoranta go huasmhéid de %s"
+
+msgid "Open exercise player"
+msgstr "Oscail seinnteoir cleachtaidh"
+
+msgid "The score is hidden for this exercise."
+msgstr "Tá an scór i bhfolach don chleachtadh seo."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Tá na ceartúcháin i bhfolach de réir socruithe torthaí an chleachtaidh."
+
+msgid "Progressive adaptive result"
+msgstr "Toradh oiriúnaitheach forásach"
+
+msgid "Achieved level"
+msgstr "Leibhéal bainte amach"
+
+msgid "Correction history"
+msgstr "Stair na gceartúchán"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Stair na gceartúchán láimhe a rinneadh don iarracht seo."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Úsáideann an cleachtadh seo an mód torthaí radar/spiderweb. Níl an chairt ar fáil ar an leathanach seo."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Tá sonraí na ceiste i bhfolach de réir socruithe torthaí an chleachtaidh."
+
+msgid "Media question"
+msgstr "Ceist meán"
+
+msgid "Pending correction"
+msgstr "Ceartúchán ar feitheamh"
+
+msgid "No answer"
+msgstr "Gan freagra"
+
+msgid "Blank %s"
+msgstr "Bán %s"
+
+msgid "Your order"
+msgstr "D’ordú"
+
+msgid "Correct order"
+msgstr "Ordú ceart"
+
+msgid "Delineation review"
+msgstr "Athbhreithniú imlíne"
+
+msgid "Learner clicks"
+msgstr "Cliceanna an fhoghlaimeora"
+
+msgid "Question image"
+msgstr "Íomhá na ceiste"
+
+msgid "No hotspot image available"
+msgstr "Níl aon íomhá hotspot ar fáil"
+
+msgid "Learner delineation"
+msgstr "Imlíne an fhoghlaimeora"
+
+msgid "Expected delineation"
+msgstr "Imlíne ionchais"
+
+msgid "Expected zones"
+msgstr "Criosanna ionchais"
+
+msgid "Zone"
+msgstr "Crios"
+
+msgid "Learner annotation"
+msgstr "Anótáil an fhoghlaimeora"
+
+msgid "No annotation image available"
+msgstr "Níl aon íomhá anótála ar fáil"
+
+msgid "This answer is pending teacher correction."
+msgstr "Tá an freagra seo ag feitheamh le ceartúchán ón múinteoir."
+
+msgid "Teacher comment"
+msgstr "Trácht an mhúinteora"
+
+msgid "Teacher correction"
+msgstr "Ceartúchán an mhúinteora"
+
+msgid "Save correction"
+msgstr "Sábháil an ceartúchán"
+
+msgid "Learner audio"
+msgstr "Fuaim an fhoghlaimeora"
+
+msgid "Download audio"
+msgstr "Íoslódáil an fhuaim"
+
+msgid "No uploaded audio"
+msgstr "Gan fuaim uaslódáilte"
+
+msgid "Learner Office document"
+msgstr "Doiciméad Oifige an fhoghlaimeora"
+
+msgid "Learner file"
+msgstr "Comhad an fhoghlaimeora"
+
+msgid "Download Office document"
+msgstr "Íoslódáil an doiciméad Oifige"
+
+msgid "No submitted document"
+msgstr "Gan doiciméad curtha isteach"
+
+msgid "No uploaded file"
+msgstr "Gan comhad uaslódáilte"
+
+msgid "Content item"
+msgstr "Mír ábhair"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Ní féidir an cineál ceiste seo a athbhreithniú ar an leathanach seo."
+
+msgid "Exercise completed"
+msgstr "Cleachtadh curtha i gcrích"
+
+msgid "Could not start the attempt"
+msgstr "Níorbh fhéidir an iarracht a thosú"
+
+msgid "Invalid exercise attempt"
+msgstr "Iarracht cleachtaidh neamhbhailí"
+
+msgid "Could not load exercise result"
+msgstr "Níorbh fhéidir toradh an chleachtaidh a luchtú"
+
+msgid "Could not load AI providers"
+msgstr "Níorbh fhéidir soláthraithe AI a luchtú"
+
+msgid "Could not generate AI suggestion"
+msgstr "Níorbh fhéidir moladh AI a ghiniúint"
+
+msgid "Correction saved"
+msgstr "Ceartúchán sábháilte"
+
+msgid "Could not save correction"
+msgstr "Níorbh fhéidir an ceartúchán a shábháil"
+
+msgid "Create exercise"
+msgstr "Cruthaigh cleachtadh"
+
+msgid "Exercise categories"
+msgstr "Catagóirí cleachtaidh"
+
+msgid "Question categories"
+msgstr "Catagóirí ceisteanna"
+
+msgid "Search by exercise title or description."
+msgstr "Cuardaigh de réir teidil nó tuairisc an chleachtaidh."
+
+msgid "Search exercises"
+msgstr "Cuardaigh cleachtaí"
+
+msgid "No exercises found"
+msgstr "Níor aimsíodh aon chleachtadh"
+
+msgid "Open exercise"
+msgstr "Oscail cleachtadh"
+
+msgid "Disable autolaunch"
+msgstr "Díchumasaigh uathsheoladh"
+
+msgid "Enable autolaunch"
+msgstr "Cumasaigh uathsheoladh"
+
+msgid "Export QTI2"
+msgstr "Easpórtáil QTI2"
+
+msgid "Bulk actions"
+msgstr "Bulcghníomhartha"
+
+msgid "Selected exercises"
+msgstr "Cleachtaí roghnaithe"
+
+msgid "No exercises selected"
+msgstr "Níl aon chleachtadh roghnaithe"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "An bhfuil tú cinnte gur mian leat an gníomh seo a chur i bhfeidhm ar na cleachtaí roghnaithe?"
+
+msgid "Bulk action completed"
+msgstr "Bulcghníomh críochnaithe"
+
+msgid "Could not update exercises"
+msgstr "Níorbh fhéidir na cleachtaí a nuashonrú"
+
+msgid "Could not update exercise"
+msgstr "Níorbh fhéidir an cleachtadh a nuashonrú"
+
+msgid "Copy exercise"
+msgstr "Cóipeáil cleachtadh"
+
+msgid "Delete exercise"
+msgstr "Scrios cleachtadh"
+
+msgid "Could not load exercises"
+msgstr "Níorbh fhéidir na cleachtaí a luchtú"
+
+msgid "No limit"
+msgstr "Gan teorainn"
+
+msgid "Add selected questions to the test"
+msgstr "Cuir na ceisteanna roghnaithe leis an triail"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Úsáidtear an cheist seo i dtriail ghníomhach agus ní féidir í a chur in eagar anseo."
+
+msgid "This question cannot be edited here."
+msgstr "Ní féidir an cheist seo a chur in eagar anseo."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Úsáidtear an cheist seo i dtriail ghníomhach agus ní féidir í a scriosadh anseo."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Ní féidir an cheist seo a scriosadh toisc go bhfuil do rochtain teoranta ag socruithe an ardáin."
+
+msgid "Already in test"
+msgstr "Cheana féin sa triail"
+
+msgid "Select at least one question."
+msgstr "Roghnaigh ceist amháin ar a laghad."
+
+msgid "Question bank updated"
+msgstr "Banc ceisteanna nuashonraithe"
+
+msgid "Could not update the question bank"
+msgstr "Níorbh fhéidir an banc ceisteanna a nuashonrú"
+
+msgid "Could not load the question bank"
+msgstr "Níorbh fhéidir an banc ceisteanna a luchtú"
+
+msgid "Total score"
+msgstr "Scór iomlán"
+
+msgid "Starting"
+msgstr "Ag tosú"
+
+msgid "Attempt history"
+msgstr "Stair na n-iarrachtaí"
+
+msgid "No attempts yet"
+msgstr "Níl aon iarracht fós"
+
+msgid "Invalid exercise"
+msgstr "Cleachtadh neamhbhailí"
+
+msgid "Could not load exercise overview"
+msgstr "Níorbh fhéidir forbhreathnú an chleachtaidh a luchtú"
+
+msgid "Open test"
+msgstr "Oscail triail"
+
+msgid "Random answers"
+msgstr "Freagraí randamacha"
+
+msgid "Prevent moving backwards"
+msgstr "Cosc a chur ar dhul siar"
+
+msgid "Previous button hidden"
+msgstr "Cnaipe roimhe i bhfolach"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Úsáideann an cleachtadh seo roghanna a éilíonn seinnteoir trialach eile."
+
+msgid "Continue test"
+msgstr "Lean ar aghaidh leis an triail"
+
+msgid "Attempt started"
+msgstr "Tús curtha leis an iarracht"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Ní chruthaíonn réamhamharc an mhúinteora iarracht rianaithe."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Tosaigh nó lean ar aghaidh le hiarracht cleachtaidh. Is féidir freagraí dréachta a shábháil sula ndéantar an aighneacht deiridh."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Teorainn ama sroichte. Ag críochnú na hiarrachta."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Am ceiste sroichte. Ag sábháil do fhreagra."
+
+msgid "Finishing"
+msgstr "Ag críochnú"
+
+msgid "Draft saved"
+msgstr "Dréacht sábháilte"
+
+msgid "Statement"
+msgstr "Ráiteas"
+
+msgid "Drop each option on the matching answer"
+msgstr "Tarraing gach rogha chuig an freagra comhoiriúnach"
+
+msgid "Clear match"
+msgstr "Glan an mheaitseáil"
+
+msgid "Click to place the selected option here"
+msgstr "Cliceáil chun an rogha roghnaithe a chur anseo"
+
+msgid "Select an option, then click here"
+msgstr "Roghnaigh rogha, ansin cliceáil anseo"
+
+msgid "Already matched"
+msgstr "Meaitseáilte cheana"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Is féidir leat rogha a tharraingt chuig freagra, nó rogha a roghnú agus ansin cliceáil ar bhosca sprioc."
+
+msgid "Put the items in the correct order."
+msgstr "Cuir na míreanna in ord ceart."
+
+msgid "Move left"
+msgstr "Bog ar chlé"
+
+msgid "Move right"
+msgstr "Bog ar dheis"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Is féidir leat míreanna a tharraingt ar chlé nó ar dheis, nó na cnaipí gluaiseachta a úsáid chun an t-ord a athrú."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Is féidir leat míreanna a tharraingt nó na cnaipí gluaiseachta a úsáid chun an t-ord a athrú."
+
+msgid "Or upload an audio file"
+msgstr "Nó uaslódáil comhad fuaime"
+
+msgid "Selected audio"
+msgstr "Fuaime roghnaithe"
+
+msgid "Uploaded audio"
+msgstr "Fuaime uaslódáilte"
+
+msgid "Office document"
+msgstr "Doiciméad oifige"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Comhlánaigh an doiciméad san eagarthóir thíos. Beidh an comhad ceangailte leis an iarracht seo le haghaidh ceartúcháin ón múinteoir."
+
+msgid "Reload Office editor"
+msgstr "Athlódáil eagarthóir Oifige"
+
+msgid "Prepare Office document"
+msgstr "Ullmhaigh doiciméad Oifige"
+
+msgid "Open in new tab"
+msgstr "Oscail i gcluaisín nua"
+
+msgid "Preparing Office document"
+msgstr "Ag ullmhú doiciméad Oifige"
+
+msgid "Submitted document"
+msgstr "Doiciméad curtha isteach"
+
+msgid "Annotation tools"
+msgstr "Uirlisí nótaí"
+
+msgid "Text to place"
+msgstr "Téacs le cur"
+
+msgid "Click the image to place the text annotation."
+msgstr "Cliceáil an íomhá chun an nóta téacs a chur."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Cliceáil an íomhá chun pointí cosáin a chur. Úsáid Tosaigh cosán nua chun cosáin a scaradh."
+
+msgid "Start new path"
+msgstr "Tosaigh cosán nua"
+
+msgid "Current annotations"
+msgstr "Nótaí reatha"
+
+msgid "Remove point"
+msgstr "Bain pointe"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Cliceáil an íomhá chun an polagán teorann a tharraingt."
+
+msgid "Click a marker to remove it."
+msgstr "Cliceáil ar mharcóir chun é a bhaint."
+
+msgid "Placed"
+msgstr "Curtha"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Roghnaigh freagra, ansin cliceáil ar an íomhá chun é a mharcáil."
+
+msgid "Reading speed"
+msgstr "Luas léitheoireachta"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Ní féidir an cineál ceiste seo a thaispeáint sa seinnteoir seo."
+
+msgid "Save draft"
+msgstr "Sábháil dréacht"
+
+msgid "I confirm that my answers were saved."
+msgstr "Deimhním gur sábháladh mo chuid freagraí."
+
+msgid "Finish test"
+msgstr "Críochnaigh an triail"
+
+msgid "Attempt finished"
+msgstr "Iarracht críochnaithe"
+
+msgid "Question category"
+msgstr "Catagóir ceiste"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Chríochnaigh tú na ceisteanna a bhaineann leis an gcatagóir ceiste seo, is é seo do dheis dheireanach chun dul ar ais agus na ceisteanna sin a athbhreithniú."
+
+msgid "Question time left"
+msgstr "Am ceiste fágtha"
+
+msgid "Time left"
+msgstr "Am fágtha"
+
+msgid "Current attempt"
+msgstr "Iarracht reatha"
+
+msgid "Could not save draft answer"
+msgstr "Níorbh fhéidir freagra dréachta a shábháil"
+
+msgid "Could not load exercise"
+msgstr "Níorbh fhéidir an cleachtadh a luchtú"
+
+msgid "Draft answer saved"
+msgstr "Dréachtfhreagra sábháilte"
+
+msgid "Could not finish the attempt"
+msgstr "Níorbh fhéidir an iarracht a chríochnú"
+
+msgid "Could not prepare Office document"
+msgstr "Níorbh fhéidir an doiciméad Office a ullmhú"
+
+msgid "Back to learner score"
+msgstr "Ar ais go scór an fhoghlaimeora"
+
+msgid "Disable auto refresh"
+msgstr "Díchumasaigh athnuachan uathoibríoch"
+
+msgid "Enable auto refresh"
+msgstr "Cumasaigh athnuachan uathoibríoch"
+
+msgid "Live window"
+msgstr "Fuinneog bheo"
+
+msgid "Ongoing attempts"
+msgstr "Iarrachtaí leanúnacha"
+
+msgid "Completed attempts"
+msgstr "Iarrachtaí críochnaithe"
+
+msgid "Started"
+msgstr "Tosaíodh"
+
+msgid "Last activity"
+msgstr "Gníomhaíocht dheireanach"
+
+msgid "Could not load live results"
+msgstr "Níorbh fhéidir na torthaí beo a luchtú"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Tá an cleachtadh seo inléite amháin toisc go bhfuil sé san áireamh i gconair foghlama."
+
+msgid "Select a question type to create a question."
+msgstr "Roghnaigh cineál ceiste chun ceist a chruthú."
+
+msgid "Click to preview"
+msgstr "Cliceáil chun réamhamharc a dhéanamh"
+
+msgid "Hide preview"
+msgstr "Folaigh réamhamharc"
+
+msgid "Shape"
+msgstr "Cruth"
+
+msgid "Coordinates"
+msgstr "Comhordanáidí"
+
+msgid "Blanks"
+msgstr "Bearnaí"
+
+msgid "Switchable blanks"
+msgstr "Bearnaí inathraithe"
+
+msgid "Blank"
+msgstr "Bearna"
+
+msgid "Input width"
+msgstr "Leithead ionchuir"
+
+msgid "Orientation"
+msgstr "Treoshuíomh"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Níl sé ar fáil leis an mód aiseolais cleachtaidh reatha"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Níl sé ar fáil i sreabhadh cruthaithe na conaire foghlama"
+
+msgid "Delete question"
+msgstr "Scrios ceist"
+
+msgid "Could not update exercise questions"
+msgstr "Níorbh fhéidir ceisteanna an chleachtaidh a nuashonrú"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Níorbh fhéidir an cleachtadh a chur leis an gconair foghlama"
+
+msgid "A valid exercise id is required."
+msgstr "Tá id cleachtaidh bailí ag teastáil."
+
+msgid "Could not load exercise questions"
+msgstr "Níorbh fhéidir ceisteanna an chleachtaidh a luchtú"
+
+msgid "Delete selected attempts"
+msgstr "Scrios na hiarrachtaí roghnaithe"
+
+msgid "Before date"
+msgstr "Roimh dháta"
+
+msgid "Pending corrections"
+msgstr "Ceartúcháin ar feitheamh"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Tá an cleachtadh seo faoi ghlas ag an leabhar grád. Tá gníomhartha glanta iarrachtaí díchumasaithe."
+
+msgid "No attempts found"
+msgstr "Níor aimsíodh aon iarracht"
+
+msgid "Review"
+msgstr "Athbhreithniú"
+
+msgid "Print/PDF"
+msgstr "Priontáil/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Níorbh fhéidir tuarascáil an chleachtaidh a luchtú"
+
+msgid "Select at least one attempt"
+msgstr "Roghnaigh iarracht amháin ar a laghad"
+
+msgid "Delete selected attempts?"
+msgstr "Scrios na hiarrachtaí roghnaithe?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Seol ríomhphoist torthaí iarrachta athbhreithnithe?"
+
+msgid "Could not send emails"
+msgstr "Níorbh fhéidir na ríomhphoist a sheoladh"
+
+msgid "Exercise result emails sent"
+msgstr "Seoladh ríomhphoist torthaí an chleachtaidh"
+
+msgid "Skipped"
+msgstr "Scipeáilte"
+
+msgid "Close attempt?"
+msgstr "Dún iarracht?"
+
+msgid "Attempt closed"
+msgstr "Iarracht dúnta"
+
+msgid "Could not close attempt"
+msgstr "Níorbh fhéidir an iarracht a dhúnadh"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Seol toradh an iarrachta seo trí ríomhphost chuig an bhfoghlaimeoir?"
+
+msgid "Email sent"
+msgstr "Ríomhphost seolta"
+
+msgid "Could not send email"
+msgstr "Níorbh fhéidir an ríomhphost a sheoladh"
+
+msgid "Attempt deleted"
+msgstr "Iarracht scriosta"
+
+msgid "Could not delete attempt"
+msgstr "Níorbh fhéidir an iarracht a scriosadh"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Roghnaigh comhad CSV ina bhfuil colúin teidil agus cur síos."
+
+msgid "Manage categories used to classify questions."
+msgstr "Bainistigh na catagóirí a úsáidtear chun ceisteanna a rangú."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Bainistigh na catagóirí a úsáidtear chun cleachtaí a rangú."
+
+msgid "Could not load categories"
+msgstr "Níorbh fhéidir na catagóirí a luchtú"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Catagóirí iompórtáilte: %s. Rónna a fágadh ar lár: %s."
+
+msgid "Imported categories: %s."
+msgstr "Catagóirí iompórtáilte: %s."
+
+msgid "Could not import categories"
+msgstr "Níorbh fhéidir na catagóirí a iompórtáil"
+
+msgid "Could not save category"
+msgstr "Níorbh fhéidir an chatagóir a shábháil"
+
+msgid "Answer distribution"
+msgstr "Dáileadh freagraí"
+
+msgid "Configured answers"
+msgstr "Freagraí cumraithe"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Níl comhaireamh mionsonraithe freagraí do roinnt cineálacha ceisteanna ar fáil sa tuarascáil imirce fós."
+
+msgid "No report by question data found"
+msgstr "Níor aimsíodh aon sonraí tuarascála de réir ceiste"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Níl comhaireamh mionsonraithe freagraí don chineál ceiste seo ar fáil sa tuarascáil imirce fós."
+
+msgid "No answer distribution found"
+msgstr "Níor aimsíodh aon dáileadh freagraí"
+
+msgid "Could not load report by question"
+msgstr "Níorbh fhéidir an tuarascáil de réir ceiste a luchtú"
+
+msgid "Question settings"
+msgstr "Socruithe ceiste"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Fág folamh nó 0 mura bhfuil aon teorainn ama."
+
+msgid "Time limit in seconds"
+msgstr "Teorainn ama i soicindí"
+
+msgid "Attached questions"
+msgstr "Ceisteanna ceangailte"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Níl ach ceisteanna atá ceangailte leis an gceist mheáin seo laistigh den chleachtadh reatha liostaithe anseo."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Níl aon cheisteanna ceangailte leis an gceist mheáin seo sa chleachtadh reatha."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Uaslódáil an teimpléad doiciméad Office a chuirfidh foghlaimeoirí in eagar le OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Ionadaigh an doiciméad Office"
+
+msgid "Current Office document"
+msgstr "An doiciméad Office reatha"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Ceartaítear an cheist seo de láimh tar éis don fhoghlaimeoir an doiciméad curtha in eagar a chur isteach."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Ríomhtar an scór iomlán mar shuim na scór hotspot."
+
+msgid "Global score"
+msgstr "Scór domhanda"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Roghnaigh sraith hotspot, roghnaigh a cruth, ansin tarraing thar an íomhá. I gcás polagáin, cliceáil gach pointe agus críochnaigh an polagán, nó cliceáil faoi dhó chun críochnú."
+
+msgid "Finish polygon"
+msgstr "Críochnaigh an polagán"
+
+msgid "Calculated answer"
+msgstr "Freagra ríofa"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Clóscríobh do théacs thíos agus úsáid lúibíní cearnacha [...] chun bearna amháin nó níos mó a shainiú."
+
+msgid "Lowest value"
+msgstr "An luach is ísle"
+
+msgid "Highest value"
+msgstr "An luach is airde"
+
+msgid "Fill in blanks"
+msgstr "Líon isteach na bearnaí"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Úsáid na marcóirí roghnaithe chun bearnaí a shainiú. Sampla: Is é príomhchathair Pheiriú [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Iontráil na roghanna anuas, freagra amháin in aghaidh an líne. Ansin marcáil na freagraí ionchais thíos, mar an uirlis oidhreachta."
+
+msgid "Refresh answers"
+msgstr "Athnuaigh na freagraí"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Úsáideann an cheist chomhcheangail anuas seo scór domhanda amháin, mar an oidhreacht."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Iontráil ar a laghad dhá rogha anuas."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Cruthaigh na roghanna ceann scríbe ar dtús, ansin nasc gach mír leis an rogha ceart."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Úsáideann an cheist chomhcheangail mheaitseála seo scór domhanda amháin, mar an oidhreacht."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Cruthaigh na céimeanna agus roghnaigh an suíomh ionchais do gach ceann, mar an Draggable oidhreachta."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Roghneoidh foghlaimeoirí Fíor nó Bréagach agus ansin roghnóidh siad a leibhéal cinnteachta le linn na hiarrachta. Stórálann an t-eagarthóir na scóir Ceart/Mícheart agus na leibhéil cinnteachta céanna leis an oidhreacht."
+
+msgid "Hotspot combination"
+msgstr "Comhcheangal hotspot"
+
+msgid "Add delineation"
+msgstr "Cuir teorannú leis"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Níl aon roghanna freagra ag an gceist doiciméad Office seo. Sanntar a scór le linn ceartaithe/athbhreithniú torthaí."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Níl aon roghanna freagra ag an gceist uaslódála seo. Sanntar a scór le linn ceartaithe/athbhreithniú torthaí."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Níl aon roghanna freagra ag an gceist seo maidir le léiriú béil. Déantar a scór a shannadh le linn ceartaithe/athbhreithniú torthaí."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Níl aon roghanna freagra ag an gceist oscailte seo. Déantar a scór a shannadh le linn ceartaithe/athbhreithniú torthaí."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Cuir téacs léitheoireachta leis le socruithe luais scrollaithe."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Cuir ábhar, meáin nó comhthéacs léitheoireachta leis gan scór a chur leis."
+
+msgid "Insert a page break without adding score."
+msgstr "Ionsáigh briseadh leathanaigh gan scór a chur leis."
+
+msgid "Could not save question"
+msgstr "Níorbh fhéidir an cheist a shábháil"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Ní cheadaítear ach doiciméid DOC, DOCX, XLS nó XLSX."
+
+msgid "Please select an Office document."
+msgstr "Roghnaigh doiciméad Office le do thoil."
+
+msgid "Please draw at least one hotspot."
+msgstr "Tarraing hotspot amháin ar a laghad le do thoil."
+
+msgid "Please draw at least one delineation."
+msgstr "Tarraing teorainn amháin ar a laghad le do thoil."
+
+msgid "The fill in blanks text is required."
+msgstr "Tá téacs na mbealach folamh riachtanach."
+
+msgid "At least one expected answer is required."
+msgstr "Tá freagra ionchais amháin ar a laghad riachtanach."
+
+msgid "At least two draggable items are required."
+msgstr "Tá dhá mhír inbhogtha ar a laghad riachtanach."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Ní mór gach mír inbhogtha a nascadh le suíomh sprioc bailí."
+
+msgid "At least two matching options are required."
+msgstr "Tá dhá rogha meaitseála ar a laghad riachtanach."
+
+msgid "At least two matching pairs are required."
+msgstr "Tá dhá phéire meaitseála ar a laghad riachtanach."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Ní mór gach péire meaitseála a nascadh le rogha bailí."
+
+msgid "At least two answers are required."
+msgstr "Tá dhá fhreagra ar a laghad riachtanach."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Ní mór fíor nó bréagach a roghnú do gach freagra fíor/bréagach."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Ní mór ceist le freagra uathúil a bheith aici le freagra ceart amháin go díreach."
+
+msgid "At least one correct answer is required."
+msgstr "Tá freagra ceart amháin ar a laghad riachtanach."
+
+msgid "Could not load question"
+msgstr "Níorbh fhéidir an cheist a luchtú"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Roghnaigh cúrsa agus easpórtáil an tuarascáil torthaí cleachtaidh dhomhanda mar CSV."
+
+msgid "Back to reports catalog"
+msgstr "Ar ais go catalóg na dtuarascálacha"
+
+msgid "Could not load exercise global report"
+msgstr "Níorbh fhéidir an tuarascáil dhomhanda cleachtaidh a luchtú"
+
+msgid "Imported questions"
+msgstr "Ceisteanna allmhairithe"
+
+msgid "Aiken content"
+msgstr "Ábhar Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Níorbh fhéidir gineadóir AI Aiken a luchtú"
+
+msgid "Could not generate Aiken content"
+msgstr "Níorbh fhéidir ábhar Aiken a ghiniúint"
+
+msgid "Could not import generated Aiken content"
+msgstr "Níorbh fhéidir ábhar Aiken ginte a allmhairiú"
+
+msgid "Back to my courses"
+msgstr "Ar ais chuig mo chúrsaí"
+
+msgid "Open report"
+msgstr "Oscail tuarascáil"
+
+msgid "Questions with no automatic correction"
+msgstr "Ceisteanna gan ceartú uathoibríoch"
+
+msgid "Could not load pending attempts"
+msgstr "Níorbh fhéidir iarrachtaí ar feitheamh a luchtú"
+
+msgid "Skipped questions"
+msgstr "Ceisteanna a fágadh ar lár"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Dáileann allmhairiú Aiken an meáchan iomlán seo thar na ceisteanna allmhairithe mura sainmhíníonn ceist SCORE."
+
+msgid "Import warnings"
+msgstr "Rabhaidh allmhairithe"
+
+msgid "Could not import questions"
+msgstr "Níorbh fhéidir ceisteanna a allmhairiú"
+
+msgid "No question statistics found"
+msgstr "Níor aimsíodh aon staitisticí ceiste"
+
+msgid "Could not load question statistics"
+msgstr "Níorbh fhéidir staitisticí ceiste a luchtú"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Is féidir leat cliant MCP a nascadh go díreach freisin trí é a dhíriú ar an bpointe deiridh seo a leanas:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Níl aon fheidhmchláir ceangailte le do chuntas faoi láthair."
+
+msgid "Connected on"
+msgstr "Ceangailte ar"
+
+msgid "Last used"
+msgstr "Úsáidte go deireanach"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "Ní bheidh %s in ann rochtain a fháil ar do chuntas Chamilo a thuilleadh. Lean ar aghaidh?"
+
+msgid "Application revoked"
+msgstr "Feidhmchlár cealaithe"
+
+msgid "Copied to clipboard"
+msgstr "Cóipeáilte chuig an gearrthaisce"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Níorbh fhéidir an pointe deiridh MCP a chóipeáil"
+
+msgid "MCP endpoint"
+msgstr "Pointe deiridh MCP"
+
+msgid "API key"
+msgstr "Eochair API"
+
+msgid "Last used at"
+msgstr "Úsáidte go deireanach ag"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Cóipeáil an eochair seo anois. Ní thaispeánfar arís é."
+
+msgid "Rotate API key"
+msgstr "Rothlaigh eochair API"
+
+msgid "Revoke API key"
+msgstr "Cúlghair eochair API"
+
+msgid "Remote MCP connection"
+msgstr "Ceangal iargúlta MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Cumraigh do chliant MCP leis na luachanna seo a leanas:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Stopfaidh an eochair reatha ag obair láithreach. Lean ar aghaidh?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Ginfear eochair phearsanta nua API MCP. Lean ar aghaidh?"
+
+msgid "MCP API key generated"
+msgstr "Eochair API MCP ginte"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Stopfaidh cliaint MCP atá ceangailte ag úsáid na heochrach seo ag obair láithreach. Lean ar aghaidh?"
+
+msgid "MCP API key revoked"
+msgstr "Eochair API MCP cúlghairthe"
+
+msgid "Could not copy the API key"
+msgstr "Níorbh fhéidir an eochair API a chóipeáil"
+
+msgid "Project"
+msgstr "Tionscadal"
+
+msgid "Close old tickets"
+msgstr "Dún ticéid sean"
+
+msgid "Close tickets older than seven days?"
+msgstr "Dún ticéid níos sine ná seacht lá?"
+
+msgid "Assignment history"
+msgstr "Stair sannacháin"
+
+msgid "Translate with AI"
+msgstr "Aistrigh le AI"
+
+msgid "Target language"
+msgstr "Sprioctheanga"
+
+msgid "Please select a provider"
+msgstr "Roghnaigh soláthraí le do thoil"
+
+msgid "Generate translation"
+msgstr "Gin aistriúchán"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Caithfidh téacs a bheith i rannán amháin ar a laghad de na téarmaí agus coinníollacha."
+
+msgid "No active target languages are available."
+msgstr "Níl aon sprioctheangacha gníomhacha ar fáil."
+
+msgid "Tutor"
+msgstr "Teagascóir"
+
+msgid "Access dates"
+msgstr "Dátaí rochtana"
+
+msgid "Coach access dates"
+msgstr "Dátaí rochtana cóitseálaí"
+
+msgid "No sessions found"
+msgstr "Níor aimsíodh seisiúin"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Roghnaigh na cúrsaí nach mbeidh an t-úsáideoir seo in ann rochtain a fháil orthu sa seisiún seo."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Ní féidir úsáideoir a bhac ó gach cúrsa sa seisiún. Díliostáil an t-úsáideoir ina ionad sin."
+
+msgid "Users subscribed to this session"
+msgstr "Úsáideoirí atá liostáilte sa seisiún seo"
+
+msgid "No available users found"
+msgstr "Níor aimsíodh aon úsáideoirí atá ar fáil"
+
+msgid "Subscribe this user to the session?"
+msgstr "Liostáil an t-úsáideoir seo sa seisiún?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Liostáil na húsáideoirí roghnaithe sa seisiún?"
+
+msgid "General tutor planning"
+msgstr "Pleanáil ghinearálta teagascóra"
+
+msgid "User is already registered by another tutor."
+msgstr "Tá an t-úsáideoir cláraithe cheana ag teagascóir eile."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Tá tú ag fáil cóip toisc gur teagascóir cúrsa thú"
+
+msgid "General tutor"
+msgstr "Teagascóir ginearálta"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Smaoinigh ar na cúrsaí, na teagascóirí, an deasc chabhrach theicniúil, na múinteoirí, agus/nó na hábhair atá ar fáil."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Teagascóirí atá liostáilte mar mhúinteoirí i gcúrsa %s"
+
+msgid "Tutor name"
+msgstr "Ainm an teagascóra"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Is comhordaitheoirí seisiúin iad teagascóirí seisiúin agus is féidir leo feidhmiú mar theagascóirí do gach cúrsa sa seisiún. Ní féidir ach úsáideoirí a bhfuil ról múinteora acu a roghnú mar theagascóirí seisiúin."
+
+msgid "Access start date for tutors"
+msgstr "Dáta tosaigh rochtana do theagascóirí"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "An dáta a chuirtear an seisiún ar fáil do theagascóirí, ionas gur féidir leo é a ullmhú sula nascann na mic léinn"
+
+msgid "Access end date for tutors"
+msgstr "Dáta deiridh rochtana do theagascóirí"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "An dáta a dhúntar an seisiún do theagascóirí. Ceadóidh an mhoill bhreise dóibh gach faisnéis ábhartha rianaithe a onnmhairiú"
+
+msgid "Tutor and student"
+msgstr "Teagascóir agus mac léinn"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Taispeánann an tuarascáil seo dáileadh seachtainiúil na seisiún in aghaidh an teagascóra ghinearálta sa raon dátaí roghnaithe."
+
+msgid "User is general tutor in some sessions"
+msgstr "Tá an t-úsáideoir ina theagascóir ginearálta i roinnt seisiún"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Cuirfear múinteoirí leis mar theagascóirí i ngach seisiún cúrsa."
+
+msgid "Delete failed: invalid question id."
+msgstr "Theip ar an scriosadh: aitheantas ceiste neamhbhailí."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Meánlíon na seisiún in aghaidh an teagascóra ghinearálta seisiúin"
+
+msgid "No room"
+msgstr "Gan seomra"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Iompórtáil múinteoirí an chúrsa mar theagascóirí an chúrsa sa seisiún"
+
+msgid "Clean and update course tutors"
+msgstr "Glan agus nuashonraigh teagascóirí an chúrsa"
+
+msgid "Add me as tutor"
+msgstr "Cuir mise mar theagascóir"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ní féidir an suirbhé a chur leis an gconair foghlama"
+
+msgid "Access dates for tutors"
+msgstr "Dátaí rochtana do theagascóirí"
+
+msgid "Tutor and group member"
+msgstr "Teagascóir agus ball grúpa"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Tá do theorainn laethúil comharthaí AI sroichte. Bain triail eile as amárach."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Tá do theorainn mhíosúil comharthaí AI sroichte. Bain triail eile as an mhí seo chugainn."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Tá an cód cúrsa seo ann cheana, roghnaigh cód eile le do thoil."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tá teideal an chúrsa seo ann cheana, roghnaigh teideal eile le do thoil."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Ní féidir infheictheacht an uirlis seo a athrú"
+
+msgid "Invalid visibility"
+msgstr "Infheictheacht neamhbhailí"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Tá cóip á fáil agat toisc go bhfuil tú ar cheann de theagascóirí an chúrsa"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Tá cóip á fáit agat toisc gur tusa teagascóir an chúrsa"
+
+msgid "Manual completion"
+msgstr "Críochnú láimhe"
+
+msgid "Send to tutors"
+msgstr "Seol chuig teagascóirí"
+
+msgid "Lab title"
+msgstr "Teideal an tsaotharlainne"
+
+msgid "Lab week"
+msgstr "Seachtain an tsaotharlainne"
+
+msgid "Final exam access rule"
+msgstr "Riail rochtana don scrúdú deiridh"
+
+msgid "Course completion rule"
+msgstr "Riail chríochnaithe an chúrsa"
+
+msgid "You have been invited to join a course"
+msgstr "Tá cuireadh faighte agat chun páirt a ghlacadh i gcúrsa"
+
+msgid "No user has been found"
+msgstr "Níor aimsíodh aon úsáideoir"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Ní féidir an t-úsáideoir roghnaithe a chlárú sa chomhthéacs seo"
+
+msgid "No change has been made"
+msgstr "Ní dhearnadh aon athrú"
+
+msgid "Back to group list"
+msgstr "Ar ais go liosta na ngrúpaí"
+
+msgid "Remove class link"
+msgstr "Bain nasc an ranga"
+
+msgid "Group settings"
+msgstr "Socruithe an ghrúpa"
+
+msgid "Self-registration allowed"
+msgstr "Ceadaítear féinchlárú"
+
+msgid "Self-unregistration allowed"
+msgstr "Ceadaítear féinchlárú a chúlghairm"
+
+msgid "This group is linked to the class"
+msgstr "Tá an grúpa seo nasctha leis an rang"
+
+msgid "Create one or more empty course groups"
+msgstr "Cruthaigh grúpa nó níos mó de ghrúpaí cúrsa folmha"
+
+msgid "Number of places"
+msgstr "Líon áiteanna"
+
+msgid "Base group"
+msgstr "Grúpa bunúsach"
+
+msgid "Share"
+msgstr "Comhroinn"
+
+msgid "Collaboration"
+msgstr "Comhoibriú"
+
+msgid "The group title is required."
+msgstr "Tá teideal an ghrúpa riachtanach."
+
+msgid "Back to group area"
+msgstr "Ar ais go limistéar an ghrúpa"
+
+msgid "Members are managed by the linked class"
+msgstr "Bainistítear na baill ag an rang nasctha"
+
+msgid "%s groups selected"
+msgstr "%s grúpa roghnaithe"
+
+msgid "Fill selected groups"
+msgstr "Líon na grúpaí roghnaithe"
+
+msgid "Empty selected groups"
+msgstr "Folmhaigh na grúpaí roghnaithe"
+
+msgid "Fill group"
+msgstr "Líon an grúpa"
+
+msgid "Empty group"
+msgstr "Folmhaigh an grúpa"
+
+msgid "Groups per user"
+msgstr "Grúpaí in aghaidh an úsáideora"
+
+msgid "No tutors"
+msgstr "Gan teagascóirí"
+
+msgid "No users"
+msgstr "Gan úsáideoirí"
 

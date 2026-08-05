@@ -159,7 +159,7 @@
     <CommentDialog
       v-if="showEditCommentDialog"
       :initialText="editCommentText"
-      :dialogTitle="t('Edit comment')"
+      :dialogTitle="t('Edit Comment')"
       :confirmLabel="t('Save')"
       :headerIcon="'pencil'"
       @close="showEditCommentDialog=false"

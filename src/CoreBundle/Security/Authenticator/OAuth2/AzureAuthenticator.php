@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
@@ -34,6 +35,7 @@ class AzureAuthenticator extends AbstractAuthenticator
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
         private readonly AzureAuthenticatorHelper $azureHelper,
     ) {
         parent::__construct(
@@ -42,7 +44,8 @@ class AzureAuthenticator extends AbstractAuthenticator
             $userRepository,
             $authenticationConfigHelper,
             $urlHelper,
-            $entityManager
+            $entityManager,
+            $logger,
         );
     }
 

@@ -1,5 +1,5 @@
 {% autoescape false %}
-{% set formShell = 'rounded-3xl border border-gray-25 bg-white shadow-sm [&_form]:space-y-6 [&_.form-group]:mb-0 [&_.form-group]:rounded-2xl [&_.form-group]:border [&_.form-group]:border-gray-25 [&_.form-group]:bg-white [&_.form-group]:p-5 [&_.form-group]:shadow-sm [&_label]:mb-2 [&_label]:block [&_label]:text-sm [&_label]:font-semibold [&_label]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:block [&_input:not([type=radio]):not([type=checkbox])]:w-full [&_input:not([type=radio]):not([type=checkbox])]:rounded-xl [&_input:not([type=radio]):not([type=checkbox])]:border-gray-25 [&_input:not([type=radio]):not([type=checkbox])]:bg-white [&_input:not([type=radio]):not([type=checkbox])]:text-sm [&_input:not([type=radio]):not([type=checkbox])]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:shadow-sm [&_input:not([type=radio]):not([type=checkbox])]:placeholder:text-gray-50 [&_input:not([type=radio]):not([type=checkbox])]:focus:border-primary [&_input:not([type=radio]):not([type=checkbox])]:focus:ring-primary [&_select]:block [&_select]:w-full [&_select]:rounded-xl [&_select]:border-gray-25 [&_select]:bg-white [&_select]:text-sm [&_select]:text-gray-90 [&_select]:shadow-sm [&_select]:focus:border-primary [&_select]:focus:ring-primary [&_.btn]:inline-flex [&_.btn]:items-center [&_.btn]:justify-center [&_.btn]:gap-2 [&_.btn]:rounded-xl [&_.btn]:px-4 [&_.btn]:py-2.5 [&_.btn]:text-sm [&_.btn]:font-semibold [&_.btn]:shadow-sm [&_.btn]:transition [&_.btn]:hover:opacity-90 [&_.btn]:focus:outline-none [&_.btn]:focus:ring-2 [&_.btn]:focus:ring-offset-2 [&_.btn-primary]:bg-primary [&_.btn-primary]:text-white [&_.btn-primary]:focus:ring-primary/30 [&_.btn-success]:bg-success [&_.btn-success]:text-white [&_.btn-success]:focus:ring-success/30 [&_.btn-default]:border [&_.btn-default]:border-gray-25 [&_.btn-default]:bg-white [&_.btn-default]:text-gray-90 [&_.help-block]:mt-2 [&_.help-block]:block [&_.help-block]:text-sm [&_.help-block]:text-gray-50 [&_.col-sm-2]:w-full [&_.col-sm-3]:w-full [&_.col-sm-7]:w-full [&_.col-sm-8]:w-full [&_.col-sm-10]:w-full [&_.col-sm-11]:w-full' %}
+{% set formShell = 'rounded-3xl border border-gray-25 bg-white p-5 shadow-sm [&_form]:space-y-6 [&_.form-group]:mb-0 [&_.form-group]:rounded-2xl [&_.form-group]:border [&_.form-group]:border-gray-25 [&_.form-group]:bg-white [&_.form-group]:p-5 [&_.form-group]:shadow-sm [&_label]:mb-2 [&_label]:block [&_label]:text-sm [&_label]:font-semibold [&_label]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:block [&_input:not([type=radio]):not([type=checkbox])]:w-full [&_input:not([type=radio]):not([type=checkbox])]:rounded-xl [&_input:not([type=radio]):not([type=checkbox])]:border-gray-25 [&_input:not([type=radio]):not([type=checkbox])]:bg-white [&_input:not([type=radio]):not([type=checkbox])]:text-sm [&_input:not([type=radio]):not([type=checkbox])]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:shadow-sm [&_input:not([type=radio]):not([type=checkbox])]:placeholder:text-gray-50 [&_input:not([type=radio]):not([type=checkbox])]:focus:border-primary [&_input:not([type=radio]):not([type=checkbox])]:focus:ring-primary [&_select]:block [&_select]:w-full [&_select]:rounded-xl [&_select]:border-gray-25 [&_select]:bg-white [&_select]:text-sm [&_select]:text-gray-90 [&_select]:shadow-sm [&_select]:focus:border-primary [&_select]:focus:ring-primary [&_.btn]:inline-flex [&_.btn]:items-center [&_.btn]:justify-center [&_.btn]:gap-2 [&_.btn]:rounded-xl [&_.btn]:px-4 [&_.btn]:py-2.5 [&_.btn]:text-sm [&_.btn]:font-semibold [&_.btn]:shadow-sm [&_.btn]:transition [&_.btn]:hover:opacity-90 [&_.btn]:focus:outline-none [&_.btn]:focus:ring-2 [&_.btn]:focus:ring-offset-2 [&_.btn-primary]:bg-primary [&_.btn-primary]:text-white [&_.btn-primary]:focus:ring-primary/30 [&_.btn-success]:bg-success [&_.btn-success]:text-white [&_.btn-success]:focus:ring-success/30 [&_.btn-default]:border [&_.btn-default]:border-gray-25 [&_.btn-default]:bg-white [&_.btn-default]:text-gray-90 [&_.help-block]:mt-2 [&_.help-block]:block [&_.help-block]:text-sm [&_.help-block]:text-gray-50 [&_.col-sm-2]:w-full [&_.col-sm-3]:w-full [&_.col-sm-7]:w-full [&_.col-sm-8]:w-full [&_.col-sm-10]:w-full [&_.col-sm-11]:w-full' %}
 
 <div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
@@ -24,7 +24,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -41,7 +41,7 @@
                         href="{{ paypal_payout_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-paypal fa-fw"></em>
+                        <em class="mdi mdi-bank-transfer"></em>
                         {{ 'PaypalPayoutCommissions'|get_plugin_lang('BuyCoursesPlugin') }}
                     </a>
                 {% endif %}
@@ -51,7 +51,7 @@
                         href="{{ payout_report_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-money fa-fw"></em>
+                        <em class="mdi mdi-cash"></em>
                         {{ 'PayoutReport'|get_plugin_lang('BuyCoursesPlugin') }}
                     </a>
                 {% endif %}
@@ -103,7 +103,7 @@
                 href="sales_report.php"
                 class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary"
             >
-                {{ 'CourseSessionBlock'|get_lang }}
+                {{ 'CourseSessionBlock'|get_plugin_lang('BuyCoursesPlugin') }}
             </a>
 
             {% if services_are_included %}
@@ -197,16 +197,6 @@
 
                 <tbody class="divide-y divide-gray-25 bg-white">
                     {% for sale in sale_list %}
-                        {% if sale.payment_type == 1 %}
-                            {% set paymentMethodLabel = 'PayPal' %}
-                        {% elseif sale.payment_type == 2 %}
-                            {% set paymentMethodLabel = 'BankTransfer'|get_plugin_lang('BuyCoursesPlugin') %}
-                        {% elseif sale.payment_type == 3 %}
-                            {% set paymentMethodLabel = 'Culqi' %}
-                        {% else %}
-                            {% set paymentMethodLabel = sale.payment_type|default('') %}
-                        {% endif %}
-
                         <tr class="transition hover:bg-support-2" id="service-sale-row-{{ sale.id }}">
                             <td class="px-4 py-4 text-sm font-medium text-gray-90">
                                 {{ sale.reference|default('') }}
@@ -233,11 +223,11 @@
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ sale.date|default('')|api_get_local_time }}
+                                {{ sale.buy_date|default('')|api_get_local_time }}
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ paymentMethodLabel }}
+                                {{ sale.payment_type_label|default('') }}
                             </td>
 
                             <td class="px-4 py-4 text-right text-sm font-semibold text-gray-90">
@@ -257,7 +247,7 @@
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
-                                {{ sale.complete_user_name|default('') }}
+                                {{ sale.username|default('') }}
                             </td>
 
                             <td class="px-4 py-4 text-sm text-gray-90">
@@ -302,7 +292,7 @@
                             <td colspan="11" class="px-4 py-10 text-center">
                                 <div class="mx-auto max-w-md space-y-2">
                                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                                        <em class="fa fa-briefcase text-xl"></em>
+                                        <em class="mdi mdi-briefcase text-xl"></em>
                                     </div>
                                     <h3 class="text-lg font-semibold text-gray-90">
                                         {{ 'NoResults'|get_lang }}
@@ -364,117 +354,89 @@
             .replaceAll("'", '&#039;')
     }
 
-    function cleanLegacyText(value) {
-        return String(value ?? '')
-            .replace(/\u00a0/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
+    function buildInfoDetails(details) {
+        return `
+            <dl class="mt-3 grid gap-2 sm:grid-cols-2">
+                ${details.map((detail) => `
+                    <div class="rounded-lg border border-gray-25 bg-white px-3 py-2.5">
+                        <dt class="text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            ${escapeHtml(detail.label)}
+                        </dt>
+                        <dd class="mt-1 break-words text-sm text-gray-90">
+                            ${escapeHtml(detail.value || '—')}
+                        </dd>
+                    </div>
+                `).join('')}
+            </dl>
+        `
     }
 
-    function buildInfoRow(label, value) {
-        const safeLabel = escapeHtml(cleanLegacyText(label))
-        const safeValue = escapeHtml(cleanLegacyText(value) || '—')
+    function buildInfoRow(row) {
+        const safeLabel = escapeHtml(row.label)
+
+        if (Array.isArray(row.details) && row.details.length) {
+            const metaHtml = row.meta
+                ? `<span class="text-xs font-medium text-gray-50">${escapeHtml(row.meta)}</span>`
+                : ''
+
+            return `
+                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3">
+                    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                        <dt class="text-sm font-semibold text-gray-90">${safeLabel}</dt>
+                        ${metaHtml}
+                    </div>
+                    <dd>${buildInfoDetails(row.details)}</dd>
+                </div>
+            `
+        }
+
+        const safeValue = escapeHtml(row.value || '—')
+        const valueHtml = row.url
+            ? `<a href="${escapeHtml(row.url)}" class="font-semibold text-primary hover:underline">${safeValue}</a>`
+            : safeValue
+        const valueClasses = row.multiline ? 'whitespace-pre-line leading-6' : ''
 
         return `
             <div class="grid gap-1 rounded-xl border border-gray-25 bg-support-2 px-4 py-3 sm:grid-cols-[180px_minmax(0,1fr)]">
                 <dt class="text-sm font-semibold text-gray-90">${safeLabel}</dt>
-                <dd class="text-sm text-gray-90 break-words">${safeValue}</dd>
+                <dd class="break-words text-sm text-gray-90 ${valueClasses}">${valueHtml}</dd>
             </div>
         `
     }
 
-    function buildInfoSection(title, rows) {
-        if (!rows.length) {
+    function buildInfoSection(section) {
+        if (!section.rows || !section.rows.length) {
             return ''
         }
 
         return `
             <section class="space-y-3">
                 <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-50">
-                    ${escapeHtml(cleanLegacyText(title))}
+                    ${escapeHtml(section.title)}
                 </h4>
                 <dl class="space-y-3">
-                    ${rows.join('')}
+                    ${section.rows.map(buildInfoRow).join('')}
                 </dl>
             </section>
         `
     }
 
-    function normalizeServiceSaleInfoHtml(rawHtml) {
-        const parser = new DOMParser()
-        const parsed = parser.parseFromString(
-            `<div class="buycourses-service-sale-info-root">${rawHtml}</div>`,
-            'text/html'
-        )
-        const root = parsed.querySelector('.buycourses-service-sale-info-root')
-
-        if (!root) {
-            return `<div class="rounded-2xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">${buyCoursesErrorLabel}</div>`
-        }
-
-        root.querySelectorAll('script, style, noscript').forEach((element) => {
-            element.remove()
-        })
-
-        root.querySelectorAll('form, button, input, select, textarea, .btn, .bc-action-buttons').forEach((element) => {
-            element.remove()
-        })
-
-        const image = root.querySelector('img')
-        let imageHtml = ''
-
-        if (image && image.getAttribute('src')) {
-            imageHtml = `
+    function buildServiceSaleInfoHtml(data) {
+        const imageHtml = data.imageUrl
+            ? `
                 <div class="overflow-hidden rounded-2xl border border-gray-25 bg-support-2">
                     <img
-                        src="${escapeHtml(image.getAttribute('src'))}"
-                        alt="${escapeHtml(image.getAttribute('alt') || 'Service image')}"
+                        src="${escapeHtml(data.imageUrl)}"
+                        alt="${escapeHtml(data.imageAlt || 'Service image')}"
                         class="h-auto w-full object-cover"
                     >
                 </div>
             `
-        }
+            : ''
 
-        root.querySelectorAll('img').forEach((element) => {
-            element.remove()
-        })
+        const sections = (data.sections || []).map(buildInfoSection).filter(Boolean)
 
-        let normalizedHtml = root.innerHTML
-
-        normalizedHtml = normalizedHtml
-            .replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p>/gi, '\n')
-            .replace(/<\/div>/gi, '\n')
-            .replace(/<\/li>/gi, '\n')
-            .replace(/<\/h[1-6]>/gi, '\n')
-
-        const textContainer = document.createElement('div')
-        textContainer.innerHTML = normalizedHtml
-
-        const lines = String(textContainer.textContent || '')
-            .split('\n')
-            .map((line) => cleanLegacyText(line))
-            .filter(Boolean)
-            .filter((line) => {
-                const lower = line.toLowerCase()
-
-                if (
-                    lower.includes('$.ajax') ||
-                    lower.includes('buycourses.ajax.php') ||
-                    lower.includes('function(') ||
-                    lower.includes('success: function') ||
-                    lower.includes('beforeSend') ||
-                    lower.includes('do not close this window') ||
-                    lower.includes('processing.') ||
-                    lower.includes('bc-action-buttons')
-                ) {
-                    return false
-                }
-
-                return true
-            })
-
-        if (!lines.length) {
+        if (!sections.length) {
             return `
                 <div class="space-y-4">
                     ${imageHtml}
@@ -484,44 +446,6 @@
                 </div>
             `
         }
-
-        const sections = []
-        let currentTitle = '{{ 'Info'|get_lang|e('js') }}'
-        let currentRows = []
-
-        function flushSection() {
-            const html = buildInfoSection(currentTitle, currentRows)
-            if (html) {
-                sections.push(html)
-            }
-            currentRows = []
-        }
-
-        lines.forEach((line) => {
-            const lowerLine = line.toLowerCase()
-
-            if (lowerLine === 'service information' || lowerLine === 'sale information') {
-                flushSection()
-                currentTitle = line
-                return
-            }
-
-            const separatorPosition = line.indexOf(':')
-            if (separatorPosition > -1) {
-                const label = line.slice(0, separatorPosition)
-                const value = line.slice(separatorPosition + 1)
-                currentRows.push(buildInfoRow(label, value))
-                return
-            }
-
-            currentRows.push(`
-                <div class="rounded-xl border border-gray-25 bg-support-2 px-4 py-3 text-sm text-gray-90">
-                    ${escapeHtml(line)}
-                </div>
-            `)
-        })
-
-        flushSection()
 
         return `
             <div class="space-y-4">
@@ -558,9 +482,9 @@
             },
             body: requestBody.toString(),
         })
-            .then((response) => response.text())
-            .then((html) => {
-                body.innerHTML = normalizeServiceSaleInfoHtml(html)
+            .then((response) => response.json())
+            .then((data) => {
+                body.innerHTML = buildServiceSaleInfoHtml(data)
             })
             .catch(() => {
                 body.innerHTML = '<div class="rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-gray-90">' + buyCoursesErrorLabel + '</div>'

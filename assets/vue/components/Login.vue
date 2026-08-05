@@ -25,7 +25,8 @@
           :placeholder="t('Username')"
           type="text"
           variant="filled"
-          @blur="updateCaptchaStatus"
+          @blur="updateCaptchaStatus(login)"
+          @focus="setFocusedField('login')"
         />
       </div>
 
@@ -37,35 +38,42 @@
           input-id="password"
           toggle-mask
           variant="filled"
+          @focus="setFocusedField('password')"
         />
       </div>
       <div
-        v-if="captchaEnabled && !requires2FA"
+        v-if="useVirtualKeyboard && focusedField && !requires2FA"
+        class="field"
+      >
+        <VirtualKeyboard @key-press="handleVirtualKeyboardKey" />
+      </div>
+      <div
+        v-if="captcha.required && !requires2FA"
         class="field"
       >
         <div class="mb-3">
           <img
-            v-if="captchaImageUrl"
-            :src="captchaImageUrl"
+            v-if="captcha.imageUrl"
+            :src="captcha.imageUrl"
             alt="Login captcha"
             class="block w-full max-w-[220px] rounded border border-gray-200 bg-white"
           />
         </div>
         <InputText
-          v-model="captchaCode"
+          v-model="captcha.code"
           :placeholder="t('Enter captcha code')"
           type="text"
           variant="filled"
         />
         <button
-          type="button"
           class="mt-2 text-sm text-primary hover:underline"
+          type="button"
           @click="refreshCaptcha"
         >
           {{ t("Refresh captcha") }}
         </button>
         <p
-          v-if="captchaBlocked && captchaBlockedSeconds > 0"
+          v-if="captcha.blocked && captcha.blockedSeconds > 0"
           class="mt-2 text-sm text-danger"
         >
           {{ t("Captcha is temporarily blocked. Please try again later.") }}
@@ -110,7 +118,7 @@
         <a
           v-if="allowRegistration"
           class="btn btn--primary-outline"
-          href="/main/auth/registration.php"
+          href="/registration"
           tabindex="3"
           v-text="t('Sign up')"
         />
@@ -120,7 +128,7 @@
         <a
           id="forgot"
           class="field"
-          href="/main/auth/lostPassword.php"
+          href="/lost-password"
           tabindex="5"
           v-text="t('Forgot your password?')"
         />
@@ -145,9 +153,12 @@ import BaseCheckbox from "./basecomponents/BaseCheckbox.vue"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import CategoryLinks from "./page/CategoryLinks.vue"
 import { useLogin } from "../composables/auth/login"
-import securityService from "../services/securityService"
 import { usePlatformConfig } from "../store/platformConfig"
+import VirtualKeyboard from "./login/VirtualKeyboard.vue"
 
+const useVirtualKeyboard = computed(() => {
+  return "true" === platformConfigStore.getSetting("platform.use_virtual_keyboard")
+})
 const isInIframe = window.self !== window.top
 const isHttps = window.location.protocol === "https:"
 
@@ -157,7 +168,7 @@ if (isInIframe) {
     const parent = new URL(parentUrl)
     const redirectPath = parent.pathname + parent.search + parent.hash
     window.top.location.href = "/login?redirect=" + encodeURIComponent(redirectPath)
-  } catch (error) {
+  } catch {
     window.top.location.href = "/login"
   }
 }
@@ -169,95 +180,72 @@ const allowRegistration = computed(() => {
   return "false" !== platformConfigStore.getSetting("registration.allow_registration")
 })
 
-const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLogin()
+const {
+  redirectNotAuthenticated,
+  submitLogin,
+  isLoading,
+  requires2FA,
+  captcha,
+  refreshCaptcha,
+  loadCaptchaStatus,
+  updateCaptchaStatus,
+} = useLogin()
 
 const ldapAuth = ref(false)
 const login = ref("")
 const password = ref("")
+const focusedField = ref(null)
 const totp = ref("")
 const remember = ref(false)
 
-const captchaEnabled = ref(false)
-const captchaCode = ref("")
-const captchaImageUrl = ref("")
-const captchaBlocked = ref(false)
-const captchaBlockedSeconds = ref(0)
-
-function resetCaptchaState() {
-  captchaCode.value = ""
-  captchaBlocked.value = false
-  captchaBlockedSeconds.value = 0
+function setFocusedField(field) {
+  focusedField.value = field
 }
 
-async function refreshCaptcha() {
-  captchaImageUrl.value = `/login/captcha/image?ts=${Date.now()}`
-}
-
-async function loadCaptchaStatus() {
-  try {
-    const response = await securityService.getLoginCaptchaStatus(login.value || "")
-
-    captchaEnabled.value = !!response.enabled
-    captchaBlocked.value = !!response.blocked
-    captchaBlockedSeconds.value = response.remainingSeconds || 0
-    captchaImageUrl.value = response.imageUrl || ""
-
-    if (!captchaEnabled.value) {
-      resetCaptchaState()
-      captchaImageUrl.value = ""
-    }
-  } catch (error) {
-    captchaEnabled.value = false
-    captchaBlocked.value = false
-    captchaBlockedSeconds.value = 0
-    captchaImageUrl.value = ""
-  }
-}
-
-async function updateCaptchaStatus() {
-  if (requires2FA.value) {
+function handleVirtualKeyboardKey(key) {
+  if (!focusedField.value) {
     return
   }
 
-  await loadCaptchaStatus()
-}
+  const target = "password" === focusedField.value ? password : login
 
-async function onSubmitLoginForm() {
-  if (!requires2FA.value && captchaEnabled.value && !captchaImageUrl.value) {
-    await refreshCaptcha()
+  if ("backspace" === key) {
+    target.value = target.value.slice(0, -1)
+
+    return
   }
 
-  const result = await performLogin({
+  if ("space" === key) {
+    target.value += " "
+
+    return
+  }
+
+  if ("clear" === key) {
+    target.value = ""
+
+    return
+  }
+
+  target.value += key
+}
+
+/**
+ * Submits the login form, delegating the login and captcha flow to the composable.
+ * @returns {Promise<void>}
+ */
+async function onSubmitLoginForm() {
+  await submitLogin({
     login: login.value,
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
-    captcha_code: captchaEnabled.value ? captchaCode.value : null,
     _remember_me: isHttps ? remember.value : false,
     isLoginLdap: ldapAuth.value,
   })
-
-  if (result?.captchaBlocked) {
-    captchaBlocked.value = true
-    captchaBlockedSeconds.value = result.captchaBlockedSeconds || 0
-    captchaCode.value = ""
-    await refreshCaptcha()
-    return
-  }
-
-  if (result?.captchaRequired) {
-    captchaCode.value = ""
-    await refreshCaptcha()
-    return
-  }
-
-  if (!result?.success && captchaEnabled.value && !requires2FA.value) {
-    captchaCode.value = ""
-    await refreshCaptcha()
-  }
 }
 
 onMounted(async () => {
-  redirectNotAuthenticated()
-  await loadCaptchaStatus()
+  await redirectNotAuthenticated()
+  await loadCaptchaStatus(login.value)
 })
 </script>

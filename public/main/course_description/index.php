@@ -2,90 +2,85 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 require_once __DIR__.'/../inc/global.inc.php';
+
 $current_course_tool = TOOL_COURSE_DESCRIPTION;
 $this_section = SECTION_COURSES;
 
-$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'listing';
+$rawAction = $_GET['action'] ?? 'listing';
+$action = \is_string($rawAction) ? trim($rawAction) : 'listing';
 
-$logInfo = [
-    'tool' => TOOL_COURSE_DESCRIPTION,
-    'action' => $action,
-];
-Event::registerLog($logInfo);
-// protect a course script
-api_protect_course_script(true);
-
-Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
-
-$description_type = '';
-if (isset($_GET['description_type'])) {
-    $description_type = (int) $_GET['description_type'];
-}
-
-$id = null;
-if (isset($_GET['id'])) {
-    $id = (int) $_GET['id'];
-}
-
-if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
+if (!\in_array($action, ['listing', 'history', 'add', 'edit', 'delete'], true)) {
     $action = 'listing';
 }
 
-// interbreadcrumb
-if (1 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Description')];
-}
-if (2 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Objectives')];
-}
-if (3 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Topics')];
-}
-if (4 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Methodology')];
-}
-if (5 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Course material')];
-}
-if (6 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Resources')];
-}
-if (7 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Assessment')];
-}
-if (8 == $description_type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance')];
-}
-if ($description_type >= 9) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Others')];
+$rawStudentView = $_GET['isStudentView'] ?? null;
+$studentView = \is_scalar($rawStudentView)
+    && filter_var($rawStudentView, FILTER_VALIDATE_BOOLEAN);
+
+if ($studentView) {
+    $action = 'listing';
 }
 
-// course description controller object
-$descriptionController = new CourseDescriptionController();
+Event::registerLog([
+    'tool' => TOOL_COURSE_DESCRIPTION,
+    'action' => $action,
+]);
 
-// block access
-if (in_array($action, ['add', 'edit', 'delete']) &&
-    !api_is_allowed_to_edit(null, true)
-) {
+api_protect_course_script(true);
+Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
+
+$course = api_get_course_entity();
+$courseResourceNode = $course?->getResourceNode();
+
+if (null === $course || null === $courseResourceNode || null === $courseResourceNode->getId()) {
     api_not_allowed(true);
 }
 
-// Actions to controller
-switch ($action) {
-    case 'history':
-        $descriptionController->listing(true);
-        break;
-    case 'add':
-        $descriptionController->add();
-        break;
-    case 'edit':
-        $descriptionController->edit($id, $description_type);
-        break;
-    case 'delete':
-        $descriptionController->delete($id);
-        break;
-    case 'listing':
-    default:
-        $descriptionController->listing();
+$rawDescriptionType = $_GET['description_type'] ?? null;
+$descriptionType = \is_scalar($rawDescriptionType) ? (int) $rawDescriptionType : 0;
+if ($descriptionType >= 8) {
+    $descriptionType = 8;
 }
+
+$rawDescriptionId = $_GET['id'] ?? null;
+$descriptionId = \is_scalar($rawDescriptionId) ? (int) $rawDescriptionId : 0;
+$targetPath = 'resources/course-description/'.$courseResourceNode->getId().'/';
+
+if ('add' === $action) {
+    $targetPath .= 'add';
+    if ($descriptionType <= 0) {
+        $descriptionType = 8;
+    }
+} elseif ('edit' === $action) {
+    $targetPath .= 'edit';
+    if ($descriptionId > 0) {
+        $targetPath .= '/'.$descriptionId;
+    }
+}
+
+$query = [
+    'cid' => (int) $course->getId(),
+];
+
+$sessionId = api_get_session_id();
+if ($sessionId > 0) {
+    $query['sid'] = $sessionId;
+}
+
+$groupId = api_get_group_id();
+if ($groupId > 0) {
+    $query['gid'] = $groupId;
+}
+
+if (null !== $rawStudentView) {
+    $query['isStudentView'] = $studentView ? 'true' : 'false';
+}
+
+if ($descriptionType > 0 && \in_array($action, ['add', 'edit'], true)) {
+    $query['descriptionType'] = $descriptionType;
+}
+
+api_location(api_get_path(WEB_PATH).$targetPath.'?'.http_build_query($query));

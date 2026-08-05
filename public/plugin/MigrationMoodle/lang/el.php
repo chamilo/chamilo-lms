@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Εισαγωγή από το Moodle';
+$strings['plugin_comment'] = 'Εκτέλεση διαδικασίας εισαγωγής από βάση δεδομένων και αρχεία του Moodle στο Chamilo.';
+
+$strings['MoodlePassword'] = 'Κωδικός πρόσβασης Moodle';
+$strings['UninstallError'] = 'Παρουσιάστηκε σφάλμα κατά την απεγκατάσταση του πρόσθετου.';
+
+$strings['db_host'] = 'Διακομιστής βάσης δεδομένων Moodle';
+$strings['db_user'] = 'Χρήστης βάσης δεδομένων Moodle';
+$strings['db_password'] = 'Κωδικός πρόσβασης βάσης δεδομένων Moodle';
+$strings['db_name'] = 'Όνομα βάσης δεδομένων Moodle';
+$strings['user_filter'] = 'Φίλτρο για χρήστες';
+$strings['user_filter_help'] = 'Εισαγωγή μόνο χρηστών των οποίων το όνομα χρήστη αρχίζει με αυτό το πρόθεμα.<br>Η εισαγωγή μαθημάτων επηρεάζεται επίσης από αυτή τη ρύθμιση, καθώς εισάγονται μόνο μαθήματα στα οποία είναι εγγεγραμμένοι χρήστες με αυτό το πρόθεμα ονόματος χρήστη.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID URL πρόσβασης για την αποθήκευση μαθημάτων, χρηστών και συνεδριών (εάν χρησιμοποιείται multi-url).';
+$strings['moodle_path'] = 'Διαδρομή Moodledata';
+$strings['moodle_path_help'] = 'Η διαδρομή του φακέλου moodledata. Συνήθως κάτι σαν <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Χρήστες';
+$strings['CourseCategoriesTask'] = 'Κατηγορίες μαθημάτων';
+$strings['CoursesTask'] = 'Μαθήματα';
+$strings['CourseSectionsTask'] = 'Ενότητες μαθήματος';
+$strings['CourseModulesLessonTask'] = 'Ενότητες μαθήματος: Μαθήματα';
+$strings['LessonPagesTask'] = 'Σελίδες μαθήματος';
+$strings['LessonPagesDocumentTask'] = 'Σελίδες μαθήματος: Έγγραφα';
+$strings['FilesForLessonPagesTask'] = 'Αρχεία για σελίδες μαθήματος';
+$strings['LessonPagesQuizTask'] = 'Σελίδες μαθήματος: Ερωτήσεις';
+$strings['LessonPagesQuizQuestionTask'] = 'Ερωτήσεις για σελίδες ερωτήσεων';
+$strings['LessonAnswersTrueFalseTask'] = 'Απαντήσεις για ερωτήσεις Σωστό/Λάθος';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Απαντήσεις για ερωτήσεις Πολλαπλής Επιλογής';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Απαντήσεις για ερωτήσεις Πολλαπλών Απαντήσεων';
+$strings['LessonAnswersMatchingTask'] = 'Απαντήσεις για ερωτήσεις Αντιστοίχισης';
+$strings['LessonAnswersEssayTask'] = 'Απαντήσεις για ερωτήσεις Δοκιμίου';
+$strings['LessonAnswersShortAnswerTask'] = 'Απαντήσεις για ερωτήσεις Σύντομης Απάντησης';
+$strings['FilesForLessonAnswersTask'] = 'Αρχεία για απαντήσεις μαθήματος';
+$strings['CourseModulesQuizTask'] = 'Ενότητες μαθήματος: Κουίζ';
+$strings['CQuizTask'] = 'Κουίζ C';
+$strings['RoleAssignmentsTask'] = 'Αναθέσεις ρόλων';
+$strings['QuizzesTask'] = 'Κουίζ';
+$strings['FilesForQuizzesTask'] = 'Αρχεία για κουίζ';
+$strings['QuestionCategoriesTask'] = 'Κατηγορίες ερωτήσεων';
+$strings['QuestionsTask'] = 'Ερωτήσεις';
+$strings['QuestionMultiChoiceSingleTask'] = 'Απαντήσεις για ερωτήσεις πολλαπλής επιλογής (μονή)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Απαντήσεις για ερωτήσεις πολλαπλής επιλογής (πολλαπλή)';
+$strings['QuestionsTrueFalseTask'] = 'Απαντήσεις για ερωτήσεις σωστού/λάθους';
+$strings['QuestionShortAnswerTask'] = 'Απαντήσεις για ερωτήσεις σύντομης απάντησης';
+$strings['CourseModulesScormTask'] = 'Μαθήματα SCORM';
+$strings['ScormScoesTask'] = 'Στοιχεία SCORM';
+$strings['FilesForScormScoesTask'] = 'Αρχεία για στοιχεία SCORM';
+$strings['UserSessionsTask'] = 'Συνεδρίες μαθήματος για χρήστες';
+$strings['CourseIntroductionsTask'] = 'Εισαγωγές μαθήματος';
+$strings['FilesForCourseIntroductionsTask'] = 'Αρχεία για εισαγωγές μαθήματος';
+$strings['FilesForCourseSectionsTask'] = 'Αρχεία για ενότητες μαθήματος';
+$strings['CourseModulesUrlTask'] = 'Ενότητες μαθήματος: URLs';
+$strings['UrlsTask'] = 'URLs';
+$strings['SortSectionModulesTask'] = 'Ταξινόμηση ενοτήτων σε ενότητα';
+$strings['UsersScormsViewTask'] = 'Προβολές SCORM για χρήστες';
+$strings['UsersScormsProgressTask'] = 'Πρόοδος SCORM';
+$strings['UsersLearnPathsTask'] = 'Προβολές μαθησιακών διαδρομών χρηστών';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Χρονόμετρο μαθήματος για χρόνο έναρξης ενότητας μαθησιακών διαδρομών';
+$strings['QuizzesScoresTask'] = 'Ενημέρωση βαθμών κουίζ σε μαθησιακή διαδρομή';
+$strings['QuestionGapselectTask'] = 'Απαντήσεις για ερωτήσεις gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Διακλάδωση μαθήματος σε συνολικό χρόνο σε έγγραφα μαθησιακών διαδρομών';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Προσπάθειες μαθήματος σε συνολικό χρόνο σε κουίζ μαθησιακών διαδρομών';
+$strings['UsersLearnPathsQuizzesTask'] = 'Προσπάθειες κουίζ σε προσπάθειες κουίζ μαθησιακών διαδρομών';
+$strings['UsersQuizzesAttemptsTask'] = 'Προσπάθειες κουίζ χρηστών';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Προσπάθειες ερωτήσεων χρηστών για shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Προσπάθειες ερωτήσεων χρηστών για gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Προσπάθειες ερωτήσεων χρηστών για truefalse';
+$strings['UsersLastLoginTask'] = 'Τελευταίες συνδέσεις για χρήστες';
+$strings['TrackLoginTask'] = 'Πρώτη σύνδεση και τελευταία αποσύνδεση';
+$strings['TrackCourseAccessTask'] = 'Πρόσβαση χρήστη στο μάθημα';
+$strings['UserLearnPathsProgressScript'] = 'Ενημέρωση προόδου σε μαθησιακές διαδρομές για χρήστες.';
+$strings['UserScormsProgressScript'] = 'Ενημέρωση προόδου σε SCORM για χρήστες.';
+
+$strings['InstallError'] = 'Παρουσιάστηκε σφάλμα κατά την εγκατάσταση του προσθέτου: %s';
+$strings['AdminIntro'] = 'Εκτέλεση εργασιών μετεγκατάστασης Moodle με τη σειρά. Κάθε βήμα ενεργοποιείται μόνο αφού ολοκληρωθεί το γονικό του βήμα.';
+$strings['MoodleDatabase'] = 'Βάση δεδομένων Moodle';
+$strings['MoodledataPath'] = 'Διαδρομή Moodledata';
+$strings['AccessUrlId'] = 'ID URL πρόσβασης';
+$strings['Configured'] = 'Ρυθμισμένο';
+$strings['NotConfigured'] = 'Μη ρυθμισμένο';
+$strings['ConfigurePlugin'] = 'Ρύθμιση προσθέτου';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Ρυθμίστε τον διακομιστή, τον χρήστη και το όνομα της βάσης δεδομένων Moodle πριν εκτελέσετε εργασίες μετεγκατάστασης.';
+$strings['MissingMoodledataPathWarning'] = 'Η διαδρομή Moodledata είναι κενή. Οι εργασίες που σχετίζονται με αρχεία ενδέχεται να αποτύχουν μέχρι να ρυθμιστεί αυτή η παράμετρος.';
+$strings['InvalidMigrationAction'] = 'Μη έγκυρη ενέργεια μετεγκατάστασης.';
+$strings['InvalidSecurityToken'] = 'Μη έγκυρο διακριτικό ασφαλείας. Παρακαλούμε φορτώστε ξανά τη σελίδα και δοκιμάστε ξανά.';
+$strings['MigrationTasks'] = 'Εργασίες μετεγκατάστασης';
+$strings['MaintenanceScripts'] = 'Σενάρια συντήρησης';
+$strings['ExecutionOutput'] = 'Έξοδος εκτέλεσης';
+$strings['TaskAlreadyExecuted'] = 'Αυτή η εργασία ή σενάριο έχει ήδη εκτελεστεί.';
+$strings['SelectTaskToRun'] = 'Επιλέξτε μια εργασία μετεγκατάστασης για εκτέλεση. Η έξοδος θα εμφανιστεί εδώ.';

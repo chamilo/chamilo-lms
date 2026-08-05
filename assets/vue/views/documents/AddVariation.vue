@@ -51,6 +51,13 @@
           />
         </div>
 
+        <BaseAdvancedSettingsButton
+          v-if="showResourceLanguageAdvancedSettings"
+          v-model="showAdvancedSettings"
+        >
+          <ResourceLanguageSelector v-model="selectedLanguage" />
+        </BaseAdvancedSettingsButton>
+
         <div class="flex justify-end">
           <BaseButton
             :label="t('Upload')"
@@ -142,26 +149,59 @@
 import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
+import resourceFileService from "../../services/resourceFileService"
+import { findAll as findAllAccessUrls } from "../../services/accessurlService"
 import Column from "primevue/column"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import prettyBytes from "pretty-bytes"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 
 const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
+const { cid, sid, gid } = getCourseContext()
 const file = ref(null)
 const variations = ref([])
 const originalFile = ref(null)
 const resourceFileId = route.params.resourceFileId
 const selectedAccessUrl = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
+})
+const selectedLanguage = ref("")
 const accessUrls = ref([])
 const isAdmin = computed(() => securityStore.isAdmin)
 
@@ -184,8 +224,7 @@ async function fetchVariations() {
 
   try {
     const resourceNodeId = originalFile.value.resourceNode.id
-    const response = await axios.get(`/r/resource_files/${resourceNodeId}/variants`)
-    variations.value = response.data
+    variations.value = await resourceFileService.getVariants(resourceNodeId)
   } catch (error) {
     console.error("Error fetching variations:", error)
   }
@@ -193,11 +232,11 @@ async function fetchVariations() {
 
 async function fetchAccessUrls() {
   try {
-    const response = await axios.get("/api/access_urls")
-    if (Array.isArray(response.data["hydra:member"])) {
+    const items = await findAllAccessUrls()
+    if (Array.isArray(items)) {
       const currentAccessUrlId = window.access_url_id
 
-      accessUrls.value = response.data["hydra:member"].filter((url) => url.id !== currentAccessUrlId)
+      accessUrls.value = items.filter((url) => url.id !== currentAccessUrlId)
     } else {
       accessUrls.value = []
     }
@@ -209,8 +248,7 @@ async function fetchAccessUrls() {
 
 async function fetchOriginalFile() {
   try {
-    const response = await axios.get(`/api/resource_files/${resourceFileId}`)
-    originalFile.value = response.data
+    originalFile.value = await resourceFileService.findById(resourceFileId)
   } catch (error) {
     console.error("Error fetching original file:", error)
   }
@@ -229,13 +267,16 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     formData.append("accessUrlId", accessUrlId)
   }
 
+  formData.append("language", selectedLanguage.value)
+
   try {
-    const response = await axios.post("/api/resource_files/add_variant", formData)
-    console.log("Variant uploaded or updated successfully:", response.data)
+    const data = await resourceFileService.addVariant(formData)
+    console.log("Variant uploaded or updated successfully:", data)
 
     await fetchVariations()
     file.value = null
     selectedAccessUrl.value = null
+    selectedLanguage.value = ""
   } catch (error) {
     console.error("Error uploading variant:", error)
   }
@@ -243,7 +284,7 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
 
 async function deleteVariant(variantId) {
   try {
-    await axios.delete(`/r/resource_files/${variantId}/delete_variant`)
+    await resourceFileService.deleteVariant(variantId)
     console.log("Variant deleted successfully.")
     await fetchVariations()
   } catch (error) {

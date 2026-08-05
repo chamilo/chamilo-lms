@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Avaliação Eletrônica está desabilitada';
 $strings['StudentId'] = 'ID do Estudante';
 $strings['ProviderId'] = 'ID do Provedor';
 $strings['CourseHours'] = 'Horas do curso';
+
+$strings['GenerateFile'] = 'Gerar arquivo';
+$strings['CourseId'] = 'ID do curso';

@@ -1,35 +1,112 @@
-{% autoescape false %}
-{{ form }}
+<div class="space-y-6">
+    <section class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                    {{ 'Dictionary' | get_plugin_lang('DictionaryPlugin') }}
+                </p>
+                <h1 class="mt-1 text-2xl font-bold text-gray-90">
+                    {{ 'plugin_title' | get_plugin_lang('DictionaryPlugin') }}
+                </h1>
+                <p class="mt-2 text-sm text-gray-50">
+                    {{ 'plugin_comment' | get_plugin_lang('DictionaryPlugin') }}
+                </p>
+            </div>
 
-<table class="data_table">
-    <tr>
-        <th>
-            {{ 'Term' | get_plugin_lang('DictionaryPlugin') }}
-        </th>
-        <th>
-            {{ 'Definition' | get_plugin_lang('DictionaryPlugin') }}
-        </th>
-        <th>
-            {{ 'Actions' | get_lang }}
-        </th>
-    </tr>
-{% for term in terms %}
-    <tr>
-        <td>
-            {{ term.term }}
-        </td>
-        <td>
-            {{ term.definition }}
-        </td>
-        <td>
-            <a href="{{ url('index') }}plugin/Dictionary/terms.php?action=edit&{{ {'id': term.id}|url_encode() }}" class="btn btn--success">
-                <span class="fa fa-edit fa-fw" aria-hidden="true"></span> {{ 'Edit'|get_lang }}
-            </a>
-            <a href="{{ url('index') }}plugin/Dictionary/terms.php?action=delete&{{ {'id': term.id}|url_encode() }}" class="btn btn--danger">
-                <span class="fa fa-times fa-fw" aria-hidden="true"></span> {{ 'Delete'|get_lang }}
-            </a>
-        </td>
-    </tr>
-{% endfor %}
-</table>
-{% endautoescape %}
+            <div class="flex flex-wrap gap-2">
+                {% if mode == 'list' %}
+                    <a class="btn btn--primary inline-flex items-center gap-2" href="{{ add_url }}">
+                        <span class="mdi mdi-plus-box ch-tool-icon" aria-hidden="true"></span>
+                        {{ 'AddTerm' | get_plugin_lang('DictionaryPlugin') }}
+                    </a>
+                {% else %}
+                    <a class="btn btn--plain inline-flex items-center gap-2" href="{{ back_url }}">
+                        <span class="mdi mdi-arrow-left ch-tool-icon" aria-hidden="true"></span>
+                        {{ 'Back' | get_lang }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    {% if mode == 'form' %}
+        <section class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+            {{ form|raw }}
+        </section>
+    {% else %}
+        <section class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+            <div class="mb-4 flex items-center justify-between gap-4">
+                <h2 class="text-xl font-semibold text-gray-90">
+                    {{ 'Terms' | get_plugin_lang('DictionaryPlugin') }}
+                </h2>
+                <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+                    {{ terms|length }}
+                </span>
+            </div>
+
+            {% if terms is empty %}
+                <div class="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+                    {{ 'NoTermsAvailable' | get_plugin_lang('DictionaryPlugin') }}
+                </div>
+            {% else %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-20 text-sm">
+                        <thead class="bg-gray-10">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-70">
+                                    {{ 'Term' | get_plugin_lang('DictionaryPlugin') }}
+                                </th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-70">
+                                    {{ 'Definition' | get_plugin_lang('DictionaryPlugin') }}
+                                </th>
+                                <th class="px-4 py-3 text-right font-semibold text-gray-70">
+                                    {{ 'Actions' | get_lang }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-20 bg-white">
+                            {% for term in terms %}
+                                <tr class="hover:bg-gray-10">
+                                    <td class="px-4 py-3 align-top font-semibold text-gray-90">
+                                        {{ term.term }}
+                                    </td>
+                                    <td class="px-4 py-3 align-top text-gray-70">
+                                        {{ term.definition|nl2br }}
+                                    </td>
+                                    <td class="px-4 py-3 align-top">
+                                        <div class="flex justify-end gap-2">
+                                            <a
+                                                class="ch-tool-icon-button"
+                                                href="{{ admin_url }}?action=edit&id={{ term.id }}"
+                                                title="{{ 'Edit' | get_lang }}"
+                                                aria-label="{{ 'Edit' | get_lang }}"
+                                            >
+                                                <span class="mdi mdi-pencil ch-tool-icon" aria-hidden="true"></span>
+                                            </a>
+
+                                            <form
+                                                method="post"
+                                                action="{{ admin_url }}?action=delete&id={{ term.id }}"
+                                                onsubmit="return confirm('{{ 'DeleteConfirm' | get_plugin_lang('DictionaryPlugin')|e('js') }}');"
+                                            >
+                                                <input type="hidden" name="sec_token" value="{{ delete_token }}">
+                                                <button
+                                                    type="submit"
+                                                    class="ch-tool-icon-button"
+                                                    title="{{ 'Delete' | get_lang }}"
+                                                    aria-label="{{ 'Delete' | get_lang }}"
+                                                >
+                                                    <span class="mdi mdi-delete ch-tool-icon" aria-hidden="true"></span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </section>
+    {% endif %}
+</div>

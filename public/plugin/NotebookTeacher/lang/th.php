@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'ไม่มีบันทึกที่สร
 $strings['NoNotebook'] = 'ไม่มีบันทึกที่สร้างในระบบ';
 $strings['NoNotebookUser'] = 'ไม่มีบันทึกสำหรับนักเรียนนี้';
 $strings['NotebookNoStudentAssigned'] = 'บันทึกที่ยังไม่กำหนดนักเรียน';
+
+$strings['TeacherNotesHelp'] = 'สร้างบันทึกส่วนตัวสำหรับผู้สอนที่เชื่อมโยงกับผู้เรียนในรายวิชานี้';
+$strings['CurrentFilter'] = 'ตัวกรองปัจจุบัน';
+$strings['EmptyStateHelp'] = 'สร้างบันทึกใหม่หรือเปลี่ยนตัวกรองผู้เรียน';

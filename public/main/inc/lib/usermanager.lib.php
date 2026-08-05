@@ -153,6 +153,17 @@ class UserManager
             return false;
         }
 
+        // Defense in depth against privilege mass-assignment (CWE-915):
+        // when the effective requester is anonymous (self-registration path)
+        // never allow elevated platform roles to be assigned. Only STUDENT
+        // and COURSEMANAGER are acceptable for self-service flows.
+        if (api_is_anonymous()
+            && !in_array((int) $status, [STUDENT, COURSEMANAGER], true)
+        ) {
+            $status = STUDENT;
+            $isAdmin = false;
+        }
+
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = $creatorInfo['email'] ?? '';
 
@@ -357,7 +368,7 @@ class UserManager
             $params = [
                 'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
                 'login_name' => $loginName,
-                'original_password' => stripslashes((string) $original_password),
+                'original_password' => (string) $original_password,
                 'mailWebPath' => $url,
                 'new_user' => $user,
                 'search_link' => $url,
@@ -1240,7 +1251,7 @@ class UserManager
 
             $originalPassword = '';
             if ($reset_password > 0) {
-                $originalPassword = stripslashes($original_password);
+                $originalPassword = (string) $original_password;
             }
             $tplContent->assign('original_password', $originalPassword);
             $tplContent->assign('portal_url', $url);
@@ -2687,16 +2698,16 @@ class UserManager
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
         $dqlStudent = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionRelCourseRelUser AS scu WITH scu.session = s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
             WHERE scu.user = :user AND url.url = :url ";
         $dqlCoach = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-            INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
+            INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser AS su WITH su.session = s
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
@@ -3646,15 +3657,14 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        $user_id = (int) $user_id;
-        if (empty($user_id)) {
+        $userId = (int) $user_id;
+        if (empty($userId)) {
             return false;
         }
-        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-        $res = Database::query($sql);
 
-        return 1 === Database::num_rows($res);
+        $user = api_get_user_entity($userId);
+
+        return $user instanceof User && ($user->isAdmin() || $user->isSuperAdmin());
     }
 
     /**
@@ -4043,25 +4053,24 @@ class UserManager
      */
     public static function get_all_administrators()
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId = api_get_current_access_url_id();
+        $adminRoleCondition = "(u.roles LIKE '%ROLE_ADMIN%' OR u.roles LIKE '%ROLE_GLOBAL_ADMIN%')";
+
         if (api_get_multiple_access_url()) {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $tbl_url_rel_user as url
-                    INNER JOIN $table_admin as admin
-                    ON (admin.user_id=url.user_id)
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)
-                    WHERE access_url_id ='".$access_url_id."'";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableAccessUrlRelUser url
+                    INNER JOIN $tableUser u
+                    ON (u.id = url.user_id)
+                    WHERE url.access_url_id = '$accessUrlId'
+                      AND $adminRoleCondition";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $table_admin as admin
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableUser u
+                    WHERE $adminRoleCondition";
         }
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+        $sql .= ' AND u.active <> '.USER_SOFT_DELETED;
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -4390,7 +4399,8 @@ class UserManager
         $column = null,
         $direction = null,
         $active = null,
-        $lastConnectionDate = null
+        $lastConnectionDate = null,
+        bool $applyReportingWorkflowSetting = false
     ) {
         return self::getUsersFollowedByUser(
             $userId,
@@ -4404,7 +4414,10 @@ class UserManager
             $direction,
             $active,
             $lastConnectionDate,
-            DRH
+            DRH,
+            null,
+            false,
+            $applyReportingWorkflowSetting
         );
     }
 
@@ -4442,7 +4455,8 @@ class UserManager
         $lastConnectionDate = null,
         $status = null,
         $keyword = null,
-        $checkSessionVisibility = false
+        $checkSessionVisibility = false,
+        bool $applyDrhAllStudentsWorkflowSetting = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -4516,8 +4530,8 @@ class UserManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -4527,13 +4541,26 @@ class UserManager
         $drhConditions = null;
         $teacherSelect = null;
         $urlId = api_get_current_access_url_id();
+        $allowDrhAccessToAllStudents = self::shouldAllowDrhAccessToAllStudents(
+            $status,
+            $userStatus,
+            $applyDrhAllStudentsWorkflowSetting
+        );
 
         switch ($status) {
             case DRH:
-                $drhConditions .= " AND
-                    friend_user_id = '$userId' AND
-                    relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
-                ";
+                if ($allowDrhAccessToAllStudents) {
+                    $drhConditions = '';
+
+                    if (empty($userStatus)) {
+                        $userConditions .= ' AND u.status = '.STUDENT;
+                    }
+                } else {
+                    $drhConditions .= " AND
+            friend_user_id = '$userId' AND
+            relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
+        ";
+                }
                 break;
             case COURSEMANAGER:
                 $drhConditions .= " AND
@@ -4611,22 +4638,27 @@ class UserManager
         }
 
         $join = null;
-        $sql = " $masterSelect
-                (
-                    (
-                        $select
-                        FROM $tbl_user u
-                        INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.id)
-                        LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
-                        $join
-                        WHERE
-                            access_url_id = ".$urlId."
-                            $drhConditions
-                            $userConditions
-                    )
-                    $teacherSelect
 
-                ) as t1";
+        $userRelationJoin = $allowDrhAccessToAllStudents
+            ? ''
+            : "INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.id)";
+
+        $sql = " $masterSelect
+        (
+            (
+                $select
+                FROM $tbl_user u
+                $userRelationJoin
+                LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
+                $join
+                WHERE
+                    access_url_id = ".$urlId."
+                    $drhConditions
+                    $userConditions
+            )
+            $teacherSelect
+
+        ) as t1";
 
         if ($getSql) {
             return $sql;
@@ -4714,7 +4746,7 @@ class UserManager
         $users = implode(', ', $usersId);
         Database::getManager()
             ->createQuery('
-                DELETE FROM ChamiloCoreBundle:UserRelUser uru
+                DELETE FROM Chamilo\CoreBundle\Entity\UserRelUser uru
                 WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
             ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
@@ -5043,28 +5075,14 @@ class UserManager
 
     public static function addUserAsAdmin(User $user)
     {
-        $userId = $user->getId();
-
-        if (!self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "INSERT INTO $table SET user_id = $userId";
-            Database::query($sql);
-        }
-
-        $user->addRole('ROLE_ADMIN');
+        $user->addUserAsAdmin();
         Container::getUserRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)
     {
-        $userId = (int) $user->getId();
-        if (self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "DELETE FROM $table WHERE user_id = $userId";
-            Database::query($sql);
-            $user->removeRole('ROLE_ADMIN');
-            Container::getUserRepository()->updateUser($user, true);
-        }
+        $user->removeUserAsAdmin();
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     /**
@@ -5669,7 +5687,7 @@ SQL;
      */
     public static function sendUserConfirmationMail(User $user)
     {
-        $uniqueId = api_get_unique_id();
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
 
         Database::getManager()->persist($user);
@@ -6377,7 +6395,7 @@ SQL;
         if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
             1 === (int) $askPassword['ask_new_password']
         ) {
-            $uniqueId = api_get_unique_id();
+            $uniqueId = api_generate_secure_token();
             $userObj = api_get_user_entity($userId);
             $userObj->setConfirmationToken($uniqueId);
             $userObj->setPasswordRequestedAt(new \DateTime());
@@ -6509,5 +6527,47 @@ SQL;
         }
 
         return [];
+    }
+
+    private static function shouldAllowDrhAccessToAllStudents(
+        $status,
+        $userStatus,
+        bool $applyReportingWorkflowSetting
+    ): bool {
+        if (!$applyReportingWorkflowSetting) {
+            return false;
+        }
+
+        if ((int) $status !== DRH) {
+            return false;
+        }
+
+        if (!self::isWorkflowSettingEnabled('drh_allow_access_to_all_students')) {
+            return false;
+        }
+
+        /*
+         * The setting is limited to students.
+         * If a caller explicitly asks for teachers or another status, keep the
+         * existing assigned-users behavior.
+         */
+        if (!empty($userStatus) && (int) $userStatus !== STUDENT) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function isWorkflowSettingEnabled(string $variable): bool
+    {
+        $value = api_get_setting('workflows.'.$variable);
+
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
     }
 }

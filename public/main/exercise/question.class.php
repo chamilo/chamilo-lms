@@ -2245,7 +2245,7 @@ abstract class Question
         $count = $em
             ->createQuery('
             SELECT COUNT(qq.iid)
-            FROM ChamiloCourseBundle:CQuizRelQuestion qq
+            FROM Chamilo\CourseBundle\Entity\CQuizRelQuestion qq
             WHERE IDENTITY(qq.question) = :id
         ')
             ->setParameters(['id' => (int) $this->id])
@@ -2268,8 +2268,8 @@ abstract class Question
         // So we select CQuiz as root and join the relation entity with a WITH clause.
         $dql = '
         SELECT DISTINCT q
-        FROM ChamiloCourseBundle:CQuiz q
-        JOIN ChamiloCourseBundle:CQuizRelQuestion qq WITH qq.quiz = q
+        FROM Chamilo\CourseBundle\Entity\CQuiz q
+        JOIN Chamilo\CourseBundle\Entity\CQuizRelQuestion qq WITH qq.quiz = q
         WHERE IDENTITY(qq.question) = :id
     ';
 
@@ -2285,10 +2285,7 @@ abstract class Question
         try {
             $conn = Database::getConnection();
 
-            // DBAL 2/3 schema manager compatibility
-            $sm = method_exists($conn, 'createSchemaManager')
-                ? $conn->createSchemaManager()
-                : $conn->getSchemaManager();
+            $sm = $conn->createSchemaManager();
 
             $tableNames = method_exists($sm, 'listTableNames') ? $sm->listTableNames() : [];
 

@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Videokonferensi Zoom';
 $strings['plugin_comment'] = 'Integrasi Videokonferensi Zoom di mata kuliah dan sesi';
 
+$strings['accountId'] = 'ID Akun';
+$strings['clientId'] = 'ID Klien';
+$strings['clientSecret'] = 'Rahasia Klien';
+$strings['webhookSecretToken'] = 'Token Rahasia Webhook';
+$strings['apiKey_help'] = 'Kunci API JWT lama. Disarankan menggunakan Account ID, Client ID, dan Client Secret untuk Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Rahasia API JWT lama. Disarankan menggunakan Account ID, Client ID, dan Client Secret untuk Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Token verifikasi webhook lama. Disarankan menggunakan Webhook Secret Token.';
+$strings['accountId_help'] = 'ID Akun Zoom Server-to-Server OAuth.';
+$strings['clientId_help'] = 'ID Klien Zoom Server-to-Server OAuth.';
+$strings['clientSecret_help'] = 'Rahasia Klien Zoom Server-to-Server OAuth.';
+$strings['webhookSecretToken_help'] = 'Token rahasia yang digunakan untuk memvalidasi permintaan webhook Zoom.';
 $strings['apiKey'] = 'Kunci API';
 $strings['apiSecret'] = 'Rahasia API';
 $strings['verificationToken'] = 'Token Verifikasi';

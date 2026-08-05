@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Tidak ada catatan yang dibuat dengan filter saat
 $strings['NoNotebook'] = 'Tidak ada catatan yang dibuat di sistem';
 $strings['NoNotebookUser'] = 'Tidak ada catatan untuk siswa ini';
 $strings['NotebookNoStudentAssigned'] = 'Catatan tanpa siswa yang ditugaskan';
+
+$strings['TeacherNotesHelp'] = 'Buat catatan pribadi pengajar yang terhubung dengan peserta didik dalam kursus ini.';
+$strings['CurrentFilter'] = 'Filter saat ini';
+$strings['EmptyStateHelp'] = 'Buat catatan baru atau ubah filter peserta didik.';

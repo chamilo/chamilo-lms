@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Throwable;
 
 /**
  * Doctrine entity listener for CCourseDescription to trigger Xapian indexing.
@@ -25,16 +26,35 @@ final class CourseDescriptionSearchEntityListener
 
     public function postPersist(CCourseDescription $description, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexCourseDescription($description);
+        $this->indexSafely($description, 'postPersist');
     }
 
     public function postUpdate(CCourseDescription $description, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexCourseDescription($description);
+        $this->indexSafely($description, 'postUpdate');
     }
 
     public function postRemove(CCourseDescription $description, LifecycleEventArgs $args): void
     {
-        $this->indexer->deleteCourseDescriptionIndex($description);
+        try {
+            $this->indexer->deleteCourseDescriptionIndex($description);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] CourseDescriptionSearchEntityListener postRemove: deletion failed: '
+                .$exception->getMessage()
+            );
+        }
+    }
+
+    private function indexSafely(CCourseDescription $description, string $event): void
+    {
+        try {
+            $this->indexer->indexCourseDescription($description);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] CourseDescriptionSearchEntityListener '.$event.': indexing failed: '
+                .$exception->getMessage()
+            );
+        }
     }
 }

@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Montru Google-map-on kun uzantlokoĵoj konservitaj en kromkampoj.';
+$strings['enable_api'] = 'Ŝarĝi Google Maps API';
+$strings['api_key'] = 'API-ŝlosilo';
+$strings['extra_field_name'] = 'Nomo de kromkampo';
+$strings['extra_field_name_help'] = 'Enigu unu aŭ plurajn uzantajn kromkampajn variablojn apartigitajn per komoj. La mapo povas montri ĝis 5 kampojn. Ekzemplo: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Uzantloka mapo';
+$strings['UsersCoordinatesMapHelp'] = 'Ĉi tiu mapo montras uzantlokoĵojn surbaze de agorditaj uzantaj kromkampoj.';
+$strings['GoogleMapsAdminIntro'] = 'Agordu la Google Maps API-ŝlosilon kaj la uzantajn kromkampojn kiuj enhavas adresojn aŭ lokoĵojn.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Kromkampoj';
+$strings['Access'] = 'Aliro';
+$strings['AdministratorsOnly'] = 'Nur administrantoj';
+$strings['OpenMap'] = 'Malfermi mapon';
+$strings['ConfigurePlugin'] = 'Agordi kromprogramon';
+$strings['Configured'] = 'Agordita';
+$strings['NotConfigured'] = 'Ne agordita';
+$strings['GoogleMapsApiDisabledWarning'] = 'Ŝargado de Google Maps API estas malŝaltita en la agordo de la kromprogramo.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Mankas Google Maps API-ŝlosilo.';
+$strings['ExtraFieldNameMissingWarning'] = 'Neniu uzanta kromkampo estis agordita.';
+$strings['ExtraFieldsNotFoundWarning'] = 'La sekvaj uzantaj kromkampoj ne estis trovitaj: %s.';
+$strings['NoUserCoordinatesFound'] = 'Neniu uzantloko estis trovita por la agorditaj kromkampoj.';
+$strings['ConfigureGoogleMapsFirst'] = 'Agordu kaj ebligu la Google Maps API antaŭ ol malfermi la mapon.';
+
+$strings['map_provider'] = 'Mapprovizanto';
+$strings['map_provider_help'] = 'Elektu la mapprovizanton uzatan de la kromprogramo kaj de la Socia mapo.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Mapprovizanto';
+$strings['MapProviderConfiguration'] = 'Agordo de provizanto';
+$strings['default_latitude'] = 'Defaŭlta latitudo';
+$strings['default_latitude_help'] = 'Defaŭlta latitudo de mapcentro. Uzata kiam neniu markilo disponeblas.';
+$strings['default_longitude'] = 'Defaŭlta longitudo';
+$strings['default_longitude_help'] = 'Defaŭlta longitudo de mapcentro. Uzata kiam neniu markilo disponeblas.';
+$strings['default_zoom'] = 'Defaŭlta zomo';
+$strings['default_zoom_help'] = 'Defaŭlta mapzomo inter 1 kaj 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap ne postulas API-ŝlosilon. Adresaj markiloj estas montrataj kiel serĉligiloj krom se koordinatoj disponeblas.';

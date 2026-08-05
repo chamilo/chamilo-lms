@@ -3,11 +3,21 @@
 
 require_once __DIR__.'/config.php';
 
-if (!api_user_is_login()) {
+if (api_is_anonymous()) {
     api_not_allowed(true);
 }
 
 $plugin = UserRemoteServicePlugin::create();
 
-header('Location: '.$plugin->getActiveServiceSpecificUserUrl());
+if (!$plugin->isEnabled()) {
+    api_not_allowed(true);
+}
+
+$url = $plugin->getActiveServiceSpecificUserUrl();
+
+if (empty($url)) {
+    api_not_allowed(true);
+}
+
+header('Location: '.$url);
 exit;

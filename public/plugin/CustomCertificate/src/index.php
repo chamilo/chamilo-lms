@@ -19,7 +19,7 @@ $_setting['student_view_enabled'] = 'false';
 $userId = api_get_user_id();
 $plugin = CustomCertificatePlugin::create();
 $nameTools = $plugin->get_lang('CertificateSetting');
-$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
+$enable = $plugin->isEnabled(true);
 $accessUrlId = api_get_current_access_url_id();
 $course_info = api_get_course_info();
 
@@ -47,11 +47,33 @@ if (!$enable) {
 }
 
 if (!$enableCourse && !$useDefault) {
-    api_not_allowed(true, $plugin->get_lang('ToolDisabledCourse'));
+    $backUrl = api_get_path(WEB_CODE_PATH).'course_info/infocours.php';
+    if (!empty(api_get_cidreq())) {
+        $backUrl .= '?'.api_get_cidreq();
+    }
+
+    Display::display_header($nameTools);
+    echo Display::return_message($plugin->get_lang('ToolDisabledCourse'), 'warning');
+    echo '<p>';
+    echo Display::url(get_lang('Back'), $backUrl, ['class' => 'btn btn--plain']);
+    echo '</p>';
+    Display::display_footer();
+    exit;
 }
 
 if ($enableCourse && $useDefault) {
-    api_not_allowed(true, $plugin->get_lang('ToolUseDefaultSettingCourse'));
+    $backUrl = api_get_path(WEB_CODE_PATH).'course_info/infocours.php';
+    if (!empty(api_get_cidreq())) {
+        $backUrl .= '?'.api_get_cidreq();
+    }
+
+    Display::display_header($nameTools);
+    echo Display::return_message($plugin->get_lang('ToolUseDefaultSettingCourse'), 'warning');
+    echo '<p>';
+    echo Display::url(get_lang('Back'), $backUrl, ['class' => 'btn btn--plain']);
+    echo '</p>';
+    Display::display_footer();
+    exit;
 }
 
 $allow = api_is_platform_admin() || api_is_teacher();
@@ -60,6 +82,135 @@ if (!$allow) {
 }
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
+$infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
+
+if ('POST' === strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? ''))) {
+    $formValues = $_POST;
+
+    if (!Security::check_token('post')) {
+        Display::addFlash(Display::return_message(get_lang('Invalid token'), 'error'));
+        Security::clear_token();
+        header('Location: '.api_get_self().$urlParams);
+        exit;
+    }
+
+    $contents = '';
+    if (!empty($formValues['contents'])) {
+        $contents = (string) $formValues['contents'];
+    }
+
+    $params = [
+        'access_url_id' => $accessUrlId,
+        'c_id' => $courseId,
+        'session_id' => $sessionId,
+        'content_course' => Security::remove_XSS((string) ($formValues['content_course'] ?? '')),
+        'contents_type' => (int) ($formValues['contents_type'] ?? 0),
+        'contents' => Security::remove_XSS($contents),
+        'date_change' => (int) ($formValues['date_change'] ?? 0),
+        'date_start' => customcertificate_normalize_datetime((string) ($formValues['date_start'] ?? '')),
+        'date_end' => customcertificate_normalize_datetime((string) ($formValues['date_end'] ?? '')),
+        'place' => Security::remove_XSS((string) ($formValues['place'] ?? '')),
+        'type_date_expediction' => (int) ($formValues['type_date_expediction'] ?? 0),
+        'day' => Security::remove_XSS((string) ($formValues['day'] ?? '')),
+        'month' => Security::remove_XSS((string) ($formValues['month'] ?? '')),
+        'year' => Security::remove_XSS((string) ($formValues['year'] ?? '')),
+        'logo_left' => (string) ($infoCertificate['logo_left'] ?? ''),
+        'logo_center' => (string) ($infoCertificate['logo_center'] ?? ''),
+        'logo_right' => (string) ($infoCertificate['logo_right'] ?? ''),
+        'seal' => (string) ($infoCertificate['seal'] ?? ''),
+        'signature1' => (string) ($infoCertificate['signature1'] ?? ''),
+        'signature2' => (string) ($infoCertificate['signature2'] ?? ''),
+        'signature3' => (string) ($infoCertificate['signature3'] ?? ''),
+        'signature4' => (string) ($infoCertificate['signature4'] ?? ''),
+        'signature_text1' => Security::remove_XSS((string) ($formValues['signature_text1'] ?? '')),
+        'signature_text2' => Security::remove_XSS((string) ($formValues['signature_text2'] ?? '')),
+        'signature_text3' => Security::remove_XSS((string) ($formValues['signature_text3'] ?? '')),
+        'signature_text4' => Security::remove_XSS((string) ($formValues['signature_text4'] ?? '')),
+        'background' => (string) ($infoCertificate['background'] ?? ''),
+        'margin_left' => (int) ($formValues['margin_left'] ?? 0),
+        'margin_right' => (int) ($formValues['margin_right'] ?? 0),
+        'certificate_default' => $defaultCertificate,
+    ];
+
+    if (!empty($infoCertificate['id']) && $infoCertificate['id'] > 0) {
+        $certificateId = (int) $infoCertificate['id'];
+        Database::update($table, $params, ['id = ?' => $certificateId]);
+    } else {
+        $certificateId = (int) Database::insert($table, $params);
+    }
+
+    if ($certificateId <= 0) {
+        Display::addFlash(Display::return_message($plugin->get_lang('CouldNotSaveCertificate'), 'error'));
+        Security::clear_token();
+        header('Location: '.api_get_self().$urlParams);
+        exit;
+    }
+
+    $fieldList = [
+        'logo_left',
+        'logo_center',
+        'logo_right',
+        'seal',
+        'signature1',
+        'signature2',
+        'signature3',
+        'signature4',
+        'background',
+    ];
+
+    foreach ($fieldList as $field) {
+        $checkLogo[$field] = false;
+
+        if (!empty($formValues['remove_'.$field]) || !empty($_FILES[$field]['size'])) {
+            checkInstanceImage(
+                $certificateId,
+                $infoCertificate[$field] ?? '',
+                $field
+            );
+        }
+
+        if (!empty($_FILES[$field]['size'])) {
+            $newPicture = customcertificate_upload_image(
+                $_FILES[$field],
+                $certificateId,
+                $field
+            );
+
+            if (!empty($newPicture)) {
+                Database::update(
+                    $table,
+                    [$field => $newPicture],
+                    ['id = ?' => $certificateId]
+                );
+                $checkLogo[$field] = true;
+            }
+        }
+    }
+
+    if (1 === (int) ($formValues['use_default'] ?? 0)) {
+        $infoCertificateDefault = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
+        if (!empty($infoCertificateDefault)) {
+            foreach ($fieldList as $field) {
+                if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
+                    Database::update(
+                        $table,
+                        [$field => $infoCertificateDefault[$field]],
+                        ['id = ?' => $certificateId]
+                    );
+                }
+            }
+        }
+    }
+
+    Display::addFlash(Display::return_message(get_lang('Saved')));
+
+    Security::clear_token();
+    header('Location: '.api_get_self().$urlParams);
+    exit;
+}
+
+$token = Security::get_token();
+
 $htmlHeadXtra[] = api_get_js_simple(
     api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/resources/js/certificate.js'
 );
@@ -81,7 +232,7 @@ $htmlHeadXtra[] = '<script>
                 var plugin_path = "'.api_get_path(WEB_PLUGIN_PATH).'";
                 var ajax_path = plugin_path + "CustomCertificate/src/customcertificate.ajax.php?a=delete_certificate";
                 $.ajax({
-                    data: {courseId: courseId, sessionId: sessionId, accessUrlId: accessUrlId},
+                    data: {courseId: courseId, sessionId: sessionId, accessUrlId: accessUrlId, sec_token: "'.$token.'"},
                     url: ajax_path,
                     type: "POST",
                     success: function (response) {
@@ -94,9 +245,7 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-// Get info certificate
-$infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
-
+// Build form
 $form = new FormValidator(
     'formEdit',
     'post',
@@ -105,116 +254,6 @@ $form = new FormValidator(
     ['class' => 'form-vertical']
 );
 
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
-    if (empty($formValues['contents'])) {
-        $contents = '';
-    } else {
-        $contents = $formValues['contents'];
-    }
-    $check = Security::check_token('post');
-    if ($check) {
-        $date_start = str_replace('/', '-', $formValues['date_start']);
-        $date_end = str_replace('/', '-', $formValues['date_end']);
-        $params = [
-            'access_url_id' => api_get_current_access_url_id(),
-            'c_id' => $formValues['c_id'],
-            'session_id' => $formValues['session_id'],
-            'content_course' => $formValues['content_course'],
-            'contents_type' => (int) $formValues['contents_type'],
-            'contents' => $contents,
-            'date_change' => intval($formValues['date_change']),
-            'date_start' => date("Y-m-d", strtotime($date_start)),
-            'date_end' => date("Y-m-d", strtotime($date_end)),
-            'place' => $formValues['place'],
-            'type_date_expediction' => (int) $formValues['type_date_expediction'],
-            'day' => $formValues['day'],
-            'month' => $formValues['month'],
-            'year' => $formValues['year'],
-            'signature_text1' => $formValues['signature_text1'],
-            'signature_text2' => $formValues['signature_text2'],
-            'signature_text3' => $formValues['signature_text3'],
-            'signature_text4' => $formValues['signature_text4'],
-            'margin_left' => (int) $formValues['margin_left'],
-            'margin_right' => (int) $formValues['margin_right'],
-            'certificate_default' => 0,
-        ];
-
-        if (intval(1 == $formValues['default_certificate'])) {
-            $params['certificate_default'] = 1;
-        }
-
-        // Insert or Update
-        if ($infoCertificate['id'] > 0) {
-            $certificateId = $infoCertificate['id'];
-            Database::update($table, $params, ['id = ?' => $certificateId]);
-        } else {
-            $certificateId = Database::insert($table, $params);
-        }
-
-        // Image manager
-        $fieldList = [
-            'logo_left',
-            'logo_center',
-            'logo_right',
-            'seal',
-            'signature1',
-            'signature2',
-            'signature3',
-            'signature4',
-            'background',
-        ];
-
-        foreach ($fieldList as $field) {
-            $checkLogo[$field] = false;
-            if (!empty($formValues['remove_'.$field]) || $_FILES[$field]['size']) {
-                checkInstanceImage(
-                    $certificateId,
-                    $infoCertificate[$field],
-                    $field
-                );
-            }
-
-            throw new Exception('@todo custom certificate upload');
-            if ($_FILES[$field]['size']) {
-                $newPicture = api_upload_file(
-                    'certificates',
-                    $_FILES[$field],
-                    $certificateId,
-                    $formValues[$field.'_crop_result']
-                );
-                if ($newPicture) {
-                    $sql = "UPDATE $table
-                            SET $field = '".$newPicture['path_to_save']."'
-                            WHERE id = $certificateId";
-                    Database::query($sql);
-                    $checkLogo[$field] = true;
-                }
-            }
-        }
-
-        // Certificate Default
-        if (intval(1 == $formValues['use_default'])) {
-            $infoCertificateDefault = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
-            if (!empty($infoCertificateDefault)) {
-                foreach ($fieldList as $field) {
-                    if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
-                        $sql = "UPDATE $table
-                                SET $field = '".$infoCertificateDefault[$field]."'
-                                WHERE id = $certificateId";
-                        Database::query($sql);
-                    }
-                }
-            }
-        }
-
-        Display::addFlash(Display::return_message(get_lang('Saved')));
-
-        Security::clear_token();
-        header('Location: '.api_get_self().$urlParams);
-        exit;
-    }
-}
 
 if (empty($infoCertificate)) {
     $infoCertificate = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
@@ -233,29 +272,50 @@ if (empty($infoCertificate)) {
 
 // Display the header
 Display::display_header($nameTools);
+
 $actionsLeft = Display::url(
-    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Certificate')),
-    'print_certificate.php'.$urlParams
+    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon text-primary', null, ICON_SIZE_SMALL, get_lang('Certificate')).
+    '<span>'.get_lang('Certificate').'</span>',
+    'print_certificate.php'.$urlParams,
+    [
+        'class' => 'inline-flex items-center gap-2 rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 font-semibold text-primary shadow-sm hover:bg-support-2',
+    ]
 );
+
 if (!empty($courseId) && !$useDefault) {
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $plugin->get_lang('DeleteCertificate')),
+        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon text-danger', null, ICON_SIZE_SMALL, $plugin->get_lang('DeleteCertificate')).
+        '<span>'.$plugin->get_lang('DeleteCertificate').'</span>',
         'delete_certificate.php'.$urlParams,
-        ['id' => 'delete_certificate']
+        [
+            'id' => 'delete_certificate',
+            'class' => 'inline-flex items-center gap-2 rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 font-semibold text-danger shadow-sm hover:bg-support-2',
+        ]
     );
 }
 
-echo Display::toolbarAction(
-    'toolbar-document',
-    [$actionsLeft]
-);
+echo '<div class="ch customcertificate-page space-y-6">';
+echo '<div class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">';
+echo '<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">';
+echo '<div class="flex items-center gap-3">';
+echo Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon-gradient', null, ICON_SIZE_MEDIUM, get_lang('Certificate'));
+echo '<div>';
+echo '<h2 class="m-0 text-xl font-semibold text-gray-90">'.$nameTools.'</h2>';
+echo '<p class="m-0 mt-1 text-body-2 text-gray-50">'.$plugin->get_lang('CertificateSetting').'</p>';
+echo '</div>';
+echo '</div>';
+echo '<div class="flex flex-wrap items-center gap-2">'.$actionsLeft.'</div>';
+echo '</div>';
+echo '</div>';
 
 if ($useDefault && $courseId > 0) {
-    echo Display::return_message(get_lang('InfoFromDefaultCertificate'), 'info');
+    echo '<div class="rounded-lg border border-info bg-support-1 p-4 text-body-2 text-gray-90">';
+    echo Display::return_message($plugin->get_lang('InfoFromDefaultCertificate'), 'info', false);
+    echo '</div>';
 }
 
 // Student and course section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('StudentCourseInfo')).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('StudentCourseInfo'), 'mdi-account-school-outline'));
 $form->addHtml('<div class="col-sm-8">');
 $dir = '/';
 $courseInfo = api_get_course_info();
@@ -267,9 +327,6 @@ $editorConfig = [
     'cols-size' => [0, 12, 0],
     'FullPage' => true,
     'InDocument' => true,
-    'CreateDocumentDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
-    'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
-    'BaseHref' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$dir,
 ];
 $form->addHtmlEditor(
     'content_course',
@@ -277,7 +334,7 @@ $form->addHtmlEditor(
     false,
     true,
     $editorConfig,
-    true
+    []
 );
 $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-4">');
@@ -298,17 +355,17 @@ $strInfo .= '((start_date))<br />';
 $strInfo .= '((end_date))<br />';
 $strInfo .= '((date_expediction))';
 
-$createCertificate = get_lang('CreateCertificateWithTags');
+$createCertificate = $plugin->get_lang('CreateCertificateWithTags');
 $form->addElement(
     'html',
     Display::return_message($createCertificate.': <br />'.$strInfo, 'normal', false)
 );
 $form->addHtml('</div>');
-$form->addHtml('</fieldset>');
+$form->addHtml(customcertificate_close_section());
 $form->addHtml('<div class="clearfix"></div>');
 
 // Contents section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Contents')).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('Contents'), 'mdi-format-list-bulleted'));
 $extra = '';
 if (empty($infoCertificate['contents_type'])) {
     $infoCertificate['contents_type'] = 0;
@@ -320,7 +377,7 @@ $element = &$form->createElement(
     'radio',
     'contents_type',
     '',
-    get_lang('ContentsCourseDescription'),
+    $plugin->get_lang('ContentsCourseDescription'),
     0,
     ['id' => 'contents_type_0', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
 );
@@ -331,7 +388,7 @@ $element = &$form->createElement(
     'radio',
     'contents_type',
     '',
-    get_lang('ContentsIndexLearnpath'),
+    $plugin->get_lang('ContentsIndexLearnpath'),
     1,
     ['id' => 'contents_type_1', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
 );
@@ -341,7 +398,7 @@ $element = &$form->createElement(
     'radio',
     'contents_type',
     '',
-    get_lang('ContentsHide'),
+    $plugin->get_lang('ContentsHide'),
     3,
     ['id' => 'contents_type_3', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
 );
@@ -351,7 +408,7 @@ $element = &$form->createElement(
     'radio',
     'contents_type',
     '',
-    get_lang('ContentsCustom'),
+    $plugin->get_lang('ContentsCustom'),
     2,
     ['id' => 'contents_type_2', 'onclick' => 'javascript: contentsTypeSwitchRadioButton();']
 );
@@ -360,7 +417,7 @@ $group[] = $element;
 $form->addGroup(
     $group,
     'contents_type',
-    get_lang('ContentsToShow'),
+    $plugin->get_lang('ContentsToShow'),
     null,
     false
 );
@@ -373,31 +430,28 @@ $editorConfig = [
     'cols-size' => [2, 10, 0],
     'FullPage' => true,
     'InDocument' => true,
-    'CreateDocumentDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
-    'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/',
-    'BaseHref' => api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$dir,
     'id' => 'contents',
     $extra,
 ];
 $form->addHtmlEditor(
     'contents',
-    get_lang('Contents'),
+    $plugin->get_lang('Contents'),
     false,
     true,
     $editorConfig,
-    true
+    []
 );
 $form->addHtml('</div>');
 
 // Dates section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang("Dates")).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('Dates'), 'mdi-calendar-range'));
 
 $group = [];
 $option1 = &$form->createElement(
     'radio',
     'date_change',
     '',
-    get_lang('UseDateSessionAccess'),
+    $plugin->get_lang('UseDateSessionAccess'),
     0,
     ['id' => 'date_change_0', 'onclick' => 'javascript: dateCertificateSwitchRadioButton0();']
 );
@@ -407,7 +461,7 @@ $option2 = &$form->createElement(
     'radio',
     'date_change',
     '',
-    get_lang('None'),
+    $plugin->get_lang('None'),
     2,
     ['id' => 'date_change_2', 'onclick' => 'javascript: dateCertificateSwitchRadioButton2();']
 );
@@ -417,7 +471,7 @@ $option3 = &$form->createElement(
     'radio',
     'date_change',
     '',
-    get_lang('Custom'),
+    $plugin->get_lang('Custom'),
     1,
     ['id' => 'date_change_1', 'onclick' => 'javascript: dateCertificateSwitchRadioButton1();']
 );
@@ -426,7 +480,7 @@ $group[] = $option3;
 $form->addGroup(
     $group,
     'date_change',
-    get_lang('CourseDeliveryDates'),
+    $plugin->get_lang('CourseDeliveryDates'),
     null,
     false
 );
@@ -465,7 +519,7 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
 
 $form->addText(
     'place',
-    get_lang('ExpectionPlace'),
+    $plugin->get_lang('ExpectionPlace'),
     false,
     ['id' => 'place', 'cols-size' => [2, 5, 5], 'autofocus']
 );
@@ -475,7 +529,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('UseDateEndAccessSession'),
+    $plugin->get_lang('UseDateEndAccessSession'),
     0,
     [
         'id' => 'type_date_expediction_0',
@@ -489,7 +543,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('UseDateDownloadCertificate'),
+    $plugin->get_lang('UseDateDownloadCertificate'),
     1,
     [
         'id' => 'type_date_expediction_1',
@@ -502,7 +556,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('UseDateGenerationCertificate'),
+    $plugin->get_lang('UseDateGenerationCertificate'),
     4,
     [
         'id' => 'type_date_expediction_4',
@@ -515,7 +569,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('None'),
+    $plugin->get_lang('None'),
     3,
     [
         'id' => 'type_date_expediction_3',
@@ -528,7 +582,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('UseCustomDate'),
+    $plugin->get_lang('UseCustomDate'),
     2,
     [
         'id' => 'type_date_expediction_2',
@@ -540,7 +594,7 @@ $group[] = $option;
 $form->addGroup(
     $group,
     'type_date_expediction',
-    get_lang('DateExpediction'),
+    $plugin->get_lang('DateExpediction'),
     null,
     false
 );
@@ -587,17 +641,15 @@ $form->addHtml(
         </div>
     </div>'
 );
-$form->addHtml('</fieldset>');
+$form->addHtml(customcertificate_close_section());
 
 // Signature section
-$base = api_get_path(WEB_UPLOAD_PATH);
-$path = $base.'certificates/';
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('LogosSeal')).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('LogosSeal'), 'mdi-image-multiple-outline'));
 // Logo 1
 $form->addHtml('<div class="col-sm-6">');
 $form->addFile(
     'logo_left',
-    get_lang('LogoLeft'),
+    $plugin->get_lang('LogoLeft'),
     [
         'id' => 'logo_left',
         'class' => 'picture-form',
@@ -611,7 +663,7 @@ if (!empty($infoCertificate['logo_left'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_left'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['logo_left']).'" width="100"  />
         <br><br>'
     );
 }
@@ -627,7 +679,7 @@ $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addFile(
     'logo_center',
-    get_lang('LogoCenter'),
+    $plugin->get_lang('LogoCenter'),
     [
         'id' => 'logo_center',
         'class' => 'picture-form',
@@ -641,7 +693,7 @@ if (!empty($infoCertificate['logo_center'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_center'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['logo_center']).'" width="100"  />
         <br><br>'
     );
 }
@@ -657,7 +709,7 @@ $form->addHtml('</div><div class="clearfix"></div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addFile(
     'logo_right',
-    get_lang('LogoRight'),
+    $plugin->get_lang('LogoRight'),
     [
         'id' => 'logo_right',
         'class' => 'picture-form',
@@ -671,7 +723,7 @@ if (!empty($infoCertificate['logo_right'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['logo_right'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['logo_right']).'" width="100"  />
         <br><br>'
     );
 }
@@ -686,7 +738,7 @@ $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addFile(
     'seal',
-    get_lang('Seal'),
+    $plugin->get_lang('Seal'),
     [
         'id' => 'seal',
         'class' => 'picture-form',
@@ -700,7 +752,7 @@ if (!empty($infoCertificate['seal'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['seal'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['seal']).'" width="100"  />
         <br><br>'
     );
 }
@@ -712,19 +764,19 @@ $form->addRule(
     $allowedPictureTypes
 );
 $form->addHtml('</div><div class="clearfix"></div>');
-$form->addHtml('</fieldset>');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Signatures')).'</legend>');
+$form->addHtml(customcertificate_close_section());
+$form->addHtml(customcertificate_open_section($plugin->get_lang('Signatures'), 'mdi-draw-pen'));
 // signature 1
 $form->addHtml('<div class="col-sm-6">');
 $form->addText(
     'signature_text1',
-    get_lang('SignatureText1'),
+    $plugin->get_lang('SignatureText1'),
     false,
     ['cols-size' => [2, 10, 0], 'autofocus']
 );
 $form->addFile(
     'signature1',
-    get_lang('Signature1'),
+    $plugin->get_lang('Signature1'),
     [
         'id' => 'signature1',
         'class' => 'picture-form',
@@ -738,7 +790,7 @@ if (!empty($infoCertificate['signature1'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature1'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['signature1']).'" width="100"  />
         <br><br>'
     );
 }
@@ -754,13 +806,13 @@ $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addText(
     'signature_text2',
-    get_lang('SignatureText2'),
+    $plugin->get_lang('SignatureText2'),
     false,
     ['cols-size' => [2, 10, 0], 'autofocus']
 );
 $form->addFile(
     'signature2',
-    get_lang('Signature2'),
+    $plugin->get_lang('Signature2'),
     [
         'id' => 'signature2',
         'class' => 'picture-form',
@@ -774,7 +826,7 @@ if (!empty($infoCertificate['signature2'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature2'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['signature2']).'" width="100"  />
         <br><br>'
     );
 }
@@ -790,13 +842,13 @@ $form->addHtml('</div><div class="clearfix"></div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addText(
     'signature_text3',
-    get_lang('SignatureText3'),
+    $plugin->get_lang('SignatureText3'),
     false,
     ['cols-size' => [2, 10, 0], 'autofocus']
 );
 $form->addFile(
     'signature3',
-    get_lang('Signature3'),
+    $plugin->get_lang('Signature3'),
     [
         'id' => 'signature3',
         'class' => 'picture-form',
@@ -810,7 +862,7 @@ if (!empty($infoCertificate['signature3'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature3'].'" width="100" />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['signature3']).'" width="100" />
         <br><br>'
     );
 }
@@ -826,13 +878,13 @@ $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
 $form->addText(
     'signature_text4',
-    get_lang('SignatureText4'),
+    $plugin->get_lang('SignatureText4'),
     false,
     ['cols-size' => [2, 10, 0], 'autofocus']
 );
 $form->addFile(
     'signature4',
-    get_lang('Signature4'),
+    $plugin->get_lang('Signature4'),
     [
         'id' => 'signature4',
         'class' => 'picture-form',
@@ -846,7 +898,7 @@ if (!empty($infoCertificate['signature4'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['signature4'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['signature4']).'" width="100"  />
         <br><br>'
     );
 }
@@ -858,13 +910,13 @@ $form->addRule(
     $allowedPictureTypes
 );
 $form->addHtml('</div><div class="clearfix"></div>');
-$form->addHtml('</fieldset><br>');
+$form->addHtml(customcertificate_close_section().'<br>');
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Background')).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('Background'), 'mdi-image-outline'));
 // background
 $form->addFile(
     'background',
-    get_lang('Background'),
+    $plugin->get_lang('Background'),
     [
         'id' => 'background',
         'class' => 'picture-form',
@@ -878,7 +930,7 @@ if (!empty($infoCertificate['background'])) {
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
-        <img src="'.$path.$infoCertificate['background'].'" width="100"  />
+        <img src="'.CustomCertificatePlugin::getCertificateImageUrl($infoCertificate['background']).'" width="100"  />
         <br><br>'
     );
 }
@@ -889,10 +941,10 @@ $form->addRule(
     'filetype',
     $allowedPictureTypes
 );
-$form->addHtml('</fieldset>');
+$form->addHtml(customcertificate_close_section());
 $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Other options')).'</legend>');
+$form->addHtml(customcertificate_open_section($plugin->get_lang('OtherOptions'), 'mdi-tune'));
 $marginOptions = [];
 $i = 0;
 while ($i < 298) {
@@ -901,23 +953,23 @@ while ($i < 298) {
 }
 $form->addSelect(
     'margin_left',
-    get_lang('Margin to the left'),
+    $plugin->get_lang('MarginLeft'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
 $form->addSelect(
     'margin_right',
-    get_lang('Margin to the right'),
+    $plugin->get_lang('MarginRight'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
-$form->addHtml('</fieldset>');
+$form->addHtml(customcertificate_close_section());
 $form->addHtml('</div>');
 $form->addHtml('<div class="clearfix"></div>');
 
 $form->addButton(
     'submit',
-    get_lang('Save certificate'),
+    $plugin->get_lang('SaveCertificate'),
     'check',
     'primary',
     null,
@@ -929,7 +981,6 @@ $form->addButton(
 $form->addElement('hidden', 'formSent');
 $infoCertificate['formSent'] = 1;
 $form->setDefaults($infoCertificate);
-$token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
 $form->addElement('hidden', 'use_default');
 $form->addElement('hidden', 'default_certificate');
@@ -944,14 +995,68 @@ $form->setConstants(
         'session_id' => $sessionId,
     ]
 );
-echo '<div class="page-create">';
-echo '<div class="row" style="overflow:hidden">';
-echo '<div id="doc_form" class="col-md-12">';
+echo '<div class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">';
+echo '<div id="doc_form" class="w-full">';
 echo $form->returnForm();
 echo '</div>';
 echo '</div>';
 echo '</div>';
 Display::display_footer();
+
+
+
+/**
+ * Open a styled section for the legacy form.
+ */
+function customcertificate_open_section(string $title, string $icon): string
+{
+    return '<section class="mb-6 overflow-hidden rounded-lg border border-gray-25 bg-white shadow-sm">'.
+        '<div class="flex items-center gap-2 border-b border-gray-20 bg-support-2 px-4 py-3">'.
+        '<span class="mdi '.$icon.' ch-tool-icon text-primary" aria-hidden="true"></span>'.
+        '<h3 class="m-0 text-body-2 font-semibold text-gray-90">'.htmlspecialchars($title, ENT_QUOTES).'</h3>'.
+        '</div>'.
+        '<div class="p-4">';
+}
+
+/**
+ * Close a styled section for the legacy form.
+ */
+function customcertificate_close_section(): string
+{
+    return '</div></section>';
+}
+
+/**
+ * Uploads a certificate image and returns the relative path stored in DB.
+ *
+ * @param array  $file
+ * @param int    $certificateId
+ * @param string $field
+ *
+ * @return string|null
+ */
+
+function customcertificate_normalize_datetime(string $value): string
+{
+    $value = trim($value);
+
+    if ('' === $value) {
+        return '1970-01-01 00:00:00';
+    }
+
+    $timestamp = strtotime(str_replace('/', '-', $value));
+
+    if (false === $timestamp) {
+        return '1970-01-01 00:00:00';
+    }
+
+    return date('Y-m-d H:i:s', $timestamp);
+}
+
+function customcertificate_upload_image(array $file, int $certificateId, string $field): ?string
+{
+    return CustomCertificatePlugin::storeUploadedCertificateImage($file, $certificateId, $field);
+}
 
 /**
  * Delete the file if there is only one instance.
@@ -971,7 +1076,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);
     if (1 == Database::num_rows($res)) {
-        api_remove_uploaded_file($type, $imagePath);
+        CustomCertificatePlugin::deleteUploadedCertificateFile($imagePath);
     }
 
     $sql = "UPDATE $table SET $field = '' WHERE id = $certificateId";

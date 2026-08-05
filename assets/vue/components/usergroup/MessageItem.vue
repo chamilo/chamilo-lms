@@ -17,7 +17,7 @@
       </div>
       <div
         class="message-content"
-        v-html="message.content"
+        v-html="sanitizeHtml(message.content)"
       ></div>
       <div
         v-if="message.attachment && message.attachment.length"
@@ -84,6 +84,7 @@
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useI18n } from "vue-i18n"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t } = useI18n()
 

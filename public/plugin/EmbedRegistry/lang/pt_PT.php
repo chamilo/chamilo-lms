@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Dentro dessas datas, este conteúdo embutido s
 $strings['HtmlCode'] = 'Código HTML';
 $strings['HtmlCodeHelp'] = 'O código HTML partilhado, fornecido pelo serviço externo, ao pedir para partilhar em formato Embutido.';
 $strings['LaunchContent'] = 'Lançar conteúdo';
+
+$strings['InvalidDateRange'] = 'A data de início deve ser anterior ou igual à data de fim.';
+
+$strings['InvalidSecurityToken'] = 'Token de segurança inválido. Por favor, recarregue a página e tente novamente.';

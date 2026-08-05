@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importeren vanuit Moodle';
+$strings['plugin_comment'] = 'Voer een importproces uit vanuit een Moodle-database en bestanden naar Chamilo.';
+
+$strings['MoodlePassword'] = 'Moodle-wachtwoord';
+$strings['UninstallError'] = 'Er is een fout opgetreden bij het verwijderen van de plugin.';
+
+$strings['db_host'] = 'Moodle DB-host';
+$strings['db_user'] = 'Moodle DB-gebruiker';
+$strings['db_password'] = 'Moodle DB-wachtwoord';
+$strings['db_name'] = 'Moodle DB-naam';
+$strings['user_filter'] = 'Filter voor gebruikers';
+$strings['user_filter_help'] = 'Importeer alleen gebruikers met een gebruikersnaam die begint met deze string.<br>De import van cursussen wordt ook beïnvloed door deze configuratie, omdat alleen cursussen worden geïmporteerd waarin gebruikers met dit voorvoegsel zijn ingeschreven.';
+$strings['url_id'] = 'URL-ID';
+$strings['url_id_help'] = 'Toegangs-URL-ID om cursussen, gebruikers en sessies in op te slaan (bij gebruik van multi-url).';
+$strings['moodle_path'] = 'Moodledata-pad';
+$strings['moodle_path_help'] = 'Het pad naar de moodledata-map. Meestal iets als <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Gebruikers';
+$strings['CourseCategoriesTask'] = 'Cursuscategorieën';
+$strings['CoursesTask'] = 'Cursussen';
+$strings['CourseSectionsTask'] = 'Cursussecties';
+$strings['CourseModulesLessonTask'] = 'Cursusmodules: Lessen';
+$strings['LessonPagesTask'] = "Lespagina's";
+$strings['LessonPagesDocumentTask'] = "Lespagina's: Documenten";
+$strings['FilesForLessonPagesTask'] = "Bestanden voor lespagina's";
+$strings['LessonPagesQuizTask'] = "Lespagina's: Vragen";
+$strings['LessonPagesQuizQuestionTask'] = "Vragen voor vraagpagina's";
+$strings['LessonAnswersTrueFalseTask'] = 'Antwoorden voor Waar/Onwaar-vragen';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Antwoorden voor Meerkeuzevragen';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Antwoorden voor Meerdere Antwoorden-vragen';
+$strings['LessonAnswersMatchingTask'] = 'Antwoorden voor Koppelvragen';
+$strings['LessonAnswersEssayTask'] = 'Antwoorden voor Essay-vragen';
+$strings['LessonAnswersShortAnswerTask'] = 'Antwoorden voor Korte Antwoorden-vragen';
+$strings['FilesForLessonAnswersTask'] = 'Bestanden voor lesantwoorden';
+$strings['CourseModulesQuizTask'] = 'Cursusmodules: Quizzen';
+$strings['CQuizTask'] = 'C Quiz';
+$strings['RoleAssignmentsTask'] = 'Roltoewijzingen';
+$strings['QuizzesTask'] = 'Quizzen';
+$strings['FilesForQuizzesTask'] = 'Bestanden voor quizzen';
+$strings['QuestionCategoriesTask'] = 'Vraagcategorieën';
+$strings['QuestionsTask'] = 'Vragen';
+$strings['QuestionMultiChoiceSingleTask'] = 'Antwoorden voor meerkeuzevragen (enkel)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Antwoorden voor meerkeuzevragen (meerdere)';
+$strings['QuestionsTrueFalseTask'] = 'Antwoorden voor waar/onwaar-vragen';
+$strings['QuestionShortAnswerTask'] = 'Antwoorden voor korte antwoordvragen';
+$strings['CourseModulesScormTask'] = 'SCORM-cursussen';
+$strings['ScormScoesTask'] = 'SCORM-items';
+$strings['FilesForScormScoesTask'] = 'Bestanden voor SCORM-items';
+$strings['UserSessionsTask'] = 'Cursussessies voor gebruikers';
+$strings['CourseIntroductionsTask'] = 'Cursusintroducties';
+$strings['FilesForCourseIntroductionsTask'] = 'Bestanden voor cursusintroducties';
+$strings['FilesForCourseSectionsTask'] = 'Bestanden voor cursussecties';
+$strings['CourseModulesUrlTask'] = "Cursusmodules: URL's";
+$strings['UrlsTask'] = "URL's";
+$strings['SortSectionModulesTask'] = 'Modules sorteren in sectie';
+$strings['UsersScormsViewTask'] = 'SCORM-weergaven voor gebruikers';
+$strings['UsersScormsProgressTask'] = 'SCORM-voortgang';
+$strings['UsersLearnPathsTask'] = 'Leerpadweergaven van gebruikers';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Lesstimer naar starttijd van leerpadsectie';
+$strings['QuizzesScoresTask'] = 'Quizscores bijwerken in leerpad';
+$strings['QuestionGapselectTask'] = 'Antwoorden voor gapselect-vragen';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Lesvertakking naar totale tijd in leerpaddocumenten';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Lespogingen naar totale tijd in leerpadquizzen';
+$strings['UsersLearnPathsQuizzesTask'] = 'Quizpogingen naar leerpadquizpogingen';
+$strings['UsersQuizzesAttemptsTask'] = 'Quizpogingen van gebruikers';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Vragenpogingen van gebruikers voor shortanswer';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Vragenpogingen van gebruikers voor gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Vragenpogingen van gebruikers voor truefalse';
+$strings['UsersLastLoginTask'] = 'Laatste aanmeldingen voor gebruikers';
+$strings['TrackLoginTask'] = 'Eerste aanmelding en laatste afmelding';
+$strings['TrackCourseAccessTask'] = 'Gebruikers toegang tot cursus';
+$strings['UserLearnPathsProgressScript'] = 'Voortgang bijwerken in leerpaden voor gebruikers.';
+$strings['UserScormsProgressScript'] = "Voortgang bijwerken in SCORM's voor gebruikers.";
+
+$strings['InstallError'] = 'Er is een fout opgetreden bij het installeren van de plugin: %s';
+$strings['AdminIntro'] = 'Voer Moodle-migratietaken in volgorde uit. Elke stap is alleen ingeschakeld nadat de bovenliggende stap is voltooid.';
+$strings['MoodleDatabase'] = 'Moodle-database';
+$strings['MoodledataPath'] = 'Moodledata-pad';
+$strings['AccessUrlId'] = 'Toegangs-URL-ID';
+$strings['Configured'] = 'Geconfigureerd';
+$strings['NotConfigured'] = 'Niet geconfigureerd';
+$strings['ConfigurePlugin'] = 'Plugin configureren';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Configureer de Moodle-databasehost, gebruiker en databasenaam voordat u migratietaken uitvoert.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata-pad is leeg. Bestandsgerelateerde taken kunnen mislukken totdat deze instelling is geconfigureerd.';
+$strings['InvalidMigrationAction'] = 'Ongeldige migratieactie.';
+$strings['InvalidSecurityToken'] = 'Ongeldig beveiligingstoken. Herlaad de pagina en probeer het opnieuw.';
+$strings['MigrationTasks'] = 'Migratietaken';
+$strings['MaintenanceScripts'] = 'Onderhoudsscripts';
+$strings['ExecutionOutput'] = 'Uitvoer';
+$strings['TaskAlreadyExecuted'] = 'Deze taak of dit script is al uitgevoerd.';
+$strings['SelectTaskToRun'] = 'Selecteer een migratietaak om uit te voeren. Uitvoer verschijnt hier.';

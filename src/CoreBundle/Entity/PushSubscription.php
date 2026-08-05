@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -15,6 +14,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Repository\PushSubscriptionRepository;
+use Chamilo\CoreBundle\State\PushSubscriptionStateProcessor;
+use Chamilo\CoreBundle\State\PushSubscriptionStateProvider;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -22,20 +23,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER')"),
+        new Get(
+            security: "is_granted('ROLE_USER')",
+        ),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+        ),
+        new GetCollection(
+            security: "is_granted('ROLE_USER')",
+        ),
+        new Delete(
+            security: "is_granted('ROLE_USER')",
+        ),
     ],
     normalizationContext: ['groups' => ['pushsubscription:read']],
     denormalizationContext: ['groups' => ['pushsubscription:write']],
-    paginationClientEnabled: false
+    paginationClientEnabled: false,
+    provider: PushSubscriptionStateProvider::class,
+    processor: PushSubscriptionStateProcessor::class,
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'endpoint' => 'exact',
-])]
-#[ApiFilter(NumericFilter::class, properties: [
-    'user.id',
 ])]
 #[ORM\Table(name: 'push_subscription')]
 #[ORM\Index(columns: ['user_id'], name: 'idx_push_subscription_user')]
@@ -53,12 +61,12 @@ class PushSubscription
     #[ORM\Column(name: 'endpoint', type: 'text')]
     private string $endpoint;
 
-    #[Groups(['pushsubscription:read', 'pushsubscription:write'])]
+    #[Groups(['pushsubscription:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'public_key', type: 'text')]
     private string $publicKey;
 
-    #[Groups(['pushsubscription:read', 'pushsubscription:write'])]
+    #[Groups(['pushsubscription:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'auth_token', type: 'text')]
     private string $authToken;
@@ -79,7 +87,7 @@ class PushSubscription
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[Groups(['pushsubscription:read', 'pushsubscription:write'])]
+    #[Groups(['pushsubscription:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?User $user = null;

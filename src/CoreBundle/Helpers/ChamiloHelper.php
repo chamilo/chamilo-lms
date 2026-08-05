@@ -30,18 +30,20 @@ use UserManager;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
 use const PHP_URL_PATH;
+use const PHP_URL_SCHEME;
 
 class ChamiloHelper
 {
-    public const COURSE_MANAGER = 1;
-    public const SESSION_ADMIN = 3;
-    public const DRH = 4;
-    public const STUDENT = 5;
-    public const ANONYMOUS = 6;
+    public const int COURSE_MANAGER = 1;
+    public const int SESSION_ADMIN = 3;
+    public const int DRH = 4;
+    public const int STUDENT = 5;
+    public const int ANONYMOUS = 6;
 
     private static array $configuration;
 
@@ -166,10 +168,16 @@ class ChamiloHelper
         bool $getSysPath = false,
         bool $forcedGetter = false
     ): string {
-        $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.svg');
+        $configuredLogoUrl = self::getConfiguredPlatformLogoUrl();
 
-        if (empty($logoPath)) {
-            $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.png');
+        if (null !== $configuredLogoUrl) {
+            $logoPath = $configuredLogoUrl;
+        } else {
+            $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.svg');
+
+            if (empty($logoPath)) {
+                $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.png');
+            }
         }
 
         $institution = api_get_setting('Institution');
@@ -1287,5 +1295,40 @@ class ChamiloHelper
         ];
 
         return $map[$type] ?? '';
+    }
+
+    private static function getConfiguredPlatformLogoUrl(): ?string
+    {
+        $url = trim((string) api_get_setting('platform.platform_logo_url'));
+
+        if ('' === $url || !self::isSafeImageLogoUrl($url)) {
+            return null;
+        }
+
+        return $url;
+    }
+
+    private static function isSafeImageLogoUrl(string $url): bool
+    {
+        if (str_starts_with($url, '/')) {
+            return self::hasAllowedLogoExtension($url);
+        }
+
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+
+        if (!\in_array($scheme, ['http', 'https'], true)) {
+            return false;
+        }
+
+        return false !== filter_var($url, FILTER_VALIDATE_URL)
+            && self::hasAllowedLogoExtension($url);
+    }
+
+    private static function hasAllowedLogoExtension(string $url): bool
+    {
+        $path = (string) parse_url($url, PHP_URL_PATH);
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        return \in_array($extension, ['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'], true);
     }
 }

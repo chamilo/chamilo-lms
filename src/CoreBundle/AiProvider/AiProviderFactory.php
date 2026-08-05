@@ -8,10 +8,10 @@ namespace Chamilo\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 final class AiProviderFactory
 {
@@ -35,7 +35,7 @@ final class AiProviderFactory
     ) {
         $config = $this->readProvidersConfig();
 
-        // Default provider = first key in config (if any)
+        // Default provider = first key in config (if any). It may be replaced later if it is not usable.
         $this->defaultProvider = array_key_first($config) ?? 'openai';
 
         // Provider name -> class prefix
@@ -45,6 +45,8 @@ final class AiProviderFactory
             'grok' => 'Grok',
             'mistral' => 'Mistral',
             'gemini' => 'Gemini',
+            'claude' => 'Claude',
+            'anthropic' => 'Anthropic',
         ];
 
         // Suffix used only if you create type-specific classes (optional)
@@ -136,9 +138,19 @@ final class AiProviderFactory
             }
         }
 
-        // Ensure default provider exists when config is not empty
+        // Keep the AI UI usable even if the first configured provider is invalid.
         if (!empty($config) && !isset($this->providers[$this->defaultProvider])) {
-            throw new InvalidArgumentException("The default AI provider '{$this->defaultProvider}' is not configured properly.");
+            $fallbackProvider = array_key_first($this->providers);
+
+            if (\is_string($fallbackProvider)) {
+                error_log('[AI] Default provider "'.$this->defaultProvider.'" is not usable. Falling back to "'.$fallbackProvider.'".');
+                $this->defaultProvider = $fallbackProvider;
+
+                return;
+            }
+
+            error_log('[AI] No usable AI providers are configured.');
+            $this->defaultProvider = 'openai';
         }
     }
 
@@ -193,7 +205,15 @@ final class AiProviderFactory
         $configJson = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
 
         if (\is_string($configJson)) {
-            return json_decode($configJson, true) ?? [];
+            $decoded = json_decode($configJson, true);
+
+            if (!\is_array($decoded)) {
+                error_log('[AI] Invalid JSON in ai_helpers.ai_providers: '.json_last_error_msg());
+
+                return [];
+            }
+
+            return $decoded;
         }
 
         if (\is_array($configJson)) {
@@ -219,7 +239,7 @@ final class AiProviderFactory
                 $this->aiRequestsRepository,
                 $this->security
             );
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             error_log('[AI] Could not instantiate '.$fqcn.': '.$e->getMessage());
 
             return null;

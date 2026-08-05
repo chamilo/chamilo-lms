@@ -24,9 +24,12 @@ class AwsS3ClientFactory
         string $region,
         string $key,
         string $secret,
-        string $endpoint = '',
-        string $usePathStyle = '',
+        ?string $endpoint = null,
+        ?string $usePathStyle = null,
     ): S3Client {
+        $endpoint ??= '';
+        $usePathStyle ??= '';
+
         $config = [
             'version' => $version,
             'region' => $region,

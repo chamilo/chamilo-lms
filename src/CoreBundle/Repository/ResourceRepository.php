@@ -254,7 +254,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceFile = $this->addFile($resource, $uploadedFile);
 
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
 
         return $resourceFile;
@@ -622,9 +622,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         //    ->innerJoin('node.creator', 'userCreator')
             ->leftJoin('node.resourceLinks', 'links')
             ->where('node.id = :id')
-            ->setParameters([
-                'id' => $resourceNodeId,
-            ])
+            ->setParameter('id', $resourceNodeId)
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -828,6 +826,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $slug = \sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
+        // A title composed entirely of special characters (e.g. "/") can produce an empty slug.
+        // Fall back to the resource identifier so the node can still be persisted.
+        if ('' === $slug) {
+            $slug = 'resource-'.$resource->getResourceIdentifier();
+        }
+
         $resourceNode = new ResourceNode();
         $resourceNode
             ->setTitle($resourceName)
@@ -884,11 +888,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceFiles', 'file')
             ->where('l.course = :course')
             ->andWhere('file IS NOT NULL')
-            ->setParameters(
-                [
-                    'course' => $course,
-                ]
-            )
+            ->setParameter('course', $course)
         ;
 
         if (null === $group) {

@@ -218,6 +218,7 @@ class LinkAddEditForm extends FormValidator
             $this->addButtonUpdate(get_lang('Edit link'));
         }
 
+        $this->protect();
         // set default values
         $this->setDefaults($defaults);
     }

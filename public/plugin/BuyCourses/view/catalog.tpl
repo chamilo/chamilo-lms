@@ -26,6 +26,13 @@
     {% set visibleTabsCount = visibleTabsCount + 1 %}
 {% endif %}
 
+<style>
+    .bc-translated-html p {margin: 0 0 0.5rem;}
+    .bc-translated-html ul {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: disc;}
+    .bc-translated-html ol {margin: 0.5rem 0 0.5rem 1.25rem; padding-left: 1.25rem; list-style: decimal;}
+    .bc-translated-html li {margin: 0.2rem 0;}
+</style>
+
 <div class="mx-auto w-full max-w-[1600px] space-y-6 px-4 py-6 sm:px-6 lg:px-8 2xl:px-10">
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -56,7 +63,7 @@
                         href="{{ back_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="fa fa-arrow-left fa-fw"></em>
+                        <em class="mdi mdi-arrow-left"></em>
                         {{ 'Back'|get_lang }}
                     </a>
                 </div>
@@ -185,20 +192,28 @@
                     >
                 </div>
 
+                {% if showing_services %}
+                    <input
+                        type="hidden"
+                        name="billing_cycle"
+                        value="{{ billing_cycle_filter_value|default('monthly') }}"
+                    >
+                {% endif %}
+
                 <div class="flex flex-col gap-3 pt-2">
                     <button
                         type="submit"
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-filter fa-fw"></em>
+                        <em class="mdi mdi-filter"></em>
                         {{ 'Search'|get_lang }}
                     </button>
 
                     <a
-                        href="{{ pagination_base_path|default('course_catalog.php') }}"
+                        href="{{ service_catalog_reset_url|default(pagination_base_path|default('course_catalog.php')) }}"
                         class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                     >
-                        <em class="fa fa-eraser fa-fw"></em>
+                        <em class="mdi mdi-eraser"></em>
                         {{ 'Reset'|get_lang }}
                     </a>
                 </div>
@@ -243,13 +258,13 @@
                                         {% if course.teachers is defined and course.teachers %}
                                             {% for teacher in course.teachers %}
                                                 <div class="flex items-center gap-2">
-                                                    <em class="fa fa-user text-primary"></em>
+                                                    <em class="mdi mdi-account text-primary"></em>
                                                     <span>{{ teacher }}</span>
                                                 </div>
                                             {% endfor %}
                                         {% else %}
                                             <div class="flex items-center gap-2">
-                                                <em class="fa fa-user text-primary"></em>
+                                                <em class="mdi mdi-account text-primary"></em>
                                                 <span>{{ 'NoTeacherInformationAvailable'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                             </div>
                                         {% endif %}
@@ -263,7 +278,7 @@
 
                                     {% if course.enrolled == 'YES' %}
                                         <div class="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-gray-90">
-                                            <em class="fa fa-check-square-o fa-fw"></em>
+                                            <em class="mdi mdi-checkbox-marked-outline"></em>
                                             {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </div>
                                     {% elseif course.enrolled == 'TMP' %}
@@ -277,7 +292,7 @@
                                                 href="{{ course_description_url }}"
                                                 data-title="{{ course.title }}"
                                             >
-                                                <em class="fa fa-file-text fa-fw"></em>
+                                                <em class="mdi mdi-file-document-outline"></em>
                                                 {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                             </a>
 
@@ -285,7 +300,7 @@
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode }}"
                                             >
-                                                <em class="fa fa-shopping-cart fa-fw"></em>
+                                                <em class="mdi mdi-cart-outline"></em>
                                                 {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                             </a>
                                         </div>
@@ -297,7 +312,7 @@
                 {% else %}
                     <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                            <em class="fa fa-search text-xl"></em>
+                            <em class="mdi mdi-magnify text-xl"></em>
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-gray-90">
                             {{ 'NoCoursesFound'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -305,6 +320,17 @@
                         <p class="mt-2 text-sm text-gray-50">
                             {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
+                        {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                            <div class="mt-6">
+                                <a
+                                    href="{{ admin_empty_catalog_action_url }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                                >
+                                    <em class="mdi mdi-plus"></em>
+                                    {{ admin_empty_catalog_action_label }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% endif %}
@@ -334,13 +360,13 @@
                                     <div class="space-y-2 text-sm text-gray-50">
                                         {% if 'show_session_coach'|api_get_setting == 'true' %}
                                             <div class="flex items-center gap-2">
-                                                <em class="fa fa-user text-primary"></em>
+                                                <em class="mdi mdi-account text-primary"></em>
                                                 <span>{{ session.coach }}</span>
                                             </div>
                                         {% endif %}
 
                                         <div class="flex items-center gap-2">
-                                            <em class="fa fa-calendar text-primary"></em>
+                                            <em class="mdi mdi-calendar text-primary"></em>
                                             <span>
                                                 {% if session.duration %}
                                                     {{ 'SessionDurationXDaysTotal'|get_lang|format(session.duration) }}
@@ -361,7 +387,7 @@
 
                                     {% if session.enrolled == 'YES' %}
                                         <div class="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-gray-90">
-                                            <em class="fa fa-check-square-o fa-fw"></em>
+                                            <em class="mdi mdi-checkbox-marked-outline"></em>
                                             {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </div>
                                     {% elseif session.enrolled == 'TMP' %}
@@ -374,7 +400,7 @@
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                                                 href="{{ url('index') ~ 'session/' ~ session.id ~ '/about/' }}"
                                             >
-                                                <em class="fa fa-file-text fa-fw"></em>
+                                                <em class="mdi mdi-file-document-outline"></em>
                                                 {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                             </a>
 
@@ -382,7 +408,7 @@
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode }}"
                                             >
-                                                <em class="fa fa-shopping-cart fa-fw"></em>
+                                                <em class="mdi mdi-cart-outline"></em>
                                                 {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                             </a>
                                         </div>
@@ -394,7 +420,7 @@
                 {% else %}
                     <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                            <em class="fa fa-search text-xl"></em>
+                            <em class="mdi mdi-magnify text-xl"></em>
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-gray-90">
                             {{ 'NoSessionsFound'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -402,14 +428,40 @@
                         <p class="mt-2 text-sm text-gray-50">
                             {{ 'TryChangingSearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
                         </p>
+                        {% if admin_empty_catalog_action_url is defined and admin_empty_catalog_action_url and admin_empty_catalog_action_label is defined and admin_empty_catalog_action_label %}
+                            <div class="mt-6">
+                                <a
+                                    href="{{ admin_empty_catalog_action_url }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
+                                >
+                                    <em class="mdi mdi-plus"></em>
+                                    {{ admin_empty_catalog_action_label }}
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             {% endif %}
 
             {% if showing_services %}
+                {% if billing_cycle_tabs is defined and billing_cycle_tabs %}
+                    <nav class="overflow-x-auto" aria-label="{{ 'BillingPeriod'|get_plugin_lang('BuyCoursesPlugin') }}">
+                        <div class="inline-flex rounded-2xl border border-gray-25 bg-white p-1 shadow-sm">
+                            {% for billingTab in billing_cycle_tabs %}
+                                <a
+                                    href="{{ billingTab.url }}"
+                                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition {{ billingTab.active ? 'bg-primary text-white shadow-sm' : 'text-gray-90 hover:bg-support-2 hover:text-primary' }}"
+                                >
+                                    {{ billingTab.label }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </nav>
+                {% endif %}
+
                 {% if buyer_role_notice is defined and buyer_role_notice %}
                     <div class="rounded-2xl border border-warning bg-support-6 px-4 py-3 text-sm text-gray-90">
-                        <em class="fa fa-info-circle fa-fw"></em>
+                        <em class="mdi mdi-information-outline"></em>
                         {{ buyer_role_notice }}
                     </div>
                 {% endif %}
@@ -433,8 +485,8 @@
                                         </h3>
                                     </div>
 
-                                    <div class="text-sm text-gray-50">
-                                        {{ service.description }}
+                                    <div class="bc-translated-html text-sm text-gray-50">
+                                        {{ service.description|raw }}
                                     </div>
 
                                     <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">
@@ -444,39 +496,79 @@
                                         <div class="mt-1 text-base font-semibold text-gray-90">
                                             {{ service.display_price|default(service.total_price|default('')) }}
                                         </div>
+                                        <div class="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-50">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
+                                                <em class="mdi mdi-calendar text-primary"></em>
+                                                {{ service.billing_cycle_label|default('') }}
+                                            </span>
+                                            {% if service.duration_label|default('') %}
+                                                <span class="inline-flex items-center rounded-full bg-white px-2.5 py-1">
+                                                    {{ service.duration_label }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
                                     </div>
+
+                                    {% if service.is_upgrade|default(false) and service.upgrade_offer %}
+                                        <div class="rounded-2xl border border-info/20 bg-support-2 px-4 py-3 text-sm text-gray-90">
+                                            <div class="flex items-center gap-2 font-semibold text-primary">
+                                                <em class="mdi mdi-arrow-up-bold-circle-outline"></em>
+                                                {{ 'UpgradeFromService'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.source_service_name|e) }}
+                                            </div>
+                                            <div class="mt-2 grid gap-1 text-xs text-gray-50">
+                                                <span>{{ 'UpgradeRemainingDays'|get_plugin_lang('BuyCoursesPlugin')|format(service.upgrade_offer.remaining_days) }}</span>
+                                                <span>{{ 'UpgradeProratedCredit'|get_plugin_lang('BuyCoursesPlugin') }}: - {{ service.upgrade_offer.credit_amount_formatted }}</span>
+                                                <span class="font-semibold text-gray-90">{{ 'UpgradePriceToday'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.upgrade_total_price_formatted }}</span>
+                        {% if service.upgrade_offer.source_recurring_enabled %}
+                            <span>{{ 'UpgradeNextRenewalPrice'|get_plugin_lang('BuyCoursesPlugin') }}: {{ service.display_price }}</span>
+                        {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
 
                                     <div class="flex flex-col gap-3">
                                         <a
                                             class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                                             href="service_information.php?service_id={{ service.id }}"
                                         >
-                                            <em class="fa fa-file-text fa-fw"></em>
+                                            <em class="mdi mdi-file-document-outline"></em>
                                             {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </a>
 
                                         {% if service.has_blocking_sale|default(false) %}
                                             <span
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
+                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary/15 px-4 py-2.5 text-sm font-semibold text-primary"
                                             >
-                                                <em class="fa fa-check-circle fa-fw"></em>
+                                                <em class="mdi mdi-check-circle"></em>
                                                 {{ 'Already purchased'|get_lang }}
                                             </span>
-                                        {% elseif can_buy_services|default(false) %}
-                                            <a
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
-                                                href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
-                                            >
-                                                <em class="fa fa-shopping-cart fa-fw"></em>
-                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                            </a>
                                         {% else %}
+                                            {% if service.has_pending_sale|default(false) %}
+                                                <span
+                                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-warning/15 px-4 py-2.5 text-sm font-semibold text-warning"
+                                                >
+                                                    <em class="mdi mdi-clock-outline"></em>
+                                                    {{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                </span>
+                                            {% endif %}
+
+                                            {% set canBuyThisService = service.can_buy is defined ? service.can_buy : can_buy_services|default(false) %}
+                                            {% if canBuyThisService %}
+                                                <a
+                                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
+                                                    href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}"
+                                                >
+                                                    <em class="mdi {{ service.is_upgrade|default(false) ? 'mdi-arrow-up-bold-circle-outline' : 'mdi-cart-outline' }}"></em>
+                                                    {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
+                                                </a>
+                                            {% elseif not service.purchase_blocked_by_active_upsale_chain|default(false) %}
                                             <span
                                                 class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50"
                                             >
-                                                <em class="fa fa-lock fa-fw"></em>
-                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                <em class="mdi mdi-lock"></em>
+                                                {{ (service.is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}
                                             </span>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -486,7 +578,7 @@
                 {% else %}
                     <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                         <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                            <em class="fa fa-search text-xl"></em>
+                            <em class="mdi mdi-magnify text-xl"></em>
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-gray-90">
                             {{ 'NoServicesFound'|get_plugin_lang('BuyCoursesPlugin') }}

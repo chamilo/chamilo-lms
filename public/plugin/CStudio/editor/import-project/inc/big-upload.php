@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__.'/../../../0_dal/dal.global_lib.php';
+require_once __DIR__.'/../../../inc/csrf_token.php';
 
 use Chamilo\CoreBundle\Framework\Container;
 
@@ -210,6 +211,17 @@ class BigUpload
     {
         $tempFilePath = $this->getTempDirectory().$this->getTempName();
 
+        if (!cstudio_upload_extension_allowed((string) $finalName)) {
+            if (file_exists($tempFilePath)) {
+                @unlink($tempFilePath);
+            }
+
+            return json_encode([
+                'errorStatus' => 1,
+                'errorText' => 'File extension not allowed.',
+            ]);
+        }
+
         if (file_exists($tempFilePath)) {
             $pluginFileSystem = Container::getPluginsFileSystem();
             $fsDest = $this->mainDirectory.$finalName;
@@ -240,7 +252,12 @@ class BigUpload
      */
     public function postUnsupported($scormid)
     {
-        $name = $_FILES['bigUploadFile']['name'];
+        $name = disable_dangerous_file(api_replace_dangerous_char((string) ($_FILES['bigUploadFile']['name'] ?? '')));
+
+        if (!cstudio_upload_extension_allowed($name)) {
+            return 'File extension not allowed.';
+        }
+
         $tempName = $_FILES['bigUploadFile']['tmp_name'];
 
         if (filesize($tempName) > self::MAX_SIZE) {
@@ -257,6 +274,50 @@ class BigUpload
     }
 }
 
+/**
+ * Resolve the allowlist of extensions accepted by the upload endpoint, based on
+ * the caller-declared `uploadKind`:
+ *  - "zip"   → import.php (whole project archive, extracted server-side)
+ *  - "asset" → import-file.php (single image/audio/video/document embedded by the editor)
+ * Defaults to "zip" so an unset value cannot widen the surface.
+ */
+function cstudio_upload_extension_allowed(string $filename): bool
+{
+    $kind = isset($_REQUEST['uploadKind']) ? (string) $_REQUEST['uploadKind'] : 'zip';
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    $allowlist = match ($kind) {
+        'asset' => [
+            'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp',
+            'mp3', 'wav', 'ogg', 'm4a',
+            'mp4', 'webm', 'ogv',
+            'pdf', 'odt', 'ods', 'odp', 'otp',
+            'xlsx', 'docx', 'pptx',
+        ],
+        default => ['zip'],
+    };
+
+    return in_array($ext, $allowlist, true);
+}
+
+// Require an authenticated teacher session. The previous check only enforced
+// "any logged-in user", which let a student plant a ZIP that an anonymous
+// follow-up request (cotk=-2) could then extract and trigger.
+if (empty(api_get_user_id()) || !api_is_allowed_to_edit()) {
+    http_response_code(403);
+    echo json_encode(['errorStatus' => 1, 'errorText' => 'Forbidden']);
+    exit;
+}
+
+// CSRF: the upload endpoint mutates server state, so it must be gated by the
+// per-user token, not just by session existence.
+$oel_token = isset($_GET['cotk']) ? (string) $_GET['cotk'] : (isset($_POST['cotk']) ? (string) $_POST['cotk'] : '');
+if (false === validateCSRFToken($oel_token, api_get_user_id())) {
+    http_response_code(403);
+    echo json_encode(['errorStatus' => 1, 'errorText' => 'Invalid CSRF token']);
+    exit;
+}
+
 // Instantiate the class
 $bigUpload = new BigUpload();
 
@@ -268,7 +329,25 @@ if (isset($_GET['key'])) {
 if (isset($_POST['key'])) {
     $tempName = $_POST['key'];
 }
+
+if (!empty($tempName)) {
+    $tempName = api_replace_dangerous_char($tempName);
+    $tempName = disable_dangerous_file($tempName);
+}
+
 $bigUpload->setTempName($tempName);
+
+// Register the final filename in session when the first chunk arrives with ?name=
+// so that finish cannot be tricked into using an attacker-controlled POST value.
+$sessionKey = 'cstudio_bigupload';
+if (!isset($_SESSION[$sessionKey])) {
+    $_SESSION[$sessionKey] = [];
+}
+if (isset($_GET['name']) && '' !== $bigUpload->getTempName()) {
+    $_SESSION[$sessionKey][$bigUpload->getTempName()] = disable_dangerous_file(
+        api_replace_dangerous_char((string) $_GET['name'])
+    );
+}
 
 switch ($_GET['action']) {
     case 'upload':
@@ -278,11 +357,14 @@ switch ($_GET['action']) {
 
     case 'abort':
         print $bigUpload->abortUpload();
+        unset($_SESSION[$sessionKey][$bigUpload->getTempName()]);
 
         break;
 
     case 'finish':
-        print $bigUpload->finishUpload($_POST['name'], $_POST['scormid']);
+        $finalName = $_SESSION[$sessionKey][$bigUpload->getTempName()] ?? '';
+        print $bigUpload->finishUpload($finalName, $_POST['scormid']);
+        unset($_SESSION[$sessionKey][$bigUpload->getTempName()]);
 
         break;
 

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
+use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationRegistrationGate;
 use ChamiloSession as Session;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -20,6 +21,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 /**
  * This script displays a form for registering new users.
  */
+
+// This page's URL can carry a one-time course-invitation token
+// (?invitation=<hash>, see CourseInvitationRegistrationGate below). Force a
+// strict referrer policy so that token can never leak to a third-party
+// resource this page might load (fonts, analytics, embeds, etc.) via the
+// Referer header — without this, an older/non-compliant browser default
+// could send the full URL, hash included, to such a third party.
+header('Referrer-Policy: strict-origin-when-cross-origin');
 
 // Quick hack to adapt the registration form result to the selected registration language.
 if (!empty($_POST['language'])) {
@@ -204,8 +213,7 @@ foreach ($forcedVisibleFields as $f) {
     }
 }
 
-$pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
-$isTccEnabled = (is_dir($pluginTccDirectoryPath) && Container::getPluginHelper()->isPluginEnabled('logintcc'));
+$isTccEnabled = false; //(is_dir(api_get_path(SYS_PLUGIN_PATH).'logintcc') && Container::getPluginHelper()->isPluginEnabled('logintcc'));
 $webserviceUrl = '';
 $hash = '';
 
@@ -349,7 +357,18 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 EOD;
 
-// User is not allowed if Terms and Conditions are disabled and registration is disabled too.
+// Course invitation (register + auto-subscribe to a course or whole session
+// via a one-time link). Resolved here, before the "not allowed" gate below,
+// so a valid invitation can also open that gate back up — not only the
+// later "show the form" gate further down. Deliberately independent of the
+// $courseIdRedirect/$exercise_redirect direct-link mechanism (built below):
+// this only reads its own `invitation` hash, never `c`/`s`/`e`.
+$courseInvitationGate = Container::$container->get(CourseInvitationRegistrationGate::class);
+$invitationRequest = Container::getRequest();
+$resolvedInvitation = null !== $invitationRequest ? $courseInvitationGate->resolveFromRequest($invitationRequest) : null;
+
+// User is not allowed if Terms and Conditions are disabled and registration is disabled too,
+// unless a valid course invitation link opens registration back up (see $courseInvitationGate above).
 $isCreatingIntroPage = isset($_GET['create_intro_page']);
 $isPlatformAdmin = api_is_platform_admin();
 
@@ -358,7 +377,10 @@ $isNotAllowedHere = (
     'false' === api_get_setting('allow_registration')
 );
 
-if ($isNotAllowedHere && !($isCreatingIntroPage && $isPlatformAdmin)) {
+if ($isNotAllowedHere
+    && !($isCreatingIntroPage && $isPlatformAdmin)
+    && !$courseInvitationGate->canShowForm($resolvedInvitation)
+) {
     api_not_allowed(
         true,
         get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.')
@@ -451,6 +473,9 @@ $buildDirectLinkRedirectUrl = static function (int $courseId, int $exerciseId = 
 $courseIdRedirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? (int) $_REQUEST['c'] : null;
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? (int) $_REQUEST['e'] : 0;
 
+// $courseInvitationGate / $resolvedInvitation are already resolved further up
+// (before the early "not allowed" gate), so they're reused as-is here.
+
 if (!empty($courseIdRedirect)) {
     $courseInfo = api_get_course_info_by_id($courseIdRedirect);
     $visibility = (int) ($courseInfo['visibility'] ?? -1);
@@ -478,8 +503,9 @@ if (!empty($courseIdRedirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
-// allow_registration can be 'true', 'false', 'approval' or 'confirmation'. Only 'false' hides the form.
-if (false === $userAlreadyRegisteredShowTerms && 'false' !== api_get_setting('allow_registration')) {
+// allow_registration can be 'true', 'false', 'approval' or 'confirmation'. Only 'false' hides the form,
+// unless a valid course invitation link opens it back up (see $courseInvitationGate above).
+if (false === $userAlreadyRegisteredShowTerms && $courseInvitationGate->canShowForm($resolvedInvitation)) {
     /**
      * ROLE SELECTOR (Learner / Teacher)
      * UI: must be shown only when teacher self-registration is allowed.
@@ -720,7 +746,20 @@ EOD;
     $isLanguageRequired = $hasRequiredProfileConfig ? $isLanguageRequiredFromRequiredProfile : false;
 
     // EMAIL
-    $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
+    $emailElement = $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
+    if (null !== $resolvedInvitation) {
+        // The account created from an invitation link must be tied to the
+        // invited address; readonly is a UX signal only, the real
+        // enforcement happens server-side (see the $values['email'] override
+        // right before UserManager::create_user() further down).
+        $emailElement->setAttribute('readonly', 'readonly');
+
+        // The form's action has no query string, so the `?invitation=` hash
+        // would otherwise be lost on submit; resend it as a hidden field
+        // (CourseInvitationRegistrationGate::resolveFromRequest() reads it
+        // back from either the query string or this POST field).
+        $form->addHidden('invitation', $resolvedInvitation['token']->getHash());
+    }
     if ($isEmailRequired) {
         $form->addRule('email', get_lang('Required field'), 'required');
         $markRequired($form, 'email');
@@ -1123,6 +1162,11 @@ if (!empty($_GET['username'])) {
 if (!empty($_GET['email'])) {
     $defaults['email'] = Security::remove_XSS($_GET['email']);
 }
+if (null !== $resolvedInvitation) {
+    // Takes precedence over ?email= above: the invited address is
+    // authoritative, not whatever a query param claims.
+    $defaults['email'] = $resolvedInvitation['invitation']->getEmail();
+}
 if (!empty($_GET['phone'])) {
     $defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
@@ -1254,6 +1298,26 @@ if ($form->validate()) {
     // Security rule: if teacher registration is disabled, force learner status.
     if (!$allowTeacherRegistration) {
         $values['status'] = STUDENT;
+    }
+
+    // Security rule: server-side allow-list on submitted status to prevent
+    // privilege mass-assignment (CWE-915). The UI only offers STUDENT/COURSEMANAGER;
+    // any other value (e.g. SESSIONADMIN, DRH, COURSEMANAGERLOWSECURITY) coming
+    // from a tampered POST must be downgraded to STUDENT.
+    $allowedSelfRegistrationStatus = $allowTeacherRegistration
+        ? [STUDENT, COURSEMANAGER]
+        : [STUDENT];
+    if (!in_array((int) ($values['status'] ?? STUDENT), $allowedSelfRegistrationStatus, true)) {
+        $values['status'] = STUDENT;
+    }
+
+    // Security rule: a course invitation link ties the account to the
+    // invited address. The email field is readonly client-side, but that is
+    // only a UX signal - force it server-side too, regardless of what was
+    // actually submitted, before it is used for login/username derivation
+    // below or handed to UserManager::create_user().
+    if (null !== $resolvedInvitation) {
+        $values['email'] = $resolvedInvitation['invitation']->getEmail();
     }
 
     if (empty($values['official_code']) && !empty($values['username'])) {
@@ -1499,6 +1563,23 @@ if ($form->validate()) {
     Container::getTrackELoginRepository()->createLoginRecord($userEntity, new DateTime(), $request->getClientIp());
 
     /**
+     * Course invitation: subscribe the freshly-created user to the invited
+     * course or whole session, consume the one-time token, and redirect.
+     * Independent of, and takes precedence over, the legacy direct-link
+     * redirect right below (driven by $_REQUEST['c']/['s']/['e']).
+     */
+    if (null !== $resolvedInvitation) {
+        $invitationRedirectUrl = $courseInvitationGate->subscribeAndRedirect(
+            $userEntity,
+            $resolvedInvitation,
+            $buildDirectLinkRedirectUrl
+        );
+
+        header('Location: '.$invitationRedirectUrl);
+        exit;
+    }
+
+    /**
      * Direct link redirect (course + optional exercise).
      */
     $directCourseId = (int) Session::read('course_redirect');
@@ -1705,15 +1786,39 @@ if ($form->validate()) {
         if (false !== $termActivated) {
             $inscriptionHeader = Display::page_header($toolName);
         }
+
         $em = Container::getEntityManager();
         $categoryRepo = $em->getRepository(PageCategory::class);
         $pageRepo = $em->getRepository(Page::class);
         $accessUrl = api_get_url_entity();
-        $locale = api_get_language_isocode();
+
+        $autoDetectCustomPageLanguage = 'true' === (string) api_get_setting('language.auto_detect_language_custom_pages');
+
+        $defaultCustomPageLocale = api_get_setting('platformLanguage');
+
+        if (!is_string($defaultCustomPageLocale) || '' === trim($defaultCustomPageLocale)) {
+            $defaultCustomPageLocale = function_exists('api_get_language_isocode')
+                ? api_get_language_isocode()
+                : 'en';
+        }
+
+        $currentCustomPageLocale = $autoDetectCustomPageLanguage
+            ? (function_exists('api_get_language_isocode') ? api_get_language_isocode() : $defaultCustomPageLocale)
+            : $defaultCustomPageLocale;
 
         $category = $categoryRepo->findOneBy(['title' => 'introduction']);
         $introPage = null;
-        if ($category) {
+
+        if ($category && method_exists($pageRepo, 'findEnabledPageByCategoryWithLocaleFallback')) {
+            $introPage = $pageRepo->findEnabledPageByCategoryWithLocaleFallback(
+                $accessUrl,
+                'introduction',
+                $currentCustomPageLocale,
+                $defaultCustomPageLocale
+            );
+        }
+
+        if (!$introPage && $category) {
             $introPage = $pageRepo->findOneBy([
                 'category' => $category,
                 'url' => $accessUrl,

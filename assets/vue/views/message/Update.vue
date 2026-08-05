@@ -21,12 +21,14 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex"
+import { mapState } from "pinia"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import UpdateMixin from "../../mixins/UpdateMixin"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
+import { useSecurityStore } from "../../store/securityStore"
 
 const servicePrefix = "Documents"
 
@@ -49,9 +51,7 @@ export default {
       violations: "violations",
     }),
     ...mapGetters("documents", ["find"]),
-    ...mapGetters({
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
+    ...mapState(useSecurityStore, ["isCurrentTeacher"]),
   },
   methods: {
     ...mapActions("documents", {

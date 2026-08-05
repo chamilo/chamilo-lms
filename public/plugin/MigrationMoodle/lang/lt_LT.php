@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Importuoti iš Moodle';
+$strings['plugin_comment'] = 'Vykdyti importo procesą iš Moodle duomenų bazės ir failų į Chamilo.';
+
+$strings['MoodlePassword'] = 'Moodle slaptažodis';
+$strings['UninstallError'] = 'Įvyko klaida išinstaliuojant įskiepį.';
+
+$strings['db_host'] = 'Moodle DB serveris';
+$strings['db_user'] = 'Moodle DB vartotojas';
+$strings['db_password'] = 'Moodle DB slaptažodis';
+$strings['db_name'] = 'Moodle DB pavadinimas';
+$strings['user_filter'] = 'Vartotojų filtras';
+$strings['user_filter_help'] = 'Importuoti tik tuos vartotojus, kurių vartotojo vardas prasideda šiuo tekstu.<br>Kursų importą taip pat veikia ši konfigūracija, nes importuojami tik kursai, į kuriuos užsiregistravę vartotojai su šiuo vartotojo vardo prefiksu.';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = 'Prieigos URL ID, į kurį išsaugoti kursus, vartotojus ir sesijas (jei naudojama kelių URL funkcija).';
+$strings['moodle_path'] = 'Moodledata kelias';
+$strings['moodle_path_help'] = 'Moodledata aplanko kelias. Paprastai kažkas panašaus į <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Vartotojai';
+$strings['CourseCategoriesTask'] = 'Kursų kategorijos';
+$strings['CoursesTask'] = 'Kursai';
+$strings['CourseSectionsTask'] = 'Kursų skyriai';
+$strings['CourseModulesLessonTask'] = 'Kursų moduliai: Pamokos';
+$strings['LessonPagesTask'] = 'Pamokų puslapiai';
+$strings['LessonPagesDocumentTask'] = 'Pamokų puslapiai: Dokumentai';
+$strings['FilesForLessonPagesTask'] = 'Pamokų puslapių failai';
+$strings['LessonPagesQuizTask'] = 'Pamokų puslapiai: Klausimai';
+$strings['LessonPagesQuizQuestionTask'] = 'Klausimų puslapių klausimai';
+$strings['LessonAnswersTrueFalseTask'] = 'Teisinga/Neteisinga klausimų atsakymai';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Kelių pasirinkimų klausimų atsakymai';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Kelių atsakymų klausimų atsakymai';
+$strings['LessonAnswersMatchingTask'] = 'Atitikimo klausimų atsakymai';
+$strings['LessonAnswersEssayTask'] = 'Esė klausimų atsakymai';
+$strings['LessonAnswersShortAnswerTask'] = 'Trumpų atsakymų klausimų atsakymai';
+$strings['FilesForLessonAnswersTask'] = 'Pamokų atsakymų failai';
+$strings['CourseModulesQuizTask'] = 'Kursų moduliai: Testai';
+$strings['CQuizTask'] = 'C Testas';
+$strings['RoleAssignmentsTask'] = 'Vaidmenų priskyrimai';
+$strings['QuizzesTask'] = 'Testai';
+$strings['FilesForQuizzesTask'] = 'Testų failai';
+$strings['QuestionCategoriesTask'] = 'Klausimų kategorijos';
+$strings['QuestionsTask'] = 'Klausimai';
+$strings['QuestionMultiChoiceSingleTask'] = 'Kelių pasirinkimų klausimų atsakymai (vienas)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Kelių pasirinkimų klausimų atsakymai (keli)';
+$strings['QuestionsTrueFalseTask'] = 'Teisinga/Neteisinga klausimų atsakymai';
+$strings['QuestionShortAnswerTask'] = 'Trumpų atsakymų klausimų atsakymai';
+$strings['CourseModulesScormTask'] = 'SCORM kursai';
+$strings['ScormScoesTask'] = 'SCORM elementai';
+$strings['FilesForScormScoesTask'] = 'SCORM elementų failai';
+$strings['UserSessionsTask'] = 'Kursų sesijos vartotojams';
+$strings['CourseIntroductionsTask'] = 'Kursų įžangos';
+$strings['FilesForCourseIntroductionsTask'] = 'Kursų įžangų failai';
+$strings['FilesForCourseSectionsTask'] = 'Kursų skyrių failai';
+$strings['CourseModulesUrlTask'] = 'Kursų moduliai: URL';
+$strings['UrlsTask'] = 'URL adresai';
+$strings['SortSectionModulesTask'] = 'Rikiuoti modulius skyriuje';
+$strings['UsersScormsViewTask'] = 'SCORM peržiūros naudotojams';
+$strings['UsersScormsProgressTask'] = 'SCORM eiga';
+$strings['UsersLearnPathsTask'] = 'Mokymosi kelių peržiūros naudotojams';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Pamokos laikmatis mokymosi kelių skyriaus pradžios laikui';
+$strings['QuizzesScoresTask'] = 'Atnaujinti testo balus mokymosi kelyje';
+$strings['QuestionGapselectTask'] = 'Atsakymai į gapselect klausimus';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Pamokos šaka į bendrą laiką mokymosi kelių dokumentuose';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Pamokos bandymai į bendrą laiką mokymosi kelių testuose';
+$strings['UsersLearnPathsQuizzesTask'] = 'Testų bandymai į mokymosi kelių testų bandymus';
+$strings['UsersQuizzesAttemptsTask'] = 'Naudotojų testo bandymai';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Naudotojų klausimų bandymai trumpajam atsakymui';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Naudotojų klausimų bandymai gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Naudotojų klausimų bandymai teisinga/neteisinga';
+$strings['UsersLastLoginTask'] = 'Paskutiniai naudotojų prisijungimai';
+$strings['TrackLoginTask'] = 'Pirmas prisijungimas ir paskutinis atsijungimas';
+$strings['TrackCourseAccessTask'] = 'Naudotojo prieiga prie kurso';
+$strings['UserLearnPathsProgressScript'] = 'Atnaujinti mokymosi kelių eigą naudotojams.';
+$strings['UserScormsProgressScript'] = 'Atnaujinti SCORM eigą naudotojams.';
+
+$strings['InstallError'] = 'Įdiegiant įskiepį įvyko klaida: %s';
+$strings['AdminIntro'] = 'Vykdyti Moodle migracijos užduotis iš eilės. Kiekvienas žingsnis įjungiamas tik tada, kai jo pirminis žingsnis yra užbaigtas.';
+$strings['MoodleDatabase'] = 'Moodle duomenų bazė';
+$strings['MoodledataPath'] = 'Moodledata kelias';
+$strings['AccessUrlId'] = 'Prieigos URL ID';
+$strings['Configured'] = 'Sukonfigūruota';
+$strings['NotConfigured'] = 'Nesukonfigūruota';
+$strings['ConfigurePlugin'] = 'Konfigūruoti įskiepį';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Konfigūruokite Moodle duomenų bazės serverį, vartotoją ir duomenų bazės pavadinimą prieš vykdydami migracijos užduotis.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata kelias yra tuščias. Su failais susijusios užduotys gali nepavykti, kol šis nustatymas nebus sukonfigūruotas.';
+$strings['InvalidMigrationAction'] = 'Neteisingas migracijos veiksmas.';
+$strings['InvalidSecurityToken'] = 'Neteisingas saugos žetonas. Įkelkite puslapį iš naujo ir bandykite dar kartą.';
+$strings['MigrationTasks'] = 'Migracijos užduotys';
+$strings['MaintenanceScripts'] = 'Priežiūros skriptai';
+$strings['ExecutionOutput'] = 'Vykdymo išvestis';
+$strings['TaskAlreadyExecuted'] = 'Ši užduotis arba skriptas jau buvo įvykdytas.';
+$strings['SelectTaskToRun'] = 'Pasirinkite migracijos užduotį vykdymui. Rezultatas atsiras čia.';

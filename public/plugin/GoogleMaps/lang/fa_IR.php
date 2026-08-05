@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'نقشه گوگل';
+$strings['plugin_comment'] = 'نمایش نقشه گوگل با موقعیت کاربران ذخیره شده در فیلدهای اضافی.';
+$strings['enable_api'] = 'بارگذاری API نقشه گوگل';
+$strings['api_key'] = 'کلید API';
+$strings['extra_field_name'] = 'نام فیلد اضافی';
+$strings['extra_field_name_help'] = 'یک یا چند متغیر فیلد اضافی کاربر را با کاما جدا کنید. نقشه می‌تواند حداکثر ۵ فیلد نمایش دهد. مثال: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'نقشه موقعیت کاربران';
+$strings['UsersCoordinatesMapHelp'] = 'این نقشه موقعیت کاربران را بر اساس فیلدهای اضافی پیکربندی شده نمایش می‌دهد.';
+$strings['GoogleMapsAdminIntro'] = 'کلید API نقشه گوگل و فیلدهای اضافی کاربر حاوی آدرس یا موقعیت را پیکربندی کنید.';
+$strings['GoogleMapsApi'] = 'API نقشه گوگل';
+$strings['ExtraFields'] = 'فیلدهای اضافی';
+$strings['Access'] = 'دسترسی';
+$strings['AdministratorsOnly'] = 'فقط مدیران';
+$strings['OpenMap'] = 'باز کردن نقشه';
+$strings['ConfigurePlugin'] = 'پیکربندی افزونه';
+$strings['Configured'] = 'پیکربندی شده';
+$strings['NotConfigured'] = 'پیکربندی نشده';
+$strings['GoogleMapsApiDisabledWarning'] = 'بارگذاری API نقشه گوگل در تنظیمات افزونه غیرفعال است.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'کلید API نقشه گوگل وجود ندارد.';
+$strings['ExtraFieldNameMissingWarning'] = 'هیچ فیلد اضافی کاربری پیکربندی نشده است.';
+$strings['ExtraFieldsNotFoundWarning'] = 'فیلدهای اضافی کاربری زیر یافت نشدند: %s.';
+$strings['NoUserCoordinatesFound'] = 'هیچ موقعیت کاربری برای فیلدهای اضافی پیکربندی شده یافت نشد.';
+$strings['ConfigureGoogleMapsFirst'] = 'قبل از باز کردن نقشه، API نقشه گوگل را پیکربندی و فعال کنید.';
+
+$strings['map_provider'] = 'ارائه‌دهنده نقشه';
+$strings['map_provider_help'] = 'ارائه‌دهنده نقشه مورد استفاده توسط افزونه و نقشه اجتماعی را انتخاب کنید.';
+$strings['GoogleMapsProvider'] = 'نقشه گوگل';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'ارائه‌دهنده نقشه';
+$strings['MapProviderConfiguration'] = 'پیکربندی ارائه‌دهنده';
+$strings['default_latitude'] = 'عرض جغرافیایی پیش‌فرض';
+$strings['default_latitude_help'] = 'عرض جغرافیایی مرکز پیش‌فرض نقشه. زمانی استفاده می‌شود که هیچ نشانگری موجود نباشد.';
+$strings['default_longitude'] = 'طول جغرافیایی پیش‌فرض';
+$strings['default_longitude_help'] = 'طول جغرافیایی مرکز پیش‌فرض نقشه. زمانی استفاده می‌شود که هیچ نشانگری موجود نباشد.';
+$strings['default_zoom'] = 'بزرگنمایی پیش‌فرض';
+$strings['default_zoom_help'] = 'بزرگنمایی پیش‌فرض نقشه بین ۱ تا ۲۰.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap نیازی به کلید API ندارد. نشانگرهای فقط آدرس به صورت لینک جستجو نمایش داده می‌شوند مگر اینکه مختصات موجود باشد.';

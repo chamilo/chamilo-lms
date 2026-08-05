@@ -10,9 +10,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
+$plugin = Justification::create();
 
-if (!$allowJustification) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 $personalRepo = Container::getPersonalFileRepository();
@@ -20,13 +20,12 @@ $userId = api_get_user_id();
 $user = api_get_user_entity();
 
 $justification = '';
-$plugin = Justification::create();
 $fields = $plugin->getList();
 $formValidator = new FormValidator('justification');
 $formValidator->addHeader($plugin->get_lang('Justification'));
 foreach ($fields as $field) {
     $formValidator->addHtml('<a name="'.$field['code'].'"></a>');
-    $formValidator->addFile($field['code'].'_file', [$field['name'], $field['comment']]);
+    $formValidator->addFile($field['code'].'_file', [$field['title'], $field['comment']]);
     if ($field['date_manual_on']) {
         $formValidator->addDatePicker($field['code'].'_date', $plugin->get_lang('DateValidity'));
     }
@@ -96,7 +95,7 @@ switch ($action) {
             'post',
             api_get_self().'?a=edit_justification&justification_id='.$justificationId
         );
-        $formEdit->addHeader($justification['name']);
+        $formEdit->addHeader($justification['title']);
         $element = $formEdit->addDatePicker('date_validity', $plugin->get_lang('ValidityDate'));
         $element->setValue($userJustification['date_validity']);
         $formEdit->addButtonUpdate(get_lang('Update'));
@@ -165,7 +164,7 @@ if (!empty($userJustifications)) {
         //$url = api_get_uploaded_web_url('justification', $userJustification['id'], $userJustification['file_path']);
         $link = Display::url($userJustification['file_path'], $url);
         $col = 0;
-        $table->setCellContents($row, $col++, $justification['name']);
+        $table->setCellContents($row, $col++, $justification['title']);
         $table->setCellContents($row, $col++, $link);
         $date = $userJustification['date_validity'];
         if ($userJustification['date_validity'] < api_get_local_time()) {

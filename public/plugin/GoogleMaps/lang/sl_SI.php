@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Prikaži Google zemljevid z lokacijami uporabnikov, shranjenimi v dodatnih poljih.';
+$strings['enable_api'] = 'Naloži Google Maps API';
+$strings['api_key'] = 'API ključ';
+$strings['extra_field_name'] = 'Ime dodatnega polja';
+$strings['extra_field_name_help'] = 'Vnesite eno ali več spremenljivk dodatnih polj uporabnika, ločenih z vejicami. Zemljevid lahko prikaže do 5 polj. Primer: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Zemljevid lokacij uporabnikov';
+$strings['UsersCoordinatesMapHelp'] = 'Ta zemljevid prikazuje lokacije uporabnikov na podlagi konfiguriranih dodatnih polj uporabnikov.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurirajte API ključ za Google Maps in dodatna polja uporabnikov, ki vsebujejo naslove ali lokacije.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Dodatna polja';
+$strings['Access'] = 'Dostop';
+$strings['AdministratorsOnly'] = 'Samo skrbniki';
+$strings['OpenMap'] = 'Odpri zemljevid';
+$strings['ConfigurePlugin'] = 'Konfiguriraj vtičnik';
+$strings['Configured'] = 'Konfigurirano';
+$strings['NotConfigured'] = 'Ni konfigurirano';
+$strings['GoogleMapsApiDisabledWarning'] = 'Nalaganje Google Maps API je onemogočeno v konfiguraciji vtičnika.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Manjka ključ Google Maps API.';
+$strings['ExtraFieldNameMissingWarning'] = 'Ni konfiguriranega dodatnega polja uporabnika.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Naslednjih dodatnih polj uporabnikov ni bilo mogoče najti: %s.';
+$strings['NoUserCoordinatesFound'] = 'Za konfigurirana dodatna polja ni bilo mogoče najti lokacij uporabnikov.';
+$strings['ConfigureGoogleMapsFirst'] = 'Pred odprtjem zemljevida konfigurirajte in omogočite Google Maps API.';
+
+$strings['map_provider'] = 'Ponudnik zemljevida';
+$strings['map_provider_help'] = 'Izberite ponudnika zemljevida, ki ga uporablja vtičnik in družabni zemljevid.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Ponudnik zemljevida';
+$strings['MapProviderConfiguration'] = 'Konfiguracija ponudnika';
+$strings['default_latitude'] = 'Privzeta zemljepisna širina';
+$strings['default_latitude_help'] = 'Privzeta zemljepisna širina središča zemljevida. Uporablja se, kadar oznaka ni na voljo.';
+$strings['default_longitude'] = 'Privzeta zemljepisna dolžina';
+$strings['default_longitude_help'] = 'Privzeta zemljepisna dolžina središča zemljevida. Uporablja se, kadar oznaka ni na voljo.';
+$strings['default_zoom'] = 'Privzeta povečava';
+$strings['default_zoom_help'] = 'Privzeta povečava zemljevida med 1 in 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap ne zahteva API ključa. Označbe samo z naslovom so prikazane kot povezave za iskanje, razen če so na voljo koordinate.';

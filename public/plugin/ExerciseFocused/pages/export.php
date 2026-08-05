@@ -22,14 +22,14 @@ if (!api_is_allowed_to_edit()) {
 
 $plugin = ExerciseFocusedPlugin::create();
 $monitoringPlugin = ExerciseMonitoringPlugin::create();
-$monitoringPluginIsEnabled = $monitoringPlugin->isEnabled(true);
+$monitoringPluginIsEnabled = $monitoringPlugin->isEnabled();
 $em = Database::getManager();
 /** @var FocusedLogRepository $focusedLogRepository */
 $focusedLogRepository = $em->getRepository(FocusedLog::class);
 /** @var TrackEAttemptRepository $attempsRepository */
 $attempsRepository = $em->getRepository(TrackEAttempt::class);
 
-if (!$plugin->isEnabled(true)) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
@@ -274,7 +274,7 @@ function findResults(array $formValues, EntityManagerInterface $em, ExerciseFocu
 
 function getSnapshotListForLevel(int $level, TrackEExercise $trackExe): string
 {
-    $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled(true);
+    $monitoringPluginIsEnabled = ExerciseMonitoringPlugin::create()->isEnabled();
 
     if (!$monitoringPluginIsEnabled) {
         return '';

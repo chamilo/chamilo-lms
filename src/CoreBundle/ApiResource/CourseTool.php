@@ -22,6 +22,9 @@ class CourseTool extends AbstractResource
     public ?bool $visibility = null;
 
     #[Groups(['ctool:read'])]
+    public bool $allowChangeVisibility = true;
+
+    #[Groups(['ctool:read'])]
     public AbstractTool $tool;
 
     #[Groups(['ctool:read'])]

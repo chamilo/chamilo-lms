@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'იმპორტი Moodle-დან';
+$strings['plugin_comment'] = 'Moodle-ის მონაცემთა ბაზიდან და ფაილებიდან Chamilo-ში იმპორტის პროცესის შესრულება.';
+
+$strings['MoodlePassword'] = 'Moodle-ის პაროლი';
+$strings['UninstallError'] = 'დაფიქსირდა შეცდომა დამატებითი მოდულის წაშლისას.';
+
+$strings['db_host'] = 'Moodle-ის მონაცემთა ბაზის ჰოსტი';
+$strings['db_user'] = 'Moodle-ის მონაცემთა ბაზის მომხმარებელი';
+$strings['db_password'] = 'Moodle-ის მონაცემთა ბაზის პაროლი';
+$strings['db_name'] = 'Moodle-ის მონაცემთა ბაზის სახელი';
+$strings['user_filter'] = 'ფილტრი მომხმარებლებისთვის';
+$strings['user_filter_help'] = 'იმპორტი მხოლოდ იმ მომხმარებლებისთვის, რომელთა სახელიც იწყება ამ სტრიქონით.<br>კურსების იმპორტიც დამოკიდებულია ამ პარამეტრზე, რადგან იმპორტი ხდება მხოლოდ იმ კურსებში ჩარიცხული მომხმარებლებისთვის, რომელთა სახელიც იწყება მოცემული პრეფიქსით.';
+$strings['url_id'] = 'URL-ის ID';
+$strings['url_id_help'] = 'წვდომის URL-ის ID, რომელშიც შეინახება კურსები, მომხმარებლები და სესიები (მრავალ-URL-ის გამოყენების შემთხვევაში).';
+$strings['moodle_path'] = 'Moodledata-ს მდებარეობა';
+$strings['moodle_path_help'] = 'moodledata საქაღალდის მდებარეობა. ჩვეულებრივ მსგავსია <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'მომხმარებლები';
+$strings['CourseCategoriesTask'] = 'კურსის კატეგორიები';
+$strings['CoursesTask'] = 'კურსები';
+$strings['CourseSectionsTask'] = 'კურსის სექციები';
+$strings['CourseModulesLessonTask'] = 'კურსის მოდულები: გაკვეთილები';
+$strings['LessonPagesTask'] = 'გაკვეთილის გვერდები';
+$strings['LessonPagesDocumentTask'] = 'გაკვეთილის გვერდები: დოკუმენტები';
+$strings['FilesForLessonPagesTask'] = 'გაკვეთილის გვერდების ფაილები';
+$strings['LessonPagesQuizTask'] = 'გაკვეთილის გვერდები: კითხვები';
+$strings['LessonPagesQuizQuestionTask'] = 'კითხვების გვერდების კითხვები';
+$strings['LessonAnswersTrueFalseTask'] = 'პასუხები ჭეშმარიტი/მცდარი კითხვებისთვის';
+$strings['LessonAnswersMultipleChoiceTask'] = 'პასუხები მრავალჯერადი არჩევანის კითხვებისთვის';
+$strings['LessonAnswersMultipleAnswerTask'] = 'პასუხები მრავალჯერადი პასუხის კითხვებისთვის';
+$strings['LessonAnswersMatchingTask'] = 'პასუხები დამთხვევის კითხვებისთვის';
+$strings['LessonAnswersEssayTask'] = 'პასუხები ესეს კითხვებისთვის';
+$strings['LessonAnswersShortAnswerTask'] = 'პასუხები მოკლე პასუხის კითხვებისთვის';
+$strings['FilesForLessonAnswersTask'] = 'გაკვეთილის პასუხების ფაილები';
+$strings['CourseModulesQuizTask'] = 'კურსის მოდულები: ტესტები';
+$strings['CQuizTask'] = 'C ტესტი';
+$strings['RoleAssignmentsTask'] = 'როლების მინიჭება';
+$strings['QuizzesTask'] = 'ტესტები';
+$strings['FilesForQuizzesTask'] = 'ტესტების ფაილები';
+$strings['QuestionCategoriesTask'] = 'კითხვების კატეგორიები';
+$strings['QuestionsTask'] = 'კითხვები';
+$strings['QuestionMultiChoiceSingleTask'] = 'პასუხები მრავალჯერადი არჩევანის კითხვებისთვის (ერთი)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'პასუხები მრავალჯერადი არჩევანის კითხვებისთვის (რამდენიმე)';
+$strings['QuestionsTrueFalseTask'] = 'პასუხები ჭეშმარიტი/მცდარი კითხვებისთვის';
+$strings['QuestionShortAnswerTask'] = 'პასუხები მოკლე პასუხის კითხვებისთვის';
+$strings['CourseModulesScormTask'] = 'SCORM კურსები';
+$strings['ScormScoesTask'] = 'SCORM ელემენტები';
+$strings['FilesForScormScoesTask'] = 'SCORM ელემენტების ფაილები';
+$strings['UserSessionsTask'] = 'კურსის სესიები მომხმარებლებისთვის';
+$strings['CourseIntroductionsTask'] = 'კურსის შესავალი';
+$strings['FilesForCourseIntroductionsTask'] = 'კურსის შესავლის ფაილები';
+$strings['FilesForCourseSectionsTask'] = 'კურსის სექციების ფაილები';
+$strings['CourseModulesUrlTask'] = 'კურსის მოდულები: ბმულები';
+$strings['UrlsTask'] = 'URL-ები';
+$strings['SortSectionModulesTask'] = 'მოდულების დალაგება სექციაში';
+$strings['UsersScormsViewTask'] = 'SCORM ნახვები მომხმარებლებისთვის';
+$strings['UsersScormsProgressTask'] = 'SCORM პროგრესი';
+$strings['UsersLearnPathsTask'] = 'სასწავლო ბილიკების ნახვები მომხმარებლებისთვის';
+$strings['UsersLearnPathsLessonTimerTask'] = 'გაკვეთილის ტაიმერი სასწავლო ბილიკების სექციის დაწყების დროისთვის';
+$strings['QuizzesScoresTask'] = 'ტესტის ქულების განახლება სასწავლო ბილიკში';
+$strings['QuestionGapselectTask'] = 'პასუხები gapselect კითხვებისთვის';
+$strings['UsersLearnPathsLessonBranchTask'] = 'გაკვეთილის განშტოება სასწავლო ბილიკების დოკუმენტებში საერთო დროისთვის';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'გაკვეთილის მცდელობები სასწავლო ბილიკების ტესტებში საერთო დროისთვის';
+$strings['UsersLearnPathsQuizzesTask'] = 'ტესტის მცდელობები სასწავლო ბილიკების ტესტების მცდელობებთან';
+$strings['UsersQuizzesAttemptsTask'] = 'ტესტის მცდელობები მომხმარებლებისთვის';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'კითხვის მცდელობები მომხმარებლებისთვის მოკლე პასუხისთვის';
+$strings['UserQuestionAttemptsGapselectTask'] = 'კითხვის მცდელობები მომხმარებლებისთვის gapselect-ისთვის';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'კითხვის მცდელობები მომხმარებლებისთვის truefalse-ისთვის';
+$strings['UsersLastLoginTask'] = 'ბოლო შესვლები მომხმარებლებისთვის';
+$strings['TrackLoginTask'] = 'პირველი შესვლა და ბოლო გამოსვლა';
+$strings['TrackCourseAccessTask'] = 'მომხმარებლის წვდომა კურსზე';
+$strings['UserLearnPathsProgressScript'] = 'პროგრესის განახლება სასწავლო ბილიკებში მომხმარებლებისთვის.';
+$strings['UserScormsProgressScript'] = 'პროგრესის განახლება SCORM-ებში მომხმარებლებისთვის.';
+
+$strings['InstallError'] = 'დაფიქსირდა შეცდომა დამატების ინსტალაციისას: %s';
+$strings['AdminIntro'] = 'გაუშვით Moodle-ის მიგრაციის ამოცანები თანმიმდევრობით. თითოეული ნაბიჯი ხელმისაწვდომია მხოლოდ მას შემდეგ, რაც მისი მშობელი ნაბიჯი დასრულდება.';
+$strings['MoodleDatabase'] = 'Moodle-ის მონაცემთა ბაზა';
+$strings['MoodledataPath'] = 'Moodledata-ს მდებარეობა';
+$strings['AccessUrlId'] = 'წვდომის URL-ის ID';
+$strings['Configured'] = 'კონფიგურირებულია';
+$strings['NotConfigured'] = 'არ არის კონფიგურირებული';
+$strings['ConfigurePlugin'] = 'დამატების კონფიგურაცია';
+$strings['MissingRequiredDatabaseConfiguration'] = 'კონფიგურირეთ Moodle-ის მონაცემთა ბაზის ჰოსტი, მომხმარებელი და ბაზის სახელი მიგრაციის ამოცანების გაშვებამდე.';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata-ს მდებარეობა ცარიელია. ფაილებთან დაკავშირებული ამოცანები შეიძლება ჩაიშალოს, სანამ ეს პარამეტრი არ იქნება კონფიგურირებული.';
+$strings['InvalidMigrationAction'] = 'მიგრაციის არასწორი მოქმედება.';
+$strings['InvalidSecurityToken'] = 'უსაფრთხოების ტოკენი არასწორია. გადატვირთეთ გვერდი და სცადეთ ხელახლა.';
+$strings['MigrationTasks'] = 'მიგრაციის ამოცანები';
+$strings['MaintenanceScripts'] = 'ტექნიკური მომსახურების სკრიპტები';
+$strings['ExecutionOutput'] = 'შესრულების შედეგი';
+$strings['TaskAlreadyExecuted'] = 'ეს ამოცანა ან სკრიპტი უკვე შესრულებულია.';
+$strings['SelectTaskToRun'] = 'აირჩიეთ გასაშვები მიგრაციის ამოცანა. შედეგი აქ გამოჩნდება.';

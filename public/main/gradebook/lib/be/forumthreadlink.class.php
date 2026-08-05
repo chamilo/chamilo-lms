@@ -112,6 +112,17 @@ class ForumThreadLink extends AbstractLink
                 WHERE iid = '.$this->get_ref_id();
         $query = Database::query($sql);
         $assignment = Database::fetch_array($query);
+        $threadPeerQualify = (int) (
+            $threadInfo['thread_peer_qualify']
+            ?? $threadInfo['threadPeerQualify']
+            ?? 0
+        );
+        $threadQualifyMax = (float) (
+            $assignment['thread_qualify_max']
+            ?? $threadInfo['thread_qualify_max']
+            ?? $threadInfo['threadQualifyMax']
+            ?? 0.0
+        );
 
         $sql = "SELECT * FROM $thread_qualify
                 WHERE iid = ".$this->get_ref_id();
@@ -125,16 +136,16 @@ class ForumThreadLink extends AbstractLink
 
         // for 1 student
         if (isset($studentId)) {
-            if (0 == $threadInfo['thread_peer_qualify']) {
+            if (0 === $threadPeerQualify) {
                 // Classic way of calculate score
                 if ($data = Database::fetch_array($scores)) {
                     return [
                         $data['qualify'],
-                        $assignment['thread_qualify_max'],
+                        $threadQualifyMax,
                     ];
                 } else {
                     // We sent the 0/thread_qualify_max instead of null for correct calculations
-                    return [0, $assignment['thread_qualify_max']];
+                    return [0, $threadQualifyMax];
                 }
             } else {
                 // Take average
@@ -148,10 +159,10 @@ class ForumThreadLink extends AbstractLink
                 }
                 // If no result
                 if (empty($counter) || $counter <= 2) {
-                    return [0, $assignment['thread_qualify_max']];
+                    return [0, $threadQualifyMax];
                 }
 
-                return [$score / $counter, $assignment['thread_qualify_max']];
+                return [$score / $counter, $threadQualifyMax];
             }
         } else {
             // All students -> get average
@@ -165,15 +176,15 @@ class ForumThreadLink extends AbstractLink
 
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
-                    if (0 != $assignment['thread_qualify_max']) {
+                    if (0 != $threadQualifyMax) {
                         $students[$data['user_id']] = $data['qualify'];
                         $counter++;
-                        $sum += $data['qualify'] / $assignment['thread_qualify_max'];
+                        $sum += $data['qualify'] / $threadQualifyMax;
                         $sumResult += $data['qualify'];
                         if ($data['qualify'] > $bestResult) {
                             $bestResult = $data['qualify'];
                         }
-                        $weight = $assignment['thread_qualify_max'];
+                        $weight = $threadQualifyMax;
                     }
                 }
             }
@@ -260,10 +271,24 @@ class ForumThreadLink extends AbstractLink
         $row = Database::fetch_assoc($result);
 
         if ($row) {
-            $forum_id = $row['forum_id'];
+            $forum_id = (int) $row['forum_id'];
+            $courseId = (int) $this->getCourseId();
+            $course = Container::getCourseRepository()->find($courseId);
+            $nodeId = $course?->getResourceNode()?->getId();
+
+            if (!empty($nodeId)) {
+                $query = http_build_query([
+                    'cid' => $courseId,
+                    'sid' => (int) $sessionId,
+                    'gid' => 0,
+                    'gradebook' => 'view',
+                ]);
+
+                return api_get_path(WEB_PATH).'resources/forum/'.$nodeId.'/forum/'.$forum_id.'/thread/'.$this->get_ref_id().'?'.$query;
+            }
 
             return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-                api_get_cidreq_params($this->getCourseId(), $sessionId).
+                api_get_cidreq_params($courseId, $sessionId).
                 '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
         }
 

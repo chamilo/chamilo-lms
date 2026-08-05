@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Möchten Sie das spezifische Diplom löschen und d
 $strings['SuccessDelete'] = 'Erfolgreich gelöscht';
 $strings['ProblemDelete'] = 'Problem beim Löschen des Zertifikats';
 $strings['OnlyCustomCertificates'] = 'Nur Kurse mit personalisiertem Zertifikat werden exportiert';
+$strings['CertificateMode'] = 'Zertifikatsmodus';
+$strings['UseCourseCustomCertificate'] = 'Kurs-spezifisches benutzerdefiniertes Zertifikat verwenden';
+$strings['UseDefaultCustomCertificate'] = 'Standard-Benutzerzertifikat der Plattform verwenden';
+
+$strings['CreateCertificateWithTags'] = 'Zertifikat mit diesen Tags erstellen';
+
+$strings['DeleteCertificate'] = 'Zertifikat löschen';
+
+$strings['SaveCertificate'] = 'Zertifikat speichern';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Wählen Sie eine Option aus und speichern Sie die Einstellungen, bevor Sie den Zertifikatseditor öffnen.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Wählen Sie aus, wie dieser Kurs benutzerdefinierte Zertifikate verwenden soll.';
+
+$strings['CouldNotSaveCertificate'] = 'Zertifikatkonfiguration konnte nicht gespeichert werden.';

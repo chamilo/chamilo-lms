@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -54,7 +56,7 @@ class CurriculumCategoryType extends AbstractType
                         $qb->andWhere('c.sessionId = :session_id');
                         $parameters['session_id'] = $session->getId();
                     }
-                    $qb->setParameters($parameters);
+                    $qb->setParameters(new ArrayCollection(array_map(static fn ($name, $value) => new Parameter($name, $value), array_keys($parameters), array_values($parameters))));
 
                     return $qb;
                 },

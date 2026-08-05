@@ -223,7 +223,7 @@ class SessionRepetitionCommand extends Command
             );
 
             if ($debug) {
-                $output->writeln(\sprintf('Notifying coach (ID: %d) for session %d', $generalCoach->getId(), $newSession->getId()));
+                $output->writeln(\sprintf('Notifying tutor (ID: %d) for session %d', $generalCoach->getId(), $newSession->getId()));
             }
 
             $senderId = $this->getFirstAdminId();
@@ -238,7 +238,7 @@ class SessionRepetitionCommand extends Command
                 $output->writeln('Notification sent using MessageHelper.');
             }
         } elseif ($debug) {
-            $output->writeln('No general coach found for session '.$newSession->getId());
+            $output->writeln('No general tutor found for session '.$newSession->getId());
         }
     }
 

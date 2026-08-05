@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = '사용자 추가 필드에 저장된 위치를 Google 지도로 표시합니다.';
+$strings['enable_api'] = 'Google Maps API 로드';
+$strings['api_key'] = 'API 키';
+$strings['extra_field_name'] = '추가 필드 이름';
+$strings['extra_field_name_help'] = '쉼표로 구분된 사용자 추가 필드 변수를 하나 이상 입력하세요. 지도는 최대 5개의 필드를 표시할 수 있습니다. 예: address, office_address, city';
+$strings['UsersCoordinatesMap'] = '사용자 위치 지도';
+$strings['UsersCoordinatesMapHelp'] = '이 지도는 구성된 사용자 추가 필드를 기반으로 사용자 위치를 표시합니다.';
+$strings['GoogleMapsAdminIntro'] = 'Google Maps API 키와 주소 또는 위치가 포함된 사용자 추가 필드를 구성하세요.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = '추가 필드';
+$strings['Access'] = '접근';
+$strings['AdministratorsOnly'] = '관리자 전용';
+$strings['OpenMap'] = '지도 열기';
+$strings['ConfigurePlugin'] = '플러그인 구성';
+$strings['Configured'] = '구성됨';
+$strings['NotConfigured'] = '구성되지 않음';
+$strings['GoogleMapsApiDisabledWarning'] = '플러그인 구성에서 Google Maps API 로드가 비활성화되었습니다.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API 키가 없습니다.';
+$strings['ExtraFieldNameMissingWarning'] = '구성된 사용자 추가 필드가 없습니다.';
+$strings['ExtraFieldsNotFoundWarning'] = '다음 사용자 추가 필드를 찾을 수 없습니다: %s.';
+$strings['NoUserCoordinatesFound'] = '구성된 추가 필드에 대한 사용자 위치를 찾을 수 없습니다.';
+$strings['ConfigureGoogleMapsFirst'] = '지도를 열기 전에 Google Maps API를 구성하고 활성화하세요.';
+
+$strings['map_provider'] = '지도 제공자';
+$strings['map_provider_help'] = '플러그인과 소셜 지도에서 사용할 지도 제공자를 선택하세요.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = '지도 제공자';
+$strings['MapProviderConfiguration'] = '제공자 구성';
+$strings['default_latitude'] = '기본 위도';
+$strings['default_latitude_help'] = '마커가 없을 때 사용되는 기본 지도 중심 위도입니다.';
+$strings['default_longitude'] = '기본 경도';
+$strings['default_longitude_help'] = '마커가 없을 때 사용되는 기본 지도 중심 경도입니다.';
+$strings['default_zoom'] = '기본 줌';
+$strings['default_zoom_help'] = '1에서 20 사이의 기본 지도 줌 레벨입니다.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap은 API 키를 필요로 하지 않습니다. 좌표가 없는 주소 전용 마커는 검색 링크로 표시됩니다.';

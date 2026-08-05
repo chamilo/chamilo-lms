@@ -123,7 +123,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import GlossaryTermList from "../../components/glossary/GlossaryTermList.vue"
 import GlossaryTermTable from "../../components/glossary/GlossaryTermTable.vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
@@ -156,15 +156,8 @@ const searchTerm = ref("")
 const searchBoxTouched = ref(false)
 const parentResourceNodeId = ref(Number(route.params.node))
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid: route.query.sid,
-      cid: route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const glossaries = ref([])
 const view = ref("list")
@@ -185,32 +178,16 @@ const canEditGlossary = computed(() => {
   return basePermission && !platform.isStudentViewActive
 })
 
-async function loadCourseSettingsIfPossible() {
-  const courseId = course.value?.id
-  const sessionId = session.value?.id
-
-  if (!courseId) {
-    return
-  }
-
-  try {
-    await courseSettingsStore.loadCourseSettings(courseId, sessionId)
-  } catch (err) {
-    console.error("[Glossary] loadCourseSettings FAILED:", err)
-  }
-}
-
 onMounted(async () => {
   isLoading.value = true
 
-  await loadCourseSettingsIfPossible()
   await fetchGlossaries()
 })
 
 watch(
   () => [course.value?.id, session.value?.id],
   async () => {
-    await loadCourseSettingsIfPossible()
+    await fetchGlossaries()
   },
 )
 
@@ -323,7 +300,7 @@ async function exportToDocuments() {
   }
 }
 
-const { cid, sid } = useCidReq()
+const { cid, sid } = getCourseContext()
 
 async function fetchGlossaries() {
   const params = {

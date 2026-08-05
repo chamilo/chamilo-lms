@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Kalifikazio Elektronikoa desgaituta dago';
 $strings['StudentId'] = 'Ikaslearen ID';
 $strings['ProviderId'] = 'Hornitzailaren ID';
 $strings['CourseHours'] = 'Ikastaro orduak';
+
+$strings['GenerateFile'] = 'Sortu fitxategia';
+$strings['CourseId'] = 'Ikastaroaren IDa';

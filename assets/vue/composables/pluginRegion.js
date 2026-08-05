@@ -1,8 +1,7 @@
-import axios from "axios"
 import { computed, nextTick, onUnmounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useCidReqStore } from "../store/cidReq"
-import api from "../config/api"
+import pluginRegionService from "../services/pluginRegionService"
 
 /**
  * @param {string} region
@@ -38,8 +37,7 @@ export function usePluginRegion(region) {
     blocks.value = []
 
     try {
-      const { data } = await api.get(`/plugin-regions/${region}`, {
-        headers: { Accept: "application/json" },
+      const data = await pluginRegionService.getRegion(region, {
         params: resolvedParams.value,
         signal: abortController.signal,
       })
@@ -51,7 +49,8 @@ export function usePluginRegion(region) {
       executeInlineScripts()
       injectAssets()
     } catch (e) {
-      if (!axios.isCancel(e)) {
+      // Ignore request cancellations triggered by AbortController
+      if (e?.code !== "ERR_CANCELED" && e?.name !== "CanceledError") {
         blocks.value = []
       }
     }

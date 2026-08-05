@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'En tiuj datoj, ĉi tiu enmetita enhavo estos m
 $strings['HtmlCode'] = 'HTML-kodo';
 $strings['HtmlCodeHelp'] = 'La kunpartata HTML-kodo, provizita de la eksterna servo, kiam petas kunparti en Enmetita formato.';
 $strings['LaunchContent'] = 'Lanci enhavon';
+
+$strings['InvalidDateRange'] = 'La komencdato devas esti pli frua ol aŭ egala al la findato.';
+
+$strings['InvalidSecurityToken'] = 'Nevalida sekureca ĵetono. Bonvolu reŝarĝi la paĝon kaj provi denove.';

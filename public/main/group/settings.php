@@ -78,7 +78,7 @@ $form->addHtml('</div>');
 // Message for group rel usergroup
 if (GroupManager::isGroupLinkedToUsergroup($groupEntity)) {
     $unlinkToken = Security::get_token();
-    $unlinkForm = '<form method="post" action="settings.php?'.api_get_cidreq().'" style="display:inline">'.
+    $unlinkForm = '<form method="post" action="settings.php?'.api_get_cidreq().'" class="inline">';
         '<input type="hidden" name="remove_consistent_link" value="1">'.
         '<input type="hidden" name="sec_token" value="'.$unlinkToken.'">'.
         '<button type="submit" class="mt-2 inline-flex items-center rounded-md bg-danger px-3 py-2 text-sm font-medium text-danger-button-text shadow-sm transition hover:opacity-90" onclick="return confirm(\''.addslashes(get_lang('Are you sure?')).'\')">'.

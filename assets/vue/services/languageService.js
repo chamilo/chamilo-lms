@@ -1,17 +1,23 @@
 import makeService from "./api"
+import baseService from "./baseService"
 
-const legalExtensions = {
+const languageExtensions = {
   async findAllAvailable() {
     try {
-      const response = await fetch("/api/languages?available=true")
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-      return await response.json()
+      return await baseService.get("/api/languages", { available: true })
     } catch (error) {
       console.error("Error fetching available languages:", error)
       throw error
     }
   },
+
+  /**
+   * Searches languages by isocode (includes unavailable ones).
+   * @param {string} isocode
+   * @returns {Promise<{totalItems, items}>}
+   */
+  async searchByIsocode(isocode) {
+    return baseService.getCollection("/api/languages", { isocode })
+  },
 }
-export default makeService("languages", legalExtensions)
+export default makeService("languages", languageExtensions)

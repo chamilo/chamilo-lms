@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Šajā datumā šis iegultais saturs tiks par�
 $strings['HtmlCode'] = 'HTML kods';
 $strings['HtmlCodeHelp'] = 'Kopīgotais HTML kods, ko nodrošina ārējais pakalpojums, pieprasot kopīgot iegultā formātā.';
 $strings['LaunchContent'] = 'Startēt saturu';
+
+$strings['InvalidDateRange'] = 'Sākuma datumam jābūt agrākam vai vienādam ar beigu datumu.';
+
+$strings['InvalidSecurityToken'] = 'Nederīgs drošības marķieris. Lūdzu, atkārtoti ielādējiet lapu un mēģiniet vēlreiz.';

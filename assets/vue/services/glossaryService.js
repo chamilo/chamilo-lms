@@ -1,66 +1,66 @@
-import axios from "axios"
+import baseService from "./baseService"
 
 export default {
   // ---------------------------
   // Glossary CRUD (API entrypoint)
   // ---------------------------
   getGlossaryTerms: async (params) => {
-    const response = await axios.get("/api/glossaries", { params })
-    return response.data
+    return await baseService.get("/api/glossaries", params)
   },
 
   getGlossaryTerm: async (termId) => {
-    const response = await axios.get(`/api/glossaries/${termId}`)
-    return response.data
+    return await baseService.get(`/api/glossaries/${termId}`)
   },
 
   createGlossaryTerm: async (data) => {
-    const response = await axios.post("/api/glossaries", data)
-    return response.data
+    return await baseService.post("/api/glossaries", data)
   },
 
   updateGlossaryTerm: async (termId, data) => {
-    const response = await axios.put(`/api/glossaries/${termId}`, data)
-    return response.data
+    return await baseService.put(`/api/glossaries/${termId}`, data)
   },
 
   export: async (formData) => {
-    const response = await axios.post("/api/glossaries/export", formData, { responseType: "blob" })
-    return response.data
+    const response = await baseService.postRaw("/api/glossaries/export", formData, { responseType: "blob" })
+
+    return {
+      data: response.data,
+      headers: response.headers,
+    }
   },
 
   import: async (formData) => {
-    const response = await axios.post("/api/glossaries/import", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    return response.data
+    return await baseService.post("/api/glossaries/import", formData)
   },
 
   exportToDocuments: async (data) => {
-    const response = await axios.post("/api/glossaries/export_to_documents", data)
-    return response.data
+    return await baseService.post("/api/glossaries/export_to_documents", data)
   },
 
   deleteTerm: async (termId) => {
-    const response = await axios.delete(`/api/glossaries/${termId}`)
-    return response.data
+    return await baseService.delete(`/api/glossaries/${termId}`)
   },
 
   // ---------------------------
   // AI helpers (non-API entrypoint)
   // ---------------------------
   getTextProviders: async () => {
-    const response = await axios.get("/ai/text_providers")
-    return response.data
+    return await baseService.get("/ai/text_providers")
   },
 
   getDefaultPrompt: async (params) => {
-    const response = await axios.get("/ai/glossary_default_prompt", { params })
-    return response.data
+    return await baseService.get("/ai/glossary_default_prompt", params)
+  },
+
+  getAiCapabilities: async () => {
+    return await baseService.get("/ai/capabilities")
+  },
+
+  getDocumentSources: async (params) => {
+    return await baseService.get("/ai/glossary_document_sources", params)
   },
 
   generateGlossaryTerms: async (data) => {
-    const response = await axios.post("/ai/generate_glossary_terms", data)
-    return response.data
+    return await baseService.post("/ai/generate_glossary_terms", data)
   },
 }

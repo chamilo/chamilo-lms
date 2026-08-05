@@ -873,7 +873,7 @@ function deletePost(CForumPost $post): void
     $em = Database::getManager();
     $em
         ->createQuery('
-            UPDATE ChamiloCourseBundle:CForumPost p
+            UPDATE Chamilo\CourseBundle\Entity\CForumPost p
             SET p.postParent = :parent_of_deleted_post
             WHERE
                 p.postParent = :post AND
@@ -5099,7 +5099,7 @@ function getAttachedFiles(
             $json['id'] = $row['iid'];
             $json['comment'] = $attachment->getComment();
             // Format file size
-            $json['size'] = format_file_size($attachment->getSize());
+            $json['size'] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($attachment->getSize());
             // Check if $row is consistent
             if ($attachment) {
                 // Set result as success and bring delete URL

@@ -25,9 +25,20 @@
         </div>
 
         <div
-          v-if="ui.categories.length > 0"
+          v-if="isCurrentUserCourseTeacher || ui.categories.length > 0"
           class="course-card__category-list"
         >
+          <span
+            v-if="isCurrentUserCourseTeacher"
+            class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white shadow-sm"
+            :title="t('Teacher')"
+            :aria-label="t('Teacher')"
+          >
+            <span
+              class="mdi mdi-school-outline text-sm"
+              aria-hidden="true"
+            />
+          </span>
           <BaseTag
             v-for="cat in ui.categories"
             :key="cat"
@@ -194,6 +205,20 @@
     </Card>
     <!-- Overlays -->
     <div class="absolute inset-x-0 top-0 z-50 aspect-video pointer-events-none">
+      <!-- Paid service ribbon -->
+      <div
+        v-if="showBuyCoursesServiceBanner"
+        class="absolute bottom-3 left-0 inline-flex max-w-[80%] items-center gap-2 rounded-r-full bg-primary px-4 py-2 pr-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/30 backdrop-blur-sm"
+        :title="buyCoursesServiceName"
+        :aria-label="buyCoursesServiceName"
+      >
+        <span
+          class="mdi mdi-diamond-stone text-base"
+          aria-hidden="true"
+        />
+        <span class="truncate">{{ buyCoursesServiceName }}</span>
+      </div>
+
       <!-- Certificate badge -->
       <div
         v-if="ui.showCertificate && ui.certificateAvailable"
@@ -384,6 +409,7 @@ import { computed, onBeforeUnmount, onMounted, ref, shallowReactive, watch } fro
 import { useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
@@ -392,6 +418,7 @@ import BaseTag from "../basecomponents/BaseTag.vue"
 import { useUserSessionSubscription } from "../../composables/userPermissions"
 import { useLocale } from "../../composables/locale"
 import courseService from "../../services/courseService"
+import baseService from "../../services/baseService"
 
 function createStudentInfoBatcher() {
   const cache = shallowReactive(new Map()) // key -> studentInfo
@@ -467,41 +494,32 @@ function createStudentInfoBatcher() {
 
           if (ids.length === 0) return
 
-          const resp = await fetch("/course/student-info-batch.json", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              sid: Number(sid) || 0,
-              courseIds: ids,
-            }),
-            signal: abortCtrl.signal,
-          })
+          try {
+            const data = await baseService.post(
+              "/course/student-info-batch.json",
+              { sid: Number(sid) || 0, courseIds: ids },
+              {},
+              { signal: abortCtrl.signal },
+            )
 
-          if (!resp.ok) {
+            const items = data?.items || {}
+            const normalizedSid = Number(data?.sid ?? sid) || 0
+
+            Object.entries(items).forEach(([cidStr, info]) => {
+              const cId = Number(cidStr) || 0
+              if (cId <= 0) return
+              cache.set(buildKey(cId, normalizedSid), info)
+            })
+
+            ids.forEach((cid) => {
+              const k = buildKey(cid, normalizedSid)
+              if (!cache.has(k)) {
+                requestedKeys.delete(k)
+              }
+            })
+          } catch {
             ids.forEach((cid) => requestedKeys.delete(buildKey(cid, sid)))
-            return
           }
-
-          const data = await resp.json()
-          const items = data?.items || {}
-          const normalizedSid = Number(data?.sid ?? sid) || 0
-
-          Object.entries(items).forEach(([cidStr, info]) => {
-            const cId = Number(cidStr) || 0
-            if (cId <= 0) return
-            cache.set(buildKey(cId, normalizedSid), info)
-          })
-
-          ids.forEach((cid) => {
-            const k = buildKey(cid, normalizedSid)
-            if (!cache.has(k)) {
-              requestedKeys.delete(k)
-            }
-          })
         }),
       )
     } catch (e) {
@@ -536,6 +554,7 @@ const props = defineProps({
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
+const securityStore = useSecurityStore()
 const { isCoach } = useUserSessionSubscription(props.session, props.course)
 
 /**
@@ -578,19 +597,8 @@ async function loadNotifications() {
   try {
     const url = buildNotificationsEndpoint()
 
-    const resp = await fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-      signal: notificationsAbort.signal,
-    })
-
-    if (!resp.ok) {
-      notificationsError.value = "[CourseCard] Failed to load notifications."
-      return
-    }
-
-    const data = await resp.json()
+    const resp = await baseService.getRaw(url, { signal: notificationsAbort.signal })
+    const data = resp.data
 
     notificationsItems.value = Array.isArray(data?.items) ? data.items : []
     notificationsMeta.value = {
@@ -599,7 +607,7 @@ async function loadNotifications() {
 
     notificationsLoadedOnce = true
   } catch (e) {
-    if (e?.name !== "AbortError") {
+    if (e?.code !== "ERR_CANCELED" && e?.name !== "AbortError") {
       console.warn("[CourseCard] Notifications request failed.", e)
       notificationsError.value = "[CourseCard] Failed to load notifications."
     }
@@ -663,6 +671,12 @@ watch(showNotifications, (open) => {
 const { getOriginalLanguageName, getLanguageName } = useLocale()
 
 const courseTitle = computed(() => String(props.course?.title ?? ""))
+const buyCoursesServiceName = computed(() =>
+  String(props.course?.buyCoursesServiceName ?? props.course?.buy_courses_service_name ?? "").trim(),
+)
+const showBuyCoursesServiceBanner = computed(
+  () => Boolean(buyCoursesServiceName.value) && !platformConfigStore.isStudentViewActive,
+)
 
 function extractNumericId(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value
@@ -673,7 +687,7 @@ function extractNumericId(value) {
   }
 
   if (value && typeof value === "object") {
-    const candidates = [value.id, value._id, value["@id"]]
+    const candidates = [value.id, value._id, value["@id"], value.value]
     for (const c of candidates) {
       const n = extractNumericId(c)
       if (n > 0) return n
@@ -681,6 +695,27 @@ function extractNumericId(value) {
   }
 
   return 0
+}
+
+const currentUserId = computed(() => extractNumericId(securityStore.user))
+
+function isCurrentUserReference(value) {
+  const userId = extractNumericId(value)
+
+  return userId > 0 && userId === currentUserId.value
+}
+
+function isTeacherSubscription(subscription) {
+  const status = subscription?.status ?? null
+  const role = String(subscription?.role ?? subscription?.roleKey ?? subscription?.roleLabel ?? "").toLowerCase()
+
+  return (
+    true === subscription?.isTutor ||
+    true === subscription?.tutor ||
+    1 === Number(status) ||
+    role.includes("teacher") ||
+    role.includes("coach")
+  )
 }
 
 const courseNumericId = computed(() => {
@@ -781,7 +816,7 @@ const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions && courseIri) {
     return props.session.courseCoachesSubscriptions
       .filter((srcru) => srcru.course?.["@id"] === courseIri)
-      .map((srcru) => normalizeTeacher(srcru.user, "Coach"))
+      .map((srcru) => normalizeTeacher(srcru.user, "Tutor"))
       .filter(Boolean)
   }
 
@@ -795,13 +830,57 @@ const teachers = computed(() => {
             id: node?.id,
             ...node?.user,
           },
-          isTutor ? "Coach" : "Teacher",
+          isTutor ? "Tutor" : "Teacher",
         )
       })
       .filter(Boolean)
   }
 
   return []
+})
+
+const isCurrentUserCourseTeacher = computed(() => {
+  const currentCourse = props.course || {}
+
+  if (platformConfigStore.isStudentViewActive) {
+    return false
+  }
+
+  if (isCoach.value) {
+    return true
+  }
+
+  if (
+    true === currentCourse.currentUserIsTeacher ||
+    true === currentCourse.current_user_is_teacher ||
+    true === currentCourse.isCurrentUserTeacher ||
+    true === currentCourse.is_current_user_teacher
+  ) {
+    return true
+  }
+
+  const teachersLite = currentCourse.teachersLite ?? currentCourse.teachers_lite ?? []
+  if (Array.isArray(teachersLite) && teachersLite.some((teacher) => isCurrentUserReference(teacher))) {
+    return true
+  }
+
+  const courseIri = currentCourse["@id"]
+  if (props.session?.courseCoachesSubscriptions && courseIri) {
+    return props.session.courseCoachesSubscriptions.some((subscription) => {
+      return subscription?.course?.["@id"] === courseIri && isCurrentUserReference(subscription?.user)
+    })
+  }
+
+  const edges = currentCourse.users?.edges ?? []
+  if (Array.isArray(edges)) {
+    return edges.some((edge) => {
+      const subscription = edge?.node ?? {}
+
+      return isCurrentUserReference(subscription?.user ?? subscription) && isTeacherSubscription(subscription)
+    })
+  }
+
+  return false
 })
 
 const sessionDisplayDate = computed(() => {
@@ -922,16 +1001,9 @@ async function fetchStudentInfoSingle() {
   try {
     const url = `/course/${courseNumericId.value}/student-info.json?sid=${props.sessionId || 0}`
 
-    const resp = await fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: { Accept: "application/json" },
-      signal: studentInfoAbort.signal,
-    })
+    const resp = await baseService.getRaw(url, { signal: studentInfoAbort.signal })
+    const data = resp.data
 
-    if (!resp.ok) return
-
-    const data = await resp.json()
     if (data && typeof data === "object") {
       studentInfoLocal.value = data
     }

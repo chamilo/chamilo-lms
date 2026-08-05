@@ -4,7 +4,14 @@
     <hr class="mb-6" />
 
     <Message
-      v-if="capabilityStatus === 'blocked'"
+      v-if="isLoading"
+      severity="info"
+    >
+      {{ t("Checking course creation options...") }}
+    </Message>
+
+    <Message
+      v-else-if="showGlobalBlockedMessage"
       severity="warn"
     >
       <div class="space-y-2">
@@ -18,24 +25,10 @@
       </div>
     </Message>
 
-    <Message
-      v-else-if="capabilityStatus === 'error'"
-      severity="error"
-    >
-      <div class="space-y-2">
-        <p class="font-medium">
-          {{ t("Unable to verify whether you can create a new course right now.") }}
-        </p>
-
-        <p>
-          {{ t("Please try again later or contact the administrator.") }}
-        </p>
-      </div>
-    </Message>
-
     <CourseForm
-      v-else-if="capabilityStatus === 'allowed'"
+      v-if="showCourseForm"
       ref="createForm"
+      :buy-courses-options="buyCoursesOptions"
       :errors="violations"
       :values="item"
       @submit="submitCourse"
@@ -44,7 +37,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
@@ -69,8 +62,30 @@ const item = ref({
 })
 
 const violations = ref(null)
-const capabilityStatus = ref("pending")
+const isLoading = ref(true)
+const capabilityStatus = ref("allowed")
 const createCapabilityMessage = ref("")
+const buyCoursesOptions = ref(null)
+
+const hasBuyCoursesCourseTypeOptions = computed(() => {
+  return !!buyCoursesOptions.value?.enabled && !!buyCoursesOptions.value?.hasServiceOptions
+})
+
+const showGlobalBlockedMessage = computed(() => {
+  return capabilityStatus.value === "blocked" && !hasBuyCoursesCourseTypeOptions.value
+})
+
+const showCourseForm = computed(() => {
+  if (isLoading.value) {
+    return false
+  }
+
+  if (hasBuyCoursesCourseTypeOptions.value) {
+    return true
+  }
+
+  return capabilityStatus.value !== "blocked"
+})
 
 function sanitizeCoursePayload(data) {
   const payload = { ...data }
@@ -94,35 +109,57 @@ function sanitizeCoursePayload(data) {
   return payload
 }
 
-function withTimeout(promise, timeout = 2500) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      window.setTimeout(() => {
-        reject(new Error("create-capability-timeout"))
-      }, timeout)
-    }),
-  ])
+function normalizeCapabilityResponse(response) {
+  return response?.data || response || {}
 }
 
 async function loadCreateCapability() {
-  capabilityStatus.value = "pending"
   createCapabilityMessage.value = ""
 
   try {
-    const data = await withTimeout(courseService.getCreateCourseCapability(), 2500)
+    const response = await courseService.getCreateCourseCapability()
+    const capability = normalizeCapabilityResponse(response)
 
-    if (true === data.canCreate) {
-      capabilityStatus.value = "allowed"
+    if (false === capability.canCreate) {
+      capabilityStatus.value = "blocked"
+      createCapabilityMessage.value = capability.message || t("You cannot create more courses right now.")
+
       return
     }
 
-    capabilityStatus.value = "blocked"
-    createCapabilityMessage.value = data.message || t("You cannot create more courses right now.")
+    capabilityStatus.value = "allowed"
   } catch (error) {
     console.error("[course.create-capability] request failed", error)
-    capabilityStatus.value = "error"
+
+    // Do not block the form because this is only a pre-check.
+    // The backend validates the real limit when submitting the course.
+    capabilityStatus.value = "allowed"
   }
+}
+
+async function loadBuyCoursesOptions() {
+  buyCoursesOptions.value = null
+
+  try {
+    const response = await courseService.getBuyCoursesCourseCreationOptions()
+
+    if (response?.success && response?.enabled && response?.hasServiceOptions) {
+      buyCoursesOptions.value = response
+    }
+  } catch (error) {
+    console.error("[course.buycourses-options] request failed", error)
+
+    // BuyCourses options are optional. Standard course creation must keep working.
+    buyCoursesOptions.value = null
+  }
+}
+
+async function loadCreationContext() {
+  isLoading.value = true
+
+  await Promise.all([loadCreateCapability(), loadBuyCoursesOptions()])
+
+  isLoading.value = false
 }
 
 async function submitCourse(formData) {
@@ -139,7 +176,7 @@ async function submitCourse(formData) {
       throw new Error(t("Course ID is missing. Unable to navigate to the course home page."))
     }
 
-    showSuccessNotification(t("Course created successfully."))
+    showSuccessNotification(t("Course created successfully"))
     await router.push(`/course/${courseId}/home?sid=${sessionId}`)
   } catch (error) {
     console.error(error)
@@ -155,6 +192,6 @@ async function submitCourse(formData) {
 }
 
 onMounted(() => {
-  loadCreateCapability()
+  loadCreationContext()
 })
 </script>

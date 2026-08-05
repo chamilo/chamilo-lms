@@ -9,13 +9,7 @@ class CourseLegalPlugin extends Plugin
 {
     public $isCoursePlugin = true;
 
-    // When creating a new course this settings are added to the course
-    public $course_settings = [
-        [
-            'name' => 'courselegal',
-            'type' => 'text',
-        ],
-    ];
+    public $isAdminPlugin = true;
 
     protected function __construct()
     {
@@ -37,6 +31,13 @@ class CourseLegalPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
+
+    public function getAdminUrl()
+    {
+        return api_get_path(WEB_PLUGIN_PATH).'CourseLegal/admin.php';
+    }
+
+
     /**
      * @return string
      */
@@ -48,7 +49,7 @@ class CourseLegalPlugin extends Plugin
             $link = Display::url(
                 $this->get_lang('CourseLegal'),
                 $url,
-                ['class' => 'btn']
+                ['class' => 'btn btn--primary']
             );
         }
 
@@ -95,11 +96,7 @@ class CourseLegalPlugin extends Plugin
         $result = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
 
         if (!empty($result)) {
-            if (1 == $result['mail_agreement'] &&
-                1 == $result['web_agreement']
-            ) {
-                return true;
-            }
+            return 1 === (int) $result['web_agreement'];
         }
 
         return false;
@@ -109,36 +106,51 @@ class CourseLegalPlugin extends Plugin
      * @param int  $userId
      * @param int  $courseCode
      * @param int  $sessionId
-     * @param bool $sendEmail  Optional. Indicate whether the mail must be sent. Default is true
+     * @param bool $sendEmail  Optional. Indicate whether the mail confirmation link must be sent.
      */
-    public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
+    public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = false)
     {
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
         $data = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
+        $table = Database::get_main_table('session_rel_course_rel_user_legal');
+        $uniqueId = api_get_unique_id();
 
-        $id = false;
         if (empty($data)) {
-            $table = Database::get_main_table(
-                'session_rel_course_rel_user_legal'
-            );
-            $uniqueId = api_get_unique_id();
             $values = [
                 'user_id' => $userId,
                 'c_id' => $courseId,
                 'session_id' => $sessionId,
                 'web_agreement' => 1,
                 'web_agreement_date' => api_get_utc_datetime(),
+                'mail_agreement' => $sendEmail ? 0 : 1,
+                'mail_agreement_date' => $sendEmail ? null : api_get_utc_datetime(),
                 'mail_agreement_link' => $uniqueId,
             ];
+
             $id = Database::insert($table, $values);
 
             if ($sendEmail) {
                 $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
             }
+
+            return $id;
         }
 
-        return $id;
+        Database::update(
+            $table,
+            [
+                'web_agreement' => 1,
+                'web_agreement_date' => api_get_utc_datetime(),
+            ],
+            ['id = ? ' => [$data['id']]]
+        );
+
+        if ($sendEmail) {
+            $this->updateMailAgreementLink($userId, $courseId, $sessionId);
+        }
+
+        return (int) $data['id'];
     }
 
     /**
@@ -340,52 +352,26 @@ class CourseLegalPlugin extends Plugin
     {
         $table = Database::get_main_table('session_rel_course_legal');
 
-        $courseId = $values['c_id'];
-        $sessionId = $values['session_id'];
+        $courseId = (int) $values['c_id'];
+        $sessionId = (int) $values['session_id'];
 
         $conditions = [
             'c_id' => $courseId,
             'session_id' => $sessionId,
         ];
 
-        $course = api_get_course_info_by_id($courseId);
-
         $legalData = $this->getData($courseId, $sessionId);
-        $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/CourseLegal';
-        $uploadResult = $coursePath.'/'.$legalData['filename'];
-
-        if (!is_dir($coursePath)) {
-            mkdir($coursePath, api_get_permissions_for_new_directories());
-        }
-        $uploadOk = process_uploaded_file($file, false);
         $fileName = null;
+        $uploadedFilePath = null;
 
-        if ($uploadOk) {
-            $uploadResult = null;
-            /*$uploadResult = handle_uploaded_document(
-                $course,
-                $file,
-                $coursePath,
-                '/',
-                api_get_user_id(),
-                api_get_group_id(),
-                null,
-                false,
-                false,
-                false,
-                true
-            );*/
+        if (!empty($file) && process_uploaded_file($file, false)) {
+            $uploadedFilePath = $this->storeUploadedFile($courseId, $sessionId, $file);
 
-            if ($uploadResult) {
-                $fileName = basename($uploadResult);
-                // Delete old one if exists.
-                if ($legalData) {
-                    if (!empty($legalData['filename'])) {
-                        $fileToDelete = $coursePath.'/'.$legalData['filename'];
-                        if (file_exists($fileToDelete)) {
-                            unlink($fileToDelete);
-                        }
-                    }
+            if ($uploadedFilePath) {
+                $fileName = basename($uploadedFilePath);
+
+                if (!empty($legalData['filename'])) {
+                    $this->deleteStoredFile($courseId, $sessionId, $legalData['filename']);
                 }
             }
         }
@@ -419,12 +405,13 @@ class CourseLegalPlugin extends Plugin
                 ['filename' => ''],
                 ['id = ? ' => $id]
             );
+
             if (!empty($legalData['filename'])) {
-                $fileToDelete = $coursePath.'/'.$legalData['filename'];
-                if (file_exists($fileToDelete)) {
-                    unlink($fileToDelete);
-                }
+                $this->deleteStoredFile($courseId, $sessionId, $legalData['filename']);
             }
+
+            $fileName = null;
+            $uploadedFilePath = null;
         }
 
         if (isset($values['remove_previous_agreements']) &&
@@ -446,15 +433,86 @@ class CourseLegalPlugin extends Plugin
                 break;
             case '3':
                 // Send mail + attachment if exists.
-                if (!empty($legalData['filename'])) {
+                $attachmentPath = $uploadedFilePath;
+
+                if (empty($attachmentPath)) {
+                    $currentData = $this->getData($courseId, $sessionId);
+                    if (!empty($currentData['filename'])) {
+                        $attachmentPath = $this->getStoredFilePath($courseId, $sessionId, $currentData['filename']);
+                    }
+                }
+
+                if (!empty($attachmentPath) && is_file($attachmentPath)) {
                     $this->warnUsersByEmail(
                         $courseId,
                         $sessionId,
-                        $uploadResult
+                        $attachmentPath
                     );
                 }
 
                 break;
+        }
+    }
+
+    private function getStorageDirectory(int $courseId, int $sessionId): string
+    {
+        return rtrim(api_get_path(SYMFONY_SYS_PATH), '/').'/var/upload/course_legal/course_'.$courseId.'/session_'.$sessionId;
+    }
+
+    private function ensureStorageDirectory(int $courseId, int $sessionId): string
+    {
+        $directory = $this->getStorageDirectory($courseId, $sessionId);
+
+        if (!is_dir($directory)) {
+            mkdir($directory, api_get_permissions_for_new_directories(), true);
+        }
+
+        return $directory;
+    }
+
+    private function sanitizeUploadedFilename(string $filename): string
+    {
+        $filename = basename($filename);
+        $filename = preg_replace('/[^A-Za-z0-9._-]+/', '_', $filename);
+        $filename = trim((string) $filename, '._-');
+
+        if ('' === $filename) {
+            $filename = 'agreement';
+        }
+
+        return date('YmdHis').'_'.uniqid('', true).'_'.$filename;
+    }
+
+    private function storeUploadedFile(int $courseId, int $sessionId, array $file): ?string
+    {
+        if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+            return null;
+        }
+
+        $directory = $this->ensureStorageDirectory($courseId, $sessionId);
+        $fileName = $this->sanitizeUploadedFilename($file['name'] ?? 'agreement');
+        $targetPath = $directory.'/'.$fileName;
+
+        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+            return null;
+        }
+
+        chmod($targetPath, api_get_permissions_for_new_files());
+
+        return $targetPath;
+    }
+
+    public function getStoredFilePath(int $courseId, int $sessionId, string $fileName): string
+    {
+        return $this->getStorageDirectory($courseId, $sessionId).'/'.basename($fileName);
+    }
+
+    private function deleteStoredFile(int $courseId, int $sessionId, string $fileName): void
+    {
+        $filePath = $this->getStoredFilePath($courseId, $sessionId, $fileName);
+
+        if (is_file($filePath)) {
+            unlink($filePath);
         }
     }
 
@@ -487,22 +545,25 @@ class CourseLegalPlugin extends Plugin
      */
     public function getCurrentFile($courseId, $sessionId)
     {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
         $data = $this->getData($courseId, $sessionId);
 
         if (isset($data['filename']) && !empty($data['filename'])) {
-            $course = api_get_course_info_by_id($courseId);
-
-            $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/CourseLegal';
-            $file = $coursePath.'/'.$data['filename'];
+            $file = $this->getStoredFilePath($courseId, $sessionId, $data['filename']);
 
             if (file_exists($file)) {
+                $url = api_get_path(WEB_PLUGIN_PATH).'CourseLegal/download.php?course_id='.$courseId.'&session_id='.$sessionId;
+
                 return Display::url(
                     $data['filename'],
-                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/CourseLegal/'.$data['filename'],
+                    $url,
                     ['target' => '_blank']
                 );
             }
         }
+
+        return '';
     }
 
     public function install()
@@ -531,22 +592,16 @@ class CourseLegalPlugin extends Plugin
                     mail_agreement_link varchar(255)
                 )";
         Database::query($sql);
-
-        // Installing course settings
-        $this->install_course_fields_in_all_courses(false);
     }
 
     public function uninstall()
     {
         $table = Database::get_main_table('session_rel_course_legal');
-        $sql = "DROP TABLE $table ";
+        $sql = "DROP TABLE IF EXISTS $table ";
         Database::query($sql);
 
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
-        $sql = "DROP TABLE $table ";
+        $sql = "DROP TABLE IF EXISTS $table ";
         Database::query($sql);
-
-        // Deleting course settings
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 }

@@ -31,10 +31,10 @@
   />
 
   <BaseDialog
-    v-model:visible="isDialogVisible"
+    v-model:is-visible="isDialogVisible"
     :title="t('Student progress')"
     size="large"
-    is-visible
+    :close-label="t('Close')"
   >
     <div
       v-if="loadingProgress"
@@ -101,9 +101,7 @@ const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const isTeacherUI = computed(
-  () =>
-    (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) &&
-    !platformConfigStore.isStudentViewActive,
+  () => (securityStore.isCourseAdmin || securityStore.isTeacher) && !platformConfigStore.isStudentViewActive,
 )
 
 const componentToShow = computed(() => (isTeacherUI.value ? TeacherAssignmentList : StudentAssignmentList))

@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Event\LoginCredentialsCheckedEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LoginCredentialsCheckedEvent;
 use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -36,12 +36,16 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
      */
     public function onLoginCredentialsChecked(LoginCredentialsCheckedEvent $event): void
     {
-        if (!$this->plugin->isEnabled(true)) {
+        if (!$this->plugin->isEnabled()) {
             return;
         }
 
         $userData = $event->getUser();
         $credentials = $event->getCredentials();
+
+        if (empty($userData['id']) || empty($credentials['password'])) {
+            return;
+        }
 
         $extraField = $this->getExtraField();
 
@@ -51,17 +55,17 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
 
         $fieldValue = $this->getExtraFieldValue($extraField, $userData);
 
-        if (empty($fieldValue)) {
+        if (empty($fieldValue) || '' === (string) $fieldValue->getFieldValue()) {
             return;
         }
 
         $isPasswordVerified = password_verify(
-            $credentials['password'],
-            $fieldValue->getFieldValue()
+            (string) $credentials['password'],
+            (string) $fieldValue->getFieldValue()
         );
 
         if (!$isPasswordVerified) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException('Invalid Moodle password.');
         }
     }
 
@@ -87,6 +91,9 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
     {
         return Database::getManager()
             ->getRepository(ExtraFieldValues::class)
-            ->findOneBy(['field' => $extraField, 'itemId' => $userData['id']]);
+            ->findOneBy([
+                'field' => $extraField,
+                'itemId' => (int) $userData['id'],
+            ]);
     }
 }

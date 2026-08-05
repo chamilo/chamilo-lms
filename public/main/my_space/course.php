@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 ob_start();
 $cidReset = true;
@@ -32,7 +35,7 @@ if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
-    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'student' == $_GET['type']) {
@@ -80,9 +83,9 @@ if (api_is_platform_admin(true, true)) {
             $user_id = (int) $_GET['user_id'];
             $user_info = api_get_user_info($user_id);
             $title = get_lang('Courses assigned to').' '.api_get_person_name(
-                    $user_info['firstname'],
-                    $user_info['lastname']
-                );
+                $user_info['firstname'],
+                $user_info['lastname']
+            );
             $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('Your courses');
@@ -187,7 +190,7 @@ if (api_is_platform_admin(true, true)) {
         $menu_items[] = $questionTabs;
 
         if (api_can_login_as($user_id)) {
-            $loginAsToken = Container::$container->get(\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
+            $loginAsToken = Container::$container->get(CsrfTokenManagerInterface::class)->getToken('login_as')->getValue();
             $menu_items[] = '<a href="'.
                 api_get_path(WEB_PATH).'admin/user-list-login-as?user_id='.$user_id.'&sec_token='.urlencode($loginAsToken).'">'.
                 Display::getMdiIcon(
@@ -327,7 +330,7 @@ function get_courses($from, $limit, $column, $direction)
     }
 
     if (false == $drhLoaded) {
-        // General coach can see all reports.
+        // General tutor can see all reports.
         if ($session && $session->hasUserAsGeneralCoach(api_get_user_entity())) {
             $courseList = SessionManager::getCoursesInSession($session->getId());
             $courses = [];
@@ -413,21 +416,34 @@ function get_courses($from, $limit, $column, $direction)
             $tematic_advance = $thematic->get_total_average_of_thematic_advances($course, $session);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
-                $tematicAdvanceProgress = '<a
-                    title="'.get_lang('Go to thematic advance').'"
-                    href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cid='.$courseId.'&sid='.$sessionId.'">'.
-                    $tematic_advance.'%</a>';
+                $tematicAdvanceProgress = $tematic_advance.'%';
+                $courseResourceNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+                if ($courseResourceNodeId > 0) {
+                    $courseProgressQuery = [
+                        'cid' => $courseId,
+                        'sid' => (int) $sessionId,
+                        'gid' => 0,
+                    ];
+                    $courseProgressUrl = api_get_path(WEB_PATH).
+                        'resources/course-progress/'.$courseResourceNodeId.'/?'.
+                        http_build_query($courseProgressQuery);
+                    $tematicAdvanceProgress = '<a
+                        title="'.get_lang('Go to thematic advance').'"
+                        href="'.$courseProgressUrl.'">'.
+                        $tematic_advance.'%</a>';
+                }
             }
 
             $courseIcon = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
                 '.Display::getMdiIcon(
-                    ActionIcon::VIEW_DETAILS,
-                    'ch-tool-icon',
-                    null,
-                    ICON_SIZE_SMALL,
-                    get_lang('Details')
-                ).'
+                ActionIcon::VIEW_DETAILS,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Details')
+            ).'
               </a>';
 
             $title = Display::url(
@@ -453,12 +469,12 @@ function get_courses($from, $limit, $column, $direction)
             $courseList[] = [
                 $title,
                 $countStudents,
-                is_null($avgTimeSpentInCourse) ? '-' : $avgTimeSpentInCourse,
+                null === $avgTimeSpentInCourse ? '-' : $avgTimeSpentInCourse,
                 $tematicAdvanceProgress,
-                is_null($avgProgressInCourse) ? '-' : $avgProgressInCourse.'%',
-                is_null($avgScoreInCourse) ? '-' : $avgScoreInCourse,
-                is_null($messagesInCourse) ? '-' : $messagesInCourse,
-                is_null($assignmentsInCourse) ? '-' : $assignmentsInCourse,
+                null === $avgProgressInCourse ? '-' : $avgProgressInCourse.'%',
+                null === $avgScoreInCourse ? '-' : $avgScoreInCourse,
+                null === $messagesInCourse ? '-' : $messagesInCourse,
+                null === $assignmentsInCourse ? '-' : $assignmentsInCourse,
                 $attendanceLink,
                 $courseIcon,
             ];
@@ -540,23 +556,26 @@ Display::display_header($headerTitle);
 
 echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
 
-// Header row: title on the left, toolbar and optional import link on the right.
-echo '  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">';
-echo '      <div class="space-y-1">';
-echo            Display::page_subheader($pageTitle);
-echo '      </div>';
+// Toolbar must be displayed before the page title in this legacy report page.
+echo '  <div class="flex flex-col gap-3">';
 
-echo '      <div class="flex flex-col items-end gap-2">';
-echo '          <div class="flex justify-start md:justify-end gap-2">';
-echo                $toolbar;
-echo '          </div>';
+if (!empty($toolbar) || !empty($importLink)) {
+    echo '      <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">';
+    echo '          <div class="flex flex-wrap items-center gap-2">';
+    echo $toolbar;
+    echo '          </div>';
 
-if (!empty($importLink)) {
-    echo '      <div class="mt-1 text-sm text-right">';
-    echo            $importLink;
+    if (!empty($importLink)) {
+        echo '      <div class="text-sm md:text-right">';
+        echo $importLink;
+        echo '      </div>';
+    }
+
     echo '      </div>';
 }
 
+echo '      <div class="space-y-1">';
+echo Display::page_subheader($pageTitle);
 echo '      </div>';
 echo '  </div>';
 

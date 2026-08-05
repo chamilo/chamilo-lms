@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use ApiPlatform\Api\IriConverterInterface;
+use ApiPlatform\Metadata\IriConverterInterface;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
@@ -87,6 +87,12 @@ class AccessUrlController extends AbstractController
                 } else {
                     $accessUrl->addUser($user);
                     $this->em->persist($accessUrl);
+
+                    $firstAuthSource = $user->getAuthSources()->first();
+                    if ($firstAuthSource && 0 === $user->getAuthSourcesByUrl($accessUrl)->count()) {
+                        $user->addAuthSourceByAuthentication($firstAuthSource->getAuthentication(), $accessUrl);
+                    }
+
                     $report[] = $this->formatReport('check-circle', "Line %s: user '%s' successfully assigned to '%s'.", [$lineNumber, $username, $url]);
                 }
             }
@@ -200,6 +206,53 @@ class AccessUrlController extends AbstractController
         $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
 
         return new JsonResponse($authSources);
+    }
+
+    /**
+     * Returns the current auth_source (if any) for a list of users on a given access URL.
+     *
+     * Query parameters:
+     *   access_url  – IRI of the AccessUrl entity
+     *   users[]     – one or more IRIs of User entities
+     *
+     * Response: { "/api/users/42": "platform", "/api/users/99": null, ... }
+     */
+    #[Route('/auth-sources/users-current', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function authSourcesUsersCurrent(
+        Request $request,
+        IriConverterInterface $iriConverter,
+    ): JsonResponse {
+        $accessUrlIri = $request->query->get('access_url', '');
+        $userIris = $request->query->all('users');
+
+        if (!$accessUrlIri || empty($userIris)) {
+            return new JsonResponse([]);
+        }
+
+        try {
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $iriConverter->getResourceFromIri($accessUrlIri);
+        } catch (Exception) {
+            throw $this->createNotFoundException('Access URL not found');
+        }
+
+        $result = [];
+        foreach ($userIris as $userIri) {
+            try {
+                /** @var User $user */
+                $user = $iriConverter->getResourceFromIri($userIri);
+            } catch (Exception) {
+                continue;
+            }
+
+            $sources = $user->getAuthSourcesByUrl($accessUrl);
+            $result[$userIri] = $sources->count() > 0
+                ? $sources->first()->getAuthentication()
+                : null;
+        }
+
+        return new JsonResponse($result);
     }
 
     /**

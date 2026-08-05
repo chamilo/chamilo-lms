@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 
@@ -15,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
  * Modified by hubert.borderiou (question category)
  */
 require_once __DIR__.'/../inc/global.inc.php';
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
 $current_course_tool = TOOL_QUIZ;
 
 // Setting the tabs
@@ -350,7 +352,8 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft .= Display::getMdiIcon('database', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recycle existing questions'));
     $actionsLeft .= '</a>';
 
-    if (api_is_allowed_to_edit(null, true) && 'true' === api_get_course_setting('exercise_generator')) {
+    if (api_is_allowed_to_edit(null, true)
+        && $aiFeatureAccessHelper->isFeatureEnabledForCourse('exercise_generator', api_get_course_int_id())) {
         $actionsLeft .= '<a href="exercise_aiken_generator.php?'.api_get_cidreq().'">'.
             Display::getMdiIcon('robot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AI Aiken generator')).'</a>';
     }

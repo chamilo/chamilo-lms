@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = '从 Moodle 导入';
+$strings['plugin_comment'] = '从 Moodle 数据库和文件执行导入过程到 Chamilo。';
+
+$strings['MoodlePassword'] = 'Moodle 密码';
+$strings['UninstallError'] = '卸载插件时发生错误。';
+
+$strings['db_host'] = 'Moodle 数据库主机';
+$strings['db_user'] = 'Moodle 数据库用户';
+$strings['db_password'] = 'Moodle 数据库密码';
+$strings['db_name'] = 'Moodle 数据库名称';
+$strings['user_filter'] = '用户筛选器';
+$strings['user_filter_help'] = '仅导入用户名以此字符串为前缀的用户。<br>课程导入也受此配置影响，因为它仅导入有此前缀用户所选修的课程。';
+$strings['url_id'] = 'URL ID';
+$strings['url_id_help'] = '保存课程、用户和教学活动的访问 URL ID（如果使用多 URL）。';
+$strings['moodle_path'] = 'Moodledata 路径';
+$strings['moodle_path_help'] = 'moodledata 文件夹路径。通常类似于 <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = '用户';
+$strings['CourseCategoriesTask'] = '课程分类';
+$strings['CoursesTask'] = '课程';
+$strings['CourseSectionsTask'] = '课程章节';
+$strings['CourseModulesLessonTask'] = '课程模块：课件';
+$strings['LessonPagesTask'] = '课件页面';
+$strings['LessonPagesDocumentTask'] = '课件页面：文档';
+$strings['FilesForLessonPagesTask'] = '课件页面的文件';
+$strings['LessonPagesQuizTask'] = '课件页面：问题';
+$strings['LessonPagesQuizQuestionTask'] = '问题页面的问题';
+$strings['LessonAnswersTrueFalseTask'] = '判断题的答案';
+$strings['LessonAnswersMultipleChoiceTask'] = '单选题的答案';
+$strings['LessonAnswersMultipleAnswerTask'] = '多选题的答案';
+$strings['LessonAnswersMatchingTask'] = '匹配题的答案';
+$strings['LessonAnswersEssayTask'] = '论述题的答案';
+$strings['LessonAnswersShortAnswerTask'] = '简答题的答案';
+$strings['FilesForLessonAnswersTask'] = '课件答案的文件';
+$strings['CourseModulesQuizTask'] = '课程模块：测验';
+$strings['CQuizTask'] = 'C 语言测验';
+$strings['RoleAssignmentsTask'] = '角色分配';
+$strings['QuizzesTask'] = '测验';
+$strings['FilesForQuizzesTask'] = '测验的文件';
+$strings['QuestionCategoriesTask'] = '问题分类';
+$strings['QuestionsTask'] = '问题';
+$strings['QuestionMultiChoiceSingleTask'] = '单选题的答案（单选）';
+$strings['QuestionMultiChoiceMultipleTask'] = '多选题的答案（多选）';
+$strings['QuestionsTrueFalseTask'] = '判断题的答案';
+$strings['QuestionShortAnswerTask'] = '简答题的答案';
+$strings['CourseModulesScormTask'] = 'SCORM 课程';
+$strings['ScormScoesTask'] = 'SCORM 项目';
+$strings['FilesForScormScoesTask'] = 'SCORM 项目的文件';
+$strings['UserSessionsTask'] = '用户的课程教学活动';
+$strings['CourseIntroductionsTask'] = '课程简介';
+$strings['FilesForCourseIntroductionsTask'] = '课程简介的文件';
+$strings['FilesForCourseSectionsTask'] = '课程章节的文件';
+$strings['CourseModulesUrlTask'] = '课程模块：URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = '对章节中的模块排序';
+$strings['UsersScormsViewTask'] = '用户 SCORM 查看记录';
+$strings['UsersScormsProgressTask'] = 'SCORM 进度';
+$strings['UsersLearnPathsTask'] = '用户学习路径查看记录';
+$strings['UsersLearnPathsLessonTimerTask'] = '学习路径章节开始时间的课程计时器';
+$strings['QuizzesScoresTask'] = '更新学习路径中的测验成绩';
+$strings['QuestionGapselectTask'] = '填空题答案';
+$strings['UsersLearnPathsLessonBranchTask'] = '学习路径文档中分支到总时间的课程';
+$strings['UsersLearnPathsLessonAttemptsTask'] = '学习路径测验中尝试次数到总时间的课程';
+$strings['UsersLearnPathsQuizzesTask'] = '测验尝试次数到学习路径测验尝试次数';
+$strings['UsersQuizzesAttemptsTask'] = '用户测验尝试次数';
+$strings['UserQuestionAttemptsShortanswerTask'] = '用户简答题的题目尝试次数';
+$strings['UserQuestionAttemptsGapselectTask'] = '用户填空题的题目尝试次数';
+$strings['UserQuestionAttemptsTruefalseTask'] = '用户判断题的题目尝试次数';
+$strings['UsersLastLoginTask'] = '用户最后登录记录';
+$strings['TrackLoginTask'] = '首次登录和最后登出';
+$strings['TrackCourseAccessTask'] = '用户访问课程';
+$strings['UserLearnPathsProgressScript'] = '为用户更新学习路径中的进度。';
+$strings['UserScormsProgressScript'] = '为用户更新 SCORM 中的进度。';
+
+$strings['InstallError'] = '安装插件时发生错误：%s';
+$strings['AdminIntro'] = '按顺序运行 Moodle 迁移任务。每个步骤仅在其父步骤完成后才启用。';
+$strings['MoodleDatabase'] = 'Moodle 数据库';
+$strings['MoodledataPath'] = 'Moodledata 路径';
+$strings['AccessUrlId'] = '访问 URL ID';
+$strings['Configured'] = '已配置';
+$strings['NotConfigured'] = '未配置';
+$strings['ConfigurePlugin'] = '配置插件';
+$strings['MissingRequiredDatabaseConfiguration'] = '在运行迁移任务前，请先配置 Moodle 数据库的主机、用户和数据库名称。';
+$strings['MissingMoodledataPathWarning'] = 'Moodledata 路径为空。在配置此设置之前，与文件相关的任务可能会失败。';
+$strings['InvalidMigrationAction'] = '无效的迁移操作。';
+$strings['InvalidSecurityToken'] = '无效的安全令牌。请重新加载页面并重试。';
+$strings['MigrationTasks'] = '迁移任务';
+$strings['MaintenanceScripts'] = '维护脚本';
+$strings['ExecutionOutput'] = '执行输出';
+$strings['TaskAlreadyExecuted'] = '此任务或脚本已被执行过。';
+$strings['SelectTaskToRun'] = '选择要运行的迁移任务。输出将显示在此处。';

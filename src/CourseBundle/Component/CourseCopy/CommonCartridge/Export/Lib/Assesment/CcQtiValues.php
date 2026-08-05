@@ -8,29 +8,29 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Lib\A
 
 abstract class CcQtiValues
 {
-    public const EXAM_PROFILE = 'cc.exam.v0p1';
-    public const YES = 'Yes';
-    public const NO = 'No';
-    public const RESPONSE = 'Response';
-    public const SOLUTION = 'Solution';
-    public const HINT = 'Hint';
-    public const EXAMINATION = 'Examination';
-    public const PERCENTAGE = 'Percentage';
-    public const UNLIMITED = 'unlimited';
-    public const SINGLE = 'Single';
-    public const MULTIPLE = 'Multiple';
-    public const ORDERER = 'Ordered';
-    public const ASTERISK = 'Asterisk';
-    public const BOX = 'Box';
-    public const DASHLINE = 'Dashline';
-    public const UNDERLINE = 'Underline';
-    public const DECIMAL = 'Decimal';
-    public const INTEGER = 'Integer';
-    public const SCIENTIFIC = 'Scientific';
-    public const STRING = 'String';
-    public const SCORE = 'SCORE';
-    public const SET = 'Set';
-    public const COMPLETE = 'Complete';
-    public const TEXTTYPE = 'text/plain';
-    public const HTMLTYPE = 'text/html';
+    public const string EXAM_PROFILE = 'cc.exam.v0p1';
+    public const string YES = 'Yes';
+    public const string NO = 'No';
+    public const string RESPONSE = 'Response';
+    public const string SOLUTION = 'Solution';
+    public const string HINT = 'Hint';
+    public const string EXAMINATION = 'Examination';
+    public const string PERCENTAGE = 'Percentage';
+    public const string UNLIMITED = 'unlimited';
+    public const string SINGLE = 'Single';
+    public const string MULTIPLE = 'Multiple';
+    public const string ORDERER = 'Ordered';
+    public const string ASTERISK = 'Asterisk';
+    public const string BOX = 'Box';
+    public const string DASHLINE = 'Dashline';
+    public const string UNDERLINE = 'Underline';
+    public const string DECIMAL = 'Decimal';
+    public const string INTEGER = 'Integer';
+    public const string SCIENTIFIC = 'Scientific';
+    public const string STRING = 'String';
+    public const string SCORE = 'SCORE';
+    public const string SET = 'Set';
+    public const string COMPLETE = 'Complete';
+    public const string TEXTTYPE = 'text/plain';
+    public const string HTMLTYPE = 'text/html';
 }

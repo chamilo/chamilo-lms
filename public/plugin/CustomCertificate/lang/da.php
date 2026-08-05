@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Vil du slette det specifikke diplom og bruge stand
 $strings['SuccessDelete'] = 'Rydt slettet';
 $strings['ProblemDelete'] = 'Problem med at slette certifikatet';
 $strings['OnlyCustomCertificates'] = 'Kun kurser med personlige certifikater eksporteres';
+$strings['CertificateMode'] = 'Certifikat-tilstand';
+$strings['UseCourseCustomCertificate'] = 'Brug kursusspecifikt tilpasset certifikat';
+$strings['UseDefaultCustomCertificate'] = 'Brug platformens standard tilpassede certifikat';
+
+$strings['CreateCertificateWithTags'] = 'Opret certifikatet ved hjælp af disse tags';
+
+$strings['DeleteCertificate'] = 'Slet certifikat';
+
+$strings['SaveCertificate'] = 'Gem certifikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Vælg en indstilling og gem indstillingerne, før du åbner certifikat-editoren.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Vælg hvordan dette kursus skal bruge tilpassede certifikater.';
+
+$strings['CouldNotSaveCertificate'] = 'Kunne ikke gemme certifikatkonfigurationen.';

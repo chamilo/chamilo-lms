@@ -98,6 +98,11 @@ class SearchEngineFieldValue
         return $this;
     }
 
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
     public function setValue(string $value): self
     {
         $value = trim($value);
@@ -110,10 +115,5 @@ class SearchEngineFieldValue
         $this->value = $value;
 
         return $this;
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 }

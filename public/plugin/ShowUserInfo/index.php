@@ -1,17 +1,14 @@
 <?php
-// A user must be logged in.
-$_template['show_message'] = false;
 
-if (!api_is_anonymous()) {
-    $_template['show_message'] = true;
+/* For licensing terms, see /license.txt */
 
-    // Getting the current user id.
-    $user_id = api_get_user_id();
+/**
+ * Region entry point.
+ *
+ * AppPlugin::getAllPluginContentsByRegion() executes this file for the configured region.
+ * The visible output must be printed directly from index.php, following the Static plugin pattern.
+ */
 
-    //Getting the current user info.
-    $user_info = api_get_user_info($user_id);
+require_once __DIR__.'/lib/show_user_info_plugin.class.php';
 
-    // You can also use template setting variables in the special variable called template.
-    $_template['user_info'] = $user_info;
-    $_template['username'] = $user_info['username'];
-}
+echo ShowUserInfoPlugin::create()->renderUserBlock();

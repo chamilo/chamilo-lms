@@ -37,9 +37,17 @@ class LearnpathLink extends AbstractLink
         }
 
         $lpRepo = Container::getLpRepository();
-        $session = api_get_session_entity();
-        $course = api_get_course_entity();
+        $sessionId = $this->get_session_id();
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
+        $course = api_get_course_entity($this->getCourseId());
+        if (!$course) {
+            return [];
+        }
+
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
         $qb = $lpRepo->getResourcesByCourse($course, $session);
         $lps = $qb->getQuery()->getResult();
 
@@ -58,8 +66,15 @@ class LearnpathLink extends AbstractLink
     public function has_results()
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT count(id) AS number FROM $tbl_stats
-				WHERE lp_id = ".$this->get_ref_id();
+        $sessionId = $this->get_session_id();
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
+        $sql = "SELECT COUNT(iid) AS number FROM $tbl_stats
+                WHERE c_id = ".$this->getCourseId()."
+                  AND lp_id = ".$this->get_ref_id()."
+                  AND session_id = ".(int) $sessionId;
         $result = Database::query($sql);
         $number = Database::fetch_array($result, 'NUM');
 
@@ -79,17 +94,22 @@ class LearnpathLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
-        $session_id = $this->get_session_id();
-
-        $sql = "SELECT * FROM $tbl_stats
-                WHERE lp_id = ".$this->get_ref_id();
-
-        if (isset($studentId)) {
-            $sql .= ' AND user_id = '.intval($studentId);
+        $sessionId = $this->get_session_id();
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
         }
 
-        // order by id, that way the student's first attempt is accessed first
-        $sql .= ' ORDER BY view_count DESC';
+        $sql = "SELECT * FROM $tbl_stats
+                WHERE c_id = ".$this->getCourseId()."
+                  AND lp_id = ".$this->get_ref_id()."
+                  AND session_id = ".(int) $sessionId;
+
+        if (isset($studentId)) {
+            $sql .= ' AND user_id = '.(int) $studentId;
+        }
+
+        // The latest attempt is the one shown in the gradebook.
+        $sql .= ' ORDER BY view_count DESC, iid DESC';
 
         $scores = Database::query($sql);
         // for 1 student
@@ -146,19 +166,33 @@ class LearnpathLink extends AbstractLink
      */
     public function get_link()
     {
-        $session_id = $this->get_session_id();
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
-            $this->getCourseId(),
-                $session_id
-        ).'&gradebook=view';
-
-        if (!api_is_allowed_to_edit() || null == $this->calc_score(api_get_user_id())) {
-            $url .= '&action=view&lp_id='.$this->get_ref_id();
-        } else {
-            $url .= '&action=build&lp_id='.$this->get_ref_id();
+        $courseId = $this->getCourseId();
+        $sessionId = $this->get_session_id();
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
         }
 
-        return $url;
+        $course = api_get_course_entity($courseId);
+        $courseNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+        if ($courseNodeId <= 0) {
+            return $this->getLegacyLink($sessionId);
+        }
+
+        $canEdit = api_is_allowed_to_edit();
+        $openRuntime = !$canEdit || null === $this->calc_score(api_get_user_id());
+        $path = '/resources/lp/'.$courseNodeId.'/'.$this->get_ref_id().($openRuntime ? '/runtime' : '/builder');
+
+        $params = [
+            'cid' => $courseId,
+            'sid' => (int) $sessionId,
+            'gid' => 0,
+            'gradebook' => 1,
+            'origin' => 'gradebook',
+            'isStudentView' => $canEdit ? 'false' : 'true',
+        ];
+
+        return api_get_path(WEB_PATH).ltrim($path, '/').'?'.http_build_query($params);
     }
 
     /**
@@ -222,6 +256,20 @@ class LearnpathLink extends AbstractLink
     public function get_icon_name()
     {
         return 'learnpath';
+    }
+
+    private function getLegacyLink(int $sessionId): string
+    {
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
+            $this->getCourseId(),
+            $sessionId
+        ).'&gradebook=view';
+
+        if (!api_is_allowed_to_edit() || null === $this->calc_score(api_get_user_id())) {
+            return $url.'&action=view&lp_id='.$this->get_ref_id();
+        }
+
+        return $url.'&action=build&lp_id='.$this->get_ref_id();
     }
 
     /**

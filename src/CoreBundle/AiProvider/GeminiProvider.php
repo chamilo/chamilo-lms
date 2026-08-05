@@ -22,6 +22,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 {
     private array $providerConfig;
     private string $apiKey;
+    private ?string $lastTextError = null;
 
     // Text defaults
     private string $textModel;
@@ -176,7 +177,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             temperature: $resolved['temperature'],
             maxOutputTokens: $resolved['max_output_tokens'],
             prompt: $prompt,
-            toolName: 'generateText'
+            toolName: 'generateText',
+            responseMimeType: $resolved['response_mime_type'],
         );
 
         if (null === $result || '' === trim($result)) {
@@ -225,6 +227,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $topic
         );
 
+        $this->lastTextError = null;
+
         $lpStructure = $this->requestGeminiText(
             $this->buildUrl($this->textUrlTemplate, $this->textModel),
             $this->textTemperature,
@@ -234,7 +238,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         );
 
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return [
+                'success' => false,
+                'message' => $this->buildTextFailureMessage('Gemini'),
+            ];
         }
 
         $lpItems = [];
@@ -397,21 +404,38 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         }
 
         return 'predict' === $format
-            ? $this->requestImagenPredict($resolved['url'], $prompt, $resolved['n'], $toolName)
+            ? $this->requestImagenPredict(
+                $resolved['url'],
+                $prompt,
+                $resolved['n'],
+                $toolName,
+                $resolved['aspect_ratio'],
+            )
             : $this->requestGeminiGenerateContentImage(
                 $resolved['url'],
                 $prompt,
                 $resolved['n'],
                 $resolved['response_modalities'],
-                $toolName
+                $toolName,
+                $resolved['aspect_ratio'],
             );
     }
 
-    private function requestGeminiText(string $url, float $temperature, int $maxOutputTokens, string $prompt, string $toolName): ?string
-    {
+    private function requestGeminiText(
+        string $url,
+        float $temperature,
+        int $maxOutputTokens,
+        string $prompt,
+        string $toolName,
+        ?string $responseMimeType = null,
+    ): ?string {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $payload = [
@@ -428,14 +452,22 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             ],
         ];
 
+        if (null !== $responseMimeType) {
+            $payload['generationConfig']['responseMimeType'] = $responseMimeType;
+        }
+
         try {
             $data = $this->postJson($url, $payload);
             if (empty($data)) {
+                $this->lastTextError ??= 'Gemini returned an empty response.';
+
                 return null;
             }
 
             $text = $this->extractFirstTextFromGenerateContent($data);
             if (null === $text || '' === trim($text)) {
+                $this->lastTextError ??= $this->extractGeminiNoTextReason($data);
+
                 return null;
             }
 
@@ -455,6 +487,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
             return trim($text);
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Gemini] Exception: '.$e->getMessage());
 
             return null;
@@ -466,7 +499,8 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         string $prompt,
         int $n,
         array $modalities,
-        string $toolName
+        string $toolName,
+        string $aspectRatio,
     ): array {
         $userId = $this->getUserId();
         if (!$userId) {
@@ -503,6 +537,12 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 'responseModalities' => array_values(array_unique($cleanModalities)),
             ],
         ];
+
+        if ('' !== $aspectRatio) {
+            $payload['generationConfig']['imageConfig'] = [
+                'aspectRatio' => $aspectRatio,
+            ];
+        }
 
         if ($n > 1) {
             $payload['generationConfig']['candidateCount'] = $n;
@@ -552,8 +592,13 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         ];
     }
 
-    private function requestImagenPredict(string $url, string $prompt, int $n, string $toolName): array
-    {
+    private function requestImagenPredict(
+        string $url,
+        string $prompt,
+        int $n,
+        string $toolName,
+        string $aspectRatio,
+    ): array {
         $userId = $this->getUserId();
         if (!$userId) {
             return [
@@ -574,6 +619,10 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
                 'sampleCount' => $n > 0 ? $n : 1,
             ],
         ];
+
+        if ('' !== $aspectRatio) {
+            $payload['parameters']['aspectRatio'] = $aspectRatio;
+        }
 
         $data = $this->postJson($url, $payload);
         if (empty($data)) {
@@ -643,6 +692,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $data = json_decode($raw, true);
 
             if (!\is_array($data)) {
+                $this->lastTextError = 'Gemini returned invalid JSON (HTTP '.$status.').';
                 error_log('[AI][Gemini] Invalid JSON response (status='.$status.'). Raw: '.mb_substr($raw, 0, 800));
 
                 return [];
@@ -650,11 +700,13 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
 
             if ($status < 200 || $status >= 300) {
                 $msg = $this->extractGeminiErrorMessage($data) ?? 'Request failed.';
+                $this->lastTextError = 'HTTP '.$status.': '.$msg;
                 error_log('[AI][Gemini] HTTP '.$status.': '.$msg);
             }
 
             return $data;
         } catch (Throwable $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Gemini] HTTP exception: '.$e->getMessage());
 
             return [];
@@ -1037,6 +1089,36 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         return null;
     }
 
+    private function extractGeminiNoTextReason(array $data): string
+    {
+        $error = $this->extractGeminiErrorMessage($data);
+        if (null !== $error) {
+            return $error;
+        }
+
+        $blockReason = $data['promptFeedback']['blockReason'] ?? null;
+        if (\is_string($blockReason) && '' !== trim($blockReason)) {
+            return 'Gemini blocked the prompt: '.trim($blockReason).'.';
+        }
+
+        $finishReason = $data['candidates'][0]['finishReason'] ?? null;
+        if (\is_string($finishReason) && '' !== trim($finishReason)) {
+            return 'Gemini returned no text. Finish reason: '.trim($finishReason).'.';
+        }
+
+        return 'Gemini returned no text content.';
+    }
+
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
+    }
+
     private function extractFirstTextFromGenerateContent(array $data): ?string
     {
         $parts = $data['candidates'][0]['content']['parts'] ?? null;
@@ -1210,7 +1292,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
      *
      * @param array<string,mixed> $options
      *
-     * @return array{url:string,temperature:float,max_output_tokens:int}
+     * @return array{url:string,temperature:float,max_output_tokens:int,response_mime_type:string|null}
      */
     private function resolveTextOptions(array $options): array
     {
@@ -1230,10 +1312,17 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             $max = $this->textMaxOutputTokens > 0 ? $this->textMaxOutputTokens : 1000;
         }
 
+        $responseMimeType = $options['response_mime_type'] ?? $options['responseMimeType'] ?? null;
+        $responseMimeType = null !== $responseMimeType ? trim((string) $responseMimeType) : null;
+        if (!\in_array($responseMimeType, [null, 'application/json', 'text/plain'], true)) {
+            $responseMimeType = null;
+        }
+
         return [
             'url' => $url,
             'temperature' => $temperature,
             'max_output_tokens' => $max,
+            'response_mime_type' => $responseMimeType,
         ];
     }
 
@@ -1251,6 +1340,11 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
         $url = isset($options['url']) ? (string) $options['url'] : $this->buildUrl($template, $model);
 
         $format = (string) (($options['request_format'] ?? null) ?? $this->imageRequestFormat);
+
+        $aspectRatio = trim((string) ($options['aspect_ratio'] ?? ''));
+        if (!\in_array($aspectRatio, ['1:1', '16:9', '9:16'], true)) {
+            $aspectRatio = '';
+        }
 
         $n = (int) (($options['n'] ?? null) ?? $this->imageN);
         if ($n <= 0) {
@@ -1278,6 +1372,7 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
             'request_format' => $format,
             'n' => $n,
             'response_modalities' => $modalities,
+            'aspect_ratio' => $aspectRatio,
         ];
     }
 

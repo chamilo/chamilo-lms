@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Видеоконференция Zoom';
 $strings['plugin_comment'] = 'Интеграция видеоконференции Zoom в курсы и сессии';
 
+$strings['accountId'] = 'Идентификатор аккаунта';
+$strings['clientId'] = 'Идентификатор клиента';
+$strings['clientSecret'] = 'Секрет клиента';
+$strings['webhookSecretToken'] = 'Секретный токен вебхука';
+$strings['apiKey_help'] = 'Устаревший JWT API-ключ. Рекомендуется использовать Account ID, Client ID и Client Secret для Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Устаревший JWT API-секрет. Рекомендуется использовать Account ID, Client ID и Client Secret для Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Устаревший токен проверки вебхука. Рекомендуется использовать Webhook Secret Token.';
+$strings['accountId_help'] = 'Идентификатор аккаунта Zoom Server-to-Server OAuth.';
+$strings['clientId_help'] = 'Идентификатор клиента Zoom Server-to-Server OAuth.';
+$strings['clientSecret_help'] = 'Секрет клиента Zoom Server-to-Server OAuth.';
+$strings['webhookSecretToken_help'] = 'Секретный токен, используемый для проверки запросов вебхуков Zoom.';
 $strings['apiKey'] = 'Ключ API';
 $strings['apiSecret'] = 'Секретный ключ API';
 $strings['verificationToken'] = 'Токен проверки';

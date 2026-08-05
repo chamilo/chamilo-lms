@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Quere eliminar o diploma específico e usar o cert
 $strings['SuccessDelete'] = 'Eliminado correctamente';
 $strings['ProblemDelete'] = 'Problema ao eliminar o certificado';
 $strings['OnlyCustomCertificates'] = 'Só se exportan os cursos cun certificado personalizado';
+$strings['CertificateMode'] = 'Modo de certificado';
+$strings['UseCourseCustomCertificate'] = 'Usar certificado personalizado específico do curso';
+$strings['UseDefaultCustomCertificate'] = 'Usar certificado personalizado predeterminado da plataforma';
+
+$strings['CreateCertificateWithTags'] = 'Crear o certificado usando estas etiquetas';
+
+$strings['DeleteCertificate'] = 'Eliminar certificado';
+
+$strings['SaveCertificate'] = 'Gardar certificado';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Seleccione unha opción e garde a configuración antes de abrir o editor de certificados.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Escolla como debe usar este curso os certificados personalizados.';
+
+$strings['CouldNotSaveCertificate'] = 'Non se puido gardar a configuración do certificado.';

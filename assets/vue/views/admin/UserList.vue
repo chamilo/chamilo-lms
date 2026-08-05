@@ -469,7 +469,7 @@
       </Column>
     </BaseTable>
 
-    <!-- Bulk actions toolbar -->
+    <!-- Bulk actions toolbar — All users tab -->
     <div
       v-if="selectedItems.length > 0 && view !== 'deleted' && viewer.isPlatformAdmin"
       class="flex items-center gap-4"
@@ -497,6 +497,28 @@
         @click="confirmBulkAction('enable_users')"
       />
     </div>
+
+    <!-- Bulk actions toolbar — Deleted users tab -->
+    <div
+      v-if="selectedItems.length > 0 && view === 'deleted' && viewer.isPlatformAdmin"
+      class="flex items-center gap-4"
+    >
+      <span class="text-sm text-gray-600">{{ selectedItems.length }} {{ t("selected") }}</span>
+      <BaseButton
+        :label="t('Restore')"
+        icon="restore"
+        size="small"
+        type="secondary"
+        @click="confirmBulkAction('restore_users')"
+      />
+      <BaseButton
+        :label="t('Delete permanently')"
+        icon="delete-forever"
+        size="small"
+        type="danger"
+        @click="confirmBulkAction('destroy_users')"
+      />
+    </div>
   </div>
 </template>
 
@@ -504,6 +526,7 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { useToast } from "primevue/usetoast"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -513,6 +536,7 @@ import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const toast = useToast()
 const route = useRoute()
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -525,7 +549,7 @@ const page = ref(1)
 const pageSize = ref(20)
 const sortField = ref("lastname")
 const sortOrder = ref(1)
-const view = ref("all")
+const view = ref(urlParams.get("view") === "deleted" ? "deleted" : "all")
 
 const simpleKeyword = ref(urlParams.get("keyword") || String(route.query.keyword || ""))
 const showAdvanced = ref(false)
@@ -582,10 +606,11 @@ function toggleActive(data) {
     message,
     async accept() {
       try {
-        const res = await fetch(
-          `/main/inc/ajax/user_manager.ajax.php?a=active_user&user_id=${data.id}&status=${newStatus}`,
-        )
-        const text = await res.text()
+        const res = await baseService.getRaw("/main/inc/ajax/user_manager.ajax.php", {
+          params: { a: "active_user", user_id: data.id, status: newStatus },
+          responseType: "text",
+        })
+        const text = String(res.data ?? "")
         data.active = text.trim() === "1" ? 1 : 0
       } catch (e) {
         console.error(e)
@@ -603,24 +628,29 @@ function canLoginAs(data) {
   return false
 }
 
+function actionError(error) {
+  return error?.response?.data?.error || t("An error occurred")
+}
+
 function confirmAction(action, data, title) {
   requireConfirmation({
     title,
-    accept() {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = `/admin/user-list-action`
+    async accept() {
+      try {
+        const formData = new URLSearchParams()
+        formData.set("action", action)
+        formData.set("user_id", String(data.id))
+        formData.set("_token", csrfToken.value)
 
-      const fields = { action, user_id: data.id, view: view.value, _token: csrfToken.value }
-      for (const [k, v] of Object.entries(fields)) {
-        const input = document.createElement("input")
-        input.type = "hidden"
-        input.name = k
-        input.value = v
-        form.appendChild(input)
+        // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+        await baseService.post("/admin/user-list-action", formData)
+
+        selectedItems.value = []
+        await load()
+      } catch (e) {
+        console.error("Error performing action:", e)
+        toast.add({ severity: "error", summary: t("Error"), detail: actionError(e), life: 5000 })
       }
-      document.body.appendChild(form)
-      form.submit()
     },
   })
 }
@@ -634,16 +664,18 @@ function confirmBulkAction(action) {
         formData.set("_token", csrfToken.value)
         selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
-        await fetch("/admin/user-list-action", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData.toString(),
-        })
+        // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+        const data = await baseService.post("/admin/user-list-action", formData)
+
+        if (data?.error) {
+          toast.add({ severity: "warn", summary: t("Warning"), detail: data.error, life: 5000 })
+        }
 
         selectedItems.value = []
         await load()
       } catch (e) {
         console.error("Error performing bulk action:", e)
+        toast.add({ severity: "error", summary: t("Error"), detail: actionError(e), life: 5000 })
       }
     },
   })

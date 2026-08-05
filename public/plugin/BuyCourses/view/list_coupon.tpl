@@ -17,6 +17,7 @@
                 <th>{{ 'CouponDateStart'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'CouponDateEnd'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'CouponDelivered'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th>{{ 'CouponTimesApplied'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Options'|get_lang }}</th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
                     <td>{{ coupon.valid_start | api_get_local_time }}</td>
                     <td>{{ coupon.valid_end | api_get_local_time }}</td>
                     <td>{{ coupon.delivered }}</td>
+                    <td>{{ coupon.times_applied_label|default('') }}</td>
                     <td>
                         {% if coupon.active == coupon_status_active %}
                             <a title="{{ 'CouponDisable'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ app.request.requestUri ~ '?' ~ {'coupon': coupon.id, 'action': 'deactivate'}|url_encode() }}"

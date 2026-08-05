@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'ज़ूम वीडियो कॉन्फ्रेंस';
 $strings['plugin_comment'] = 'कोर्स और सत्रों में ज़ूम वीडियो कॉन्फ्रेंस एकीकरण';
 
+$strings['accountId'] = 'खाता आईडी';
+$strings['clientId'] = 'क्लाइंट आईडी';
+$strings['clientSecret'] = 'क्लाइंट सीक्रेट';
+$strings['webhookSecretToken'] = 'वेबहुक सीक्रेट टोकन';
+$strings['apiKey_help'] = 'लीगेसी JWT API कुंजी। Zoom सर्वर-टू-सर्वर OAuth के लिए खाता आईडी, क्लाइंट आईडी और क्लाइंट सीक्रेट को प्राथमिकता दें।';
+$strings['apiSecret_help'] = 'लीगेसी JWT API सीक्रेट। Zoom सर्वर-टू-सर्वर OAuth के लिए खाता आईडी, क्लाइंट आईडी और क्लाइंट सीक्रेट को प्राथमिकता दें।';
+$strings['verificationToken_help'] = 'लीगेसी वेबहुक सत्यापन टोकन। वेबहुक सीक्रेट टोकन को प्राथमिकता दें।';
+$strings['accountId_help'] = 'Zoom सर्वर-टू-सर्वर OAuth खाता आईडी।';
+$strings['clientId_help'] = 'Zoom सर्वर-टू-सर्वर OAuth क्लाइंट आईडी।';
+$strings['clientSecret_help'] = 'Zoom सर्वर-टू-सर्वर OAuth क्लाइंट सीक्रेट।';
+$strings['webhookSecretToken_help'] = 'Zoom वेबहुक अनुरोधों को मान्य करने के लिए उपयोग किया जाने वाला सीक्रेट टोकन।';
 $strings['apiKey'] = 'API कुंजी';
 $strings['apiSecret'] = 'API गुप्त कुंजी';
 $strings['verificationToken'] = 'सत्यापन टोकन';

@@ -40,7 +40,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer'],
                     ),
                 ],
-            )
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
     ],
@@ -53,17 +54,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CGroupRepository::class)]
 class CGroup extends AbstractResource implements ResourceInterface, Stringable
 {
-    public const TOOL_NOT_AVAILABLE = 0;
-    public const TOOL_PUBLIC = 1;
-    public const TOOL_PRIVATE = 2;
-    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
+    public const int TOOL_NOT_AVAILABLE = 0;
+    public const int TOOL_PUBLIC = 1;
+    public const int TOOL_PRIVATE = 2;
+    public const int TOOL_PRIVATE_BETWEEN_USERS = 3;
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['group:read', 'group:write'])]
     protected ?int $iid = null;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['group:read', 'group:write'])]
     protected string $title;
     #[Assert\NotNull]

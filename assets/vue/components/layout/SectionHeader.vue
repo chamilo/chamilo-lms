@@ -13,6 +13,10 @@ defineProps({
     required: false,
     default: "2",
   },
+  showStudentViewButton: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const cidReqStore = useCidReqStore()
@@ -34,7 +38,7 @@ const { course } = storeToRefs(cidReqStore)
 
     <div class="section-header__actions">
       <slot />
-      <StudentViewButton v-if="course" />
+      <StudentViewButton v-if="course && showStudentViewButton" />
     </div>
   </div>
 </template>

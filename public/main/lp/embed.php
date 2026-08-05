@@ -9,6 +9,7 @@ api_protect_course_script(true);
 
 $type = $_REQUEST['type'] ?? '';
 $src = $_REQUEST['source'] ?? '';
+$origin = $_REQUEST['origin'] ?? '';
 if (empty($type) || empty($src)) {
     api_not_allowed();
 }
@@ -58,6 +59,30 @@ switch ($type) {
             false
         ));
         break;
+}
+
+if ('learnpath' === $origin) {
+    echo '<!doctype html>';
+    echo '<html>';
+    echo '<head>';
+    echo '<meta charset="utf-8">';
+    echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+    echo '<style>';
+    echo 'html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;}';
+    echo 'body{font-family:Arial,Helvetica,sans-serif;}';
+    echo '#content,.lp-embed-content{box-sizing:border-box;width:100%;max-width:100%;margin:0 auto;padding:16px;text-align:center;}';
+    echo '#content iframe,.lp-embed-content iframe{max-width:100%;}';
+    echo '.btn,.btn--primary{display:inline-block;padding:8px 16px;border-radius:4px;text-decoration:none;}';
+    echo '</style>';
+    echo '</head>';
+    echo '<body>';
+    echo '<div class="lp-embed-content">';
+    echo $iframe;
+    echo '</div>';
+    echo '</body>';
+    echo '</html>';
+
+    exit;
 }
 
 $htmlHeadXtra[] = "

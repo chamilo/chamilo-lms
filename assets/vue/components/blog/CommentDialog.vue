@@ -4,6 +4,7 @@
     :title="dialogTitleComputed"
     :header-icon="headerIconComputed"
     :width="'560px'"
+    @update:isVisible="(v) => !v && $emit('close')"
   >
     <div class="space-y-3">
       <textarea
@@ -13,20 +14,17 @@
         :placeholder="placeholderComputed"
         @keydown.ctrl.enter.prevent="submit"
       />
-      <div class="flex items-center justify-between">
-        <span class="text-xs text-gray-500">{{ t('Press Ctrl+Enter to send') }}</span>
-        <div class="flex gap-2">
-          <BaseButton type="black" icon="close" :label="t('Cancel')" @click="close" />
-          <BaseButton
-            type="primary"
-            :icon="confirmIconComputed"
-            :label="confirmLabelComputed"
-            :disabled="!text.trim()"
-            @click="submit"
-          />
-        </div>
-      </div>
+      <span class="text-xs text-gray-500">{{ t('Press Ctrl+Enter to send') }}</span>
     </div>
+    <template #footer>
+      <BaseButton
+        type="primary"
+        :icon="confirmIconComputed"
+        :label="confirmLabelComputed"
+        :disabled="!text.trim()"
+        @click="submit"
+      />
+    </template>
   </BaseDialog>
 </template>
 

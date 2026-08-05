@@ -60,13 +60,11 @@ import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import glossaryService from "../../services/glossaryService"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
-import { useCidReq } from "../../composables/cidReq"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
 
 const emit = defineEmits(["backPressed"])
 
@@ -81,15 +79,8 @@ const replace = ref(false)
 const update = ref(false)
 const parentResourceNodeId = ref(Number(route.params.node))
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const submitForm = async () => {
   console.log(selectedFile.value)

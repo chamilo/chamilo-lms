@@ -22,6 +22,13 @@
         :for="editorId"
       >
         {{ title }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
       </label>
     </FloatLabel>
     <small
@@ -42,6 +49,9 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import FloatLabel from "primevue/floatlabel"
 import { useLocale } from "../../composables/locale"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const modelValue = defineModel({ type: String, required: true })
 
@@ -52,13 +62,16 @@ const isFocused = ref(false)
 const props = defineProps({
   editorId: { type: String, required: true },
   required: { type: Boolean, default: false },
-  title: { type: String, default: "" },
+  showRequiredMarker: { type: Boolean, default: false },
+  title: { type: String, default: "", required: true },
   editorConfig: { type: Object, default: () => ({}) },
   helpText: { type: String, default: "" },
   // If true: use Chamilo file manager; if false: use system file picker.
   useFileManager: { type: Boolean, default: false },
   // When true, includes TinyMCE "fullpage" plugin/button.
   fullPage: { type: Boolean, default: true },
+  // Keep translate_html enabled by default, but allow language-specific editors to opt out.
+  enableTranslateHtml: { type: Boolean, default: true },
 })
 
 /* Derived UI flags */
@@ -138,6 +151,20 @@ const languageConfig = getLanguageConfig(appLocale.value)
 const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG : {}) || {}
 
 const RESPONSIVE_IMAGE_CLASS = "ch-img-responsive"
+const TINYMCE_CONTENT_SPACING_RULE = [
+  "body.mce-content-body",
+  "{ padding: 8px 12px !important; box-sizing: border-box; }",
+  "body.mce-content-body > :first-child",
+  "{ margin-top: 0; }",
+].join(" ")
+
+const TINYMCE_FIREFOX_FOCUS_RULE = [
+  "html:focus,",
+  "html:focus-visible,",
+  "body.mce-content-body:focus,",
+  "body.mce-content-body:focus-visible",
+  "{ outline: none !important; box-shadow: none !important; }",
+].join(" ")
 const HOOK_GUARD_KEY = "__chamiloBaseTinyEditorHooksAttached"
 const EDITOR_IMAGE_ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "bmp"]
 
@@ -209,6 +236,12 @@ function ensureTinyContentStyles(contentStyleRaw) {
   }
   if (!out.includes(`img.${RESPONSIVE_IMAGE_CLASS}`)) {
     out += responsiveRule
+  }
+  if (!out.includes("body.mce-content-body") || !out.includes("padding: 8px 12px")) {
+    out += ` ${TINYMCE_CONTENT_SPACING_RULE}`
+  }
+  if (!out.includes("body.mce-content-body:focus")) {
+    out += ` ${TINYMCE_FIREFOX_FOCUS_RULE}`
   }
 
   return out
@@ -351,12 +384,17 @@ const allowSvgInEditor = computed(() => {
 
 const editorFeatureFlags = computed(() => ({
   isLearner: securityStore.isStudent === true,
+  disableCopyPaste: toBool(platformConfigStore.getSetting("platform.disable_copy_paste")),
   blockCopyPasteForStudents: toBool(platformConfigStore.getSetting("editor.block_copy_paste_for_students")),
   youtubeForStudents: toBool(platformConfigStore.getSetting("editor.youtube_for_students")),
   enabledInsertHtml: toBool(platformConfigStore.getSetting("editor.enabled_insertHtml")),
   enableIframeInclusion: toBool(platformConfigStore.getSetting("editor.enable_iframe_inclusion")),
   enabledSupportSvg: allowSvgInEditor.value,
 }))
+
+const translateHtmlEnabled = computed(() => {
+  return props.enableTranslateHtml && toBool(platformConfigStore.getSetting("editor.translate_html"))
+})
 
 const enableUploadImageInEditor = computed(() => {
   return (
@@ -481,6 +519,95 @@ function resolvePickedUrl(url) {
   return pickedUrl
 }
 
+function removeToolbarItems(toolbar, removedItems) {
+  const blocked = new Set(
+    removedItems
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
+      .filter(Boolean),
+  )
+
+  const cleanupToolbar = (toolbarValue) =>
+    String(toolbarValue || "")
+      .split("|")
+      .map((group) =>
+        group
+          .split(/\s+/)
+          .map((item) => item.trim())
+          .filter((item) => item && !blocked.has(item.toLowerCase()))
+          .join(" "),
+      )
+      .filter(Boolean)
+      .join(" | ")
+
+  if (Array.isArray(toolbar)) {
+    return toolbar.map((toolbarValue) => cleanupToolbar(toolbarValue)).filter(Boolean)
+  }
+
+  return cleanupToolbar(toolbar)
+}
+
+function normalizeTinyPluginList(rawPlugins) {
+  const values = Array.isArray(rawPlugins) ? rawPlugins : [rawPlugins]
+
+  return values
+    .flatMap((value) => String(value || "").split(/\s+/))
+    .map((value) => value.trim())
+    .filter(Boolean)
+}
+
+function mergeTinyPlugins(rawPlugins, additionalPlugins) {
+  return Array.from(new Set([...normalizeTinyPluginList(rawPlugins), ...additionalPlugins])).join(" ")
+}
+
+function toolbarContainsItem(toolbar, item) {
+  const rows = Array.isArray(toolbar) ? toolbar : [toolbar]
+  const expected = String(item || "")
+    .trim()
+    .toLowerCase()
+
+  return rows.some((row) =>
+    String(row || "")
+      .split(/[|\s]+/)
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean)
+      .includes(expected),
+  )
+}
+
+function appendToolbarItem(toolbar, item) {
+  if (toolbarContainsItem(toolbar, item)) {
+    return toolbar
+  }
+
+  if (Array.isArray(toolbar)) {
+    const rows = [...toolbar]
+
+    if (rows.length === 0) {
+      return [item]
+    }
+
+    const lastIndex = rows.length - 1
+    const currentRow = String(rows[lastIndex] || "").trim()
+    rows[lastIndex] = currentRow ? `${currentRow} | ${item}` : item
+
+    return rows
+  }
+
+  const currentToolbar = String(toolbar || "").trim()
+
+  return currentToolbar ? `${currentToolbar} | ${item}` : item
+}
+
+function positiveContextId(value) {
+  const parsed = Number.parseInt(String(value ?? "0"), 10)
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0
+}
+
 const editorConfig = computed(() => {
   const builder = typeof window !== "undefined" ? window.buildTinyMceConfig : null
 
@@ -491,10 +618,14 @@ const editorConfig = computed(() => {
 
   const callerSetup = typeof callerConfig.setup === "function" ? callerConfig.setup : null
   const appendToolbar = String(callerConfig.appendToolbar || "").trim()
+  const removeToolbarButtons = String(callerConfig.removeToolbarButtons || "")
+    .split(/\s+/)
+    .filter(Boolean)
 
   const safeCallerConfig = { ...callerConfig }
   delete safeCallerConfig.setup
   delete safeCallerConfig.appendToolbar
+  delete safeCallerConfig.removeToolbarButtons
 
   const local = {
     ...defaultEditorConfig,
@@ -518,6 +649,24 @@ const editorConfig = computed(() => {
   }
 
   const built = builder ? builder(local) : local
+
+  if (translateHtmlEnabled.value) {
+    built.plugins = mergeTinyPlugins(built.plugins, ["translatehtml"])
+    built.toolbar = appendToolbarItem(built.toolbar, "translatehtml")
+    built.translatehtml_ai_endpoint = built.translatehtml_ai_endpoint || "/api/wysiwyg_translation"
+    built.translatehtml_context = {
+      ...(built.translatehtml_context && typeof built.translatehtml_context === "object"
+        ? built.translatehtml_context
+        : {}),
+      courseId: positiveContextId(course.value?.id || route.query?.cid),
+      sessionId: positiveContextId(route.query?.sid),
+      groupId: positiveContextId(route.query?.gid),
+    }
+  }
+
+  if (removeToolbarButtons.length > 0) {
+    built.toolbar = removeToolbarItems(built.toolbar, removeToolbarButtons)
+  }
 
   if (appendToolbar) {
     const currentToolbar = String(built.toolbar || "").trim()
@@ -719,7 +868,7 @@ async function filePickerCallback(callback, _value, meta) {
   try {
     window.tinymce?.activeEditor?.windowManager.openUrl({
       url,
-      title: "File Manager",
+      title: t("File manager"),
       onMessage: (api, message) => {
         const picked = message?.content?.url || message?.url || message?.data?.url
 
@@ -751,3 +900,12 @@ onBeforeUnmount(() => {
   removeActiveMessageHandler()
 })
 </script>
+
+<style scoped>
+.html-editor-container :deep(.tox .tox-edit-area__iframe),
+.html-editor-container :deep(.tox .tox-edit-area__iframe:focus),
+.html-editor-container :deep(.tox .tox-edit-area__iframe:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+</style>

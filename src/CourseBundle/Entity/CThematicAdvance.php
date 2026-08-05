@@ -154,7 +154,7 @@ class CThematicAdvance implements Stringable // extends AbstractResource impleme
         return $this->attendance;
     }
 
-    public function setAttendance(CAttendance $attendance): self
+    public function setAttendance(?CAttendance $attendance): self
     {
         $this->attendance = $attendance;
 

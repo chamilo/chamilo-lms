@@ -1,9 +1,9 @@
-import axios from "axios"
+import baseService from "./baseService"
 
 export default {
   findAll: async () => {
-    const response = await axios.get("/api/page_categories")
+    const { items } = await baseService.getCollection("/api/page_categories")
 
-    return response.data["hydra:member"]
+    return items
   },
 }

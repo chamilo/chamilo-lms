@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
-class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoJobProviderInterface, AiDocumentProviderInterface, AiDocumentProcessProviderInterface
+class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, AiVideoJobProviderInterface, AiDocumentProviderInterface, AiDocumentProcessProviderInterface, AiSearchMediaTextProviderInterface
 {
     private array $providerConfig;
     private string $apiKey;
@@ -24,9 +24,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private int $monthlyTokenLimit;
 
     // OpenAI Videos API constraints (validate early to avoid avoidable 400s).
-    private const ALLOWED_VIDEO_MODELS = ['sora-2', 'sora-2-pro'];
-    private const ALLOWED_VIDEO_SECONDS = ['4', '8', '12'];
-    private const ALLOWED_VIDEO_SIZES = ['720x1280', '1280x720', '1024x1792', '1792x1024'];
+    private const array ALLOWED_VIDEO_MODELS = ['sora-2', 'sora-2-pro'];
+    private const array ALLOWED_VIDEO_SECONDS = ['4', '8', '12'];
+    private const array ALLOWED_VIDEO_SIZES = ['720x1280', '1280x720', '1024x1792', '1792x1024'];
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -56,7 +56,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
      * Chat completion entrypoint for AiTutorChatService.
      *
      * @param array<int, array{role:string,content:string}> $messages
-     * @param array<string,mixed>                           $options
+     * @param array<string, mixed>                          $options
      */
     public function chat(array $messages, array $options = []): string
     {
@@ -355,6 +355,223 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     }
 
     /**
+     * Extract searchable media text for the Xapian indexer.
+     *
+     * Images are described through the Responses API. Audio and video files are sent
+     * to the transcription endpoint when the provider supports it.
+     *
+     * @param array<string, mixed> $options
+     */
+    public function extractSearchableMediaText(
+        string $filename,
+        string $mimeType,
+        string $binaryContent,
+        string $mediaType,
+        array $options = []
+    ): ?string {
+        $mediaType = strtolower(trim($mediaType));
+        if (!\in_array($mediaType, ['image', 'audio', 'video'], true)) {
+            return null;
+        }
+
+        if ('image' === $mediaType) {
+            return $this->describeImageForSearch($filename, $mimeType, $binaryContent, $options);
+        }
+
+        return $this->transcribeMediaForSearch($filename, $mimeType, $binaryContent, $mediaType, $options);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function describeImageForSearch(
+        string $filename,
+        string $mimeType,
+        string $binaryContent,
+        array $options = []
+    ): ?string {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][OpenAI][search_image_description] User not authenticated.');
+
+            return null;
+        }
+
+        $cfg = $this->getTypeConfig('document_process');
+        if (empty($cfg)) {
+            $cfg = $this->getTypeConfig('text');
+        }
+
+        if (empty($cfg)) {
+            error_log('[AI][OpenAI][search_image_description] Missing config for type: document_process/text');
+
+            return null;
+        }
+
+        $prompt = trim((string) ($options['prompt'] ?? 'Describe this image for full-text search indexing. Return only concise searchable plain text. Include visible text if any.'));
+        $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/responses');
+        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $maxOutputTokens = (int) (($options['max_output_tokens'] ?? null) ?? ($cfg['max_output_tokens'] ?? 500));
+        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.1));
+
+        $payload = [
+            'model' => $model,
+            'temperature' => $temperature,
+            'max_output_tokens' => $maxOutputTokens,
+            'input' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        [
+                            'type' => 'input_text',
+                            'text' => $prompt,
+                        ],
+                        [
+                            'type' => 'input_image',
+                            'image_url' => 'data:'.$mimeType.';base64,'.base64_encode($binaryContent),
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        try {
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $this->buildAuthHeaders(true),
+                'json' => $payload,
+            ]);
+
+            $raw = (string) $response->getContent(false);
+            $data = json_decode($raw, true);
+
+            if (!\is_array($data)) {
+                error_log('[AI][OpenAI][search_image_description] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+
+                return null;
+            }
+
+            if (isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][search_image_description] Error response: '.$msg);
+
+                return null;
+            }
+
+            $text = trim($this->extractResponsesApiText($data));
+            if ('' === $text) {
+                error_log('[AI][OpenAI][search_image_description] Empty output_text.');
+
+                return null;
+            }
+
+            $usage = \is_array($data['usage'] ?? null) ? $data['usage'] : [];
+            $this->saveAiRequest(
+                $userId,
+                'search_image_description',
+                mb_substr($filename.' '.$prompt, 0, 900),
+                'openai',
+                (int) ($usage['input_tokens'] ?? 0),
+                (int) ($usage['output_tokens'] ?? 0),
+                (int) ($usage['total_tokens'] ?? 0)
+            );
+
+            return $text;
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][search_image_description] Exception: '.$e->getMessage());
+
+            return null;
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function transcribeMediaForSearch(
+        string $filename,
+        string $mimeType,
+        string $binaryContent,
+        string $mediaType,
+        array $options = []
+    ): ?string {
+        $userId = $this->getUserId();
+        if (!$userId) {
+            error_log('[AI][OpenAI][search_media_transcript] User not authenticated.');
+
+            return null;
+        }
+
+        $cfg = $this->getTypeConfig('document_process');
+        if (empty($cfg)) {
+            $cfg = $this->getTypeConfig('text');
+        }
+
+        $url = (string) (($options['url'] ?? null) ?? ($cfg['transcription_url'] ?? 'https://api.openai.com/v1/audio/transcriptions'));
+        $model = (string) (($options['model'] ?? null) ?? ($cfg['transcription_model'] ?? 'whisper-1'));
+        $prompt = trim((string) ($options['prompt'] ?? ''));
+
+        try {
+            $formFields = [
+                'model' => $model,
+                'file' => new DataPart($binaryContent, $filename, $mimeType),
+            ];
+
+            if ('' !== $prompt) {
+                $formFields['prompt'] = $prompt;
+            }
+
+            $formData = new FormDataPart($formFields);
+            $headers = array_merge(
+                $this->buildAuthHeaders(false),
+                $formData->getPreparedHeaders()->toArray(),
+                ['Accept' => 'application/json']
+            );
+
+            $response = $this->httpClient->request('POST', $url, [
+                'headers' => $headers,
+                'body' => $formData->bodyToIterable(),
+            ]);
+
+            $raw = (string) $response->getContent(false);
+            $data = json_decode($raw, true);
+
+            if (!\is_array($data)) {
+                error_log('[AI][OpenAI][search_media_transcript] Invalid JSON response: '.mb_substr($raw, 0, 1200));
+
+                return null;
+            }
+
+            if (isset($data['error'])) {
+                $msg = $data['error']['message'] ?? 'OpenAI returned an error response.';
+                $msg = \is_string($msg) ? trim($msg) : 'OpenAI returned an error response.';
+                error_log('[AI][OpenAI][search_media_transcript] Error response: '.$msg);
+
+                return null;
+            }
+
+            $text = $data['text'] ?? null;
+            if (!\is_string($text) || '' === trim($text)) {
+                error_log('[AI][OpenAI][search_media_transcript] Empty transcript.');
+
+                return null;
+            }
+
+            $this->saveAiRequest(
+                $userId,
+                'search_'.$mediaType.'_transcript',
+                mb_substr($filename, 0, 900),
+                'openai'
+            );
+
+            return trim($text);
+        } catch (Throwable $e) {
+            error_log('[AI][OpenAI][search_media_transcript] Exception: '.$e->getMessage());
+
+            return null;
+        }
+    }
+
+    /**
      * Upload a file to /v1/files to obtain file_id for Responses API.
      */
     private function uploadFileForResponses(string $filename, string $mimeType, string $binaryContent): ?string
@@ -540,7 +757,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $lpStructure = $this->requestChatCompletion($tableOfContentsPrompt, 'learnpath', 'text');
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => 'OpenAI failed to generate the course structure.'];
+        }
+
+        if (str_starts_with($lpStructure, 'Error:')) {
+            return ['success' => false, 'message' => trim(substr($lpStructure, 6))];
         }
 
         $lpItems = [];
@@ -635,8 +856,25 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $cfg = $this->getTypeConfig('image');
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/images/generations');
         $model = (string) ($cfg['model'] ?? 'gpt-image-1');
+        $normalizedModel = strtolower(trim($model));
         $size = (string) ($cfg['size'] ?? '1024x1024');
-        $quality = (string) ($cfg['quality'] ?? 'standard');
+        $requestedFormat = strtolower(trim((string) ($options['format'] ?? '')));
+        if (\in_array($requestedFormat, ['square', 'landscape', 'portrait'], true)) {
+            $size = match ($requestedFormat) {
+                'landscape' => 'dall-e-3' === $normalizedModel ? '1792x1024' : '1536x1024',
+                'portrait' => 'dall-e-3' === $normalizedModel ? '1024x1792' : '1024x1536',
+                default => '1024x1024',
+            };
+
+            if ('dall-e-2' === $normalizedModel) {
+                $size = '1024x1024';
+            }
+        }
+        $configuredQuality = isset($cfg['quality']) ? trim((string) $cfg['quality']) : '';
+        $quality = '' !== $configuredQuality ? $configuredQuality : ($this->isGptImageModel($normalizedModel) ? 'auto' : 'standard');
+        if ($this->isGptImageModel($normalizedModel) && 'standard' === strtolower($quality)) {
+            $quality = 'auto';
+        }
         $n = (int) (($options['n'] ?? null) ?? ($cfg['n'] ?? 1));
 
         $promptTrimmed = trim($prompt);
@@ -655,11 +893,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'n' => $n,
         ];
 
-        // Best-effort: allow response_format for any model that supports it.
-        $responseFormat = (string) ($cfg['response_format'] ?? 'b64_json');
-        if ('' !== trim($responseFormat)) {
-            $payload['response_format'] = $responseFormat;
-        }
+        // Do not send response_format. New OpenAI image models reject it, and the
+        // provider already supports both b64_json and url responses.
+        unset($payload['response_format']);
 
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -1146,6 +1382,11 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         return $validQuestions;
+    }
+
+    private function isGptImageModel(string $model): bool
+    {
+        return str_starts_with(strtolower(trim($model)), 'gpt-image-');
     }
 
     private function getTypeConfig(string $type): array

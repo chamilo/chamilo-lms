@@ -142,9 +142,9 @@ $form->addHtml(GroupManager::renderGroupTabs('tutor'));
 
 // Card
 $form->addHtml('<div class="rounded-lg border border-gray-50 bg-white p-6 shadow-sm">');
-$form->addHtml('<h2 class="text-base font-semibold text-gray-900 mb-4">'.get_lang('Coaches').'</h2>');
+$form->addHtml('<h2 class="text-base font-semibold text-gray-900 mb-4">'.get_lang('Tutors').'</h2>');
 
-$form->addMultiSelect('group_tutors', get_lang('Coaches'), $possible_users);
+$form->addMultiSelect('group_tutors', get_lang('Tutors'), $possible_users);
 
 $form->addHtml('</div>');
 

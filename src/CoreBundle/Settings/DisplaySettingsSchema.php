@@ -54,7 +54,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 'display_categories_on_homepage' => 'false',
                 'show_closed_courses' => 'false',
                 'accessibility_font_resize' => 'false',
-                'show_admin_toolbar' => 'do_not_show',
                 'show_hot_courses' => 'true',
                 'hide_logout_button' => 'false',
                 'hide_social_media_links' => 'false',
@@ -102,18 +101,6 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('display_categories_on_homepage', YesNoType::class)
             ->add('show_closed_courses', YesNoType::class)
             ->add('accessibility_font_resize', YesNoType::class)
-            ->add(
-                'show_admin_toolbar',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Do not show' => 'do_not_show',
-                        'Show to admins only' => 'show_to_admin',
-                        'Show to admins and teachers' => 'show_to_admin_and_teachers',
-                        'Show to all users' => 'show_to_all',
-                    ],
-                ]
-            )
             ->add('show_hot_courses', YesNoType::class)
             ->add('hide_logout_button', YesNoType::class)
             ->add('hide_social_media_links', YesNoType::class)

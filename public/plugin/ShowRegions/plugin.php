@@ -1,19 +1,21 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /**
- * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
+ * Plugin details.
  *
- * @author Julio Montoya <gugli100@gmail.com>
- */
-/**
- * Plugin details (must be present).
+ * This plugin intentionally stays as a simple region renderer. It must not be
+ * marked as an admin plugin because administrators need to assign it to several
+ * layout regions from the Regions settings page.
  */
 
-//the plugin title
-$plugin_info['title'] = 'Show regions';
-//the comments that go with the plugin
-$plugin_info['comment'] = 'This is useful when trying to find the Chamilo regions, (<strong>only the admin </strong>can view this plugin). You have to activate all the items in the Regions area';
-//the plugin version
-$plugin_info['version'] = '1.0';
-//the plugin author
-$plugin_info['author'] = 'Julio Montoya';
+$plugin_info = [
+    'title' => 'Show regions',
+    'comment' => 'Displays visible markers for enabled plugin regions. Markers are shown only to platform administrators.',
+    'version' => '2.0.0',
+    'author' => 'Chamilo',
+    'source' => 'official',
+    'commercial_model' => 'free',
+    'supports_regions' => true,
+];

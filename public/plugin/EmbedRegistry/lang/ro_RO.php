@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'În aceste date, acest conținut încorporat v
 $strings['HtmlCode'] = 'Cod HTML';
 $strings['HtmlCodeHelp'] = 'Codul HTML partajat, furnizat de serviciul extern, când se cere partajarea în format încorporat.';
 $strings['LaunchContent'] = 'Lansați conținutul';
+
+$strings['InvalidDateRange'] = 'Data de început trebuie să fie anterioară sau egală cu data de încheiere.';
+
+$strings['InvalidSecurityToken'] = 'Token de securitate invalid. Vă rugăm să reîncărcați pagina și să încercați din nou.';

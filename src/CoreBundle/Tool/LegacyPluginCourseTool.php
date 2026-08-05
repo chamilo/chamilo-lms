@@ -37,7 +37,7 @@ final class LegacyPluginCourseTool extends AbstractPlugin
         }
 
         $sysPluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/';
-        $webPluginPath = api_get_path(WEB_PLUGIN_PATH).$pluginName.'/';
+        $webPluginPath = self::normalizeWebPath(api_get_path(WEB_PLUGIN_PATH).$pluginName.'/');
 
         $link = '';
         foreach (['start.php', 'index.php', 'admin.php'] as $file) {
@@ -57,6 +57,23 @@ final class LegacyPluginCourseTool extends AbstractPlugin
             $titleToShow,
             $link
         );
+    }
+
+    private static function normalizeWebPath(string $path): string
+    {
+        if ('' === $path) {
+            return '/';
+        }
+
+        if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $path) || str_starts_with($path, '//')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return '/'.$path;
     }
 
     public function getTitle(): string

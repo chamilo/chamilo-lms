@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Няма създадени бележки с т
 $strings['NoNotebook'] = 'Няма създадени бележки в системата';
 $strings['NoNotebookUser'] = 'Няма бележки за този студент';
 $strings['NotebookNoStudentAssigned'] = 'Бележки без назначени студенти';
+
+$strings['TeacherNotesHelp'] = 'Създаване на лични бележки на преподавателя, свързани с обучаемите в този курс.';
+$strings['CurrentFilter'] = 'Текущ филтър';
+$strings['EmptyStateHelp'] = 'Създайте нова бележка или променете филтъра за обучаеми.';

@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Datasoen barruan, txertatutako eduki hau orria
 $strings['HtmlCode'] = 'HTML kodea';
 $strings['HtmlCodeHelp'] = 'Partekatutako HTML kodea, kanpoko zerbitzuak Txertatutako formatuan partekatzeko eskatzen duenean emandakoa.';
 $strings['LaunchContent'] = 'Abian edukiaren';
+
+$strings['InvalidDateRange'] = 'Hasiera-data amaiera-data baino lehenagokoa edo berdina izan behar da.';
+
+$strings['InvalidSecurityToken'] = 'Segurtasun-token baliogabea. Mesedez, orria birkargatu eta saiatu berriro.';

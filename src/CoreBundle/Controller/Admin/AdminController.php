@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Form\TestEmailType;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -22,12 +23,13 @@ use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Helpers\TempUploadHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use MessageManager;
 use RuntimeException;
@@ -43,7 +45,7 @@ use UserManager;
 #[Route('/admin')]
 class AdminController extends BaseController
 {
-    private const ITEMS_PER_PAGE = 50;
+    private const int ITEMS_PER_PAGE = 50;
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
@@ -75,7 +77,8 @@ class AdminController extends BaseController
     public function listFilesInfo(
         Request $request,
         ResourceFileRepository $resourceFileRepository,
-        CourseRepository $courseRepository
+        CourseRepository $courseRepository,
+        TicketMessageAttachmentRepository $ticketMessageAttachmentRepository
     ): Response {
         $page = $request->query->getInt('page', 1);
         $search = $request->query->get('search', '');
@@ -90,6 +93,19 @@ class AdminController extends BaseController
         $orphanFlags = [];
         $linksCount = [];
         $coursesByFile = [];
+        $resourceNodeIds = [];
+
+        /** @var ResourceFile $file */
+        foreach ($files as $file) {
+            $resourceNodeId = $file->getResourceNode()?->getId();
+            if (null !== $resourceNodeId) {
+                $resourceNodeIds[] = $resourceNodeId;
+            }
+        }
+
+        $ticketAttachmentsByResourceNode = $ticketMessageAttachmentRepository->findIndexedByResourceNodeIds(
+            array_values(array_unique($resourceNodeIds))
+        );
 
         /** @var ResourceFile $file */
         foreach ($files as $file) {
@@ -98,10 +114,18 @@ class AdminController extends BaseController
             $coursesForThisFile = [];
 
             if ($resourceNode) {
-                // Public URL to open/download this file
-                $fileUrls[$file->getId()] = $this->resourceNodeRepository->getResourceFileUrl($resourceNode);
+                $resourceNodeId = $resourceNode->getId();
+                $ticketAttachment = null !== $resourceNodeId
+                    ? ($ticketAttachmentsByResourceNode[$resourceNodeId] ?? null)
+                    : null;
 
-                // Count how many ResourceLinks still point to this node and collect courses.
+                // Ticket attachments require their protected download route.
+                // Other resources keep their regular view URL.
+                $fileUrls[$file->getId()] = $ticketAttachment
+                    ? $ticketMessageAttachmentRepository->getResourceFileDownloadUrl($ticketAttachment)
+                    : $this->resourceNodeRepository->getResourceFileUrl($resourceNode);
+
+                // Count ResourceLinks and direct Ticket attachment usage.
                 $links = $resourceNode->getResourceLinks();
                 if ($links) {
                     $count = $links->count();
@@ -128,6 +152,10 @@ class AdminController extends BaseController
                             ];
                         }
                     }
+                }
+
+                if ($ticketAttachment) {
+                    ++$count;
                 }
             } else {
                 $fileUrls[$file->getId()] = null;
@@ -447,6 +475,7 @@ class AdminController extends BaseController
     public function deleteOrphanFile(
         Request $request,
         ResourceFileRepository $resourceFileRepository,
+        TicketMessageAttachmentRepository $ticketMessageAttachmentRepository,
         EntityManagerInterface $em
     ): Response {
         $token = (string) $request->request->get('_token', '');
@@ -479,8 +508,12 @@ class AdminController extends BaseController
 
         $resourceNode = $resourceFile->getResourceNode();
         $linksCount = $resourceNode ? $resourceNode->getResourceLinks()->count() : 0;
-        if ($linksCount > 0) {
-            $this->addFlash('warning', 'This file is still used by at least one course/session and cannot be deleted.');
+        $ticketAttachment = $resourceNode
+            ? $ticketMessageAttachmentRepository->findOneBy(['resourceNode' => $resourceNode])
+            : null;
+
+        if ($linksCount > 0 || null !== $ticketAttachment) {
+            $this->addFlash('warning', 'This file is still used by at least one resource and cannot be deleted.');
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -776,6 +809,50 @@ class AdminController extends BaseController
         );
     }
 
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/users/{id}/clear-session', name: 'admin_user_clear_session', methods: ['POST'])]
+    public function clearUserSession(
+        int $id,
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $em,
+        SettingsManager $settingsManager
+    ): Response {
+        if ('true' !== $settingsManager->getSetting('security.prevent_multiple_simultaneous_login', true)) {
+            throw $this->createAccessDeniedException('This action is only available when prevent_multiple_simultaneous_login is enabled.');
+        }
+
+        $token = (string) $request->request->get('_token', '');
+
+        if (!$this->isCsrfTokenValid('clear_user_session_'.$id, $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $user = $userRepository->find($id);
+
+        if (null === $user) {
+            $this->addFlash('error', 'User not found.');
+
+            return $this->redirect('/main/admin/user_list.php');
+        }
+
+        $deleted = $em
+            ->createQueryBuilder()
+            ->delete(TrackEOnline::class, 'online')
+            ->where('online.loginUserId = :userId')
+            ->setParameter('userId', $id)
+            ->getQuery()
+            ->execute()
+        ;
+
+        $this->addFlash(
+            'success',
+            \sprintf('User active session has been cleared. Removed records: %d.', (int) $deleted)
+        );
+
+        return $this->redirect('/main/admin/user_information.php?user_id='.$id);
+    }
+
     /**
      * Create a visible CDocument in a course from an existing ResourceFile.
      */
@@ -963,7 +1040,7 @@ class AdminController extends BaseController
                 WHERE p.c_id IN (:cids)
         ";
 
-        $rows = $conn->executeQuery($sql, ['cids' => $cids], ['cids' => Connection::PARAM_INT_ARRAY])->fetchAllAssociative();
+        $rows = $conn->executeQuery($sql, ['cids' => $cids], ['cids' => ArrayParameterType::INTEGER])->fetchAllAssociative();
 
         $out = [];
         foreach ($rows as $r) {

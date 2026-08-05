@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'გსურთ სპეციფიური დ
 $strings['SuccessDelete'] = 'წარმატებით წაიშალა';
 $strings['ProblemDelete'] = 'პრობლემა სერტიფიკატის წაშლისას';
 $strings['OnlyCustomCertificates'] = 'ექსპორტდება მხოლოდ პერსონალიზებული სერტიფიკატი მქონე კურსები';
+$strings['CertificateMode'] = 'სერტიფიკატის რეჟიმი';
+$strings['UseCourseCustomCertificate'] = 'გამოიყენე კურსისთვის სპეციფიკური მორგებული სერტიფიკატი';
+$strings['UseDefaultCustomCertificate'] = 'გამოიყენე პლატფორმის ნაგულისხმევი მორგებული სერტიფიკატი';
+
+$strings['CreateCertificateWithTags'] = 'შექმენი სერტიფიკატი ამ ტეგების გამოყენებით';
+
+$strings['DeleteCertificate'] = 'სერტიფიკატის წაშლა';
+
+$strings['SaveCertificate'] = 'სერტიფიკატის შენახვა';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'აირჩიეთ ერთი ვარიანტი და შეინახეთ პარამეტრები სერტიფიკატის რედაქტორის გახსნამდე.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'აირჩიეთ, როგორ უნდა გამოიყენოს ამ კურსმა მორგებული სერტიფიკატები.';
+
+$strings['CouldNotSaveCertificate'] = 'სერტიფიკატის კონფიგურაციის შენახვა ვერ მოხერხდა.';

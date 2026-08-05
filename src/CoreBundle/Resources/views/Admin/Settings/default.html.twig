@@ -356,7 +356,25 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                         <td class="px-3 py-2"><code>catdoc</code></td>
                                         <td class="px-3 py-2">{{ 'Legacy Microsoft Word (binary)'|trans }}</td>
                                         <td class="px-3 py-2 text-gray-70">
-                                            {{ 'Applies to older .doc files (not .docx).'|trans }}
+                                            {{ 'Applies to older .doc files.'|trans }}
+                                        </td>
+                                    </tr>
+
+                                    <tr class="border-t border-gray-15">
+                                        <td class="px-3 py-2"><code>.docx</code>, <code>.xlsx</code>, <code>.pptx</code></td>
+                                        <td class="px-3 py-2">{{ 'None (ZIP/XML parser)'|trans }}</td>
+                                        <td class="px-3 py-2">{{ 'Modern Microsoft Office documents'|trans }}</td>
+                                        <td class="px-3 py-2 text-gray-70">
+                                            {{ 'Extracted directly from the XML content inside the Office archive. Macro-enabled and template variants are also supported.'|trans }}
+                                        </td>
+                                    </tr>
+
+                                    <tr class="border-t border-gray-15">
+                                        <td class="px-3 py-2"><code>.odt</code>, <code>.ods</code>, <code>.odp</code></td>
+                                        <td class="px-3 py-2">{{ 'None (ZIP/XML parser)'|trans }}</td>
+                                        <td class="px-3 py-2">{{ 'OpenDocument files'|trans }}</td>
+                                        <td class="px-3 py-2 text-gray-70">
+                                            {{ 'Extracted directly from content.xml inside the OpenDocument archive.'|trans }}
                                         </td>
                                     </tr>
 
@@ -408,7 +426,7 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                                 </table>
 
                                 <p class="text-body-2 text-gray-60 mt-3 mb-0">
-                                    {{ 'Note: modern Office formats like .docx/.pptx/.xlsx require a different extraction method (ZIP/XML parsing, LibreOffice conversion, or a dedicated parser service).'|trans }}
+                                    {{ 'Note: modern Office and OpenDocument formats are extracted with the PHP ZIP extension and XML parsing, without requiring LibreOffice by default.'|trans }}
                                 </p>
                             </div>
                             {# --- End block --- #}

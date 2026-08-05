@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'کنفرانس ویدیویی زوم';
 $strings['plugin_comment'] = 'یکپارچه‌سازی کنفرانس ویدیویی زوم در دوره‌ها و جلسات';
 
+$strings['accountId'] = 'شناسه حساب';
+$strings['clientId'] = 'شناسه سرویس‌گیرنده';
+$strings['clientSecret'] = 'رمز سرویس‌گیرنده';
+$strings['webhookSecretToken'] = 'توکن مخفی وب‌هوک';
+$strings['apiKey_help'] = 'کلید API JWT قدیمی. برای OAuth سرور به سرور زوم، از شناسه حساب، شناسه سرویس‌گیرنده و رمز سرویس‌گیرنده استفاده کنید.';
+$strings['apiSecret_help'] = 'رمز API JWT قدیمی. برای OAuth سرور به سرور زوم، از شناسه حساب، شناسه سرویس‌گیرنده و رمز سرویس‌گیرنده استفاده کنید.';
+$strings['verificationToken_help'] = 'توکن تأیید وب‌هوک قدیمی. از توکن مخفی وب‌هوک استفاده کنید.';
+$strings['accountId_help'] = 'شناسه حساب OAuth سرور به سرور زوم.';
+$strings['clientId_help'] = 'شناسه سرویس‌گیرنده OAuth سرور به سرور زوم.';
+$strings['clientSecret_help'] = 'رمز سرویس‌گیرنده OAuth سرور به سرور زوم.';
+$strings['webhookSecretToken_help'] = 'توکن مخفی برای اعتبارسنجی درخواست‌های وب‌هوک زوم.';
 $strings['apiKey'] = 'کلید API';
 $strings['apiSecret'] = 'راز API';
 $strings['verificationToken'] = 'توکن تأیید';

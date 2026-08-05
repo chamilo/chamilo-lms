@@ -4,8 +4,9 @@
       <PlatformLogo />
     </div>
     <div class="app-topbar__items">
+      <FontResizeControls />
       <BaseAppLink
-        v-if="isTeacher && allowUsersToCreateCourses"
+        v-if="canCreateCourseFromTopbar"
         :title="t('Create course')"
         :to="{ name: 'CourseCreate' }"
         class="item-button group"
@@ -36,8 +37,8 @@
       </button>
       <BaseAppLink
         v-if="!isAnonymous && showTicketLink"
-        :title="t('Ticket')"
-        :url="ticketUrl"
+        :title="t('Tickets')"
+        :to="ticketRoute"
         class="item-button"
       >
         <BaseIcon
@@ -52,13 +53,11 @@
         :to="{ name: 'MessageList' }"
         class="item-button group"
       >
-        <span class="inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
-          <BaseIcon
-            icon="inbox"
-            zoom-trigger="group"
-            class="item-button__icon"
-          />
-        </span>
+        <BaseIcon
+          icon="inbox"
+          zoom-trigger="group"
+          class="item-button__icon"
+        />
         <span
           v-if="btnInboxBadge"
           class="item-button__badge"
@@ -102,6 +101,7 @@
 <script setup>
 import Avatar from "primevue/avatar"
 import PlatformLogo from "./PlatformLogo.vue"
+import FontResizeControls from "./FontResizeControls.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
@@ -121,12 +121,11 @@ const { t } = useI18n()
 const {
   loginUrl,
   elUserSubmenu,
-  isTeacher,
-  allowUsersToCreateCourses,
+  canCreateCourseFromTopbar,
   showTicketLink,
   isAnonymous,
   messagingEnabled,
-  ticketUrl,
+  ticketRoute,
   btnInboxBadge,
   userSubmenuItems,
   toggleUserMenu,

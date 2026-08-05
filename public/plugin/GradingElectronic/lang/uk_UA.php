@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Електронне оцінювання вимк
 $strings['StudentId'] = 'ID студента';
 $strings['ProviderId'] = 'ID провайдера';
 $strings['CourseHours'] = 'Години курсу';
+
+$strings['GenerateFile'] = 'Створити файл';
+$strings['CourseId'] = 'ID курсу';

@@ -83,6 +83,50 @@ async function checkSession() {
 }
 
 /**
+ * Returns the current server-side session expiration metadata.
+ * This endpoint also starts or refreshes an anonymous session when needed.
+ *
+ * @returns {Promise<Object>}
+ */
+async function getSessionExpiration() {
+  return await baseService.get("/session/expiration")
+}
+
+/**
+ * Explicitly renews the current server-side session.
+ *
+ * @returns {Promise<Object>}
+ */
+async function keepSessionAlive() {
+  return await baseService.post("/session/keep-alive", {})
+}
+
+/**
+ * Fetches the contextual ROLE_CURRENT_COURSE_* roles the current user holds for
+ * the given course context, as resolved authoritatively by the backend.
+ * @param {Object} context
+ * @param {number} context.cid - Current course id
+ * @param {number} [context.sid=0] - Current session id
+ * @param {number} [context.gid=0] - Current group id
+ * @returns {Promise<string[]>}
+ */
+async function getCourseContextRoles({ cid, sid = 0, gid = 0 }) {
+  const params = new URLSearchParams({ cid: String(cid) })
+
+  if (sid) {
+    params.set("sid", String(sid))
+  }
+
+  if (gid) {
+    params.set("gid", String(gid))
+  }
+
+  const { roles } = await baseService.get(`/course-context-roles?${params.toString()}`)
+
+  return roles ?? []
+}
+
+/**
  * Requests a login token from the server.
  * @returns {Promise<string>}
  */
@@ -104,7 +148,6 @@ async function loginTokenCheck(portalUrl, token) {
   await baseService.post(
     `${portalUrl}/login/token/check`,
     {},
-    false,
     { Authorization: `Bearer ${token}` },
     { withCredentials: true },
   )
@@ -115,6 +158,9 @@ export default {
   loginLdap,
   getLoginCaptchaStatus,
   checkSession,
+  getSessionExpiration,
+  keepSessionAlive,
+  getCourseContextRoles,
   loginTokenRequest,
   loginTokenCheck,
 }

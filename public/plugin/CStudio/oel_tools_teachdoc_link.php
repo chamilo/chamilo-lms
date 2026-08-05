@@ -25,9 +25,21 @@ $iso = api_get_language_isocode();
 if (!$VDB->w_api_is_anonymous()) {
     $user = $VDB->w_api_get_user_info();
 
-    if (!$VDB->w_api_is_allowed_to_edit()) {
+    $isAllowedToEdit = (bool) $VDB->w_api_is_allowed_to_edit();
+
+    /*
+     * CStudio can be opened from a learning path rendered in student view
+     * by a teacher. In that context, Chamilo's default edit check may be
+     * stricter than the LP toolbar check and redirects teachers to the portal
+     * home before the plugin can resolve the CStudio project.
+     */
+    if (!$isAllowedToEdit && function_exists('api_is_allowed_to_edit')) {
+        $isAllowedToEdit = (bool) api_is_allowed_to_edit(null, true, false, false);
+    }
+
+    if (!$isAllowedToEdit) {
         Display::addFlash(
-            Display::return_message(get_lang(''), 'error')
+            Display::return_message(get_lang('NotAllowed'), 'error')
         );
 
         (new RedirectResponse('../../index.php'))->send();
@@ -59,6 +71,13 @@ $table = 'plugin_oel_tools_teachdoc';
 $action = isset($_GET['action']) ? $VDB->remove_XSS($_GET['action']) : 'add';
 $cid = isset($_GET['cid']) ? (int) $VDB->remove_XSS($_GET['cid']) : '';
 $idLudiLP = isset($_GET['idLudiLP']) ? (int) $_GET['idLudiLP'] : 0;
+
+$editorContextParameters = [];
+foreach (['cid', 'sid', 'gid', 'gradebook'] as $contextParameter) {
+    if (isset($_GET[$contextParameter])) {
+        $editorContextParameters[$contextParameter] = (int) $_GET[$contextParameter];
+    }
+}
 
 if (0 == $idLudiLP) {
     if (!isset($_GET['cotk']) || $_GET['cotk'] != $cotk) {
@@ -128,19 +147,39 @@ if (0 == $idLudiLP) {
     $sql .= " WHERE lp_id = $idLudiLP AND id_parent = 0 ";
     $sql .= $UrlWhere;
 
-    $idLudiProject = $VDB->get_value_by_query($sql, 'id');
+    $idLudiProject = (int) $VDB->get_value_by_query($sql, 'id');
 
-    if ('' != $idLudiProject && 0 != $idLudiProject) {
-        if (isset($_GET['first'])) {
-            (new RedirectResponse('editor/index.php?id='.$idLudiProject.'&cotk='.$cotk.'&first=1'))->send();
-        } else {
-            if ('' != $cotk) {
-                (new RedirectResponse('editor/index.php?id='.$idLudiProject.'&cotk='.$cotk))->send();
-            } else {
-                Display::display_header();
-                echo "<div style='color:red;' >CSRF Token Error !</div>";
-                Display::display_footer();
+    if (0 !== $idLudiProject) {
+        $sql = "SELECT id FROM $table ";
+        $sql .= " WHERE id_parent = $idLudiProject AND type_node <> -1 ";
+        $sql .= $UrlWhere;
+        $sql .= ' ORDER BY order_lst ASC, id ASC LIMIT 1';
+
+        $idLudiEditorPage = (int) $VDB->get_value_by_query($sql, 'id');
+
+        if (0 === $idLudiEditorPage) {
+            $idLudiEditorPage = $idLudiProject;
+        }
+
+        if ('' != $cotk) {
+            $editorQueryParameters = array_merge(
+                [
+                    'action' => 'edit',
+                    'id' => $idLudiEditorPage,
+                    'cotk' => $cotk,
+                ],
+                $editorContextParameters
+            );
+
+            if (isset($_GET['first'])) {
+                $editorQueryParameters['first'] = 1;
             }
+
+            (new RedirectResponse('editor/index.php?'.http_build_query($editorQueryParameters).'#page0'))->send();
+        } else {
+            Display::display_header();
+            echo "<div style='color:red;' >CSRF Token Error !</div>";
+            Display::display_footer();
         }
     } else {
         Display::display_header();

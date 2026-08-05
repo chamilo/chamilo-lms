@@ -23,3 +23,33 @@ $strings['notification_to_creator_only'] = 'Bidali jakinarazpena soilik erabiltz
 $strings['notification_to_creator_only_help'] = 'Aktibatuta badago, jakinarazpena soilik justifikazioak bidali dituen erabiltzailearen sortzaileari bidaliko zaio, ez administratzaile guztiei';
 $strings['access_for_session_admin'] = 'Saio-administratzaileei gaitu erabiltzaileak pluginean kudeatzeko';
 $strings['access_for_session_admin_help'] = 'Aktibatuta badago, saio-administratzaileei plugina, erabiltzaileen zerrenda eta justifikazio-kudeaketa atzitzea gaituko die.';
+
+$strings['RequiredDocuments'] = 'Erabiltzaileen justifikazioetarako beharrezko dokumentuak konfiguratuta.';
+
+$strings['UserJustificationListHelp'] = 'Hautatutako erabiltzaileak igotako dokumentuak.';
+
+$strings['UserJustifications'] = 'Erabiltzaileen justifikazioak';
+$strings['SearchUserJustificationsHelp'] = 'Bilatu erabiltzaile bat igotako justifikazio-dokumentuak berrikusteko.';
+$strings['NoUserJustificationHelp'] = 'Ez da dokumenturik igo erabiltzaile honentzat.';
+$strings['SelectUserJustificationHelp'] = 'Bilatu eta hautatu erabiltzaile bat bere justifikazio-dokumentuak berrikusteko.';
+$strings['CreateFirstJustificationHelp'] = 'Sortu lehen beharrezko justifikazio-dokumentua.';
+$strings['AddJustificationDocument'] = 'Gehitu justifikazio-dokumentua';
+$strings['AddJustificationDocumentHelp'] = 'Sortu erabiltzaileek eman behar duten beharrezko dokumentu mota bat.';
+$strings['EditJustificationDocument'] = 'Editatu justifikazio-dokumentua';
+$strings['EditJustificationDocumentHelp'] = 'Eguneratu beharrezko dokumentu motaren informazioa.';
+$strings['SetNewCourseHelp'] = 'Hautatu justifikazio-cron-ak erabiltzen duen ikastaroa erabiltzaileak harpidetzeko edo harpidetza kentzeko.';
+$strings['EditUserJustification'] = 'Editatu erabiltzailearen justifikazioa';
+$strings['EditUserJustificationHelp'] = 'Eguneratu igotako dokumentu honen baliozkotasun-data.';
+$strings['SelectUser'] = 'Hautatu erabiltzaile bat';
+
+$strings['MyJustificationsHelp'] = 'Igo zure konturako beharrezko justifikazio-dokumentuak.';
+$strings['NoRequiredJustificationDocuments'] = 'Ez dago beharrezko dokumenturik konfiguratuta';
+$strings['NoRequiredJustificationDocumentsHelp'] = 'Administratzaile batek beharrezko dokumentuak konfiguratu behar ditu erabiltzaileek fitxategiak igo ahal izan aurretik.';
+$strings['Uploaded'] = 'Igotakoa';
+$strings['ValidUntil'] = 'Baliozkoa arte';
+$strings['PendingUpload'] = 'Igotzeko zain';
+$strings['SelectFile'] = 'Hautatu fitxategia';
+$strings['UploadJustification'] = 'Igo dokumentua';
+$strings['UploadFailed'] = 'Ezin izan da dokumentua igo. Mesedez, egiaztatu fitxategi mota eta saiatu berriro.';
+$strings['DownloadFile'] = 'Deskargatu fitxategia';
+$strings['AdminList'] = 'Administratzaileen zerrenda';

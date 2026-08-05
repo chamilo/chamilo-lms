@@ -1089,13 +1089,19 @@ if (isset($modifyAnswers)) {
     </form>
     <script>
         $(function () {
+            var hotspotCidReqQueryParams = <?php echo json_encode(api_get_cidreq(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+
+            window.chamiloCidReq = window.chamiloCidReq || {};
+            window.chamiloCidReq.queryParams = hotspotCidReqQueryParams;
+
             <?php if (HOT_SPOT_DELINEATION == $answerType) {
             ?>
             new DelineationQuestion({
                 questionId: <?php echo $modifyAnswers; ?>,
                 selector: '#hotspot-container',
                 for: 'admin',
-                relPath: '<?php echo $relPath; ?>'
+                relPath: '<?php echo $relPath; ?>',
+                cidReqQueryParams: hotspotCidReqQueryParams
             });
             <?php
             } else {
@@ -1104,7 +1110,8 @@ if (isset($modifyAnswers)) {
                 questionId: <?php echo $modifyAnswers; ?>,
                 selector: '#hotspot-container',
                 for: 'admin',
-                relPath: '<?php echo $relPath; ?>'
+                relPath: '<?php echo $relPath; ?>',
+                cidReqQueryParams: hotspotCidReqQueryParams
             });
             <?php
             } ?>

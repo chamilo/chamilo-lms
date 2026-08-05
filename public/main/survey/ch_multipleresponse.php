@@ -53,19 +53,24 @@ class ch_multipleresponse extends survey_question
         $questionData = [],
         $answers = []
     ) {
-        $class = 'checkbox-inline';
-        $labelClass = 'checkbox-inline';
-        if ('vertical' == $questionData['display']) {
-            $class = 'checkbox-vertical';
+        $displayMode = strtolower(trim((string) ($questionData['display'] ?? 'horizontal')));
+        if ('vertical' !== $displayMode) {
+            $displayMode = 'horizontal';
         }
 
+        $isVertical = 'vertical' === $displayMode;
+        $class = $isVertical ? 'checkbox-vertical' : 'checkbox-inline';
+        $labelClass = $isVertical ? 'checkbox-vertical' : 'checkbox-inline';
+
         $name = 'question'.$questionData['question_id'];
+        $form->addHtml('<div class="survey-answer-options survey-answer-options-'.$displayMode.'" data-display="'.$displayMode.'">');
         $form->addCheckBoxGroup(
             $name,
             null,
             $questionData['options'],
             ['checkbox-class' => $class, 'label-class' => $labelClass]
         );
+        $form->addHtml('</div>');
 
         $defaults = [];
         if (!empty($answers)) {

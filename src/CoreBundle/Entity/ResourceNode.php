@@ -70,7 +70,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
     ]
 )]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'createdAt', 'updatedAt', 'firstResourceFile.size'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: [
+    'id', 'title', 'createdAt', 'updatedAt', 'firstResourceFile.size',
+])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 class ResourceNode implements Stringable
@@ -78,7 +80,7 @@ class ResourceNode implements Stringable
     use TimestampableAgoTrait;
     use TimestampableTypedEntity;
 
-    public const PATH_SEPARATOR = '/';
+    public const string PATH_SEPARATOR = '/';
 
     #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read', 'course:read'])]
     #[ORM\Id]
@@ -89,7 +91,13 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     #[Assert\NotBlank]
     #[Gedmo\TreePathSource]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(
+        name: 'title',
+        type: 'string',
+        length: 255,
+        nullable: false,
+        columnDefinition: 'LONGTEXT NOT NULL COMMENT \'(DC2Type:string)\'',
+    )]
     protected string $title;
 
     #[Assert\NotBlank]
@@ -111,7 +119,10 @@ class ResourceNode implements Stringable
      * Optional language for the node.
      * This is used for indexing and future-proof resource variations.
      */
-    #[Groups(['resource_node:read', 'document:read', 'personal_file:read'])]
+    #[Groups([
+        'resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'personal_file:read',
+        'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[ORM\ManyToOne(targetEntity: Language::class)]
     #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?Language $language = null;
@@ -202,7 +213,10 @@ class ResourceNode implements Stringable
      *
      * @var Collection<int, ResourceFile>
      */
-    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read', 'personal_file:read'])]
+    #[Groups([
+        'resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read',
+        'personal_file:read',
+    ])]
     #[ORM\OneToMany(
         mappedBy: 'resourceNode',
         targetEntity: ResourceFile::class,
@@ -399,25 +413,12 @@ class ResourceNode implements Stringable
 
     public function setSlug(string $slug): self
     {
-        if (str_contains(self::PATH_SEPARATOR, $slug)) {
+        if (str_contains($slug, self::PATH_SEPARATOR)) {
             $message = 'Invalid character "'.self::PATH_SEPARATOR.'" in resource name';
 
             throw new InvalidArgumentException($message);
         }
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $title = str_replace('/', '-', $title);
-        $this->title = $title;
 
         return $this;
     }
@@ -440,6 +441,13 @@ class ResourceNode implements Stringable
     public function getResourceLinks(): Collection
     {
         return $this->resourceLinks;
+    }
+
+    public function setResourceLinks(Collection $resourceLinks): self
+    {
+        $this->resourceLinks = $resourceLinks;
+
+        return $this;
     }
 
     public function getResourceLinkByContext(
@@ -494,6 +502,14 @@ class ResourceNode implements Stringable
     }
 
     /**
+     * Returns the resource id.
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
      * @return Collection<int, ResourceLink>
      */
     public function getResourceLinksByContext(
@@ -527,13 +543,6 @@ class ResourceNode implements Stringable
         return $this->resourceLinks->matching($criteria);
     }
 
-    public function setResourceLinks(Collection $resourceLinks): self
-    {
-        $this->resourceLinks = $resourceLinks;
-
-        return $this;
-    }
-
     public function addResourceLink(ResourceLink $link): self
     {
         $link->setResourceNode($this);
@@ -549,50 +558,6 @@ class ResourceNode implements Stringable
             $mimeType = $resourceFile->getMimeType();
 
             if (str_contains($mimeType, 'text')) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function getIcon(?string $additionalClass = null): string
-    {
-        $class = 'fa fa-folder';
-        if ($this->hasResourceFile()) {
-            $class = 'far fa-file';
-            if ($this->isResourceFileAnImage()) {
-                $class = 'far fa-file-image';
-            }
-            if ($this->isResourceFileAVideo()) {
-                $class = 'far fa-file-video';
-            }
-        }
-
-        if ($additionalClass) {
-            $class .= " $additionalClass";
-        }
-
-        return '<i class="'.$class.'"></i>';
-    }
-
-    public function isResourceFileAnImage(): bool
-    {
-        if ($resourceFile = $this->resourceFiles->first()) {
-            $mimeType = $resourceFile->getMimeType();
-            if (str_contains($mimeType, 'image')) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function isResourceFileAVideo(): bool
-    {
-        if ($resourceFile = $this->resourceFiles->first()) {
-            $mimeType = $resourceFile->getMimeType();
-            if (str_contains($mimeType, 'video')) {
                 return true;
             }
         }
@@ -617,12 +582,16 @@ class ResourceNode implements Stringable
         return $this->getIcon('fa-3x');
     }
 
-    /**
-     * Returns the resource id.
-     */
-    public function getId(): ?int
+    public function isResourceFileAnImage(): bool
     {
-        return $this->id;
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
+            if (str_contains($mimeType, 'image')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getResourceType(): ResourceType
@@ -635,6 +604,56 @@ class ResourceNode implements Stringable
         $this->resourceType = $resourceType;
 
         return $this;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $title = str_replace('/', '-', $title);
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getIcon(?string $additionalClass = null): string
+    {
+        $class = 'fa fa-folder';
+        if ($this->hasResourceFile()) {
+            $class = 'far fa-file';
+            if ($this->isResourceFileAnImage()) {
+                $class = 'far fa-file-image';
+            }
+            if ($this->isResourceFileAVideo()) {
+                $class = 'far fa-file-video';
+            }
+        }
+
+        if ($additionalClass) {
+            $class .= " $additionalClass";
+        }
+
+        return '<i class="'.$class.'"></i>';
+    }
+
+    public function hasResourceFile(): bool
+    {
+        return $this->resourceFiles->count() > 0;
+    }
+
+    public function isResourceFileAVideo(): bool
+    {
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
+            if (str_contains($mimeType, 'video')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getContent(): ?string
@@ -708,11 +727,6 @@ class ResourceNode implements Stringable
         $this->public = $public;
 
         return $this;
-    }
-
-    public function hasResourceFile(): bool
-    {
-        return $this->resourceFiles->count() > 0;
     }
 
     /**

@@ -27,12 +27,13 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Throwable;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/session-list-data')]
 class SessionListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'title' => 's.title',
         'categoryName' => 'sc.title',
         'displayStartDate' => 's.displayStartDate',
@@ -43,7 +44,7 @@ class SessionListController extends AbstractController
         'status' => 's.status',
     ];
 
-    private const VISIBILITY_LABELS = [
+    private const array VISIBILITY_LABELS = [
         Session::READ_ONLY => 'Read only',
         Session::VISIBLE => 'Visible',
         Session::INVISIBLE => 'Invisible',
@@ -51,7 +52,7 @@ class SessionListController extends AbstractController
         Session::LIST_ONLY => 'List only',
     ];
 
-    private const STATUS_LABELS = [
+    private const array STATUS_LABELS = [
         Session::STATUS_PLANNED => 'Planned',
         Session::STATUS_PROGRESS => 'In progress',
         Session::STATUS_FINISHED => 'Finished',
@@ -59,7 +60,7 @@ class SessionListController extends AbstractController
         Session::STATUS_UNKNOWN => 'Unknown',
     ];
 
-    private const ALLOWED_LIST_TYPES = [
+    private const array ALLOWED_LIST_TYPES = [
         'all',
         'active',
         'close',
@@ -73,13 +74,31 @@ class SessionListController extends AbstractController
         private readonly SettingsManager $settingsManager,
     ) {}
 
+    private function resolvePlatformTimezone(): DateTimeZone
+    {
+        $tz = (string) ($this->settingsManager->getSetting('platform.timezone', false, 'timezones') ?? '');
+
+        try {
+            return new DateTimeZone('' !== $tz ? $tz : 'UTC');
+        } catch (Throwable) {
+            return new DateTimeZone('UTC');
+        }
+    }
+
+    private function formatSessionDate(?DateTime $date, DateTimeZone $tz): ?string
+    {
+        if (null === $date) {
+            return null;
+        }
+
+        return (clone $date)->setTimezone($tz)->format('Y-m-d H:i');
+    }
+
     #[Route('', name: 'admin_session_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
         $page = max(1, (int) $request->query->get('page', 1));
         $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
-        $sortField = (string) $request->query->get('sortField', 'title');
-        $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $keyword = trim((string) $request->query->get('keyword', ''));
         $categoryFilter = $request->query->get('category');
 
@@ -94,6 +113,11 @@ class SessionListController extends AbstractController
         if (!\in_array($listType, self::ALLOWED_LIST_TYPES, true)) {
             $listType = $defaultListType;
         }
+
+        $defaultSortField = 'custom' === $listType ? 'displayStartDate' : 'title';
+        $defaultSortOrder = 'custom' === $listType ? 'DESC' : 'ASC';
+        $sortField = (string) $request->query->get('sortField', $defaultSortField);
+        $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', $defaultSortOrder)) ? 'DESC' : 'ASC';
 
         $allowOrder = 'true' === $this->settingsManager->getSetting('session.session_list_order', true);
 
@@ -177,14 +201,16 @@ class SessionListController extends AbstractController
             $tutorsMap = $this->getTutorsBySessionIds($sessionIds);
         }
 
+        $tz = $this->resolvePlatformTimezone();
+
         $items = [];
         foreach ($rows as $row) {
             $item = [
                 'id' => $row['id'],
                 'title' => $row['title'],
                 'categoryName' => $row['categoryName'] ?? '',
-                'displayStartDate' => $row['displayStartDate'] ? $row['displayStartDate']->format('Y-m-d H:i') : null,
-                'displayEndDate' => $row['displayEndDate'] ? $row['displayEndDate']->format('Y-m-d H:i') : null,
+                'displayStartDate' => $this->formatSessionDate($row['displayStartDate'], $tz),
+                'displayEndDate' => $this->formatSessionDate($row['displayEndDate'], $tz),
                 'visibility' => $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$row['visibility']] ?? 'Unknown',
                 'status' => $row['status'],
@@ -489,14 +515,16 @@ class SessionListController extends AbstractController
             $childTutorsMap = $this->getTutorsBySessionIds($childIds);
         }
 
+        $tz = $this->resolvePlatformTimezone();
+
         $childMap = [];
         foreach ($children as $child) {
             $childItem = [
                 'id' => $child['id'],
                 'title' => '-- '.$child['title'],
                 'categoryName' => $child['categoryName'] ?? '',
-                'displayStartDate' => $child['displayStartDate'] ? $child['displayStartDate']->format('Y-m-d H:i') : null,
-                'displayEndDate' => $child['displayEndDate'] ? $child['displayEndDate']->format('Y-m-d H:i') : null,
+                'displayStartDate' => $this->formatSessionDate($child['displayStartDate'], $tz),
+                'displayEndDate' => $this->formatSessionDate($child['displayEndDate'], $tz),
                 'visibility' => $child['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[$child['visibility']] ?? 'Unknown',
                 'status' => $child['status'],

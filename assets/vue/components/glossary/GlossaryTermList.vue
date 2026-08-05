@@ -72,7 +72,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useRoute } from "vue-router"
 import { computed } from "vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import DOMPurify from "dompurify"
 
 const { t } = useI18n()
@@ -81,7 +81,7 @@ const route = useRoute()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const props = defineProps({
   glossaries: {

@@ -9,7 +9,9 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceFormat;
@@ -18,21 +20,27 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\ObjectManager;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 use const JSON_THROW_ON_ERROR;
@@ -196,7 +204,10 @@ class ResourceListener
         if (null !== $request && null === $parentNode) {
             $currentRequest = $request->getCurrentRequest();
             if (null !== $currentRequest) {
-                $resourceNodeIdFromRequest = $currentRequest->get('parentResourceNodeId');
+                $resourceNodeIdFromRequest = $currentRequest->query->get(
+                    'parentResourceNodeId',
+                    $currentRequest->request->get('parentResourceNodeId')
+                );
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();
                     $contentData = json_decode($contentData, true, 512, JSON_THROW_ON_ERROR);
@@ -296,6 +307,11 @@ class ResourceListener
         // Update resourceNode title from Resource.
         $this->updateResourceName($resource);
 
+        // Bind a single-entry resourceLinkList to the session-resolved course
+        // context before the links are materialized, so the request body cannot
+        // target a foreign course (IDOR).
+        $this->normalizeSingleLinkContextFromSession($resource);
+
         BaseResourceFileAction::setLinks($resource, $em);
 
         // Upload File was set in BaseResourceFileAction.php
@@ -316,6 +332,8 @@ class ResourceListener
 
         $resource->setResourceNode($resourceNode);
 
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
+
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
             $message = \sprintf(
@@ -331,35 +349,14 @@ class ResourceListener
         }
     }
 
-    /**
-     * When updating a Resource.
-     */
-    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
-    {
-        $resourceNode = $resource->getResourceNode();
-
-        if (null === $resourceNode) {
-            return;
-        }
-
-        $parentResourceNode = $resource->getParent()?->resourceNode;
-
-        if ($parentResourceNode) {
-            $resourceNode->setParent($parentResourceNode);
-        }
-
-        $this->updateResourceName($resource);
-
-        // error_log('Resource listener preUpdate');
-        // $this->setLinks($resource, $eventArgs->getEntityManager());
-    }
-
     public function updateResourceName(AbstractResource $resource): void
     {
         $resourceName = $resource->getResourceName();
 
+        // Legacy Chamilo 1.x data may have empty titles/filenames. Use a safe
+        // fallback so migrations do not abort on dirty rows.
         if (empty($resourceName)) {
-            throw new InvalidArgumentException('Resource needs a name');
+            $resourceName = 'resource-'.$resource->getResourceIdentifier();
         }
 
         $resourceNode = $resource->getResourceNode();
@@ -372,6 +369,171 @@ class ResourceListener
             // $slug = $this->slugify->slugify($resourceName);
         }
         $resourceNode->setTitle($resourceName);
+    }
+
+    /**
+     * Forces a single-entry resourceLinkList to bind to the current course
+     * context resolved by CidReqListener (stored in the session), which is the
+     * same context that gated the operation's `security:` expression.
+     *
+     * Only the link visibility is taken from the request body; the cid/sid/gid
+     * are overwritten with the session context, so a request body cannot bind a
+     * resource to a foreign course (IDOR). Requests carrying more than one link
+     * are an explicit multi-context write and are left untouched, as are
+     * user/usergroup-scoped links (e.g. personal files) and any non-API or
+     * out-of-course-context persist (course copy, fixtures, CLI commands).
+     */
+    public function normalizeSingleLinkContextFromSession(AbstractResource $resource): void
+    {
+        $links = $resource->getResourceLinkArray();
+
+        // Multiple entries are an explicit multi-context request: honor as-is.
+        if (1 !== \count($links)) {
+            return;
+        }
+
+        $entry = $links[0];
+        if (!\is_array($entry)) {
+            return;
+        }
+
+        // User/usergroup-scoped links (e.g. personal files) are not course links.
+        if (!empty($entry['uid']) || !empty($entry['ugid'])) {
+            return;
+        }
+
+        $request = $this->request->getMainRequest();
+        if (null === $request || !$request->hasSession()) {
+            return;
+        }
+
+        // Restrict to API Platform requests: the only path where the
+        // resourceLinkList originates from untrusted request input. Programmatic
+        // persists must keep their explicit context.
+        if (!str_starts_with($request->getPathInfo(), '/api/')) {
+            return;
+        }
+
+        $session = $request->getSession();
+
+        $course = $session->get('course');
+        if (!$course instanceof Course) {
+            return;
+        }
+
+        $context = ['cid' => (int) $course->getId()];
+
+        $courseSession = $session->get('session');
+        if ($courseSession instanceof Session) {
+            $context['sid'] = (int) $courseSession->getId();
+        }
+
+        $group = $session->get('group');
+        if ($group instanceof CGroup) {
+            $context['gid'] = (int) $group->getIid();
+        }
+
+        $context['visibility'] = isset($entry['visibility'])
+            ? (int) $entry['visibility']
+            : ResourceLink::VISIBILITY_PUBLISHED;
+
+        $resource->setResourceLinkArray([$context]);
+    }
+
+    private function applyResourceLanguageFromRequest(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    {
+        $currentRequest = $this->request->getCurrentRequest();
+        $hasLanguage = false;
+        $rawLanguage = null;
+
+        if (null !== $currentRequest) {
+            if ($currentRequest->request->has('language')) {
+                $hasLanguage = true;
+                $rawLanguage = $currentRequest->request->get('language');
+            } else {
+                $content = trim($currentRequest->getContent());
+                if ('' !== $content) {
+                    $payload = json_decode($content, true);
+                    if (\is_array($payload) && \array_key_exists('language', $payload)) {
+                        $hasLanguage = true;
+                        $rawLanguage = $payload['language'];
+                    }
+                }
+            }
+        }
+
+        if (!$hasLanguage && null !== $resource->language) {
+            $hasLanguage = true;
+            $rawLanguage = $resource->language;
+        }
+
+        if (!$hasLanguage) {
+            return;
+        }
+
+        $em = $eventArgs->getObjectManager();
+        $language = $this->findLanguage($rawLanguage, $em);
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $resourceNode->setLanguage($language);
+
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+            if ($resourceFile instanceof ResourceFile) {
+                $resourceFile->setLanguage($language);
+            }
+        }
+    }
+
+    private function findLanguage(mixed $rawLanguage, ObjectManager $em): ?Language
+    {
+        if (null === $rawLanguage) {
+            return null;
+        }
+
+        if (\is_array($rawLanguage)) {
+            if (isset($rawLanguage['@id'])) {
+                $rawLanguage = $rawLanguage['@id'];
+            } elseif (isset($rawLanguage['isocode'])) {
+                $rawLanguage = $rawLanguage['isocode'];
+            } elseif (isset($rawLanguage['id'])) {
+                $rawLanguage = $rawLanguage['id'];
+            }
+        }
+
+        $languageCode = trim((string) $rawLanguage);
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)$#', $languageCode, $matches) || ctype_digit($languageCode)) {
+            $languageId = isset($matches[1]) ? (int) $matches[1] : (int) $languageCode;
+            $language = $em->getRepository(Language::class)->find($languageId);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
     }
 
     private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void
@@ -405,7 +567,9 @@ class ResourceListener
             $alreadyHasGlobalLink = false;
             foreach ($resourceNode->getResourceLinks() as $existingLink) {
                 if (null === $existingLink->getCourse() && null === $existingLink->getSession()
-                    && null === $existingLink->getGroup() && null === $existingLink->getUser()) {
+                    && null === $existingLink->getGroup()
+                    && null === $existingLink->getUser()
+                ) {
                     $alreadyHasGlobalLink = true;
 
                     break;
@@ -419,6 +583,31 @@ class ResourceListener
         }
     }
 
+    /**
+     * When updating a Resource.
+     */
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $eventArgs): void
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            return;
+        }
+
+        $parentResourceNode = $resource->getParent()?->resourceNode;
+
+        if ($parentResourceNode) {
+            $resourceNode->setParent($parentResourceNode);
+        }
+
+        $this->updateResourceName($resource);
+
+        $this->applyResourceLanguageFromRequest($resource, $eventArgs);
+
+        // error_log('Resource listener preUpdate');
+        // $this->setLinks($resource, $eventArgs->getEntityManager());
+    }
+
     public function preRemove(AbstractResource $resource, LifecycleEventArgs $args): void
     {
         if (!$resource instanceof CDocument) {
@@ -426,10 +615,14 @@ class ResourceListener
         }
 
         $em = $args->getObjectManager();
-        $docID = $resource->getIid();
-        $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
-            ->setParameter('path', $docID)
+        \assert($em instanceof EntityManagerInterface);
+        $em->createQueryBuilder()
+            ->delete(CLpItem::class, 'i')
+            ->where('i.path = :path')
+            ->andWhere('i.itemType = :type')
+            ->setParameter('path', $resource->getIid())
             ->setParameter('type', 'document')
+            ->getQuery()
             ->execute()
         ;
     }

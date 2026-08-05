@@ -69,7 +69,7 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 
@@ -82,12 +82,12 @@ const notification = useNotification()
 const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
 const leaveGroup = async () => {
   try {
-    const response = await axios.post("/social-network/group-action", {
+    const data = await socialService.groupAction({
       userId: user.value.id,
       groupId: groupInfo.value.id,
       action: "leave",
     })
-    if (response.data.success) {
+    if (data.success) {
       notification.showSuccessNotification(t("You have left the group successfully"))
       router.push("/social")
     }

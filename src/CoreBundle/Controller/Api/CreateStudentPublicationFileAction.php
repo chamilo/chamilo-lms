@@ -41,7 +41,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             }
         }
 
-        $fileExistsOption = $request->get('fileExistsOption', 'rename');
+        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
 
         $studentPublication = new CStudentPublication();
 
@@ -75,7 +75,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         $managedUser = $em->getReference(User::class, $userId);
         $studentPublication->setUser($managedUser);
 
-        $parentId = (int) $request->get('parentId');
+        $parentId = (int) $request->request->get('parentId');
         if ($parentId > 0) {
             $parentEntity = $repo->find($parentId);
             if ($parentEntity) {

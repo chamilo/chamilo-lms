@@ -63,7 +63,7 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'my_space/ti_report.php',
-                'content' => get_lang('General Coaches planning'),
+                'content' => get_lang('General tutor planning'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'my_space/question_stats_global.php',
@@ -2893,7 +2893,7 @@ class MySpace
             // check if we are the creators or not
             if ('' != $creator_id) {
                 if ($creator_id != api_get_user_id()) {
-                    $user['error'] = get_lang('User already register by other coach.');
+                    $user['error'] = get_lang('User is already registered by another tutor.');
                     $errors[] = $user;
                 }
             }
@@ -3106,9 +3106,7 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
-        $crawler = $crawler->filter('Contacts > Contact ');
+        $crawler = Import::xml($file)->filter('Contacts > Contact ');
         $array = [];
         foreach ($crawler as $domElement) {
             $row = [];

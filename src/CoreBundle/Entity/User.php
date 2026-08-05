@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -23,6 +24,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
+use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\State\UserCollectionStateProvider;
@@ -60,7 +62,7 @@ use UserManager;
             security: "is_granted('VIEW', object)",
         ),
         new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             provider: UserCollectionStateProvider::class,
@@ -79,6 +81,7 @@ use UserManager;
 )]
 #[ApiResource(
     uriTemplate: '/access_urls/{id}/user',
+    shortName: 'AccessUrlUser',
     operations: [
         new Post(
             controller: CreateUserOnAccessUrlAction::class,
@@ -111,14 +114,15 @@ use UserManager;
 #[ApiFilter(PartialSearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['username', 'firstname', 'lastname'])]
+#[ApiFilter(ExtraFieldFilter::class)]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
     use TimestampableEntity;
     use UserCreatorTrait;
 
-    public const USERNAME_MAX_LENGTH = 100;
-    public const ROLE_DEFAULT = 'ROLE_USER';
-    public const ANONYMOUS = 6;
+    public const int USERNAME_MAX_LENGTH = 100;
+    public const string ROLE_DEFAULT = 'ROLE_USER';
+    public const int ANONYMOUS = 6;
 
     /**
      * Global status for the fallback user.
@@ -126,35 +130,27 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * or fallback for content ownership when regular users are deleted.
      * This ensures data integrity and prevents orphaned content within the system.
      */
-    public const ROLE_FALLBACK = 99;
+    public const int ROLE_FALLBACK = 99;
 
     // User active field constants
-    public const ACTIVE = 1;
-    public const INACTIVE = 0;
-    public const INACTIVE_AUTOMATIC = -1;
-    public const SOFT_DELETED = -2;
-
-    /**
-     * Context roles must NEVER be persisted.
-     * They are computed per-request from course/session/group context.
-     *
-     * @var string[]
-     */
-    private array $temporaryRoles = [];
+    public const int ACTIVE = 1;
+    public const int INACTIVE = 0;
+    public const int INACTIVE_AUTOMATIC = -1;
+    public const int SOFT_DELETED = -2;
 
     /**
      * List of all context roles used by the platform security layer.
      * These roles must not be stored in the DB.
      */
-    public const CONTEXT_ROLES = [
-        'ROLE_CURRENT_COURSE_TEACHER',
-        'ROLE_CURRENT_COURSE_STUDENT',
-        'ROLE_CURRENT_COURSE_GROUP_TEACHER',
-        'ROLE_CURRENT_COURSE_GROUP_STUDENT',
-        'ROLE_CURRENT_COURSE_SESSION_TEACHER',
-        'ROLE_CURRENT_COURSE_SESSION_STUDENT',
-    ];
-
+    public const array CONTEXT_ROLES
+        = [
+            'ROLE_CURRENT_COURSE_TEACHER',
+            'ROLE_CURRENT_COURSE_STUDENT',
+            'ROLE_CURRENT_COURSE_GROUP_TEACHER',
+            'ROLE_CURRENT_COURSE_GROUP_STUDENT',
+            'ROLE_CURRENT_COURSE_SESSION_TEACHER',
+            'ROLE_CURRENT_COURSE_SESSION_STUDENT',
+        ];
     #[Groups(['user_json:read'])]
     #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
@@ -181,7 +177,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'course_catalogue:read',
     ])]
     public ?string $illustrationUrl = null;
-
     #[Groups([
         'user:read',
         'user:read:public',
@@ -198,7 +193,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
-
     #[Assert\NotBlank]
     #[Groups([
         'user_export',
@@ -220,10 +214,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
-
     #[ORM\Column(name: 'api_token', type: 'string', unique: true, nullable: true)]
     protected ?string $apiToken = null;
-
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Groups([
         'user:read',
@@ -239,7 +231,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     ])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
-
     #[Groups([
         'user:read',
         'user:read:public',
@@ -254,75 +245,55 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     ])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'website', type: 'string', length: 255, nullable: true)]
     protected ?string $website;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'biography', type: 'text', nullable: true)]
     protected ?string $biography;
-
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[ORM\Column(name: 'locale', type: 'string', length: 10)]
     protected string $locale;
-
     #[Groups(['user:write'])]
     protected ?string $plainPassword = null;
-
     #[ORM\Column(name: 'password', type: 'string', length: 255)]
     protected string $password = '';
-
     #[ORM\Column(name: 'username_canonical', type: 'string', length: 180)]
     protected string $usernameCanonical;
-
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[ORM\Column(name: 'timezone', type: 'string', length: 64)]
     protected string $timezone;
-
     #[ORM\Column(name: 'email_canonical', type: 'string', length: 100)]
     protected string $emailCanonical;
-
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
     #[ORM\Column(name: 'email', type: 'string', length: 100)]
     protected string $email;
-
     #[ORM\Column(name: 'locked', type: 'boolean')]
     protected bool $locked;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'expired', type: 'boolean')]
     protected bool $expired;
-
     #[ORM\Column(name: 'credentials_expired', type: 'boolean')]
     protected bool $credentialsExpired;
-
     #[ORM\Column(name: 'credentials_expire_at', type: 'datetime', nullable: true)]
     protected ?DateTime $credentialsExpireAt;
-
     #[ORM\Column(name: 'date_of_birth', type: 'datetime', nullable: true)]
     protected ?DateTime $dateOfBirth = null;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'expires_at', type: 'datetime', nullable: true)]
     protected ?DateTime $expiresAt;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'phone', type: 'string', length: 64, nullable: true)]
     protected ?string $phone = null;
-
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'address', type: 'string', length: 250, nullable: true)]
     protected ?string $address = null;
-
     #[ORM\Column(type: 'string', length: 255)]
     protected string $salt;
-
     #[ORM\Column(name: 'gender', type: 'string', length: 1, nullable: true)]
     protected ?string $gender = null;
-
     #[Groups(['user:read'])]
     #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
     protected ?DateTime $lastLogin = null;
@@ -332,14 +303,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[ORM\Column(name: 'confirmation_token', type: 'string', length: 255, nullable: true)]
     protected ?string $confirmationToken = null;
-
     #[ORM\Column(name: 'password_requested_at', type: 'datetime', nullable: true)]
     protected ?DateTime $passwordRequestedAt;
 
     /**
      * @var Collection<int, CourseRelUser>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CourseRelUser::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CourseRelUser::class, cascade: [
+        'persist', 'remove',
+    ], orphanRemoval: true)]
     protected Collection $courses;
 
     /**
@@ -363,16 +335,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Writable only by admins — see UserSerializerContextBuilder.
      */
     #[Groups(['user:read', 'user:admin:write', 'user_json:read'])]
-    #[ORM\Column(type: 'array')]
+    #[ORM\Column(type: 'json')]
     protected array $roles = [];
-
     #[ORM\Column(name: 'profile_completed', type: 'boolean', nullable: true)]
     protected ?bool $profileCompleted = null;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
-     */
-    // protected $jurySubscriptions;
 
     /**
      * @var Collection<int, Group>
@@ -383,6 +349,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     protected Collection $groups;
 
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
+     */
+    // protected $jurySubscriptions;
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user").
      */
@@ -659,50 +629,35 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CGroupRelTutor::class, orphanRemoval: true)]
     protected Collection $courseGroupsAsTutor;
-
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
-
     #[ORM\Column(name: 'official_code', type: 'string', length: 40, nullable: true)]
     protected ?string $officialCode = null;
-
     #[ORM\Column(name: 'picture_uri', type: 'string', length: 250, nullable: true)]
     protected ?string $pictureUri = null;
-
     #[ORM\Column(name: 'creator_id', type: 'integer', unique: false, nullable: true)]
     protected ?int $creatorId = null;
-
     #[ORM\Column(name: 'competences', type: 'text', unique: false, nullable: true)]
     protected ?string $competences = null;
-
     #[ORM\Column(name: 'diplomas', type: 'text', unique: false, nullable: true)]
     protected ?string $diplomas = null;
-
     #[ORM\Column(name: 'openarea', type: 'text', unique: false, nullable: true)]
     protected ?string $openarea = null;
-
     #[ORM\Column(name: 'teach', type: 'text', unique: false, nullable: true)]
     protected ?string $teach = null;
-
     #[ORM\Column(name: 'productions', type: 'string', length: 250, unique: false, nullable: true)]
     protected ?string $productions = null;
-
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
-
     #[Groups(['user:read', 'user_json:read'])]
     #[ORM\Column(name: 'active', type: 'integer')]
     protected int $active;
-
     #[ORM\Column(name: 'openid', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $openid = null;
-
     #[ORM\Column(name: 'theme', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $theme = null;
-
     #[ORM\Column(name: 'hr_dept_id', type: 'smallint', unique: false, nullable: true)]
     protected ?int $hrDeptId = null;
-
     #[Groups(['user:write'])]
     protected ?AccessUrl $currentUrl = null;
 
@@ -744,16 +699,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrackELogin::class, cascade: ['persist', 'remove'])]
     protected Collection $logins;
-
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Admin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    protected ?Admin $admin = null;
-
     #[ORM\Column(type: 'uuid', unique: true)]
     protected Uuid $uuid;
-
-    // Property used only during installation.
     protected bool $skipResourceNode = false;
 
+    // Property used only during installation.
     #[Groups([
         'user:read',
         'user_json:read',
@@ -767,42 +717,42 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'student_publication:read',
         'student_publication_comment:read',
         'course_catalogue:read',
+        'user_rel_user:read',
     ])]
     protected string $fullName;
-
-    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: SocialPost::class, orphanRemoval: true)]
-    private Collection $sentSocialPosts;
-
-    #[ORM\OneToMany(mappedBy: 'userReceiver', targetEntity: SocialPost::class)]
-    private Collection $receivedSocialPosts;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SocialPostFeedback::class, orphanRemoval: true)]
-    private Collection $socialPostsFeedbacks;
-
     #[ORM\Column(name: 'mfa_enabled', type: 'boolean', options: ['default' => false])]
     protected bool $mfaEnabled = false;
-
     #[ORM\Column(name: 'mfa_service', type: 'string', length: 255, nullable: true)]
     protected ?string $mfaService = null;
-
     #[ORM\Column(name: 'mfa_secret', type: 'string', length: 255, nullable: true)]
     protected ?string $mfaSecret = null;
-
     #[ORM\Column(name: 'mfa_backup_codes', type: 'text', nullable: true)]
     protected ?string $mfaBackupCodes = null;
-
     #[ORM\Column(name: 'mfa_last_used', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $mfaLastUsed = null;
+    #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'password_updated_at', type: 'datetime', nullable: true)]
+    protected ?DateTimeInterface $passwordUpdatedAt = null;
+
+    /**
+     * Context roles must NEVER be persisted.
+     * They are computed per-request from course/session/group context.
+     *
+     * @var string[]
+     */
+    private array $temporaryRoles = [];
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: SocialPost::class, orphanRemoval: true)]
+    private Collection $sentSocialPosts;
+    #[ORM\OneToMany(mappedBy: 'userReceiver', targetEntity: SocialPost::class)]
+    private Collection $receivedSocialPosts;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SocialPostFeedback::class, orphanRemoval: true)]
+    private Collection $socialPostsFeedbacks;
 
     /**
      * @var Collection<int, UserAuthSource>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserAuthSource::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $authSources;
-
-    #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'password_updated_at', type: 'datetime', nullable: true)]
-    protected ?DateTimeInterface $passwordUpdatedAt = null;
 
     public function __construct()
     {
@@ -869,11 +819,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->authSources = new ArrayCollection();
     }
 
-    public function __toString(): string
-    {
-        return $this->username;
-    }
-
     public static function getPasswordConstraints(): array
     {
         return [
@@ -884,6 +829,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void {}
+
+    public function __toString(): string
+    {
+        return $this->username;
+    }
 
     public function getUuid(): Uuid
     {
@@ -966,16 +916,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /**
-     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active).
-     *
-     * @return bool True if active = 1, false in any other case (0 = inactive, -1 = predeleted)
-     */
-    public function getIsActive(): bool
-    {
-        return self::ACTIVE === $this->active;
-    }
-
     public function isSoftDeleted(): bool
     {
         return self::SOFT_DELETED === $this->active;
@@ -984,6 +924,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isEnabled(): bool
     {
         return $this->isActive();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->getIsActive();
+    }
+
+    /**
+     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active).
+     *
+     * @return bool True if active = 1, false in any other case (0 = inactive, -1 = predeleted)
+     */
+    public function getIsActive(): bool
+    {
+        return self::ACTIVE === $this->active;
     }
 
     /**
@@ -1156,11 +1111,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->active;
     }
 
-    public function isActive(): bool
-    {
-        return $this->getIsActive();
-    }
-
     public function setActive(int $active): self
     {
         $this->active = $active;
@@ -1276,8 +1226,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function isPasswordRequestNonExpired(int $ttl): bool
     {
-        return $this->getPasswordRequestedAt() instanceof DateTime && $this->getPasswordRequestedAt()->getTimestamp(
-        ) + $ttl > time();
+        return $this->getPasswordRequestedAt() instanceof DateTime
+            && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     public function getPasswordRequestedAt(): ?DateTime
@@ -1336,46 +1286,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setCredentialsExpireAt(?DateTime $date = null): self
     {
         $this->credentialsExpireAt = $date;
-
-        return $this;
-    }
-
-    public function getFullName(): string
-    {
-        if (empty($this->fullName)) {
-            return \sprintf('%s %s', $this->getFirstname(), $this->getLastname());
-        }
-
-        return $this->fullName;
-    }
-
-    public function setFullName(string $fullName): self
-    {
-        $this->fullName = $fullName;
-
-        return $this;
-    }
-
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(?string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(?string $lastname): self
-    {
-        $this->lastname = $lastname;
 
         return $this;
     }
@@ -1742,25 +1652,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function setRoleFromStatus(int $status): void
-    {
-        $role = self::getRoleFromStatus($status);
-        $this->addRole($role);
-    }
-
-    public static function getRoleFromStatus(int $status): string
-    {
-        return match ($status) {
-            COURSEMANAGER => 'ROLE_TEACHER',
-            STUDENT => 'ROLE_STUDENT',
-            DRH => 'ROLE_HR',
-            SESSIONADMIN => 'ROLE_SESSION_MANAGER',
-            STUDENT_BOSS => 'ROLE_STUDENT_BOSS',
-            INVITEE => 'ROLE_INVITEE',
-            default => 'ROLE_USER',
-        };
-    }
-
     public function addRole(string $role): self
     {
         $role = strtoupper(trim($role));
@@ -1781,21 +1672,38 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function removeRole(string $role): self
+    public function addTemporaryRole(string $role): self
     {
         $role = strtoupper(trim($role));
 
-        // If it's a context role, remove it from temporary roles.
-        if (\in_array($role, self::CONTEXT_ROLES, true)) {
-            return $this->removeTemporaryRole($role);
+        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
+            return $this;
         }
 
-        if (false !== ($key = array_search($role, $this->roles, true))) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
+        if (!\in_array($role, $this->temporaryRoles, true)) {
+            $this->temporaryRoles[] = $role;
         }
 
         return $this;
+    }
+
+    public function setRoleFromStatus(int $status): void
+    {
+        $role = self::getRoleFromStatus($status);
+        $this->addRole($role);
+    }
+
+    public static function getRoleFromStatus(int $status): string
+    {
+        return match ($status) {
+            COURSEMANAGER => 'ROLE_TEACHER',
+            STUDENT => 'ROLE_STUDENT',
+            DRH => 'ROLE_HR',
+            SESSIONADMIN => 'ROLE_SESSION_MANAGER',
+            STUDENT_BOSS => 'ROLE_STUDENT_BOSS',
+            INVITEE => 'ROLE_INVITEE',
+            default => 'ROLE_USER',
+        };
     }
 
     public function getUsernameCanonical(): string
@@ -2065,14 +1973,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return Collection<int, UserRelUser>
      */
-    public function getFriends(): Collection
-    {
-        return $this->friends;
-    }
-
-    /**
-     * @return Collection<int, UserRelUser>
-     */
     public function getFriendsWithMe(): Collection
     {
         return $this->friendsWithMe;
@@ -2238,35 +2138,41 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return '/img/user_default.svg';
     }
 
-    public function getAdmin(): ?Admin
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(?Admin $admin): self
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
-
     public function addUserAsAdmin(): self
     {
-        if (null === $this->admin) {
-            $admin = new Admin();
-            $admin->setUser($this);
-            $this->setAdmin($admin);
-            $this->addRole('ROLE_ADMIN');
+        return $this->addRole('ROLE_ADMIN');
+    }
+
+    public function removeUserAsAdmin(): self
+    {
+        return $this->removeRole('ROLE_ADMIN');
+    }
+
+    public function removeRole(string $role): self
+    {
+        $role = strtoupper(trim($role));
+
+        // If it's a context role, remove it from temporary roles.
+        if (\in_array($role, self::CONTEXT_ROLES, true)) {
+            return $this->removeTemporaryRole($role);
+        }
+
+        if (false !== ($key = array_search($role, $this->roles, true))) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
         }
 
         return $this;
     }
 
-    public function removeUserAsAdmin(): self
+    public function removeTemporaryRole(string $role): self
     {
-        $this->admin->setUser(null);
-        $this->admin = null;
-        $this->removeRole('ROLE_ADMIN');
+        $role = strtoupper(trim($role));
+
+        if (false !== ($key = array_search($role, $this->temporaryRoles, true))) {
+            unset($this->temporaryRoles[$key]);
+            $this->temporaryRoles = array_values($this->temporaryRoles);
+        }
 
         return $this;
     }
@@ -2392,9 +2298,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             )
         );
 
-        return $categoryCourses->isEmpty() ? 0 : max(
-            $categoryCourses->map(fn ($courseRelUser) => $courseRelUser->getSort())->toArray()
-        );
+        return $categoryCourses->isEmpty()
+            ? 0
+            : max(
+                $categoryCourses->map(fn ($courseRelUser) => $courseRelUser->getSort())->toArray()
+            );
     }
 
     public function hasFriendWithRelationType(self $friend, int $relationType): bool
@@ -2402,14 +2310,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $friends = $this->getFriendsByRelationType($relationType);
 
         return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
-    }
-
-    public function isFriendWithMeByRelationType(self $friend, int $relationType): bool
-    {
-        return $this
-            ->getFriendsWithMeByRelationType($relationType)
-            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
-        ;
     }
 
     /**
@@ -2423,6 +2323,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $criteria->where(Criteria::expr()->eq('relationType', $relationType));
 
         return $this->friends->matching($criteria);
+    }
+
+    public function isFriendWithMeByRelationType(self $friend, int $relationType): bool
+    {
+        return $this
+            ->getFriendsWithMeByRelationType($relationType)
+            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
+        ;
     }
 
     public function getFriendsWithMeByRelationType(int $relationType): Collection
@@ -2443,6 +2351,14 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return $friendsOfFriends;
+    }
+
+    /**
+     * @return Collection<int, UserRelUser>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
     }
 
     /**
@@ -2554,19 +2470,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * @return Collection<int, UserAuthSource>
-     */
-    public function getAuthSourcesByUrl(AccessUrl $url): Collection
-    {
-        $criteria = Criteria::create();
-        $criteria->where(
-            Criteria::expr()->eq('url', $url)
-        );
-
-        return $this->authSources->matching($criteria);
-    }
-
-    /**
      * @return array<int, string>
      */
     public function getAuthSourcesAuthentications(?AccessUrl $url = null): array
@@ -2580,14 +2483,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
     }
 
-    public function addAuthSource(UserAuthSource $authSource): static
+    /**
+     * @return Collection<int, UserAuthSource>
+     */
+    public function getAuthSourcesByUrl(AccessUrl $url): Collection
     {
-        if (!$this->authSources->contains($authSource)) {
-            $this->authSources->add($authSource);
-            $authSource->setUser($this);
-        }
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('url', $url)
+        );
 
-        return $this;
+        return $this->authSources->matching($criteria);
     }
 
     public function addAuthSourceByAuthentication(string $authentication, AccessUrl $url): static
@@ -2606,19 +2512,29 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function hasAuthSourceByAuthentication(string $authentication): bool
-    {
-        return $this->authSources->exists(
-            fn ($key, $authSource) => $authSource instanceof UserAuthSource
-                && $authSource->getAuthentication() === $authentication
-        );
-    }
-
     public function getAuthSourceByAuthentication(string $authentication, AccessUrl $accessUrl): ?UserAuthSource
     {
         return $this->authSources->findFirst(
             fn (int $index, UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
                 && $authSource->getUrl()->getId() === $accessUrl->getId()
+        );
+    }
+
+    public function addAuthSource(UserAuthSource $authSource): static
+    {
+        if (!$this->authSources->contains($authSource)) {
+            $this->authSources->add($authSource);
+            $authSource->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function hasAuthSourceByAuthentication(string $authentication): bool
+    {
+        return $this->authSources->exists(
+            fn ($key, $authSource) => $authSource instanceof UserAuthSource
+                && $authSource->getAuthentication() === $authentication
         );
     }
 
@@ -2725,6 +2641,46 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->getFullName().' ('.$this->getUsername().')';
     }
 
+    public function getFullName(): string
+    {
+        if (empty($this->fullName)) {
+            return \sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+        }
+
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
     /**
      * Clears any context roles (temporary) and also removes them from persisted roles
      * for backward compatibility (in case they were stored by mistake in older versions).
@@ -2741,45 +2697,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    public function clearTemporaryRoles(): self
+    {
+        $this->temporaryRoles = [];
+
+        return $this;
+    }
+
     /**
      * @return string[]
      */
     public function getTemporaryRoles(): array
     {
         return $this->temporaryRoles;
-    }
-
-    public function addTemporaryRole(string $role): self
-    {
-        $role = strtoupper(trim($role));
-
-        if ('' === $role || self::ROLE_DEFAULT === $role || 'ROLE_USER' === $role) {
-            return $this;
-        }
-
-        if (!\in_array($role, $this->temporaryRoles, true)) {
-            $this->temporaryRoles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeTemporaryRole(string $role): self
-    {
-        $role = strtoupper(trim($role));
-
-        if (false !== ($key = array_search($role, $this->temporaryRoles, true))) {
-            unset($this->temporaryRoles[$key]);
-            $this->temporaryRoles = array_values($this->temporaryRoles);
-        }
-
-        return $this;
-    }
-
-    public function clearTemporaryRoles(): self
-    {
-        $this->temporaryRoles = [];
-
-        return $this;
     }
 }

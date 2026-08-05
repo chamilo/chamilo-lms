@@ -1,6 +1,10 @@
 export default {
   path: "/resources/links/:node/",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: {
+    requiresAuth: true,
+    showBreadcrumb: true,
+    tool: "link",
+  },
   name: "links",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   redirect: { name: "LinksList" },

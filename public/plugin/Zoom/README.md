@@ -1,5 +1,7 @@
 This plugin adds Zoom meetings, user registration to meetings and meeting recordings.
 
+Commercial model: this plugin is free to use in Chamilo, but it connects to the external Zoom service, which may require a paid Zoom account depending on the features used.
+
 ## Setup
 
 Once enabled, it will show as an additional course tool in all courses' homepage :
@@ -19,7 +21,7 @@ To get them, create a *JWT App* :
 6. Click on *Continue*
 7. App Credentials: <strong>copy your API Key and Secret to these fields below</strong>
 8. click on *Continue*
-9. Feature: enable *Event Subscriptions* to add a new one with endpoint URL `https://your.chamilo.url/plugin/zoom/endpoint.php` and add these event types:
+9. Feature: enable *Event Subscriptions* to add a new one with endpoint URL `https://your.chamilo.url/plugin/Zoom/endpoint.php` and add these event types:
  - Start Meeting
  - End Meeting
  - Participant/Host joined meeting
@@ -68,3 +70,17 @@ The user that starts the meeting will be identified as the Zoom account that is 
 # Contributing
 
 Read README.code.md for an introduction to the plugin's code.
+
+
+## Chamilo 2 / Zoom Server-to-Server OAuth
+
+For new Zoom integrations, configure a Server-to-Server OAuth app in Zoom and fill:
+
+- Account ID
+- Client ID
+- Client Secret
+- Webhook Secret Token
+
+The legacy JWT settings (`API Key`, `API Secret`, `Verification Token`) are kept only as backward-compatible fallback for existing installations.
+
+For a basic no-cost demo, keep automatic recording set to `None`, disable participant registration, disable global conference, and create a simple scheduled course meeting.

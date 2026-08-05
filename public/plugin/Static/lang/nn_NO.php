@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Vis statisk HTML-innhald.';
 $strings['block_title'] = 'Blokk-tittel';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Innhald';

@@ -21,7 +21,7 @@
                         <h2 class="session-title">{{ session.title }}</h2>
                         {% if show_tutor and session.generalCoach %}
                             <div class="session-tutor">
-                                <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|trans }}:
+                                <em class="fa fa-user"></em> {{ 'General tutor'|trans }}:
                                 <em>{{ session.generalCoach.getFullName() }}</em>
                             </div>
                         {% endif %}
@@ -274,7 +274,7 @@
                         <div class="panel-body">
                             {% if course_data.coaches %}
                                 <div class="panel-teachers">
-                                    <h3 class="sub-title">{{ "Coaches"|trans }}</h3>
+                                    <h3 class="sub-title">{{ "Tutors"|trans }}</h3>
                                     {% for coach in course_data.coaches %}
                                         <div class="coach-information">
                                             <div class="coach-header">

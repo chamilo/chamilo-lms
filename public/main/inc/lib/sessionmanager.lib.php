@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -239,6 +242,13 @@ class SessionManager
                 if (!empty($duration)) {
                     $session->setDuration((int) $duration);
                 } else {
+                    [$coachStartDate, $coachEndDate] = self::applyDefaultCoachAccessDates(
+                        $startDate,
+                        $endDate,
+                        $coachStartDate,
+                        $coachEndDate
+                    );
+
                     $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
                     $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
                     $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
@@ -1258,6 +1268,8 @@ class SessionManager
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
+        $courseEntity = api_get_course_entity((int) $course['real_id']);
+        $wikiNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
         $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
 
         $limit = null;
@@ -1408,6 +1420,19 @@ class SessionManager
             $getAllSessions
         );
 
+        $wikiQuery = [
+            'cid' => (int) $course['real_id'],
+            'report' => 'statistics',
+        ];
+        if ($sessionId > 0) {
+            $wikiQuery['sid'] = $sessionId;
+        }
+        $linkWiki = '%s';
+        if ($wikiNodeId > 0) {
+            $linkWiki = '<a href="'.api_get_path(WEB_PATH).'resources/wiki/'.$wikiNodeId.'/reports?'.
+                http_build_query($wikiQuery).'"> %s </a>';
+        }
+
         //process table info
         foreach ($users as $user) {
             //Course description
@@ -1526,7 +1551,6 @@ class SessionManager
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&sid='.$sessionId.'"> %s </a>';
             $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
-            $linkWiki = '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'&action=statistics"> %s </a>';
             $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
 
             $table[] = [
@@ -1902,9 +1926,9 @@ class SessionManager
                     $sessionEntity->setParentId(null);
                 }
 
-                $sessionEntity->setDaysToReinscription($daysBeforeFinishingForReinscription);
+                $sessionEntity->setDaysToReinscription('' !== (string) $daysBeforeFinishingForReinscription ? (int) $daysBeforeFinishingForReinscription : null);
                 $sessionEntity->setLastRepetition($lastRepetition);
-                $sessionEntity->setDaysToNewRepetition($daysBeforeFinishingToCreateNewRepetition);
+                $sessionEntity->setDaysToNewRepetition('' !== (string) $daysBeforeFinishingToCreateNewRepetition ? (int) $daysBeforeFinishingToCreateNewRepetition : null);
 
                 $newGeneralCoaches = array_map(
                     fn($coachId) => api_get_user_entity($coachId),
@@ -2203,6 +2227,14 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
+            $showUsername = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_username'
+                );
+            $showLostPasswordLink = 'true' === api_get_setting(
+                    'session.email_template_subscription_to_session_confirmation_lost_password'
+                );
+            $lostPasswordUrl = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php';
+
             foreach ($userList as $user_id) {
                 $tplSubject = new Template(
                     null,
@@ -2212,11 +2244,27 @@ class SessionManager
                     false,
                     false
                 );
-                $layoutSubject = $tplSubject->get_template(
-                    'mail/subject_subscription_to_session_confirmation.tpl'
+                $subject = '';
+                $mailTemplateManagerSubject = new MailTemplateManager();
+                $subjectTemplateText = $mailTemplateManagerSubject->getTemplateByType(
+                    'subject_subscription_to_session_confirmation.html.twig'
                 );
-                $subject = $tplSubject->fetch($layoutSubject);
+                if (!empty($subjectTemplateText)) {
+                    // Stored mail templates are admin-edited and therefore untrusted: render
+                    // them through a sandboxed Twig environment instead of compiling the raw
+                    // string with the full application Twig (which would allow SSTI → RCE).
+                    $subject = MailTemplateManager::renderSandboxedTemplate($subjectTemplateText, $tplSubject->params);
+                }
+                if (empty($subject)) {
+                    $layoutSubject = $tplSubject->get_template(
+                        'mail/subject_subscription_to_session_confirmation.tpl'
+                    );
+                    $subject = $tplSubject->fetch($layoutSubject);
+                }
+
                 $user_info = api_get_user_info($user_id);
+
+                $username = $user_info['username'] ?? $user_info['user_name'] ?? '';
 
                 $tplContent = new Template(
                     null,
@@ -2226,19 +2274,42 @@ class SessionManager
                     false,
                     false
                 );
-                // Variables for default template
+
+                // Variables for default template.
                 $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
                 $tplContent->assign('session_name', $session->getTitle());
                 $tplContent->assign(
                     'session_coaches',
                     $session->getGeneralCoaches()->map(fn(User $coach) => UserManager::formatUserFullName($coach))
                 );
-                $layoutContent = $tplContent->get_template(
-                    'mail/content_subscription_to_session_confirmation.tpl'
-                );
-                $content = $tplContent->fetch($layoutContent);
 
-                // Send email
+                // Optional variables controlled by session settings.
+                $tplContent->assign('show_username', $showUsername);
+                $tplContent->assign('username', $username);
+                $tplContent->assign('username_label', get_lang('Username'));
+                $tplContent->assign('show_lost_password_link', $showLostPasswordLink);
+                $tplContent->assign('lost_password_url', $lostPasswordUrl);
+                $tplContent->assign('lost_password_link_label', get_lang('Recover your password'));
+
+                $content = '';
+                $mailTemplateManager = new MailTemplateManager();
+                $templateText = $mailTemplateManager->getTemplateByType(
+                    'content_subscription_to_session_confirmation.html.twig'
+                );
+                if (!empty($templateText)) {
+                    // Stored mail templates are admin-edited and therefore untrusted: render
+                    // them through a sandboxed Twig environment instead of compiling the raw
+                    // string with the full application Twig (which would allow SSTI → RCE).
+                    $content = MailTemplateManager::renderSandboxedTemplate($templateText, $tplContent->params);
+                }
+                if (empty($content)) {
+                    $layoutContent = $tplContent->get_template(
+                        'mail/content_subscription_to_session_confirmation.tpl'
+                    );
+                    $content = $tplContent->fetch($layoutContent);
+                }
+
+                // Send email.
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
@@ -2246,7 +2317,7 @@ class SessionManager
                     $content
                 );
 
-                // Record message in system
+                // Record message in system.
                 MessageManager::send_message_simple(
                     $user_id,
                     $subject,
@@ -2345,8 +2416,8 @@ class SessionManager
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
                 if ($session->getDuration() > 0) {
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
+                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
                 } else {
                     if (null != ($accessStartDate = $session->getAccessStartDate())) {
                         $accessStartDate = "'".$accessStartDate->format('Y-m-d H:i:s')."'";
@@ -2358,8 +2429,8 @@ class SessionManager
                     } else {
                         $accessEndDate = "NULL";
                     }
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at, access_start_date, access_end_date)
-                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at, access_start_date, access_end_date)
+                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
                 }
                 Database::query($sql);
                 Event::addEvent(
@@ -2667,6 +2738,34 @@ class SessionManager
                     0,
                     true
                 );
+            }
+        }
+
+        if (!empty($user_list)) {
+            $subscriptionCheckEvent = new CourseUserSubscriptionCheckEvent(
+                [
+                    'course_id' => $courseId,
+                    'user_ids' => $user_list,
+                    'status' => STUDENT,
+                    'session_id' => $session_id,
+                ],
+                AbstractEvent::TYPE_PRE
+            );
+
+            Container::getEventDispatcher()->dispatch(
+                $subscriptionCheckEvent,
+                Events::COURSE_USER_SUBSCRIPTION_CHECK
+            );
+
+            if (!$subscriptionCheckEvent->isAllowed()) {
+                Display::addFlash(
+                    Display::return_message(
+                        $subscriptionCheckEvent->getMessage() ?: get_lang('Subscription not allowed'),
+                        'warning'
+                    )
+                );
+
+                return false;
             }
         }
 
@@ -3922,8 +4021,12 @@ class SessionManager
             return 0;
         }
 
-        $userId = $userInfo['user_id'];
-        $user = api_get_user_entity();
+        $userId = (int) $userInfo['user_id'];
+        $user = api_get_user_entity($userId);
+
+        if (null === $user) {
+            return 0;
+        }
 
         // Only subscribe DRH users.
         $rolesAllowed = [
@@ -3933,7 +4036,8 @@ class SessionManager
             COURSE_TUTOR,
         ];
         $isAdmin = api_is_platform_admin_by_id($userInfo['user_id']);
-        if (!$isAdmin && !in_array($userInfo['status'], $rolesAllowed)) {
+        $currentUserCanAssignFromDashboard = api_is_platform_admin();
+        if (!$isAdmin && !$currentUserCanAssignFromDashboard && !in_array($userInfo['status'], $rolesAllowed)) {
             return 0;
         }
 
@@ -4644,9 +4748,12 @@ class SessionManager
             $access_url_id = api_get_current_access_url_id();
 
             if (-1 != $access_url_id) {
-                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
+                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl AS access_url_rel_session
                     ON (s.id = access_url_rel_session.session_id)";
-                $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
+                $urlCondition = "access_url_rel_session.access_url_id = $access_url_id";
+                $whereConditions = empty($whereConditions)
+                    ? $urlCondition
+                    : $whereConditions.' AND '.$urlCondition;
             }
         }
         $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";
@@ -5307,8 +5414,8 @@ class SessionManager
 
             $displayAccessStartDate = $enreg['DisplayStartDate'] ?? $enreg['DateStart'];
             $displayAccessEndDate = $enreg['DisplayEndDate'] ?? $enreg['DateEnd'];
-            $coachAccessStartDate = $enreg['CoachStartDate'] ?? $enreg['DateStart'];
-            $coachAccessEndDate = $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
+            $coachAccessStartDate = $enreg['TutorStartDate'] ?? $enreg['CoachStartDate'] ?? $enreg['DateStart'];
+            $coachAccessEndDate = $enreg['TutorEndDate'] ?? $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
             $dateStart = date('Y-m-d H:i:s', strtotime(trim($enreg['DateStart'])));
             $displayAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($displayAccessStartDate)));
             $coachAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($coachAccessStartDate)));
@@ -5356,11 +5463,12 @@ class SessionManager
                 $extraParams['session_category_id'] = $session_category_id;
             }
 
-            // Searching a general coach.
-            if (!empty($enreg['Coach'])) {
-                $coach_id = UserManager::get_user_id_from_username($enreg['Coach']);
+            // Searching a general tutor.
+            $tutorUsername = $enreg['Tutor'] ?? $enreg['Coach'] ?? '';
+            if (!empty($tutorUsername)) {
+                $coach_id = UserManager::get_user_id_from_username($tutorUsername);
                 if (false === $coach_id) {
-                    // If the coach-user does not exist - I'm the coach.
+                    // If the tutor user does not exist, use the default user.
                     $coach_id = $defaultUserId;
                 }
             } else {
@@ -5378,7 +5486,7 @@ class SessionManager
             $deleteOnlyCourseCoaches = false;
             if (1 == count($courses)) {
                 if ($logger) {
-                    $logger->debug('Only one course delete old coach list');
+                    $logger->debug('Only one course: delete the old tutor list');
                 }
                 $deleteOnlyCourseCoaches = true;
             }
@@ -5844,7 +5952,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->debug("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        $logger->debug("Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                     }
                                     $savedCoaches[] = $coach_id;
                                 } else {
@@ -5933,7 +6041,7 @@ class SessionManager
                                 );
 
                                 if ($debug) {
-                                    $logger->debug("Add coach #$teacherToAdd to course $courseId and session $session_id");
+                                    $logger->debug("Add tutor #$teacherToAdd to course $courseId and session $session_id");
                                 }
 
                                 $userCourseCategory = '';
@@ -6125,7 +6233,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->debug("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->debug("Sessions - Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -6307,7 +6415,8 @@ class SessionManager
         if (isset($root->Session)) {
             foreach ($root->Session as $nodeSession) {
                 $sessionName = trim(api_utf8_decode($nodeSession->SessionName));
-                $coachUsername = trim(api_utf8_decode($nodeSession->Coach));
+                $tutorNode = isset($nodeSession->Tutor) ? $nodeSession->Tutor : $nodeSession->Coach;
+                $coachUsername = trim(api_utf8_decode((string) $tutorNode));
                 $coachId = UserManager::get_user_id_from_username($coachUsername) ?: $defaultUserId;
                 $dateStart = api_utf8_decode($nodeSession->DateStart);
                 $dateEnd = api_utf8_decode($nodeSession->DateEnd);
@@ -6414,7 +6523,8 @@ class SessionManager
                             'nbr_users' => 0,
                             'position' => 0,
                         ]);
-                        $courseCoachUsernames = explode(',', $nodeCourse->Coach);
+                        $tutorNode = isset($nodeCourse->Tutor) ? $nodeCourse->Tutor : $nodeCourse->Coach;
+                        $courseCoachUsernames = explode(',', (string) $tutorNode);
                         foreach ($courseCoachUsernames as $coachUname) {
                             $coachId = UserManager::get_user_id_from_username(trim($coachUname));
                             if ($coachId) {
@@ -6766,8 +6876,8 @@ class SessionManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -6971,7 +7081,7 @@ class SessionManager
     }
 
     /**
-     * Assign coaches of a session(s) as teachers to a given course (or courses).
+     * Assign tutors of a session(s) as teachers to a given course (or courses).
      *
      * @param array A list of session IDs
      * @param array A list of course IDs
@@ -7010,7 +7120,7 @@ class SessionManager
             foreach ($result as $courseCode => $data) {
                 $url = api_get_course_url($courseCode);
                 $htmlResult .= sprintf(
-                    get_lang('Coaches subscribed as teachers in course %s'),
+                    get_lang('Tutors subscribed as teachers in course %s'),
                     Display::url($courseCode, $url, ['target' => '_blank'])
                 );
                 foreach ($data as $sessionId => $coachList) {
@@ -8452,7 +8562,7 @@ class SessionManager
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
                 'coach_username',
-                [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                 [api_get_user_entity()],
                 [
                     'id' => 'coach_username',
@@ -8502,7 +8612,7 @@ class SessionManager
 
                 $form->addSelect(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coachesOptions,
                     [
                         'id' => 'coach_username',
@@ -8521,7 +8631,7 @@ class SessionManager
 
                 $form->addSelectAjax(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coaches,
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',
@@ -8678,8 +8788,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_start_date',
             [
-                get_lang('Access start date for coaches'),
-                get_lang('Date on which the session is made available to coaches, so they can prepare it before the students get connected'),
+                get_lang('Access start date for tutors'),
+                get_lang('Date on which the session is made available to tutors, so they can prepare it before the students get connected'),
             ],
             ['id' => 'coach_access_start_date']
         );
@@ -8687,8 +8797,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_end_date',
             [
-                get_lang('Access end date for coaches'),
-                get_lang('Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information'),
+                get_lang('Access end date for tutors'),
+                get_lang('Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information'),
             ],
             ['id' => 'coach_access_end_date']
         );
@@ -8964,10 +9074,10 @@ class SessionManager
         $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active
                        FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
@@ -9266,7 +9376,7 @@ class SessionManager
                     get_lang('Title'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
-                    get_lang('Coach'),
+                    get_lang('Tutor'),
                     get_lang('Status'),
                     get_lang('Visibility'),
                     get_lang('Course title'),
@@ -9627,10 +9737,10 @@ class SessionManager
                     SELECT DISTINCT
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active,
                 s.title,
                 s.nbr_courses,
@@ -10156,11 +10266,11 @@ class SessionManager
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)
-                FROM ChamiloCoreBundle:SessionRelCourseRelUser scu
-                INNER JOIN ChamiloCoreBundle:SessionRelUser su
+                FROM Chamilo\CoreBundle\Entity\SessionRelCourseRelUser scu
+                INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                INNER JOIN ChamiloCoreBundle:AccessUrlRelUser a
+                INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser a
                     WITH a.user = su.user
                 WHERE
                     scu.course = :course AND
@@ -11074,5 +11184,131 @@ class SessionManager
         }
 
         return [$csvHeaders, $csvContent];
+    }
+
+    public static function isCourseUserSubscriptionLimitedToSessionUsers(): bool
+    {
+        return 'true' === api_get_setting('session.session_course_users_subscription_limited_to_session_users');
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public static function getSessionStudentUserIds(int $sessionId): array
+    {
+        if (0 >= $sessionId) {
+            return [];
+        }
+
+        $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sql = "SELECT user_id
+            FROM $tableSessionRelUser
+            WHERE session_id = $sessionId
+              AND relation_type = ".Session::STUDENT;
+
+        $result = Database::query($sql);
+        $userIds = [];
+
+        while ($row = Database::fetch_assoc($result)) {
+            $userId = (int) $row['user_id'];
+            $userIds[$userId] = $userId;
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * @param array<int|string> $userIds
+     *
+     * @return array<int, int>
+     */
+    public static function filterUsersSubscribedToSession(int $sessionId, array $userIds): array
+    {
+        if (0 >= $sessionId || empty($userIds)) {
+            return [];
+        }
+
+        $userIds = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $userIds)
+                )
+            )
+        );
+
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $sessionUserIds = self::getSessionStudentUserIds($sessionId);
+
+        return array_values(
+            array_intersect($userIds, $sessionUserIds)
+        );
+    }
+
+    /**
+     * Applies default coach access dates when no explicit coach dates were provided.
+     *
+     * @return array{0: ?string, 1: ?string}
+     */
+    private static function applyDefaultCoachAccessDates(
+        ?string $startDate,
+        ?string $endDate,
+        ?string $coachStartDate,
+        ?string $coachEndDate
+    ): array {
+        if (empty($coachStartDate) && !empty($startDate)) {
+            $daysBefore = self::getPositiveIntegerSetting('session.session_days_before_coach_access');
+
+            if (0 < $daysBefore) {
+                $coachStartDate = self::shiftSessionDate($startDate, -$daysBefore);
+            }
+        }
+
+        if (empty($coachEndDate) && !empty($endDate)) {
+            $daysAfter = self::getPositiveIntegerSetting('session.session_days_after_coach_access');
+
+            if (0 < $daysAfter) {
+                $coachEndDate = self::shiftSessionDate($endDate, $daysAfter);
+            }
+        }
+
+        return [$coachStartDate, $coachEndDate];
+    }
+
+    private static function getPositiveIntegerSetting(string $setting): int
+    {
+        $value = (int) api_get_setting($setting);
+
+        return max(0, $value);
+    }
+
+    private static function shiftSessionDate(string $date, int $days): ?string
+    {
+        $date = trim($date);
+
+        if ('' === $date) {
+            return null;
+        }
+
+        $format = str_contains($date, ':') && 19 === strlen($date)
+            ? 'Y-m-d H:i:s'
+            : 'Y-m-d H:i';
+
+        $dateTime = DateTimeImmutable::createFromFormat($format, $date);
+
+        if (!$dateTime instanceof DateTimeImmutable) {
+            return null;
+        }
+
+        if (0 < $days) {
+            $dateTime = $dateTime->modify('+'.$days.' days');
+        } elseif (0 > $days) {
+            $dateTime = $dateTime->modify($days.' days');
+        }
+
+        return $dateTime->format($format);
     }
 }

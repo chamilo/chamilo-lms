@@ -127,13 +127,12 @@ final class Version20241003120000 extends AbstractMigrationChamilo
         $pattern = '/(href|src)="[^"]*\/app\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)"/i';
 
         // Use a callback function to process each matched URL
-        return preg_replace_callback($pattern, function ($matches) use ($fallbackUser, $personalRepo) {
+        $result = preg_replace_callback($pattern, function ($matches) use ($fallbackUser, $personalRepo) {
             $attribute = $matches[1];      // Capture whether it's a `href` or `src`
-            $folderId = (int) $matches[2];  // Capture the first digit of the userId (folderId)
             $userId = (int) $matches[3];    // Capture the full userId
             $filename = urldecode($matches[4]);  // Decode the filename
 
-            error_log("Processing file: $filename for userId: $userId (Folder ID: $folderId)");
+            error_log("Processing file: $filename for userId: $userId");
 
             $user = $this->entityManager->getRepository(User::class)->find($userId);
             if (!$user) {
@@ -156,5 +155,9 @@ final class Version20241003120000 extends AbstractMigrationChamilo
             // Return the original URL if no file was found
             return $matches[0];
         }, $content);
+
+        // preg_replace_callback returns null on error (e.g. PCRE backtrack limit exceeded);
+        // fall back to the original content so the migration does not abort.
+        return $result ?? $content;
     }
 }

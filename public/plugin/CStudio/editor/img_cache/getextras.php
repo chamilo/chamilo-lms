@@ -26,14 +26,20 @@ if (isset($_GET['id'])) {
 
 $pluginFileSystem = Container::getPluginsFileSystem();
 $cacheFileRel = 'CStudio/editor/img_cache/tmp/imgextras_'.$idPage.'.json';
-if ($pluginFileSystem->fileExists($cacheFileRel)) {
-    $cacheContent = $pluginFileSystem->read($cacheFileRel);
-    $lastModified = $pluginFileSystem->lastModified($cacheFileRel);
-    if ((time() - $lastModified) < 300) {
-        echo $cacheContent;
 
-        exit;
+try {
+    if ($pluginFileSystem->fileExists($cacheFileRel)) {
+        $cacheContent = $pluginFileSystem->read($cacheFileRel);
+        $lastModified = $pluginFileSystem->lastModified($cacheFileRel);
+
+        if ((time() - $lastModified) < 300) {
+            echo $cacheContent;
+
+            exit;
+        }
     }
+} catch (\Throwable $exception) {
+    error_log('CStudio getextras cache read failed: '.$exception->getMessage());
 }
 
 require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
@@ -97,6 +103,15 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
     $finalJson .= '];';
     echo $finalJson;
 
-    $pluginFileSystem->createDirectory('CStudio/editor/img_cache/tmp');
-    $pluginFileSystem->write($cacheFileRel, $finalJson);
+    try {
+        $cacheDirRel = 'CStudio/editor/img_cache/tmp';
+
+        if (!$pluginFileSystem->directoryExists($cacheDirRel)) {
+            $pluginFileSystem->createDirectory($cacheDirRel);
+        }
+
+        $pluginFileSystem->write($cacheFileRel, $finalJson);
+    } catch (\Throwable $exception) {
+        error_log('CStudio getextras cache write failed: '.$exception->getMessage());
+    }
 }

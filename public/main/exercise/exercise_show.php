@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use ChamiloSession as Session;
 
 /**
@@ -120,8 +122,12 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
 
 $allowCoachFeedbackExercises = 'true' === api_get_setting('exercise.allow_coach_feedback_exercises');
 $maxEditors = (int) api_get_setting('exercise.exercise_max_editors_in_page');
-$enableAi     = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
-$openAnsGrader= 'true' === api_get_setting('ai_helpers.open_answers_grader');
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+$enableAi = $aiFeatureAccessHelper->isFeatureEnabledForCourse(
+    'open_answers_grader',
+    api_get_course_int_id()
+);
+$openAnsGrader = $enableAi;
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 
@@ -514,6 +520,14 @@ foreach ($questionList as $questionId) {
             $totalScore += $question_result['score'];
 
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
+                $hotspotCidReqQueryParams = json_encode(
+                    api_get_cidreq_params(
+                        api_get_course_int_id(),
+                        api_get_session_id(),
+                        api_get_group_id()
+                    ),
+                    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+                );
                 echo '</table></td></tr>';
                 echo "
                         <tr>
@@ -527,7 +541,8 @@ foreach ($questionList as $questionId) {
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
-                                            relPath: '$relPath'
+                                            relPath: '$relPath',
+                                            cidReqQueryParams: $hotspotCidReqQueryParams
                                         });
                                     });
                                 </script>
@@ -913,13 +928,11 @@ if (!empty($end_of_message) && ('learnpath' === $origin)) {
 
 $totalScoreText = '';
 
-if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType) {
+if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $answerType && class_exists('QuestionOptionsEvaluationPlugin')) {
     $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
-    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+    if ($pluginEvaluation->isEnabled()) {
         $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
-
-        if (!empty($formula)) {
+        if ($pluginEvaluation->shouldApplyFormula($formula)) {
             $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
             $totalWeighting = $pluginEvaluation->getMaxScore();
         }
@@ -1035,9 +1048,18 @@ if ('export' === $action) {
     if (ob_get_contents()) {
         ob_clean();
     }
+    $includeOfficialCode = '';
+    if ('true' === api_get_setting('exercise.quiz_result_pdf_export_include_official_code_in_file_name')) {
+        $officialCode = trim((string) ($user_info['official_code'] ?? ''));
+        if ('' !== $officialCode) {
+            $includeOfficialCode = $officialCode.' ';
+        }
+    }
+
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.
+            $includeOfficialCode.
             $user_info['complete_name'].' '.
             api_get_local_time()
         ),
@@ -1060,7 +1082,7 @@ if ('export' === $action) {
         if (!is_dir($exportFolderPath)) {
             @mkdir($exportFolderPath);
         }
-        $pdfFileName = $user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
+        $pdfFileName = $includeOfficialCode.$user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
         $pdfFileName = api_replace_dangerous_char($pdfFileName);
         $fileNameToSave = $exportFolderPath.'/'.$pdfFileName;
         $pdf->html_to_pdf_with_template($content, true, false, true, [], 'F', $fileNameToSave);

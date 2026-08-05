@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Elektronsko ocjenjivanje je onemogućeno';
 $strings['StudentId'] = 'ID studenta';
 $strings['ProviderId'] = 'ID pružatelja';
 $strings['CourseHours'] = 'Sati predmeta';
+
+$strings['GenerateFile'] = 'Generiraj datoteku';
+$strings['CourseId'] = 'ID tečaja';

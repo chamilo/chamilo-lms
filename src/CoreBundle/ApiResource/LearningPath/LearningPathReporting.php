@@ -1,0 +1,157 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\ApiResource\LearningPath;
+
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingProvider;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingRecalculateProcessor;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathReportingResetProcessor;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Attribute\Groups;
+
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: '/learning_paths/{lpId}/reporting',
+            requirements: ['lpId' => '\d+'],
+            name: 'get_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            provider: LearningPathReportingProvider::class,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+        ),
+        new Post(
+            uriTemplate: '/learning_paths/{lpId}/reporting/recalculate',
+            requirements: ['lpId' => '\d+'],
+            read: false,
+            status: Response::HTTP_NO_CONTENT,
+            input: LearningPathReportingRecalculateInput::class,
+            output: false,
+            denormalizationContext: ['groups' => ['learning_path_reporting_recalculate:write']],
+            name: 'recalculate_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            processor: LearningPathReportingRecalculateProcessor::class,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+        ),
+        new Post(
+            uriTemplate: '/learning_paths/{lpId}/reporting/reset',
+            requirements: ['lpId' => '\d+'],
+            status: Response::HTTP_NO_CONTENT,
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            input: LearningPathReportingResetInput::class,
+            output: false,
+            read: false,
+            name: 'reset_learning_path_reporting',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            processor: LearningPathReportingResetProcessor::class,
+        ),
+    ],
+    normalizationContext: ['groups' => ['learning_path_reporting:read']],
+    denormalizationContext: ['groups' => ['learning_path_reporting_reset:write']],
+)]
+final class LearningPathReporting
+{
+    #[ApiProperty(identifier: true)]
+    #[Groups(['learning_path_reporting:read'])]
+    public int $lpId = 0;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public string $lpTitle = '';
+
+    #[Groups(['learning_path_reporting:read'])]
+    public int $courseId = 0;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public string $courseTitle = '';
+
+    #[Groups(['learning_path_reporting:read'])]
+    public int $sessionId = 0;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public bool $showEmail = false;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public bool $hideTime = false;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public bool $reducedReport = false;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public bool $allowUserGroups = false;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public bool $showTeachers = false;
+
+    #[Groups(['learning_path_reporting:read'])]
+    public string $groupFilter = '';
+
+    /**
+     * @var array<int, array{label: string, value: string}>
+     */
+    #[Groups(['learning_path_reporting:read'])]
+    public array $groupOptions = [];
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['learning_path_reporting:read'])]
+    public array $learners = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[Groups(['learning_path_reporting:read'])]
+    public array $detail = [];
+
+    #[Groups(['learning_path_reporting:read'])]
+    public string $csrfToken = '';
+}

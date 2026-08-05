@@ -22,7 +22,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -36,7 +36,7 @@
                     {% if not has_eligible_payouts %}disabled="disabled"{% endif %}
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 {% if not has_eligible_payouts %}cursor-not-allowed opacity-50{% endif %}"
                 >
-                    <em class="fa fa-paypal fa-fw"></em>
+                    <em class="mdi mdi-bank-transfer"></em>
                     {{ 'ContinuePayout'|get_plugin_lang('BuyCoursesPlugin') }}
                 </button>
             </div>
@@ -160,7 +160,7 @@
                                     type="button"
                                     class="cancelPayout inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
                                 >
-                                    <em class="fa fa-ban fa-fw"></em>
+                                    <em class="mdi mdi-cancel"></em>
                                     {{ 'CancelPayout'|get_plugin_lang('BuyCoursesPlugin') }}
                                 </button>
                             </td>
@@ -170,7 +170,7 @@
                             <td colspan="6" class="px-4 py-10 text-center">
                                 <div class="mx-auto max-w-md space-y-2">
                                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
-                                        <em class="fa fa-paypal text-xl"></em>
+                                        <em class="mdi mdi-bank-transfer text-xl"></em>
                                     </div>
                                     <h3 class="text-lg font-semibold text-gray-90">
                                         {{ 'NoResults'|get_lang }}
@@ -204,7 +204,7 @@
                         type="button"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2"
                     >
-                        <em class="fa fa-paypal fa-fw"></em>
+                        <em class="mdi mdi-bank-transfer"></em>
                         {{ 'ProceedPayout'|get_plugin_lang('BuyCoursesPlugin') }}
                     </button>
 

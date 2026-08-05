@@ -30,16 +30,23 @@ class ScoreDisplay
         }
 
         // Loading portal settings + using standard functions.
-        $value = api_get_setting('gradebook_score_display_coloring');
+        $value = api_get_setting('gradebook.my_display_coloring');
 
-        // Setting coloring.
-        $this->coloring_enabled = 'true' == $value ? true : false;
+        if (null === $value || '' === (string) $value) {
+            $value = api_get_setting('gradebook_score_display_coloring');
+        }
+
+// Setting coloring.
+        $this->coloring_enabled = 'true' === (string) $value || '1' === (string) $value;
 
         if ($this->coloring_enabled) {
-            $value = api_get_setting('gradebook_score_display_colorsplit');
-            if (isset($value)) {
-                $this->color_split_value = $value;
+            $value = api_get_setting('gradebook.gradebook_score_display_colorsplit');
+
+            if (null === $value || '' === (string) $value) {
+                $value = api_get_setting('gradebook_score_display_colorsplit');
             }
+
+            $this->color_split_value = is_numeric($value) ? (int) $value : 50;
         }
 
         // Setting custom enabled
@@ -83,7 +90,11 @@ class ScoreDisplay
             }
 
             if ($this->coloring_enabled) {
-                $this->color_split_value = $this->get_score_color_percent();
+                $categoryColorSplitValue = $this->get_score_color_percent();
+
+                if (null !== $categoryColorSplitValue) {
+                    $this->color_split_value = $categoryColorSplitValue;
+                }
             }
         }
     }
@@ -570,11 +581,11 @@ class ScoreDisplay
     /**
      * Get score color percent by category.
      *
-     * @param   int Gradebook category id
+     * @param int|null $category_id Gradebook category id
      *
-     * @return int Score
+     * @return int|null Score color percent, or null when there is no category override.
      */
-    private function get_score_color_percent($category_id = null)
+    private function get_score_color_percent($category_id = null): ?int
     {
         $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         if (isset($category_id)) {
@@ -583,17 +594,24 @@ class ScoreDisplay
             $category_id = $this->get_current_gradebook_category_id();
         }
 
-        $sql = 'SELECT score_color_percent FROM '.$tbl_display.'
-                WHERE category_id = '.$category_id.'
-                LIMIT 1';
-        $result = Database::query($sql);
-        $score = 0;
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_row($result);
-            $score = $row[0];
+        if (empty($category_id)) {
+            return null;
         }
 
-        return $score;
+        $sql = 'SELECT score_color_percent
+            FROM '.$tbl_display.'
+            WHERE category_id = '.$category_id.'
+            LIMIT 1';
+
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) < 1) {
+            return null;
+        }
+
+        $row = Database::fetch_row($result);
+
+        return isset($row[0]) ? (int) $row[0] : null;
     }
 
     /**

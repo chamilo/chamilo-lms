@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'ייבוא מ-Moodle';
+$strings['plugin_comment'] = 'בצע תהליך ייבוא ממסד נתונים וקבצים של Moodle אל Chamilo.';
+
+$strings['MoodlePassword'] = 'סיסמת Moodle';
+$strings['UninstallError'] = 'אירעה שגיאה בעת הסרת התוסף.';
+
+$strings['db_host'] = 'שרת מסד הנתונים של Moodle';
+$strings['db_user'] = 'משתמש מסד הנתונים של Moodle';
+$strings['db_password'] = 'סיסמת מסד הנתונים של Moodle';
+$strings['db_name'] = 'שם מסד הנתונים של Moodle';
+$strings['user_filter'] = 'מסנן למשתמשים';
+$strings['user_filter_help'] = 'ייבא רק משתמשים ששם המשתמש שלהם מתחיל במחרוזת זו.<br>הגדרה זו משפיעה גם על ייבוא הקורסים, שכן היא מייבאת רק קורסים שבהם רשומים משתמשים עם קידומת שם משתמש זו.';
+$strings['url_id'] = 'מזהה URL';
+$strings['url_id_help'] = 'מזהה URL לגישה לשמירת קורסים, משתמשים ומפגשים (אם משתמשים ב-multi-url).';
+$strings['moodle_path'] = 'נתיב moodledata';
+$strings['moodle_path_help'] = 'נתיב תיקיית moodledata. בדרך כלל משהו כמו <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'משתמשים';
+$strings['CourseCategoriesTask'] = 'קטגוריות קורסים';
+$strings['CoursesTask'] = 'קורסים';
+$strings['CourseSectionsTask'] = 'יחידות קורס';
+$strings['CourseModulesLessonTask'] = 'מודולי קורס: שיעורים';
+$strings['LessonPagesTask'] = 'עמודי שיעור';
+$strings['LessonPagesDocumentTask'] = 'עמודי שיעור: מסמכים';
+$strings['FilesForLessonPagesTask'] = 'קבצים לעמודי שיעור';
+$strings['LessonPagesQuizTask'] = 'עמודי שיעור: שאלות';
+$strings['LessonPagesQuizQuestionTask'] = 'שאלות לעמודי שאלות';
+$strings['LessonAnswersTrueFalseTask'] = 'תשובות לשאלות נכון/לא נכון';
+$strings['LessonAnswersMultipleChoiceTask'] = 'תשובות לשאלות בחירה מרובה';
+$strings['LessonAnswersMultipleAnswerTask'] = 'תשובות לשאלות עם מספר תשובות';
+$strings['LessonAnswersMatchingTask'] = 'תשובות לשאלות התאמה';
+$strings['LessonAnswersEssayTask'] = 'תשובות לשאלות חיבור';
+$strings['LessonAnswersShortAnswerTask'] = 'תשובות לשאלות תשובה קצרה';
+$strings['FilesForLessonAnswersTask'] = 'קבצים לתשובות שיעור';
+$strings['CourseModulesQuizTask'] = 'מודולי קורס: מבחנים';
+$strings['CQuizTask'] = 'מבחן C';
+$strings['RoleAssignmentsTask'] = 'הקצאות תפקידים';
+$strings['QuizzesTask'] = 'מבחנים';
+$strings['FilesForQuizzesTask'] = 'קבצים למבחנים';
+$strings['QuestionCategoriesTask'] = 'קטגוריות שאלות';
+$strings['QuestionsTask'] = 'שאלות';
+$strings['QuestionMultiChoiceSingleTask'] = 'תשובות לשאלות בחירה מרובה (יחידה)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'תשובות לשאלות בחירה מרובה (מרובות)';
+$strings['QuestionsTrueFalseTask'] = 'תשובות לשאלות נכון/לא נכון';
+$strings['QuestionShortAnswerTask'] = 'תשובות לשאלות תשובה קצרה';
+$strings['CourseModulesScormTask'] = 'קורסי SCORM';
+$strings['ScormScoesTask'] = 'פריטי SCORM';
+$strings['FilesForScormScoesTask'] = 'קבצים לפריטי SCORM';
+$strings['UserSessionsTask'] = 'מפגשי קורס למשתמשים';
+$strings['CourseIntroductionsTask'] = 'הקדמות לקורס';
+$strings['FilesForCourseIntroductionsTask'] = 'קבצים להקדמות קורס';
+$strings['FilesForCourseSectionsTask'] = 'קבצים ליחידות קורס';
+$strings['CourseModulesUrlTask'] = 'מודולי קורס: כתובות URL';
+$strings['UrlsTask'] = 'כתובות URL';
+$strings['SortSectionModulesTask'] = 'מיין מודולים בסעיף';
+$strings['UsersScormsViewTask'] = 'צפיות SCORM למשתמשים';
+$strings['UsersScormsProgressTask'] = 'התקדמות SCORM';
+$strings['UsersLearnPathsTask'] = 'צפיות מסלולי למידה של משתמשים';
+$strings['UsersLearnPathsLessonTimerTask'] = 'טיימר שיעור לזמן ההתחלה של סעיף מסלולי למידה';
+$strings['QuizzesScoresTask'] = 'עדכן ציוני מבחנים במסלול למידה';
+$strings['QuestionGapselectTask'] = 'תשובות לשאלות gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'ענף שיעור לזמן כולל במסמכי מסלולי למידה';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'ניסיונות שיעור לזמן כולל בחידוני מסלולי למידה';
+$strings['UsersLearnPathsQuizzesTask'] = 'ניסיונות חידונים לניסיונות חידוני מסלולי למידה';
+$strings['UsersQuizzesAttemptsTask'] = 'ניסיונות חידונים של משתמשים';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'ניסיונות שאלות של משתמשים לשאלות תשובה קצרה';
+$strings['UserQuestionAttemptsGapselectTask'] = 'ניסיונות שאלות של משתמשים לשאלות gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'ניסיונות שאלות של משתמשים לשאלות נכון/לא נכון';
+$strings['UsersLastLoginTask'] = 'כניסות אחרונות למשתמשים';
+$strings['TrackLoginTask'] = 'כניסה ראשונה ויציאה אחרונה';
+$strings['TrackCourseAccessTask'] = 'גישת משתמש לקורס';
+$strings['UserLearnPathsProgressScript'] = 'עדכן התקדמות במסלולי למידה עבור משתמשים.';
+$strings['UserScormsProgressScript'] = 'עדכן התקדמות ב-SCORMs עבור משתמשים.';
+
+$strings['InstallError'] = 'אירעה שגיאה בעת התקנת התוסף: %s';
+$strings['AdminIntro'] = 'הפעל את משימות ההעברה של Moodle לפי הסדר. כל שלב מופעל רק לאחר שהושלם השלב ההורה שלו.';
+$strings['MoodleDatabase'] = 'מסד נתונים של Moodle';
+$strings['MoodledataPath'] = 'נתיב Moodledata';
+$strings['AccessUrlId'] = 'מזהה כתובת URL לגישה';
+$strings['Configured'] = 'מוגדר';
+$strings['NotConfigured'] = 'לא מוגדר';
+$strings['ConfigurePlugin'] = 'הגדר תוסף';
+$strings['MissingRequiredDatabaseConfiguration'] = 'הגדר את שרת מסד הנתונים, המשתמש ושם מסד הנתונים של Moodle לפני הפעלת משימות ההעברה.';
+$strings['MissingMoodledataPathWarning'] = 'נתיב Moodledata ריק. משימות הקשורות לקבצים עלולות להיכשל עד שהגדרה זו תוגדר.';
+$strings['InvalidMigrationAction'] = 'פעולת העברה לא חוקית.';
+$strings['InvalidSecurityToken'] = 'אסימון אבטחה לא חוקי. אנא טען מחדש את הדף ונסה שוב.';
+$strings['MigrationTasks'] = 'משימות העברה';
+$strings['MaintenanceScripts'] = 'סקריפטי תחזוקה';
+$strings['ExecutionOutput'] = 'פלט ביצוע';
+$strings['TaskAlreadyExecuted'] = 'משימה או סקריפט זה כבר בוצע.';
+$strings['SelectTaskToRun'] = 'בחר משימת העברה להפעלה. הפלט יופיע כאן.';

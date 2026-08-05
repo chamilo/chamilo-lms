@@ -26,20 +26,29 @@ abstract class AbstractResource
     use UserCreatorTrait;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read',
+        'student_publication:read', 'student_publication_comment:read',
+    ])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      */
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read', 'student_publication_rel_document:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read',
+        'student_publication:read', 'student_publication_comment:read', 'student_publication_rel_document:read',
+    ])]
     public ?string $downloadUrl = null;
 
     /**
      * Content from ResourceFile - Property set by ResourceNormalizer.php.
      */
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read', 'student_publication:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read',
+        'student_publication:read',
+    ])]
     public ?string $contentFile = null;
 
     /**
@@ -93,6 +102,21 @@ abstract class AbstractResource
     ])]
     public ?int $parentResourceNode = 0;
 
+    /**
+     * Optional resource language ISO code or Language IRI.
+     * This is a transient API field handled by ResourceListener.
+     */
+    #[Groups([
+        'resource_node:write',
+        'document:write',
+        'c_student_publication:write',
+        'calendar_event:write',
+        'attendance:write',
+        'link:write',
+        'glossary:write',
+    ])]
+    public ?string $language = null;
+
     #[ApiProperty(types: ['https://schema.org/image'])]
     public ?UploadedFile $uploadFile = null;
 
@@ -101,7 +125,10 @@ abstract class AbstractResource
      */
     public $parentResource;
 
-    #[Groups(['resource_node:read', 'document:read', 'attendance:read', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups([
+        'resource_node:read', 'document:read', 'attendance:read', 'student_publication:read',
+        'student_publication_comment:read',
+    ])]
     public ?array $resourceLinkListFromEntity = null;
 
     /**
@@ -110,7 +137,7 @@ abstract class AbstractResource
      *
      * @var array<int, array<string, int>>
      */
-    #[Groups(['c_tool_intro:write', 'resource_node:write', 'c_student_publication:write', 'calendar_event:write', 'attendance:write'])]
+    #[Groups(['resource_node:write', 'c_student_publication:write', 'calendar_event:write', 'attendance:write'])]
     public array $resourceLinkList = [];
 
     /**

@@ -36,6 +36,21 @@ class XApiSharedStatement
         $this->sent = $sent;
     }
 
+    private function normalizeUuid(?string $uuid): ?Uuid
+    {
+        if (null === $uuid) {
+            return null;
+        }
+
+        $uuid = trim($uuid);
+
+        if ('' === $uuid) {
+            return null;
+        }
+
+        return Uuid::fromString($uuid);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,20 +90,5 @@ class XApiSharedStatement
         $this->sent = $sent;
 
         return $this;
-    }
-
-    private function normalizeUuid(?string $uuid): ?Uuid
-    {
-        if (null === $uuid) {
-            return null;
-        }
-
-        $uuid = trim($uuid);
-
-        if ('' === $uuid) {
-            return null;
-        }
-
-        return Uuid::fromString($uuid);
     }
 }

@@ -13,12 +13,54 @@ use Chamilo\CoreBundle\Helpers\UserMergeHelper;
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
-api_protect_admin_script();
+require_once __DIR__.'/../../inc/lib/reports.lib.php';
+
+if (!api_is_platform_admin()) {
+    $acceptHeader = (string) ($_SERVER['HTTP_ACCEPT'] ?? '');
+    $isAjaxRequest = (
+        'xmlhttprequest' === strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) ||
+        str_contains($acceptHeader, 'application/json')
+    );
+
+    http_response_code(403);
+
+    if ($isAjaxRequest && str_contains($acceptHeader, 'application/json')) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'error' => 'access_denied',
+            'message' => get_lang('You are not allowed to see this page.'),
+        ]);
+        exit;
+    }
+
+    echo Display::return_message(
+        get_lang('You are not allowed to see this page.'),
+        'error',
+        false
+    );
+    exit;
+}
+
+api_block_inactive_user();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = isset($_REQUEST['report']) ? (string) $_REQUEST['report'] : '';
 $action = isset($_REQUEST['action']) ? (string) $_REQUEST['action'] : '';
+
+if ('activities' === $report) {
+    $query = $_GET;
+    unset($query['report']);
+
+    $target = api_get_path(WEB_CODE_PATH).'admin/activities_audit.php';
+    if (!empty($query)) {
+        $target .= '?'.http_build_query($query);
+    }
+
+    header('Location: '.$target);
+    exit;
+}
+
 
 // Duplicate users actions (disable/enable + unify)
 if ($report === 'duplicated_users' && in_array($action, [
@@ -602,7 +644,6 @@ $tools = [
         'report=duplicated_users' => get_lang('Duplicate users'),
     ],
     get_lang('System') => [
-        'report=activities' => get_lang('Important activities'),
         'report=user_session' => get_lang('Portal user session stats'),
         'report=quarterly_report' => get_lang('Quarterly report'),
     ],
@@ -1332,7 +1373,7 @@ switch ($report) {
             $table->setCellContents($row, 1, $averageUser);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session coach'));
+            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session tutor'));
             $table->setCellContents($row, 1, $averageCoach);
             $row++;
 
@@ -2930,33 +2971,57 @@ switch ($report) {
             \$el.toggleClass("hidden");
           }
 
+          function renderLoadError(\$target, responseText) {
+            var message = responseText || LOAD_ERROR_TEXT;
+            \$target.html(
+              '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
+              message +
+              '</div>'
+            );
+          }
+
           function loadQuarterlyReport(action, targetId, force) {
             var \$target = $("#" + targetId);
             if (!\$target.length) {
-              return;
+              return $.Deferred().resolve().promise();
             }
 
             var isLoaded = \$target.data("loaded") === 1;
             if (isLoaded && !force) {
               toggleTarget(\$target);
-              return;
+              return $.Deferred().resolve().promise();
+            }
+
+            var runningRequest = \$target.data("request");
+            if (runningRequest && runningRequest.readyState !== 4) {
+              return runningRequest;
             }
 
             showTarget(\$target);
             \$target.html(LOADING_HTML);
 
-            // Load HTML from Ajax endpoint.
-            \$target.load(AJAX_ENDPOINT + "?a=" + encodeURIComponent(action), function (response, status) {
-              if (status !== "success") {
-                \$target.html(
-                  '<div class="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">' +
-                  LOAD_ERROR_TEXT +
-                  '</div>'
-                );
-                return;
-              }
-              \$target.data("loaded", 1);
-            });
+            var request = $.ajax({
+              url: AJAX_ENDPOINT,
+              method: "GET",
+              data: { a: action },
+              dataType: "html",
+              cache: false,
+              timeout: 120000
+            })
+              .done(function (response) {
+                \$target.html(response);
+                \$target.data("loaded", 1);
+              })
+              .fail(function (xhr) {
+                renderLoadError(\$target, xhr.responseText);
+              })
+              .always(function () {
+                \$target.removeData("request");
+              });
+
+            \$target.data("request", request);
+
+            return request;
           }
 
           $(function () {
@@ -2974,10 +3039,30 @@ switch ($report) {
 
             $(document).on("click", "#js-quarterly-load-all", function (e) {
               e.preventDefault();
-              $(".js-quarterly-load").each(function () {
-                var \$btn = $(this);
-                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true);
-              });
+
+              var \$button = $(this);
+              var \$buttons = $(".js-quarterly-load");
+              var index = 0;
+
+              if (\$button.data("loading") === 1) {
+                return;
+              }
+
+              \$button.data("loading", 1).addClass("pointer-events-none opacity-60");
+
+              function loadNext() {
+                if (index >= \$buttons.length) {
+                  \$button.data("loading", 0).removeClass("pointer-events-none opacity-60");
+                  return;
+                }
+
+                var \$btn = \$buttons.eq(index);
+                index += 1;
+
+                loadQuarterlyReport(\$btn.data("action"), \$btn.data("target"), true).always(loadNext);
+              }
+
+              loadNext();
             });
           });
         })();
@@ -3040,6 +3125,11 @@ switch ($report) {
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
+
+echo ReportRegistry::renderReportActionBar(
+    'platform_global_statistics',
+    api_get_path(WEB_CODE_PATH).'admin/index.php'
+);
 
 echo Statistics::statistics_render_menu($tools);
 

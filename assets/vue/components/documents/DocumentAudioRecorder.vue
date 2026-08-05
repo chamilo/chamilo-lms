@@ -7,6 +7,7 @@
       :is-invalid="recordError !== ''"
       :label="t('Enter filename here')"
       class="max-w-full self-center mb-4 w-60"
+      name="recordName"
     />
 
     <audio
@@ -55,11 +56,9 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import AudioRecorder from "../AudioRecorder.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
 import documentsService from "../../services/documents"
 
 const { t } = useI18n()
-const queryParams = useCidReq()
 
 const props = defineProps({
   parentResourceNodeId: {
@@ -101,17 +100,14 @@ const saveAudio = async () => {
     filetype: "file",
     uploadFile: uploadFile,
     parentResourceNodeId: props.parentResourceNodeId,
-    resourceLinkList: JSON.stringify([
-      {
-        ...queryParams,
-        visibility: RESOURCE_LINK_PUBLISHED,
-      },
-    ]),
+    // Course context derived server-side from the gated session course.
+    resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
   }
 
   try {
-    await documentsService.createWithFormData(data)
-    emit("document-saved")
+    const response = await documentsService.createWithFormData(data)
+    const document = response && "function" === typeof response.json ? await response.json() : response
+    emit("document-saved", document)
   } catch (error) {
     emit("document-not-saved", error)
   }

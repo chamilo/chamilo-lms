@@ -268,11 +268,13 @@ class GradebookUtils
             );
 
             if (api_is_allowed_to_edit(null, true)) {
+                // Shared CSRF token for the destructive GET links below.
+                $token = Security::get_existing_token();
                 // Locking button
                 if ('true' == api_get_setting('gradebook_locking_enabled')) {
                     if ($cat->is_locked()) {
                         if (api_is_platform_admin()) {
-                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to unlock this element?')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
+                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to unlock this element?')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock&sec_token='.$token.'">'.
                                 Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Unlock evaluation.')).'</a>';
                         } else {
                             $modify_icons .= '&nbsp;<a href="#">'.
@@ -280,7 +282,7 @@ class GradebookUtils
                         }
                         $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF')).'</a>';
                     } else {
-                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to lock this item? After locking this item you can\'t edit the user results. To unlock it, you need to contact the platform administrator.')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock">'.
+                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to lock this item? After locking this item you can\'t edit the user results. To unlock it, you need to contact the platform administrator.')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock&sec_token='.$token.'">'.
                             Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Lock evaluation')).'</a>';
                         $modify_icons .= '&nbsp;<a href="#" >'.
                             Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Export to PDF')).'</a>';
@@ -305,7 +307,7 @@ class GradebookUtils
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete all'));
                 } else {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'" onclick="return confirmation();">'.
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&sec_token='.$token.'&'.$courseParams.'" onclick="return confirmation();">'.
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete all')).
                         '</a>';
                 }
@@ -356,7 +358,7 @@ class GradebookUtils
                 $modify_icons .= '&nbsp;'.
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
             } else {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deleteeval='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'" onclick="return confirmation();">'.
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deleteeval='.$eval->get_id().'&selectcat='.$selectcat.'&sec_token='.Security::get_existing_token().'&'.$courseParams.'" onclick="return confirmation();">'.
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     '</a>';
             }
@@ -419,7 +421,7 @@ class GradebookUtils
             } else {
                 $modify_icons .= '&nbsp;
                 <a
-                    href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'"
+                    href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.'&sec_token='.Security::get_existing_token().'&'.$courseParams.'"
                     onclick="return confirmation();">'.
                     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     '</a>';
@@ -1256,11 +1258,11 @@ class GradebookUtils
         //Update weight into student publication(work)
         $em
             ->createQuery('
-                UPDATE ChamiloCourseBundle:CStudentPublication w
+                UPDATE Chamilo\CourseBundle\Entity\CStudentPublication w
                 SET w.weight = :final_weight
                 WHERE
                     w.iid = (
-                        SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
+                        SELECT l.refId FROM Chamilo\CoreBundle\Entity\GradebookLink l
                         WHERE l.id = :link AND l.type = :type
                     )
             ')
@@ -1340,24 +1342,27 @@ class GradebookUtils
                 continue;
             }
 
-            $path = $certificateInfo['pathCertificate'] ?? '';
-            $publish = $certificateInfo['publish'] ?? 0;
+            $path = (string) ($certificateInfo['pathCertificate'] ?? $certificateInfo['path_certificate'] ?? '');
+            $publish = (bool) ($certificateInfo['publish'] ?? false);
             $hash = pathinfo($path, PATHINFO_FILENAME);
+            $createdAt = $certificateInfo['createdAt'] ?? $certificateInfo['created_at'] ?? null;
 
+            if ($createdAt instanceof \DateTimeInterface) {
+                $createdAt = $createdAt->format('Y-m-d H:i:s');
+            }
+
+            $canAccessCertificate = $includeNonPublicCertificates || $publish || api_is_platform_admin();
             $link = '';
             $pdf = '';
-            if (api_is_platform_admin()) {
-                $publish = true;
-            }
-            if (!empty($hash) && $publish) {
-                $link = api_get_path(WEB_PATH) . "certificates/{$hash}.html";
+            if ('' !== $hash && $canAccessCertificate) {
+                $link = api_get_path(WEB_PATH)."certificates/{$hash}.html";
                 $pdf = api_get_path(WEB_PATH)."certificates/{$hash}.pdf";
             }
 
             $courseList[] = [
                 'course' => $courseInfo['title'],
-                'score' => $certificateInfo['scoreCertificate'],
-                'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
+                'score' => $certificateInfo['scoreCertificate'] ?? $certificateInfo['score_certificate'] ?? '',
+                'date' => $createdAt ? api_format_date($createdAt, DATE_FORMAT_SHORT) : '',
                 'link' => $link,
                 'pdf' => $pdf,
             ];
@@ -1433,13 +1438,27 @@ class GradebookUtils
                 if (empty($certificateInfo)) {
                     continue;
                 }
-                $hash = pathinfo($certificateInfo['path_certificate'], PATHINFO_FILENAME);
+                $path = (string) ($certificateInfo['pathCertificate'] ?? $certificateInfo['path_certificate'] ?? '');
+                $publish = (bool) ($certificateInfo['publish'] ?? false);
+                $hash = pathinfo($path, PATHINFO_FILENAME);
+                $createdAt = $certificateInfo['createdAt'] ?? $certificateInfo['created_at'] ?? null;
+
+                if ($createdAt instanceof \DateTimeInterface) {
+                    $createdAt = $createdAt->format('Y-m-d H:i:s');
+                }
+
+                $canAccessCertificate = $includeNonPublicCertificates || $publish || api_is_platform_admin();
+                $link = '';
+                if ('' !== $hash && $canAccessCertificate) {
+                    $link = api_get_path(WEB_PATH)."certificates/{$hash}.html";
+                }
+
                 $sessionList[] = [
                     'session' => $session['session_name'],
                     'course' => $course['title'],
-                    'score' => $certificateInfo['scoreCertificate'],
-                    'date' => api_format_date($certificateInfo['createdAt'], DATE_FORMAT_SHORT),
-                    'link' => api_get_path(WEB_PATH)."certificates/{$hash}.html",
+                    'score' => $certificateInfo['scoreCertificate'] ?? $certificateInfo['score_certificate'] ?? '',
+                    'date' => $createdAt ? api_format_date($createdAt, DATE_FORMAT_SHORT) : '',
+                    'link' => $link,
                 ];
             }
         }

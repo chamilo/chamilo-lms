@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Đánh giá tùy chọn câu hỏi';
 $strings['plugin_comment'] = 'Cho phép tính lại điểm của các tùy chọn trong câu hỏi';
 
-$strings['enable'] = 'Bật';
 $strings['exercise_max_score'] = 'Điểm tối đa trong bài tập';
 $strings['exercise_max_score_help'] = 'Mặc định là 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = '(Thành công - Thất bại) / 3';
 $strings['QuestionsEvaluated'] = 'Câu hỏi được đánh giá';
 $strings['RecalculateQuestionScores'] = 'Tính lại điểm câu hỏi';
 $strings['FormulaSavedForExerciseX'] = 'Công thức đã lưu cho bài tập "%s".';
+$strings['NoFormulaHelp'] = 'Giữ nguyên hành vi chấm điểm mặc định của Chamilo cho bài kiểm tra này.';
+$strings['enable'] = 'Bật';

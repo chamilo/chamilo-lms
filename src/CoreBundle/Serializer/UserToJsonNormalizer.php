@@ -717,6 +717,17 @@ final class UserToJsonNormalizer
             ];
         }
 
+        // Notebook
+        $cNotebooks = $em->getRepository(CNotebook::class)->findBy(['user' => $userId]);
+        foreach ($cNotebooks as $item) {
+            $personalData['Notebook'][] = [
+                'Title' => $item->getTitle(),
+                'Content' => $item->getDescription(),
+                'CreationDate' => $item->getCreationDate()?->format($dateFormat) ?? '',
+                'UpdateDate' => $item->getUpdateDate()?->format($dateFormat) ?? '',
+            ];
+        }
+
         // LP Views
         $cLpViews = $em->getRepository(CLpView::class)->findBy(['user' => $userId]);
         foreach ($cLpViews as $item) {

@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
-$nameTools = get_lang('Coaches');
+$nameTools = get_lang('Tutors');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
@@ -209,7 +209,7 @@ if (Database::num_rows($result_coachs) > 0) {
 echo '</table>';
 
 if (isset($_POST['export'])) {
-    Export::arrayToCsv($header + $data, 'coaches.csv');
+    Export::arrayToCsv($header + $data, 'tutors.csv');
 }
 
 echo "<br /><br />";

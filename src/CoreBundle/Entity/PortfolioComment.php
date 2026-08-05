@@ -6,18 +6,19 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
 #[ORM\Table(name: 'portfolio_comment')]
 class PortfolioComment extends AbstractResource implements ResourceInterface, Stringable
 {
-    public const VISIBILITY_VISIBLE = 1;
-    public const VISIBILITY_PER_USER = 2;
+    public const int VISIBILITY_VISIBLE = 1;
+    public const int VISIBILITY_PER_USER = 2;
 
     #[ORM\Column(type: 'smallint', options: ['default' => self::VISIBILITY_VISIBLE])]
     protected int $visibility;
@@ -52,11 +53,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, St
         $this->visibility = self::VISIBILITY_VISIBLE;
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function getItem(): Portfolio
     {
         return $this->item;
@@ -65,18 +61,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, St
     public function setItem(Portfolio $item): self
     {
         $this->item = $item;
-
-        return $this;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
 
         return $this;
     }
@@ -163,8 +147,25 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, St
         return $this->getContent();
     }
 
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int|Uuid
     {
         return $this->getId();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

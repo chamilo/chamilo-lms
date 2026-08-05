@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Visa en Google-karta med användarplatser lagrade i extra fält.';
+$strings['enable_api'] = 'Ladda Google Maps API';
+$strings['api_key'] = 'API-nyckel';
+$strings['extra_field_name'] = 'Extra fältnamn';
+$strings['extra_field_name_help'] = 'Ange en eller flera variabler för användarens extra fält separerade med kommatecken. Kartan kan visa upp till 5 fält. Exempel: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Användarplatskarta';
+$strings['UsersCoordinatesMapHelp'] = 'Denna karta visar användarplatser baserat på konfigurerade extra fält för användare.';
+$strings['GoogleMapsAdminIntro'] = 'Konfigurera Google Maps API-nyckel och de extra fält för användare som innehåller adresser eller platser.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Extra fält';
+$strings['Access'] = 'Åtkomst';
+$strings['AdministratorsOnly'] = 'Endast administratörer';
+$strings['OpenMap'] = 'Öppna karta';
+$strings['ConfigurePlugin'] = 'Konfigurera plugin';
+$strings['Configured'] = 'Konfigurerad';
+$strings['NotConfigured'] = 'Ej konfigurerad';
+$strings['GoogleMapsApiDisabledWarning'] = 'Inläsning av Google Maps API är inaktiverad i plugin-konfigurationen.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API-nyckel saknas.';
+$strings['ExtraFieldNameMissingWarning'] = 'Inget extra fält för användare har konfigurerats.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Följande extra fält för användare hittades inte: %s.';
+$strings['NoUserCoordinatesFound'] = 'Inga användarplatser hittades för de konfigurerade extra fälten.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfigurera och aktivera Google Maps API innan du öppnar kartan.';
+
+$strings['map_provider'] = 'Kartleverantör';
+$strings['map_provider_help'] = 'Välj kartleverantör som används av pluginen och av den sociala kartan.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Kartleverantör';
+$strings['MapProviderConfiguration'] = 'Leverantörskonfiguration';
+$strings['default_latitude'] = 'Standardlatitud';
+$strings['default_latitude_help'] = 'Standardlatitud för kartans centrum. Används när ingen markör finns tillgänglig.';
+$strings['default_longitude'] = 'Standardlongitud';
+$strings['default_longitude_help'] = 'Standardlongitud för kartans centrum. Används när ingen markör finns tillgänglig.';
+$strings['default_zoom'] = 'Standardzoom';
+$strings['default_zoom_help'] = 'Standardzoom för karta mellan 1 och 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap kräver ingen API-nyckel. Markörer med endast adress visas som sök länkar om inte koordinater finns tillgängliga.';

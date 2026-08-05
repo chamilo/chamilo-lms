@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Czy chcesz usunąć konkretny dyplom i użyć domy
 $strings['SuccessDelete'] = 'Pomyślnie usunięto';
 $strings['ProblemDelete'] = 'Problem z usuwaniem certyfikatu';
 $strings['OnlyCustomCertificates'] = 'Eksportowane są tylko kursy z personalizowanym certyfikatem';
+$strings['CertificateMode'] = 'Tryb certyfikatu';
+$strings['UseCourseCustomCertificate'] = 'Użyj niestandardowego certyfikatu dla kursu';
+$strings['UseDefaultCustomCertificate'] = 'Użyj domyślnego niestandardowego certyfikatu platformy';
+
+$strings['CreateCertificateWithTags'] = 'Utwórz certyfikat za pomocą tych znaczników';
+
+$strings['DeleteCertificate'] = 'Usuń certyfikat';
+
+$strings['SaveCertificate'] = 'Zapisz certyfikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Wybierz jedną opcję i zapisz ustawienia przed otwarciem edytora certyfikatów.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Wybierz, w jaki sposób ten kurs ma używać niestandardowych certyfikatów.';
+
+$strings['CouldNotSaveCertificate'] = 'Nie można zapisać konfiguracji certyfikatu.';

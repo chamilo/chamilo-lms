@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use DateTime;
@@ -25,7 +26,7 @@ class AddVariantResourceFileAction
             throw new BadRequestHttpException('"file" is required');
         }
 
-        $resourceNodeId = $request->get('resourceNodeId');
+        $resourceNodeId = $request->request->get('resourceNodeId');
         if (!$resourceNodeId) {
             throw new BadRequestHttpException('"resourceNodeId" is required');
         }
@@ -35,7 +36,7 @@ class AddVariantResourceFileAction
             throw new NotFoundHttpException('ResourceNode not found');
         }
 
-        $accessUrlId = $request->get('accessUrlId');
+        $accessUrlId = $request->request->get('accessUrlId');
         $accessUrl = null;
         if ($accessUrlId) {
             $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
@@ -43,6 +44,10 @@ class AddVariantResourceFileAction
                 throw new NotFoundHttpException('AccessUrl not found');
             }
         }
+
+        $resourceLanguage = $request->request->has('language')
+            ? $this->findLanguageFromRequest($request, $em)
+            : null;
 
         $existingResourceFile = $em->getRepository(ResourceFile::class)->findOneBy([
             'resourceNode' => $resourceNode,
@@ -53,12 +58,18 @@ class AddVariantResourceFileAction
             $existingResourceFile->setTitle($uploadedFile->getClientOriginalName());
             $existingResourceFile->setFile($uploadedFile);
             $existingResourceFile->setUpdatedAt(DateTime::createFromImmutable(new DateTimeImmutable()));
+            if ($request->request->has('language')) {
+                $existingResourceFile->setLanguage($resourceLanguage);
+            }
             $resourceFile = $existingResourceFile;
         } else {
             $resourceFile = new ResourceFile();
             $resourceFile->setTitle($uploadedFile->getClientOriginalName());
             $resourceFile->setFile($uploadedFile);
             $resourceFile->setResourceNode($resourceNode);
+            if ($request->request->has('language')) {
+                $resourceFile->setLanguage($resourceLanguage);
+            }
 
             if ($accessUrl) {
                 $resourceFile->setAccessUrl($accessUrl);
@@ -69,5 +80,38 @@ class AddVariantResourceFileAction
         $em->flush();
 
         return $resourceFile;
+    }
+
+    private function findLanguageFromRequest(Request $request, EntityManagerInterface $em): ?Language
+    {
+        $languageCode = trim((string) $request->request->get('language', ''));
+        if ('' === $languageCode) {
+            return null;
+        }
+
+        if (preg_match('#/api/languages/(\d+)#', $languageCode, $matches)) {
+            $language = $em->getRepository(Language::class)->find((int) $matches[1]);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
     }
 }

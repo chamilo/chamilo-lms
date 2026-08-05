@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
@@ -20,10 +23,12 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -35,14 +40,14 @@ use const DIRECTORY_SEPARATOR;
 use const FILTER_VALIDATE_BOOL;
 use const PATHINFO_EXTENSION;
 
-#[IsGranted('ROLE_TEACHER')]
+#[IsGranted(new Expression('is_granted("ROLE_CURRENT_COURSE_TEACHER")'))]
 #[Route('/course_maintenance/{node}', name: 'cm_', requirements: ['node' => '\d+'])]
 class CourseMaintenanceController extends AbstractCourseMaintenanceController
 {
-    private const IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
-    private const CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
+    private const array IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
+    private const array CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
 
-    private const LEGACY_SNAPSHOT_TOOLS = [
+    private const array LEGACY_SNAPSHOT_TOOLS = [
         'documents',
         'forums',
         'tool_intro',
@@ -65,7 +70,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'learnpaths',
     ];
 
-    private const MOODLE_EXPORT_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',
@@ -86,7 +91,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'course_descriptions',
     ];
 
-    private const MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',
@@ -369,7 +374,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/resources', name: 'copy_resources', methods: ['GET'])]
-    public function copyResources(int $node, Request $req): JsonResponse
+    public function copyResources(int $node, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -377,6 +382,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         if ('' === $sourceCourseCode) {
             return $this->jsonError('Missing sourceCourseId', 400);
         }
+
+        $this->assertSourceCourseAccess($sourceCourseCode, $em);
 
         $cb = new CourseBuilder();
         $cb->set_tools_to_build(self::LEGACY_SNAPSHOT_TOOLS);
@@ -391,21 +398,23 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/execute', name: 'copy_execute', methods: ['POST'])]
-    public function copyExecute(int $node, Request $req): JsonResponse
+    public function copyExecute(int $node, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
-        try {
-            $payload = $this->getJsonPayload($req);
+        $payload = $this->getJsonPayload($req);
 
-            $sourceCourseId = (string) ($payload['sourceCourseId'] ?? '');
+        $sourceCourseId = (string) ($payload['sourceCourseId'] ?? '');
+        if ('' === $sourceCourseId) {
+            return $this->jsonError('Missing sourceCourseId', 400);
+        }
+
+        $this->assertSourceCourseAccess($sourceCourseId, $em);
+
+        try {
             $copyOption = (string) ($payload['copyOption'] ?? 'full_copy'); // full_copy | select_items
             $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
             $selectedResourcesMap = (array) ($payload['resources'] ?? []);
-
-            if ('' === $sourceCourseId) {
-                return $this->jsonError('Missing sourceCourseId', 400);
-            }
 
             $cb = new CourseBuilder('partial');
             $cb->set_tools_to_build(self::LEGACY_SNAPSHOT_TOOLS);
@@ -521,7 +530,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/delete', name: 'delete', methods: ['POST'])]
-    public function deleteCourse(int $node, Request $req): JsonResponse
+    public function deleteCourse(int $node, Request $req, EntityManagerInterface $em, CourseHelper $courseHelper): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
         if (
@@ -564,7 +573,18 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 return $this->jsonError('Course code confirmation mismatch', 400);
             }
 
-            CourseManager::delete_course($sysCode, $deleteDocs);
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $course = $courseId > 0 ? $em->getRepository(CourseEntity::class)->find($courseId) : null;
+            if (!$course instanceof CourseEntity) {
+                return $this->jsonError('Course not found', 404);
+            }
+
+            if (!$courseHelper->deleteCourse($course, $deleteDocs)) {
+                return $this->json([
+                    'ok' => false,
+                    'message' => 'The course is still used in other portals; it was removed from the current one but not deleted.',
+                ]);
+            }
 
             // Best-effort cleanup
             try {
@@ -583,7 +603,6 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         } catch (Throwable $e) {
             return $this->json([
                 'error' => 'Failed to delete course: '.$e->getMessage(),
-                'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
     }
@@ -1132,6 +1151,22 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     /**
+     * Resolve the source course by its code and ensure the current user is
+     * authorized to view (and therefore copy from) it. The request listener
+     * only gates the destination course via cid; the user-supplied source
+     * course must be authorized explicitly to prevent cross-course access.
+     */
+    private function assertSourceCourseAccess(string $courseCode, EntityManagerInterface $em): void
+    {
+        $course = $em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode]);
+        if (!$course instanceof CourseEntity) {
+            throw new NotFoundHttpException('Source course not found');
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+    }
+
+    /**
      * Map UI options (1/2/3) to legacy file policy.
      */
     private function mapSameNameOption(int $opt): int
@@ -1310,7 +1345,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 if (class_exists(UnserializeApi::class)) {
                     $c = UnserializeApi::unserialize('course', $payload);
                 } else {
-                    $c = @unserialize($payload, ['allowed_classes' => true]);
+                    // Defense-in-depth: never instantiate arbitrary classes from a backup.
+                    $c = @unserialize($payload, ['allowed_classes' => false]);
                 }
             } finally {
                 restore_error_handler();

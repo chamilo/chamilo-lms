@@ -12,8 +12,8 @@ class PortfolioNotifier
     {
         $item = $comment->getItem();
         $itemResourceLink = $item->getFirstResourceLink();
-        $course = $itemResourceLink->getCourse();
-        $session = $itemResourceLink->getSession();
+        $course = $itemResourceLink?->getCourse();
+        $session = $itemResourceLink?->getSession();
 
         $messageSubject = sprintf(
             get_lang('[Portfolio] New comment in post %s'),
@@ -22,13 +22,27 @@ class PortfolioNotifier
         $userIdListToSend = [];
         $userIdListToSend[] = $comment->getItem()->resourceNode->getCreator()->getId();
 
-        $cidreq = api_get_cidreq_params(
-            $course ? $course->getCode() : '',
-            $session ? $session->getId() : 0
-        );
-        $commentUrl = api_get_path(WEB_CODE_PATH).'portfolio/index.php?'
-            .($course ? $cidreq.'&' : '')
-            .http_build_query(['action' => 'view', 'id' => $item->getId()])."#comment-{$comment->getId()}";
+        if ($course) {
+            $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+            $query = http_build_query(array_filter([
+                'cid' => (int) $course->getId(),
+                'sid' => $session?->getId(),
+            ]));
+            $path = sprintf(
+                'resources/portfolio/%d/item/%d%s#portfolio-comment-%d',
+                $courseNodeId,
+                (int) $item->getId(),
+                '' !== $query ? '?'.$query : '',
+                (int) $comment->getId(),
+            );
+        } else {
+            $path = sprintf(
+                'social/portfolio/item/%d#portfolio-comment-%d',
+                (int) $item->getId(),
+                (int) $comment->getId(),
+            );
+        }
+        $commentUrl = rtrim(api_get_path(WEB_PATH), '/').'/'.$path;
 
         if ($course) {
             $courseInfo = api_get_course_info($course->getCode());
@@ -62,7 +76,7 @@ class PortfolioNotifier
             .'<figcaption>'.$comment->resourceNode->getCreator()->getFullName().'</figcaption>'
             .'</figure>';
 
-        foreach ($userIdListToSend as $userIdToSend) {
+        foreach (array_values(array_unique(array_map('intval', $userIdListToSend))) as $userIdToSend) {
             MessageManager::send_message_simple(
                 $userIdToSend,
                 $messageSubject,

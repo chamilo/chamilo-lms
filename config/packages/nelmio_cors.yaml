@@ -3,11 +3,36 @@ nelmio_cors:
         origin_regex: true
         allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
         allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields']
+        allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields', 'X-Prefer-HTML-Errors']
         expose_headers: ['Link']
         max_age: 3600
         allow_credentials: true
     paths:
+        '^/(\.well-known/oauth-|oauth/(token|register|revoke)$)':
+            allow_origin: ['*']
+            allow_credentials: false
+            allow_methods: ['GET', 'POST', 'OPTIONS']
+            allow_headers: ['Content-Type', 'Authorization', 'MCP-Protocol-Version']
+            max_age: 3600
+        '^/mcp$':
+            allow_origin: ['*']
+            allow_credentials: false
+            allow_methods: ['GET', 'POST', 'DELETE', 'OPTIONS']
+            allow_headers: ['Content-Type', 'Authorization', 'MCP-Protocol-Version', 'Mcp-Session-Id', 'Last-Event-ID']
+            expose_headers: ['WWW-Authenticate', 'Mcp-Session-Id']
+            max_age: 3600
         '^/login/token/check':
+            origin_regex: true
+            allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
             allow_credentials: true
-        '^/': null
+            allow_methods: ['POST', 'OPTIONS']
+            allow_headers: ['Content-Type', 'Authorization', 'X-Prefer-HTML-Errors']
+            max_age: 3600
+        '^/':
+            origin_regex: true
+            allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
+            allow_credentials: true
+            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+            allow_headers: ['Content-Type', 'Authorization', 'Preload', 'Fields', 'X-Prefer-HTML-Errors']
+            expose_headers: ['Link']
+            max_age: 3600

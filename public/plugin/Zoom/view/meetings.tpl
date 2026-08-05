@@ -1,9 +1,9 @@
 {% import "default/document/recycle.tpl" as macro %}
 
-{{ schedule_form }}
-{{ search_form }}
+{{ schedule_form|default('')|raw }}
+{{ search_form|default('')|raw }}
 
-{% if meetings %}
+{% if meetings is defined and meetings|length > 0 %}
     <h4>{{ 'MeetingsFound'|get_plugin_lang('ZoomPlugin') }}: </h4>
     <table class="table table-hover table-striped">
         <thead>
@@ -13,7 +13,7 @@
                 <th>{{ 'ForEveryone'|get_plugin_lang('ZoomPlugin') }}</th>
 {#                <th>{{ 'Course'|get_lang }}</th>#}
 {#                <th>{{ 'Session'|get_lang }}</th>#}
-                {% if allow_recording %}
+                {% if allow_recording is defined and allow_recording %}
                     <th>{{ 'Recordings'|get_plugin_lang('ZoomPlugin') }}</th>
                 {% endif %}
                 <th></th>
@@ -28,7 +28,7 @@
 {#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}
 {#                    <td>{{ meeting.session ? meeting.session : '-' }}</td>#}
                 <td>
-                {% if allow_recording and meeting.recordings.count > 0 %}
+                {% if allow_recording is defined and allow_recording and meeting.recordings is defined and meeting.recordings|length > 0 %}
                     {% for recording in meeting.recordings %}
                         <dl>
                             <dt>

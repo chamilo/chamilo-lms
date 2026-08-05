@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -18,7 +17,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
-use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
@@ -27,6 +25,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Datetime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
@@ -41,7 +40,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Throwable;
 
 use const MB_CASE_LOWER;
 
@@ -52,10 +50,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 {
     protected ?UserPasswordHasherInterface $hasher = null;
 
-    public const USER_IMAGE_SIZE_SMALL = 1;
-    public const USER_IMAGE_SIZE_MEDIUM = 2;
-    public const USER_IMAGE_SIZE_BIG = 3;
-    public const USER_IMAGE_SIZE_ORIGINAL = 4;
+    public const int USER_IMAGE_SIZE_SMALL = 1;
+    public const int USER_IMAGE_SIZE_MEDIUM = 2;
+    public const int USER_IMAGE_SIZE_BIG = 3;
+    public const int USER_IMAGE_SIZE_ORIGINAL = 4;
 
     public function __construct(
         ManagerRegistry $registry,
@@ -174,6 +172,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         try {
             if ($destroy) {
+                // Remove student assignment submissions through their resource nodes so
+                // ResourceFile entities are removed by Doctrine/Vich before the user row is deleted.
+                $this->deleteUserStudentPublicationFiles($user);
+
                 // Call method to delete messages and attachments
                 $this->deleteUserMessagesAndAttachments($user);
 
@@ -290,7 +292,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         return [
             ['table' => 'access_url_rel_user', 'field' => 'user_id', 'action' => 'delete'],
-            ['table' => 'admin', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'attempt_feedback', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'chat', 'field' => 'to_user', 'action' => 'update'],
             ['table' => 'chat_video', 'field' => 'to_user', 'action' => 'update'],
@@ -381,6 +382,99 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'user_rel_tag', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'user_rel_user', 'field' => 'user_id', 'action' => 'delete'],
         ];
+    }
+
+    /**
+     * Delete assignment submission resource trees owned by the user before the raw user deletion.
+     *
+     * Student submissions are course resources. Removing only c_student_publication rows would
+     * leave ResourceFile storage objects orphaned, so we remove the ResourceNode tree instead.
+     * Root assignment folders are kept, because they usually belong to the course activity itself.
+     */
+    private function deleteUserStudentPublicationFiles(User $user): void
+    {
+        $userId = $user->getId();
+        if (null === $userId) {
+            return;
+        }
+
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $rows = $qb
+            ->select('DISTINCT resourceNode.id AS id')
+            ->from(CStudentPublication::class, 'publication')
+            ->innerJoin('publication.resourceNode', 'resourceNode')
+            ->where('IDENTITY(publication.user) = :userId')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'publication.publicationParent IS NOT NULL',
+                    'publication.filetype = :filetype'
+                )
+            )
+            ->setParameter('userId', $userId, Types::INTEGER)
+            ->setParameter('filetype', 'file')
+            ->getQuery()
+            ->getScalarResult()
+        ;
+
+        if ([] === $rows) {
+            return;
+        }
+
+        $visitedNodeIds = [];
+
+        foreach ($rows as $row) {
+            $resourceNodeId = (int) ($row['id'] ?? 0);
+            if (0 === $resourceNodeId || isset($visitedNodeIds[$resourceNodeId])) {
+                continue;
+            }
+
+            $resourceNode = $em->find(ResourceNode::class, $resourceNodeId);
+            if (!$resourceNode instanceof ResourceNode) {
+                continue;
+            }
+
+            $this->removeResourceNodeTree($resourceNode, $visitedNodeIds);
+        }
+
+        $em->flush();
+    }
+
+    /**
+     * Remove a resource node tree through Doctrine so ResourceFile preRemove handlers
+     * delete the physical files from storage.
+     *
+     * @param array<int, bool> $visitedNodeIds
+     */
+    private function removeResourceNodeTree(ResourceNode $resourceNode, array &$visitedNodeIds): void
+    {
+        $resourceNodeId = $resourceNode->getId();
+        if (null !== $resourceNodeId) {
+            if (isset($visitedNodeIds[$resourceNodeId])) {
+                return;
+            }
+
+            $visitedNodeIds[$resourceNodeId] = true;
+        }
+
+        $em = $this->getEntityManager();
+
+        foreach (iterator_to_array($resourceNode->getChildren()) as $childNode) {
+            if ($childNode instanceof ResourceNode) {
+                $this->removeResourceNodeTree($childNode, $visitedNodeIds);
+            }
+        }
+
+        foreach (iterator_to_array($resourceNode->getResourceFiles()) as $resourceFile) {
+            $em->remove($resourceFile);
+        }
+
+        foreach (iterator_to_array($resourceNode->getResourceLinks()) as $resourceLink) {
+            $em->remove($resourceLink);
+        }
+
+        $em->remove($resourceNode);
     }
 
     /**
@@ -638,6 +732,28 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Whether $targetUserId is followed by the HR manager $drhId through the UserRelUser
+     * RRHH relation. Native replacement for UserManager::is_user_followed_by_drh().
+     */
+    public function isUserFollowedByDrh(int $targetUserId, int $drhId): bool
+    {
+        $count = (int) $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(uru.id)')
+            ->from(UserRelUser::class, 'uru')
+            ->where('uru.user = :target')
+            ->andWhere('uru.friend = :drh')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('target', $targetUserId)
+            ->setParameter('drh', $drhId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
      * Get number of users in URL.
      *
      * @return int
@@ -648,9 +764,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -669,9 +783,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
         ;
 
         $this->addRoleListQueryBuilder(['ROLE_TEACHER'], $qb);
@@ -710,8 +822,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
             /*$dql = "SELECT DISTINCT U
-                    FROM ChamiloCoreBundle:User U
-                    LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                    FROM Chamilo\CoreBundle\Entity\User U
+                    LEFT JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser R
                     WITH U = R.user
                     WHERE
                         U.active = 1 AND
@@ -721,8 +833,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             } else {
                 $this->addOnlyMyFriendsQueryBuilder($currentUserId, $qb);
                 /*$dql = 'SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloCoreBundle:User AS U
+                        FROM Chamilo\CoreBundle\Entity\AccessUrlRelUser R, Chamilo\CoreBundle\Entity\UserRelUser UF
+                        INNER JOIN Chamilo\CoreBundle\Entity\User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -745,8 +857,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $online_time = time() - ($time_limit * 60);
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T
+                        FROM Chamilo\CoreBundle\Entity\User U
+                        INNER JOIN Chamilo\CoreBundle\Entity\TrackEOnline T
                         WITH U.id = T.loginUserId
                         WHERE
                           U.active = 1 AND
@@ -1007,11 +1119,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('v.itemId = :userId')
             ->andWhere('e.variable = :fieldVariable')
             ->andWhere('e.itemType = :itemType')
-            ->setParameters([
-                'userId' => $userId,
-                'fieldVariable' => $fieldVariable,
-                'itemType' => ExtraField::USER_FIELD_TYPE,
-            ])
+            ->setParameter('userId', $userId)
+            ->setParameter('fieldVariable', $fieldVariable)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
         ;
 
         if (!$allVisibility) {
@@ -1234,13 +1344,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array
     {
-        $course = $this->_em->getRepository(Course::class)->find($courseId);
+        $course = $this->getEntityManager()->getRepository(Course::class)->find($courseId);
         if (!$course) {
             throw new InvalidArgumentException('Course not found.');
         }
 
         if (null !== $sessionId) {
-            $session = $this->_em->getRepository(Session::class)->find($sessionId);
+            $session = $this->getEntityManager()->getRepository(Session::class)->find($sessionId);
             if (!$session) {
                 throw new InvalidArgumentException('Session not found.');
             }
@@ -1258,16 +1368,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         if (null !== $groupId) {
-            $qb = $this->_em->createQueryBuilder();
+            $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->select('u')
                 ->from(CGroupRelUser::class, 'cgru')
                 ->innerJoin('cgru.user', 'u')
                 ->where('cgru.cId = :courseId')
                 ->andWhere('cgru.group = :groupId')
-                ->setParameters([
-                    'courseId' => $courseId,
-                    'groupId' => $groupId,
-                ])
+                ->setParameter('courseId', $courseId)
+                ->setParameter('groupId', $groupId)
                 ->orderBy('u.lastname', 'ASC')
                 ->addOrderBy('u.firstname', 'ASC')
             ;
@@ -1275,7 +1383,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             return $qb->getQuery()->getResult();
         }
 
-        $queryBuilder = $this->_em->getRepository(Course::class)->getSubscribedStudents($course);
+        $queryBuilder = $this->getEntityManager()->getRepository(Course::class)->getSubscribedStudents($course);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -1375,10 +1483,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where(
                 $qb->expr()->in('u.id', ':ids')
             )
-            ->setParameters([
-                'active' => false,
-                'ids' => $ids,
-            ])
+            ->setParameter('active', false)
+            ->setParameter('ids', $ids)
         ;
     }
 
@@ -1396,7 +1502,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $qb->expr()->like('u.roles', ':super'),
             $qb->expr()->like('u.roles', ':admin')
         ))
-            ->setParameter('super', '%ROLE_SUPER_ADMIN%')
+            ->setParameter('super', '%ROLE_GLOBAL_ADMIN%')
             ->setParameter('admin', '%ROLE_ADMIN%')
             ->orderBy('u.id', 'ASC')
             ->setMaxResults(1)
@@ -1407,32 +1513,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     /**
      * Returns the "package" {id, username, email} to autocomplete the export.
-     * Try: Admin::class -> roles -> current user -> fallback "1/admin/admin@example.com".
+     * Try: role-based platform admin -> current user -> fallback "1/admin/admin@example.com".
      */
     public function getDefaultAdminForExport(): array
     {
-        $em = $this->getEntityManager();
-
-        try {
-            $adminEntity = $em->getRepository(Admin::class)
-                ->createQueryBuilder('a')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-
-            if ($adminEntity && $adminEntity->getUser()) {
-                $u = $adminEntity->getUser();
-
-                return [
-                    'id' => (string) $u->getId(),
-                    'username' => (string) $u->getUsername(),
-                    'email' => (string) ($u->getEmail() ?? ''),
-                ];
-            }
-        } catch (Throwable $e) {
-        }
-
         $u = $this->findOnePlatformAdmin();
         if ($u instanceof User) {
             return [

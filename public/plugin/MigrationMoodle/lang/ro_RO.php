@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Import din Moodle';
+$strings['plugin_comment'] = 'Execută un proces de import dintr-o bază de date și fișiere Moodle către Chamilo.';
+
+$strings['MoodlePassword'] = 'Parolă Moodle';
+$strings['UninstallError'] = 'A apărut o eroare la dezinstalarea plugin-ului.';
+
+$strings['db_host'] = 'Gazdă BD Moodle';
+$strings['db_user'] = 'Utilizator BD Moodle';
+$strings['db_password'] = 'Parolă BD Moodle';
+$strings['db_name'] = 'Nume BD Moodle';
+$strings['user_filter'] = 'Filtru pentru utilizatori';
+$strings['user_filter_help'] = 'Importă doar utilizatorii al căror nume de utilizator are prefixul acestui șir.<br>Importul cursurilor este de asemenea afectat de această configurație, deoarece importă doar cursurile la care sunt înscriși utilizatori cu acest prefix de nume de utilizator.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID-ul URL-ului de acces pentru salvarea cursurilor, utilizatorilor și sesiunilor (dacă se utilizează multi-url).';
+$strings['moodle_path'] = 'Calea moodledata';
+$strings['moodle_path_help'] = 'Calea către dosarul moodledata. De obicei ceva de genul <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Utilizatori';
+$strings['CourseCategoriesTask'] = 'Categorii de curs';
+$strings['CoursesTask'] = 'Cursuri';
+$strings['CourseSectionsTask'] = 'Secțiuni de curs';
+$strings['CourseModulesLessonTask'] = 'Module de curs: Lecții';
+$strings['LessonPagesTask'] = 'Pagini de lecție';
+$strings['LessonPagesDocumentTask'] = 'Pagini de lecție: Documente';
+$strings['FilesForLessonPagesTask'] = 'Fișiere pentru paginile de lecție';
+$strings['LessonPagesQuizTask'] = 'Pagini de lecție: Întrebări';
+$strings['LessonPagesQuizQuestionTask'] = 'Întrebări pentru paginile de întrebări';
+$strings['LessonAnswersTrueFalseTask'] = 'Răspunsuri pentru întrebări Adevărat/Fals';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Răspunsuri pentru întrebări cu alegere multiplă';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Răspunsuri pentru întrebări cu răspunsuri multiple';
+$strings['LessonAnswersMatchingTask'] = 'Răspunsuri pentru întrebări de potrivire';
+$strings['LessonAnswersEssayTask'] = 'Răspunsuri pentru întrebări de tip eseu';
+$strings['LessonAnswersShortAnswerTask'] = 'Răspunsuri pentru întrebări cu răspuns scurt';
+$strings['FilesForLessonAnswersTask'] = 'Fișiere pentru răspunsurile lecțiilor';
+$strings['CourseModulesQuizTask'] = 'Module de curs: Teste';
+$strings['CQuizTask'] = 'Test C';
+$strings['RoleAssignmentsTask'] = 'Atribuiri de roluri';
+$strings['QuizzesTask'] = 'Teste';
+$strings['FilesForQuizzesTask'] = 'Fișiere pentru teste';
+$strings['QuestionCategoriesTask'] = 'Categorii de întrebări';
+$strings['QuestionsTask'] = 'Întrebări';
+$strings['QuestionMultiChoiceSingleTask'] = 'Răspunsuri pentru întrebări cu alegere multiplă (unic)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Răspunsuri pentru întrebări cu alegere multiplă (multiple)';
+$strings['QuestionsTrueFalseTask'] = 'Răspunsuri pentru întrebări adevărat/fals';
+$strings['QuestionShortAnswerTask'] = 'Răspunsuri pentru întrebări cu răspuns scurt';
+$strings['CourseModulesScormTask'] = 'Cursuri SCORM';
+$strings['ScormScoesTask'] = 'Elemente SCORM';
+$strings['FilesForScormScoesTask'] = 'Fișiere pentru elemente SCORM';
+$strings['UserSessionsTask'] = 'Sesiuni de curs pentru utilizatori';
+$strings['CourseIntroductionsTask'] = 'Introduceri de curs';
+$strings['FilesForCourseIntroductionsTask'] = 'Fișiere pentru introducerile de curs';
+$strings['FilesForCourseSectionsTask'] = 'Fișiere pentru secțiunile de curs';
+$strings['CourseModulesUrlTask'] = 'Module de curs: URL-uri';
+$strings['UrlsTask'] = 'URL-uri';
+$strings['SortSectionModulesTask'] = 'Sortare module în secțiune';
+$strings['UsersScormsViewTask'] = 'Vizualizări SCORM pentru utilizatori';
+$strings['UsersScormsProgressTask'] = 'Progres SCORM';
+$strings['UsersLearnPathsTask'] = 'Vizualizări trasee de învățare ale utilizatorilor';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Temporizator lecție pentru ora de început a secțiunii traseelor de învățare';
+$strings['QuizzesScoresTask'] = 'Actualizare scoruri test în traseu de învățare';
+$strings['QuestionGapselectTask'] = 'Răspunsuri pentru întrebări gapselect';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Ramificație lecție la timpul total în documente de trasee de învățare';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Încercări lecție la timpul total în teste de trasee de învățare';
+$strings['UsersLearnPathsQuizzesTask'] = 'Încercări teste la încercări teste de trasee de învățare';
+$strings['UsersQuizzesAttemptsTask'] = 'Încercări teste ale utilizatorilor';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Încercări întrebări ale utilizatorilor pentru răspuns scurt';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Încercări întrebări ale utilizatorilor pentru gapselect';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Încercări întrebări ale utilizatorilor pentru adevărat/fals';
+$strings['UsersLastLoginTask'] = 'Ultimele autentificări pentru utilizatori';
+$strings['TrackLoginTask'] = 'Prima autentificare și ultima deconectare';
+$strings['TrackCourseAccessTask'] = 'Acces utilizator la curs';
+$strings['UserLearnPathsProgressScript'] = 'Actualizare progres în trasee de învățare pentru utilizatori.';
+$strings['UserScormsProgressScript'] = 'Actualizare progres în SCORM pentru utilizatori.';
+
+$strings['InstallError'] = 'A apărut o eroare la instalarea pluginului: %s';
+$strings['AdminIntro'] = 'Execută sarcinile de migrare Moodle în ordine. Fiecare pas este activat doar după finalizarea pasului părinte.';
+$strings['MoodleDatabase'] = 'Baza de date Moodle';
+$strings['MoodledataPath'] = 'Calea Moodledata';
+$strings['AccessUrlId'] = 'ID URL de acces';
+$strings['Configured'] = 'Configurat';
+$strings['NotConfigured'] = 'Neconfigurat';
+$strings['ConfigurePlugin'] = 'Configurează pluginul';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Configurați gazda bazei de date Moodle, utilizatorul și numele bazei de date înainte de a rula sarcinile de migrare.';
+$strings['MissingMoodledataPathWarning'] = 'Calea Moodledata este goală. Sarcinile legate de fișiere pot eșua până când această setare este configurată.';
+$strings['InvalidMigrationAction'] = 'Acțiune de migrare invalidă.';
+$strings['InvalidSecurityToken'] = 'Token de securitate invalid. Vă rugăm să reîncărcați pagina și să încercați din nou.';
+$strings['MigrationTasks'] = 'Sarcini de migrare';
+$strings['MaintenanceScripts'] = 'Scripturi de mentenanță';
+$strings['ExecutionOutput'] = 'Ieșire execuție';
+$strings['TaskAlreadyExecuted'] = 'Această sarcină sau script a fost deja executat.';
+$strings['SelectTaskToRun'] = 'Selectați o sarcină de migrare pentru a rula. Ieșirea va apărea aici.';

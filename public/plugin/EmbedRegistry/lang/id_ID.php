@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Dalam rentang tanggal tersebut, konten tertana
 $strings['HtmlCode'] = 'Kode HTML';
 $strings['HtmlCodeHelp'] = 'Kode HTML yang dibagikan, sebagaimana disediakan oleh layanan eksternal, saat diminta untuk dibagikan dalam format Tertanam.';
 $strings['LaunchContent'] = 'Luncurkan konten';
+
+$strings['InvalidDateRange'] = 'Tanggal mulai harus lebih awal atau sama dengan tanggal akhir.';
+
+$strings['InvalidSecurityToken'] = 'Token keamanan tidak valid. Silakan muat ulang halaman dan coba lagi.';

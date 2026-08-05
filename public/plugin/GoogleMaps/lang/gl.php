@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Mostra un mapa de Google coas localizacións dos usuarios almacenadas en campos extra.';
+$strings['enable_api'] = 'Cargar a API de Google Maps';
+$strings['api_key'] = 'Chave da API';
+$strings['extra_field_name'] = 'Nome do campo extra';
+$strings['extra_field_name_help'] = 'Introduza unha ou máis variables de campos extra de usuario separadas por comas. O mapa pode mostrar ata 5 campos. Exemplo: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Mapa de localizacións dos usuarios';
+$strings['UsersCoordinatesMapHelp'] = 'Este mapa mostra as localizacións dos usuarios baseadas nos campos extra configurados.';
+$strings['GoogleMapsAdminIntro'] = 'Configure a chave da API de Google Maps e os campos extra de usuario que conteñen enderezos ou localizacións.';
+$strings['GoogleMapsApi'] = 'API de Google Maps';
+$strings['ExtraFields'] = 'Campos extra';
+$strings['Access'] = 'Acceso';
+$strings['AdministratorsOnly'] = 'Só administradores';
+$strings['OpenMap'] = 'Abrir mapa';
+$strings['ConfigurePlugin'] = 'Configurar complemento';
+$strings['Configured'] = 'Configurado';
+$strings['NotConfigured'] = 'Non configurado';
+$strings['GoogleMapsApiDisabledWarning'] = 'A carga da API de Google Maps está desactivada na configuración do complemento.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Falta a chave da API de Google Maps.';
+$strings['ExtraFieldNameMissingWarning'] = 'Non se configurou ningún campo extra de usuario.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Non se atoparon os seguintes campos extra de usuario: %s.';
+$strings['NoUserCoordinatesFound'] = 'Non se atoparon localizacións de usuarios para os campos extra configurados.';
+$strings['ConfigureGoogleMapsFirst'] = 'Configure e active a API de Google Maps antes de abrir o mapa.';
+
+$strings['map_provider'] = 'Provedor de mapas';
+$strings['map_provider_help'] = 'Seleccione o provedor de mapas utilizado polo complemento e polo mapa Social.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Provedor de mapas';
+$strings['MapProviderConfiguration'] = 'Configuración do provedor';
+$strings['default_latitude'] = 'Latitude predeterminada';
+$strings['default_latitude_help'] = 'Latitude predeterminada do centro do mapa. Utilízase cando non hai marcadores dispoñibles.';
+$strings['default_longitude'] = 'Lonxitude predeterminada';
+$strings['default_longitude_help'] = 'Lonxitude predeterminada do centro do mapa. Utilízase cando non hai marcadores dispoñibles.';
+$strings['default_zoom'] = 'Zoom predeterminado';
+$strings['default_zoom_help'] = 'Zoom predeterminado do mapa entre 1 e 20.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap non require unha chave API. Os marcadores só con enderezo móstranse como ligazóns de busca a menos que haxa coordenadas dispoñibles.';

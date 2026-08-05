@@ -11,7 +11,7 @@
 .actionslistehelp{
 	position : absolute;
 	right : 40px;
-	top  : 55px;
+	top  : 152px;
 	width : 285px;
 	text-align : center;
 	z-index : 102;
@@ -51,12 +51,12 @@
 .actionsliste{
 	float:left;
 	width : 315px;
-	height : 400px;
+	height : 300px;
 	list-style-type: none; 
 	border-top:none;
 	padding : 0px;
 	margin : 0px;
-	margin-top  : 33px;
+	margin-top  : 105px;
 	margin-left : 5px;
 	padding-top:5px;
 	z-index:103;
@@ -132,3 +132,30 @@
 	background-color: rgb(8, 99, 31);
 	box-sizing:none;
 }
+
+.cstudio-button-editor-help {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    top: 39px;
+    min-height: 58px;
+    padding: 8px 10px;
+    border: 1px solid #b8c2cc;
+    border-radius: 6px;
+    background: #f7fafc;
+    color: #1f2937;
+    font-size: 12px;
+    line-height: 16px;
+    box-sizing: border-box;
+}
+
+.cstudio-button-editor-help strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+
+.cstudio-button-editor-help p {
+    margin: 0;
+}
+

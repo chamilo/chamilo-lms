@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -17,54 +16,74 @@ final class Version20201219115244 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate c_wiki';
+        return 'Migrate c_wiki using prefetched item properties and batched ORM writes';
     }
 
     public function up(Schema $schema): void
     {
         $wikiRepo = $this->container->get(CWikiRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
-
         $admin = $this->getAdmin();
 
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT iid, c_id
+             FROM c_wiki
+             WHERE resource_node_id IS NULL
+             ORDER BY c_id, iid'
+        );
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = $course->getId();
+        $rowsByCourse = [];
+        foreach ($rows as $row) {
+            $courseId = (int) ($row['c_id'] ?? 0);
+            if ($courseId > 0) {
+                $rowsByCourse[$courseId][] = (int) $row['iid'];
+            }
+        }
+
+        $migrated = 0;
+        $skipped = 0;
+
+        foreach ($rowsByCourse as $courseId => $ids) {
             $course = $courseRepo->find($courseId);
+            if (null === $course) {
+                $skipped += \count($ids);
+                $this->warnIf(true, "Course {$courseId} not found while migrating wiki resources.");
 
-            $sql = "SELECT * FROM c_wiki WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            foreach ($items as $itemData) {
-                $id = $itemData['iid'];
+                continue;
+            }
 
-                /** @var CWiki $resource */
+            $itemProperties = $this->fetchItemPropertiesMap('wiki', $courseId, $ids);
+
+            foreach ($ids as $id) {
+                /** @var CWiki|null $resource */
                 $resource = $wikiRepo->find($id);
-                if ($resource->hasResourceNode()) {
+                if (null === $resource || $resource->hasResourceNode()) {
                     continue;
                 }
 
-                $result = $this->fixItemProperty(
+                if (false === $this->fixItemProperty(
                     'wiki',
                     $wikiRepo,
                     $course,
                     $admin,
                     $resource,
-                    $course
-                );
+                    $course,
+                    $itemProperties[$id] ?? []
+                )) {
+                    ++$skipped;
 
-                if (false === $result) {
                     continue;
                 }
 
-                $this->entityManager->persist($resource);
-                $this->entityManager->flush();
+                ++$migrated;
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
+
+        $this->getLogger()->info('Wiki migration completed.', [
+            'migrated' => $migrated,
+            'skipped' => $skipped,
+        ]);
     }
 }

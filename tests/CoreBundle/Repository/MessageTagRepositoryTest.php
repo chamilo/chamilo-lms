@@ -126,6 +126,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             'POST',
             '/api/message_tags',
             [
+                'headers' => ['content-type' => ['application/ld+json']],
                 'json' => [
                     'tag' => 'my tag',
                     'user' => $testUser->getIri(),
@@ -155,6 +156,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             'POST',
             '/api/message_tags',
             [
+                'headers' => ['content-type' => ['application/ld+json']],
                 'json' => [
                     'tag' => 'my tag',
                     'user' => $testUser->getIri(),
@@ -167,9 +169,10 @@ class MessageTagRepositoryTest extends AbstractApiTest
         $id = $response->toArray()['id'];
 
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             '/api/message_tags/'.$id,
             [
+                'headers' => ['content-type' => ['application/merge-patch+json']],
                 'json' => [
                     'tag' => 'my tag 2',
                 ],
@@ -193,6 +196,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             'POST',
             '/api/message_tags',
             [
+                'headers' => ['content-type' => ['application/ld+json']],
                 'json' => [
                     'tag' => 'new tag',
                     'user' => $testUser->getIri(),

@@ -135,12 +135,6 @@
       />
       <template #footer>
         <BaseButton
-          :label="t('Cancel')"
-          icon="close"
-          type="black"
-          @click="closeRename"
-        />
-        <BaseButton
           :label="t('Save')"
           icon="check"
           type="primary"
@@ -166,7 +160,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -178,11 +172,9 @@ import ProjectCreateDialog from "../../components/blog/ProjectCreateDialog.vue"
 import service from "../../services/blogs"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_DRAFT } from "../../constants/entity/resourcelink"
-import { useCidReq } from "../../composables/cidReq"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 
-const { cid, sid } = useCidReq()
 const { t } = useI18n()
 const route = useRoute()
 
@@ -190,9 +182,11 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
 
-// Parent node and default link list (created as draft)
+// Parent node and default link list (created as draft). The course context
+// (cid/sid/gid) is derived server-side from the gated session course, so the
+// link list only carries the visibility.
 const parentResourceNodeId = ref(Number(route.params.node))
-const resourceLinkList = ref([{ sid, cid, visibility: RESOURCE_LINK_DRAFT }])
+const resourceLinkList = ref([{ visibility: RESOURCE_LINK_DRAFT }])
 
 // UI state
 const q = ref("")
@@ -207,12 +201,12 @@ const renameTitle = ref("")
 const renameSubmitted = ref(false)
 const createDialogKey = ref(0)
 
-const sortOptions = [
-  { label: "Newest first", value: "createdAt:desc" },
-  { label: "Oldest first", value: "createdAt:asc" },
-  { label: "Title (A–Z)", value: "title:asc" },
-  { label: "Title (Z–A)", value: "title:desc" },
-]
+const sortOptions = computed(() => [
+  { label: t("Newest first"), value: "createdAt:desc" },
+  { label: t("Oldest first"), value: "createdAt:asc" },
+  { label: t("Title A–Z"), value: "title:asc" },
+  { label: t("Title Z–A"), value: "title:desc" },
+])
 
 function formatDate(iso) {
   try {
@@ -263,10 +257,14 @@ function openRename(p) {
 }
 function closeRename() {
   showRename.value = false
-  renameSubmitted.value = false
-  renameTarget.value = null
-  renameTitle.value = ""
 }
+watch(showRename, (v) => {
+  if (!v) {
+    renameSubmitted.value = false
+    renameTarget.value = null
+    renameTitle.value = ""
+  }
+})
 async function saveRename() {
   renameSubmitted.value = true
   if (!renameTitle.value.trim() || !renameTarget.value) return

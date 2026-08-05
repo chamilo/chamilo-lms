@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Geen notities gemaakt met het huidige filter';
 $strings['NoNotebook'] = 'Geen notities gemaakt in het systeem';
 $strings['NoNotebookUser'] = 'Geen notities voor deze student';
 $strings['NotebookNoStudentAssigned'] = 'Notities zonder toegewezen studenten';
+
+$strings['TeacherNotesHelp'] = 'Maak privé-docentnotities gekoppeld aan cursisten in deze cursus.';
+$strings['CurrentFilter'] = 'Huidig filter';
+$strings['EmptyStateHelp'] = 'Maak een nieuwe notitie of wijzig het cursistenfilter.';

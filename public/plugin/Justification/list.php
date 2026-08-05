@@ -3,34 +3,47 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$allowSessionAdmins = api_get_plugin_setting('justification', 'access_for_session_admin') === 'true';
+$plugin = Justification::create();
+$allowSessionAdmins = $plugin->canSessionAdminsManageUsers();
+
 api_protect_admin_script($allowSessionAdmins);
 
 $tool = 'justification';
-$plugin = Justification::create();
-
 $tpl = new Template($tool);
-$fields = [];
 
-$list = $plugin->getList();
-
-$tpl->assign('list', $list);
-
-$content = $tpl->fetch('Justification/view/list.tpl');
-$actionLinks = '';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 switch ($action) {
     case 'delete':
-        $sql = "DELETE FROM justification_document WHERE id = $id";
-        Database::query($sql);
+        if (!api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
 
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+
+        Security::clear_token();
+
+        if ($id > 0) {
+            Database::query('DELETE FROM '.Justification::TABLE_DOCUMENT.' WHERE id = '.$id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
+
         header('Location: '.api_get_self());
         exit;
-        break;
 }
+
+$list = $plugin->getList();
+
+$tpl->assign('list', $list);
+$tpl->assign('token', Security::get_token());
+$tpl->assign('can_manage_documents', api_is_platform_admin());
+
+$content = $tpl->fetch('Justification/view/list.tpl');
+
+$actionLinks = '';
 
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(
@@ -45,6 +58,13 @@ $actionLinks .= Display::toolbarButton(
     $plugin->get_lang('Users'),
     api_get_path(WEB_PLUGIN_PATH).'Justification/justification_by_user.php',
     'user',
+    'primary'
+);
+
+$actionLinks .= Display::toolbarButton(
+    $plugin->get_lang('MyJustifications'),
+    api_get_path(WEB_PLUGIN_PATH).'Justification/upload.php',
+    'upload',
     'primary'
 );
 

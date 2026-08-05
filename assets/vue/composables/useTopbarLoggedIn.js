@@ -1,4 +1,4 @@
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
 import { useI18n } from "vue-i18n"
@@ -7,6 +7,7 @@ import { useMessageRelUserStore } from "../store/messageRelUserStore"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import { useNotification } from "./notification"
+import baseService from "../services/baseService"
 
 const ROLE_MAP = {
   ROLE_ADMIN: "ADMIN",
@@ -207,6 +208,59 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
   return defaultCfg
 }
 
+function isSettingEnabled(platformConfigStore, key) {
+  return normalizeBooleanFlag(platformConfigStore.getSetting(key))
+}
+
+function normalizeBooleanFlag(value) {
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  if (typeof value === "string") {
+    return value === "true"
+  }
+
+  return false
+}
+
+function normalizeExternalLogoutBehaviour(data) {
+  if (!data || data.active !== true) {
+    return null
+  }
+
+  const logoutUrl = typeof data.logoutUrl === "string" && data.logoutUrl.trim() ? data.logoutUrl.trim() : "/logout"
+
+  return {
+    logoutUrl,
+    tooltip: typeof data.tooltip === "string" ? data.tooltip : "",
+    showAlert: data.showAlert === true,
+    alertText: typeof data.alertText === "string" ? data.alertText : "",
+    disabled: data.disabled === true || logoutUrl === "#",
+  }
+}
+
+async function fetchExternalLogoutBehaviour() {
+  try {
+    const response = await fetch("/plugin/ExtAuthChamiloLogoutButtonBehaviour/logout-config.php", {
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return normalizeExternalLogoutBehaviour(await response.json())
+  } catch (e) {
+    console.warn("[ExtAuthChamiloLogoutButtonBehaviour] Unable to load logout behavior", e)
+
+    return null
+  }
+}
+
 export function useTopbarLoggedIn(props) {
   const { t } = useI18n()
   const router = useRouter()
@@ -217,20 +271,23 @@ export function useTopbarLoggedIn(props) {
   const notification = useNotification()
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
-  const { isTeacher } = storeToRefs(securityStore)
+  const { isTeacher, isAdmin, isHRM } = storeToRefs(securityStore)
 
   const loginUrl = "/login"
   const elUserSubmenu = ref(null)
+  const externalLogoutBehaviour = ref(null)
 
-  const allowUsersToCreateCourses = computed(
-    () => platformConfigStore.getSetting("workflows.allow_users_to_create_courses") === "true",
+  const allowUsersToCreateCourses = computed(() =>
+    isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
 
-  const hideLogoutButton = computed(() => platformConfigStore.getSetting("display.hide_logout_button") === "true")
-
-  const showTicketLink = computed(
-    () => platformConfigStore.getSetting("ticket.show_link_ticket_notification") !== "false",
+  const canCreateCourseFromTopbar = computed(
+    () => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value),
   )
+
+  const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
+
+  const showTicketLink = computed(() => isSettingEnabled(platformConfigStore, "ticket.show_link_ticket_notification"))
 
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
@@ -238,9 +295,7 @@ export function useTopbarLoggedIn(props) {
     return displayTabs.value?.topbar?.[key] === true
   }
 
-  const showPendingSurveys = computed(
-    () => platformConfigStore.getSetting("survey.show_pending_survey_in_menu") === "true",
-  )
+  const showPendingSurveys = computed(() => isSettingEnabled(platformConfigStore, "survey.show_pending_survey_in_menu"))
 
   const pendingSurveysUrl = computed(() => {
     try {
@@ -249,8 +304,11 @@ export function useTopbarLoggedIn(props) {
       if (resolvedRoute?.href) {
         return resolvedRoute.href
       }
-    } catch {}
-    return "/main/survey/pending.php"
+    } catch (error) {
+      console.error("Could not resolve pending surveys route", error)
+    }
+
+    return "/survey/pending"
   })
 
   const myServicesUrl = computed(() => {
@@ -282,61 +340,77 @@ export function useTopbarLoggedIn(props) {
   })
 
   const messagingEnabled = computed(
-    () => platformConfigStore.getSetting("message.allow_message_tool") === "true" && !isAnonymous.value,
+    () => isSettingEnabled(platformConfigStore, "message.allow_message_tool") && !isAnonymous.value,
   )
 
-  const ticketUrl = computed(() => {
-    const searchParams = new URLSearchParams()
+  const ticketRoute = computed(() => {
+    const query = {}
+    const courseId = Number(cidReqStore.course?.id ?? route.query.cid ?? 0)
+    const sessionId = Number(cidReqStore.session?.id ?? route.query.sid ?? 0)
+    const groupId = Number(cidReqStore.group?.id ?? route.query.gid ?? 0)
 
-    searchParams.append("project_id", "1")
-    searchParams.append("cid", cidReqStore.course?.id ?? 0)
-    searchParams.append("sid", cidReqStore.session?.id ?? 0)
-    searchParams.append("gid", cidReqStore.group?.id ?? 0)
+    if (courseId > 0) {
+      query.cid = String(courseId)
+    }
+    if (sessionId > 0) {
+      query.sid = String(sessionId)
+    }
+    if (groupId > 0) {
+      query.gid = String(groupId)
+    }
 
-    return "/main/ticket/tickets.php?" + searchParams.toString()
+    return { name: "TicketList", query }
   })
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
 
-  function normalizeBooleanFlag(value) {
-    if (typeof value === "boolean") {
-      return value
-    }
-
-    if (typeof value === "number") {
-      return value === 1
-    }
-
-    if (typeof value === "string") {
-      const normalized = value.trim().toLowerCase()
-      return ["1", "true", "yes", "on"].includes(normalized)
-    }
-
-    return false
-  }
-
   const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
 
-  function isSettingTrue(keys, defaultValue = false) {
-    for (const key of keys) {
-      const value = platformConfigStore.getSetting(key)
+  const justificationMenu = ref({
+    enabled: false,
+    label: "My justifications",
+    url: "/plugin/Justification/upload.php",
+  })
 
-      if (value === "true") {
-        return true
-      }
+  const showMyJustificationsLink = computed(() => !isAnonymous.value && justificationMenu.value.enabled === true)
 
-      if (value === "false") {
-        return false
-      }
+  async function fetchJustificationMenu() {
+    if (isAnonymous.value) {
+      justificationMenu.value.enabled = false
+
+      return
     }
 
-    return defaultValue
+    try {
+      const data = await baseService.get("/plugin/Justification/user_menu.php")
+
+      justificationMenu.value = {
+        enabled: data?.enabled === true,
+        label: data?.label || "My justifications",
+        url: data?.url || "/plugin/Justification/upload.php",
+      }
+    } catch (e) {
+      console.warn("[Topbar] Failed to load Justification user menu", e)
+      justificationMenu.value.enabled = false
+    }
   }
 
-  const skillsToolAllowed = computed(() => isSettingTrue(["skill.allow_skills_tool", "allow_skills_tool"], true))
+  const skillsToolAllowed = computed(() => isSettingEnabled(platformConfigStore, "skill.allow_skills_tool"))
+
+  const certificatesSearchAllowed = computed(() =>
+    isSettingEnabled(platformConfigStore, "certificate.allow_certificates_search"),
+  )
+
+  const skillsManagementAllowed = computed(() =>
+    isSettingEnabled(platformConfigStore, "skill.allow_hr_skills_management"),
+  )
+
+  const canManageSkills = computed(
+    () => skillsToolAllowed.value && skillsManagementAllowed.value && (isAdmin.value || isHRM.value),
+  )
 
   const generalCertificateAllowed = computed(() =>
-    isSettingTrue(["certificate.allow_general_certificate", "allow_general_certificate"], false),
+    isSettingEnabled(platformConfigStore, "certificate.allow_general_certificate"),
   )
 
   const hasCustomCertificate = ref(null)
@@ -354,17 +428,7 @@ export function useTopbarLoggedIn(props) {
     isFetchingCustomCertificate.value = true
 
     try {
-      const response = await fetch("/main/social/my_skills_report.php?a=has_custom_certificate", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" },
-      })
-
-      if (!response.ok) {
-        throw new Error("Request failed: " + response.status)
-      }
-
-      const data = await response.json()
+      const data = await baseService.get("/main/social/my_skills_report.php", { a: "has_custom_certificate" })
 
       hasCustomCertificate.value = !!(
         data &&
@@ -375,6 +439,42 @@ export function useTopbarLoggedIn(props) {
       hasCustomCertificate.value = false
     } finally {
       isFetchingCustomCertificate.value = false
+    }
+  }
+
+  function runExternalLogoutBehaviour() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      window.location.href = "/logout"
+
+      return
+    }
+
+    if (behaviour.showAlert && behaviour.alertText) {
+      window.alert(behaviour.alertText)
+    }
+
+    if (!behaviour.disabled) {
+      window.location.href = behaviour.logoutUrl || "/logout"
+    }
+  }
+
+  function buildLogoutMenuItem() {
+    const behaviour = externalLogoutBehaviour.value
+
+    if (!behaviour) {
+      return {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
+      }
+    }
+
+    return {
+      label: t("Sign out"),
+      icon: behaviour.disabled ? "mdi mdi-logout-variant opacity-60" : "mdi mdi-logout-variant",
+      command: runExternalLogoutBehaviour,
     }
   }
 
@@ -390,6 +490,14 @@ export function useTopbarLoggedIn(props) {
         ],
       },
     ]
+
+    if (showMyJustificationsLink.value) {
+      items[0].items.push({
+        label: justificationMenu.value.label || t("My justifications"),
+        url: justificationMenu.value.url || "/plugin/Justification/upload.php",
+        icon: "mdi mdi-file-document-check-outline",
+      })
+    }
 
     if (showPendingSurveys.value) {
       items[0].items.push({
@@ -412,6 +520,13 @@ export function useTopbarLoggedIn(props) {
       })
     }
 
+    if (certificatesSearchAllowed.value) {
+      items[0].items.push({
+        label: t("Search certificates"),
+        url: "/main/gradebook/search.php",
+      })
+    }
+
     if (isTopbarEnabled("topbar_my_custom_certificate") && generalCertificateAllowed.value) {
       if (hasCustomCertificate.value === true) {
         items[0].items.push({
@@ -428,15 +543,15 @@ export function useTopbarLoggedIn(props) {
       })
     }
 
+    if (canManageSkills.value) {
+      items[0].items.push({
+        label: t("Manage skills"),
+        url: "/main/skills/skill_list.php",
+      })
+    }
+
     if (!hideLogoutButton.value) {
-      items[0].items.push(
-        { separator: true },
-        {
-          label: t("Sign out"),
-          url: "/logout",
-          icon: "mdi mdi-logout-variant",
-        },
-      )
+      items[0].items.push({ separator: true }, buildLogoutMenuItem())
     }
 
     return items
@@ -466,6 +581,14 @@ export function useTopbarLoggedIn(props) {
     return unreadCount > 9 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
   })
 
+  onMounted(async () => {
+    fetchJustificationMenu()
+
+    if (!isAnonymous.value) {
+      externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
+    }
+  })
+
   if (messagingEnabled.value) {
     messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
   }
@@ -473,12 +596,13 @@ export function useTopbarLoggedIn(props) {
   return {
     loginUrl,
     elUserSubmenu,
+    canCreateCourseFromTopbar,
     isTeacher,
     allowUsersToCreateCourses,
     showTicketLink,
     isAnonymous,
     messagingEnabled,
-    ticketUrl,
+    ticketRoute,
     btnInboxBadge,
     userSubmenuItems,
     toggleUserMenu,

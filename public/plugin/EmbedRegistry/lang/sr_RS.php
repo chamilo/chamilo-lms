@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'U tom periodu, ovaj ugrađeni sadržaj će bit
 $strings['HtmlCode'] = 'HTML kod';
 $strings['HtmlCodeHelp'] = 'Podeljeni HTML kod, kako ga pruža spoljna usluga kada se traži deljenje u ugrađenom formatu.';
 $strings['LaunchContent'] = 'Pokreni sadržaj';
+
+$strings['InvalidDateRange'] = 'Datum početka mora biti raniji ili jednak datumu završetka.';
+
+$strings['InvalidSecurityToken'] = 'Nevažeći sigurnosni token. Molimo ponovo učitajte stranicu i pokušajte ponovo.';

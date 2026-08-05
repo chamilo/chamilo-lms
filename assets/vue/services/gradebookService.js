@@ -1,4 +1,4 @@
-import axios from "axios"
+import baseService from "./baseService"
 
 const API_BASE = "/gradebook"
 
@@ -14,11 +14,29 @@ export default {
     if (sessionId) params.sessionId = sessionId
 
     try {
-      const response = await axios.get(`${API_BASE}/categories`, { params })
-      return response.data
+      return await baseService.get(`${API_BASE}/categories`, params)
     } catch (error) {
       console.error("Error fetching gradebook categories:", error)
       throw error
     }
+  },
+
+  /**
+   * Sets a document as the default certificate for a course.
+   * @param {number|string} courseId
+   * @param {number|string} certificateId
+   * @returns {Promise<Object>}
+   */
+  async setDefaultCertificate(courseId, certificateId) {
+    return await baseService.patch(`${API_BASE}/set_default_certificate/${courseId}/${certificateId}`, {})
+  },
+
+  /**
+   * Fetches the default certificate for a course.
+   * @param {number|string} courseId
+   * @returns {Promise<Object>}
+   */
+  async getDefaultCertificate(courseId) {
+    return await baseService.get(`${API_BASE}/default_certificate/${courseId}`)
   },
 }

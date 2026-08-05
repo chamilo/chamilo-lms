@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom ビデオ会議';
 $strings['plugin_comment'] = 'コースとセッションでの Zoom ビデオ会議統合';
 
+$strings['accountId'] = 'アカウントID';
+$strings['clientId'] = 'クライアントID';
+$strings['clientSecret'] = 'クライアントシークレット';
+$strings['webhookSecretToken'] = 'Webhookシークレットトークン';
+$strings['apiKey_help'] = '従来のJWT APIキー。Zoom Server-to-Server OAuthにはAccount ID、Client ID、Client Secretの使用を推奨します。';
+$strings['apiSecret_help'] = '従来のJWT APIシークレット。Zoom Server-to-Server OAuthにはAccount ID、Client ID、Client Secretの使用を推奨します。';
+$strings['verificationToken_help'] = '従来のWebhook検証トークン。Webhook Secret Tokenの使用を推奨します。';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuthアカウントID。';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuthクライアントID。';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuthクライアントシークレット。';
+$strings['webhookSecretToken_help'] = 'ZoomのWebhookリクエストを検証するために使用されるシークレットトークン。';
 $strings['apiKey'] = 'API キー';
 $strings['apiSecret'] = 'API シークレット';
 $strings['verificationToken'] = '検証トークン';

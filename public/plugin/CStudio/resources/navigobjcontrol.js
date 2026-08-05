@@ -926,7 +926,47 @@ function getLangTerm(term) {
         &&projLang=='es') {
         term = "Continuar";
     }
+    if (term=='Check answers') {
+        if (projLang=='fr') {
+            term = "Vérifier les réponses";
+        } else if (projLang=='es') {
+            term = "Comprobar respuestas";
+        } else if (projLang=='it') {
+            term = "Controlla le risposte";
+        }
+    }
+    if (term=='Page incomplete') {
+        if (projLang=='fr') {
+            term = "Page incomplète";
+        } else if (projLang=='es') {
+            term = "Página incompleta";
+        } else if (projLang=='it') {
+            term = "Pagina incompleta";
+        }
+    }
+    if (term=='All answers are correct') {
+        if (projLang=='fr') {
+            term = "Toutes les réponses sont correctes";
+        } else if (projLang=='es') {
+            term = "Todas las respuestas son correctas";
+        } else if (projLang=='it') {
+            term = "Tutte le risposte sono corrette";
+        }
+    }
     return term;
+}
+
+function cstudioIsDefaultIncompleteMessage(message) {
+    var value = String(message || '').replace(/\s+/g, ' ').trim();
+    var defaults = [
+        'Page incomplete',
+        'Page not complete.',
+        'Page incomplète',
+        'Página incompleta',
+        'Pagina incompleta'
+    ];
+
+    return value === '' || defaults.indexOf(value) !== -1;
 }
 
 var tmpIndexTbl = 200; 
@@ -1063,7 +1103,7 @@ function Teachscript(){
     };
 
     this.checkAll = function(){
-        checkAnswers();
+        cstudioRunQuestionCheck();
     }
 
     this.nextPageIsOK = function(){
@@ -1269,9 +1309,13 @@ function checkAnswers(){
 
     if (ctrPage==false) {
         showErrorMessages();
-        showTopMessage();
+        showTopMessage('error');
+        scrollToFirstErrorMessages();
+    } else {
+        showTopMessage('success', getLangTerm('All answers are correct'));
     }
 
+    return ctrPage;
 }
 
 function showErrorMessages(){
@@ -1308,11 +1352,24 @@ function scrollToFirstErrorMessages() {
 
 var onetimeoutShow;
 
-function showTopMessage(){
-   
-    $(".fixed-top-message").css("right","-350px");
-    $(".fixed-top-message").css("display","block");
-    $( ".fixed-top-message" ).animate({
+function showTopMessage(type, message){
+
+    var typeClass = type === 'success' ? 'cstudio-message-success' : 'cstudio-message-error';
+    var messageBox = $(".fixed-top-message");
+
+    messageBox
+        .removeClass('cstudio-message-success cstudio-message-error')
+        .addClass(typeClass);
+
+    if (typeof message !== 'undefined' && message !== null && String(message).trim() !== '') {
+        messageBox.text(message);
+    } else if (cstudioIsDefaultIncompleteMessage(messageBox.text())) {
+        messageBox.text(getLangTerm('Page incomplete'));
+    }
+
+    messageBox.css("right","-350px");
+    messageBox.css("display","block");
+    messageBox.animate({
         right: "4px"
     },500);
 
@@ -3189,6 +3246,8 @@ function installCmq() {
         );
         
 	});
+
+    cstudioInstallQcmCheckButtons();
     
     $(".checkboxqcm").click(
 		function(){
@@ -3198,6 +3257,79 @@ function installCmq() {
     );
     
     setTimeout(function(){applyGlossaryAllTxt();},500);
+}
+
+function cstudioInstallQcmCheckButtons() {
+    var label = getLangTerm('Check answers');
+
+    $(".qcmbarre").each(function() {
+        var qcmTable = $(this);
+
+        if (qcmTable.find('.cstudio-qcm-check-row').length > 0) {
+            return;
+        }
+
+        var buttonRow = '<tr class="cstudio-qcm-check-row">';
+        buttonRow += '<td colspan="2" style="text-align:center;padding:12px;">';
+        buttonRow += '<button type="button" class="cstudio-quiz-check-button" ';
+        buttonRow += 'style="display:inline-block;padding:8px 16px;border-radius:5px;border:1px solid #2f80ed;background:#2f80ed;color:#fff;font-size:15px;cursor:pointer;" ';
+        buttonRow += 'onclick="return cstudioRunQuestionCheck();">';
+        buttonRow += label;
+        buttonRow += '</button>';
+        buttonRow += '</td>';
+        buttonRow += '</tr>';
+
+        var body = qcmTable.children('tbody').first();
+        if (body.length > 0) {
+            body.append(buttonRow);
+        } else {
+            qcmTable.append(buttonRow);
+        }
+    });
+}
+
+function cstudioTriggerHvpQuestionChecks() {
+    $(".plugteachcontain").find("iframe").each(function() {
+        try {
+            var frameContent = $(this).contents();
+            var nestedFrames = frameContent.find("iframe");
+
+            if (nestedFrames.length > 0) {
+                nestedFrames.each(function() {
+                    try {
+                        cstudioClickHvpCheckButtons($(this).contents());
+                    } catch (err) {
+                    }
+                });
+            } else {
+                cstudioClickHvpCheckButtons(frameContent);
+            }
+        } catch (err) {
+        }
+    });
+}
+
+function cstudioClickHvpCheckButtons(frameContent) {
+    frameContent.find(".h5p-question-check-answer").each(function() {
+        var button = $(this);
+
+        if (!button.is(":disabled") && button.is(":visible")) {
+            button.trigger("click");
+        }
+    });
+}
+
+function cstudioRunQuestionCheck() {
+    cstudioTriggerHvpQuestionChecks();
+    var firstResult = checkAnswers();
+
+    if (!firstResult) {
+        setTimeout(function() {
+            checkAnswers();
+        }, 700);
+    }
+
+    return false;
 }
 
 function checkObj(obj) {

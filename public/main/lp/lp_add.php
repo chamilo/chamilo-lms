@@ -4,7 +4,42 @@
 
 declare(strict_types=1);
 
+use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+
+
+function lp_add_apply_resource_language(CLp $lp, mixed $rawLanguage): void
+{
+    $resourceNode = $lp->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
@@ -90,6 +125,22 @@ $interbreadcrumb[] = [
 ];
 
 $lpRepo = Container::getLpRepository();
+
+$languageOptions = [
+    '' => get_lang('No specific language'),
+];
+$languages = Database::getManager()
+    ->getRepository(Language::class)
+    ->findBy(['available' => true], ['englishName' => 'ASC'])
+;
+foreach ($languages as $language) {
+    if (!$language instanceof Language) {
+        continue;
+    }
+
+    $languageOptions[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+}
+
 $form = new FormValidator(
     'lp_add',
     'post',
@@ -130,6 +181,16 @@ $items = learnpath::getCategoryFromCourseIntoSelect(
     true
 );
 $form->addSelect('category_id', get_lang('Category'), $items);
+if (\count($languageOptions) > 2) {
+    $form->addSelect(
+        'language',
+        get_lang('Language'),
+        $languageOptions,
+        [
+            'id' => 'resource_language',
+        ]
+    );
+}
 
 // accumulate_scorm_time
 $form->addCheckBox(
@@ -178,6 +239,7 @@ SkillModel::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 
+$defaults['language'] = '';
 $defaults['activate_start_date_check'] = 1;
 $defaults['accumulate_scorm_time'] = 0;
 if ('true' === api_get_setting('scorm_cumulative_session_time')) {
@@ -232,7 +294,13 @@ if ($form->validate()) {
 
         $lp->setSubscribeUsers((int) (null !== $request->request->get('subscribe_users')));
         $lp->setAccumulateScormTime((int) (null !== $request->request->get('accumulate_scorm_time')));
+        lp_add_apply_resource_language($lp, $request->request->get('language', ''));
         $lpRepo->update($lp);
+
+        Container::getEventDispatcher()->dispatch(
+            new LearningPathCreatedEvent(['lp' => $lp]),
+            Events::LP_CREATED
+        );
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url&isStudentView=false");

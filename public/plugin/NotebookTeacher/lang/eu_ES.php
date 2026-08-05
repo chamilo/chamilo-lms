@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Ez da oharrik sortu uneko iragazkiarekin';
 $strings['NoNotebook'] = 'Ez da oharrik sortu sisteman';
 $strings['NoNotebookUser'] = 'Ez dago oharrik ikasle honetarako';
 $strings['NotebookNoStudentAssigned'] = 'Ikaslerik esleitua ez duten oharrak';
+
+$strings['TeacherNotesHelp'] = 'Sortu irakasle-ohar pribatuak, ikastaro honetako ikasleekin lotuta.';
+$strings['CurrentFilter'] = 'Uneko iragazkia';
+$strings['EmptyStateHelp'] = 'Sortu ohar berri bat edo aldatu ikasleen iragazkia.';

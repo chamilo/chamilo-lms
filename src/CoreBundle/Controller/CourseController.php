@@ -6,10 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
@@ -31,16 +32,19 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -54,6 +58,7 @@ use CourseManager;
 use Database;
 use DateTimeInterface;
 use Display;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
@@ -61,6 +66,8 @@ use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
 use IntlDateFormatter;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,6 +82,9 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UserManager;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -107,7 +117,8 @@ class CourseController extends ToolBaseController
         LegalRepository $legalTermsRepo,
         LanguageRepository $languageRepository,
         ExtraFieldValuesRepository $extraFieldValuesRepository,
-        SettingsManager $settingsManager
+        SettingsManager $settingsManager,
+        CourseAccessResolver $courseAccessResolver,
     ): Response {
         $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
@@ -117,6 +128,26 @@ class CourseController extends ToolBaseController
             'redirect' => false,
             'url' => '#',
         ];
+
+        if (null !== $course) {
+            $coursePasswordAccepted = true === (bool) $request->getSession()->get(
+                'course_password_'.$course->getId(),
+                false
+            );
+            $session = $sid > 0 ? $this->em->find(Session::class, $sid) : null;
+
+            if (!$coursePasswordAccepted
+                && $courseAccessResolver->requiresRegistrationPassword($course, $user, $session)
+            ) {
+                return new JsonResponse([
+                    'redirect' => true,
+                    'url' => '/main/auth/set_temp_password.php?'.http_build_query([
+                        'course_id' => $course->getId(),
+                        'session_id' => $sid,
+                    ]),
+                ]);
+            }
+        }
 
         if ($user->isStudent()
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
@@ -169,7 +200,9 @@ class CourseController extends ToolBaseController
         Request $request,
         CShortcutRepository $shortcutRepository,
         EntityManagerInterface $em,
-        AssetRepository $assetRepository
+        AssetRepository $assetRepository,
+        SettingsManager $settingsManager,
+        LearningPathAccessChecker $learningPathAccessChecker,
     ): Response {
         // Handle drag & drop sort for course tools
         if ($request->isMethod('POST')) {
@@ -216,6 +249,18 @@ class CourseController extends ToolBaseController
             $userId = $user->getId();
         }
 
+        $session = $sessionId > 0 ? $em->getRepository(Session::class)->find($sessionId) : null;
+        $canManageShortcuts = null !== $user
+            && 'studentview' !== $sessionHandler->get('studentview')
+            && (
+                $user->isAdmin()
+                || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            );
+        $showInvisibleLearningPaths = $this->isTruthyCourseHomeSetting(
+            $settingsManager->getSetting('lp.show_invisible_lp_in_course_home', true),
+        );
+
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
@@ -256,7 +301,15 @@ class CourseController extends ToolBaseController
 
         $shortcuts = [];
         if (null !== $user) {
-            $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
+            $shortcutQuery = $shortcutRepository->getResourcesByCourse(
+                $course,
+                $session,
+                null,
+                $course->getResourceNode(),
+                false,
+                true,
+                true,
+            );
             $shortcuts = $shortcutQuery->getQuery()->getResult();
 
             $pluginEntity = Container::getPluginRepository()->findOneByTitle('ImsLti');
@@ -268,16 +321,148 @@ class CourseController extends ToolBaseController
                 && $pluginConfiguration
                 && $pluginConfiguration->isActive();
 
+            $topLinksRelationClass = 'Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelShortcut';
+            $topLinksEntityPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/TopLinkRelShortcut.php';
+            $topLinksRepositoryPath = \dirname(__DIR__, 3).'/public/plugin/TopLinks/src/Entity/Repository/TopLinkRelShortcutRepository.php';
+
+            if (is_file($topLinksRepositoryPath)) {
+                require_once $topLinksRepositoryPath;
+            }
+
+            if (is_file($topLinksEntityPath)) {
+                require_once $topLinksEntityPath;
+            }
+
+            $topLinksPluginEntity = Container::getPluginRepository()->findOneByTitle('TopLinks');
+            if (null === $topLinksPluginEntity) {
+                $topLinksPluginEntity = Container::getPluginRepository()->findOneByTitle('Top Links');
+            }
+
+            $topLinksConfiguration = $topLinksPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+            $isTopLinksEnabled = $topLinksPluginEntity
+                && $topLinksPluginEntity->isInstalled()
+                && $topLinksConfiguration
+                && $topLinksConfiguration->isActive()
+                && class_exists($topLinksRelationClass);
+
+            if ($isTopLinksEnabled) {
+                try {
+                    $isTopLinksEnabled = $em
+                        ->getConnection()
+                        ->createSchemaManager()
+                        ->tablesExist(['toplinks_link_rel_shortcut'])
+                    ;
+                } catch (Throwable) {
+                    $isTopLinksEnabled = false;
+                }
+            }
+
+            $embedRegistryPluginEntity = Container::getPluginRepository()->findOneByTitle('EmbedRegistry');
+            $embedRegistryConfiguration = $embedRegistryPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+            $isEmbedRegistryAvailable = false;
+
+            try {
+                $isEmbedRegistryAvailable = $em
+                    ->getConnection()
+                    ->createSchemaManager()
+                    ->tablesExist(['plugin_embed_registry_shortcut'])
+                ;
+            } catch (Throwable) {
+                $isEmbedRegistryAvailable = false;
+            }
+
+            $isEmbedRegistryEnabled = $embedRegistryPluginEntity
+                && $embedRegistryPluginEntity->isInstalled()
+                && $embedRegistryConfiguration
+                && $embedRegistryConfiguration->isActive()
+                && $isEmbedRegistryAvailable;
+
             $courseNodeId = $course->getResourceNode()->getId();
             $cid = $course->getId();
             $sid = $this->getSessionId() ?: null;
 
             $externalToolRepository = $em->getRepository(ExternalTool::class);
+            $learningPathRepository = $em->getRepository(CLp::class);
+            $learningPathCategoryRepository = $em->getRepository(CLpCategory::class);
+            $topLinksRelationRepository = $isTopLinksEnabled ? $em->getRepository($topLinksRelationClass) : null;
             $visibleShortcuts = [];
 
             /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
+
+                if (!$canManageShortcuts && !$this->isCourseHomeResourcePublished($shortcut, $course, $session)) {
+                    continue;
+                }
+
+                if (null !== $topLinksRelationRepository) {
+                    $topLinksRelation = $topLinksRelationRepository->findOneBy(['shortcut' => $shortcut]);
+
+                    if (null !== $topLinksRelation && method_exists($topLinksRelation, 'getLink')) {
+                        $topLink = $topLinksRelation->getLink();
+
+                        if (null !== $topLink && method_exists($topLink, 'getId')) {
+                            $queryParams = array_filter([
+                                'link' => $topLink->getId(),
+                                'cid' => $cid,
+                                'sid' => $sid ?: null,
+                                'gid' => 0,
+                            ], static fn ($value): bool => null !== $value);
+
+                            $shortcut->setUrlOverride('/plugin/TopLinks/start.php?'.http_build_query($queryParams));
+                            $shortcut->setIcon('mdi-link-variant');
+
+                            $iconName = method_exists($topLink, 'getIcon') ? $topLink->getIcon() : null;
+                            if (
+                                \is_string($iconName)
+                                && preg_match('/^[a-f0-9]{32}\.(?:png|jpe?g|gif|webp)$/i', $iconName)
+                            ) {
+                                $shortcut->setCustomImageUrl('/plugin/TopLinks/image.php?f='.rawurlencode($iconName));
+                            } else {
+                                $shortcut->setCustomImageUrl(null);
+                            }
+
+                            $target = method_exists($topLink, 'getTarget') ? (string) $topLink->getTarget() : '_blank';
+                            $shortcut->target = \in_array($target, ['_self', '_blank'], true) ? $target : '_blank';
+
+                            $visibleShortcuts[] = $shortcut;
+
+                            continue;
+                        }
+                    }
+                }
+
+                if ($isEmbedRegistryAvailable) {
+                    try {
+                        $embedRegistryShortcutId = (int) $em->getConnection()->fetchOne(
+                            'SELECT shortcut_id FROM plugin_embed_registry_shortcut WHERE shortcut_id = :shortcutId',
+                            ['shortcutId' => $shortcut->getId()]
+                        );
+                    } catch (Throwable) {
+                        $embedRegistryShortcutId = 0;
+                    }
+
+                    if ($embedRegistryShortcutId > 0) {
+                        if (!$isEmbedRegistryEnabled) {
+                            continue;
+                        }
+
+                        $queryParams = array_filter([
+                            'cid' => $cid,
+                            'sid' => $sid ?: null,
+                            'gid' => 0,
+                        ], static fn ($value): bool => null !== $value);
+
+                        $shortcut->setUrlOverride('/plugin/EmbedRegistry/start.php?'.http_build_query($queryParams));
+                        $shortcut->setIcon('mdi-application-brackets-outline');
+                        $shortcut->setCustomImageUrl(null);
+                        $shortcut->target = '_self';
+
+                        $visibleShortcuts[] = $shortcut;
+
+                        continue;
+                    }
+                }
 
                 /** @var ExternalTool|null $externalTool */
                 $externalTool = $externalToolRepository->findOneBy(['resourceNode' => $resourceNode]);
@@ -296,8 +481,62 @@ class CourseController extends ToolBaseController
                     continue;
                 }
 
+                /** @var CLp|null $learningPath */
+                $learningPath = $learningPathRepository->findOneBy(['resourceNode' => $resourceNode]);
+                if ($learningPath) {
+                    if (!$canManageShortcuts
+                        && !$learningPathAccessChecker->isLearningPathVisibleOnCourseHome(
+                            $learningPath,
+                            $course,
+                            $session,
+                            $user,
+                            $showInvisibleLearningPaths,
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    $shortcut->setCustomImageUrl(null);
+                    $shortcut->setUrlOverride(null);
+                    $shortcut->setIcon(null);
+                    $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
+
+                    continue;
+                }
+
+                /** @var CLpCategory|null $learningPathCategory */
+                $learningPathCategory = $learningPathCategoryRepository->findOneBy(['resourceNode' => $resourceNode]);
+                if ($learningPathCategory) {
+                    if (!$canManageShortcuts
+                        && !$learningPathAccessChecker->isCategoryVisibleOnCourseHome(
+                            $learningPathCategory,
+                            $course,
+                            $session,
+                            $user,
+                            $showInvisibleLearningPaths,
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    $shortcut->setCustomImageUrl(null);
+                    $shortcut->setUrlOverride(null);
+                    $shortcut->setIcon(null);
+                    $shortcut->target = '_self';
+
+                    $visibleShortcuts[] = $shortcut;
+
+                    continue;
+                }
+
                 $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cLink) {
+                    if (!$canManageShortcuts && !$this->isCourseHomeResourcePublished($cLink, $course, $session)) {
+                        continue;
+                    }
+
                     $shortcut->setCustomImageUrl(
                         $cLink->getCustomImage()
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
@@ -501,7 +740,16 @@ class CourseController extends ToolBaseController
             ];
         }
 
-        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+        $thematicUrl = null;
+
+        if ($courseNodeId > 0) {
+            $thematicUrl = '/resources/course-progress/'.$courseNodeId.'/?'.http_build_query([
+                'cid' => (int) $course->getId(),
+                'sid' => $this->getSessionId(),
+            ]);
+        }
+
         $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
         $thematicScore = $thematicScoreRaw.'%';
 
@@ -599,6 +847,10 @@ class CourseController extends ToolBaseController
         CToolRepository $repo,
         ToolChain $toolChain
     ): RedirectResponse {
+        if (null === $this->getCourse()) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
+
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'title' => $toolName,
@@ -608,12 +860,16 @@ class CourseController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
-        $link = $tool->getLink();
+        $toolDefinition = $toolChain->getToolFromName($tool->getTool()->getTitle());
+        $link = $toolDefinition->getLink();
 
-        if (null === $this->getCourse()) {
-            throw new NotFoundHttpException($this->trans('Course not found'));
+        if ($this->isExerciseToolEntry($toolName, $tool->getTool()->getTitle(), $link)) {
+            $exerciseUrl = $this->buildExerciseVueToolUrl();
+            if (null !== $exerciseUrl) {
+                return $this->redirect($exerciseUrl);
+            }
         }
+
         $optionalParams = '';
 
         $optionalParams = $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
@@ -641,6 +897,31 @@ class CourseController extends ToolBaseController
         SettingsFormFactory $formFactory
     ): Response {
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        $manager->setCourse($course);
+
+        if ('wiki' === $namespace) {
+            $user = $this->userHelper->getCurrent();
+            $canManageWikiSettings = $this->isGranted('ROLE_ADMIN')
+                || ($user instanceof User && (
+                    $course->hasUserAsTeacher($user)
+                    || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                ));
+
+            if (!$canManageWikiSettings) {
+                throw $this->createAccessDeniedException('You are not allowed to manage Wiki settings.');
+            }
+
+            if ($request->isMethod(Request::METHOD_GET)) {
+                $nodeId = $course->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    return $this->redirect(\sprintf(
+                        '/resources/wiki/%d/settings?cid=%d',
+                        $nodeId,
+                        $course->getId(),
+                    ));
+                }
+            }
+        }
 
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
@@ -654,7 +935,6 @@ class CourseController extends ToolBaseController
             $messageType = 'success';
 
             try {
-                $manager->setCourse($course);
                 $manager->save($form->getData());
                 $message = $this->trans('Update');
             } catch (ValidatorException $validatorException) {
@@ -693,12 +973,16 @@ class CourseController extends ToolBaseController
 
         $user = $this->userHelper->getCurrent();
 
+        if (!$this->isGranted(CourseVoter::VIEW, $course)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $fieldsRepo = $em->getRepository(ExtraField::class);
 
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
-        $courseDescriptions = $courseDescriptionRepository->getResourcesByCourse($course)->getQuery()->getResult();
+        $courseDescriptions = $courseDescriptionRepository->findAllInCourseForCatalogue($course);
 
         $courseValues = new ExtraFieldValue('course');
 
@@ -712,7 +996,7 @@ class CourseController extends ToolBaseController
                 'complete_name' => UserManager::formatUserFullName($teacher),
                 'image' => $illustrationRepository->getIllustrationUrl($teacher),
                 'diploma' => $teacher->getDiplomas(),
-                'openarea' => $teacher->getOpenarea(),
+                'openarea' => $this->sanitizeCourseAboutHtml((string) $teacher->getOpenarea()),
             ];
 
             $teachersData[] = $userData;
@@ -732,10 +1016,21 @@ class CourseController extends ToolBaseController
         $courseDescription = $courseObjectives = $courseTopics = $courseMethodology = '';
         $courseMaterial = $courseResources = $courseAssessment = '';
         $courseCustom = [];
+        $descriptionSections = [];
+
         foreach ($courseDescriptions as $descriptionTool) {
+            if (!$descriptionTool instanceof CCourseDescription) {
+                continue;
+            }
+
+            $section = $this->buildCourseAboutDescriptionSection($descriptionTool);
+            if (null !== $section) {
+                $descriptionSections[] = $section;
+            }
+
             switch ($descriptionTool->getDescriptionType()) {
                 case CCourseDescription::TYPE_DESCRIPTION:
-                    $courseDescription = $descriptionTool->getContent();
+                    $courseDescription = $section['content'] ?? '';
 
                     break;
 
@@ -776,6 +1071,10 @@ class CourseController extends ToolBaseController
             }
         }
 
+        if ('' === $courseDescription && [] !== $descriptionSections) {
+            $courseDescription = (string) ($descriptionSections[0]['content'] ?? '');
+        }
+
         $topics = [
             'objectives' => $courseObjectives,
             'topics' => $courseTopics,
@@ -799,6 +1098,7 @@ class CourseController extends ToolBaseController
         $params = [
             'course' => $course,
             'description' => $courseDescription,
+            'description_sections' => $descriptionSections,
             'image' => $image,
             'syllabus' => $topics,
             'tags' => $courseTags,
@@ -816,16 +1116,51 @@ class CourseController extends ToolBaseController
             'allow_subscribe' => $allowSubscribe,
         ];
 
-        $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
+        $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
         $metaInfo .= '<meta property="og:type" content="website" />';
-        $metaInfo .= '<meta property="og:title" content="'.$course->getTitle().'" />';
-        $metaInfo .= '<meta property="og:description" content="'.strip_tags($courseDescription).'" />';
-        $metaInfo .= '<meta property="og:image" content="'.$image.'" />';
+        $metaInfo .= '<meta property="og:title" content="'.htmlspecialchars($course->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:description" content="'.htmlspecialchars(strip_tags($courseDescription), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
+        $metaInfo .= '<meta property="og:image" content="'.htmlspecialchars($image, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
 
         $htmlHeadXtra[] = $metaInfo;
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function buildCourseAboutDescriptionSection(CCourseDescription $description): ?array
+    {
+        $title = trim(strip_tags((string) $description->getTitle()));
+        $content = $this->sanitizeCourseAboutHtml((string) $description->getContent());
+
+        if ('' === $title && '' === strip_tags($content)) {
+            return null;
+        }
+
+        return [
+            'iid' => $description->getIid(),
+            'title' => $title,
+            'content' => $content,
+            'type' => $description->getDescriptionType(),
+            'progress' => $description->getProgress(),
+        ];
+    }
+
+    private function sanitizeCourseAboutHtml(string $content): string
+    {
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? \STUDENT : null;
+
+            return (string) \Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 
     #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]
@@ -836,203 +1171,17 @@ class CourseController extends ToolBaseController
         ]);
     }
 
-    private function findIntroOfCourse(Course $course): ?CTool
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $query = $qb->select('ct')
-            ->from(CTool::class, 'ct')
-            ->where('ct.course = :c_id')
-            ->andWhere('ct.title = :title')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->eq('ct.session', ':session_id'),
-                    $qb->expr()->isNull('ct.session')
-                )
-            )
-            ->setParameters([
-                'c_id' => $course->getId(),
-                'title' => 'course_homepage',
-                'session_id' => 0,
-            ])
-            ->getQuery()
-        ;
-
-        $results = $query->getResult();
-
-        return \count($results) > 0 ? $results[0] : null;
-    }
-
-    #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]
-    public function getToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
-    {
-        $sessionId = (int) $request->query->get('sid', 0);
-
-        $session = null;
-        if ($sessionId > 0) {
-            $session = $em->getRepository(Session::class)->find($sessionId);
-        }
-
-        $ctoolRepo = $em->getRepository(CTool::class);
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
-
-        // Base tool + base intro (course context, no session).
-        $baseTool = $this->findIntroOfCourse($course);
-        if (!$baseTool) {
-            // ensure the base tool exists (should rarely happen).
-            $baseTool = $this->ensureCourseHomepageTool($course, null, $em);
-        }
-
-        $baseIntro = null;
-        if ($baseTool) {
-            $baseIntro = $ctoolintroRepo->findOneBy(
-                ['courseTool' => $baseTool],
-                ['iid' => 'DESC']
-            );
-        }
-
-        $activeTool = $baseTool;
-        $activeIntro = $baseIntro;
-        $createInSession = false;
-
-        if ($session) {
-            // Ensure the session tool exists so the frontend can create the intro in the right context.
-            $sessionTool = $ctoolRepo->findOneBy([
-                'title' => 'course_homepage',
-                'course' => $course,
-                'session' => $session,
-            ]);
-
-            if (!$sessionTool) {
-                $sessionTool = $this->ensureCourseHomepageTool($course, $session, $em);
-            }
-
-            // Use session tool for editing/creation in session context.
-            if ($sessionTool) {
-                $activeTool = $sessionTool;
-
-                $sessionIntro = $ctoolintroRepo->findOneBy(
-                    ['courseTool' => $sessionTool],
-                    ['iid' => 'DESC']
-                );
-
-                if ($sessionIntro) {
-                    // Session-specific intro exists: show it.
-                    $activeIntro = $sessionIntro;
-                    $createInSession = false;
-                } else {
-                    // No session-specific intro yet: show base intro (if any), but allow creating in session.
-                    $activeIntro = $baseIntro;
-                    $createInSession = true;
-                }
-            } else {
-                // If session tool cannot be created, fallback to base (display only).
-                $activeTool = $baseTool;
-                $activeIntro = $baseIntro;
-                $createInSession = false;
-            }
-        }
-
-        $responseData = [
-            'createInSession' => $createInSession,
-        ];
-
-        if ($activeTool) {
-            $responseData['cToolId'] = $activeTool->getIid();
-            $responseData['c_tool'] = [
-                'iid' => $activeTool->getIid(),
-                'title' => $activeTool->getTitle(),
-            ];
-        }
-
-        if ($activeIntro) {
-            $responseData['iid'] = $activeIntro->getIid();
-            $responseData['introText'] = $activeIntro->getIntroText();
-        }
-
-        return new JsonResponse($responseData);
-    }
-
-    #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
-    public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
-    {
-        $data = json_decode($request->getContent());
-        $sessionId = $data->sid ?? ($data->resourceLinkList[0]->sid ?? 0);
-        $introText = $data->introText ?? null;
-
-        $session = $sessionId ? $em->getRepository(Session::class)->find($sessionId) : null;
-        $ctoolRepo = $em->getRepository(CTool::class);
-        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
-
-        $ctoolSession = $ctoolRepo->findOneBy([
-            'title' => 'course_homepage',
-            'course' => $course,
-            'session' => $session,
-        ]);
-
-        if (!$ctoolSession) {
-            $toolEntity = $em->getRepository(Tool::class)->findOneBy(['title' => 'course_homepage']);
-            if ($toolEntity) {
-                $ctoolSession = (new CTool())
-                    ->setTool($toolEntity)
-                    ->setTitle('course_homepage')
-                    ->setCourse($course)
-                    ->setPosition(1)
-                    ->setParent($course)
-                    ->setCreator($course->getCreator())
-                    ->setSession($session)
-                    ->addCourseLink($course)
-                ;
-
-                $em->persist($ctoolSession);
-                $em->flush();
-            }
-        }
-
-        $ctoolIntro = $ctoolintroRepo->findOneBy(['courseTool' => $ctoolSession]);
-        if (!$ctoolIntro) {
-            $ctoolIntro = (new CToolIntro())
-                ->setCourseTool($ctoolSession)
-                ->setIntroText($introText ?? '')
-                ->setParent($course)
-            ;
-
-            $em->persist($ctoolIntro);
-            $em->flush();
-
-            return new JsonResponse([
-                'status' => 'created',
-                'cToolId' => $ctoolSession->getIid(),
-                'iid' => $ctoolIntro->getIid(),
-                'introIid' => $ctoolIntro->getIid(),
-                'introText' => $ctoolIntro->getIntroText(),
-            ]);
-        }
-
-        if (null !== $introText) {
-            $ctoolIntro->setIntroText($introText);
-            $em->persist($ctoolIntro);
-            $em->flush();
-
-            return new JsonResponse([
-                'status' => 'updated',
-                'cToolId' => $ctoolSession->getIid(),
-                'iid' => $ctoolIntro->getIid(),
-                'introIid' => $ctoolIntro->getIid(),
-                'introText' => $ctoolIntro->getIntroText(),
-            ]);
-        }
-
-        return new JsonResponse(['status' => 'no_action']);
-    }
-
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
-    public function checkEnrollments(EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
+    public function checkEnrollments(Request $request, EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
     {
         $user = $this->userHelper->getCurrent();
 
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($request->hasSession() && $request->getSession()->isStarted()) {
+            $request->getSession()->save();
         }
 
         $isEnrolledInCourses = $this->isUserEnrolledInAnyCourse($user, $em);
@@ -1074,6 +1223,7 @@ class CourseController extends ToolBaseController
         return new JsonResponse($results);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/create', name: 'chamilo_core_course_create')]
     public function createCourse(
         Request $request,
@@ -1104,9 +1254,15 @@ class CourseController extends ToolBaseController
             );
         }
 
-        $capabilityStatus = $this->resolveCourseCreateCapabilityStatus((int) $user->getId(), $translator);
+        $capabilityStatus = $this->resolveCourseCreateCapabilityStatus($user, $translator, $courseHelper);
 
-        if (!$capabilityStatus['canCreate']) {
+        $buyCoursesServiceSaleId = null;
+        if (isset($courseData['buyCoursesServiceSaleId']) && \is_scalar($courseData['buyCoursesServiceSaleId'])) {
+            $candidateServiceSaleId = (int) $courseData['buyCoursesServiceSaleId'];
+            $buyCoursesServiceSaleId = $candidateServiceSaleId > 0 ? $candidateServiceSaleId : null;
+        }
+
+        if (!$capabilityStatus['canCreate'] && null === $buyCoursesServiceSaleId) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1222,6 +1378,10 @@ class CourseController extends ToolBaseController
             'course_template' => $template,
         ];
 
+        if (null !== $buyCoursesServiceSaleId) {
+            $params['buycourses_service_sale_id'] = $buyCoursesServiceSaleId;
+        }
+
         if (!empty($categoryIds)) {
             $params['course_categories'] = $categoryIds;
         }
@@ -1235,23 +1395,36 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
-        } catch (Throwable $exception) {
-            error_log(
-                '[course.create] throwable='.
-                $exception::class.
-                ' message='.$exception->getMessage().
-                ' file='.$exception->getFile().
-                ' line='.(string) $exception->getLine().
-                ' peak='.memory_get_peak_usage(true)
-            );
-
+        } catch (InvalidArgumentException $exception) {
             return new JsonResponse(
                 [
                     'success' => false,
-                    'message' => $translator->trans('An error occurred while creating the course.'),
+                    'message' => $exception->getMessage(),
                 ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
+                Response::HTTP_BAD_REQUEST
             );
+        } catch (RuntimeException $exception) {
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                ],
+                Response::HTTP_FORBIDDEN
+            );
+        } catch (UniqueConstraintViolationException $exception) {
+            if ($this->isCourseCodeUniqueConstraintViolation($exception)) {
+                return new JsonResponse(
+                    [
+                        'success' => false,
+                        'message' => $this->getDuplicateCourseCreationMessage($wantedCode, $translator),
+                    ],
+                    Response::HTTP_CONFLICT
+                );
+            }
+
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
+        } catch (Throwable $exception) {
+            return $this->createCourseCreationServerErrorResponse($exception, $translator);
         }
 
         return new JsonResponse(
@@ -1263,12 +1436,55 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
-    public function createCourseCapability(TranslatorInterface $translator): JsonResponse
+    private function isCourseCodeUniqueConstraintViolation(UniqueConstraintViolationException $exception): bool
     {
+        $message = $exception->getMessage();
+
+        return str_contains($message, 'UNIQ_169E6FB977153098')
+            || str_contains($message, "for key 'code'")
+            || str_contains($message, 'for key "code"');
+    }
+
+    private function getDuplicateCourseCreationMessage(?string $wantedCode, TranslatorInterface $translator): string
+    {
+        if (null !== $wantedCode && '' !== trim($wantedCode)) {
+            return $translator->trans('This course code already exists, please choose another code.');
+        }
+
+        return $translator->trans('This course title already exists, please choose another title.');
+    }
+
+    private function createCourseCreationServerErrorResponse(
+        Throwable $exception,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        error_log(
+            '[course.create] throwable='.
+            $exception::class.
+            ' message='.$exception->getMessage().
+            ' file='.$exception->getFile().
+            ' line='.(string) $exception->getLine().
+            ' peak='.memory_get_peak_usage(true)
+        );
+
+        return new JsonResponse(
+            [
+                'success' => false,
+                'message' => $translator->trans('An error occurred while creating the course.'),
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/create-capability', name: 'chamilo_core_course_create_capability', methods: ['GET'])]
+    public function createCourseCapability(
+        TranslatorInterface $translator,
+        CourseHelper $courseHelper,
+    ): JsonResponse {
         $user = $this->userHelper->getCurrent();
 
-        if (!$user || !method_exists($user, 'getId')) {
+        if (!$user instanceof User) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1278,7 +1494,7 @@ class CourseController extends ToolBaseController
             );
         }
 
-        $status = $this->resolveCourseCreateCapabilityStatus((int) $user->getId(), $translator);
+        $status = $this->resolveCourseCreateCapabilityStatus($user, $translator, $courseHelper);
 
         return new JsonResponse([
             'success' => 'error' !== (string) ($status['limitSource'] ?? ''),
@@ -1290,6 +1506,74 @@ class CourseController extends ToolBaseController
             'limitSource' => (string) ($status['limitSource'] ?? 'error'),
             'message' => (string) ($status['message'] ?? ''),
         ]);
+    }
+
+    private function resolveCourseCreateCapabilityStatus(
+        User $user,
+        TranslatorInterface $translator,
+        CourseHelper $courseHelper,
+    ): array {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'admin',
+                'message' => '',
+            ];
+        }
+
+        try {
+            $status = $courseHelper->resolveCourseCreationCapabilityForUser($user);
+
+            $canCreate = (bool) ($status['canCreate'] ?? true);
+            $currentCount = (int) ($status['currentCount'] ?? 0);
+            $effectiveLimit = (int) ($status['effectiveLimit'] ?? 0);
+            $limitSource = (string) ($status['limitSource'] ?? 'unlimited');
+
+            $message = '';
+            if (!$canCreate) {
+                if ('service' === $limitSource) {
+                    $message = \sprintf(
+                        $translator->trans(
+                            'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.'
+                        ),
+                        $currentCount,
+                        $effectiveLimit
+                    );
+                } elseif ('role' === $limitSource) {
+                    $message = $translator->trans('Only trainers and administrators can create courses.');
+                } elseif ('setting' === $limitSource) {
+                    $message = $translator->trans('Course creation by trainers is disabled on this platform.');
+                } else {
+                    $message = \sprintf(
+                        $translator->trans(
+                            'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.'
+                        ),
+                        $currentCount,
+                        $effectiveLimit
+                    );
+                }
+            }
+
+            $status['message'] = $message;
+
+            return $status;
+        } catch (Throwable $exception) {
+            error_log('[Course] Failed to resolve course creation capability: '.$exception->getMessage());
+
+            return [
+                'canCreate' => true,
+                'currentCount' => 0,
+                'effectiveLimit' => 0,
+                'serviceLimit' => null,
+                'globalLimit' => 0,
+                'limitSource' => 'error',
+                'message' => $translator->trans('Unable to verify whether you can create a new course right now.'),
+            ];
+        }
     }
 
     #[Route('/{id}/getAutoLaunchExerciseId', name: 'chamilo_core_course_get_auto_launch_exercise_id', methods: ['GET'])]
@@ -1544,8 +1828,11 @@ class CourseController extends ToolBaseController
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.$course_id.'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        // Redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+                        // Redirecting to the migrated LP list.
+                        $url = $this->buildLearningPathVueToolUrl();
+                        if (null === $url) {
+                            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+                        }
                         $_SESSION[$session_key] = true;
                         header(\sprintf('Location: %s', $url));
 
@@ -1579,9 +1866,12 @@ class CourseController extends ToolBaseController
                         } else {
                             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
-                                // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).
-                                    'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
+                                // Redirecting to the migrated LP runtime.
+                                $url = $this->buildLearningPathVueToolUrl((int) $lp_data['iid']);
+                                if (null === $url) {
+                                    $url = api_get_path(WEB_CODE_PATH).
+                                        'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
+                                }
 
                                 $_SESSION[$session_key] = true;
                                 header(\sprintf('Location: %s', $url));
@@ -1625,8 +1915,11 @@ class CourseController extends ToolBaseController
                     );
                 }
             } else {
-                // Redirecting to the document
-                $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                $url = $this->buildExerciseVueToolUrl();
+                if (null === $url) {
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                }
+
                 header(\sprintf('Location: %s', $url));
 
                 exit;
@@ -1661,8 +1954,12 @@ class CourseController extends ToolBaseController
                 if (Database::num_rows($result) > 0) {
                     $row = Database::fetch_array($result);
                     $exerciseId = $row['iid'];
-                    $url = api_get_path(WEB_CODE_PATH).
-                        'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    $url = $this->buildExerciseVueToolUrl((int) $exerciseId);
+                    if (null === $url) {
+                        $url = api_get_path(WEB_CODE_PATH).
+                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    }
+
                     header(\sprintf('Location: %s', $url));
 
                     exit;
@@ -1699,6 +1996,130 @@ class CourseController extends ToolBaseController
                 )
             );
         }
+    }
+
+    private function buildLearningPathVueToolUrl(?int $lpId = null): ?string
+    {
+        $course = $this->getCourse();
+        if (!$course instanceof Course) {
+            $course = api_get_course_entity();
+        }
+
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return null;
+        }
+
+        $nodeId = $course->getResourceNode()->getId();
+        if (null === $nodeId) {
+            return null;
+        }
+
+        $path = '/resources/lp/'.(int) $nodeId.'/';
+        if (null !== $lpId && $lpId > 0) {
+            $path .= $lpId.'/runtime';
+        }
+
+        $query = http_build_query([
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+            'origin' => 'learnpath',
+            'isStudentView' => 'true',
+        ]);
+
+        return rtrim(api_get_path(WEB_PATH), '/').$path.'?'.$query;
+    }
+
+    private function buildExerciseVueToolUrl(?int $exerciseId = null): ?string
+    {
+        $course = $this->getCourse();
+        if (!$course instanceof Course) {
+            $course = api_get_course_entity();
+        }
+
+        if (!$course instanceof Course || null === $course->getResourceNode()) {
+            return null;
+        }
+
+        $nodeId = $course->getResourceNode()->getId();
+        if (null === $nodeId) {
+            return null;
+        }
+
+        $path = '/resources/exercise/'.(int) $nodeId.'/';
+        if (null !== $exerciseId && $exerciseId > 0) {
+            $path .= $exerciseId.'/overview';
+        }
+
+        $query = http_build_query([
+            'cid' => (int) api_get_course_int_id(),
+            'sid' => (int) api_get_session_id(),
+            'gid' => (int) api_get_group_id(),
+        ]);
+
+        return rtrim(api_get_path(WEB_PATH), '/').$path.'?'.$query;
+    }
+
+    private function isExerciseToolEntry(string $toolName, string $toolTitle, string $link): bool
+    {
+        $toolCandidates = array_map('strtolower', [$toolName, $toolTitle]);
+
+        foreach ($toolCandidates as $candidate) {
+            if (\in_array($candidate, ['quiz', 'exercise', 'exercises', 'tests'], true)) {
+                return true;
+            }
+        }
+
+        return str_contains($link, 'exercise/exercise.php')
+            || str_contains($link, '/main/exercise/exercise.php');
+    }
+
+    private function isCourseHomeResourcePublished(
+        AbstractResource $resource,
+        Course $course,
+        ?Session $session
+    ): bool {
+        $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $baseLink = null;
+
+        $courseId = $course->getId();
+        $sessionId = $session?->getId();
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getCourse()?->getId() !== $courseId
+                || null !== $resourceLink->getGroup()
+                || null !== $resourceLink->getUserGroup()
+                || null !== $resourceLink->getUser()
+            ) {
+                continue;
+            }
+
+            $resourceSessionId = $resourceLink->getSession()?->getId();
+
+            if (null !== $sessionId && $resourceSessionId === $sessionId) {
+                return ResourceLink::VISIBILITY_PUBLISHED === $resourceLink->getVisibility();
+            }
+
+            if (null === $resourceSessionId) {
+                $baseLink = $resourceLink;
+            }
+        }
+
+        return $baseLink instanceof ResourceLink
+            && ResourceLink::VISIBILITY_PUBLISHED === $baseLink->getVisibility();
+    }
+
+    private function isTruthyCourseHomeSetting(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     /**
@@ -1863,74 +2284,5 @@ class CourseController extends ToolBaseController
             'courseId' => $course->getId(),
             'sessionId' => $sessionId,
         ];
-    }
-
-    private function resolveCourseCreateCapabilityStatus(int $userId, TranslatorInterface $translator): array
-    {
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return [
-                'canCreate' => true,
-                'currentCount' => 0,
-                'effectiveLimit' => 0,
-                'serviceLimit' => null,
-                'globalLimit' => 0,
-                'limitSource' => 'admin',
-                'message' => '',
-            ];
-        }
-
-        if (!class_exists('BuyCoursesPlugin')) {
-            return [
-                'canCreate' => true,
-                'currentCount' => 0,
-                'effectiveLimit' => 0,
-                'serviceLimit' => null,
-                'globalLimit' => 0,
-                'limitSource' => 'unlimited',
-                'message' => '',
-            ];
-        }
-
-        try {
-            $plugin = BuyCoursesPlugin::create();
-
-            if (method_exists($plugin, 'isEnabled') && !$plugin->isEnabled(true)) {
-                return [
-                    'canCreate' => true,
-                    'currentCount' => 0,
-                    'effectiveLimit' => 0,
-                    'serviceLimit' => null,
-                    'globalLimit' => 0,
-                    'limitSource' => 'unlimited',
-                    'message' => '',
-                ];
-            }
-
-            $status = $plugin->getCourseCreationCapabilityStatus($userId);
-
-            return [
-                'canCreate' => (bool) ($status['canCreate'] ?? true),
-                'currentCount' => (int) ($status['currentCount'] ?? 0),
-                'effectiveLimit' => (int) ($status['effectiveLimit'] ?? 0),
-                'serviceLimit' => isset($status['serviceLimit']) ? (int) $status['serviceLimit'] : null,
-                'globalLimit' => (int) ($status['globalLimit'] ?? 0),
-                'limitSource' => (string) ($status['limitSource'] ?? 'unlimited'),
-                'message' => (string) ($status['message'] ?? ''),
-            ];
-        } catch (Throwable $exception) {
-            error_log('[BuyCourses] Failed to resolve course creation capability: '.$exception->getMessage());
-
-            return [
-                'canCreate' => false,
-                'currentCount' => 0,
-                'effectiveLimit' => 0,
-                'serviceLimit' => null,
-                'globalLimit' => 0,
-                'limitSource' => 'error',
-                'message' => $translator->trans(
-                    'Unable to verify whether you can create a new course right now. Please try again later or contact the administrator.'
-                ),
-            ];
-        }
     }
 }

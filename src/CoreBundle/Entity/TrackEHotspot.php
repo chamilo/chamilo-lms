@@ -49,18 +49,6 @@ class TrackEHotspot
     protected string $hotspotCoordinate;
 
     /**
-     * Set hotspotUserId.
-     *
-     * @return TrackEHotspot
-     */
-    public function setHotspotUserId(int $hotspotUserId)
-    {
-        $this->hotspotUserId = $hotspotUserId;
-
-        return $this;
-    }
-
-    /**
      * Get hotspotUserId.
      *
      * @return int
@@ -71,13 +59,13 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotExeId.
+     * Set hotspotUserId.
      *
      * @return TrackEHotspot
      */
-    public function setHotspotExeId(int $hotspotExeId)
+    public function setHotspotUserId(int $hotspotUserId)
     {
-        $this->hotspotExeId = $hotspotExeId;
+        $this->hotspotUserId = $hotspotUserId;
 
         return $this;
     }
@@ -93,13 +81,13 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotQuestionId.
+     * Set hotspotExeId.
      *
      * @return TrackEHotspot
      */
-    public function setHotspotQuestionId(int $hotspotQuestionId)
+    public function setHotspotExeId(int $hotspotExeId)
     {
-        $this->hotspotQuestionId = $hotspotQuestionId;
+        $this->hotspotExeId = $hotspotExeId;
 
         return $this;
     }
@@ -115,13 +103,13 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotAnswerId.
+     * Set hotspotQuestionId.
      *
      * @return TrackEHotspot
      */
-    public function setHotspotAnswerId(int $hotspotAnswerId)
+    public function setHotspotQuestionId(int $hotspotQuestionId)
     {
-        $this->hotspotAnswerId = $hotspotAnswerId;
+        $this->hotspotQuestionId = $hotspotQuestionId;
 
         return $this;
     }
@@ -137,13 +125,13 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotCorrect.
+     * Set hotspotAnswerId.
      *
      * @return TrackEHotspot
      */
-    public function setHotspotCorrect(bool $hotspotCorrect)
+    public function setHotspotAnswerId(int $hotspotAnswerId)
     {
-        $this->hotspotCorrect = $hotspotCorrect;
+        $this->hotspotAnswerId = $hotspotAnswerId;
 
         return $this;
     }
@@ -159,13 +147,13 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotCoordinate.
+     * Set hotspotCorrect.
      *
      * @return TrackEHotspot
      */
-    public function setHotspotCoordinate(string $hotspotCoordinate)
+    public function setHotspotCorrect(bool $hotspotCorrect)
     {
-        $this->hotspotCoordinate = $hotspotCoordinate;
+        $this->hotspotCorrect = $hotspotCorrect;
 
         return $this;
     }
@@ -178,6 +166,18 @@ class TrackEHotspot
     public function getHotspotCoordinate()
     {
         return $this->hotspotCoordinate;
+    }
+
+    /**
+     * Set hotspotCoordinate.
+     *
+     * @return TrackEHotspot
+     */
+    public function setHotspotCoordinate(string $hotspotCoordinate)
+    {
+        $this->hotspotCoordinate = $hotspotCoordinate;
+
+        return $this;
     }
 
     /**

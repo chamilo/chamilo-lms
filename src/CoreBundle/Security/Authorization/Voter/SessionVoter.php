@@ -8,10 +8,11 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
+use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,14 +23,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SessionVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
-        private readonly Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private readonly SettingsManager $settingsManager,
-        private readonly TrackECourseAccessRepository $trackECourseAccessRepository,
+        private readonly SessionVisibilityHelper $sessionVisibilityHelper,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -48,7 +49,7 @@ class SessionVoter extends Voter
      *
      * {@inheritdoc}
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -59,7 +60,10 @@ class SessionVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        // Use the AccessDecisionManager (not Security::isGranted) so the nested
+        // decision runs against the exact token passed to this voter, per the
+        // Symfony voter docs ("Checking for Roles inside a Voter").
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
@@ -86,150 +90,68 @@ class SessionVoter extends Voter
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
                 }
 
-                // Read the setting to determine if coaches should always have access after duration ends.
-                $coachAccessAfterDurationEnd = 'true' === $this->settingsManager->getSetting('session.session_coach_access_after_duration_end', true);
-                $visibilityForUser = $this->getAccessVisibilityByDuration($session, $user, $coachAccessAfterDurationEnd);
-
-                if (null === $visibilityForUser) {
-                    $visibilityForUser = $session->setAccessVisibilityByUser($user, true, $coachAccessAfterDurationEnd);
-                }
+                $visibilityForUser = $this->sessionVisibilityHelper->getSessionVisibility($session, $user);
 
                 if ($userIsStudent && Session::LIST_ONLY == $visibilityForUser) {
                     return false;
                 }
 
-                if ($userIsGeneralCoach || $userIsCourseCoach) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-                } elseif ($userIsStudent) { // Student access.
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-                }
-
-                if (
-                    ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
-                    && Session::INVISIBLE != $visibilityForUser
-                ) {
-                    return true;
-                }
-
-                return false;
+                return ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
+                    && Session::INVISIBLE != $visibilityForUser;
 
             case self::EDIT:
             case self::DELETE:
-                $canEdit = $this->canEditSession($user, $session, false);
-
-                if ($canEdit) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                    return true;
-                }
-
-                return false;
+                // canEditSession() runs the per-session ownership check (allowed())
+                // so non-admin session managers/teachers are confined to the
+                // sessions they actually own/coach.
+                return $this->canEditSession($token, $user, $session);
         }
 
-        // User don't have access to the session
         return false;
     }
 
-    /**
-     * Calculate session visibility for duration-based sessions using a fresh DB query
-     * instead of the potentially stale lazy collection on the User entity.
-     * Returns null if the session uses fixed dates (not duration).
-     */
-    private function getAccessVisibilityByDuration(Session $session, User $user, bool $coachAccessAfterDurationEnd): ?int
+    // Admins are already granted in voteOnAttribute(), so the methods below only
+    // ever run for non-admin users. ROLE_ADMIN is therefore intentionally not
+    // re-checked here.
+    private function canEditSession(TokenInterface $token, User $user, Session $session): bool
     {
-        // Only applies to duration-based sessions.
-        if (!$session->getDuration() || $session->getDuration() <= 0) {
-            return null;
-        }
-
-        // If session has fixed access dates, it uses date-based visibility instead.
-        if ($session->getAccessStartDate() || $session->getAccessEndDate()) {
-            return null;
-        }
-
-        // If setting is enabled, coaches always have access regardless of duration end.
-        if ($coachAccessAfterDurationEnd && $session->hasCoach($user)) {
-            return Session::AVAILABLE;
-        }
-
-        $duration = $session->getDuration() * 24 * 60 * 60;
-
-        // Use repository directly to avoid stale Doctrine lazy collection.
-        $firstAccess = $this->trackECourseAccessRepository->findFirstAccessByUserAndSession(
-            $user,
-            $session->getId()
-        );
-
-        // If no previous access exists, session is still available.
-        if (!$firstAccess) {
-            return Session::AVAILABLE;
-        }
-
-        $userSessionSubscription = $user->getSubscriptionToSession($session);
-        $userDuration = $userSessionSubscription
-            ? $userSessionSubscription->getDuration() * 24 * 60 * 60
-            : 0;
-
-        $firstAccessTimestamp = $firstAccess->getLoginCourseDate()->getTimestamp();
-        $totalDuration = $firstAccessTimestamp + $duration + $userDuration;
-        $currentTime = time();
-
-        return $totalDuration > $currentTime ? Session::AVAILABLE : $session->getVisibility();
-    }
-
-    private function canEditSession(User $user, Session $session, bool $checkSession = true): bool
-    {
-        if (!$this->allowToManageSessions()) {
+        if (!$this->allowToManageSessions($token)) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN') && $this->allowed($user, $session)) {
+        return $this->allowed($token, $user, $session);
+    }
+
+    private function allowToManageSessions(TokenInterface $token): bool
+    {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER'])) {
             return true;
         }
 
-        if ($checkSession) {
-            return $this->allowed($user, $session);
-        }
-
-        return true;
+        return $this->teachersCanCreateSessions() && $this->accessDecisionManager->decide($token, ['ROLE_TEACHER']);
     }
 
-    private function allowToManageSessions(): bool
+    private function allowed(TokenInterface $token, User $user, Session $session): bool
     {
-        if ($this->allowManageAllSessions()) {
-            return true;
-        }
-
-        $setting = $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions', true);
-
-        return 'true' === $setting && $this->security->isGranted('ROLE_TEACHER');
-    }
-
-    private function allowManageAllSessions(): bool
-    {
-        return $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SESSION_MANAGER');
-    }
-
-    private function allowed(User $user, Session $session): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
+        if ($this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER'])
             && 'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions', true)
             && !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_TEACHER')
-            && 'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions', true)
+        if ($this->accessDecisionManager->decide($token, ['ROLE_TEACHER'])
+            && $this->teachersCanCreateSessions()
             && !$session->hasUserAsGeneralCoach($user)
         ) {
             return false;
         }
 
         return true;
+    }
+
+    private function teachersCanCreateSessions(): bool
+    {
+        return 'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions', true);
     }
 }

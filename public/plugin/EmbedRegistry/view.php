@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\EmbedRegistry\Entity\Embed;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -8,16 +10,33 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_block_anonymous_users();
 api_protect_course_script(true);
 
+function embed_registry_view_is_same_context(Embed $embed, Course $course, ?Session $session): bool
+{
+    if ($course->getId() !== $embed->getCourse()->getId()) {
+        return false;
+    }
+
+    $embedSession = $embed->getSession();
+
+    if (null === $session && null === $embedSession) {
+        return true;
+    }
+
+    if (null === $session || null === $embedSession) {
+        return false;
+    }
+
+    return $session->getId() === $embedSession->getId();
+}
+
 $plugin = EmbedRegistryPlugin::create();
 
-if ('false' === $plugin->get(EmbedRegistryPlugin::SETTING_ENABLED)) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
-$isAllowedToEdit = api_is_allowed_to_edit(true);
-
 $em = Database::getManager();
-$embedRepo = $em->getRepository('ChamiloPluginBundle:EmbedRegistry\Embed');
+$embedRepo = $em->getRepository(Embed::class);
 
 $course = api_get_course_entity(api_get_course_int_id());
 $session = api_get_session_entity(api_get_session_id());
@@ -38,21 +57,15 @@ if (!$embed) {
     );
 }
 
-if ($course->getId() !== $embed->getCourse()->getId()) {
+if (!embed_registry_view_is_same_context($embed, $course, $session)) {
     api_not_allowed(true);
-}
-
-if ($session && $embed->getSession()) {
-    if ($session->getId() !== $embed->getSession()->getId()) {
-        api_not_allowed(true);
-    }
 }
 
 $plugin->saveEventAccessTool();
 
 $interbreadcrumb[] = [
     'name' => $plugin->getToolTitle(),
-    'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php',
+    'url' => api_get_path(WEB_PLUGIN_PATH).$plugin->get_name().'/start.php?'.api_get_cidreq(),
 ];
 
 $actions = Display::url(

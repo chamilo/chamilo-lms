@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Event;
+use Positioning;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PluginHelper
@@ -79,26 +80,10 @@ final class PluginHelper
 
     public function loadLegacyPlugin(string $pluginName): ?object
     {
-        $projectDir = $this->parameterBag->get('kernel.project_dir');
+        $name = $this->resolveTitle($pluginName) ?? $pluginName;
 
-        $cands = array_unique([
-            $pluginName,
-            implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', $pluginName))),
-        ]);
-
-        foreach ($cands as $cand) {
-            $pluginPath = $projectDir.'/public/plugin/'.$cand.'/src/'.$cand.'.php';
-            $pluginClass = $cand;
-
-            if (!file_exists($pluginPath)) {
-                continue;
-            }
-            if (!class_exists($pluginClass)) {
-                require_once $pluginPath;
-            }
-            if (class_exists($pluginClass) && method_exists($pluginClass, 'create')) {
-                return $pluginClass::create();
-            }
+        if (class_exists($name) && method_exists($name, 'create')) {
+            return $name::create();
         }
 
         return null;
@@ -139,13 +124,13 @@ final class PluginHelper
 
     public function shouldBlockAccessByPositioning(?int $userId, int $courseId, ?int $sessionId): bool
     {
-        if (!$this->isPluginEnabled('Positioning') || !$userId) {
+        $plugin = Positioning::create();
+
+        if (!$plugin->isEnabled() || !$userId) {
             return false;
         }
 
-        $plugin = $this->loadLegacyPlugin('Positioning');
-
-        if (!$plugin || 'true' !== $plugin->get('block_course_if_initial_exercise_not_attempted')) {
+        if ('true' !== $plugin->get('block_course_if_initial_exercise_not_attempted')) {
             return false;
         }
 
@@ -165,64 +150,24 @@ final class PluginHelper
         return empty($results);
     }
 
-    /**
-     * Return the whole configuration array for a plugin in the current Access URL,
-     * or null if not found.
-     */
-    public function getPluginConfiguration(string $pluginName): ?array
+    public function getPluginOverrides(string $pluginName): array
     {
+        if (!$this->parameterBag->has('plugin_settings')) {
+            return [];
+        }
+
+        $pluginSettings = $this->parameterBag->get('plugin_settings');
+
+        $defaults = \is_array($pluginSettings['default'][$pluginName] ?? null)
+            ? $pluginSettings['default'][$pluginName]
+            : [];
+
         $accessUrl = $this->accessUrlHelper->getCurrent();
-        if (!$accessUrl instanceof AccessUrl) {
-            return null;
-        }
 
-        $realTitle = $this->resolveTitle($pluginName);
-        if (null === $realTitle) {
-            return null;
-        }
+        $urlSpecific = $accessUrl && \is_array($pluginSettings[$accessUrl->getId()][$pluginName] ?? null)
+            ? $pluginSettings[$accessUrl->getId()][$pluginName]
+            : [];
 
-        $rel = $this->pluginRelRepo->findOneByPluginName($realTitle, $accessUrl->getId());
-        if (!$rel) {
-            return null;
-        }
-
-        $cfg = $rel->getConfiguration();
-
-        return \is_array($cfg) ? $cfg : null;
-    }
-
-    /**
-     * Get a single configuration value from the plugin configuration JSON.
-     * Tries both the plain key ($key) and the legacy-prefixed key ($pluginName.'_'.$key).
-     * Falls back to legacy plugin::get($key) if available.
-     */
-    public function getPluginConfigValue(string $pluginName, string $key, mixed $default = null): mixed
-    {
-        // Special case for legacy callers expecting "tool_enable"
-        if ('tool_enable' === $key) {
-            return $this->isPluginEnabled($pluginName) ? 'true' : 'false';
-        }
-
-        $cfg = $this->getPluginConfiguration($pluginName);
-
-        if (\is_array($cfg)) {
-            // try plain key
-            if (\array_key_exists($key, $cfg)) {
-                return $cfg[$key];
-            }
-            // try legacy-prefixed key (some migrations removed this, but keep BC)
-            $prefixed = $pluginName.'_'.$key;
-            if (\array_key_exists($prefixed, $cfg)) {
-                return $cfg[$prefixed];
-            }
-        }
-
-        // Fallback to legacy plugin object if present
-        $legacy = $this->loadLegacyPlugin($pluginName);
-        if ($legacy && method_exists($legacy, 'get')) {
-            return $legacy->get($key) ?? $default;
-        }
-
-        return $default;
+        return array_merge($defaults, $urlSpecific);
     }
 }

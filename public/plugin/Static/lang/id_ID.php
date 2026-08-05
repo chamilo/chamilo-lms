@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Tampilkan konten HTML statis.';
 $strings['block_title'] = 'Judul blok';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Konten';

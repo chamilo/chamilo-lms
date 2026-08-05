@@ -28,7 +28,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
@@ -101,7 +101,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
         $this->description = '';
         $this->selfRegAllowed = false;
         $this->selfUnregAllowed = false;
-        $this->groupsPerUser = 0;
+        $this->groupsPerUser = 1;
         $this->announcementsState = true;
         $this->calendarState = true;
         $this->documentAccess = 0;

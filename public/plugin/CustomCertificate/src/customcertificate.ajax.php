@@ -4,42 +4,55 @@
 /**
  * Responses to AJAX calls.
  */
+
 $cidReset = true;
 
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
 
 $plugin = CustomCertificatePlugin::create();
-$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
 
-if (false === $enable) {
+if (!$plugin->isEnabled(true)) {
     api_not_allowed();
 }
 
-$action = isset($_GET['a']) ? $_GET['a'] : null;
+if (!api_is_platform_admin() && !api_is_teacher()) {
+    api_not_allowed();
+}
+
+if (!Security::check_token('post')) {
+    api_not_allowed();
+}
+
+$action = $_GET['a'] ?? null;
 
 switch ($action) {
     case 'delete_certificate':
         $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
         $courseId = isset($_POST['courseId']) ? (int) $_POST['courseId'] : 0;
         $sessionId = isset($_POST['sessionId']) ? (int) $_POST['sessionId'] : 0;
-        $accessUrlId = isset($_POST['accessUrlId']) ? (int) $_POST['accessUrlId'] : 1;
+        $accessUrlId = isset($_POST['accessUrlId']) ? (int) $_POST['accessUrlId'] : api_get_current_access_url_id();
 
         if (!empty($courseId)) {
-            $sql = "DELETE FROM $table
-                    WHERE
-                        c_id = $courseId AND 
-                        session_id = $sessionId AND
-                        access_url_id = $accessUrlId";
-            Database::query($sql);
+            Database::delete(
+                $table,
+                [
+                    'c_id = ? AND session_id = ? AND access_url_id = ?' => [
+                        $courseId,
+                        $sessionId,
+                        $accessUrlId,
+                    ],
+                ]
+            );
+
             echo Display::return_message(
-                get_plugin_lang('SuccessDelete', 'CustomCertificatePlugin'),
+                $plugin->get_lang('SuccessDelete'),
                 'success'
             );
         } else {
             echo Display::return_message(
-                get_plugin_lang('ProblemDelete', 'CustomCertificatePlugin'),
+                $plugin->get_lang('ProblemDelete'),
                 'error',
                 false
             );

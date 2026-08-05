@@ -26,7 +26,7 @@ class Forum extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/forum/index.php';
+        return '/resources/forum/:nodeId/';
     }
 
     public function getIcon(): string

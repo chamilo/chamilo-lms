@@ -9,3 +9,4 @@ $strings['plugin_comment'] = '정적 HTML 콘텐츠 표시.';
 $strings['block_title'] = '블록 제목';
 
 //$strings['title'] = "Title";
+$strings['content'] = '콘텐츠';

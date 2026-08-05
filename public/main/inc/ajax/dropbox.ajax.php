@@ -61,7 +61,7 @@ switch ($action) {
                     );
 
                     $json['url'] = api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq();
-                    $json['size'] = format_file_size($result->filesize);
+                    $json['size'] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($result->filesize);
                     $json['type'] = api_htmlentities($file['type']);
                     $json['result'] = Display::getMdiIcon(
                         StateIcon::COMPLETE,

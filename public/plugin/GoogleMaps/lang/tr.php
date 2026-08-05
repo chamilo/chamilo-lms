@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Haritalar';
+$strings['plugin_comment'] = 'Kullanıcıların ekstra alanlarda depolanan konumlarını içeren bir Google haritası gösterir.';
+$strings['enable_api'] = "Google Maps API'yi Yükle";
+$strings['api_key'] = 'API anahtarı';
+$strings['extra_field_name'] = 'Ekstra alan adı';
+$strings['extra_field_name_help'] = 'Virgülle ayrılmış bir veya daha fazla kullanıcı ekstra alan değişkeni girin. Harita en fazla 5 alan gösterebilir. Örnek: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Kullanıcı konum haritası';
+$strings['UsersCoordinatesMapHelp'] = 'Bu harita, yapılandırılmış kullanıcı ekstra alanlarına göre kullanıcı konumlarını gösterir.';
+$strings['GoogleMapsAdminIntro'] = 'Google Maps API anahtarını ve adres veya konum içeren kullanıcı ekstra alanlarını yapılandırın.';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = 'Ekstra alanlar';
+$strings['Access'] = 'Erişim';
+$strings['AdministratorsOnly'] = 'Sadece yöneticiler';
+$strings['OpenMap'] = 'Haritayı aç';
+$strings['ConfigurePlugin'] = 'Eklentiyi yapılandır';
+$strings['Configured'] = 'Yapılandırıldı';
+$strings['NotConfigured'] = 'Yapılandırılmadı';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps API yüklemesi eklenti yapılandırmasında devre dışı bırakıldı.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API anahtarı eksik.';
+$strings['ExtraFieldNameMissingWarning'] = 'Hiçbir kullanıcı ekstra alanı yapılandırılmadı.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Aşağıdaki kullanıcı ekstra alanları bulunamadı: %s.';
+$strings['NoUserCoordinatesFound'] = 'Yapılandırılmış ekstra alanlar için hiçbir kullanıcı konumu bulunamadı.';
+$strings['ConfigureGoogleMapsFirst'] = "Haritayı açmadan önce Google Maps API'yi yapılandırın ve etkinleştirin.";
+
+$strings['map_provider'] = 'Harita sağlayıcısı';
+$strings['map_provider_help'] = 'Eklenti ve Sosyal harita tarafından kullanılan harita sağlayıcısını seçin.';
+$strings['GoogleMapsProvider'] = 'Google Haritalar';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Harita sağlayıcısı';
+$strings['MapProviderConfiguration'] = 'Sağlayıcı yapılandırması';
+$strings['default_latitude'] = 'Varsayılan enlem';
+$strings['default_latitude_help'] = 'Varsayılan harita merkezi enlemi. Hiç işaretleyici yoksa kullanılır.';
+$strings['default_longitude'] = 'Varsayılan boylam';
+$strings['default_longitude_help'] = 'Varsayılan harita merkezi boylamı. Hiç işaretleyici yoksa kullanılır.';
+$strings['default_zoom'] = 'Varsayılan yakınlaştırma';
+$strings['default_zoom_help'] = '1 ile 20 arasında varsayılan harita yakınlaştırma seviyesi.';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap API anahtarı gerektirmez. Yalnızca adres içeren işaretleyiciler, koordinat yoksa arama bağlantısı olarak gösterilir.';

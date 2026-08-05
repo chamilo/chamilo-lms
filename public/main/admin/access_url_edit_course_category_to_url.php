@@ -33,7 +33,7 @@ $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple a
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
-    $add_type = Security::remove_XSS($_REQUEST['add_type']);
+    $add_type = 'unique' === $_REQUEST['add_type'] ? 'unique' : 'multiple';
 }
 
 $access_url_id = 1;

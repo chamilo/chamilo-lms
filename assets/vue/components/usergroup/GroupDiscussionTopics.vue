@@ -72,7 +72,7 @@
 import { computed, onMounted, reactive, ref, toRefs } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useSocialInfo } from "../../composables/useSocialInfo"
-import axios from "axios"
+import socialService from "../../services/socialService"
 import MessageItem from "./MessageItem.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -113,8 +113,7 @@ const fetchMessages = async () => {
   const groupId = route.params.group_id
   const discussionId = route.params.discussion_id
   try {
-    const response = await axios.get(`/social-network/group/${groupId}/discussion/${discussionId}/messages`)
-    messages.value = response.data
+    messages.value = await socialService.getGroupDiscussionMessages(groupId, discussionId)
   } catch (error) {
     console.error("Error fetching messages:", error)
   }
@@ -155,9 +154,7 @@ async function handleSubmit() {
     formData.append("files[]", filesArray[i])
   }
   try {
-    await axios.post("/social-network/group-action", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
+    await socialService.groupAction(formData)
     showMessageDialog.value = false
     await fetchMessages()
   } catch (error) {
@@ -177,7 +174,7 @@ const deleteMessage = async (message) => {
       userId: user.value.id,
       groupId: groupInfo.value.id,
     }
-    await axios.post("/social-network/group-action", data)
+    await socialService.groupAction(data)
     await router.push({ name: "UserGroupShow", params: { group_id: groupInfo.value.id } })
   } catch (error) {
     console.error("Error deleting the message:", error)

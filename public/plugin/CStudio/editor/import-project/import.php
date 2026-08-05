@@ -66,18 +66,17 @@ if (false == validateCSRFToken($oel_token, $iduser)) {
     exit;
 }
 
+// Authorization gate: deny anonymous and non-teacher outright. The previous
+// code only enforced the role check when the caller was already logged in,
+// letting anonymous requests with cotk=-2 reach the ZIP extractor below.
+if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
+    echo 'Context token is not valid or has expired. User rejected ! v'.$version;
+
+    exit;
+}
+
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
-
-    if (!$VDB->w_api_is_anonymous()) {
-        $user = $VDB->w_api_get_user_info();
-        if (!$VDB->w_api_is_allowed_to_edit()) {
-            echo "<div style='color:red;' >Status !".$user['status'].'</div>';
-            echo 'Context status '.$user['status'].' is not valid or has expired. User rejected ! v'.$version;
-
-            exit;
-        }
-    }
 } else {
     if (!isset($_GET['cid'])) {
         echo 'Context token is not valid or has expired. Form submission rejected !! v'.$version;
@@ -119,12 +118,18 @@ if (isset($_GET['id'])) {
     <?php if ('step1' == $action) { ?>
       <h2>Import project</h2>
       <div id="run" >
-        <form action="inc/bigUpload.php?action=post-unsupported" method="post" enctype="multipart/form-data" id="bigUploadForm">
-            <input type="file" id="bigUploadFile" name="bigUploadFile" />
+        <form action="inc/big-upload.php?action=post-unsupported&uploadKind=zip&cotk=<?php echo htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8'); ?>" method="post" enctype="multipart/form-data" id="bigUploadForm">
+            <input type="file" id="bigUploadFile" name="bigUploadFile" accept=".zip" />
             <button class=" btn btn-primary " name="button" type="button" onclick="upload();" id="bigUploadSubmit" ><em class="fa fa-upload"></em> Upload</button>
             <input type="button" class="bigUploadButton bigUploadAbort" style="display:none;" value="Annuler" onclick="abort();" />
             <input id="scormid" name="scormid" type="hidden" value="testsco" />
+            <input type="hidden" name="cotk" value="<?php echo htmlspecialchars($cotk, ENT_QUOTES, 'UTF-8'); ?>" />
+            <input type="hidden" name="uploadKind" value="zip" />
         </form>
+        <script>
+            window.cstudioCotk = <?php echo json_encode($cotk); ?>;
+            window.cstudioUploadKind = 'zip';
+        </script>
         <div id="bigUploadProgressBarContainer" >
             <div id="bigUploadProgressBarFilled"></div>
         </div>
@@ -175,6 +180,14 @@ if (isset($_GET['id'])) {
                         for ($zi = 0; $zi < $zip->numFiles; $zi++) {
                             $stat = $zip->statIndex($zi);
                             $entryName = $stat['name'];
+
+                            // Reject zip-slip and executable extensions. Without this filter
+                            // a top-level evil.php entry would be written verbatim into the
+                            // plugins filesystem, where the LFI sink could include it.
+                            if (!cstudio_is_safe_zip_entry($entryName)) {
+                                continue;
+                            }
+
                             $entryPath = $fsBasePath.'/'.$entryName;
                             if (str_ends_with($entryName, '/')) {
                                 $pluginFileSystem->createDirectory($entryPath);
@@ -520,6 +533,47 @@ if ('create2' == $action) {
       $src = str_replace('img_cache/'.$oldFold, 'img_cache/'.$newFold, $src);
 
       return str_replace('/'.$oldFold.'/', '/'.$newFold.'/', $src);
+  }
+
+  /**
+   * Validate a ZIP entry name before it is written to disk.
+   * Rejects path traversal, absolute paths, NUL bytes, Windows separators and
+   * any extension the web server could execute (.php*, .phtml, .phar, .htaccess, etc).
+   */
+  function cstudio_is_safe_zip_entry(string $entryName): bool
+  {
+      if ('' === $entryName) {
+          return false;
+      }
+      if (false !== strpos($entryName, "\0")) {
+          return false;
+      }
+      if (false !== strpos($entryName, '\\')) {
+          return false;
+      }
+      if (str_starts_with($entryName, '/')) {
+          return false;
+      }
+      // Match a literal ".." segment anywhere in the path (start, middle or end).
+      if (preg_match('#(^|/)\.\.(/|$)#', $entryName)) {
+          return false;
+      }
+      $basename = basename($entryName);
+      if ('.htaccess' === strtolower($basename) || '.htpasswd' === strtolower($basename)) {
+          return false;
+      }
+      $forbiddenExt = [
+          'php', 'phtml', 'phar', 'phps', 'pht',
+          'php3', 'php4', 'php5', 'php7', 'php8',
+          'inc', 'pl', 'py', 'sh', 'cgi',
+          'jsp', 'jspx', 'asp', 'aspx', 'cer', 'asa',
+      ];
+      $ext = strtolower(pathinfo($basename, PATHINFO_EXTENSION));
+      if (in_array($ext, $forbiddenExt, true)) {
+          return false;
+      }
+
+      return true;
   }
 
 ob_end_flush();

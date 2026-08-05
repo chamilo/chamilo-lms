@@ -30,7 +30,16 @@ function getCourseIdFromLp($lpId): ?int
     $lpRepo = Container::getLpRepository();
     $lp = $lpRepo->find($lpId);
 
-    return $lp->getFirstResourceLink()?->getCourse()?->getId();
+    return $lp?->getFirstResourceLink()?->getCourse()?->getId();
+}
+
+function getCourseResourceNodeIdFromLp($lpId): int
+{
+    $lpRepo = Container::getLpRepository();
+    $lp = $lpRepo->find((int) $lpId);
+    $course = $lp?->getFirstResourceLink()?->getCourse();
+
+    return (int) ($course?->getResourceNode()?->getId() ?? 0);
 }
 
 function get_directory($lpid)

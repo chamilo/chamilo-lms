@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +41,18 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $documentCourse = $document->getFirstResourceLink()?->getCourse();
+        if (!$documentCourse instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $documentCourse);
+
         $user = $userHelper->getCurrent();
         $course = null;
         if ($cid) {
@@ -61,13 +75,8 @@ class TemplateController extends AbstractController
         $template->setImage($asset);
         $entityManager->persist($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(true);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(true);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 
@@ -87,6 +96,18 @@ class TemplateController extends AbstractController
     #[Route('/document-templates/{documentId}/delete', methods: ['POST'])]
     public function deleteDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
     {
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $document->getFirstResourceLink()?->getCourse();
+        if (!$course instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
 
         if (!$template) {
@@ -95,13 +116,8 @@ class TemplateController extends AbstractController
 
         $entityManager->remove($template);
 
-        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
-        if ($document) {
-            $document->setTemplate(false);
-            $entityManager->persist($document);
-        } else {
-            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
-        }
+        $document->setTemplate(false);
+        $entityManager->persist($document);
 
         $entityManager->flush();
 
@@ -109,17 +125,41 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/all-templates/{courseId}', name: 'all-templates')]
-    public function getAllTemplates($courseId, SystemTemplateRepository $systemTemplateRepository, TemplatesRepository $templatesRepository, CourseRepository $courseRepository, AssetRepository $assetRepository, CDocumentRepository $documentRepository): JsonResponse
-    {
+    public function getAllTemplates(
+        $courseId,
+        Request $request,
+        SystemTemplateRepository $systemTemplateRepository,
+        TemplatesRepository $templatesRepository,
+        CourseRepository $courseRepository,
+        AssetRepository $assetRepository,
+        CDocumentRepository $documentRepository,
+        SettingsManager $settingsManager
+    ): JsonResponse {
         $course = $courseRepository->find($courseId);
+
         if (!$course) {
             throw new NotFoundHttpException('Course not found');
         }
 
-        $systemTemplates = $systemTemplateRepository->findAll();
-        $platformTemplates = $this->formatSystemTemplates($systemTemplates, $assetRepository);
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
 
-        $courseDocumentTemplates = $this->formatCourseDocumentTemplates($course, $templatesRepository, $assetRepository, $documentRepository);
+        $languageFilterEnabled = $this->isSettingEnabled(
+            $settingsManager->getSetting('language.template_activate_language_filter', true)
+        );
+
+        $systemTemplates = $languageFilterEnabled
+            ? $systemTemplateRepository->findForLanguageFilter(
+                $this->getTemplateLanguageCandidates($request->getLocale(), $course)
+            )
+            : $systemTemplateRepository->findAll();
+
+        $platformTemplates = $this->formatSystemTemplates($systemTemplates, $assetRepository);
+        $courseDocumentTemplates = $this->formatCourseDocumentTemplates(
+            $course,
+            $templatesRepository,
+            $assetRepository,
+            $documentRepository
+        );
 
         $allTemplates = array_merge($platformTemplates, $courseDocumentTemplates);
 
@@ -191,5 +231,75 @@ class TemplateController extends AbstractController
                 'image' => $imageUrl,
             ];
         }, $courseTemplates);
+    }
+
+    private function getTemplateLanguageCandidates(?string $requestLocale = null, ?Course $course = null): array
+    {
+        $candidates = [];
+
+        /*
+         * For course document templates, the course language is the expected filter.
+         * Do not mix it with the user/request language, otherwise templates from
+         * another language can appear in the course.
+         */
+        if ($course instanceof Course) {
+            $courseLanguage = trim((string) $course->getCourseLanguage());
+
+            if ('' !== $courseLanguage) {
+                $this->addTemplateLanguageCandidates($candidates, $courseLanguage);
+
+                return array_values(array_unique(array_filter($candidates)));
+            }
+        }
+
+        $this->addTemplateLanguageCandidates($candidates, $requestLocale);
+
+        return array_values(array_unique(array_filter($candidates)));
+    }
+
+    private function addTemplateLanguageCandidates(array &$candidates, ?string $locale): void
+    {
+        $locale = strtolower(trim((string) $locale));
+
+        if ('' === $locale) {
+            return;
+        }
+
+        $localeWithDash = str_replace('_', '-', $locale);
+        $localeWithUnderscore = str_replace('-', '_', $locale);
+        $shortLocale = substr($locale, 0, 2);
+
+        $candidates[] = $locale;
+        $candidates[] = $localeWithDash;
+        $candidates[] = $localeWithUnderscore;
+
+        if (2 === \strlen($shortLocale) && ctype_alpha($shortLocale)) {
+            $candidates[] = $shortLocale;
+
+            $isoToChamiloLanguage = [
+                'en' => 'english',
+                'es' => 'spanish',
+                'fr' => 'french',
+                'de' => 'german',
+                'it' => 'italian',
+                'pt' => 'portuguese',
+                'nl' => 'dutch',
+            ];
+
+            if (isset($isoToChamiloLanguage[$shortLocale])) {
+                $candidates[] = $isoToChamiloLanguage[$shortLocale];
+            }
+        }
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        if (true === $value || 1 === $value) {
+            return true;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return 'true' === $normalized || '1' === $normalized;
     }
 }

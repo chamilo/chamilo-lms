@@ -1,39 +1,13 @@
 <?php
-/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+/* Deprecated compatibility entry point. */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_admin_script();
+api_block_anonymous_users();
+$ticketId = isset($_REQUEST['ticket_id']) ? (int) $_REQUEST['ticket_id'] : 0;
+header('Location: '.api_get_path(WEB_PATH).($ticketId > 0 ? 'tickets/'.$ticketId : 'tickets'));
 
-if (!isset($_POST['ticket_id'])) {
-    exit;
-}
-
-$ticket_id = (int) $_POST['ticket_id'];
-$history = TicketManager::get_assign_log($ticket_id);
-?>
-<table width="200px" border="0" cellspacing="2" cellpadding="2">
-<?php
-if (0 == count($history)) {
-    ?>
-    <tr>
-        <td colspan="2"><?php echo api_ucfirst(get_lang('No history')); ?></td>
-    </tr>
-    <?php
-}
-foreach ($history as $item) {
-    ?>
-    <tr>
-        <td width="50px">
-            <?php echo api_convert_encoding($item['insertuser'], 'UTF-8', $charset); ?>
-        </td>
-        <td width="80px">
-            <?php echo api_convert_encoding($item['assigned_date'], 'UTF-8', $charset); ?>
-        </td>
-        <td width="50px">
-            <?php echo api_convert_encoding($item['assignuser'], 'UTF-8', $charset); ?>
-        </td>
-    </tr>
-<?php
-} ?>
-</table>
+exit;

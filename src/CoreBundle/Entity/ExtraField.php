@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use DateTime;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN')"),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"), new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: [
@@ -41,56 +42,56 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\UniqueConstraint(name: 'uniq_extra_field_variable_itemtype', columns: ['variable', 'item_type'])]
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['variable', 'itemType' => 'exact'])]
 class ExtraField
 {
-    public const USER_FIELD_TYPE = 1;
-    public const COURSE_FIELD_TYPE = 2;
-    public const SESSION_FIELD_TYPE = 3;
-    public const QUESTION_FIELD_TYPE = 4;
-    public const CALENDAR_FIELD_TYPE = 5;
-    public const LP_FIELD_TYPE = 6;
-    public const LP_ITEM_FIELD_TYPE = 7;
-    public const SKILL_FIELD_TYPE = 8;
-    public const WORK_FIELD_TYPE = 9;
-    public const CAREER_FIELD_TYPE = 10;
-    public const USER_CERTIFICATE = 11;
-    public const SURVEY_FIELD_TYPE = 12;
-    public const SCHEDULED_ANNOUNCEMENT = 13;
-    public const TERMS_AND_CONDITION_TYPE = 14;
-    public const FORUM_CATEGORY_TYPE = 15;
-    public const FORUM_POST_TYPE = 16;
-    public const EXERCISE_FIELD_TYPE = 17;
-    public const TRACK_EXERCISE_FIELD_TYPE = 18;
-    public const PORTFOLIO_TYPE = 19;
-    public const LP_VIEW_TYPE = 20;
-    public const COURSE_ANNOUNCEMENT = 21;
-    public const MESSAGE_TYPE = 22;
-    public const DOCUMENT_TYPE = 23;
-    public const GLOSSARY_TYPE = 29;
-    public const WORK_CORRECTIONS_COMMENT = 30;
-    public const ATTENDANCE_CALENDAR_TYPE = 24;
-    public const USER_FIELD_TYPE_RADIO = 3;
-    public const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
-    public const USER_FIELD_TYPE_TAG = 10;
-    public const FIELD_TYPE_TEXT = 1;
-    public const FIELD_TYPE_TEXTAREA = 2;
-    public const FIELD_TYPE_RADIO = 3;
-    public const FIELD_TYPE_SELECT = 4;
-    public const FIELD_TYPE_SELECT_MULTIPLE = 5;
-    public const FIELD_TYPE_DATE = 6;
-    public const FIELD_TYPE_DATETIME = 7;
-    public const FIELD_TYPE_DOUBLE_SELECT = 8;
-    public const FIELD_TYPE_TAG = 10;
-    public const FIELD_TYPE_SOCIAL_PROFILE = 12;
-    public const FIELD_TYPE_CHECKBOX = 13;
-    public const FIELD_TYPE_INTEGER = 15;
-    public const FIELD_TYPE_FILE_IMAGE = 16;
-    public const FIELD_TYPE_FLOAT = 17;
-    public const FIELD_TYPE_FILE = 18;
-    public const FIELD_TYPE_GEOLOCALIZATION = 24;
-    public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
-    public const FIELD_TYPE_DURATION = 28;
+    public const int USER_FIELD_TYPE = 1;
+    public const int COURSE_FIELD_TYPE = 2;
+    public const int SESSION_FIELD_TYPE = 3;
+    public const int QUESTION_FIELD_TYPE = 4;
+    public const int CALENDAR_FIELD_TYPE = 5;
+    public const int LP_FIELD_TYPE = 6;
+    public const int LP_ITEM_FIELD_TYPE = 7;
+    public const int SKILL_FIELD_TYPE = 8;
+    public const int WORK_FIELD_TYPE = 9;
+    public const int CAREER_FIELD_TYPE = 10;
+    public const int USER_CERTIFICATE = 11;
+    public const int SURVEY_FIELD_TYPE = 12;
+    public const int SCHEDULED_ANNOUNCEMENT = 13;
+    public const int TERMS_AND_CONDITION_TYPE = 14;
+    public const int FORUM_CATEGORY_TYPE = 15;
+    public const int FORUM_POST_TYPE = 16;
+    public const int EXERCISE_FIELD_TYPE = 17;
+    public const int TRACK_EXERCISE_FIELD_TYPE = 18;
+    public const int PORTFOLIO_TYPE = 19;
+    public const int LP_VIEW_TYPE = 20;
+    public const int COURSE_ANNOUNCEMENT = 21;
+    public const int MESSAGE_TYPE = 22;
+    public const int DOCUMENT_TYPE = 23;
+    public const int GLOSSARY_TYPE = 29;
+    public const int WORK_CORRECTIONS_COMMENT = 30;
+    public const int ATTENDANCE_CALENDAR_TYPE = 24;
+    public const int USER_FIELD_TYPE_RADIO = 3;
+    public const int USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const int USER_FIELD_TYPE_TAG = 10;
+    public const int FIELD_TYPE_TEXT = 1;
+    public const int FIELD_TYPE_TEXTAREA = 2;
+    public const int FIELD_TYPE_RADIO = 3;
+    public const int FIELD_TYPE_SELECT = 4;
+    public const int FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const int FIELD_TYPE_DATE = 6;
+    public const int FIELD_TYPE_DATETIME = 7;
+    public const int FIELD_TYPE_DOUBLE_SELECT = 8;
+    public const int FIELD_TYPE_TAG = 10;
+    public const int FIELD_TYPE_SOCIAL_PROFILE = 12;
+    public const int FIELD_TYPE_CHECKBOX = 13;
+    public const int FIELD_TYPE_INTEGER = 15;
+    public const int FIELD_TYPE_FILE_IMAGE = 16;
+    public const int FIELD_TYPE_FLOAT = 17;
+    public const int FIELD_TYPE_FILE = 18;
+    public const int FIELD_TYPE_GEOLOCALIZATION = 24;
+    public const int FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    public const int FIELD_TYPE_DURATION = 28;
 
     #[Groups(['extra_field:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -180,18 +181,6 @@ class ExtraField
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getItemType(): int
-    {
-        return $this->itemType;
-    }
-
-    public function setItemType(int $itemType): self
-    {
-        $this->itemType = $itemType;
-
-        return $this;
     }
 
     public function getValueType(): int
@@ -343,6 +332,7 @@ class ExtraField
 
         return $this;
     }
+
     public function hasTag(string $tagName): bool
     {
         if (0 === $this->tags->count()) {
@@ -358,6 +348,18 @@ class ExtraField
             \ExtraField::FIELD_TYPE_RADIO, \ExtraField::FIELD_TYPE_SELECT => 'choice',
             default => 'text',
         };
+    }
+
+    public function getItemType(): int
+    {
+        return $this->itemType;
+    }
+
+    public function setItemType(int $itemType): self
+    {
+        $this->itemType = $itemType;
+
+        return $this;
     }
 
     public function getHelperText(): ?string

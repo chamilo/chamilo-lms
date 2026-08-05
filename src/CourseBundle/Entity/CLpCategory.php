@@ -11,13 +11,21 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathCategoryCollectionProvider;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathCategoryReorderProcessor;
+use Chamilo\CoreBundle\State\LearningPath\LearningPathVisibilityProcessor;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,8 +42,95 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'List LP categories by course (resourceNode.parent) or sid',
             ),
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            provider: LearningPathCategoryCollectionProvider::class,
         ),
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Patch(
+            uriTemplate: '/learning_path_categories/{iid}/toggle-visibility',
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            validate: false,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            name: 'toggle_learning_path_category_visibility',
+            processor: LearningPathVisibilityProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/learning_path_categories/reorder',
+            status: 204,
+            openapi: new Operation(
+                summary: 'Reorder learning path categories in the current course context',
+                description: 'Persists the complete category order for the current course, session and group context.',
+                requestBody: new RequestBody(
+                    description: 'Ordered category IDs and CSRF token',
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'order' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'integer'],
+                                    ],
+                                    'csrfToken' => ['type' => 'string'],
+                                ],
+                                'required' => ['order', 'csrfToken'],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
+            deserialize: false,
+            validate: false,
+            name: 'lp_category_reorder',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            processor: LearningPathCategoryReorderProcessor::class,
+        ),
     ],
     normalizationContext: [
         'groups' => ['lp_category:read', 'resource_node:read', 'resource_link:read'],
@@ -75,6 +170,18 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach', 'persist'])]
     protected Collection $lps;
+
+    #[Groups(['lp_category:read'])]
+    private ?bool $visible = null;
+
+    #[Groups(['lp_category:read'])]
+    private bool $publishedOnCourseHome = false;
+
+    #[Groups(['lp_category:read'])]
+    private bool $subscriptionsAllowed = true;
+
+    #[Groups(['lp_category:read'])]
+    private bool $reorderable = false;
 
     public function __construct()
     {
@@ -175,6 +282,46 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
         $this->users->removeElement($user);
 
         return $this;
+    }
+
+    public function getVisible(): bool
+    {
+        return $this->visible ?? true;
+    }
+
+    public function setVisible(?bool $visible): void
+    {
+        $this->visible = $visible;
+    }
+
+    public function isPublishedOnCourseHome(): bool
+    {
+        return $this->publishedOnCourseHome;
+    }
+
+    public function setPublishedOnCourseHome(bool $publishedOnCourseHome): void
+    {
+        $this->publishedOnCourseHome = $publishedOnCourseHome;
+    }
+
+    public function isSubscriptionsAllowed(): bool
+    {
+        return $this->subscriptionsAllowed;
+    }
+
+    public function setSubscriptionsAllowed(bool $subscriptionsAllowed): void
+    {
+        $this->subscriptionsAllowed = $subscriptionsAllowed;
+    }
+
+    public function isReorderable(): bool
+    {
+        return $this->reorderable;
+    }
+
+    public function setReorderable(bool $reorderable): void
+    {
+        $this->reorderable = $reorderable;
     }
 
     /**

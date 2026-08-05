@@ -14,3 +14,11 @@ Feature: Admin Security block navigation
     And I follow "Login attempts"
     And I wait for the page to be loaded
     Then I should not see an error
+
+  Scenario: Open File integrity
+    Given I am on "/admin"
+    And I wait for the page to be loaded
+    And I zoom out to maximum
+    And I follow "File integrity"
+    And I wait for the page to be loaded
+    Then I should not see an error

@@ -40,6 +40,11 @@ class CWikiDiscuss
     #[ORM\Column(name: 'dtime', type: 'datetime', nullable: false)]
     protected DateTime $dtime;
 
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
+
     /**
      * Get publicationId.
      *

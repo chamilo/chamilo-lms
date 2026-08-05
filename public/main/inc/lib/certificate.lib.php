@@ -54,6 +54,7 @@ class Certificate extends Model
      * @param bool $sendNotification      send message to student
      * @param bool $updateCertificateData
      * @param string $pathToCertificate
+     * @param array  $notification
      *
      * If no ID given, take user_id and try to generate one
      */
@@ -62,7 +63,8 @@ class Certificate extends Model
         $userId = 0,
         $sendNotification = false,
         $updateCertificateData = true,
-        $pathToCertificate = ''
+        $pathToCertificate = '',
+        array $notification = []
     ) {
         $this->table   = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? (int) $userId : api_get_user_id();
@@ -102,7 +104,13 @@ class Certificate extends Model
         // Keep original behavior: optionally generate on construct.
         if ($this->force_certificate_generation) {
             try {
-                $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                $this->generate(
+                    [
+                        'certificate_path' => $pathToCertificate,
+                        'notification' => $notification,
+                    ],
+                    $sendNotification
+                );
                 // Refresh in-memory HTML for PDF generation after generate().
                 $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
                 if ($refetched && $refetched->hasResourceNode()) {
@@ -122,7 +130,13 @@ class Certificate extends Model
             !$this->force_certificate_generation
         ) {
             try {
-                $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                $this->generate(
+                    [
+                        'certificate_path' => $pathToCertificate,
+                        'notification' => $notification,
+                    ],
+                    $sendNotification
+                );
                 $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
                 if ($refetched && $refetched->hasResourceNode()) {
                     $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($refetched);
@@ -243,6 +257,41 @@ class Certificate extends Model
         } catch (\Throwable $e) {
             error_log('[CERTIFICATE::deleteCertificate] delete error: '.$e->getMessage());
             return false;
+        }
+    }
+
+
+    /**
+     * Render a certificate using the CustomCertificate plugin when the plugin
+     * is active and the current course has enabled a custom/default template.
+     */
+    private function generateCustomCertificatePluginHtml($courseId, $courseCode, $sessionId, $categoryId)
+    {
+        $pluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+        if (!is_file($pluginFile)) {
+            return '';
+        }
+
+        require_once $pluginFile;
+
+        if (!class_exists('CustomCertificatePlugin')) {
+            return '';
+        }
+
+        try {
+            return CustomCertificatePlugin::generateHtmlCertificateForUser(
+                (int) $courseId,
+                (string) $courseCode,
+                (int) $sessionId,
+                (int) $this->user_id,
+                api_get_current_access_url_id(),
+                (int) $categoryId,
+                true
+            );
+        } catch (\Throwable $e) {
+            error_log('[CERT::generateCustomCertificatePluginHtml] '.$e->getMessage());
+
+            return '';
         }
     }
 
@@ -369,7 +418,19 @@ class Certificate extends Model
             $html   = '';
             $source = '';
 
-            if ($categoryHasDefaultTemplate) {
+            $customCertificateHtml = $this->generateCustomCertificatePluginHtml(
+                $courseId,
+                $courseInfo['code'] ?? '',
+                $sessionId,
+                $categoryId
+            );
+
+            if ('' !== $customCertificateHtml) {
+                $html = $customCertificateHtml;
+                $source = 'CUSTOMCERTIFICATE_PLUGIN';
+            }
+
+            if ('' === $html && $categoryHasDefaultTemplate) {
                 if (is_array($gb) && !empty($gb['content'])) {
                     $html   = (string)$gb['content'];
                     $source = 'DEFAULT_TEMPLATE';
@@ -377,20 +438,20 @@ class Certificate extends Model
                     $html   = $gb;
                     $source = 'DEFAULT_TEMPLATE';
                 }
-            } else {
+            } elseif ('' === $html) {
                 error_log(sprintf(
-                    '[CERT::generate] course DEFAULT template NOT found. cat=%d user=%d -> fallback to CUSTOM',
+                    '[CERT::generate] course DEFAULT template NOT found. cat=%d user=%d -> fallback to core CUSTOM',
                     (int)$categoryId,
                     (int)$this->user_id
                 ));
             }
 
-            if ($html === '') {
+            if ('' === $html) {
                 $html   = $this->generateCustomCertificate('');
                 $source = 'CUSTOM_TEMPLATE_FALLBACK';
             }
 
-            if ($html === '') {
+            if ('' === $html) {
                 error_log(sprintf(
                     '[CERT::generate] Empty HTML on category path. cat=%d user=%d',
                     (int)$categoryId,
@@ -408,10 +469,21 @@ class Certificate extends Model
                 $this->certificate_data['file_content']     = $html;
                 $this->certificate_data['path_certificate'] = '';
 
-                // Send notification if required (we have course context here)
+                // Send the notification only after the certificate resource exists.
                 if ($sendNotification) {
-                    $subject = get_lang('Certificate notification');
-                    $message = nl2br(get_lang('((user_first_name)),'));
+                    $notification = is_array($params['notification'] ?? null)
+                        ? $params['notification']
+                        : [];
+                    $subject = trim((string) ($notification['subject'] ?? ''));
+                    $message = trim((string) ($notification['message'] ?? ''));
+
+                    if ('' === $subject) {
+                        $subject = get_lang('Certificate notification');
+                    }
+                    if ('' === $message) {
+                        $message = nl2br(get_lang('((user_first_name)),'));
+                    }
+
                     $htmlUrl = '';
                     try {
                         $htmlUrl = $certRepo->getResourceFileUrl($entity);
@@ -419,16 +491,26 @@ class Certificate extends Model
                         error_log('[CERT::generate] getResourceFileUrl failed for notification: '.$e->getMessage());
                     }
 
-                    self::sendNotification(
+                    $notificationSent = self::sendNotification(
                         $subject,
                         $message,
                         api_get_user_info($this->user_id),
                         $courseInfo,
                         [
-                            'score_certificate' => $score,
-                            'html_url'          => $htmlUrl,
-                        ]
+                            'score_certificate' => round($score),
+                            'html_url' => $htmlUrl,
+                        ],
+                        !empty($notification),
+                        (int) ($notification['sender_id'] ?? 0)
                     );
+
+                    if (!$notificationSent) {
+                        error_log(sprintf(
+                            '[CERT::generate] Notification failed after certificate generation. cat=%d user=%d',
+                            (int) $categoryId,
+                            (int) $this->user_id
+                        ));
+                    }
                 }
 
                 return true;
@@ -506,13 +588,22 @@ class Certificate extends Model
         $message,
         $userInfo,
         $courseInfo,
-        $certificateInfo
+        $certificateInfo,
+        bool $forceEmailSubject = false,
+        int $senderId = 0
     ) {
         if (empty($userInfo) || empty($courseInfo)) {
             return false;
         }
 
-        $currentUserInfo = api_get_user_info();
+        $currentUserInfo = $senderId > 0
+            ? api_get_user_info($senderId)
+            : api_get_user_info();
+
+        if (empty($currentUserInfo['id'])) {
+            return false;
+        }
+
         $url = '';
 
         // Prefer resource URL if present
@@ -536,7 +627,7 @@ class Certificate extends Model
         ];
 
         $message = str_replace(self::notificationTags(), $replace, $message);
-        MessageManager::send_message(
+        return (bool) MessageManager::send_message(
             $userInfo['id'],
             $subject,
             $message,
@@ -546,7 +637,11 @@ class Certificate extends Model
             0,
             0,
             0,
-            $currentUserInfo['id']
+            $currentUserInfo['id'],
+            false,
+            0,
+            false,
+            $forceEmailSubject
         );
     }
 
@@ -959,32 +1054,7 @@ class Certificate extends Model
     public function generatePdfFromCustomCertificate(): void
     {
         $orientation = api_get_setting('certificate.certificate_pdf_orientation');
-
-        $pdfOrientation = 'landscape';
-        if (!empty($orientation)) {
-            $pdfOrientation = $orientation;
-        }
-
-        $pageFormat = 'landscape' === $pdfOrientation ? 'A4-L' : 'A4';
-
-        // Instanciate mPDF directly to avoid blank pages generated by the default
-        // PDF class: format_pdf() sets mirrorMargins=1 (book layout) and the
-        // constructor hard-codes margin_header=8 / margin_footer=8 even when
-        // headers and footers are empty, which causes mPDF to insert blank
-        // odd/even pages around the single certificate page.
-        $mpdf = new \Mpdf\Mpdf([
-            'tempDir'        => Container::getCacheDir(),
-            'mode'           => 'utf-8',
-            'format'         => $pageFormat,
-            'orientation'    => $pdfOrientation,
-            'margin_left'    => 0,
-            'margin_right'   => 0,
-            'margin_top'     => 0,
-            'margin_bottom'  => 0,
-            'margin_header'  => 0,
-            'margin_footer'  => 0,
-        ]);
-        $mpdf->mirrorMargins = 0;
+        $pdfOrientation = !empty($orientation) ? $orientation : 'landscape';
 
         // Safety: ensure HTML content is present; fetch from Resource if needed.
         if (empty($this->certificate_data['file_content'])) {
@@ -1000,11 +1070,14 @@ class Certificate extends Model
             }
         }
 
-        @$mpdf->WriteHTML((string) $this->certificate_data['file_content']);
-
-        $pdfName = api_replace_dangerous_char(get_lang('Certificates'));
-        $mpdf->Output($pdfName.'.pdf', \Mpdf\Output\Destination::DOWNLOAD);
-        exit;
+        // Single-page render with SSRF-guarded mPDF lives in the PDF class; it
+        // skips format_pdf()'s book layout to avoid blank pages around the
+        // single certificate page.
+        PDF::singlePageHtmlToPdfDownload(
+            (string) $this->certificate_data['file_content'],
+            get_lang('Certificates'),
+            $pdfOrientation
+        );
     }
 
     /**

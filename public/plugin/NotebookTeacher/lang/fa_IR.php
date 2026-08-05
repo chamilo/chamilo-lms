@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'هیچ یادداشتی با فیلتر فعلی
 $strings['NoNotebook'] = 'هیچ یادداشتی در سیستم ایجاد نشده است';
 $strings['NoNotebookUser'] = 'هیچ یادداشتی برای این دانشجو وجود ندارد';
 $strings['NotebookNoStudentAssigned'] = 'یادداشت‌های بدون دانشجوی اختصاص‌یافته';
+
+$strings['TeacherNotesHelp'] = 'ایجاد یادداشت‌های خصوصی استاد مرتبط با فراگیران این دوره.';
+$strings['CurrentFilter'] = 'فیلتر فعلی';
+$strings['EmptyStateHelp'] = 'ایجاد یادداشت جدید یا تغییر فیلتر فراگیر.';

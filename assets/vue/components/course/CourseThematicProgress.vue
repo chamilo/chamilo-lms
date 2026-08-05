@@ -60,21 +60,21 @@
         v-if="progress.detailUrl"
         class="flex-shrink-0 md:ml-auto"
       >
-        <a
-          :href="progress.detailUrl"
+        <router-link
+          :to="progress.detailUrl"
           class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border text-[0.7rem] font-semibold bg-gray-25 hover:bg-gray-50 whitespace-nowrap"
         >
           <span class="mr-1">
             {{ progress.labels?.seeDetail || t("See detail") }}
           </span>
           <i class="mdi mdi-open-in-new text-xs" />
-        </a>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue"
+import { ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
@@ -87,22 +87,23 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const progress = ref(null)
 
-onMounted(async () => {
-  if (!course.value?.id) {
+async function loadProgress() {
+  const courseId = Number(course.value?.id || 0)
+  const sessionId = Number(session.value?.id || 0)
+
+  if (courseId <= 0) {
+    progress.value = null
     return
   }
 
   try {
-    const data = await courseService.loadThematicProgress(course.value.id, session.value?.id || 0)
-
-    if (data && data.enabled) {
-      progress.value = data
-    } else {
-      progress.value = null
-    }
+    const data = await courseService.loadThematicProgress(courseId, sessionId)
+    progress.value = data && data.enabled ? data : null
   } catch (error) {
     console.error("[CourseThematicProgress] Failed to load thematic progress", error)
     progress.value = null
   }
-})
+}
+
+watch(() => [course.value?.id, session.value?.id], loadProgress, { immediate: true })
 </script>

@@ -13,9 +13,11 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeZone;
 use PauseTraining;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -54,6 +56,11 @@ class ProfileType extends AbstractType
         );
 
         $usersTimezonesEnabled = 'true' === (string) $this->settingsManager->getSetting('profile.use_users_timezone', true);
+
+        $addressGeolocalizationEnabled = 'true' === (string) $this->settingsManager->getSetting(
+            'profile.enable_profile_user_address_geolocalization',
+            true
+        );
 
         $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
         if (\is_string($rawFine)) {
@@ -104,13 +111,44 @@ class ProfileType extends AbstractType
         ];
 
         $fieldsMap = [
-            'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'First name'],
-            'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Last name'],
-            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official code'],
-            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'E-mail'],
-            'picture' => ['field' => 'illustration', 'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],
-            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Username'],
-            'password' => ['field' => 'password', 'type' => PasswordType::class, 'label' => 'Password', 'mapped' => false, 'required' => false],
+            'firstname' => [
+                'field' => 'firstname',
+                'type' => TextType::class,
+                'label' => 'First name',
+            ],
+            'lastname' => [
+                'field' => 'lastname',
+                'type' => TextType::class,
+                'label' => 'Last name',
+            ],
+            'officialcode' => [
+                'field' => 'official_code',
+                'type' => TextType::class,
+                'label' => 'Official code',
+            ],
+            'email' => [
+                'field' => 'email',
+                'type' => EmailType::class,
+                'label' => 'E-mail',
+            ],
+            'picture' => [
+                'field' => 'illustration',
+                'type' => IllustrationType::class,
+                'label' => 'Picture',
+                'mapped' => false,
+            ],
+            'login' => [
+                'field' => 'login',
+                'type' => TextType::class,
+                'label' => 'Username',
+            ],
+            'password' => [
+                'field' => 'password',
+                'type' => PasswordType::class,
+                'label' => 'Password',
+                'mapped' => false,
+                'required' => false,
+            ],
             'language' => [
                 'field' => 'locale',
                 'type' => ChoiceType::class,
@@ -120,8 +158,22 @@ class ProfileType extends AbstractType
                 'placeholder' => null,
                 'choice_translation_domain' => false,
             ],
-            'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone number'],
-            'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme (stylesheet)'],
+            'phone' => [
+                'field' => 'phone',
+                'type' => TextType::class,
+                'label' => 'Phone number',
+            ],
+            'address' => [
+                'field' => 'address',
+                'type' => TextType::class,
+                'label' => 'Address',
+                'required' => false,
+            ],
+            'theme' => [
+                'field' => 'theme',
+                'type' => TextType::class,
+                'label' => 'Theme (stylesheet)',
+            ],
             'date_of_birth' => [
                 'field' => 'date_of_birth',
                 'type' => DateType::class,
@@ -159,13 +211,34 @@ class ProfileType extends AbstractType
             ],
         ];
 
-        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine, $ignoredKeys, $usersTimezonesEnabled): bool {
+        $isCoreVisible = function (
+            string $key
+        ) use (
+            $fieldsVisibility,
+            $visibleHigh,
+            $hasFine,
+            $ignoredKeys,
+            $usersTimezonesEnabled,
+            $addressGeolocalizationEnabled
+        ): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
 
             if ('timezone' === $key) {
                 return $usersTimezonesEnabled;
+            }
+
+            if ('address' === $key) {
+                if (!$addressGeolocalizationEnabled) {
+                    return false;
+                }
+
+                if ($hasFine) {
+                    return \array_key_exists($key, $fieldsVisibility);
+                }
+
+                return true;
             }
 
             if ($hasFine) {
@@ -175,13 +248,33 @@ class ProfileType extends AbstractType
             return \in_array($key, $visibleHigh, true);
         };
 
-        $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh, $ignoredKeys, $usersTimezonesEnabled): bool {
+        $isCoreEditable = function (
+            string $key
+        ) use (
+            $fieldsVisibility,
+            $editableHigh,
+            $ignoredKeys,
+            $usersTimezonesEnabled,
+            $addressGeolocalizationEnabled
+        ): bool {
             if (\in_array($key, $ignoredKeys, true)) {
                 return false;
             }
 
             if ('timezone' === $key) {
                 return $usersTimezonesEnabled;
+            }
+
+            if ('address' === $key) {
+                if (!$addressGeolocalizationEnabled) {
+                    return false;
+                }
+
+                if (\array_key_exists($key, $fieldsVisibility)) {
+                    return (bool) $fieldsVisibility[$key];
+                }
+
+                return true;
             }
 
             if (\array_key_exists($key, $fieldsVisibility)) {
@@ -259,10 +352,10 @@ class ProfileType extends AbstractType
                 $constraints = $this->addConstraintIfMissing(
                     $constraints,
                     EmailConstraint::class,
-                    new EmailConstraint([
-                        'mode' => EmailConstraint::VALIDATION_MODE_HTML5,
-                        'message' => 'Please enter a valid email address.',
-                    ])
+                    new EmailConstraint(
+                        mode: EmailConstraint::VALIDATION_MODE_HTML5,
+                        message: 'Please enter a valid email address.',
+                    )
                 );
                 $opts['constraints'] = $constraints;
                 $opts['invalid_message'] = 'Please enter a valid email address.';
@@ -272,14 +365,27 @@ class ProfileType extends AbstractType
                 $constraints = $this->addConstraintIfMissing(
                     $constraints,
                     NotBlank::class,
-                    new NotBlank([
-                        'message' => 'This value should not be blank.',
-                    ])
+                    new NotBlank(message: 'This value should not be blank.')
                 );
                 $opts['constraints'] = $constraints;
             }
 
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
+
+            if ('picture' === $key && $isEditable) {
+                $builder->add('illustration_crop', HiddenType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                ]);
+
+                if ($options['has_illustration']) {
+                    $builder->add('delete_illustration', CheckboxType::class, [
+                        'label' => 'Delete photo',
+                        'mapped' => false,
+                        'required' => false,
+                    ]);
+                }
+            }
         }
 
         if ($isCoreVisible('timezone')) {
@@ -306,9 +412,7 @@ class ProfileType extends AbstractType
                 $opts['label_attr'] = $existingLabelAttr;
 
                 $constraints = $opts['constraints'] ?? [];
-                $constraints[] = new NotBlank([
-                    'message' => 'This value should not be blank.',
-                ]);
+                $constraints[] = new NotBlank(message: 'This value should not be blank.');
                 $opts['constraints'] = $constraints;
             }
 
@@ -323,6 +427,10 @@ class ProfileType extends AbstractType
 
             if (\array_key_exists('email', $data) && null === $data['email']) {
                 $data['email'] = '';
+            }
+
+            if (\array_key_exists('address', $data) && null === $data['address']) {
+                $data['address'] = '';
             }
 
             $event->setData($data);
@@ -366,9 +474,11 @@ class ProfileType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'include_password_field' => false,
+            'has_illustration' => false,
         ]);
 
         $resolver->setAllowedTypes('include_password_field', 'bool');
+        $resolver->setAllowedTypes('has_illustration', 'bool');
     }
 
     private function addConstraintIfMissing(array $constraints, string $constraintClass, object $constraint): array
@@ -443,6 +553,6 @@ class ProfileType extends AbstractType
             }
         }
 
-        return PauseTraining::create()->isEnabled(true);
+        return PauseTraining::create()->isEnabled();
     }
 }

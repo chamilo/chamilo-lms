@@ -37,15 +37,30 @@ trait CourseLinkExtensionTrait
 
     protected function addVisibilityCondition(QueryBuilder $queryBuilder): void
     {
-        $allowDraft =
-            $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-
-        if (!$allowDraft) {
-            $queryBuilder
-                ->andWhere('resource_links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-            ;
+        if ($this->canViewDraftResources()) {
+            return;
         }
+
+        $queryBuilder
+            ->andWhere('resource_links.visibility != :visibilityDraft')
+            ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
+        ;
+    }
+
+    /**
+     * Whether the current user may see draft (unpublished) course resources:
+     * platform admins and teachers of the current course/session.
+     *
+     * Context roles (ROLE_CURRENT_COURSE_*) live in User::$temporaryRoles and appear in
+     * $user->getRoles(), but Symfony's AbstractToken::getRoleNames() only returns roles
+     * fixed at token-creation time, so isGranted() misses them — read them from the User.
+     */
+    protected function canViewDraftResources(): bool
+    {
+        $roles = $this->security->getUser()?->getRoles() ?? [];
+
+        return $this->security->isGranted('ROLE_ADMIN')
+            || \in_array('ROLE_CURRENT_COURSE_TEACHER', $roles, true)
+            || \in_array('ROLE_CURRENT_COURSE_SESSION_TEACHER', $roles, true);
     }
 }

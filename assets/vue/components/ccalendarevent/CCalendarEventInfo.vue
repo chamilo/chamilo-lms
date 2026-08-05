@@ -21,6 +21,14 @@
       v-else-if="type.invitation === event.invitationType"
       :event="event"
     />
+    <div
+      v-else-if="event.objectType === 'learning_calendar' && event.eventType"
+      class="mt-2"
+    >
+      <strong>{{ t("Type") }}:</strong>
+      {{ event.eventType }}
+    </div>
+
     <ShowLinks
       v-else
       :clickable-course="true"
@@ -28,7 +36,10 @@
       :show-status="false"
     />
 
-    <CalendarRemindersInfo :event="event" />
+    <CalendarRemindersInfo
+      v-if="event.objectType !== 'learning_calendar'"
+      :event="event"
+    />
 
     <div
       v-if="event.room"

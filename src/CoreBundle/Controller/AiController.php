@@ -6,24 +6,34 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\AiProvider\AiCourseAnalyzerService;
 use Chamilo\CoreBundle\AiProvider\AiDocumentProcessProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiVideoJobProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiVideoProviderInterface;
+use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use DateTime;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Question;
@@ -31,8 +41,11 @@ use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -54,7 +67,21 @@ use const PHP_URL_QUERY;
 class AiController extends AbstractController
 {
     private bool $debug = false;
-    private const ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
+    private const string ACTIVE_MEDIA_PROVIDER_SESSION_PREFIX = 'ai_media_active_provider_';
+    private const int LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH = 5000;
+    private const array LP_LEARNING_HELPER_METHODS = [
+        'mind_map',
+        'feynman',
+        'elaborative_interrogation',
+        'spaced_repetition',
+        'sq3r',
+        'analogies_metaphors',
+        'dual_coding',
+        'storytelling',
+        'thematic_connections',
+        'interleaved_learning',
+        'memory_palace',
+    ];
 
     public function __construct(
         private readonly AiProviderFactory $aiProviderFactory,
@@ -65,6 +92,8 @@ class AiController extends AbstractController
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly MessageHelper $messageHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
+        private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private readonly CCourseDescriptionRepository $courseDescriptionRepository,
     ) {}
 
     #[Route('/text_providers', name: 'chamilo_core_ai_text_providers', methods: ['GET'])]
@@ -100,18 +129,164 @@ class AiController extends AbstractController
         return new JsonResponse(['providers' => $providers]);
     }
 
+    #[Route('/glossary_document_sources', name: 'chamilo_core_ai_glossary_document_sources', methods: ['GET'])]
+    public function glossaryDocumentSources(Request $request): JsonResponse
+    {
+        try {
+            $this->denyIfNotTeacher();
+        } catch (AccessDeniedException) {
+            return new JsonResponse(['documents' => []], 403);
+        }
+
+        $cid = (int) $request->query->get('cid', 0);
+        $sid = (int) $request->query->get('sid', 0);
+
+        if (0 === $cid) {
+            return new JsonResponse(['documents' => []], 400);
+        }
+
+        /** @var Course|null $course */
+        $course = $this->em->getRepository(Course::class)->find($cid);
+        if (null === $course) {
+            return new JsonResponse(['documents' => []], 404);
+        }
+
+        $documents = [];
+        $seen = [];
+        $qb = $this->em->createQueryBuilder();
+        $qb
+            ->select(
+                'DISTINCT rf.id AS resource_file_id',
+                'rn.id AS resource_node_id',
+                'rn.title AS title',
+                'rf.title AS file_title',
+                'rf.originalName AS original_name',
+                'rf.mimeType AS mime_type',
+                'rf.size AS size'
+            )
+            ->from(ResourceFile::class, 'rf')
+            ->join('rf.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->where('IDENTITY(rl.course) = :cid')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'LOWER(rf.mimeType) = :pdfMime',
+                    'LOWER(rf.mimeType) LIKE :textMime',
+                    'LOWER(rf.originalName) LIKE :pdfExt',
+                    'LOWER(rf.originalName) LIKE :txtExt',
+                    'LOWER(rf.title) LIKE :pdfExt',
+                    'LOWER(rf.title) LIKE :txtExt',
+                    'LOWER(rn.title) LIKE :pdfExt',
+                    'LOWER(rn.title) LIKE :txtExt'
+                )
+            )
+            ->orderBy('rn.title', 'ASC')
+            ->addOrderBy('rf.id', 'ASC')
+            ->setMaxResults(200)
+            ->setParameter('cid', $cid, Types::INTEGER)
+            ->setParameter('pdfMime', 'application/pdf')
+            ->setParameter('textMime', 'text/plain%')
+            ->setParameter('pdfExt', '%.pdf')
+            ->setParameter('txtExt', '%.txt')
+        ;
+
+        if ($sid > 0) {
+            $qb
+                ->andWhere('(IDENTITY(rl.session) = :sid OR rl.session IS NULL)')
+                ->setParameter('sid', $sid, Types::INTEGER)
+            ;
+        }
+
+        /** @var list<array<string, mixed>> $rows */
+        $rows = $qb->getQuery()->getArrayResult();
+
+        foreach ($rows as $row) {
+            $this->addGlossaryDocumentSourceFromRow($documents, $seen, $row);
+        }
+
+        /*
+         * Fallback for installations where the document resource link is
+         * resolved through CDocument. This keeps the selector robust without
+         * replacing the ResourceFile flow that already worked.
+         */
+        if (\count($documents) < 200) {
+            $qb = $this->em->createQueryBuilder();
+            $qb
+                ->select(
+                    'DISTINCT d.iid AS document_id',
+                    'rn.title AS title',
+                    'rf.id AS resource_file_id',
+                    'rf.title AS file_title',
+                    'rf.originalName AS original_name',
+                    'rf.mimeType AS mime_type',
+                    'rf.size AS size'
+                )
+                ->from(CDocument::class, 'd')
+                ->join('d.resourceNode', 'rn')
+                ->join('rn.resourceLinks', 'rl')
+                ->join('rn.resourceFiles', 'rf')
+                ->where('IDENTITY(rl.course) = :cid')
+                ->andWhere('rl.deletedAt IS NULL')
+                ->andWhere('d.filetype = :filetype')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        'LOWER(rf.mimeType) = :pdfMime',
+                        'LOWER(rf.mimeType) LIKE :textMime',
+                        'LOWER(rf.originalName) LIKE :pdfExt',
+                        'LOWER(rf.originalName) LIKE :txtExt',
+                        'LOWER(rf.title) LIKE :pdfExt',
+                        'LOWER(rf.title) LIKE :txtExt',
+                        'LOWER(rn.title) LIKE :pdfExt',
+                        'LOWER(rn.title) LIKE :txtExt'
+                    )
+                )
+                ->orderBy('rn.title', 'ASC')
+                ->addOrderBy('rf.id', 'ASC')
+                ->setMaxResults(200)
+                ->setParameter('cid', $cid, Types::INTEGER)
+                ->setParameter('filetype', 'file')
+                ->setParameter('pdfMime', 'application/pdf')
+                ->setParameter('textMime', 'text/plain%')
+                ->setParameter('pdfExt', '%.pdf')
+                ->setParameter('txtExt', '%.txt')
+            ;
+
+            if ($sid > 0) {
+                $qb
+                    ->andWhere('(IDENTITY(rl.session) = :sid OR rl.session IS NULL)')
+                    ->setParameter('sid', $sid, Types::INTEGER)
+                ;
+            }
+
+            /** @var list<array<string, mixed>> $rows */
+            $rows = $qb->getQuery()->getArrayResult();
+
+            foreach ($rows as $row) {
+                if (\count($documents) >= 200) {
+                    break;
+                }
+
+                $this->addGlossaryDocumentSourceFromRow($documents, $seen, $row);
+            }
+        }
+
+        return new JsonResponse(['documents' => $documents]);
+    }
+
     #[Route('/glossary_default_prompt', name: 'chamilo_core_ai_glossary_default_prompt', methods: ['GET'])]
     public function glossaryDefaultPrompt(Request $request): JsonResponse
     {
         try {
             $this->denyIfNotTeacher();
-        } catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException) {
             return new JsonResponse(['prompt' => ''], 403);
         }
 
         $cid = (int) $request->query->get('cid', 0);
         $sid = (int) $request->query->get('sid', 0);
         $n = (int) $request->query->get('n', 15);
+        $resourceFileId = (int) $request->query->get('resource_file_id', 0);
 
         if ($n < 1) {
             $n = 1;
@@ -130,6 +305,39 @@ class AiController extends AbstractController
             return new JsonResponse(['prompt' => ''], 404);
         }
 
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return new JsonResponse(['prompt' => ''], 403);
+        }
+
+        $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
+
+        if ($resourceFileId > 0) {
+            /** @var ResourceFile|null $resourceFile */
+            $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+            if (null === $resourceFile) {
+                return new JsonResponse(['prompt' => ''], 404);
+            }
+
+            if (!$this->resourceFileBelongsToCourse($resourceFile, $cid)) {
+                return new JsonResponse(['prompt' => ''], 403);
+            }
+
+            $node = $resourceFile->getResourceNode();
+            $documentTitle = null !== $node ? (string) $node->getTitle() : (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle());
+
+            return new JsonResponse([
+                'prompt' => $this->appendExistingGlossaryTermsToPrompt(
+                    $this->buildGlossaryFromDocumentPrompt(
+                        (string) $course->getTitle(),
+                        $documentTitle,
+                        (string) $request->query->get('language', 'en'),
+                        $n
+                    ),
+                    $existingTerms
+                ),
+            ]);
+        }
+
         $courseTitle = (string) $course->getTitle();
         $desc = $this->getGenericCourseDescription($cid, $sid);
 
@@ -146,6 +354,8 @@ class AiController extends AbstractController
             $prompt .= ' '.\sprintf($descPrefix, $courseTitle).' '.$desc;
         }
 
+        $prompt = $this->appendExistingGlossaryTermsToPrompt($prompt, $existingTerms);
+
         return new JsonResponse(['prompt' => $prompt]);
     }
 
@@ -154,11 +364,19 @@ class AiController extends AbstractController
     {
         try {
             $this->denyIfNotTeacher();
-        } catch (AccessDeniedException $e) {
+        } catch (AccessDeniedException) {
             return new JsonResponse([
                 'success' => false,
                 'text' => 'Access denied.',
             ], 403);
+        }
+
+        $debug = false;
+
+        try {
+            $debug = (bool) $this->getParameter('kernel.debug');
+        } catch (Throwable) {
+            $debug = false;
         }
 
         $data = json_decode($request->getContent(), true);
@@ -172,24 +390,12 @@ class AiController extends AbstractController
         $n = (int) ($data['n'] ?? 15);
         $language = (string) ($data['language'] ?? 'en');
         $prompt = trim((string) ($data['prompt'] ?? ''));
-        $providerName = null;
-
-        $providerRaw = $data['ai_provider'] ?? null;
-        if (\is_array($providerRaw)) {
-            // Front-end may send {key,label}
-            $providerName = isset($providerRaw['key']) ? trim((string) $providerRaw['key']) : null;
-            if (null === $providerName || '' === $providerName) {
-                $providerName = isset($providerRaw['name']) ? trim((string) $providerRaw['name']) : null;
-            }
-        } elseif (\is_string($providerRaw)) {
-            $providerName = trim($providerRaw);
-        }
-
-        if ('' === (string) $providerName) {
-            $providerName = null; // Use factory default
-        }
+        $providerName = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
         $cid = (int) ($data['cid'] ?? 0);
+        $sid = (int) ($data['sid'] ?? 0);
         $toolName = trim((string) ($data['tool'] ?? 'glossary'));
+        $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
+        $documentTitle = trim((string) ($data['document_title'] ?? ''));
 
         if ($n < 1) {
             $n = 1;
@@ -198,7 +404,7 @@ class AiController extends AbstractController
             $n = 200;
         }
 
-        if (0 === $cid || '' === $prompt) {
+        if (0 === $cid || (0 === $resourceFileId && '' === $prompt)) {
             return new JsonResponse([
                 'success' => false,
                 'text' => 'Invalid request parameters.',
@@ -214,7 +420,215 @@ class AiController extends AbstractController
             ], 404);
         }
 
+        if (!$this->isAiFeatureEnabledForCourse('glossary_terms_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($providerName, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
+
+        $existingTerms = $this->getExistingGlossaryTermTitles($course, $sid);
+
         try {
+            if ($resourceFileId > 0) {
+                /** @var ResourceFile|null $resourceFile */
+                $resourceFile = $this->em->getRepository(ResourceFile::class)->find($resourceFileId);
+                if (null === $resourceFile) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource file not found.',
+                    ], 404);
+                }
+
+                $node = $resourceFile->getResourceNode();
+                if (null === $node) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource node not found.',
+                    ], 404);
+                }
+
+                if (!$this->resourceFileBelongsToCourse($resourceFile, $cid)) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Resource does not belong to this course.',
+                    ], 403);
+                }
+
+                $fileUri = $this->resourceNodeRepository->getFilename($resourceFile);
+                if (!\is_string($fileUri) || '' === trim($fileUri)) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Could not resolve resource file URI.',
+                    ], 500);
+                }
+
+                try {
+                    $binary = (string) $this->resourceNodeRepository->getFileSystem()->read($fileUri);
+                } catch (Throwable $e) {
+                    if ($debug) {
+                        error_log('[AI][glossary_document] Failed to read file: '.$e->getMessage());
+                    }
+
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Failed to read file content.',
+                    ], 500);
+                }
+
+                if ('' === $binary) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'File is empty.',
+                    ], 400);
+                }
+
+                $filename = basename($fileUri);
+                $mimeType = (string) ($resourceFile->getMimeType() ?: 'application/octet-stream');
+                $mode = $this->getSupportedDocumentMode($filename, $mimeType);
+
+                if ('' === $mode) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Unsupported file type. Supported: PDF, TXT.',
+                    ], 415);
+                }
+
+                $maxBytesPdf = 10 * 1024 * 1024;
+                $maxBytesTxt = 1 * 1024 * 1024;
+
+                if ('pdf' === $mode && \strlen($binary) > $maxBytesPdf) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Document is too large to analyze.',
+                    ], 413);
+                }
+
+                if ('txt' === $mode && \strlen($binary) > $maxBytesTxt) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'Text file is too large to analyze.',
+                    ], 413);
+                }
+
+                $docLabel = '' !== $documentTitle ? $documentTitle : (string) ($node->getTitle() ?: $filename);
+                $documentPrompt = $this->appendExistingGlossaryTermsToPrompt(
+                    $this->buildGlossaryFromDocumentPrompt((string) $course->getTitle(), $docLabel, $language, $n),
+                    $existingTerms
+                );
+
+                if ('txt' === $mode) {
+                    $text = $this->normalizePlainText($binary);
+
+                    $maxChars = 20000;
+                    $truncated = false;
+                    if (mb_strlen($text) > $maxChars) {
+                        $text = mb_substr($text, 0, $maxChars);
+                        $truncated = true;
+                    }
+
+                    $fullPrompt = $documentPrompt
+                        ."\n\nUse only the following document content as source material:\n"
+                        .$text
+                        .($truncated ? "\n\n[Content truncated]" : '');
+
+                    $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
+
+                    if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+                        return new JsonResponse([
+                            'success' => false,
+                            'text' => 'Selected AI provider does not support text generation.',
+                        ], 400);
+                    }
+
+                    try {
+                        $raw = (string) $provider->generateText($fullPrompt, [
+                            'language' => $language,
+                            'n' => $n,
+                            'tool' => 'glossary_terms_from_document_txt',
+                            'cid' => $cid,
+                            'sid' => $sid,
+                            'resource_file_id' => $resourceFileId,
+                        ]);
+                    } catch (TypeError $e) {
+                        $raw = (string) $provider->generateText($fullPrompt, $language);
+                    }
+
+                    $raw = trim($raw);
+                } else {
+                    $provider = $this->aiProviderFactory->getProvider($providerName, 'document_process');
+
+                    if (!$provider instanceof AiDocumentProcessProviderInterface) {
+                        return new JsonResponse([
+                            'success' => false,
+                            'text' => 'Selected AI provider does not support document processing.',
+                        ], 400);
+                    }
+
+                    $result = $provider->processDocument(
+                        $documentPrompt,
+                        'glossary_terms_from_document_pdf',
+                        $filename,
+                        'application/pdf',
+                        $binary,
+                        [
+                            'language' => $language,
+                            'n' => $n,
+                            'cid' => $cid,
+                            'sid' => $sid,
+                            'resource_file_id' => $resourceFileId,
+                        ]
+                    );
+
+                    $raw = \is_string($result) ? trim($result) : '';
+                }
+
+                if ('' === $raw) {
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => 'AI request returned an empty response.',
+                    ], 500);
+                }
+
+                if (str_starts_with($raw, 'Error:')) {
+                    $msg = trim((string) preg_replace('/^Error:\s*/', '', $raw));
+                    $status = $this->mapDocumentErrorToHttpStatus($msg);
+
+                    return new JsonResponse([
+                        'success' => false,
+                        'text' => '' !== $msg ? $msg : $raw,
+                    ], $status);
+                }
+
+                $this->aiDisclosureHelper->logAudit(
+                    targetKey: 'course:'.$cid.':glossary_terms_document:'.sha1($resourceFileId.'|'.$language.'|'.$n),
+                    userId: $this->getCurrentUserId(),
+                    meta: [
+                        'feature' => 'glossary_generator_document',
+                        'mode' => 'generated',
+                        'provider' => $providerName ?? 'default',
+                        'tool' => $toolName,
+                        'n' => $n,
+                        'language' => $language,
+                        'resource_file_id' => $resourceFileId,
+                        'document_title' => $docLabel,
+                        'document_mode' => $mode,
+                    ],
+                    courseId: $cid,
+                    sessionId: $sid > 0 ? $sid : api_get_session_id()
+                );
+
+                return new JsonResponse([
+                    'success' => true,
+                    'text' => $raw,
+                    'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+                ]);
+            }
+
+            $prompt = $this->appendExistingGlossaryTermsToPrompt($prompt, $existingTerms);
+
             $provider = $this->aiProviderFactory->getProvider($providerName, 'text');
 
             if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
@@ -285,6 +699,90 @@ class AiController extends AbstractController
         }
     }
 
+    #[Route('/course/{courseId}/analyzer', name: 'chamilo_core_ai_course_analyzer', methods: ['GET', 'POST'])]
+    public function courseAnalyzer(
+        Request $request,
+        int $courseId,
+        CourseRepository $courseRepository,
+        AiCourseAnalyzerService $courseAnalyzerService,
+        CsrfTokenManagerInterface $csrfTokenManager,
+    ): Response {
+        /** @var Course|null $course */
+        $course = $courseRepository->find($courseId);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found.');
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
+        $enabled = $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
+
+        $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
+        $providers = $this->aiProviderFactory->getProvidersForType('text');
+        $defaultProvider = $providers[0] ?? '';
+        $csrfTokenId = 'ai_course_analyzer_'.$course->getId();
+
+        $result = null;
+        $error = null;
+        $prompt = trim((string) $request->request->get('prompt', ''));
+        $selectedProvider = trim((string) $request->request->get('provider', $defaultProvider));
+        $includeStandaloneDocuments = '1' === (string) $request->request->get('include_standalone_documents', '0');
+        $includeStandaloneExercises = '1' === (string) $request->request->get('include_standalone_exercises', '0');
+
+        if ('' === $selectedProvider) {
+            $selectedProvider = $defaultProvider;
+        }
+
+        if ($request->isMethod('POST')) {
+            if (!$enabled) {
+                $error = 'AI course analyzer is disabled.';
+            } elseif ('' === $prompt) {
+                $error = 'Please describe what kind of feedback you want.';
+            } elseif ('' === $selectedProvider || !\in_array($selectedProvider, $providers, true)) {
+                $error = 'No valid AI text provider is configured.';
+            } else {
+                $submittedToken = (string) $request->request->get('_token', '');
+                $token = new CsrfToken($csrfTokenId, $submittedToken);
+
+                if (!$csrfTokenManager->isTokenValid($token)) {
+                    $error = 'Invalid security token. Please reload the page and try again.';
+                } else {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($selectedProvider, 'text');
+                    if (null !== $quotaMessage) {
+                        $error = $quotaMessage;
+                    } else {
+                        try {
+                            $result = $courseAnalyzerService->analyze(
+                                $course,
+                                $session,
+                                $prompt,
+                                $selectedProvider,
+                                $includeStandaloneDocuments,
+                                $includeStandaloneExercises,
+                            );
+                        } catch (Throwable $exception) {
+                            $error = 'The AI analysis could not be completed: '.$exception->getMessage();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->render('@ChamiloCore/Course/ai_analyzer.html.twig', [
+            'course' => $course,
+            'session' => $session,
+            'enabled' => $enabled,
+            'providers' => $providers,
+            'selected_provider' => $selectedProvider,
+            'prompt' => $prompt,
+            'result' => $result,
+            'error' => $error,
+            'include_standalone_documents' => $includeStandaloneDocuments,
+            'include_standalone_exercises' => $includeStandaloneExercises,
+            'csrf_token_id' => $csrfTokenId,
+        ]);
+    }
+
     #[Route('/capabilities', name: 'chamilo_core_ai_capabilities', methods: ['GET'])]
     public function capabilities(): JsonResponse
     {
@@ -324,6 +822,176 @@ class AiController extends AbstractController
         ]);
     }
 
+    #[Route('/lp_learning_helper', name: 'chamilo_core_ai_lp_learning_helper', methods: ['POST'])]
+    public function lpLearningHelper(Request $request): JsonResponse
+    {
+        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers')) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI helpers are disabled.',
+            ], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!\is_array($data)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid JSON payload.',
+            ], 400);
+        }
+
+        $lpItemId = (int) ($data['lp_item_id'] ?? 0);
+        $cid = $this->resolveCourseIdFromRequest($request, $data);
+        $sid = $this->resolveSessionIdFromRequest($request, $data);
+        $method = trim((string) ($data['method'] ?? ''));
+        $selectedText = trim((string) ($data['selected_text'] ?? ''));
+        $language = trim((string) ($data['language'] ?? 'en'));
+        $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
+
+        if ($lpItemId <= 0 || $cid <= 0 || '' === $method || '' === $selectedText) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Invalid request parameters.',
+            ], 400);
+        }
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
+
+        if (!\in_array($method, self::LP_LEARNING_HELPER_METHODS, true)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Unsupported learning helper method.',
+            ], 400);
+        }
+
+        if (mb_strlen($selectedText) > self::LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH) {
+            $selectedText = mb_substr($selectedText, 0, self::LP_LEARNING_HELPER_MAX_SELECTED_TEXT_LENGTH);
+        }
+
+        if ('' === $language) {
+            $language = 'en';
+        }
+
+        /** @var CLpItem|null $lpItem */
+        $lpItem = $this->em->getRepository(CLpItem::class)->find($lpItemId);
+        if (null === $lpItem) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path item not found.',
+            ], 404);
+        }
+
+        if ('document' !== $lpItem->getItemType()) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI learning helper is only available for document items.',
+            ], 400);
+        }
+
+        $lp = $lpItem->getLp();
+        $lpNode = $lp->getResourceNode();
+        if (null === $lpNode) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path resource was not found.',
+            ], 404);
+        }
+
+        if (!$this->learningPathBelongsToCourse($lpItem, $cid, $sid)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Learning path item does not belong to this course.',
+            ], 403);
+        }
+
+        if (!$this->isGranted('VIEW', $lpNode)) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Access denied.',
+            ], 403);
+        }
+
+        $prompt = $this->buildLpLearningHelperPrompt(
+            $method,
+            $language,
+            trim($lpItem->getTitle()),
+            trim($lp->getTitle()),
+            $selectedText
+        );
+
+        try {
+            $provider = $this->aiProviderFactory->getProvider($aiProvider, 'text');
+        } catch (Throwable) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'No AI text provider is configured.',
+            ], 400);
+        }
+
+        if (!\is_object($provider) || !method_exists($provider, 'generateText')) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'Selected AI provider does not support text generation.',
+            ], 400);
+        }
+
+        try {
+            $raw = (string) $provider->generateText($prompt, [
+                'language' => $language,
+                'tool' => 'lp_learning_helper',
+                'method' => $method,
+                'cid' => $cid,
+                'sid' => $sid,
+                'lp_item_id' => $lpItemId,
+            ]);
+        } catch (TypeError) {
+            $raw = (string) $provider->generateText($prompt, $language);
+        } catch (Throwable $e) {
+            error_log('[AI][lp_learning_helper] Generation failed: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating the learning helper response.',
+            ], 500);
+        }
+
+        $answer = trim($raw);
+        if ('' === $answer) {
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'AI request returned an empty response.',
+            ], 500);
+        }
+
+        $this->aiDisclosureHelper->logAudit(
+            targetKey: 'course:'.$cid.':lp_item:'.$lpItemId.':learning_helper:'.$method,
+            userId: $this->getCurrentUserId(),
+            meta: [
+                'feature' => 'lp_learning_helper',
+                'method' => $method,
+                'provider' => \is_string($aiProvider) && '' !== trim($aiProvider) ? $aiProvider : 'default',
+                'language' => $language,
+                'selected_text_length' => mb_strlen($selectedText),
+            ],
+            courseId: $cid,
+            sessionId: $sid
+        );
+
+        return new JsonResponse([
+            'success' => true,
+            'text' => $answer,
+            'method' => $method,
+            'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+        ]);
+    }
+
     #[Route('/generate_learnpath', name: 'chamilo_core_ai_generate_learnpath', methods: ['POST'])]
     public function generateLearnPath(Request $request): JsonResponse
     {
@@ -355,6 +1023,15 @@ class AiController extends AbstractController
 
             $cid = $this->resolveCourseIdFromRequest($request, $data);
             $sid = $this->resolveSessionIdFromRequest($request, $data);
+
+            if (!$this->isAiFeatureEnabledForCourse('learning_path_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $quotaResponse = $this->buildAiTokenQuotaExceededResponse($this->normalizeProviderNameFromPayload($aiProvider), 'text');
+            if (null !== $quotaResponse) {
+                return $quotaResponse;
+            }
 
             if ('' === $topic || $chaptersCount <= 0 || $wordsCount <= 0) {
                 return new JsonResponse([
@@ -398,7 +1075,17 @@ class AiController extends AbstractController
             }
 
             if (\is_array($result) && isset($result['success']) && false === (bool) $result['success']) {
-                $msg = isset($result['message']) ? (string) $result['message'] : 'Learning path generation failed.';
+                $msg = isset($result['message']) ? trim((string) $result['message']) : '';
+                if ('' === $msg) {
+                    $msg = 'Learning path generation failed.';
+                }
+
+                $providerName = $this->normalizeProviderNameFromPayload($aiProvider) ?? 'default';
+                error_log(
+                    '[AI][learnpath] Provider failure. provider='
+                    .$providerName
+                    .' message='.mb_substr($msg, 0, 1000)
+                );
 
                 return new JsonResponse([
                     'success' => false,
@@ -467,6 +1154,15 @@ class AiController extends AbstractController
             $aiProvider = $this->normalizeProviderNameFromPayload($data['ai_provider'] ?? null);
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+            if (null !== $quotaResponse) {
+                return $quotaResponse;
+            }
 
             if ($nQ <= 0 || '' === $topic) {
                 return new JsonResponse([
@@ -580,6 +1276,15 @@ class AiController extends AbstractController
         $cid = (int) ($data['cid'] ?? 0);
         $sid = (int) ($data['sid'] ?? 0);
         $gid = (int) ($data['gid'] ?? 0);
+
+        if (!$this->isAiFeatureEnabledForCourse('exercise_generator', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'document');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
@@ -851,6 +1556,12 @@ class AiController extends AbstractController
     #[Route('/open_answer_grade', name: 'chamilo_core_ai_open_answer_grade', methods: ['POST'])]
     public function openAnswerGrade(Request $request): JsonResponse
     {
+        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers')
+            || 'true' !== api_get_setting('ai_helpers.open_answers_grader')
+        ) {
+            return $this->json(['error' => 'AI open answer grading is disabled.'], 403);
+        }
+
         $exeId = $request->request->getInt('exeId', 0);
         $questionId = $request->request->getInt('questionId', 0);
         $courseId = $request->request->getInt('courseId', 0);
@@ -865,6 +1576,10 @@ class AiController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
+        if (!$this->isAiFeatureEnabledForCourse('open_answers_grader', $courseId)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
 
         // Optional provider selection (form-encoded)
         $aiProvider = $request->request->get('ai_provider');
@@ -883,6 +1598,11 @@ class AiController extends AbstractController
             if ('' === $aiProvider) {
                 $aiProvider = null;
             }
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'text');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
         }
 
         /** @var TrackEExercise|null $trackExercise */
@@ -1065,6 +1785,10 @@ class AiController extends AbstractController
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
 
+            if (!$this->isAiFeatureEnabledForCourse('image_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
             if ($n <= 0 || '' === $prompt || '' === $toolName) {
                 return new JsonResponse([
                     'success' => false,
@@ -1093,12 +1817,26 @@ class AiController extends AbstractController
             }
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
+            if ($explicitProvider) {
+                $quotaResponse = $this->buildAiTokenQuotaExceededResponse($explicitProvider, 'image');
+                if (null !== $quotaResponse) {
+                    return $quotaResponse;
+                }
+            }
+
             $errors = [];
             $providerUsed = null;
             $result = null;
 
             foreach ($providersToTry as $providerName) {
                 try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'image');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
                     $aiService = $this->aiProviderFactory->getProvider($providerName, 'image');
 
                     if (!$aiService instanceof AiImageProviderInterface) {
@@ -1138,11 +1876,27 @@ class AiController extends AbstractController
             if (null === $providerUsed || empty($result)) {
                 error_log('[AI][image] Image generation failed for all providers: '.json_encode($errors));
 
+                $firstError = '';
+                foreach ($errors as $err) {
+                    if (\is_string($err) && '' !== trim($err)) {
+                        $firstError = trim($err);
+
+                        break;
+                    }
+                }
+
+                $message = $explicitProvider
+                    ? 'Image generation failed for the selected provider.'
+                    : 'All image providers failed.';
+                $statusCode = 500;
+                if ('' !== $firstError && $this->isAiTokenQuotaMessage($firstError)) {
+                    $message = $firstError;
+                    $statusCode = 429;
+                }
+
                 $payload = [
                     'success' => false,
-                    'text' => $explicitProvider
-                        ? 'Image generation failed for the selected provider.'
-                        : 'All image providers failed.',
+                    'text' => $message,
                 ];
 
                 if ($this->shouldExposeProviderDetails()) {
@@ -1150,7 +1904,7 @@ class AiController extends AbstractController
                     $payload['errors'] = $errors;
                 }
 
-                return new JsonResponse($payload, 500);
+                return new JsonResponse($payload, $statusCode);
             }
 
             // Audit (provider details in DB only).
@@ -1234,6 +1988,326 @@ class AiController extends AbstractController
         }
     }
 
+    #[Route('/generate_course_picture', name: 'chamilo_core_ai_generate_course_picture', methods: ['POST'])]
+    public function generateCoursePicture(Request $request, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    {
+        try {
+            try {
+                $this->denyIfNotTeacher();
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
+
+            $data = json_decode($request->getContent(), true);
+            if (!\is_array($data)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid JSON payload.',
+                ], 400);
+            }
+
+            $cid = (int) ($data['cid'] ?? 0);
+            $userPrompt = trim((string) ($data['prompt'] ?? ''));
+            $submittedToken = (string) ($data['_token'] ?? '');
+
+            if ($cid <= 0 || '' === $userPrompt) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
+                ], 400);
+            }
+
+            $csrfTokenId = 'ai_generate_course_picture_'.$cid;
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $submittedToken))) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Invalid security token. Please reload the page and try again.',
+                ], 403);
+            }
+
+            /** @var Course|null $course */
+            $course = $this->em->getRepository(Course::class)->find($cid);
+            if (null === $course) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Course not found.',
+                ], 404);
+            }
+
+            // Object-level check: the client-supplied cid must be a course the current
+            // user actually manages, not merely any course with the feature enabled.
+            try {
+                $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+            } catch (AccessDeniedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'Access denied.',
+                ], 403);
+            }
+
+            if (!$this->isAiFeatureEnabledForCourse('image_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
+
+            $availableProviders = $this->aiProviderFactory->getProvidersForType('image');
+            if (empty($availableProviders)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => 'No AI providers available for image generation.',
+                ], 400);
+            }
+
+            $prompt = $this->buildCoursePicturePrompt($course, $userPrompt);
+
+            $errors = [];
+            $providerUsed = null;
+            $result = null;
+
+            foreach ($availableProviders as $providerName) {
+                try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'image');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
+                    $aiService = $this->aiProviderFactory->getProvider($providerName, 'image');
+
+                    if (!$aiService instanceof AiImageProviderInterface) {
+                        $errors[$providerName] = 'Provider does not implement image generation interface.';
+
+                        continue;
+                    }
+
+                    $result = $aiService->generateImage($prompt, 'course_picture', [
+                        'language' => $request->getLocale(),
+                        'n' => 1,
+                    ]);
+
+                    if (empty($result)) {
+                        $errors[$providerName] = 'Provider returned an empty response.';
+
+                        continue;
+                    }
+
+                    if (\is_string($result) && str_starts_with($result, 'Error:')) {
+                        $errors[$providerName] = $result;
+                        $result = null;
+
+                        continue;
+                    }
+
+                    $providerUsed = $providerName;
+
+                    break;
+                } catch (Throwable $e) {
+                    $errors[$providerName] = $e->getMessage();
+
+                    continue;
+                }
+            }
+
+            if (null === $providerUsed || empty($result)) {
+                error_log('[AI][course_picture] Image generation failed for all providers: '.json_encode($errors));
+
+                $firstError = '';
+                foreach ($errors as $err) {
+                    if (\is_string($err) && '' !== trim($err)) {
+                        $firstError = trim($err);
+
+                        break;
+                    }
+                }
+
+                $message = 'All image providers failed.';
+                $statusCode = 500;
+                if ('' !== $firstError && $this->isAiTokenQuotaMessage($firstError)) {
+                    $message = $firstError;
+                    $statusCode = 429;
+                }
+
+                return new JsonResponse([
+                    'success' => false,
+                    'text' => $message,
+                ], $statusCode);
+            }
+
+            $this->aiDisclosureHelper->logAudit(
+                targetKey: 'course_picture:'.sha1($prompt),
+                userId: $this->getCurrentUserId(),
+                meta: [
+                    'feature' => 'image_generator',
+                    'mode' => 'generated',
+                    'provider' => $providerUsed,
+                    'tool' => 'course_picture',
+                ],
+                courseId: $cid,
+                sessionId: api_get_session_id()
+            );
+
+            if (\is_string($result)) {
+                $normalized = [
+                    'content' => trim($result),
+                    'url' => null,
+                    'is_base64' => true,
+                    'content_type' => 'image/png',
+                    'revised_prompt' => null,
+                ];
+
+                $payload = [
+                    'success' => true,
+                    'text' => $normalized['content'],
+                    'result' => $normalized,
+                    'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+                ];
+
+                if ($this->shouldExposeProviderDetails()) {
+                    $payload['provider_used'] = $providerUsed;
+                }
+
+                return new JsonResponse($payload);
+            }
+
+            $url = isset($result['url']) && \is_string($result['url']) ? trim($result['url']) : '';
+            $content = isset($result['content']) && \is_string($result['content']) ? trim($result['content']) : '';
+
+            if ('' === $content && '' !== $url && false === (bool) ($result['is_base64'] ?? false)) {
+                $fetched = $this->fetchUrlAsBase64($url, 10 * 1024 * 1024);
+                $result['content'] = $fetched['content'];
+                $result['content_type'] = $fetched['content_type'];
+                $result['is_base64'] = true;
+                $result['url'] = null;
+            }
+
+            $text = '';
+            if (!empty($result['content']) && \is_string($result['content'])) {
+                $text = trim($result['content']);
+            }
+
+            $payload = [
+                'success' => true,
+                'text' => $text,
+                'result' => $result,
+                'ai_assisted' => $this->aiDisclosureHelper->isDisclosureEnabled(),
+            ];
+
+            if ($this->shouldExposeProviderDetails()) {
+                $payload['provider_used'] = $providerUsed;
+            }
+
+            return new JsonResponse($payload);
+        } catch (Exception $e) {
+            error_log('[AI][course_picture] Controller exception: '.$e->getMessage());
+
+            return new JsonResponse([
+                'success' => false,
+                'text' => 'An error occurred while generating the image. Please contact the administrator.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Builds the full prompt sent to the AI model: course title, first course description
+     * entry, and the current color theme are included as guidelines, on top of the
+     * illustration-style instructions the user typed in the modal.
+     */
+    private function buildCoursePicturePrompt(Course $course, string $userPrompt): string
+    {
+        $parts = [
+            'Create a flat-design digital illustration to use as a course thumbnail in an online course catalog, '
+            .'widescreen landscape orientation (16:9).',
+            'Depict the subject conceptually and abstractly, in a clean modern vector-illustration style with soft '
+            .'shapes; do not depict photorealistic people.',
+            'Do not include any readable text, letters, numbers, or logos anywhere in the image.',
+            'Center the main subject with clear space near all four edges, since the image will be cropped to a '
+            .'widescreen thumbnail.',
+            \sprintf('Course title: "%s".', $course->getTitle()),
+        ];
+
+        $description = $this->firstCourseDescriptionText($course);
+        if ('' !== $description) {
+            $parts[] = \sprintf('Course description, to use as context for the topic: "%s".', $description);
+        }
+
+        $colorGuideline = $this->buildColorGuidelineFromCurrentTheme();
+        if ('' !== $colorGuideline) {
+            $parts[] = \sprintf('Use these colors as accents in the illustration palette: %s.', $colorGuideline);
+        }
+
+        $parts[] = \sprintf('Illustration instructions: %s', $userPrompt);
+
+        return implode(' ', $parts);
+    }
+
+    private function firstCourseDescriptionText(Course $course): string
+    {
+        $descriptions = $this->courseDescriptionRepository->findAllInCourse($course);
+        $first = $descriptions[0] ?? null;
+
+        if (null === $first) {
+            return '';
+        }
+
+        $text = trim(strip_tags((string) $first->getContent()));
+
+        if (mb_strlen($text) > 500) {
+            $text = mb_substr($text, 0, 500).'...';
+        }
+
+        return $text;
+    }
+
+    private function buildColorGuidelineFromCurrentTheme(): string
+    {
+        /** @var AccessUrlRelColorTheme|null $activeRel */
+        $activeRel = $this->em->getRepository(AccessUrlRelColorTheme::class)->findOneBy([
+            'url' => api_get_current_access_url_id(),
+            'active' => true,
+        ]);
+
+        $colorTheme = $activeRel?->getColorTheme();
+        if (null === $colorTheme) {
+            return '';
+        }
+
+        $variables = $colorTheme->getVariables();
+        $labelsByVariable = [
+            '--color-primary-base' => 'primary',
+            '--color-secondary-base' => 'secondary',
+            '--color-tertiary-base' => 'tertiary',
+        ];
+
+        $parts = [];
+        foreach ($labelsByVariable as $cssVariable => $label) {
+            $hex = $this->rgbTripletToHex((string) ($variables[$cssVariable] ?? ''));
+            if (null !== $hex) {
+                $parts[] = $label.' '.$hex;
+            }
+        }
+
+        return implode(', ', $parts);
+    }
+
+    private function rgbTripletToHex(string $triplet): ?string
+    {
+        $components = preg_split('/\s+/', trim($triplet));
+        if (!\is_array($components) || 3 !== \count($components)) {
+            return null;
+        }
+
+        foreach ($components as $component) {
+            if (!is_numeric($component)) {
+                return null;
+            }
+        }
+
+        return \sprintf('#%02X%02X%02X', (int) $components[0], (int) $components[1], (int) $components[2]);
+    }
+
     #[Route('/generate_video', name: 'chamilo_core_ai_generate_video', methods: ['POST'])]
     public function generateVideo(Request $request): JsonResponse
     {
@@ -1265,6 +2339,10 @@ class AiController extends AbstractController
 
             $cid = (int) ($data['cid'] ?? 0);
             $sid = (int) ($data['sid'] ?? 0);
+
+            if (!$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             // Gemini requires durationSeconds to be a NUMBER (int).
             $seconds = null;
@@ -1301,6 +2379,12 @@ class AiController extends AbstractController
             }
 
             $providersToTry = $explicitProvider ? [$explicitProvider] : $availableProviders;
+            if ($explicitProvider) {
+                $quotaResponse = $this->buildAiTokenQuotaExceededResponse($explicitProvider, 'video');
+                if (null !== $quotaResponse) {
+                    return $quotaResponse;
+                }
+            }
 
             if (!$explicitProvider) {
                 $active = $this->getActiveMediaProviderFromSession($request, 'video', $cid);
@@ -1315,6 +2399,13 @@ class AiController extends AbstractController
 
             foreach ($providersToTry as $providerName) {
                 try {
+                    $quotaMessage = $this->getAiTokenQuotaExceededMessage($providerName, 'video');
+                    if (null !== $quotaMessage) {
+                        $errors[$providerName] = $quotaMessage;
+
+                        continue;
+                    }
+
                     $aiService = $this->aiProviderFactory->getProvider($providerName, 'video');
 
                     if (!$aiService instanceof AiVideoProviderInterface) {
@@ -1406,6 +2497,8 @@ class AiController extends AbstractController
 
                 return new JsonResponse($payload, $statusCode);
             }
+
+            $this->logEstimatedAiTokenUsage($providerUsed, 'video_generator', $prompt, 'video');
 
             $this->aiDisclosureHelper->logAudit(
                 targetKey: 'video:'.sha1($prompt.'|'.$toolName.'|'.$language.'|'.$n.'|'.(string) $seconds.'|'.(string) $size),
@@ -1505,6 +2598,10 @@ class AiController extends AbstractController
             }
 
             $cid = (int) $request->query->get('cid', 0);
+
+            if ($cid > 0 && !$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
+                return $this->buildAiFeatureDisabledResponse();
+            }
 
             $aiProvider = $request->query->get('ai_provider');
             $aiProvider = null !== $aiProvider ? trim((string) $aiProvider) : '';
@@ -1647,6 +2744,15 @@ class AiController extends AbstractController
 
         $resourceFileId = (int) ($data['resource_file_id'] ?? 0);
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
+
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
+        $quotaResponse = $this->buildAiTokenQuotaExceededResponse($aiProvider, 'document');
+        if (null !== $quotaResponse) {
+            return $quotaResponse;
+        }
 
         if (0 === $cid || 0 === $resourceFileId || '' === $prompt) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
@@ -1911,6 +3017,10 @@ class AiController extends AbstractController
         $documentTitle = trim((string) ($data['document_title'] ?? ''));
         $answer = trim((string) ($data['answer'] ?? ''));
 
+        if (!$this->isAiFeatureEnabledForCourse('content_analyser', $cid)) {
+            return $this->buildAiFeatureDisabledResponse();
+        }
+
         if (0 === $cid || '' === $documentTitle || '' === $answer) {
             return new JsonResponse(['success' => false, 'text' => 'Invalid request parameters.'], 400);
         }
@@ -2000,6 +3110,206 @@ class AiController extends AbstractController
         return $base;
     }
 
+    /**
+     * @param list<array<string, mixed>> $documents
+     * @param array<int, bool>           $seen
+     * @param array<string, mixed>       $row
+     */
+    private function addGlossaryDocumentSourceFromRow(array &$documents, array &$seen, array $row): void
+    {
+        $resourceFileId = (int) ($row['resource_file_id'] ?? 0);
+        if ($resourceFileId <= 0 || isset($seen[$resourceFileId])) {
+            return;
+        }
+
+        $title = trim((string) ($row['title'] ?? ''));
+        $fileTitle = trim((string) ($row['file_title'] ?? ''));
+        $originalName = trim((string) ($row['original_name'] ?? ''));
+        $filename = $originalName ?: $fileTitle ?: $title;
+        $mimeType = trim((string) ($row['mime_type'] ?? ''));
+        $mode = $this->getSupportedDocumentMode($filename, $mimeType);
+
+        if ('' === $mode) {
+            return;
+        }
+
+        $seen[$resourceFileId] = true;
+        $documents[] = [
+            'resource_file_id' => $resourceFileId,
+            'document_id' => (int) ($row['document_id'] ?? 0),
+            'title' => '' !== $title ? $title : $filename,
+            'filename' => $filename,
+            'mime_type' => $mimeType,
+            'mode' => $mode,
+            'size' => (int) ($row['size'] ?? 0),
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getExistingGlossaryTermTitles(Course $course, int $sid = 0, int $limit = 200): array
+    {
+        $session = null;
+        if ($sid > 0) {
+            /** @var Session|null $session */
+            $session = $this->em->getRepository(Session::class)->find($sid);
+        }
+
+        $repo = $this->em->getRepository(CGlossary::class);
+        if (!$repo instanceof CGlossaryRepository) {
+            return [];
+        }
+
+        try {
+            $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
+            $qb
+                ->orderBy('resource.title', 'ASC')
+                ->setMaxResults($limit)
+            ;
+
+            /** @var list<CGlossary> $glossaryItems */
+            $glossaryItems = $qb->getQuery()->getResult();
+        } catch (Throwable) {
+            return [];
+        }
+
+        $terms = [];
+        $seen = [];
+
+        foreach ($glossaryItems as $item) {
+            if (!$item instanceof CGlossary) {
+                continue;
+            }
+
+            $title = $this->normalizeExistingGlossaryTermTitle($item->getTitle());
+            if ('' === $title) {
+                continue;
+            }
+
+            $key = mb_strtolower($title);
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            $terms[] = $title;
+        }
+
+        return $terms;
+    }
+
+    private function normalizeExistingGlossaryTermTitle(string $title): string
+    {
+        $title = trim(strip_tags($title));
+        $title = preg_replace('/\s+/u', ' ', $title) ?? '';
+
+        return trim($title);
+    }
+
+    /**
+     * @param list<string> $existingTerms
+     */
+    private function appendExistingGlossaryTermsToPrompt(string $prompt, array $existingTerms): string
+    {
+        if (empty($existingTerms)) {
+            return $prompt;
+        }
+
+        if (str_contains($prompt, 'Existing glossary terms that must not be generated again:')) {
+            return $prompt;
+        }
+
+        $prompt .= "\n\nExisting glossary terms that must not be generated again:\n";
+
+        foreach ($existingTerms as $term) {
+            $prompt .= '- '.$term."\n";
+        }
+
+        $prompt .= "\nDo not generate duplicate entries for these terms, and do not generate minor spelling, plural, singular or capitalization variants of them.";
+
+        return $prompt;
+    }
+
+    private function resourceFileBelongsToCourse(ResourceFile $resourceFile, int $courseId): bool
+    {
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        $node = $resourceFile->getResourceNode();
+        if (null !== $node) {
+            foreach ($node->getResourceLinks() as $link) {
+                $linkCourse = $link->getCourse();
+                if ($linkCourse && (int) $linkCourse->getId() === $courseId) {
+                    return true;
+                }
+            }
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $count = (int) $qb
+            ->select('COUNT(d.iid)')
+            ->from(CDocument::class, 'd')
+            ->join('d.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->join('rn.resourceFiles', 'rf')
+            ->where('rf.id = :resourceFileId')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('d.filetype = :filetype')
+            ->setParameter('resourceFileId', (int) $resourceFile->getId(), Types::INTEGER)
+            ->setParameter('courseId', $courseId, Types::INTEGER)
+            ->setParameter('filetype', 'file')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    private function buildGlossaryFromDocumentPrompt(
+        string $courseTitle,
+        string $documentTitle,
+        string $language,
+        int $numberOfTerms
+    ): string {
+        $prompt = "You are an expert teacher creating glossary entries.\n";
+        $prompt .= "Language: {$language}\n";
+        $prompt .= "Course: {$courseTitle}\n";
+        $prompt .= "Document: {$documentTitle}\n";
+        $prompt .= "Requested term count: {$numberOfTerms}\n\n";
+        $prompt .= "Task:\n";
+        $prompt .= "- Use only the selected document content as source material.\n";
+        $prompt .= "- Do not use outside knowledge or general course context.\n";
+        $prompt .= "- Generate exactly {$numberOfTerms} glossary terms when possible.\n";
+        $prompt .= "- Select relevant concepts, names, acronyms, expressions or technical terms found in the document.\n\n";
+        $prompt .= "Output rules:\n";
+        $prompt .= "- Return plain text only.\n";
+        $prompt .= "- Each term must be on a single line.\n";
+        $prompt .= "- The definition must be on the next line.\n";
+        $prompt .= "- Add one blank line between terms.\n";
+        $prompt .= "- Do not return Markdown, HTML, bullets, code fences, headings or explanations.\n";
+
+        return $prompt;
+    }
+
+    private function getSupportedDocumentMode(string $filename, string $mimeType): string
+    {
+        $mimeType = strtolower(trim($mimeType));
+        $extension = strtolower((string) pathinfo($filename, PATHINFO_EXTENSION));
+
+        if ('pdf' === $extension || 'application/pdf' === $mimeType) {
+            return 'pdf';
+        }
+
+        if ('txt' === $extension || str_starts_with($mimeType, 'text/plain')) {
+            return 'txt';
+        }
+
+        return '';
+    }
+
     private function buildAikenFromDocumentPrompt(
         string $courseTitle,
         string $documentTitle,
@@ -2078,7 +3388,7 @@ class AiController extends AbstractController
             return 403;
         }
 
-        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests') || str_contains($m, 'token limit')) {
             return 429;
         }
 
@@ -2116,6 +3426,232 @@ class AiController extends AbstractController
         }
 
         return '' !== $decoded;
+    }
+
+    private function isAiTokenQuotaMessage(string $message): bool
+    {
+        $message = strtolower(trim($message));
+
+        return str_contains($message, 'daily ai token limit')
+            || str_contains($message, 'monthly ai token limit')
+            || str_contains($message, 'token limit has been reached');
+    }
+
+    private function buildAiTokenQuotaExceededResponse(?string $providerName, string $serviceType): ?JsonResponse
+    {
+        $message = $this->getAiTokenQuotaExceededMessage($providerName, $serviceType);
+        if (null === $message) {
+            return null;
+        }
+
+        return new JsonResponse([
+            'success' => false,
+            'text' => $message,
+        ], 429);
+    }
+
+    private function getAiTokenQuotaExceededMessage(?string $providerName, string $serviceType): ?string
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0) {
+            return null;
+        }
+
+        $limits = $this->getAiTokenLimitsForProvider($providerName, $serviceType);
+        if ($limits['daily'] <= 0 && $limits['monthly'] <= 0) {
+            return null;
+        }
+
+        $provider = $limits['provider'];
+        $reservedTokens = $this->getConfiguredAiRequestTokenCost($provider, $serviceType);
+
+        if ($limits['daily'] > 0) {
+            $dailyUsed = $this->getAiTokensUsedSince($userId, $provider, new DateTimeImmutable('today'));
+            if ($dailyUsed + $reservedTokens > $limits['daily']) {
+                return $this->translator->trans('Your daily AI token limit has been reached. Please try again tomorrow.');
+            }
+        }
+
+        if ($limits['monthly'] > 0) {
+            $monthlyUsed = $this->getAiTokensUsedSince($userId, $provider, new DateTimeImmutable('first day of this month 00:00:00'));
+            if ($monthlyUsed + $reservedTokens > $limits['monthly']) {
+                return $this->translator->trans('Your monthly AI token limit has been reached. Please try again next month.');
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{provider:?string,daily:int,monthly:int}
+     */
+    private function getAiTokenLimitsForProvider(?string $providerName, string $serviceType): array
+    {
+        $config = $this->readAiProvidersConfig();
+        $provider = $this->resolveAiProviderNameForQuota($providerName, $serviceType, $config);
+        if (null === $provider || !isset($config[$provider]) || !\is_array($config[$provider])) {
+            return ['provider' => $provider, 'daily' => 0, 'monthly' => 0];
+        }
+
+        $providerConfig = $config[$provider];
+
+        return [
+            'provider' => $provider,
+            'daily' => max(0, (int) ($providerConfig['daily_token_limit'] ?? 0)),
+            'monthly' => max(0, (int) ($providerConfig['monthly_token_limit'] ?? 0)),
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     */
+    private function resolveAiProviderNameForQuota(?string $providerName, string $serviceType, array $config): ?string
+    {
+        $providerName = null !== $providerName ? trim($providerName) : '';
+        if ('' !== $providerName && isset($config[$providerName])) {
+            return $providerName;
+        }
+
+        $providers = $this->aiProviderFactory->getProvidersForType($serviceType);
+        foreach ($providers as $provider) {
+            if (isset($config[$provider])) {
+                return $provider;
+            }
+        }
+
+        $firstProvider = array_key_first($config);
+
+        return \is_string($firstProvider) ? $firstProvider : null;
+    }
+
+    private function getAiTokensUsedSince(int $userId, ?string $providerName, DateTimeImmutable $start): int
+    {
+        try {
+            $connection = $this->em->getConnection();
+            $params = [
+                'user_id' => $userId,
+                'start_date' => $start->format('Y-m-d H:i:s'),
+            ];
+            $types = [
+                'user_id' => Types::INTEGER,
+                'start_date' => Types::STRING,
+            ];
+            $sql = 'SELECT COALESCE(SUM(total_tokens), 0) FROM ai_requests WHERE user_id = :user_id AND requested_at >= :start_date';
+
+            if (null !== $providerName && '' !== trim($providerName)) {
+                $sql .= ' AND ai_provider = :ai_provider';
+                $params['ai_provider'] = $providerName;
+                $types['ai_provider'] = Types::STRING;
+            }
+
+            return (int) $connection->executeQuery($sql, $params, $types)->fetchOne();
+        } catch (Throwable $e) {
+            error_log('[AI][quota] Could not read AI token usage: '.$e->getMessage());
+
+            return 0;
+        }
+    }
+
+    /**
+     * Reads optional per-provider estimated cost from ai_helpers.ai_providers.
+     * Supported keys: provider.<type>.token_cost, provider.<type>.estimated_token_cost,
+     * provider.token_cost, provider.estimated_token_cost.
+     */
+    private function getConfiguredAiRequestTokenCost(?string $providerName, string $serviceType): int
+    {
+        if (null === $providerName || '' === trim($providerName)) {
+            return 0;
+        }
+
+        $config = $this->readAiProvidersConfig();
+        if (!isset($config[$providerName]) || !\is_array($config[$providerName])) {
+            return 0;
+        }
+
+        $providerConfig = $config[$providerName];
+        $typeConfig = $providerConfig[$serviceType] ?? [];
+        if (!\is_array($typeConfig)) {
+            $typeConfig = [];
+        }
+
+        $configuredCost = $typeConfig['token_cost']
+            ?? $typeConfig['estimated_token_cost']
+            ?? $providerConfig['token_cost']
+            ?? $providerConfig['estimated_token_cost']
+            ?? null;
+
+        if (null !== $configuredCost) {
+            return max(0, (int) $configuredCost);
+        }
+
+        $maxTokens = $typeConfig['max_tokens'] ?? $typeConfig['max_output_tokens'] ?? null;
+
+        return max(0, (int) ($maxTokens ?? 0));
+    }
+
+    private function logEstimatedAiTokenUsage(?string $providerName, string $toolName, string $prompt, string $serviceType): void
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0 || null === $providerName || '' === trim($providerName)) {
+            return;
+        }
+
+        $tokenCost = $this->getConfiguredAiRequestTokenCost($providerName, $serviceType);
+        if ($tokenCost <= 0) {
+            return;
+        }
+
+        try {
+            $this->em->getConnection()->insert('ai_requests', [
+                'user_id' => $userId,
+                'tool_name' => $toolName.'_estimated_cost',
+                'requested_at' => (new DateTimeImmutable())->format('Y-m-d H:i:s'),
+                'request_text' => mb_substr($prompt, 0, 900),
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => $tokenCost,
+                'ai_provider' => $providerName,
+            ], [
+                'user_id' => Types::INTEGER,
+                'tool_name' => Types::STRING,
+                'requested_at' => Types::STRING,
+                'request_text' => Types::TEXT,
+                'prompt_tokens' => Types::INTEGER,
+                'completion_tokens' => Types::INTEGER,
+                'total_tokens' => Types::INTEGER,
+                'ai_provider' => Types::STRING,
+            ]);
+        } catch (Throwable $e) {
+            error_log('[AI][quota] Could not save estimated AI token usage: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private function readAiProvidersConfig(): array
+    {
+        $configJson = api_get_setting('ai_helpers.ai_providers');
+        if (\is_string($configJson)) {
+            $decoded = json_decode($configJson, true);
+
+            return \is_array($decoded) ? $decoded : [];
+        }
+
+        return \is_array($configJson) ? $configJson : [];
+    }
+
+    private function isAiFeatureEnabledForCourse(string $feature, int $courseId): bool
+    {
+        return $this->aiFeatureAccessHelper->isFeatureEnabledForCourse($feature, $courseId);
+    }
+
+    private function buildAiFeatureDisabledResponse(): JsonResponse
+    {
+        return new JsonResponse([
+            'success' => false,
+            'text' => 'This AI feature is not enabled for this course.',
+        ], 403);
     }
 
     private function denyIfNotTeacher(): void
@@ -2250,7 +3786,7 @@ class AiController extends AbstractController
             return 401;
         }
 
-        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests')) {
+        if (str_contains($m, 'rate limit') || str_contains($m, 'too many requests') || str_contains($m, 'token limit')) {
             return 429;
         }
 
@@ -2338,6 +3874,71 @@ class AiController extends AbstractController
         return $providers;
     }
 
+    private function learningPathBelongsToCourse(CLpItem $lpItem, int $courseId, int $sessionId): bool
+    {
+        $lp = $lpItem->getLp();
+        $node = $lp->getResourceNode();
+        if (null === $node) {
+            return false;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if (null === $linkCourse || (int) $linkCourse->getId() !== $courseId) {
+                continue;
+            }
+
+            if ($sessionId <= 0) {
+                return true;
+            }
+
+            $linkSession = $link->getSession();
+            if (null === $linkSession || (int) $linkSession->getId() === $sessionId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function buildLpLearningHelperPrompt(
+        string $method,
+        string $language,
+        string $lpItemTitle,
+        string $lpTitle,
+        string $selectedText
+    ): string {
+        $topic = '' !== $lpItemTitle ? $lpItemTitle : $lpTitle;
+        if ('' === trim($topic)) {
+            $topic = 'the selected learning content';
+        }
+
+        $instructions = [
+            'mind_map' => 'Explain how to create a mind map to visually structure and organize the key concepts, facilitating better understanding and recall.',
+            'feynman' => 'Demonstrate how to apply the Feynman Technique by simplifying complex concepts and explaining them as if teaching someone else.',
+            'elaborative_interrogation' => 'Describe the process of elaborative interrogation and provide useful questions and examples to improve information retention.',
+            'spaced_repetition' => 'Explain how to incorporate spaced repetition into a study routine to enhance long-term memory retention and recall.',
+            'sq3r' => 'Introduce the SQ3R Method and demonstrate how to apply it to read and retain information from this content.',
+            'analogies_metaphors' => 'Share analogies and metaphors that simplify complex ideas and make them more memorable and easier to understand.',
+            'dual_coding' => 'Explain how to combine verbal and visual information using dual coding theory to enhance understanding and retention.',
+            'storytelling' => 'Explain how to transform the concepts into a relatable story, making them more memorable and easier to understand.',
+            'thematic_connections' => 'Describe how to build thematic connections between different aspects of the topic to form a coherent mental structure.',
+            'interleaved_learning' => 'Introduce interleaved learning and demonstrate how to mix related subjects or skills to enhance retention and transfer.',
+            'memory_palace' => 'Describe how to create a memory palace to retain and recall the main ideas by associating concepts with vivid mental images and locations.',
+        ];
+        $instruction = $instructions[$method] ?? $instructions['feynman'];
+
+        return "You are an educational assistant inside Chamilo LMS.\n"
+            ."Answer in the {$language} language.\n"
+            ."Use the selected learning path document content as the only source material.\n"
+            ."Do not invent facts that are not supported by the selected text.\n"
+            ."Keep the explanation practical and useful for a learner.\n\n"
+            ."Learning path: {$lpTitle}\n"
+            ."Topic: {$topic}\n"
+            ."Task: {$instruction}\n\n"
+            ."Selected content:\n{$selectedText}";
+    }
+
     /**
      * Accept ai_provider as string or as {key,label}/{name}.
      */
@@ -2368,6 +3969,18 @@ class AiController extends AbstractController
         }
 
         error_log($message);
+    }
+
+    private function getAiCourseAnalyzerSessionFromRequest(Request $request): ?Session
+    {
+        $sessionId = (int) $request->query->get('sid');
+        if ($sessionId <= 0) {
+            return null;
+        }
+
+        $session = $this->em->getRepository(Session::class)->find($sessionId);
+
+        return $session instanceof Session ? $session : null;
     }
 
     private function getCurrentUserId(): int

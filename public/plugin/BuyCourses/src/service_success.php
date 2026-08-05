@@ -101,7 +101,15 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $action = trim((string) ($_POST['action'] ?? ''));
 
     if ('cancel' === $action) {
-        $plugin->cancelServiceSale((int) $serviceSale['id']);
+        $plugin->cancelServiceSale(
+            (int) $serviceSale['id'],
+            BuyCoursesPlugin::AUDIT_SOURCE_USER,
+            api_get_user_id(),
+            [
+                'gateway' => 'paypal',
+                'trigger' => 'checkout_cancel',
+            ]
+        );
 
         unset($_SESSION['bc_service_sale_id'], $_SESSION['bc_coupon_id'], $_SESSION['TOKEN'], $_SESSION['payer_id']);
 
@@ -142,7 +150,17 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         switch ($paymentStatus) {
             case 'COMPLETED':
             case 'PROCESSED':
-                $serviceSaleIsCompleted = $plugin->completeServiceSale((int) $serviceSale['id']);
+                $serviceSaleIsCompleted = $plugin->completeServiceSale(
+                    (int) $serviceSale['id'],
+                    BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+                    api_get_user_id(),
+                    [
+                        'gateway' => 'paypal',
+                        'transaction_id' => (string) ($confirmPayments['PAYMENTINFO_0_TRANSACTIONID'] ?? ''),
+                        'payment_status' => $paymentStatus,
+                        'trigger' => 'checkout_return',
+                    ]
+                );
 
                 error_log(
                     'BuyCourses completeServiceSale result for sale '.$serviceSale['id'].': '.

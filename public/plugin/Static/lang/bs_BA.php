@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Prikaz statičkog HTML sadržaja.';
 $strings['block_title'] = 'Naslov bloka';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Sadržaj';

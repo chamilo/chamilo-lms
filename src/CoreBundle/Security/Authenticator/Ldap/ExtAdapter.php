@@ -18,10 +18,13 @@ class ExtAdapter extends Adapter
 
         $config = [
             'connection_string' => $params['connection_string'],
-            'options' => [
-                'protocol_version' => $params['protocol_version'],
-                'referrals' => $params['referrals'],
-            ],
+            'options' => array_merge(
+                [
+                    'protocol_version' => $params['protocol_version'],
+                    'referrals' => $params['referrals'],
+                ],
+                $params['tls_options'],
+            ),
         ];
 
         parent::__construct($config);

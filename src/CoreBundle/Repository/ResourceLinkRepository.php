@@ -25,20 +25,21 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 class ResourceLinkRepository extends SortableRepository
 {
     private array $toolList = [
-        'course_description' => '/main/course_description/index.php',
+        'course_description' => '/resources/course-description/%resource_node_id%/',
         'document' => '/resources/document/%resource_node_id%/',
-        'learnpath' => '/main/lp/lp_controller.php',
+        'learnpath' => '/resources/lp/%resource_node_id%/',
         'link' => '/resources/links/%resource_node_id%/',
-        'quiz' => '/main/exercise/exercise.php',
-        'announcement' => '/main/announcements/announcements.php',
+        'quiz' => '/resources/exercise/%resource_node_id%/',
+        'announcement' => '/resources/announcement/%resource_node_id%/',
         'glossary' => '/resources/glossary/%resource_node_id%/',
         'attendance' => '/main/attendance/index.php',
-        'course_progress' => '/main/course_progress/index.php',
+        'course_progress' => '/resources/course-progress/%resource_node_id%/',
         'agenda' => '/resources/ccalendarevent',
         'forum' => '/main/forum/index.php',
         'student_publication' => '/resources/assignment/%resource_node_id%',
-        'survey' => '/main/survey/survey_list.php',
-        'notebook' => '/main/notebook/index.php',
+        'survey' => '/resources/survey/%resource_node_id%/',
+        'notebook' => '/resources/notebook/%resource_node_id%/',
+        'portfolio' => '/resources/portfolio/%resource_node_id%/',
     ];
 
     public function __construct(EntityManagerInterface $em)
@@ -70,6 +71,10 @@ class ResourceLinkRepository extends SortableRepository
         );
 
         foreach ($links as $link) {
+            if (!$link->getUser() instanceof User) {
+                continue;
+            }
+
             $this->remove($link); // soft delete
             $this->remove($link); // hard delete
         }
@@ -97,7 +102,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getAvailableTools(): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
             ->from(ResourceLink::class, 'rl')
@@ -125,7 +130,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getToolUsageReportByTools(array $toolIds): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
             ->select(

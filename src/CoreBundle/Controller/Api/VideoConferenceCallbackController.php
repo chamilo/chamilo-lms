@@ -26,9 +26,9 @@ use Throwable;
 #[AsController]
 class VideoConferenceCallbackController
 {
-    private const SIGNATURE_TTL_SECONDS = 300; // 5 minutes window to limit replay
-    private const SIGNATURE_HEADER = 'X-Chamilo-Signature';
-    private const TIMESTAMP_HEADER = 'X-Chamilo-Timestamp';
+    private const int SIGNATURE_TTL_SECONDS = 300; // 5 minutes window to limit replay
+    private const string SIGNATURE_HEADER = 'X-Chamilo-Signature';
+    private const string TIMESTAMP_HEADER = 'X-Chamilo-Timestamp';
 
     public function __invoke(Request $request, EntityManagerInterface $em, ParameterBagInterface $params): Response
     {
@@ -52,6 +52,14 @@ class VideoConferenceCallbackController
         $kernelSecret = (string) ($params->get('kernel.secret') ?? '');
         $isAuthenticated = $this->isValidSignature($request, $rawBody, $kernelSecret);
 
+        // The provider webhook authenticates via an HMAC signature (APP_SECRET). Require a
+        // valid signature before ANY meeting lookup or mutation: otherwise an unauthenticated
+        // caller who knows a meeting remoteId could hijack it (reset moderator/attendee
+        // passwords, reassign the owner, inject malicious recording URLs).
+        if (!$isAuthenticated) {
+            return new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
+        }
+
         // Find existing meeting (do not create new meetings if unauthenticated)
         $meetingRepo = $em->getRepository(ConferenceMeeting::class);
         $meeting = $meetingRepo->findOneBy([
@@ -60,11 +68,7 @@ class VideoConferenceCallbackController
         ]);
 
         if (null === $meeting) {
-            if (!$isAuthenticated) {
-                // Security hardening: avoid creating meetings from unauthenticated sources.
-                return new Response('Unauthorized (meeting not found)', Response::HTTP_UNAUTHORIZED);
-            }
-
+            // Signature already verified at the top of __invoke.
             $meeting = new ConferenceMeeting();
             $meeting->setServiceProvider($provider);
             $meeting->setRemoteId($remoteId);
@@ -159,15 +163,8 @@ class VideoConferenceCallbackController
             }
         }
 
-        // Activity insertion: ONLY if request is authenticated
+        // Activity insertion (signature already verified at the top of __invoke).
         if (isset($payload['participant_id'])) {
-            if (!$isAuthenticated) {
-                // Security hardening: do not allow arbitrary attendance logging without signature.
-                $em->flush();
-
-                return new Response('OK (activity skipped: missing signature)', Response::HTTP_OK);
-            }
-
             $participant = $em->find(User::class, (int) $payload['participant_id']);
             if (null !== $participant) {
                 // Minimal de-duplication: avoid inserting the exact same event twice

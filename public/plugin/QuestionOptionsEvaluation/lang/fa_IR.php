@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'ارزیابی گزینه‌های سؤال';
 $strings['plugin_comment'] = 'اجازه محاسبه مجدد امتیازات گزینه‌ها در سؤالات';
 
-$strings['enable'] = 'فعال کردن';
 $strings['exercise_max_score'] = 'حداکثر امتیاز در تمرین‌ها';
 $strings['exercise_max_score_help'] = 'پیش‌فرض ۱۰ است.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'موفقیت‌ها - شکست‌ها / ۳';
 $strings['QuestionsEvaluated'] = 'سؤالات ارزیابی‌شده';
 $strings['RecalculateQuestionScores'] = 'محاسبه مجدد امتیازات سؤال';
 $strings['FormulaSavedForExerciseX'] = 'فرمول برای تمرین «%s» ذخیره شد.';
+$strings['NoFormulaHelp'] = 'رفتار امتیازدهی پیش‌فرض چامیلو را برای این آزمون حفظ کنید.';
+$strings['enable'] = 'فعال کردن';

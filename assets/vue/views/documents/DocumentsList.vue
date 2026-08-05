@@ -58,6 +58,7 @@
       icon="drawing"
       only-icon
       type="success"
+      @click="goToNewDrawing"
     />
     <BaseButton
       v-if="showRecordAudioButton"
@@ -136,27 +137,35 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div style="display: flex; align-items: center">
-          <DocumentEntry
-            v-if="slotProps.data"
-            :data="slotProps.data"
-          />
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center">
+            <DocumentEntry
+              v-if="slotProps.data"
+              :data="slotProps.data"
+            />
 
-          <!-- AI badge at the end of the title -->
-          <span
-            v-if="slotProps.data?.ai_assisted"
-            aria-label="AI-assisted"
-            class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
-            title="AI-assisted"
-          >
-            <span aria-hidden="true">🤖</span>
-            <span class="font-semibold">AI</span>
-          </span>
+            <!-- AI badge at the end of the title -->
+            <span
+              v-if="slotProps.data?.ai_assisted"
+              aria-label="AI-assisted"
+              class="ml-2 inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-10 px-2 py-[2px] text-xs text-gray-700"
+              title="AI-assisted"
+            >
+              <span aria-hidden="true">🤖</span>
+              <span class="font-semibold">AI</span>
+            </span>
 
-          <BaseIcon
-            v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-            class="mr-8"
-            icon="session-star"
+            <BaseIcon
+              v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
+              class="mr-8"
+              icon="session-star"
+            />
+          </div>
+
+          <div
+            v-if="getDocumentComment(slotProps.data)"
+            class="max-w-3xl whitespace-pre-line text-sm text-gray-500"
+            v-text="getDocumentComment(slotProps.data)"
           />
         </div>
       </template>
@@ -169,9 +178,11 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
-            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
-            : ""
+          slotProps.data.filetype === "link"
+            ? t("Cloud link")
+            : slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
+              ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+              : ""
         }}
       </template>
     </Column>
@@ -427,28 +438,33 @@
   <BaseDialog
     v-model:is-visible="isFileUsageDialogVisible"
     :style="{ width: '28rem' }"
-    :title="t('Space available')"
+    :title="t('Document quota')"
+    :close-label="t('Close')"
   >
     <div
       v-if="usageQuotaSummary"
       class="mb-3 rounded border border-gray-200 bg-gray-10 p-3"
     >
       <div class="text-sm font-semibold">
-        {{ usageQuotaSummary.limiterLabel }}
+        {{ t("Document quota") }}
       </div>
 
-      <div class="mt-1 text-xs opacity-80">
-        {{ usageQuotaSummary.remainingLabel }}
-      </div>
-
-      <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+      <div class="mt-2 grid gap-2 text-xs">
         <div>
-          <span class="font-semibold">{{ t("Course") }}:</span>
-          {{ usageQuotaSummary.courseLine }}
+          <span class="font-semibold">{{ t("Limit") }}:</span>
+          {{ usageQuotaSummary.limitLabel }}
         </div>
         <div>
-          <span class="font-semibold">{{ t("Documents") }}:</span>
-          {{ usageQuotaSummary.documentsLine }}
+          <span class="font-semibold">{{ t("Used space") }}:</span>
+          {{ usageQuotaSummary.usedLabel }}
+        </div>
+        <div>
+          <span class="font-semibold">{{ t("Available space") }}:</span>
+          {{ usageQuotaSummary.availableLabel }}
+        </div>
+        <div>
+          <span class="font-semibold">{{ t("Available percentage") }}:</span>
+          {{ usageQuotaSummary.availablePercentLabel }}
         </div>
       </div>
     </div>
@@ -461,6 +477,7 @@
     :style="{ width: '28rem' }"
     :title="t('Record audio')"
     header-icon="record-add"
+    :close-label="t('Close')"
   >
     <DocumentAudioRecorder
       :parent-resource-node-id="route.params.node"
@@ -639,11 +656,13 @@ import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed, nextTick, onMounted, ref, unref, watch } from "vue"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
-import axios from "axios"
 import baseService from "../../services/baseService"
+import documentsService from "../../services/documents"
+import aiService from "../../services/aiService"
+import gradebookService from "../../services/gradebookService"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -684,16 +703,9 @@ async function downloadAllItems() {
   try {
     const rootNodeId = getDocumentsRootNodeId()
 
-    const response = await axios.post(
-      "/api/documents/download-all",
-      { rootNodeId },
-      {
-        responseType: "blob",
-        params: { cid, sid, gid },
-      },
-    )
+    const blob = await documentsService.downloadAll(rootNodeId, { cid, sid, gid })
 
-    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement("a")
     link.href = url
     link.setAttribute("download", "all_documents.zip")
@@ -737,7 +749,7 @@ const hideDownloadIcon = computed(() => {
 })
 
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 const { isImage, isHtml, isFile } = useFileUtils()
 const { relativeDatetime } = useFormatDate()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
@@ -782,6 +794,10 @@ const selectedItems = ref([])
  * Visibility helpers (safe access)
  * -----------------------------------------
  */
+function getDocumentComment(document) {
+  return String(document?.comment || "").trim()
+}
+
 function getPrimaryResourceLink(doc) {
   const links = doc?.resourceLinkListFromEntity
   if (!Array.isArray(links) || links.length === 0) {
@@ -1068,13 +1084,6 @@ onMounted(async () => {
   // course folders and is only needed when the move dialog is opened.
   // openMoveDialog() calls it on demand.
 
-  void courseSettingsStore
-    .loadCourseSettings(cid, sid)
-    .catch((e) => console.error("[AI] loadCourseSettings failed:", e))
-    .finally(() => {
-      void loadAiCapabilities()
-    })
-
   void loadAiCapabilities()
   consumeAiSavedToast()
 })
@@ -1182,14 +1191,8 @@ function createNewFolder() {
     if (!item.value.id) {
       item.value.filetype = "folder"
       item.value.parentResourceNodeId = route.params.node
-      item.value.resourceLinkList = JSON.stringify([
-        {
-          gid,
-          sid,
-          cid,
-          visibility: RESOURCE_LINK_PUBLISHED,
-        },
-      ])
+      // Course context derived server-side from the gated session course.
+      item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
       tableLoading.value = true
       store.dispatch("documents/createWithFormData", item.value).then(() => {
@@ -1213,10 +1216,10 @@ function showDeleteMultipleDialog() {
 
 async function confirmDeleteItem(itemToDelete) {
   try {
-    const response = await axios.get(`/api/documents/${itemToDelete.iid}/lp-usage`)
+    const data = await documentsService.getLpUsage(itemToDelete.iid)
 
-    if (response.data.usedInLp) {
-      lpListWarning.value = response.data.lpList.map((lp) => ({
+    if (data.usedInLp) {
+      lpListWarning.value = data.lpList.map((lp) => ({
         ...lp,
         documentTitle: itemToDelete.title,
         documentId: itemToDelete.iid,
@@ -1237,7 +1240,7 @@ async function forceDeleteItem() {
     const docIdsToDelete = [...new Set(lpListWarning.value.map((lp) => lp.documentId))]
 
     tableLoading.value = true
-    await Promise.all(docIdsToDelete.map((iid) => axios.delete(`/api/documents/${iid}`)))
+    await Promise.all(docIdsToDelete.map((iid) => documentsService.deleteDocument(iid)))
 
     notification.showSuccessNotification(t("Documents deleted"))
     isDeleteWarningLpDialogVisible.value = false
@@ -1246,7 +1249,7 @@ async function forceDeleteItem() {
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error deleting documents forcibly:", error)
-    notification.showErrorNotification(t("Error deleting document(s)."))
+    notification.showErrorNotification(t("Error deleting document(s)"))
   }
 }
 
@@ -1268,16 +1271,18 @@ async function downloadSelectedItems() {
     return
   }
 
+  if (selectedItems.value.some((item) => item?.filetype === "link")) {
+    notification.showErrorNotification(t("Cloud links cannot be downloaded."))
+
+    return
+  }
+
   isDownloading.value = true
 
   try {
-    const response = await axios.post(
-      "/api/documents/download-selected",
-      { ids: selectedItems.value.map((item) => item.iid) },
-      { responseType: "blob" },
-    )
+    const blob = await documentsService.downloadSelected(selectedItems.value.map((item) => item.iid))
 
-    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const url = window.URL.createObjectURL(new Blob([blob]))
     const link = document.createElement("a")
     link.href = url
     link.setAttribute("download", "selected_documents.zip")
@@ -1301,8 +1306,8 @@ async function deleteMultipleItems() {
   tableLoading.value = true
   for (const item of selectedItems.value) {
     try {
-      const response = await axios.get(`/api/documents/${item.iid}/lp-usage`)
-      if (response.data.usedInLp) {
+      const data = await documentsService.getLpUsage(item.iid)
+      if (data.usedInLp) {
         if (!documentsWithLpMap[item.iid]) {
           documentsWithLpMap[item.iid] = {
             iid: item.iid,
@@ -1310,7 +1315,7 @@ async function deleteMultipleItems() {
             lpList: [],
           }
         }
-        documentsWithLpMap[item.iid].lpList.push(...response.data.lpList)
+        documentsWithLpMap[item.iid].lpList.push(...data.lpList)
       } else {
         itemsWithoutLp.push(item)
       }
@@ -1393,6 +1398,31 @@ function goToUploadFile() {
   })
 }
 
+function goToNewDrawing() {
+  router.push({
+    name: "DocumentsSvgEditor",
+    params: { node: route.params.node },
+    query: route.query,
+  })
+}
+
+function getDocumentExtension(doc) {
+  const fileName = String(doc?.resourceNode?.firstResourceFile?.originalName || doc?.title || "")
+    .trim()
+    .toLowerCase()
+  const parts = fileName.split(".")
+
+  return parts.length > 1 ? String(parts.pop() || "").trim() : ""
+}
+
+function isSvgDocument(doc) {
+  const mime = String(doc?.resourceNode?.firstResourceFile?.mimeType || "")
+    .trim()
+    .toLowerCase()
+
+  return mime === "image/svg+xml" || getDocumentExtension(doc) === "svg"
+}
+
 function btnShowInformationOnClick(item) {
   const folderParams = route.query
 
@@ -1411,7 +1441,7 @@ function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
   folderParams.id = item["@id"]
 
-  baseService.put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
+  baseService.patch(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
     item.resourceLinkListFromEntity = data.resourceLinkListFromEntity
   })
 }
@@ -1425,6 +1455,18 @@ function btnEditOnClick(item) {
       name: "DocumentsUpdate",
       params: { id: item["@id"] },
       query: folderParams,
+    })
+    return
+  }
+
+  if ("file" === item.filetype && isSvgDocument(item)) {
+    router.push({
+      name: "DocumentsSvgEditor",
+      params: { node: route.params.node },
+      query: {
+        ...folderParams,
+        id: item["@id"],
+      },
     })
     return
   }
@@ -1445,12 +1487,7 @@ function showSlideShowWithFirstImage() {
 
 async function showUsageDialog() {
   try {
-    const response = await axios.get(`/api/documents/${cid}/usage`, {
-      headers: { Accept: "application/json" },
-      params: { sid, gid },
-    })
-
-    usageData.value = response.data
+    usageData.value = await documentsService.getUsage(cid, { sid, gid })
   } catch (error) {
     console.error("[Documents] Error fetching documents quota usage:", error)
     usageData.value = {
@@ -1541,20 +1578,18 @@ async function fetchFolders(nodeId = null, parentPath = "") {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid: unref(cid),
-          sid: unref(sid),
-          gid: unref(gid),
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentsService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid: unref(cid),
+        sid: unref(sid),
+        gid: unref(gid),
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
 
       members.forEach((folder) => {
         const folderNodeId =
@@ -1614,17 +1649,11 @@ async function moveDocument() {
       return
     }
 
-    await axios.put(
-      `/api/documents/${item.value.iid}/move`,
-      { parentResourceNodeId: parentId },
-      {
-        params: {
-          cid: unref(cid),
-          sid: unref(sid),
-          gid: unref(gid),
-        },
-      },
-    )
+    await documentsService.moveDocument(item.value.iid, parentId, {
+      cid: unref(cid),
+      sid: unref(sid),
+      gid: unref(gid),
+    })
 
     notification.showSuccessNotification(t("Document moved successfully"))
     isMoveDialogVisible.value = false
@@ -1664,11 +1693,7 @@ async function replaceDocument() {
   formData.append("file", selectedReplaceFile.value)
 
   try {
-    await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    await documentsService.replaceDocument(documentToReplace.value.iid, formData)
 
     notification.showSuccessNotification(t("File replaced"))
     isReplaceDialogVisible.value = false
@@ -1686,12 +1711,10 @@ async function replaceDocument() {
  */
 async function selectAsDefaultCertificate(certificate) {
   try {
-    const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
-    if (response.status === 200) {
-      loadDefaultCertificate()
-      triggerTableLoad()
-      notification.showSuccessNotification(t("Certificate set as default successfully"))
-    }
+    await gradebookService.setDefaultCertificate(cid, certificate.iid)
+    loadDefaultCertificate()
+    triggerTableLoad()
+    notification.showSuccessNotification(t("Certificate set as default successfully"))
   } catch {
     notification.showErrorNotification(t("Error setting certificate as default"))
   }
@@ -1699,8 +1722,8 @@ async function selectAsDefaultCertificate(certificate) {
 
 async function loadDefaultCertificate() {
   try {
-    const response = await axios.get(`/gradebook/default_certificate/${cid}`)
-    defaultCertificateId.value = response.data.certificateId
+    const data = await gradebookService.getDefaultCertificate(cid)
+    defaultCertificateId.value = data.certificateId
   } catch (error) {
     if (error.response?.status === 404) {
       console.error("[Documents] Default certificate not found.")
@@ -1727,8 +1750,8 @@ const currentDocumentId = ref(null)
 
 const isDocumentTemplate = async (documentId) => {
   try {
-    const response = await axios.get(`/template/document-templates/${documentId}/is-template`)
-    return response.data.isTemplate
+    const data = await documentsService.isDocumentTemplate(documentId)
+    return data.isTemplate
   } catch (error) {
     console.error("[Documents] Error verifying template status:", error)
     return false
@@ -1737,12 +1760,12 @@ const isDocumentTemplate = async (documentId) => {
 
 const deleteDocumentTemplate = async (documentId) => {
   try {
-    await axios.post(`/template/document-templates/${documentId}/delete`)
+    await documentsService.deleteDocumentTemplate(documentId)
     triggerTableLoad()
-    notification.showSuccessNotification(t("Template successfully deleted."))
+    notification.showSuccessNotification(t("Template successfully deleted"))
   } catch (error) {
     console.error("[Documents] Error deleting template:", error)
-    notification.showErrorNotification(t("Error deleting the template."))
+    notification.showErrorNotification(t("Error deleting the template"))
   }
 }
 
@@ -1767,7 +1790,7 @@ const submitTemplateForm = async () => {
   submitted.value = true
 
   if (!templateFormData.value.title || !selectedFile.value) {
-    notification.showErrorNotification(t("The title and thumbnail are required."))
+    notification.showErrorNotification(t("The title and thumbnail are required"))
     return
   }
 
@@ -1778,24 +1801,16 @@ const submitTemplateForm = async () => {
     formData.append("refDoc", currentDocumentId.value)
     formData.append("cid", cid)
 
-    const response = await axios.post("/template/document-templates/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    await documentsService.createDocumentTemplate(formData)
 
-    if (response.status === 200 || response.status === 201) {
-      notification.showSuccessNotification(t("Template created successfully."))
-      templateFormData.value.title = ""
-      selectedFile.value = null
-      showTemplateFormModal.value = false
-      triggerTableLoad()
-    } else {
-      notification.showErrorNotification(t("Error creating the template."))
-    }
+    notification.showSuccessNotification(t("Template created successfully"))
+    templateFormData.value.title = ""
+    selectedFile.value = null
+    showTemplateFormModal.value = false
+    triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error submitting template form:", error)
-    notification.showErrorNotification(t("Error submitting the form."))
+    notification.showErrorNotification(t("Error submitting the form"))
   }
 }
 
@@ -1873,10 +1888,7 @@ async function loadAiCapabilities() {
   }
 
   try {
-    const { data } = await axios.get("/ai/capabilities", {
-      params: { cid: unref(cid), sid: unref(sid), gid: unref(gid) },
-      headers: { Accept: "application/json" },
-    })
+    const data = await aiService.getCapabilities({ cid: unref(cid), sid: unref(sid), gid: unref(gid) })
 
     console.warn("[AI] capabilities:", data)
 
@@ -1893,8 +1905,8 @@ async function loadAiCapabilities() {
     aiTextProviders.value = []
     if (isCurrentTeacher.value) {
       try {
-        const res = await axios.get("/ai/text_providers", { headers: { Accept: "application/json" } })
-        aiTextProviders.value = normalizeProviders(res?.data?.providers)
+        const res = await aiService.getTextProviders()
+        aiTextProviders.value = normalizeProviders(res?.providers)
       } catch (e) {
         console.warn("[AI][Documents] Failed to load /ai/text_providers, fallback to capabilities:", e?.response || e)
         aiTextProviders.value = normalizeProviders(data?.types?.text)
@@ -2108,9 +2120,7 @@ async function runAiFeedback() {
       ai_provider: aiFeedbackProvider.value,
     }
 
-    const { data } = await axios.post("/ai/document_feedback", payload, {
-      headers: { Accept: "application/json" },
-    })
+    const data = await aiService.getDocumentFeedback(payload)
 
     if (!data?.success) {
       aiFeedbackError.value = String(data?.text || "AI feedback request failed.")
@@ -2155,9 +2165,7 @@ async function saveAiFeedbackToInbox() {
       answer: aiFeedbackAnswer.value,
     }
 
-    const { data } = await axios.post("/ai/document_feedback/save_to_inbox", payload, {
-      headers: { Accept: "application/json" },
-    })
+    const data = await aiService.saveDocumentFeedbackToInbox(payload)
 
     if (!data?.success) {
       aiFeedbackError.value = String(data?.text || "Failed to save the answer to inbox.")
@@ -2177,43 +2185,64 @@ const usageQuotaSummary = computed(() => {
   const q = usageData.value?.quota
   if (!q) return null
 
-  const limiter = String(q.limiter || "unlimited")
+  function formatQuotaMb(value) {
+    const n = Number(value)
 
-  function fmtBytes(v) {
-    if (v === null || v === undefined) return t("Unlimited")
-    const n = Number(v)
-    if (!Number.isFinite(n)) return t("Unlimited")
-    return prettyBytes(Math.max(n, 0))
+    if (!Number.isFinite(n) || n <= 0) {
+      return t("Unlimited")
+    }
+
+    return `${Math.round(n)} MB`
   }
 
-  const courseQuota = fmtBytes(q.courseQuotaBytes)
-  const docsQuota = fmtBytes(q.documentsQuotaBytes)
+  function formatBytesAsMb(value) {
+    if (value === null || value === undefined) {
+      return t("Unlimited")
+    }
 
-  const courseAvail = fmtBytes(q.availableCourseBytes)
-  const docsAvail = fmtBytes(q.availableDocumentsBytes)
+    const n = Number(value)
 
-  const effectiveAvail = fmtBytes(q.availableBytes)
-  const effectivePct = Number(q.availablePercent)
-  const pctLabel = Number.isFinite(effectivePct) ? `${effectivePct}%` : ""
+    if (!Number.isFinite(n)) {
+      return t("Unlimited")
+    }
 
-  let limiterLabel = ""
-  if (limiter === "course") {
-    limiterLabel = `${t("Limiting quota")}: ${t("Course")}`
-  } else if (limiter === "documents") {
-    limiterLabel = `${t("Limiting quota")}: ${t("Documents")}`
-  } else {
-    limiterLabel = `${t("Limiting quota")}: ${t("Unlimited")}`
+    const mb = Math.max(n, 0) / 1048576
+    const rounded = Math.round(mb * 100) / 100
+
+    if (Number.isInteger(rounded)) {
+      return `${rounded} MB`
+    }
+
+    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
   }
 
-  const remainingLabel = `${t("Remaining space")}: ${effectiveAvail}${pctLabel ? ` (${pctLabel})` : ""}`
+  function formatPercent(value) {
+    const n = Number(value)
+
+    if (!Number.isFinite(n)) {
+      return "0%"
+    }
+
+    const rounded = Math.round(n * 100) / 100
+
+    if (Number.isInteger(rounded)) {
+      return `${rounded}%`
+    }
+
+    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")}%`
+  }
+
+  const usedBytes = Number(q.usedBytes ?? 0)
+  const availableBytes = q.availableBytes
 
   return {
-    limiterLabel,
-    remainingLabel,
-    courseLine: `${courseAvail} / ${courseQuota}`,
-    documentsLine: `${docsAvail} / ${docsQuota}`,
+    limitLabel: formatQuotaMb(q.quotaMb),
+    usedLabel: formatBytesAsMb(usedBytes),
+    availableLabel: formatBytesAsMb(availableBytes),
+    availablePercentLabel: formatPercent(q.availablePercent),
   }
 })
+
 
 function consumeAiSavedToast() {
   if (String(route.query.ai_saved || "") !== "1") {

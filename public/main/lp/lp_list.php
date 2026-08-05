@@ -4,9 +4,11 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
@@ -70,7 +72,7 @@ if ($is_allowed_to_edit) {
     $actionLeft .= Display::url(
         Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', 'font-size: 32px; width: 32px; height: 32px;'),
         '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH,
-        ['title' => htmlentities(get_lang('Import AICC, SCORM and Chamilo learning path'))]
+        ['title' => htmlentities(get_lang('Import').' SCORM')]
     );
 
     if ('true' === api_get_setting('service_ppt2lp', 'active')) {
@@ -89,9 +91,10 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    if (('true' === api_get_setting('ai_helpers.enable_ai_helpers'))  &&
-        ('true' === api_get_course_setting('learning_path_generator'))
-    ) {
+    if ($aiFeatureAccessHelper->isFeatureEnabledForCourse(
+        'learning_path_generator',
+        api_get_course_int_id()
+    )) {
         $actionLeft .= Display::url(
             Display::getMdiIcon(
                 'robot',

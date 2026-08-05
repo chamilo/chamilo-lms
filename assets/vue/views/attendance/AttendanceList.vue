@@ -18,7 +18,7 @@
       :attendances="attendances"
       :loading="isLoading"
       :total-records="totalAttendances"
-      :readonly="securityStore.isStudent || platformConfigStore.isStudentViewActive"
+      :readonly="readonly"
       @edit="redirectToEditAttendance"
       @view="toggleResourceLinkVisibility"
       @delete="confirmDeleteAttendance"
@@ -44,7 +44,7 @@ import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.v
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -54,14 +54,17 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
-const readonly = computed(() => securityStore.isStudent || platformConfigStore.isStudentViewActive)
+// Editable only for users who can manage the current course (course/session
+// teacher or admin), matching CAttendance's write security. The student view
+// forces read-only even for them.
+const readonly = computed(() => !securityStore.isCourseAdmin || platformConfigStore.isStudentViewActive)
 
 const attendances = ref([])
 const isDeleteDialogVisible = ref(false)
 const attendanceToDelete = ref({ id: null, title: "" })
 const totalAttendances = ref(0)
 const isLoading = ref(false)
-const { sid, cid, gid } = useCidReq()
+const { sid, cid, gid } = getCourseContext()
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const redirectToCreateAttendance = () => {

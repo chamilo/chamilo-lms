@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'V tomto období bude tento vestavěný obsah z
 $strings['HtmlCode'] = 'HTML kód';
 $strings['HtmlCodeHelp'] = 'Sdílený HTML kód poskytnutý externí službou při žádosti o sdílení ve formátu Vestavěné.';
 $strings['LaunchContent'] = 'Spustit obsah';
+
+$strings['InvalidDateRange'] = 'Datum zahájení musí být dříve nebo stejné jako datum ukončení.';
+
+$strings['InvalidSecurityToken'] = 'Neplatný bezpečnostní token. Obnovte stránku a zkuste to znovu.';

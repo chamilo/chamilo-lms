@@ -19,7 +19,7 @@ $toolId = str_replace('tool:', '', $_POST['data']);
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 /** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+$course = $em->find('Chamilo\CoreBundle\Entity\Course', api_get_course_int_id());
 /** @var ExternalTool|null $ltiTool */
 $ltiTool = $em->find(ExternalTool::class, $toolId);
 

@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Inom dessa datum visas detta inbäddade inneh�
 $strings['HtmlCode'] = 'HTML-kod';
 $strings['HtmlCodeHelp'] = 'Den delade HTML-koden, som tillhandahålls av den externa tjänsten, när du ber om att dela i inbäddat format.';
 $strings['LaunchContent'] = 'Starta innehåll';
+
+$strings['InvalidDateRange'] = 'Startdatumet måste vara tidigare än eller lika med slutdatumet.';
+
+$strings['InvalidSecurityToken'] = 'Ogiltig säkerhetstoken. Ladda om sidan och försök igen.';

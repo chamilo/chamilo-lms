@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -27,6 +28,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,25 +38,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ResourceNodeVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const CREATE = 'CREATE';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
-    public const EXPORT = 'EXPORT';
-    public const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
-    public const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
-    public const ROLE_CURRENT_COURSE_GROUP_TEACHER = 'ROLE_CURRENT_COURSE_GROUP_TEACHER';
-    public const ROLE_CURRENT_COURSE_GROUP_STUDENT = 'ROLE_CURRENT_COURSE_GROUP_STUDENT';
-    public const ROLE_CURRENT_COURSE_SESSION_TEACHER = 'ROLE_CURRENT_COURSE_SESSION_TEACHER';
-    public const ROLE_CURRENT_COURSE_SESSION_STUDENT = 'ROLE_CURRENT_COURSE_SESSION_STUDENT';
+    public const string VIEW = 'VIEW';
+    public const string CREATE = 'CREATE';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
+    public const string EXPORT = 'EXPORT';
+    public const string ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
+    public const string ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
+    public const string ROLE_CURRENT_COURSE_GROUP_TEACHER = 'ROLE_CURRENT_COURSE_GROUP_TEACHER';
+    public const string ROLE_CURRENT_COURSE_GROUP_STUDENT = 'ROLE_CURRENT_COURSE_GROUP_STUDENT';
+    public const string ROLE_CURRENT_COURSE_SESSION_TEACHER = 'ROLE_CURRENT_COURSE_SESSION_TEACHER';
+    public const string ROLE_CURRENT_COURSE_SESSION_STUDENT = 'ROLE_CURRENT_COURSE_SESSION_STUDENT';
 
     public function __construct(
         private Security $security,
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private EntityManagerInterface $entityManager,
         private PageHelper $pageHelper,
         private readonly ResourceAclHelper $resourceAclHelper,
+        private readonly CourseFromRequestHelper $courseFromRequest,
     ) {}
 
     public static function getReaderMask(): int
@@ -85,7 +90,15 @@ class ResourceNodeVoter extends Voter
         return $subject instanceof ResourceNode;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    // Context roles (ROLE_CURRENT_COURSE_*) live in User::$temporaryRoles and appear in
+    // $user->getRoles(), but Symfony's AbstractToken::getRoleNames() only returns roles
+    // fixed at token-creation time. isGranted() therefore misses them.
+    private function hasContextRole(string $role): bool
+    {
+        return \in_array($role, $this->security->getUser()?->getRoles() ?? [], true);
+    }
+
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
@@ -102,15 +115,11 @@ class ResourceNodeVoter extends Voter
         }
 
         // Checking admin role.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
         if (self::VIEW === $attribute && $this->canViewOwnStudentPublicationRelatedResource($resourceNode, $token)) {
-            return true;
-        }
-
-        if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
             return true;
         }
 
@@ -153,7 +162,7 @@ class ResourceNodeVoter extends Voter
                         if ($rel && $rel->getQuiz()) {
                             $quiz = $rel->getQuiz();
                             // Allow if the user has VIEW rights on the quiz
-                            if ($this->security->isGranted('VIEW', $quiz)) {
+                            if ($this->accessDecisionManager->decide($token, ['VIEW'], $quiz)) {
                                 return true;
                             }
                         }
@@ -191,10 +200,10 @@ class ResourceNodeVoter extends Voter
                 return true;
             }
 
-            if ($this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            if ($this->hasContextRole('ROLE_CURRENT_COURSE_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             ) {
                 return true;
             }
@@ -227,9 +236,12 @@ class ResourceNodeVoter extends Voter
         $isFromLearningPath = false;
 
         if (null !== $request) {
-            $courseId = (int) $request->get('cid');
-            $sessionId = (int) $request->get('sid');
-            $groupId = (int) $request->get('gid');
+            // Context from the request URL (cid/sid/gid or their 1.11.x forms).
+            // A course referenced by code returns null here and flows through the
+            // session fallback below, already resolved by CidReqListener.
+            $courseId = $this->courseFromRequest->getCourseId($request) ?? 0;
+            $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
+            $groupId = $this->courseFromRequest->getGroupId($request) ?? 0;
 
             // Detect learning path context from request parameters.
             $lpId = $request->query->getInt('lp_id', 0);
@@ -370,7 +382,7 @@ class ResourceNodeVoter extends Voter
 
         if ($courseId && $link->hasCourse() && $link->getCourse()->getId() === $courseId) {
             // If teacher.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_TEACHER)
@@ -382,7 +394,7 @@ class ResourceNodeVoter extends Voter
             // Normal case: resource must be published.
             // Exception: when the resource is being opened from a learning path item,
             // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_STUDENT)
                 && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
             ) {
                 $resourceRight = (new ResourceRight())
@@ -405,7 +417,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($groupId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER)
@@ -413,7 +425,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
@@ -423,7 +435,7 @@ class ResourceNodeVoter extends Voter
         }
 
         if (!empty($sessionId)) {
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER)
@@ -431,7 +443,7 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
@@ -677,27 +689,6 @@ class ResourceNodeVoter extends Voter
 
             $headerHost = $scheme.'://'.$host.(null !== $port ? ':'.$port : '');
             if ($headerHost !== $currentHost) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function isBlogResource(ResourceNode $node): bool
-    {
-        $type = $node->getResourceType()?->getTitle();
-        if (\in_array($type, ['blog', 'blogs', 'c_blog', 'c_blogs'], true)) {
-            return true;
-        }
-
-        $firstLink = $node->getResourceLinks()->first();
-        if ($firstLink && method_exists($firstLink, 'getTool') && $firstLink->getTool()) {
-            $toolName = method_exists($firstLink->getTool(), 'getName')
-                ? $firstLink->getTool()->getName()
-                : $firstLink->getTool()->getTitle();
-
-            if (\in_array(strtolower((string) $toolName), ['blog', 'blogs'], true)) {
                 return true;
             }
         }

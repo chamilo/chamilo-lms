@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom-videokonferens';
 $strings['plugin_comment'] = 'Zoom-videokonferensintegration i kurser och sessioner';
 
+$strings['accountId'] = 'Konto-ID';
+$strings['clientId'] = 'Klient-ID';
+$strings['clientSecret'] = 'Klienthemlighet';
+$strings['webhookSecretToken'] = 'Webhook-hemlig token';
+$strings['apiKey_help'] = 'Äldre JWT API-nyckel. Använd istället Konto-ID, Klient-ID och Klienthemlighet för Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Äldre JWT API-hemlighet. Använd istället Konto-ID, Klient-ID och Klienthemlighet för Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Äldre webhook-verifieringstoken. Använd istället Webhook-hemlig token.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth Konto-ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth Klient-ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth Klienthemlighet.';
+$strings['webhookSecretToken_help'] = 'Hemlig token som används för att validera Zoom webhook-förfrågningar.';
 $strings['apiKey'] = 'API-nyckel';
 $strings['apiSecret'] = 'API-hemlighet';
 $strings['verificationToken'] = 'Verifieringstoken';

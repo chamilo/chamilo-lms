@@ -3,11 +3,68 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
+
+function announcements_get_resource_language_options(): array
+{
+    $options = [
+        '' => get_lang('No specific language'),
+    ];
+
+    $languages = Database::getManager()
+        ->getRepository(Language::class)
+        ->findBy(['available' => true], ['englishName' => 'ASC'])
+    ;
+
+    foreach ($languages as $language) {
+        if (!$language instanceof Language) {
+            continue;
+        }
+
+        $options[$language->getIsocode()] = $language->getOriginalName() ?: $language->getEnglishName();
+    }
+
+    return $options;
+}
+
+function announcements_apply_resource_language(?CAnnouncement $announcement, mixed $rawLanguage): void
+{
+    if (!$announcement instanceof CAnnouncement) {
+        return;
+    }
+
+    $resourceNode = $announcement->getResourceNode();
+    if (null === $resourceNode) {
+        return;
+    }
+
+    $languageCode = trim((string) $rawLanguage);
+    $entityManager = Database::getManager();
+    $language = null;
+
+    if ('' !== $languageCode) {
+        $language = $entityManager
+            ->getRepository(Language::class)
+            ->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ])
+        ;
+
+        if (!$language instanceof Language) {
+            return;
+        }
+    }
+
+    $resourceNode->setLanguage($language);
+    $entityManager->persist($resourceNode);
+    $entityManager->flush();
+}
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -474,6 +531,7 @@ switch ($action) {
             null,
             ['enctype' => 'multipart/form-data']
         );
+        $languageOptions = announcements_get_resource_language_options();
 
         $form_name = get_lang('Edit announcement');
         if (empty($id)) {
@@ -590,14 +648,18 @@ switch ($action) {
                 }
             }
 
+            $language = $announcementInfo->getResourceNode()?->getLanguage();
             $defaults = [
                 'title' => $announcementInfo->getTitle(),
                 'content' => $announcementInfo->getContent(),
                 'id' => $announcementInfo->getIid(),
                 'users' => $to,
+                'language' => $language instanceof Language ? $language->getIsocode() : '',
             ];
         } else {
-            $defaults = [];
+            $defaults = [
+                'language' => '',
+            ];
             if (!empty($to)) {
                 $defaults['users'] = $to;
             }
@@ -684,6 +746,10 @@ switch ($action) {
                         });
                     }
                 });
+
+                $('#announcement').on('submit', function () {
+                    $(this).find('[type=\"submit\"]').prop('disabled', true);
+                });
             });
         </script>
         ");
@@ -732,6 +798,19 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
+        if (\count($languageOptions) > 2) {
+            $form->addButtonAdvancedSettings('resource_options', get_lang('Advanced settings'));
+            $form->addElement('html', '<div id="resource_options_options" style="display:none">');
+            $form->addSelect(
+                'language',
+                get_lang('Language'),
+                $languageOptions,
+                [
+                    'id' => 'resource_language',
+                ]
+            );
+            $form->addElement('html', '</div>');
+        }
 
     if (!$announcementAttachmentIsDisabled) {
         // Allow multiple files in one selection
@@ -902,6 +981,7 @@ switch ($action) {
                       <option value="d">'.addslashes(get_lang('Days')).'</option>
                       <option value="w">'.addslashes(get_lang('Weeks')).'</option>
                     </select>
+                    <span>'.addslashes(get_lang('Before')).'</span>
                     <button type="button" class="btn btn--danger js-reminder-remove" title="'.addslashes(get_lang('Delete')).'">×</button>
                   </div>
                 `);
@@ -987,6 +1067,8 @@ switch ($action) {
                     $sendToUsersInSession
                 );
 
+                announcements_apply_resource_language($announcement, $data['language'] ?? '');
+
                 if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
                     $extraFieldValues = new ExtraFieldValue('course_announcement');
                     $data['item_id'] = $announcement->getIid();
@@ -1069,6 +1151,8 @@ switch ($action) {
                 }
 
                 if ($announcement) {
+                    announcements_apply_resource_language($announcement instanceof CAnnouncement ? $announcement : null, $data['language'] ?? '');
+
                     if ($announcementScheduledByDate && $announcement instanceof CAnnouncement) {
                         $extraFieldValues = new ExtraFieldValue('course_announcement');
                         $data['item_id'] = $announcement->getIid();

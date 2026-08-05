@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Me respekt"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mostër formulë: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Shembull formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Vargjet e variablave"
@@ -1579,8 +1579,8 @@ msgstr "A jeni të sigurt që dëshironi të fshini këto hapa?"
 msgid "Authoring tool"
 msgstr "Mjet krijimi"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Kartelë SCORM ose AICC për ngarkim"
+msgid "SCORM file to upload"
+msgstr "Kartelë SCORM për ngarkim"
 
 msgid "Course location"
 msgstr "Vendndodhja e kursit"
@@ -2012,7 +2012,7 @@ msgid "Format"
 msgstr "Formati"
 
 msgid ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
-msgstr ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
+msgstr ":draft:projekt,,      final:final,,      revised:rishikuar,,      unavailable:jo i disponueshëm"
 
 msgid ":no:free, no cost,, yes:not free, cost"
 msgstr ":no:falas, pa kosto,, yes:jo falas, me kosto"
@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:të drejtat e autorit,, no:pa të drejtat e autorit"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Dosje,, application/msword:MsWord,, application/octet-stream:Rrjedhë octet,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:Folder,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ushtrim,,      simulation:simulim,,      questionnaire:pyetësor,,      diagram:diagramë,,      figure:figurë,,      graph:grafik,,      index:indeks,,      slide:slide,,      table:tabelë,,      narrative text:tekst narrativ,,      exam:provim,,      experiment:eksperiment,,      problem statement:përmbajtja e problemit,,      self assessment:vëtëvlerësim,,      lecture:ligjëratë"
@@ -4640,7 +4640,7 @@ msgid "Invalid end date was given."
 msgstr "U dha një datë përfundimi e pavlefshme."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d/m/v h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "Skedarët e faqes kryesore nuk janë të shkruajtshme!"
@@ -8551,6 +8551,9 @@ msgstr "Kompani"
 msgid "Reporting"
 msgstr "Raportim"
 
+msgid "Analytics"
+msgstr "Analitika"
+
 msgid "Update"
 msgstr "Përditëso"
 
@@ -8727,6 +8730,15 @@ msgstr "Shfaq"
 
 msgid "My courses"
 msgstr "Kursimet e mia"
+
+msgid "Shop"
+msgstr "Dyqan"
+
+msgid "Invoice"
+msgstr "Fatura"
+
+msgid "Request invoice"
+msgstr "Kërko faturë"
 
 msgid "View my progress"
 msgstr "Shih përparimin tim"
@@ -9730,6 +9742,9 @@ msgstr "Rezultatet e kërkimit për:"
 msgid "Select a file"
 msgstr "Zgjidh një skedar"
 
+msgid "Select a file to insert into the editor."
+msgstr "Zgjidhni një skedar për ta futur në redaktues."
+
 msgid "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
 msgstr "Paralajmërim - Skedari FAQ, i vendosur në direktorinë /home/ të portalit tuaj, nuk është i shkruajtshëm. Teksti juaj nuk do të ruhet derisa të ndryshohen lejet e skedarit."
 
@@ -9742,8 +9757,8 @@ msgstr "Na vjen keq, ju nuk jeni të lejuar të aksesoni këtë faqe, ose ndosht
 msgid "Result"
 msgstr "Rezultati"
 
-msgid "Attempting to login as %s %s (id %s)"
-msgstr "Duke u përpjekur të hysh si %s %s (id %s)"
+msgid "Attempting to login as %s (id %d)"
+msgstr "Duke u përpjekur të hysh si %s (id %d)"
 
 msgid "Login successful. Go to %s"
 msgstr "Hyrja e suksesshme. Shko te %s"
@@ -15910,6 +15925,9 @@ msgstr "Data & ora"
 msgid "Item"
 msgstr "Artikull"
 
+msgid "Items"
+msgstr "Artikuj"
+
 msgid "Configure Dashboard Plugin"
 msgstr "Konfiguro Plugin-in e Dashboard-it"
 
@@ -17163,6 +17181,18 @@ msgstr "Sesione në grup"
 
 msgid "Courses in group"
 msgstr "Kurse në grup"
+
+msgid "Courses on the platform"
+msgstr "Kurset në platformë"
+
+msgid "%s courses"
+msgstr "%s kurse"
+
+msgid "%s sessions"
+msgstr "%s sesione"
+
+msgid "Search by title or code"
+msgstr "Kërko sipas titullit ose kodit"
 
 msgid "Users in group"
 msgstr "Përdorues në grup"
@@ -24113,7 +24143,7 @@ msgid "Course code to be entered in capital letters to confirm the deletion: %s"
 msgstr "Kodi i kursit për t'u futur me shkronja të mëdha për të konfirmuar fshirjen: %s"
 
 msgid "Badge: %s"
-msgstr "Badge: %s"
+msgstr "Distinktiv: %s"
 
 msgid "Comment by %s"
 msgstr "Komenti nga %s"
@@ -26591,7 +26621,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurimi i lidhjes LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Array që përcakton host dhe port për serverin LDAP.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Varg që përcakton hostin dhe portin për serverin LDAP.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Vendosni datën e skadimit në hyrjen e parë"
@@ -32167,6 +32197,9 @@ msgstr "Detyrë"
 msgid "Allowed file formats: %s"
 msgstr "Formatet e lejuara të skedarëve: %s"
 
+msgid "File manager"
+msgstr "Menaxheri i skedarëve"
+
 msgid "File type not allowed. Allowed extensions: %s"
 msgstr "Lloji i skedarit nuk lejohet. Shtesat e lejuara: %s"
 
@@ -33880,6 +33913,5022 @@ msgstr "Mirësevini"
 msgid "Welcome to Chamilo"
 msgstr "Mirësevini në Chamilo"
 
+msgid "Check all unanswered questions below"
+msgstr "Kontrollo të gjitha pyetjet pa përgjigje më poshtë"
+
 msgid "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> If this is your first time using Chamilo, make sure you check the side menu to find your way through its many features. If you need help, you will find <a href=\"https://docs.chamilo.org\">our official docs</a> can help for standard documentation, while our <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">online forum</a> can help share ideas and find answers from other Chamilo users."
 msgstr "<p><img src=\"/img/document/images/mr_chamilo/svg/collaborative.svg\" width=\"320\" height=\"340\" /></p> Nëse kjo është hera juaj e parë që përdorni Chamilo, sigurohuni të kontrolloni menunë anësore për të gjetur rrugën nëpër shumë karakteristikat e saj. Nëse keni nevojë për ndihmë, do të gjeni <a href=\"https://docs.chamilo.org\">dokumentacionin tonë zyrtar</a> mund të ndihmojë për dokumentacionin standard, ndërsa <a href=\"https://github.com/chamilo/chamilo-lms/discussions\">forumi ynë online</a> mund të ndihmojë për të ndarë ide dhe për të gjetur përgjigje nga përdorues të tjerë të Chamilo."
+
+msgid "Change password"
+msgstr "Ndrysho fjalëkalimin"
+
+msgid "Newest first"
+msgstr "Më të rejat së pari"
+
+msgid "Oldest first"
+msgstr "Më të vjetrat së pari"
+
+msgid "Title A–Z"
+msgstr "Titulli A–Z"
+
+msgid "Title Z–A"
+msgstr "Titulli Z–A"
+
+msgid "Send test email"
+msgstr "Dërgo email provë"
+
+msgid "Show teachers"
+msgstr "Shfaq mësuesit"
+
+msgid "Hide teachers"
+msgstr "Fshih mësuesit"
+
+msgid "Delete exercise attempts"
+msgstr "Fshi përpjekjet e ushtrimit"
+
+msgid "Message sent successfully."
+msgstr "Mesazhi u dërgua me sukses."
+
+msgid "You cannot create a new course right now."
+msgstr "Nuk mund të krijoni një kurs të ri tani."
+
+msgid "Unable to verify whether you can create a new course right now."
+msgstr "Nuk është e mundur të verifikohet nëse mund të krijoni një kurs të ri tani."
+
+msgid "Please try again later or contact the administrator."
+msgstr "Ju lutemi provoni përsëri më vonë ose kontaktoni administratorin."
+
+msgid "You cannot create more courses at this time."
+msgstr "Nuk mund të krijoni më shumë kurse tani."
+
+msgid "You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses."
+msgstr "Ju tashmë menaxhoni %d kurse dhe shërbimi juaj aktiv lejon deri në %d. Për të krijuar një kurs tjetër, ju nevojitet një kufi më i lartë shërbimi ose zvogëloni kurset aktive aktuale."
+
+msgid "You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now."
+msgstr "Ju tashmë menaxhoni %d kurse dhe platforma aktualisht lejon deri në %d për llogarinë tuaj. Nuk mund të krijoni më shumë kurse tani."
+
+msgid "Add a class"
+msgstr "Shto një klasë"
+
+msgid "Search classes"
+msgstr "Kërko klasa"
+
+msgid "No classes found"
+msgstr "Asnjë klasë nuk u gjet"
+
+msgid "Import classes"
+msgstr "Importo klasa"
+
+msgid "Class users"
+msgstr "Përdoruesit e klasës"
+
+msgid "%s classes imported"
+msgstr "%s klasa u importuan"
+
+msgid "%s user-class links imported"
+msgstr "%s lidhje përdorues-klasë u importuan"
+
+msgid "Hide comments"
+msgstr "Fshih komentet"
+
+msgid "Loading comments..."
+msgstr "Duke ngarkuar komentet..."
+
+msgid "No comments yet."
+msgstr "Nuk ka komente ende."
+
+msgid "A user with this username already exists"
+msgstr "Një përdorues me këtë emër përdoruesi ekziston tashmë"
+
+msgid "Manage meetings, review recordings and update course-wide BBB settings from one place."
+msgstr "Menaxho takimet, rishiko regjistrimet dhe përditëso cilësimet e BBB në të gjithë kursin nga një vend."
+
+msgid "Review the current defaults and propagate them to every course when needed."
+msgstr "Rishiko parazgjedhjet aktuale dhe përhapini ato në çdo kurs kur është e nevojshme."
+
+msgid "Filter the list by meeting date range."
+msgstr "Filtro listën sipas intervalit të datës së takimit."
+
+msgid "Review meeting history, participants and recording actions."
+msgstr "Rishiko historikun e takimeve, pjesëmarrësit dhe veprimet e regjistrimit."
+
+msgid "Participants"
+msgstr "Pjesëmarrësit"
+
+msgid "CountUsers"
+msgstr "NumriIPërdoruesve"
+
+msgid "No data found"
+msgstr "Nuk u gjetën të dhëna"
+
+msgid "My justifications"
+msgstr "Justifikimet e mia"
+
+msgid "My services"
+msgstr "Shërbimet e mia"
+
+msgid "Extra menu"
+msgstr "Meny ekstra"
+
+msgid "Pending tests"
+msgstr "Teste në pritje"
+
+msgid "No specific language"
+msgstr "Asnjë gjuhë specifike"
+
+msgid "Source Chamilo version"
+msgstr "Versioni burimor i Chamilo"
+
+msgid "Exporting..."
+msgstr "Duke eksportuar..."
+
+msgid "Autosaved drafts available"
+msgstr "Draftet e ruajtura automatikisht janë të disponueshme"
+
+msgid "Hide drafts"
+msgstr "Fshih draftet"
+
+msgid "Show drafts"
+msgstr "Shfaq draftet"
+
+msgid "Drafts are stored only in this browser and are removed after saving the document."
+msgstr "Draftet ruhen vetëm në këtë shfletues dhe hiqen pas ruajtjes së dokumentit."
+
+msgid "Last saved"
+msgstr "Ruajtur për herë të fundit"
+
+msgid "Restore draft"
+msgstr "Rivendos draftin"
+
+msgid "Delete draft"
+msgstr "Fshi draftin"
+
+msgid "Information about indexing document content"
+msgstr "Informacion rreth indeksimit të përmbajtjes së dokumentit"
+
+msgid "When enabled, the document text is indexed by the search engine so users can find it from platform search."
+msgstr "Kur aktivizohet, teksti i dokumentit indeksohet nga motori i kërkimit kështu që përdoruesit mund ta gjejnë atë nga kërkimi i platformës."
+
+msgid "The editor is not available."
+msgstr "Redaktori nuk është i disponueshëm."
+
+msgid "Please place the cursor inside a paragraph first."
+msgstr "Ju lutemi vendosni kursorin brenda një paragrafi fillimisht."
+
+msgid "The selected paragraph is empty."
+msgstr "Paragrafi i zgjedhur është bosh."
+
+msgid "Loading failed."
+msgstr "Ngarkimi dështoi."
+
+msgid "Add introduction"
+msgstr "Shto hyrje"
+
+msgid "Course type"
+msgstr "Lloji i kursit"
+
+msgid "Choose whether this course uses the standard platform limits or benefits from a purchased service."
+msgstr "Zgjidhni nëse ky kurs përdor kufijtë standardë të platformës ose përfiton nga një shërbim i blerë."
+
+msgid "Standard course"
+msgstr "Kurs standard"
+
+msgid "Use the standard platform limits."
+msgstr "Përdor kufijtë standardë të platformës."
+
+msgid "Selected"
+msgstr "Zgjedhur"
+
+msgid "Hosting limit"
+msgstr "Kufiri i pritjes"
+
+msgid "Document quota"
+msgstr "Kuota e dokumenteve"
+
+msgid "The standard course limit has been reached."
+msgstr "Është arritur kufiri standard i kursit."
+
+msgid "Use the benefits granted by this service."
+msgstr "Përdorni përfitimet e ofruara nga ky shërbim."
+
+msgid "Courses with these benefits"
+msgstr "Kurset me këto përfitime"
+
+msgid "Active service"
+msgstr "Shërbim aktiv"
+
+msgid "Buy service"
+msgstr "Bli shërbimin"
+
+msgid "Select an available course type before creating the course."
+msgstr "Zgjidhni një lloj kursi të disponueshëm para se të krijoni kursin."
+
+msgid "users"
+msgstr "përdorues"
+
+msgid "You need to buy this service before using these benefits."
+msgstr "Duhet të blini këtë shërbim para se të përdorni këto përfitime."
+
+msgid "You already used all courses available with this service."
+msgstr "Keni përdorur tashmë të gjitha kurset e disponueshme me këtë shërbim."
+
+msgid "This option is not available."
+msgstr "Kjo mundësi nuk është e disponueshme."
+
+msgid "This field is required"
+msgstr "Kjo fushë është e detyrueshme"
+
+msgid "Show less"
+msgstr "Shfaq më pak"
+
+msgid "Show full description"
+msgstr "Shfaq përshkrimin e plotë"
+
+msgid "Virtual keyboard"
+msgstr "Tastierë virtuale"
+
+msgid "Backspace"
+msgstr "Fshije"
+
+msgid "Space"
+msgstr "Hapësirë"
+
+msgid "Learning path only visible to selected learners"
+msgstr "Shtegu i të nxënit i dukshëm vetëm për nxënësit e zgjedhur"
+
+msgid "Create course"
+msgstr "Krijo kurs"
+
+msgid "Tour"
+msgstr "Tur"
+
+msgid "Are you sure you want to delete this comment?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë koment?"
+
+msgid "No posts found"
+msgstr "Nuk u gjetën postime"
+
+msgid "No communities"
+msgstr "Nuk ka komunitete"
+
+msgid "No friends found"
+msgstr "Nuk u gjetën miq"
+
+msgid "Visual overview of your skills"
+msgstr "Përmbledhje vizuale e aftësive tuaja"
+
+msgid "Compare your progress"
+msgstr "Krahasoni progresin tuaj"
+
+msgid "Please enter a search term."
+msgstr "Ju lutemi, vendosni një term kërkimi."
+
+msgid "Enter captcha code"
+msgstr "Vendosni kodin captcha"
+
+msgid "Refresh captcha"
+msgstr "Rifresko captcha"
+
+msgid "Captcha is temporarily blocked. Please try again later."
+msgstr "Captcha është bllokuar përkohësisht. Ju lutemi, provoni përsëri më vonë."
+
+msgid "Item Details"
+msgstr "Detajet e artikullit"
+
+msgid "Open File"
+msgstr "Hap skedarin"
+
+msgid "Selection"
+msgstr "Përzgjedhja"
+
+msgid "Remove selection context"
+msgstr "Hiq kontekstin e përzgjedhjes"
+
+msgid "Source document"
+msgstr "Dokumenti burimor"
+
+msgid "Use the current course context"
+msgstr "Përdor kontekstin e kursit aktual"
+
+msgid "Loading documents..."
+msgstr "Po ngarkohen dokumentet..."
+
+msgid "No compatible PDF or TXT document was found in this course."
+msgstr "Nuk u gjet asnjë dokument PDF ose TXT i përputhshëm në këtë kurs."
+
+msgid "Select a PDF or TXT document to generate terms only from that document."
+msgstr "Zgjidhni një dokument PDF ose TXT për të gjeneruar terma vetëm nga ai dokument."
+
+msgid "Confidentiality warning"
+msgstr "Paralajmërim për konfidencialitetin"
+
+msgid "When a document is selected, the prompt is fixed so the generation uses only that document content."
+msgstr "Kur zgjidhet një dokument, prompt-i fiksohet kështu që gjenerimi të përdorë vetëm përmbajtjen e atij dokumenti."
+
+msgid "No document-processing AI providers available."
+msgstr "Nuk ka ofrues AI për përpunim dokumentesh të disponueshëm."
+
+msgid "Failed to save signature. Please try again."
+msgstr "Dështoi ruajtja e nënshkrimit. Ju lutemi, provoni përsëri."
+
+msgid "Select and move"
+msgstr "Zgjidh dhe lëviz"
+
+msgid "Freehand"
+msgstr "Me dorë të lirë"
+
+msgid "Stroke"
+msgstr "Vija"
+
+msgid "Fill"
+msgstr "Mbush"
+
+msgid "Import SVG"
+msgstr "Importo SVG"
+
+msgid "Import image"
+msgstr "Importo imazh"
+
+msgid "Click the drawing area to place this text"
+msgstr "Klikoni në zonën e vizatimit për të vendosur këtë tekst"
+
+msgid "Draw a new SVG, import an existing SVG or embed an image, then save it as a reusable document."
+msgstr "Vizato një SVG të ri, importo një SVG ekzistues ose fut një imazh, pastaj ruaje si dokument të ripërdorshëm."
+
+msgid "Use Select and move to reposition or resize elements added in this editor."
+msgstr "Përdor Përzgjidh dhe lëviz për të rirregulluar ose ndryshuar madhësinë e elementeve të shtuara në këtë redaktues."
+
+msgid "Stroke width"
+msgstr "Gjerësia e vijës"
+
+msgid "Transparent fill"
+msgstr "Mbushje transparente"
+
+msgid "Invalid id"
+msgstr "ID e pavlefshme"
+
+msgid "Unable to load the drawing"
+msgstr "Nuk mund të ngarkohet vizatimi"
+
+msgid "Only PNG, JPG, WEBP or GIF images are supported."
+msgstr "Mbështeten vetëm imazhet PNG, JPG, WEBP ose GIF."
+
+msgid "Unable to read the image file."
+msgstr "Nuk mund të lexohet skedari i imazhit."
+
+msgid "Only SVG files are supported."
+msgstr "Mbështeten vetëm skedarët SVG."
+
+msgid "The SVG file is empty or invalid."
+msgstr "Skedari SVG është bosh ose i pavlefshëm."
+
+msgid "Unable to read the SVG file."
+msgstr "Nuk mund të lexohet skedari SVG."
+
+msgid "The drawing is empty or invalid."
+msgstr "Vizatimi është bosh ose i pavlefshëm."
+
+msgid "Unable to save the drawing"
+msgstr "Nuk mund të ruhet vizatimi"
+
+msgid "Information about AI-assisted documents"
+msgstr "Informacion rreth dokumenteve me ndihmën e AI"
+
+msgid "Location"
+msgstr "Vendndodhja"
+
+msgid "Cloud link"
+msgstr "Lidhje në re"
+
+msgid "Add a link to a cloud document, such as Google Drive or Google Docs."
+msgstr "Shto një lidhje me një dokument në re, si Google Drive ose Google Docs."
+
+msgid "Add cloud link"
+msgstr "Shto lidhje në re"
+
+msgid "Document title"
+msgstr "Titulli i dokumentit"
+
+msgid "Document options change how uploaded files are processed after saving."
+msgstr "Opsionet e dokumentit ndryshojnë mënyrën se si përpunohen skedarët e ngarkuar pas ruajtjes."
+
+msgid "Information about uncompressing zip files"
+msgstr "Informacion rreth dekompresimit të skedarëve zip"
+
+msgid "When enabled, ZIP files are extracted into the current document folder after upload."
+msgstr "Kur aktivizohet, skedarët ZIP nxirren në dosjen aktuale të dokumenteve pas ngarkimit."
+
+msgid "The title is required."
+msgstr "Titulli është i detyrueshëm."
+
+msgid "The URL is required."
+msgstr "URL-ja është e detyrueshme."
+
+msgid "The destination folder is missing."
+msgstr "Dosja e destinacionit mungon."
+
+msgid "Unable to create cloud link."
+msgstr "Nuk mund të krijohet lidhja në re."
+
+msgid "Copy to My Files"
+msgstr "Kopjo te Skedarët e Mi"
+
+msgid "Used space"
+msgstr "Hapësira e përdorur"
+
+msgid "Available space"
+msgstr "Hapësira e disponueshme"
+
+msgid "Available percentage"
+msgstr "Përqindja e disponueshme"
+
+msgid "Cloud links cannot be downloaded."
+msgstr "Lidhjet në re nuk mund të shkarkohen."
+
+msgid "Could not copy the file to My Files"
+msgstr "Nuk mund të kopjohet skedari te Skedarët e Mi"
+
+msgid "File copied to My Files"
+msgstr "Skedari u kopjua te Skedarët e Mi"
+
+msgid "Checking course creation options..."
+msgstr "Po kontrollohen opsionet e krijimit të kursit..."
+
+msgid "You cannot create more courses right now."
+msgstr "Nuk mund të krijoni më shumë kurse tani."
+
+msgid "AI analyzer"
+msgstr "Analizuesi AI"
+
+msgid "Expand all"
+msgstr "Zgjero të gjitha"
+
+msgid "Collapse all"
+msgstr "Palos të gjitha"
+
+msgid "Review your active service benefits, purchase history and available receipts."
+msgstr "Shqyrto përfitimet e shërbimeve aktive, historinë e blerjeve dhe faturat e disponueshme."
+
+msgid "Active services"
+msgstr "Shërbimet aktive"
+
+msgid "No active services"
+msgstr "Nuk ka shërbime aktive"
+
+msgid "Valid until"
+msgstr "I vlefshëm deri"
+
+msgid "Recurring payment"
+msgstr "Pagesë e përsëritur"
+
+msgid "Next charge"
+msgstr "Ngarkesa e ardhshme"
+
+msgid "Enable auto billing"
+msgstr "Aktivizo faturimin automatik"
+
+msgid "Cancel auto billing"
+msgstr "Anulo faturimin automatik"
+
+msgid "Granted benefits"
+msgstr "Përfitimet e dhëna"
+
+msgid "Purchase history"
+msgstr "Historia e blerjeve"
+
+msgid "No purchases yet"
+msgstr "Nuk ka blerje ende"
+
+msgid "Product"
+msgstr "Produkti"
+
+msgid "Reference"
+msgstr "Referenca"
+
+msgid "Amount"
+msgstr "Shuma"
+
+msgid "Receipt"
+msgstr "Fatura"
+
+msgid "Unable to load your services right now."
+msgstr "Nuk mund të ngarkohen shërbimet tuaja tani."
+
+msgid "Auto billing enabled"
+msgstr "Faturimi automatik i aktivizuar"
+
+msgid "Auto billing suspended"
+msgstr "Faturimi automatik i pezulluar"
+
+msgid "Auto billing cancelled"
+msgstr "Faturimi automatik i anuluar"
+
+msgid "Auto billing disabled"
+msgstr "Faturimi automatik i çaktivizuar"
+
+msgid "Cancel auto billing for this service?"
+msgstr "Të anulohet faturimi automatik për këtë shërbim?"
+
+msgid "Preview class members and courses"
+msgstr "Shiko paraprakisht anëtarët e klasës dhe kurset"
+
+msgid "Please select a CSV file to import."
+msgstr "Ju lutemi zgjidhni një skedar CSV për import."
+
+msgid "%d user-class links imported"
+msgstr "%d lidhje përdorues-klasë u importuan"
+
+msgid "The following errors occurred during import:"
+msgstr "Gabimet e mëposhtme ndodhën gjatë importit:"
+
+msgid "CSV file"
+msgstr "Skedari CSV"
+
+msgid "Remove user from all group-related entities if not in the list"
+msgstr "Hiq përdoruesin nga të gjitha entitetet e lidhura me grupin nëse nuk është në listë"
+
+msgid "UserName"
+msgstr "EmriPërdoruesit"
+
+msgid "ClassName"
+msgstr "EmriKlasës"
+
+msgid "are required for each row."
+msgstr "janë të kërkuara për çdo rresht."
+
+msgid "title"
+msgstr "titulli"
+
+msgid "is required."
+msgstr "është i kërkuar."
+
+msgid "description"
+msgstr "përshkrimi"
+
+msgid "are optional."
+msgstr "janë opsionale."
+
+msgid "Are you sure you want to remove this user from the class?"
+msgstr "Jeni të sigurt që dëshironi të hiqni këtë përdorues nga klasa?"
+
+msgid "Users in class"
+msgstr "Përdoruesit në klasë"
+
+msgid "Remove user"
+msgstr "Hiq përdoruesin"
+
+msgid "Class not found"
+msgstr "Klasa nuk u gjet"
+
+msgid "Class overview"
+msgstr "Përmbledhja e klasës"
+
+msgid "Back to classes"
+msgstr "Kthehu te klasat"
+
+msgid "Search members or courses"
+msgstr "Kërko anëtarë ose kurse"
+
+msgid "Search by name, email, username or course title"
+msgstr "Kërko sipas emrit, emailit, emrit të përdoruesit ose titullit të kursit"
+
+msgid "Class members"
+msgstr "Anëtarët e klasës"
+
+msgid "No email"
+msgstr "Asnjë email"
+
+msgid "No members found"
+msgstr "Asnjë anëtar i gjetur"
+
+msgid "No courses found"
+msgstr "Asnjë kurs i gjetur"
+
+msgid "The end date must be after the start date."
+msgstr "Data e përfundimit duhet të jetë pas datës së fillimit."
+
+msgid "Always visible"
+msgstr "Gjithmonë i dukshëm"
+
+msgid "No end date"
+msgstr "Asnjë datë përfundimi"
+
+msgid "No restriction"
+msgstr "Asnjë kufizim"
+
+msgid "Missing learning path or course identifier"
+msgstr "Mungon identifikuesi i rrugës së të nxënit ose i kursit"
+
+msgid "Select a user or a group first"
+msgstr "Zgjidhni fillimisht një përdorues ose një grup"
+
+msgid "Remove all date restrictions for this learning path?"
+msgstr "Të hiqen të gjitha kufizimet e datës për këtë rrugë të të nxënit?"
+
+msgid "Advanced learning path access"
+msgstr "Qasje e avancuar në rrugën e të nxënit"
+
+msgid "Remove date restrictions"
+msgstr "Hiq kufizimet e datës"
+
+msgid "Search by name, email, username or group"
+msgstr "Kërko sipas emrit, emailit, emrit të përdoruesit ose grupit"
+
+msgid "Edit user restriction"
+msgstr "Ndrysho kufizimin e përdoruesit"
+
+msgid "Edit group restriction"
+msgstr "Ndrysho kufizimin e grupit"
+
+msgid "Select a user or group"
+msgstr "Zgjidhni një përdorues ose grup"
+
+msgid "Save restriction"
+msgstr "Ruaj kufizimin"
+
+msgid "members"
+msgstr "anëtarë"
+
+msgid "Create Assignment"
+msgstr "Krijo Detyrë"
+
+msgid "The submission deadline has passed. You can no longer submit."
+msgstr "Afati i dorëzimit ka skaduar. Nuk mund të dorëzoni më."
+
+msgid "Mailing cannot be combined with other recipients."
+msgstr "Postimi nuk mund të kombinohet me marrës të tjerë."
+
+msgid "Social map"
+msgstr "Harta sociale"
+
+msgid "The map plugin is not enabled or configured."
+msgstr "Plugin-i i hartës nuk është aktivizuar ose konfiguruar."
+
+msgid "Some configured extra fields were not found"
+msgstr "Disa fusha shtesë të konfiguruara nuk u gjetën"
+
+msgid "No user locations were found."
+msgstr "Nuk u gjetën vendndodhje përdoruesish."
+
+msgid "OpenStreetMap needs coordinates to display an embedded marker. Address-only locations are listed below."
+msgstr "OpenStreetMap ka nevojë për koordinata për të shfaqur një shënues të integruar. Vendndodhjet vetëm me adresë janë listuar më poshtë."
+
+msgid "Locations"
+msgstr "Vendndodhje"
+
+msgid "Open map"
+msgstr "Hap hartën"
+
+msgid "Provider: OpenStreetMap"
+msgstr "Ofruesi: OpenStreetMap"
+
+msgid "Provider: Google Maps"
+msgstr "Ofruesi: Google Maps"
+
+msgid "Personal files"
+msgstr "Skedarë personalë"
+
+msgid "Upload image"
+msgstr "Ngarko imazh"
+
+msgid "Upload media"
+msgstr "Ngarko media"
+
+msgid "Only image files are allowed in this upload screen."
+msgstr "Vetëm skedarë imazhi lejohen në këtë ekran ngarkimi."
+
+msgid "Only audio and video files are allowed in this upload screen."
+msgstr "Vetëm skedarë audio dhe video lejohen në këtë ekran ngarkimi."
+
+msgid "Upload files to your personal storage."
+msgstr "Ngarkoni skedarë në ruajtjen tuaj personale."
+
+msgid "Linked"
+msgstr "I lidhur"
+
+msgid "No audio or video files were found in this folder."
+msgstr "Nuk u gjetën skedarë audio ose video në këtë dosje."
+
+msgid "No image files were found in this folder."
+msgstr "Nuk u gjetën skedarë imazhi në këtë dosje."
+
+msgid "No matching files were found in this folder."
+msgstr "Nuk u gjetën skedarë përputhës në këtë dosje."
+
+msgid "This file type is not allowed in this upload screen."
+msgstr "Ky lloj skedari nuk lejohet në këtë ekran ngarkimi."
+
+msgid "Manage your personal files and course documents."
+msgstr "Menaxhoni skedarët tuaj personalë dhe dokumentet e kursit."
+
+msgid "DateValidity"
+msgstr "DateValidity"
+
+msgid "JustificationSaved"
+msgstr "JustificationSaved"
+
+msgid "ValidityDate"
+msgstr "ValidityDate"
+
+msgid "MyJustifications"
+msgstr "MyJustifications"
+
+msgid "Submission"
+msgstr "Dorëzim"
+
+msgid "Use the filters above to narrow the list."
+msgstr "Përdorni filtrat më sipër për të ngushtuar listën."
+
+msgid "You are not allowed to see this page."
+msgstr "Nuk ju lejohet të shihni këtë faqe."
+
+msgid "plugin_title"
+msgstr "plugin_title"
+
+msgid "plugin_comment"
+msgstr "plugin_comment"
+
+msgid "Course tracking details"
+msgstr "Detajet e ndjekjes së kursit"
+
+msgid "Course activity statistics"
+msgstr "Statistikat e aktivitetit të kursit"
+
+msgid "mobile_phone_number"
+msgstr "mobile_phone_number"
+
+msgid "Allowed template syntax"
+msgstr "Sintaksa e lejuar e shabllonit"
+
+msgid "Functions"
+msgstr "Funksionet"
+
+msgid "Available variables depend on the template type, for example {{ user.getUsername() }} or {{ user.getEmail() }}."
+msgstr "Variablat e disponueshëm varen nga lloji i shabllonit, për shembull {{ user.getUsername() }} ose {{ user.getEmail() }}."
+
+msgid "For security reasons, any other Twig function, filter (such as filter, map, reduce or sort) or PHP call is blocked."
+msgstr "Për arsye sigurie, çdo funksion tjetër Twig, filtër (si filter, map, reduce ose sort) ose thirrje PHP është bllokuar."
+
+msgid "Global administrator"
+msgstr "Administratori global"
+
+msgid "Session manager"
+msgstr "Menaxheri i sesionit"
+
+msgid "Human resources manager"
+msgstr "Menaxheri i burimeve njerëzore"
+
+msgid "Course teacher"
+msgstr "Mësuesi i kursit"
+
+msgid "Course student"
+msgstr "Studenti i kursit"
+
+msgid "Platform reports"
+msgstr "Raportet e platformës"
+
+msgid "Security reports"
+msgstr "Raportet e sigurisë"
+
+msgid "Course reports"
+msgstr "Raportet e kursit"
+
+msgid "Gradebook reports"
+msgstr "Raportet e librit të notave"
+
+msgid "Social reports"
+msgstr "Raportet sociale"
+
+msgid "Exports"
+msgstr "Eksportet"
+
+msgid "Reports about platform-wide usage, users, courses and sessions."
+msgstr "Raporte mbi përdorimin e platformës, përdoruesit, kurset dhe sesionet."
+
+msgid "Audit and security-sensitive reports."
+msgstr "Raporte auditimi dhe të ndjeshme ndaj sigurisë."
+
+msgid "Reports scoped to courses managed by the user."
+msgstr "Raporte të kufizuara në kurset e menaxhuara nga përdoruesi."
+
+msgid "Reports related to learner activity and follow-up."
+msgstr "Raporte të lidhura me aktivitetin dhe ndjekjen e nxënësve."
+
+msgid "Reports related to scores, certificates and gradebook data."
+msgstr "Raporte të lidhura me rezultatet, certifikatat dhe të dhënat e librit të notave."
+
+msgid "Reports and exports that generate downloadable files."
+msgstr "Raporte dhe eksporte që gjenerojnë skedarë të shkarkueshëm."
+
+msgid "Main platform statistics dashboard."
+msgstr "Paneli kryesor i statistikave të platformës."
+
+msgid "Number of courses and course distribution report."
+msgstr "Numri i kurseve dhe raporti i shpërndarjes së tyre."
+
+msgid "Platform-wide access to course tools."
+msgstr "Qasje në mbarë platformën te mjetet e kurseve."
+
+msgid "Number of resources per tool."
+msgstr "Numri i burimeve për mjet."
+
+msgid "Latest access to courses."
+msgstr "Qasjet e fundit në kurse."
+
+msgid "Course distribution by language."
+msgstr "Shpërndarja e kurseve sipas gjuhës."
+
+msgid "Course usage report."
+msgstr "Raporti i përdorimit të kurseve."
+
+msgid "Platform user count report."
+msgstr "Raporti i numrit të përdoruesve të platformës."
+
+msgid "Recent logins chart."
+msgstr "Grafiku i hyrjeve të fundit."
+
+msgid "Login distribution by month."
+msgstr "Shpërndarja e hyrjeve sipas muajit."
+
+msgid "Login distribution by day."
+msgstr "Shpërndarja e hyrjeve sipas ditës."
+
+msgid "Login distribution by hour."
+msgstr "Shpërndarja e hyrjeve sipas orës."
+
+msgid "Users with profile picture."
+msgstr "Përdorues me fotografi profili."
+
+msgid "Login report filtered by date."
+msgstr "Raporti i hyrjeve i filtruar sipas datës."
+
+msgid "Users who have not logged in recently."
+msgstr "Përdorues që nuk kanë hyrë kohët e fundit."
+
+msgid "Inactive or suspicious user accounts report."
+msgstr "Raporti i llogarive të përdoruesve joaktivë ose të dyshimtë."
+
+msgid "Users activity statistics."
+msgstr "Statistikat e aktivitetit të përdoruesve."
+
+msgid "Currently online users report."
+msgstr "Raporti i përdoruesve aktualisht në linjë."
+
+msgid "New user registrations over time."
+msgstr "Regjistrimet e reja të përdoruesve me kalimin e kohës."
+
+msgid "Course and session subscriptions over time."
+msgstr "Abonimet në kurse dhe sesione me kalimin e kohës."
+
+msgid "Duplicate user detection and maintenance report."
+msgstr "Raporti i zbulimit dhe mirëmbajtjes së përdoruesve të dyfishtë."
+
+msgid "Platform user/session statistics."
+msgstr "Statistikat e përdoruesve/sesioneve të platformës."
+
+msgid "Quarterly platform report."
+msgstr "Raporti tremujor i platformës."
+
+msgid "Activities audit"
+msgstr "Auditimi i aktiviteteve"
+
+msgid "Audit report for important administrative and platform activities."
+msgstr "Raporti i auditimit për aktivitete të rëndësishme administrative dhe të platformës."
+
+msgid "Social messages received report."
+msgstr "Raporti i mesazheve sociale të marra."
+
+msgid "Social messages sent report."
+msgstr "Raporti i mesazheve sociale të dërguara."
+
+msgid "Social contacts count report."
+msgstr "Raporti i numrit të kontakteve sociale."
+
+msgid "Sessions created over time."
+msgstr "Sesionet e krijuara me kalimin e kohës."
+
+msgid "Learning analytics dashboard."
+msgstr "Paneli i analitikës së të nxënit."
+
+msgid "Teacher time report."
+msgstr "Raporti i kohës së mësuesit."
+
+msgid "Teachers time by session report"
+msgstr "Raporti i kohës së mësuesve sipas sesionit"
+
+msgid "Teacher time report grouped by session."
+msgstr "Raporti i kohës së mësuesit i grupuar sipas sesionit."
+
+msgid "Corporate learning analytics report."
+msgstr "Raporti i analitikës së të nxënit korporativ."
+
+msgid "Course learners tracking report."
+msgstr "Raporti i ndjekjes së nxënësve të kursit."
+
+msgid "Course activity statistics with connected and inactive users."
+msgstr "Statistikat e aktivitetit të kursit me përdorues të lidhur dhe joaktivë."
+
+msgid "Detailed tracking report for a learner inside a course."
+msgstr "Raporti i detajuar i ndjekjes për një nxënës brenda një kursi."
+
+msgid "Course gradebook overview."
+msgstr "Përmbledhja e librit të notave të kursit."
+
+msgid "Gradebook statistics"
+msgstr "Statistikat e librit të notave"
+
+msgid "Gradebook statistics report."
+msgstr "Raporti i statistikave të librit të notave."
+
+msgid "Certificate report"
+msgstr "Raporti i certifikatave"
+
+msgid "Certificate report for course gradebook."
+msgstr "Raporti i certifikatave për librin e notave të kursit."
+
+msgid "User statistics"
+msgstr "Statistikat e përdoruesit"
+
+msgid "Course gradebook statistics for a user."
+msgstr "Statistikat e librit të notave të kursit për një përdorues."
+
+msgid "Personal statistics"
+msgstr "Statistika personale"
+
+msgid "Personal gradebook statistics."
+msgstr "Statistika personale të librit të notave."
+
+msgid "Reports catalog"
+msgstr "Katalogu i raporteve"
+
+msgid "Central catalog of available reports, roles and permission categories."
+msgstr "Katalogu qendror i raporteve të disponueshme, roleve dhe kategorive të lejeve."
+
+msgid "Course log events"
+msgstr "Ngjarjet e regjistrit të kursit"
+
+msgid "Detailed course tracking events."
+msgstr "Ngjarje të detajuara të ndjekjes së kursit."
+
+msgid "Course tool usage"
+msgstr "Përdorimi i mjeteve të kursit"
+
+msgid "Course tracking report grouped by tools."
+msgstr "Raport ndjekjeje i kursit i grupuar sipas mjeteve."
+
+msgid "Course resource usage"
+msgstr "Përdorimi i burimeve të kursit"
+
+msgid "Course tracking report grouped by resources."
+msgstr "Raport ndjekjeje i kursit i grupuar sipas burimeve."
+
+msgid "Course group tracking"
+msgstr "Ndjekja e grupeve të kursit"
+
+msgid "Tracking report for course groups."
+msgstr "Raport ndjekjeje për grupet e kursit."
+
+msgid "Course session report"
+msgstr "Raporti i sesionit të kursit"
+
+msgid "Tracking report for a course inside sessions."
+msgstr "Raport ndjekjeje për një kurs brenda sesioneve."
+
+msgid "Learning path report"
+msgstr "Raporti i rrugës së të nxënit"
+
+msgid "Learning path tracking report."
+msgstr "Raport ndjekjeje i rrugës së të nxënit."
+
+msgid "Learning path results by user"
+msgstr "Rezultatet e rrugës së të nxënit sipas përdoruesit"
+
+msgid "Learning path results grouped by user."
+msgstr "Rezultatet e rrugës së të nxënit të grupuara sipas përdoruesit."
+
+msgid "Exercises report"
+msgstr "Raporti i ushtrimeve"
+
+msgid "Course exercises and exams tracking report."
+msgstr "Raport ndjekjeje i ushtrimeve dhe provimeve të kursit."
+
+msgid "Question report"
+msgstr "Raporti i pyetjeve"
+
+msgid "Course question tracking report."
+msgstr "Raport ndjekjeje i pyetjeve të kursit."
+
+msgid "Messages report"
+msgstr "Raporti i mesazheve"
+
+msgid "Course messages tracking report."
+msgstr "Raport ndjekjeje i mesazheve të kursit."
+
+msgid "Total time tracking report for course learners."
+msgstr "Raport ndjekjeje i kohës totale për nxënësit e kursit."
+
+msgid "Gradebook summary"
+msgstr "Përmbledhja e librit të notave"
+
+msgid "Summary view of gradebook results."
+msgstr "Pamje përmbledhëse e rezultateve të librit të notave."
+
+msgid "Flat view"
+msgstr "Pamje e sheshtë"
+
+msgid "Flat gradebook results view."
+msgstr "Pamje e rezultateve të librit të notave në formë të sheshtë."
+
+msgid "Evaluation log"
+msgstr "Regjistri i vlerësimeve"
+
+msgid "Change log for gradebook evaluations."
+msgstr "Regjistër ndryshimesh për vlerësimet e librit të notave."
+
+msgid "Link log"
+msgstr "Regjistri i lidhjeve"
+
+msgid "Change log for gradebook links."
+msgstr "Regjistër ndryshimesh për lidhjet e librit të notave."
+
+msgid "Result details"
+msgstr "Detajet e rezultateve"
+
+msgid "Detailed view of a gradebook result."
+msgstr "Pamje e detajuar e një rezultati të librit të notave."
+
+msgid "Personal certificates report."
+msgstr "Raporti personal i certifikatave."
+
+msgid "User move statistics"
+msgstr "Statistikat e lëvizjes së përdoruesve"
+
+msgid "Report for user move and transfer statistics."
+msgstr "Raport për statistikat e lëvizjes dhe transferimit të përdoruesve."
+
+msgid "User consent list"
+msgstr "Lista e pëlqimeve të përdoruesve"
+
+msgid "Report of users and consent status."
+msgstr "Raport i përdoruesve dhe statusit të pëlqimit."
+
+msgid "Special platform exports."
+msgstr "Eksporte të veçanta të platformës."
+
+msgid "Export certificates"
+msgstr "Eksporto certifikatat"
+
+msgid "Export platform certificates."
+msgstr "Eksporto certifikatat e platformës."
+
+msgid "Export exercise results"
+msgstr "Eksporto rezultatet e ushtrimeve"
+
+msgid "Export exercise results from the platform."
+msgstr "Eksporto rezultatet e ushtrimeve nga platforma."
+
+msgid "Course survey results and reporting."
+msgstr "Rezultatet dhe raportimi i anketave të kursit."
+
+msgid "Attendance report"
+msgstr "Raporti i pjesëmarrjes"
+
+msgid "Course attendance tracking and reports."
+msgstr "Ndjekja dhe raportet e pjesëmarrjes në kurs."
+
+msgid "Exercises global report"
+msgstr "Raporti global i ushtrimeve"
+
+msgid "Global exercise results report for the course."
+msgstr "Raport global i rezultateve të ushtrimeve për kursin."
+
+msgid "Exercise report"
+msgstr "Raporti i ushtrimeve"
+
+msgid "Detailed exercise report."
+msgstr "Raporti i detajuar i ushtrimeve."
+
+msgid "Exercise history"
+msgstr "Historia e ushtrimeve"
+
+msgid "Exercise attempt history."
+msgstr "Historia e përpjekjeve të ushtrimeve."
+
+msgid "Exercise results"
+msgstr "Rezultatet e ushtrimeve"
+
+msgid "Exercise results and corrections."
+msgstr "Rezultatet dhe korrigjimet e ushtrimeve."
+
+msgid "Question-level exercise statistics."
+msgstr "Statistikat e ushtrimeve në nivel pyetjesh."
+
+msgid "Exercise statistics"
+msgstr "Statistikat e ushtrimeve"
+
+msgid "Exercise statistics page."
+msgstr "Faqja e statistikave të ushtrimeve."
+
+msgid "Live exercise statistics"
+msgstr "Statistikat e ushtrimeve në kohë reale"
+
+msgid "Live exercise statistics for teachers."
+msgstr "Statistikat e ushtrimeve në kohë reale për mësuesit."
+
+msgid "Learning path statistics"
+msgstr "Statistikat e rrugës së të nxënit"
+
+msgid "Learning path item statistics."
+msgstr "Statistikat e elementeve të rrugës së të nxënit."
+
+msgid "Learning path report inside a course."
+msgstr "Raporti i rrugës së të nxënit brenda një kursi."
+
+msgid "User skills report."
+msgstr "Raporti i aftësive të përdoruesit."
+
+msgid "Scheduled or periodic export configuration."
+msgstr "Konfigurimi i eksportit të planifikuar ose periodik."
+
+msgid "User export"
+msgstr "Eksporti i përdoruesve"
+
+msgid "Export users from the platform."
+msgstr "Eksporti i përdoruesve nga platforma."
+
+msgid "Not classified"
+msgstr "I paklasifikuar"
+
+msgid "You have acquired the skill %s"
+msgstr "Ju keni fituar aftësinë %s"
+
+msgid "You have acquired the skill %s."
+msgstr "Ju keni fituar aftësinë %s."
+
+msgid "Recover your password"
+msgstr "Rikuperoni fjalëkalimin tuaj"
+
+msgid "Disclaimer"
+msgstr "Mohim përgjegjësie"
+
+msgid "This operation would exceed the limit of %d users allowed for this course."
+msgstr "Ky operacion do të tejkalonte kufirin e %d përdoruesve të lejuar për këtë kurs."
+
+msgid "DefaultGroupCategory"
+msgstr "DefaultGroupCategory"
+
+msgid "LearningCalendar"
+msgstr "LearningCalendar"
+
+msgid "Choose how this user can authenticate on the platform."
+msgstr "Zgjidhni se si mund të autentifikohet ky përdorues në platformë."
+
+msgid "Authentication methods"
+msgstr "Metodat e autentifikimit"
+
+msgid "Set password manually"
+msgstr "Vendosni fjalëkalimin manualisht"
+
+msgid "Report role matrix"
+msgstr "Matrica e roleve të raporteve"
+
+msgid "Report permission categories"
+msgstr "Kategoritë e lejeve të raporteve"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix."
+msgstr "Ky regjistër liston faqet e njohura të raportimit, kategorinë e tyre, URL-në kanonike, URL-në e trashëguar dhe audiencën e pritshme të rolit. URL-të kanonike zbatojnë matricën e dokumentuar të roleve të raporteve."
+
+msgid "reports"
+msgstr "raportet"
+
+msgid "Canonical URL"
+msgstr "URL kanonike"
+
+msgid "Legacy URL"
+msgstr "URL e trashëguar"
+
+msgid "Permission category"
+msgstr "Kategoria e lejeve"
+
+msgid "This matrix documents the expected audience for each report and is enforced by the canonical report entry point."
+msgstr "Kjo matricë dokumenton audiencën e pritshme për çdo raport dhe zbatohet nga pika hyrëse kanonike e raportit."
+
+msgid "These keys group reports by access scope and are used by the report registry. They can later be mapped to finer-grained platform permissions."
+msgstr "Këto çelësa grupojnë raportet sipas fushës së aksesit dhe përdoren nga regjistri i raporteve. Ato mund të hartohen më vonë me leje më të imta të platformës."
+
+msgid "Permission"
+msgstr "Leja"
+
+msgid "Clear active session"
+msgstr "Pastro sesionin aktiv"
+
+msgid "Are you sure you want to clear this user active session?"
+msgstr "Jeni të sigurt që dëshironi të pastroni këtë sesion aktiv të përdoruesit?"
+
+msgid "Preview shown without course context. Some course-specific data may be unavailable."
+msgstr "Pamja paraprake shfaqet pa kontekst kursi. Disa të dhëna specifike të kursit mund të mos jenë të disponueshme."
+
+msgid "Preview is not available for this question."
+msgstr "Pamja paraprake nuk është e disponueshme për këtë pyetje."
+
+msgid "Edition is not allowed without a course context."
+msgstr "Redaktimi nuk lejohet pa një kontekst kursi."
+
+msgid "This plugin does not use regions."
+msgstr "Ky plugin nuk përdor rajone."
+
+msgid "No plugins with regions were found."
+msgstr "Nuk u gjetën plugin-e me rajone."
+
+msgid "Freemium"
+msgstr "Freemium"
+
+msgid "Commercial service"
+msgstr "Shërbim komercial"
+
+msgid "Commercial"
+msgstr "Komercial"
+
+msgid "100% free"
+msgstr "100% falas"
+
+msgid "Displayed above the public login form."
+msgstr "Shfaqet mbi formularin publik të hyrjes."
+
+msgid "Displayed below the public login form."
+msgstr "Shfaqet poshtë formularit publik të hyrjes."
+
+msgid "Displayed before the footer area."
+msgstr "Shfaqet para zonës së fundores."
+
+msgid "Displayed in the left footer column."
+msgstr "Shfaqet në kolonën e majtë të fundores."
+
+msgid "Displayed in the center footer column."
+msgstr "Shfaqet në kolonën qendrore të fundores."
+
+msgid "Displayed in the right footer column."
+msgstr "Shfaqet në kolonën e djathtë të fundores."
+
+msgid "Showing all plugins."
+msgstr "Po shfaqen të gjitha shtojcat."
+
+msgid "Some plugins are still pending functional verification."
+msgstr "Disa shtojca janë ende në pritje të verifikimit funksional."
+
+msgid "Show verified plugins only"
+msgstr "Shfaq vetëm shtojcat e verifikuara"
+
+msgid "Showing verified plugins only."
+msgstr "Po shfaqen vetëm shtojcat e verifikuara."
+
+msgid "Pending plugins are temporarily hidden until they are adapted and tested."
+msgstr "Shtojcat në pritje janë fshehur përkohësisht derisa të përshtaten dhe të testohen."
+
+msgid "Show all plugins"
+msgstr "Shfaq të gjitha shtojcat"
+
+msgid "Official and free plugins are listed separately from plugins that may depend on commercial services or paid offers."
+msgstr "Shtojcat zyrtare dhe falas renditen veçmas nga ato që mund të varen nga shërbime komerciale ose oferta me pagesë."
+
+msgid "Included free plugins"
+msgstr "Shtojcat e përfshira falas"
+
+msgid "Commercial and freemium plugins"
+msgstr "Shtojcat komerciale dhe freemium"
+
+msgid "All plugins"
+msgstr "Të gjitha shtojcat"
+
+msgid "No plugins were found for this category."
+msgstr "Nuk u gjetën shtojca për këtë kategori."
+
+msgid "Search plugins"
+msgstr "Kërko shtojca"
+
+msgid "Search by name or description"
+msgstr "Kërko sipas emrit ose përshkrimit"
+
+msgid "Advanced filters"
+msgstr "Filtra të avancuar"
+
+msgid "All statuses"
+msgstr "Të gjitha statuset"
+
+msgid "All sources"
+msgstr "Të gjitha burimet"
+
+msgid "All types"
+msgstr "Të gjitha llojet"
+
+msgid "Installed plugins are shown first"
+msgstr "Shtojcat e instaluara shfaqen të parat"
+
+msgid "No plugins match the current filters."
+msgstr "Asnjë shtojcë nuk përputhet me filtrat aktualë."
+
+msgid "Try clearing the search or changing the filters."
+msgstr "Provo të pastroni kërkimin ose të ndryshoni filtrat."
+
+msgid "README"
+msgstr "README"
+
+msgid "Invalid security token"
+msgstr "Token sigurie i pavlefshëm"
+
+msgid "Please select a destination session"
+msgstr "Ju lutemi zgjidhni një sesion destinacioni"
+
+msgid "Cannot move this to the same session"
+msgstr "Nuk mund ta zhvendosni këtë në të njëjtin sesion"
+
+msgid "The destination session must include the selected course"
+msgstr "Sesioni i destinacionit duhet të përfshijë kursin e zgjedhur"
+
+msgid "The source session must include the selected course"
+msgstr "Sesioni burimor duhet të përfshijë kursin e zgjedhur"
+
+msgid "No learners found"
+msgstr "Nuk u gjetën nxënës"
+
+msgid "Will be subscribed"
+msgstr "Do të regjistrohet"
+
+msgid "Subscribed"
+msgstr "I regjistruar"
+
+msgid "The move process has finished"
+msgstr "Procesi i zhvendosjes përfundoi"
+
+msgid "Comparison finished. No data has been moved."
+msgstr "Krahasimi përfundoi. Nuk u zhvendosën të dhëna."
+
+msgid "Move tracking data from the base course or a source session to another session. Use comparison first to review the affected learner data."
+msgstr "Zhvendos të dhënat e ndjekjes nga kursi bazë ose një sesion burimor në një sesion tjetër. Përdor krahasimin fillimisht për të rishikuar të dhënat e prekura të nxënësve."
+
+msgid "Search for a course or use the manual course ID field below."
+msgstr "Kërko një kurs ose përdor fushën manuale të ID-së së kursit më poshtë."
+
+msgid "Fallback when the course search is not available."
+msgstr "Zëvendësim kur kërkimi i kursit nuk është i disponueshëm."
+
+msgid "Load sessions"
+msgstr "Ngarko sesionet"
+
+msgid "Selected course"
+msgstr "Kursi i zgjedhur"
+
+msgid "Choose the base course or the session where the tracking data currently exists."
+msgstr "Zgjidh kursin bazë ose sesionin ku të dhënat e ndjekjes ekzistojnë aktualisht."
+
+msgid "Choose the session that will receive the tracking data."
+msgstr "Zgjidh sesionin që do të marrë të dhënat e ndjekjes."
+
+msgid "Important"
+msgstr "E rëndësishme"
+
+msgid "The move action updates existing tracking data. Run compare first and test this tool with a non-production course before moving real learner data."
+msgstr "Veprimi i zhvendosjes përditëson të dhënat ekzistuese të ndjekjes. Kryeni krahasimin fillimisht dhe testoni këtë mjet me një kurs jo-produktiv para se të zhvendosni të dhëna reale të nxënësve."
+
+msgid "No sessions found for this course"
+msgstr "Nuk u gjetën sesione për këtë kurs"
+
+msgid "Some users were ignored because they are not subscribed to this session."
+msgstr "Disa përdorues u injoruan sepse nuk janë regjistruar në këtë sesion."
+
+msgid "Remove selected user"
+msgstr "Hiq përdoruesin e zgjedhur"
+
+msgid "Add selected user"
+msgstr "Shto përdoruesin e zgjedhur"
+
+msgid "No users from the selected list are subscribed to this session."
+msgstr "Asnjë përdorues nga lista e zgjedhur nuk është regjistruar në këtë sesion."
+
+msgid "No image"
+msgstr "Asnjë imazh"
+
+msgid "Invalid URL."
+msgstr "URL e pavlefshme."
+
+msgid "This cloud document cannot be embedded."
+msgstr "Ky dokument cloud nuk mund të futet."
+
+msgid "Document not found"
+msgstr "Dokumenti nuk u gjet"
+
+msgid "File not found"
+msgstr "Skedari nuk u gjet"
+
+msgid "This learning path is not available for your user at this time."
+msgstr "Kjo rrugë mësimore nuk është e disponueshme për përdoruesin tuaj në këtë kohë."
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "StartDateMustBeBeforeTheEndDate"
+
+msgid "Next learning path"
+msgstr "Rrugë mësimore e radhës"
+
+msgid "Select the learning path that will be available after this one."
+msgstr "Zgjidhni rrugën mësimore që do të jetë e disponueshme pas kësaj."
+
+msgid "Create another learning path in this course to enable learning path flow."
+msgstr "Krijoni një rrugë tjetër mësimore në këtë kurs për të aktivizuar rrjedhën e rrugëve mësimore."
+
+msgid "Available from %s"
+msgstr "E disponueshme nga %s"
+
+msgid "Available until %s"
+msgstr "E disponueshme deri më %s"
+
+msgid "Statistics reset date"
+msgstr "Data e rivendosjes së statistikave"
+
+msgid "Last 24 hours"
+msgstr "24 orët e fundit"
+
+msgid "This reset date is used as the reference date for the report. It does not delete historical tracking data."
+msgstr "Kjo datë rivendosjeje përdoret si data referencë për raportin. Ajo nuk fshin të dhënat historike të ndjekjes."
+
+msgid "Since reset date"
+msgstr "Që nga data e rivendosjes"
+
+msgid "Users connected in the last 24 hours"
+msgstr "Përdoruesit e lidhur në 24 orët e fundit"
+
+msgid "Learners with at least one course access during the last 24 hours."
+msgstr "Nxënës me të paktën një qasje në kurs gjatë 24 orëve të fundit."
+
+msgid "Users connected in the last week"
+msgstr "Përdoruesit e lidhur në javën e fundit"
+
+msgid "Learners with at least one course access during the last 7 days."
+msgstr "Nxënës me të paktën një qasje në kurs gjatë 7 ditëve të fundit."
+
+msgid "Users connected in the last month"
+msgstr "Përdoruesit e lidhur në muajin e fundit"
+
+msgid "Learners with at least one course access during the last 30 days."
+msgstr "Nxënës me të paktën një qasje në kurs gjatë 30 ditëve të fundit."
+
+msgid "Not recently connected users"
+msgstr "Përdoruesit e palidhur kohët e fundit"
+
+msgid "Learners without course access since %s."
+msgstr "Nxënës pa qasje në kurs që nga %s."
+
+msgid "Recently used resources"
+msgstr "Burime të përdorura kohët e fundit"
+
+msgid "Course tools/resources used since %s."
+msgstr "Mjetet/burimet e kursit të përdorura që nga %s."
+
+msgid "%s %% of learners"
+msgstr "%s %% e nxënësve"
+
+msgid "Connections"
+msgstr "Lidhje"
+
+msgid "Total connections"
+msgstr "Lidhje totale"
+
+msgid "Downloaded documents"
+msgstr "Dokumente të shkarkuara"
+
+msgid "List of documents downloaded by this learner in this course."
+msgstr "Lista e dokumenteve të shkarkuara nga ky nxënës në këtë kurs."
+
+msgid "Forum topics"
+msgstr "Temat e forumit"
+
+msgid "Forum topics opened by this learner in this course."
+msgstr "Temat e forumit të hapura nga ky nxënës në këtë kurs."
+
+msgid "Forum posts"
+msgstr "Postimet e forumit"
+
+msgid "Forum posts written by this learner in this course."
+msgstr "Postimet e forumit të shkruara nga ky nxënës në këtë kurs."
+
+msgid "Course connections"
+msgstr "Lidhjet e kursit"
+
+msgid "Connection history for this learner in this course."
+msgstr "Historia e lidhjeve për këtë nxënës në këtë kurs."
+
+msgid "Resources used"
+msgstr "Burime të përdorura"
+
+msgid "Latest tools or resources used by this learner in this course."
+msgstr "Mjetet ose burimet e fundit të përdorura nga ky nxënës në këtë kurs."
+
+msgid "Logout date"
+msgstr "Data e daljes"
+
+msgid "Imported Aiken quiz"
+msgstr "Kuiz i importuar Aiken"
+
+msgid "Only supported documents will be listed here."
+msgstr "Vetëm dokumentet e mbështetura do të listohen këtu."
+
+msgid "Generated Aiken content"
+msgstr "Përmbajtje e gjeneruar Aiken"
+
+msgid "Review the generated content before importing it as a new exercise."
+msgstr "Rishikoni përmbajtjen e gjeneruar para se ta importoni si ushtrim të ri."
+
+msgid "No documents available."
+msgstr "Asnjë dokument i disponueshëm."
+
+msgid "yperbolic arctangent:\\t\\tarctanh(x)"
+msgstr "yperbolic arctangent:\\t\\tarctanh(x)"
+
+msgid "Exercise"
+msgstr "Ushtrim"
+
+msgid "OfficialCode"
+msgstr "OfficialCode"
+
+msgid "FirstName"
+msgstr "FirstName"
+
+msgid "LastName"
+msgstr "Mbiemri"
+
+msgid "LoginName"
+msgstr "Emri i përdoruesit"
+
+msgid "MinMinute"
+msgstr "MinMinuta"
+
+msgid "StartDate"
+msgstr "Data e fillimit"
+
+msgid "EndDate"
+msgstr "Data e përfundimit"
+
+msgid "CorrectionDate"
+msgstr "Data e korrigjimit"
+
+msgid "NotValidated"
+msgstr "I pavaliduar"
+
+msgid "PendingAttempts"
+msgstr "Përpjekjet në pritje"
+
+msgid "List of pending test attempts across your courses."
+msgstr "Lista e përpjekjeve të testeve në pritje në të gjitha kurset tuaja."
+
+msgid "User ID"
+msgstr "ID e përdoruesit"
+
+msgid "QuestionType"
+msgstr "Lloji i pyetjes"
+
+msgid "QuestionsWithNoAutomaticCorrection"
+msgstr "Pyetjet pa korrigjim automatik"
+
+msgid "There are no pending tests."
+msgstr "Nuk ka teste në pritje."
+
+msgid "%s results"
+msgstr "%s rezultate"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Shembull i aktivitetit të plotësimit të formularit: llogarit Indeksin e Masës Trupore</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Mosha</strong></td>            <td width=\"75%\" style=\"\">[25] vjeç</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gjinia</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ose F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Pesha</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Gjatësia</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Indeksi i Masës Trupore</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Pesha/Madhësia<sup>2</sup> (Shih.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikullin në Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Removed"
+msgstr "Hequr"
+
+msgid "NoUsersInTheList"
+msgstr "Asnjë përdorues në listë"
+
+msgid "Are you sure?"
+msgstr "Jeni të sigurt?"
+
+msgid "NoResultsAvailable"
+msgstr "Nuk ka rezultate të disponueshme"
+
+msgid "Import groups from a CSV file and optionally remove items that are not present in the file."
+msgstr "Importo grupet nga një skedar CSV dhe hiq opsionalisht elementët që nuk janë të pranishëm në skedar."
+
+msgid "Use this option carefully because items missing from the CSV can be removed during the import process."
+msgstr "Përdor këtë opsion me kujdes sepse elementët që mungojnë në CSV mund të hiqen gjatë procesit të importit."
+
+msgid "Upload a CSV file with the group data you want to import."
+msgstr "Ngarko një skedar CSV me të dhënat e grupeve që dëshiron të importosh."
+
+msgid "You can download the example file to use the expected format."
+msgstr "Mund të shkarkosh skedarin shembull për të përdorur formatin e pritur."
+
+msgid "If you enable deletion, items not present in the file may be removed."
+msgstr "Nëse aktivizon fshirjen, elementët që nuk janë të pranishëm në skedar mund të hiqen."
+
+msgid "The CSV file is mandatory to start the import."
+msgstr "Skedari CSV është i detyrueshëm për të filluar importin."
+
+msgid "Please select at least one class."
+msgstr "Ju lutemi zgjidhni të paktën një klasë."
+
+msgid "Define the properties for each group before creating them."
+msgstr "Përcaktoni vetitë për çdo grup para se t'i krijoni."
+
+msgid "Apply the first row values"
+msgstr "Zbato vlerat e rreshtit të parë"
+
+msgid "Create groups manually or generate them from the classes subscribed to this course."
+msgstr "Krijo grupe manualisht ose gjeneroji nga klasat e regjistruara në këtë kurs."
+
+msgid "Create manual groups"
+msgstr "Krijo grupe manualisht"
+
+msgid "Use this form when you want to create empty course groups manually."
+msgstr "Përdor këtë formular kur dëshiron të krijosh grupe kursesh bosh manualisht."
+
+msgid "Configure manual groups"
+msgstr "Konfiguro grupet manualisht"
+
+msgid "Create groups from subscribed classes"
+msgstr "Krijo grupe nga klasat e regjistruara"
+
+msgid "Use this form when you want to create one course group for each selected class."
+msgstr "Përdor këtë formular kur dëshiron të krijosh një grup kursi për çdo klasë të zgjedhur."
+
+msgid "Keep created groups linked to their source classes"
+msgstr "Mbaji grupet e krijuara të lidhura me klasat e tyre burimore"
+
+msgid "Create groups from selected classes"
+msgstr "Krijo grupe nga klasat e zgjedhura"
+
+msgid "You must be logged in to access this page."
+msgstr "Duhet të jeni të identifikuar për të hyrë në këtë faqe."
+
+msgid "Invalid user"
+msgstr "Përdorues i pavlefshëm"
+
+msgid "UseCourseCustomCertificate"
+msgstr "PërdorCertifikatëKursiPersonalizuar"
+
+msgid "UseDefaultCustomCertificate"
+msgstr "PërdorCertifikatëParazgjedhurPersonalizuar"
+
+msgid "CertificateSetting"
+msgstr "Cilësimi i Certifikatës"
+
+msgid "SelectOneOptionBeforeOpeningEditor"
+msgstr "ZgjidhNjëOpsionParaHapjesSëRedaktorit"
+
+msgid "ChooseCustomCertificateModeHelp"
+msgstr "ZgjidhNdihmënPërModalitetinE CertifikatësPersonalizuar"
+
+msgid "CertificateMode"
+msgstr "Modaliteti i Certifikatës"
+
+msgid "Enable student to validate own attendance"
+msgstr "Lejo studentin të vërtetojë vetë praninë"
+
+msgid "Course block"
+msgstr "Blloku i kursit"
+
+msgid "Add custom content blocks to course footer regions."
+msgstr "Shto blloqe përmbajtjeje të personalizuara në rajonet e fundores së kursit."
+
+msgid "course_block_pre_footer"
+msgstr "course_block_pre_footer"
+
+msgid "Before footer"
+msgstr "Para fundores"
+
+msgid "course_block_footer_left"
+msgstr "course_block_footer_left"
+
+msgid "Footer left"
+msgstr "Fundi majtas"
+
+msgid "course_block_footer_center"
+msgstr "course_block_footer_center"
+
+msgid "Footer center"
+msgstr "Fundi në qendër"
+
+msgid "course_block_footer_right"
+msgstr "course_block_footer_right"
+
+msgid "Footer right"
+msgstr "Fundi djathtas"
+
+msgid "SetNotification"
+msgstr "SetNotification"
+
+msgid "CourseLegal"
+msgstr "CourseLegal"
+
+msgid "Certificates search is not available"
+msgstr "Kërkimi i certifikatave nuk është i disponueshëm"
+
+msgid "It allows the acquisition of skills by subcategories"
+msgstr "Lejon fitimin e aftësive sipas nënkategorive"
+
+msgid "Allow skills by subcategories"
+msgstr "Lejo aftësitë sipas nënkategorive"
+
+msgid "Minimum score for skills"
+msgstr "Rezultati minimal për aftësitë"
+
+msgid "The gradebook table is hidden."
+msgstr "Tabela e librit të notave është e fshehur."
+
+msgid "Invalid token"
+msgstr "Token i pavlefshëm"
+
+msgid "Unable to save the item"
+msgstr "Nuk mund të ruhet elementi"
+
+msgid "Only HTTP and HTTPS URLs are allowed."
+msgstr "Lejohen vetëm URL-të HTTP dhe HTTPS."
+
+msgid "Invalid URL host."
+msgstr "Host i pavlefshëm URL-je."
+
+msgid "This cloud provider is not allowed."
+msgstr "Ky ofrues cloud nuk lejohet."
+
+msgid "Documents used"
+msgstr "Dokumente të përdorura"
+
+msgid "No document usage"
+msgstr "Asnjë përdorim dokumenti"
+
+msgid "Invalid action."
+msgstr "Veprim i pavlefshëm."
+
+msgid "No users selected."
+msgstr "Asnjë përdorues i zgjedhur."
+
+msgid "%s user(s) processed."
+msgstr "%s përdorues të përpunuar."
+
+msgid "Invalid CSRF token."
+msgstr "Token CSRF i pavlefshëm."
+
+msgid "[%s] Please change your password"
+msgstr "[%s] Ju lutemi ndryshoni fjalëkalimin tuaj"
+
+msgid "Dear %s,\n\nOur security enforcing process shows you use a password that is commonly used on the internet, which means your account could easily be stolen. It is probably a simple sequence or a very common word, we don't really know (we cannot see your password), but we ask you to please connect to the platform and request a password change. You can follow the link here: %s to do that now.\n\nPlease note we will never ask for your password in this process. You just enter your username or e-mail and we send you a link. If you are asked to introduce your existing password to do that, someone is probably trying to do Phishing on your account. Be safe, change your password now!\n\n%s\n%s"
+msgstr "I nderuar %s,\n\nProcesi ynë i zbatimit të sigurisë tregon se përdorni një fjalëkalim që përdoret zakonisht në internet, që do të thotë se llogaria juaj mund të vidhet lehtë. Është ndoshta një sekuencë e thjeshtë ose një fjalë shumë e zakonshme, ne nuk e dimë vërtet (nuk mund ta shohim fjalëkalimin tuaj), por ju kërkojmë të lidheni me platformën dhe të kërkoni ndryshimin e fjalëkalimit. Mund të ndiqni lidhjen këtu: %s për ta bërë këtë tani.\n\nJu lutemi vini re se ne nuk do të kërkojmë kurrë fjalëkalimin tuaj në këtë proces. Thjesht futni emrin tuaj të përdoruesit ose e-mail-in dhe ne ju dërgojmë një lidhje. Nëse ju kërkohet të futni fjalëkalimin tuaj ekzistues për ta bërë këtë, dikush ndoshta po përpiqet të bëjë Phishing në llogarinë tuaj. Jini të sigurt, ndryshoni fjalëkalimin tuaj tani!\n\n%s\n%s"
+
+msgid "[%s] Your password has been reset"
+msgstr "[%s] Fjalëkalimi juaj është rivendosur"
+
+msgid "Dear %s,\n\nOur security enforcing process flagged you as using a password that is commonly used on the internet, which means your account could easily be stolen. As a prevention measure, we have decided to initiate a password reset process. Your new, automatically generated password is now:\n\n%s\n\nPlease login to the platform soon (using this new password) to set your own, personal and secure, password.\n\nBe safe.\n\n%s\n%s"
+msgstr "I nderuar %s,\n\nProcesi ynë i zbatimit të sigurisë ju ka shënuar si duke përdorur një fjalëkalim që përdoret zakonisht në internet, që do të thotë se llogaria juaj mund të vidhet lehtë. Si masë parandaluese, kemi vendosur të fillojmë një proces rivendosjeje të fjalëkalimit. Fjalëkalimi juaj i ri, i gjeneruar automatikisht është tani:\n\n%s\n\nJu lutemi hyni në platformë shpejt (duke përdorur këtë fjalëkalim të ri) për të vendosur fjalëkalimin tuaj personal dhe të sigurt.\n\nJini të sigurt.\n\n%s\n%s"
+
+msgid "Signature saved successfully"
+msgstr "Nënshkrimi u ruajt me sukses"
+
+msgid "Invalid request payload."
+msgstr "Ngarkesa e kërkesës e pavlefshme."
+
+msgid "Authentication required."
+msgstr "Kërkohet vërtetimi."
+
+msgid "The course title is required."
+msgstr "Titulli i kursit është i detyrueshëm."
+
+msgid "Only trainers and administrators can create courses."
+msgstr "Vetëm trajnerët dhe administratorët mund të krijojnë kurse."
+
+msgid "Course creation by trainers is disabled on this platform."
+msgstr "Krijimi i kurseve nga trajnerët është i çaktivizuar në këtë platformë."
+
+msgid "The selected BuyCourses service cannot be used to create this course."
+msgstr "Shërbimi i zgjedhur BuyCourses nuk mund të përdoret për të krijuar këtë kurs."
+
+msgid "You have reached the maximum number of courses allowed (%d)."
+msgstr "Keni arritur numrin maksimal të kurseve të lejuara (%d)."
+
+msgid "The selected BuyCourses service is invalid."
+msgstr "Shërbimi i zgjedhur BuyCourses është i pavlefshëm."
+
+msgid "BuyCourses is not available right now."
+msgstr "BuyCourses nuk është i disponueshëm tani."
+
+msgid "BuyCourses cannot validate the selected service right now."
+msgstr "BuyCourses nuk mund të vërtetojë shërbimin e zgjedhur tani."
+
+msgid "Unable to validate the selected BuyCourses service right now."
+msgstr "Nuk mund të vërtetohet shërbimi i zgjedhur BuyCourses tani."
+
+msgid "External tool removed from course"
+msgstr "Mjeti i jashtëm u hoq nga kursi"
+
+msgid "External tool was removed from the course, but kept internally because it is linked to the gradebook"
+msgstr "Mjeti i jashtëm u hoq nga kursi, por u mbajt brenda sepse është i lidhur me librin e notave"
+
+msgid "There are no external tools available to add to the gradebook"
+msgstr "Nuk ka mjete të jashtme të disponueshme për t'u shtuar në librin e notave"
+
+msgid "The evaluation could not be created"
+msgstr "Vlerësimi nuk mund të krijohej"
+
+msgid "The gradebook evaluation could not be linked"
+msgstr "Vlerësimi i librit të notave nuk mund të lidhej"
+
+msgid "Survey questions"
+msgstr "Pyetjet e anketës"
+
+msgid "Back to survey list"
+msgstr "Kthehu te lista e anketave"
+
+msgid "This survey already has answers. Question editing is disabled by configuration."
+msgstr "Kjo anketë ka tashmë përgjigje. Redaktimi i pyetjeve është çaktivizuar nga konfigurimi."
+
+msgid "Choose the type of question you want to add."
+msgstr "Zgjidhni llojin e pyetjes që dëshironi të shtoni."
+
+msgid "The free text option is added automatically."
+msgstr "Opsioni i tekstit të lirë shtohet automatikisht."
+
+msgid "No questions found"
+msgstr "Nuk u gjetën pyetje"
+
+msgid "Mandatory"
+msgstr "I detyrueshëm"
+
+msgid "Unsupported question type"
+msgstr "Lloj pyetjeje i pambështetur"
+
+msgid "You can use the tags {%s} and {%s} in the question."
+msgstr "Mund të përdorni etiketat {%s} dhe {%s} në pyetje."
+
+msgid "This question is shown conditionally while answering the survey."
+msgstr "Kjo pyetje shfaqet me kusht gjatë plotësimit të anketës."
+
+msgid "The percentage options from 1 to 100 are generated automatically."
+msgstr "Opsionet e përqindjes nga 1 deri në 100 gjenerohen automatikisht."
+
+msgid "Could not load survey questions"
+msgstr "Nuk u ngarkuan pyetjet e anketës"
+
+msgid "The question text is required."
+msgstr "Teksti i pyetjes është i detyrueshëm."
+
+msgid "The maximum score is required."
+msgstr "Pikët maksimale janë të detyrueshme."
+
+msgid "Please select a parent option."
+msgstr "Ju lutemi zgjidhni një opsion prind."
+
+msgid "Please fill all answer options."
+msgstr "Ju lutemi plotësoni të gjitha opsionet e përgjigjeve."
+
+msgid "QuestionUpdated"
+msgstr "QuestionUpdated"
+
+msgid "Could not save survey question"
+msgstr "Nuk u ruajt pyetja e anketës"
+
+msgid "Could not delete survey question"
+msgstr "Nuk u fshi pyetja e anketës"
+
+msgid "Could not move survey question"
+msgstr "Nuk u zhvendos pyetja e anketës"
+
+msgid "Could not copy survey question"
+msgstr "Nuk u kopjua pyetja e anketës"
+
+msgid "Hide search"
+msgstr "Fshih kërkimin"
+
+msgid "Showing results for: %s"
+msgstr "Duke shfaqur rezultatet për: %s"
+
+msgid "Search by survey title, code or description."
+msgstr "Kërko sipas titullit të anketës, kodit ose përshkrimit."
+
+msgid "Search surveys"
+msgstr "Kërko anketa"
+
+msgid "%s surveys selected"
+msgstr "%s anketa të zgjedhura"
+
+msgid "Clear selection"
+msgstr "Pastro zgjedhjen"
+
+msgid "No surveys found"
+msgstr "Nuk u gjetën anketa"
+
+msgid "Unsupported"
+msgstr "I pambështetur"
+
+msgid "Could not load surveys"
+msgstr "Nuk u ngarkuan anketa"
+
+msgid "Delete selected surveys"
+msgstr "Fshi anketa të zgjedhura"
+
+msgid "The selected surveys and their questions will be deleted. This action cannot be undone."
+msgstr "Anketat e zgjedhura dhe pyetjet e tyre do të fshihen. Ky veprim nuk mund të zhbëhet."
+
+msgid "Could not delete selected surveys"
+msgstr "Nuk u fshinë anketa të zgjedhura"
+
+msgid "Survey action"
+msgstr "Veprim ankete"
+
+msgid "A copy of this survey will be created: %s"
+msgstr "Do të krijohet një kopje e kësaj ankete: %s"
+
+msgid "All answers and invitations will be deleted for this survey: %s"
+msgstr "Të gjitha përgjigjet dhe ftesat do të fshihen për këtë anketë: %s"
+
+msgid "Generated multiplied questions will be removed from this survey: %s"
+msgstr "Pyetjet e shumëzuara të gjeneruara do të hiqen nga kjo anketë: %s"
+
+msgid "This survey will be published for the linked group tutors: %s"
+msgstr "Kjo anketë do të publikohet për tutorët e grupit të lidhur: %s"
+
+msgid "This survey and its questions will be deleted: %s"
+msgstr "Kjo anketë dhe pyetjet e saj do të fshihen: %s"
+
+msgid "Could not complete survey action"
+msgstr "Nuk u përfundua veprimi i anketës"
+
+msgid "Not started"
+msgstr "Nuk ka filluar"
+
+msgid "Meeting polls let invited users select the dates when they are available."
+msgstr "Sondazhet e takimeve u lejojnë përdoruesve të ftuar të zgjedhin datat kur janë të disponueshëm."
+
+msgid "Back to surveys"
+msgstr "Kthehu te anketa"
+
+msgid "Edit meeting poll"
+msgstr "Ndrysho sondazhin e takimit"
+
+msgid "View meeting poll"
+msgstr "Shiko sondazhin e takimit"
+
+msgid "Basic information"
+msgstr "Informacion bazë"
+
+msgid "This will create a survey of type meeting poll. Answers and invitations are handled separately."
+msgstr "Kjo do të krijojë një anketë të llojit sondazh takimi. Përgjigjet dhe ftesat trajtohen veçmas."
+
+msgid "Availability"
+msgstr "Disponueshmëria"
+
+msgid "Meeting dates"
+msgstr "Datat e takimit"
+
+msgid "Meeting poll"
+msgstr "Sondazh takimi"
+
+msgid "My availability"
+msgstr "Disponueshmëria ime"
+
+msgid "Meeting poll results"
+msgstr "Rezultatet e sondazhit të takimit"
+
+msgid "No invitations found"
+msgstr "Nuk u gjetën ftesa"
+
+msgid "available"
+msgstr "i disponueshëm"
+
+msgid "Could not load meeting poll"
+msgstr "Nuk u ngarkua sondazhi i takimit"
+
+msgid "Please complete the required fields"
+msgstr "Ju lutemi plotësoni fushat e kërkuara"
+
+msgid "Could not save meeting poll"
+msgstr "Nuk u ruajt sondazhi i takimit"
+
+msgid "Could not save meeting availability"
+msgstr "Nuk u ruajt disponueshmëria e takimit"
+
+msgid "Copy this survey to another course or session"
+msgstr "Kopjo këtë anketë në një kurs ose seancë tjetër"
+
+msgid "The survey will be copied without answers or invitations."
+msgstr "Anketa do të kopjohet pa përgjigje ose ftesa."
+
+msgid "No target courses found"
+msgstr "Nuk u gjetën kurse të synuara"
+
+msgid "Search by course title, course code or session name."
+msgstr "Kërko sipas titullit të kursit, kodit të kursit ose emrit të seancës."
+
+msgid "Use Duplicate survey when you want a copy in the same course."
+msgstr "Përdorni Dublikoj anketën kur dëshironi një kopje në të njëjtin kurs."
+
+msgid "Questions and options will be copied. Answers, invitations and reports will stay only in the original survey."
+msgstr "Pyetjet dhe opsionet do të kopjohen. Përgjigjet, ftesat dhe raportet do të mbeten vetëm në anketën origjinale."
+
+msgid "Selected target"
+msgstr "I zgjedhur i synuar"
+
+msgid "Could not load copy form"
+msgstr "Nuk u ngarkua forma e kopjimit"
+
+msgid "The survey will be copied to: %s"
+msgstr "Anketa do të kopjohet në: %s"
+
+msgid "Survey copied."
+msgstr "Anketa u kopjua."
+
+msgid "Could not copy survey"
+msgstr "Nuk u kopjua anketa"
+
+msgid "Answer survey"
+msgstr "Përgjigju anketës"
+
+msgid "Preview mode does not save answers."
+msgstr "Modaliteti i paraqitjes nuk ruan përgjigjet."
+
+msgid "Survey completed"
+msgstr "Anketa u plotësua"
+
+msgid "Thank you for answering the survey."
+msgstr "Faleminderit që iu përgjigjët anketës."
+
+msgid "Profile information"
+msgstr "Informacioni i profilit"
+
+msgid "Please review the requested profile fields before answering the survey."
+msgstr "Ju lutemi, rishikoni fushat e kërkuara të profilit para se të përgjigjeni në anketë."
+
+msgid "This profile field is read-only."
+msgstr "Kjo fushë profili është vetëm për lexim."
+
+msgid "You already filled this survey."
+msgstr "Ju e keni plotësuar tashmë këtë anketë."
+
+msgid "Please specify"
+msgstr "Ju lutemi, specifikoni"
+
+msgid "This question type is not supported in the modern survey view."
+msgstr "Ky lloj pyetjeje nuk mbështetet në pamjen moderne të anketës."
+
+msgid "Preview only"
+msgstr "Vetëm parashikim"
+
+msgid "Submit answers"
+msgstr "Dërgo përgjigjet"
+
+msgid "Could not load survey"
+msgstr "Nuk u ngarkua anketa"
+
+msgid "Please complete the required profile fields."
+msgstr "Ju lutemi, plotësoni fushat e kërkuara të profilit."
+
+msgid "Please answer all mandatory questions."
+msgstr "Ju lutemi, përgjigjuni të gjitha pyetjeve të detyrueshme."
+
+msgid "Could not save survey answers"
+msgstr "Nuk u ruajtën përgjigjet e anketës"
+
+msgid "Configure the main survey information before managing questions and invitations."
+msgstr "Konfiguroni informacionin kryesor të anketës para se të menaxhoni pyetjet dhe ftesat."
+
+msgid "The survey code cannot be changed after creation."
+msgstr "Kodi i anketës nuk mund të ndryshohet pas krijimit."
+
+msgid "Survey behavior"
+msgstr "Sjellja e anketës"
+
+msgid "Use 0 for no time limit."
+msgstr "Përdorni 0 për pa kufi kohë."
+
+msgid "Survey messages"
+msgstr "Mesazhet e anketës"
+
+msgid "Profile fields selected here will be shown before the survey questions."
+msgstr "Fushat e profilit të zgjedhura këtu do të shfaqen para pyetjeve të anketës."
+
+msgid "No profile fields are currently available."
+msgstr "Aktualisht nuk ka fusha profili të disponueshme."
+
+msgid "Profile field selection is available only for non-anonymous surveys."
+msgstr "Përzgjedhja e fushave të profilit është e disponueshme vetëm për anketa jo-anonime."
+
+msgid "Skill linkage will be migrated in a dedicated batch."
+msgstr "Lidhja me aftësitë do të migrohet në një grup të dedikuar."
+
+msgid "Could not load survey configuration"
+msgstr "Nuk u ngarkua konfigurimi i anketës"
+
+msgid "The survey code is required."
+msgstr "Kodi i anketës është i detyrueshëm."
+
+msgid "The survey title is required."
+msgstr "Titulli i anketës është i detyrueshëm."
+
+msgid "The survey has been saved successfully"
+msgstr "Anketa u ruajt me sukses"
+
+msgid "Could not save survey configuration"
+msgstr "Nuk u ruajt konfigurimi i anketës"
+
+msgid "Course users"
+msgstr "Përdoruesit e kursit"
+
+msgid "Already invited"
+msgstr "Tashmë i ftuar"
+
+msgid "No users found"
+msgstr "Nuk u gjetën përdorues"
+
+msgid "No groups found"
+msgstr "Nuk u gjetën grupe"
+
+msgid "Use **link** where the survey link should appear."
+msgstr "Përdorni **link** ku duhet të shfaqet lidhja e anketës."
+
+msgid "Remind all selected users"
+msgstr "Kujto të gjithë përdoruesit e zgjedhur"
+
+msgid "Anonymous access link"
+msgstr "Lidhja e qasjes anonime"
+
+msgid "Users who are not invited can use this link to take the survey."
+msgstr "Përdoruesit që nuk janë të ftuar mund ta përdorin këtë lidhje për të plotësuar anketën."
+
+msgid "Answered anonymously"
+msgstr "U përgjigjën në mënyrë anonime"
+
+msgid "Could not load survey invitations"
+msgstr "Nuk u ngarkuan ftesat e anketës"
+
+msgid "Mail subject and message are required when sending mail."
+msgstr "Subjekti dhe mesazhi i postës janë të detyrueshëm kur dërgohet postë."
+
+msgid "Could not publish survey"
+msgstr "Nuk u publikua anketa"
+
+msgid "Could not copy the link"
+msgstr "Nuk u kopjua lidhja"
+
+msgid "Please answer this survey using the following link"
+msgstr "Ju lutemi, përgjigjuni kësaj ankete duke përdorur lidhjen e mëposhtme"
+
+msgid "Export CSV"
+msgstr "Eksporto CSV"
+
+msgid "Export compact CSV"
+msgstr "Eksporto CSV kompakt"
+
+msgid "Export Excel"
+msgstr "Eksporto Excel"
+
+msgid "Export package"
+msgstr "Eksporto paketë"
+
+msgid "Results summary"
+msgstr "Përmbledhja e rezultateve"
+
+msgid "This view shows the migrated reporting data for this survey."
+msgstr "Kjo pamje tregon të dhënat e raportimit të migruara për këtë anketë."
+
+msgid "Select user"
+msgstr "Zgjidh përdoruesin"
+
+msgid "No answers found"
+msgstr "Nuk u gjetën përgjigje"
+
+msgid "answers"
+msgstr "Përgjigjet"
+
+msgid "Could not load survey reporting"
+msgstr "Nuk u ngarkua raportimi i anketës"
+
+msgid "Back to threads"
+msgstr "Kthehu te temat"
+
+msgid "Back to learning path"
+msgstr "Kthehu te rruga e të nxënit"
+
+msgid "Remove sticky"
+msgstr "Hiq ngjitjen"
+
+msgid "Make sticky"
+msgstr "Bëje ngjitëse"
+
+msgid "Open thread"
+msgstr "Hap temën"
+
+msgid "Close thread"
+msgstr "Mbyll temën"
+
+msgid "Delete thread"
+msgstr "Fshije temën"
+
+msgid "This thread is hidden from learners."
+msgstr "Kjo temë është e fshehur për nxënësit."
+
+msgid "Revision requested"
+msgstr "Rishikim i kërkuar"
+
+msgid "Revision"
+msgstr "Rishikim"
+
+msgid "Approve post"
+msgstr "Mirato postimin"
+
+msgid "Reject post"
+msgstr "Refuzo postimin"
+
+msgid "Cancel revision request"
+msgstr "Anulo kërkesën për rishikim"
+
+msgid "Delete post"
+msgstr "Fshije postimin"
+
+msgid "Message is required"
+msgstr "Mesazhi është i detyrueshëm"
+
+msgid "Target thread is required"
+msgstr "Tema e synuar është e detyrueshme"
+
+msgid "Could not retrieve posts"
+msgstr "Nuk u morën postimet"
+
+msgid "Thread shown"
+msgstr "Tema u shfaq"
+
+msgid "Thread hidden"
+msgstr "Tema u fsheh"
+
+msgid "Could not update thread"
+msgstr "Nuk u përditësua tema"
+
+msgid "Thread closed"
+msgstr "Tema u mbyll"
+
+msgid "Thread opened"
+msgstr "Tema u hap"
+
+msgid "Thread marked as sticky"
+msgstr "Tema u shënua si ngjitëse"
+
+msgid "Thread unmarked as sticky"
+msgstr "Tema u hoq nga shënimi si ngjitëse"
+
+msgid "Thread notifications enabled"
+msgstr "Njoftimet e temës u aktivizuan"
+
+msgid "Thread notifications disabled"
+msgstr "Njoftimet e temës u çaktivizuan"
+
+msgid "Could not update thread notification"
+msgstr "Nuk u përditësuan njoftimet e temës"
+
+msgid "Are you sure you want to delete this thread?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë temë?"
+
+msgid "Could not delete thread"
+msgstr "Nuk u fshi tema"
+
+msgid "Post approved"
+msgstr "Postimi u miratua"
+
+msgid "Could not approve post"
+msgstr "Nuk u miratua postimi"
+
+msgid "Are you sure you want to reject this post?"
+msgstr "Jeni të sigurt që dëshironi të refuzoni këtë postim?"
+
+msgid "Post rejected"
+msgstr "Postimi u refuzua"
+
+msgid "Could not reject post"
+msgstr "Nuk u refuzua postimi"
+
+msgid "Post shown"
+msgstr "Postimi u shfaq"
+
+msgid "Post hidden"
+msgstr "Postimi u fsheh"
+
+msgid "Could not update post"
+msgstr "Nuk u përditësua postimi"
+
+msgid "Post updated"
+msgstr "Postimi u përditësua"
+
+msgid "Are you sure you want to delete this post?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë postim?"
+
+msgid "Post deleted"
+msgstr "Postimi u fshi"
+
+msgid "Could not delete post"
+msgstr "Nuk u fshi postimi"
+
+msgid "Untitled thread"
+msgstr "Temë pa titull"
+
+msgid "Could not retrieve threads"
+msgstr "Nuk u morën temat"
+
+msgid "Post moved"
+msgstr "Postimi u zhvendos"
+
+msgid "Could not move post"
+msgstr "Nuk u zhvendos postimi"
+
+msgid "Revision request removed"
+msgstr "Kërkesa për rishikim u hoq"
+
+msgid "Could not update revision request"
+msgstr "Nuk u përditësua kërkesa për rishikim"
+
+msgid "Are you sure you want to report this post?"
+msgstr "Jeni të sigurt që dëshironi të raportoni këtë postim?"
+
+msgid "Could not report post"
+msgstr "Nuk mund të raportohej postimi"
+
+msgid "Are you sure you want to delete this attachment?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë bashkëngjitje?"
+
+msgid "Attachment deleted"
+msgstr "Bashkëngjitja u fshi"
+
+msgid "Could not delete attachment"
+msgstr "Nuk mund të fshihej bashkëngjitja"
+
+msgid "Thread title"
+msgstr "Titulli i temës"
+
+msgid "Sticky thread"
+msgstr "Temë e ngjitur"
+
+msgid "Attach files"
+msgstr "Bashkëngjit skedarë"
+
+msgid "Attachments are disabled for this forum"
+msgstr "Bashkëngjitjet janë të çaktivizuara për këtë forum"
+
+msgid "The forum is not open yet."
+msgstr "Forumi nuk është hapur ende."
+
+msgid "The forum is closed."
+msgstr "Forumi është i mbyllur."
+
+msgid "The forum is locked."
+msgstr "Forumi është i kyçur."
+
+msgid "New threads are not allowed in this forum."
+msgstr "Temat e reja nuk lejohen në këtë forum."
+
+msgid "Thread created"
+msgstr "Tema u krijua"
+
+msgid "Could not create thread"
+msgstr "Nuk mund të krijohej tema"
+
+msgid "Back to posts"
+msgstr "Kthehu te postimet"
+
+msgid "This reply will be stored as a revision."
+msgstr "Kjo përgjigje do të ruhet si rishikim."
+
+msgid "Post reply"
+msgstr "Posto përgjigje"
+
+msgid "The thread is locked."
+msgstr "Tema është e kyçur."
+
+msgid "Reply added"
+msgstr "Përgjigja u shtua"
+
+msgid "Could not add reply"
+msgstr "Nuk mund të shtohej përgjigja"
+
+msgid "Add forum"
+msgstr "Shto forum"
+
+msgid "No forums found"
+msgstr "Nuk u gjetën forume"
+
+msgid "Create your first forum category or forum to start discussions."
+msgstr "Krijo kategorinë ose forumin tënd të parë për të filluar diskutimet."
+
+msgid "Locked"
+msgstr "I kyçur"
+
+msgid "No forums in this category"
+msgstr "Nuk ka forume në këtë kategori"
+
+msgid "Posts require approval"
+msgstr "Postimet kërkojnë miratim"
+
+msgid "Forum for current group"
+msgstr "Forum për grupin aktual"
+
+msgid "Group forum visibility"
+msgstr "Dukshmëria e forumit të grupit"
+
+msgid "No category"
+msgstr "Pa kategori"
+
+msgid "Could not retrieve forums"
+msgstr "Nuk mund të merreshin forumet"
+
+msgid "Forum category updated"
+msgstr "Kategoria e forumit u përditësua"
+
+msgid "Forum category created"
+msgstr "Kategoria e forumit u krijua"
+
+msgid "Could not save forum category"
+msgstr "Nuk mund të ruhej kategoria e forumit"
+
+msgid "Forum updated"
+msgstr "Forumi u përditësua"
+
+msgid "Forum created"
+msgstr "Forumi u krijua"
+
+msgid "Could not save forum"
+msgstr "Nuk mund të ruhej forumi"
+
+msgid "Are you sure you want to delete this forum category?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë kategori forumi?"
+
+msgid "Could not delete forum category"
+msgstr "Nuk mund të fshihej kategoria e forumit"
+
+msgid "Are you sure you want to delete this forum?"
+msgstr "Jeni të sigurt që dëshironi të fshini këtë forum?"
+
+msgid "Could not delete forum"
+msgstr "Nuk mund të fshihej forumi"
+
+msgid "Forum category unlocked"
+msgstr "Kategoria e forumit u zhbllokua"
+
+msgid "Forum category locked"
+msgstr "Kategoria e forumit u kyç"
+
+msgid "Could not update forum category"
+msgstr "Nuk mund të përditësohej kategoria e forumit"
+
+msgid "Forum category shown"
+msgstr "Kategoria e forumit u shfaq"
+
+msgid "Forum category hidden"
+msgstr "Kategoria e forumit u fsheh"
+
+msgid "Forum unlocked"
+msgstr "Forumi u zhbllokua"
+
+msgid "Forum locked"
+msgstr "Forumi u kyç"
+
+msgid "Could not update forum"
+msgstr "Nuk mund të përditësohej forumi"
+
+msgid "Forum shown"
+msgstr "Forumi u shfaq"
+
+msgid "Forum hidden"
+msgstr "Forumi u fsheh"
+
+msgid "Forum notifications enabled"
+msgstr "Njoftimet e forumit të aktivizuara"
+
+msgid "Forum notifications disabled"
+msgstr "Njoftimet e forumit të çaktivizuara"
+
+msgid "Could not update forum notification"
+msgstr "Nuk mund të përditësohej njoftimi i forumit"
+
+msgid "Forum category moved"
+msgstr "Kategoria e forumit u zhvendos"
+
+msgid "Could not move forum category"
+msgstr "Nuk mund të zhvendosej kategoria e forumit"
+
+msgid "Forum moved"
+msgstr "Forumi u zhvendos"
+
+msgid "Could not move forum"
+msgstr "Nuk mund të zhvendosej forumi"
+
+msgid "Back to forums"
+msgstr "Kthehu te forumet"
+
+msgid "New thread"
+msgstr "Temë e re"
+
+msgid "No threads found"
+msgstr "Nuk u gjetën tema"
+
+msgid "Sticky"
+msgstr "I fiksuar"
+
+msgid "Graded"
+msgstr "I vlerësuar"
+
+msgid "Grade peers"
+msgstr "Vlerëso bashkëmoshatarët"
+
+msgid "Move thread"
+msgstr "Zhvendos temën"
+
+msgid "Target forum"
+msgstr "Forumi i synuar"
+
+msgid "Target forum is required"
+msgstr "Forumi i synuar është i detyrueshëm"
+
+msgid "Students"
+msgstr "Studentët"
+
+msgid "No students found"
+msgstr "Nuk u gjetën studentë"
+
+msgid "No peers available to grade."
+msgstr "Nuk ka bashkëmoshatarë të disponueshëm për vlerësim."
+
+msgid "Qualified"
+msgstr "I kualifikuar"
+
+msgid "Not qualified"
+msgstr "I pakualifikuar"
+
+msgid "Could not retrieve thread grading"
+msgstr "Nuk mund të merrej vlerësimi i temës"
+
+msgid "Thread grading updated"
+msgstr "Vlerësimi i temës u përditësua"
+
+msgid "Could not update thread grading"
+msgstr "Nuk mund të përditësohej vlerësimi i temës"
+
+msgid "Thread score saved"
+msgstr "Pikët e temës u ruajtën"
+
+msgid "Could not save thread score"
+msgstr "Nuk mund të ruhen pikët e temës"
+
+msgid "Could not move thread"
+msgstr "Nuk mund të zhvendosej tema"
+
+msgid "Thread updated"
+msgstr "Tema u përditësua"
+
+msgid "Search term is too short"
+msgstr "Termi i kërkimit është shumë i shkurtër"
+
+msgid "Could not search forums"
+msgstr "Nuk mund të kërkoheshin forumet"
+
+msgid "Moderated"
+msgstr "I moderuar"
+
+msgid "View threads"
+msgstr "Shiko temat"
+
+msgid "No auth source"
+msgstr "Asnjë burim autentikimi"
+
+msgid "You must add at least one question"
+msgstr "Duhet të shtoni të paktën një pyetje"
+
+msgid "Advanced actions"
+msgstr "Veprime të avancuara"
+
+msgid "Application path"
+msgstr "Rrugë aplikacioni"
+
+msgid "Apply files details"
+msgstr "Apliko detajet e skedarëve"
+
+msgid "Apply plan details"
+msgstr "Apliko detajet e planit"
+
+msgid "Apply plan failed"
+msgstr "Aplikimi i planit dështoi"
+
+msgid "Apply plan ready"
+msgstr "Apliko planin gati"
+
+msgid "Apply preparation"
+msgstr "Apliko përgatitjen"
+
+msgid "Apply staged files"
+msgstr "Apliko skedarët e skeduar"
+
+msgid "Applying files..."
+msgstr "Duke aplikuar skedarët..."
+
+msgid "Audit file"
+msgstr "Skedar auditimi"
+
+msgid "Backup directory"
+msgstr "Direktoria e rezervës"
+
+msgid "Baseline clean"
+msgstr "Pastrim bazë"
+
+msgid "Baseline warnings"
+msgstr "Paralajmërime bazë"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Ndërto një plan aplikimi të sigurt nga paketa e skeduar. Kjo kontrollon vetëm skedarët, lejet, rrugën e rezervës dhe statusin e bllokimit. Nuk zëvendëson skedarët."
+
+msgid "Build production frontend assets."
+msgstr "Ndërto asetet e frontend-it të prodhimit."
+
+msgid "Building plan..."
+msgstr "Duke ndërtuar planin..."
+
+msgid "Channel"
+msgstr "Channel"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Kontrollo për përditësime të disponueshme të Chamilo, verifiko paketat, skedarët e skeduar dhe ekzekuto hapat e kontrolluar pas përditësimit."
+
+msgid "Check manifest"
+msgstr "Kontrollo manifestin"
+
+msgid "Checking post-apply actions..."
+msgstr "Duke kontrolluar veprimet pas aplikimit..."
+
+msgid "Checking..."
+msgstr "Po kontrollohet..."
+
+msgid "Composer install"
+msgstr "Instalimi i Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Veprimet e Composer, Yarn dhe migrimit të bazës së të dhënave mund të ndryshojnë varësitë, asetet e gjeneruara ose bazën e të dhënave. Zgjidhini ato vetëm pasi të keni konfirmuar kopjet rezervë dhe lejet."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Konfiguro CHAMILO_UPDATE_MANIFEST_URL në server ose siguro një URL manifesti HTTPS."
+
+msgid "Configured"
+msgstr "I konfiguruar"
+
+msgid "Current migration"
+msgstr "Migrimi aktual"
+
+msgid "Database baseline"
+msgstr "Baza e të dhënave bazë"
+
+msgid "Database migration safety review"
+msgstr "Rishikimi i sigurisë së migrimit të bazës së të dhënave"
+
+msgid "Database migrations"
+msgstr "Migrimet e bazës së të dhënave"
+
+msgid "Development mode"
+msgstr "Mënyra zhvillimi"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Mos e aktivizo këtë nëse nuk janë rishikuar kopja rezervë e përditësimit dhe lejet e serverit."
+
+msgid "Doctrine dry-run command"
+msgstr "Komanda e provës së Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine raportoi paralajmërime për bazën historike. Përditësuesi do të ekzekutojë vetëm migrimet e skeduara V210 pas konfirmimit të qartë."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine do të ekzekutojë vetëm migrimet e skeduara V210 në mënyrë të qartë pas kalimit të rishikimit të sigurisë."
+
+msgid "Dry-run exit code"
+msgstr "Kodi i daljes së provës"
+
+msgid "Executed unavailable migrations"
+msgstr "Migrime të ekzekutuara të padisponueshme"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Nxirr paketën e verifikuar të përditësimit në një drejtori skenike për inspektim. Kjo nuk zëvendëson skedarë, nuk ekzekuton migrime ose nuk ndryshon bazën e të dhënave."
+
+msgid "File apply available"
+msgstr "Aplikimi i skedarëve i disponueshëm"
+
+msgid "Files to replace"
+msgstr "Skedarë për zëvendësim"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Konfirmoj që ekziston një kopje rezervë e bazës së të dhënave dhe është verifikuar para ekzekutimit të migrimeve."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Kuptoj që veprimet e avancuara mund të ndryshojnë varësitë, asetet e gjeneruara ose bazën e të dhënave."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Kuptoj që kjo do të zëvendësojë skedarët në instalimin e Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Kuptoj që kjo do të ekzekutojë komanda përditësimi në server."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Instalo varësitë e ndërfaqes së përdoruesit para rindërtimit të aseteve."
+
+msgid "Installed version"
+msgstr "Versioni i instaluar"
+
+msgid "Latest migration"
+msgstr "Migrimi i fundit"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Lëre bosh rrugët e paketës dhe nënshkrimit për t'i shkarkuar ato nga URL-të e verifikuara të manifestit. Rrugët lokale janë të disponueshme vetëm për teste zhvillimi."
+
+msgid "Live command log"
+msgstr "Regjistri i komandave live"
+
+msgid "Live update log"
+msgstr "Regjistri i përditësimit live"
+
+msgid "Local test options"
+msgstr "Opsionet e testit lokal"
+
+msgid "Local test update notice link"
+msgstr "Lidhja e njoftimit të përditësimit të testit lokal"
+
+msgid "Local update notice simulation"
+msgstr "Simulimi i njoftimit të përditësimit lokal"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Simulimi i njoftimit të përditësimit lokal është i disponueshëm vetëm në mënyrën e zhvillimit."
+
+msgid "Manifest"
+msgstr "Manifesti"
+
+msgid "Manifest source"
+msgstr "Burimi i manifestit"
+
+msgid "Migration safety details"
+msgstr "Detajet e sigurisë së migrimit"
+
+msgid "Migration safety review failed"
+msgstr "Rishikimi i sigurisë së migrimit dështoi"
+
+msgid "Migration safety review ready"
+msgstr "Rishikimi i sigurisë së migrimit gati"
+
+msgid "Migration target"
+msgstr "Objektivi i migrimit"
+
+msgid "New files"
+msgstr "Skedarë të rinj"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migrime të reja të raportuara nga Doctrine"
+
+msgid "Next migration"
+msgstr "Migrimi tjetër"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Asnjë migrim i padisponueshëm i ekzekutuar nuk u raportua."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Asnjë URL zyrtare e manifestit nuk është konfiguruar ende. Përdor një URL HTTPS ose një rrugë lokale për teste zhvillimi."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Asnjë migrim në pritje nuk u zbulua para objektivit të përditësimit të skeduar."
+
+msgid "Not configured"
+msgstr "I pakonfiguruar"
+
+msgid "Not detected"
+msgstr "I pazbuluar"
+
+msgid "Official Chamilo update channel"
+msgstr "Kanali zyrtar i përditësimit të Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 i paketës"
+
+msgid "Package URL"
+msgstr "URL e paketës"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Skedarët e paketës dhe nënshkrimit do të shkarkohen nga manifesti. Rrugët lokale janë të çaktivizuara në këtë mjedis."
+
+msgid "Package path"
+msgstr "Rrugë e paketës"
+
+msgid "Package staged successfully"
+msgstr "Paketa u vendos me sukses"
+
+msgid "Package staging failed"
+msgstr "Vendosja e paketës dështoi"
+
+msgid "Package verification"
+msgstr "Verifikimi i paketës"
+
+msgid "Package verification failed"
+msgstr "Verifikimi i paketës dështoi"
+
+msgid "Package verified successfully"
+msgstr "Paketa u verifikua me sukses"
+
+msgid "Pending migrations before this update"
+msgstr "Migrimet në pritje para këtij përditësimi"
+
+msgid "Planned backup path"
+msgstr "Rrugë e planifikuar e rezervës"
+
+msgid "Post-apply actions completed"
+msgstr "Veprimet pas zbatimit u përfunduan"
+
+msgid "Post-apply actions failed"
+msgstr "Veprimet pas zbatimit dështuan"
+
+msgid "Post-apply actions ready"
+msgstr "Veprimet pas zbatimit janë gati"
+
+msgid "Post-apply checks"
+msgstr "Kontrollet pas zbatimit"
+
+msgid "Post-apply checks failed"
+msgstr "Kontrollet pas zbatimit dështuan"
+
+msgid "Post-apply details"
+msgstr "Detajet pas zbatimit"
+
+msgid "Post-apply run details"
+msgstr "Detajet e ekzekutimit pas zbatimit"
+
+msgid "Preflight checks"
+msgstr "Kontrollet paraprake"
+
+msgid "Preflight checks completed"
+msgstr "Kontrollet paraprake u përfunduan"
+
+msgid "Preflight checks failed"
+msgstr "Kontrollet paraprake dështuan"
+
+msgid "Preflight details"
+msgstr "Detajet paraprake"
+
+msgid "Prepare staging"
+msgstr "Përgatitja e vendosjes"
+
+msgid "Preparing staging..."
+msgstr "Po përgatitet vendosja..."
+
+msgid "Production mode"
+msgstr "Mënyra e prodhimit"
+
+msgid "Released at"
+msgstr "Lëshuar më"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Zëvendëso skedarët e Chamilo nga paketa e vendosur duke përdorur planin e rishikuar të zbatimit. Kjo nuk ekzekuton migrimet e bazës së të dhënave, Composer, Yarn ose komandat e cache-it."
+
+msgid "Review apply plan"
+msgstr "Rishiko planin e zbatimit"
+
+msgid "Review database migrations"
+msgstr "Rishiko migrimet e bazës së të dhënave"
+
+msgid "Review post-apply actions"
+msgstr "Rishiko veprimet pas zbatimit"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Rishiko komandat manuale të rekomanduara pas zbatimit të skedarëve të përditësimit. Ky hap nuk ekzekuton Composer, Yarn, migrimet ose komandat e cache-it."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Rishiko migrimet e Doctrine të vendosura dhe daljen e ekzekutimit të thatë para ekzekutimit të migrimeve të bazës së të dhënave."
+
+msgid "Reviewing database migrations..."
+msgstr "Po rishikohen migrimet e bazës së të dhënave..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Ekzekuto dhe kaloni rishikimin e sigurisë së migrimeve para ekzekutimit të migrimeve të bazës së të dhënave."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Ekzekuto kontrollet e mjedisit para çdo hapi të ardhshëm të zbatimit të përditësimit. Kjo nuk ndryshon skedarët ose bazën e të dhënave."
+
+msgid "Run post-apply actions"
+msgstr "Ekzekuto veprimet pas zbatimit"
+
+msgid "Run preflight checks"
+msgstr "Ekzekuto kontrollet paraprake"
+
+msgid "Run selected post-apply actions"
+msgstr "Ekzekuto veprimet e zgjedhura pas zbatimit"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Ekzekuto komandat e zgjedhura pas zbatimit nga serveri duke përdorur një listë të lejuar të kontrolluar. Nuk pranohen komanda të personalizuara shell."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Ekzekuto këto komanda manualisht nga serveri pas konfirmimit të rezultatit të përditësimit të skedarëve dhe rezervave."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Ekzekutimi i veprimeve pas zbatimit nga ndërfaqja është i çaktivizuar në mënyrën e prodhimit."
+
+msgid "Running post-apply actions..."
+msgstr "Po ekzekutohen veprimet pas zbatimit..."
+
+msgid "Safe actions"
+msgstr "Veprime të sigurta"
+
+msgid "Signature path"
+msgstr "Rrugë e nënshkrimit"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Verifikimi i nënshkrimit nuk mund të anashkalohet në këtë mjedis."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Anashkalo verifikimin e nënshkrimit për testet e zhvillimit lokal"
+
+msgid "Staged file application failed"
+msgstr "Zbatimi i skedarëve të vendosur dështoi"
+
+msgid "Staged files applied successfully"
+msgstr "Skedarët e vendosur u zbatuan me sukses"
+
+msgid "Staging details"
+msgstr "Detajet e vendosjes"
+
+msgid "Staging directory"
+msgstr "Direktoria e vendosjes"
+
+msgid "Staging extraction"
+msgstr "Nxjerrja e vendosjes"
+
+msgid "Symfony cache clear"
+msgstr "Pastrimi i cache-it të Symfony"
+
+msgid "System update"
+msgstr "Përditësimi i sistemit"
+
+msgid "Target version"
+msgstr "Versioni i synuar"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL-ja e manifestit zyrtar të konfiguruar është e paracaktuar. Mund ta ndryshoni në një manifest tjetër HTTPS nëse është e nevojshme."
+
+msgid "The database migration baseline is clean."
+msgstr "Baza e migrimit të bazës së të dhënave është e pastër."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Përgjigja përfundimtare HTTP dështoi pas përfundimit të operacionit. Kjo zakonisht shkaktohet nga lejet e cache-it në kohë reale ose nga një rinisje e serverit web gjatë kërkesës."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Regjistri i operacionit raporton se veprimet pas zbatimit u përfunduan me sukses."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Komandat e zgjedhura pas zbatimit u përfunduan me sukses, por përgjigja përfundimtare HTTP dështoi. Rifreskoni faqen dhe verifikoni lejet e cache-it në kohë reale nëse faqja nuk ngarkohet siç duhet."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Përditësuesi nuk krijon ose rivendos kopje rezervë të bazës së të dhënave."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Këto veprime janë të sigurta për t'u ekzekutuar nga ndërfaqja pas shqyrtimit të rezultatit të përditësimit."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Këto komanda mund të ndryshojnë varësitë, asetet e gjeneruara, cache-in ose bazën e të dhënave. Konfirmoni kopjet rezervë para se të vazhdoni."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Ky veprim ndryshon skedarët në instalimin e Chamilo. Sigurohuni që plani i zbatimit të jetë shqyrtuar dhe kopjet rezervë të jenë të aktivizuara para se të vazhdoni."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Ky hyrje zhvillimi simulon njoftimin e ardhshëm të përditësimit të Chamilo.org duke përdorur rrugët lokale të paketave të testit."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Kjo ekran u hap nga një njoftim zyrtar përditësimi, por ende nuk është konfiguruar asnjë burim zyrtar manifesti."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Kjo ekran u hap nga një njoftim përditësimi. Vetëm kontrolli i manifestit fillon automatikisht."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Ky hap përgatit vetëm një shqyrtim. Zëvendësimi i skedarëve ndodh më vonë në hapin Zbatoni skedarët e skenës, me mbrojtje kyçi, kopje rezervë dhe kthim mbrapsht."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Ky përditësues nuk krijon një kopje rezervë të bazës së të dhënave. Krijoni dhe verifikoni një kopje rezervë para se të ekzekutoni migrimet."
+
+msgid "Trusted public key"
+msgstr "Çelës publik i besuar"
+
+msgid "Trusted signing key"
+msgstr "Çelës nënshkrimi i besuar"
+
+msgid "Type APPLY UPDATE FILES to confirm"
+msgstr "Shkruani APPLY UPDATE FILES për të konfirmuar"
+
+msgid "Type RUN DATABASE MIGRATIONS to confirm database migrations"
+msgstr "Shkruani RUN DATABASE MIGRATIONS për të konfirmuar migrimet e bazës së të dhënave"
+
+msgid "Type RUN POST UPDATE ACTIONS to confirm"
+msgstr "Shkruani RUN POST UPDATE ACTIONS për të konfirmuar"
+
+msgid "Unknown update notice source."
+msgstr "Burim i panjohur njoftimi përditësimi."
+
+msgid "Update availability"
+msgstr "Disponueshmëria e përditësimit"
+
+msgid "Update directory"
+msgstr "Direktoria e përditësimit"
+
+msgid "Update lock path"
+msgstr "Rrugë kyçi përditësimi"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Përdorni direktorinë e skenës të gjeneruar nga hapi i mëparshëm. Backend-i pranon vetëm direktori brenda var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Përdorni këtë lidhje për të simuluar njoftimin e ardhshëm të përditësimit të Chamilo.org gjatë testeve të zhvillimit."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Përdorni këtë vetëm për teste zhvillimi lokale. Përditësimet e prodhimit duhet të përdorin çelësin e konfiguruar të serverit."
+
+msgid "Verification details"
+msgstr "Detajet e verifikimit"
+
+msgid "Verify package"
+msgstr "Verifiko paketën"
+
+msgid "Verifying..."
+msgstr "Duke verifikuar..."
+
+msgid "Waiting for command progress events..."
+msgstr "Duke pritur për ngjarjet e progresit të komandës..."
+
+msgid "Waiting for update progress events..."
+msgstr "Duke pritur për ngjarjet e progresit të përditësimit..."
+
+msgid "Yarn build"
+msgstr "Ndërtimi me Yarn"
+
+msgid "Yarn install"
+msgstr "Instalimi me Yarn"
+
+msgid "A comment is required"
+msgstr "Kërkohet një koment"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Një bazë të dhënash me të njëjtin emër ekziston tashmë. Nëse përmban tabela, ato do të fshihen; nëse është bosh, do të ripërdoret."
+
+msgid "AI generated"
+msgstr "I gjeneruar nga AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Shtoni të paktën një pyetje para se të ktheheni te rruga e të mësuarit."
+
+msgid "Add attachments"
+msgstr "Shtoni bashkëngjitje"
+
+msgid "Additional fields"
+msgstr "Fusha shtesë"
+
+msgid "Allow comments"
+msgstr "Lejo komentet"
+
+msgid "Allow new pages"
+msgstr "Lejo faqe të reja"
+
+msgid "Allow ratings"
+msgstr "Lejo vlerësimet"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Jeni të sigurt që dëshironi të fshini të gjitha elementët?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Jeni të sigurt që dëshironi të rivendosni rinovimin automatik?"
+
+msgid "Attachment has been deleted"
+msgstr "Bashkëngjitja është fshirë"
+
+msgid "Backup file"
+msgstr "Skedari i kopjes rezervë"
+
+msgid "Block comments"
+msgstr "Blloko komentet"
+
+msgid "Block new pages"
+msgstr "Blloko faqe të reja"
+
+msgid "Block ratings"
+msgstr "Blloko vlerësimet"
+
+msgid "Cancel renewal"
+msgstr "Anulo rinovimin"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Lidhjet e kategorisë do të hiqen nga faqet Wiki të %s."
+
+msgid "Change"
+msgstr "Ndrysho"
+
+msgid "Clear group"
+msgstr "Pastro grupin"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Kliko një etiketë për ta futur në redaktues. Këto vendmbajtëse do të zëvendësohen kur të krijohet certifikata."
+
+msgid "Comment added"
+msgstr "Komenti u shtua"
+
+msgid "Comment is required"
+msgstr "Komenti është i detyrueshëm"
+
+msgid "Comment score"
+msgstr "Vlerësimi i komentit"
+
+msgid "Compare selected versions line by line"
+msgstr "Krahaso versionet e zgjedhura rresht për rresht"
+
+msgid "Compare selected versions word by word"
+msgstr "Krahaso versionet e zgjedhura fjalë për fjalë"
+
+msgid "Compare versions"
+msgstr "Krahaso versionet"
+
+msgid "Copy completed"
+msgstr "Kopjimi u përfundua"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Krijo faqe pune Wiki individuale për nxënësit"
+
+msgid "Current view mode"
+msgstr "Mënyra aktuale e shikimit"
+
+msgid "Delete Wiki"
+msgstr "Fshi Wiki"
+
+msgid "Delete page"
+msgstr "Fshi faqen"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Fshirja e faqes kryesore të Wiki nuk rekomandohet. Mund ta rikrijoni më vonë."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Çaktivizimi i Wiki bllokon faqet dhe veprimet normale të Wiki. Kjo faqe cilësimesh mbetet e disponueshme për mësuesit e kursit."
+
+msgid "Discussion"
+msgstr "Diskutim"
+
+msgid "Edit Comment"
+msgstr "Ndrysho komentin"
+
+msgid "Edit page"
+msgstr "Ndrysho faqen"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Data e përfundimit duhet të jetë pas ose e barabartë me datën e skadimit"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Shkruaj një term kërkimi për të gjetur faqet Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Data e skadimit duhet të jetë para ose e barabartë me datën e përfundimit"
+
+msgid "Failed email recipients"
+msgstr "Marrësit e dështuara të emailit"
+
+msgid "Finish and return to learning path"
+msgstr "Përfundo dhe kthehu te rruga e të mësuarit"
+
+msgid "Forum image"
+msgstr "Imazhi i forumit"
+
+msgid "Hide discussion"
+msgstr "Fshih diskutimin"
+
+msgid "Hide page"
+msgstr "Fshih faqen"
+
+msgid "I changed my mind"
+msgstr "Ndryshova mendje"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Nëse nuk është zgjedhur, këto skedarë do të mbeten të disponueshëm për administratorin e platformës përmes mjetit 'Informacioni i skedarit'."
+
+msgid "Internal message failures"
+msgstr "Dështime të mesazheve të brendshme"
+
+msgid "Internal messages available"
+msgstr "Mesazhet e brendshme të disponueshme"
+
+msgid "Internal messages created now"
+msgstr "Mesazhet e brendshme të krijuara tani"
+
+msgid "Item score"
+msgstr "Pikët e elementit"
+
+msgid "Last post"
+msgstr "Postimi i fundit"
+
+msgid "Lock page"
+msgstr "Blloko faqen"
+
+msgid "Manage categories"
+msgstr "Menaxho kategoritë"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Shënon këtë dokument si të asistuar nga AI. Përdoreni kur përmbajtja është krijuar ose ndryshuar ndjeshëm me mjete AI."
+
+msgid "Maximum score is required"
+msgstr "Pikët maksimale janë të detyrueshme"
+
+msgid "Metric"
+msgstr "Metrikë"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Komentet e reja janë bllokuar në këtë diskutim"
+
+msgid "No Wiki categories are available yet."
+msgstr "Nuk ka ende kategori Wiki të disponueshme."
+
+msgid "No categories found"
+msgstr "Nuk u gjetën kategori"
+
+msgid "No content"
+msgstr "Asnjë përmbajtje"
+
+msgid "No parent category"
+msgstr "Asnjë kategori prind"
+
+msgid "Number of comments scored"
+msgstr "Numri i komenteve të vlerësuara"
+
+msgid "Old version"
+msgstr "Versioni i vjetër"
+
+msgid "Only image files are allowed."
+msgstr "Lejohen vetëm skedarë imazhi."
+
+msgid "Please fill all required fields"
+msgstr "Ju lutemi plotësoni të gjitha fushat e kërkuara"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Pyetjet me vendmbajtëse klase ose studenti do të gjenerohen për klasat ose grupet e kursit: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Vlerësimet janë bllokuar në këtë diskutim"
+
+msgid "Remove image"
+msgstr "Hiq imazhin"
+
+msgid "Restore renewal"
+msgstr "Rivendos rinovimin"
+
+msgid "Restore version"
+msgstr "Rivendos versionin"
+
+msgid "Search in"
+msgstr "Kërko në"
+
+msgid "Select group"
+msgstr "Zgjidh grupin"
+
+msgid "Select image"
+msgstr "Zgjidh imazhin"
+
+msgid "Selected image"
+msgstr "Imazhi i zgjedhur"
+
+msgid "Show discussion"
+msgstr "Shfaq diskutimin"
+
+msgid "Show page"
+msgstr "Shfaq faqen"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Disa skedarë ose dosje nuk kanë leje shkrimi. Për të instaluar Chamilo duhet të ndryshoni fillimisht lejet e tyre (duke përdorur CHMOD). Ju lutemi lexoni"
+
+msgid "Subcategories"
+msgstr "Nënkategoritë"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Prekni majtas ose djathtas për të lundruar"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Afati i detyrës Wiki ka skaduar, por lejohet dorëzimi me vonesë."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Afati i detyrës Wiki ka skaduar."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Detyra Wiki nuk ka filluar ende."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Bllokimi i redaktimit të faqes Wiki kërkohet para ruajtjes."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Njoftimi u ruajt, por një bashkëngjitje nuk mund të ngarkohej."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Njoftimi u ruajt, por dërgimi me email dështoi."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Njoftimi u ruajt, por asnjë email nuk mund të dorëzohej."
+
+msgid "The category has been created"
+msgstr "Kategoria është krijuar"
+
+msgid "The category has been deleted"
+msgstr "Kategoria është fshirë"
+
+msgid "The category has been updated"
+msgstr "Kategoria është përditësuar"
+
+msgid "The end date is invalid"
+msgstr "Data e përfundimit është e pavlefshme"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Numri maksimal i versioneve duhet të jetë një numër i plotë jo negativ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Numri maksimal i fjalëve duhet të jetë një numër i plotë jo negativ"
+
+msgid "The print window could not be opened"
+msgstr "Dritarja e printimit nuk mund të hapet"
+
+msgid "The start date is invalid"
+msgstr "Data e fillimit është e pavlefshme"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Këto cilësime zbatohen për të gjithë kursin, përfshirë sesionet dhe grupet e tij."
+
+msgid "This announcement has already been sent by email."
+msgstr "Ky njoftim është dërguar tashmë me email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Ky diskutim është i fshehur nga nxënësit"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Ky mjet i AI gjenerues ju lejon të krijoni imazhe dhe video të shkurtra për të ilustruar kursin tuaj. Duke shpjeguar (në tekst) atë që dëshironi në seksionin e kërkesës, do t'i jepni modelit të konfiguruar të AI elementët e nevojshëm për të gjeneruar një imazh ose video. Ju lutemi të jeni të durueshëm. Modeli i AI do të marrë pak kohë dhe do të gjenerojë një rezultat, të cilin mund të dëshironi ta mbani duke ruajtur median në dosjen tuaj të dokumenteve, dhe më pas ta futni brenda një dokumenti HTML. Jo të gjitha modelet e AI janë të barabarta për sa i përket shpejtësisë ose cilësisë. Modeli i AI mund t'ju japë gjithashtu një kërkesë të modifikuar, e cila është një interpretim më i detajuar i kërkesës suaj. Më pas mund ta përdorni këtë kërkesë të modifikuar për të përmirësuar kërkesën tuaj. Ju lutemi të jeni të vetëdijshëm se ky mjet, veçanërisht për videot, mund të gjenerojë kosto të konsiderueshme për organizatën tuaj, edhe nëse vendosni të mos ruani median e gjeneruar. Ju lutemi ta përdorni atë në përputhje me rrethanat. Nëse keni probleme për të marrë atë që po kërkoni, ju lutemi të merrni pak kohë për të kërkuar truket e kërkesave në internet për modelin e AI në dispozicionin tuaj."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Ky historik i përket kursit bazë. Rivendosja është e disponueshme pas krijimit të një versioni sesioni."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Ky imazh zëvendëson ikonën e paracaktuar të forumit që shfaqet pranë titullit të forumit."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Kjo faqe vjen nga kursi bazë. Ruajtja e saj do të krijojë një version për sesionin aktual."
+
+msgid "This will also delete %s subcategories."
+msgstr "Kjo do të fshijë gjithashtu %s nënkategori."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Kjo do të krijojë faqe pune individuale për %s nxënës."
+
+msgid "Thread history"
+msgstr "Historiku i temës"
+
+msgid "Title and content"
+msgstr "Titulli dhe përmbajtja"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Nuk mund të anulohet rinovimi tani."
+
+msgid "Unable to restore renewal right now."
+msgstr "Nuk mund të rivendoset rinovimi tani."
+
+msgid "Unlock page"
+msgstr "Zhblloko faqen"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Përdorni [[Faqe]] ose [[Faqe|Tekst i dukshëm]] për të krijuar lidhje të brendshme Wiki."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Përdorni tastin e hapësirës ose tastet e shigjetave për të lundruar"
+
+msgid "View version"
+msgstr "Shih versionin"
+
+msgid "Visible only to teachers"
+msgstr "I dukshëm vetëm për mësuesit"
+
+msgid "Weight is required"
+msgstr "Pesha është e kërkuar"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Kategoritë Wiki janë të çaktivizuara për këtë kurs."
+
+msgid "Wiki categories enabled"
+msgstr "Kategoritë e Wiki-s të aktivizuara"
+
+msgid "Wiki html strict filtering"
+msgstr "Filtrimi strikt HTML i Wiki-s"
+
+msgid "Wiki settings"
+msgstr "Cilësimet e Wiki-s"
+
+msgid "Wiki settings updated"
+msgstr "Cilësimet e Wiki-s u përditësuan"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Po shihni një version historik të kësaj faqeje"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Mund të bashkëngjitni një ose më shumë skedarë në këtë përgjigje."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Mund të redaktoni këtë faqe detyre, por faqet e punës së nxënësve nuk do të ndryshohen."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Mund të përdorni etiketat {{class_name}} dhe {{student_full_name}} në pyetje."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Keni 20 minuta për të redaktuar këtë faqe para se të skadojë bllokimi i redaktimit."
+
+msgid "by"
+msgstr "nga"
+
+msgid "required"
+msgstr "i detyrueshëm"
+
+msgid "Incorrect password."
+msgstr "Fjalëkalim i pasaktë."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Kontrolli i integritetit të skedarit është ndalur për 1 orë."
+
+msgid "New baseline established: %s files."
+msgstr "Baza e re e vendosur: %s skedarë."
+
+msgid "Scan complete: changes were detected."
+msgstr "Skanimi përfundoi: u zbuluan ndryshime."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Skanimi përfundoi: nuk u zbuluan ndryshime."
+
+msgid "File integrity"
+msgstr "Integriteti i skedarëve"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Ky raport krahason skedarët e instaluar (gjithçka përveç var/ dhe .git/, megjithëse .git/config ende mbikëqyret për të kapur një remote të rrëmbyer) me një bazë të besueshme, për të zbuluar shtesa, modifikime ose fshirje të papritura."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Mund të shikoni raportin e fundit më poshtë. Për të kryer një skanim, për të ndaluar përkohësisht njoftimet ose për të vendosur një bazë të re kërkohet një administrator global."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Njoftimet janë ndalur përkohësisht për mirëmbajtje. Ato do të rifillojnë automatikisht më %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Asnjë skanim nuk është kryer ende. Kryeni një nga këtu, ose nga rreshti i komandës me app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Skanimi i fundit"
+
+msgid "Files scanned"
+msgstr "Skedarë të skanuar"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Nuk ekzistonte ende asnjë bazë: ky skanim vendosi një. Ndryshimet do të raportohen duke filluar nga skanimi tjetër."
+
+msgid "No changes detected since the baseline."
+msgstr "Nuk u zbuluan ndryshime që nga baza."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Konfigurimi i remote-it Git (.git/config) është ndryshuar. Verifikoni nëse kjo ishte e pritur."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Skanimi u ndal herët sepse një nën-direktori nuk mund të lexohej (kontrolloni lejet e skedarëve). Rezultatet më poshtë mund të jenë të pjesshme."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Shumë ndryshime për t'u listuar plotësisht; vetëm hyrjet e para të çdo kategorie shfaqen më poshtë. Shihni regjistrin CEF për listën e plotë."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% skedar(ë) nuk mund të lexoheshin (leje) dhe u anashkaluan."
+
+msgid "Run a scan now"
+msgstr "Kryej një skanim tani"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Ndalo njoftimet për 1 orë (për mirëmbajtje)"
+
+msgid "Pause for 1 hour"
+msgstr "Ndalo për 1 orë"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Beso pemën aktuale të skedarëve si bazë e re"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Kjo do të besojë çdo skedar aktual si të saktë, duke përfshirë çdo ndryshim të parecensuar. Të vazhdohet?"
+
+msgid "Establish new baseline"
+msgstr "Vendos bazë të re"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Planifikoni skanimin nga një crontab i sistemit, për shembull"
+
+msgid "File integrity alert on %platform%"
+msgstr "Njoftim integriteti skedarësh në %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Një skanim integriteti skedarësh zbuloi ndryshime në platformë:"
+
+msgid "Added files"
+msgstr "Skedarë të shtuar"
+
+msgid "Modified files"
+msgstr "Skedarë të modifikuar"
+
+msgid "Deleted files"
+msgstr "Skedarë të fshirë"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Shikoni raportin e plotë nga Administrimi > Siguria > Integriteti i skedarëve."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Fjalëkalimi për të konfirmuar ndalimin e njoftimeve"
+
+msgid "Password to confirm the new baseline"
+msgstr "Fjalëkalimi për të konfirmuar bazën e re"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Një skanim është tashmë në proces. Ju lutemi prisni që të përfundojë para se të filloni një tjetër."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Një skanim është aktualisht në proces (filloi më %date%). Një skanim i plotë mund të zgjasë disa minuta; kjo faqe mund të ringarkohet me siguri për të kontrolluar përparimin."
+
+msgid "Currently processing"
+msgstr "Aktualisht në proces"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Një skanim i mëparshëm (filloi më %date%) u ndërpre para se të përfundonte — procesi nuk është më në ekzekutim. Mund të filloni me siguri një të ri."
+
+msgid "files"
+msgstr "skedarë"
+
+msgid "Permissions changed"
+msgstr "Lejet u ndryshuan"
+
+msgid "Files with changed permissions"
+msgstr "Skedarë me leje të ndryshuara"
+
+msgid "Alert history"
+msgstr "Historia e njoftimeve"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Çdo skanim që gjeti diçka, ruhet edhe pasi devijimi të jetë zgjidhur ose një bazë e re të jetë vendosur — ndryshe nga raporti më sipër, një skanim i pastër ose një rivendosje bazë nuk e pastron kurrë këtë."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Kjo hyrje u shkurtesua në kohën e kapjes; shihni regjistrin CEF për listën e plotë."
+
+msgid "No alert has been recorded yet."
+msgstr "Asnjë njoftim nuk është regjistruar ende."
+
+msgid "Git remote changed"
+msgstr "Remote-i Git u ndryshua"
+
+msgid "Press enter to select"
+msgstr "Shtypni enter për të zgjedhur"
+
+msgid "Press enter to remove"
+msgstr "Shtypni enter për të hequr"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Asnjë element nuk u gjet. Konsideroni ndryshimin e kërkesës së kërkimit."
+
+msgid "List is empty."
+msgstr "Lista është bosh."
+
+msgid "Your session has expired. Please try again."
+msgstr "Sesioni juaj ka skaduar. Ju lutemi provoni përsëri."
+
+msgid "Generate with AI"
+msgstr "Gjenero me AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Një ilustrim modern dhe mikpritës që përfaqëson temën e këtij kursi, në stil të pastër flat-design, duke përdorur ngjyrat e platformës sime si thekse."
+
+msgid "Back to account"
+msgstr "Kthehu te llogaria"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Feedback-u juaj do të na ndihmojë të përmirësojmë sesionet e ardhshme të trajnimit."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Faleminderit që ndatë feedback-un tuaj."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Sa i kënaqur jeni me cilësinë e përgjithshme të trajnimit?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Sa i kënaqur jeni me rëndësinë e përmbajtjes?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Sa i kënaqur jeni me qartësinë e shpjegimeve?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Sa i kënaqur jeni me organizimin dhe ritmin e trajnimit?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Sa i kënaqur jeni me dobinë praktike të asaj që keni mësuar?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "A do ta rekomandoni këtë trajnim për persona të tjerë?"
+
+msgid "What should we improve in future editions?"
+msgstr "Çfarë duhet të përmirësojmë në edicionet e ardhshme?"
+
+msgid "Very satisfied"
+msgstr "Shumë i kënaqur"
+
+msgid "Satisfied"
+msgstr "I kënaqur"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "I pakënaqur"
+
+msgid "Very dissatisfied"
+msgstr "Shumë i pakënaqur"
+
+msgid "Add destination"
+msgstr "Shto destinacion"
+
+msgid "Add this test to the assessment tool"
+msgstr "Shto këtë test në mjetin e vlerësimit"
+
+msgid "Attempts and timing"
+msgstr "Përpjekjet dhe koha"
+
+msgid "Available questions"
+msgstr "Pyetjet e disponueshme"
+
+msgid "Cancel and return to learning path"
+msgstr "Anulo dhe kthehu te rruga e të mësuarit"
+
+msgid "Category destinations"
+msgstr "Destinacionet e kategorisë"
+
+msgid "Classification"
+msgstr "Klasifikimi"
+
+msgid "Context"
+msgstr "Konteksti"
+
+msgid "Could not load exercise configuration"
+msgstr "Nuk u ngarkua konfigurimi i ushtrimit"
+
+msgid "Could not save exercise"
+msgstr "Nuk u ruajt ushtrimi"
+
+msgid "Display and learning path"
+msgstr "Shfaqja dhe rruga e të mësuarit"
+
+msgid "Edit test"
+msgstr "Ndrysho testin"
+
+msgid "Exercise settings saved."
+msgstr "Cilësimet e ushtrimit u ruajtën."
+
+msgid "Extra settings"
+msgstr "Cilësime shtesë"
+
+msgid "Feedback and results"
+msgstr "Reagimi dhe rezultatet"
+
+msgid "Finish exercise"
+msgstr "Përfundo ushtrimin"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifikon gjuhën e këtij ushtrimi si metadatë burimi. Nuk mundëson indeksimin e kërkimit vetë."
+
+msgid "Maximum score (%)"
+msgstr "Pikët maksimale (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatat përmbajnë aftësi dhe fusha shtesë të konfiguruara për ushtrimet. Është opsionale dhe mbetet e fshehur derisa të hapet."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Nuk ka ende kategori pyetjesh të disponueshme për këtë ushtrim."
+
+msgid "Question categories matrix"
+msgstr "Matrica e kategorive të pyetjeve"
+
+msgid "Questions behavior"
+msgstr "Sjellja e pyetjeve"
+
+msgid "Random by category"
+msgstr "Rastësore sipas kategorisë"
+
+msgid "Remove destination"
+msgstr "Hiq destinacionin"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Rregullat vlerësohen sipas përqindjes së rezultateve në rend rritës. Zgjidhni Përfundo ushtrimin për të mbyllur testin."
+
+msgid "Score and final messages"
+msgstr "Rezultati dhe mesazhet përfundimtare"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Disa opsione janë të bllokuara pasi ushtrimi është krijuar."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Kjo vlerë ruhet si kohëzgjatje totale në minuta."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Përdorni 0 për të mbajtur të gjitha pyetjet e disponueshme. Përdorni -1 ku lejohen të gjitha pyetjet e disponueshme."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Përdorni këto fusha për të klasifikuar ushtrimin në mënyrë të pavarur nga opsionet e shfaqjes."
+
+msgid "Invite by email"
+msgstr "Fto me email"
+
+msgid "Invitation has been sent"
+msgstr "Ftesa është dërguar"
+
+msgid "Sent on"
+msgstr "Dërguar më"
+
+msgid "Accepted on"
+msgstr "Pranuar më"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Ky kurs është i hapur në një sesion. Dërgimi i një ftese këtu do të regjistrojë marrësin në të gjithë sesionin %s, jo vetëm në këtë kurs."
+
+msgid "Revoke"
+msgstr "Anulo"
+
+msgid "Revoked"
+msgstr "Anuluar"
+
+msgid "Invitation has been revoked"
+msgstr "Ftesa është anuluar"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Jeni të sigurt që dëshironi të anuloni ftesën e dërguar te %s?"
+
+msgid "No default room"
+msgstr "Asnjë dhomë e paracaktuar"
+
+msgid "Floor"
+msgstr "Kati"
+
+msgid "Capacity"
+msgstr "Kapaciteti"
+
+msgid "Use attendance default room"
+msgstr "Përdor dhomën e paracaktuar të pranisë"
+
+msgid "Floor number"
+msgstr "Numri i katit"
+
+msgid "Copy to students"
+msgstr "Kopjo te studentët"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gjenero një test të shpejtë mbi këtë temë"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Përmbajtja e dokumentit të ruajtur do t'i dërgohet një modeli AI për përpunim."
+
+msgid "MCP API key"
+msgstr "Çelësi API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplikacionet e autorizuara"
+
+msgid "Your session is about to expire"
+msgstr "Sesioni juaj po skadon"
+
+msgid "Do you want to continue your session?"
+msgstr "Dëshironi të vazhdoni sesionin tuaj?"
+
+msgid "Stay connected"
+msgstr "Qëndro i lidhur"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Do të dilni nga llogaria pas %s sekondash."
+
+msgid "No descriptions available yet."
+msgstr "Nuk ka përshkrime të disponueshme ende."
+
+msgid "%s users selected"
+msgstr "%s përdorues të zgjedhur"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Përdoruesit e zgjedhur janë regjistruar në kurs"
+
+msgid "Import teachers"
+msgstr "Importo mësuesit"
+
+msgid "Import learners"
+msgstr "Importo nxënësit"
+
+msgid "Select CSV file"
+msgstr "Zgjidh skedarin CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Disa përdorues nuk mund të regjistroheshin"
+
+msgid "Browse available classes"
+msgstr "Shfleto klasat e disponueshme"
+
+msgid "Back to linked classes"
+msgstr "Kthehu te klasat e lidhura"
+
+msgid "No classes are currently linked to this course."
+msgstr "Asnjë klasë nuk është e lidhur aktualisht me këtë kurs."
+
+msgid "No available classes were found for this course."
+msgstr "Nuk u gjetën klasa të disponueshme për këtë kurs."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Jeni të sigurt që dëshironi të çregjistroni përdoruesit e zgjedhur?"
+
+msgid "Learning path access"
+msgstr "Qasja në rrugën e të mësuarit"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Vetëm përdoruesit dhe grupet e zgjedhur mund të kenë qasje në këtë rrugë të të mësuarit. Menaxhoji ato pas ruajtjes."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Të gjithë përdoruesit aktualë dhe të ardhshëm të kursit mund të kenë qasje në këtë rrugë të të mësuarit."
+
+msgid "All course users"
+msgstr "Të gjithë përdoruesit e kursit"
+
+msgid "Selected users and groups"
+msgstr "Përdoruesit dhe grupet e zgjedhur"
+
+msgid "No access"
+msgstr "Pa qasje"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Vetëm përdoruesit dhe grupet e shtuara këtu mund të kenë qasje në këtë rrugë të të mësuarit."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Numri i pyetjeve i kufizuar në maksimum %s"
+
+msgid "Open exercise player"
+msgstr "Hap lojtarin e ushtrimeve"
+
+msgid "The score is hidden for this exercise."
+msgstr "Rezultati është i fshehur për këtë ushtrim."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Korrigjimet janë të fshehura sipas cilësimeve të rezultateve të ushtrimit."
+
+msgid "Progressive adaptive result"
+msgstr "Rezultat adaptiv progresiv"
+
+msgid "Achieved level"
+msgstr "Niveli i arritur"
+
+msgid "Correction history"
+msgstr "Historia e korrigjimeve"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historia e korrigjimeve manuale të bëra për këtë përpjekje."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Ky ushtrim përdor modalitetin e rezultateve radar/merimangë. Grafiku nuk është i disponueshëm në këtë faqe."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Detajet e pyetjeve janë të fshehura sipas cilësimeve të rezultateve të ushtrimit."
+
+msgid "Media question"
+msgstr "Pyetje me media"
+
+msgid "Pending correction"
+msgstr "Korrigjim në pritje"
+
+msgid "No answer"
+msgstr "Pa përgjigje"
+
+msgid "Blank %s"
+msgstr "Bosh %s"
+
+msgid "Your order"
+msgstr "Renditja juaj"
+
+msgid "Correct order"
+msgstr "Renditja e saktë"
+
+msgid "Delineation review"
+msgstr "Rishikim i delimitimit"
+
+msgid "Learner clicks"
+msgstr "Klikimet e nxënësit"
+
+msgid "Question image"
+msgstr "Imazhi i pyetjes"
+
+msgid "No hotspot image available"
+msgstr "Nuk ka imazh hotspot të disponueshëm"
+
+msgid "Learner delineation"
+msgstr "Delimitimi i nxënësit"
+
+msgid "Expected delineation"
+msgstr "Delimitimi i pritur"
+
+msgid "Expected zones"
+msgstr "Zonat e pritura"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Shënimi i nxënësit"
+
+msgid "No annotation image available"
+msgstr "Nuk ka imazh shënimi të disponueshëm"
+
+msgid "This answer is pending teacher correction."
+msgstr "Kjo përgjigje është në pritje të korrigjimit nga mësuesi."
+
+msgid "Teacher comment"
+msgstr "Komenti i mësuesit"
+
+msgid "Teacher correction"
+msgstr "Korrigjimi i mësuesit"
+
+msgid "Save correction"
+msgstr "Ruaj korrigjimin"
+
+msgid "Learner audio"
+msgstr "Audio e nxënësit"
+
+msgid "Download audio"
+msgstr "Shkarko audio"
+
+msgid "No uploaded audio"
+msgstr "Asnjë audio i ngarkuar"
+
+msgid "Learner Office document"
+msgstr "Dokument Office i nxënësit"
+
+msgid "Learner file"
+msgstr "Skedar i nxënësit"
+
+msgid "Download Office document"
+msgstr "Shkarko dokument Office"
+
+msgid "No submitted document"
+msgstr "Asnjë dokument i dorëzuar"
+
+msgid "No uploaded file"
+msgstr "Asnjë skedar i ngarkuar"
+
+msgid "Content item"
+msgstr "Element përmbajtjeje"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Ky lloj pyetjeje nuk mund të shqyrtohet në këtë faqe."
+
+msgid "Exercise completed"
+msgstr "Ushtrimi i përfunduar"
+
+msgid "Could not start the attempt"
+msgstr "Nuk mund të fillohej përpjekja"
+
+msgid "Invalid exercise attempt"
+msgstr "Përpjekje e pavlefshme ushtrimi"
+
+msgid "Could not load exercise result"
+msgstr "Nuk mund të ngarkohej rezultati i ushtrimit"
+
+msgid "Could not load AI providers"
+msgstr "Nuk mund të ngarkoheshin ofruesit e AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nuk mund të gjenerohej sugjerim AI"
+
+msgid "Correction saved"
+msgstr "Korrigjimi u ruajt"
+
+msgid "Could not save correction"
+msgstr "Nuk mund të ruhej korrigjimi"
+
+msgid "Create exercise"
+msgstr "Krijo ushtrim"
+
+msgid "Exercise categories"
+msgstr "Kategoritë e ushtrimeve"
+
+msgid "Question categories"
+msgstr "Kategoritë e pyetjeve"
+
+msgid "Search by exercise title or description."
+msgstr "Kërko sipas titullit ose përshkrimit të ushtrimit."
+
+msgid "Search exercises"
+msgstr "Kërko ushtrime"
+
+msgid "No exercises found"
+msgstr "Asnjë ushtrim i gjetur"
+
+msgid "Open exercise"
+msgstr "Hap ushtrimin"
+
+msgid "Disable autolaunch"
+msgstr "Çaktivizo nisjen automatike"
+
+msgid "Enable autolaunch"
+msgstr "Aktivizo nisjen automatike"
+
+msgid "Export QTI2"
+msgstr "Eksporto QTI2"
+
+msgid "Bulk actions"
+msgstr "Veprime masive"
+
+msgid "Selected exercises"
+msgstr "Ushtrimet e zgjedhura"
+
+msgid "No exercises selected"
+msgstr "Asnjë ushtrim i zgjedhur"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Jeni të sigurt që dëshironi të zbatoni këtë veprim te ushtrimet e zgjedhura?"
+
+msgid "Bulk action completed"
+msgstr "Veprimi masiv u përfundua"
+
+msgid "Could not update exercises"
+msgstr "Nuk mund të përditësoheshin ushtrimet"
+
+msgid "Could not update exercise"
+msgstr "Nuk mund të përditësohej ushtrimi"
+
+msgid "Copy exercise"
+msgstr "Kopjo ushtrimin"
+
+msgid "Delete exercise"
+msgstr "Fshi ushtrimin"
+
+msgid "Could not load exercises"
+msgstr "Nuk mund të ngarkoheshin ushtrimet"
+
+msgid "No limit"
+msgstr "Pa kufi"
+
+msgid "Add selected questions to the test"
+msgstr "Shto pyetjet e zgjedhura në test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Kjo pyetje përdoret në një test aktiv dhe nuk mund të ndryshohet këtu."
+
+msgid "This question cannot be edited here."
+msgstr "Kjo pyetje nuk mund të ndryshohet këtu."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Kjo pyetje përdoret në një test aktiv dhe nuk mund të fshihet këtu."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Kjo pyetje nuk mund të fshihet sepse qasja juaj është e kufizuar nga cilësimet e platformës."
+
+msgid "Already in test"
+msgstr "Tashmë në test"
+
+msgid "Select at least one question."
+msgstr "Zgjidhni të paktën një pyetje."
+
+msgid "Question bank updated"
+msgstr "Banka e pyetjeve u përditësua"
+
+msgid "Could not update the question bank"
+msgstr "Nuk mund të përditësohej banka e pyetjeve"
+
+msgid "Could not load the question bank"
+msgstr "Nuk mund të ngarkohej banka e pyetjeve"
+
+msgid "Total score"
+msgstr "Pikët totale"
+
+msgid "Starting"
+msgstr "Duke filluar"
+
+msgid "Attempt history"
+msgstr "Historia e përpjekjeve"
+
+msgid "No attempts yet"
+msgstr "Nuk ka përpjekje ende"
+
+msgid "Invalid exercise"
+msgstr "Ushtrim i pavlefshëm"
+
+msgid "Could not load exercise overview"
+msgstr "Nuk mund të ngarkohet përmbledhja e ushtrimit"
+
+msgid "Open test"
+msgstr "Hap testin"
+
+msgid "Random answers"
+msgstr "Përgjigje të rastësishme"
+
+msgid "Prevent moving backwards"
+msgstr "Parandalo lëvizjen prapa"
+
+msgid "Previous button hidden"
+msgstr "Butoni i mëparshëm i fshehur"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Ky ushtrim përdor opsione që kërkojnë një lojtar testesh të ndryshëm."
+
+msgid "Continue test"
+msgstr "Vazhdo testin"
+
+msgid "Attempt started"
+msgstr "Përpjekja filloi"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Pamja paraprake e mësuesit nuk krijon një përpjekje të ndjekur."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Fillo ose rifillo një përpjekje ushtrimi. Përgjigjet e draftit mund të ruhen para dorëzimit përfundimtar."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Kufiri kohor u arrit. Duke përfunduar përpjekjen."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Koha e pyetjes u arrit. Duke ruajtur përgjigjen tuaj."
+
+msgid "Finishing"
+msgstr "Duke përfunduar"
+
+msgid "Draft saved"
+msgstr "Drafti u ruajt"
+
+msgid "Statement"
+msgstr "Deklarata"
+
+msgid "Drop each option on the matching answer"
+msgstr "Vendos çdo opsion mbi përgjigjen përkatëse"
+
+msgid "Clear match"
+msgstr "Pastro përputhjen"
+
+msgid "Click to place the selected option here"
+msgstr "Kliko për të vendosur opsionin e zgjedhur këtu"
+
+msgid "Select an option, then click here"
+msgstr "Zgjidh një opsion, pastaj kliko këtu"
+
+msgid "Already matched"
+msgstr "Tashmë i përputhur"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Mund të tërhiqni një opsion drejt një përgjigjeje, ose të zgjidhni një opsion dhe pastaj të klikoni një kuti të synuar."
+
+msgid "Put the items in the correct order."
+msgstr "Vendosni artikujt në rendin e duhur."
+
+msgid "Move left"
+msgstr "Lëviz majtas"
+
+msgid "Move right"
+msgstr "Lëviz djathtas"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Mund të tërhiqni artikujt majtas ose djathtas, ose të përdorni butonat e lëvizjes për të ndryshuar rendin."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Mund të tërhiqni artikujt ose të përdorni butonat e lëvizjes për të ndryshuar rendin."
+
+msgid "Or upload an audio file"
+msgstr "Ose ngarko një skedar audio"
+
+msgid "Selected audio"
+msgstr "Audio e zgjedhur"
+
+msgid "Uploaded audio"
+msgstr "Audio e ngarkuar"
+
+msgid "Office document"
+msgstr "Dokument zyre"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Plotëso dokumentin në redaktuesin më poshtë. Skedari do të bashkëngjitet në këtë përpjekje për korrigjim nga mësuesi."
+
+msgid "Reload Office editor"
+msgstr "Ringarko redaktuesin e zyrës"
+
+msgid "Prepare Office document"
+msgstr "Përgatit dokumentin e zyrës"
+
+msgid "Open in new tab"
+msgstr "Hap në skedë të re"
+
+msgid "Preparing Office document"
+msgstr "Duke përgatitur dokumentin e zyrës"
+
+msgid "Submitted document"
+msgstr "Dokumenti i dorëzuar"
+
+msgid "Annotation tools"
+msgstr "Mjetet e shënimeve"
+
+msgid "Text to place"
+msgstr "Tekst për t'u vendosur"
+
+msgid "Click the image to place the text annotation."
+msgstr "Kliko imazhin për të vendosur shënimin e tekstit."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Kliko imazhin për të shtuar pikat e shtegut. Përdor Filloni shteg të ri për të ndarë shtigjet."
+
+msgid "Start new path"
+msgstr "Filloni shteg të ri"
+
+msgid "Current annotations"
+msgstr "Shënimet aktuale"
+
+msgid "Remove point"
+msgstr "Hiq pikën"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Kliko imazhin për të vizatuar poligonin e delimitimit."
+
+msgid "Click a marker to remove it."
+msgstr "Kliko një shënues për ta hequr."
+
+msgid "Placed"
+msgstr "I vendosur"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Zgjidh një përgjigje, pastaj kliko në imazh për ta shënuar."
+
+msgid "Reading speed"
+msgstr "Shpejtësia e leximit"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Ky lloj pyetjeje nuk mund të shfaqet në këtë lojtar."
+
+msgid "Save draft"
+msgstr "Ruaj draftin"
+
+msgid "I confirm that my answers were saved."
+msgstr "Konfirmoj që përgjigjet e mia u ruajtën."
+
+msgid "Finish test"
+msgstr "Përfundo testin"
+
+msgid "Attempt finished"
+msgstr "Përpjekja përfundoi"
+
+msgid "Question category"
+msgstr "Kategoria e pyetjes"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Përfunduat pyetjet që lidhen me këtë kategori pyetjesh, është mundësia juaj e fundit për t'u kthyer dhe rishikuar ato pyetje."
+
+msgid "Question time left"
+msgstr "Koha e mbetur për pyetjen"
+
+msgid "Time left"
+msgstr "Koha e mbetur"
+
+msgid "Current attempt"
+msgstr "Përpjekja aktuale"
+
+msgid "Could not save draft answer"
+msgstr "Nuk u ruajt dot përgjigja draft"
+
+msgid "Could not load exercise"
+msgstr "Nuk u ngarkua dot ushtrimi"
+
+msgid "Draft answer saved"
+msgstr "Përgjigja draft u ruajt"
+
+msgid "Could not finish the attempt"
+msgstr "Nuk u përfundua dot përpjekja"
+
+msgid "Could not prepare Office document"
+msgstr "Nuk u përgatit dot dokumenti Office"
+
+msgid "Back to learner score"
+msgstr "Kthehu te rezultati i nxënësit"
+
+msgid "Disable auto refresh"
+msgstr "Çaktivizo rifreskimin automatik"
+
+msgid "Enable auto refresh"
+msgstr "Aktivizo rifreskimin automatik"
+
+msgid "Live window"
+msgstr "Dritarja e drejtpërdrejtë"
+
+msgid "Ongoing attempts"
+msgstr "Përpjekjet në vazhdim"
+
+msgid "Completed attempts"
+msgstr "Përpjekjet e përfunduara"
+
+msgid "Started"
+msgstr "Filloi"
+
+msgid "Last activity"
+msgstr "Aktiviteti i fundit"
+
+msgid "Could not load live results"
+msgstr "Nuk u ngarkuan dot rezultatet e drejtpërdrejta"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ky ushtrim është vetëm për lexim sepse është përfshirë në një rrugë mësimore."
+
+msgid "Select a question type to create a question."
+msgstr "Zgjidhni një lloj pyetjeje për të krijuar një pyetje."
+
+msgid "Click to preview"
+msgstr "Klikoni për të parë paraprakisht"
+
+msgid "Hide preview"
+msgstr "Fshih parapamjen"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Koordinatat"
+
+msgid "Blanks"
+msgstr "Boshllëqet"
+
+msgid "Switchable blanks"
+msgstr "Boshllëqe të ndërrueshme"
+
+msgid "Blank"
+msgstr "Boshllëk"
+
+msgid "Input width"
+msgstr "Gjerësia e fushës"
+
+msgid "Orientation"
+msgstr "Orientimi"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Nuk është i disponueshëm me modalitetin aktual të reagimit të ushtrimit"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Nuk është i disponueshëm në rrjedhën e krijimit të rrugës së mësimit"
+
+msgid "Delete question"
+msgstr "Fshi pyetjen"
+
+msgid "Could not update exercise questions"
+msgstr "Nuk u përditësuan dot pyetjet e ushtrimit"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nuk u shtua dot ushtrimi në rrugën e mësimit"
+
+msgid "A valid exercise id is required."
+msgstr "Kërkohet një ID e vlefshme ushtrimi."
+
+msgid "Could not load exercise questions"
+msgstr "Nuk u ngarkuan dot pyetjet e ushtrimit"
+
+msgid "Delete selected attempts"
+msgstr "Fshi përpjekjet e zgjedhura"
+
+msgid "Before date"
+msgstr "Para datës"
+
+msgid "Pending corrections"
+msgstr "Korrigjime në pritje"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Ky ushtrim është i bllokuar nga libri i notave. Veprimet e pastrimit të përpjekjeve janë të çaktivizuara."
+
+msgid "No attempts found"
+msgstr "Nuk u gjetën përpjekje"
+
+msgid "Review"
+msgstr "Rishiko"
+
+msgid "Print/PDF"
+msgstr "Printo/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nuk u ngarkua raporti i ushtrimit"
+
+msgid "Select at least one attempt"
+msgstr "Zgjidhni të paktën një përpjekje"
+
+msgid "Delete selected attempts?"
+msgstr "Të fshihen përpjekjet e zgjedhura?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Të dërgohen email-et me rezultatet e përpjekjeve të shqyrtuara?"
+
+msgid "Could not send emails"
+msgstr "Nuk u dërguan email-et"
+
+msgid "Exercise result emails sent"
+msgstr "Email-et me rezultatet e ushtrimit u dërguan"
+
+msgid "Skipped"
+msgstr "U anashkalua"
+
+msgid "Close attempt?"
+msgstr "Të mbyllet përpjekja?"
+
+msgid "Attempt closed"
+msgstr "Përpjekja u mbyll"
+
+msgid "Could not close attempt"
+msgstr "Nuk u mbyll përpjekja"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Të dërgohet rezultati i kësaj përpjekjeje me email tek nxënësi?"
+
+msgid "Email sent"
+msgstr "Email-i u dërgua"
+
+msgid "Could not send email"
+msgstr "Nuk u dërgua email-i"
+
+msgid "Attempt deleted"
+msgstr "Përpjekja u fshi"
+
+msgid "Could not delete attempt"
+msgstr "Nuk u fshi përpjekja"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Zgjidhni një skedar CSV që përmban kolona titulli dhe përshkrimi."
+
+msgid "Manage categories used to classify questions."
+msgstr "Menaxhoni kategoritë e përdorura për të klasifikuar pyetjet."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Menaxhoni kategoritë e përdorura për të klasifikuar ushtrimet."
+
+msgid "Could not load categories"
+msgstr "Nuk u ngarkuan kategoritë"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Kategoritë e importuara: %s. Rreshtat e anashkaluar: %s."
+
+msgid "Imported categories: %s."
+msgstr "Kategoritë e importuara: %s."
+
+msgid "Could not import categories"
+msgstr "Nuk u importuan kategoritë"
+
+msgid "Could not save category"
+msgstr "Nuk u ruajt kategoria"
+
+msgid "Answer distribution"
+msgstr "Shpërndarja e përgjigjeve"
+
+msgid "Configured answers"
+msgstr "Përgjigjet e konfiguruara"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Numërimi i detajuar i përgjigjeve për disa lloje pyetjesh nuk është i disponueshëm ende në raportin e migrimit."
+
+msgid "No report by question data found"
+msgstr "Nuk u gjetën të dhëna raporti sipas pyetjes"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Numërimi i detajuar i përgjigjeve për këtë lloj pyetjeje nuk është i disponueshëm ende në raportin e migrimit."
+
+msgid "No answer distribution found"
+msgstr "Nuk u gjet shpërndarje përgjigjesh"
+
+msgid "Could not load report by question"
+msgstr "Nuk u ngarkua raporti sipas pyetjes"
+
+msgid "Question settings"
+msgstr "Cilësimet e pyetjes"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Lëreni bosh ose 0 për pa kufi kohë."
+
+msgid "Time limit in seconds"
+msgstr "Kufi kohë në sekonda"
+
+msgid "Attached questions"
+msgstr "Pyetjet e bashkangjitura"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Këtu listohen vetëm pyetjet e bashkangjitura me këtë pyetje media brenda ushtrimit aktual."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Asnjë pyetje nuk është bashkangjitur me këtë pyetje media në ushtrimin aktual."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Ngarkoni shabllonin e dokumentit Office që nxënësit do ta redaktojnë me OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Zëvendëso dokumentin Office"
+
+msgid "Current Office document"
+msgstr "Dokumenti aktual Office"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Kjo pyetje korrigjohet manualisht pasi nxënësi dorëzon dokumentin e redaktuar."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Pikët totale llogariten si shuma e pikëve të hotspot-it."
+
+msgid "Global score"
+msgstr "Pikët globale"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Zgjidhni një rresht hotspot, zgjidhni formën e tij, pastaj vizatoni mbi imazh. Për shumëkëndëshat, klikoni çdo pikë dhe përfundoni shumëkëndëshin, ose klikoni dy herë për ta përfunduar."
+
+msgid "Finish polygon"
+msgstr "Përfundo shumëkëndëshin"
+
+msgid "Calculated answer"
+msgstr "Përgjigje e llogaritur"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Ju lutemi shkruani tekstin tuaj më poshtë dhe përdorni kllapa katrore [...] për të përcaktuar një ose më shumë boshllëqe."
+
+msgid "Lowest value"
+msgstr "Vlera më e ulët"
+
+msgid "Highest value"
+msgstr "Vlera më e lartë"
+
+msgid "Fill in blanks"
+msgstr "Plotëso boshllëqet"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Përdorni shënuesit e zgjedhur për të përcaktuar boshllëqet. Shembull: Kryeqyteti i Shqipërisë është [Tirana]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Fut opsionet e listës rënëse, një përgjigje për rresht. Pastaj shëno përgjigjet e pritura më poshtë, si në mjetin e trashëguar."
+
+msgid "Refresh answers"
+msgstr "Rifresko përgjigjet"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Kjo pyetje me kombinim listash rënëse përdor një rezultat global, si në versionin e trashëguar."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Ju lutemi futni të paktën dy opsione për listën rënëse."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Krijoni fillimisht opsionet e destinacionit, pastaj lidhni çdo element me opsionin e saktë."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Kjo pyetje me kombinim përputhjeje përdor një rezultat global, si në versionin e trashëguar."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Krijoni hapat dhe zgjidhni pozicionin e pritur për secilin, si në Draggable të trashëguar."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Nxënësit do të zgjedhin Të vërtetë ose Të gabuar dhe pastaj do të zgjedhin shkallën e sigurisë gjatë provës. Redaktori ruan të njëjtat rezultate Të saktë/Të gabuar dhe nivelet e sigurisë si në versionin e trashëguar."
+
+msgid "Hotspot combination"
+msgstr "Kombinim hotspot"
+
+msgid "Add delineation"
+msgstr "Shto ndarje"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Kjo pyetje me dokument Office nuk ka opsione përgjigjeje. Rezultati i saj caktohet gjatë korrigjimit/shqyrtimit të rezultateve."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Kjo pyetje ngarkimi nuk ka opsione përgjigjeje. Rezultati i saj caktohet gjatë korrigjimit/shqyrtimit të rezultateve."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Kjo pyetje me shprehje gojore nuk ka opsione përgjigjeje. Rezultati i saj caktohet gjatë korrigjimit/shqyrtimit të rezultateve."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Kjo pyetje e hapur nuk ka opsione përgjigjeje. Rezultati i saj caktohet gjatë korrigjimit/shqyrtimit të rezultateve."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Shto një tekst leximi me cilësime shpejtësie rrëshqitjeje."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Shto përmbajtje, media ose kontekst leximi pa shtuar rezultat."
+
+msgid "Insert a page break without adding score."
+msgstr "Fut një ndarje faqeje pa shtuar rezultat."
+
+msgid "Could not save question"
+msgstr "Nuk u ruajt dot pyetja"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Lejohen vetëm dokumente DOC, DOCX, XLS ose XLSX."
+
+msgid "Please select an Office document."
+msgstr "Ju lutemi zgjidhni një dokument Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Ju lutemi vizatoni të paktën një hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Ju lutemi vizatoni të paktën një ndarje."
+
+msgid "The fill in blanks text is required."
+msgstr "Teksti i plotësimit të boshllëqeve është i detyrueshëm."
+
+msgid "At least one expected answer is required."
+msgstr "Kërkohet të paktën një përgjigje e pritur."
+
+msgid "At least two draggable items are required."
+msgstr "Kërkohen të paktën dy elemente të zvarritshme."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Çdo element i zvarritshëm duhet të lidhet me një pozicion të vlefshëm objektivi."
+
+msgid "At least two matching options are required."
+msgstr "Kërkohen të paktën dy opsione përputhjeje."
+
+msgid "At least two matching pairs are required."
+msgstr "Kërkohen të paktën dy çifte përputhjeje."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Çdo çift përputhjeje duhet të lidhet me një opsion të vlefshëm."
+
+msgid "At least two answers are required."
+msgstr "Kërkohen të paktën dy përgjigje."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Çdo përgjigje e vërtetë/e gabuar duhet të ketë zgjedhur Të vërtetë ose Të gabuar."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Një pyetje me përgjigje unike duhet të ketë saktësisht një përgjigje të saktë."
+
+msgid "At least one correct answer is required."
+msgstr "Kërkohet të paktën një përgjigje e saktë."
+
+msgid "Could not load question"
+msgstr "Nuk u ngarkua dot pyetja"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Zgjidhni një kurs dhe eksportoni raportin global të rezultateve të ushtrimit si CSV."
+
+msgid "Back to reports catalog"
+msgstr "Kthehu te katalogu i raporteve"
+
+msgid "Could not load exercise global report"
+msgstr "Nuk u ngarkua dot raporti global i ushtrimit"
+
+msgid "Imported questions"
+msgstr "Pyetje të importuara"
+
+msgid "Aiken content"
+msgstr "Përmbajtje Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Nuk u ngarkua dot gjeneratori AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Nuk u gjenerua dot përmbajtja Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Nuk u importua dot përmbajtja e gjeneruar Aiken"
+
+msgid "Back to my courses"
+msgstr "Kthehu te kurset e mia"
+
+msgid "Open report"
+msgstr "Hap raportin"
+
+msgid "Questions with no automatic correction"
+msgstr "Pyetje pa korrigjim automatik"
+
+msgid "Could not load pending attempts"
+msgstr "Nuk u ngarkuan dot përpjekjet në pritje"
+
+msgid "Skipped questions"
+msgstr "Pyetje të anashkaluara"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Importi Aiken shpërndan këtë peshë totale midis pyetjeve të importuara, përveç nëse një pyetje përcakton SCORE."
+
+msgid "Import warnings"
+msgstr "Paralajmërime importi"
+
+msgid "Could not import questions"
+msgstr "Nuk u importuan dot pyetjet"
+
+msgid "No question statistics found"
+msgstr "Nuk u gjetën statistika pyetjesh"
+
+msgid "Could not load question statistics"
+msgstr "Nuk mund të ngarkoheshin statistikat e pyetjeve"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Ju mund të lidhni gjithashtu një klient MCP drejtpërdrejt duke e drejtuar te pika e mëposhtme:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Aktualisht nuk ka aplikacione të lidhura me llogarinë tuaj."
+
+msgid "Connected on"
+msgstr "Lidhur më"
+
+msgid "Last used"
+msgstr "Përdorur për herë të fundit"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s nuk do të jetë më në gjendje të hyjë në llogarinë tuaj Chamilo. Të vazhdohet?"
+
+msgid "Application revoked"
+msgstr "Aplikacioni u revokua"
+
+msgid "Copied to clipboard"
+msgstr "U kopjua në clipboard"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nuk mund të kopjohej pika fundore MCP"
+
+msgid "MCP endpoint"
+msgstr "Pika fundore MCP"
+
+msgid "API key"
+msgstr "Çelës API"
+
+msgid "Last used at"
+msgstr "Përdorur për herë të fundit më"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopjojeni këtë çelës tani. Nuk do të shfaqet më."
+
+msgid "Rotate API key"
+msgstr "Rrotullo çelësin API"
+
+msgid "Revoke API key"
+msgstr "Revoko çelësin API"
+
+msgid "Remote MCP connection"
+msgstr "Lidhje MCP në distancë"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfiguroni klientin tuaj MCP me vlerat e mëposhtme:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Çelësi aktual do të ndalojë së funksionuari menjëherë. Të vazhdohet?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Do të gjenerohet një çelës i ri personal MCP API. Të vazhdohet?"
+
+msgid "MCP API key generated"
+msgstr "Çelësi MCP API u gjenerua"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Klientët MCP të lidhur që përdorin këtë çelës do të ndalojnë së funksionuari menjëherë. Të vazhdohet?"
+
+msgid "MCP API key revoked"
+msgstr "Çelësi MCP API u revokua"
+
+msgid "Could not copy the API key"
+msgstr "Nuk mund të kopjohej çelësi API"
+
+msgid "Project"
+msgstr "Projekti"
+
+msgid "Close old tickets"
+msgstr "Mbyll biletat e vjetra"
+
+msgid "Close tickets older than seven days?"
+msgstr "Të mbyllen biletat më të vjetra se shtatë ditë?"
+
+msgid "Assignment history"
+msgstr "Historia e detyrave"
+
+msgid "Translate with AI"
+msgstr "Përkthe me AI"
+
+msgid "Target language"
+msgstr "Gjuha e synuar"
+
+msgid "Please select a provider"
+msgstr "Ju lutemi zgjidhni një ofrues"
+
+msgid "Generate translation"
+msgstr "Gjenero përkthimin"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Të paktën një seksion i kushteve dhe rregullave duhet të përmbajë tekst."
+
+msgid "No active target languages are available."
+msgstr "Nuk ka gjuhë të synuara aktive të disponueshme."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Datat e aksesit"
+
+msgid "Coach access dates"
+msgstr "Datat e aksesit të trajnerit"
+
+msgid "No sessions found"
+msgstr "Nuk u gjetën sesione"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Zgjidhni kurset që ky përdorues nuk duhet të jetë në gjendje t'i aksesojë në këtë sesion."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Një përdorues nuk mund të bllokohet nga çdo kurs në sesion. Anuloni abonimin e përdoruesit në vend të kësaj."
+
+msgid "Users subscribed to this session"
+msgstr "Përdoruesit e abonuar në këtë sesion"
+
+msgid "No available users found"
+msgstr "Nuk u gjetën përdorues të disponueshëm"
+
+msgid "Subscribe this user to the session?"
+msgstr "Të abonohet ky përdorues në sesion?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Të abonohet përdoruesit e zgjedhur në sesion?"
+
+msgid "General tutor planning"
+msgstr "Planifikimi i përgjithshëm i tutorëve"
+
+msgid "User is already registered by another tutor."
+msgstr "Përdoruesi është regjistruar tashmë nga një tutor tjetër."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Po merrni një kopje sepse jeni tutor kursi"
+
+msgid "General tutor"
+msgstr "Tutor i përgjithshëm"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Merrni parasysh kurset, tutorët, ndihmën teknike, mësuesit dhe/ose materialet e disponueshme."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutorët e abonuar si mësues në kursin %s"
+
+msgid "Tutor name"
+msgstr "Emri i tutorëve"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Tutorët e sesionit janë koordinatorë të sesionit dhe mund të veprojnë si tutorë për çdo kurs në sesion. Vetëm përdoruesit me rolin e mësuesit mund të zgjidhen si tutorë të sesionit."
+
+msgid "Access start date for tutors"
+msgstr "Data e fillimit të aksesit për tutorët"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data në të cilën sesioni bëhet i disponueshëm për tutorët, në mënyrë që ata të mund ta përgatisin para se studentët të lidhen"
+
+msgid "Access end date for tutors"
+msgstr "Data e mbarimit të aksesit për tutorët"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data në të cilën sesioni mbyllet për tutorët. Vonesa shtesë do t'u lejojë atyre të eksportojnë të gjitha informacionet përkatëse të ndjekjes"
+
+msgid "Tutor and student"
+msgstr "Tutor dhe student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Ky raport tregon shpërndarjen javore të sesioneve sipas tutorëve të përgjithshëm në intervalin e datave të zgjedhura."
+
+msgid "User is general tutor in some sessions"
+msgstr "Përdoruesi është tutor i përgjithshëm në disa sesione"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Mësuesit do të shtohen si tutorë në të gjitha sesionet e kursit."
+
+msgid "Delete failed: invalid question id."
+msgstr "Fshirja dështoi: ID e pyetjes e pavlefshme."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Numri mesatar i sesioneve për tutor të përgjithshëm të sesionit"
+
+msgid "No room"
+msgstr "Asnjë dhomë"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importo mësuesit e kursit si tutorë të kursit në sesion"
+
+msgid "Clean and update course tutors"
+msgstr "Pastro dhe përditëso tutorët e kursit"
+
+msgid "Add me as tutor"
+msgstr "Më shto si tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nuk mund të shtohet anketa në rrugën e të nxënit"
+
+msgid "Access dates for tutors"
+msgstr "Datat e aksesit për tutorët"
+
+msgid "Tutor and group member"
+msgstr "Tutor dhe anëtar i grupit"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Kufiri juaj ditor i tokenëve të AI është arritur. Ju lutemi provoni përsëri nesër."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Kufiri juaj mujor i tokenëve të AI është arritur. Ju lutemi provoni përsëri muajin e ardhshëm."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Ky kod kursi ekziston tashmë, ju lutemi zgjidhni një kod tjetër."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Ky titull kursi ekziston tashmë, ju lutemi zgjidhni një titull tjetër."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Dukshmëria e këtij mjeti nuk mund të ndryshohet"
+
+msgid "Invalid visibility"
+msgstr "Dukshmëri e pavlefshme"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Ju po merrni një kopje sepse jeni një nga tutorët e kursit"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Ju po merrni një kopje sepse jeni tutori i kursit"
+
+msgid "Manual completion"
+msgstr "Përfundim manual"
+
+msgid "Send to tutors"
+msgstr "Dërgo te tutorët"
+
+msgid "Lab title"
+msgstr "Titulli i laboratorit"
+
+msgid "Lab week"
+msgstr "Java e laboratorit"
+
+msgid "Final exam access rule"
+msgstr "Rregulli i aksesit të provimit final"
+
+msgid "Course completion rule"
+msgstr "Rregulli i përfundimit të kursit"
+
+msgid "You have been invited to join a course"
+msgstr "Jeni ftuar të bashkoheni në një kurs"
+
+msgid "No user has been found"
+msgstr "Asnjë përdorues nuk u gjet"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Përdoruesi i zgjedhur nuk mund të regjistrohet në këtë kontekst"
+
+msgid "No change has been made"
+msgstr "Asnjë ndryshim nuk është bërë"
+
+msgid "Back to group list"
+msgstr "Kthehu te lista e grupeve"
+
+msgid "Remove class link"
+msgstr "Hiq lidhjen e klasës"
+
+msgid "Group settings"
+msgstr "Cilësimet e grupit"
+
+msgid "Self-registration allowed"
+msgstr "Regjistrimi vetë lejohet"
+
+msgid "Self-unregistration allowed"
+msgstr "Çregjistrimi vetë lejohet"
+
+msgid "This group is linked to the class"
+msgstr "Ky grup është i lidhur me klasën"
+
+msgid "Create one or more empty course groups"
+msgstr "Krijo një ose më shumë grupe kursesh bosh"
+
+msgid "Number of places"
+msgstr "Numri i vendeve"
+
+msgid "Base group"
+msgstr "Grupi bazë"
+
+msgid "Share"
+msgstr "Ndaj"
+
+msgid "Collaboration"
+msgstr "Bashkëpunim"
+
+msgid "The group title is required."
+msgstr "Titulli i grupit është i detyrueshëm."
+
+msgid "Back to group area"
+msgstr "Kthehu te zona e grupit"
+
+msgid "Members are managed by the linked class"
+msgstr "Anëtarët menaxhohen nga klasa e lidhur"
+
+msgid "%s groups selected"
+msgstr "%s grupe të zgjedhura"
+
+msgid "Fill selected groups"
+msgstr "Plotëso grupet e zgjedhura"
+
+msgid "Empty selected groups"
+msgstr "Boshatis grupet e zgjedhura"
+
+msgid "Fill group"
+msgstr "Plotëso grupin"
+
+msgid "Empty group"
+msgstr "Boshatis grupin"
+
+msgid "Groups per user"
+msgstr "Grupe për përdorues"
+
+msgid "No tutors"
+msgstr "Asnjë tutor"
+
+msgid "No users"
+msgstr "Asnjë përdorues"
 

@@ -1,18 +1,77 @@
-.form-control-cert {
+/* For licensing terms, see /license.txt */
+
+/*
+ * CustomCertificate legacy form refresh for Chamilo 2.
+ * The colors use the same CSS variables exposed by the Tailwind theme.
+ */
+.customcertificate-page {
+    color: #333333;
+}
+
+.customcertificate-page .form-control-cert {
     background-color: #fff;
     background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    color: #555;
+    border: 1px solid #e4e9ed;
+    border-radius: 0.5rem;
+    box-shadow: none;
+    color: #333333;
     font-size: 14px;
     line-height: 1.42857143;
-    padding: 6px 12px;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    padding: 0.5rem 0.75rem;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-.certificado-text-label {
+
+.customcertificate-page .form-control-cert:focus {
+    border-color: rgb(var(--color-primary-base));
+    box-shadow: 0 0 0 3px rgb(var(--color-primary-base) / 0.15);
+    outline: none;
+}
+
+.customcertificate-page .certificado-text-label {
+    color: #333333;
     font-weight: 700;
-    margin: 0 10px 0 10px;
+    margin: 0 10px;
 }
-input:disabled { background: #eee; }
-label { font-size: 13px; }
+
+.customcertificate-page input:disabled,
+.customcertificate-page textarea:disabled,
+.customcertificate-page select:disabled {
+    background: #fafafa;
+    color: #a2a6b0;
+}
+
+.customcertificate-page label {
+    color: #333333;
+    font-size: 13px;
+}
+
+.customcertificate-page fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.customcertificate-page img {
+    border: 1px solid #e4e9ed;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    background: #fff;
+}
+
+.customcertificate-page .picture-form {
+    border: 1px dashed #a2a6b0;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    width: 100%;
+}
+
+.customcertificate-page .form-group {
+    margin-bottom: 1rem;
+}
+
+.customcertificate-page .cke,
+.customcertificate-page .tox-tinymce {
+    border-color: #e4e9ed !important;
+    border-radius: 0.5rem !important;
+    overflow: hidden;
+}

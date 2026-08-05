@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Notation Électronique est désactivée';
 $strings['StudentId'] = 'ID Étudiant';
 $strings['ProviderId'] = 'ID Fournisseur';
 $strings['CourseHours'] = 'Heures de cours';
+
+$strings['GenerateFile'] = 'Générer le fichier';
+$strings['CourseId'] = 'Identifiant du cours';

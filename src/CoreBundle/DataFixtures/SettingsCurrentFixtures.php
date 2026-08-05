@@ -20,7 +20,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
      * Settings candidates that must be locked at URL-level (access_url_locked = 1),
      * based on the task list.
      */
-    private const ACCESS_URL_LOCKED_YES = [
+    private const array ACCESS_URL_LOCKED_YES = [
         'permissions_for_new_directories',
         'permissions_for_new_files',
         'course_creation_form_set_extra_fields_mandatory',
@@ -46,7 +46,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
      * Settings candidates explicitly mentioned as "no" in the task list.
      * We set them to access_url_locked = 0, but only for this candidate list.
      */
-    private const ACCESS_URL_LOCKED_NO = [
+    private const array ACCESS_URL_LOCKED_NO = [
         'drh_allow_access_to_all_students',
         'ticket_allow_category_edition',
         'max_anonymous_users',
@@ -240,7 +240,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'allow_edit_tool_visibility_in_session',
                     'title' => 'Allow tool visibility edition in sessions',
-                    'comment' => 'When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow coaches in session courses to adapt tool visibilities to their needs.',
+                    'comment' => 'When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs.',
                 ],
                 [
                     'name' => 'courses_list_session_title_link',
@@ -260,23 +260,23 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'add_users_by_coach',
-                    'title' => 'Register users by Coach',
-                    'comment' => 'Coach users may create users to the platform and subscribe users to a session.',
+                    'title' => 'Allow tutors to register users',
+                    'comment' => 'Tutors may create users on the platform and subscribe users to a session.',
                 ],
                 [
                     'name' => 'allow_coach_to_edit_course_session',
-                    'title' => 'Allow coaches to edit inside course sessions',
-                    'comment' => 'Allow coaches to edit inside course sessions',
+                    'title' => 'Allow tutors to edit inside course sessions',
+                    'comment' => 'Allow tutors to edit inside course sessions',
                 ],
                 [
                     'name' => 'extend_rights_for_coach',
-                    'title' => 'Extend rights for coach',
-                    'comment' => 'Activate this option will give the coach the same permissions as the trainer on authoring tools',
+                    'title' => 'Extend rights for tutors',
+                    'comment' => 'Enable this option to give tutors the same permissions as trainers on authoring tools',
                 ],
                 [
                     'name' => 'show_session_coach',
-                    'title' => 'Show session coach',
-                    'comment' => 'Show the global session coach name in session title box in the courses list',
+                    'title' => 'Show session tutor',
+                    'comment' => 'Show the general session tutor name in the session title box in the course list',
                 ],
                 [
                     'name' => 'show_session_data',
@@ -311,7 +311,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'allow_tutors_to_assign_students_to_session',
                     'title' => 'Tutors can assign students to sessions',
-                    'comment' => 'When enabled, course coaches/tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.',
+                    'comment' => 'When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.',
                 ],
                 [
                     'name' => 'drh_can_access_all_session_content',
@@ -335,13 +335,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'session_days_after_coach_access',
-                    'title' => 'Default coach access days after session',
-                    'comment' => 'Default number of days a coach can access his session after the official session end date',
+                    'title' => 'Default tutor access days after session',
+                    'comment' => 'Default number of days a tutor can access a session after the official session end date',
                 ],
                 [
                     'name' => 'session_days_before_coach_access',
-                    'title' => 'Default coach access days before session',
-                    'comment' => 'Default number of days a coach can access his session before the official session start date',
+                    'title' => 'Default tutor access days before session',
+                    'comment' => 'Default number of days a tutor can access a session before the official session start date',
                 ],
                 [
                     'name' => 'show_session_description',
@@ -431,6 +431,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_toolshortcuts',
                     'title' => 'Tools shortcuts',
                     'comment' => 'Show the tool shortcuts in the banner?',
+                    'selected_value' => 'false',
                 ],
                 [
                     'name' => 'student_view_enabled',
@@ -627,27 +628,27 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'drh_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
-                    'comment' => 'Human resources director autosubscribe - not yet available',
+                    'comment' => 'Course codes separated by "|". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'sessionadmin_autosubscribe',
+                    'title' => 'Session admin autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
+                ],
+                [
+                    'name' => 'student_autosubscribe',
+                    'title' => 'Learner autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002.',
+                ],
+                [
+                    'name' => 'teacher_autosubscribe',
+                    'title' => 'Teacher autosubscribe',
+                    'comment' => 'Course codes separated by "|". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions.',
                 ],
                 [
                     'name' => 'platform_unsubscribe_allowed',
                     'title' => 'Allow unsubscription from platform',
                     'comment' => 'By enabling this option, you allow any user to definitively remove his own account and all data related to it from the platform. This is quite a radical action, but it is necessary for portals opened to the public where users can auto-register. An additional entry will appear in the user profile to unsubscribe after confirmation.',
-                ],
-                [
-                    'name' => 'sessionadmin_autosubscribe',
-                    'title' => 'Session admin autosubscribe',
-                    'comment' => 'Session administrator autosubscribe - not available yet',
-                ],
-                [
-                    'name' => 'student_autosubscribe',
-                    'title' => 'Learner autosubscribe',
-                    'comment' => 'Learner autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'teacher_autosubscribe',
-                    'title' => 'Teacher autosubscribe',
-                    'comment' => 'Teacher autosubscribe - not yet available',
                 ],
             ],
             'message' => [
@@ -761,11 +762,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'enable_help_link',
                     'title' => 'Enable help link',
                     'comment' => 'The Help link is located in the top right part of the screen',
-                ],
-                [
-                    'name' => 'show_admin_toolbar',
-                    'title' => 'Show admin toolbar',
-                    'comment' => "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users",
                 ],
                 [
                     'name' => 'show_hot_courses',
@@ -977,25 +973,25 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'dropbox_hide_course_coach',
-                    'title' => 'Dropbox: hide course coach',
-                    'comment' => 'Hide session course coach in dropbox when a document is sent by the coach to students',
+                    'title' => 'Dropbox: hide course tutor',
+                    'comment' => 'Hide the session course tutor in Dropbox when a document is sent by the tutor to students',
                 ],
                 [
                     'name' => 'dropbox_hide_general_coach',
-                    'title' => 'Hide general coach in dropbox',
-                    'comment' => 'Hide general coach name in the dropbox tool when the general coach uploaded the file',
+                    'title' => 'Hide general tutor in Dropbox',
+                    'comment' => 'Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file',
                 ],
             ],
             'survey' => [
                 [
                     'name' => 'extend_rights_for_coach_on_survey',
-                    'title' => 'Extend rights for coachs on surveys',
-                    'comment' => 'Activate this option will allow the coachs to create and edit surveys',
+                    'title' => 'Extend rights for tutors on surveys',
+                    'comment' => 'Enable this option to allow tutors to create and edit surveys',
                 ],
                 [
                     'name' => 'survey_email_sender_noreply',
                     'title' => 'Survey e-mail sender (no-reply)',
-                    'comment' => 'Should the survey invitations use the coach e-mail address or the no-reply address defined in the main configuration section?',
+                    'comment' => 'Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?',
                 ],
             ],
             'gradebook' => [
@@ -1316,8 +1312,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'allow_coach_feedback_exercises',
-                    'title' => 'Allow coaches to comment in review of exercises',
-                    'comment' => 'Allow coaches to edit feedback during review of exercises',
+                    'title' => 'Allow tutors to comment when reviewing exercises',
+                    'comment' => 'Allow tutors to edit feedback when reviewing exercises',
                 ],
                 [
                     'name' => 'configure_exercise_visibility_in_course',
@@ -1343,6 +1339,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_official_code_exercise_result_list',
                     'title' => 'Display official code in exercises results',
                     'comment' => "Whether to show the students' official code in the exercises results reports",
+                ],
+                [
+                    'name' => 'quiz_result_pdf_export_include_official_code_in_file_name',
+                    'title' => 'Include official code in exported quiz result PDF file name',
+                    'comment' => "Whether to include the student's official code in the file name when exporting a quiz result to PDF",
                 ],
             ],
             'security' => [
@@ -1791,6 +1792,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'User certificates can be view by unregistered users.',
                 ],
                 [
+                    'name' => 'allow_certificates_search',
+                    'title' => 'Allow certificates search',
+                    'comment' => 'Allow users and visitors to search generated certificates from the top bar menu.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'certificate_pdf_orientation',
                     'title' => 'PDF orientation for certificates',
                     'comment' => 'Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates.',
@@ -1914,8 +1921,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'allow_coach_to_edit_announcements',
-                    'title' => 'Allow coaches to always edit announcements',
-                    'comment' => 'Allow coaches to always edit announcements inside active or past sessions.',
+                    'title' => 'Allow tutors to always edit announcements',
+                    'comment' => 'Allow tutors to always edit announcements inside active or past sessions.',
                 ],
                 [
                     'name' => 'allow_scheduled_announcements',
@@ -2006,6 +2013,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Enable Multi-Level Attendance Grading',
                     'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
                 ],
+                [
+                    'name' => 'attendance_add_official_code',
+                    'title' => "Show students' official code in attendance sheets",
+                    'comment' => "Whether to display the students' official code alongside their name in attendance sheets and lists.",
+                ],
             ],
             'display' => [
                 [
@@ -2094,7 +2106,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             'chat' => [
                 [
                     'name' => 'course_chat_restrict_to_coach',
-                    'title' => 'Restrict course chat to coaches',
+                    'title' => 'Restrict course chat to tutors',
                     'comment' => 'Only allow students to talk to the tutors in the course (not other students).',
                 ],
                 [
@@ -2166,6 +2178,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'language' => [
+                [
+                    'name' => 'language_by_resource',
+                    'title' => 'Language by resource',
+                    'comment' => 'Allow assigning a specific language to individual resources.',
+                    'selected_value' => 'false',
+                ],
                 [
                     'name' => 'allow_course_multiple_languages',
                     'title' => 'Multiple-language courses',
@@ -2389,6 +2407,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'scorm_complete_on_leave_when_incomplete',
+                    'title' => 'Complete SCO on leave when status stays incomplete',
+                    'comment' => "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO.",
+                ],
+                [
                     'name' => 'scorm_lms_update_sco_status_all_time',
                     'title' => 'Update SCO status autonomously',
                     'comment' => 'If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo.',
@@ -2411,7 +2434,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_invisible_lp_in_course_home',
                     'title' => 'Display link to learning path on course home when invisible',
-                    'comment' => 'If a learning path is set to invisible but the teacher/coach decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage.',
+                    'comment' => 'If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage.',
                 ],
                 [
                     'name' => 'student_follow_page_add_LP_acquisition_info',
@@ -2461,6 +2484,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear.',
                 ],
                 [
+                    'name' => 'quiz_question_category_destinations',
+                    'title' => 'Enable progressive adaptive tests by category destination',
+                    'comment' => 'Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score.',
+                ],
+                [
                     'name' => 'allow_mandatory_question_in_category',
                     'title' => 'Enable selecting mandatory questions',
                     'comment' => 'Enable the selection of mandatory questions in a test when using random categories.',
@@ -2507,8 +2535,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'block_quiz_mail_notification_general_coach',
-                    'title' => 'Block sending test notifications to general coach',
-                    'comment' => 'Learners completing a test usually sends notifications to coaches, including the general session coach. Enable this option to omit the general coach from these notifications.',
+                    'title' => 'Block sending test notifications to the general tutor',
+                    'comment' => 'When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications.',
                 ],
                 [
                     'name' => 'disable_clean_exercise_results_for_teachers',
@@ -2683,7 +2711,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_exercise_attempts_in_all_user_sessions',
                     'title' => 'Show test attempts from all sessions in pending tests report',
-                    'comment' => 'Show test attempts from users in all sessions where the general coach has access in pending tests report.',
+                    'comment' => 'Show test attempts from users in all sessions where the general tutor has access in the pending tests report.',
                 ],
                 [
                     'name' => 'show_exercise_expected_choice',
@@ -3057,6 +3085,18 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'session_expiration_warning_enabled',
+                    'title' => 'Enable session expiration warning',
+                    'comment' => 'Show a warning to authenticated users before their server-side session expires.',
+                    'selected_value' => 'false',
+                ],
+                [
+                    'name' => 'session_expiration_warning_seconds',
+                    'title' => 'Session expiration warning time',
+                    'comment' => 'Number of seconds before session expiration when the warning is displayed. The default is 180 seconds.',
+                    'selected_value' => '180',
+                ],
+                [
                     'name' => 'proxy_settings',
                     'title' => 'Proxy settings',
                     'comment' => 'Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.',
@@ -3146,6 +3186,26 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'X-XSS-Protection',
                     'comment' => "X-XSS-Protection sets the configuration for the cross-site scripting filter built into most browsers. Recommended value '1; mode=block'.",
                 ],
+                [
+                    'name' => 'file_integrity_check_notify_admins',
+                    'title' => 'File integrity check notification recipients',
+                    'comment' => 'Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead.',
+                ],
+                [
+                    'name' => 'oauth_server_enabled',
+                    'title' => 'Enable the OAuth authorization server',
+                    'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
+                ],
+                [
+                    'name' => 'mcp_enabled',
+                    'title' => 'Enable MCP server',
+                    'comment' => 'Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp.',
+                ],
+                [
+                    'name' => 'mcp_allowed_roles',
+                    'title' => 'Allow MCP by roles',
+                    'comment' => 'JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections.',
+                ],
             ],
             'session' => [
                 [
@@ -3161,7 +3221,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_simple_session_info',
                     'title' => 'Show simple session info',
-                    'comment' => "Add coach and dates to the session's subtitle in the sessions' list.",
+                    'comment' => 'Add the tutor and dates to the session subtitle in the session list.',
                 ],
                 [
                     'name' => 'duplicate_specific_session_content_on_session_copy',
@@ -3290,8 +3350,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'session_coach_access_after_duration_end',
-                    'title' => 'Sessions by duration always available to coaches',
-                    'comment' => 'Otherwise, session coaches only have access to sessions by duration during the active duration.',
+                    'title' => 'Sessions by duration always available to tutors',
+                    'comment' => 'Otherwise, session tutors only have access to sessions by duration during the active duration.',
                 ],
                 [
                     'name' => 'session_course_users_subscription_limited_to_session_users',
@@ -3395,6 +3455,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide legal accept checkbox in Terms and Conditions page',
                     'comment' => 'If set to true, removes the "I have read and accept" checkbox in the Terms and Conditions page flow.',
                 ],
+                [
+                    'name' => 'allow_invitation_registration',
+                    'title' => 'Allow registration via course invitation links',
+                    'comment' => 'When enabled, a teacher/admin can send a one-time invitation link from a course\'s Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled.',
+                ],
             ],
             'work' => [
                 [
@@ -3426,6 +3491,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'assignment_prevent_duplicate_upload',
                     'title' => 'Prevent duplicate uploads in assignments',
                     'comment' => '',
+                ],
+                [
+                    'name' => 'add_fullname_in_file_download',
+                    'title' => 'Add student fullname in file download name',
+                    'comment' => 'Add the student full name to assignment file names when downloading individual submissions or assignment packages.',
                 ],
                 [
                     'name' => 'block_student_publication_add_documents',
@@ -3576,6 +3646,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Configuration data to connect with external AI services.',
                 ],
                 [
+                    'name' => 'wysiwyg_translation_all_languages',
+                    'title' => 'Allow AI translation to all active languages in WYSIWYG editors',
+                    'comment' => 'Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'learning_path_generator',
                     'title' => 'Learning paths generator',
                     'comment' => 'Generates personalized learning paths using AI suggestions.',
@@ -3629,6 +3705,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'disclose_ai_assistance',
                     'title' => 'Disclose AI assistance',
                     'comment' => 'Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user.',
+                    'selected_value' => 'true',
                 ],
             ],
             'privacy' => [
@@ -3716,8 +3793,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'disabled_edit_session_coaches_course_editing_course',
-                    'title' => 'Disable the ability to edit course coaches',
-                    'comment' => 'When disabled, admins do not have a link to quickly assign coaches to session-courses on the course edition page.',
+                    'title' => 'Disable the ability to edit course tutors',
+                    'comment' => 'When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page.',
                 ],
                 [
                     'name' => 'course_visibility_change_only_admin',

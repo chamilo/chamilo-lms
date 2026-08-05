@@ -1,428 +1,395 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-/* For license terms, see /license.txt */
-
-/**
- * Search course widget.
- * Display a search form and a list of courses that matches the search.
- *
- * @copyright (c) 2011 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht
- */
 class SearchCourseWidget
 {
-    const PARAM_ACTION = 'action';
-    const ACTION_SUBSCRIBE = 'subscribe';
+    public const MAX_RESULTS = 50;
 
-    /**
-     * Returns $_POST data for $key is it exists or $default otherwise.
-     *
-     * @param string $key
-     * @param object $default
-     *
-     * @return string
-     */
-    public static function post($key, $default = '')
+    public static function post(string $key, string $default = ''): string
     {
-        return isset($_POST[$key]) ? $_POST[$key] : $default;
+        return isset($_POST[$key]) ? trim((string) $_POST[$key]) : $default;
     }
 
-    /**
-     * Returns $_GET data for $key is it exists or $default otherwise.
-     *
-     * @param string $key
-     * @param object $default
-     *
-     * @return string
-     */
-    public static function get($key, $default = '')
+    public static function get(string $key, string $default = ''): string
     {
-        return isset($_GET[$key]) ? $_GET[$key] : $default;
+        return isset($_GET[$key]) ? trim((string) $_GET[$key]) : $default;
     }
 
-    public static function server($key, $default = '')
+    public static function escape(string $value): string
     {
-        return isset($_SERVER[$key]) ? $_SERVER[$key] : $default;
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
-    public static function get_lang($name)
+    public static function getPluginLang(string $name): string
     {
         return SearchCoursePlugin::create()->get_lang($name);
     }
 
-    /**
-     * @return bool
-     */
-    public function is_homepage()
+    public static function factory(): self
     {
-        $url = self::server('REQUEST_URI');
-        $url = explode('?', $url);
-        $url = reset($url);
-        $url = self::server('SERVER_NAME').$url;
-
-        $root = api_get_path('WEB_PATH');
-        $root = str_replace('https://', '', $root);
-        $root = str_replace('http://', '', $root);
-        $index_url = $root.'index.php';
-
-        return $url == $index_url || $url == $root;
+        return new self();
     }
 
-    /**
-     * @return bool
-     */
-    public function is_user_portal()
+    public static function getSearchPageUrl(): string
     {
-        $url = self::server('REQUEST_URI');
-        $url = explode('?', $url);
-        $url = reset($url);
-        $url = self::server('HTTP_HOST').$url;
-
-        $root = api_get_path('WEB_PATH');
-        $root = str_replace('https://', '', $root);
-        $root = str_replace('http://', '', $root);
-        $index_url = $root.'user_portal.php';
-
-        return $url == $index_url || $url == $root;
+        return SearchCoursePlugin::create()->getSearchPageUrl();
     }
 
-    public function accept()
+    public function renderBlock(): string
     {
-        return $this->is_homepage() || $this->is_user_portal();
-    }
-
-    /**
-     * Display the search course widget:.
-     *
-     * Title
-     * Search form
-     *
-     * Search results
-     */
-    public function run()
-    {
-        if (!$this->accept()) {
-            return;
-        }
-        $this->display_header();
-
-        $this->display_form();
-
-        $search_term = self::post('search_term');
-        $action = self::get('action');
-
-        $has_content = !empty($search_term) || !empty($action);
-        if ($has_content) {
-            echo '<div class="list">';
-        } else {
-            echo '<div>';
+        if (api_is_anonymous()) {
+            return '';
         }
 
-        if (RegisterCourseWidget::factory()->run()) {
-            $result = true;
-        } else {
-            $result = $this->action_display();
+        $content = '<div class="space-y-4" data-search-course-region-block="1">';
+        $content .= $this->renderHeader();
+        $content .= $this->renderSearchForm();
+        $content .= '<p class="text-xs text-gray-50">'.self::escape(self::getPluginLang('SearchCourseRegionHelp')).'</p>';
+        $content .= '</div>';
+
+        return $content;
+    }
+
+    public function run(): string
+    {
+        $content = '<div class="space-y-6">';
+        $content .= $this->renderHeader();
+        $content .= RegisterCourseWidget::factory()->run();
+        $content .= $this->renderSearchForm();
+
+        $searchTerm = self::post('search_term');
+
+        if ('' !== $searchTerm) {
+            $courses = $this->retrieveCourses($searchTerm);
+            $content .= $this->renderResults($courses, $searchTerm);
         }
 
-        echo '</div>';
+        $content .= '</div>';
 
-        $this->display_footer();
-
-        return $result;
+        return $content;
     }
 
-    public function get_url($action = '')
+    public function renderHeader(): string
     {
-        $self = $_SERVER['PHP_SELF'];
-        $parameters = [];
-        if ($action) {
-            $parameters[self::PARAM_ACTION] = $action;
+        if (api_is_anonymous()) {
+            return '';
         }
-        $parameters = implode('&', $parameters);
-        $parameters = $parameters ? '?'.$parameters : '';
-
-        return $self.$parameters;
+        return '
+            <section class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">'
+                    .self::escape(self::getPluginLang('CourseCatalog')).'
+                </p>
+                <h2 class="mt-1 text-2xl font-bold text-gray-90">'
+                    .self::escape(self::getPluginLang('Search courses')).'
+                </h2>
+                <p class="mt-2 text-sm text-gray-50">'
+                    .self::escape(self::getPluginLang('SearchCourseIntro')).'
+                </p>
+            </section>';
     }
 
-    /**
-     * Handle the display action.
-     */
-    public function action_display()
-    {
-        global $charset;
-
-        $search_term = self::post('search_term');
-        if ($search_term) {
-            $search_result_for_label = self::get_lang('Search results for:');
-            $search_term_html = htmlentities($search_term, ENT_QUOTES, $charset);
-            echo "<h5>$search_result_for_label $search_term_html</h5>";
-
-            $courses = $this->retrieve_courses($search_term);
-            $this->display_list($courses);
-        }
-
-        return true;
-    }
-
-    public function display_header()
-    {
-        $search_course_label = self::get_lang('Search courses');
-        echo <<<EOT
-        <div class="well course_search">
-        <div class="menusection">
-            <h4>$search_course_label</h4>
-EOT;
-    }
-
-    public function display_footer()
-    {
-        echo '</div></div>';
-    }
-
-    /**
-     * Display the search course form.
-     */
-    public function display_form()
-    {
-        global $stok;
-        $search_label = self::get_lang('_search');
-        $self = api_get_self();
-        $search_term = self::post('search_term');
-        $form = <<<EOT
-        <form class="course_list" method="post" action="$self">
-            <input type="hidden" name="sec_token" value="$stok" />
-            <input type="hidden" name="search_course" value="1" />
-            <input type="text" name="search_term" class="span2" value="$search_term" />
-            &nbsp;<input class="btn btn--plain" type="submit" value="$search_label" />
-        </form>
-EOT;
-        echo $form;
-    }
-
-    /**
-     * @param array $courses
-     *
-     * @return bool
-     */
-    public function display_list($courses)
-    {
-        if (empty($courses)) {
-            return false;
-        }
-
-        $user_courses = $this->retrieve_user_courses();
-        $display_coursecode = 'true' == api_get_setting('display_coursecode_in_courselist');
-        $display_teacher = 'true' == api_get_setting('display_teacher_in_courselist');
-
-        echo '<table cellpadding="4">';
-        foreach ($courses as $key => $course) {
-            $details = [];
-            if ($display_coursecode) {
-                $details[] = $course['visual_code'];
-            }
-            if ($display_teacher) {
-                $details[] = $course['tutor'];
-            }
-            $details = implode(' - ', $details);
-            $title = $course['title'];
-
-            $href = api_get_path(WEB_COURSE_PATH).$course['code'].'/index.php';
-            echo '<tr><td><b><a href="'.$href.'">'."$title</a></b><br/>$details</td><td>";
-            if (!api_is_anonymous()) {
-                if ($course['registration_code']) {
-                    echo Display::return_icon(
-                        'passwordprotected.png',
-                        '',
-                        ['style' => 'float:left;']
-                    );
-                }
-                $this->display_subscribe_icon($course, $user_courses);
-            }
-            echo '</td></tr>';
-        }
-        echo '</table>';
-
-        return true;
-    }
-
-    /**
-     * Displays the subscribe icon if subscribing is allowed and
-     * if the user is not yet subscribed to this course.
-     *
-     * @global type $stok
-     *
-     * @param array $current_course
-     * @param array $user_courses
-     *
-     * @return bool
-     */
-    public function display_subscribe_icon($current_course, $user_courses)
+    public function renderSearchForm(): string
     {
         global $stok;
 
-        //Already subscribed
-        $code = $current_course['code'];
-        if (isset($user_courses[$code])) {
-            echo self::get_lang('Already subscribed');
+        $searchTerm = self::escape(self::post('search_term'));
+        $token = self::escape((string) $stok);
 
-            return false;
-        }
-
-        //Not authorized to subscribe
-        if (SUBSCRIBE_ALLOWED != $current_course['subscribe']) {
-            echo self::get_lang('Subscribing not allowed');
-
-            return false;
-        }
-
-        //Subscribe form
-        $self = $_SERVER['PHP_SELF'];
-        echo <<<EOT
-                <form action="$self?action=subscribe" method="post">
-                    <input type="hidden" name="sec_token" value="$stok" />
-                    <input type="hidden" name="subscribe" value="$code" />
-EOT;
-
-        $search_term = $this->post('search_term');
-        if ($search_term) {
-            $search_term = Security::remove_XSS($search_term);
-            echo <<<EOT
-                    <input type="hidden" name="search_course" value="1" />
-                    <input type="hidden" name="search_term" value="$search_term" />
-EOT;
-        }
-        echo '<input type="image" name="unsub" src="'.Display::returnIconPath('enroll.gif').'" alt="'.get_lang('Subscribe').'" />
-                '.get_lang('Subscribe').'
+        return '
+            <section class="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+                <form class="flex flex-col gap-3 md:flex-row md:items-end" method="post" action="'.self::escape(self::getSearchPageUrl()).'">
+                    <input type="hidden" name="sec_token" value="'.$token.'">
+                    <input type="hidden" name="search_course" value="1">
+                    <label class="flex flex-1 flex-col gap-1 text-sm">
+                        <span class="font-semibold text-gray-70">'.self::escape(get_lang('Search')).'</span>
+                        <input
+                            class="w-full rounded-lg border border-gray-25 px-3 py-2 text-sm"
+                            type="text"
+                            name="search_term"
+                            value="'.$searchTerm.'"
+                            placeholder="'.self::escape(self::getPluginLang('SearchByCourseTitleCodeOrTeacher')).'"
+                        >
+                    </label>
+                    <button class="btn btn--primary" type="submit">
+                        <span class="mdi mdi-magnify ch-tool-icon" aria-hidden="true"></span>
+                        '.self::escape(get_lang('Search')).'
+                    </button>
                 </form>
-        ';
-
-        return true;
+            </section>';
     }
 
-    /**
-     * DB functions - DB functions - DB functions.
-     */
-
-    /**
-     * Search courses that match the search term.
-     * Search is done on the code, title and tutor fields.
-     *
-     * @param string $search_term
-     *
-     * @return array
-     */
-    public function retrieve_courses($search_term)
+    public function renderResults(array $courses, string $searchTerm): string
     {
-        if (empty($search_term)) {
-            return [];
+        $searchTermHtml = self::escape($searchTerm);
+        $count = count($courses);
+
+        $content = '
+            <section class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+                <div class="border-b border-gray-20 p-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">'
+                        .self::escape(self::getPluginLang('SearchResults')).'
+                    </p>
+                    <h3 class="mt-1 text-xl font-bold text-gray-90">'
+                        .sprintf(
+                            self::escape(self::getPluginLang('Search results for:')),
+                            $searchTermHtml
+                        ).'
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-50">'
+                        .sprintf(self::escape(self::getPluginLang('CoursesFound')), $count).'
+                    </p>
+                </div>';
+
+        if (empty($courses)) {
+            return $content.'
+                <div class="p-6 text-center text-sm text-gray-50">'
+                    .self::escape(get_lang('No data available')).'
+                </div>
+            </section>';
         }
-        $search_term = Database::escape_string($search_term);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $content .= '
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-left text-sm">
+                    <thead class="bg-gray-10 text-xs uppercase text-gray-50">
+                        <tr>
+                            <th class="px-4 py-3">'.self::escape(get_lang('Course')).'</th>
+                            <th class="px-4 py-3">'.self::escape(get_lang('Teacher')).'</th>
+                            <th class="px-4 py-3">'.self::escape(get_lang('Visibility')).'</th>
+                            <th class="px-4 py-3 text-right">'.self::escape(get_lang('Actions')).'</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+        $userCourses = api_is_anonymous() ? [] : $this->retrieveUserCourses();
+
+        foreach ($courses as $course) {
+            $content .= $this->renderCourseRow($course, $userCourses);
+        }
+
+        $content .= '
+                    </tbody>
+                </table>
+            </div>
+        </section>';
+
+        return $content;
+    }
+
+    public function renderCourseRow(array $course, array $userCourses): string
+    {
+        $courseCode = (string) ($course['code'] ?? '');
+        $courseId = (int) ($course['id'] ?? 0);
+        $title = (string) ($course['title'] ?? '');
+        $visualCode = (string) ($course['visual_code'] ?? '');
+        $tutor = (string) ($course['tutor'] ?? '');
+        $visibility = (int) ($course['visibility'] ?? 0);
+        $courseUrl = api_get_path(WEB_PATH).'course/'.$courseId.'/home?sid=0';
+
+        $details = [];
+
+        if ('true' === api_get_setting('display_coursecode_in_courselist') && '' !== $visualCode) {
+            $details[] = self::escape($visualCode);
+        }
+
+        $detailsHtml = empty($details) ? '' : '<p class="mt-1 text-xs text-gray-50">'.implode(' · ', $details).'</p>';
+
+        return '
+            <tr class="border-t border-gray-15">
+                <td class="px-4 py-3">
+                    <a class="font-semibold text-blue-700 hover:underline" href="'.self::escape($courseUrl).'">'
+                        .self::escape($title).'
+                    </a>'
+                    .$detailsHtml.'
+                </td>
+                <td class="px-4 py-3 text-gray-70">'.self::escape($tutor).'</td>
+                <td class="px-4 py-3">'.$this->renderVisibilityBadge($visibility).'</td>
+                <td class="px-4 py-3 text-right">'.$this->renderActions($course, $userCourses).'</td>
+            </tr>';
+    }
+
+    public function renderVisibilityBadge(int $visibility): string
+    {
+        $label = match ($visibility) {
+            COURSE_VISIBILITY_OPEN_WORLD => self::getPluginLang('Public'),
+            COURSE_VISIBILITY_OPEN_PLATFORM => self::getPluginLang('PlatformUsers'),
+            COURSE_VISIBILITY_REGISTERED => self::getPluginLang('RegistrationAllowed'),
+            default => get_lang('Private'),
+        };
+
+        $class = match ($visibility) {
+            COURSE_VISIBILITY_OPEN_WORLD => 'bg-green-100 text-green-700',
+            COURSE_VISIBILITY_OPEN_PLATFORM => 'bg-blue-100 text-blue-700',
+            COURSE_VISIBILITY_REGISTERED => 'bg-orange-100 text-orange-700',
+            default => 'bg-gray-100 text-gray-700',
+        };
+
+        return '<span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold '.$class.'">'.self::escape($label).'</span>';
+    }
+
+    public function renderActions(array $course, array $userCourses): string
+    {
+        global $stok;
+
+        $courseCode = (string) ($course['code'] ?? '');
+        $courseId = (int) ($course['id'] ?? 0);
+        $courseUrl = api_get_path(WEB_PATH).'course/'.$courseId.'/home?sid=0';
+
+        $viewLink = '
+            <a href="'.self::escape($courseUrl).'" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-100 bg-white text-blue-700 hover:bg-blue-50" title="'.self::escape(get_lang('View')).'">
+                <span class="mdi mdi-eye ch-tool-icon" aria-hidden="true"></span>
+                <span class="sr-only">'.self::escape(get_lang('View')).'</span>
+            </a>';
 
         if (api_is_anonymous()) {
-            $course_fiter = 'visibility = '.COURSE_VISIBILITY_OPEN_WORLD;
-        } else {
-            $course_fiter = 'visibility = '.COURSE_VISIBILITY_OPEN_WORLD.' OR ';
-            $course_fiter .= 'visibility = '.COURSE_VISIBILITY_OPEN_PLATFORM.' OR ';
-            $course_fiter .= '(visibility = '.COURSE_VISIBILITY_REGISTERED.' AND subscribe = 1)';
+            return '<div class="flex justify-end gap-2">'.$viewLink.'</div>';
         }
 
-        $sql = <<<EOT
-                SELECT * FROM $course_table
-                WHERE ($course_fiter) AND (code LIKE '%$search_term%' OR visual_code LIKE '%$search_term%' OR title LIKE '%$search_term%' OR tutor_name LIKE '%$search_term%')
-                ORDER BY title, visual_code ASC
-EOT;
+        if (isset($userCourses[$courseCode])) {
+            return '<div class="flex justify-end gap-2">'.$viewLink.'<span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">'.self::escape(self::getPluginLang('Already subscribed')).'</span></div>';
+        }
+
+        if (SUBSCRIBE_ALLOWED !== (int) ($course['subscribe'] ?? 0)) {
+            return '<div class="flex justify-end gap-2">'.$viewLink.'<span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">'.self::escape(self::getPluginLang('Subscribing not allowed')).'</span></div>';
+        }
+
+        $token = self::escape((string) $stok);
+
+        $subscribeForm = '
+            <form method="post" action="'.self::escape(self::getSearchPageUrl()).'" class="inline-flex">
+                <input type="hidden" name="sec_token" value="'.$token.'">
+                <input type="hidden" name="action" value="'.RegisterCourseWidget::ACTION_SUBSCRIBE.'">
+                <input type="hidden" name="'.RegisterCourseWidget::PARAM_SUBSCRIBE.'" value="'.self::escape($courseCode).'">
+                <input type="hidden" name="search_course" value="1">
+                <input type="hidden" name="search_term" value="'.self::escape(self::post('search_term')).'">
+                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-green-100 bg-white text-green-700 hover:bg-green-50" title="'.self::escape(get_lang('Subscribe')).'">
+                    <span class="mdi mdi-account-plus ch-tool-icon" aria-hidden="true"></span>
+                    <span class="sr-only">'.self::escape(get_lang('Subscribe')).'</span>
+                </button>
+            </form>';
+
+        return '<div class="flex justify-end gap-2">'.$viewLink.$subscribeForm.'</div>';
+    }
+
+    public function retrieveCourses(string $searchTerm): array
+    {
+        if ('' === trim($searchTerm)) {
+            return [];
+        }
+
+        $searchTerm = Database::escape_string($searchTerm);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $whereVisibility = $this->getVisibilityWhereClause();
+
+        $sql = "
+            SELECT
+                id,
+                code,
+                visual_code,
+                title,
+                tutor_name,
+                subscribe,
+                unsubscribe,
+                registration_code,
+                visibility
+            FROM $courseTable
+            WHERE ($whereVisibility)
+              AND (
+                    code LIKE '%$searchTerm%'
+                 OR visual_code LIKE '%$searchTerm%'
+                 OR title LIKE '%$searchTerm%'
+                 OR tutor_name LIKE '%$searchTerm%'
+              )
+            ORDER BY title ASC, visual_code ASC
+            LIMIT ".self::MAX_RESULTS;
 
         $result = [];
-        $resultset = Database::query($sql);
-        while ($row = Database::fetch_array($resultset)) {
-            $code = $row['code'];
+        $resultSet = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($resultSet)) {
+            $code = (string) $row['code'];
             $result[$code] = [
+                'id' => (int) $row['id'],
                 'code' => $code,
-                'directory' => $row['directory'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
+                'visual_code' => (string) $row['visual_code'],
+                'title' => (string) $row['title'],
+                'tutor' => (string) $row['tutor_name'],
+                'subscribe' => (int) $row['subscribe'],
+                'unsubscribe' => (int) $row['unsubscribe'],
+                'registration_code' => (string) $row['registration_code'],
+                'visibility' => (int) $row['visibility'],
             ];
         }
 
         return $result;
     }
 
-    /**
-     * Retrieves courses that the user is subscribed to.
-     *
-     * @param int $user_id
-     *
-     * @return array
-     */
-    public function retrieve_user_courses($user_id = null)
+    public function retrieveUserCourses(?int $userId = null): array
     {
-        if (null === $user_id) {
-            global $_user;
-            $user_id = $_user['user_id'];
+        if (null === $userId) {
+            $userId = api_get_user_id();
         }
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $user_course_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $user_id = (int) $user_id;
-        $sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-                                      course.title i, course.tutor_name t, course.directory dir, course_rel_user.status status,
-                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                       FROM $course_table course, $user_course_table course_rel_user
-                       WHERE course.id = course_rel_user.c_id
-                             AND course_rel_user.user_id = $user_id
-                       ORDER BY course_rel_user.sort ASC";
+        if (empty($userId)) {
+            return [];
+        }
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $userCourseTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $userId = (int) $userId;
+
+        $sql = "
+            SELECT
+                course.code,
+                course.visual_code,
+                course.title,
+                course.tutor_name,
+                course.directory,
+                course.subscribe,
+                course.unsubscribe,
+                course_rel_user.status,
+                course_rel_user.sort,
+                course_rel_user.user_course_cat
+            FROM $courseTable course
+            INNER JOIN $userCourseTable course_rel_user ON course.id = course_rel_user.c_id
+            WHERE course_rel_user.user_id = $userId
+            ORDER BY course_rel_user.sort ASC";
+
         $result = [];
-        $resultset = Database::query($sql_select_courses);
-        while ($row = Database::fetch_array($resultset)) {
-            $code = $row['k'];
+        $resultSet = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($resultSet)) {
+            $code = (string) $row['code'];
             $result[$code] = [
                 'code' => $code,
-                'visual_code' => $row['vc'],
-                'title' => $row['i'],
-                'directory' => $row['dir'],
-                'status' => $row['status'],
-                'tutor' => $row['t'],
-                'subscribe' => $row['subscr'],
-                'unsubscribe' => $row['unsubscr'],
-                'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat'], ];
+                'visual_code' => (string) $row['visual_code'],
+                'title' => (string) $row['title'],
+                'directory' => (string) $row['directory'],
+                'status' => (int) $row['status'],
+                'tutor' => (string) $row['tutor_name'],
+                'subscribe' => (int) $row['subscribe'],
+                'unsubscribe' => (int) $row['unsubscribe'],
+                'sort' => (int) $row['sort'],
+                'user_course_category' => (int) $row['user_course_cat'],
+            ];
         }
 
         return $result;
     }
 
-    /*
-     * Utility functions - Utility functions - Utility functions
-     */
-
-    /**
-     * Removes from $courses all courses the user is subscribed to.
-     *
-     * @global array $_user
-     *
-     * @param array $courses
-     *
-     * @return array
-     */
-    public function filter_out_user_courses($courses)
+    private function getVisibilityWhereClause(): string
     {
-        if (empty($courses)) {
-            return $courses;
+        if (api_is_anonymous()) {
+            return 'visibility = '.COURSE_VISIBILITY_OPEN_WORLD;
         }
 
-        global $_user;
-        $user_id = $_user['user_id'];
-
-        $user_courses = $this->retrieve_user_courses($user_id);
-        foreach ($user_courses as $key => $value) {
-            unset($courses[$key]);
-        }
-
-        return $courses;
+        return implode(
+            ' OR ',
+            [
+                'visibility = '.COURSE_VISIBILITY_OPEN_WORLD,
+                'visibility = '.COURSE_VISIBILITY_OPEN_PLATFORM,
+                '(visibility = '.COURSE_VISIBILITY_REGISTERED.' AND subscribe = '.SUBSCRIBE_ALLOWED.')',
+            ]
+        );
     }
 }

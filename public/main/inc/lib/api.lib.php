@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
-use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -28,6 +27,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This is a code library for Chamilo.
@@ -1011,12 +1013,10 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginHelper::class);
+    $plugin = Positioning::create();
+    if ($plugin->isEnabled()) {
 
-    if ($pluginHelper->isPluginEnabled('Positioning')) {
-        $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
-
-        if ($plugin && $plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
+        if ($plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
             $currentPath = $_SERVER['REQUEST_URI'];
 
             $allowedPatterns = [
@@ -2922,15 +2922,12 @@ function api_get_plugin_setting($plugin, $variable)
         return $helper->isPluginEnabled((string) $plugin) ? 'true' : 'false';
     }
 
-    $value = $helper->getPluginConfigValue((string) $plugin, (string) $variable, null);
+    $value = $helper->getPluginSetting((string) $plugin, (string) $variable);
 
-    // BC: many legacy callers expect strings; normalize booleans to 'true'/'false'
     if (\is_bool($value)) {
         return $value ? 'true' : 'false';
     }
 
-    // If the value is serialized in old code paths, keep it as-is.
-    // For arrays/objects coming from JSON config, return them directly.
     return $value;
 }
 
@@ -3013,7 +3010,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
 }
 
 /**
- * Checks whether the user given as user id is in the admin table.
+ * Checks whether the user given as user id has platform administrator rights.
  *
  * @param int $user_id If none provided, will use current user
  * @param int $url     URL ID. If provided, also check if the user is active on given URL
@@ -3022,14 +3019,14 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
-    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-    $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-    $res = Database::query($sql);
-    $is_admin = 1 === Database::num_rows($res);
+
+    $is_admin = $user->isAdmin() || $user->isSuperAdmin();
+
     if (!$is_admin || !isset($url)) {
         return $is_admin;
     }
@@ -3037,7 +3034,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     $url = (int) $url;
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT * FROM $url_user_table
-            WHERE access_url_id = $url AND user_id = $user_id";
+            WHERE access_url_id = $url AND user_id = ".$user->getId();
     $res = Database::query($sql);
 
     return 1 === Database::num_rows($res);
@@ -5668,9 +5665,10 @@ function api_get_tool_information_by_name($name)
 {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
+    $courseToolName = TOOL_USER === $name ? 'member' : $name;
 
     $sql = "SELECT id FROM tool
-            WHERE title = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($courseToolName)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {
@@ -5688,10 +5686,7 @@ function api_get_tool_information_by_name($name)
 /**
  * Function used to protect a "global" admin script.
  * The function blocks access when the user has no global platform admin rights.
- * Global admins are the admins that are registered in the main.admin table
- * AND the users who have access to the "principal" portal.
- * That means that there is a record in the main.access_url_rel_user table
- * with his user id and the access_url_id=1.
+ * Global admins are users with ROLE_GLOBAL_ADMIN.
  *
  * @author Julio Montoya
  *
@@ -5701,19 +5696,13 @@ function api_get_tool_information_by_name($name)
  */
 function api_is_global_platform_admin($user_id = null)
 {
-    $user_id = (int) $user_id;
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
-    }
-    if (api_is_platform_admin_by_id($user_id)) {
-        $urlList = api_get_access_url_from_user($user_id);
-        // The admin is registered in the first "main" site with access_url_id = 1
-        if (in_array(1, $urlList)) {
-            return true;
-        }
+    $user = api_get_user_entity((int) $user_id);
+
+    if (null === $user) {
+        return false;
     }
 
-    return false;
+    return $user->isSuperAdmin();
 }
 
 /**
@@ -5740,14 +5729,7 @@ function api_global_admin_can_edit_admin(
         return true;
     }
 
-    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
-    if (!$is_platform_admin) {
-        $userEntity = api_get_user_entity($userId);
-        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
-            $is_platform_admin = true;
-        }
-    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
@@ -6045,11 +6027,32 @@ function api_is_multiple_url_enabled(): bool
 /**
  * Returns a md5 unique id.
  *
+ * The value is derived from the current time and is therefore predictable, so
+ * it must not be used as a secret. For security tokens (password reset, e-mail
+ * confirmation, ...) use api_generate_secure_token() instead.
+ *
  * @todo add more parameters
  */
 function api_get_unique_id()
 {
     return md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
+}
+
+/**
+ * Generates a cryptographically secure, unpredictable random token, suitable
+ * for use as a secret (password reset links, e-mail confirmation links, ...).
+ *
+ * Unlike api_get_unique_id(), the returned value is not derived from the clock.
+ *
+ * @param int $bytes Number of random bytes to read (a floor of 16 is enforced)
+ *
+ * @return string
+ */
+function api_generate_secure_token($bytes = 32)
+{
+    $bytes = max(16, (int) $bytes);
+
+    return bin2hex(random_bytes($bytes));
 }
 
 /**
@@ -6822,6 +6825,9 @@ function api_drh_can_access_all_session_content()
 /**
  * Checks if user can login as another user.
  *
+ * Thin compatibility wrapper around LoginAsAuthorizationChecker, which is the single source
+ * of truth shared with the modern Symfony switch_user firewall (SwitchUserSubscriber).
+ *
  * @param int $loginAsUserId the user id to log in
  * @param int $userId        my user id
  *
@@ -6838,49 +6844,20 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $userId = api_get_user_id();
     }
 
-    if ($loginAsUserId == $userId) {
+    $userId = (int) $userId;
+
+    if (empty($userId)) {
         return false;
     }
 
-    // If target is an admin, only global admins can login to admin accounts
-    if (api_is_platform_admin_by_id($loginAsUserId)) {
-        if (!api_global_admin_can_edit_admin($loginAsUserId)) {
-            return false;
-        }
-    }
-
-    $userInfo = api_get_user_info($loginAsUserId);
-
-    $isDrh = function () use ($loginAsUserId) {
-        if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
-                $users   = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-                $userIds = [];
-                if (is_array($users)) {
-                    foreach ($users as $user) {
-                        $userIds[] = $user['id'];
-                    }
-                }
-                return in_array($loginAsUserId, $userIds);
-            }
-
-            if (UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
-                return true;
-            }
-        }
-
+    $impersonator = api_get_user_entity($userId);
+    $target = api_get_user_entity($loginAsUserId);
+    if (null === $impersonator || null === $target) {
         return false;
-    };
-
-    $loginAsStatusForSessionAdmins = [STUDENT];
-
-    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
-        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
-    return api_is_platform_admin() // local admins can login as (except into other admins unless allowed above)
-        || (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins))
-        || $isDrh();
+    return \Chamilo\CoreBundle\Framework\Container::getLoginAsAuthorizationChecker()
+        ->canLoginAs($impersonator, $target);
 }
 
 /**
@@ -7753,4 +7730,197 @@ function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $re
     ';
 }
 
+function api_is_samesite_none_session_cookie_setting_enabled(): bool
+{
+    try {
+        $value = api_get_setting('security.security_session_cookie_samesite_none');
+    } catch (Throwable $exception) {
+        error_log('Unable to read SameSite=None session cookie setting: '.$exception->getMessage());
+
+        return false;
+    }
+
+    if (true === $value || 1 === $value) {
+        return true;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['true', '1', 'yes'], true);
+}
+
+function api_is_secure_request_for_samesite_none(?Request $request = null): bool
+{
+    if (null !== $request && $request->isSecure()) {
+        return true;
+    }
+
+    $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+    $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+
+    return 'on' === $https || '1' === $https || 'https' === $forwardedProto;
+}
+
+function api_should_apply_samesite_none_session_cookie(?Request $request = null): bool
+{
+    if ('cli' === PHP_SAPI) {
+        return false;
+    }
+
+    if (!api_is_secure_request_for_samesite_none($request)) {
+        return false;
+    }
+
+    return api_is_samesite_none_session_cookie_setting_enabled();
+}
+
+function api_apply_samesite_none_session_cookie_to_response(Response $response, ?Request $request = null): void
+{
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $sessionName = '';
+
+    if (null !== $request && $request->hasSession()) {
+        $sessionName = $request->getSession()->getName();
+    }
+
+    if ('' === $sessionName) {
+        $sessionName = session_name();
+    }
+
+    if ('' === $sessionName) {
+        return;
+    }
+
+    foreach ($response->headers->getCookies() as $cookie) {
+        if ($cookie->getName() !== $sessionName) {
+            continue;
+        }
+
+        $response->headers->setCookie(
+            Cookie::create(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpiresTime(),
+                $cookie->getPath(),
+                $cookie->getDomain(),
+                true,
+                $cookie->isHttpOnly(),
+                $cookie->isRaw(),
+                Cookie::SAMESITE_NONE
+            )
+        );
+    }
+}
+
+function api_apply_samesite_none_session_cookie_setting(): void
+{
+    static $registered = false;
+
+    if ($registered || headers_sent()) {
+        return;
+    }
+
+    $request = null;
+
+    try {
+        $request = Container::getRequest();
+    } catch (Throwable) {
+        $request = null;
+    }
+
+    if (!api_should_apply_samesite_none_session_cookie($request)) {
+        return;
+    }
+
+    $registered = true;
+
+    header_register_callback(static function (): void {
+        $sessionName = session_name();
+
+        if ('' === $sessionName) {
+            return;
+        }
+
+        $headers = headers_list();
+        $rewrittenSessionCookies = [];
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 !== strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            $cookieValue = preg_replace('/;\s*SameSite=[^;]*/i', '', $cookieValue);
+
+            if (!preg_match('/;\s*Secure(?:;|$)/i', $cookieValue)) {
+                $cookieValue .= '; Secure';
+            }
+
+            $cookieValue .= '; SameSite=None';
+
+            $rewrittenSessionCookies[] = $cookieValue;
+        }
+
+        if (empty($rewrittenSessionCookies)) {
+            return;
+        }
+
+        header_remove('Set-Cookie');
+
+        foreach ($headers as $header) {
+            if (0 !== stripos($header, 'Set-Cookie:')) {
+                continue;
+            }
+
+            $cookieValue = trim(substr($header, strlen('Set-Cookie:')));
+
+            if (0 === strncmp($cookieValue, $sessionName.'=', strlen($sessionName) + 1)) {
+                continue;
+            }
+
+            header($header, false);
+        }
+
+        foreach ($rewrittenSessionCookies as $cookieValue) {
+            header('Set-Cookie: '.$cookieValue, false);
+        }
+    });
+}
+
+function api_get_video_context_menu_hidden_script(): string
+{
+    if ('true' !== api_get_setting('editor.video_context_menu_hidden')) {
+        return '';
+    }
+
+    return <<<HTML
+    <script>
+    (function () {
+        if (window.chamiloVideoContextMenuHiddenInitialized) {
+            return;
+        }
+
+        window.chamiloVideoContextMenuHiddenInitialized = true;
+
+        document.addEventListener('contextmenu', function (event) {
+            var target = event.target;
+
+            if (!target || !target.closest) {
+                return;
+            }
+
+            if (target.closest('video:not(.skip), .mejs__container')) {
+                event.preventDefault();
+            }
+        });
+    })();
+    </script>
+    HTML;
+}
 

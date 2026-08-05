@@ -8,9 +8,11 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -18,10 +20,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class SocialPostVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
         private SettingsManager $settingsManager
@@ -47,7 +49,7 @@ class SocialPostVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {
             return false;
@@ -93,7 +95,46 @@ class SocialPostVoter extends Voter
                 break;
 
             case self::VIEW:
+                // Sender and direct recipient can always read the post.
+                if ($sender === $currentUser || $userReceiver === $currentUser) {
+                    return true;
+                }
+
+                // Promoted messages are platform-wide announcements.
+                if (SocialPost::TYPE_PROMOTED_MESSAGE === $post->getType()) {
+                    return true;
+                }
+
+                // Wall posts/comments are visible only to friends of the sender.
+                if (
+                    \in_array($post->getType(), [SocialPost::TYPE_WALL_POST, SocialPost::TYPE_WALL_COMMENT], true)
+                    && $currentUser->hasFriendWithRelationType($sender, UserRelUser::USER_RELATION_TYPE_FRIEND)
+                ) {
+                    return true;
+                }
+
+                // Group messages are visible only to members of the receiving group.
+                $groupReceiver = $post->getGroupReceiver();
+                if (
+                    SocialPost::TYPE_GROUP_MESSAGE === $post->getType()
+                    && $groupReceiver instanceof Usergroup
+                    && $this->isMemberOfGroup($currentUser, $groupReceiver)
+                ) {
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
+    private function isMemberOfGroup(User $user, Usergroup $group): bool
+    {
+        foreach ($group->getUsers() as $relUser) {
+            if ($relUser->getUser() === $user) {
                 return true;
+            }
         }
 
         return false;

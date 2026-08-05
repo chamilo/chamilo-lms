@@ -22,6 +22,7 @@ class CourseHomeNotifyPlugin extends Plugin
 
         parent::__construct('0.1', 'Angel Fernando Quiroz Campos', $settings);
 
+        $this->isAdminPlugin = true;
         $this->isCoursePlugin = true;
         $this->addCourseTool = false;
         $this->setCourseSettings();
@@ -47,18 +48,17 @@ class CourseHomeNotifyPlugin extends Plugin
     public function install()
     {
         $em = Database::getManager();
+        $schemaManager = $em->getConnection()->createSchemaManager();
 
-        if ($em->getConnection()->createSchemaManager()->tablesExist(['course_home_notify_notification'])) {
-            return;
+        if (!$schemaManager->tablesExist(['course_home_notify_notification'])) {
+            $schemaTool = new SchemaTool($em);
+            $schemaTool->createSchema(
+                [
+                    $em->getClassMetadata(Notification::class),
+                    $em->getClassMetadata(NotificationRelUser::class),
+                ]
+            );
         }
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(Notification::class),
-                $em->getClassMetadata(NotificationRelUser::class),
-            ]
-        );
     }
 
     /**
@@ -91,10 +91,15 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     public function renderRegion($region)
     {
+        $routeName = Container::getRequest()->query->get('_route_name');
+
         if (
-            'main_bottom' !== $region
-            || strpos($_SERVER['SCRIPT_NAME'], 'course_home/course_home.php') === false
+            'content_bottom' !== $region || $routeName !== 'CourseHome'
         ) {
+            return '';
+        }
+
+        if (!$this->isEnabled()) {
             return '';
         }
 
@@ -111,27 +116,33 @@ class CourseHomeNotifyPlugin extends Plugin
         $em = Database::getManager();
         /** @var Notification $notification */
         $notification = $em
-            ->getRepository('ChamiloPluginBundle:CourseHomeNotify\Notification')
+            ->getRepository(Notification::class)
             ->findOneBy(['course' => $course]);
 
         if (!$notification) {
             return '';
         }
 
-        $modalFooter = '';
-        $modalConfig = ['show' => true];
+        $footerJs = '';
+        $preventCloseJs = '';
 
         if ($notification->getExpirationLink()) {
             /** @var NotificationRelUser $notificationUser */
             $notificationUser = $em
-                ->getRepository('ChamiloPluginBundle:CourseHomeNotify\NotificationRelUser')
+                ->getRepository(NotificationRelUser::class)
                 ->findOneBy(['notification' => $notification, 'user' => $user]);
 
             if ($notificationUser) {
                 return '';
             }
 
-            $contentUrl = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/content.php?hash='.$notification->getHash();
+            $contentUrl = api_get_path(WEB_PLUGIN_PATH)
+                .$this->get_name()
+                .'/content.php?hash='
+                .urlencode($notification->getHash())
+                .'&'
+                .api_get_cidreq();
+
             $link = Display::toolbarButton(
                 $this->get_lang('PleaseFollowThisLink'),
                 $contentUrl,
@@ -140,40 +151,49 @@ class CourseHomeNotifyPlugin extends Plugin
                 ['id' => 'course-home-notify-link', 'target' => '_blank']
             );
 
-            $modalConfig['keyboard'] = false;
-            $modalConfig['backdrop'] = 'static';
+            $footerJs = "footer.html(".json_encode($link).");\n"
+                ."\$('#course-home-notify-link').on('click', function () {\n"
+                ."dialog.close();\n"
+                ."});";
 
-            $modalFooter = '<div class="modal-footer">'.$link.'</div>';
+            // Equivalent to the old keyboard:false / backdrop:static config:
+            // prevent dismissing with the Escape key so the user follows the link.
+            $preventCloseJs = "dialog.addEventListener('cancel', function (e) {\n"
+                ."e.preventDefault();\n"
+                ."});";
         }
 
-        $modal = '<div id="course-home-notify-modal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">'.$this->get_lang('CourseNotice').'</h4>
-                    </div>
-                    <div class="modal-body">
-                        '.$notification->getContent().'
-                    </div>
-                    '.$modalFooter.'
-                </div>
-            </div>
-        </div>';
+        // The notice is authored with a rich-text editor and rendered through
+        // jQuery .html(), so sanitize it to strip scripts, inline event handlers
+        // and javascript: URLs while keeping legitimate formatting (stored XSS).
+        $content = Security::remove_XSS($notification->getContent());
 
-        $modal .= "<script>
-            $(document).ready(function () {
-                \$('#course-home-notify-modal').modal(".json_encode($modalConfig).");
+        return "<script>
+            \$(function () {
+                var dialog = document.getElementById('global-modal');
 
-                \$('#course-home-notify-link').on('click', function () {
-                    $('#course-home-notify-modal').modal('hide');
+                if (!dialog) {
+                    return;
+                }
+
+                \$('#global-modal-title').text(".json_encode($this->get_lang('CourseNotice')).");
+                \$('#global-modal-body').html(".json_encode($content).");
+
+                var footer = \$('#global-modal .legacy-modal__footer');
+                footer.empty();
+                $footerJs
+
+                $preventCloseJs
+
+                dialog.addEventListener('close', function () {
+                    footer.empty();
                 });
+
+                if (!dialog.open) {
+                    dialog.showModal();
+                }
             });
         </script>";
-
-        return $modal;
     }
 
     /**
@@ -181,10 +201,6 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     private function setCourseSettings()
     {
-        if (!Container::getPluginHelper()->isPluginEnabled($this->get_name())) {
-            return;
-        }
-
         $name = $this->get_name();
 
         $button = Display::toolbarButton(
@@ -196,8 +212,10 @@ class CourseHomeNotifyPlugin extends Plugin
 
         $this->course_settings = [
             [
-                'name' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
+                'name' => 'notification_configuration',
+                'group' => 'course_home_notify',
                 'type' => 'html',
+                'init_value' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
             ],
         ];
     }

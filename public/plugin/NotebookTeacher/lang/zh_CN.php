@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = '当前筛选条件下无笔记';
 $strings['NoNotebook'] = '系统中无笔记';
 $strings['NoNotebookUser'] = '该学生无笔记';
 $strings['NotebookNoStudentAssigned'] = '未分配学生的笔记';
+
+$strings['TeacherNotesHelp'] = '为本课程中的学习者创建私人教师笔记。';
+$strings['CurrentFilter'] = '当前筛选';
+$strings['EmptyStateHelp'] = '创建新笔记或更改学习者筛选。';

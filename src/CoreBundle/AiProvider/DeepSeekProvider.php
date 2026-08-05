@@ -20,6 +20,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
     private array $providerConfig;
     private string $apiUrl;
     private string $apiKey;
+    private ?string $lastTextError = null;
     private string $model;
     private float $temperature;
     private int $maxTokens;
@@ -194,9 +195,10 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
             $topic
         );
 
+        $this->lastTextError = null;
         $lpStructure = $this->requestDeepSeek($tableOfContentsPrompt, 'learnpath');
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => $this->buildTextFailureMessage('DeepSeek')];
         }
 
         $lpItems = [];
@@ -282,9 +284,13 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
 
     private function requestDeepSeek(string $prompt, string $toolName): ?string
     {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $payload = [
@@ -306,11 +312,13 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
                 'json' => $payload,
             ]);
 
+            $statusCode = $response->getStatusCode();
             $data = $response->toArray(false);
 
             if (\is_array($data) && isset($data['error'])) {
                 $msg = $data['error']['message'] ?? 'DeepSeek returned an error response.';
                 $msg = \is_string($msg) ? trim($msg) : 'DeepSeek returned an error response.';
+                $this->lastTextError = 'HTTP '.$statusCode.': '.$msg;
                 error_log('[AI][DeepSeek] Error response: '.$msg);
 
                 return null;
@@ -318,6 +326,7 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
 
             $generatedContent = $data['choices'][0]['message']['content'] ?? null;
             if (!\is_string($generatedContent) || '' === trim($generatedContent)) {
+                $this->lastTextError = 'HTTP '.$statusCode.': Empty content returned.';
                 error_log('[AI][DeepSeek] Empty content returned.');
 
                 return null;
@@ -335,10 +344,21 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
 
             return $generatedContent;
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
 
             return null;
         }
+    }
+
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
     }
 
     private function filterValidAikenQuestions(string $quizContent): array

@@ -22,7 +22,19 @@ if (!$isDrhOfCourse) {
 $categoryId = isset($_REQUEST['selectcat']) ? (int) $_REQUEST['selectcat'] : 0;
 
 if (isset($_POST['submit']) && isset($_POST['keyword'])) {
-    header('Location: '.api_get_self().'?selectcat='.$categoryId.'&search='.Security::remove_XSS($_POST['keyword']));
+    $searchKeyword = trim(Security::remove_XSS((string) $_POST['keyword']));
+    $searchParameters = [
+        'selectcat' => $categoryId,
+        'cid' => api_get_course_int_id(),
+        'sid' => api_get_session_id(),
+        'gid' => api_get_group_id(),
+    ];
+
+    if ('' !== $searchKeyword) {
+        $searchParameters['search'] = $searchKeyword;
+    }
+
+    header('Location: '.api_get_self().'?'.http_build_query($searchParameters));
     exit;
 }
 
@@ -77,19 +89,47 @@ $values = $simple_search_form->exportValues();
 
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-    $keyword = Security::remove_XSS($_GET['search']);
+    $keyword = trim(Security::remove_XSS((string) $_GET['search']));
 }
 if ($simple_search_form->validate() && empty($keyword)) {
     $keyword = $values['keyword'];
 }
 
-if (!empty($keyword)) {
-    $users = GradebookUtils::find_students($keyword);
-} else {
-    $users = null;
-    if (isset($alleval) && isset($alllinks)) {
-        $users = GradebookUtils::get_all_users($alleval, $alllinks);
-    }
+$users = null;
+if (isset($alleval) && isset($alllinks)) {
+    $users = GradebookUtils::get_all_users($alleval, $alllinks);
+}
+
+if ('' !== $keyword && is_array($users)) {
+    $containsKeyword = static function (string $haystack, string $needle): bool {
+        if (function_exists('mb_stripos')) {
+            return false !== mb_stripos($haystack, $needle, 0, 'UTF-8');
+        }
+
+        return false !== stripos($haystack, $needle);
+    };
+
+    $users = array_values(
+        array_filter(
+            $users,
+            static function (array $user) use ($containsKeyword, $keyword): bool {
+                $username = isset($user[1]) ? (string) $user[1] : '';
+                $lastName = isset($user[2]) ? (string) $user[2] : '';
+                $firstName = isset($user[3]) ? (string) $user[3] : '';
+                $officialCode = isset($user[4]) ? (string) $user[4] : '';
+                $searchableText = implode(' ', [
+                    $username,
+                    $firstName,
+                    $lastName,
+                    $lastName,
+                    $firstName,
+                    $officialCode,
+                ]);
+
+                return $containsKeyword($searchableText, $keyword);
+            }
+        )
+    );
 }
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
@@ -97,6 +137,8 @@ $addparams = ['selectcat' => $cat[0]->get_id()];
 if (isset($_GET['search'])) {
     $addparams['search'] = $keyword;
 }
+
+$hasNoSearchResults = '' !== $keyword && empty($users);
 
 // Main course category
 $mainCourseCategory = Category::load(
@@ -120,7 +162,14 @@ $flatViewTable = new FlatViewTable(
 );
 
 $flatViewTable->setAutoFill(false);
-$parameters = ['selectcat' => $categoryId];
+$parameters = array_merge(
+    $addparams,
+    [
+        'cid' => api_get_course_int_id(),
+        'sid' => api_get_session_id(),
+        'gid' => api_get_group_id(),
+    ]
+);
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
@@ -279,7 +328,11 @@ if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     $showlink,
     $simple_search_form
 );
-    $flatViewTable->display();
+    if ($hasNoSearchResults) {
+        echo Display::return_message(get_lang('No results found'), 'normal', false);
+    } else {
+        $flatViewTable->display();
+    }
 } elseif (isset($_GET['selectcat']) && (false === $studentView)) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
@@ -288,11 +341,15 @@ if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
         $simple_search_form
     );
 
-    $flatViewTable->display();
-    //@todo load images with jquery
-    echo '<div id="contentArea" style="text-align: center;" >';
-    $flatViewTable->display_graph_by_resource();
-    echo '</div>';
+    if ($hasNoSearchResults) {
+        echo Display::return_message(get_lang('No results found'), 'normal', false);
+    } else {
+        $flatViewTable->display();
+        //@todo load images with jquery
+        echo '<div id="contentArea" style="text-align: center;" >';
+        $flatViewTable->display_graph_by_resource();
+        echo '</div>';
+    }
 }
 
 Display::display_footer();

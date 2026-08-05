@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom Videokonferencia';
 $strings['plugin_comment'] = 'Integrácia Zoom Videokonferencie do kurzov a sedení';
 
+$strings['accountId'] = 'ID účtu';
+$strings['clientId'] = 'ID klienta';
+$strings['clientSecret'] = 'Tajomstvo klienta';
+$strings['webhookSecretToken'] = 'Tajomstvo webhooku';
+$strings['apiKey_help'] = 'Starší kľúč API JWT. Uprednostňujte Account ID, Client ID a Client Secret pre Zoom Server-to-Server OAuth.';
+$strings['apiSecret_help'] = 'Staršie tajomstvo API JWT. Uprednostňujte Account ID, Client ID a Client Secret pre Zoom Server-to-Server OAuth.';
+$strings['verificationToken_help'] = 'Starší overovací token webhooku. Uprednostňujte Webhook Secret Token.';
+$strings['accountId_help'] = 'Zoom Server-to-Server OAuth Account ID.';
+$strings['clientId_help'] = 'Zoom Server-to-Server OAuth Client ID.';
+$strings['clientSecret_help'] = 'Zoom Server-to-Server OAuth Client Secret.';
+$strings['webhookSecretToken_help'] = 'Tajný token používaný na overenie požiadaviek Zoom webhooku.';
 $strings['apiKey'] = 'API Kľúč';
 $strings['apiSecret'] = 'API Tajomstvo';
 $strings['verificationToken'] = 'Overovací token';

@@ -6,43 +6,42 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $plugin = LearningCalendarPlugin::create();
+
+if (!$plugin->isEnabled()) {
+    api_not_allowed(true);
+}
+
+$calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $item = $plugin->getCalendar($calendarId);
 $plugin->protectCalendar($item);
 
-$isoCode = api_get_language_isocode();
-$htmlHeadXtra[] = api_get_asset('bootstrap-year-calendar/js/bootstrap-year-calendar.js');
-$calendarLanguage = 'en';
-if ('en' !== $isoCode) {
-    $file = 'bootstrap-year-calendar/js/languages/bootstrap-year-calendar.'.$isoCode.'.js';
-    $path = api_get_path(SYS_PUBLIC_PATH).'assets/'.$file;
-    if (file_exists($path)) {
-        $htmlHeadXtra[] = api_get_asset($file);
-        $calendarLanguage = $isoCode;
-    }
-}
+$template = new Template($item['title']);
 
-$htmlHeadXtra[] = api_get_css_asset('bootstrap-year-calendar/css/bootstrap-year-calendar.css');
-
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-$formToString = '';
-
-$template = new Template();
-$actionLeft = Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
+$toolbarActions = [];
+$toolbarActions[] = Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $plugin->get_lang('BackToMySpace')),
+    api_get_path(WEB_CODE_PATH).'my_space/index.php'
+);
+$toolbarActions[] = Display::url(
+    Display::getMdiIcon('format-list-bulleted', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
     api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
 );
 
-$actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
-
 $eventList = $plugin->getEventTypeList();
 $template->assign('events', $eventList);
-$template->assign('calendar_language', $calendarLanguage);
 $template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/ajax.php?id='.$calendarId);
+$template->assign('plugin_title', $plugin->get_lang('LearningCalendar'));
 $template->assign('header', $item['title']);
+$template->assign('description', $item['description'] ?? '');
+$template->assign('total_hours', (int) $item['total_hours']);
+$template->assign('minutes_per_day', (int) $item['minutes_per_day']);
+$template->assign('calendar_help', $plugin->get_lang('LearningCalendarSelectRangeHelp'));
+$template->assign('calendar_cycle_help', $plugin->get_lang('LearningCalendarCycleHelp'));
+$template->assign('calendar_range_help', $plugin->get_lang('LearningCalendarRangeHelp'));
+
 $content = $template->fetch('LearningCalendar/view/calendar.tpl');
-$template->assign('actions', $actions);
+$template->assign('actions', Display::toolbarAction('toolbar-calendar', $toolbarActions));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

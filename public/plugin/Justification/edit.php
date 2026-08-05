@@ -20,7 +20,7 @@ $tpl = new Template($tool);
 $fields = [];
 
 $form = new FormValidator('add', 'post', api_get_self().'?id='.$id);
-$form->addText('name', get_lang('Name'));
+$form->addText('title', get_lang('Title'));
 $form->addText('code', $plugin->get_lang('JustificationCode'));
 $form->addNumeric('validity_duration', $plugin->get_lang('ValidityDuration'));
 $form->addCheckBox('date_manual_on', $plugin->get_lang('DateManualOn'));
@@ -40,7 +40,7 @@ if ($form->validate()) {
     $message = Display::return_message(get_lang('This code already exists'), 'warning');
     if (empty($data)) {
         $params = [
-            'name' => $values['name'],
+            'title' => $values['title'],
             'code' => $cleanedCode,
             'validity_duration' => $values['validity_duration'],
             'date_manual_on' => (int) $values['date_manual_on'],
@@ -70,7 +70,23 @@ $tpl->assign(
     Display::toolbarAction('toolbar', [$actionLinks])
 );
 
-$content = $form->returnForm();
+$content = '
+<section class="w-full space-y-6">
+    <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <span class="mdi mdi-file-edit-outline text-2xl"></span>
+            </div>
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-90">'.$plugin->get_lang('EditJustificationDocument').'</h2>
+                <p class="text-sm text-gray-50">'.$plugin->get_lang('EditJustificationDocumentHelp').'</p>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+        '.$form->returnForm().'
+    </div>
+</section>';
 
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

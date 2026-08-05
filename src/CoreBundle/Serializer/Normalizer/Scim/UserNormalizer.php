@@ -18,8 +18,8 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     use NormalizerAwareTrait;
 
-    public const FORMAT = 'scim';
-    private const ALREADY_CALLED = 'SCIM_USER_NORMALIZER_ALREADY_CALLED';
+    public const string FORMAT = 'scim';
+    private const string ALREADY_CALLED = 'SCIM_USER_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
         private readonly NameConventionHelper $nameConventionHelper,
@@ -27,10 +27,10 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
         private readonly ScimHelper $scimHelper,
     ) {}
 
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array
     {
         /** @var User $user */
-        $user = $object;
+        $user = $data;
 
         $uuid = $user->getUuid();
 

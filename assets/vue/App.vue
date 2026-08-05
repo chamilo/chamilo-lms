@@ -2,7 +2,7 @@
   <component
     :is="layout"
     v-if="!platformConfigurationStore.isLoading"
-    :show-breadcrumb="route.meta.showBreadcrumb"
+    :show-breadcrumb="showBreadcrumb"
   >
     <!-- 403 banner shown INSIDE the layout -->
     <Transition
@@ -36,11 +36,17 @@
       ref="legacyContainer"
     />
 
-    <PluginRegion region="content_bottom" />
-    <PluginRegion region="pre_footer" />
+    <PluginRegion
+      v-if="!hideGlobalUi"
+      region="content_bottom"
+    />
+    <PluginRegion
+      v-if="!hideGlobalUi"
+      region="pre_footer"
+    />
 
     <ConfirmDialog />
-    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout && !hideGlobalUi" />
 
     <!-- Do not show docked chat in embedded contexts (iframes/pickers/dialogs) -->
     <DockedChat v-if="showGlobalChat" />
@@ -71,6 +77,8 @@
       </div>
     </template>
   </Toast>
+
+  <SessionExpirationWarning v-if="securityStore.isAuthenticated" />
 </template>
 
 <script setup>
@@ -86,7 +94,7 @@ import {
   watchEffect,
 } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import axios from "axios"
+import api from "./config/api"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
 import { useSecurityStore } from "./store/securityStore"
@@ -101,6 +109,7 @@ import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
+import SessionExpirationWarning from "./components/security/SessionExpirationWarning.vue"
 
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
@@ -127,9 +136,75 @@ const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
 const securityStore = useSecurityStore()
 const notification = useNotification()
 const platformConfigurationStore = usePlatformConfig()
+const disableCopyPaste = computed(() => {
+  if (platformConfigurationStore.isLoading) {
+    return false
+  }
+
+  const value = platformConfigurationStore.getSetting?.("platform.disable_copy_paste")
+
+  return value === true || value === 1 || value === "true" || value === "1"
+})
+
+const disabledCopyPasteKeys = new Set(["c", "x", "v", "p", "s"])
+
+function shouldBlockCopyPasteShortcut(event) {
+  if (!disableCopyPaste.value) {
+    return false
+  }
+
+  if (!event.ctrlKey && !event.metaKey) {
+    return false
+  }
+
+  return disabledCopyPasteKeys.has(String(event.key || "").toLowerCase())
+}
+
+function blockCopyPasteEvent(event) {
+  if (!disableCopyPaste.value) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+function blockCopyPasteShortcut(event) {
+  if (!shouldBlockCopyPasteShortcut(event)) {
+    return
+  }
+
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+const hideBreadcrumbIfNotAllowed = computed(() => {
+  if (platformConfigurationStore.isLoading) {
+    return false
+  }
+
+  const value = platformConfigurationStore.getSetting?.("security.hide_breadcrumb_if_not_allowed")
+
+  return value === true || value === 1 || value === "true" || value === "1"
+})
+
+const showBreadcrumb = computed(() => {
+  if (route.meta.showBreadcrumb === false) {
+    return false
+  }
+
+  if (hideBreadcrumbIfNotAllowed.value && forbiddenMsg.value) {
+    return false
+  }
+
+  return route.meta.showBreadcrumb
+})
+
 const showAccessUrlChosserLayout = computed(
   () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
 )
+
+const hideGlobalUi = computed(() => Boolean(route.meta.hideGlobalUi))
 
 // ---- Embedded context detection (iframe/dialog/picker) ----
 const queryParams = computed(() => new URLSearchParams(window.location.search))
@@ -161,8 +236,45 @@ const isEmbeddedContext = computed(() => {
   return isPickerContext.value || isIframeContext.value || isDialogContext.value
 })
 
+const isTruthyQueryValue = (value) => {
+  return ["1", "true", "yes", "on"].includes(String(value || "").toLowerCase())
+}
+
+const isLearnpathEmbeddedRoute = computed(() => {
+  const qp = queryParams.value
+  const origin = String(qp.get("origin") || "").toLowerCase()
+  const lpAction = String(qp.get("action") || "").toLowerCase()
+  const hasLpId = qp.has("lp_id")
+
+  // LP player/runtime screens are rendered inside the learning path player.
+  // They must use EmptyLayout to avoid duplicated Chamilo header/sidebar.
+  if (
+    hasLpId &&
+    ("view" === lpAction || isTruthyQueryValue(qp.get("embedded")) || isTruthyQueryValue(qp.get("isStudentView")))
+  ) {
+    return true
+  }
+
+  if ("learnpath" !== origin) {
+    return false
+  }
+
+  // Authoring screens launched from the LP add-item screen must keep the full
+  // course layout. This is used by Exercise, Forum and Survey creation flows.
+  if (isTruthyQueryValue(qp.get("returnToLp"))) {
+    return false
+  }
+
+  return (
+    qp.has("lp_init") ||
+    qp.has("learnpath_id") ||
+    qp.has("learnpath_item_id") ||
+    qp.has("learnpath_item_view_id")
+  )
+})
+
 const layout = computed(() => {
-  if (showAccessUrlChosserLayout.value) {
+  if (showAccessUrlChosserLayout.value && !hideGlobalUi.value) {
     return AccessUrlChooserLayout
   }
 
@@ -178,7 +290,7 @@ const layout = computed(() => {
     return EmptyLayout
   }
 
-  if ((qp.has("lp_id") && "view" === qp.get("action")) || (qp.has("origin") && "learnpath" === qp.get("origin"))) {
+  if (isLearnpathEmbeddedRoute.value) {
     return EmptyLayout
   }
 
@@ -243,7 +355,7 @@ onUpdated(() => {
   app.dataset.flashes = ""
 })
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (r) => r,
   (error) => {
     const s = error?.response?.status
@@ -255,25 +367,27 @@ axios.interceptors.response.use(
 
 platformConfigurationStore.initialize()
 
-// i18n sync
-watch(
-  () => route.params,
-  () => {
-    const { appLocale } = useLocale()
-    if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
-  },
-  { immediate: true },
-)
+// i18n sync — single writer. appLocale mirrors the server-side locale chain
+// (see useLocale) and reacts to store changes (platform config, user profile,
+// course context set/cleared by the router guards) on client-side navigation.
+// The boot locale comes from <html data-lang>, already resolved by the server.
+const { appLocale } = useLocale()
 
 watch(
-  () => securityStore.user?.language,
-  (lang) => {
-    if (lang && locale.value !== lang) setLocale(lang)
+  appLocale,
+  (newLocale) => {
+    if (newLocale && locale.value !== newLocale) setLocale(newLocale)
   },
   { immediate: true },
 )
 
 onMounted(async () => {
+  document.addEventListener("copy", blockCopyPasteEvent, true)
+  document.addEventListener("cut", blockCopyPasteEvent, true)
+  document.addEventListener("paste", blockCopyPasteEvent, true)
+  document.addEventListener("contextmenu", blockCopyPasteEvent, true)
+  document.addEventListener("keydown", blockCopyPasteShortcut, true)
+
   const { loader } = useMediaElementLoader()
   loader()
 
@@ -332,7 +446,7 @@ const allowGlobalChat = computed(() => {
 
 const showGlobalChat = computed(() => {
   // Do not render global chat when the app is embedded (iframe/dialog/picker).
-  return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value
+  return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value && !hideGlobalUi.value
 })
 
 watch(
@@ -381,6 +495,11 @@ onBeforeUnmount(() => {
     forbiddenBannerTimer = null
   }
 
+  document.removeEventListener("copy", blockCopyPasteEvent, true)
+  document.removeEventListener("cut", blockCopyPasteEvent, true)
+  document.removeEventListener("paste", blockCopyPasteEvent, true)
+  document.removeEventListener("contextmenu", blockCopyPasteEvent, true)
+  document.removeEventListener("keydown", blockCopyPasteShortcut, true)
   delete window.chamiloCidReq
 })
 </script>

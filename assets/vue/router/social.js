@@ -5,6 +5,12 @@ export default {
   component: () => import("../views/social/SocialLayout.vue"),
   children: [
     {
+      name: "SocialMap",
+      path: "map",
+      meta: { breadcrumb: "Social map" },
+      component: () => import("../views/social/SocialMap.vue"),
+    },
+    {
       name: "SocialWall",
       path: ":filterType?",
       meta: { breadcrumb: "Social wall" },

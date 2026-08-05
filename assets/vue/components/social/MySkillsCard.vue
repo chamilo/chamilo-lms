@@ -117,7 +117,7 @@
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { useI18n } from "vue-i18n"
 import { inject, ref, watch, computed } from "vue"
-import axios from "axios"
+import userService from "../../services/userService"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
 
@@ -126,9 +126,9 @@ const skills = ref([])
 const user = inject("social-user")
 
 const securityStore = useSecurityStore()
-const { isAdmin, isHRM, isSessionAdmin } = storeToRefs(securityStore)
+const { isHRM } = storeToRefs(securityStore)
 
-const canSeeSkillWheel = computed(() => isAdmin.value || isHRM.value || isSessionAdmin.value)
+const canSeeSkillWheel = computed(() => securityStore.isGranted("ROLE_SESSION_MANAGER") || isHRM.value)
 const defaultBadge = "/img/icons/32/badges-default.png"
 const skillsRankingUrl = computed(() => "/skill/ranking")
 
@@ -179,8 +179,8 @@ function onBadgeError(event) {
 
 async function fetchSkills(userId) {
   try {
-    const response = await axios.get(`/api/users/${userId}/skills`)
-    const data = Array.isArray(response.data) ? response.data : []
+    const result = await userService.getSkills(userId)
+    const data = Array.isArray(result) ? result : []
 
     skills.value = data.map((skill) => {
       const id = skill.id ?? skill.skillId ?? skill.skill_id

@@ -12,7 +12,10 @@ export async function findUserActivePortals(userIri) {
 }
 
 export async function findAll() {
-  const { items } = await baseService.getCollection("/api/access_urls")
+  const { items } = await baseService.getCollection("/api/access_urls", {
+    pagination: false,
+    "order[url]": "asc",
+  })
 
   return items
 }

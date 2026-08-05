@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Adakah anda mahu memadamkan diploma khusus dan men
 $strings['SuccessDelete'] = 'Berjaya dipadamkan';
 $strings['ProblemDelete'] = 'Masalah memadamkan sijil';
 $strings['OnlyCustomCertificates'] = 'Hanya kursus dengan sijil peribadi yang dieksport';
+$strings['CertificateMode'] = 'Mod sijil';
+$strings['UseCourseCustomCertificate'] = 'Gunakan sijil tersuai khusus kursus';
+$strings['UseDefaultCustomCertificate'] = 'Gunakan sijil tersuai lalai platform';
+
+$strings['CreateCertificateWithTags'] = 'Cipta sijil menggunakan tag ini';
+
+$strings['DeleteCertificate'] = 'Padam sijil';
+
+$strings['SaveCertificate'] = 'Simpan sijil';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Pilih satu pilihan dan simpan tetapan sebelum membuka penyunting sijil.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Pilih cara kursus ini harus menggunakan sijil tersuai.';
+
+$strings['CouldNotSaveCertificate'] = 'Tidak dapat menyimpan konfigurasi sijil.';

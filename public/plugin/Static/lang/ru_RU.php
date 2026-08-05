@@ -9,3 +9,4 @@ $strings['plugin_comment'] = 'Отображение статического HT
 $strings['block_title'] = 'Заголовок блока';
 
 //$strings['title'] = "Title";
+$strings['content'] = 'Содержимое';

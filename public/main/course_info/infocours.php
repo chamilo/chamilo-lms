@@ -2,11 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Helpers\FormatHelper;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Chamilo\CoreBundle\Entity\Course;
 
 /**
@@ -55,6 +59,160 @@ $isImsLtiEnabled = $imsLtiPluginEntity
     && $imsLtiPluginConfiguration
     && $imsLtiPluginConfiguration->isActive();
 
+$courseHomeNotifyPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseHomeNotify');
+$courseHomeNotifyPluginConfiguration = $courseHomeNotifyPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseHomeNotifyEnabled = $courseHomeNotifyPluginEntity
+    && $courseHomeNotifyPluginEntity->isInstalled()
+    && $courseHomeNotifyPluginConfiguration
+    && $courseHomeNotifyPluginConfiguration->isActive();
+
+$courseHomeNotifyPlugin = null;
+$courseHomeNotifyPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseHomeNotify/CourseHomeNotifyPlugin.php';
+
+if (is_file($courseHomeNotifyPluginPath)) {
+    require_once $courseHomeNotifyPluginPath;
+
+    if (class_exists('CourseHomeNotifyPlugin')) {
+        $courseHomeNotifyPlugin = CourseHomeNotifyPlugin::create();
+    }
+}
+
+$courseLegalPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseLegal');
+$courseLegalPluginConfiguration = $courseLegalPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseLegalEnabled = $courseLegalPluginEntity
+    && $courseLegalPluginEntity->isInstalled()
+    && $courseLegalPluginConfiguration
+    && $courseLegalPluginConfiguration->isActive();
+
+$courseLegalPlugin = null;
+$courseLegalPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseLegal/CourseLegalPlugin.php';
+
+if (is_file($courseLegalPluginPath)) {
+    require_once $courseLegalPluginPath;
+
+    if (class_exists('CourseLegalPlugin')) {
+        $courseLegalPlugin = CourseLegalPlugin::create();
+    }
+}
+
+$courseBlockSettings = [
+    'course_block_pre_footer',
+    'course_block_footer_left',
+    'course_block_footer_center',
+    'course_block_footer_right',
+];
+
+$courseBlockPluginEntity = Container::getPluginRepository()->findOneByTitle('CourseBlock');
+$courseBlockPluginConfiguration = $courseBlockPluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCourseBlockEnabled = $courseBlockPluginEntity
+    && $courseBlockPluginEntity->isInstalled()
+    && $courseBlockPluginConfiguration
+    && $courseBlockPluginConfiguration->isActive();
+
+$courseBlockPlugin = null;
+$courseBlockPluginPath = api_get_path(SYS_PLUGIN_PATH).'CourseBlock/CourseBlockPlugin.php';
+
+if (is_file($courseBlockPluginPath)) {
+    require_once $courseBlockPluginPath;
+
+    if (class_exists('CourseBlockPlugin')) {
+        $courseBlockPlugin = CourseBlockPlugin::create();
+    }
+}
+
+$courseBlockAppPlugin = null;
+
+if ($isCourseBlockEnabled) {
+    $courseBlockAppPlugin = AppPlugin::getInstance();
+}
+
+$customCertificateSettings = [
+    'customcertificate_course_enable',
+    'use_certificate_default',
+];
+
+$customCertificatePluginEntity = Container::getPluginRepository()->findOneByTitle('CustomCertificate');
+$customCertificatePluginConfiguration = $customCertificatePluginEntity?->getConfigurationsByAccessUrl($currentAccessUrl);
+
+$isCustomCertificateEnabled = $customCertificatePluginEntity
+    && $customCertificatePluginEntity->isInstalled()
+    && $customCertificatePluginConfiguration
+    && $customCertificatePluginConfiguration->isActive();
+
+$customCertificatePlugin = null;
+$customCertificatePluginPath = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+
+if ($isCustomCertificateEnabled && is_file($customCertificatePluginPath)) {
+    require_once $customCertificatePluginPath;
+
+    if (class_exists('CustomCertificatePlugin')) {
+        $customCertificatePlugin = CustomCertificatePlugin::create();
+    }
+}
+
+$customCertificateAppPlugin = null;
+
+if ($isCustomCertificateEnabled) {
+    $customCertificateAppPlugin = AppPlugin::getInstance();
+}
+
+if (!function_exists('customcertificate_save_course_setting')) {
+    function customcertificate_save_course_setting(string $variable, int $value, int $courseId): void
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !\in_array($variable, ['customcertificate_course_enable', 'use_certificate_default'], true)) {
+            return;
+        }
+
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+        $escapedVariable = Database::escape_string($variable);
+        $escapedValue = Database::escape_string((string) $value);
+        $escapedTitle = Database::escape_string($variable);
+
+        $sql = "SELECT variable
+                FROM $courseSettingTable
+                WHERE c_id = $courseId AND variable = '$escapedVariable'
+                LIMIT 1";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            $sql = "UPDATE $courseSettingTable
+                    SET value = '$escapedValue'
+                    WHERE c_id = $courseId AND variable = '$escapedVariable'";
+            Database::query($sql);
+
+            return;
+        }
+
+        $sql = "INSERT INTO $courseSettingTable (c_id, variable, value, title)
+                VALUES ($courseId, '$escapedVariable', '$escapedValue', '$escapedTitle')";
+        Database::query($sql);
+    }
+}
+
+if (!function_exists('customcertificate_save_course_settings_mode')) {
+    function customcertificate_save_course_settings_mode(string $mode, int $courseId): void
+    {
+        $courseValue = 0;
+        $defaultValue = 0;
+
+        if ('course' === $mode) {
+            $courseValue = 1;
+        }
+
+        if ('default' === $mode) {
+            $defaultValue = 1;
+        }
+
+        customcertificate_save_course_setting('customcertificate_course_enable', $courseValue, $courseId);
+        customcertificate_save_course_setting('use_certificate_default', $defaultValue, $courseId);
+    }
+}
+
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     if (isset($_GET['delete_watermark'])) {
@@ -68,14 +226,52 @@ $categories = $courseCategoryRepo->getCategoriesByCourseIdAndAccessUrlId($course
 $formOptionsArray = [];
 
 $enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+$aiProviderFactory = Container::$container->get(AiProviderFactory::class);
+$canGenerateCoursePictureWithAi = $aiProviderFactory->hasProvidersForType('image')
+    && $aiFeatureAccessHelper->isFeatureEnabledForCourse('image_generator', $courseId);
+
+$generateCoursePictureWithAiCsrfToken = '';
+if ($canGenerateCoursePictureWithAi) {
+    $generateCoursePictureWithAiCsrfToken = Container::$container->get(CsrfTokenManagerInterface::class)
+        ->getToken('ai_generate_course_picture_'.$courseId)
+        ->getValue();
+}
 
 $courseVisibilityAdminsOnlySetting = api_get_setting('workflows.course_visibility_change_only_admin');
 $courseVisibilityAdminsOnly = \in_array($courseVisibilityAdminsOnlySetting, ['true', '1'], true);
 
-// Teachers/course admins won't be able to change the visibility or subscription when this is enabled.
-// Platform admins can still change both options.
-$canChangeCourseVisibility = !$courseVisibilityAdminsOnly || api_is_platform_admin();
-$canChangeCourseSubscription = $canChangeCourseVisibility;
+$hasActiveBuyCoursesService = false;
+$buyCoursesPluginPath = api_get_path(SYS_PLUGIN_PATH).'BuyCourses/src/buy_course_plugin.class.php';
+
+if (is_file($buyCoursesPluginPath)) {
+    require_once $buyCoursesPluginPath;
+
+    if (class_exists('BuyCoursesPlugin')) {
+        try {
+            $buyCoursesPlugin = BuyCoursesPlugin::create();
+            $hasActiveBuyCoursesService = $buyCoursesPlugin->isEnabled()
+                && 'true' === $buyCoursesPlugin->get('include_services')
+                && $buyCoursesPlugin->hasActiveSubscriptionCourse($courseId);
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][CourseSettings] Unable to resolve active paid course status. course_id='.
+                $courseId.
+                ' error='.
+                $exception->getMessage()
+            );
+        }
+    }
+}
+
+// A teacher can manage the visibility of a course while its linked paid service is active,
+// even when the platform normally reserves visibility changes for administrators.
+$canChangeCourseVisibility = !$courseVisibilityAdminsOnly
+    || api_is_platform_admin()
+    || $hasActiveBuyCoursesService;
+
+// The paid-service exception applies only to visibility, not to course subscription settings.
+$canChangeCourseSubscription = !$courseVisibilityAdminsOnly || api_is_platform_admin();
 
 // Build the form
 $form = new FormValidator(
@@ -156,49 +352,189 @@ $(function() {
 });
 </script>';
 
-// Picture preview HTML
-$image = '';
+// Course picture preview and upload
+$hasCustomCoursePicture = $illustrationRepo->hasIllustration($courseEntity);
 $illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
+$allowed_picture_types = api_get_supported_image_extensions(false);
+$acceptedPictureTypes = implode(
+    ',',
+    array_map(
+        static fn (string $extension): string => '.'.$extension,
+        $allowed_picture_types
+    )
+);
 
-if (!empty($illustrationUrl)) {
-    $image = '
-        <div class="field course-picture-preview-row">
-            <div class="course-picture-preview">
-                <small class="help-block">'.get_lang('Current picture').'</small>
-                <img class="w-full" src="'.$illustrationUrl.'" alt="'.get_lang('Current picture').'" />
-            </div>
-        </div>'
-    ;
+$pictureStatusLabel = $hasCustomCoursePicture ? get_lang('Current picture') : get_lang('Default');
+$pictureStatusClasses = $hasCustomCoursePicture
+    ? 'bg-success text-white'
+    : 'bg-gray-20 text-gray-90';
+
+$deleteCoursePictureButton = '';
+if ($hasCustomCoursePicture) {
+    $deleteCoursePictureButton = '
+        <button
+            type="submit"
+            name="delete_picture"
+            value="1"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-danger bg-white text-danger transition hover:bg-support-6"
+            title="'.get_lang('Delete picture').'"
+            aria-label="'.get_lang('Delete picture').'"
+        >
+            '.Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon text-danger',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Delete picture')
+        ).'
+        </button>';
 }
 
-// Picture file input
+$form->addHtml('
+    <div id="course-picture-card" class="my-6 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-start">
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-4 lg:col-span-3">
+                <div class="mb-3 flex items-center gap-2">
+                    <span class="mdi mdi-image-outline ch-tool-icon"></span>
+                    <h4 class="m-0 text-body-1 font-semibold text-gray-90">'.get_lang('Course picture').'</h4>
+                </div>
+
+                <div
+                    id="course-picture-input-target"
+                    class="min-h-24 rounded-2xl border border-dashed border-support-3 bg-white p-4"
+                >
+                    <p class="m-0 mb-2 text-body-2 font-semibold text-gray-90">'.get_lang('Add image').'</p>
+                    <p class="m-0 mb-3 text-caption text-gray-50">
+                        '.get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowed_picture_types).')
+                    </p>
+');
+
+// Keep the file element registered directly in QuickForm.
+// The surrounding HTML keeps the input in the visual card without moving it with JavaScript.
 $form->addFile(
     'picture',
-    get_lang('Course picture'),
+    '',
     [
         'id' => 'picture',
-        'class' => 'picture-form',
+        'class' => 'picture-form block w-full cursor-pointer rounded-xl border border-gray-25 bg-white text-body-2 text-gray-90 file:mr-4 file:border-0 file:bg-primary file:px-4 file:py-2 file:text-body-2 file:font-semibold file:text-white hover:file:bg-primary-gradient',
         'crop_image' => true,
+        'accept' => $acceptedPictureTypes,
     ]
 );
 
-$allowed_picture_types = api_get_supported_image_extensions(false);
+$generateCoursePictureWithAiButton = '';
+if ($canGenerateCoursePictureWithAi) {
+    $generateCoursePictureWithAiButton = '
+                <button
+                    type="button"
+                    id="course-picture-generate-ai-button"
+                    class="mt-3 inline-flex items-center gap-2 rounded-xl border border-primary bg-white px-4 py-2 text-body-2 font-semibold text-primary transition hover:bg-primary hover:text-white"
+                >
+                    <span class="mdi mdi-robot"></span>
+                    '.get_lang('Generate with AI').'
+                </button>';
+}
 
-// Preview below the file input
-$form->addHtml($image);
+$form->addHtml('
+                </div>
+                '.$generateCoursePictureWithAiButton.'
+
+                <p
+                    id="course-picture-selected-file"
+                    class="mt-3 hidden text-body-2 font-semibold text-primary"
+                ></p>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-support-2 p-3 lg:col-span-1">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                    <span class="text-body-2 font-semibold text-gray-90">'.get_lang('Preview').'</span>
+                    <span class="flex items-center gap-2">
+                        <span
+                            id="course-picture-status"
+                            class="inline-flex items-center rounded-full px-3 py-1 text-caption font-semibold '.$pictureStatusClasses.'"
+                        >
+                            '.$pictureStatusLabel.'
+                        </span>
+                        '.$deleteCoursePictureButton.'
+                    </span>
+                </div>
+
+                <div class="aspect-video overflow-hidden rounded-xl border border-gray-25 bg-white">
+                    <img
+                        id="course-picture-preview-image"
+                        class="block h-full w-full object-cover"
+                        src="'.htmlspecialchars($illustrationUrl, ENT_QUOTES | ENT_SUBSTITUTE).'"
+                        alt="'.get_lang('Course picture').'"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+');
+
+if ($canGenerateCoursePictureWithAi) {
+    $defaultAiCoursePicturePrompt = get_lang(
+        "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+    );
+
+    $form->addHtml('
+    <div
+        id="course-picture-ai-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
+    >
+        <div class="w-full max-w-lg rounded-2xl bg-white p-5 shadow-lg">
+            <div class="mb-3 flex items-center justify-between gap-2">
+                <h4 class="m-0 text-body-1 font-semibold text-gray-90">'.get_lang('Generate with AI').'</h4>
+                <button
+                    type="button"
+                    id="course-picture-ai-modal-close"
+                    class="text-gray-50 hover:text-gray-90"
+                    aria-label="'.get_lang('Close').'"
+                >
+                    <span class="mdi mdi-close"></span>
+                </button>
+            </div>
+
+            <label
+                for="course-picture-ai-prompt"
+                class="mb-1 block text-body-2 font-semibold text-gray-90"
+            >'.get_lang('Prompt').'</label>
+            <textarea
+                id="course-picture-ai-prompt"
+                rows="4"
+                class="w-full rounded-xl border border-gray-25 p-3 text-body-2 text-gray-90"
+            >'.htmlspecialchars($defaultAiCoursePicturePrompt, ENT_QUOTES | ENT_SUBSTITUTE).'</textarea>
+
+            <p
+                id="course-picture-ai-error"
+                class="mt-2 hidden text-body-2 font-semibold text-danger"
+            ></p>
+
+            <div class="mt-4 flex items-center justify-end gap-2">
+                <button
+                    type="button"
+                    id="course-picture-ai-cancel"
+                    class="rounded-xl border border-gray-25 px-4 py-2 text-body-2 font-semibold text-gray-90 hover:bg-gray-10"
+                >'.get_lang('Cancel').'</button>
+                <button
+                    type="button"
+                    id="course-picture-ai-generate"
+                    class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-body-2 font-semibold text-white hover:bg-primary-gradient disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    <span id="course-picture-ai-generate-icon" class="mdi mdi-robot"></span>
+                    <span id="course-picture-ai-generate-label">'.get_lang('Generate').'</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    ');
+}
+
 $form->addRule(
     'picture',
     get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
-);
-
-// Delete checkbox
-$form->addElement(
-    'checkbox',
-    'delete_picture',
-    null,
-    get_lang('Delete picture')
 );
 
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -239,7 +575,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
     $form->addGroup($group, null, [get_lang('Style sheets')]);
 }
 
-$form->addElement('label', get_lang('Space available'), format_file_size(DocumentManager::get_course_quota()));
+$form->addElement('label', get_lang('Space Available'), FormatHelper::formatFileSize(DocumentManager::get_course_quota(), 'MB', true));
 
 $aiOptions = [
     'learning_path_generator' => 'Enable learning path generator',
@@ -251,8 +587,18 @@ $aiOptions = [
     'image_generator' => 'Enable image generator',
     'glossary_terms_generator' => 'Enable glossary terms generator',
     'video_generator' => 'Enable video generator',
-    //'course_analyser' => 'Enable course analyser',
+    'course_analyser' => 'Enable course analyser',
 ];
+
+$configurableAiOptions = [];
+
+if ($enableAiHelpers) {
+    foreach ($aiOptions as $key => $label) {
+        if ($aiFeatureAccessHelper->isFeatureConfigurableForCourse($key, $courseId)) {
+            $configurableAiOptions[$key] = $label;
+        }
+    }
+}
 
 // This global "Save settings" button belongs to the main course settings block
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
@@ -908,6 +1254,86 @@ if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     );
 }
 
+if ($isCustomCertificateEnabled && null !== $customCertificatePlugin) {
+    $customCertificateUrl = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/start.php?'.api_get_cidreq();
+    $customCertificateCourseIsEnabled = 1 == api_get_course_setting('customcertificate_course_enable');
+    $customCertificateDefaultIsEnabled = 1 == api_get_course_setting('use_certificate_default');
+    $customCertificateCanOpenEditor = $customCertificateCourseIsEnabled || $customCertificateDefaultIsEnabled;
+
+    $customCertificateMode = 'disabled';
+    if ($customCertificateCourseIsEnabled) {
+        $customCertificateMode = 'course';
+    }
+    if ($customCertificateDefaultIsEnabled) {
+        $customCertificateMode = 'default';
+    }
+
+    $values['customcertificate_mode'] = $customCertificateMode;
+
+    $customCertificateModeGroup = [
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('Disabled'),
+            'disabled'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseCourseCustomCertificate'),
+            'course'
+        ),
+        $form->createElement(
+            'radio',
+            'customcertificate_mode',
+            null,
+            $customCertificatePlugin->get_lang('UseDefaultCustomCertificate'),
+            'default'
+        ),
+    ];
+
+    if ($customCertificateCanOpenEditor) {
+        $customCertificateAction = '<a class="btn btn--primary text-white" style="color: #fff;" href="'.$customCertificateUrl.'">'
+            .'<span class="mdi mdi-certificate-outline text-white" style="color: #fff;" aria-hidden="true"></span> '
+            .'<span class="text-white" style="color: #fff;">'.$customCertificatePlugin->get_lang('CertificateSetting').'</span>'
+            .'</a>';
+    } else {
+        $customCertificateAction = '<span class="btn btn--plain disabled" aria-disabled="true">'
+            .'<span class="mdi mdi-certificate-outline" aria-hidden="true"></span> '
+            .$customCertificatePlugin->get_lang('CertificateSetting')
+            .'</span>'
+            .'<p class="text-muted mt-2">'
+            .$customCertificatePlugin->get_lang('SelectOneOptionBeforeOpeningEditor')
+            .'</p>';
+    }
+
+    $customCertificateInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$customCertificatePlugin->get_lang('ChooseCustomCertificateModeHelp')
+        .'</p>'
+        .$customCertificateAction
+        .'</div>'
+    );
+
+    $customCertificateSaveButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+    $form->addPanelOption(
+        'custom_certificate',
+        $customCertificatePlugin->get_title(),
+        [
+            $customCertificateInfo,
+            $customCertificatePlugin->get_lang('CertificateMode') => $customCertificateModeGroup,
+            '' => $customCertificateSaveButton,
+        ],
+        ObjectIcon::CERTIFICATE,
+        false
+    );
+}
+
 // Forum settings
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -1071,14 +1497,12 @@ $form->addPanelOption(
 if ($enableAiHelpers) {
     $globalAiGroup = [];
 
-    foreach ($aiOptions as $key => $label) {
-        if (api_get_setting("ai_helpers.$key") === 'true') {
-            $aiGroup = [];
-            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('Yes'), 'true');
-            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('No'), 'false');
+    foreach ($configurableAiOptions as $key => $label) {
+        $aiGroup = [];
+        $aiGroup[] = $form->createElement('radio', $key, null, get_lang('Yes'), 'true');
+        $aiGroup[] = $form->createElement('radio', $key, null, get_lang('No'), 'false');
 
-            $globalAiGroup[get_lang($label)] = $aiGroup;
-        }
+        $globalAiGroup[get_lang($label)] = $aiGroup;
     }
 
     if (!empty($globalAiGroup)) {
@@ -1116,6 +1540,147 @@ if ($isImsLtiEnabled) {
         'external_tools_lti',
         get_lang('External tools (LTI)'),
         [$ltiInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseBlockEnabled) {
+    $courseBlockTitle = $courseBlockPlugin
+        ? $courseBlockPlugin->get_title()
+        : get_lang('Course block');
+
+    $courseBlockEditorConfig = [
+        'ToolbarSet' => 'Documents',
+        'Width' => '100%',
+        'Height' => '220',
+    ];
+
+    $form->addStartPanel(
+        'course_block',
+        $courseBlockTitle,
+        true,
+        ToolIcon::PLUGIN
+    );
+
+    $form->addHtml(
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .get_lang('Add custom content blocks to course footer regions.')
+        .'</p>'
+        .'</div>'
+    );
+
+    $form->addHtmlEditor(
+        'course_block_pre_footer',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_pre_footer') : get_lang('Before footer'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_left',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_left') : get_lang('Footer left'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_center',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_center') : get_lang('Footer center'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+    $form->addHtmlEditor(
+        'course_block_footer_right',
+        $courseBlockPlugin ? $courseBlockPlugin->get_lang('course_block_footer_right') : get_lang('Footer right'),
+        false,
+        false,
+        $courseBlockEditorConfig
+    );
+
+    $form->addButtonSave(get_lang('Save settings'), 'submit_save');
+
+    $form->addEndPanel();
+}
+
+if ($isCourseHomeNotifyEnabled) {
+    $courseHomeNotifyTitle = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_title()
+        : 'Notify in course home';
+    $courseHomeNotifyDescription = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_comment()
+        : 'Show notifications when a user enters the course homepage.';
+    $courseHomeNotifyButtonLabel = $courseHomeNotifyPlugin
+        ? $courseHomeNotifyPlugin->get_lang('SetNotification')
+        : 'Set one notification on home page';
+
+    $button = Display::toolbarButton(
+        $courseHomeNotifyButtonLabel,
+        api_get_path(WEB_PLUGIN_PATH).'CourseHomeNotify/configure.php?'.api_get_cidreq(),
+        'cog',
+        'primary'
+    );
+
+    $courseHomeNotifyInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseHomeNotifyDescription
+        .'</p>'
+        .$button
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_home_notify',
+        $courseHomeNotifyTitle,
+        [$courseHomeNotifyInfo],
+        ToolIcon::COURSE,
+        false
+    );
+}
+
+if ($isCourseLegalEnabled) {
+    $courseLegalTitle = $courseLegalPlugin
+        ? $courseLegalPlugin->get_title()
+        : 'Course legal agreement';
+    $courseLegalDescription = $courseLegalPlugin
+        ? $courseLegalPlugin->get_comment()
+        : 'Configure a legal agreement that learners must accept before accessing the course.';
+
+    $configureButton = Display::toolbarButton(
+        $courseLegalPlugin ? $courseLegalPlugin->get_lang('CourseLegal') : 'Configure agreement',
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/start.php?'.api_get_cidreq(),
+        'file-document-edit-outline',
+        'primary'
+    );
+
+    $userListButton = Display::toolbarButton(
+        get_lang('User list'),
+        api_get_path(WEB_PLUGIN_PATH).'CourseLegal/user_list.php?'.api_get_cidreq(),
+        'account-check-outline',
+        'secondary'
+    );
+
+    $courseLegalInfo = $form->createElement(
+        'html',
+        '<div class="mb-4">'
+        .'<p class="mb-3">'
+        .$courseLegalDescription
+        .'</p>'
+        .'<div class="flex flex-wrap gap-2">'
+        .$configureButton
+        .$userListButton
+        .'</div>'
+        .'</div>'
+    );
+
+    $form->addPanelOption(
+        'course_legal',
+        $courseLegalTitle,
+        [$courseLegalInfo],
         ToolIcon::COURSE,
         false
     );
@@ -1199,6 +1764,10 @@ $defaultCourseSettings = [
     // Certificates
     'allow_public_certificates' => 0,
 
+    // CustomCertificate plugin
+    'customcertificate_course_enable' => 0,
+    'use_certificate_default' => 0,
+
     // Forum settings (Yes=1, No=2)
     'hide_forum_notifications' => 2,
     'subscribe_users_to_forum_notifications' => 2,
@@ -1232,6 +1801,15 @@ $values['activate_legal'] = $courseEntity->getActivateLegal();
 $values['show_score'] = $_course['show_score'] ?? 0;
 
 $courseSettings = CourseManager::getCourseSettingVariables();
+
+if ($isCourseBlockEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $courseBlockSettings)));
+}
+
+if ($isCustomCertificateEnabled) {
+    $courseSettings = array_values(array_unique(array_merge($courseSettings, $customCertificateSettings)));
+}
+
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
 
@@ -1279,6 +1857,24 @@ if (!isset($values['email_alert_student_on_manual_subscription'])) {
     $values['email_alert_student_on_manual_subscription'] = 0;
 }
 
+if ($isCustomCertificateEnabled) {
+    foreach ($customCertificateSettings as $customCertificateSetting) {
+        if (!isset($values[$customCertificateSetting])) {
+            $values[$customCertificateSetting] = 0;
+        }
+    }
+
+    $values['customcertificate_mode'] = 'disabled';
+
+    if (1 == $values['customcertificate_course_enable']) {
+        $values['customcertificate_mode'] = 'course';
+    }
+
+    if (1 == $values['use_certificate_default']) {
+        $values['customcertificate_mode'] = 'default';
+    }
+}
+
 // Auto-launch: compute the selected UI option from stored flags
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
@@ -1305,7 +1901,7 @@ $values['auto_launch_option'] = $defaultAutoLaunchOption;
 // AI helpers: api_get_course_setting() can also return -1 for new courses.
 // We want radios to default to "No" ("false") to avoid an empty state.
 if ($enableAiHelpers) {
-    foreach ($aiOptions as $key => $label) {
+    foreach ($configurableAiOptions as $key => $label) {
         $v = api_get_course_setting($key);
         $values[$key] = ('-1' === (string) $v || $v === null || $v === '') ? 'false' : (string) $v;
     }
@@ -1314,21 +1910,487 @@ if ($enableAiHelpers) {
 $form->setDefaults($values);
 
 $htmlHeadXtra[] = '
-<style>
-    .course-picture-preview img {
-        max-width: 320px;
-        height: auto;
-        display: block;
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var card = document.getElementById("course-picture-card");
+    var input = document.getElementById("picture");
+    var previewImage = document.getElementById("course-picture-preview-image");
+    var selectedFile = document.getElementById("course-picture-selected-file");
+    var status = document.getElementById("course-picture-status");
+    var currentPictureLabel = '.json_encode(get_lang('Current picture')).';
+    var objectUrl = null;
+    var originalImage = null;
+    var lastCropValue = "";
+    var syncTimer = null;
+
+    function markAsCurrentPicture() {
+        if (!status) {
+            return;
+        }
+
+        status.textContent = currentPictureLabel;
+        status.classList.remove(
+            "bg-gray-20",
+            "text-gray-90",
+            "bg-success"
+        );
+        status.classList.add(
+            "bg-primary",
+            "text-white"
+        );
     }
 
-    .course-picture-preview .help-block {
-        margin-bottom: 0.25rem;
+    function updateSelectedFileName(file) {
+        if (!selectedFile) {
+            return;
+        }
+
+        selectedFile.textContent = file.name;
+        selectedFile.classList.remove("hidden");
     }
-    .field-checkbox, .field-radiobutton {
-      margin-top: 10px;
+
+    function getCropInput() {
+        return document.querySelector(
+            "input[name=\"picture_crop_result\"], textarea[name=\"picture_crop_result\"], #picture_crop_result"
+        );
     }
-</style>
+
+    function parseCropValue(value) {
+        var crop = null;
+
+        if (!value) {
+            return null;
+        }
+
+        try {
+            crop = JSON.parse(value);
+        } catch (e) {
+            try {
+                crop = Object.fromEntries(new URLSearchParams(value));
+            } catch (ignored) {
+                crop = null;
+            }
+        }
+
+        if (!crop) {
+            return null;
+        }
+
+        var x = parseFloat(crop.x || crop.left || 0);
+        var y = parseFloat(crop.y || crop.top || 0);
+        var width = parseFloat(crop.width || crop.w || 0);
+        var height = parseFloat(crop.height || crop.h || 0);
+
+        if (!width || !height) {
+            return null;
+        }
+
+        return {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+    }
+
+    function normaliseCrop(crop, image) {
+        var normalised = {
+            x: crop.x,
+            y: crop.y,
+            width: crop.width,
+            height: crop.height
+        };
+
+        if (normalised.width <= 1 && normalised.height <= 1) {
+            normalised.x *= image.naturalWidth;
+            normalised.y *= image.naturalHeight;
+            normalised.width *= image.naturalWidth;
+            normalised.height *= image.naturalHeight;
+        }
+
+        normalised.x = Math.max(0, Math.min(normalised.x, image.naturalWidth - 1));
+        normalised.y = Math.max(0, Math.min(normalised.y, image.naturalHeight - 1));
+        normalised.width = Math.max(1, Math.min(normalised.width, image.naturalWidth - normalised.x));
+        normalised.height = Math.max(1, Math.min(normalised.height, image.naturalHeight - normalised.y));
+
+        return normalised;
+    }
+
+    function applyCropPreviewFromHiddenInput() {
+        var cropInput = getCropInput();
+
+        if (!cropInput || !cropInput.value || !originalImage || !previewImage) {
+            return false;
+        }
+
+        if (cropInput.value === lastCropValue) {
+            return true;
+        }
+
+        var crop = parseCropValue(cropInput.value);
+
+        if (!crop) {
+            return false;
+        }
+
+        lastCropValue = cropInput.value;
+        crop = normaliseCrop(crop, originalImage);
+
+        var canvas = document.createElement("canvas");
+        var maxWidth = 640;
+        var outputWidth = Math.min(maxWidth, Math.round(crop.width));
+        var outputHeight = Math.max(1, Math.round(outputWidth * crop.height / crop.width));
+        var context = canvas.getContext("2d");
+
+        if (!context) {
+            return false;
+        }
+
+        canvas.width = outputWidth;
+        canvas.height = outputHeight;
+
+        context.drawImage(
+            originalImage,
+            crop.x,
+            crop.y,
+            crop.width,
+            crop.height,
+            0,
+            0,
+            outputWidth,
+            outputHeight
+        );
+
+        previewImage.src = canvas.toDataURL("image/jpeg", 0.92);
+        markAsCurrentPicture();
+
+        return true;
+    }
+
+    function isCropEditorElement(element) {
+        return Boolean(
+            element.closest(
+                ".modal, .modal-dialog, .ui-dialog, .cropper-container, .cropper-wrap-box, .cropper-canvas, .jcrop-holder, [role=\"dialog\"]"
+            )
+        );
+    }
+
+    function getExternalGeneratedPreviewImages() {
+        var form = input ? input.closest("form") : null;
+        var cropInput = getCropInput();
+
+        if (!form || !card || !cropInput || !cropInput.value) {
+            return [];
+        }
+
+        return Array.prototype.filter.call(form.querySelectorAll("img"), function (image) {
+            var src = image.getAttribute("src") || "";
+
+            if (card.contains(image) || isCropEditorElement(image)) {
+                return false;
+            }
+
+            if (image.classList.contains("hidden")) {
+                return false;
+            }
+
+            return src.indexOf("blob:") === 0 || src.indexOf("data:image/") === 0;
+        });
+    }
+
+    function hideGeneratedPreviewElement(image) {
+        var current = image;
+        var stop = input ? input.closest("form") : null;
+        var steps = 0;
+
+        if (isCropEditorElement(image)) {
+            return;
+        }
+
+        while (
+            current.parentElement &&
+            current.parentElement !== stop &&
+            steps < 4
+        ) {
+            var parent = current.parentElement;
+
+            if (
+                isCropEditorElement(parent) ||
+                parent.querySelector("input[type=\"file\"], select, textarea")
+            ) {
+                break;
+            }
+
+            if (parent.children.length <= 2) {
+                current = parent;
+                steps++;
+                continue;
+            }
+
+            break;
+        }
+
+        current.classList.add("hidden");
+        current.setAttribute("aria-hidden", "true");
+    }
+
+    function hideExternalGeneratedPreviews() {
+        getExternalGeneratedPreviewImages().forEach(hideGeneratedPreviewElement);
+    }
+
+    function syncPreviewAfterCrop() {
+        var updated = applyCropPreviewFromHiddenInput();
+
+        if (updated) {
+            hideExternalGeneratedPreviews();
+        }
+    }
+
+    function readImageFile(file) {
+        if (objectUrl) {
+            window.URL.revokeObjectURL(objectUrl);
+        }
+
+        objectUrl = window.URL.createObjectURL(file);
+
+        originalImage = new Image();
+        originalImage.onload = function () {
+            if (previewImage) {
+                previewImage.src = objectUrl;
+            }
+
+            syncPreviewAfterCrop();
+        };
+        originalImage.src = objectUrl;
+    }
+
+    if (!input || !card) {
+        return;
+    }
+
+    input.addEventListener("change", function () {
+        if (!input.files || !input.files[0]) {
+            return;
+        }
+
+        lastCropValue = "";
+        updateSelectedFileName(input.files[0]);
+        readImageFile(input.files[0]);
+        markAsCurrentPicture();
+
+        if (syncTimer) {
+            window.clearInterval(syncTimer);
+        }
+
+        syncTimer = window.setInterval(syncPreviewAfterCrop, 500);
+
+        window.setTimeout(function () {
+            if (syncTimer) {
+                window.clearInterval(syncTimer);
+                syncTimer = null;
+            }
+
+            syncPreviewAfterCrop();
+        }, 30000);
+    });
+});
+</script>
 ';
+
+if ($canGenerateCoursePictureWithAi) {
+    $htmlHeadXtra[] = '
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var openButton = document.getElementById("course-picture-generate-ai-button");
+    var modal = document.getElementById("course-picture-ai-modal");
+    var closeButton = document.getElementById("course-picture-ai-modal-close");
+    var cancelButton = document.getElementById("course-picture-ai-cancel");
+    var generateButton = document.getElementById("course-picture-ai-generate");
+    var generateIcon = document.getElementById("course-picture-ai-generate-icon");
+    var generateLabel = document.getElementById("course-picture-ai-generate-label");
+    var promptField = document.getElementById("course-picture-ai-prompt");
+    var errorBox = document.getElementById("course-picture-ai-error");
+    var pictureInput = document.getElementById("picture");
+
+    if (!openButton || !modal || !generateButton || !promptField || !pictureInput) {
+        return;
+    }
+
+    var courseId = '.(int) $courseId.';
+    var csrfToken = '.json_encode($generateCoursePictureWithAiCsrfToken).';
+    var generateLabelDefault = generateLabel.textContent;
+    var generateIconDefaultClass = generateIcon.className;
+    var generatingLabel = '.json_encode(get_lang('Generating...')).';
+    var genericErrorMessage = '.json_encode(get_lang('An error occurred. Please try again.')).';
+
+    function showError(message) {
+        if (!errorBox) {
+            return;
+        }
+        errorBox.textContent = message || genericErrorMessage;
+        errorBox.classList.remove("hidden");
+    }
+
+    function hideError() {
+        if (!errorBox) {
+            return;
+        }
+        errorBox.classList.add("hidden");
+        errorBox.textContent = "";
+    }
+
+    function openModal() {
+        hideError();
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+
+    function closeModal() {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+
+    function freezeGenerateButton() {
+        generateButton.disabled = true;
+        generateIcon.className = "mdi mdi-loading mdi-spin";
+        generateLabel.textContent = generatingLabel;
+    }
+
+    function unfreezeGenerateButton() {
+        generateButton.disabled = false;
+        generateIcon.className = generateIconDefaultClass;
+        generateLabel.textContent = generateLabelDefault;
+    }
+
+    function resizeBase64ImageCover(rawBase64, contentType, targetWidth, targetHeight) {
+        return new Promise(function (resolve, reject) {
+            var img = new Image();
+
+            img.onload = function () {
+                try {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    var ctx = canvas.getContext("2d");
+                    if (!ctx) {
+                        reject(new Error("Canvas context not available"));
+                        return;
+                    }
+
+                    var scale = Math.max(targetWidth / img.width, targetHeight / img.height);
+                    var sourceWidth = targetWidth / scale;
+                    var sourceHeight = targetHeight / scale;
+                    var sourceX = (img.width - sourceWidth) / 2;
+                    var sourceY = (img.height - sourceHeight) / 2;
+
+                    ctx.drawImage(
+                        img,
+                        sourceX,
+                        sourceY,
+                        sourceWidth,
+                        sourceHeight,
+                        0,
+                        0,
+                        targetWidth,
+                        targetHeight
+                    );
+
+                    canvas.toBlob(function (blob) {
+                        if (!blob) {
+                            reject(new Error("Failed to create blob from canvas"));
+                            return;
+                        }
+                        resolve(blob);
+                    }, "image/png");
+                } catch (e) {
+                    reject(e);
+                }
+            };
+
+            img.onerror = function () {
+                reject(new Error("Failed to load the generated image"));
+            };
+
+            img.src = "data:" + (contentType || "image/png") + ";base64," + rawBase64;
+        });
+    }
+
+    function applyGeneratedBlobToPictureInput(blob) {
+        var file = new File([blob], "course_picture_ai.png", { type: blob.type || "image/png" });
+        var dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        pictureInput.files = dataTransfer.files;
+        pictureInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function generate() {
+        var prompt = (promptField.value || "").trim();
+
+        if (!prompt) {
+            showError('.json_encode(get_lang('This field is required')).');
+            return;
+        }
+
+        hideError();
+        freezeGenerateButton();
+
+        fetch("'.addslashes((string) api_get_path(WEB_PATH)).'ai/generate_course_picture?cid=" + courseId, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cid: courseId, prompt: prompt, _token: csrfToken })
+        })
+            .then(function (response) {
+                return response.json().then(function (data) {
+                    return { ok: response.ok, data: data };
+                });
+            })
+            .then(function (payload) {
+                if (!payload.ok || !payload.data || !payload.data.success) {
+                    throw new Error((payload.data && payload.data.text) || "");
+                }
+
+                var result = payload.data.result || {};
+
+                if (!result.is_base64 || !result.content) {
+                    throw new Error("");
+                }
+
+                return resizeBase64ImageCover(result.content, result.content_type, 1024, 576);
+            })
+            .then(function (blob) {
+                applyGeneratedBlobToPictureInput(blob);
+                unfreezeGenerateButton();
+                closeModal();
+            })
+            .catch(function (error) {
+                unfreezeGenerateButton();
+                showError((error && error.message) || genericErrorMessage);
+            });
+    }
+
+    openButton.addEventListener("click", openModal);
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeModal);
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener("click", closeModal);
+    }
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    generateButton.addEventListener("click", generate);
+});
+</script>
+';
+}
 
 // Handle form submission
 if ($form->validate()) {
@@ -1355,8 +2417,8 @@ if ($form->validate()) {
         ? (int) $updateValues['visibility']
         : $courseEntity->getVisibility();
 
-    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
-        // Do not allow non-platform admins to change course visibility even if they tamper with the POST payload.
+    if (!$canChangeCourseVisibility) {
+        // Do not allow unauthorized visibility changes even if the POST payload is tampered with.
         $updateValues['visibility'] = (int) $courseEntity->getVisibility();
     }
 
@@ -1364,7 +2426,7 @@ if ($form->validate()) {
         ? (int) $updateValues['subscribe']
         : $courseEntity->getSubscribe();
 
-    if ($courseVisibilityAdminsOnly && !api_is_platform_admin()) {
+    if (!$canChangeCourseSubscription) {
         $updateValues['subscribe'] = (int) $courseEntity->getSubscribe();
     }
 
@@ -1382,15 +2444,19 @@ if ($form->validate()) {
             : $courseEntity->getRegistrationCode();
 
     $visibility = $updateValues['visibility'] ?? $courseEntity->getVisibility();
-    $deletePicture = !empty($updateValues['delete_picture'] ?? null);
 
     $request = Container::getRequest();
     /** @var UploadedFile|null $uploadFile */
     $uploadFile = $request->files->get('picture');
+    $deletePicture = !empty($submittedValues['delete_picture'] ?? null);
 
-    // Handle course picture upload / update
-    if (null !== $uploadFile) {
-        // Replace existing illustration with the new one
+    // Handle course picture delete / upload.
+    // Delete has priority to avoid uploading and deleting a picture in the same submit.
+    if ($deletePicture) {
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
+    } elseif (null !== $uploadFile) {
         if ($illustrationRepo->hasIllustration($courseEntity)) {
             $illustrationRepo->deleteIllustration($courseEntity);
         }
@@ -1402,7 +2468,6 @@ if ($form->validate()) {
         );
 
         if ($file) {
-            // Crop info is provided by the crop widget (hidden field)
             if (!empty($updateValues['picture_crop_result'])) {
                 $file->setCrop($updateValues['picture_crop_result']);
             }
@@ -1415,15 +2480,6 @@ if ($form->validate()) {
                 'course_picture',
                 $uploadFile->getFilename()
             );
-        }
-    }
-
-    $visibility = $updateValues['visibility'] ?? '';
-    $deletePicture = $updateValues['delete_picture'] ?? '';
-
-    if ($deletePicture) {
-        if ($illustrationRepo->hasIllustration($courseEntity)) {
-            $illustrationRepo->deleteIllustration($courseEntity);
         }
     }
 
@@ -1501,6 +2557,16 @@ if ($form->validate()) {
             break;
     }
 
+    if ($isCustomCertificateEnabled) {
+        foreach ($customCertificateSettings as $customCertificateSetting) {
+            $updateValues[$customCertificateSetting] = !empty($submittedValues[$customCertificateSetting]) ? 1 : 0;
+        }
+
+        if (!empty($updateValues['use_certificate_default'])) {
+            $updateValues['customcertificate_course_enable'] = 0;
+        }
+    }
+
     // Persist main course entity
     $courseEntity
         ->setTitle($updateValues['title'])
@@ -1526,11 +2592,21 @@ if ($form->validate()) {
 
     // Persist AI helper per-course settings
     if ($enableAiHelpers) {
-        foreach ($aiOptions as $key => $label) {
+        foreach ($configurableAiOptions as $key => $label) {
             if (isset($updateValues[$key])) {
                 CourseManager::saveCourseConfigurationSetting($key, $updateValues[$key], api_get_course_int_id());
             }
         }
+    }
+
+    if ($isCustomCertificateEnabled) {
+        $customCertificateMode = $submittedValues['customcertificate_mode'] ?? 'disabled';
+
+        if (!\in_array($customCertificateMode, ['disabled', 'course', 'default'], true)) {
+            $customCertificateMode = 'disabled';
+        }
+
+        customcertificate_save_course_settings_mode($customCertificateMode, api_get_course_int_id());
     }
 
     // Insert/Update course_settings table
@@ -1539,17 +2615,51 @@ if ($form->validate()) {
     foreach ($courseSettings as $setting) {
         $value = $updateValues[$setting] ?? null;
 
+        if ($isCourseBlockEnabled && \in_array($setting, $courseBlockSettings, true)) {
+            // CourseBlock fields are added as panel elements and can be missing from exportValues()
+            // on some branches. Read the raw POST value to avoid saving null.
+            $value = $submittedValues[$setting] ?? '';
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            continue;
+        }
+
         if ('email_alert_manager_on_new_quiz' === $setting) {
             // Store checkbox values as a stable CSV string.
             $value = implode(',', $updateValues['email_alert_manager_on_new_quiz']);
             $quizNotificationSettingSaved = true;
         }
 
+        $pluginContext = null;
+
+        if (\in_array($setting, $courseBlockSettings, true)) {
+            $pluginContext = $courseBlockAppPlugin;
+        }
+
+        if ($isCustomCertificateEnabled && \in_array($setting, $customCertificateSettings, true)) {
+            $pluginContext = $customCertificateAppPlugin;
+        }
+
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,
-            api_get_course_int_id()
+            api_get_course_int_id(),
+            $pluginContext
         );
+    }
+
+    if ($isCourseBlockEnabled && null !== $courseBlockAppPlugin) {
+        foreach ($courseBlockSettings as $setting) {
+            $value = $submittedValues[$setting] ?? '';
+
+            CourseManager::saveCourseConfigurationSetting(
+                $setting,
+                $value,
+                api_get_course_int_id(),
+                $courseBlockAppPlugin
+            );
+        }
     }
 
     if (!$quizNotificationSettingSaved) {

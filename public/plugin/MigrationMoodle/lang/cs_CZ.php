@@ -1,0 +1,95 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+$strings['plugin_title'] = 'Import z Moodlu';
+$strings['plugin_comment'] = 'Spustit proces importu z databáze a souborů Moodlu do Chamila.';
+
+$strings['MoodlePassword'] = 'Heslo Moodlu';
+$strings['UninstallError'] = 'Při odinstalaci pluginu došlo k chybě.';
+
+$strings['db_host'] = 'Hostitel DB Moodlu';
+$strings['db_user'] = 'Uživatel DB Moodlu';
+$strings['db_password'] = 'Heslo k DB Moodlu';
+$strings['db_name'] = 'Název DB Moodlu';
+$strings['user_filter'] = 'Filtr pro uživatele';
+$strings['user_filter_help'] = 'Importovat pouze uživatele, jejichž uživatelské jméno má tuto předponu.<br>Import kurzů je touto konfigurací také ovlivněn, protože importuje pouze kurzy, ve kterých jsou zapsáni uživatelé s touto předponou uživatelského jména.';
+$strings['url_id'] = 'ID URL';
+$strings['url_id_help'] = 'ID přístupové URL, kam se mají ukládat kurzy, uživatelé a relace (při použití multi-url).';
+$strings['moodle_path'] = 'Cesta k moodledata';
+$strings['moodle_path_help'] = 'Cesta ke složce moodledata. Obvykle něco jako <pre>/var/www/moodledata</pre>';
+
+// Tasks
+$strings['UsersTask'] = 'Uživatelé';
+$strings['CourseCategoriesTask'] = 'Kategorie kurzů';
+$strings['CoursesTask'] = 'Kurzy';
+$strings['CourseSectionsTask'] = 'Sekce kurzů';
+$strings['CourseModulesLessonTask'] = 'Moduly kurzu: Lekce';
+$strings['LessonPagesTask'] = 'Stránky lekcí';
+$strings['LessonPagesDocumentTask'] = 'Stránky lekcí: Dokumenty';
+$strings['FilesForLessonPagesTask'] = 'Soubory pro stránky lekcí';
+$strings['LessonPagesQuizTask'] = 'Stránky lekcí: Otázky';
+$strings['LessonPagesQuizQuestionTask'] = 'Otázky pro stránky s otázkami';
+$strings['LessonAnswersTrueFalseTask'] = 'Odpovědi pro otázky Pravda/Nepravda';
+$strings['LessonAnswersMultipleChoiceTask'] = 'Odpovědi pro otázky s výběrem z více možností';
+$strings['LessonAnswersMultipleAnswerTask'] = 'Odpovědi pro otázky s více odpověďmi';
+$strings['LessonAnswersMatchingTask'] = 'Odpovědi pro otázky párování';
+$strings['LessonAnswersEssayTask'] = 'Odpovědi pro esejové otázky';
+$strings['LessonAnswersShortAnswerTask'] = 'Odpovědi pro krátké odpovědi';
+$strings['FilesForLessonAnswersTask'] = 'Soubory pro odpovědi v lekcích';
+$strings['CourseModulesQuizTask'] = 'Moduly kurzu: Testy';
+$strings['CQuizTask'] = 'Test C';
+$strings['RoleAssignmentsTask'] = 'Přiřazení rolí';
+$strings['QuizzesTask'] = 'Testy';
+$strings['FilesForQuizzesTask'] = 'Soubory pro testy';
+$strings['QuestionCategoriesTask'] = 'Kategorie otázek';
+$strings['QuestionsTask'] = 'Otázky';
+$strings['QuestionMultiChoiceSingleTask'] = 'Odpovědi pro otázky s výběrem (jedna)';
+$strings['QuestionMultiChoiceMultipleTask'] = 'Odpovědi pro otázky s výběrem (více)';
+$strings['QuestionsTrueFalseTask'] = 'Odpovědi pro otázky pravda/nepravda';
+$strings['QuestionShortAnswerTask'] = 'Odpovědi pro otázky s krátkou odpovědí';
+$strings['CourseModulesScormTask'] = 'SCORM kurzy';
+$strings['ScormScoesTask'] = 'SCORM položky';
+$strings['FilesForScormScoesTask'] = 'Soubory pro SCORM položky';
+$strings['UserSessionsTask'] = 'Relace kurzů pro uživatele';
+$strings['CourseIntroductionsTask'] = 'Úvody ke kurzům';
+$strings['FilesForCourseIntroductionsTask'] = 'Soubory pro úvody ke kurzům';
+$strings['FilesForCourseSectionsTask'] = 'Soubory pro sekce kurzů';
+$strings['CourseModulesUrlTask'] = 'Moduly kurzu: URL';
+$strings['UrlsTask'] = 'URL';
+$strings['SortSectionModulesTask'] = 'Seřadit moduly v sekci';
+$strings['UsersScormsViewTask'] = 'Zobrazení SCORM pro uživatele';
+$strings['UsersScormsProgressTask'] = 'Průběh SCORM';
+$strings['UsersLearnPathsTask'] = 'Zobrazení výukových cest uživatelů';
+$strings['UsersLearnPathsLessonTimerTask'] = 'Časovač lekce pro čas spuštění sekce výukových cest';
+$strings['QuizzesScoresTask'] = 'Aktualizovat skóre testů ve výukové cestě';
+$strings['QuestionGapselectTask'] = 'Odpovědi pro otázky s výběrem mezer';
+$strings['UsersLearnPathsLessonBranchTask'] = 'Větvení lekce na celkový čas v dokumentech výukových cest';
+$strings['UsersLearnPathsLessonAttemptsTask'] = 'Pokusy o lekci na celkový čas v testech výukových cest';
+$strings['UsersLearnPathsQuizzesTask'] = 'Pokusy o testy na pokusy o testy ve výukových cestách';
+$strings['UsersQuizzesAttemptsTask'] = 'Pokusy o testy uživatelů';
+$strings['UserQuestionAttemptsShortanswerTask'] = 'Pokusy o otázky uživatelů pro krátkou odpověď';
+$strings['UserQuestionAttemptsGapselectTask'] = 'Pokusy o otázky uživatelů pro výběr mezer';
+$strings['UserQuestionAttemptsTruefalseTask'] = 'Pokusy o otázky uživatelů pro pravda/nepravda';
+$strings['UsersLastLoginTask'] = 'Poslední přihlášení uživatelů';
+$strings['TrackLoginTask'] = 'První přihlášení a poslední odhlášení';
+$strings['TrackCourseAccessTask'] = 'Přístup uživatele do kurzu';
+$strings['UserLearnPathsProgressScript'] = 'Aktualizovat průběh ve výukových cestách pro uživatele.';
+$strings['UserScormsProgressScript'] = 'Aktualizovat průběh ve SCORM pro uživatele.';
+
+$strings['InstallError'] = 'Při instalaci pluginu došlo k chybě: %s';
+$strings['AdminIntro'] = 'Spouštějte migrační úlohy Moodlu v pořadí. Každý krok je povolen pouze po dokončení nadřazeného kroku.';
+$strings['MoodleDatabase'] = 'Databáze Moodlu';
+$strings['MoodledataPath'] = 'Cesta k Moodledata';
+$strings['AccessUrlId'] = 'ID přístupové URL';
+$strings['Configured'] = 'Nakonfigurováno';
+$strings['NotConfigured'] = 'Nenakonfigurováno';
+$strings['ConfigurePlugin'] = 'Konfigurovat plugin';
+$strings['MissingRequiredDatabaseConfiguration'] = 'Před spuštěním migračních úloh nakonfigurujte hostitele databáze Moodlu, uživatele a název databáze.';
+$strings['MissingMoodledataPathWarning'] = 'Cesta k Moodledata je prázdná. Úlohy související se soubory mohou selhat, dokud nebude toto nastavení nakonfigurováno.';
+$strings['InvalidMigrationAction'] = 'Neplatná migrační akce.';
+$strings['InvalidSecurityToken'] = 'Neplatný bezpečnostní token. Obnovte stránku a zkuste to znovu.';
+$strings['MigrationTasks'] = 'Migrační úlohy';
+$strings['MaintenanceScripts'] = 'Údržbové skripty';
+$strings['ExecutionOutput'] = 'Výstup spuštění';
+$strings['TaskAlreadyExecuted'] = 'Tato úloha nebo skript již byl spuštěn.';
+$strings['SelectTaskToRun'] = 'Vyberte migrační úlohu ke spuštění. Výstup se zobrazí zde.';

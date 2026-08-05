@@ -1,6 +1,10 @@
 export default {
   path: "/resources/attendance/:node/",
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: {
+    requiresAuth: true,
+    showBreadcrumb: true,
+    tool: "attendance",
+  },
   name: "attendance",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   redirect: { name: "AttendanceList" },

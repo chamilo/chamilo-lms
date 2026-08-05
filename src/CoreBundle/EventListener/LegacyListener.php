@@ -139,7 +139,7 @@ class LegacyListener
 
         // We set cid_reset = true if we enter inside a main/admin url
         // CidReqListener check this variable and deletes the course session
-        if (str_contains((string) $request->get('name'), 'admin/')) {
+        if (str_contains((string) ($request->attributes->get('name') ?? $request->query->get('name') ?? $request->request->get('name')), 'admin/')) {
             $session->set('cid_reset', true);
         } else {
             $session->set('cid_reset', false);

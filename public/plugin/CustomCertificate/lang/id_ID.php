@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Apakah Anda ingin menghapus diploma khusus dan men
 $strings['SuccessDelete'] = 'Berhasil dihapus';
 $strings['ProblemDelete'] = 'Masalah saat menghapus sertifikat';
 $strings['OnlyCustomCertificates'] = 'Hanya kursus dengan sertifikat yang dipersonalisasi yang diekspor';
+$strings['CertificateMode'] = 'Mode sertifikat';
+$strings['UseCourseCustomCertificate'] = 'Gunakan sertifikat khusus untuk kursus ini';
+$strings['UseDefaultCustomCertificate'] = 'Gunakan sertifikat khusus bawaan platform';
+
+$strings['CreateCertificateWithTags'] = 'Buat sertifikat menggunakan tag berikut';
+
+$strings['DeleteCertificate'] = 'Hapus sertifikat';
+
+$strings['SaveCertificate'] = 'Simpan sertifikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Pilih salah satu opsi dan simpan pengaturan sebelum membuka editor sertifikat.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Pilih cara kursus ini menggunakan sertifikat khusus.';
+
+$strings['CouldNotSaveCertificate'] = 'Tidak dapat menyimpan konfigurasi sertifikat.';

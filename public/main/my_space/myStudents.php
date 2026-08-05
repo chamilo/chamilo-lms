@@ -53,49 +53,44 @@ $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss();
 
-$allowedToTrackUser =
+// Access to a student's tracking is granted on two levels:
+// 1) Wide scope: platform/session admins, HR managers (DRH) and student bosses
+//    may view any student's tracking data.
+// 2) Teachers, coaches and course tutors may only view a student they have a
+//    real relationship with: a shared course (as teacher), a shared session (as
+//    coach), or a course they tutor where the student is enrolled. This closes
+//    the hole where any teacher could read any student's data regardless of
+//    enrollment.
+$hasWideTrackingScope =
     api_is_platform_admin(true, true) ||
-    api_is_allowed_to_edit(null, true) ||
     api_is_session_admin() ||
     api_is_drh() ||
-    api_is_student_boss() ||
-    api_is_course_admin() ||
-    api_is_teacher()
-;
+    api_is_student_boss();
 
-if (false === $allowedToTrackUser && null !== $course) {
-    if (empty($sessionId)) {
-        $isTeacher = CourseManager::isCourseTeacher(
+$tracksThisStudent = false;
+if (!$hasWideTrackingScope && !empty($studentId)) {
+    $tracksThisStudent =
+        UserManager::isTeacherOfStudent(api_get_user_id(), $studentId)
+        || Tracking::is_allowed_to_coach_student(api_get_user_id(), $studentId);
+
+    // A course tutor keeps access, but only to students enrolled in the course
+    // they tutor (not to any student, as the previous check allowed).
+    if (!$tracksThisStudent && null !== $course) {
+        $isCourseTutor = 1 === (int) CourseManager::get_tutor_in_course_status(
             api_get_user_id(),
             $course->getId()
         );
-
-        if ($isTeacher) {
-            $allowedToTrackUser = true;
-        } else {
-            // Check if the user is tutor of the course
-            $userCourseStatus = CourseManager::get_tutor_in_course_status(
-                api_get_user_id(),
-                $course->getId()
-            );
-
-            if (1 === $userCourseStatus) {
-                $allowedToTrackUser = true;
-            }
-        }
-    } else {
-        $coach = api_is_coach($sessionId, $course->getId());
-
-        if ($coach) {
-            $allowedToTrackUser = true;
-        }
+        $studentInCourse = CourseManager::is_user_subscribed_in_course(
+            $studentId,
+            $course->getCode(),
+            !empty($sessionId),
+            $sessionId
+        );
+        $tracksThisStudent = $isCourseTutor && $studentInCourse;
     }
 }
 
-if (!$allowedToTrackUser) {
-    api_not_allowed(true);
-}
-if (empty($studentId)) {
+if (empty($studentId) || (!$hasWideTrackingScope && !$tracksThisStudent)) {
     api_not_allowed(true);
 }
 
@@ -570,7 +565,8 @@ switch ($action) {
         if ($isBoss || api_is_platform_admin()) {
             LegalManager::sendLegal($studentId, api_get_user_id());
         }
-        break;
+        header('Location: '.api_get_self().'?student='.$studentId.'&course='.$courseCode);
+        exit;
     case 'delete_legal':
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
@@ -1241,7 +1237,10 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $btn = Display::url(
                 get_lang('Send legal agreement'),
                 api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
-                ['class' => 'btn btn--primary']
+                [
+                    'class' => 'btn btn--primary',
+                    'onclick' => "this.classList.add('disabled'); this.style.pointerEvents='none';",
+                ]
             );
             $timeLegalAccept = get_lang('Not Registered');
         }
@@ -2171,10 +2170,32 @@ if (empty($details)) {
                         if ($allowToQualify) {
                             $qualifyLink = '&action=qualify';
                         }
-                        $attemptLink =
-                            '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseId
-                            .'&sid='.$sessionId.'&student='.$studentId.'&origin='
-                            .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        $exerciseResourceNodeId = null !== $course && null !== $course->getResourceNode()
+                            ? (int) $course->getResourceNode()->getId()
+                            : 0;
+
+                        if (0 < $exerciseResourceNodeId) {
+                            $attemptQueryParams = [
+                                'cid' => $courseId,
+                                'sid' => $sessionId,
+                                'gid' => 0,
+                                'student' => $studentId,
+                                'origin' => empty($origin) ? 'tracking' : $origin,
+                            ];
+
+                            if ($allowToQualify) {
+                                $attemptQueryParams['action'] = 'qualify';
+                            }
+
+                            $attemptLink = api_get_path(WEB_PATH).'resources/exercise/'
+                                .$exerciseResourceNodeId.'/'.$exercise_id.'/result/'.$id_last_attempt.'?'
+                                .http_build_query($attemptQueryParams);
+                        } else {
+                            $attemptLink =
+                                '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseId
+                                .'&sid='.$sessionId.'&student='.$studentId.'&origin='
+                                .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        }
                         echo Display::url(
                             Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Test')),
                             $attemptLink
@@ -2185,8 +2206,23 @@ if (empty($details)) {
 
                 echo '<td>';
                 if ($count_attempts > 0) {
-                    $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
-                        ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
+                    $exerciseResourceNodeId = null !== $course && null !== $course->getResourceNode()
+                        ? (int) $course->getResourceNode()->getId()
+                        : 0;
+
+                    if (0 < $exerciseResourceNodeId) {
+                        $all_attempt_url = api_get_path(WEB_PATH).'resources/exercise/'
+                            .$exerciseResourceNodeId.'/'.$exercise_id.'/report?'
+                            .http_build_query([
+                                'cid' => $courseId,
+                                'sid' => $sessionId,
+                                'gid' => 0,
+                                'filter_by_user' => $studentId,
+                            ]);
+                    } else {
+                        $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
+                            ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
+                    }
                     echo Display::url(
                         Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('All attempts')),
                         $all_attempt_url

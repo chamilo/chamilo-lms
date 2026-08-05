@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google Maps';
+$strings['plugin_comment'] = 'Erakutsi erabiltzaileen kokapenak Google mapan, eremu gehigarrietan gordeta daudenak.';
+$strings['enable_api'] = 'Kargatu Google Maps APIa';
+$strings['api_key'] = 'API gakoa';
+$strings['extra_field_name'] = 'Eremu gehigarriaren izena';
+$strings['extra_field_name_help'] = 'Sartu komaz bereizitako erabiltzaile-eremu gehigarrien aldagai bat edo gehiago. Mapak gehienez 5 eremu bistaratu ditzake. Adibidea: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'Erabiltzaileen kokapen-mapa';
+$strings['UsersCoordinatesMapHelp'] = 'Mapa honek erabiltzaileen kokapenak erakusten ditu konfiguratutako eremu gehigarrien arabera.';
+$strings['GoogleMapsAdminIntro'] = 'Konfiguratu Google Maps API gakoa eta helbideak edo kokapenak dituzten erabiltzaile-eremu gehigarriak.';
+$strings['GoogleMapsApi'] = 'Google Maps APIa';
+$strings['ExtraFields'] = 'Eremu gehigarriak';
+$strings['Access'] = 'Sarbidea';
+$strings['AdministratorsOnly'] = 'Administratzaileak soilik';
+$strings['OpenMap'] = 'Ireki mapa';
+$strings['ConfigurePlugin'] = 'Konfiguratu plugina';
+$strings['Configured'] = 'Konfiguratuta';
+$strings['NotConfigured'] = 'Ez dago konfiguratuta';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps APIaren karga desgaituta dago pluginaren konfigurazioan.';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps API gakoa falta da.';
+$strings['ExtraFieldNameMissingWarning'] = 'Ez da erabiltzaile-eremu gehigarririk konfiguratu.';
+$strings['ExtraFieldsNotFoundWarning'] = 'Hurrengo erabiltzaile-eremu gehigarriak ez dira aurkitu: %s.';
+$strings['NoUserCoordinatesFound'] = 'Ez da erabiltzaileen kokapenik aurkitu konfiguratutako eremu gehigarrientzat.';
+$strings['ConfigureGoogleMapsFirst'] = 'Konfiguratu eta gaitu Google Maps APIa mapa ireki aurretik.';
+
+$strings['map_provider'] = 'Mapa-hornitzailea';
+$strings['map_provider_help'] = 'Hautatu pluginak eta Sareko mapak erabiliko duten mapa-hornitzailea.';
+$strings['GoogleMapsProvider'] = 'Google Maps';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'Mapa-hornitzailea';
+$strings['MapProviderConfiguration'] = 'Hornitzailearen konfigurazioa';
+$strings['default_latitude'] = 'Lehenetsitako latitudea';
+$strings['default_latitude_help'] = 'Maparen erdigunearen lehenetsitako latitudea. Markatzailerik ez dagoenean erabiltzen da.';
+$strings['default_longitude'] = 'Lehenetsitako longitudea';
+$strings['default_longitude_help'] = 'Maparen erdigunearen lehenetsitako longitudea. Markatzailerik ez dagoenean erabiltzen da.';
+$strings['default_zoom'] = 'Lehenetsitako zooma';
+$strings['default_zoom_help'] = 'Maparen lehenetsitako zooma (1 eta 20 artean).';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMap-ek ez du API gakorik behar. Helbide-soileko markatzaileak bilaketa-estekak bezala erakusten dira koordenatuak eskuragarri ez badaude.';

@@ -12,3 +12,7 @@ $strings['NoNotebookFilter'] = 'Aucune note créée avec le filtre actuel';
 $strings['NoNotebook'] = 'Aucune note créée dans le système';
 $strings['NoNotebookUser'] = 'Aucune note pour cet étudiant';
 $strings['NotebookNoStudentAssigned'] = 'Notes sans étudiants assignés';
+
+$strings['TeacherNotesHelp'] = 'Créer des notes privées pour les enseignants liées aux apprenants dans ce cours.';
+$strings['CurrentFilter'] = 'Filtre actuel';
+$strings['EmptyStateHelp'] = 'Créer une nouvelle note ou modifier le filtre des apprenants.';

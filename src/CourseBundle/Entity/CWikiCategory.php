@@ -8,13 +8,14 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Repository\CWikiCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Table(name: 'c_wiki_category')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CWikiCategoryRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
 class CWikiCategory
 {
@@ -49,6 +50,7 @@ class CWikiCategory
     #[ORM\Column(name: 'rgt', type: 'integer')]
     private int $rgt = 0;
 
+    #[Gedmo\TreeRoot]
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $root = null;
@@ -64,6 +66,7 @@ class CWikiCategory
 
     public function __construct()
     {
+        $this->session = null;
         $this->parent = null;
         $this->children = new ArrayCollection();
         $this->wikiPages = new ArrayCollection();
@@ -96,6 +99,22 @@ class CWikiCategory
         return $this;
     }
 
+    /**
+     * Legacy compatibility for the existing Wiki category form.
+     */
+    public function getName(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * Legacy compatibility for the existing Wiki category form.
+     */
+    public function setName(string $name): self
+    {
+        return $this->setTitle($name);
+    }
+
     public function getCourse(): Course
     {
         return $this->course;
@@ -125,6 +144,21 @@ class CWikiCategory
         return $this->root;
     }
 
+    public function getLeft(): int
+    {
+        return $this->lft;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->lvl;
+    }
+
+    public function getRight(): int
+    {
+        return $this->rgt;
+    }
+
     public function getParent(): ?self
     {
         return $this->parent;
@@ -138,7 +172,7 @@ class CWikiCategory
     }
 
     /**
-     * @return Collection<int, CWiki>
+     * @return Collection<int, CWikiCategory>
      */
     public function getChildren(): Collection
     {
@@ -154,7 +188,16 @@ class CWikiCategory
 
     public function addWikiPage(CWiki $page): self
     {
-        $this->wikiPages->add($page);
+        if (!$this->wikiPages->contains($page)) {
+            $this->wikiPages->add($page);
+        }
+
+        return $this;
+    }
+
+    public function removeWikiPage(CWiki $page): self
+    {
+        $this->wikiPages->removeElement($page);
 
         return $this;
     }

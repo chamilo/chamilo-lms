@@ -3,13 +3,17 @@
 
 require_once __DIR__.'/config.php';
 
-if (!api_user_is_login()) {
+if (api_is_anonymous()) {
     api_not_allowed(true);
 }
 
 $plugin = UserRemoteServicePlugin::create();
 
-Display::display_header();
+if (!$plugin->isEnabled()) {
+    api_not_allowed(true);
+}
+
+Display::display_header($plugin->get_title());
 
 echo $plugin->getIFrame();
 

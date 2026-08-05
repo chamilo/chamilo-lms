@@ -13,23 +13,35 @@
       :vuelidate-property="v$.description"
     />
 
-    <!-- AI-assisted toggle (raw extrafield) -->
-    <div
-      v-if="canShowAiToggle"
-      class="mt-2 flex items-center gap-2"
+    <BaseAdvancedSettingsButton
+      v-if="resourceLanguageEnabled || canShowAiToggle"
+      v-model="showAdvancedSettings"
     >
-      <input
-        id="ai-assisted-flag"
-        v-model="formData.ai_assisted_raw"
-        type="checkbox"
-      />
-      <label
-        for="ai-assisted-flag"
-        class="text-sm"
-      >
-        AI-assisted
-      </label>
-    </div>
+      <div class="flex flex-col gap-4">
+        <ResourceLanguageSelector
+          id="glossary-language"
+          v-model="formData.language"
+        />
+
+        <!-- AI-assisted toggle (raw extrafield) -->
+        <div
+          v-if="canShowAiToggle"
+          class="flex items-center gap-2"
+        >
+          <input
+            id="ai-assisted-flag"
+            v-model="formData.ai_assisted_raw"
+            type="checkbox"
+          />
+          <label
+            for="ai-assisted-flag"
+            class="text-sm"
+          >
+            AI-assisted
+          </label>
+        </div>
+      </div>
+    </BaseAdvancedSettingsButton>
 
     <LayoutFormButtons>
       <BaseButton
@@ -59,17 +71,19 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import { required } from "@vuelidate/validators"
 import useVuelidate from "@vuelidate/core"
 import BaseTextAreaWithVuelidate from "../basecomponents/BaseTextAreaWithVuelidate.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import { useNotification } from "../../composables/notification"
 import glossaryService from "../../services/glossaryService"
-import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 const notification = useNotification()
-const { sid, cid } = useCidReq()
 const securityStore = useSecurityStore()
 
 const props = defineProps({
@@ -82,21 +96,15 @@ const props = defineProps({
 const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
+const showAdvancedSettings = ref(false)
 
-const resourceLinkList = ref(
-  JSON.stringify([
-    {
-      sid,
-      cid,
-      visibility: RESOURCE_LINK_PUBLISHED, // visible by default
-    },
-  ]),
-)
+// Course context derived server-side from the gated session course.
+const resourceLinkList = ref(JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]))
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const canShowAiToggle = computed(() => {
-  const isAdmin = !!(securityStore.isAdmin || securityStore.isPlatformAdmin || securityStore.isSuperAdmin)
+  const isAdmin = securityStore.isAdmin
   const isTeacher = !!(securityStore.isCurrentTeacher || securityStore.isTeacher)
   return isAdmin || isTeacher || isAllowedToEdit.value
 })
@@ -105,10 +113,12 @@ const formData = reactive({
   title: "",
   description: "",
   ai_assisted_raw: false,
+  language: "",
 })
 const rules = {
   title: { required },
   description: { required },
+  language: {},
 }
 const v$ = useVuelidate(rules, formData)
 
@@ -123,6 +133,10 @@ function normalizeBoolean(value) {
   return value === true || value === 1 || s === "1" || s === "true" || s === "yes" || s === "on"
 }
 
+function extractResourceLanguage(resource) {
+  return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
+}
+
 const fetchTerm = async () => {
   if (!props.termId) {
     return
@@ -132,6 +146,7 @@ const fetchTerm = async () => {
 
     formData.title = glossary.title ?? ""
     formData.description = glossary.description ?? ""
+    formData.language = extractResourceLanguage(glossary)
 
     // Prefer stored raw value
     if (typeof glossary.ai_assisted_raw !== "undefined") {
@@ -161,6 +176,7 @@ const submitGlossaryForm = async () => {
     sid: route.query.sid,
     cid: route.query.cid,
     ai_assisted_raw: formData.ai_assisted_raw ? 1 : 0,
+    language: formData.language || "",
   }
 
   try {

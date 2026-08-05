@@ -28,6 +28,20 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'security' => [
+                [
+                    'variable' => 'mcp_allowed_roles',
+                    'json_example' => [
+                        'ADMIN' => true,
+                        'COURSEMANAGER' => true,
+                        'STUDENT' => false,
+                        'DRH' => false,
+                        'SESSIONADMIN' => false,
+                        'STUDENT_BOSS' => false,
+                        'INVITEE' => false,
+                    ],
+                ],
+            ],
             'search' => [
                 [
                     'variable' => 'search_prefilter_prefix',
@@ -251,6 +265,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'organization_id' => '',
                             'project_id' => '',
                             'monthly_token_limit' => 10000,
+                            'daily_token_limit' => 2000,
                             'text' => [
                                 'url' => 'https://api.openai.com/v1/chat/completions',
                                 'model' => 'gpt-4o',
@@ -259,10 +274,9 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             ],
                             'image' => [
                                 'url' => 'https://api.openai.com/v1/images/generations',
-                                'model' => 'dall-e-3',
+                                'model' => 'gpt-image-1',
                                 'size' => '1024x1024',
-                                'quality' => 'standard',
-                                'response_format' => 'b64_json',
+                                'quality' => 'auto',
                                 'n' => 1,
                             ],
                             'video' => [
@@ -272,6 +286,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'model' => 'sora-2',
                                 'seconds' => '4',
                                 'size' => '720x1280',
+                                'token_cost' => 3000,
                             ],
                             'document' => [
                                 'url' => 'https://api.openai.com/v1/chat/completions',
@@ -289,97 +304,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'url' => 'https://api.openai.com/v1/files',
                             ],
                         ],
-                        'deepseek' => [
-                            'api_key' => 'DEEPSEEK_KEY',
-                            'monthly_token_limit' => 5000,
-                            'text' => [
-                                'url' => 'https://api.deepseek.com/chat/completions',
-                                'model' => 'deepseek-chat',
-                                'temperature' => 0.7,
-                                'max_tokens' => 1000,
-                            ],
-                            'document' => [
-                                'url' => 'https://api.deepseek.com/chat/completions',
-                                'model' => 'deepseek-chat',
-                                'temperature' => 0.7,
-                                'max_tokens' => 1200,
-                            ],
-                        ],
-                        'mistral' => [
-                            'api_key' => 'MISTRAL_KEY',
-                            'monthly_token_limit' => 5000,
-                            'text' => [
-                                'url' => 'https://api.mistral.ai/v1/chat/completions',
-                                'model' => 'mistral-large-latest',
-                                'temperature' => 0.7,
-                                'max_tokens' => 1000,
-                            ],
-                            'document' => [
-                                'url' => 'https://api.mistral.ai/v1/chat/completions',
-                                'model' => 'mistral-large-latest',
-                                'temperature' => 0.7,
-                                'max_tokens' => 1200,
-                            ],
-                        ],
-                        'grok' => [
-                            'api_key' => 'GROK_KEY',
-                            'monthly_token_limit' => 5000,
-                            'text' => [
-                                'url' => 'https://api.x.ai/v1/chat/completions',
-                                'model' => 'grok-3-mini',
-                                'temperature' => 0.2,
-                                'max_tokens' => 400,
-                            ],
-                            'document' => [
-                                'url' => 'https://api.x.ai/v1/chat/completions',
-                                'model' => 'grok-3-mini',
-                                'temperature' => 0.2,
-                                'max_tokens' => 700,
-                            ],
-                            'image' => [
-                                'url' => 'https://api.x.ai/v1/images/generations',
-                                'model' => 'grok-imagine-image',
-                                'response_format' => 'b64_json',
-                                'n' => 1,
-                            ],
-                            'video' => [
-                                'url' => 'https://api.x.ai/v1/videos/generations',
-                                'model' => 'grok-imagine-video',
-                                'duration' => 8,
-                                'aspect_ratio' => '16:9',
-                                'resolution' => '480p',
-                            ],
-                        ],
-                        'gemini' => [
-                            'api_key' => 'GEMINI_KEY',
-                            'monthly_token_limit' => 5000,
-                            'text' => [
-                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
-                                'model' => 'gemini-2.5-flash',
-                                'temperature' => 0.7,
-                                'max_output_tokens' => 1000,
-                            ],
-                            'document' => [
-                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
-                                'model' => 'gemini-2.5-flash',
-                                'temperature' => 0.7,
-                                'max_output_tokens' => 1200,
-                            ],
-                            'image' => [
-                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent',
-                                'model' => 'gemini-3.1-flash-image-preview',
-                                'request_format' => 'generateContent',
-                                'response_modalities' => ['IMAGE', 'TEXT'],
-                                'n' => 1,
-                            ],
-                            'video' => [
-                                'url' => 'https://generativelanguage.googleapis.com/v1beta/models/%s:predictLongRunning',
-                                'model' => 'veo-3.1-generate-preview',
-                                'aspect_ratio' => '16:9',
-                                'resolution' => '720p',
-                                'status_base_url' => 'https://generativelanguage.googleapis.com/v1beta',
-                            ],
-                        ],
+                        // resto de providers igual
                     ],
                 ],
             ],

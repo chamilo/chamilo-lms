@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CSurveyAnswer;
-use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -21,191 +18,279 @@ if (empty($surveyData)) {
 $plugin = SurveyExportCsvPlugin::create();
 $allowExportIncomplete = 'true' === $plugin->get('export_incomplete');
 
-if ('true' !== $plugin->get('enabled')) {
+if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
-$questionsData = SurveyManager::get_questions($surveyId, $courseId);
-// Sort questions by their "sort" field
-$questionsData = array_filter(
-    $questionsData,
-    function ($questionData) {
-        return in_array($questionData['type'], ['yesno', 'multiplechoice', 'open']);
-    }
-);
+$questionsData = getExportableQuestions($surveyId, $courseId);
 $numberOfQuestions = count($questionsData);
-
-usort(
-    $questionsData,
-    function ($qL, $qR) {
-        if ($qL['sort'] == $qR['sort']) {
-            return 0;
-        }
-
-        return $qL['sort'] < $qR['sort'] ? -1 : 1;
-    }
-);
-
 $content = [];
-$content[] = firstRow($questionsData);
+$content[] = buildHeaderRow($questionsData, $surveyData);
 
-$surveyAnswers = getSurveyAnswers($courseId, $surveyId);
+$surveyAnswers = getSurveyRespondents($surveyId);
+$isAnonymous = isSurveyAnonymous($surveyData);
 
-// Process answers
-$i = 1;
+$counter = 1;
 foreach ($surveyAnswers as $answer) {
-    $row = otherRow($questionsData, $answer['user'], $courseId);
+    $answerData = buildReadableRow($questionsData, (string) $answer['user'], $counter, $isAnonymous);
 
-    if (!$allowExportIncomplete && count($row) < $numberOfQuestions) {
+    if (!$allowExportIncomplete && $answerData['answered_count'] < $numberOfQuestions) {
         continue;
     }
 
-    array_unshift($row, $i);
-
-    $content[] = $row;
-    $i++;
+    $content[] = $answerData['row'];
+    $counter++;
 }
 
-// Generate file
-$fileName = md5($surveyId.time());
+$fileName = 'survey_'.$surveyId.'_readable_'.date('Ymd_His');
 
 Export::arrayToCsv($content, $fileName, false, "'");
 
-/**
- * Generate the first row for file.
- *
- * @param $questions
- *
- * @return array
- */
-function firstRow($questions)
+function getExportableQuestions(int $surveyId, int $courseId): array
 {
-    array_pop($questions);
-    $positions = array_keys($questions);
-
-    $row = ['DATID'];
-
-    foreach ($positions as $position) {
-        $row[] = sprintf('P%02d', $position + 1);
-    }
-
-    $row[] = 'DATOBS';
-
-    return $row;
-}
-
-/**
- * Get unique answer for surveys by users.
- *
- * @param int $courseId
- * @param int $surveyId
- *
- * @return array
- */
-function getSurveyAnswers($courseId, $surveyId)
-{
-    return Database::getManager()
-        ->createQuery(
-            'SELECT sa.user, MIN(sa.iid) AS id FROM ChamiloCourseBundle:CSurveyAnswer sa
-            WHERE sa.cId = :course AND sa.surveyId = :survey
-            GROUP BY sa.user ORDER BY id ASC'
-        )
-        ->setParameters(['course' => $courseId, 'survey' => $surveyId])
-        ->getResult();
-}
-
-/**
- * @param string $user
- * @param int    $courseId
- * @param int    $surveyId
- * @param int    $questionId
- *
- * @return array
- */
-function getQuestionOptions($user, $courseId, $surveyId, $questionId)
-{
-    return Database::getManager()
-        ->createQuery(
-            'SELECT sqo FROM ChamiloCourseBundle:CSurveyQuestionOption sqo
-            INNER JOIN ChamiloCourseBundle:CSurveyAnswer sa
-                WITH
-                    sqo.cId = sa.cId
-                    AND sqo.questionId = sa.questionId
-                    AND sqo.surveyId = sa.surveyId
-                    AND sqo.iid = sa.optionId
-            WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
-        )
-        ->setMaxResults(1)
-        ->setParameters(
-            [
-                'user' => $user,
-                'course' => $courseId,
-                'survey' => $surveyId,
-                'question' => $questionId,
-            ]
-        )
-        ->getResult();
-}
-
-/**
- * @param int    $questionId
- * @param int    $surveyId
- * @param int    $courseId
- * @param string $user
- *
- * @throws \Doctrine\ORM\NonUniqueResultException
- *
- * @return CSurveyAnswer|null
- */
-function getOpenAnswer($questionId, $surveyId, $courseId, $user)
-{
-    return Database::getManager()
-        ->createQuery(
-            'SELECT sa FROM ChamiloCourseBundle:CSurveyAnswer sa
-            WHERE sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question AND sa.user = :user'
-        )
-        ->setParameters(['course' => $courseId, 'survey' => $surveyId, 'question' => $questionId, 'user' => $user])
-        ->getOneOrNullResult();
-}
-
-/**
- * Generate the content rows for file.
- *
- * @param array  $questions
- * @param string $user
- * @param int    $courseId
- *
- * @throws \Doctrine\ORM\NonUniqueResultException
- *
- * @return array
- */
-function otherRow($questions, $user, $courseId)
-{
-    $row = [];
-
-    foreach ($questions as $question) {
-        if ('open' === $question['type']) {
-            $answer = getOpenAnswer($question['question_id'], $question['survey_id'], $courseId, $user);
-
-            if ($answer) {
-                $row[] = Security::remove_XSS($answer->getOptionId());
+    $questions = SurveyManager::get_questions($surveyId, $courseId);
+    $questions = array_values(
+        array_filter(
+            $questions,
+            function (array $question): bool {
+                return in_array($question['type'], ['yesno', 'multiplechoice', 'open'], true);
             }
-        } else {
-            $options = getQuestionOptions(
-                $user,
-                $courseId,
-                $question['survey_id'],
-                $question['question_id']
-            );
-            /** @var CSurveyQuestionOption|null $option */
-            $option = end($options);
+        )
+    );
 
-            if ($option) {
-                $value = $option->getSort();
-                $row[] = '"'.$value.'"';
+    usort(
+        $questions,
+        function (array $left, array $right): int {
+            if ($left['sort'] == $right['sort']) {
+                return 0;
             }
+
+            return $left['sort'] < $right['sort'] ? -1 : 1;
+        }
+    );
+
+    return $questions;
+}
+
+function buildHeaderRow(array $questions, array $surveyData): array
+{
+    $row = [
+        'Response #',
+        'User ID',
+        'Username',
+        'First name',
+        'Last name',
+    ];
+
+    foreach ($questions as $index => $question) {
+        $questionNumber = sprintf('Q%02d', $index + 1);
+        $questionText = cleanExportText($question['question'] ?? '');
+        $label = $questionNumber;
+
+        if ('' !== $questionText) {
+            $label .= ' - '.$questionText;
+        }
+
+        $row[] = $label;
+
+        if ('open' !== $question['type']) {
+            $row[] = $questionNumber.' code';
         }
     }
 
     return $row;
+}
+
+function getSurveyRespondents(int $surveyId): array
+{
+    $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
+    $surveyId = (int) $surveyId;
+    $sessionCondition = getSurveyExportSessionCondition();
+
+    $sql = "SELECT user, MIN(iid) AS id
+            FROM $table
+            WHERE survey_id = $surveyId
+            $sessionCondition
+            GROUP BY user
+            ORDER BY id ASC";
+
+    $result = Database::query($sql);
+    $rows = [];
+
+    while ($row = Database::fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+
+    return $rows;
+}
+
+function buildReadableRow(array $questions, string $user, int $counter, bool $isAnonymous): array
+{
+    $userInfo = getExportUserInfo($user, $isAnonymous);
+    $answeredCount = 0;
+
+    $row = [
+        $counter,
+        $userInfo['user_id'],
+        $userInfo['username'],
+        $userInfo['firstname'],
+        $userInfo['lastname'],
+    ];
+
+    foreach ($questions as $question) {
+        $answers = getQuestionReadableAnswers($question, $user);
+
+        if (!empty($answers['labels']) || '' !== $answers['open_answer']) {
+            $answeredCount++;
+        }
+
+        if ('open' === $question['type']) {
+            $row[] = $answers['open_answer'];
+            continue;
+        }
+
+        $row[] = implode(' | ', $answers['labels']);
+        $row[] = implode(' | ', $answers['codes']);
+    }
+
+    return [
+        'row' => $row,
+        'answered_count' => $answeredCount,
+    ];
+}
+
+function getQuestionReadableAnswers(array $question, string $user): array
+{
+    $questionId = (int) $question['question_id'];
+    $surveyId = (int) $question['survey_id'];
+
+    if ('open' === $question['type']) {
+        return [
+            'labels' => [],
+            'codes' => [],
+            'open_answer' => getOpenAnswer($questionId, $surveyId, $user) ?? '',
+        ];
+    }
+
+    $answerTable = Database::get_course_table(TABLE_SURVEY_ANSWER);
+    $optionTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
+    $escapedUser = Database::escape_string($user);
+    $sessionCondition = getSurveyExportSessionCondition('sa');
+
+    $sql = "SELECT sa.option_id, sqo.sort, sqo.option_text
+            FROM $answerTable sa
+            LEFT JOIN $optionTable sqo
+                ON sqo.iid = CAST(sa.option_id AS UNSIGNED)
+                AND sqo.question_id = sa.question_id
+                AND sqo.survey_id = sa.survey_id
+            WHERE sa.user = '$escapedUser'
+              AND sa.survey_id = $surveyId
+              AND sa.question_id = $questionId
+              $sessionCondition
+            ORDER BY sa.iid ASC";
+
+    $result = Database::query($sql);
+    $labels = [];
+    $codes = [];
+
+    while ($row = Database::fetch_assoc($result)) {
+        if (!empty($row['option_text'])) {
+            $labels[] = cleanExportText($row['option_text']);
+            $codes[] = (string) $row['sort'];
+            continue;
+        }
+
+        $labels[] = cleanExportText((string) $row['option_id']);
+    }
+
+    return [
+        'labels' => $labels,
+        'codes' => $codes,
+        'open_answer' => '',
+    ];
+}
+
+function getOpenAnswer(int $questionId, int $surveyId, string $user): ?string
+{
+    $answerTable = Database::get_course_table(TABLE_SURVEY_ANSWER);
+
+    $escapedUser = Database::escape_string($user);
+    $sessionCondition = getSurveyExportSessionCondition();
+
+    $sql = "SELECT option_id
+            FROM $answerTable
+            WHERE survey_id = $surveyId
+              AND question_id = $questionId
+              AND user = '$escapedUser'
+              $sessionCondition
+            ORDER BY iid ASC
+            LIMIT 1";
+
+    $result = Database::query($sql);
+    $row = Database::fetch_assoc($result);
+
+    if (empty($row)) {
+        return null;
+    }
+
+    return cleanExportText((string) $row['option_id']);
+}
+
+function getExportUserInfo(string $user, bool $isAnonymous): array
+{
+    if ($isAnonymous || !ctype_digit($user)) {
+        return [
+            'user_id' => '',
+            'username' => get_lang('Anonymous'),
+            'firstname' => '',
+            'lastname' => '',
+        ];
+    }
+
+    $userInfo = api_get_user_info((int) $user);
+
+    if (empty($userInfo)) {
+        return [
+            'user_id' => $user,
+            'username' => '',
+            'firstname' => '',
+            'lastname' => '',
+        ];
+    }
+
+    return [
+        'user_id' => $userInfo['user_id'] ?? $user,
+        'username' => cleanExportText($userInfo['username'] ?? ''),
+        'firstname' => cleanExportText($userInfo['firstname'] ?? ''),
+        'lastname' => cleanExportText($userInfo['lastname'] ?? ''),
+    ];
+}
+
+function isSurveyAnonymous(array $surveyData): bool
+{
+    return isset($surveyData['anonymous']) && (1 === (int) $surveyData['anonymous']);
+}
+
+function cleanExportText(string $value): string
+{
+    return trim(api_html_entity_decode(strip_tags(Security::remove_XSS($value))));
+}
+
+function getSurveyExportSessionCondition(string $alias = ''): string
+{
+    $showBaseInSessions = api_get_configuration_value('show_surveys_base_in_sessions');
+
+    if (true !== $showBaseInSessions && 'true' !== $showBaseInSessions) {
+        return '';
+    }
+
+    $prefix = '' === $alias ? '' : $alias.'.';
+    $sessionId = (int) api_get_session_id();
+
+    if ($sessionId > 0) {
+        return " AND {$prefix}session_id = $sessionId";
+    }
+
+    return " AND ({$prefix}session_id IS NULL OR {$prefix}session_id = 0)";
 }

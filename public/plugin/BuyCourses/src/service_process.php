@@ -46,15 +46,129 @@ $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 $coupon = null;
 
 if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
-    $couponCode = trim((string) $_REQUEST['c']);
-    $coupon = $plugin->getCouponServiceByCode($couponCode, $serviceId);
+    $couponValue = trim((string) $_REQUEST['c']);
+    $coupon = ctype_digit($couponValue)
+        ? $plugin->getCouponService((int) $couponValue, $serviceId)
+        : $plugin->getCouponServiceByCode($couponValue, $serviceId);
+
+    if (empty($coupon) || empty($coupon['id'])) {
+        Display::addFlash(
+            Display::return_message(
+                $plugin->get_lang('CouponNotValid'),
+                'warning',
+                false
+            )
+        );
+
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.$type);
+        exit;
+    }
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);
+
+if (empty($serviceInfo) || empty($serviceInfo['id'])) {
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
+if (!$plugin->isServiceActive($serviceInfo)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServiceInactiveForPurchase'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+    exit;
+}
+
+$purchaseUpsaleChainBlock = $plugin->getServicePurchaseUpsaleChainBlock($serviceId, $currentUserId);
+if (null !== $purchaseUpsaleChainBlock) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
+$upgradeOffer = $plugin->getCurrentUserServiceUpgradeOffer($serviceId, $coupon);
+$plugin->applyServiceUpgradeOfferToPricing($serviceInfo, $upgradeOffer);
+$serviceInfo['upgrade_offer'] = $upgradeOffer;
+$serviceInfo['is_upgrade'] = null !== $upgradeOffer;
+
+if (null !== $upgradeOffer && empty($upgradeOffer['purchasable'])) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('UpgradePriceMustBePositive'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
+if (!$plugin->canCurrentUserBuyService($serviceInfo)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('ServicesOnlyForTeachers'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
+if ($plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId)) {
+    Display::addFlash(
+        Display::return_message(
+            get_lang('Active service'),
+            'info',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');
 $paymentTypesOptions = $plugin->getPaymentTypes(true);
+$requiredPaymentType = isset($upgradeOffer['required_payment_type'])
+    ? (int) $upgradeOffer['required_payment_type']
+    : 0;
+
+if ($requiredPaymentType > 0) {
+    $paymentTypesOptions = isset($paymentTypesOptions[$requiredPaymentType])
+        ? [$requiredPaymentType => $paymentTypesOptions[$requiredPaymentType]]
+        : [];
+}
+
+if ([] === $paymentTypesOptions) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('UpgradeMustUseExistingPaymentGateway'),
+            'error',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
 
 $form->addHtml(
     Display::return_message(
@@ -98,7 +212,7 @@ if ($typeUser) {
         '<div class="rounded-2xl border border-gray-20 bg-support-2 p-4">'.
         '<div class="text-body-2 font-semibold text-primary">'.get_lang('User').'</div>'.
         '<div class="mt-2 text-body-2 font-medium text-gray-90">'.$currentUserLabel.'</div>'.
-        '<div class="mt-1 text-caption text-gray-50">This service will be applied to your account.</div>'.
+        '<div class="mt-1 text-caption text-gray-50">'.$plugin->get_lang('ServiceAppliedToUserAccountHelp').'</div>'.
         '</div>'
     );
 } elseif ($typeCourse) {
@@ -218,12 +332,58 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }
 
+$form->addHtml(
+    '<div class="mt-6 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">'.
+    '<h3 class="mb-2 text-body-1 font-semibold text-gray-90">'.$plugin->get_lang('VATBuyerInformation').'</h3>'.
+    '<p class="mb-4 text-body-2 text-gray-60">'.$plugin->get_lang('VATBuyerInformationHelp').'</p>'.
+    '</div>'
+);
+
+$form->addSelect(
+    'buyer_country',
+    $plugin->get_lang('BuyerCountry'),
+    $plugin->getVatCountryOptions()
+);
+$form->addText('buyer_postcode', $plugin->get_lang('BuyerPostcode'));
+$form->addSelect(
+    'buyer_type',
+    $plugin->get_lang('BuyerType'),
+    [
+        'individual' => $plugin->get_lang('BuyerTypeIndividual'),
+        'business' => $plugin->get_lang('BuyerTypeBusiness'),
+    ]
+);
+$form->addText('buyer_vat_number', $plugin->get_lang('BuyerVatNumber'));
+$form->addText('buyer_business_name', $plugin->get_lang('BuyerBusinessName'));
+$form->addTextarea('buyer_business_address', $plugin->get_lang('BuyerBusinessAddress'));
+$form->addCheckBox('invoice_requested', null, $plugin->get_lang('RequestVatInvoice'));
+
+$form->setDefaults([
+    'buyer_type' => 'individual',
+]);
+
 $form->addHidden('t', $type);
 $form->addHidden('i', $serviceId);
-$form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+$form->addHidden('buycourses_service_checkout_action', 'confirm_order');
 
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
+if (null !== $coupon) {
+    $form->addHidden('c', (int) $coupon['id']);
+}
+
+$form->addButton(
+    'submit',
+    $plugin->get_lang(null !== $upgradeOffer ? 'ConfirmUpgrade' : 'ConfirmOrder'),
+    'check',
+    'success'
+);
+
+$checkoutAction = (string) ($_POST['buycourses_service_checkout_action'] ?? '');
+
+if ('confirm_order' === $checkoutAction) {
+    // Read posted values directly for the checkout action.
+    // QuickForm validation can be affected by other forms on this page,
+    // so the required checkout fields are validated explicitly below.
+    $formValues = $_POST;
 
     if (!isset($formValues['payment_type'])) {
         Display::addFlash(
@@ -259,22 +419,43 @@ if ($form->validate()) {
         }
     }
 
+    $vatErrors = $plugin->validateVatBuyerData($formValues);
+
+    if (!empty($vatErrors)) {
+        foreach ($vatErrors as $vatError) {
+            Display::addFlash(
+                Display::return_message(
+                    $vatError,
+                    'error',
+                    false
+                )
+            );
+        }
+
+        header('Location: '.api_get_self().'?'.$queryString);
+        exit;
+    }
+
+    $couponId = isset($formValues['c']) ? (int) $formValues['c'] : null;
+
     $serviceSaleId = $plugin->registerServiceSale(
         $serviceId,
         (int) $formValues['payment_type'],
         (int) $infoSelected,
-        $formValues['c'] ?? null
+        $couponId,
+        $formValues
     );
 
     if (false !== $serviceSaleId) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
+        $serviceSaleWasReused = $plugin->wasLastServiceSaleReused();
 
-        if (isset($formValues['c'])) {
-            $couponSaleId = $plugin->registerCouponServiceSale($serviceSaleId, $formValues['c']);
+        if (!$serviceSaleWasReused && null !== $couponId) {
+            $couponSaleId = $plugin->registerCouponServiceSale($serviceSaleId, $couponId);
 
             if (false !== $couponSaleId) {
-                $plugin->updateCouponDelivered($formValues['c']);
-                $_SESSION['bc_coupon_id'] = $formValues['c'];
+                $plugin->updateCouponDelivered($couponId);
+                $_SESSION['bc_coupon_id'] = $couponId;
             }
         }
 
@@ -282,13 +463,28 @@ if ($form->validate()) {
         exit;
     }
 
+    $errorMessage = $plugin->getLastServiceSaleError();
+    Display::addFlash(
+        Display::return_message(
+            '' !== $errorMessage ? $errorMessage : $plugin->get_lang('UpgradeCouldNotBeCompleted'),
+            'error',
+            false
+        )
+    );
+
+    header('Location: '.api_get_self().'?'.$queryString);
     exit;
 }
 
 $formCoupon = new FormValidator('confirm_coupon');
+$formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
+$formCoupon->addHidden('t', $type);
+$formCoupon->addHidden('i', $serviceId);
+$formCoupon->addHidden('buycourses_service_checkout_action', 'coupon');
+$formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');
 
-if ($formCoupon->validate()) {
-    $formCouponValues = $formCoupon->getSubmitValues();
+if ('coupon' === $checkoutAction) {
+    $formCouponValues = $_POST;
     $couponCode = trim((string) ($formCouponValues['coupon_code'] ?? ''));
 
     if ('' === $couponCode) {
@@ -334,16 +530,6 @@ if ($formCoupon->validate()) {
     exit;
 }
 
-$formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
-$formCoupon->addHidden('t', $type);
-$formCoupon->addHidden('i', $serviceId);
-
-if (null !== $coupon) {
-    $form->addHidden('c', (int) $coupon['id']);
-}
-
-$formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');
-
 $templateName = $plugin->get_lang('PaymentMethods');
 
 $interbreadcrumb[] = [
@@ -354,6 +540,8 @@ $interbreadcrumb[] = [
 $tpl = new Template($templateName);
 $tpl->assign('buying_service', true);
 $tpl->assign('service', $serviceInfo);
+$tpl->assign('upgrade_offer', $upgradeOffer);
+$tpl->assign('is_upgrade', null !== $upgradeOffer);
 $tpl->assign('user', api_get_user_info());
 $tpl->assign('form_coupon', $formCoupon->returnForm());
 $tpl->assign('form', $form->returnForm());

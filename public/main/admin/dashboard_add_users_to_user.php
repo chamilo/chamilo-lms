@@ -74,13 +74,14 @@ function search_users($needle, $type = 'multiple')
         $assigned_users_to_hrm = [];
 
         switch ($userStatus) {
-            case DRH:
-            case PLATFORM_ADMIN:
-                $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
-
-                break;
             case STUDENT_BOSS:
                 $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+
+                break;
+            case DRH:
+            case PLATFORM_ADMIN:
+            default:
+                $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 
                 break;
         }
@@ -170,7 +171,7 @@ function search_users($needle, $type = 'multiple')
                 api_utf8_encode($return)
             );
         } else {
-            $return .= '<select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15" ">';
+            $return .= '<select id="origin" ondblclick="moveItem(document.getElementById(&quot;origin&quot;), document.getElementById(&quot;destination&quot;))" class="form-control h-96 w-full min-w-0 rounded-xl border-gray-25 text-body-2 text-gray-90" name="NoAssignedUsersList[]" multiple="multiple" size="15">';
             while ($user = Database :: fetch_array($rs)) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                 $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name, ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
@@ -186,6 +187,21 @@ function search_users($needle, $type = 'multiple')
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
+var assignmentFormChanged = false;
+
+function setAssignmentFormChanged() {
+    assignmentFormChanged = true;
+    var field = document.getElementById("assignmentChanged");
+    if (field) {
+        field.value = "1";
+    }
+
+    var saveButton = document.getElementById("assign_user");
+    if (saveButton) {
+        saveButton.disabled = false;
+    }
+}
+
 function add_user_to_user (code, content) {
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -200,17 +216,27 @@ function add_user_to_user (code, content) {
     destination.options[destination.length] = new Option(content,code);
     destination.selectedIndex = -1;
     sortOptions(destination.options);
+    setAssignmentFormChanged();
 }
 function moveItem(origin , destination) {
+    var moved = false;
+
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
             origin.options[i]=null;
             i = i-1;
+            moved = true;
         }
     }
-    destination.selectedIndex = -1;
-    sortOptions(destination.options);
+
+    if (moved) {
+        destination.selectedIndex = -1;
+        sortOptions(destination.options);
+        setAssignmentFormChanged();
+    }
+
+    return moved;
 }
 function sortOptions(options) {
     var newOptions = new Array();
@@ -233,20 +259,53 @@ function mysort(a, b) {
     return 0;
 }
 
+function syncAssignedItems() {
+    var destination = document.getElementById("destination");
+    var assignedItems = document.getElementById("assignedItems");
+
+    if (!destination || !assignedItems) {
+        return;
+    }
+
+    var values = [];
+    for (var i = 0; i < destination.options.length; i++) {
+        values.push(destination.options[i].value);
+    }
+
+    assignedItems.value = values.join(",");
+}
+
 function valide() {
+    var changedField = document.getElementById("assignmentChanged");
+
+    if (!assignmentFormChanged && (!changedField || changedField.value !== "1")) {
+        return false;
+    }
+
     var options = document.getElementById("destination").options;
     for (i = 0 ; i<options.length ; i++) {
         options[i].selected = true;
     }
+
+    syncAssignedItems();
     document.forms.formulaire.submit();
 }
 function remove_item(origin) {
+    var removed = false;
+
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             origin.options[i]=null;
             i = i-1;
+            removed = true;
         }
     }
+
+    if (removed) {
+        setAssignmentFormChanged();
+    }
+
+    return removed;
 }
 </script>';
 
@@ -290,19 +349,29 @@ if (!empty($filters) && !empty($filterData)) {
     }
 }
 
-if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
-    $user_list = isset($_POST['UsersList']) ? Security::remove_XSS($_POST['UsersList']) : null;
-    switch ($userStatus) {
-        case DRH:
-        case PLATFORM_ADMIN:
-            UserManager::subscribeUsersToHRManager($user_id, $user_list);
+if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent']) && isset($_POST['assignmentChanged']) && '1' === (string) $_POST['assignmentChanged']) {
+    if (isset($_POST['assignedItems']) && '' !== (string) $_POST['assignedItems']) {
+        $user_list = array_filter(
+            array_map('intval', explode(',', (string) Security::remove_XSS($_POST['assignedItems']))),
+            function ($userId) {
+                return $userId > 0;
+            }
+        );
+    } else {
+        $user_list = isset($_POST['UsersList']) ? array_map('intval', Security::remove_XSS($_POST['UsersList'])) : [];
+    }
 
-            break;
+    switch ($userStatus) {
         case STUDENT_BOSS:
             UserManager::subscribeBossToUsers($user_id, $user_list);
 
             break;
+        case DRH:
+        case PLATFORM_ADMIN:
         default:
+            UserManager::subscribeUsersToHRManager($user_id, $user_list);
+
+            break;
     }
 
     Display::addFlash(
@@ -355,13 +424,14 @@ echo Display::page_header(
 $assigned_users_to_hrm = [];
 
 switch ($userStatus) {
-    case DRH:
-    case PLATFORM_ADMIN:
-        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
-
-        break;
     case STUDENT_BOSS:
         $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+
+        break;
+    case DRH:
+    case PLATFORM_ADMIN:
+    default:
+        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 
         break;
 }
@@ -420,103 +490,114 @@ if (api_is_multiple_url_enabled()) {
 }
 $result = Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" class="form-horizontal" <?php if ($ajax_search) {
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" class="form-horizontal w-full w-100" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?>>
 <input type="hidden" name="formSent" value="1" />
-<div class="row">
-    <div class="col-md-4">
-        <?php echo get_lang('Portal users list'); ?>
-        <div class="form-group">
-            <div class="col-sm-12">
-                <div id="ajax_list_users_multiple">
-                    <select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15">
-                        <?php
-                        while ($enreg = Database::fetch_array($result)) {
-                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-                            <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
-                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                            </option>
-                        <?php
-                        } ?>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="code-course">
-            <?php if ('multiple' == $add_type) {
-                            ?>
-                <p><?php echo get_lang('First letter (last name)'); ?></p>
-                <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
-                    <option value="%">--</option>
-                    <?php echo Display::get_alphabet_options($firstLetterUser); ?>
+<input type="hidden" id="assignmentChanged" name="assignmentChanged" value="0" />
+<input type="hidden" id="assignedItems" name="assignedItems" value="" />
+
+<div class="row g-4 align-items-stretch w-full w-100">
+    <div class="col-12 col-md-5 col-xl-5">
+        <section class="min-w-0 h-full h-100 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+            <label for="origin" class="mb-3 block text-body-2 font-semibold text-gray-90">
+                <?php echo get_lang('Portal users list'); ?>
+            </label>
+            <div id="ajax_list_users_multiple">
+                <select id="origin" ondblclick="moveItem(document.getElementById(&quot;origin&quot;), document.getElementById(&quot;destination&quot;))" class="form-control h-96 w-full min-w-0 rounded-xl border-gray-25 text-body-2 text-gray-90" name="NoAssignedUsersList[]" multiple="multiple" size="15">
+                    <?php
+                    while ($enreg = Database::fetch_array($result)) {
+                        $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+                        <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
+                        <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                        </option>
+                    <?php
+                    } ?>
                 </select>
-            <?php
-                        } ?>
-        </div>
-        <div class="control-course">
-        <?php if ($ajax_search) {
-                            ?>
-            <div class="separate-action">
-                <button class="btn btn--secondary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
             </div>
-        <?php
+        </section>
+    </div>
+
+    <div class="col-12 col-md-2 col-xl-1">
+        <section class="min-w-0 h-full h-100 rounded-2xl border border-gray-20 bg-support-2 p-4 shadow-sm">
+            <div class="h-full min-h-96 flex flex-col justify-center gap-3 h-100">
+                <?php if ('multiple' == $add_type) {
+                            ?>
+                    <div>
+                        <label for="firstLetterUser" class="mb-2 block text-body-2 font-semibold text-gray-90">
+                            <?php echo get_lang('First letter (last name)'); ?>
+                        </label>
+                        <select id="firstLetterUser" class="selectpicker show-tick form-control w-full rounded-xl border-gray-25 text-body-2 text-gray-90" name="firstLetterUser" onchange="xajax_search_users(this.value,'multiple')">
+                            <option value="%">--</option>
+                            <?php echo Display::get_alphabet_options($firstLetterUser); ?>
+                        </select>
+                    </div>
+                <?php
+                        } ?>
+
+                <div class="flex flex-col items-center justify-center gap-3">
+                <?php if ($ajax_search) {
+                            ?>
+                    <button class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center border-0 bg-secondary text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary" type="button" onclick="remove_item(document.getElementById('destination'))" title="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <span class="mdi mdi-arrow-left-bold text-white text-lg" aria-hidden="true"></span>
+                        <span class="sr-only"><?php echo get_lang('Remove'); ?></span>
+                    </button>
+                <?php
                         } else {
                             ?>
-            <div class="separate-action">
-                <button id="add_user_button" class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-                <em class="fa fa-chevron-right"></em>
-            </button>
-            </div>
-            <div class="separate-action">
-                <button id="remove_user_button" class="btn btn--secondary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-                <em class="fa fa-chevron-left"></em>
-                </button>
-            </div>
-        <?php
+                    <button id="add_user_button" class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center border-0 bg-secondary text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" title="<?php echo htmlspecialchars(get_lang('Add'), ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars(get_lang('Add'), ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <span class="mdi mdi-arrow-right-bold text-white text-lg" aria-hidden="true"></span>
+                        <span class="sr-only"><?php echo get_lang('Add'); ?></span>
+                    </button>
+
+                    <button id="remove_user_button" class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center border-0 bg-secondary text-secondary-button-text hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" title="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars(get_lang('Remove'), ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <span class="mdi mdi-arrow-left-bold text-white text-lg" aria-hidden="true"></span>
+                        <span class="sr-only"><?php echo get_lang('Remove'); ?></span>
+                    </button>
+                <?php
                         } ?>
-            <div class="separate-action">
-        <?php
-        echo '<button id="assign_user" class="btn btn--success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
-        ?>
+
+                    <button id="assign_user" class="inline-flex h-12 w-12 min-w-12 min-h-12 items-center justify-center rounded-xl p-0 text-center disabled:cursor-not-allowed disabled:opacity-50 border-0 bg-success text-success-button-text hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success" type="button" disabled="disabled" value="" onclick="valide()" title="<?php echo htmlspecialchars($tool_name, ENT_QUOTES); ?>" aria-label="<?php echo htmlspecialchars($tool_name, ENT_QUOTES); ?>" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <span class="mdi mdi-content-save-outline text-white text-lg" aria-hidden="true"></span>
+                        <span class="sr-only"><?php echo $tool_name; ?></span>
+                    </button>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
-    <div class="col-md-4">
-    <?php
-    if (UserManager::is_admin($user_id)) {
-        echo get_lang('Users assigned to the platform administrator');
-    } else {
-        if ($isSessionAdmin) {
-            echo get_lang('Assign a users list to the sessions administrator');
-        } else {
-            if (api_is_student_boss($user)) {
-                echo get_lang('Users assigned to their superior');
+
+    <div class="col-12 col-md-5 col-xl-6">
+        <section class="min-w-0 h-full h-100 rounded-2xl border border-gray-20 bg-white p-4 shadow-sm">
+            <label for="destination" class="mb-3 block text-body-2 font-semibold text-gray-90">
+            <?php
+            if (UserManager::is_admin($user_id)) {
+                echo get_lang('Users assigned to the platform administrator');
             } else {
-                echo get_lang('List of users assigned to Human Resources manager');
+                if ($isSessionAdmin) {
+                    echo get_lang('Assign a users list to the sessions administrator');
+                } else {
+                    if (api_is_student_boss($user)) {
+                        echo get_lang('Users assigned to their superior');
+                    } else {
+                        echo get_lang('List of users assigned to Human Resources manager');
+                    }
+                }
             }
-        }
-    }
-    ?>
-        <div class="form-group">
-            <div class="col-sm-12">
-                <br>
-                <select id='destination' class="form-control" name="UsersList[]" multiple="multiple" size="15" >
+            ?>
+            </label>
+            <select id="destination" ondblclick="moveItem(document.getElementById(&quot;destination&quot;), document.getElementById(&quot;origin&quot;))" class="form-control h-96 w-full min-w-0 rounded-xl border-gray-25 text-body-2 text-gray-90" name="UsersList[]" multiple="multiple" size="15">
+                <?php
+                if (is_array($assigned_users_to_hrm)) {
+                    foreach ($assigned_users_to_hrm as $enreg) {
+                        $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+                        <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
+                        <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                        </option>
                     <?php
-                    if (is_array($assigned_users_to_hrm)) {
-                        foreach ($assigned_users_to_hrm as $enreg) {
-                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-                            <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
-                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                            </option>
-                        <?php
-                        }
-                    }?>
-                </select>
-            </div>
-        </div>
+                    }
+                }?>
+            </select>
+        </section>
     </div>
 </div>
 </form>

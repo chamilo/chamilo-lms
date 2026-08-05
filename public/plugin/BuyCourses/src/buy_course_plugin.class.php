@@ -30,6 +30,9 @@ use Chamilo\CoreBundle\Entity\ExtraField;
  */
 class BuyCoursesPlugin extends Plugin
 {
+    private string $lastServiceSaleError = '';
+    private bool $lastServiceSaleWasReused = false;
+
     public const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
     public const TABLE_CURRENCY = 'plugin_buycourses_currency';
     public const TABLE_ITEM = 'plugin_buycourses_item';
@@ -40,8 +43,10 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
     public const TABLE_SERVICES = 'plugin_buycourses_services';
     public const TABLE_SERVICES_SALE = 'plugin_buycourses_service_sale';
+    public const TABLE_AUDIT = 'plugin_buycourses_audit';
     public const TABLE_SERVICE_REL_EXTRA_FIELD = 'plugin_buycourses_service_rel_extra_field';
     public const TABLE_FROZEN_ENROLLMENT = 'plugin_buycourses_frozen_enrollment';
+    public const TABLE_SUBSCRIPTION_COURSE = 'plugin_buycourses_subscription_course';
     public const TABLE_CULQI = 'plugin_buycourses_culqi';
     public const TABLE_GLOBAL_CONFIG = 'plugin_buycourses_global_config';
     public const TABLE_INVOICE = 'plugin_buycourses_invoices';
@@ -81,6 +86,33 @@ class BuyCoursesPlugin extends Plugin
     public const SERVICE_TYPE_SESSION = 3;
     public const SERVICE_TYPE_TEMPLATE_CERTIFICATE = 4;
     public const SERVICE_TYPE_LP_FINAL_ITEM = 4;
+    public const SERVICE_TYPE_SUBSCRIPTION_PACKAGE = 5;
+    public const SERVICE_RECURRING_PAYMENT_DISABLED = 0;
+    public const SERVICE_RECURRING_PAYMENT_ENABLED = 1;
+    public const SERVICE_RECURRING_PAYMENT_SUSPENDED = 2;
+    public const SERVICE_RECURRING_PAYMENT_CANCELLED = -1;
+
+    public const AUDIT_OBJECT_SERVICE_SALE = 'service_sale';
+
+    public const AUDIT_ACTION_SERVICE_SALE_CREATED = 'service_sale_created';
+    public const AUDIT_ACTION_SERVICE_SALE_COMPLETED = 'service_sale_completed';
+    public const AUDIT_ACTION_SERVICE_SALE_CANCELLED = 'service_sale_cancelled';
+    public const AUDIT_ACTION_SERVICE_UPGRADE_COMPLETED = 'service_upgrade_completed';
+    public const AUDIT_ACTION_SERVICE_REPLACED_BY_UPGRADE = 'service_replaced_by_upgrade';
+    public const AUDIT_ACTION_RENEWAL_ENABLED = 'renewal_enabled';
+    public const AUDIT_ACTION_RENEWAL_CANCELLED = 'renewal_cancelled';
+    public const AUDIT_ACTION_RENEWAL_RESTORED = 'renewal_restored';
+    public const AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED = 'renewal_payment_succeeded';
+    public const AUDIT_ACTION_RENEWAL_PAYMENT_FAILED = 'renewal_payment_failed';
+
+    public const AUDIT_SOURCE_USER = 'user';
+    public const AUDIT_SOURCE_ADMIN = 'admin';
+    public const AUDIT_SOURCE_GATEWAY = 'gateway';
+    public const AUDIT_SOURCE_SYSTEM = 'system';
+
+    public const PAYPAL_RECURRING_PAYMENT_CANCEL = 'Cancel';
+    public const PAYPAL_RECURRING_PAYMENT_SUSPEND = 'Suspend';
+    public const PAYPAL_RECURRING_PAYMENT_REACTIVATE = 'Reactivate';
     public const CULQI_INTEGRATION_TYPE = 'INTEG';
     public const CULQI_PRODUCTION_TYPE = 'PRODUC';
     public const TAX_APPLIES_TO_ALL = 1;
@@ -100,6 +132,17 @@ class BuyCoursesPlugin extends Plugin
     public const EXTRA_FIELD_HOSTING_LIMIT = 'buycourses_hosting_limit';
     public const EXTRA_FIELD_DOCUMENT_QUOTA = 'buycourses_document_quota';
 
+    public const AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR = 'learning_path_generator';
+    public const AI_COURSE_FEATURE_EXERCISE_GENERATOR = 'exercise_generator';
+    public const AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER = 'open_answers_grader';
+    public const AI_COURSE_FEATURE_TUTOR_CHATBOT = 'tutor_chatbot';
+    public const AI_COURSE_FEATURE_TASK_GRADER = 'task_grader';
+    public const AI_COURSE_FEATURE_CONTENT_ANALYSER = 'content_analyser';
+    public const AI_COURSE_FEATURE_IMAGE_GENERATOR = 'image_generator';
+    public const AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR = 'glossary_terms_generator';
+    public const AI_COURSE_FEATURE_COURSE_ANALYSER = 'course_analyser';
+    public const AI_COURSE_FEATURE_VIDEO_GENERATOR = 'video_generator';
+
     /**
      * @var bool
      */
@@ -108,7 +151,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '7.1',
+            '7.5',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
@@ -147,6 +190,252 @@ class BuyCoursesPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+
+    private function getCurrentLanguageIsoCode(): string
+    {
+        $language = '';
+        $userInfo = api_get_user_info();
+
+        if (!empty($userInfo['language'])) {
+            $language = (string) $userInfo['language'];
+        }
+
+        if ('' === $language && function_exists('api_get_language_isocode')) {
+            $language = (string) api_get_language_isocode();
+        }
+
+        if ('' === $language) {
+            $language = (string) api_get_setting('platformLanguage');
+        }
+
+        $languageId = api_get_language_id($language);
+        if (!empty($languageId)) {
+            $languageInfo = api_get_language_info($languageId);
+            if (!empty($languageInfo['isocode'])) {
+                $language = (string) $languageInfo['isocode'];
+            }
+        }
+
+        return $this->normalizeServiceTranslationLanguageCode($language) ?: 'en_US';
+    }
+
+    public function filterServiceMultilingualHtml(string $html): string
+    {
+        if ('' === trim($html) || 'true' !== api_get_setting('editor.translate_html')) {
+            return $html;
+        }
+
+        if (!str_contains($html, 'mce-translatehtml')) {
+            return Security::remove_XSS($html);
+        }
+
+        if (!class_exists(\DOMDocument::class) || !class_exists(\DOMXPath::class)) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previousUseInternalErrors = libxml_use_internal_errors(true);
+        $loaded = $document->loadHTML(
+            '<?xml encoding="UTF-8"><div id="buycourses-translation-root">'.$html.'</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseInternalErrors);
+
+        if (false === $loaded) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $xpath = new \DOMXPath($document);
+        $nodes = $xpath->query('//*[@lang and contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ")]');
+
+        if (false === $nodes || 0 === $nodes->length) {
+            return Security::remove_XSS($html);
+        }
+
+        $availableLanguages = [];
+
+        foreach ($nodes as $node) {
+            if (!$node instanceof \DOMElement) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+            if ('' !== $nodeLanguage) {
+                $availableLanguages[] = $nodeLanguage;
+            }
+        }
+
+        $targetLanguage = $this->resolveServiceTranslationTargetLanguage($availableLanguages);
+
+        for ($i = $nodes->length - 1; $i >= 0; $i--) {
+            $node = $nodes->item($i);
+
+            if (!$node instanceof \DOMElement || null === $node->parentNode) {
+                continue;
+            }
+
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode($node->getAttribute('lang'));
+
+            if ($nodeLanguage !== $targetLanguage) {
+                $node->parentNode->removeChild($node);
+                continue;
+            }
+
+            while ($node->firstChild) {
+                $node->parentNode->insertBefore($node->firstChild, $node);
+            }
+
+            $node->parentNode->removeChild($node);
+        }
+
+        $this->removeEmptyServiceTranslationNodes($xpath);
+
+        $root = $xpath->query('//*[@id="buycourses-translation-root"]')->item(0);
+        if (!$root instanceof \DOMElement) {
+            return $this->filterServiceMultilingualHtmlWithRegex($html);
+        }
+
+        $filteredHtml = '';
+        foreach ($root->childNodes as $childNode) {
+            $filteredHtml .= $document->saveHTML($childNode);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    private function normalizeServiceTranslationLanguageCode(string $language): string
+    {
+        $language = trim(str_replace('-', '_', $language));
+
+        if (preg_match('/^([a-z]{2})(?:_([a-z]{2}))?$/i', $language, $matches)) {
+            return strtolower((string) $matches[1]).(!empty($matches[2]) ? '_'.strtoupper((string) $matches[2]) : '');
+        }
+
+        return '';
+    }
+
+    private function resolveServiceTranslationTargetLanguage(array $availableLanguages): string
+    {
+        $availableLanguages = array_values(array_unique(array_filter($availableLanguages)));
+        if (empty($availableLanguages)) {
+            return $this->getCurrentLanguageIsoCode();
+        }
+
+        $targetLanguage = $this->getCurrentLanguageIsoCode();
+        if (in_array($targetLanguage, $availableLanguages, true)) {
+            return $targetLanguage;
+        }
+
+        $targetPrimaryLanguage = $this->getServiceTranslationPrimaryLanguageCode($targetLanguage);
+        foreach ($availableLanguages as $availableLanguage) {
+            if ($targetPrimaryLanguage === $this->getServiceTranslationPrimaryLanguageCode($availableLanguage)) {
+                return $availableLanguage;
+            }
+        }
+
+        foreach (['en_US', 'en'] as $fallbackLanguage) {
+            if (in_array($fallbackLanguage, $availableLanguages, true)) {
+                return $fallbackLanguage;
+            }
+        }
+
+        foreach ($availableLanguages as $availableLanguage) {
+            if ('en' === $this->getServiceTranslationPrimaryLanguageCode($availableLanguage)) {
+                return $availableLanguage;
+            }
+        }
+
+        return (string) ($availableLanguages[0] ?? $targetLanguage);
+    }
+
+    private function getServiceTranslationPrimaryLanguageCode(string $language): string
+    {
+        return strtolower(strtok(str_replace('-', '_', $language), '_') ?: $language);
+    }
+
+    private function removeEmptyServiceTranslationNodes(\DOMXPath $xpath): void
+    {
+        $emptyNodes = $xpath->query(
+            '//*[self::p or self::div][not(@id="buycourses-translation-root") and not(.//img) and not(.//video) and not(.//audio) and not(.//iframe) and not(.//table) and not(.//ul) and not(.//ol) and normalize-space(.) = ""]'
+        );
+
+        if (false === $emptyNodes) {
+            return;
+        }
+
+        for ($i = $emptyNodes->length - 1; $i >= 0; $i--) {
+            $node = $emptyNodes->item($i);
+            if (null !== $node?->parentNode) {
+                $node->parentNode->removeChild($node);
+            }
+        }
+    }
+
+    private function filterServiceMultilingualHtmlWithRegex(string $html): string
+    {
+        $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2}(?:[-_][a-z]{2})?)\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
+
+        if (!preg_match_all($pattern, $html, $matches, PREG_SET_ORDER)) {
+            return Security::remove_XSS($html);
+        }
+
+        $availableLanguages = [];
+
+        foreach ($matches as $match) {
+            $nodeLanguage = $this->normalizeServiceTranslationLanguageCode((string) $match[3]);
+            if ('' !== $nodeLanguage) {
+                $availableLanguages[] = $nodeLanguage;
+            }
+        }
+
+        $targetLanguage = $this->resolveServiceTranslationTargetLanguage($availableLanguages);
+
+        $filteredHtml = preg_replace_callback(
+            $pattern,
+            function (array $match) use ($targetLanguage): string {
+                $nodeLanguage = $this->normalizeServiceTranslationLanguageCode((string) $match[3]);
+
+                if ($nodeLanguage !== $targetLanguage) {
+                    return '';
+                }
+
+                return (string) $match['content'];
+            },
+            $html
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        $filteredHtml = preg_replace(
+            '/<(p|div|li|h[1-6])\b[^>]*>\s*(?:&nbsp;|\xC2\xA0|\s)*<\/\1>/iu',
+            '',
+            $filteredHtml
+        );
+
+        if (null === $filteredHtml) {
+            return Security::remove_XSS($html);
+        }
+
+        return Security::remove_XSS($filteredHtml);
+    }
+
+    public function filterServiceMultilingualPlainText(string $html): string
+    {
+        $filteredHtml = $this->filterServiceMultilingualHtml($html);
+        $text = trim(strip_tags($filteredHtml));
+
+        if (function_exists('api_html_entity_decode')) {
+            $text = api_html_entity_decode($text);
+        } else {
+            $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        return trim((string) preg_replace('/\s+/u', ' ', $text));
+    }
+
     /**
      * @return string[]
      */
@@ -164,8 +453,10 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_PAYPAL_PAYOUTS,
             self::TABLE_SERVICES,
             self::TABLE_SERVICES_SALE,
+            self::TABLE_AUDIT,
             self::TABLE_SERVICE_REL_EXTRA_FIELD,
             self::TABLE_FROZEN_ENROLLMENT,
+            self::TABLE_SUBSCRIPTION_COURSE,
             self::TABLE_GLOBAL_CONFIG,
             self::TABLE_INVOICE,
             self::TABLE_TPV_REDSYS,
@@ -194,14 +485,80 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    private function hasPluginTable(string $table): bool
+    {
+        static $tableExists = [];
+
+        $tableName = Database::get_main_table($table);
+        if (isset($tableExists[$tableName])) {
+            return $tableExists[$tableName];
+        }
+
+        $tableLike = Database::escape_string(addcslashes($tableName, '\_%'));
+        $result = Database::query("SHOW TABLES LIKE '$tableLike'");
+
+        $tableExists[$tableName] = false !== $result && Database::num_rows($result) > 0;
+
+        return $tableExists[$tableName];
+    }
+
+    private function hasSubscriptionCourseInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_SERVICES_SALE)
+            && $this->hasPluginTable(self::TABLE_SUBSCRIPTION_COURSE);
+    }
+
+    private function hasCourseCreationServiceInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_SERVICES)
+            && $this->hasPluginTable(self::TABLE_SERVICES_SALE)
+            && $this->hasPluginTable(self::TABLE_SERVICE_REL_EXTRA_FIELD)
+            && $this->hasPluginTable(self::TABLE_SUBSCRIPTION_COURSE);
+    }
+
+    private function hasFrozenEnrollmentInfrastructure(): bool
+    {
+        return $this->hasPluginTable(self::TABLE_FROZEN_ENROLLMENT);
+    }
+
     /**
      * Check if plugin is enabled.
-     *
-     * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
      */
-    public function isEnabled(bool $checkEnabled = false): bool
+    public function isEnabled(): bool
     {
         return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
+    }
+
+    /**
+     * Mark the BuyCourses course relation as deleted when Chamilo removes a course.
+     *
+     * The service sale is intentionally preserved as purchase history.
+     *
+     * @param int $courseId
+     */
+    public function doWhenDeletingCourse($courseId)
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return;
+        }
+
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $now = api_get_utc_datetime();
+
+        Database::update(
+            $table,
+            [
+                'status' => 'deleted',
+                'updated_at' => $now,
+                'deleted_at' => $now,
+                'last_action' => 'course_deleted',
+            ],
+            ['course_id = ?' => [$courseId]]
+        );
+
+        $this->clearFrozenEnrollmentsForCourse($courseId);
     }
 
     /**
@@ -276,6 +633,27 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
+        $sellerVatColumns = [
+            'seller_country' => 'VARCHAR(2) DEFAULT NULL',
+            'seller_postcode' => 'VARCHAR(32) DEFAULT NULL',
+            'seller_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'seller_vat_registered' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'seller_annual_eu_tbe_turnover' => 'DECIMAL(12,2) NOT NULL DEFAULT 0.00',
+            'vat_geoip_provider' => "VARCHAR(32) NOT NULL DEFAULT 'none'",
+            'vat_maxmind_account_id' => 'VARCHAR(64) DEFAULT NULL',
+            'vat_maxmind_license_key' => 'VARCHAR(255) DEFAULT NULL',
+        ];
+
+        foreach ($sellerVatColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $table WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $table ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
         $table = Database::get_main_table(self::TABLE_ITEM);
         $sql = "SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'";
         $res = Database::query($sql);
@@ -297,6 +675,16 @@ class BuyCoursesPlugin extends Plugin
             $res = Database::query($sql);
             if (!$res) {
                 echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        } else {
+            // An empty tax rate must be stored as NULL so the service falls back to the
+            // global tax rate. Older installations created this column as NOT NULL.
+            $column = Database::fetch_assoc($res);
+            if (isset($column['Null']) && 'NO' === $column['Null']) {
+                $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
             }
         }
 
@@ -358,6 +746,137 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
+        // BuyCourses recurring service fields migration.
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $recurringServiceColumns = [
+            'renewable' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'total_charges' => 'INT NOT NULL DEFAULT 0',
+            'allow_trial' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'trial_period' => 'VARCHAR(32) DEFAULT NULL',
+            'trial_frequency' => 'INT NOT NULL DEFAULT 0',
+            'trial_total_charges' => 'INT NOT NULL DEFAULT 0',
+            'max_subscribers' => 'INT NOT NULL DEFAULT 0',
+            'subscription_behavior_json' => 'LONGTEXT DEFAULT NULL',
+            'stripe_price_id' => 'VARCHAR(255) DEFAULT NULL',
+            'display_on_course_creation_page' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'ai_course_features_json' => 'LONGTEXT DEFAULT NULL',
+            'upsale_from_id' => 'INT UNSIGNED DEFAULT NULL',
+            'active' => 'TINYINT(1) NOT NULL DEFAULT 1',
+        ];
+
+        foreach ($recurringServiceColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $servicesTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $servicesTable ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $recurringServiceSaleColumns = [
+            'trial' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'recurring_payment' => 'INT NOT NULL DEFAULT 0',
+            'recurring_profile_id' => 'VARCHAR(255) DEFAULT NULL',
+            'next_charge_date' => 'DATETIME DEFAULT NULL',
+            'cancelled_at' => 'DATETIME DEFAULT NULL',
+            'recurring_gateway' => 'VARCHAR(50) DEFAULT NULL',
+            'gateway_customer_id' => 'VARCHAR(255) DEFAULT NULL',
+            'gateway_checkout_session_id' => 'VARCHAR(255) DEFAULT NULL',
+            'gateway_subscription_id' => 'VARCHAR(255) DEFAULT NULL',
+            'gateway_last_event_id' => 'VARCHAR(255) DEFAULT NULL',
+        ];
+
+        foreach ($recurringServiceSaleColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $serviceSaleTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        $upgradeServiceSaleColumns = [
+            'upgrade_from_sale_id' => 'INT UNSIGNED DEFAULT NULL',
+            'upgrade_credit_amount' => 'DECIMAL(10,2) DEFAULT NULL',
+            'recurring_amount' => 'DECIMAL(10,2) DEFAULT NULL',
+            'upgraded_to_sale_id' => 'INT UNSIGNED DEFAULT NULL',
+            'upgrade_completed_at' => 'DATETIME DEFAULT NULL',
+        ];
+
+        foreach ($upgradeServiceSaleColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $serviceSaleTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        $serviceSaleVatColumns = [
+            'buyer_country' => 'VARCHAR(2) DEFAULT NULL',
+            'buyer_postcode' => 'VARCHAR(32) DEFAULT NULL',
+            'buyer_ip' => 'VARCHAR(45) DEFAULT NULL',
+            'buyer_ip_country' => 'VARCHAR(2) DEFAULT NULL',
+            'buyer_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'buyer_vat_valid' => 'TINYINT(1) DEFAULT NULL',
+            'buyer_business_name' => 'VARCHAR(255) DEFAULT NULL',
+            'buyer_business_address' => 'TEXT DEFAULT NULL',
+            'vat_treatment' => 'VARCHAR(128) DEFAULT NULL',
+            'vat_rate' => 'DECIMAL(5,2) DEFAULT NULL',
+            'vat_evidence_json' => 'LONGTEXT DEFAULT NULL',
+        ];
+
+        foreach ($serviceSaleVatColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $serviceSaleTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                $res = Database::query("ALTER TABLE $serviceSaleTable ADD $field $definition");
+                if (!$res) {
+                    echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                }
+            }
+        }
+
+        // Course/session and subscription sales share the same per-country VAT evidence
+        // columns as service sales, so they can apply and record the destination VAT rate.
+        $vatEvidenceTables = [
+            Database::get_main_table(self::TABLE_SALE),
+            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
+        ];
+
+        foreach ($vatEvidenceTables as $vatEvidenceTable) {
+            foreach ($serviceSaleVatColumns as $field => $definition) {
+                $res = Database::query("SHOW COLUMNS FROM $vatEvidenceTable WHERE Field = '$field'");
+                if (0 === Database::num_rows($res)) {
+                    $res = Database::query("ALTER TABLE $vatEvidenceTable ADD $field $definition");
+                    if (!$res) {
+                        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+                    }
+                }
+            }
+        }
+
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $res = Database::query("SHOW COLUMNS FROM $couponTable WHERE Field = 'times_applied'");
+        if (0 === Database::num_rows($res)) {
+            $res = Database::query("ALTER TABLE $couponTable ADD times_applied INT UNSIGNED NOT NULL DEFAULT 0");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
+        $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
+        $res = Database::query("SHOW COLUMNS FROM $couponServiceSaleTable WHERE Field = 'applied_count'");
+        if (0 === Database::num_rows($res)) {
+            $res = Database::query("ALTER TABLE $couponServiceSaleTable ADD applied_count INT UNSIGNED NOT NULL DEFAULT 1");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
+
         $table = Database::get_main_table(self::TABLE_INVOICE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -399,6 +918,7 @@ class BuyCoursesPlugin extends Plugin
             code varchar(255) NOT NULL,
             discount_type int unsigned NOT NULL,
             discount_amount decimal(10, 2) NOT NULL,
+            times_applied int unsigned NOT NULL DEFAULT 0,
             valid_start datetime NOT NULL,
             valid_end datetime NOT NULL,
             delivered varchar(255) NOT NULL,
@@ -437,6 +957,17 @@ class BuyCoursesPlugin extends Plugin
             PRIMARY KEY (product_type, product_id, duration)
         )";
         Database::query($sql);
+
+        // An empty tax rate must be stored as NULL so the subscription falls back to the
+        // global tax rate. Older installations created this column as NOT NULL.
+        $res = Database::query("SHOW COLUMNS FROM $table WHERE Field = 'tax_perc'");
+        $column = Database::fetch_assoc($res);
+        if (isset($column['Null']) && 'NO' === $column['Null']) {
+            $res = Database::query("ALTER TABLE $table MODIFY tax_perc int unsigned NULL");
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+        }
 
         $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -485,6 +1016,7 @@ class BuyCoursesPlugin extends Plugin
             id int unsigned NOT NULL AUTO_INCREMENT,
             coupon_id int unsigned NOT NULL,
             service_sale_id int unsigned NOT NULL,
+            applied_count int unsigned NOT NULL DEFAULT 1,
             PRIMARY KEY (id)
         )";
         Database::query($sql);
@@ -533,6 +1065,8 @@ class BuyCoursesPlugin extends Plugin
         )";
         Database::query($sql);
 
+        $this->ensureAuditTable();
+
         Display::addFlash(
             Display::return_message(
                 $this->get_lang('Updated'),
@@ -547,6 +1081,151 @@ class BuyCoursesPlugin extends Plugin
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
 
+    }
+
+    private function ensureAuditTable(): void
+    {
+        $table = Database::get_main_table(self::TABLE_AUDIT);
+
+        Database::query("CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            subject_user_id int unsigned NULL,
+            action varchar(64) NOT NULL,
+            object_type varchar(64) NOT NULL,
+            object_id int unsigned NOT NULL,
+            source varchar(32) NOT NULL,
+            created_at datetime NOT NULL,
+            ip_address varchar(45) NULL,
+            data_json longtext NULL,
+            PRIMARY KEY (id),
+            KEY idx_buycourses_audit_subject (subject_user_id),
+            KEY idx_buycourses_audit_action (action),
+            KEY idx_buycourses_audit_object (object_type, object_id),
+            KEY idx_buycourses_audit_created_at (created_at)
+        )");
+    }
+
+    public function recordAudit(
+        string $action,
+        string $objectType,
+        int $objectId,
+        array $data = [],
+        ?int $subjectUserId = null,
+        ?string $source = null,
+        ?string $ipAddress = null
+    ): bool {
+        $action = trim($action);
+        $objectType = trim($objectType);
+
+        if ('' === $action || '' === $objectType || $objectId <= 0 || !$this->hasPluginTable(self::TABLE_AUDIT)) {
+            return false;
+        }
+
+        if (null === $subjectUserId) {
+            $currentUserId = api_get_user_id();
+            $subjectUserId = $currentUserId > 0 ? $currentUserId : null;
+        }
+
+        if (null === $source || '' === trim($source)) {
+            if (null !== $subjectUserId && $subjectUserId > 0) {
+                $source = api_is_platform_admin()
+                    ? self::AUDIT_SOURCE_ADMIN
+                    : self::AUDIT_SOURCE_USER;
+            } else {
+                $source = self::AUDIT_SOURCE_SYSTEM;
+            }
+        }
+
+        $allowedSources = [
+            self::AUDIT_SOURCE_USER,
+            self::AUDIT_SOURCE_ADMIN,
+            self::AUDIT_SOURCE_GATEWAY,
+            self::AUDIT_SOURCE_SYSTEM,
+        ];
+
+        if (!in_array($source, $allowedSources, true)) {
+            $source = self::AUDIT_SOURCE_SYSTEM;
+        }
+
+        if (null === $ipAddress) {
+            $ipAddress = $this->getBuyerIpForVatEvidence();
+        }
+
+        $dataJson = null;
+        if ([] !== $data) {
+            try {
+                $dataJson = json_encode(
+                    $data,
+                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                );
+            } catch (JsonException $exception) {
+                error_log('[BuyCourses][Audit] Could not encode audit data: '.$exception->getMessage());
+            }
+        }
+
+        return false !== Database::insert(
+            Database::get_main_table(self::TABLE_AUDIT),
+            [
+                'subject_user_id' => $subjectUserId,
+                'action' => mb_substr($action, 0, 64),
+                'object_type' => mb_substr($objectType, 0, 64),
+                'object_id' => $objectId,
+                'source' => mb_substr($source, 0, 32),
+                'created_at' => api_get_utc_datetime(),
+                'ip_address' => '' !== trim((string) $ipAddress) ? mb_substr((string) $ipAddress, 0, 45) : null,
+                'data_json' => $dataJson,
+            ]
+        );
+    }
+
+    public function getAuditEntries(string $objectType, int $objectId): array
+    {
+        $objectType = trim($objectType);
+
+        if ('' === $objectType || $objectId <= 0 || !$this->hasPluginTable(self::TABLE_AUDIT)) {
+            return [];
+        }
+
+        $auditTable = Database::get_main_table(self::TABLE_AUDIT);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        return Database::select(
+            'a.*, a.id AS audit_entry_id, u.firstname, u.lastname, u.username, u.email',
+            "$auditTable a LEFT JOIN $userTable u ON a.subject_user_id = u.id",
+            [
+                'where' => [
+                    'a.object_type = ? AND a.object_id = ?' => [$objectType, $objectId],
+                ],
+                'order' => 'audit_entry_id DESC',
+            ]
+        );
+    }
+
+    public function getAuditActionLabel(string $action): string
+    {
+        return match ($action) {
+            self::AUDIT_ACTION_SERVICE_SALE_CREATED => $this->get_lang('AuditActionServiceSaleCreated'),
+            self::AUDIT_ACTION_SERVICE_SALE_COMPLETED => $this->get_lang('AuditActionServiceSaleCompleted'),
+            self::AUDIT_ACTION_SERVICE_SALE_CANCELLED => $this->get_lang('AuditActionServiceSaleCancelled'),
+            self::AUDIT_ACTION_SERVICE_UPGRADE_COMPLETED => $this->get_lang('AuditActionServiceUpgradeCompleted'),
+            self::AUDIT_ACTION_SERVICE_REPLACED_BY_UPGRADE => $this->get_lang('AuditActionServiceReplacedByUpgrade'),
+            self::AUDIT_ACTION_RENEWAL_ENABLED => $this->get_lang('AuditActionRenewalEnabled'),
+            self::AUDIT_ACTION_RENEWAL_CANCELLED => $this->get_lang('AuditActionRenewalCancelled'),
+            self::AUDIT_ACTION_RENEWAL_RESTORED => $this->get_lang('AuditActionRenewalRestored'),
+            self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED => $this->get_lang('AuditActionRenewalPaymentSucceeded'),
+            self::AUDIT_ACTION_RENEWAL_PAYMENT_FAILED => $this->get_lang('AuditActionRenewalPaymentFailed'),
+            default => $action,
+        };
+    }
+
+    public function getAuditSourceLabel(string $source): string
+    {
+        return match ($source) {
+            self::AUDIT_SOURCE_USER => $this->get_lang('AuditSourceUser'),
+            self::AUDIT_SOURCE_ADMIN => $this->get_lang('AuditSourceAdmin'),
+            self::AUDIT_SOURCE_GATEWAY => $this->get_lang('AuditSourceGateway'),
+            default => $this->get_lang('AuditSourceSystem'),
+        };
     }
 
     public function ensureBenefitInfrastructure(): void
@@ -576,6 +1255,28 @@ class BuyCoursesPlugin extends Plugin
             UNIQUE KEY uniq_bc_frozen_course_user (course_id, user_id),
             KEY idx_bc_frozen_course (course_id),
             KEY idx_bc_frozen_user (user_id)
+        )");
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        Database::query("CREATE TABLE IF NOT EXISTS $subscriptionCourseTable (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            service_sale_id int unsigned NOT NULL,
+            service_id int unsigned NOT NULL,
+            course_id int unsigned NOT NULL,
+            user_id int unsigned NOT NULL,
+            status varchar(32) NOT NULL DEFAULT 'active',
+            context_json longtext NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NULL,
+            closed_at datetime NULL,
+            hidden_at datetime NULL,
+            deleted_at datetime NULL,
+            last_action varchar(32) NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY uniq_buycourses_subscription_course_course (course_id),
+            KEY idx_buycourses_subscription_course_sale (service_sale_id),
+            KEY idx_buycourses_subscription_course_user (user_id),
+            KEY idx_buycourses_subscription_course_status (status)
         )");
 
         $columnResult = Database::query("SHOW COLUMNS FROM $serviceRelTable WHERE Field = 'granted_value'");
@@ -744,6 +1445,146 @@ class BuyCoursesPlugin extends Plugin
         ];
     }
 
+    public function getAiCourseFeatureDefinitions(): array
+    {
+        return [
+            self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_LEARNING_PATH_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureLearningPathGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureLearningPathGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_EXERCISE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureExerciseGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureExerciseGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_OPEN_ANSWERS_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureOpenAnswersGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureOpenAnswersGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TUTOR_CHATBOT => [
+                'variable' => self::AI_COURSE_FEATURE_TUTOR_CHATBOT,
+                'title' => $this->get_lang('AiCourseFeatureTutorChatbotTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTutorChatbotDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TASK_GRADER => [
+                'variable' => self::AI_COURSE_FEATURE_TASK_GRADER,
+                'title' => $this->get_lang('AiCourseFeatureTaskGraderTitle'),
+                'description' => $this->get_lang('AiCourseFeatureTaskGraderDescription'),
+            ],
+            self::AI_COURSE_FEATURE_CONTENT_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_CONTENT_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureContentAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureContentAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_IMAGE_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_IMAGE_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureImageGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureImageGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureGlossaryTermsGeneratorDescription'),
+            ],
+            self::AI_COURSE_FEATURE_COURSE_ANALYSER => [
+                'variable' => self::AI_COURSE_FEATURE_COURSE_ANALYSER,
+                'title' => $this->get_lang('AiCourseFeatureCourseAnalyserTitle'),
+                'description' => $this->get_lang('AiCourseFeatureCourseAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_VIDEO_GENERATOR => [
+                'variable' => self::AI_COURSE_FEATURE_VIDEO_GENERATOR,
+                'title' => $this->get_lang('AiCourseFeatureVideoGeneratorTitle'),
+                'description' => $this->get_lang('AiCourseFeatureVideoGeneratorDescription'),
+                'expensive' => true,
+            ],
+        ];
+    }
+
+    public function getAiCourseFeatureFormField(string $feature): string
+    {
+        return 'ai_course_feature_'.$feature;
+    }
+
+    public function getAiCourseFeatureFormDefaults(array $service = []): array
+    {
+        $enabledFeatures = $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? []);
+        $defaults = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $defaults[$this->getAiCourseFeatureFormField($feature)] = in_array($feature, $enabledFeatures, true) ? 1 : 0;
+        }
+
+        return $defaults;
+    }
+
+    public function getAiCourseFeaturesFromServiceData(array $serviceData): array
+    {
+        $features = [];
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $formField = $this->getAiCourseFeatureFormField($feature);
+            if (!empty($serviceData[$formField])) {
+                $features[] = $feature;
+            }
+        }
+
+        return $this->normalizeAiCourseFeatures($features);
+    }
+
+    public function normalizeAiCourseFeatures(mixed $rawFeatures): array
+    {
+        if (is_string($rawFeatures)) {
+            $decoded = json_decode($rawFeatures, true);
+            $rawFeatures = is_array($decoded) ? $decoded : [];
+        }
+
+        if (!is_array($rawFeatures)) {
+            return [];
+        }
+
+        $allowed = array_keys($this->getAiCourseFeatureDefinitions());
+        $features = [];
+
+        foreach ($rawFeatures as $feature) {
+            $feature = (string) $feature;
+            if (in_array($feature, $allowed, true)) {
+                $features[] = $feature;
+            }
+        }
+
+        return array_values(array_unique($features));
+    }
+
+    public function buildAiCourseFeaturesJson(array $features): ?string
+    {
+        $features = $this->normalizeAiCourseFeatures($features);
+        if (empty($features)) {
+            return null;
+        }
+
+        return json_encode($features, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getAiCourseFeatureSummary(array|string|null $rawFeatures): string
+    {
+        $features = $this->normalizeAiCourseFeatures($rawFeatures ?? []);
+        if (empty($features)) {
+            return '';
+        }
+
+        $definitions = $this->getAiCourseFeatureDefinitions();
+        $labels = [];
+        foreach ($features as $feature) {
+            if (isset($definitions[$feature])) {
+                $labels[] = $definitions[$feature]['title'];
+            }
+        }
+
+        return implode(', ', $labels);
+    }
+
     public function getAvailableBenefitExtraFields(): array
     {
         $fields = [];
@@ -811,12 +1652,19 @@ class BuyCoursesPlugin extends Plugin
             $defaults[$definition['form_field']] = 0;
         }
 
+        $defaults = array_merge($defaults, $this->getAiCourseFeatureFormDefaults());
+
         if ($serviceId <= 0) {
             return $defaults;
         }
 
         foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
             $defaults[$configuration['form_field']] = (int) ($configuration['granted_value'] ?? 0);
+        }
+
+        $service = $this->getService($serviceId);
+        if (!empty($service) && is_array($service)) {
+            $defaults = array_replace($defaults, $this->getAiCourseFeatureFormDefaults($service));
         }
 
         return $defaults;
@@ -1580,7 +2428,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($product, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($product, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $product;
     }
@@ -1650,7 +2498,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        $this->setPriceSettings($item, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($item, $this->getTaxCategoryForProductType($itemType), $coupon);
 
         return $item;
     }
@@ -1690,7 +2538,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         for ($i = 0; $i < count($items); $i++) {
-            $this->setPriceSettings($items[$i], self::TAX_APPLIES_TO_ONLY_COURSE);
+            $this->setPriceSettings($items[$i], $this->getTaxCategoryForProductType($itemType));
         }
 
         if (empty($items)) {
@@ -2312,7 +3160,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int $paymentType The payment type
      * @param int $couponId    The coupon ID
      */
-    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null): ?int
+    public function registerSale(int $itemId, int $paymentType, ?int $couponId = null, array $vatBuyerData = []): ?int
     {
         if (!in_array(
             $paymentType,
@@ -2372,30 +3220,18 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -2407,18 +3243,24 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SALE, $values);
+        $saleId = Database::insert(self::TABLE_SALE, $values);
+
+        if ($saleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $saleId;
     }
 
     /**
@@ -2946,6 +3788,7 @@ class BuyCoursesPlugin extends Plugin
             self::SERVICE_TYPE_USER => get_lang('User'),
             self::SERVICE_TYPE_COURSE => get_lang('Course'),
             self::SERVICE_TYPE_SESSION => get_lang('Session'),
+            self::SERVICE_TYPE_SUBSCRIPTION_PACKAGE => $this->get_lang('SubscriptionPackage'),
             self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('TemplateTitleCertificate'),
         ];
     }
@@ -3677,8 +4520,21 @@ class BuyCoursesPlugin extends Plugin
                 'price' => $service['price'],
                 'tax_perc' => $service['tax_perc'],
                 'duration_days' => $service['duration_days'],
+                'renewable' => $service['renewable'],
+                'total_charges' => $service['total_charges'],
+                'allow_trial' => $service['allow_trial'],
+                'trial_period' => $service['trial_period'],
+                'trial_frequency' => $service['trial_frequency'],
+                'trial_total_charges' => $service['trial_total_charges'],
+                'max_subscribers' => $service['max_subscribers'],
+                'subscription_behavior_json' => $service['subscription_behavior_json'],
+                'stripe_price_id' => $service['stripe_price_id'],
+                'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
+                'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
+                'active' => $service['active'],
                 'visibility' => $service['visibility'],
                 'image' => '',
                 'video_url' => $service['video_url'],
@@ -3735,6 +4591,143 @@ class BuyCoursesPlugin extends Plugin
         }
     }
 
+    public function copyService(int $id)
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $service = Database::select(
+            '*',
+            $servicesTable,
+            [
+                'where' => ['id = ?' => $id],
+            ],
+            'first'
+        );
+
+        if (empty($service) || !is_array($service)) {
+            return false;
+        }
+
+        $sourceName = trim((string) ($service['name'] ?? ''));
+        if ('' === $sourceName) {
+            $sourceName = $this->get_lang('Service');
+        }
+
+        $sourceImageName = (string) ($service['image'] ?? '');
+
+        $copiedServiceId = Database::insert(
+            $servicesTable,
+            [
+                'name' => $sourceName.' (copy)',
+                'description' => (string) ($service['description'] ?? ''),
+                'price' => isset($service['price']) ? (float) $service['price'] : 0.0,
+                'tax_perc' => '' !== (string) ($service['tax_perc'] ?? '') ? (int) $service['tax_perc'] : null,
+                'duration_days' => isset($service['duration_days']) ? (int) $service['duration_days'] : 0,
+                'renewable' => !empty($service['renewable']) ? 1 : 0,
+                'total_charges' => isset($service['total_charges']) ? (int) $service['total_charges'] : 0,
+                'allow_trial' => !empty($service['allow_trial']) ? 1 : 0,
+                'trial_period' => (string) ($service['trial_period'] ?? ''),
+                'trial_frequency' => isset($service['trial_frequency']) ? (int) $service['trial_frequency'] : 0,
+                'trial_total_charges' => isset($service['trial_total_charges']) ? (int) $service['trial_total_charges'] : 0,
+                'max_subscribers' => isset($service['max_subscribers']) ? (int) $service['max_subscribers'] : 0,
+                'subscription_behavior_json' => (string) ($service['subscription_behavior_json'] ?? ''),
+                'stripe_price_id' => (string) ($service['stripe_price_id'] ?? ''),
+                'display_on_course_creation_page' => !empty($service['display_on_course_creation_page']) ? 1 : 0,
+                'ai_course_features_json' => (string) ($service['ai_course_features_json'] ?? ''),
+                'upsale_from_id' => null,
+                'applies_to' => isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE,
+                'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+                'active' => 0,
+                'visibility' => !empty($service['visibility']) ? 1 : 0,
+                'image' => '',
+                'video_url' => (string) ($service['video_url'] ?? ''),
+                'service_information' => (string) ($service['service_information'] ?? ''),
+            ]
+        );
+
+        if (!$copiedServiceId) {
+            return false;
+        }
+
+        $copiedImageName = 'simg-'.(int) $copiedServiceId.'.png';
+        if ($this->copyServiceImage($sourceImageName, $copiedImageName)) {
+            Database::update(
+                $servicesTable,
+                ['image' => $copiedImageName],
+                ['id = ?' => (int) $copiedServiceId]
+            );
+        }
+
+        $this->copyServiceBenefitConfigurations($id, (int) $copiedServiceId);
+
+        return (int) $copiedServiceId;
+    }
+
+    private function copyServiceBenefitConfigurations(int $sourceServiceId, int $targetServiceId): void
+    {
+        if ($sourceServiceId <= 0 || $targetServiceId <= 0) {
+            return;
+        }
+
+        if (!$this->hasPluginTable(self::TABLE_SERVICE_REL_EXTRA_FIELD)) {
+            return;
+        }
+
+        $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $rows = Database::select(
+            '*',
+            $serviceRelTable,
+            [
+                'where' => ['service_id = ?' => $sourceServiceId],
+            ]
+        );
+
+        foreach ($rows as $row) {
+            $extraFieldId = isset($row['extra_field_id']) ? (int) $row['extra_field_id'] : 0;
+            $grantedValue = isset($row['granted_value']) ? (int) $row['granted_value'] : 0;
+
+            if ($extraFieldId <= 0 || $grantedValue <= 0) {
+                continue;
+            }
+
+            Database::insert($serviceRelTable, [
+                'service_id' => $targetServiceId,
+                'extra_field_id' => $extraFieldId,
+                'granted_value' => $grantedValue,
+            ]);
+        }
+    }
+
+    private function copyServiceImage(string $sourceImageName, string $targetImageName): bool
+    {
+        if ('' === $sourceImageName || '' === $targetImageName) {
+            return false;
+        }
+
+        if (!$this->serviceImageExists($sourceImageName)) {
+            return false;
+        }
+
+        try {
+            $pluginsFilesystem = Container::getPluginsFileSystem();
+            $directory = $this->getServiceImagesDirectory();
+
+            if (!$pluginsFilesystem->directoryExists($directory)) {
+                $pluginsFilesystem->createDirectory($directory);
+            }
+
+            $content = $pluginsFilesystem->read($this->getServiceImageStoragePath($sourceImageName));
+            $pluginsFilesystem->write($this->getServiceImageStoragePath($targetImageName), $content);
+        } catch (\Throwable) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * update a service.
      *
@@ -3775,8 +4768,21 @@ class BuyCoursesPlugin extends Plugin
                 'price' => $service['price'],
                 'tax_perc' => $service['tax_perc'],
                 'duration_days' => $service['duration_days'],
+                'renewable' => $service['renewable'],
+                'total_charges' => $service['total_charges'],
+                'allow_trial' => $service['allow_trial'],
+                'trial_period' => $service['trial_period'],
+                'trial_frequency' => $service['trial_frequency'],
+                'trial_total_charges' => $service['trial_total_charges'],
+                'max_subscribers' => $service['max_subscribers'],
+                'subscription_behavior_json' => $service['subscription_behavior_json'],
+                'stripe_price_id' => $service['stripe_price_id'],
+                'display_on_course_creation_page' => $service['display_on_course_creation_page'],
+                'ai_course_features_json' => $service['ai_course_features_json'],
+                'upsale_from_id' => $service['upsale_from_id'],
                 'applies_to' => $service['applies_to'],
                 'owner_id' => $service['owner_id'],
+                'active' => $service['active'],
                 'visibility' => $service['visibility'],
                 'image' => $service['image'],
                 'video_url' => $service['video_url'],
@@ -3793,6 +4799,9 @@ class BuyCoursesPlugin extends Plugin
     private function normalizeServicePayload(array $service, ?array $existingService = null): array
     {
         $appliesTo = isset($service['applies_to']) ? (int) $service['applies_to'] : self::SERVICE_TYPE_NONE;
+        $active = array_key_exists('active', $service)
+            ? (!empty($service['active']) ? 1 : 0)
+            : (int) ($existingService['active'] ?? 1);
         $visibility = !empty($service['visibility']) ? 1 : 0;
 
         $payload = [
@@ -3801,8 +4810,27 @@ class BuyCoursesPlugin extends Plugin
             'price' => isset($service['price']) ? (float) $service['price'] : 0.0,
             'tax_perc' => '' !== (string) ($service['tax_perc'] ?? '') ? (int) $service['tax_perc'] : null,
             'duration_days' => isset($service['duration_days']) ? (int) $service['duration_days'] : 0,
+            'renewable' => !empty($service['renewable']) ? 1 : 0,
+            'total_charges' => isset($service['total_charges']) ? max(0, (int) $service['total_charges']) : (int) ($existingService['total_charges'] ?? 0),
+            'allow_trial' => !empty($service['allow_trial']) ? 1 : 0,
+            'trial_period' => trim((string) ($service['trial_period'] ?? ($existingService['trial_period'] ?? ''))),
+            'trial_frequency' => isset($service['trial_frequency']) ? max(0, (int) $service['trial_frequency']) : (int) ($existingService['trial_frequency'] ?? 0),
+            'trial_total_charges' => isset($service['trial_total_charges']) ? max(0, (int) $service['trial_total_charges']) : (int) ($existingService['trial_total_charges'] ?? 0),
+            'max_subscribers' => isset($service['max_subscribers']) ? max(0, (int) $service['max_subscribers']) : (int) ($existingService['max_subscribers'] ?? 0),
+            'subscription_behavior_json' => trim((string) ($service['subscription_behavior_json'] ?? ($existingService['subscription_behavior_json'] ?? ''))),
+            'stripe_price_id' => trim((string) ($service['stripe_price_id'] ?? ($existingService['stripe_price_id'] ?? ''))),
+            'display_on_course_creation_page' => array_key_exists('display_on_course_creation_page', $service)
+                ? (!empty($service['display_on_course_creation_page']) ? 1 : 0)
+                : (int) ($existingService['display_on_course_creation_page'] ?? 0),
+            'ai_course_features_json' => $this->buildAiCourseFeaturesJson(
+                $this->getAiCourseFeaturesFromServiceData($service)
+            ),
+            'upsale_from_id' => isset($service['upsale_from_id']) && (int) $service['upsale_from_id'] > 0
+                ? (int) $service['upsale_from_id']
+                : null,
             'applies_to' => $appliesTo,
             'owner_id' => isset($service['owner_id']) ? (int) $service['owner_id'] : api_get_user_id(),
+            'active' => $active,
             'visibility' => $visibility,
             'video_url' => trim((string) ($service['video_url'] ?? '')),
             'service_information' => (string) ($service['service_information'] ?? ''),
@@ -3820,6 +4848,8 @@ class BuyCoursesPlugin extends Plugin
             foreach ($this->getBenefitExtraFieldDefinitions() as $definition) {
                 $payload[$definition['form_field']] = 0;
             }
+
+            $payload['ai_course_features_json'] = null;
         }
 
         return $payload;
@@ -3972,6 +5002,11 @@ class BuyCoursesPlugin extends Plugin
         return $service;
     }
 
+    public function isServiceActive(array $service): bool
+    {
+        return 1 === (int) ($service['active'] ?? 1);
+    }
+
     /**
      * List additional services.
      *
@@ -3996,6 +5031,462 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $services;
+    }
+
+    public function getServiceUpsaleOptions(int $excludeServiceId = 0): array
+    {
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $conditions = [
+            'where' => [
+                'applies_to = ?' => self::SERVICE_TYPE_USER,
+            ],
+            'ORDER' => 'name ASC, id ASC',
+        ];
+
+        $rows = Database::select('id, name', $servicesTable, $conditions);
+        $options = [
+            0 => get_lang('None'),
+        ];
+
+        foreach ($rows as $row) {
+            $serviceId = (int) ($row['id'] ?? 0);
+            if ($serviceId <= 0 || $serviceId === $excludeServiceId) {
+                continue;
+            }
+
+            $options[$serviceId] = (string) ($row['name'] ?? '');
+        }
+
+        return $options;
+    }
+
+    public function getServiceUpsaleValidationError(array $serviceData, int $targetServiceId = 0): ?string
+    {
+        $sourceServiceId = isset($serviceData['upsale_from_id']) ? (int) $serviceData['upsale_from_id'] : 0;
+        if ($sourceServiceId <= 0) {
+            return null;
+        }
+
+        if ($targetServiceId > 0 && $sourceServiceId === $targetServiceId) {
+            return $this->get_lang('UpsaleCannotReferenceSameService');
+        }
+
+        $sourceService = $this->getService($sourceServiceId);
+        if (empty($sourceService)) {
+            return $this->get_lang('UpsaleSourceServiceNotFound');
+        }
+
+        $targetAppliesTo = isset($serviceData['applies_to'])
+            ? (int) $serviceData['applies_to']
+            : self::SERVICE_TYPE_NONE;
+        if (self::SERVICE_TYPE_USER !== $targetAppliesTo
+            || self::SERVICE_TYPE_USER !== (int) ($sourceService['applies_to'] ?? self::SERVICE_TYPE_NONE)
+        ) {
+            return $this->get_lang('UpsaleOnlyForUserServices');
+        }
+
+        $targetPrice = isset($serviceData['price']) ? (float) $serviceData['price'] : 0.0;
+        $sourcePrice = (float) ($sourceService['service_price'] ?? $sourceService['price_without_discount'] ?? $sourceService['price'] ?? 0.0);
+        if ($targetPrice <= $sourcePrice) {
+            return $this->get_lang('UpsaleTargetPriceMustBeHigher');
+        }
+
+        $sourceDuration = (int) ($sourceService['duration_days'] ?? 0);
+        $targetDuration = isset($serviceData['duration_days']) ? (int) $serviceData['duration_days'] : 0;
+        if ($targetDuration < $sourceDuration) {
+            return $this->get_lang('UpsaleTargetDurationMustNotBeShorter');
+        }
+
+        $sourceRenewable = !empty($sourceService['renewable']);
+        $targetRenewable = !empty($serviceData['renewable']);
+        if (($sourceRenewable || $targetRenewable) && $sourceRenewable !== $targetRenewable) {
+            return $this->get_lang('UpsaleRenewableModeMustMatch');
+        }
+
+        if ($targetServiceId > 0 && $this->wouldCreateServiceUpsaleCycle($targetServiceId, $sourceServiceId)) {
+            return $this->get_lang('UpsaleCycleNotAllowed');
+        }
+
+        return null;
+    }
+
+    private function wouldCreateServiceUpsaleCycle(int $targetServiceId, int $sourceServiceId): bool
+    {
+        $visited = [];
+        $currentServiceId = $sourceServiceId;
+
+        while ($currentServiceId > 0 && !isset($visited[$currentServiceId])) {
+            if ($currentServiceId === $targetServiceId) {
+                return true;
+            }
+
+            $visited[$currentServiceId] = true;
+            $service = $this->getService($currentServiceId);
+            if (empty($service)) {
+                return false;
+            }
+
+            $currentServiceId = (int) ($service['upsale_from_id'] ?? 0);
+        }
+
+        return false;
+    }
+
+    private function isServiceUpsaleAncestorOf(int $ancestorServiceId, int $descendantServiceId): bool
+    {
+        if ($ancestorServiceId <= 0 || $descendantServiceId <= 0 || $ancestorServiceId === $descendantServiceId) {
+            return false;
+        }
+
+        $visited = [];
+        $currentServiceId = $descendantServiceId;
+
+        while ($currentServiceId > 0 && !isset($visited[$currentServiceId])) {
+            $visited[$currentServiceId] = true;
+            $service = $this->getService($currentServiceId);
+            if (empty($service)) {
+                return false;
+            }
+
+            $currentServiceId = (int) ($service['upsale_from_id'] ?? 0);
+            if ($currentServiceId === $ancestorServiceId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the highest active user-service sale from each Upsale chain.
+     *
+     * When multiple generations in the same chain are active, only the most
+     * advanced service is returned.
+     */
+    private function getHighestActiveUserServiceSales(int $buyerId): array
+    {
+        if ($buyerId <= 0) {
+            return [];
+        }
+
+        $activeServiceSales = array_values(array_filter(
+            $this->getActiveServicesForUser($buyerId),
+            static function (array $activeServiceSale) use ($buyerId): bool {
+                return self::SERVICE_TYPE_USER === (int) ($activeServiceSale['node_type'] ?? 0)
+                    && $buyerId === (int) ($activeServiceSale['node_id'] ?? 0)
+                    && (int) ($activeServiceSale['service_id'] ?? 0) > 0;
+            }
+        ));
+
+        $highestActiveServiceSales = [];
+        foreach ($activeServiceSales as $activeServiceSale) {
+            $activeServiceId = (int) ($activeServiceSale['service_id'] ?? 0);
+            $hasHigherActiveDescendant = false;
+
+            foreach ($activeServiceSales as $otherActiveServiceSale) {
+                $otherActiveServiceId = (int) ($otherActiveServiceSale['service_id'] ?? 0);
+                if ($otherActiveServiceId <= 0 || $otherActiveServiceId === $activeServiceId) {
+                    continue;
+                }
+
+                if ($this->isServiceUpsaleAncestorOf($activeServiceId, $otherActiveServiceId)) {
+                    $hasHigherActiveDescendant = true;
+                    break;
+                }
+            }
+
+            if (!$hasHigherActiveDescendant) {
+                $highestActiveServiceSales[] = $activeServiceSale;
+            }
+        }
+
+        return $highestActiveServiceSales;
+    }
+
+    /**
+     * Return the active service that blocks buying another service in the same Upsale lineage.
+     *
+     * A direct child of the active service is not blocked because it is the valid next Upgrade.
+     */
+    public function getServicePurchaseUpsaleChainBlock(int $serviceId, int $buyerId): ?array
+    {
+        if ($serviceId <= 0 || $buyerId <= 0) {
+            return null;
+        }
+
+        $service = $this->getService($serviceId);
+        if (empty($service) || self::SERVICE_TYPE_USER !== (int) ($service['applies_to'] ?? self::SERVICE_TYPE_NONE)) {
+            return null;
+        }
+
+        foreach ($this->getHighestActiveUserServiceSales($buyerId) as $activeServiceSale) {
+            $activeServiceId = (int) ($activeServiceSale['service_id'] ?? 0);
+            if ($activeServiceId === $serviceId) {
+                continue;
+            }
+
+            $candidateIsAncestor = $this->isServiceUpsaleAncestorOf($serviceId, $activeServiceId);
+            $candidateIsDescendant = $this->isServiceUpsaleAncestorOf($activeServiceId, $serviceId);
+
+            if (!$candidateIsAncestor && !$candidateIsDescendant) {
+                continue;
+            }
+
+            $isDirectUpgrade = $candidateIsDescendant
+                && $activeServiceId === (int) ($service['upsale_from_id'] ?? 0);
+            if ($isDirectUpgrade) {
+                continue;
+            }
+
+            return [
+                'active_sale_id' => (int) ($activeServiceSale['id'] ?? 0),
+                'active_service_id' => $activeServiceId,
+                'active_service_name' => (string) (
+                    $activeServiceSale['service']['name']
+                    ?? $activeServiceSale['name']
+                    ?? ''
+                ),
+                'relation' => $candidateIsAncestor ? 'ancestor' : 'indirect_descendant',
+            ];
+        }
+
+        return null;
+    }
+
+    public function getCurrentUserServicePurchaseUpsaleChainBlock(int $serviceId): ?array
+    {
+        return $this->getServicePurchaseUpsaleChainBlock($serviceId, api_get_user_id());
+    }
+
+    public function formatServicePurchaseUpsaleChainBlockMessage(array $block): string
+    {
+        return sprintf(
+            $this->get_lang('ServiceInActiveUpsaleChainCannotBePurchased'),
+            (string) ($block['active_service_name'] ?? '')
+        );
+    }
+
+    public function getCurrentUserServiceUpgradeOffer(int $targetServiceId, ?array $coupon = null): ?array
+    {
+        return $this->getServiceUpgradeOffer($targetServiceId, api_get_user_id(), $coupon);
+    }
+
+    public function getServiceUpgradeOffer(int $targetServiceId, int $buyerId, ?array $coupon = null): ?array
+    {
+        if ($targetServiceId <= 0 || $buyerId <= 0) {
+            return null;
+        }
+
+        $targetService = $this->getService($targetServiceId, $coupon);
+        if (empty($targetService) || !$this->isServiceActive($targetService)) {
+            return null;
+        }
+
+        $sourceServiceId = (int) ($targetService['upsale_from_id'] ?? 0);
+        if ($sourceServiceId <= 0) {
+            return null;
+        }
+
+        $nodeType = (int) ($targetService['applies_to'] ?? 0);
+        if (self::SERVICE_TYPE_USER !== $nodeType) {
+            return null;
+        }
+
+        if ($this->hasBlockingActiveServiceSale($buyerId, $targetServiceId, $nodeType, $buyerId)) {
+            return null;
+        }
+
+        $sourceSale = $this->getBestActiveServiceSaleForUpgrade(
+            $buyerId,
+            $sourceServiceId,
+            $nodeType,
+            $buyerId
+        );
+        if (null === $sourceSale) {
+            return null;
+        }
+
+        $periodStart = strtotime((string) ($sourceSale['date_start'] ?? $sourceSale['buy_date'] ?? ''));
+        $periodEnd = strtotime((string) ($sourceSale['date_end'] ?? ''));
+        $now = time();
+
+        if (false === $periodStart || false === $periodEnd || $periodEnd <= $now) {
+            return null;
+        }
+
+        $periodStart = min($periodStart, $now);
+        $periodSeconds = max(1, $periodEnd - $periodStart);
+        $remainingSeconds = max(0, $periodEnd - $now);
+        $remainingRatio = min(1.0, max(0.0, $remainingSeconds / $periodSeconds));
+
+        $sourcePriceWithoutTax = $this->getServiceSaleCurrentPeriodPriceWithoutTax($sourceSale);
+        $targetFullPriceWithoutTax = max(0.0, (float) ($targetService['price'] ?? 0));
+        $isoCode = (string) ($targetService['iso_code'] ?? '');
+        $sourceRecurringGateway = strtolower(trim((string) ($sourceSale['recurring_gateway'] ?? '')));
+        $sourceRecurringProfileId = trim(
+            (string) ($sourceSale['gateway_subscription_id'] ?? $sourceSale['recurring_profile_id'] ?? '')
+        );
+        $sourceRecurringEnabled = self::SERVICE_RECURRING_PAYMENT_ENABLED
+            === (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
+            && '' !== $sourceRecurringProfileId;
+        $sourceDateEnd = (string) ($sourceSale['date_end'] ?? '');
+        $sourceDateEndFormatted = '' !== $sourceDateEnd
+            ? api_format_date(api_get_local_time($sourceDateEnd), DATE_TIME_FORMAT_LONG_24H)
+            : '';
+
+        $targetChargeBaseWithoutTax = $sourceRecurringEnabled
+            ? round($targetFullPriceWithoutTax * $remainingRatio, 2)
+            : $targetFullPriceWithoutTax;
+        $creditAmount = round($sourcePriceWithoutTax * $remainingRatio, 2);
+        $upgradePriceWithoutTax = round(
+            max(0.0, $targetChargeBaseWithoutTax - $creditAmount),
+            2
+        );
+
+        $requiredPaymentType = null;
+        if ($sourceRecurringEnabled) {
+            $requiredPaymentType = match ($sourceRecurringGateway) {
+                'stripe' => self::PAYMENT_TYPE_STRIPE,
+                'paypal' => self::PAYMENT_TYPE_PAYPAL,
+                default => null,
+            };
+        }
+
+        return [
+            'source_sale_id' => (int) $sourceSale['id'],
+            'source_service_id' => (int) ($sourceSale['service_id'] ?? 0),
+            'source_service_name' => (string) ($sourceSale['service']['name'] ?? $sourceSale['name'] ?? ''),
+            'source_date_end' => $sourceDateEnd,
+            'source_date_end_formatted' => $sourceDateEndFormatted,
+            'source_recurring_payment' => (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED),
+            'source_recurring_gateway' => $sourceRecurringGateway,
+            'source_recurring_profile_id' => $sourceRecurringProfileId,
+            'source_recurring_enabled' => $sourceRecurringEnabled,
+            'required_payment_type' => $requiredPaymentType,
+            'remaining_days' => max(1, (int) ceil($remainingSeconds / 86400)),
+            'remaining_ratio' => $remainingRatio,
+            'credit_amount' => $creditAmount,
+            'credit_amount_formatted' => $this->getPriceWithCurrencyFromIsoCode($creditAmount, $isoCode),
+            'target_full_price_without_tax' => $targetFullPriceWithoutTax,
+            'target_full_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $targetFullPriceWithoutTax,
+                $isoCode
+            ),
+            'target_price_without_tax' => $targetChargeBaseWithoutTax,
+            'target_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $targetChargeBaseWithoutTax,
+                $isoCode
+            ),
+            'upgrade_price_without_tax' => $upgradePriceWithoutTax,
+            'upgrade_price_without_tax_formatted' => $this->getPriceWithCurrencyFromIsoCode(
+                $upgradePriceWithoutTax,
+                $isoCode
+            ),
+            'purchasable' => $upgradePriceWithoutTax > 0
+                && (!$sourceRecurringEnabled || null !== $requiredPaymentType),
+        ];
+    }
+
+    private function getBestActiveServiceSaleForUpgrade(
+        int $buyerId,
+        int $serviceId,
+        int $nodeType,
+        int $nodeId
+    ): ?array {
+        $sales = $this->getServiceSales($buyerId, self::SERVICE_STATUS_COMPLETED, $nodeType, $nodeId);
+        $bestSale = null;
+        $bestDateEnd = 0;
+
+        foreach ($sales as $sale) {
+            if ((int) ($sale['service_id'] ?? 0) !== $serviceId) {
+                continue;
+            }
+
+            if (!empty($sale['upgraded_to_sale_id'])) {
+                continue;
+            }
+
+            if (!$this->isServiceSaleBlockingForRepurchase($sale)) {
+                continue;
+            }
+
+            $dateEnd = strtotime((string) ($sale['date_end'] ?? '')) ?: 0;
+            if ($dateEnd > $bestDateEnd) {
+                $bestDateEnd = $dateEnd;
+                $bestSale = $sale;
+            }
+        }
+
+        return is_array($bestSale) ? $bestSale : null;
+    }
+
+    private function getServiceSaleCurrentPeriodPriceWithoutTax(array $serviceSale): float
+    {
+        $priceWithoutTax = null !== ($serviceSale['price_without_tax'] ?? null)
+            ? (float) $serviceSale['price_without_tax']
+            : max(
+                0.0,
+                (float) ($serviceSale['price'] ?? 0) - (float) ($serviceSale['tax_amount'] ?? 0)
+            );
+
+        if (empty($serviceSale['upgrade_from_sale_id'])) {
+            return max(0.0, $priceWithoutTax);
+        }
+
+        $recurringAmount = (float) ($serviceSale['recurring_amount'] ?? 0);
+        if ($recurringAmount > 0) {
+            $taxPerc = null !== ($serviceSale['tax_perc'] ?? null)
+                ? max(0.0, (float) $serviceSale['tax_perc'])
+                : 0.0;
+
+            return $taxPerc > 0
+                ? max(0.0, round($recurringAmount / (1 + ($taxPerc / 100)), 2))
+                : max(0.0, $recurringAmount);
+        }
+
+        return max(
+            0.0,
+            $priceWithoutTax + (float) ($serviceSale['upgrade_credit_amount'] ?? 0)
+        );
+    }
+
+    public function applyServiceUpgradeOfferToPricing(array &$service, ?array $upgradeOffer): void
+    {
+        if (null === $upgradeOffer) {
+            return;
+        }
+
+        $isoCode = (string) ($service['iso_code'] ?? '');
+        $upgradePriceWithoutTax = max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0));
+        $taxPerc = null !== ($service['tax_perc_show'] ?? null)
+            ? (float) $service['tax_perc_show']
+            : 0.0;
+        $upgradeTaxAmount = !empty($service['tax_enable'])
+            ? round($upgradePriceWithoutTax * $taxPerc / 100, 2)
+            : 0.0;
+        $upgradeTotalPrice = $upgradePriceWithoutTax + $upgradeTaxAmount;
+
+        $service['upgrade_offer'] = $upgradeOffer;
+        $service['upgrade_price_without_tax'] = $upgradePriceWithoutTax;
+        $service['upgrade_price_without_tax_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradePriceWithoutTax,
+            $isoCode
+        );
+        $service['upgrade_tax_amount'] = $upgradeTaxAmount;
+        $service['upgrade_tax_amount_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradeTaxAmount,
+            $isoCode
+        );
+        $service['upgrade_total_price'] = $upgradeTotalPrice;
+        $service['upgrade_total_price_formatted'] = $this->getPriceWithCurrencyFromIsoCode(
+            $upgradeTotalPrice,
+            $isoCode
+        );
+    }
+
+    public function getLastServiceSaleError(): string
+    {
+        return $this->lastServiceSaleError;
     }
 
     /**
@@ -4074,21 +5565,103 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        foreach ([self::SERVICE_STATUS_PENDING, self::SERVICE_STATUS_COMPLETED] as $status) {
-            $serviceSales = $this->getServiceSales($buyerId, $status, $nodeType, $nodeId);
+        $serviceSales = $this->getServiceSales($buyerId, self::SERVICE_STATUS_COMPLETED, $nodeType, $nodeId);
 
-            foreach ($serviceSales as $serviceSale) {
-                if ((int) ($serviceSale['service_id'] ?? 0) !== $serviceId) {
-                    continue;
-                }
+        foreach ($serviceSales as $serviceSale) {
+            if ((int) ($serviceSale['service_id'] ?? 0) !== $serviceId) {
+                continue;
+            }
 
-                if ($this->isServiceSaleBlockingForRepurchase($serviceSale)) {
-                    return true;
-                }
+            if ($this->isServiceSaleBlockingForRepurchase($serviceSale)) {
+                return true;
             }
         }
 
         return false;
+    }
+
+    private function hasPendingServiceSale(
+        int $buyerId,
+        int $serviceId,
+        int $nodeType,
+        int $nodeId
+    ): bool {
+        if ($buyerId <= 0 || $serviceId <= 0 || $nodeType <= 0 || $nodeId <= 0) {
+            return false;
+        }
+
+        $serviceSales = $this->getServiceSales($buyerId, self::SERVICE_STATUS_PENDING, $nodeType, $nodeId);
+
+        foreach ($serviceSales as $serviceSale) {
+            if ((int) ($serviceSale['service_id'] ?? 0) !== $serviceId) {
+                continue;
+            }
+
+            $dateEnd = (string) ($serviceSale['date_end'] ?? '');
+            if ('' !== $dateEnd && strtotime($dateEnd) < time()) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function getPendingServiceUpgradeSale(
+        int $buyerId,
+        int $targetServiceId,
+        int $sourceServiceSaleId,
+        int $nodeType,
+        int $nodeId
+    ): array {
+        if ($buyerId <= 0
+            || $targetServiceId <= 0
+            || $sourceServiceSaleId <= 0
+            || $nodeType <= 0
+            || $nodeId <= 0
+        ) {
+            return [];
+        }
+
+        $pendingSale = Database::select(
+            'MAX(id) AS id',
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            [
+                'WHERE' => [
+                    'buyer_id = ? AND service_id = ? AND upgrade_from_sale_id = ? AND node_type = ? AND node_id = ? AND status = ?' => [
+                        $buyerId,
+                        $targetServiceId,
+                        $sourceServiceSaleId,
+                        $nodeType,
+                        $nodeId,
+                        self::SERVICE_STATUS_PENDING,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if (empty($pendingSale['id'])) {
+            return [];
+        }
+
+        $serviceSale = $this->getServiceSale((int) $pendingSale['id']);
+        if (empty($serviceSale)) {
+            return [];
+        }
+
+        $dateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+        if ('' !== $dateEnd && strtotime($dateEnd) < time()) {
+            return [];
+        }
+
+        return $serviceSale;
+    }
+
+    public function wasLastServiceSaleReused(): bool
+    {
+        return $this->lastServiceSaleWasReused;
     }
 
     /**
@@ -4172,15 +5745,24 @@ class BuyCoursesPlugin extends Plugin
 
         $conditions = ['WHERE' => ['ss.id = ?' => $id]];
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id ";
-        $currency = $this->getSelectedCurrency();
-        $isoCode = $currency['iso_code'];
 
         $servicesSale = Database::select(
-            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.renewable, s.total_charges, s.allow_trial, s.trial_period, s.trial_frequency, s.trial_total_charges, s.max_subscribers, s.subscription_behavior_json, s.stripe_price_id, s.upsale_from_id, s.applies_to, s.owner_id, s.active, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
         );
+
+        if (empty($servicesSale)) {
+            return [];
+        }
+
+        $currency = $this->getCurrency((int) ($servicesSale['currency_id'] ?? 0));
+        if (empty($currency) || empty($currency['iso_code'])) {
+            $currency = $this->getSelectedCurrency();
+        }
+        $isoCode = (string) ($currency['iso_code'] ?? '');
+
         $owner = api_get_user_info($servicesSale['owner_id']);
         $buyer = api_get_user_info($servicesSale['buyer_id']);
 
@@ -4196,9 +5778,20 @@ class BuyCoursesPlugin extends Plugin
         );
 
         $servicesSale['service']['duration_days'] = $servicesSale['duration_days'];
+        $servicesSale['service']['renewable'] = (int) ($servicesSale['renewable'] ?? 0);
+        $servicesSale['service']['total_charges'] = (int) ($servicesSale['total_charges'] ?? 0);
+        $servicesSale['service']['allow_trial'] = (int) ($servicesSale['allow_trial'] ?? 0);
+        $servicesSale['service']['trial_period'] = $servicesSale['trial_period'] ?? '';
+        $servicesSale['service']['trial_frequency'] = (int) ($servicesSale['trial_frequency'] ?? 0);
+        $servicesSale['service']['trial_total_charges'] = (int) ($servicesSale['trial_total_charges'] ?? 0);
+        $servicesSale['service']['max_subscribers'] = (int) ($servicesSale['max_subscribers'] ?? 0);
+        $servicesSale['service']['subscription_behavior_json'] = $servicesSale['subscription_behavior_json'] ?? '';
+        $servicesSale['service']['stripe_price_id'] = $servicesSale['stripe_price_id'] ?? '';
+        $servicesSale['service']['upsale_from_id'] = isset($servicesSale['upsale_from_id']) ? (int) $servicesSale['upsale_from_id'] : null;
         $servicesSale['service']['applies_to'] = $servicesSale['applies_to'];
         $servicesSale['service']['owner']['id'] = $servicesSale['owner_id'];
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
+        $servicesSale['service']['active'] = (int) ($servicesSale['active'] ?? 1);
         $servicesSale['service']['visibility'] = $servicesSale['visibility'];
         $servicesSale['service']['image'] = $this->getServiceImageUrl($servicesSale['image'] ?? null);
         $servicesSale['service']['date_start'] = $servicesSale['date_start'];
@@ -4207,22 +5800,370 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['buyer']['id'] = $buyer['user_id'];
         $servicesSale['buyer']['name'] = api_get_person_name($buyer['firstname'], $buyer['lastname']);
         $servicesSale['buyer']['username'] = $buyer['username'];
+        $servicesSale['buyer']['email'] = $buyer['email'];
 
         return $servicesSale;
     }
 
     /**
-     * Update service sale status to cancelled.
-     *
-     * @param int $serviceSaleId The sale ID
-     *
-     * @return bool
+     * Build the price/tax summary for a service sale confirmation screen from the
+     * VAT already resolved for this buyer (resolveSaleVat(), stored on the sale
+     * itself), instead of recomputing it from the service's flat/global tax
+     * settings, which know nothing about the buyer's declared country.
      */
-    public function cancelServiceSale(int $serviceSaleId)
+    public function buildServiceSaleVatSummary(array $serviceSale): array
     {
-        $this->updateServiceSaleStatus(
+        $isoCode = (string) ($serviceSale['service']['currency'] ?? '');
+        $totalPrice = (float) ($serviceSale['price'] ?? 0);
+        $priceWithoutTax = null !== ($serviceSale['price_without_tax'] ?? null)
+            ? (float) $serviceSale['price_without_tax']
+            : $totalPrice;
+        $taxPerc = $serviceSale['tax_perc'] ?? null;
+        $taxAmount = (float) ($serviceSale['tax_amount'] ?? 0);
+        $discountAmount = (float) ($serviceSale['discount_amount'] ?? 0);
+        $upgradeCreditAmount = (float) ($serviceSale['upgrade_credit_amount'] ?? 0);
+        $recurringAmount = (float) ($serviceSale['recurring_amount'] ?? 0);
+        $upgradeFromSaleId = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0);
+        $globalParameters = $this->getGlobalParameters();
+
+        $sourceSale = $upgradeFromSaleId > 0 ? $this->getServiceSale($upgradeFromSaleId) : [];
+        $targetPriceWithoutTax = $priceWithoutTax + $upgradeCreditAmount;
+
+        return [
+            'price_formatted' => $this->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode),
+            'tax_enable' => null !== $taxPerc,
+            'tax_name' => (string) ($globalParameters['tax_name'] ?? ''),
+            'tax_perc_show' => $taxPerc,
+            'tax_amount_formatted' => $this->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode),
+            'total_price_formatted' => $this->getPriceWithCurrencyFromIsoCode($totalPrice, $isoCode),
+            'has_coupon' => $discountAmount > 0,
+            'discount_amount_formatted' => $discountAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($discountAmount, $isoCode)
+                : null,
+            'is_upgrade' => $upgradeFromSaleId > 0,
+            'upgrade_source_service_name' => (string) ($sourceSale['service']['name'] ?? ''),
+            'upgrade_credit_amount_formatted' => $upgradeCreditAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($upgradeCreditAmount, $isoCode)
+                : null,
+            'upgrade_target_price_formatted' => $upgradeFromSaleId > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($targetPriceWithoutTax, $isoCode)
+                : null,
+            'recurring_amount_formatted' => $recurringAmount > 0
+                ? $this->getPriceWithCurrencyFromIsoCode($recurringAmount, $isoCode)
+                : null,
+        ];
+    }
+
+    /**
+     * Set the external recurring profile ID for a service sale.
+     */
+    public function updateRecurringProfileId(int $serviceSaleId, string $recurringProfileId): bool
+    {
+        if ($serviceSaleId <= 0) {
+            return false;
+        }
+
+        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        return false !== Database::update(
+            $servicesSaleTable,
+            ['recurring_profile_id' => $recurringProfileId],
+            ['id = ?' => $serviceSaleId]
+        );
+    }
+
+    /**
+     * Update the recurring payment status for a service sale.
+     */
+    public function updateRecurringPayments(int $serviceSaleId, int $recurringPaymentStatus): bool
+    {
+        if ($serviceSaleId <= 0) {
+            return false;
+        }
+
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        return false !== Database::update(
+            $serviceSaleTable,
+            ['recurring_payment' => $recurringPaymentStatus],
+            ['id = ?' => $serviceSaleId]
+        );
+    }
+
+    /**
+     * Update recurring payment metadata for a service sale.
+     */
+    public function updateServiceSaleRecurringData(
+        int $serviceSaleId,
+        int $recurringPaymentStatus,
+        ?string $recurringProfileId = null,
+        ?string $nextChargeDate = null,
+        ?string $cancelledAt = null
+    ): bool {
+        if ($serviceSaleId <= 0) {
+            return false;
+        }
+
+        $allowedValues = [
+            'recurring_payment' => $recurringPaymentStatus,
+        ];
+
+        if (null !== $recurringProfileId) {
+            $allowedValues['recurring_profile_id'] = $recurringProfileId;
+        }
+
+        if (null !== $nextChargeDate) {
+            $allowedValues['next_charge_date'] = $nextChargeDate;
+        }
+
+        if (null !== $cancelledAt) {
+            $allowedValues['cancelled_at'] = $cancelledAt;
+        }
+
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        return false !== Database::update(
+            $serviceSaleTable,
+            $allowedValues,
+            ['id = ?' => $serviceSaleId]
+        );
+    }
+
+    public function updateServiceSaleGatewayData(int $serviceSaleId, array $gatewayData): bool
+    {
+        if ($serviceSaleId <= 0) {
+            return false;
+        }
+
+        $allowedFields = [
+            'recurring_gateway',
+            'gateway_customer_id',
+            'gateway_checkout_session_id',
+            'gateway_subscription_id',
+            'gateway_last_event_id',
+            'gateway_transaction_id',
+            'recurring_profile_id',
+            'recurring_payment',
+            'next_charge_date',
+            'cancelled_at',
+            'date_end',
+            'date_start',
+            'status',
+        ];
+
+        $values = [];
+        foreach ($allowedFields as $field) {
+            if (array_key_exists($field, $gatewayData)) {
+                $values[$field] = $gatewayData[$field];
+            }
+        }
+
+        if ([] === $values) {
+            return false;
+        }
+
+        return false !== Database::update(
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            $values,
+            ['id = ?' => $serviceSaleId]
+        );
+    }
+
+    public function getServiceSaleFromGatewayCheckoutSessionId(string $checkoutSessionId): array
+    {
+        $checkoutSessionId = trim($checkoutSessionId);
+        if ('' === $checkoutSessionId) {
+            return [];
+        }
+
+        $result = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            [
+                'where' => [
+                    'gateway_checkout_session_id = ?' => $checkoutSessionId,
+                ],
+            ],
+            'first'
+        );
+
+        return is_array($result) ? $result : [];
+    }
+
+    public function getServiceSaleFromGatewaySubscriptionId(string $subscriptionId): array
+    {
+        $subscriptionId = trim($subscriptionId);
+        if ('' === $subscriptionId) {
+            return [];
+        }
+
+        $result = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            [
+                'where' => [
+                    'gateway_subscription_id = ?' => $subscriptionId,
+                ],
+            ],
+            'first'
+        );
+
+        return is_array($result) ? $result : [];
+    }
+
+    public function wasGatewayEventProcessed(int $serviceSaleId, string $eventId): bool
+    {
+        if ($serviceSaleId <= 0 || '' === trim($eventId)) {
+            return false;
+        }
+
+        $value = Database::select(
+            'id',
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            [
+                'where' => [
+                    'id = ? AND gateway_last_event_id = ?' => [$serviceSaleId, $eventId],
+                ],
+            ],
+            'first'
+        );
+
+        return !empty($value);
+    }
+
+    public function markGatewayEventProcessed(int $serviceSaleId, string $eventId): bool
+    {
+        if ($serviceSaleId <= 0 || '' === trim($eventId)) {
+            return false;
+        }
+
+        return false !== Database::update(
+            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            ['gateway_last_event_id' => $eventId],
+            ['id = ?' => $serviceSaleId]
+        );
+    }
+
+    public function completeStripeRecurringServiceSale(int $serviceSaleId, ?string $subscriptionId = null, ?string $customerId = null, ?string $nextChargeDate = null): bool
+    {
+        if ($serviceSaleId <= 0) {
+            return false;
+        }
+
+        $currentServiceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($currentServiceSale)) {
+            return false;
+        }
+
+        $existingSubscriptionId = trim((string) (
+            $currentServiceSale['gateway_subscription_id']
+            ?? $currentServiceSale['recurring_profile_id']
+            ?? ''
+        ));
+        $normalizedSubscriptionId = trim((string) $subscriptionId);
+        $renewalWasAlreadyEnabled = self::SERVICE_RECURRING_PAYMENT_ENABLED
+            === (int) ($currentServiceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
+            && ('' === $normalizedSubscriptionId || $normalizedSubscriptionId === $existingSubscriptionId);
+
+        $metadata = [
+            'recurring_gateway' => 'stripe',
+            'recurring_payment' => self::SERVICE_RECURRING_PAYMENT_ENABLED,
+        ];
+
+        if (null !== $subscriptionId && '' !== trim($subscriptionId)) {
+            $metadata['gateway_subscription_id'] = $subscriptionId;
+            $metadata['recurring_profile_id'] = $subscriptionId;
+        }
+
+        if (null !== $customerId && '' !== trim($customerId)) {
+            $metadata['gateway_customer_id'] = $customerId;
+        }
+
+        if (null !== $nextChargeDate && '' !== trim($nextChargeDate)) {
+            $metadata['next_charge_date'] = $nextChargeDate;
+        }
+
+        if (!$this->updateServiceSaleGatewayData($serviceSaleId, $metadata)) {
+            return false;
+        }
+
+        if (!$renewalWasAlreadyEnabled) {
+            $this->recordAudit(
+                self::AUDIT_ACTION_RENEWAL_ENABLED,
+                self::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                [
+                    'gateway' => 'stripe',
+                    'subscription_id' => $subscriptionId,
+                    'next_charge_date' => $nextChargeDate,
+                ],
+                null,
+                self::AUDIT_SOURCE_GATEWAY
+            );
+        }
+
+        return $this->completeServiceSale(
             $serviceSaleId,
-            self::SERVICE_STATUS_CANCELLED
+            self::AUDIT_SOURCE_GATEWAY,
+            null,
+            [
+                'gateway' => 'stripe',
+                'subscription_id' => $subscriptionId,
+            ]
+        );
+    }
+
+    /**
+     * Return a user-facing recurring payment status label.
+     */
+    public function getRecurringPaymentStatusLabel(int $status): string
+    {
+        return match ($status) {
+            self::SERVICE_RECURRING_PAYMENT_ENABLED => $this->get_lang('RecurringPaymentEnabled'),
+            self::SERVICE_RECURRING_PAYMENT_SUSPENDED => $this->get_lang('RecurringPaymentSuspended'),
+            self::SERVICE_RECURRING_PAYMENT_CANCELLED => $this->get_lang('RecurringPaymentCancelled'),
+            default => $this->get_lang('RecurringPaymentDisabled'),
+        };
+    }
+
+    /**
+     * Update service sale status to cancelled.
+     */
+    public function cancelServiceSale(
+        int $serviceSaleId,
+        string $auditSource = '',
+        ?int $subjectUserId = null,
+        array $auditData = []
+    ): bool {
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+
+        if (empty($serviceSale)) {
+            return false;
+        }
+
+        $previousStatus = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
+        if (self::SERVICE_STATUS_CANCELLED === $previousStatus) {
+            return true;
+        }
+
+        if (!$this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_CANCELLED)) {
+            return false;
+        }
+
+        $this->recordAudit(
+            self::AUDIT_ACTION_SERVICE_SALE_CANCELLED,
+            self::AUDIT_OBJECT_SERVICE_SALE,
+            $serviceSaleId,
+            array_merge(
+                [
+                    'service_id' => (int) ($serviceSale['service_id'] ?? 0),
+                    'previous_status' => $previousStatus,
+                    'new_status' => self::SERVICE_STATUS_CANCELLED,
+                ],
+                $auditData
+            ),
+            $subjectUserId,
+            $auditSource
         );
 
         return true;
@@ -4230,28 +6171,540 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Complete service sale process. Update service sale status to completed.
-     *
-     * @param int $serviceSaleId The service sale ID
-     *
-     * @return bool
      */
-    public function completeServiceSale(int $serviceSaleId)
-    {
+    public function completeServiceSale(
+        int $serviceSaleId,
+        string $auditSource = '',
+        ?int $subjectUserId = null,
+        array $auditData = []
+    ): bool {
+        $this->lastServiceSaleError = '';
         $serviceSale = $this->getServiceSale($serviceSaleId);
-        if (self::SERVICE_STATUS_COMPLETED == $serviceSale['status']) {
+
+        if (empty($serviceSale)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceSaleNotFound');
+
+            return false;
+        }
+
+        $previousStatus = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
+        $isUpgrade = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0) > 0;
+        $upgradeAlreadyCompleted = !empty($serviceSale['upgrade_completed_at']);
+
+        if (self::SERVICE_STATUS_COMPLETED === $previousStatus
+            && (!$isUpgrade || $upgradeAlreadyCompleted)
+        ) {
             return true;
         }
 
-        $this->updateServiceSaleStatus(
-            $serviceSaleId,
-            self::SERVICE_STATUS_COMPLETED
-        );
+        if ($isUpgrade) {
+            if (!$this->finalizeServiceUpgrade($serviceSaleId, $serviceSale)) {
+                return false;
+            }
+        } elseif (!$this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_COMPLETED)) {
+            return false;
+        }
 
         if ('true' === $this->get('invoicing_enable')) {
             $this->setInvoice($serviceSaleId, 1);
         }
 
         $this->applyServiceBenefitsFromSale($serviceSaleId);
+
+        if ($isUpgrade) {
+            $buyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+            $sourceSaleId = (int) ($serviceSale['upgrade_from_sale_id'] ?? 0);
+            $this->refreshAllBenefitPayloadsFromSales($buyerId);
+
+            $upgradeAuditData = array_merge(
+                [
+                    'source_sale_id' => $sourceSaleId,
+                    'source_service_id' => (int) ($serviceSale['service']['upsale_from_id'] ?? 0),
+                    'target_service_id' => (int) ($serviceSale['service_id'] ?? 0),
+                    'upgrade_credit_amount' => (float) ($serviceSale['upgrade_credit_amount'] ?? 0),
+                ],
+                $auditData
+            );
+
+            $this->recordAudit(
+                self::AUDIT_ACTION_SERVICE_UPGRADE_COMPLETED,
+                self::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                $upgradeAuditData,
+                $subjectUserId,
+                $auditSource
+            );
+
+            if ($sourceSaleId > 0) {
+                $this->recordAudit(
+                    self::AUDIT_ACTION_SERVICE_REPLACED_BY_UPGRADE,
+                    self::AUDIT_OBJECT_SERVICE_SALE,
+                    $sourceSaleId,
+                    [
+                        'target_sale_id' => $serviceSaleId,
+                        'target_service_id' => (int) ($serviceSale['service_id'] ?? 0),
+                    ],
+                    $subjectUserId,
+                    $auditSource
+                );
+            }
+        } else {
+            $this->recordAudit(
+                self::AUDIT_ACTION_SERVICE_SALE_COMPLETED,
+                self::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                array_merge(
+                    [
+                        'service_id' => (int) ($serviceSale['service_id'] ?? 0),
+                        'payment_type' => (int) ($serviceSale['payment_type'] ?? 0),
+                        'previous_status' => $previousStatus,
+                        'new_status' => self::SERVICE_STATUS_COMPLETED,
+                    ],
+                    $auditData
+                ),
+                $subjectUserId,
+                $auditSource
+            );
+        }
+
+        return true;
+    }
+
+    private function finalizeServiceUpgrade(int $newServiceSaleId, array $newServiceSale): bool
+    {
+        $sourceServiceSaleId = (int) ($newServiceSale['upgrade_from_sale_id'] ?? 0);
+        if ($sourceServiceSaleId <= 0) {
+            return true;
+        }
+
+        $sourceServiceSale = $this->getServiceSale($sourceServiceSaleId);
+        if (empty($sourceServiceSale)) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        $newBuyerId = (int) ($newServiceSale['buyer']['id'] ?? $newServiceSale['buyer_id'] ?? 0);
+        $sourceBuyerId = (int) ($sourceServiceSale['buyer']['id'] ?? $sourceServiceSale['buyer_id'] ?? 0);
+        $sourceServiceId = (int) ($sourceServiceSale['service_id'] ?? $sourceServiceSale['service']['id'] ?? 0);
+        $targetServiceId = (int) ($newServiceSale['service_id'] ?? $newServiceSale['service']['id'] ?? 0);
+        $targetSourceServiceId = (int) ($newServiceSale['service']['upsale_from_id'] ?? 0);
+        $alreadyUpgradedTo = (int) ($sourceServiceSale['upgraded_to_sale_id'] ?? 0);
+
+        if ($newBuyerId <= 0
+            || $newBuyerId !== $sourceBuyerId
+            || $sourceServiceId <= 0
+            || $sourceServiceId !== $targetSourceServiceId
+            || $targetServiceId <= 0
+            || ($alreadyUpgradedTo > 0 && $alreadyUpgradedTo !== $newServiceSaleId)
+        ) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        if ($alreadyUpgradedTo === $newServiceSaleId && !empty($newServiceSale['upgrade_completed_at'])) {
+            return true;
+        }
+
+        if (self::SERVICE_STATUS_COMPLETED !== (int) ($sourceServiceSale['status'] ?? self::SERVICE_STATUS_PENDING)
+            || strtotime((string) ($sourceServiceSale['date_end'] ?? '')) < time()
+        ) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeSourceNoLongerAvailable');
+
+            return false;
+        }
+
+        $recurringTransition = $this->transitionRecurringProfileForUpgrade(
+            $sourceServiceSale,
+            $newServiceSale
+        );
+
+        if (false === $recurringTransition) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradeRecurringTransitionFailed');
+
+            return false;
+        }
+
+        $now = api_get_utc_datetime();
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $connection = Database::getManager()->getConnection();
+
+        try {
+            $connection->beginTransaction();
+
+            $newServiceSaleForMigration = array_merge($newServiceSale, $recurringTransition);
+
+            if (!$this->migrateSubscriptionCoursesForUpgrade(
+                $sourceServiceSale,
+                $newServiceSaleForMigration,
+                $now
+            )) {
+                throw new RuntimeException('Could not migrate BuyCourses course subscriptions.');
+            }
+
+            $newSaleValues = [
+                'status' => self::SERVICE_STATUS_COMPLETED,
+                'upgrade_completed_at' => $now,
+            ];
+
+            foreach ($recurringTransition as $field => $value) {
+                $newSaleValues[$field] = $value;
+            }
+
+            if (false === Database::update(
+                $serviceSaleTable,
+                $newSaleValues,
+                ['id = ?' => $newServiceSaleId]
+            )) {
+                throw new RuntimeException('Could not complete the upgraded service sale.');
+            }
+
+            $sourceSaleValues = [
+                'status' => self::SERVICE_STATUS_CANCELLED,
+                'date_end' => $now,
+                'cancelled_at' => $now,
+                'upgraded_to_sale_id' => $newServiceSaleId,
+            ];
+
+            if ([] !== $recurringTransition) {
+                $sourceSaleValues['recurring_payment'] = self::SERVICE_RECURRING_PAYMENT_CANCELLED;
+                $sourceSaleValues['recurring_profile_id'] = null;
+                $sourceSaleValues['gateway_subscription_id'] = null;
+                $sourceSaleValues['next_charge_date'] = null;
+            }
+
+            if (false === Database::update(
+                $serviceSaleTable,
+                $sourceSaleValues,
+                ['id = ?' => $sourceServiceSaleId]
+            )) {
+                throw new RuntimeException('Could not close the previous service sale.');
+            }
+
+            $connection->commit();
+        } catch (Throwable $exception) {
+            if ($connection->getTransactionNestingLevel() > 0) {
+                $connection->rollBack();
+            }
+
+            error_log(
+                '[BuyCourses][Upgrade] Upgrade completion failed. new_sale_id='.
+                $newServiceSaleId.
+                ' source_sale_id='.
+                $sourceServiceSaleId.
+                ' error='.
+                $exception->getMessage()
+            );
+            $this->lastServiceSaleError = $this->get_lang('UpgradeCouldNotBeCompleted');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function transitionRecurringProfileForUpgrade(array $sourceServiceSale, array $newServiceSale): array|false
+    {
+        $profileId = trim((string) (
+            $sourceServiceSale['gateway_subscription_id']
+            ?? $sourceServiceSale['recurring_profile_id']
+            ?? ''
+        ));
+        $isRecurring = self::SERVICE_RECURRING_PAYMENT_ENABLED
+            === (int) ($sourceServiceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
+            && '' !== $profileId;
+
+        if (!$isRecurring) {
+            return [];
+        }
+
+        $gateway = strtolower(trim((string) ($sourceServiceSale['recurring_gateway'] ?? '')));
+
+        try {
+            return match ($gateway) {
+                'stripe' => $this->transitionStripeRecurringProfileForUpgrade(
+                    $profileId,
+                    $sourceServiceSale,
+                    $newServiceSale
+                ),
+                'paypal' => $this->transitionPayPalRecurringProfileForUpgrade(
+                    $profileId,
+                    $sourceServiceSale,
+                    $newServiceSale
+                ),
+                default => false,
+            };
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][Upgrade] Recurring profile transition failed. gateway='.
+                $gateway.
+                ' source_sale_id='.
+                (int) ($sourceServiceSale['id'] ?? 0).
+                ' error='.
+                $exception->getMessage()
+            );
+
+            return false;
+        }
+    }
+
+    private function transitionStripeRecurringProfileForUpgrade(
+        string $subscriptionId,
+        array $sourceServiceSale,
+        array $newServiceSale
+    ): array|false {
+        $stripeParams = $this->getStripeParams();
+        $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+        $targetService = $newServiceSale['service'] ?? [];
+        $recurringAmount = (float) ($newServiceSale['recurring_amount'] ?? 0);
+        $currency = $this->getCurrency((int) ($newServiceSale['currency_id'] ?? 0));
+        $currencyCode = strtolower(trim((string) ($currency['iso_code'] ?? '')));
+
+        if ('' === $secretKey || $recurringAmount <= 0 || '' === $currencyCode) {
+            return false;
+        }
+
+        \Stripe\Stripe::setApiKey($secretKey);
+        \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+        $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+        $subscriptionItem = $subscription->items->data[0] ?? null;
+        if (null === $subscriptionItem || empty($subscriptionItem->id)) {
+            return false;
+        }
+
+        $priceId = trim((string) ($targetService['stripe_price_id'] ?? ''));
+        if ('' === $priceId) {
+            $product = \Stripe\Product::create([
+                'name' => (string) ($targetService['name'] ?? 'BuyCourses service'),
+                'metadata' => [
+                    'source' => 'BuyCourses',
+                    'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                ],
+            ]);
+            $interval = $this->getStripeRecurringInterval((int) ($targetService['duration_days'] ?? 0));
+            $price = \Stripe\Price::create([
+                'unit_amount' => (int) round($recurringAmount * 100),
+                'currency' => $currencyCode,
+                'product' => (string) $product->id,
+                'recurring' => $interval,
+                'metadata' => [
+                    'source' => 'BuyCourses',
+                    'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                ],
+            ]);
+            $priceId = (string) $price->id;
+        }
+
+        $subscription = \Stripe\Subscription::update($subscriptionId, [
+            'items' => [[
+                'id' => (string) $subscriptionItem->id,
+                'price' => $priceId,
+            ]],
+            'proration_behavior' => 'none',
+            'metadata' => [
+                'source' => 'BuyCourses',
+                'sale_type' => 'service',
+                'service_sale_id' => (string) ($newServiceSale['id'] ?? 0),
+                'service_id' => (string) ($newServiceSale['service_id'] ?? 0),
+                'buyer_id' => (string) ($newServiceSale['buyer']['id'] ?? $newServiceSale['buyer_id'] ?? 0),
+            ],
+        ]);
+
+        $nextChargeDate = !empty($subscription->current_period_end)
+            ? gmdate('Y-m-d H:i:s', (int) $subscription->current_period_end)
+            : (string) ($sourceServiceSale['date_end'] ?? '');
+
+        return [
+            'recurring_gateway' => 'stripe',
+            'recurring_payment' => self::SERVICE_RECURRING_PAYMENT_ENABLED,
+            'recurring_profile_id' => $subscriptionId,
+            'gateway_subscription_id' => $subscriptionId,
+            'gateway_customer_id' => (string) ($subscription->customer ?? $sourceServiceSale['gateway_customer_id'] ?? ''),
+            'next_charge_date' => $nextChargeDate,
+            'date_end' => $nextChargeDate,
+        ];
+    }
+
+    private function transitionPayPalRecurringProfileForUpgrade(
+        string $profileId,
+        array $sourceServiceSale,
+        array $newServiceSale
+    ): array|false {
+        $paypalParams = $this->getPaypalParams();
+        $paypalUsername = trim((string) ($paypalParams['username'] ?? ''));
+        $paypalPassword = trim((string) ($paypalParams['password'] ?? ''));
+        $paypalSignature = trim((string) ($paypalParams['signature'] ?? ''));
+        $isSandbox = 1 === (int) ($paypalParams['sandbox'] ?? 0);
+        $recurringAmount = (float) ($newServiceSale['recurring_amount'] ?? 0);
+        $currency = $this->getCurrency((int) ($newServiceSale['currency_id'] ?? 0));
+        $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? '')));
+
+        if ('' === $paypalUsername
+            || '' === $paypalPassword
+            || '' === $paypalSignature
+            || $recurringAmount <= 0
+            || '' === $currencyCode
+        ) {
+            return false;
+        }
+
+        require_once __DIR__.'/paypalfunctions.php';
+
+        global $API_Endpoint, $API_UserName, $API_Password, $API_Signature;
+        $API_UserName = $paypalUsername;
+        $API_Password = $paypalPassword;
+        $API_Signature = $paypalSignature;
+        $API_Endpoint = $isSandbox
+            ? 'https://api-3t.sandbox.paypal.com/nvp'
+            : 'https://api-3t.paypal.com/nvp';
+
+        $response = UpdateRecurringPaymentsProfile(
+            $profileId,
+            $recurringAmount,
+            $currencyCode,
+            (string) ($newServiceSale['service']['name'] ?? 'BuyCourses service')
+        );
+        $ack = strtoupper((string) ($response['ACK'] ?? ''));
+
+        if (!in_array($ack, ['SUCCESS', 'SUCCESSWITHWARNING'], true)) {
+            error_log(
+                '[BuyCourses][Upgrade] PayPal recurring profile update failed. profile_id='.
+                $profileId.
+                ' code='.
+                (string) ($response['L_ERRORCODE0'] ?? 'unknown').
+                ' message='.
+                (string) ($response['L_LONGMESSAGE0'] ?? 'unknown')
+            );
+
+            return false;
+        }
+
+        $nextChargeDate = (string) ($sourceServiceSale['date_end'] ?? '');
+
+        return [
+            'recurring_gateway' => 'paypal',
+            'recurring_payment' => self::SERVICE_RECURRING_PAYMENT_ENABLED,
+            'recurring_profile_id' => $profileId,
+            'gateway_subscription_id' => $profileId,
+            'next_charge_date' => $nextChargeDate,
+            'date_end' => $nextChargeDate,
+        ];
+    }
+
+    private function getStripeRecurringInterval(int $durationDays): array
+    {
+        $durationDays = max(1, $durationDays);
+
+        if ($durationDays >= 360) {
+            return [
+                'interval' => 'year',
+                'interval_count' => max(1, (int) round($durationDays / 365)),
+            ];
+        }
+
+        if ($durationDays >= 28) {
+            return [
+                'interval' => 'month',
+                'interval_count' => max(1, (int) round($durationDays / 30)),
+            ];
+        }
+
+        if ($durationDays >= 7) {
+            return [
+                'interval' => 'week',
+                'interval_count' => max(1, (int) round($durationDays / 7)),
+            ];
+        }
+
+        return [
+            'interval' => 'day',
+            'interval_count' => $durationDays,
+        ];
+    }
+
+    private function migrateSubscriptionCoursesForUpgrade(
+        array $sourceServiceSale,
+        array $newServiceSale,
+        string $upgradedAt
+    ): bool {
+        if (!$this->hasSubscriptionCourseInfrastructure()) {
+            return true;
+        }
+
+        $sourceServiceSaleId = (int) ($sourceServiceSale['id'] ?? 0);
+        $newServiceSaleId = (int) ($newServiceSale['id'] ?? 0);
+        $newServiceId = (int) ($newServiceSale['service_id'] ?? $newServiceSale['service']['id'] ?? 0);
+        if ($sourceServiceSaleId <= 0 || $newServiceSaleId <= 0 || $newServiceId <= 0) {
+            return false;
+        }
+
+        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $rows = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'service_sale_id = ?' => $sourceServiceSaleId,
+                ],
+            ]
+        );
+        $benefits = $this->getServiceCourseCreationBenefitValues($newServiceId);
+        $aiFeatures = $this->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []);
+
+        foreach ($rows as $row) {
+            $rowId = (int) ($row['id'] ?? 0);
+            $courseId = (int) ($row['course_id'] ?? 0);
+            if ($rowId <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            $context = json_decode((string) ($row['context_json'] ?? ''), true);
+            if (!is_array($context)) {
+                $context = [];
+            }
+
+            $context = array_merge($context, [
+                'service_sale_id' => $newServiceSaleId,
+                'service_id' => $newServiceId,
+                'service_name' => (string) ($newServiceSale['service']['name'] ?? ''),
+                'date_start' => (string) ($newServiceSale['date_start'] ?? ''),
+                'date_end' => (string) ($newServiceSale['date_end'] ?? ''),
+                'recurring_profile_id' => (string) (
+                    $newServiceSale['recurring_profile_id']
+                    ?? $sourceServiceSale['recurring_profile_id']
+                    ?? ''
+                ),
+                'max_courses_with_benefits' => max(0, (int) ($benefits['maxCourses'] ?? 0)),
+                'hosting_limit' => max(0, (int) ($benefits['hostingLimit'] ?? 0)),
+                'document_quota_mb' => max(0, (int) ($benefits['documentQuotaMb'] ?? 0)),
+                'ai_features' => $aiFeatures,
+                'status' => 'active',
+                'upgraded_from_service_sale_id' => $sourceServiceSaleId,
+                'upgraded_at' => $upgradedAt,
+            ]);
+
+            if (false === Database::update(
+                $table,
+                [
+                    'service_sale_id' => $newServiceSaleId,
+                    'service_id' => $newServiceId,
+                    'status' => 'active',
+                    'context_json' => json_encode(
+                        $context,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    ),
+                    'updated_at' => $upgradedAt,
+                    'last_action' => 'upgraded',
+                ],
+                ['id = ?' => $rowId]
+            )) {
+                return false;
+            }
+
+            $this->applyAiCourseFeatureSettingsToCourse($courseId, $aiFeatures);
+        }
 
         return true;
     }
@@ -4270,49 +6723,87 @@ class BuyCoursesPlugin extends Plugin
         int $min = 0,
         int $max = 0,
         $appliesTo = '',
-        string $typeResult = 'all'
+        string $typeResult = 'all',
+        ?string $billingCycle = null
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $whereConditions = [
-            's.visibility <> ? ' => 0,
+            's.active = 1',
+            's.visibility <> 0',
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $safeName = Database::escape_string($name);
+            $whereConditions[] = "s.name LIKE '%$safeName%'";
         }
 
-        if (!empty($min)) {
-            $whereConditions['AND s.price >= ?'] = $min;
+        if ($min > 0) {
+            $whereConditions[] = 's.price >= '.(int) $min;
         }
 
-        if (!empty($max)) {
-            $whereConditions['AND s.price <= ?'] = $max;
+        if ($max > 0) {
+            $whereConditions[] = 's.price <= '.(int) $max;
         }
 
-        if ('' == !$appliesTo) {
-            $whereConditions['AND s.applies_to = ?'] = $appliesTo;
+        if ('' !== (string) $appliesTo) {
+            $whereConditions[] = 's.applies_to = '.(int) $appliesTo;
         }
 
-        $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
-        $return = Database::select(
-            's.*',
-            "$servicesTable s $innerJoins",
-            ['WHERE' => $whereConditions, 'limit' => "$start, $end"],
-            $typeResult
-        );
+        if ('monthly' === $billingCycle) {
+            $whereConditions[] = 's.duration_days > 0';
+            $whereConditions[] = 's.duration_days <= 31';
+        } elseif ('yearly' === $billingCycle) {
+            $whereConditions[] = 's.duration_days >= 365';
+        }
+
+        $from = "$servicesTable s INNER JOIN $userTable u ON s.owner_id = u.id";
+        $where = implode(' AND ', $whereConditions);
 
         if ('count' === $typeResult) {
-            return $return;
+            $result = Database::query("SELECT COUNT(*) AS total FROM $from WHERE $where");
+            $row = Database::fetch_assoc($result);
+
+            return (int) ($row['total'] ?? 0);
         }
 
+        $start = max(0, $start);
+        $end = max(1, $end);
+        $result = Database::query(
+            "SELECT s.id FROM $from WHERE $where ORDER BY s.id ASC LIMIT $start, $end"
+        );
+
         $services = [];
-        foreach ($return as $index => $service) {
-            $services[$index] = $this->getService($service['id']);
+        while ($service = Database::fetch_assoc($result)) {
+            $serviceId = (int) ($service['id'] ?? 0);
+            if ($serviceId <= 0) {
+                continue;
+            }
+
+            $services[] = $this->getService($serviceId);
         }
 
         return $services;
+    }
+
+    public function canCurrentUserBuyUserServices(): bool
+    {
+        return api_is_platform_admin() || api_is_teacher();
+    }
+
+    public function canCurrentUserBuyService(array $service): bool
+    {
+        if (!$this->isServiceActive($service)) {
+            return false;
+        }
+
+        $appliesTo = (int) ($service['applies_to'] ?? 0);
+
+        if (self::SERVICE_TYPE_USER === $appliesTo) {
+            return $this->canCurrentUserBuyUserServices();
+        }
+
+        return true;
     }
 
     public function hasBlockingUserServiceSaleForCurrentBuyer(int $serviceId): bool
@@ -4341,6 +6832,901 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    public function hasPendingUserServiceSaleForCurrentBuyer(int $serviceId): bool
+    {
+        $userId = api_get_user_id();
+        if ($userId <= 0 || $serviceId <= 0) {
+            return false;
+        }
+
+        $service = $this->getService($serviceId);
+        if (empty($service)) {
+            return false;
+        }
+
+        $nodeType = (int) ($service['applies_to'] ?? 0);
+
+        if (self::SERVICE_TYPE_USER !== $nodeType) {
+            return false;
+        }
+
+        return $this->hasPendingServiceSale(
+            $userId,
+            $serviceId,
+            $nodeType,
+            $userId
+        );
+    }
+
+
+    /**
+     * Return country options used in the VAT buyer declaration form.
+     * The first phase keeps the list static and avoids external dependencies.
+     */
+    public function getVatCountryOptions(): array
+    {
+        return [
+            '' => get_lang('Select'),
+            'AT' => 'Austria',
+            'BE' => 'Belgium',
+            'BG' => 'Bulgaria',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czech Republic',
+            'DE' => 'Germany',
+            'DK' => 'Denmark',
+            'EE' => 'Estonia',
+            'ES' => 'Spain',
+            'FI' => 'Finland',
+            'FR' => 'France',
+            'GR' => 'Greece',
+            'HR' => 'Croatia',
+            'HU' => 'Hungary',
+            'IE' => 'Ireland',
+            'IT' => 'Italy',
+            'LT' => 'Lithuania',
+            'LU' => 'Luxembourg',
+            'LV' => 'Latvia',
+            'MT' => 'Malta',
+            'NL' => 'Netherlands',
+            'PL' => 'Poland',
+            'PT' => 'Portugal',
+            'RO' => 'Romania',
+            'SE' => 'Sweden',
+            'SI' => 'Slovenia',
+            'SK' => 'Slovakia',
+            'GB' => 'United Kingdom',
+            'NO' => 'Norway',
+            'CH' => 'Switzerland',
+            'US' => 'United States',
+            'CA' => 'Canada',
+            'PE' => 'Peru',
+            'MX' => 'Mexico',
+            'BR' => 'Brazil',
+            'AR' => 'Argentina',
+            'CL' => 'Chile',
+            'CO' => 'Colombia',
+            'EC' => 'Ecuador',
+            'BO' => 'Bolivia',
+            'UY' => 'Uruguay',
+            'PY' => 'Paraguay',
+            'VE' => 'Venezuela',
+        ];
+    }
+
+    /**
+     * Return the EU country codes used for the first VAT decision phase.
+     */
+    private function getEuVatCountryCodes(): array
+    {
+        return [
+            'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'EL', 'ES',
+            'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT',
+            'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK',
+        ];
+    }
+
+    /**
+     * Normalize country aliases used by EU VAT systems.
+     */
+    private function normalizeVatCountryCode(string $countryCode): string
+    {
+        $countryCode = strtoupper(trim($countryCode));
+
+        if ('GR' === $countryCode) {
+            return 'EL';
+        }
+
+        return substr($countryCode, 0, 2);
+    }
+
+    /**
+     * Check whether the country is part of the EU VAT area for this first phase.
+     */
+    private function isEuVatCountry(string $countryCode): bool
+    {
+        return in_array(
+            $this->normalizeVatCountryCode($countryCode),
+            $this->getEuVatCountryCodes(),
+            true
+        );
+    }
+
+    /**
+     * Return static standard VAT rates for the first implementation phase.
+     *
+     * This intentionally avoids external dependencies. Later phases can replace
+     * this with a configurable table or a cached official source.
+     */
+    public function getEuStandardVatRates(): array
+    {
+        return [
+            'AT' => 20.00,
+            'BE' => 21.00,
+            'BG' => 20.00,
+            'CY' => 19.00,
+            'CZ' => 21.00,
+            'DE' => 19.00,
+            'DK' => 25.00,
+            'EE' => 22.00,
+            'EL' => 24.00,
+            'ES' => 21.00,
+            'FI' => 25.50,
+            'FR' => 20.00,
+            'HR' => 25.00,
+            'HU' => 27.00,
+            'IE' => 23.00,
+            'IT' => 22.00,
+            'LT' => 21.00,
+            'LU' => 17.00,
+            'LV' => 21.00,
+            'MT' => 18.00,
+            'NL' => 21.00,
+            'PL' => 23.00,
+            'PT' => 23.00,
+            'RO' => 19.00,
+            'SE' => 25.00,
+            'SI' => 22.00,
+            'SK' => 23.00,
+        ];
+    }
+
+    /**
+     * Return the standard VAT rate for a country, if it is known.
+     */
+    public function getStandardVatRateForCountry(string $countryCode): ?float
+    {
+        $countryCode = $this->normalizeVatCountryCode($countryCode);
+        $rates = $this->getEuStandardVatRates();
+
+        return array_key_exists($countryCode, $rates) ? (float) $rates[$countryCode] : null;
+    }
+
+    /**
+     * Return country and local VAT number parts for the VIES REST API.
+     */
+    private function splitVatNumberForVies(string $buyerCountry, string $vatNumber): array
+    {
+        $country = $this->normalizeVatCountryCode($buyerCountry);
+        $vatNumber = strtoupper(preg_replace('/[^A-Z0-9]/', '', $vatNumber));
+
+        if (2 <= strlen($vatNumber)) {
+            $prefix = $this->normalizeVatCountryCode(substr($vatNumber, 0, 2));
+            if ($prefix === $country) {
+                $vatNumber = substr($vatNumber, 2);
+            }
+        }
+
+        return [$country, $vatNumber];
+    }
+
+    /**
+     * Fetch a VIES REST API response using cURL when available, with a stream fallback.
+     * Apache/FPM environments can fail on one transport while CLI succeeds, so keep both.
+     *
+     * @return array{0: string, 1: string}
+     */
+    private function fetchViesApiResponse(string $url): array
+    {
+        $errors = [];
+
+        if (function_exists('curl_init')) {
+            $ch = curl_init($url);
+
+            if (false !== $ch) {
+                curl_setopt_array($ch, [
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FOLLOWLOCATION => false,
+                    CURLOPT_CONNECTTIMEOUT => 5,
+                    CURLOPT_TIMEOUT => 15,
+                    CURLOPT_HTTPHEADER => [
+                        'Accept: application/json',
+                        'User-Agent: Chamilo-BuyCourses/1.0',
+                    ],
+                ]);
+
+                $response = curl_exec($ch);
+                $curlError = curl_error($ch);
+                $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                if (is_string($response) && '' !== trim($response) && $httpCode >= 200 && $httpCode < 300) {
+                    return [$response, ''];
+                }
+
+                if ('' !== $curlError) {
+                    $errors[] = 'cURL: '.$curlError;
+                } elseif ($httpCode > 0) {
+                    $errors[] = 'cURL HTTP status: '.$httpCode;
+                } else {
+                    $errors[] = 'cURL returned an empty response.';
+                }
+            } else {
+                $errors[] = 'cURL initialization failed.';
+            }
+        }
+
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 15,
+                'ignore_errors' => true,
+                'header' => "Accept: application/json\r\nUser-Agent: Chamilo-BuyCourses/1.0\r\n",
+            ],
+        ]);
+
+        $previousError = error_get_last();
+        $response = @file_get_contents($url, false, $context);
+        $lastError = error_get_last();
+
+        if (is_string($response) && '' !== trim($response)) {
+            return [$response, ''];
+        }
+
+        if (is_array($lastError) && $lastError !== $previousError && !empty($lastError['message'])) {
+            $errors[] = 'stream: '.$lastError['message'];
+        } else {
+            $errors[] = 'stream returned an empty response.';
+        }
+
+        return ['', implode(' | ', array_filter($errors))];
+    }
+
+
+
+    /**
+     * Some VIES userError values mean temporary unavailability, not an invalid VAT number.
+     */
+    private function isTemporaryViesError(string $userError): bool
+    {
+        $userError = strtoupper(trim($userError));
+
+        return in_array($userError, [
+            'GLOBAL_MAX_CONCURRENT_REQ',
+            'MS_MAX_CONCURRENT_REQ',
+            'SERVICE_UNAVAILABLE',
+            'MS_UNAVAILABLE',
+            'TIMEOUT',
+            'SERVER_BUSY',
+        ], true);
+    }
+
+    /**
+     * Validate an EU business VAT number through the VIES REST API.
+     * If VIES is unavailable, the sale keeps charging VAT instead of applying reverse charge.
+     */
+    public function validateBuyerVatNumberWithVies(array $buyerData): array
+    {
+        $normalized = $this->normalizeVatBuyerData($buyerData);
+        $buyerCountry = $this->normalizeVatCountryCode($normalized['buyer_country']);
+        $buyerVatNumber = (string) $normalized['buyer_vat_number'];
+
+        $result = [
+            'status' => 'not_applicable',
+            'valid' => null,
+            'checked_at' => api_get_utc_datetime(),
+            'country_code' => $buyerCountry,
+            'vat_number' => $buyerVatNumber,
+            'business_name' => '',
+            'business_address' => '',
+            'error' => '',
+        ];
+
+        if ('business' !== $normalized['buyer_type'] || '' === $buyerVatNumber || !$this->isEuVatCountry($buyerCountry)) {
+            return $result;
+        }
+
+        [$viesCountry, $viesNumber] = $this->splitVatNumberForVies($buyerCountry, $buyerVatNumber);
+        if ('' === $viesCountry || '' === $viesNumber) {
+            return array_merge($result, [
+                'status' => 'invalid',
+                'valid' => false,
+                'error' => 'Missing country or VAT number for VIES validation.',
+            ]);
+        }
+
+        $url = sprintf(
+            'https://ec.europa.eu/taxation_customs/vies/rest-api/ms/%s/vat/%s',
+            rawurlencode($viesCountry),
+            rawurlencode($viesNumber)
+        );
+
+        [$json, $fetchError] = $this->fetchViesApiResponse($url);
+        if ('' === trim($json)) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'valid' => null,
+                'country_code' => $viesCountry,
+                'vat_number' => $viesNumber,
+                'error' => '' !== $fetchError
+                    ? 'VIES service did not return a response. '.$fetchError
+                    : 'VIES service did not return a response.',
+            ]);
+        }
+
+        $decoded = json_decode($json, true);
+        if (!is_array($decoded)) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'valid' => null,
+                'country_code' => $viesCountry,
+                'vat_number' => $viesNumber,
+                'error' => 'VIES service returned an invalid JSON response.',
+            ]);
+        }
+
+        $valid = null;
+        foreach (['isValid', 'valid'] as $key) {
+            if (array_key_exists($key, $decoded)) {
+                $valid = filter_var($decoded[$key], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                break;
+            }
+        }
+
+        if (null === $valid) {
+            $userError = (string) ($decoded['userError'] ?? $decoded['error'] ?? '');
+            $temporaryError = '' !== $userError && $this->isTemporaryViesError($userError);
+
+            return array_merge($result, [
+                'status' => $temporaryError || '' === $userError ? 'unavailable' : 'invalid',
+                'valid' => $temporaryError ? null : false,
+                'country_code' => $viesCountry,
+                'vat_number' => $viesNumber,
+                'error' => '' !== $userError ? $userError : 'VIES response did not contain a validation flag.',
+            ]);
+        }
+
+        $businessName = trim((string) ($decoded['name'] ?? $decoded['traderName'] ?? ''));
+        $businessAddress = trim((string) ($decoded['address'] ?? $decoded['traderAddress'] ?? ''));
+
+        return array_merge($result, [
+            'status' => $valid ? 'valid' : 'invalid',
+            'valid' => $valid,
+            'country_code' => $viesCountry,
+            'vat_number' => $viesNumber,
+            'business_name' => $businessName,
+            'business_address' => $businessAddress,
+            'error' => $valid ? '' : (string) ($decoded['userError'] ?? ''),
+        ]);
+    }
+
+    /**
+     * Determine the first VAT treatment decision from buyer declaration and seller configuration.
+     *
+     * This phase does not validate VAT numbers through VIES yet. If a buyer declares
+     * a VAT number, the sale is marked as pending VIES validation and VAT is still
+     * charged using the buyer country rate until a later phase validates reverse charge.
+     */
+    public function determineVatTreatment(array $buyerData, ?array $sellerParameters = null): array
+    {
+        $normalizedBuyer = $this->normalizeVatBuyerData($buyerData);
+        $seller = $sellerParameters ?? $this->getGlobalParameters();
+
+        $sellerCountry = $this->normalizeVatCountryCode((string) ($seller['seller_country'] ?? ''));
+        $buyerCountry = $this->normalizeVatCountryCode((string) ($normalizedBuyer['buyer_country'] ?? ''));
+        $sellerVatRegistered = !empty($seller['seller_vat_registered']);
+        $buyerIsBusiness = 'business' === ($normalizedBuyer['buyer_type'] ?? 'individual');
+        $buyerVatNumber = trim((string) ($normalizedBuyer['buyer_vat_number'] ?? ''));
+        $buyerVatValid = $normalizedBuyer['buyer_vat_valid'] ?? null;
+        $viesResult = $normalizedBuyer['vies_result'] ?? null;
+        $viesStatus = '' !== $buyerVatNumber
+            ? (is_array($viesResult) ? (string) ($viesResult['status'] ?? 'pending_validation') : 'pending_validation')
+            : 'not_applicable';
+
+        $result = [
+            'vat_rate' => null,
+            'treatment' => 'pending_vat_calculation',
+            'charge_vat' => false,
+            'use_oss' => false,
+            'invoice_note' => '',
+            'seller_country' => $sellerCountry,
+            'buyer_country' => $buyerCountry,
+            'vies_status' => $viesStatus,
+            'vies_result' => $viesResult,
+        ];
+
+        if ('' === $sellerCountry || '' === $buyerCountry) {
+            return array_merge($result, [
+                'treatment' => 'missing_vat_country_information',
+                'invoice_note' => 'VAT could not be calculated because seller or buyer country is missing.',
+            ]);
+        }
+
+        $isSellerInEu = $this->isEuVatCountry($sellerCountry);
+        $isBuyerInEu = $this->isEuVatCountry($buyerCountry);
+        $buyerVatRate = $this->getStandardVatRateForCountry($buyerCountry);
+        $hasValidEuBusinessVat = $buyerIsBusiness
+            && '' !== $buyerVatNumber
+            && true === $buyerVatValid
+            && $isBuyerInEu;
+
+        if (!$isSellerInEu) {
+            if (!$isBuyerInEu) {
+                return array_merge($result, [
+                    'vat_rate' => 0.00,
+                    'treatment' => 'non_eu_to_non_eu_no_eu_vat',
+                    'charge_vat' => false,
+                    'invoice_note' => 'No EU VAT applicable.',
+                ]);
+            }
+
+            if ($hasValidEuBusinessVat) {
+                return array_merge($result, [
+                    'vat_rate' => 0.00,
+                    'treatment' => 'non_eu_to_eu_b2b_reverse_charge',
+                    'charge_vat' => false,
+                    'use_oss' => false,
+                    'invoice_note' => 'Reverse charge. Buyer accounts for VAT.',
+                ]);
+            }
+
+            if ($buyerIsBusiness && '' !== $buyerVatNumber) {
+                return array_merge($result, [
+                    'vat_rate' => $buyerVatRate,
+                    'treatment' => 'non_eu_to_eu_business_vies_not_validated',
+                    'charge_vat' => null !== $buyerVatRate,
+                    'use_oss' => true,
+                    'invoice_note' => 'VAT number was not validated through VIES. Destination VAT applied.',
+                ]);
+            }
+
+            return array_merge($result, [
+                'vat_rate' => $buyerVatRate,
+                'treatment' => 'non_eu_to_eu_b2c_destination_vat',
+                'charge_vat' => null !== $buyerVatRate,
+                'use_oss' => true,
+                'invoice_note' => 'Destination VAT applies for EU buyer.',
+            ]);
+        }
+
+        if (!$sellerVatRegistered) {
+            if (!$isBuyerInEu) {
+                return array_merge($result, [
+                    'vat_rate' => 0.00,
+                    'treatment' => 'eu_non_registered_seller_to_non_eu_export',
+                    'charge_vat' => false,
+                    'invoice_note' => 'VAT exempt export by non-registered seller.',
+                ]);
+            }
+
+            return array_merge($result, [
+                'vat_rate' => 0.00,
+                'treatment' => 'eu_seller_not_vat_registered_vat_exempt',
+                'charge_vat' => false,
+                'invoice_note' => 'Seller is not VAT registered. VAT is not charged in this first phase.',
+            ]);
+        }
+
+        if (!$isBuyerInEu) {
+            return array_merge($result, [
+                'vat_rate' => 0.00,
+                'treatment' => 'eu_registered_seller_to_non_eu_export',
+                'charge_vat' => false,
+                'invoice_note' => 'VAT exempt export.',
+            ]);
+        }
+
+        if ($hasValidEuBusinessVat) {
+            return array_merge($result, [
+                'vat_rate' => 0.00,
+                'treatment' => 'eu_b2b_reverse_charge',
+                'charge_vat' => false,
+                'use_oss' => false,
+                'invoice_note' => 'Reverse charge. Buyer accounts for VAT.',
+            ]);
+        }
+
+        if ($buyerIsBusiness && '' !== $buyerVatNumber) {
+            return array_merge($result, [
+                'vat_rate' => $buyerVatRate,
+                'treatment' => 'eu_b2b_vies_not_validated_destination_vat',
+                'charge_vat' => null !== $buyerVatRate,
+                'use_oss' => true,
+                'invoice_note' => 'VAT number was not validated through VIES. Destination VAT applied.',
+            ]);
+        }
+
+        return array_merge($result, [
+            'vat_rate' => $buyerVatRate,
+            'treatment' => 'eu_b2c_destination_vat',
+            'charge_vat' => null !== $buyerVatRate,
+            'use_oss' => true,
+            'invoice_note' => 'Destination VAT applies for EU buyer.',
+        ]);
+    }
+
+    /**
+     * Normalize VAT buyer data captured before redirecting to the payment gateway.
+     */
+    public function normalizeVatBuyerData(array $data): array
+    {
+        $country = strtoupper(trim((string) ($data['buyer_country'] ?? '')));
+        $postcode = trim((string) ($data['buyer_postcode'] ?? ''));
+        $buyerType = trim((string) ($data['buyer_type'] ?? 'individual'));
+
+        if (!in_array($buyerType, ['individual', 'business'], true)) {
+            $buyerType = 'individual';
+        }
+
+        $vatNumber = strtoupper(preg_replace('/\s+/', '', (string) ($data['buyer_vat_number'] ?? '')));
+        $businessName = trim((string) ($data['buyer_business_name'] ?? ''));
+        $businessAddress = trim((string) ($data['buyer_business_address'] ?? ''));
+
+        $buyerVatValid = null;
+        if (array_key_exists('buyer_vat_valid', $data) && null !== $data['buyer_vat_valid'] && '' !== $data['buyer_vat_valid']) {
+            $buyerVatValid = (bool) $data['buyer_vat_valid'];
+        }
+
+        return [
+            'buyer_country' => substr($country, 0, 2),
+            'buyer_postcode' => substr($postcode, 0, 32),
+            'buyer_type' => $buyerType,
+            'buyer_vat_number' => substr($vatNumber, 0, 64),
+            'buyer_vat_valid' => $buyerVatValid,
+            'buyer_business_name' => substr($businessName, 0, 255),
+            'buyer_business_address' => $businessAddress,
+            'vies_result' => is_array($data['vies_result'] ?? null) ? $data['vies_result'] : null,
+        ];
+    }
+
+    /**
+     * Validate the required VAT buyer declaration fields.
+     */
+    public function validateVatBuyerData(array $data): array
+    {
+        $errors = [];
+        $normalized = $this->normalizeVatBuyerData($data);
+        $countryOptions = $this->getVatCountryOptions();
+
+        if ('' === $normalized['buyer_country'] || !isset($countryOptions[$normalized['buyer_country']])) {
+            $errors[] = $this->get_lang('BuyerCountryRequired');
+        }
+
+        if ('' === $normalized['buyer_postcode']) {
+            $errors[] = $this->get_lang('BuyerPostcodeRequired');
+        }
+
+        if ('business' === $normalized['buyer_type'] && '' !== $normalized['buyer_vat_number'] && strlen($normalized['buyer_vat_number']) < 4) {
+            $errors[] = $this->get_lang('BuyerVatNumberInvalidFormat');
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Return the best available client IP for VAT evidence.
+     */
+    public function getBuyerIpForVatEvidence(): string
+    {
+        $candidates = [];
+
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $candidates[] = (string) $_SERVER['HTTP_CF_CONNECTING_IP'];
+        }
+
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            foreach (explode(',', (string) $_SERVER['HTTP_X_FORWARDED_FOR']) as $forwardedIp) {
+                $candidates[] = trim($forwardedIp);
+            }
+        }
+
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $candidates[] = (string) $_SERVER['REMOTE_ADDR'];
+        }
+
+        foreach ($candidates as $candidate) {
+            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+                return $candidate;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Returns true when an IP address is not useful for country evidence.
+     */
+    private function isPrivateOrLocalIpAddress(string $ipAddress): bool
+    {
+        if ('' === trim($ipAddress) || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
+            return true;
+        }
+
+        return false === filter_var(
+            $ipAddress,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        );
+    }
+
+    /**
+     * Resolve the buyer IP country for VAT evidence.
+     *
+     * The GeoIP check is intentionally optional. When it is not configured, the sale
+     * still stores the buyer IP and the declared country/postcode as evidence.
+     */
+    public function resolveBuyerIpCountryForVatEvidence(string $ipAddress, string $declaredCountry = ''): array
+    {
+        $ipAddress = trim($ipAddress);
+        $declaredCountry = $this->normalizeVatCountryCode($declaredCountry);
+        $settings = $this->getGlobalParameters();
+        $provider = strtolower(trim((string) ($settings['vat_geoip_provider'] ?? 'none')));
+
+        $result = [
+            'provider' => '' !== $provider ? $provider : 'none',
+            'status' => 'not_configured',
+            'country_code' => null,
+            'declared_country' => $declaredCountry,
+            'checked_at' => api_get_utc_datetime(),
+            'error' => '',
+        ];
+
+        if ('' === $ipAddress || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
+            return array_merge($result, [
+                'status' => 'missing_ip',
+                'error' => 'Buyer IP address is missing or invalid.',
+            ]);
+        }
+
+        if ($this->isPrivateOrLocalIpAddress($ipAddress)) {
+            return array_merge($result, [
+                'status' => 'private_or_local_ip',
+                'error' => 'Private, reserved or local IP address cannot be resolved with GeoIP.',
+            ]);
+        }
+
+        if ('none' === $provider || '' === $provider) {
+            return $result;
+        }
+
+        if ('maxmind_web_service' !== $provider) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'error' => 'Unsupported GeoIP provider configured.',
+            ]);
+        }
+
+        $accountId = trim((string) ($settings['vat_maxmind_account_id'] ?? ''));
+        $licenseKey = trim((string) ($settings['vat_maxmind_license_key'] ?? ''));
+
+        if ('' === $accountId || '' === $licenseKey) {
+            return array_merge($result, [
+                'status' => 'not_configured',
+                'error' => 'MaxMind account ID or license key is missing.',
+            ]);
+        }
+
+        $url = 'https://geoip.maxmind.com/geoip/v2.1/country/'.rawurlencode($ipAddress);
+        $json = '';
+        $error = '';
+
+        if (function_exists('curl_init')) {
+            $ch = curl_init($url);
+            if (false !== $ch) {
+                curl_setopt_array($ch, [
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_TIMEOUT => 10,
+                    CURLOPT_USERPWD => $accountId.':'.$licenseKey,
+                    CURLOPT_HTTPHEADER => ['Accept: application/json'],
+                ]);
+                $response = curl_exec($ch);
+                $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $curlError = curl_error($ch);
+                curl_close($ch);
+
+                if (is_string($response) && '' !== trim($response) && $httpCode >= 200 && $httpCode < 300) {
+                    $json = $response;
+                } else {
+                    $error = '' !== $curlError ? $curlError : 'MaxMind returned HTTP '.$httpCode.'.';
+                }
+            }
+        }
+
+        if ('' === $json) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'error' => '' !== $error ? $error : 'MaxMind GeoIP service did not return a response.',
+            ]);
+        }
+
+        $decoded = json_decode($json, true);
+        if (!is_array($decoded)) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'error' => 'MaxMind GeoIP service returned invalid JSON.',
+            ]);
+        }
+
+        $countryCode = strtoupper((string) ($decoded['country']['iso_code'] ?? $decoded['registered_country']['iso_code'] ?? ''));
+        if ('' === $countryCode) {
+            return array_merge($result, [
+                'status' => 'unavailable',
+                'error' => 'MaxMind GeoIP response did not include a country code.',
+            ]);
+        }
+
+        $status = 'resolved';
+        if ('' !== $declaredCountry) {
+            $status = $declaredCountry === $countryCode ? 'match' : 'mismatch';
+        }
+
+        return array_merge($result, [
+            'status' => $status,
+            'country_code' => $countryCode,
+            'error' => '',
+        ]);
+    }
+
+    /**
+     * Build the first VAT evidence snapshot. VIES and optional GeoIP evidence are recorded when available.
+     */
+    public function buildVatEvidenceSnapshot(array $buyerData, ?array $vatTreatment = null): array
+    {
+        $normalized = $this->normalizeVatBuyerData($buyerData);
+        $seller = $this->getGlobalParameters();
+        $buyerIp = $this->getBuyerIpForVatEvidence();
+        $vatTreatment = $vatTreatment ?? $this->determineVatTreatment($normalized, $seller);
+        $geoIp = $this->resolveBuyerIpCountryForVatEvidence($buyerIp, $normalized['buyer_country']);
+        $ipCountry = $geoIp['country_code'] ?? null;
+
+        return [
+            'version' => 1,
+            'recorded_at' => api_get_utc_datetime(),
+            'seller' => [
+                'name' => (string) ($seller['seller_name'] ?? ''),
+                'address' => (string) ($seller['seller_address'] ?? ''),
+                'country' => strtoupper((string) ($seller['seller_country'] ?? '')),
+                'postcode' => (string) ($seller['seller_postcode'] ?? ''),
+                'vat_number' => (string) ($seller['seller_vat_number'] ?? ''),
+                'vat_registered' => !empty($seller['seller_vat_registered']),
+                'annual_eu_tbe_turnover' => (float) ($seller['seller_annual_eu_tbe_turnover'] ?? 0),
+                'email' => (string) ($seller['seller_email'] ?? ''),
+            ],
+            'buyer' => [
+                'declared_country' => $normalized['buyer_country'],
+                'postcode' => $normalized['buyer_postcode'],
+                'type' => $normalized['buyer_type'],
+                'vat_number' => $normalized['buyer_vat_number'],
+                'business_name' => $normalized['buyer_business_name'],
+                'business_address' => $normalized['buyer_business_address'],
+                'ip' => $buyerIp,
+                'ip_country' => $ipCountry,
+            ],
+            'checks' => [
+                'country_postcode' => 'declared',
+                'geoip' => $geoIp['status'] ?? 'not_configured',
+                'vies' => $vatTreatment['vies_status'] ?? ('business' === $normalized['buyer_type'] && '' !== $normalized['buyer_vat_number'] ? 'pending_validation' : 'not_applicable'),
+            ],
+            'geoip' => $geoIp,
+            'vies' => is_array($vatTreatment['vies_result'] ?? null) ? $vatTreatment['vies_result'] : null,
+            'vat' => [
+                'treatment' => $vatTreatment['treatment'] ?? 'pending_vat_calculation',
+                'rate' => $vatTreatment['vat_rate'] ?? null,
+                'charge_vat' => $vatTreatment['charge_vat'] ?? null,
+                'use_oss' => $vatTreatment['use_oss'] ?? false,
+                'invoice_note' => $vatTreatment['invoice_note'] ?? '',
+            ],
+        ];
+    }
+
+    /**
+     * Save buyer business data in user extra fields so it can be reused later.
+     */
+    public function saveVatBuyerDataInUserExtraFields(int $userId, array $buyerData): void
+    {
+        $userId = (int) $userId;
+
+        if ($userId <= 0) {
+            return;
+        }
+
+        $normalized = $this->normalizeVatBuyerData($buyerData);
+        $fieldMap = [
+            self::EXTRA_FIELD_COMPANY => $normalized['buyer_business_name'],
+            self::EXTRA_FIELD_VAT => $normalized['buyer_vat_number'],
+            self::EXTRA_FIELD_ADDRESS => $normalized['buyer_business_address'],
+        ];
+
+        foreach ($fieldMap as $variable => $value) {
+            if ('' === trim((string) $value)) {
+                continue;
+            }
+
+            $fieldInfo = $this->getUserExtraFieldInfo($variable);
+            if (empty($fieldInfo['id'])) {
+                $fieldId = $this->ensureUserExtraField($variable, $this->get_lang('VATBuyerInformation'));
+            } else {
+                $fieldId = (int) $fieldInfo['id'];
+            }
+
+            $this->saveUserExtraFieldTextValue($userId, $fieldId, (string) $value);
+        }
+    }
+
+    /**
+     * Save a text value in a user extra field.
+     */
+    private function saveUserExtraFieldTextValue(int $userId, int $extraFieldId, string $value): void
+    {
+        $userId = (int) $userId;
+        $extraFieldId = (int) $extraFieldId;
+
+        if ($userId <= 0 || $extraFieldId <= 0) {
+            return;
+        }
+
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $valueColumn = $this->getExtraFieldValueColumn();
+        $escapedValue = Database::escape_string($value);
+
+        $checkSql = "SELECT id
+            FROM $table
+            WHERE field_id = $extraFieldId
+              AND item_id = $userId
+            LIMIT 1";
+        $checkResult = Database::query($checkSql);
+
+        if ($checkResult && Database::num_rows($checkResult) > 0) {
+            $updateData = [
+                $valueColumn => $value,
+            ];
+
+            if (in_array('updated_at', $this->getExtraFieldValueTimestampColumns(), true)) {
+                $updateData['updated_at'] = api_get_utc_datetime();
+            }
+
+            Database::update(
+                $table,
+                $updateData,
+                [
+                    'field_id = ? AND item_id = ?' => [$extraFieldId, $userId],
+                ]
+            );
+
+            return;
+        }
+
+        $insertData = [
+            'field_id' => $extraFieldId,
+            'item_id' => $userId,
+            $valueColumn => $value,
+        ];
+
+        $timestampColumns = $this->getExtraFieldValueTimestampColumns();
+        if (!empty($timestampColumns)) {
+            $now = api_get_utc_datetime();
+
+            if (in_array('created_at', $timestampColumns, true)) {
+                $insertData['created_at'] = $now;
+            }
+
+            if (in_array('updated_at', $timestampColumns, true)) {
+                $insertData['updated_at'] = $now;
+            }
+        }
+
+        Database::insert($table, $insertData);
+    }
+
     /**
      * Register a Service sale.
      *
@@ -4353,12 +7739,129 @@ class BuyCoursesPlugin extends Plugin
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null): int|bool
+    /**
+     * Resolve the tax/VAT to apply to a sale.
+     *
+     * When the buyer declares a country and postcode, the per-country EU VAT rules
+     * (destination VAT, B2B reverse charge, exports, OSS) computed by determineVatTreatment()
+     * are applied. Otherwise it falls back to the flat global/product rate, gated by the
+     * plugin tax settings for the given tax category.
+     *
+     * $normalizedBuyer is passed by reference because the VIES lookup enriches it with the
+     * validation result and any business name/address returned by VIES.
+     *
+     * @param float      $netPrice        Price after discount, before tax
+     * @param int|null   $productTaxPerc  Product-level tax rate (null means "use global")
+     * @param int        $taxCategory     One of the TAX_APPLIES_TO_* constants for this product
+     * @param array      $normalizedBuyer Buyer data already passed through normalizeVatBuyerData()
+     * @param array      $globalParameters Plugin global parameters (seller/tax configuration)
+     *
+     * @return array{price: float, price_without_tax: float|null, tax_perc: float|null, tax_amount: float, vat_treatment: array, vat_evidence: array, buyer_ip: string, buyer_ip_country: string}
+     */
+    private function resolveSaleVat(
+        float $netPrice,
+        ?int $productTaxPerc,
+        int $taxCategory,
+        array &$normalizedBuyer,
+        array $globalParameters
+    ): array {
+        $precision = 2;
+        $taxEnable = 'true' === $this->get('tax_enable');
+        $taxAppliesTo = (int) $globalParameters['tax_applies_to'];
+
+        $price = $netPrice;
+        $priceWithoutTax = null;
+        $taxPerc = null;
+        $taxAmount = 0;
+
+        $hasVatBuyerDeclaration = '' !== $normalizedBuyer['buyer_country']
+            && '' !== $normalizedBuyer['buyer_postcode'];
+
+        $viesResult = $this->validateBuyerVatNumberWithVies($normalizedBuyer);
+        if (in_array($viesResult['status'], ['valid', 'invalid', 'unavailable'], true)) {
+            $normalizedBuyer['buyer_vat_valid'] = $viesResult['valid'];
+            $normalizedBuyer['vies_result'] = $viesResult;
+
+            if (true === $viesResult['valid']) {
+                if ('' !== trim((string) ($viesResult['business_name'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_name'] = substr((string) $viesResult['business_name'], 0, 255);
+                }
+
+                if ('' !== trim((string) ($viesResult['business_address'] ?? ''))) {
+                    $normalizedBuyer['buyer_business_address'] = (string) $viesResult['business_address'];
+                }
+            }
+        }
+
+        $vatTreatment = $this->determineVatTreatment($normalizedBuyer, $globalParameters);
+
+        if ($hasVatBuyerDeclaration) {
+            $priceWithoutTax = $netPrice;
+            $taxPerc = !empty($vatTreatment['charge_vat']) && null !== $vatTreatment['vat_rate']
+                ? (float) $vatTreatment['vat_rate']
+                : 0.00;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        } elseif ($taxEnable
+            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || $taxCategory == $taxAppliesTo)
+        ) {
+            $priceWithoutTax = $netPrice;
+            $globalTaxPerc = $globalParameters['global_tax_perc'];
+            $taxPerc = null === $productTaxPerc ? $globalTaxPerc : $productTaxPerc;
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $price = $priceWithoutTax + $taxAmount;
+        }
+
+        $vatEvidence = $this->buildVatEvidenceSnapshot($normalizedBuyer, $vatTreatment);
+
+        return [
+            'price' => $price,
+            'price_without_tax' => $priceWithoutTax,
+            'tax_perc' => $taxPerc,
+            'tax_amount' => $taxAmount,
+            'vat_treatment' => $vatTreatment,
+            'vat_evidence' => $vatEvidence,
+            'buyer_ip' => (string) ($vatEvidence['buyer']['ip'] ?? ''),
+            'buyer_ip_country' => (string) ($vatEvidence['buyer']['ip_country'] ?? ''),
+        ];
+    }
+
+    /**
+     * Build the persisted VAT/buyer columns shared by all sale tables.
+     *
+     * @param array $normalizedBuyer Buyer data enriched by resolveSaleVat()
+     * @param array $vat             Result array returned by resolveSaleVat()
+     */
+    private function buildSaleVatColumns(array $normalizedBuyer, array $vat): array
     {
+        return [
+            'buyer_country' => $normalizedBuyer['buyer_country'] ?: null,
+            'buyer_postcode' => $normalizedBuyer['buyer_postcode'] ?: null,
+            'buyer_ip' => '' !== $vat['buyer_ip'] ? $vat['buyer_ip'] : null,
+            'buyer_ip_country' => '' !== $vat['buyer_ip_country'] ? $vat['buyer_ip_country'] : null,
+            'buyer_vat_number' => $normalizedBuyer['buyer_vat_number'] ?: null,
+            'buyer_vat_valid' => null === $normalizedBuyer['buyer_vat_valid']
+                ? null
+                : (int) (bool) $normalizedBuyer['buyer_vat_valid'],
+            'buyer_business_name' => $normalizedBuyer['buyer_business_name'] ?: null,
+            'buyer_business_address' => $normalizedBuyer['buyer_business_address'] ?: null,
+            'vat_treatment' => $vat['vat_treatment']['treatment'] ?? 'pending_vat_calculation',
+            'vat_rate' => $vat['vat_treatment']['vat_rate'] ?? null,
+            'vat_evidence_json' => json_encode($vat['vat_evidence'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ];
+    }
+
+    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): int|bool
+    {
+        $this->lastServiceSaleError = '';
+        $this->lastServiceSaleWasReused = false;
+
         if (!in_array(
             $paymentType,
-            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI]
+            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI, self::PAYMENT_TYPE_STRIPE]
         )) {
+            $this->lastServiceSaleError = $this->get_lang('InvalidPaymentMethod');
+
             return false;
         }
 
@@ -4366,54 +7869,145 @@ class BuyCoursesPlugin extends Plugin
         $service = $this->getService($serviceId);
 
         if (empty($service)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceNotFound');
+
+            return false;
+        }
+
+        if (!$this->isServiceActive($service)) {
+            $this->lastServiceSaleError = $this->get_lang('ServiceInactiveForPurchase');
+
             return false;
         }
 
         $nodeType = (int) ($service['applies_to'] ?? 0);
         $nodeId = (int) $infoSelect;
 
+        $purchaseUpsaleChainBlock = $this->getServicePurchaseUpsaleChainBlock($serviceId, $userId);
+        if (null !== $purchaseUpsaleChainBlock) {
+            $this->lastServiceSaleError = $this->formatServicePurchaseUpsaleChainBlockMessage(
+                $purchaseUpsaleChainBlock
+            );
+
+            return false;
+        }
+
         if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
+            $this->lastServiceSaleError = get_lang('Active service');
+
             return false;
         }
 
         $coupon = null;
-
-        if (null != $couponId) {
+        if (null !== $couponId) {
             $coupon = $this->getCouponService($couponId, $serviceId);
         }
 
-        $couponDiscount = 0;
-        $priceWithoutDiscount = 0;
-        if (null != $coupon) {
-            if (self::COUPON_DISCOUNT_TYPE_AMOUNT == $coupon['discount_type']) {
-                $couponDiscount = $coupon['discount_amount'];
-            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
-                $couponDiscount = ($service['price'] * $coupon['discount_amount']) / 100;
+        $basePrice = max(0.0, (float) ($service['price'] ?? 0));
+        $couponDiscount = 0.0;
+        $priceWithoutDiscount = 0.0;
+
+        if (null !== $coupon) {
+            if (self::COUPON_DISCOUNT_TYPE_AMOUNT === (int) ($coupon['discount_type'] ?? 0)) {
+                $couponDiscount = (float) ($coupon['discount_amount'] ?? 0);
+            } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE === (int) ($coupon['discount_type'] ?? 0)) {
+                $couponDiscount = ($basePrice * (float) ($coupon['discount_amount'] ?? 0)) / 100;
             }
-            $priceWithoutDiscount = $service['price'];
+
+            $couponDiscount = min($basePrice, max(0.0, round($couponDiscount, 2)));
+            $priceWithoutDiscount = $basePrice;
         }
-        $service['price'] -= $couponDiscount;
+
+        $couponTimesApplied = null !== $coupon ? max(0, (int) ($coupon['times_applied'] ?? 0)) : 0;
+        $limitedRecurringCoupon = !empty($service['renewable']) && $couponTimesApplied > 0;
+        $recurringPriceWithoutTax = $limitedRecurringCoupon
+            ? round($basePrice, 2)
+            : round(max(0.0, $basePrice - $couponDiscount), 2);
+        $upgradeOffer = $this->getServiceUpgradeOffer($serviceId, $userId, $coupon);
+        $upgradeCreditAmount = 0.0;
+        $upgradeFromSaleId = null;
+
+        if (null !== $upgradeOffer) {
+            if (empty($upgradeOffer['purchasable'])) {
+                $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
+
+                return false;
+            }
+
+            $requiredPaymentType = isset($upgradeOffer['required_payment_type'])
+                ? (int) $upgradeOffer['required_payment_type']
+                : 0;
+
+            if ($requiredPaymentType > 0 && $requiredPaymentType !== $paymentType) {
+                $this->lastServiceSaleError = $this->get_lang('UpgradeMustUseExistingPaymentGateway');
+
+                return false;
+            }
+
+            $upgradeCreditAmount = max(0.0, (float) ($upgradeOffer['credit_amount'] ?? 0));
+            $upgradeFromSaleId = (int) ($upgradeOffer['source_sale_id'] ?? 0);
+
+            $pendingUpgradeSale = $this->getPendingServiceUpgradeSale(
+                $userId,
+                $serviceId,
+                $upgradeFromSaleId,
+                $nodeType,
+                $nodeId
+            );
+
+            if (!empty($pendingUpgradeSale['id'])) {
+                $this->lastServiceSaleWasReused = true;
+
+                return (int) $pendingUpgradeSale['id'];
+            }
+        }
+
+        $firstChargePriceWithoutTax = null !== $upgradeOffer
+            ? round(max(0.0, (float) ($upgradeOffer['upgrade_price_without_tax'] ?? 0)), 2)
+            : round(max(0.0, $basePrice - $couponDiscount), 2);
+
+        if ($firstChargePriceWithoutTax <= 0) {
+            $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
+
+            return false;
+        }
+
         $currency = $this->getSelectedCurrency();
-        $price = $service['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
-        $taxAmount = 0;
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
 
-        if ($taxEnable
-            && (self::TAX_APPLIES_TO_ALL == $taxAppliesTo || self::TAX_APPLIES_TO_ONLY_SERVICES == $taxAppliesTo)
+        $firstChargeVat = $this->resolveSaleVat(
+            $firstChargePriceWithoutTax,
+            null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
+            self::TAX_APPLIES_TO_ONLY_SERVICES,
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
+        $recurringVat = $this->resolveSaleVat(
+            $recurringPriceWithoutTax,
+            null === $service['tax_perc'] ? null : (int) $service['tax_perc'],
+            self::TAX_APPLIES_TO_ONLY_SERVICES,
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
+
+        $now = api_get_utc_datetime();
+        $dateEnd = date_format(
+            date_add(
+                date_create($now),
+                date_interval_create_from_date_string($service['duration_days'].' days')
+            ),
+            'Y-m-d H:i:s'
+        );
+
+        if (null !== $upgradeOffer
+            && !empty($upgradeOffer['source_recurring_enabled'])
+            && !empty($upgradeOffer['source_date_end'])
         ) {
-            $priceWithoutTax = $service['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $service['tax_perc'] ? $globalTaxPerc : $service['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
+            $dateEnd = (string) $upgradeOffer['source_date_end'];
         }
 
-        $values = [
+        $values = array_merge([
             'service_id' => $serviceId,
             'reference' => $this->generateReference(
                 $userId,
@@ -4421,30 +8015,46 @@ class BuyCoursesPlugin extends Plugin
                 $infoSelect
             ),
             'currency_id' => $currency['id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $firstChargeVat['price'],
+            'price_without_tax' => $firstChargeVat['price_without_tax'],
+            'tax_perc' => $firstChargeVat['tax_perc'],
+            'tax_amount' => $firstChargeVat['tax_amount'],
             'node_type' => $nodeType,
             'node_id' => $nodeId,
             'buyer_id' => $userId,
-            'buy_date' => api_get_utc_datetime(),
-            'date_start' => api_get_utc_datetime(),
-            'date_end' => date_format(
-                date_add(
-                    date_create(api_get_utc_datetime()),
-                    date_interval_create_from_date_string($service['duration_days'].' days')
-                ),
-                'Y-m-d H:i:s'
-            ),
+            'buy_date' => $now,
+            'date_start' => $now,
+            'date_end' => $dateEnd,
             'status' => self::SERVICE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
+            'upgrade_from_sale_id' => $upgradeFromSaleId,
+            'upgrade_credit_amount' => $upgradeCreditAmount > 0 ? $upgradeCreditAmount : null,
+            'recurring_amount' => !empty($service['renewable']) ? $recurringVat['price'] : null,
             'invoice' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $firstChargeVat));
 
-        return Database::insert(self::TABLE_SERVICES_SALE, $values);
+        $serviceSaleId = Database::insert(self::TABLE_SERVICES_SALE, $values);
+
+        if ($serviceSaleId) {
+            $this->saveVatBuyerDataInUserExtraFields($userId, $normalizedVatBuyerData);
+            $this->recordAudit(
+                self::AUDIT_ACTION_SERVICE_SALE_CREATED,
+                self::AUDIT_OBJECT_SERVICE_SALE,
+                (int) $serviceSaleId,
+                [
+                    'service_id' => $serviceId,
+                    'payment_type' => $paymentType,
+                    'status' => self::SERVICE_STATUS_PENDING,
+                    'upgrade_from_sale_id' => $upgradeFromSaleId,
+                ],
+                $userId,
+                self::AUDIT_SOURCE_USER
+            );
+        }
+
+        return $serviceSaleId;
     }
 
     /**
@@ -4537,6 +8147,18 @@ class BuyCoursesPlugin extends Plugin
             'seller_name' => $params['seller_name'] ?? $defaultParams['seller_name'],
             'seller_id' => $params['seller_id'] ?? $defaultParams['seller_id'],
             'seller_address' => $params['seller_address'] ?? $defaultParams['seller_address'],
+            'seller_country' => strtoupper(trim((string) ($params['seller_country'] ?? $defaultParams['seller_country']))),
+            'seller_postcode' => trim((string) ($params['seller_postcode'] ?? $defaultParams['seller_postcode'])),
+            'seller_vat_number' => trim((string) ($params['seller_vat_number'] ?? $defaultParams['seller_vat_number'])),
+            'seller_vat_registered' => !empty($params['seller_vat_registered']) ? 1 : 0,
+            'seller_annual_eu_tbe_turnover' => isset($params['seller_annual_eu_tbe_turnover'])
+                ? (float) $params['seller_annual_eu_tbe_turnover']
+                : (float) $defaultParams['seller_annual_eu_tbe_turnover'],
+            'vat_geoip_provider' => in_array(($params['vat_geoip_provider'] ?? $defaultParams['vat_geoip_provider']), ['none', 'maxmind_web_service'], true)
+                ? ($params['vat_geoip_provider'] ?? $defaultParams['vat_geoip_provider'])
+                : 'none',
+            'vat_maxmind_account_id' => trim((string) ($params['vat_maxmind_account_id'] ?? $defaultParams['vat_maxmind_account_id'])),
+            'vat_maxmind_license_key' => trim((string) ($params['vat_maxmind_license_key'] ?? $defaultParams['vat_maxmind_license_key'])),
             'seller_email' => $params['seller_email'] ?? $defaultParams['seller_email'],
             'next_number_invoice' => isset($params['next_number_invoice']) ? (int) $params['next_number_invoice'] : (int) $defaultParams['next_number_invoice'],
             'invoice_series' => $params['invoice_series'] ?? $defaultParams['invoice_series'],
@@ -4562,6 +8184,14 @@ class BuyCoursesPlugin extends Plugin
             'seller_name' => '',
             'seller_id' => '',
             'seller_address' => '',
+            'seller_country' => '',
+            'seller_postcode' => '',
+            'seller_vat_number' => '',
+            'seller_vat_registered' => 0,
+            'seller_annual_eu_tbe_turnover' => 0.00,
+            'vat_geoip_provider' => 'none',
+            'vat_maxmind_account_id' => '',
+            'vat_maxmind_license_key' => '',
             'seller_email' => '',
             'next_number_invoice' => 0,
             'invoice_series' => '',
@@ -4605,6 +8235,20 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return false;
+    }
+
+    /**
+     * Map a product type to the matching "tax applies to" category, so the displayed
+     * price uses the same tax rule as the sale. Services are always services; everything
+     * else is a course unless it is explicitly a session.
+     */
+    public function getTaxCategoryForProductType(int $productType): int
+    {
+        return match ($productType) {
+            self::PRODUCT_TYPE_SESSION => self::TAX_APPLIES_TO_ONLY_SESSION,
+            self::PRODUCT_TYPE_SERVICE => self::TAX_APPLIES_TO_ONLY_SERVICES,
+            default => self::TAX_APPLIES_TO_ONLY_COURSE,
+        };
     }
 
     /**
@@ -4722,7 +8366,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function registerCouponServiceSale(int $saleId, int $couponId): bool
     {
-        $sale = $this->getSale($saleId);
+        $sale = $this->getServiceSale($saleId);
 
         if (empty($sale)) {
             return false;
@@ -4731,6 +8375,7 @@ class BuyCoursesPlugin extends Plugin
         $values = [
             'coupon_id' => $couponId,
             'service_sale_id' => $saleId,
+            'applied_count' => 1,
         ];
 
         return Database::insert(self::TABLE_COUPON_SERVICE_SALE, $values) > 0;
@@ -4933,6 +8578,61 @@ class BuyCoursesPlugin extends Plugin
         return $this->getDataCouponServiceByCode($couponCode, $serviceId);
     }
 
+    public function getServiceSaleCouponUsage(int $serviceSaleId): array
+    {
+        if ($serviceSaleId <= 0) {
+            return [];
+        }
+
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
+
+        $couponFrom = "
+            $couponTable c
+            INNER JOIN $couponServiceSaleTable cs
+                ON c.id = cs.coupon_id
+        ";
+
+        $coupon = Database::select(
+            [
+                'c.*',
+                'cs.id AS coupon_service_sale_id',
+                'cs.applied_count',
+            ],
+            $couponFrom,
+            [
+                'where' => [
+                    'cs.service_sale_id = ? ' => $serviceSaleId,
+                ],
+            ],
+            'first'
+        );
+
+        return is_array($coupon) ? $coupon : [];
+    }
+
+    public function incrementServiceSaleCouponAppliedCount(int $serviceSaleId): int
+    {
+        $coupon = $this->getServiceSaleCouponUsage($serviceSaleId);
+        $couponServiceSaleId = (int) ($coupon['coupon_service_sale_id'] ?? 0);
+
+        if ($couponServiceSaleId <= 0) {
+            return 0;
+        }
+
+        $appliedCount = max(0, (int) ($coupon['applied_count'] ?? 0)) + 1;
+
+        Database::update(
+            self::TABLE_COUPON_SERVICE_SALE,
+            [
+                'applied_count' => $appliedCount,
+            ],
+            ['id = ?' => $couponServiceSaleId]
+        );
+
+        return $appliedCount;
+    }
+
     /**
      * Get the coupon code of a item sale.
      *
@@ -4962,7 +8662,11 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
 
-        return $couponCode['code'];
+        if (!is_array($couponCode) || empty($couponCode['code'])) {
+            return '';
+        }
+
+        return (string) $couponCode['code'];
     }
 
     /**
@@ -4994,7 +8698,11 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
 
-        return $couponCode['code'];
+        if (!is_array($couponCode) || empty($couponCode['code'])) {
+            return '';
+        }
+
+        return (string) $couponCode['code'];
     }
 
     /**
@@ -5039,7 +8747,8 @@ class BuyCoursesPlugin extends Plugin
         int $productType,
         int $paymentType,
         int $duration,
-        ?int $couponId = null
+        ?int $couponId = null,
+        array $vatBuyerData = []
     ) {
         if (!in_array(
             $paymentType,
@@ -5099,32 +8808,20 @@ class BuyCoursesPlugin extends Plugin
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
-        $price = $item['price'];
-        $priceWithoutTax = null;
-        $taxPerc = null;
-        $taxAmount = 0;
-        $taxEnable = 'true' === $this->get('tax_enable');
         $globalParameters = $this->getGlobalParameters();
-        $taxAppliesTo = $globalParameters['tax_applies_to'];
 
-        if ($taxEnable
-            && (
-                self::TAX_APPLIES_TO_ALL == $taxAppliesTo
-                || (self::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && self::PRODUCT_TYPE_COURSE == $item['product_type'])
-                || (self::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && self::PRODUCT_TYPE_SESSION == $item['product_type'])
-            )
-        ) {
-            $priceWithoutTax = $item['price'];
-            $globalTaxPerc = $globalParameters['global_tax_perc'];
-            $precision = 2;
-            $taxPerc = null === $item['tax_perc'] ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
-            $price = $priceWithoutTax + $taxAmount;
-        }
+        $normalizedVatBuyerData = $this->normalizeVatBuyerData($vatBuyerData);
+        $vat = $this->resolveSaleVat(
+            (float) $item['price'],
+            null === $item['tax_perc'] ? null : (int) $item['tax_perc'],
+            $this->getTaxCategoryForProductType((int) $item['product_type']),
+            $normalizedVatBuyerData,
+            $globalParameters
+        );
 
         $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
 
-        $values = [
+        $values = array_merge([
             'reference' => $this->generateReference(
                 api_get_user_id(),
                 $item['product_type'],
@@ -5136,10 +8833,10 @@ class BuyCoursesPlugin extends Plugin
             'product_type' => $item['product_type'],
             'product_name' => $productName,
             'product_id' => $item['product_id'],
-            'price' => $price,
-            'price_without_tax' => $priceWithoutTax,
-            'tax_perc' => $taxPerc,
-            'tax_amount' => $taxAmount,
+            'price' => $vat['price'],
+            'price_without_tax' => $vat['price_without_tax'],
+            'tax_perc' => $vat['tax_perc'],
+            'tax_amount' => $vat['tax_amount'],
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
@@ -5147,9 +8844,15 @@ class BuyCoursesPlugin extends Plugin
             'invoice' => 0,
             'subscription_end' => $subscriptionEnd,
             'expired' => 0,
-        ];
+        ], $this->buildSaleVatColumns($normalizedVatBuyerData, $vat));
 
-        return Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+        $subscriptionSaleId = Database::insert(self::TABLE_SUBSCRIPTION_SALE, $values);
+
+        if ($subscriptionSaleId) {
+            $this->saveVatBuyerDataInUserExtraFields(api_get_user_id(), $normalizedVatBuyerData);
+        }
+
+        return $subscriptionSaleId;
     }
 
     /**
@@ -5284,7 +8987,7 @@ class BuyCoursesPlugin extends Plugin
 
         $subscription['iso_code'] = $currency['iso_code'];
 
-        $this->setPriceSettings($subscription, self::TAX_APPLIES_TO_ONLY_COURSE, $coupon);
+        $this->setPriceSettings($subscription, $this->getTaxCategoryForProductType($productType), $coupon);
 
         return $subscription;
     }
@@ -6390,7 +10093,7 @@ class BuyCoursesPlugin extends Plugin
     private function filterSubscriptionCourseList(
         int $start,
         int $end,
-        string $name = '',
+        ?string $name = null,
         string $typeResult = 'all'
     ): array|int {
         $subscriptionTable = Database::get_main_table(self::TABLE_SUBSCRIPTION);
@@ -6465,10 +10168,10 @@ class BuyCoursesPlugin extends Plugin
     private function updateServiceSaleStatus(
         int $serviceSaleId,
         int $newStatus = self::SERVICE_STATUS_PENDING
-    ): void {
+    ): bool {
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
-        Database::update(
+        return false !== Database::update(
             $serviceSaleTable,
             ['status' => $newStatus],
             ['id = ?' => $serviceSaleId]
@@ -6763,6 +10466,7 @@ class BuyCoursesPlugin extends Plugin
         $values = [
             'valid_start' => $coupon['valid_start'],
             'valid_end' => $coupon['valid_end'],
+            'times_applied' => max(0, (int) ($coupon['times_applied'] ?? 0)),
             'active' => $coupon['active'],
         ];
 
@@ -6795,6 +10499,7 @@ class BuyCoursesPlugin extends Plugin
             'code' => (string) $coupon['code'],
             'discount_type' => (int) $coupon['discount_type'],
             'discount_amount' => $coupon['discount_amount'],
+            'times_applied' => max(0, (int) ($coupon['times_applied'] ?? 0)),
             'valid_start' => $coupon['valid_start'],
             'valid_end' => $coupon['valid_end'],
             'delivered' => 0,
@@ -7136,6 +10841,35 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Return timestamp columns available on extra_field_values.
+     * Some Chamilo 2 installations enforce NOT NULL created_at/updated_at.
+     *
+     * @return string[]
+     */
+    private function getExtraFieldValueTimestampColumns(): array
+    {
+        static $columns = null;
+
+        if (null !== $columns) {
+            return $columns;
+        }
+
+        $columns = [];
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $result = Database::query("SHOW COLUMNS FROM $table");
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $fieldName = (string) ($row['Field'] ?? '');
+
+            if (in_array($fieldName, ['created_at', 'updated_at'], true)) {
+                $columns[] = $fieldName;
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
      * Return all benefit relations configured for a service.
      */
     public function getServiceBenefitRelations(int $serviceId): array
@@ -7178,9 +10912,7 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $valueColumn = $this->getExtraFieldValueColumn();
-        $jsonValue = Database::escape_string(
-            json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-        );
+        $jsonValue = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         $checkSql = "SELECT id
                  FROM $table
@@ -7190,11 +10922,21 @@ class BuyCoursesPlugin extends Plugin
         $checkResult = Database::query($checkSql);
 
         if ($checkResult && Database::num_rows($checkResult) > 0) {
-            $sql = "UPDATE $table
-                SET $valueColumn = '$jsonValue'
-                WHERE field_id = $extraFieldId
-                  AND item_id = $userId";
-            Database::query($sql);
+            $updateData = [
+                $valueColumn => $jsonValue,
+            ];
+
+            if (in_array('updated_at', $this->getExtraFieldValueTimestampColumns(), true)) {
+                $updateData['updated_at'] = api_get_utc_datetime();
+            }
+
+            Database::update(
+                $table,
+                $updateData,
+                [
+                    'field_id = ? AND item_id = ?' => [$extraFieldId, $userId],
+                ]
+            );
 
             return;
         }
@@ -7204,6 +10946,19 @@ class BuyCoursesPlugin extends Plugin
             'item_id' => $userId,
             $valueColumn => $jsonValue,
         ];
+
+        $timestampColumns = $this->getExtraFieldValueTimestampColumns();
+        if (!empty($timestampColumns)) {
+            $now = api_get_utc_datetime();
+
+            if (in_array('created_at', $timestampColumns, true)) {
+                $insertData['created_at'] = $now;
+            }
+
+            if (in_array('updated_at', $timestampColumns, true)) {
+                $insertData['updated_at'] = $now;
+            }
+        }
 
         Database::insert($table, $insertData);
     }
@@ -7425,6 +11180,102 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Count managed courses that are not linked to a BuyCourses service.
+     */
+    public function countStandardManagedCoursesByUser(int $userId): int
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0) {
+            return 0;
+        }
+
+        if (!$this->hasSubscriptionCourseInfrastructure()) {
+            return $this->countManagedCoursesByUser($userId);
+        }
+
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+
+        $sql = "SELECT COUNT(DISTINCT cru.c_id) AS total
+            FROM $courseUserTable cru
+            LEFT JOIN $subscriptionCourseTable sc
+                ON sc.course_id = cru.c_id
+                AND sc.status <> 'deleted'
+                AND sc.deleted_at IS NULL
+            WHERE cru.user_id = $userId
+              AND cru.status = ".COURSEMANAGER."
+              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+              AND sc.id IS NULL";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Return service labels for paid courses managed by the current user.
+     *
+     * @param int[] $courseIds
+     *
+     * @return array<int, array{serviceName: string}>
+     */
+    public function getManagedCourseServiceLabelsForUser(int $userId, array $courseIds): array
+    {
+        $userId = (int) $userId;
+        $courseIds = array_values(array_unique(array_filter(
+            array_map('intval', $courseIds),
+            static fn (int $courseId): bool => $courseId > 0
+        )));
+
+        if ($userId <= 0 || empty($courseIds) || !$this->hasSubscriptionCourseInfrastructure()) {
+            return [];
+        }
+
+        $courseIds = array_slice($courseIds, 0, 100);
+        $courseIdsSql = implode(',', $courseIds);
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT sc.course_id, s.name AS service_name
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $servicesTable s ON s.id = sc.service_id
+            INNER JOIN $courseTable c ON c.id = sc.course_id
+            INNER JOIN $courseUserTable cru
+                ON cru.c_id = sc.course_id
+                AND cru.user_id = $userId
+                AND cru.status = ".COURSEMANAGER."
+                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+            WHERE sc.course_id IN ($courseIdsSql)
+              AND sc.status <> 'deleted'
+              AND sc.deleted_at IS NULL
+            ORDER BY sc.course_id ASC";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return [];
+        }
+
+        $labels = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $courseId = (int) ($row['course_id'] ?? 0);
+            $serviceName = trim((string) ($row['service_name'] ?? ''));
+
+            if ($courseId <= 0 || '' === $serviceName) {
+                continue;
+            }
+
+            $labels[$courseId] = [
+                'serviceName' => $serviceName,
+            ];
+        }
+
+        return $labels;
+    }
+
+    /**
      * Return the effective max courses limit for a user.
      * Active service benefit wins over the global setting.
      * Zero means unlimited.
@@ -7497,6 +11348,25 @@ class BuyCoursesPlugin extends Plugin
 
         $canCreate = $effectiveLimit <= 0 || $currentCount < $effectiveLimit;
 
+        $message = '';
+        if (!$canCreate) {
+            if ($effectiveLimit <= 0) {
+                $message = 'You cannot create more courses at this time.';
+            } elseif ('service' === $source) {
+                $message = sprintf(
+                    'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.',
+                    $currentCount,
+                    $effectiveLimit
+                );
+            } else {
+                $message = sprintf(
+                    'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.',
+                    $currentCount,
+                    $effectiveLimit
+                );
+            }
+        }
+
         return [
             'canCreate' => $canCreate,
             'currentCount' => $currentCount,
@@ -7504,7 +11374,7 @@ class BuyCoursesPlugin extends Plugin
             'serviceLimit' => $serviceLimit,
             'globalLimit' => $globalLimit,
             'limitSource' => $source,
-            'message' => $canCreate ? '' : $this->getCourseCreationLimitMessage($userId),
+            'message' => $message,
         ];
     }
 
@@ -7513,29 +11383,409 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCourseCreationLimitMessage(int $userId): string
     {
-        $status = $this->getCourseCreationCapabilityStatus($userId);
+        return (string) ($this->getCourseCreationCapabilityStatus($userId)['message'] ?? '');
+    }
 
-        $limit = (int) $status['effectiveLimit'];
-        $currentCount = (int) $status['currentCount'];
-        $source = (string) $status['limitSource'];
 
-        if ($limit <= 0) {
-            return 'You cannot create more courses at this time.';
+    /**
+     * Build course creation options exposed to the modern course creation page.
+     */
+    public function getCourseCreationOptionsForUser(int $userId): array
+    {
+        $userId = (int) $userId;
+        $standardOption = $this->getStandardCourseCreationOptionForUser($userId);
+        $serviceOptions = $this->getDisplayedServiceCourseCreationOptionsForUser($userId);
+
+        $hasAvailableService = false;
+        foreach ($serviceOptions as $serviceOption) {
+            if (!empty($serviceOption['available'])) {
+                $hasAvailableService = true;
+                break;
+            }
         }
 
-        if ('service' === $source) {
-            return sprintf(
-                'You already manage %d courses and your active service allows up to %d. To create another course, you need a higher service limit or reduce your current active courses.',
-                $currentCount,
-                $limit
+        return [
+            'canCreate' => !empty($standardOption['available']) || $hasAvailableService,
+            'hasServiceOptions' => !empty($serviceOptions),
+            'standard' => $standardOption,
+            'services' => $serviceOptions,
+        ];
+    }
+
+    /**
+     * Return the standard platform limits shown as the first course creation option.
+     */
+    public function getStandardCourseCreationOptionForUser(int $userId): array
+    {
+        $userId = (int) $userId;
+        $currentCount = $this->countStandardManagedCoursesByUser($userId);
+        $globalMaxCourses = max(0, (int) api_get_setting('platform.max_courses_per_user'));
+        $hostingLimit = max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
+        $documentQuotaMb = max(0, (int) api_get_setting('document.default_document_quotum'));
+        $available = $globalMaxCourses <= 0 || $currentCount < $globalMaxCourses;
+
+        return [
+            'type' => 'standard',
+            'id' => null,
+            'label' => $this->get_lang('StandardCourseOption'),
+            'description' => $this->get_lang('StandardCourseOptionDescription'),
+            'available' => $available,
+            'disabledReason' => $available ? null : 'platform_limit_reached',
+            'currentCourses' => $currentCount,
+            'maxCourses' => $globalMaxCourses,
+            'hostingLimit' => $hostingLimit,
+            'documentQuotaMb' => $documentQuotaMb,
+            'buyUrl' => null,
+            'serviceId' => null,
+            'serviceSaleId' => null,
+        ];
+    }
+
+    /**
+     * Return service options configured to appear on the course creation page.
+     */
+    public function getDisplayedServiceCourseCreationOptionsForUser(int $userId): array
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0 || 'true' !== $this->get('include_services') || !$this->hasCourseCreationServiceInfrastructure()) {
+            return [];
+        }
+
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $serviceIds = Database::select(
+            'id',
+            $servicesTable,
+            [
+                'where' => [
+                    'display_on_course_creation_page = ? AND applies_to = ? AND visibility = ?' => [
+                        1,
+                        self::SERVICE_TYPE_USER,
+                        1,
+                    ],
+                ],
+                'ORDER' => 'id ASC',
+            ]
+        );
+
+        $preferredActiveServiceIds = [];
+        foreach ($this->getHighestActiveUserServiceSales($userId) as $preferredActiveServiceSale) {
+            $preferredServiceId = (int) ($preferredActiveServiceSale['service_id'] ?? 0);
+            if ($preferredServiceId > 0) {
+                $preferredActiveServiceIds[$preferredServiceId] = true;
+            }
+        }
+
+        $options = [];
+        foreach ($serviceIds as $serviceRow) {
+            $serviceId = (int) ($serviceRow['id'] ?? 0);
+            if ($serviceId <= 0) {
+                continue;
+            }
+
+            $service = $this->getService($serviceId);
+            if (empty($service)) {
+                continue;
+            }
+
+            $benefits = $this->getServiceCourseCreationBenefitValues($serviceId);
+            $activeSale = $this->getBestActiveServiceSaleForCourseCreation($userId, $serviceId, $benefits['maxCourses']);
+            if (!$this->isServiceActive($service) && null === $activeSale) {
+                continue;
+            }
+            $usedCourses = null !== $activeSale
+                ? $this->countCoursesLinkedToServiceSale((int) $activeSale['id'])
+                : 0;
+
+            $hasActiveSale = null !== $activeSale;
+            $purchaseUpsaleChainBlock = !$hasActiveSale
+                ? $this->getServicePurchaseUpsaleChainBlock($serviceId, $userId)
+                : null;
+            $upgradeOffer = !$hasActiveSale && null === $purchaseUpsaleChainBlock
+                ? $this->getServiceUpgradeOffer($serviceId, $userId)
+                : null;
+            $availableByLimit = $benefits['maxCourses'] <= 0 || $usedCourses < $benefits['maxCourses'];
+            $available = $hasActiveSale && $availableByLimit;
+
+            $disabledReason = null;
+            if (!$hasActiveSale && null === $purchaseUpsaleChainBlock) {
+                $disabledReason = 'service_not_purchased';
+            } elseif (!$availableByLimit) {
+                $disabledReason = 'service_course_limit_reached';
+            }
+
+            $options[] = [
+                'type' => 'service',
+                'id' => $serviceId,
+                'label' => (string) ($service['name'] ?? ''),
+                'description' => $this->filterServiceMultilingualHtml((string) ($service['description'] ?? '')),
+                'available' => $available,
+                'disabledReason' => $disabledReason,
+                'serviceId' => $serviceId,
+                'serviceSaleId' => null !== $activeSale ? (int) $activeSale['id'] : null,
+                'preferredForCourseCreation' => $hasActiveSale && isset($preferredActiveServiceIds[$serviceId]),
+                'currentCourses' => $usedCourses,
+                'usedCourses' => $usedCourses,
+                'maxCourses' => $benefits['maxCourses'],
+                'hostingLimit' => $benefits['hostingLimit'],
+                'documentQuotaMb' => $benefits['documentQuotaMb'],
+                'aiFeatures' => $benefits['aiFeatures'],
+                'aiFeatureSummary' => $this->getAiCourseFeatureSummary($benefits['aiFeatures']),
+                'price' => $service['price_label'] ?? ($service['price_with_tax'] ?? ($service['price'] ?? null)),
+                'currency' => $service['iso_code'] ?? null,
+                'isUpgrade' => null !== $upgradeOffer,
+                'purchaseBlockedByActiveUpsaleChain' => null !== $purchaseUpsaleChainBlock,
+                'buyLabel' => $this->get_lang(null !== $upgradeOffer ? 'Upgrade' : 'Buy'),
+                'upgradeFromServiceName' => null !== $upgradeOffer
+                    ? (string) ($upgradeOffer['source_service_name'] ?? '')
+                    : null,
+                'upgradePrice' => null !== $upgradeOffer
+                    ? (string) ($upgradeOffer['upgrade_price_without_tax_formatted'] ?? '')
+                    : null,
+                'buyUrl' => null !== $purchaseUpsaleChainBlock
+                    || (null !== $upgradeOffer && empty($upgradeOffer['purchasable']))
+                    ? null
+                    : api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.self::SERVICE_TYPE_USER,
+                'informationUrl' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId,
+                'informationLabel' => get_lang('More information'),
+            ];
+        }
+
+        return $options;
+    }
+
+    /**
+     * Return benefit values configured for a service and useful on course creation.
+     */
+    public function getServiceCourseCreationBenefitValues(int $serviceId): array
+    {
+        $configurations = $this->getServiceBenefitConfigurations($serviceId);
+
+        $service = $this->getService($serviceId);
+
+        return [
+            'maxCourses' => (int) ($configurations[self::EXTRA_FIELD_MAX_COURSES]['granted_value'] ?? 0),
+            'hostingLimit' => (int) ($configurations[self::EXTRA_FIELD_HOSTING_LIMIT]['granted_value'] ?? 0),
+            'documentQuotaMb' => (int) ($configurations[self::EXTRA_FIELD_DOCUMENT_QUOTA]['granted_value'] ?? 0),
+            'aiFeatures' => !empty($service) && is_array($service)
+                ? $this->normalizeAiCourseFeatures($service['ai_course_features_json'] ?? [])
+                : [],
+        ];
+    }
+
+    /**
+     * Validate that a selected service sale can be used to create a course with BuyCourses benefits.
+     */
+    public function getCourseCreationServiceSaleSelectionStatus(int $userId, int $serviceSaleId): array
+    {
+        $userId = (int) $userId;
+        $serviceSaleId = (int) $serviceSaleId;
+
+        if ($userId <= 0 || $serviceSaleId <= 0) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('InvalidCourseCreationServiceSelection'),
+                'reason' => 'invalid_selection',
+                'sale' => null,
+            ];
+        }
+
+        if ('true' !== $this->get('include_services')) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('BuyCoursesServicesDisabled'),
+                'reason' => 'services_disabled',
+                'sale' => null,
+            ];
+        }
+
+        if (!$this->hasCourseCreationServiceInfrastructure()) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('SelectedServiceUnavailableForCourseCreation'),
+                'reason' => 'service_infrastructure_unavailable',
+                'sale' => null,
+            ];
+        }
+
+        $salesTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT
+                ss.*,
+                s.name AS service_name,
+                s.display_on_course_creation_page,
+                s.applies_to,
+                s.visibility,
+                s.renewable
+            FROM $salesTable ss
+            INNER JOIN $servicesTable s ON s.id = ss.service_id
+            WHERE
+                ss.id = $serviceSaleId
+                AND ss.buyer_id = $userId
+                AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+                AND ss.date_end >= '$now'
+                AND s.display_on_course_creation_page = 1
+                AND s.applies_to = ".self::SERVICE_TYPE_USER."
+                AND s.visibility = 1
+            LIMIT 1";
+
+        $result = Database::query($sql);
+        if (false === $result || 0 === Database::num_rows($result)) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('SelectedServiceUnavailableForCourseCreation'),
+                'reason' => 'service_sale_unavailable',
+                'sale' => null,
+            ];
+        }
+
+        $sale = Database::fetch_array($result, 'ASSOC');
+        if (!is_array($sale)) {
+            return [
+                'valid' => false,
+                'message' => $this->get_lang('SelectedServiceUnavailableForCourseCreation'),
+                'reason' => 'service_sale_unavailable',
+                'sale' => null,
+            ];
+        }
+
+        $benefits = $this->getServiceCourseCreationBenefitValues((int) $sale['service_id']);
+        $usedCourses = $this->countCoursesLinkedToServiceSale($serviceSaleId);
+        $maxCourses = max(0, (int) ($benefits['maxCourses'] ?? 0));
+
+        $sale['max_courses_with_benefits'] = max(0, (int) ($benefits['maxCourses'] ?? 0));
+        $sale['hosting_limit'] = max(0, (int) ($benefits['hostingLimit'] ?? 0));
+        $sale['document_quota_mb'] = max(0, (int) ($benefits['documentQuotaMb'] ?? 0));
+        $sale['ai_features'] = $this->normalizeAiCourseFeatures($benefits['aiFeatures'] ?? []);
+
+        if ($maxCourses > 0 && $usedCourses >= $maxCourses) {
+            return [
+                'valid' => false,
+                'message' => sprintf(
+                    $this->get_lang('SelectedServiceCourseLimitReached'),
+                    $maxCourses
+                ),
+                'reason' => 'service_course_limit_reached',
+                'sale' => $sale,
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'message' => '',
+            'reason' => null,
+            'sale' => $sale,
+            'benefits' => $benefits,
+            'usedCourses' => $usedCourses,
+            'maxCourses' => $maxCourses,
+        ];
+    }
+
+    /**
+     * Return the active service sale with more remaining course slots for the requested service.
+     */
+    public function getBestActiveServiceSaleForCourseCreation(int $userId, int $serviceId, int $maxCourses = 0): ?array
+    {
+        $userId = (int) $userId;
+        $serviceId = (int) $serviceId;
+        $maxCourses = max(0, (int) $maxCourses);
+
+        if ($userId <= 0 || $serviceId <= 0 || !$this->hasCourseCreationServiceInfrastructure()) {
+            return null;
+        }
+
+        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT *
+            FROM $servicesSaleTable
+            WHERE buyer_id = $userId
+              AND service_id = $serviceId
+              AND status = ".self::SERVICE_STATUS_COMPLETED."
+              AND date_end >= '$now'
+            ORDER BY date_end DESC, id DESC";
+        $result = Database::query($sql);
+
+        $bestSale = null;
+        $bestRemaining = -1;
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $usedCourses = $this->countCoursesLinkedToServiceSale((int) $row['id']);
+            $remaining = $maxCourses <= 0 ? PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
+
+            if ($remaining > $bestRemaining) {
+                $bestRemaining = $remaining;
+                $bestSale = $row;
+            }
+        }
+
+        return is_array($bestSale) ? $bestSale : null;
+    }
+
+    /**
+     * Count courses already linked to a service sale.
+     */
+    public function countCoursesLinkedToServiceSale(int $serviceSaleId): int
+    {
+        $serviceSaleId = (int) $serviceSaleId;
+        if ($serviceSaleId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return 0;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT COUNT(DISTINCT sc.course_id) AS total
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $courseTable c ON c.id = sc.course_id
+            WHERE sc.service_sale_id = $serviceSaleId
+              AND sc.status <> 'deleted'
+              AND sc.deleted_at IS NULL";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    public function applyAiCourseFeatureSettingsToCourse(int $courseId, array $enabledFeatures): void
+    {
+        $courseId = (int) $courseId;
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $enabledFeatures = $this->normalizeAiCourseFeatures($enabledFeatures);
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+
+        foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
+            $value = in_array($feature, $enabledFeatures, true) ? 'true' : 'false';
+            $featureEsc = Database::escape_string($feature);
+            $valueEsc = Database::escape_string($value);
+            $categoryEsc = Database::escape_string('ai_helpers');
+
+            $result = Database::query(
+                "SELECT 1 FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
+            );
+
+            if (false !== $result && Database::num_rows($result) > 0) {
+                Database::update(
+                    $table,
+                    [
+                        'value' => $value,
+                        'category' => 'ai_helpers',
+                    ],
+                    [
+                        'c_id = ? AND variable = ?' => [$courseId, $feature],
+                    ]
+                );
+
+                continue;
+            }
+
+            Database::query(
+                "INSERT INTO $table (c_id, title, variable, value, category) " .
+                "VALUES ($courseId, '', '$featureEsc', '$valueEsc', '$categoryEsc')"
             );
         }
-
-        return sprintf(
-            'You already manage %d courses and the platform currently allows up to %d for your account. You cannot create more courses right now.',
-            $currentCount,
-            $limit
-        );
     }
 
     /**
@@ -7597,26 +11847,243 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Check whether a course is linked to a currently active paid service.
+     *
+     * Cancellation of the next renewal does not disable the current paid period: the
+     * relation remains active until the sale end date.
+     */
+    public function hasActiveSubscriptionCourse(int $courseId): bool
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT 1
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            LIMIT 1";
+
+        $result = Database::query($sql);
+
+        return false !== $result && Database::num_rows($result) > 0;
+    }
+
+    public function hasActiveAiCourseFeature(int $courseId, string $feature): bool
+    {
+        $courseId = (int) $courseId;
+        $features = $this->normalizeAiCourseFeatures([$feature]);
+
+        if ($courseId <= 0 || empty($features) || !$this->hasSubscriptionCourseInfrastructure()) {
+            return false;
+        }
+
+        $feature = $features[0];
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.context_json, s.ai_course_features_json
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            INNER JOIN $serviceTable s ON s.id = sc.service_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND sc.deleted_at IS NULL
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            ORDER BY ss.date_end DESC, sc.id DESC";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return false;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $context = json_decode((string) ($row['context_json'] ?? ''), true);
+            $hasStoredFeatures = is_array($context) && array_key_exists('ai_features', $context);
+            $activeFeatures = $hasStoredFeatures
+                ? $this->normalizeAiCourseFeatures($context['ai_features'])
+                : $this->normalizeAiCourseFeatures($row['ai_course_features_json'] ?? []);
+
+            if (in_array($feature, $activeFeatures, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the active BuyCourses hosting limit configured for a course created with a selected service.
+     */
+    public function getActiveSubscriptionCourseHostingLimit(int $courseId): ?int
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return null;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.context_json
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.course_id = $courseId
+              AND sc.status = 'active'
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end >= '$now'
+            ORDER BY ss.date_end DESC, sc.id DESC
+            LIMIT 1";
+
+        $result = Database::query($sql);
+        if (!$result || 0 === Database::num_rows($result)) {
+            return null;
+        }
+
+        $row = Database::fetch_array($result, 'ASSOC') ?: [];
+        $context = json_decode((string) ($row['context_json'] ?? ''), true);
+
+        if (!is_array($context)) {
+            return null;
+        }
+
+        $limit = (int) ($context['hosting_limit'] ?? 0);
+
+        return $limit > 0 ? $limit : null;
+    }
+
+    /**
+     * Count enrolled students for the BuyCourses hosting limit.
+     * Teachers are not counted. Direct course users and session-course users are both counted once.
+     */
+    public function countStudentsForCourseHostingLimit(int $courseId): int
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT COUNT(DISTINCT user_id) AS total
+            FROM (
+                SELECT user_id
+                FROM $courseUserTable
+                WHERE c_id = $courseId
+                  AND status = ".STUDENT."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                UNION
+                SELECT user_id
+                FROM $sessionCourseUserTable
+                WHERE c_id = $courseId
+                  AND status = ".STUDENT."
+            ) subscribed_users";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC') ?: [];
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Check whether subscribing the given users would exceed the effective users-per-course
+     * limit for this course (an active BuyCourses hosting-limit subscription if any, otherwise
+     * the platform-wide "Global limit of users per course" setting).
+     *
+     * @param int[] $userIds
+     */
+    public function wouldCourseUserSubscriptionExceedHostingLimit(int $courseId, array $userIds): bool
+    {
+        $courseId = (int) $courseId;
+
+        if ($courseId <= 0) {
+            return false;
+        }
+
+        $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
+
+        if ($limit <= 0) {
+            return false;
+        }
+
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
+        $userIds = array_values(array_filter(
+            $userIds,
+            static fn (int $userId): bool => $userId > 0
+        ));
+
+        if (empty($userIds)) {
+            return false;
+        }
+
+        $idList = implode(',', $userIds);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT COUNT(DISTINCT user_id) AS already
+            FROM (
+                SELECT user_id
+                FROM $courseUserTable
+                WHERE c_id = $courseId
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND user_id IN ($idList)
+                UNION
+                SELECT user_id
+                FROM $sessionCourseUserTable
+                WHERE c_id = $courseId
+                  AND user_id IN ($idList)
+            ) existing_users";
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC') ?: [];
+        $already = (int) ($row['already'] ?? 0);
+        $newCount = count($userIds) - $already;
+
+        if ($newCount <= 0) {
+            return false;
+        }
+
+        $current = $this->countStudentsForCourseHostingLimit($courseId);
+
+        return ($current + $newCount) > $limit;
+    }
+
+    /**
      * Return the effective users-per-course limit for a course.
-     * Highest active service limit among course managers wins over global setting.
+     * A BuyCourses service explicitly linked to this course wins over the global fallback.
+     * A teacher's user-level service benefit must not extend to unrelated courses.
      * Zero means unlimited.
      */
     public function getEffectiveUsersPerCourseLimitForCourse(int $courseId): int
     {
-        $limit = (int) api_get_setting('platform.hosting_limit_users_per_course');
-        $limit = max(0, $limit);
-
-        $managerIds = $this->getCourseManagerIdsForCourse($courseId);
-
-        foreach ($managerIds as $managerId) {
-            $serviceLimit = $this->getActiveHostingLimit($managerId);
-
-            if (null !== $serviceLimit && $serviceLimit > $limit) {
-                $limit = $serviceLimit;
-            }
+        $courseSpecificLimit = $this->getActiveSubscriptionCourseHostingLimit($courseId);
+        if (null !== $courseSpecificLimit) {
+            return max(0, $courseSpecificLimit);
         }
 
-        return $limit;
+        return max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
     }
 
     /**
@@ -7666,7 +12133,7 @@ class BuyCoursesPlugin extends Plugin
         $courseId = (int) $courseId;
         $userId = (int) $userId;
 
-        if ($courseId <= 0 || $userId <= 0) {
+        if ($courseId <= 0 || $userId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return false;
         }
 
@@ -7689,7 +12156,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $courseId = (int) $courseId;
 
-        if ($courseId <= 0) {
+        if ($courseId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return;
         }
 
@@ -7706,7 +12173,7 @@ class BuyCoursesPlugin extends Plugin
         $courseId = (int) $courseId;
         $limit = (int) $limit;
 
-        if ($courseId <= 0) {
+        if ($courseId <= 0 || !$this->hasFrozenEnrollmentInfrastructure()) {
             return;
         }
 
@@ -7757,6 +12224,10 @@ class BuyCoursesPlugin extends Plugin
      */
     public function processExpiredServiceBenefits(): int
     {
+        if (!$this->hasPluginTable(self::TABLE_SERVICES_SALE)) {
+            return 0;
+        }
+
         $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $now = Database::escape_string(api_get_utc_datetime());
 
@@ -7778,6 +12249,7 @@ class BuyCoursesPlugin extends Plugin
 
             $this->processExpiredCourseCreationForUser($userId);
             $this->processExpiredHostingLimitForUser($userId);
+            $this->processExpiredAiCourseFeaturesForUser($userId);
 
             $processedUsers++;
         }
@@ -7824,6 +12296,53 @@ class BuyCoursesPlugin extends Plugin
         foreach ($courseIds as $courseId) {
             $limit = $this->getEffectiveUsersPerCourseLimitForCourse($courseId);
             $this->freezeExcessEnrollmentsForCourse($courseId, $limit);
+        }
+    }
+
+    private function processExpiredAiCourseFeaturesForUser(int $userId): void
+    {
+        if ($userId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return;
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        $sql = "SELECT sc.id, sc.course_id
+            FROM $subscriptionCourseTable sc
+            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
+            WHERE sc.user_id = $userId
+              AND sc.status = 'active'
+              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
+              AND ss.date_end IS NOT NULL
+              AND ss.date_end < '$now'";
+
+        $result = Database::query($sql);
+        if (false === $result) {
+            return;
+        }
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $subscriptionCourseId = (int) ($row['id'] ?? 0);
+            $courseId = (int) ($row['course_id'] ?? 0);
+
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $this->applyAiCourseFeatureSettingsToCourse($courseId, []);
+
+            if ($subscriptionCourseId > 0) {
+                Database::update(
+                    $subscriptionCourseTable,
+                    [
+                        'updated_at' => api_get_utc_datetime(),
+                        'last_action' => 'ai_expired',
+                    ],
+                    ['id = ?' => $subscriptionCourseId]
+                );
+            }
         }
     }
 

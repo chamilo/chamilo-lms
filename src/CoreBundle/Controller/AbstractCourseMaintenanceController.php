@@ -14,6 +14,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use UnserializeApi;
 use ZipArchive;
 
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
@@ -428,7 +429,11 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             set_error_handler(static function (): void {});
 
             try {
-                $val = @unserialize($s, ['allowed_classes' => true]);
+                // Untrusted backup bytes: never instantiate arbitrary classes (PHP Object
+                // Injection → RCE via Guzzle/Monolog gadget chains). Route through the same
+                // class allow-list as the restore path so only legitimate course-backup
+                // classes are built; everything else is left as __PHP_Incomplete_Class.
+                $val = UnserializeApi::unserialize('course', $s, true);
                 $ok = (false !== $val) || ('b:0;' === trim($s));
             } catch (Throwable $e) {
                 $err = $e->getMessage();
@@ -444,7 +449,8 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
                 set_error_handler(static function (): void {});
 
                 try {
-                    $tmp = @unserialize($s, ['allowed_classes' => false]);
+                    // No class instantiation at all (UnserializeApi default => allowed_classes:false).
+                    $tmp = UnserializeApi::unserialize('not_allowed_classes', $s, true);
                     if (false !== $tmp || 'b:0;' === trim($s)) {
                         $val = $this->deincomplete($tmp);
                         $ok = true;

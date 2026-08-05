@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'لا توجد ملاحظات تم إنشاؤها
 $strings['NoNotebook'] = 'لا توجد ملاحظات تم إنشاؤها في النظام';
 $strings['NoNotebookUser'] = 'لا توجد ملاحظات لهذا الطالب';
 $strings['NotebookNoStudentAssigned'] = 'ملاحظات بدون طلاب مخصصين';
+
+$strings['TeacherNotesHelp'] = 'إنشاء ملاحظات خاصة للمعلم مرتبطة بالمتعلمين في هذه الدورة.';
+$strings['CurrentFilter'] = 'التصفية الحالية';
+$strings['EmptyStateHelp'] = 'أنشئ ملاحظة جديدة أو غيّر تصفية المتعلم.';

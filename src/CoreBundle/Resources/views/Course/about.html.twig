@@ -1,196 +1,537 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-    {% autoescape false %}
-        <div id="about-course" class="container-about-custom mt-4">
-            <div id="course-info-top" class="mb-4">
-                <h2 class="session-title text-2xl font-bold">{{ course.title }}</h2>
-                {% if not 'course_about_teacher_name_hide'|api_get_configuration_value %}
-                    <div class="course-short mt-2">
-                        <ul>
-                            <li class="author">{{ "Teachers"|trans }}:</li>
-                            {% for teacher in teachers %}
-                                <li>{{ teacher.complete_name }}{% if not loop.last %} |{% endif %}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
+    <div id="about-course" class="course-about-page">
+        <style>
+            .course-about-page {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 1.5rem clamp(1rem, 2vw, 2.5rem) 3rem;
+            }
 
-            {% set course_video = '' %}
-            {% for extra_field in extra_fields %}
-                {% if extra_field.value.getField().getVariable() == 'video_url' %}
-                    {% set course_video = extra_field.value.getValue() %}
-                {% endif %}
-            {% endfor %}
+            .course-about-topbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
 
-            <div class="bg-white shadow rounded mb-4 p-4">
-                <div class="row">
-                    <div class="col">
+            .course-about-back {
+                display: inline-flex;
+                align-items: center;
+                gap: .35rem;
+                color: #374151;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .course-about-back:hover,
+            .course-about-back:focus {
+                color: #111827;
+                text-decoration: underline;
+            }
+
+            .course-about-header {
+                margin-bottom: 1.25rem;
+            }
+
+            .course-about-title {
+                margin: 0;
+                font-size: 1.75rem;
+                font-weight: 700;
+                line-height: 1.25;
+            }
+
+            .course-about-teacher-summary {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .35rem;
+                margin: .5rem 0 0;
+                padding: 0;
+                color: #4b5563;
+                list-style: none;
+            }
+
+            .course-about-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 360px;
+                gap: 1.5rem;
+                align-items: start;
+            }
+
+            .course-about-main,
+            .course-about-sidebar {
+                min-width: 0;
+            }
+
+            .course-about-sidebar {
+                position: sticky;
+                top: 1rem;
+                display: grid;
+                gap: 1rem;
+            }
+
+            .course-about-card {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: .75rem;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, .08);
+                overflow: hidden;
+            }
+
+            .course-about-card-body {
+                padding: 1rem;
+            }
+
+            .course-about-hero-media {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: clamp(260px, 34vw, 460px);
+                background: #f3f4f6;
+                overflow: hidden;
+            }
+
+            .course-about-cover {
+                display: block;
+                width: auto;
+                height: auto;
+                max-width: 100%;
+                max-height: 520px;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            .course-about-cover--vector,
+            .course-about-cover--wide {
+                width: 100%;
+                height: clamp(260px, 34vw, 460px);
+                max-height: none;
+                object-fit: contain;
+            }
+
+            .course-about-cover--small {
+                width: auto;
+                max-width: min(100%, 520px);
+                max-height: 320px;
+                margin: 2rem auto;
+            }
+
+            .course-about-video iframe,
+            .course-about-video object,
+            .course-about-video embed {
+                display: block;
+                width: 100%;
+                min-height: 320px;
+            }
+
+            .course-about-share {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .5rem;
+                align-items: center;
+            }
+
+            .course-about-share-label {
+                margin-right: .25rem;
+                font-weight: 600;
+            }
+
+            .course-about-share-button {
+                display: inline-flex;
+                align-items: center;
+                gap: .35rem;
+                min-height: 2.25rem;
+                color: #111827 !important;
+                background: #fff !important;
+                border: 1px solid #d1d5db !important;
+                border-radius: .35rem;
+                text-decoration: none;
+                white-space: nowrap;
+            }
+
+            .course-about-share-button:hover,
+            .course-about-share-button:focus {
+                color: #111827 !important;
+                background: #f9fafb !important;
+                text-decoration: none;
+            }
+
+            .course-about-share-button img {
+                width: 1em;
+                height: 1em;
+                vertical-align: middle;
+            }
+
+            .course-about-descriptions {
+                margin-top: 1.5rem;
+            }
+
+            .course-about-section-title {
+                margin: 0 0 1rem;
+                font-size: 1.35rem;
+                font-weight: 700;
+            }
+
+            .course-about-description-list {
+                display: grid;
+                gap: 1rem;
+            }
+
+            .course-about-description-item {
+                padding: 1.25rem 1.5rem;
+            }
+
+            .course-about-description-item-title {
+                margin: 0 0 .75rem;
+                font-size: 1.15rem;
+                font-weight: 700;
+            }
+
+            .course-about-empty {
+                padding: 1.25rem 1.5rem;
+                color: #6b7280;
+                font-style: italic;
+            }
+
+            .course-about-panel-title {
+                margin: 0 0 .85rem;
+                font-size: 1.1rem;
+                font-weight: 700;
+            }
+
+            .course-about-action {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            .course-about-teacher {
+                display: flex;
+                gap: .75rem;
+                align-items: flex-start;
+            }
+
+            .course-about-teacher + .course-about-teacher {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eef2f7;
+            }
+
+            .course-about-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 999px;
+                object-fit: cover;
+                flex: 0 0 auto;
+            }
+
+            .course-about-teacher-name {
+                margin: .2rem 0 .2rem;
+                font-weight: 700;
+            }
+
+            .course-about-teacher-extra {
+                margin: 0;
+                color: #4b5563;
+                font-size: .9rem;
+            }
+
+            .course-about-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .5rem;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .course-about-tag {
+                display: inline-flex;
+                align-items: center;
+                border-radius: 999px;
+                background: #eef2f7;
+                color: #374151;
+                padding: .25rem .65rem;
+                font-size: .9rem;
+            }
+
+            .rich-html-content {
+                color: #111827;
+                line-height: 1.55;
+            }
+
+            .rich-html-content > :first-child {
+                margin-top: 0;
+            }
+
+            .rich-html-content > :last-child {
+                margin-bottom: 0;
+            }
+
+            .rich-html-content img,
+            .rich-html-content iframe,
+            .rich-html-content table {
+                max-width: 100%;
+            }
+
+            .rich-html-content table {
+                margin: 1rem auto;
+            }
+
+            @media (max-width: 991px) {
+                .course-about-topbar {
+                    align-items: flex-start;
+                    flex-direction: column;
+                }
+
+                .course-about-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .course-about-sidebar {
+                    position: static;
+                }
+
+                .course-about-hero-media,
+                .course-about-cover--vector,
+                .course-about-cover--wide {
+                    min-height: 220px;
+                    height: 220px;
+                }
+
+                .course-about-cover--small {
+                    max-height: 220px;
+                }
+            }
+        </style>
+
+        <div class="course-about-topbar">
+            <a href="{{ base_url }}/catalogue/courses" class="course-about-back">
+                <em class="mdi mdi-arrow-left" aria-hidden="true"></em>
+                <span>{{ 'Back'|trans }}</span>
+            </a>
+        </div>
+
+        <header class="course-about-header">
+            <h1 class="course-about-title">{{ course.title }}</h1>
+            {% if teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
+                <ul class="course-about-teacher-summary" aria-label="{{ 'Teachers'|trans }}">
+                    <li>{{ 'Teachers'|trans }}:</li>
+                    {% for teacher in teachers %}
+                        <li>{{ teacher.complete_name }}{% if not loop.last %},{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </header>
+
+        {% set course_video = '' %}
+        {% for extra_field in extra_fields %}
+            {% if extra_field.value.getField().getVariable() == 'video_url' %}
+                {% set course_video = extra_field.value.getValue() %}
+            {% endif %}
+        {% endfor %}
+        {% set image_path = image|split('?')|first|lower %}
+        {% set is_vector_image = image_path ends with '.svg' %}
+
+        <div class="course-about-layout">
+            <main class="course-about-main">
+                <section class="course-about-card course-about-hero" aria-label="{{ course.title }}">
+                    <div class="course-about-hero-media">
                         {% if course_video %}
-                            <div class="course-video mb-3">
-                                <div class="aspect-w-16 aspect-h-9">
-                                    {{ essence.replace(course_video) }}
-                                </div>
+                            <div class="course-about-video">
+                                {{ essence.replace(course_video)|raw }}
                             </div>
                         {% else %}
-                            <div class="course-image mb-3">
-                                <img src="{{ image }}" class="w-full h-auto rounded" />
-                            </div>
-                        {% endif %}
-
-                        {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
-                            <div class="share-social-media mt-3">
-                                <div class="social-buttons">
-                                    <span>{{ "Share with your friends"|trans }}</span>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="facebook">
-                                        <em class="mdi mdi-facebook"></em> Facebook
-                                    </a>
-                                    <a href="https://x.com/intent/post?{{ {'text': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
-                                        <img src="/img/icons/svg/x.svg" alt="X" style="width:1em;height:1em;vertical-align:middle;display:inline-block;" /> &nbsp;
-                                    </a>
-                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
-                                        <em class="mdi mdi-linkedin"></em> LinkedIn
-                                    </a>
-                                    <a href="#" id="copy-link-btn" data-url="{{ url|e('html_attr') }}">
-                                        <em class="mdi mdi-paperclip"></em> <span>{{ "Copy link"|trans }}</span>
-                                    </a>
-                                </div>
-                            </div>
+                            <img
+                                src="{{ image }}"
+                                alt="{{ course.title }}"
+                                class="course-about-cover{% if is_vector_image %} course-about-cover--vector{% endif %}"
+                                loading="eager"
+                                decoding="async"
+                            />
                         {% endif %}
                     </div>
-                    <div class="col">
-                        <div class="course-description">
-                            {{ description }}
-                        </div>
-                    </div>
-                </div>
-                {% if tags %}
-                    <div class="panel-tags mt-4">
-                        <ul class="list-none flex flex-wrap">
-                            <li class="font-bold mr-2">{{ 'Tags'|trans }}:</li>
-                            {% for tag in tags %}
-                                <li class="bg-gray-200 text-gray-700 rounded-full px-2 py-1 mr-2 mb-2">{{ tag.getTag }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
-            <section id="course-info-bottom" class="course">
-                <div class="row">
-                    <div class="col col-2 mb-4">
-                        <div class="bg-white shadow rounded p-4">
-                            <h3 class="sub-title text-xl font-bold mb-3">{{ "Course Information"|trans }}</h3>
-                            <div class="course-information">
-                                {{ description | raw }}
+
+                    {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
+                        <div class="course-about-card-body">
+                            <div class="course-about-share">
+                                <span class="course-about-share-label">{{ "Share with your friends"|trans }}</span>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ url|url_encode }}" target="_blank" rel="noopener noreferrer" class="btn course-about-share-button facebook">
+                                    <em class="mdi mdi-facebook" aria-hidden="true"></em> <span>Facebook</span>
+                                </a>
+                                <a href="https://x.com/intent/post?{{ {'text': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" rel="noopener noreferrer" class="btn course-about-share-button twitter" aria-label="X">
+                                    <img src="/img/icons/svg/x.svg" alt="" /> <span>X</span>
+                                </a>
+                                <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url, 'title': course.title }|url_encode }}" target="_blank" rel="noopener noreferrer" class="btn course-about-share-button linkedin">
+                                    <em class="mdi mdi-linkedin" aria-hidden="true"></em> <span>LinkedIn</span>
+                                </a>
+                                <a href="#" id="copy-link-btn" data-url="{{ url|e('html_attr') }}" class="btn course-about-share-button">
+                                    <em class="mdi mdi-paperclip" aria-hidden="true"></em> <span>{{ "Copy link"|trans }}</span>
+                                </a>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+                </section>
 
-                    <div class="col">
-                        <div class="bg-white shadow rounded p-4 mb-4">
-                            {% if not is_premium %}
-                                <h5 class="text-lg font-semibold">{{ 'Course subscription'|trans }}</h5>
-                                <div class="session-subscribe mt-2">
-                                    {% if not is_granted('IS_AUTHENTICATED') %}
-                                        {% if 'allow_registration'|api_get_setting != 'false' %}
-                                            <a href="{{ base_url ~ '/main/auth/registration.php?c=' ~ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
-                                                <i class="mdi mdi-pencil" aria-hidden="true"></i> {{ 'Sign up'|trans }}
-                                            </a>
-                                        {% endif %}
-                                    {% elseif subscription %}
-                                        <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course homepage'|trans }}</a>
-                                    {% elseif allow_subscribe %}
-                                        <a href="{{ base_url }}/main/auth/courses.php?action=subscribe_course&course_code={{ course.code }}&sec_token={{ token }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
-                                    {% else %}
-                                        <button class="btn btn--success w-full py-2 mt-2 text-white bg-gray-400 rounded" title="{{ 'Subscription is not allowed for this course'|trans }}" disabled>
-                                            {{ 'Subscription not allowed'|trans }}
-                                        </button>
+                <section class="course-about-descriptions" aria-labelledby="course-about-description-title">
+                    <h2 id="course-about-description-title" class="course-about-section-title">{{ "Course description"|trans }}</h2>
+
+                    {% if description_sections is not empty %}
+                        <div class="course-about-description-list">
+                            {% for section in description_sections %}
+                                <article id="course-description-{{ section.iid }}" class="course-about-card course-about-description-item">
+                                    {% if section.title %}
+                                        <h3 class="course-about-description-item-title">{{ section.title }}</h3>
                                     {% endif %}
-                                </div>
-                            {% else %}
-                                <div class="session-price mt-2">
-                                    <div class="sale-price text-lg font-semibold">
-                                        {{ 'Sale price'|trans }}
-                                    </div>
-                                    <div class="price-text text-2xl font-bold text-gray-800">
-                                        {{ is_premium.iso_code }} {{ is_premium.price }}
-                                    </div>
-                                    <div class="buy-box mt-2">
-                                        <a href="{{ base_url }}/plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn--primary w-full py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700">{{ 'Buy now'|trans }}</a>
-                                    </div>
-                                </div>
-                            {% endif %}
+                                    {% if section.content %}
+                                        <div class="rich-html-content">
+                                            {{ section.content|raw }}
+                                        </div>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
                         </div>
-                        {% if teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
-                            <div class="bg-white shadow rounded p-4">
-                                <div class="panel-teachers">
-                                    <h5 class="sub-title text-lg font-semibold mb-3">{{ "Coaches"|trans }}</h5>
-                                </div>
-                                {% for teacher in teachers %}
-                                    <div class="coach-information mb-4">
-                                        <div class="flex items-center mb-2">
-                                            <div class="coach-avatar mr-2">
-                                                <img class="w-12 h-12 rounded-full" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
-                                            </div>
-                                            <div>
-                                                <h6 class="text-md font-bold">{{ teacher.complete_name }}</h6>
-                                                <p class="text-sm">{{ teacher.diploma }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="open-area {{ teachers | length >= 2 ? 'open-more' : '' }}">
-                                            {{ teacher.openarea }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                    {% else %}
+                        <div class="course-about-card course-about-empty">
+                            {{ 'No description available'|trans }}
+                        </div>
+                    {% endif %}
+                </section>
+            </main>
+
+            <aside class="course-about-sidebar">
+                <section class="course-about-card">
+                    <div class="course-about-card-body">
+                        {% if not is_premium %}
+                            <h2 class="course-about-panel-title">{{ 'Course subscription'|trans }}</h2>
+                            {% if not is_granted('IS_AUTHENTICATED') %}
+                                {% if 'allow_registration'|api_get_setting != 'false' %}
+                                    <a href="{{ base_url ~ '/main/auth/registration.php?c=' ~ course.code }}" class="btn btn--success course-about-action">
+                                        <i class="mdi mdi-pencil" aria-hidden="true"></i> {{ 'Sign up'|trans }}
+                                    </a>
+                                {% endif %}
+                            {% elseif subscription %}
+                                <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success course-about-action">
+                                    {{ 'Course homepage'|trans }}
+                                </a>
+                            {% elseif allow_subscribe %}
+                                <a href="{{ base_url }}/main/auth/courses.php?action=subscribe_course&course_code={{ course.code }}&sec_token={{ token }}" class="btn btn--success course-about-action">
+                                    {{ 'Subscribe'|trans }}
+                                </a>
+                            {% else %}
+                                <button class="btn btn--plain course-about-action" title="{{ 'Subscription is not allowed for this course'|trans }}" disabled>
+                                    {{ 'Subscription not allowed'|trans }}
+                                </button>
+                            {% endif %}
+                        {% else %}
+                            <h2 class="course-about-panel-title">{{ 'Sale price'|trans }}</h2>
+                            <div class="price-text text-2xl font-bold text-gray-800">
+                                {{ is_premium.iso_code }} {{ is_premium.price }}
                             </div>
+                            <a href="{{ base_url }}/plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn--primary course-about-action">
+                                {{ 'Buy now'|trans }}
+                            </a>
                         {% endif %}
                     </div>
-                </div>
-            </section>
+                </section>
+
+                {% if teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
+                    <section class="course-about-card">
+                        <div class="course-about-card-body">
+                            <h2 class="course-about-panel-title">{{ "Teachers"|trans }}</h2>
+                            {% for teacher in teachers %}
+                                <article class="course-about-teacher">
+                                    <img class="course-about-avatar" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                    <div>
+                                        <h3 class="course-about-teacher-name">{{ teacher.complete_name }}</h3>
+                                        {% if teacher.diploma %}
+                                            <p class="course-about-teacher-extra">{{ teacher.diploma }}</p>
+                                        {% endif %}
+                                        {% if teacher.openarea %}
+                                            <div class="rich-html-content course-about-teacher-extra">
+                                                {{ teacher.openarea|raw }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% if tags %}
+                    <section class="course-about-card">
+                        <div class="course-about-card-body">
+                            <h2 class="course-about-panel-title">{{ 'Tags'|trans }}</h2>
+                            <ul class="course-about-tags">
+                                {% for tag in tags %}
+                                    <li class="course-about-tag">{{ tag.getTag }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>
+                {% endif %}
+            </aside>
         </div>
 
         <script>
           $(function() {
-            var copyBtn = document.getElementById('copy-link-btn');
-            if (copyBtn) {
-              copyBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                var url = this.getAttribute('data-url');
-                var span = this.querySelector('span');
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                  navigator.clipboard.writeText(url).then(function() {
-                    span.textContent = '{{ "Link copied!"|trans }}';
-                  });
-                } else {
-                  var ta = document.createElement('textarea');
-                  ta.value = url;
-                  ta.style.position = 'fixed';
-                  ta.style.opacity = '0';
-                  document.body.appendChild(ta);
-                  ta.select();
-                  document.execCommand('copy');
-                  document.body.removeChild(ta);
-                  span.textContent = '{{ "Link copied!"|trans }}';
+            var cover = document.querySelector('.course-about-cover');
+            if (cover && !cover.classList.contains('course-about-cover--vector')) {
+              var updateCoverSize = function() {
+                var width = cover.naturalWidth || 0;
+                var height = cover.naturalHeight || 0;
+
+                if (!width || !height) {
+                  return;
                 }
-              });
+
+                if (width < 640 || height < 260) {
+                  cover.classList.add('course-about-cover--small');
+                } else {
+                  cover.classList.add('course-about-cover--wide');
+                }
+              };
+
+              if (cover.complete) {
+                updateCoverSize();
+              } else {
+                cover.addEventListener('load', updateCoverSize, {once: true});
+              }
             }
 
-            $('.course-information').readmore({
-              speed: 100,
-              lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
-              moreLink: '<a class="read-more" href="#">{{ 'Read more...' | trans }}</a>',
-              collapsedHeight: 730,
-              heightMargin: 100
-            });
-            $('.open-more').readmore({
-              speed: 100,
-              lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
-              moreLink: '<a class="read-more" href="#">{{ 'Read more...' | trans }}</a>',
-              collapsedHeight: 90,
-              heightMargin: 20
+            var copyBtn = document.getElementById('copy-link-btn');
+            if (!copyBtn) {
+              return;
+            }
+
+            copyBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              var url = this.getAttribute('data-url');
+              var span = this.querySelector('span');
+
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function() {
+                  span.textContent = '{{ "Link copied!"|trans }}';
+                });
+
+                return;
+              }
+
+              var ta = document.createElement('textarea');
+              ta.value = url;
+              ta.style.position = 'fixed';
+              ta.style.opacity = '0';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+              span.textContent = '{{ "Link copied!"|trans }}';
             });
           });
         </script>
-    {% endautoescape %}
+    </div>
 {% endblock %}

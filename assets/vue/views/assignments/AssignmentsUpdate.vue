@@ -27,13 +27,13 @@ import AssignmentsForm from "../../components/assignments/AssignmentsForm.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const notification = useNotification()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const assignment = ref(null)
 const isFormLoading = ref(true)
@@ -52,6 +52,27 @@ function extractNumericId(idOrIri) {
 
 const assignmentIdRaw = route.params.id
 const assignmentId = extractNumericId(assignmentIdRaw)
+
+const learningPathId = Number(route.query.lp_id || 0)
+const isLearningPathContext =
+  "learnpath" === String(route.query.origin || "").toLowerCase() && learningPathId > 0
+
+function buildLearningPathBuilderRoute() {
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: learningPathId,
+    },
+    query,
+  }
+}
 
 function buildCidParams() {
   return {
@@ -87,6 +108,10 @@ async function onSubmit(publicationStudent) {
 }
 
 function goBack() {
+  if (isLearningPathContext) {
+    return router.push(buildLearningPathBuilderRoute())
+  }
+
   if (route.query.from === "AssignmentDetail") {
     router.push({
       name: "AssignmentDetail",

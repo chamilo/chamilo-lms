@@ -27,8 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -48,7 +46,7 @@ class AccountController extends BaseController
      * Prefix used to identify HKDF-based encryption format for MFA secrets.
      * Legacy secrets have no prefix and remain readable for backward compatibility.
      */
-    private const MFA_SECRET_V2_PREFIX = 'v2:';
+    private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
     public function __construct(
         private readonly UserHelper $userHelper,
@@ -68,16 +66,24 @@ class AccountController extends BaseController
         /** @var User $user */
         $form = $this->createForm(ProfileType::class, $user, [
             'include_password_field' => false,
+            'has_illustration' => $illustrationRepo->hasIllustration($user),
         ]);
         $form->setData($user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $deleteIllustration = $form->has('delete_illustration')
+                && true === (bool) $form->get('delete_illustration')->getData();
+
             if ($form->has('illustration')) {
                 $illustration = $form['illustration']->getData();
+                $crop = $form->has('illustration_crop') ? (string) $form->get('illustration_crop')->getData() : '';
+
                 if ($illustration) {
                     $illustrationRepo->deleteIllustration($user);
-                    $illustrationRepo->addIllustration($user, $user, $illustration);
+                    $illustrationRepo->addIllustration($user, $user, $illustration, $crop);
+                } elseif ($deleteIllustration) {
+                    $illustrationRepo->deleteIllustration($user);
                 }
             }
 
@@ -112,21 +118,20 @@ class AccountController extends BaseController
         CsrfTokenManagerInterface $csrfTokenManager,
         SettingsManager $settingsManager,
         UserPasswordHasherInterface $passwordHasher,
-        TokenStorageInterface $tokenStorage,
     ): Response {
-        /** @var ?User $user */
         $user = $this->getUser();
 
         // Always enforce "self" for this endpoint.
-        if (!$user || !$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             throw $this->createAccessDeniedException('You must be logged in to access this page.');
         }
 
         // Global 2FA toggle: read either "security.2fa_enable" or fallback "2fa_enable"
         $twoFaEnabledGlobally = 'true' === $settingsManager->getSetting('security.2fa_enable', true);
 
-        // When rotating password (forced update), we also hide the 2FA widget
         $isRotation = $request->query->getBoolean('rotate', false);
+        $isFirstLogin = $this->isFirstLoginPasswordChange($user, $settingsManager);
+        $isForcedPasswordChange = $isRotation || $isFirstLogin;
 
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
@@ -134,7 +139,7 @@ class AccountController extends BaseController
             'user' => $user,
             'portal_name' => $settingsManager->getSetting('platform.institution'),
             'password_hasher' => $passwordHasher,
-            'enable_2fa_field' => $twoFaEnabledGlobally && !$isRotation,
+            'enable_2fa_field' => $twoFaEnabledGlobally && !$isForcedPasswordChange,
             'global_2fa_enabled' => $twoFaEnabledGlobally,
         ]);
         $form->handleRequest($request);
@@ -184,12 +189,12 @@ class AccountController extends BaseController
                     $newPassword = (string) $form->get('newPassword')->getData();
                     $confirmPassword = (string) $form->get('confirmPassword')->getData();
 
-                    $enable2FA = $twoFaEnabledGlobally && !$isRotation && $form->has('enable2FA')
+                    $enable2FA = $twoFaEnabledGlobally && !$isForcedPasswordChange && $form->has('enable2FA')
                         ? (bool) $form->get('enable2FA')->getData()
                         : false;
 
                     // Optional hardening: require current password to toggle 2FA as well.
-                    $twoFaToggleRequested = $twoFaEnabledGlobally && !$isRotation
+                    $twoFaToggleRequested = $twoFaEnabledGlobally && !$isForcedPasswordChange
                         && (($enable2FA && !$user->getMfaEnabled()) || (!$enable2FA && $user->getMfaEnabled()));
 
                     if ($twoFaToggleRequested && !$userRepository->isPasswordValid($user, $currentPassword)) {
@@ -215,7 +220,7 @@ class AccountController extends BaseController
                         }
 
                         // 2FA deactivation
-                        if ($twoFaEnabledGlobally && !$isRotation && !$enable2FA && $user->getMfaEnabled()) {
+                        if ($twoFaEnabledGlobally && !$isForcedPasswordChange && !$enable2FA && $user->getMfaEnabled()) {
                             $user->setMfaEnabled(false);
                             $user->setMfaSecret(null);
                             $userRepository->updateUser($user);
@@ -235,6 +240,11 @@ class AccountController extends BaseController
                             } else {
                                 $user->setPlainPassword($newPassword);
                                 $user->setPasswordUpdatedAt(new DateTimeImmutable());
+
+                                if ($isFirstLogin) {
+                                    $user->setPasswordRequestedAt(null);
+                                }
+
                                 $userRepository->updateUser($user);
                                 $this->addFlash('success', $this->translator->trans('Password updated successfully'));
 
@@ -251,9 +261,18 @@ class AccountController extends BaseController
             'qrCode' => $qrCodeBase64,
             'user' => $user,
             'showQRCode' => $showQRCode,
+            'is_first_login' => $isFirstLogin,
+            'is_forced_password_change' => $isForcedPasswordChange,
             'password_check_enabled' => 'true' === $settingsManager->getSetting('security.check_password', true),
             'password_requirements' => Security::getPasswordRequirements()['min'],
         ]);
+    }
+
+    private function isFirstLoginPasswordChange(User $user, SettingsManager $settingsManager): bool
+    {
+        return 'true' === $settingsManager->getSetting('security.force_renew_password_at_first_login', true)
+            && null !== $user->getPasswordRequestedAt()
+            && null === $user->getConfirmationToken();
     }
 
     /**

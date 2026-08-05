@@ -58,11 +58,19 @@ switch ($action) {
         exit;
         break;
     case 'lock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         $category_to_lock = Category::load((int) $_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).');
         break;
     case 'unlock':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         if (api_is_platform_admin()) {
             $category_to_lock = Category::load((int) $_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
@@ -339,6 +347,10 @@ if (isset($_GET['movelink'])) {
 
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
         // Delete all categories,subcategories and results
@@ -356,6 +368,10 @@ if (isset($_GET['deletecat'])) {
 // Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $locked = (int) $_GET['lockedeval'];
     $type_locked = 1;
     $confirmation_message = get_lang('Evaluation has been locked');
@@ -373,6 +389,10 @@ if (isset($_GET['lockedeval'])) {
 
 if (isset($_GET['deleteeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $eval = Evaluation::load($_GET['deleteeval']);
     if (null != $eval[0]) {
         $eval[0]->delete_with_results();
@@ -383,6 +403,10 @@ if (isset($_GET['deleteeval'])) {
 
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
     if (!empty($get_delete_link)) {
@@ -432,6 +456,10 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $number_of_selected_items = count($_POST['id']);
 
     if (0 == $number_of_selected_items) {
@@ -1020,11 +1048,27 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                     ];
                 }
 
-                $table = $gradebookTable->return_table();
+                $hideGradebookTableForLearners = !$isAllow
+                    && 'true' === api_get_setting('gradebook.gradebook_hide_table')
+                    && 'export_table' !== $action;
+
+                $table = '';
+
+                if (!$hideGradebookTableForLearners) {
+                    $table = $gradebookTable->return_table();
+                }
 
                 $graph = '';
                 if ($allowGraph && empty($model)) {
                     $graph = $gradebookTable->getGraph();
+                }
+
+                if ($hideGradebookTableForLearners) {
+                    echo Display::return_message(
+                        get_lang('The gradebook table is hidden.'),
+                        'normal',
+                        false
+                    );
                 }
 
                 if ('export_table' === $action) {
@@ -1060,7 +1104,54 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
 
 api_set_in_gradebook();
 
-$contents = ob_get_contents();
+$gradingElectronicContent = '';
+$gradingElectronicPluginFile = api_get_path(SYS_PLUGIN_PATH).'GradingElectronic/src/GradingElectronicPlugin.php';
+
+if (is_file($gradingElectronicPluginFile)) {
+    require_once $gradingElectronicPluginFile;
+
+    if (class_exists('GradingElectronicPlugin', false)) {
+        try {
+            $gradingElectronicPlugin = GradingElectronicPlugin::create();
+            $canRenderGradingElectronic = $gradingElectronicPlugin->isEnabled()
+                && (
+                    (isset($is_platform_admin) && $is_platform_admin)
+                    || (isset($is_course_admin) && $is_course_admin)
+                    || (function_exists('api_is_allowed_to_edit') && api_is_allowed_to_edit(null, true))
+                );
+
+            if ($canRenderGradingElectronic && method_exists($gradingElectronicPlugin, 'renderGradebookExport')) {
+                if (
+                    method_exists($gradingElectronicPlugin, 'isDownloadRequest')
+                    && $gradingElectronicPlugin->isDownloadRequest()
+                    && method_exists($gradingElectronicPlugin, 'downloadFromRequest')
+                ) {
+                    $gradingElectronicPlugin->downloadFromRequest();
+                }
+
+                if (
+                    method_exists($gradingElectronicPlugin, 'isGenerateRequest')
+                    && $gradingElectronicPlugin->isGenerateRequest()
+                    && method_exists($gradingElectronicPlugin, 'generateFromRequest')
+                ) {
+                    $gradingElectronicContent = '<div class="grading-electronic-generation-result" data-grading-electronic-generation-result="1">'
+                        .$gradingElectronicPlugin->generateFromRequest().
+                        '</div>';
+                } else {
+                    $gradingElectronicContent = $gradingElectronicPlugin->renderGradebookExport(true);
+                }
+            }
+        } catch (Throwable $exception) {
+            error_log('GradingElectronic render error: '.$exception->getMessage());
+            $gradingElectronicContent = Display::return_message(
+                'GradingElectronic error: '.$exception->getMessage(),
+                'error'
+            );
+        }
+    }
+}
+
+$contents = $gradingElectronicContent.ob_get_contents();
 
 ob_end_clean();
 Event::event_access_tool(TOOL_GRADEBOOK);

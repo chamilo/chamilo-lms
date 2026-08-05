@@ -129,7 +129,7 @@ class ExerciseFocusedPlugin extends Plugin
 
     public function getLinkReporting(int $exerciseId): string
     {
-        if (!$this->isEnabled(true)) {
+        if (!$this->isEnabled()) {
             return '';
         }
 
@@ -164,7 +164,7 @@ class ExerciseFocusedPlugin extends Plugin
 
     public function isEnableForExercise(int $exerciseId, \Symfony\Component\HttpFoundation\Request $request): bool
     {
-        $renderRegion = $this->isEnabled(true)
+        $renderRegion = $this->isEnabled()
             && '/main/exercise/exercise_submit.php' === $request->query->get('_route');
 
         if (!$renderRegion) {

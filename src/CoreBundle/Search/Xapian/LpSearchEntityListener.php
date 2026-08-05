@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Throwable;
 
 /**
  * Doctrine entity listener for CLp to trigger Xapian indexing.
@@ -25,16 +26,35 @@ final class LpSearchEntityListener
 
     public function postPersist(CLp $lp, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexLp($lp);
+        $this->indexSafely($lp, 'postPersist');
     }
 
     public function postUpdate(CLp $lp, LifecycleEventArgs $args): void
     {
-        $this->indexer->indexLp($lp);
+        $this->indexSafely($lp, 'postUpdate');
     }
 
     public function postRemove(CLp $lp, LifecycleEventArgs $args): void
     {
-        $this->indexer->deleteLpIndex($lp);
+        try {
+            $this->indexer->deleteLpIndex($lp);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] LpSearchEntityListener postRemove: deletion failed: '
+                .$exception->getMessage()
+            );
+        }
+    }
+
+    private function indexSafely(CLp $lp, string $event): void
+    {
+        try {
+            $this->indexer->indexLp($lp);
+        } catch (Throwable $exception) {
+            error_log(
+                '[Xapian] LpSearchEntityListener '.$event.': indexing failed: '
+                .$exception->getMessage()
+            );
+        }
     }
 }

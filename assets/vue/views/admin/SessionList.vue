@@ -379,12 +379,12 @@ async function load() {
     const params = new URLSearchParams({
       page: String(page.value),
       limit: String(pageSize.value),
-      sortField: sortField.value,
-      sortOrder: sortOrder.value === 1 ? "ASC" : "DESC",
     })
 
     if (listType.value) {
       params.set("listType", listType.value)
+      params.set("sortField", sortField.value)
+      params.set("sortOrder", sortOrder.value === 1 ? "ASC" : "DESC")
     }
 
     if (keyword.value) {
@@ -397,6 +397,11 @@ async function load() {
     const data = await baseService.get(`/admin/session-list-data?${params.toString()}`)
 
     if (data.currentListType && isValidTab(data.currentListType)) {
+      if (!listType.value) {
+        const defaults = defaultSortForTab(data.currentListType)
+        sortField.value = defaults.field
+        sortOrder.value = defaults.order
+      }
       listType.value = data.currentListType
     }
 
@@ -456,11 +461,8 @@ async function onRowReorder(event) {
       formData.append(`order[${i}][position]`, String(entry.position))
     })
 
-    await fetch("/admin/session-list-data-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
+    // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+    await baseService.post("/admin/session-list-data-action", formData)
   } catch (e) {
     console.error("Error saving session order:", e)
   }
@@ -476,6 +478,12 @@ async function onSearch() {
   await load()
 }
 
+function defaultSortForTab(tab) {
+  return tab === "custom"
+    ? { field: "displayStartDate", order: -1 }
+    : { field: "title", order: 1 }
+}
+
 async function switchTab(tab) {
   if (!isValidTab(tab) || listType.value === tab) {
     return
@@ -486,6 +494,10 @@ async function switchTab(tab) {
   keyword.value = ""
   categoryFilter.value = ""
   selectedItems.value = []
+
+  const defaults = defaultSortForTab(tab)
+  sortField.value = defaults.field
+  sortOrder.value = defaults.order
 
   await syncRouteState()
   await load()
@@ -500,11 +512,8 @@ function confirmDelete(ids) {
         formData.set("_token", csrfToken.value)
         ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-        await fetch("/admin/session-list-data-action", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData.toString(),
-        })
+        // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+        await baseService.post("/admin/session-list-data-action", formData)
 
         selectedItems.value = []
         await load()
@@ -534,11 +543,8 @@ async function performCopy(ids, action = "copy") {
     formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-    await fetch("/admin/session-list-data-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
+    // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+    await baseService.post("/admin/session-list-data-action", formData)
 
     selectedItems.value = []
     await load()
@@ -562,24 +568,30 @@ async function submitExportForm(ids, action) {
     formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-    const response = await fetch("/admin/session-list-data-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
+    // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+    // validateStatus lets us inspect error bodies (JSON) without axios throwing.
+    const response = await baseService.postRaw("/admin/session-list-data-action", formData, {
+      responseType: "blob",
+      validateStatus: () => true,
     })
 
-    if (!response.ok) {
-      const data = await response.json().catch(() => null)
-      alert(data?.error || t("No data to export"))
+    if (response.status < 200 || response.status >= 300) {
+      let errorMessage = ""
+      try {
+        errorMessage = JSON.parse(await response.data.text())?.error
+      } catch {
+        errorMessage = ""
+      }
+      alert(errorMessage || t("No data to export"))
       return
     }
 
     // File download — extract filename from Content-Disposition header
-    const disposition = response.headers.get("Content-Disposition") || ""
+    const disposition = response.headers["content-disposition"] || ""
     const match = disposition.match(/filename="?([^";\n]+)"?/)
     const filename = match ? match[1] : "export"
 
-    const blob = await response.blob()
+    const blob = response.data
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
@@ -631,11 +643,8 @@ async function confirmDeleteDirect(ids) {
     formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
-    await fetch("/admin/session-list-data-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString(),
-    })
+    // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+    await baseService.post("/admin/session-list-data-action", formData)
 
     selectedItems.value = []
     await load()
@@ -650,6 +659,9 @@ onMounted(async () => {
 
   if (query.list_type && isValidTab(String(query.list_type))) {
     listType.value = String(query.list_type)
+    const defaults = defaultSortForTab(listType.value)
+    sortField.value = defaults.field
+    sortOrder.value = defaults.order
   }
   if (query.id_category) {
     categoryFilter.value = String(query.id_category)

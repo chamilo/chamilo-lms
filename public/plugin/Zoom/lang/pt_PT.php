@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Videoconferência Zoom';
 $strings['plugin_comment'] = 'Integração da videoconferência Zoom em cursos e sessões';
 
+$strings['accountId'] = 'ID da conta';
+$strings['clientId'] = 'ID do cliente';
+$strings['clientSecret'] = 'Segredo do cliente';
+$strings['webhookSecretToken'] = 'Token secreto do webhook';
+$strings['apiKey_help'] = 'Chave API JWT legada. Prefira Account ID, Client ID e Client Secret para o OAuth Server-to-Server do Zoom.';
+$strings['apiSecret_help'] = 'Segredo API JWT legado. Prefira Account ID, Client ID e Client Secret para o OAuth Server-to-Server do Zoom.';
+$strings['verificationToken_help'] = 'Token de verificação de webhook legado. Prefira o Token secreto do webhook.';
+$strings['accountId_help'] = 'ID da conta OAuth Server-to-Server do Zoom.';
+$strings['clientId_help'] = 'ID do cliente OAuth Server-to-Server do Zoom.';
+$strings['clientSecret_help'] = 'Segredo do cliente OAuth Server-to-Server do Zoom.';
+$strings['webhookSecretToken_help'] = 'Token secreto utilizado para validar os pedidos de webhook do Zoom.';
 $strings['apiKey'] = 'Chave API';
 $strings['apiSecret'] = 'Segredo API';
 $strings['verificationToken'] = 'Token de Verificação';

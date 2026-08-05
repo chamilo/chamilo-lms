@@ -1,0 +1,39 @@
+<?php
+
+$strings['plugin_title'] = 'Google マップ';
+$strings['plugin_comment'] = 'ユーザーの追加フィールドに保存された位置情報をGoogleマップで表示します。';
+$strings['enable_api'] = 'Google Maps APIを読み込む';
+$strings['api_key'] = 'APIキー';
+$strings['extra_field_name'] = '追加フィールド名';
+$strings['extra_field_name_help'] = 'カンマ区切りで1つ以上のユーザー追加フィールド変数を入力してください。マップは最大5つのフィールドを表示できます。例: address, office_address, city';
+$strings['UsersCoordinatesMap'] = 'ユーザー位置マップ';
+$strings['UsersCoordinatesMapHelp'] = 'このマップは、設定されたユーザー追加フィールドに基づいてユーザーの位置情報を表示します。';
+$strings['GoogleMapsAdminIntro'] = 'Google Maps APIキーと、住所や位置情報を含むユーザー追加フィールドを設定してください。';
+$strings['GoogleMapsApi'] = 'Google Maps API';
+$strings['ExtraFields'] = '追加フィールド';
+$strings['Access'] = 'アクセス';
+$strings['AdministratorsOnly'] = '管理者限定';
+$strings['OpenMap'] = 'マップを開く';
+$strings['ConfigurePlugin'] = 'プラグインを設定';
+$strings['Configured'] = '設定済み';
+$strings['NotConfigured'] = '未設定';
+$strings['GoogleMapsApiDisabledWarning'] = 'Google Maps APIの読み込みはプラグイン設定で無効になっています。';
+$strings['GoogleMapsApiKeyMissingWarning'] = 'Google Maps APIキーが設定されていません。';
+$strings['ExtraFieldNameMissingWarning'] = 'ユーザー追加フィールドが設定されていません。';
+$strings['ExtraFieldsNotFoundWarning'] = '次のユーザー追加フィールドが見つかりませんでした: %s。';
+$strings['NoUserCoordinatesFound'] = '設定された追加フィールドに対するユーザーの位置情報が見つかりませんでした。';
+$strings['ConfigureGoogleMapsFirst'] = 'マップを開く前にGoogle Maps APIを設定して有効にしてください。';
+
+$strings['map_provider'] = 'マッププロバイダ';
+$strings['map_provider_help'] = 'プラグインおよびソーシャルマップで使用するマッププロバイダを選択してください。';
+$strings['GoogleMapsProvider'] = 'Google マップ';
+$strings['OpenStreetMapProvider'] = 'OpenStreetMap';
+$strings['MapProvider'] = 'マッププロバイダ';
+$strings['MapProviderConfiguration'] = 'プロバイダ設定';
+$strings['default_latitude'] = 'デフォルト緯度';
+$strings['default_latitude_help'] = 'マーカーがない場合に使用されるデフォルトのマップ中心緯度です。';
+$strings['default_longitude'] = 'デフォルト経度';
+$strings['default_longitude_help'] = 'マーカーがない場合に使用されるデフォルトのマップ中心経度です。';
+$strings['default_zoom'] = 'デフォルトズーム';
+$strings['default_zoom_help'] = '1から20の間のデフォルトマップズームレベルです。';
+$strings['OpenStreetMapInfo'] = 'OpenStreetMapはAPIキーを必要としません。座標が利用できない場合、住所のみのマーカーは検索リンクとして表示されます。';

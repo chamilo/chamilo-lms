@@ -68,6 +68,28 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        # MCP remote server authenticated with a personal MCP API key, an OAuth
+        # access token issued by the oauth_server firewall below, or a legacy
+        # development JWT.
+        mcp:
+            pattern: ^/mcp$
+            stateless: true
+            provider: app_user_provider
+            entry_point: Chamilo\CoreBundle\Security\Authenticator\McpBearerAuthenticator
+            custom_authenticators:
+                - Chamilo\CoreBundle\Security\Authenticator\McpBearerAuthenticator
+
+        # Generic OAuth 2.1 Authorization Server surface (discovery, dynamic
+        # client registration, token issuance/refresh, revocation). These
+        # authenticate the *client application* (or an explicit secret in the
+        # request body), never a Chamilo user session — deliberately stateless
+        # and carries no custom authenticators. /oauth/authorize is NOT here:
+        # it needs the real session cookie from /login and stays under `main`.
+        oauth_server:
+            pattern: ^/(\.well-known/oauth-(protected-resource|authorization-server)|oauth/(token|register|revoke))
+            stateless: true
+            provider: app_user_provider
+
         # Use to connect via a JWT token
         api:
             pattern: ^/api
@@ -90,6 +112,7 @@ security:
         # Default login via json
         main:
             pattern: ^/
+            jwt: ~
             context: main
             provider: app_user_provider
             # set throttling through the rate-limit package (uses Lock for persistence, see config/packages/lock.yaml)
@@ -129,6 +152,12 @@ security:
                 - Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator
 
     access_control:
+        - { path: '^/mcp$', roles: PUBLIC_ACCESS, methods: [OPTIONS] }
+        - { path: '^/mcp$', roles: ROLE_USER }
+        - { path: '^/\.well-known/oauth-', roles: PUBLIC_ACCESS }
+        - { path: '^/oauth/(token|register|revoke)$', roles: PUBLIC_ACCESS }
+        - { path: '^/oauth/authorize$', roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: '^/oauth/authorize$', roles: ROLE_USER, methods: [POST] }
         - { path: ^/scim/v2, roles: PUBLIC_ACCESS }
         - { path: ^/login/token/check, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }

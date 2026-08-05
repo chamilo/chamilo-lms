@@ -1,7 +1,7 @@
 import { ref } from "vue"
 import { usePlatformConfig } from "../store/platformConfig"
 import { arrayBufferToBase64, urlBase64ToUint8Array } from "../utils/pushUtils.js"
-import axios from "axios"
+import pushSubscriptionService from "../services/pushSubscriptionService"
 
 export function usePushSubscription() {
   const isSubscribed = ref(null)
@@ -70,12 +70,10 @@ export function usePushSubscription() {
 
       const sub = await registration.pushManager.getSubscription()
       if (sub) {
-        const result = await axios.get(
-          `/api/push_subscriptions?endpoint=${encodeURIComponent(sub.endpoint)}&user.id=${userId}`,
-        )
+        const result = await pushSubscriptionService.findByEndpoint(sub.endpoint, userId)
 
-        if (result.data["hydra:member"].length > 0) {
-          const dbSub = result.data["hydra:member"][0]
+        if (result.items.length > 0) {
+          const dbSub = result.items[0]
           isSubscribed.value = true
           subscriptionInfo.value = {
             id: dbSub.id,
@@ -152,14 +150,14 @@ export function usePushSubscription() {
         user: `/api/users/${userId}`,
       }
 
-      const response = await axios.post("/api/push_subscriptions", payload)
+      const data = await pushSubscriptionService.create(payload)
 
-      if (response.data && response.data.id) {
+      if (data && data.id) {
         subscriptionInfo.value = {
-          id: response.data.id,
-          endpoint: response.data.endpoint,
-          p256dh: response.data.publicKey,
-          auth: response.data.authToken,
+          id: data.id,
+          endpoint: data.endpoint,
+          p256dh: data.publicKey,
+          auth: data.authToken,
         }
       }
 
@@ -193,13 +191,11 @@ export function usePushSubscription() {
       if (sub) {
         await sub.unsubscribe()
 
-        const result = await axios.get(
-          `/api/push_subscriptions?endpoint=${encodeURIComponent(sub.endpoint)}&user.id=${userId}`,
-        )
+        const result = await pushSubscriptionService.findByEndpoint(sub.endpoint, userId)
 
-        if (result.data["hydra:member"].length > 0) {
-          const id = result.data["hydra:member"][0].id
-          await axios.delete(`/api/push_subscriptions/${id}`)
+        if (result.items.length > 0) {
+          const id = result.items[0].id
+          await pushSubscriptionService.remove(id)
           console.log("[Push] Deleted backend subscription with id", id)
         } else {
           console.warn("Push subscription not found in backend for deletion.")

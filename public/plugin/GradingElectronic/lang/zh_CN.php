@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = '电子评分已禁用';
 $strings['StudentId'] = '学生ID';
 $strings['ProviderId'] = '提供者ID';
 $strings['CourseHours'] = '课程小时';
+
+$strings['GenerateFile'] = '生成文件';
+$strings['CourseId'] = '课程 ID';

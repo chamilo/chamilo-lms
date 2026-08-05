@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Evaluarea opțiunilor de întrebare';
 $strings['plugin_comment'] = 'Permite recalcularea punctajelor opțiunilor în întrebări';
 
-$strings['enable'] = 'Activați';
 $strings['exercise_max_score'] = 'Punctaj maxim în exerciții';
 $strings['exercise_max_score_help'] = 'Valoarea implicită este 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Succese - Eșecuri / 3';
 $strings['QuestionsEvaluated'] = 'Întrebări evaluate';
 $strings['RecalculateQuestionScores'] = 'Recalculează punctajele întrebărilor';
 $strings['FormulaSavedForExerciseX'] = 'Formula salvată pentru exercițiul „%s”.';
+$strings['NoFormulaHelp'] = 'Păstrează comportamentul implicit de notare Chamilo pentru acest test.';
+$strings['enable'] = 'Activați';

@@ -25,6 +25,7 @@ import { computed, onMounted, provide, ref } from "vue"
 import { useRoute } from "vue-router"
 import SocialWall from "./SocialWall.vue"
 import SocialSearch from "./SocialSearch.vue"
+import SocialMap from "./SocialMap.vue"
 import UserProfileCard from "../../components/social/UserProfileCard.vue"
 import MyGroupsCard from "../../components/social/MyGroupsCard.vue"
 import MyFriendsCard from "../../components/social/MyFriendsCard.vue"
@@ -56,5 +57,12 @@ onMounted(async () => {
 })
 
 const isSearchPage = computed(() => route.path.includes("/social/search"))
-const currentComponent = computed(() => (isSearchPage.value ? SocialSearch : SocialWall))
+const isMapPage = computed(() => route.path.includes("/social/map"))
+const currentComponent = computed(() => {
+  if (isMapPage.value) {
+    return SocialMap
+  }
+
+  return isSearchPage.value ? SocialSearch : SocialWall
+})
 </script>

@@ -21,6 +21,9 @@ api_protect_admin_script(true);
 $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
+$hideNeverExpireOption = 'true' === api_get_setting('registration.user_hide_never_expire_option')
+    && !api_is_platform_admin();
+$adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
 $userInfo = api_get_user_info($user_id, null, true);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
@@ -59,6 +62,41 @@ function confirmation(name) {
         return false;
     }
 }
+
+function update_user_edit_password_section() {
+    var authSourceSelect = document.getElementById("auth_source");
+    var passwordSection = document.getElementById("user-edit-password-section");
+
+    if (!authSourceSelect || !passwordSection) {
+        return;
+    }
+
+    var hasPlatformAuth = false;
+    for (var i = 0; i < authSourceSelect.options.length; i++) {
+        if (authSourceSelect.options[i].selected && "platform" === authSourceSelect.options[i].value) {
+            hasPlatformAuth = true;
+            break;
+        }
+    }
+
+    passwordSection.classList.toggle("hidden", !hasPlatformAuth);
+
+    if (!hasPlatformAuth) {
+        var defaultRadio = document.querySelector("input[name=reset_password][value=\"0\"]");
+        if (defaultRadio) {
+            defaultRadio.checked = true;
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var authSourceSelect = document.getElementById("auth_source");
+
+    if (authSourceSelect) {
+        authSourceSelect.addEventListener("change", update_user_edit_password_section);
+        update_user_edit_password_section();
+    }
+});
 </script>';
 
 $advancedPanelOpen = !empty($_POST);
@@ -175,55 +213,93 @@ if ('true' !== api_get_setting('login_is_email')) {
 }
 
 $extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($accessUrl);
+$authSources = [
+    UserAuthSource::PLATFORM => get_lang('Platform'),
+];
 
 if (!empty($extAuthSource) && count($extAuthSource) > 0) {
-    foreach ($userInfo['auth_sources'] as $userAuthSource) {
-        $form->addLabel(
-            get_lang('Current authentication method'),
-            '<em>'.$userAuthSource.'</em>'
-        );
-    }
-}
-
-// Password
-$form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('Don\'t reset password'), 0);
-$nb_ext_auth_source_added = 0;
-if (!empty($extAuthSource) && count($extAuthSource) > 0) {
-    $auth_sources = [];
     foreach ($extAuthSource as $key) {
         // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_add.php
         if ((UserAuthSource::CAS == $key && 'true' === api_get_setting('cas_activate')) || (UserAuthSource::CAS != $key)) {
-            $auth_sources[$key] = $key;
-            $nb_ext_auth_source_added++;
+            $authSources[$key] = $key;
         }
     }
-    if ($nb_ext_auth_source_added > 0) {
-        // @todo check the radio button for external authentification and select the external authentication in the menu
-        $group[] = $form->createElement('radio', 'reset_password', null, get_lang('External authentification').' ', 3);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple', 'size' => 2]);;
-        $group[] = $form->createElement('static', '', '', '<br />', []);
-        $form->addGroup($group, 'password', null, null, false);
-    }
 }
-$form->addElement('radio', 'reset_password', null, get_lang('Automatically generate a new password'), 1);
-$group = [];
-$group[] = $form->createElement('radio', 'reset_password', null, get_lang('Enter password'), 2);
-$group[] = $form->createElement(
-    'password',
-    'password',
-    null,
-    [
-        'id' => 'password',
-        'onkeydown' => 'javascript: password_switch_radio_button();',
-        'show_hide' => true,
-    ]
+
+$hasSingleAuthSource = 1 === count($authSources);
+$currentAuthSources = (array) ($userInfo['auth_sources'] ?? []);
+if ($hasSingleAuthSource || empty($currentAuthSources)) {
+    $currentAuthSources = array_keys($authSources);
+}
+$showPasswordSection = in_array(UserAuthSource::PLATFORM, $currentAuthSources, true);
+
+$form->addHtml(
+    '<div class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">'.
+    '<div class="mb-4">'.
+    '<h3 class="mb-1 text-heading-4 font-semibold text-gray-90">'.get_lang('Authentication').'</h3>'.
+    '<p class="text-body-2 text-gray-50">'.get_lang('Choose how this user can authenticate on the platform.').'</p>'.
+    '</div>'
 );
 
-$form->addGroup($group, 'password', null, null, false);
-$form->addPasswordRule('password', 'password');
+if ($hasSingleAuthSource) {
+    $singleAuthSourceLabel = (string) reset($authSources);
+    $form->addElement(
+        'static',
+        null,
+        get_lang('Authentication methods'),
+        htmlspecialchars($singleAuthSourceLabel, \ENT_QUOTES, 'UTF-8')
+    );
+} else {
+    $form->addElement(
+        'select',
+        'auth_source',
+        get_lang('Authentication methods'),
+        $authSources,
+        [
+            'id' => 'auth_source',
+            'multiple' => 'multiple',
+            'size' => max(3, min(count($authSources), 8)),
+            'class' => 'w-full rounded-lg border border-gray-25 bg-white px-3 py-2 text-body-2 text-gray-90 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
+        ]
+    );
+    $form->addRule('auth_source', get_lang('Required field'), 'required');
+}
+
+$form->addHtml(
+    '<div id="user-edit-password-section" class="mt-6 rounded-xl border border-gray-25 bg-gray-5 p-4 '.($showPasswordSection ? '' : 'hidden').'">'.
+    '<h4 class="mb-3 text-body-1 font-semibold text-gray-90">'.get_lang('Password').'</h4>'
+);
+
+$resetPasswordOptions = [
+    0 => get_lang('Don\'t reset password'),
+    1 => get_lang('Automatically generate a new password'),
+];
+
+if ($adminsCanSetUsersPass) {
+    $resetPasswordOptions[2] = get_lang('Set password manually');
+}
+
+$form->addRadio('reset_password', null, $resetPasswordOptions);
+
+if ($adminsCanSetUsersPass) {
+    $form->addElement(
+        'password',
+        'password',
+        null,
+        [
+            'id' => 'password',
+            'onkeydown' => 'javascript: password_switch_radio_button();',
+            'show_hide' => true,
+            'autocomplete' => 'new-password',
+        ]
+    );
+    $form->addPasswordRule('password');
+}
+
+$form->addHtml('</div></div>');
 
 $roleOptions = UserManager::getAllowedRoleOptionsForUserForm();
 
@@ -270,16 +346,32 @@ $isUserEditingOwnAccount = ($user_data['id'] === api_get_user_id());
 $hideFields = $isUserEditingOwnAccount || USER_SOFT_DELETED == $user_data['active'];
 if (!$hideFields) {
     // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        ['onchange' => 'javascript: enable_expiration_date();']
-    );
-    $form->addGroup($group, 'max_member_group', null, null, false);
+    if ($hideNeverExpireOption) {
+        $form->addElement('hidden', 'radio_expiration_date', 1);
+
+        $group = [];
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', get_lang('Expiration date'), null, false);
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
+
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            ['onchange' => 'javascript: enable_expiration_date();']
+        );
+
+        $form->addGroup($group, 'max_member_group', null, null, false);
+    }
 
     // active account or inactive account
     $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
@@ -362,11 +454,23 @@ $form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;
-$user_data['auth_source'] = $userInfo['auth_sources'];
+if (!$hasSingleAuthSource) {
+    $user_data['auth_source'] = $currentAuthSources;
+}
 
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
-    if (empty($expiration_date)) {
+
+    if ($hideNeverExpireOption) {
+        $user_data['radio_expiration_date'] = 1;
+
+        if (empty($expiration_date)) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user_data['expiration_date'] = api_get_local_time('+'.$days.' day');
+        } else {
+            $user_data['expiration_date'] = api_get_local_time($expiration_date);
+        }
+    } elseif (empty($expiration_date)) {
         $user_data['radio_expiration_date'] = 0;
         $user_data['expiration_date'] = api_get_local_time();
     } else {
@@ -395,8 +499,39 @@ $form->setDefaults($user_data);
 $error_drh = false;
 // Validate form
 if ($form->validate()) {
-    $user = $form->getSubmitValues(1);
-    $reset_password = (int) $user['reset_password'];
+    $user = $form->getSubmitValues(true);
+    if ($hideNeverExpireOption && !$hideFields) {
+        $user['radio_expiration_date'] = '1';
+
+        if (empty($user['expiration_date'])) {
+            $days = (int) api_get_setting('account_valid_duration');
+            $user['expiration_date'] = api_get_local_time('+'.$days.' day');
+        }
+    }
+    $allowedAuthSources = array_map('strval', array_keys($authSources));
+    $submittedAuthSources = $hasSingleAuthSource
+        ? $allowedAuthSources
+        : array_map('strval', (array) ($user['auth_source'] ?? []));
+    $authSource = array_values(array_intersect(
+        $submittedAuthSources,
+        $allowedAuthSources
+    ));
+
+    if (empty($authSource)) {
+        Display::addFlash(Display::return_message(get_lang('Required field'), 'error'));
+        header('Location: '.api_get_self().'?user_id='.$user_id);
+        exit();
+    }
+
+    $hasPlatformAuth = in_array(UserAuthSource::PLATFORM, $authSource, true);
+    $reset_password = (int) ($user['reset_password'] ?? 0);
+    $password = (string) ($user['password'] ?? '');
+
+    if (!$hasPlatformAuth || (2 === $reset_password && !$adminsCanSetUsersPass)) {
+        $reset_password = 0;
+        $password = '';
+    }
+
     if (2 == $reset_password && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('The password is too short')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -437,14 +572,13 @@ if ($form->validate()) {
 
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
-        $password = $user['password'];
-        $auth_source = $user['auth_source'] ?? ($userInfo['auth_source'] ?? []);
+        $auth_source = $authSource;
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
         $send_mail = (int) $user['send_mail'];
-        $reset_password = (int) $user['reset_password'];
+        $reset_password = (int) $reset_password;
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['locale'];
         $address = $user['address'] ?? null;
@@ -480,7 +614,7 @@ if ($form->validate()) {
                 }
 
                 if (!empty($coachSessions)) {
-                    $conflicts[] = get_lang('User is general coach in some sessions');
+                    $conflicts[] = get_lang('User is general tutor in some sessions');
                 }
 
                 if (!empty($adminSessions)) {

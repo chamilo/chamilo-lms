@@ -1,6 +1,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { usePlatformConfig } from "../store/platformConfig"
+import baseService from "../services/baseService"
 
 export function useTopbarTour({ isAnonymous }) {
   const platformConfigStore = usePlatformConfig()
@@ -119,18 +120,7 @@ export function useTopbarTour({ isAnonymous }) {
 
     const stepsAjax = getTourConfigValue("stepsAjax", "/plugin/Tour/ajax/steps.ajax.php")
 
-    const response = await fetch(`${stepsAjax}?page=${encodeURIComponent(pageClass)}`, {
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-      },
-    })
-
-    if (!response.ok) {
-      throw new Error(`Tour steps request failed: ${response.status}`)
-    }
-
-    const data = await response.json()
+    const data = await baseService.get(stepsAjax, { page: pageClass })
 
     return Array.isArray(data) ? data : []
   }
@@ -295,19 +285,8 @@ export function useTopbarTour({ isAnonymous }) {
     }
 
     try {
-      const response = await fetch(saveAjax, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          Accept: "application/json",
-        },
-        body: params.toString(),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Tour save request failed: ${response.status}`)
-      }
+      // URLSearchParams body makes axios send application/x-www-form-urlencoded.
+      await baseService.post(saveAjax, params)
     } catch (e) {
       console.warn("[Topbar][Tour] Failed to save completion state", e)
     }

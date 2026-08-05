@@ -8,3 +8,6 @@ $strings['PluginDisabled'] = 'Az Elektronikus Értékelés ki van kapcsolva';
 $strings['StudentId'] = 'Hallgató azonosító';
 $strings['ProviderId'] = 'Szolgáltató azonosító';
 $strings['CourseHours'] = 'Kurzus órák';
+
+$strings['GenerateFile'] = 'Fájl generálása';
+$strings['CourseId'] = 'Kurzus azonosító';

@@ -105,8 +105,12 @@ if ('true' === $filter) {
 }
 
 $content = '';
-$allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
-    1 == api_get_course_setting('customcertificate_course_enable', $courseInfo);
+$customCertificatePluginFile = api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
+if (is_file($customCertificatePluginFile)) {
+    require_once $customCertificatePluginFile;
+}
+$allowCustomCertificate = class_exists('CustomCertificatePlugin') &&
+    CustomCertificatePlugin::isEnabledForCourse($courseInfo);
 
 $tags = Certificate::notificationTags();
 

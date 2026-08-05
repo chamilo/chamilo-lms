@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -27,7 +29,13 @@ final class Version20201212203625 extends AbstractMigrationChamilo
      *
      * @var string[]
      */
-    private const FOLDER_LIKE_FILETYPES = [
+    private const int DOCUMENT_BATCH_SIZE = 100;
+    private const int AUDIO_ASSET_FLUSH_BATCH_SIZE = 50;
+    private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';
+    private const string CDOCUMENT_CID_INDEX = 'idx_legacy_migration_cdocument_c_id';
+    private const string TRACK_E_ATTEMPT_LOOKUP_INDEX = 'idx_legacy_migration_track_e_attempt_uid_qid_fn';
+
+    private const array FOLDER_LIKE_FILETYPES = [
         'folder',
         'user_folder',
         'user_folder_ses',
@@ -44,6 +52,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureCDocumentFiletypeVarchar15();
+        $this->ensureItemPropertyMigrationIndex();
+        $this->ensureCDocumentCidIndex();
+        $this->ensureTrackEAttemptLookupIndex();
 
         /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
@@ -51,8 +62,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         /** @var CourseRepository $courseRepo */
         $courseRepo = $this->container->get(CourseRepository::class);
 
-        $batchSize = self::BATCH_SIZE;
+        $batchSize = self::DOCUMENT_BATCH_SIZE;
         $updateRootPath = $this->getUpdateRootPath();
+
+        $courses = $this->connection->fetchAllAssociative(
+            'SELECT id, directory FROM course ORDER BY id'
+        );
 
         // Prepared statements.
         $stmtTeacherAudioDocs = $this->connection->prepare(
@@ -85,23 +100,27 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         );
 
         $stmtCourseDocuments = $this->connection->prepare(
-            'SELECT iid, path, session_id, filetype
+            'SELECT iid, path, filetype
              FROM c_document
              WHERE c_id = :cid
                AND path NOT LIKE :exPattern
-               AND path NOT LIKE :chatPattern
+               AND path NOT LIKE :chatFilesPattern
+               AND path NOT LIKE :chatHistoryPattern
              ORDER BY filetype DESC, path'
         );
 
         // --------------------------
         // 1) Teacher exercise audio
         // --------------------------
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $pendingFeedbackRows = [];
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = (int) $course->getId();
-            $courseDirectory = (string) $course->getDirectory();
+        foreach ($courses as $courseData) {
+            $courseId = (int) ($courseData['id'] ?? 0);
+            $courseDirectory = (string) ($courseData['directory'] ?? '');
+
+            if ($courseId <= 0 || '' === $courseDirectory) {
+                continue;
+            }
 
             $documents = $stmtTeacherAudioDocs->executeQuery([
                 'cid' => $courseId,
@@ -152,26 +171,34 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     ;
 
                     $this->entityManager->persist($asset);
-                    $this->entityManager->flush();
+                    $pendingFeedbackRows[] = [$attemptId, $userId, $asset];
 
-                    $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+                    if (\count($pendingFeedbackRows) >= self::AUDIO_ASSET_FLUSH_BATCH_SIZE) {
+                        $this->flushPendingFeedbackRows($pendingFeedbackRows);
+                        $pendingFeedbackRows = [];
+                    }
                 } catch (Throwable) {
                     // Ignore single-file failures to keep the migration running.
                 }
             }
+        }
 
-            $this->entityManager->clear();
+        if ([] !== $pendingFeedbackRows) {
+            $this->flushPendingFeedbackRows($pendingFeedbackRows);
         }
 
         // --------------------------
         // 2) Student exercise audio
         // --------------------------
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $pendingFileRows = [];
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = (int) $course->getId();
-            $courseDirectory = (string) $course->getDirectory();
+        foreach ($courses as $courseData) {
+            $courseId = (int) ($courseData['id'] ?? 0);
+            $courseDirectory = (string) ($courseData['directory'] ?? '');
+
+            if ($courseId <= 0 || '' === $courseDirectory) {
+                continue;
+            }
 
             $documents = $stmtStudentAudioDocs->executeQuery([
                 'cid' => $courseId,
@@ -235,34 +262,45 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     ;
 
                     $this->entityManager->persist($asset);
-                    $this->entityManager->flush();
+                    $pendingFileRows[] = [$attemptId, $asset];
 
-                    $this->insertAttemptFileRow($attemptId, $asset);
+                    if (\count($pendingFileRows) >= self::AUDIO_ASSET_FLUSH_BATCH_SIZE) {
+                        $this->flushPendingFileRows($pendingFileRows);
+                        $pendingFileRows = [];
+                    }
                 } catch (Throwable) {
                     // Ignore single-file failures to keep the migration running.
                 }
             }
+        }
 
-            $this->entityManager->clear();
+        if ([] !== $pendingFileRows) {
+            $this->flushPendingFileRows($pendingFileRows);
         }
 
         // --------------------------
         // 3) Normal documents
         // --------------------------
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
-
         $docMeta = $this->entityManager->getClassMetadata(CDocument::class);
         $docIdField = (string) $docMeta->getSingleIdentifierFieldName();
+        $documentResourceTypeId = (int) $documentRepo->getResourceType()->getId();
+        $adminId = (int) $this->connection->fetchOne(
+            'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1'
+        );
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = (int) $course->getId();
-            $courseDirectory = (string) $course->getDirectory();
+        foreach ($courses as $courseData) {
+            $courseId = (int) ($courseData['id'] ?? 0);
+            $courseDirectory = (string) ($courseData['directory'] ?? '');
+
+            if ($courseId <= 0 || '' === $courseDirectory) {
+                continue;
+            }
 
             $rows = $stmtCourseDocuments->executeQuery([
                 'cid' => $courseId,
                 'exPattern' => '/../exercises/%',
-                'chatPattern' => '/chat_files/%',
+                'chatFilesPattern' => '%/chat_files/%',
+                'chatHistoryPattern' => '%/chat_history/%',
             ])->fetchAllAssociative();
 
             if (empty($rows)) {
@@ -281,6 +319,17 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
             $baseDocumentsPath = $updateRootPath.'/app/courses/'.$courseDirectory.'/document/';
 
+            $documentRefs = [];
+            foreach ($rows as $row) {
+                $documentId = (int) ($row['iid'] ?? 0);
+                if ($documentId > 0) {
+                    $documentRefs[] = $documentId;
+                }
+            }
+
+            // Fetch once per course instead of once per small document batch.
+            $itemPropsMap = $this->fetchItemPropertiesMap('document', $courseId, $documentRefs);
+
             $total = \count($rows);
             for ($offset = 0; $offset < $total; $offset += $batchSize) {
                 /** @var Course|null $courseEntity */
@@ -289,20 +338,16 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     break;
                 }
 
-                // Must be loaded in the current EM because we clear() between batches.
-                $admin = $this->getAdmin();
+                // These references must belong to the current EntityManager after clear().
+                $admin = $adminId > 0
+                    ? $this->entityManager->getReference(User::class, $adminId)
+                    : $this->getAdmin();
+                $documentResourceType = $this->entityManager->getReference(
+                    ResourceType::class,
+                    $documentResourceTypeId
+                );
 
                 $chunk = \array_slice($rows, $offset, $batchSize);
-
-                // Prefetch item properties for this batch to avoid N+1 queries in fixItemProperty().
-                $refs = [];
-                foreach ($chunk as $r) {
-                    $iid = (int) ($r['iid'] ?? 0);
-                    if ($iid > 0) {
-                        $refs[] = $iid;
-                    }
-                }
-                $itemPropsMap = $this->fetchItemPropertiesMap('document', $courseId, $refs);
 
                 // Batch-load documents (+ parents) to avoid per-row find().
                 $idsToLoad = [];
@@ -392,6 +437,27 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     }
 
                     $items = $itemPropsMap[$documentId] ?? [];
+
+                    // The legacy certificate folder can exist without c_item_property while
+                    // its certificate templates still have valid item-property rows. Create
+                    // only the technical parent node so the child templates can be migrated
+                    // with their original metadata. Do not synthesize a course/session/group
+                    // link for the folder itself.
+                    $effectiveFiletype = (string) ($document->getFiletype() ?? $legacyFiletype);
+                    if (empty($items) && 'cert_folder' === $effectiveFiletype) {
+                        $document->setParent($parent);
+                        $resourceNode = $documentRepo->addResourceNode(
+                            $document,
+                            $admin,
+                            $parent,
+                            $documentResourceType
+                        );
+                        $this->entityManager->persist($resourceNode);
+                        $this->entityManager->persist($document);
+
+                        continue;
+                    }
+
                     $ok = $this->fixItemProperty(
                         'document',
                         $documentRepo,
@@ -399,7 +465,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                         $admin,
                         $document,
                         $parent,
-                        $items
+                        $items,
+                        $documentResourceType
                     );
                     if (false === $ok) {
                         continue;
@@ -408,8 +475,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     // Folders/system folders: no file upload step.
                     $effectiveFiletype = (string) ($document->getFiletype() ?? $legacyFiletype);
                     if (\in_array($effectiveFiletype, self::FOLDER_LIKE_FILETYPES, true)) {
-                        $this->entityManager->persist($document);
-
                         continue;
                     }
 
@@ -417,8 +482,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $filePath = $baseDocumentsPath.$documentPathRel;
 
                     if (!$this->fileExists($filePath)) {
-                        $this->entityManager->persist($document);
-
                         continue;
                     }
 
@@ -428,8 +491,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     if ('html' === $ext || 'htm' === $ext) {
                         $filePathToUpload = $this->rewriteHtmlFileLegacyLinksIfNeeded($filePath, $courseDirectory);
                         if (!$this->fileExists($filePathToUpload)) {
-                            $this->entityManager->persist($document);
-
                             continue;
                         }
                     }
@@ -443,8 +504,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                         $documentId,
                         $originalFilename
                     );
-
-                    $this->entityManager->persist($document);
                 }
 
                 $this->entityManager->flush();
@@ -478,6 +537,70 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         return false !== $v;
     }
 
+    /**
+     * @param array<int, array{0: int, 1: int, 2: Asset}> $pendingRows
+     */
+    private function flushPendingFeedbackRows(array $pendingRows): void
+    {
+        try {
+            $this->entityManager->flush();
+            foreach ($pendingRows as [$attemptId, $userId, $asset]) {
+                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+            }
+            $this->entityManager->clear();
+
+            return;
+        } catch (Throwable) {
+            $this->entityManager->clear();
+        }
+
+        // A single bad file must not drop the whole batch: retry one by one,
+        // exactly like the original per-row flush this batching replaced.
+        foreach ($pendingRows as [$attemptId, $userId, $asset]) {
+            try {
+                $this->entityManager->persist($asset);
+                $this->entityManager->flush();
+                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
+            } catch (Throwable) {
+                // Ignore single-file failures to keep the migration running.
+            }
+        }
+
+        $this->entityManager->clear();
+    }
+
+    /**
+     * @param array<int, array{0: int, 1: Asset}> $pendingRows
+     */
+    private function flushPendingFileRows(array $pendingRows): void
+    {
+        try {
+            $this->entityManager->flush();
+            foreach ($pendingRows as [$attemptId, $asset]) {
+                $this->insertAttemptFileRow($attemptId, $asset);
+            }
+            $this->entityManager->clear();
+
+            return;
+        } catch (Throwable) {
+            $this->entityManager->clear();
+        }
+
+        // A single bad file must not drop the whole batch: retry one by one,
+        // exactly like the original per-row flush this batching replaced.
+        foreach ($pendingRows as [$attemptId, $asset]) {
+            try {
+                $this->entityManager->persist($asset);
+                $this->entityManager->flush();
+                $this->insertAttemptFileRow($attemptId, $asset);
+            } catch (Throwable) {
+                // Ignore single-file failures to keep the migration running.
+            }
+        }
+
+        $this->entityManager->clear();
+    }
+
     private function insertAttemptFeedbackRow(int $attemptId, int $userId, Asset $asset): void
     {
         $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
@@ -507,6 +630,109 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'created_at' => $now,
             'updated_at' => $now,
         ]);
+    }
+
+    private function ensureItemPropertyMigrationIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_item_property', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_item_property') as $index) {
+                if (self::ITEM_PROPERTY_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 2
+                    && 'tool' === $columns[0]
+                    && 'ref' === $columns[1]
+                ) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_item_property.', [
+                'index' => self::ITEM_PROPERTY_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::ITEM_PROPERTY_INDEX.' ON c_item_property (tool, ref, c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_item_property migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureCDocumentCidIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('c_document', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('c_document') as $index) {
+                if (self::CDOCUMENT_CID_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'c_id' === $columns[0]) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on c_document.', [
+                'index' => self::CDOCUMENT_CID_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::CDOCUMENT_CID_INDEX.' ON c_document (c_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create c_document migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureTrackEAttemptLookupIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('track_e_attempt', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('track_e_attempt') as $index) {
+                if (self::TRACK_E_ATTEMPT_LOOKUP_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 3
+                    && 'user_id' === $columns[0]
+                    && 'question_id' === $columns[1]
+                    && 'filename' === $columns[2]
+                ) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating temporary migration index on track_e_attempt.', [
+                'index' => self::TRACK_E_ATTEMPT_LOOKUP_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::TRACK_E_ATTEMPT_LOOKUP_INDEX.' ON track_e_attempt (user_id, question_id, filename)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create track_e_attempt migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 
     private function ensureCDocumentFiletypeVarchar15(): void

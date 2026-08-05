@@ -22,7 +22,7 @@
                         href="{{ plugin_index_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
 
@@ -30,7 +30,7 @@
                         href="{{ plugin_settings_url }}"
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
-                    <em class="fa fa-sliders fa-fw"></em>
+                    <em class="mdi mdi-tune"></em>
                     {{ 'PluginSettings'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
             </div>
@@ -93,7 +93,7 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div class="flex items-start gap-3">
                 <div class="mt-0.5 text-primary">
-                    <em class="fa fa-info-circle text-lg"></em>
+                    <em class="mdi mdi-information-outline text-lg"></em>
                 </div>
                 <div class="space-y-1">
                     <p class="font-semibold text-gray-90">
@@ -109,7 +109,7 @@
                     href="{{ plugin_settings_url }}"
                     class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-primary/20 bg-white px-4 py-2.5 text-sm font-semibold text-primary transition hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
             >
-                <em class="fa fa-external-link fa-fw"></em>
+                <em class="mdi mdi-open-in-new"></em>
                 {{ 'OpenPluginSettings'|get_plugin_lang('BuyCoursesPlugin') }}
             </a>
         </div>
@@ -330,7 +330,7 @@
                                         href="{{ delete_transfer_base_url ~ '?' ~ {'action': 'delete_taccount', 'id': account.id}|url_encode }}"
                                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
                                 >
-                                    <em class="fa fa-remove fa-fw"></em>
+                                    <em class="mdi mdi-close"></em>
                                     {{ 'Delete'|get_lang }}
                                 </a>
                             </td>

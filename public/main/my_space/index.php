@@ -151,20 +151,49 @@ if (!empty($session_id) &&
 
     // 2) Extra actions: "View my progress", calendar plugin, certificates.
 
-    // Optional Learning Calendar plugin entry (teachers only).
-    $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
-    if ($pluginCalendar && api_is_teacher()) {
-        $lpCalendar = \LearningCalendarPlugin::create();
-        $actionsLeft .= Display::url(
-            Display::getMdiIcon(
-                'calendar-text',
-                'ch-tool-icon',
-                null,
-                32,
-                $lpCalendar->get_lang('Learning calendar')
-            ),
-            api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
-        );
+    // Optional Learning Calendar plugin entry for users allowed to access reporting.
+    $learningCalendarPluginPath = api_get_path(SYS_PLUGIN_PATH).'LearningCalendar/LearningCalendarPlugin.php';
+    if (file_exists($learningCalendarPluginPath)) {
+        require_once $learningCalendarPluginPath;
+    }
+
+    $canAccessLearningCalendar = $allowToTrack || $is_drh || $is_coach;
+    if (class_exists('LearningCalendarPlugin') && $canAccessLearningCalendar) {
+        $learningCalendarPlugin = LearningCalendarPlugin::create();
+        if ($learningCalendarPlugin->isEnabled()) {
+            $actionsLeft .= Display::url(
+                Display::getMdiIcon(
+                    'calendar-text',
+                    'ch-tool-icon',
+                    null,
+                    32,
+                    $learningCalendarPlugin->get_lang('LearningCalendar')
+                ),
+                api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
+            );
+        }
+    }
+
+    // Optional StudentFollowUp plugin entry for users allowed to access reporting.
+    $studentFollowUpPluginPath = api_get_path(SYS_PLUGIN_PATH).'StudentFollowUp/StudentFollowUpPlugin.php';
+    if (file_exists($studentFollowUpPluginPath)) {
+        require_once $studentFollowUpPluginPath;
+    }
+
+    if (class_exists('StudentFollowUpPlugin')) {
+        $studentFollowUpPlugin = StudentFollowUpPlugin::create();
+        if ($studentFollowUpPlugin->isEnabled()) {
+            $actionsLeft .= Display::url(
+                Display::getMdiIcon(
+                    'account-search',
+                    'ch-tool-icon',
+                    null,
+                    32,
+                    $studentFollowUpPlugin->get_lang('plugin_title')
+                ),
+                api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/my_students.php'
+            );
+        }
     }
 }
 
@@ -223,6 +252,7 @@ $form = new FormValidator(
 $form = Tracking::setUserSearchForm($form);
 
 $totalTimeSpent = null;
+$averageTimeSpentOnThePlatform = null;
 $averageScore = null;
 $posts = null;
 
@@ -230,18 +260,21 @@ if (false === $skipData) {
     if (!empty($students)) {
         // Students.
         $studentIds = array_values($students);
-        $progress = 0; // @todo: fix stats (Tracking::get_avg_student_progress($studentIds)).
-        $countAssignments = 0; // @todo: restore assignments count when stats are fixed.
+        $avgTotalProgress = Tracking::getAverageLearningPathProgressForStudentList($studentIds);
+        $countAssignments = Tracking::countAssignmentsForStudentList($studentIds);
+        $posts = Tracking::countForumPostsForStudentList($studentIds);
 
         // Average progress.
         if ($numberStudents > 0) {
-            $avgTotalProgress = $progress / $numberStudents;
             $numberAssignments = $countAssignments / $numberStudents;
             $avg_courses_per_student = $countCourses / $numberStudents;
         }
 
-        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
-        $posts = 0; // @todo: restore forum posts stats.
+        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds, 'all');
+        if ($numberStudents > 0 && is_numeric($totalTimeSpent)) {
+            $averageTimeSpentOnThePlatform = $totalTimeSpent / $numberStudents;
+        }
+
         $averageScore = Tracking::getAverageStudentScore($studentIds);
     }
 
@@ -249,7 +282,12 @@ if (false === $skipData) {
         // CSV export.
         $csv_content[] = [get_lang('Learners')];
         $csv_content[] = [get_lang('Inactive learners'), $nb_inactive_students];
-        $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
+        $csv_content[] = [
+            get_lang('Time spent on portal'),
+            is_null($averageTimeSpentOnThePlatform)
+                ? null
+                : api_time_to_hms($averageTimeSpentOnThePlatform),
+        ];
         $csv_content[] = [
             get_lang('Average number of courses to which my learners are subscribed'),
             round($avg_courses_per_student, 3),
@@ -270,7 +308,7 @@ if (false === $skipData) {
         $csv_content[] = [get_lang('Average assignments per learner'), $numberAssignments];
         $csv_content[] = [];
     } else {
-        $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
+        $lastConnectionDate = api_get_utc_datetime(strtotime($daysAgo.' days ago'));
         $countActiveUsers = SessionManager::getCountUserTracking(
             null,
             1,
@@ -293,14 +331,15 @@ if (false === $skipData) {
             $sessionIdList,
             $studentIds
         );
+        $nb_inactive_students = (int) $countSleepingStudents;
 
         $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
             ? ''
             : round($avg_courses_per_student, 3);
         $report['InactivesStudents'] = $nb_inactive_students;
-        $report['AverageTimeSpentOnThePlatform'] = is_null($totalTimeSpent)
+        $report['AverageTimeSpentOnThePlatform'] = is_null($averageTimeSpentOnThePlatform)
             ? '00:00:00'
-            : api_time_to_hms($totalTimeSpent);
+            : api_time_to_hms($averageTimeSpentOnThePlatform);
         $report['AverageProgressInLearnpath'] = is_null($avgTotalProgress)
             ? ''
             : round($avgTotalProgress, 2).'%';

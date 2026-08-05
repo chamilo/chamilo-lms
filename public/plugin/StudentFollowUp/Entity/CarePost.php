@@ -4,11 +4,11 @@
 
 declare(strict_types=1);
 
-
 namespace Chamilo\PluginBundle\StudentFollowUp\Entity;
 
-use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -21,47 +21,47 @@ class CarePost
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
-    protected string $title;
+    protected string $title = '';
 
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
-    protected string $content;
+    protected ?string $content = null;
 
     #[ORM\Column(name: 'external_care_id', type: 'string', nullable: true)]
-    protected ?string $externalCareId;
+    protected ?string $externalCareId = null;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
-    protected ?DateTime $createdAt;
+    protected ?DateTime $createdAt = null;
 
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
-    protected ?DateTime $updatedAt;
+    protected ?DateTime $updatedAt = null;
 
     #[ORM\Column(name: 'private', type: 'boolean')]
-    protected bool $private;
+    protected bool $private = false;
 
     #[ORM\Column(name: 'external_source', type: 'boolean')]
-    protected bool $externalSource;
+    protected bool $externalSource = false;
 
     #[ORM\Column(name: 'tags', type: 'array')]
-    protected array $tags;
+    protected array $tags = [];
 
     #[ORM\Column(name: 'attachment', type: 'string', length: 255)]
-    protected string $attachment;
+    protected string $attachment = '';
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'insert_user_id', referencedColumnName: 'id', nullable: false)]
-    private User $insertUser;
+    private ?User $insertUser = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
-    private User $user;
+    private ?User $user = null;
 
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: CarePost::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private CarePost $parent;
+    private ?CarePost $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CarePost::class)]
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
@@ -69,27 +69,24 @@ class CarePost
 
     #[Gedmo\TreeLeft]
     #[ORM\Column(name: 'lft', type: 'integer', unique: false, nullable: true)]
-    private ?int $lft;
+    private ?int $lft = null;
 
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'rgt', type: 'integer', unique: false, nullable: true)]
-    private ?int $rgt;
+    private ?int $rgt = null;
 
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'lvl', type: 'integer', unique: false, nullable: true)]
-    private ?int $lvl;
+    private ?int $lvl = null;
 
     #[Gedmo\TreeRoot]
     #[ORM\Column(name: 'root', type: 'integer', unique: false, nullable: true)]
-    private ?int $root;
+    private ?int $root = null;
 
-    /**
-     * Project constructor.
-     */
     public function __construct()
     {
         $this->createdAt = new DateTime();
-        $this->attachment = '';
+        $this->children = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,7 +106,7 @@ class CarePost
         return $this->title;
     }
 
-    public function setTitle($title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
@@ -118,10 +115,10 @@ class CarePost
 
     public function getContent(): string
     {
-        return $this->content;
+        return $this->content ?? '';
     }
 
-    public function setContent(string $content): static
+    public function setContent(?string $content): static
     {
         $this->content = $content;
 
@@ -140,12 +137,12 @@ class CarePost
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser($user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
@@ -188,12 +185,12 @@ class CarePost
         return $this;
     }
 
-    public function getParent(): CarePost
+    public function getParent(): ?CarePost
     {
         return $this->parent;
     }
 
-    public function setParent(CarePost $parent): static
+    public function setParent(?CarePost $parent): static
     {
         $this->parent = $parent;
 
@@ -202,7 +199,7 @@ class CarePost
 
     public function hasParent(): int
     {
-        return !empty($this->parent) ? 1 : 0;
+        return null !== $this->parent ? 1 : 0;
     }
 
     public function getChildren(): Collection
@@ -253,7 +250,7 @@ class CarePost
         return $this;
     }
 
-    public function getInsertUser(): User
+    public function getInsertUser(): ?User
     {
         return $this->insertUser;
     }

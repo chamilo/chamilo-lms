@@ -33,6 +33,10 @@ final class PageExtension implements QueryCollectionExtensionInterface, QueryIte
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
+    /**
+     * @param array<string, mixed> $identifiers
+     * @param array<string, mixed> $context
+     */
     public function applyToItem(
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,

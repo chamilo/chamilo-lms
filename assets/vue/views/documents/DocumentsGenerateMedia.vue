@@ -219,19 +219,29 @@
       >
         <h3 class="font-semibold">{{ t("Preview") }}</h3>
 
-        <img
-          v-if="selectedType === 'image'"
-          :src="previewUrl"
-          class="max-w-full rounded border border-gray-200"
-          alt="Generated preview"
-        />
+        <div class="relative inline-block max-w-full">
+          <img
+            v-if="selectedType === 'image'"
+            :src="previewUrl"
+            class="block max-w-full rounded border border-gray-200"
+            alt="Generated preview"
+          />
 
-        <video
-          v-else
-          :src="previewUrl"
-          class="max-w-full rounded border border-gray-200"
-          controls
-        />
+          <video
+            v-else
+            :src="previewUrl"
+            class="block max-w-full rounded border border-gray-200"
+            controls
+          />
+
+          <span
+            v-if="showPreviewAiGeneratedBadge"
+            class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+            style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+          >
+            {{ t("AI generated") }}
+          </span>
+        </div>
       </div>
 
       <!-- Revised prompt -->
@@ -301,13 +311,16 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from "vue"
-import axios from "axios"
+import documentService from "../../services/documents"
+import aiService from "../../services/aiService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
@@ -316,7 +329,7 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
@@ -337,9 +350,37 @@ const selectedType = ref("image")
 // - ""   => Auto (recommended)
 // - "openai"/"grok"/... => explicit provider
 const selectedProvider = ref(null)
+const showAdvancedSettings = ref(false)
+
+function isResourceLanguageActive(language) {
+  if (!language || "object" !== typeof language) {
+    return false
+  }
+
+  if ("available" in language) {
+    return true === language.available || 1 === language.available || "1" === language.available
+  }
+
+  if ("isAvailable" in language) {
+    return true === language.isAvailable || 1 === language.isAvailable || "1" === language.isAvailable
+  }
+
+  if ("enabled" in language) {
+    return true === language.enabled || 1 === language.enabled || "1" === language.enabled
+  }
+
+  return true
+}
+
+const showResourceLanguageAdvancedSettings = computed(() => {
+  const languages = Array.isArray(window.languages) ? window.languages : []
+
+  return languages.filter(isResourceLanguageActive).length > 1
+})
 
 const folders = ref([])
 const selectedFolderId = ref(null)
+const selectedLanguage = ref("")
 
 const fileName = ref("")
 const prompt = ref("")
@@ -509,6 +550,12 @@ const canGenerate = computed(() => {
 
 const hasGeneratedResult = computed(() => !!generatedResult.value)
 
+// Base64 images are resized locally and receive an embedded AI-generated watermark.
+// Keep the HTML preview badge only when no embedded image watermark is guaranteed.
+const showPreviewAiGeneratedBadge = computed(
+  () => selectedType.value !== "image" || !generatedResult.value?.is_base64,
+)
+
 const canAccept = computed(() => {
   if (!generatedResult.value) return false
   if (!generatedResult.value.is_base64) return false
@@ -570,8 +617,9 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
+// Course context derived server-side from the gated session course.
 function buildResourceLinkList() {
-  return JSON.stringify([{ gid, sid, cid, visibility: RESOURCE_LINK_PUBLISHED }])
+  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 }
 
 function canvasMimeFromContentType(contentType) {
@@ -580,6 +628,32 @@ function canvasMimeFromContentType(contentType) {
   if (ct.includes("png")) return "image/png"
   if (ct.includes("webp")) return "image/webp"
   return "image/png"
+}
+
+function drawAiGeneratedWatermark(ctx, canvas) {
+  const label = t("AI generated")
+  const smallerSide = Math.max(1, Math.min(canvas.width, canvas.height))
+  const fontSize = Math.max(14, Math.round(smallerSide * 0.035))
+  const paddingX = Math.max(10, Math.round(fontSize * 0.75))
+  const paddingY = Math.max(6, Math.round(fontSize * 0.45))
+  const margin = Math.max(12, Math.round(fontSize * 0.8))
+
+  ctx.save()
+  ctx.font = `600 ${fontSize}px sans-serif`
+
+  const textMetrics = ctx.measureText(label)
+  const boxWidth = Math.ceil(textMetrics.width + paddingX * 2)
+  const boxHeight = Math.ceil(fontSize + paddingY * 2)
+  const x = Math.max(margin, canvas.width - boxWidth - margin)
+  const y = Math.max(margin, canvas.height - boxHeight - margin)
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.72)"
+  ctx.fillRect(x, y, boxWidth, boxHeight)
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.96)"
+  ctx.textBaseline = "middle"
+  ctx.fillText(label, x + paddingX, y + boxHeight / 2)
+  ctx.restore()
 }
 
 function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
@@ -602,6 +676,8 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
         const sy = (img.height - sh) / 2
 
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH)
+
+        drawAiGeneratedWatermark(ctx, canvas)
 
         const preferredMime = canvasMimeFromContentType(inContentType)
         let dataUrl = canvas.toDataURL(preferredMime)
@@ -650,15 +726,12 @@ async function saveToDocuments(file) {
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
   formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
+  formData.append("language", selectedLanguage.value)
 
   // Mark as AI-assisted (same request, no extra calls)
   formData.append("ai_assisted", "1")
 
-  const response = await axios.post("/api/documents", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-
-  const data = response?.data || {}
+  const data = (await documentService.uploadDocumentFile(formData)) || {}
   savedIri.value = String(data?.["@id"] || data?.id || "")
   return data
 }
@@ -686,20 +759,18 @@ async function fetchFolders(nodeId = null) {
         continue
       }
 
-      const response = await axios.get("/api/documents", {
-        params: {
-          loadNode: 1,
-          filetype: ["folder"],
-          "resourceNode.parent": currentNodeId,
-          cid,
-          sid,
-          gid,
-          page: 1,
-          itemsPerPage: 200,
-        },
+      const { items } = await documentService.listDocuments({
+        loadNode: 1,
+        filetype: ["folder"],
+        "resourceNode.parent": currentNodeId,
+        cid,
+        sid,
+        gid,
+        page: 1,
+        itemsPerPage: 200,
       })
 
-      const members = response.data?.["hydra:member"] || []
+      const members = items || []
       for (const folder of members) {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
@@ -722,7 +793,7 @@ async function loadCapabilities() {
   isLoadingCaps.value = true
 
   try {
-    const { data } = await axios.get("/ai/capabilities")
+    const data = await aiService.getCapabilities()
 
     hasImage.value = !!data?.has?.image
     hasVideo.value = !!data?.has?.video
@@ -771,10 +842,7 @@ function stopVideoPolling(reason = "") {
 }
 
 async function pollVideoJobOnce(jobId, providerCode) {
-  const response = await axios.get(`/ai/video_job/${encodeURIComponent(jobId)}`, {
-    params: { ai_provider: providerCode || null },
-  })
-  return response?.data
+  return aiService.getVideoJob(jobId, providerCode)
 }
 
 function isTerminalVideoStatus(status) {
@@ -931,7 +999,7 @@ async function generate() {
       payload.height = parsedHeight.value
     }
 
-    const { data } = await axios.post(endpoint, payload, { headers: { "Content-Type": "application/json" } })
+    const data = await aiService.generateMedia(endpoint, payload)
 
     if (!data?.success) {
       const msg = String(data?.text || "")
@@ -1061,12 +1129,6 @@ onMounted(async () => {
   isBooting.value = true
 
   try {
-    try {
-      await courseSettingsStore.loadCourseSettings(cid, sid)
-    } catch (e) {
-      console.error("[AI Media] loadCourseSettings failed:", e)
-    }
-
     try {
       let allowed = await checkIsAllowedToEdit(true, true, true, false)
 

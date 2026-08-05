@@ -75,3 +75,18 @@ $strings['QuestionDelete'] = 'Vill du ta bort det specifika diplom och använda 
 $strings['SuccessDelete'] = 'Borttagen framgångsrikt';
 $strings['ProblemDelete'] = 'Problem med att ta bort certifikatet';
 $strings['OnlyCustomCertificates'] = 'Endast kurser med personliga certifikat exporteras';
+$strings['CertificateMode'] = 'Certifikatläge';
+$strings['UseCourseCustomCertificate'] = 'Använd kurspecifikt anpassat certifikat';
+$strings['UseDefaultCustomCertificate'] = 'Använd plattformens standardanpassade certifikat';
+
+$strings['CreateCertificateWithTags'] = 'Skapa certifikatet med dessa taggar';
+
+$strings['DeleteCertificate'] = 'Ta bort certifikat';
+
+$strings['SaveCertificate'] = 'Spara certifikat';
+
+$strings['SelectOneOptionBeforeOpeningEditor'] = 'Välj ett alternativ och spara inställningarna innan du öppnar certifikatredigeraren.';
+
+$strings['ChooseCustomCertificateModeHelp'] = 'Välj hur denna kurs ska använda anpassade certifikat.';
+
+$strings['CouldNotSaveCertificate'] = 'Kunde inte spara certifikatkonfigurationen.';

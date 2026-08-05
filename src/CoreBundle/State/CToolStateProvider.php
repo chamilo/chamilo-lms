@@ -10,11 +10,10 @@ use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
-use AppPlugin;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
@@ -26,9 +25,12 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Plugin;
+use Positioning;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
+
+use const JSON_ERROR_NONE;
 
 /**
  * @template-implements ProviderInterface<CTool>
@@ -82,6 +84,7 @@ final class CToolStateProvider implements ProviderInterface
         );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('session.allow_edit_tool_visibility_in_session');
+        $hiddenToolsFromTeachers = $this->getHiddenToolsFromTeachers();
 
         [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly(
             $user,
@@ -89,10 +92,34 @@ final class CToolStateProvider implements ProviderInterface
             $session?->getId()
         );
 
+        /** @var CTool[] $courseTools */
+        $courseTools = iterator_to_array($result, false);
+        $canonicalRows = $this->getCanonicalCourseToolRows($courseTools);
+        $emittedCourseTools = [];
         $results = [];
 
-        /** @var CTool $cTool */
-        foreach ($result as $cTool) {
+        foreach ($courseTools as $cTool) {
+            $storedName = $this->getStoredCourseToolName($cTool);
+            $canonicalName = $this->normalizeCourseToolKey($storedName);
+
+            // Prefer the real course-tool row over a legacy alias such as user -> member.
+            if ($storedName !== $canonicalName && isset($canonicalRows[$canonicalName])) {
+                continue;
+            }
+
+            // Do not render two semantic aliases of the same course tool.
+            if (isset($emittedCourseTools[$canonicalName])) {
+                continue;
+            }
+
+            if ($this->shouldSkipUnavailableTeacherOnlyLegacyCourseTool($cTool)) {
+                continue;
+            }
+
+            if ($this->shouldHideTeacherOnlyLegacyCourseTool($cTool, (bool) $isAllowToEdit, $studentView)) {
+                continue;
+            }
+
             $resolved = $this->resolveToolModelFromCTool($cTool);
             if (null === $resolved) {
                 continue;
@@ -101,6 +128,15 @@ final class CToolStateProvider implements ProviderInterface
             /** @var AbstractTool $toolModel */
             $toolModel = $resolved['model'];
             $resolvedName = $resolved['name'];
+            $legacyPlugin = $resolved['plugin'] ?? null;
+
+            if ($this->shouldHideToolFromTeacher($cTool, $resolvedName, $hiddenToolsFromTeachers, $user)) {
+                continue;
+            }
+
+            if ($this->shouldHideLegacyPluginCourseTool($legacyPlugin, (bool) $isAllowToEdit, $studentView)) {
+                continue;
+            }
 
             if ($restrictToPositioning && $allowedToolName && $resolvedName !== $allowedToolName) {
                 continue;
@@ -119,7 +155,7 @@ final class CToolStateProvider implements ProviderInterface
 
             if ($session && $allowVisibilityInSession) {
                 $sessionLink = $resourceLinks->findFirst(
-                    fn (int $key, ResourceLink $resourceLink): bool => $resourceLink->getSession()?->getId() === $session->getId()
+                    fn (int $key, ResourceLink $resourceLink): bool => $resourceLink->getSession()?->getId() === $session->getId(),
                 );
 
                 if ($sessionLink) {
@@ -132,27 +168,94 @@ final class CToolStateProvider implements ProviderInterface
                 }
             }
 
+            $userToolVisibilityLocked = $this->isUserToolVisibilityLocked($course, $resolvedName);
+            if ($userToolVisibilityLocked && (!$isAllowToEdit || 'studentview' === $studentView)) {
+                continue;
+            }
+
             if (!$isAllowToEdit || 'studentview' === $studentView) {
                 $firstLink = $resourceLinks->first();
                 if (!$firstLink) {
                     continue;
                 }
 
-                if (ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility()) {
+                $isHiddenLearningPathAllowed = $this->isHiddenLearningPathAllowedInCourseHome($resolvedName);
+
+                if (
+                    ResourceLink::VISIBILITY_PUBLISHED !== $firstLink->getVisibility()
+                    && !$isHiddenLearningPathAllowed
+                ) {
                     continue;
                 }
             }
 
-            $results[] = $this->transformer->transform($cTool, $toolModel);
+            $courseTool = $this->transformer->transform($cTool, $toolModel);
+            if ($userToolVisibilityLocked) {
+                $courseTool->visibility = false;
+                $courseTool->allowChangeVisibility = false;
+            }
+
+            $results[] = $courseTool;
+            $emittedCourseTools[$canonicalName] = true;
         }
 
         return $results;
     }
 
     /**
+     * @param CTool[] $courseTools
+     *
+     * @return array<string, true>
+     */
+    private function getCanonicalCourseToolRows(array $courseTools): array
+    {
+        $canonicalRows = [];
+
+        foreach ($courseTools as $courseTool) {
+            $storedName = $this->getStoredCourseToolName($courseTool);
+            $canonicalName = $this->normalizeCourseToolKey($storedName);
+
+            if ($storedName === $canonicalName) {
+                $canonicalRows[$canonicalName] = true;
+            }
+        }
+
+        return $canonicalRows;
+    }
+
+    private function getStoredCourseToolName(CTool $courseTool): string
+    {
+        return strtolower(trim((string) $courseTool->getTool()->getTitle()));
+    }
+
+    private function normalizeCourseToolKey(string $toolName): string
+    {
+        return strtolower(trim($this->toolChain->normalizeCourseToolName($toolName)));
+    }
+
+    private function isUserToolVisibilityLocked(Course $course, string $toolName): bool
+    {
+        if ('member' !== $this->normalizeCourseToolKey($toolName) || !$course->isPublic()) {
+            return false;
+        }
+
+        return $this->isSettingEnabled(
+            $this->settingsManager->getSetting('privacy.disable_change_user_visibility_for_public_courses')
+        );
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        return true === $value
+            || 1 === $value
+            || '1' === $value
+            || 'true' === strtolower(trim((string) $value));
+    }
+
+    /**
      * Resolve a tool model from ToolChain first, then fallback to a legacy plugin course tool.
      *
-     * @return array{model: AbstractTool, name: string}|null
+     * @return array{model: AbstractTool, name: string, plugin?: Plugin}|null
      */
     private function resolveToolModelFromCTool(CTool $cTool): ?array
     {
@@ -160,13 +263,19 @@ final class CToolStateProvider implements ProviderInterface
         $rawTitle = $toolEntity ? trim((string) $toolEntity->getTitle()) : '';
         $courseToolTitle = trim((string) $cTool->getTitle());
 
-        foreach ($this->buildToolNameCandidates($rawTitle) as $candidate) {
+        $canonicalTitle = $this->toolChain->normalizeCourseToolName($rawTitle);
+        $candidates = array_values(array_unique(array_merge(
+            $this->buildToolNameCandidates($canonicalTitle),
+            $this->buildToolNameCandidates($rawTitle),
+        )));
+
+        foreach ($candidates as $candidate) {
             try {
                 $model = $this->toolChain->getToolFromName($candidate);
 
                 return [
                     'model' => $model,
-                    'name' => $candidate,
+                    'name' => $this->normalizeCourseToolKey($model->getTitle()),
                 ];
             } catch (Throwable) {
                 // Try next candidate
@@ -175,58 +284,68 @@ final class CToolStateProvider implements ProviderInterface
 
         $legacyTool = $this->resolveLegacyPluginTool($rawTitle, $courseToolTitle);
         if (null !== $legacyTool) {
+            return $legacyTool;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{model: AbstractTool, name: string, plugin: Plugin}|null
+     */
+    private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?array
+    {
+        foreach ([$rawTitle, $courseToolTitle] as $candidate) {
+            $candidate = trim($candidate);
+            if ('' === $candidate) {
+                continue;
+            }
+
+            $plugin = $this->loadLegacyPluginFromToolTitle($candidate);
+            if (!$plugin instanceof Plugin
+                || !$plugin->isEnabled(true)
+                || !$plugin->isCoursePlugin
+                || !$plugin->addCourseTool
+            ) {
+                continue;
+            }
+
+            $legacyTool = LegacyPluginCourseTool::fromLegacyPlugin($plugin, $courseToolTitle);
+
             return [
                 'model' => $legacyTool,
                 'name' => $legacyTool->getTitle(),
+                'plugin' => $plugin,
             ];
         }
 
         return null;
     }
 
-    private function resolveLegacyPluginTool(string $rawTitle, string $courseToolTitle): ?AbstractTool
+    private function loadLegacyPluginFromToolTitle(string $candidate): ?Plugin
     {
-        $appPlugin = new AppPlugin();
-        $pluginRepository = Container::getPluginRepository();
-        $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+        try {
+            $plugin = $this->pluginHelper->loadLegacyPlugin($candidate);
+            if ($plugin instanceof Plugin) {
+                return $plugin;
+            }
+        } catch (Throwable) {
+            // Try class-name fallbacks below.
+        }
 
-        foreach ($this->buildLegacyPluginCandidates($rawTitle, $courseToolTitle) as $pluginName) {
+        foreach ($this->buildLegacyPluginClassCandidates($candidate) as $className) {
+            if (!class_exists($className) || !method_exists($className, 'create')) {
+                continue;
+            }
+
             try {
-                $pluginEntity = $pluginRepository->findOneByTitle($pluginName)
-                    ?: $pluginRepository->findOneByTitle(ucfirst(strtolower($pluginName)));
-
-                if (!$pluginEntity || !$pluginEntity->isInstalled()) {
-                    continue;
-                }
-
-                $pluginConfiguration = $pluginEntity->getConfigurationsByAccessUrl($currentAccessUrl);
-
-                if (!$pluginConfiguration || !$pluginConfiguration->isActive()) {
-                    continue;
-                }
-
-                $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
-                $pluginClass = $pluginInfo['plugin_class'] ?? null;
-
-                if (!$pluginClass || !class_exists($pluginClass, false)) {
-                    continue;
-                }
-
-                $plugin = method_exists($pluginClass, 'create')
-                    ? $pluginClass::create()
-                    : new $pluginClass();
-
-                if (!$plugin instanceof Plugin) {
-                    continue;
-                }
-
-                if (!$plugin->isCoursePlugin || !$plugin->addCourseTool) {
-                    continue;
-                }
-
-                return LegacyPluginCourseTool::fromLegacyPlugin($plugin, $courseToolTitle);
+                $plugin = $className::create();
             } catch (Throwable) {
-                // Try next candidate
+                continue;
+            }
+
+            if ($plugin instanceof Plugin) {
+                return $plugin;
             }
         }
 
@@ -234,29 +353,104 @@ final class CToolStateProvider implements ProviderInterface
     }
 
     /**
+     * Build possible legacy plugin class names from a stored tool title.
+     *
      * @return string[]
      */
-    private function buildLegacyPluginCandidates(string ...$values): array
+    private function buildLegacyPluginClassCandidates(string $rawTitle): array
     {
-        $candidates = [];
+        $rawTitle = trim($rawTitle);
+        if ('' === $rawTitle) {
+            return [];
+        }
 
-        foreach ($values as $value) {
-            $value = trim($value);
-            if ('' === $value) {
-                continue;
-            }
+        $studly = implode('', array_map('ucfirst', preg_split('/[^a-z0-9]+/i', $rawTitle) ?: []));
+        $compact = preg_replace('/[^a-z0-9]+/i', '', $rawTitle) ?: $rawTitle;
 
-            $candidates[] = $value;
-            $candidates[] = ucfirst(strtolower($value));
+        return array_values(array_unique(array_filter([
+            $rawTitle,
+            $rawTitle.'Plugin',
+            $studly,
+            $studly.'Plugin',
+            $compact,
+            $compact.'Plugin',
+        ], static fn ($value): bool => \is_string($value) && '' !== trim($value))));
+    }
 
-            $normalized = preg_replace('/[^a-z0-9]+/i', '', $value) ?? $value;
-            if ('' !== $normalized) {
-                $candidates[] = $normalized;
-                $candidates[] = ucfirst(strtolower($normalized));
+    private function shouldHideLegacyPluginCourseTool(?Plugin $plugin, bool $isAllowToEdit, ?string $studentView): bool
+    {
+        if (!$plugin instanceof Plugin) {
+            return false;
+        }
+
+        $visibility = $plugin->getToolIconVisibilityPerUserStatus();
+
+        if (Plugin::TAB_FILTER_NO_STUDENT === $visibility) {
+            return !$isAllowToEdit || 'studentview' === $studentView;
+        }
+
+        if (Plugin::TAB_FILTER_ONLY_STUDENT === $visibility) {
+            return $isAllowToEdit && 'studentview' !== $studentView;
+        }
+
+        return false;
+    }
+
+    private function shouldSkipUnavailableTeacherOnlyLegacyCourseTool(CTool $cTool): bool
+    {
+        if (!$this->isTeacherOnlyLegacyCourseTool($cTool)) {
+            return false;
+        }
+
+        foreach ($this->getLegacyPluginToolTitleCandidates($cTool) as $candidate) {
+            try {
+                if ($this->pluginHelper->isPluginEnabled($candidate)) {
+                    return false;
+                }
+            } catch (Throwable) {
+                // Try next candidate.
             }
         }
 
-        return array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
+        return true;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getLegacyPluginToolTitleCandidates(CTool $cTool): array
+    {
+        $toolTitle = trim((string) $cTool->getTool()->getTitle());
+        $courseToolTitle = trim((string) $cTool->getTitle());
+
+        return array_values(array_unique(array_filter([
+            $toolTitle,
+            $courseToolTitle,
+            'NotebookTeacher',
+            'Teacher notes',
+            'teacher_notes',
+        ], static fn ($value): bool => \is_string($value) && '' !== trim($value))));
+    }
+
+    private function shouldHideTeacherOnlyLegacyCourseTool(
+        CTool $cTool,
+        bool $isAllowToEdit,
+        ?string $studentView
+    ): bool {
+        if (!$this->isTeacherOnlyLegacyCourseTool($cTool)) {
+            return false;
+        }
+
+        return !$isAllowToEdit || 'studentview' === $studentView;
+    }
+
+    private function isTeacherOnlyLegacyCourseTool(CTool $cTool): bool
+    {
+        $toolTitle = strtolower(trim((string) $cTool->getTool()->getTitle()));
+        $courseToolTitle = strtolower(trim((string) $cTool->getTitle()));
+
+        return \in_array($toolTitle, ['notebookteacher', 'teacher notes', 'teacher notebook'], true)
+            || \in_array($courseToolTitle, ['notebookteacher', 'teacher notes', 'teacher notebook'], true);
     }
 
     /**
@@ -297,7 +491,150 @@ final class CToolStateProvider implements ProviderInterface
         $candidates[] = str_replace('_', '', $camelSnake);
         $candidates[] = str_replace('_', '', $alnumSnake);
 
-        return array_values(array_unique(array_filter($candidates, static fn ($v) => \is_string($v) && '' !== trim($v))));
+        return array_values(array_unique(array_filter(
+            $candidates,
+            static fn ($v): bool => \is_string($v) && '' !== trim($v),
+        )));
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    private function getHiddenToolsFromTeachers(): array
+    {
+        return $this->normalizeHiddenToolsSetting(
+            $this->settingsManager->getSetting('course.course_hide_tools', true)
+        );
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    private function normalizeHiddenToolsSetting(mixed $settingValue): array
+    {
+        if (null === $settingValue || false === $settingValue) {
+            return [];
+        }
+
+        $items = [];
+
+        if (\is_array($settingValue)) {
+            $items = $settingValue;
+        } elseif (\is_scalar($settingValue)) {
+            $settingValue = trim((string) $settingValue);
+
+            if ('' === $settingValue) {
+                return [];
+            }
+
+            $decodedValue = json_decode($settingValue, true);
+
+            if (JSON_ERROR_NONE === json_last_error() && \is_array($decodedValue)) {
+                $items = $decodedValue;
+            } else {
+                $items = preg_split('/[,;|]+/', $settingValue) ?: [];
+            }
+        }
+
+        if ([] === $items) {
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach ($items as $key => $item) {
+            $value = $item;
+
+            if ((true === $item || 'true' === $item || '1' === $item) && \is_string($key)) {
+                $value = $key;
+            }
+
+            if ((false === $item || null === $item || '' === $item) && \is_string($key)) {
+                $value = $key;
+            }
+
+            if (!\is_scalar($value) && null !== $value) {
+                continue;
+            }
+
+            $tool = $this->normalizeToolIdentifier((string) $value);
+
+            if ('' === $tool) {
+                continue;
+            }
+
+            $normalized[$tool] = true;
+        }
+
+        return $normalized;
+    }
+
+    private function shouldHideToolFromTeacher(
+        CTool $cTool,
+        string $resolvedName,
+        array $hiddenTools,
+        ?User $user
+    ): bool {
+        if ([] === $hiddenTools || !$this->isCurrentUserTeacherAffectedByHiddenTools($user)) {
+            return false;
+        }
+
+        foreach ($this->getCourseToolHideCandidates($cTool, $resolvedName) as $candidate) {
+            if (isset($hiddenTools[$candidate])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isCurrentUserTeacherAffectedByHiddenTools(?User $user): bool
+    {
+        if (null === $user || $user->isAdmin()) {
+            return false;
+        }
+
+        return $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getCourseToolHideCandidates(CTool $cTool, string $resolvedName): array
+    {
+        $toolTitle = trim((string) $cTool->getTool()->getTitle());
+        $courseToolTitle = trim((string) $cTool->getTitle());
+
+        $candidates = [
+            $resolvedName,
+            $toolTitle,
+            $courseToolTitle,
+        ];
+
+        foreach ([$resolvedName, $toolTitle, $courseToolTitle] as $candidate) {
+            $candidates = array_merge($candidates, $this->buildToolNameCandidates($candidate));
+        }
+
+        return array_values(array_unique(array_filter(
+            array_map([$this, 'normalizeToolIdentifier'], $candidates),
+            static fn (string $value): bool => '' !== $value
+        )));
+    }
+
+    private function normalizeToolIdentifier(string $tool): string
+    {
+        $tool = trim($tool);
+
+        if ('' === $tool) {
+            return '';
+        }
+
+        $tool = strtolower($tool);
+        $tool = preg_replace('/[\s\-]+/', '_', $tool) ?? $tool;
+        $tool = preg_replace('/[^a-z0-9_]+/', '_', $tool) ?? $tool;
+
+        return trim($tool, '_');
     }
 
     private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array
@@ -312,13 +649,13 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        if (!$this->pluginHelper->isPluginEnabled('positioning')) {
+        $pluginInstance = Positioning::create();
+
+        if (!$pluginInstance->isEnabled()) {
             return [false, null];
         }
 
-        $pluginInstance = $this->pluginHelper->loadLegacyPlugin('Positioning');
-
-        if (!$pluginInstance || 'true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
+        if ('true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
             return [false, null];
         }
 
@@ -332,7 +669,7 @@ final class CToolStateProvider implements ProviderInterface
             $user->getId(),
             (int) $initialData['exercise_id'],
             $courseId,
-            $sessionId
+            $sessionId,
         );
 
         if (empty($results)) {
@@ -340,5 +677,17 @@ final class CToolStateProvider implements ProviderInterface
         }
 
         return [false, null];
+    }
+
+    private function isHiddenLearningPathAllowedInCourseHome(string $toolName): bool
+    {
+        if ('learnpath' !== $toolName) {
+            return false;
+        }
+
+        return 'true' === $this->settingsManager->getSetting(
+            'lp.show_invisible_lp_in_course_home',
+            true,
+        );
     }
 }

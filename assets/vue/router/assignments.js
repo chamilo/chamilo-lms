@@ -3,9 +3,10 @@ export default {
   meta: {
     requiresAuth: true,
     showBreadcrumb: true,
+    tool: "student_publication",
   },
   name: "assignments",
-  component: () => import("../components/assignments/AssignmentsLayout.vue"),
+  component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   redirect: { name: "AssignmentsList" },
   children: [
     {
@@ -25,9 +26,7 @@ export default {
       path: "edit/:id",
       component: () => import("../views/assignments/AssignmentsUpdate.vue"),
       props: true,
-      meta: {
-        breadcrumb: "Edit assignment",
-      },
+      meta: { breadcrumb: "Edit assignment" },
     },
     {
       name: "AssignmentDetail",
@@ -48,18 +47,14 @@ export default {
       path: ":id/add-doc",
       component: () => import("../views/assignments/AssignmentAddDocument.vue"),
       props: true,
-      meta: {
-        breadcrumb: "Add documents",
-      },
+      meta: { breadcrumb: "Add documents" },
     },
     {
       name: "AssignmentAddUser",
       path: ":id/add-user",
       component: () => import("../views/assignments/AssignmentAddUser.vue"),
       props: true,
-      meta: {
-        breadcrumb: "Add users",
-      },
+      meta: { breadcrumb: "Add users" },
     },
     {
       name: "AssignmentMissing",

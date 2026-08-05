@@ -1,4 +1,4 @@
-# Chamilo 2
+# Chamilo 3
 
 [![Behat tests 🐞](https://github.com/chamilo/chamilo-lms/actions/workflows/behat.yml/badge.svg)](https://github.com/chamilo/chamilo-lms/actions/workflows/behat.yml)
 [![PHPUnit 🐛](https://github.com/chamilo/chamilo-lms/actions/workflows/phpunit.yml/badge.svg)](https://github.com/chamilo/chamilo-lms/actions/workflows/phpunit.yml)
@@ -58,10 +58,10 @@ You can try out Chamilo at https://campus.chamilo.net/ (use the "Teach courses" 
 
 ## Quick install
 
-**IMPORTANT** Chamilo 2.0 is in its validation phase right now.
+**IMPORTANT** Chamilo 3.0 is in its validation phase right now.
 The installation procedure below is for reference only.
-For a stable Chamilo, please install Chamilo 1.11.x.
-See the 1.11.x branch's README.md for details.
+For a stable Chamilo, please install Chamilo 2.x.
+See the 2.0 branch's README.md for details.
 
 ### Minimum hardware requirements
 
@@ -72,7 +72,7 @@ You will need:
 - 4GB RAM
 - 4GB free disk space
 
-Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
+Chamilo 3.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
 build the development environment, you will need at least 4GB RAM.
 At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
 Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
@@ -86,7 +86,7 @@ Any recent computer with a recent (no older than 5y) browser should do.
 You should have:
 
 - A web server with a virtualhost in a domain or subdomain (not in a subfolder inside a domain with another application).
-- A working PHP configuration with PHP 8.2 or 8.3
+- A working PHP configuration with PHP 8.3, 8.4 or 8.5
 - MariaDB 10 or higer (alternatively, MySQL 5.7 or higher can also be used)
 
 ### Software stack installation (Ubuntu)
@@ -95,7 +95,7 @@ You can install Chamilo using 3rd party installers like Softaculous,
 Installatron, DigitalOcean marketplace, etc. and skip the following steps.
 
 These are instructions for a fictitious `my.chamilo.net` domain, with a
-`chamilo2` database and DB user, on your own self-managed server.
+`chamilo` database and DB user, on your own self-managed server.
 Please adapt the commands below accordingly.
 
 These instructions are meant for a standalone public server, with no
@@ -110,20 +110,21 @@ Install the software stack and Chamilo using the commands below.
 ~~~~
 sudo apt update && sudo apt -y upgrade
 sudo apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} unzip curl
-sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY 'chamilo2';"
+sudo mysql -e "CREATE USER chamilo@localhost IDENTIFIED BY 'chamilo';"
+sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;"
 cd /var/www
-sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-RC.2/chamilo-2.0.0-RC.2.tar.gz
-sudo tar zxf chamilo-2.0.0-RC.2.tar.gz
-sudo mv chamilo-2.0.0-RC.2 chamilo
+sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.3/chamilo-2.0.3.tar.gz
+sudo tar zxf chamilo-2.0.3.tar.gz
 cd chamilo
 sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
-# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain
+# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain name
 sudo a2ensite my.chamilo.net
 sudo a2enmod rewrite ssl headers expires
+sudo touch .env
 sudo chown -R www-data: .env config/ var/
 sudo systemctl restart apache2
 # Open http://my.chamilo.net in your browser to go through the installation wizard
-# Complete the installation information using DB credentials chamilo2/chamilo2/chamilo2 and the default host and port
+# Complete the installation information using DB credentials chamilo/chamilo/chamilo and the default host and port
 # Done
 ~~~~
 
@@ -160,10 +161,9 @@ environment). This will improve maintainability through different Chamilo upgrad
 
 ## Documentation
 
-For more information on Chamilo 2, visit https://2.chamilo.org/documentation/index.html
+For more information on Chamilo, visit https://3.chamilo.org/documentation/index.html
 For Chamilo usage documentation, most of the documentation at
-https://docs.chamilo.org/ is still valid for Chamilo 2, despite having been
-written for Chamilo 1.
+https://docs.chamilo.org/ is up to date.
 
 ## JWT Authentication
 
@@ -197,7 +197,7 @@ Then you can make queries using the JWT token.
 
 ## Contributing
 
-If you want to submit new features or patches to Chamilo 2, please follow the
+If you want to submit new features or patches to Chamilo, please follow the
 Github contribution guide https://guides.github.com/activities/contributing-to-open-source/
 and our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 

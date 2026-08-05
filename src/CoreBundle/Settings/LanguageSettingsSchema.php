@@ -21,6 +21,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                 [
                     'platform_language' => 'en',
                     'allow_use_sub_language' => 'false',
+                    'language_by_resource' => 'false',
                     'auto_detect_language_custom_pages' => 'true',
                     'show_different_course_language' => 'true',
                     'language_priority_1' => 'course_lang',
@@ -38,6 +39,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
         $allowedTypes = [
             'platform_language' => ['string'],
             'allow_use_sub_language' => ['string'],
+            'language_by_resource' => ['string'],
             'auto_detect_language_custom_pages' => ['string'],
             'show_different_course_language' => ['string'],
         ];
@@ -72,6 +74,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('platform_language', LanguageType::class, $options)
             ->add('allow_use_sub_language', YesNoType::class)
+            ->add('language_by_resource', YesNoType::class)
             ->add('auto_detect_language_custom_pages', YesNoType::class)
             ->add('show_different_course_language', YesNoType::class)
             ->add('language_priority_1', ChoiceType::class, [

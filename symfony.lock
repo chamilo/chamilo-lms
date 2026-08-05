@@ -158,6 +158,18 @@
             "ref": "3ae1b83985e89138f5443bbc2d9b8c074b497d49"
         }
     },
+    "php-http/discovery": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "config/packages/http_discovery.yaml"
+        ]
+    },
     "phpstan/phpstan": {
         "version": "1.12",
         "recipe": {
@@ -206,6 +218,15 @@
             "branch": "main",
             "version": "1.2",
             "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
+        }
+    },
+    "stripe/stripe-php": {
+        "version": "20.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "19.0",
+            "ref": "d6829c693e3927a8972c7671d74a1a5c505712b0"
         }
     },
     "symfony/amazon-mailer": {
@@ -272,6 +293,18 @@
             ".env.dev"
         ]
     },
+    "symfony/form": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.2",
+            "ref": "7d86a6723f4a623f59e2bf966b6aad2fc461d36b"
+        },
+        "files": [
+            "config/packages/csrf.yaml"
+        ]
+    },
     "symfony/framework-bundle": {
         "version": "6.4",
         "recipe": {
@@ -333,6 +366,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mcp-bundle": {
+        "version": "v0.12.0"
+    },
     "symfony/messenger": {
         "version": "6.4",
         "recipe": {
@@ -382,6 +418,18 @@
             "bin/phpunit",
             "phpunit.xml.dist",
             "tests/bootstrap.php"
+        ]
+    },
+    "symfony/property-info": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.3",
+            "ref": "dae70df71978ae9226ae915ffd5fad817f5ca1f7"
+        },
+        "files": [
+            "config/packages/property_info.yaml"
         ]
     },
     "symfony/requirements-checker": {

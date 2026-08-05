@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Exercise\FinalExamAccessRule;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 
@@ -22,8 +23,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
 $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
-$courseInfo = api_get_course_info_by_id($courseId);
-$courseCode = $courseInfo['code'];
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
 $objExercise = new Exercise($courseId);
@@ -33,17 +32,80 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-if (Container::getPluginHelper()->isPluginEnabled('Positioning')) {
-    $plugin = Positioning::create();
+$plugin = Positioning::create();
+if ($plugin->isEnabled()) {
     if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, $courseId, $sessionId)) {
         api_not_allowed(true);
     }
+}
+
+if (isset($_POST['final_exam_user_identifier_save'])) {
+    header('Content-Type: application/json; charset='.api_get_system_encoding());
+
+    if (!Security::check_token('post')) {
+        http_response_code(403);
+        echo json_encode(['success' => false]);
+        exit;
+    }
+
+    $studentId = trim((string) ($_POST['student_id'] ?? ''));
+    $success = FinalExamAccessRule::saveUserIdentifier(
+        api_get_user_id(),
+        $exercise_id,
+        $studentId
+    );
+
+    Security::clear_token();
+    echo json_encode(['success' => $success]);
+    exit;
 }
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : null;
 $origin = api_get_origin();
+if (empty($origin) && !empty($learnpath_id)) {
+    $origin = 'learnpath';
+}
+
+$useExplicitLegacyRuntime = 1 === (int) ($_GET['legacy'] ?? 0);
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && !$useExplicitLegacyRuntime) {
+    $vueParams = [];
+    foreach (
+        [
+            'gradebook',
+            'origin',
+            'learnpath_id',
+            'learnpath_item_id',
+            'learnpath_item_view_id',
+            'lp_id',
+            'lp_init',
+            'item_id',
+            'returnToLp',
+            'embedded',
+            'isStudentView',
+            'preview',
+            'attemptId',
+        ] as $key
+    ) {
+        $value = $_GET[$key] ?? null;
+        if (null !== $value && '' !== (string) $value) {
+            $vueParams[$key] = Security::remove_XSS((string) $value);
+        }
+    }
+
+    $vueOverviewUrl = ExerciseLib::buildVueOverviewUrl(
+        $exercise_id,
+        $vueParams,
+        $courseId,
+        $sessionId,
+        isset($_REQUEST['gid']) ? (int) $_REQUEST['gid'] : api_get_group_id()
+    );
+    if (null !== $vueOverviewUrl) {
+        header('Location: '.$vueOverviewUrl, true, 302);
+        exit;
+    }
+}
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -78,7 +140,9 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+$useBlankExerciseLayout = in_array($origin, ['learnpath', 'embeddable'], true);
+
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'], true)) {
     SessionManager::addFlashSessionReadOnly();
     Display::display_header();
 } else {
@@ -87,7 +151,13 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     body { background: none;}
     </style>
     ';
-    Display::display_reduced_header();
+
+    if ($useBlankExerciseLayout) {
+        ob_start();
+        Display::$legacyTemplate = '@ChamiloCore/Layout/blank.html.twig';
+    } else {
+        Display::display_reduced_header();
+    }
 }
 
 if ('mobileapp' === $origin) {
@@ -130,7 +200,7 @@ if ('true' === api_get_setting('editor.save_titles_as_html')) {
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div($objExercise->description, ['class' => 'exercise_description wysiwyg']);
+    $html .= Display::div($objExercise->description, ['class' => 'exercise_description tiny-content']);
 }
 
 $extra_params = '';
@@ -148,9 +218,14 @@ if ($time_control && !empty($exercise_stat_info['exe_id']) && !empty($clock_expi
     $time_left_check = api_strtotime($clock_expired_time, 'UTC') - time();
     if ($time_left_check <= 0) {
         $result_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'
-            . api_get_cidreq()
-            . '&show_headers=1&'
-            . http_build_query(['id' => $exercise_stat_info['exe_id']]);
+            .api_get_cidreq().'&'.http_build_query([
+                'id' => $exercise_stat_info['exe_id'],
+                'show_headers' => in_array($origin, ['learnpath', 'embeddable', 'mobileapp']) ? 0 : 1,
+                'origin' => $origin,
+                'learnpath_id' => $learnpath_id,
+                'learnpath_item_id' => $learnpath_item_id,
+                'learnpath_item_view_id' => $learnpathItemViewId,
+            ]);
         api_location($result_url);
     }
 }
@@ -168,7 +243,13 @@ if (isset($exercise_stat_info['exe_id'])) {
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq().'&'.http_build_query([
+        'exerciseId' => $objExercise->id,
+        'learnpath_id' => $learnpath_id,
+        'learnpath_item_id' => $learnpath_item_id,
+        'learnpath_item_view_id' => $learnpathItemViewId,
+        'origin' => $origin,
+    ]).$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -265,8 +346,14 @@ if (!empty($attempts)) {
 
         $score = ExerciseLib::show_score($attempt_result['score'], $attempt_result['max_score']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
-        $attempt_url .= api_get_cidreq().'&show_headers=1&';
-        $attempt_url .= http_build_query(['id' => $attempt_result['exe_id']]);
+        $attempt_url .= api_get_cidreq().'&'.http_build_query([
+            'id' => $attempt_result['exe_id'],
+            'show_headers' => in_array($origin, ['learnpath', 'embeddable', 'mobileapp']) ? 0 : 1,
+            'origin' => $origin,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpathItemViewId,
+        ]);
         $attempt_url .= $url_suffix;
 
         $attempt_link = Display::url(
@@ -462,21 +549,126 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
-    if ($quizCheckButtonEnabled) {
-        $html .= Display::div(
-            $btnCheck,
-            ['class' => 'exercise_overview_options']
+    $finalExamAccess = $is_allowed_to_edit
+        ? ['applies' => false, 'allowed' => true]
+        : FinalExamAccessRule::evaluate(
+            api_get_user_id(),
+            $courseId,
+            $sessionId,
+            $exercise_id
         );
-        $html .= '<br>';
+
+    if ($finalExamAccess['applies']) {
+        if (!$finalExamAccess['time_requirement_met']) {
+            $html .= Display::return_message(
+                'You have not met the minimum time requirement. You must spend an additional <strong>'.
+                FinalExamAccessRule::formatMinutes($finalExamAccess['remaining_minutes']).
+                '</strong> reviewing course content. Please return to the course and reexamine the material.'.
+                '<br><br><strong>Please Note</strong>: This course is timed to ensure compliance with the standard set by your state/region certification agency.',
+                'warning',
+                false
+            );
+        }
+
+        if (!$finalExamAccess['user_identifier_present']) {
+            $identifierLabel = htmlspecialchars(
+                $finalExamAccess['user_identifier_label'],
+                ENT_QUOTES,
+                api_get_system_encoding()
+            );
+            $html .= '<br><br>'.Display::return_message(
+                'To ensure you receive credit for this course, your '.$identifierLabel.' is required to take the final exam.',
+                'warning',
+                false
+            );
+
+            if ($finalExamAccess['allow_user_identifier_opt_out']) {
+                $optOutPrompt = htmlspecialchars(
+                    $finalExamAccess['user_identifier_opt_out_prompt'],
+                    ENT_QUOTES,
+                    api_get_system_encoding()
+                );
+                $html .= '<p>'.$optOutPrompt.'</p>';
+                $html .= '<p><button type="button" class="btn btn--primary btn-primary" onclick="finalExamUseUserIdentifier(true)">Yes</button> ';
+                $html .= '<button type="button" class="btn btn--plain btn-default" onclick="finalExamUseUserIdentifier(false)">No</button></p>';
+            }
+
+            $disabled = $finalExamAccess['allow_user_identifier_opt_out'] ? ' disabled="disabled"' : '';
+            $html .= '<p>'.$identifierLabel.': ';
+            $html .= '<input type="text" name="final_exam_user_identifier" id="final-exam-user-identifier" placeholder="Input Numbers Only" onkeypress="return finalExamIsNumberKey(event)"'.$disabled.'> ';
+            $html .= '<button type="button" class="btn btn--primary btn-primary" onclick="finalExamSaveUserIdentifier()">Save</button></p>';
+            $html .= '<div id="final-exam-user-identifier-message"></div>';
+
+            $securityToken = json_encode(
+                Security::get_token(),
+                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+            );
+            $html .= <<<JS
+<script>
+function finalExamIsNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+}
+function finalExamUseUserIdentifier(useIdentifier) {
+    var input = jQuery('#final-exam-user-identifier');
+    if (useIdentifier) {
+        input.prop('disabled', false).val('').focus();
+        return;
+    }
+    input.prop('disabled', true).val('NONE');
+    finalExamSaveUserIdentifier();
+}
+function finalExamSaveUserIdentifier() {
+    var studentId = jQuery('#final-exam-user-identifier').val();
+    if (studentId !== 'NONE' && !/^\d{3,}$/.test(studentId)) {
+        alert('Please enter a valid student ID');
+        return false;
+    }
+    jQuery.ajax({
+        url: window.location.href,
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            final_exam_user_identifier_save: 1,
+            student_id: studentId,
+            sec_token: {$securityToken}
+        },
+        success: function (response) {
+            if (response && response.success) {
+                jQuery('#final-exam-user-identifier-message').html('<span class="text-success">Student ID saved successfully. Reloading...</span>');
+                window.setTimeout(function () { window.location.reload(); }, 1000);
+                return;
+            }
+            jQuery('#final-exam-user-identifier-message').html('<span class="text-danger">Unable to save the Student ID.</span>');
+        },
+        error: function () {
+            jQuery('#final-exam-user-identifier-message').html('<span class="text-danger">Unable to save the Student ID.</span>');
+        }
+    });
+    return false;
+}
+</script>
+JS;
+        }
     }
 
-    $html .= Display::div(
-        Display::div(
-            $exercise_url_button,
-            ['class' => 'exercise_overview_options']
-        ),
-        ['class' => 'options']
-    );
+    if ($finalExamAccess['allowed']) {
+        if ($quizCheckButtonEnabled) {
+            $html .= Display::div(
+                $btnCheck,
+                ['class' => 'exercise_overview_options']
+            );
+            $html .= '<br>';
+        }
+
+        $html .= Display::div(
+            Display::div(
+                $exercise_url_button,
+                ['class' => 'exercise_overview_options']
+            ),
+            ['class' => 'options']
+        );
+    }
 }
 
 if ($isLimitReached) {
@@ -573,4 +765,10 @@ if ($quizCheckButtonEnabled) {
 
 echo $html;
 
-Display::display_footer();
+if ($useBlankExerciseLayout) {
+    Display::display_footer();
+} elseif ('mobileapp' === $origin) {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
+}

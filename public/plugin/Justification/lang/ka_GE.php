@@ -23,3 +23,33 @@ $strings['notification_to_creator_only'] = 'შეტყობინების
 $strings['notification_to_creator_only_help'] = 'თუ ჩართულია, შეტყობინება გაიგზავნება მხოლოდ იმ მომხმარებელს, ვინც შექმნა ძირითადს მომწოდებელი მომხმარებელი და არა ყველა ადმინს';
 $strings['access_for_session_admin'] = 'სესიის ადმინისტრატორების მიერ მომხმარებლების მართვის ჩართვა პლაგინში';
 $strings['access_for_session_admin_help'] = 'თუ ჩართულია, სესიის ადმინისტრატორებს შეუძლიათ პლაგინზე წვდომა, მომხმარებელთა სია და ძირითადების მართვა.';
+
+$strings['RequiredDocuments'] = 'მომხმარებლის დასაბუთებებისთვის კონფიგურირებული საჭირო დოკუმენტები.';
+
+$strings['UserJustificationListHelp'] = 'არჩეული მომხმარებლის მიერ ატვირთული დოკუმენტები.';
+
+$strings['UserJustifications'] = 'მომხმარებლის დასაბუთებები';
+$strings['SearchUserJustificationsHelp'] = 'მოძებნეთ მომხმარებელი ატვირთული დასაბუთებით დოკუმენტების გადასამოწმებლად.';
+$strings['NoUserJustificationHelp'] = 'ამ მომხმარებლისთვის დოკუმენტი არ არის ატვირთული.';
+$strings['SelectUserJustificationHelp'] = 'მოძებნეთ და აირჩიეთ მომხმარებელი მისი დასაბუთებით დოკუმენტების გადასამოწმებლად.';
+$strings['CreateFirstJustificationHelp'] = 'შექმენით პირველი საჭირო დასაბუთებით დოკუმენტი.';
+$strings['AddJustificationDocument'] = 'დასაბუთებით დოკუმენტის დამატება';
+$strings['AddJustificationDocumentHelp'] = 'შექმენით საჭირო დოკუმენტის ტიპი, რომელიც მომხმარებლებმა უნდა წარმოადგინონ.';
+$strings['EditJustificationDocument'] = 'დასაბუთებით დოკუმენტის რედაქტირება';
+$strings['EditJustificationDocumentHelp'] = 'განაახლეთ საჭირო დოკუმენტის ტიპის ინფორმაცია.';
+$strings['SetNewCourseHelp'] = 'აირჩიეთ კურსი, რომელსაც იყენებს დასაბუთებების cron მომხმარებლების გამოწერის ან გამოწერის გაუქმებისთვის.';
+$strings['EditUserJustification'] = 'მომხმარებლის დასაბუთების რედაქტირება';
+$strings['EditUserJustificationHelp'] = 'განაახლეთ ამ ატვირთული დოკუმენტის მოქმედების ვადა.';
+$strings['SelectUser'] = 'აირჩიეთ მომხმარებელი';
+
+$strings['MyJustificationsHelp'] = 'ატვირთეთ თქვენი ანგარიშისთვის საჭირო დასაბუთებით დოკუმენტები.';
+$strings['NoRequiredJustificationDocuments'] = 'არ არის კონფიგურირებული საჭირო დოკუმენტები';
+$strings['NoRequiredJustificationDocumentsHelp'] = 'ადმინისტრატორმა უნდა კონფიგურიროს საჭირო დოკუმენტები, სანამ მომხმარებლები შეძლებენ ფაილების ატვირთვას.';
+$strings['Uploaded'] = 'ატვირთულია';
+$strings['ValidUntil'] = 'მოქმედებს მდე';
+$strings['PendingUpload'] = 'ატვირთვის მოლოდინში';
+$strings['SelectFile'] = 'აირჩიეთ ფაილი';
+$strings['UploadJustification'] = 'დოკუმენტის ატვირთვა';
+$strings['UploadFailed'] = 'დოკუმენტის ატვირთვა ვერ მოხერხდა. გთხოვთ შეამოწმოთ ფაილის ტიპი და სცადოთ ხელახლა.';
+$strings['DownloadFile'] = 'ფაილის ჩამოტვირთვა';
+$strings['AdminList'] = 'ადმინისტრატორთა სია';

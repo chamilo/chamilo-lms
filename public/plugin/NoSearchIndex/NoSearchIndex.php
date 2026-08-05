@@ -3,29 +3,23 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class NoSearchIndex.
+ * Prevents search engines from indexing dynamic Chamilo pages while the plugin
+ * is active for the current access URL.
  */
 class NoSearchIndex extends Plugin
 {
     public $addCourseTool = false;
 
-    /**
-     * NoSearchIndex constructor.
-     */
     public function __construct()
     {
         parent::__construct(
-            '0.1',
-            'Julio Montoya',
-            [
-            ]
+            '0.2',
+            'Chamilo',
+            []
         );
     }
 
-    /**
-     * @return $this
-     */
-    public static function create()
+    public static function create(): self
     {
         static $result = null;
 

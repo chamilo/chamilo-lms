@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,26 +21,25 @@ use UserManager;
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserListActionController extends AbstractController
 {
+    private const string CANNOT_DELETE_MESSAGE = 'This user cannot be deleted: they are still an active member of a '
+        .'course, or user deletion is disabled on this platform.';
+
     public function __construct(
         private readonly EntityManagerInterface $em,
     ) {}
 
     #[Route('/admin/user-list-action', name: 'admin_user_list_action', methods: ['POST'])]
-    public function handleAction(Request $request): JsonResponse|RedirectResponse
+    public function handleAction(Request $request): JsonResponse
     {
         $action = (string) $request->request->get('action');
         $token = (string) $request->request->get('_token');
 
         if (!$this->isCsrfTokenValid('user_list_action', $token)) {
-            if (\in_array($action, ['delete_users', 'disable_users', 'enable_users'], true)) {
-                return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-            }
-            $this->addFlash('error', 'Invalid CSRF token.');
-
-            return $this->redirect('/admin/user-list');
+            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
-        if (\in_array($action, ['delete_users', 'disable_users', 'enable_users'], true)) {
+        $bulkActions = ['delete_users', 'disable_users', 'enable_users', 'restore_users', 'destroy_users'];
+        if (\in_array($action, $bulkActions, true)) {
             return $this->handleBulkAction($request, $action);
         }
 
@@ -64,6 +62,7 @@ class UserListActionController extends AbstractController
 
         $userRepo = $this->em->getRepository(User::class);
         $affected = 0;
+        $failedIds = [];
 
         foreach ($userIds as $userId) {
             if ($userId <= 0 || $userId === $currentUserId) {
@@ -97,75 +96,95 @@ class UserListActionController extends AbstractController
                     }
 
                     break;
+
+                case 'restore_users':
+                    if (User::SOFT_DELETED === $user->getActive()) {
+                        $user->setActive(User::ACTIVE);
+                        ++$affected;
+                    }
+
+                    break;
+
+                case 'destroy_users':
+                    if (UserManager::delete_user($userId, true)) {
+                        ++$affected;
+                    } else {
+                        $failedIds[] = $userId;
+                    }
+
+                    break;
             }
         }
 
         $this->em->flush();
 
-        return $this->json(['success' => true, 'affected' => $affected]);
+        $response = ['success' => true, 'affected' => $affected];
+
+        if ([] !== $failedIds) {
+            $response['failedIds'] = $failedIds;
+            $response['error'] = \sprintf(
+                '%d user(s) could not be permanently deleted: they are still an active member of a course, '
+                    .'or user deletion is disabled on this platform.',
+                \count($failedIds)
+            );
+        }
+
+        return $this->json($response);
     }
 
-    private function handleSingleAction(Request $request, string $action): RedirectResponse
+    private function handleSingleAction(Request $request, string $action): JsonResponse
     {
         $userId = (int) $request->request->get('user_id');
-        $view = (string) $request->request->get('view', 'all');
 
         $currentUser = $this->getUser();
         $currentUserId = $currentUser ? $currentUser->getId() : 0;
 
         if ($userId <= 0 || $userId === $currentUserId) {
-            $this->addFlash('error', 'Invalid action.');
-
-            return $this->redirect('/admin/user-list');
+            return $this->json(['error' => 'Invalid action.'], Response::HTTP_BAD_REQUEST);
         }
 
         $userRepo = $this->em->getRepository(User::class);
         $user = $userRepo->find($userId);
 
         if (!$user) {
-            $this->addFlash('error', 'User not found.');
-
-            return $this->redirect('/admin/user-list');
+            return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
         }
 
         switch ($action) {
             case 'delete_user':
                 if (!$this->isGranted('ROLE_ADMIN')) {
-                    break;
+                    return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
-                UserManager::delete_user($userId);
-
-                $this->addFlash('success', 'User has been removed.');
+                if (!UserManager::delete_user($userId)) {
+                    return $this->json(['error' => self::CANNOT_DELETE_MESSAGE], Response::HTTP_CONFLICT);
+                }
 
                 break;
 
             case 'restore':
                 if (!$this->isGranted('ROLE_ADMIN')) {
-                    break;
+                    return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
                 UserManager::change_active_state($userId, User::ACTIVE);
-
-                $this->addFlash('success', 'The user has been restored.');
 
                 break;
 
             case 'destroy':
                 if (!$this->isGranted('ROLE_ADMIN')) {
-                    break;
+                    return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
-                UserManager::delete_user($userId, true);
-
-                $this->addFlash('success', 'The user has been deleted permanently.');
-                $view = 'deleted';
+                if (!UserManager::delete_user($userId, true)) {
+                    return $this->json(['error' => self::CANNOT_DELETE_MESSAGE], Response::HTTP_CONFLICT);
+                }
 
                 break;
 
             case 'anonymize':
                 if (!$this->isGranted('ROLE_ADMIN')) {
-                    break;
+                    return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
                 }
 
                 $message = UserManager::anonymizeUserWithVerification($userId);
@@ -175,11 +194,6 @@ class UserListActionController extends AbstractController
                 break;
         }
 
-        $redirectUrl = '/admin/user-list';
-        if ('deleted' === $view) {
-            $redirectUrl .= '?view=deleted';
-        }
-
-        return $this->redirect($redirectUrl);
+        return $this->json(['success' => true]);
     }
 }

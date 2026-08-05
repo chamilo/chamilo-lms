@@ -89,17 +89,17 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         if ($table->hasColumn('page_result_configuration')) {
             $this->addSql(
-                'UPDATE c_quiz SET page_result_configuration = "a:0:{}" WHERE page_result_configuration IS NULL OR page_result_configuration = "" '
+                'UPDATE c_quiz SET page_result_configuration = "[]" WHERE page_result_configuration IS NULL OR page_result_configuration = "" '
             );
             $this->addSql(
-                "ALTER TABLE c_quiz CHANGE page_result_configuration page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:array)';"
+                "ALTER TABLE c_quiz CHANGE page_result_configuration page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:json)';"
             );
         } else {
             $this->addSql(
-                "ALTER TABLE c_quiz ADD COLUMN page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:array)';"
+                "ALTER TABLE c_quiz ADD COLUMN page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:json)';"
             );
             $this->addSql(
-                'UPDATE c_quiz SET page_result_configuration = "a:0:{}"'
+                'UPDATE c_quiz SET page_result_configuration = "[]"'
             );
         }
 
@@ -285,7 +285,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_A468585C12469DE2')) {
-            if ($table->hasPrimaryKey()) {
+            if (null !== $table->getPrimaryKey()) {
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY');
                 $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (category_id, question_id)');
             }

@@ -80,7 +80,7 @@ import { ref, onMounted, nextTick, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRoute, useRouter } from "vue-router"
-import { useCidReq } from "../../composables/cidReq"
+import { getCourseContext } from "../../utils/courseContext"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -91,7 +91,7 @@ const { t, locale } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
 const router = useRouter()
 const route = useRoute()
-const { cid, sid, gid } = useCidReq()
+const { cid, sid, gid } = getCourseContext()
 
 const assignments = ref([])
 const loading = ref(false)

@@ -34,6 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             output: CourseTool::class,
             provider: CToolStateProvider::class,
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
         ),
     ],
     normalizationContext: ['groups' => ['ctool:read']],

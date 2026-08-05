@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import axios from "axios"
+import socialService from "../services/socialService"
 
 export const useSocialStore = defineStore("social", {
   state: () => ({
@@ -9,8 +9,8 @@ export const useSocialStore = defineStore("social", {
   actions: {
     async checkUserRelation(currentUserId, profileUserId) {
       try {
-        const response = await axios.get(`/social-network/user-relation/${currentUserId}/${profileUserId}`)
-        this.showFullProfile = response.data.isAllowed
+        const data = await socialService.getUserRelation(currentUserId, profileUserId)
+        this.showFullProfile = data.isAllowed
       } catch (error) {
         console.error("Error checking user relation:", error)
         this.showFullProfile = false

@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\LanguageListener;
@@ -33,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"), new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['language:read']],
     paginationEnabled: false
@@ -46,30 +47,45 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\EntityListeners([LanguageListener::class])]
 class Language
 {
-    public const ISO_MAX_LENGTH = 8;
+    public const int ISO_MAX_LENGTH = 8;
 
-    #[Groups(['language:read'])]
+    #[Groups([
+        'language:read', 'resource_node:read', 'resource_file:read', 'document:read', 'personal_file:read',
+        'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups([
+        'language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read',
+        'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'original_name', type: 'string', length: 255, nullable: true)]
     protected ?string $originalName = null;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups([
+        'language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read',
+        'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'english_name', type: 'string', length: 255)]
     protected string $englishName;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups([
+        'language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read',
+        'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'isocode', type: 'string', length: self::ISO_MAX_LENGTH)]
     protected string $isocode;
 
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups([
+        'language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read',
+        'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
@@ -80,13 +96,21 @@ class Language
     /**
      * @var Collection<int, self>
      */
-    #[Groups(['language:read', 'language:write'])]
+    #[Groups([
+        'language:read', 'language:write', 'resource_node:read', 'resource_file:read', 'document:read',
+        'personal_file:read', 'student_publication:read', 'attendance:read', 'calendar_event:read', 'link:read',
+    ])]
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $subLanguages;
 
     public function __construct()
     {
         $this->subLanguages = new ArrayCollection();
+    }
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
     }
 
     public function setOriginalName(string $originalName): self
@@ -96,9 +120,9 @@ class Language
         return $this;
     }
 
-    public function getOriginalName(): ?string
+    public function getEnglishName(): string
     {
-        return $this->originalName;
+        return $this->englishName;
     }
 
     public function setEnglishName(string $englishName): self
@@ -108,21 +132,9 @@ class Language
         return $this;
     }
 
-    public function getEnglishName(): string
+    public function getAvailable(): bool
     {
-        return $this->englishName;
-    }
-
-    public function setIsocode(string $isocode): self
-    {
-        $this->isocode = $isocode;
-
-        return $this;
-    }
-
-    public function getIsocode(): string
-    {
-        return $this->isocode;
+        return $this->available;
     }
 
     public function setAvailable(bool $available): self
@@ -132,37 +144,12 @@ class Language
         return $this;
     }
 
-    public function getAvailable(): bool
-    {
-        return $this->available;
-    }
-
-    public function setParent(?self $parent): static
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    public function getParent(): ?static
-    {
-        return $this->parent;
-    }
-
     /**
      * @return Collection<int, self>
      */
     public function getSubLanguages(): Collection
     {
         return $this->subLanguages;
-    }
-
-    /**
-     * Get id.
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function addSubLanguage(self $subLanguage): static
@@ -187,10 +174,42 @@ class Language
         return $this;
     }
 
+    public function getParent(): ?static
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): static
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     public function generateIsoCodeForChild(): string
     {
         $isoCode = explode('_', $this->getParent()->getIsocode());
 
         return $isoCode[0].'_'.$this->getId();
+    }
+
+    public function getIsocode(): string
+    {
+        return $this->isocode;
+    }
+
+    public function setIsocode(string $isocode): self
+    {
+        $this->isocode = $isocode;
+
+        return $this;
+    }
+
+    /**
+     * Get id.
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

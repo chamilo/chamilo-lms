@@ -1,129 +1,80 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\UserRemoteService;
 
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
-/**
- * UserRemoteService.
- *
- * @ORM\Table(name="plugin_user_remote_service")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'plugin_user_remote_service')]
+#[ORM\Entity]
 class UserRemoteService
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
-    protected $title;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title = '';
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="url", type="string", length=255, nullable=false)
-     */
-    protected $url;
+    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: false)]
+    protected string $url = '';
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return UserRemoteService
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getURL()
+    public function getURL(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return UserRemoteService
-     */
-    public function setURL($url)
+    public function setURL(string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAccessURL($pluginName)
+    public function getAccessURL(string $pluginName): string
     {
-        $accessUrl = api_get_path(WEB_PLUGIN_PATH).$pluginName."/redirect.php?serviceId=".$this->getId();
-
-        return $accessUrl;
+        return api_get_path(WEB_PLUGIN_PATH).$pluginName.'/redirect.php?serviceId='.(int) $this->getId();
     }
 
     /**
-     * Returns a user-specific URL, with two extra query string parameters : 'username' and 'hash'.
-     * 'hash' is generated using $salt and $userId.
+     * Returns a user-specific URL with username and hash parameters.
      *
-     * @param string $username the URL query parameter 'username'
-     * @param string $userId   the user identifier, to build the hash
-     * @param string $salt     the salt, to build the hash
-     *
-     * @throws Exception on hash generation failure
-     *
-     * @return string the custom user URL
+     * @throws Exception
      */
-    public function getCustomUserURL($username, $userId, $salt)
+    public function getCustomUserURL(string $username, int $userId, string $salt): string
     {
         $hash = password_hash($salt.$userId, PASSWORD_BCRYPT);
+
         if (false === $hash) {
-            throw new Exception('hash generation failed');
+            throw new Exception('Hash generation failed');
         }
 
         return sprintf(
@@ -140,21 +91,16 @@ class UserRemoteService
     }
 
     /**
-     * Returns a user-specific URL, with two extra query string parameters : 'uid' and 'hash'.
-     * 'hash' is generated using $salt and $userId.
+     * Returns a user-specific URL with uid and hash parameters.
      *
-     * @param string $userId the user identifier, to build the hash and to include for the uid parameter
-     * @param string $salt   the salt, to build the hash
-     *
-     * @throws Exception on hash generation failure
-     *
-     * @return string the custom user redirect URL
+     * @throws Exception
      */
-    public function getCustomUserRedirectURL($userId, $salt)
+    public function getCustomUserRedirectURL(int $userId, string $salt): string
     {
         $hash = password_hash($salt.$userId, PASSWORD_BCRYPT);
+
         if (false === $hash) {
-            throw new Exception('hash generation failed');
+            throw new Exception('Hash generation failed');
         }
 
         return sprintf(

@@ -1,4 +1,13 @@
-No search index
-===
+# NoSearchIndex
 
-This plugin allows administrators to hide the portal from search engines using the robots.txt file and adding a meta tag "noindex". It modifies the robots.txt file to add 'Disallow: /' and also adds ```<meta name="robots" content="noindex" />``` to the file app/home/header_extra_content.txt that correspond to the content of the variable "Extra content in header"
+This Chamilo 2 version is intentionally simple.
+
+When the plugin is active from **Administration > Plugins**, Chamilo renders this tag inside the global HTML `<head>`:
+
+```html
+<meta name="robots" content="noindex, nofollow, noarchive" data-plugin="NoSearchIndex">
+```
+
+The plugin does not edit `robots.txt`, does not register dynamic plugin subscribers, and does not change web server configuration.
+
+This only affects HTML pages rendered by Chamilo. Static files served directly by Apache/Nginx are not modified by the plugin.

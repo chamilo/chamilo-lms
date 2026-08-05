@@ -1,6 +1,7 @@
 <?php
 
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
 
@@ -18,6 +19,7 @@ echo "var userStatusCS = '?';";
 echo "var listPagesCS = '?';";
 echo "var renderFromSvg = '';";
 echo "var optionsGlobalPage = '';";
+echo "var cstudioUploadMaxFileSize = '".addslashes((string) ini_get('upload_max_filesize'))."';";
 echo "var lfIdent = '';";
 echo '</script>';
 
@@ -34,6 +36,8 @@ $loadh = '';
 $changColor = '';
 $changQuizzColor = '';
 $localFolder = '';
+$cstudioAiCsrfToken = '';
+$cstudioLegacyCsrfToken = '';
 
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
@@ -82,22 +86,34 @@ if (isset($_GET['id'])) {
     echo "optionsCSCDT = '".$options_studio_cdt."';";
     echo 'renderFromSvg = '.json_encode((string) $fromsvg).';';
 
+    // Authorization gate: deny anonymous users outright. CStudio editor URLs are
+    // opened without a cid parameter after the project link redirects to
+    // editor/index.php, so the strict course-context edit check can fail even for
+    // teachers. Use the same fallback as oel_tools_teachdoc_link.php.
+    $isAllowedToEdit = false;
+
     if (!$VDB->w_api_is_anonymous()) {
-        $user = $VDB->w_api_get_user_info();
+        $isAllowedToEdit = (bool) $VDB->w_api_is_allowed_to_edit();
 
-        if ($VDB->w_api_is_allowed_to_edit()) {
-            echo "userStatusCS = '".(int) $user['status']."';";
-            if (isset($_SESSION['idsessionedition'])) {
-                echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
-            }
-        } else {
-            echo 'Context token is not valid or has expired. User rejected !</br>';
-            echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
-
-            exit;
+        if (!$isAllowedToEdit && function_exists('api_is_allowed_to_edit')) {
+            $isAllowedToEdit = (bool) api_is_allowed_to_edit(null, true, false, false);
         }
-    } else {
-        echo "console.log('api_is_anonymous !');";
+    }
+
+    if (!$isAllowedToEdit) {
+        echo '<script>';
+        echo 'document.addEventListener("DOMContentLoaded", function () {';
+        echo 'document.body.innerHTML = "<p style=\"padding:20px;color:#b91c1c;font-family:sans-serif;\">Context token is not valid or has expired. User rejected.</p>";';
+        echo '});';
+        echo '</script>';
+
+        exit;
+    }
+
+    $user = $VDB->w_api_get_user_info();
+    echo "userStatusCS = '".(int) $user['status']."';";
+    if (isset($_SESSION['idsessionedition'])) {
+        echo "listPagesCS = '".(string) $_SESSION['idsessionedition']."';";
     }
 
     echo "var renderEngRed = '".$VDB->engine."';";
@@ -112,6 +128,14 @@ if (isset($_GET['id'])) {
         exit;
     }
     echo "<script>console.log('api_get_user_id');</script>";
+    $cstudioLegacyCsrfToken = savedCSRFToken($VDB->w_api_get_user_id());
+
+    /** @var CsrfTokenManagerInterface $csrfTokenManager */
+    $csrfTokenManager = Container::$container->get(CsrfTokenManagerInterface::class);
+    $cstudioAiCsrfToken = $csrfTokenManager
+        ->getToken('cstudio_ai_'.$idPage)
+        ->getValue()
+    ;
 
     if ('' != $idPage && 0 != $idPage) {
         $pluginFileSystem = Container::getPluginsFileSystem();
@@ -164,7 +188,13 @@ if (isset($_GET['id'])) {
 
         // Cookie cstudio_lang is written by the JS language switcher (setCstudioLangCookie)
         // on every page load, making it the most reliable source for the user's chosen UI language.
-        $cstudioInterfaceLocale = (!empty($_COOKIE['cstudio_lang']) ? $_COOKIE['cstudio_lang'] : null)
+        // Validate it against an iso-locale allowlist before passing it to apply_cstudio_template_lang(),
+        // which performs a require() on a path built from this value.
+        $cstudioCookieLocale = !empty($_COOKIE['cstudio_lang']) ? (string) $_COOKIE['cstudio_lang'] : '';
+        if (!preg_match('/^[a-z]{2}(_[A-Z]{2})?$/', $cstudioCookieLocale)) {
+            $cstudioCookieLocale = '';
+        }
+        $cstudioInterfaceLocale = ('' !== $cstudioCookieLocale ? $cstudioCookieLocale : null)
             ?? Container::getSession()?->get('_locale')
             ?? 'en_US';
 
@@ -228,6 +258,7 @@ if (isset($_GET['id'])) {
         echo 'var cstudioCourseLocale = '.json_encode($cstudioCourseLocale).';';
         echo '</script>';
 
+        echo '<script>var baseMyCollImgs = [];</script>';
         echo '<script type="text/javascript" src="img_cache/getextras.php?id='.$id_parent.'" ></script>';
     } else {
         echo "<script>location.href = '../oel_tools_teachdoc_list.php';</script>";
@@ -308,9 +339,11 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="dist/css/grapes.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="dist/grapesjs-preset-webpage.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
+    <link href="jscss/cstudio-ai.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
+    <script src="dist/js/grapes.js?v=<?php echo $version; ?>"></script>
     <script src="dist/js/grapesludi.js?v=<?php echo $version; ?>"></script>
     <script src="dist/grapesjs-preset-webpage.min.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/jquery.js?v=<?php echo $version; ?>"></script>
@@ -321,6 +354,15 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <script src="jscss/oel-teachdoc-x.js?v=<?php echo $version; ?>"></script>
     <script src="../resources/js/cstudio-i18n.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/oel-teachdoc.js?v=<?php echo $version; ?>"></script>
+    <script>
+      window.cstudioAiConfig = <?php echo json_encode([
+          'endpoint' => api_get_path(WEB_PATH).'ai/cstudio',
+          'pageId' => (int) $idPage,
+          'csrfToken' => $cstudioAiCsrfToken,
+          'locale' => $cstudioInterfaceLocale,
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+    </script>
+    <script src="jscss/cstudio-ai.js?v=<?php echo $version; ?>"></script>
     <script>correctPositionsEditor();</script>
 
     <?php
@@ -354,7 +396,7 @@ if (isset($_GET['pty'])) {
 
     <script src="../resources/interfaces/xapi/base64.js"></script>
     <form method="POST" action="index.php">
-    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo savedCSRFToken($VDB->w_api_get_user_id()); ?>">
+    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo htmlspecialchars($cstudioLegacyCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
     </form>
     <?php
     if (false != strpos($base_html, 'txtmathjax')) {

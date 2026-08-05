@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Mevcut filtreyle not oluşturulmadı';
 $strings['NoNotebook'] = 'Sistemde not oluşturulmadı';
 $strings['NoNotebookUser'] = 'Bu öğrenci için not yok';
 $strings['NotebookNoStudentAssigned'] = 'Öğrenci atanmamış notlar';
+
+$strings['TeacherNotesHelp'] = 'Bu dersteki öğrenenlere bağlı özel öğretmen notları oluşturun.';
+$strings['CurrentFilter'] = 'Mevcut filtre';
+$strings['EmptyStateHelp'] = 'Yeni bir not oluşturun veya öğrenen filtresini değiştirin.';

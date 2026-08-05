@@ -20,3 +20,7 @@ $strings['EmbedDateRangeHelp'] = 'Ezen a dátumtartományon belül ez a beágyaz
 $strings['HtmlCode'] = 'HTML kód';
 $strings['HtmlCodeHelp'] = 'A megosztott HTML kód, ahogy azt a külső szolgáltatás biztosítja a Beágyazott formátumban történő megosztáskor.';
 $strings['LaunchContent'] = 'Tartalom indítása';
+
+$strings['InvalidDateRange'] = 'A kezdő dátumnak korábbinak vagy egyezőnek kell lennie a befejezési dátumnál.';
+
+$strings['InvalidSecurityToken'] = 'Érvénytelen biztonsági token. Kérjük, töltse újra az oldalt, és próbálja újra.';

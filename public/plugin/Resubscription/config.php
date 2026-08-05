@@ -1,9 +1,9 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * Config the plugin.
- *
- * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
- */
-require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
+
+if (!class_exists('Resubscription', false)) {
+    require_once __DIR__.'/src/Resubscription.php';
+}

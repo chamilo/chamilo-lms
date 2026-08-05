@@ -4,7 +4,6 @@
 $strings['plugin_title'] = 'Evaluering av spørsmålsalternativ';
 $strings['plugin_comment'] = 'Tillat omrekning av poeng for alternativ i spørsmål';
 
-$strings['enable'] = 'Aktiver';
 $strings['exercise_max_score'] = 'Maks poeng i øvelser';
 $strings['exercise_max_score_help'] = 'Standard er 10.';
 
@@ -17,3 +16,5 @@ $strings['Formula3'] = 'Suksessar - feil / 3';
 $strings['QuestionsEvaluated'] = 'Spørsmål evaluert';
 $strings['RecalculateQuestionScores'] = 'Rekalkuler spørsmålspoeng';
 $strings['FormulaSavedForExerciseX'] = 'Formel lagra for øvelse "%s".';
+$strings['NoFormulaHelp'] = 'Behold standard Chamilo-poenggjeving for denne prøva.';
+$strings['enable'] = 'Aktiver';

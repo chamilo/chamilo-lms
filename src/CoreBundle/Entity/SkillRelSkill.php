@@ -46,6 +46,11 @@ class SkillRelSkill
         return $this;
     }
 
+    public function getRelationType(): int
+    {
+        return $this->relationType;
+    }
+
     public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
@@ -53,9 +58,9 @@ class SkillRelSkill
         return $this;
     }
 
-    public function getRelationType(): int
+    public function getLevel(): int
     {
-        return $this->relationType;
+        return $this->level;
     }
 
     public function setLevel(int $level): self
@@ -63,11 +68,6 @@ class SkillRelSkill
         $this->level = $level;
 
         return $this;
-    }
-
-    public function getLevel(): int
-    {
-        return $this->level;
     }
 
     public function getId(): int

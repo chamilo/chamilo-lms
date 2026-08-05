@@ -1,57 +1,68 @@
-<h4>
-    {{ meeting.typeName }} {{ meeting.meetingId }}
-</h4>
+{% set meeting_info = meeting.meetingInfoGet is defined ? meeting.meetingInfoGet : null %}
+{% set meeting_topic = meeting_info and meeting_info.topic is defined ? meeting_info.topic : '' %}
 
-<a class="btn btn--primary" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
-    {{ 'Edit'|get_lang }}
-</a>
+<section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-primary">
+                {{ 'ZoomVideoConferences'|get_plugin_lang('ZoomPlugin') }}
+            </p>
+            <h1 class="text-2xl font-bold text-gray-90">
+                {{ meeting_topic|default('') ?: ('Activity'|get_plugin_lang('ZoomPlugin')) }}
+            </h1>
+            <p class="mt-1 text-sm text-gray-50">
+                {{ 'Meeting'|get_lang }} #{{ meeting.meetingId }}
+            </p>
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>{{ 'Type'|get_lang }}</th>
-            <th>{{ 'Action'|get_plugin_lang('ZoomPlugin') }}</th>
-{#            <th>{{ 'User'|get_lang }}</th>#}
-            <th>{{ 'Date'|get_lang }}</th>
-            <th>{{ 'Details'|get_lang }} </th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for activity in meeting.activities %}
-        <tr>
-            <td>
-                {{ activity.type }}
-            </td>
-            <td>
-                {{ activity.title }}
-            </td>
-            <td>
-                {{ activity.createdAt | api_convert_and_format_date(3)}}
-            </td>
-{#            <td>#}
-{#                {% if is_granted('ROLE_ADMIN')) %}#}
-{#                    <a href="{{ url('index') }}main/admin/user_information.php?user_id={{ activity.user.id }}" >#}
-{#                        {{ activity.user.firstname }} {{ activity.user.lastname }} ({{ activity.user.username }})#}
-{#                    </a>#}
-{#                {% else %}#}
-{#                    {{ activity.user.firstname }} {{ activity.user.lastname }} ({{ activity.user.username }})#}
-{#                {% endif %}#}
-{#            </td>#}
-            <td>
-                {% if activity.eventDecoded.registrant %}
-                    {{ 'User' | get_lang }} :
-                    {{ activity.eventDecoded.registrant.first_name }} -
-                    {{ activity.eventDecoded.registrant.last_name }} -
-                    {{ activity.eventDecoded.registrant.email }} -
-                    {{ activity.eventDecoded.registrant.status }}
-                {% endif %}
+        <a
+            class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-primary shadow-sm hover:bg-gray-15"
+            href="meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
+        >
+            <span class="mdi mdi-information ch-tool-icon" aria-hidden="true"></span>
+            {{ 'Details'|get_lang }}
+        </a>
+    </div>
 
-                {% if activity.eventDecoded.participant %}
-                    {{ 'User' | get_lang }} :
-                    {{ activity.eventDecoded.participant.user_name }}
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <div class="overflow-hidden rounded-xl border border-gray-25">
+        <table class="min-w-full divide-y divide-gray-25 text-sm">
+            <thead class="bg-gray-15">
+                <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Type'|get_lang }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Action'|get_plugin_lang('ZoomPlugin') }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Date'|get_lang }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-90">{{ 'Details'|get_lang }}</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-25 bg-white">
+            {% for activity in meeting.activities %}
+                <tr>
+                    <td class="px-4 py-3 text-gray-90">{{ activity.type }}</td>
+                    <td class="px-4 py-3 text-gray-90">{{ activity.title }}</td>
+                    <td class="px-4 py-3 text-gray-70">{{ activity.createdAt|api_convert_and_format_date(3) }}</td>
+                    <td class="px-4 py-3 text-gray-70">
+                        {% if activity.eventDecoded is defined and activity.eventDecoded.registrant is defined and activity.eventDecoded.registrant %}
+                            <span class="font-semibold">{{ 'User'|get_lang }}:</span>
+                            {{ activity.eventDecoded.registrant.first_name|default('') }}
+                            {{ activity.eventDecoded.registrant.last_name|default('') }}
+                            {{ activity.eventDecoded.registrant.email|default('') }}
+                            {{ activity.eventDecoded.registrant.status|default('') }}
+                        {% elseif activity.eventDecoded is defined and activity.eventDecoded.participant is defined and activity.eventDecoded.participant %}
+                            <span class="font-semibold">{{ 'User'|get_lang }}:</span>
+                            {{ activity.eventDecoded.participant.user_name|default('') }}
+                        {% else %}
+                            <span class="text-gray-50">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="px-4 py-6 text-center text-gray-50" colspan="4">
+                        {{ 'No data available'|get_lang }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>

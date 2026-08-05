@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Videoconferència Zoom';
 $strings['plugin_comment'] = 'Integració de videoconferència Zoom en cursos i sessions';
 
+$strings['accountId'] = 'ID del compte';
+$strings['clientId'] = 'ID del client';
+$strings['clientSecret'] = 'Secret del client';
+$strings['webhookSecretToken'] = 'Token secret del webhook';
+$strings['apiKey_help'] = "Clau API JWT antiga. Es recomana utilitzar Account ID, Client ID i Client Secret per a l'OAuth Server-to-Server de Zoom.";
+$strings['apiSecret_help'] = "Secret API JWT antic. Es recomana utilitzar Account ID, Client ID i Client Secret per a l'OAuth Server-to-Server de Zoom.";
+$strings['verificationToken_help'] = 'Token de verificació de webhook antic. Es recomana utilitzar Webhook Secret Token.';
+$strings['accountId_help'] = 'ID del compte OAuth Server-to-Server de Zoom.';
+$strings['clientId_help'] = 'ID del client OAuth Server-to-Server de Zoom.';
+$strings['clientSecret_help'] = 'Secret del client OAuth Server-to-Server de Zoom.';
+$strings['webhookSecretToken_help'] = 'Token secret utilitzat per validar les sol·licituds de webhook de Zoom.';
 $strings['apiKey'] = 'Clau API';
 $strings['apiSecret'] = 'Secret API';
 $strings['verificationToken'] = 'Token de verificació';

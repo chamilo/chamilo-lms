@@ -104,19 +104,29 @@ if (isset($_GET['action'])) {
 
                 $form->addFloat(
                     'score',
-                    [
-                        get_lang('Score'),
-                        null,
-                        '/ '.$evaluation->get_max(),
-                    ],
+                    get_lang('Score'),
                     true,
                     [
                         'size' => '4',
                         'maxlength' => '5',
+                        'style' => 'width: 6rem; max-width: 6rem;',
+                        'class' => 'text-right',
                     ],
                     false,
                     0,
                     $evaluation->get_max()
+                );
+                $renderer = &$form->defaultRenderer();
+                $renderer->setElementTemplate(
+                    '<div class="field">
+                        <label class="form-label">{label}</label>
+                        <div class="inline-flex items-center justify-start gap-1 whitespace-nowrap">
+                            {element}
+                            <span class="text-sm text-gray-700">/ '.$evaluation->get_max().'</span>
+                        </div>
+                        <!-- BEGIN error --><div class="mt-1 text-sm text-danger">{error}</div><!-- END error -->
+                    </div>',
+                    'score'
                 );
 
                 $form->addTextarea('comment', get_lang('Comment'));

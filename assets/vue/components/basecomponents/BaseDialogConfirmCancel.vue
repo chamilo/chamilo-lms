@@ -3,6 +3,7 @@
     :is-visible="isVisible"
     :style="{ width: '28rem' }"
     :title="title"
+    :show-close-button="false"
     @update:is-visible="$emit('update:isVisible', $event)"
   >
     <slot></slot>

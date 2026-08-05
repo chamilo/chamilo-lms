@@ -13,3 +13,7 @@ $strings['NoNotebookFilter'] = 'Brak notatek utworzonych z bieżącym filtrem';
 $strings['NoNotebook'] = 'Brak notatek utworzonych w systemie';
 $strings['NoNotebookUser'] = 'Brak notatek dla tego studenta';
 $strings['NotebookNoStudentAssigned'] = 'Notatki bez przypisanych studentów';
+
+$strings['TeacherNotesHelp'] = 'Tworzenie prywatnych notatek nauczyciela powiązanych z uczniami w tym kursie.';
+$strings['CurrentFilter'] = 'Bieżący filtr';
+$strings['EmptyStateHelp'] = 'Utwórz nową notatkę lub zmień filtr uczniów.';

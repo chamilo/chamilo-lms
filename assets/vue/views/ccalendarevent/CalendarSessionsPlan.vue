@@ -122,6 +122,7 @@
 import { ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { DateTime } from "luxon"
+import calendarService from "../../services/calendarService"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRoute, useRouter } from "vue-router"
@@ -206,22 +207,7 @@ async function fetchPlan() {
     isLoading.value = true
     errorMessage.value = ""
 
-    const url = `/api/calendar/sessions-plan?year=${encodeURIComponent(String(year.value))}`
-    const resp = await fetch(url, { method: "GET", headers: { Accept: "application/ld+json, application/json" } })
-
-    if (!resp.ok) {
-      const text = await resp.text().catch(() => "")
-      console.error("[SessionsPlan] Request failed", resp.status, text)
-      if (resp.status === 403) {
-        errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in your plan")
-      } else {
-        errorMessage.value = tOrFallback("Failed to load sessions plan", "Failed to load sessions plan")
-      }
-      sessions.value = []
-      return
-    }
-
-    const data = await resp.json()
+    const data = await calendarService.getSessionsPlan(year.value)
     const items = Array.isArray(data) ? data : Array.isArray(data?.["hydra:member"]) ? data["hydra:member"] : []
 
     sessions.value = items.map((x) => ({
@@ -235,8 +221,12 @@ async function fetchPlan() {
       color: x.color || "rgba(70,130,180,0.9)",
     }))
   } catch (e) {
-    console.error("[SessionsPlan] Unexpected error", e)
-    errorMessage.value = tOrFallback("Failed to load sessions plan", "Failed to load sessions plan")
+    console.error("[SessionsPlan] Request failed", e?.response?.status ?? e)
+    if (e?.response?.status === 403) {
+      errorMessage.value = tOrFallback("TooMuchSessionsInPlanification", "Too many sessions in your plan")
+    } else {
+      errorMessage.value = tOrFallback("Failed to load sessions plan", "Failed to load sessions plan")
+    }
     sessions.value = []
   } finally {
     isLoading.value = false

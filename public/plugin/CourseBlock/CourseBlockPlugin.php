@@ -7,12 +7,19 @@
  */
 class CourseBlockPlugin extends Plugin
 {
+    private const REGION_SETTING_MAP = [
+        'footer_left' => 'course_block_footer_left',
+        'footer_center' => 'course_block_footer_center',
+        'footer_right' => 'course_block_footer_right',
+        'pre_footer' => 'course_block_pre_footer',
+    ];
+
     public $isCoursePlugin = true;
     public $addCourseTool = false;
 
-    // When creating a new course this settings are added to the course
+    // When creating a new course these settings are added to the course.
     public $course_settings = [
-         [
+        [
             'name' => 'course_block_pre_footer',
             'type' => 'textarea',
         ],
@@ -33,66 +40,111 @@ class CourseBlockPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '0.1',
+            '0.2',
             'Julio Montoya',
-            [
-            ]
+            []
         );
     }
 
-    /**
-     * @return CourseBlockPlugin
-     */
-    public static function create()
+    public static function create(): self
     {
         static $result = null;
 
         return $result ?: $result = new self();
     }
 
-    public function install()
+    public function get_info(): array
     {
-        // Installing course settings
-        $this->install_course_fields_in_all_courses(false);
-    }
+        $info = parent::get_info();
+        $info['supports_regions'] = true;
 
-    public function uninstall()
-    {
-        // Deleting course settings
-        $this->uninstall_course_fields_in_all_courses();
+        return $info;
     }
 
     /**
-     * @param string $region
-     *
-     * @return string
+     * CourseBlock has per-course settings only. Avoid showing unrelated global settings.
      */
-    public function renderRegion($region)
+    public function getSettingsForm()
     {
-        $content = '';
-        switch ($region) {
-            case 'footer_left':
-                $content = api_get_course_setting('course_block_footer_left');
-                $content = -1 === $content ? '' : $content;
+        return null;
+    }
 
-                break;
-            case 'footer_center':
-                $content = api_get_course_setting('course_block_footer_center');
-                $content = -1 === $content ? '' : $content;
+    public function install(): void
+    {
+        // Installing course settings.
+        $this->install_course_fields_in_all_courses(false);
+    }
 
-                break;
-            case 'footer_right':
-                $content = api_get_course_setting('course_block_footer_right');
-                $content = -1 === $content ? '' : $content;
+    public function uninstall(): void
+    {
+        // Deleting course settings.
+        $this->uninstall_course_fields_in_all_courses();
+    }
 
-                break;
-            case 'pre_footer':
-                $content = api_get_course_setting('course_block_pre_footer');
-                $content = -1 === $content ? '' : $content;
+    public function renderRegion($region): string
+    {
+        $region = (string) $region;
 
-                break;
+        if (!$this->isEnabled()) {
+            return '';
         }
 
-        return $content;
+        if (!isset(self::REGION_SETTING_MAP[$region])) {
+            return '';
+        }
+
+        $courseId = $this->getCurrentCourseId();
+
+        if (0 >= $courseId) {
+            return '';
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $content = api_get_course_setting(self::REGION_SETTING_MAP[$region], $courseInfo, true);
+
+        if (-1 === $content || null === $content) {
+            return '';
+        }
+
+        $content = trim((string) $content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        $content = Security::remove_XSS($content);
+
+        return '<div class="course-block course-block--'.htmlspecialchars($region, ENT_QUOTES, 'UTF-8').'">'.$content.'</div>';
+    }
+
+    private function getCurrentCourseId(): int
+    {
+        if (function_exists('api_get_course_int_id')) {
+            $courseId = (int) api_get_course_int_id();
+
+            if (0 < $courseId) {
+                return $courseId;
+            }
+        }
+
+        if (isset($_GET['cid']) && is_numeric($_GET['cid'])) {
+            return (int) $_GET['cid'];
+        }
+
+        $courseInfo = api_get_course_info();
+
+        if (empty($courseInfo)) {
+            return 0;
+        }
+
+        if (is_array($courseInfo) && isset($courseInfo['real_id'])) {
+            return (int) $courseInfo['real_id'];
+        }
+
+        if ($courseInfo instanceof \Chamilo\CoreBundle\Entity\Course) {
+            return (int) $courseInfo->getId();
+        }
+
+        return 0;
     }
 }

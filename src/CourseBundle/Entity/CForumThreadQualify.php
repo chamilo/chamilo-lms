@@ -36,7 +36,7 @@ class CForumThreadQualify
     #[ORM\JoinColumn(name: 'qualify_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $qualifyUser;
 
-    #[ORM\Column(name: 'qualify', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[ORM\Column(name: '`qualify`', type: 'float', precision: 6, scale: 2, nullable: false)]
     protected float $qualify;
 
     #[ORM\Column(name: 'qualify_time', type: 'datetime', nullable: true)]
@@ -96,6 +96,30 @@ class CForumThreadQualify
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getQualifyUser(): User
+    {
+        return $this->qualifyUser;
+    }
+
+    public function setQualifyUser(User $qualifyUser): self
+    {
+        $this->qualifyUser = $qualifyUser;
+
+        return $this;
     }
 
     public function getThread(): CForumThread

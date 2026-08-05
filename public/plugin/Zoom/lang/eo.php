@@ -5,6 +5,17 @@
 $strings['plugin_title'] = 'Zoom Videokonferenco';
 $strings['plugin_comment'] = 'Integro de Zoom-videokonferenco en kursoj kaj sesioj';
 
+$strings['accountId'] = 'Konto-ID';
+$strings['clientId'] = 'Kliento-ID';
+$strings['clientSecret'] = 'Klienta sekreto';
+$strings['webhookSecretToken'] = 'Retkroĉa sekreta ĵetono';
+$strings['apiKey_help'] = 'Malnova JWT API-ŝlosilo. Preferu Konto-ID, Kliento-ID kaj Klientan Sekreton por Zoom Servilo-al-Servilo OAuth.';
+$strings['apiSecret_help'] = 'Malnova JWT API-sekreto. Preferu Konto-ID, Kliento-ID kaj Klientan Sekreton por Zoom Servilo-al-Servilo OAuth.';
+$strings['verificationToken_help'] = 'Malnova retkroĉa konfirma ĵetono. Preferu Retkroĉan Sekretan Ĵetonon.';
+$strings['accountId_help'] = 'Zoom Servilo-al-Servilo OAuth Konto-ID.';
+$strings['clientId_help'] = 'Zoom Servilo-al-Servilo OAuth Kliento-ID.';
+$strings['clientSecret_help'] = 'Zoom Servilo-al-Servilo OAuth Klienta Sekreto.';
+$strings['webhookSecretToken_help'] = 'Sekreta ĵetono uzata por validigi Zoom retkroĉajn petojn.';
 $strings['apiKey'] = 'API-ŝlosilo';
 $strings['apiSecret'] = 'API-sekreto';
 $strings['verificationToken'] = 'Verifika ĵetono';

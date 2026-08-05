@@ -21,14 +21,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')"),
-        new Delete(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')"),
+        new Get(security: "object.getPublication() != null and is_granted('VIEW', object.getPublication().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
+        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
+        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_user:read']],
     denormalizationContext: ['groups' => ['student_publication_rel_user:write']],
-    security: "is_granted('ROLE_USER')"
+    security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'publication' => 'exact',

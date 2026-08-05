@@ -1,0 +1,442 @@
+{% extends '@ChamiloCore/Layout/no_layout.html.twig' %}
+
+{% block content %}
+    <main class="min-h-screen bg-gray-15 px-8 py-8 text-gray-90">
+        <div class="mx-auto max-w-[1120px]">
+            <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                <h1 class="m-0 text-3xl font-bold leading-tight text-gray-90">{{ 'AI analyzer'|trans }}</h1>
+                <p class="mt-2 text-base text-gray-60">
+                    {{ course.title }}
+                    {% if session %}
+                        · {{ 'Session'|trans }} #{{ session.id }}
+                    {% endif %}
+                </p>
+
+                <div class="mt-4 rounded-xl border-l-4 border-warning bg-warning/10 p-4 text-warning-dark">
+                    <strong>{{ 'Important'|trans }}</strong><br>
+                    {{ 'The contents of this course can be sent to an AI provider that might be external to your organization. Make sure you have authorization to share this content. This operation can also represent a considerable cost if used on large courses.'|trans }}
+                </div>
+            </section>
+
+            {% if error %}
+                <div class="mb-6 rounded-xl border-l-4 border-danger bg-danger/10 p-4 text-danger-dark">
+                    {{ error|trans }}
+                </div>
+            {% endif %}
+
+            <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                {% if not enabled %}
+                    <p>{{ 'AI course analyzer is disabled by the platform administrator.'|trans }}</p>
+                {% elseif providers is empty %}
+                    <p>{{ 'No AI text provider is configured.'|trans }}</p>
+                {% else %}
+                    <form method="post" id="ai-course-analyzer-form">
+                        <input type="hidden" name="_token" value="{{ csrf_token(csrf_token_id) }}">
+                        {% if session %}
+                            <input type="hidden" name="sid" value="{{ session.id }}">
+                        {% endif %}
+
+                        <div>
+                            <label class="mb-2 block font-semibold text-gray-90" for="provider">{{ 'AI provider'|trans }}</label>
+                            <select
+                                    id="provider"
+                                    name="provider"
+                                    class="w-full rounded-xl border border-gray-30 bg-white p-3 text-sm text-gray-90"
+                            >
+                                {% for provider in providers %}
+                                    <option value="{{ provider }}" {{ provider == selected_provider ? 'selected' : '' }}>
+                                        {{ provider }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="mb-2 block font-semibold text-gray-90" for="prompt">{{ 'What feedback do you want about this course?'|trans }}</label>
+                            <textarea
+                                    id="prompt"
+                                    name="prompt"
+                                    class="min-h-[140px] w-full resize-y rounded-xl border border-gray-30 bg-white p-3 text-sm text-gray-90"
+                                    required
+                                    placeholder="{{ 'Example: Analyze the pedagogical sequence of each lesson, the role of each item, document clarity, quiz quality and possible improvements.'|trans }}"
+                            >{{ prompt }}</textarea>
+                        </div>
+
+                        <div class="mt-4 space-y-3 rounded-xl border border-gray-25 bg-gray-15 p-4">
+                            <label class="flex cursor-pointer items-start gap-3 text-sm text-gray-90" for="include_standalone_documents">
+                                <input
+                                        type="checkbox"
+                                        id="include_standalone_documents"
+                                        name="include_standalone_documents"
+                                        value="1"
+                                        class="mt-1"
+                                        {% if include_standalone_documents %}checked{% endif %}
+                                >
+                                <span>
+                                    <strong>{{ 'Also include standalone course documents'|trans }}</strong><br>
+                                    <span class="text-gray-60">
+                                        {{ 'By default, the analyzer focuses on visible learning paths and their items. Enable this only if you also want to analyze visible documents that are not used in any lesson.'|trans }}
+                                    </span>
+                                </span>
+                            </label>
+
+                            <label class="flex cursor-pointer items-start gap-3 text-sm text-gray-90" for="include_standalone_exercises">
+                                <input
+                                        type="checkbox"
+                                        id="include_standalone_exercises"
+                                        name="include_standalone_exercises"
+                                        value="1"
+                                        class="mt-1"
+                                        {% if include_standalone_exercises %}checked{% endif %}
+                                >
+                                <span>
+                                    <strong>{{ 'Also include standalone course exercises'|trans }}</strong><br>
+                                    <span class="text-gray-60">
+                                        {{ 'Enable this if you also want to analyze visible tests that are not used in any lesson.'|trans }}
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-end gap-3">
+                            <div
+                                    id="ai-course-analyzer-loading"
+                                    class="hidden items-center gap-2 text-sm font-semibold text-gray-60"
+                                    aria-live="polite"
+                                    aria-hidden="true"
+                            >
+                                <span class="h-[18px] w-[18px] animate-spin rounded-full border-2 border-gray-30 border-t-primary" aria-hidden="true"></span>
+                                <span>{{ 'Analyzing course, please wait…'|trans }}</span>
+                            </div>
+
+                            <button
+                                    type="submit"
+                                    id="ai-course-analyzer-submit"
+                                    class="inline-flex min-h-[42px] cursor-pointer items-center justify-center gap-1.5 rounded-xl border-0 bg-primary px-5 py-2.5 font-bold text-white hover:bg-primary-gradient disabled:cursor-not-allowed disabled:opacity-60"
+                                    data-loading-text="{{ 'Analyzing…'|trans }}"
+                            >
+                                <span class="mdi mdi-brain text-lg leading-none" aria-hidden="true"></span>
+                                <span class="ai-course-analyzer-button-label">{{ 'Analyze course'|trans }}</span>
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </section>
+
+            {% if result %}
+                {% set structured = result.structuredResponse %}
+                {% set payload = result.payload %}
+
+                <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                    <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Analysis summary'|trans }}</h2>
+                    <p>
+                        {{ 'Lessons included'|trans }}: {{ payload.lessons|length }} ·
+                        {{ 'Standalone documents included'|trans }}: {{ payload.standaloneDocuments|length }} ·
+                        {{ 'Standalone exercises included'|trans }}: {{ payload.standaloneExercises|length }}
+                    </p>
+                </section>
+
+                {% if structured %}
+                    <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                        <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'General feedback'|trans }}</h2>
+                        <p>{{ structured.generalFeedback|default('') }}</p>
+                    </section>
+
+                    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Strengths'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.strengths|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No strengths returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Risks'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.risks|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No risks returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+
+                        <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'Recommendations'|trans }}</h2>
+                            <ul class="m-0 list-disc pl-5">
+                                {% for item in structured.recommendations|default([]) %}
+                                    <li>{{ item }}</li>
+                                {% else %}
+                                    <li>{{ 'No recommendations returned.'|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+                    </div>
+
+                    {% if structured.lessons|default([]) is not empty %}
+                        <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-4 text-lg font-bold text-gray-90">{{ 'Lesson feedback'|trans }}</h2>
+                            <div class="space-y-4">
+                                {% for lesson in structured.lessons %}
+                                    {% set payload_lesson = payload.lessons[loop.index0]|default(null) %}
+                                    <article class="rounded-xl border border-gray-25 bg-white p-4">
+                                        <div class="mb-2 flex items-start justify-between gap-3">
+                                            <h3 class="m-0 text-base font-bold text-gray-90">{{ lesson.title|default('Lesson') }}</h3>
+                                            {% if payload_lesson and payload_lesson.editUrl|default('') %}
+                                                <a
+                                                        href="{{ payload_lesson.editUrl }}"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="inline-flex items-center gap-1 rounded-lg border border-gray-25 px-2 py-1 text-sm text-gray-90 hover:bg-gray-15"
+                                                        title="{{ 'Edit learning path'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-pencil ch-tool-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Edit learning path'|trans }}</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <p>{{ lesson.feedback|default('') }}</p>
+
+                                        {% if lesson.sequenceFeedback|default('') %}
+                                            <div class="mt-3 rounded-xl bg-gray-15 p-3">
+                                                <strong>{{ 'Sequence feedback'|trans }}</strong>
+                                                <p class="mb-0">{{ lesson.sequenceFeedback }}</p>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if lesson.items|default([]) is not empty %}
+                                            <div class="mt-3 space-y-2">
+                                                {% for item in lesson.items %}
+                                                    {% set payload_item = payload_lesson and payload_lesson.items is defined ? payload_lesson.items[loop.index0]|default(null) : null %}
+                                                    <div class="rounded-xl border border-gray-25 bg-gray-15 p-3">
+                                                        <div class="flex items-start justify-between gap-3">
+                                                            <div>
+                                                                <strong>{{ item.title|default('Lesson item') }}</strong>
+                                                                {% if item.type|default('') %}
+                                                                    <span class="ml-2 rounded-full bg-gray-25 px-2 py-1 text-xs text-gray-60">{{ item.type }}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                            {% if payload_item and payload_item.editUrl|default('') %}
+                                                                <a
+                                                                        href="{{ payload_item.editUrl }}"
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        class="inline-flex items-center gap-1 rounded-lg border border-gray-25 bg-white px-2 py-1 text-sm text-gray-90 hover:bg-gray-15"
+                                                                        title="{{ 'Edit lesson item'|trans }}"
+                                                                >
+                                                                    <span class="mdi mdi-pencil ch-tool-icon" aria-hidden="true"></span>
+                                                                    <span class="sr-only">{{ 'Edit lesson item'|trans }}</span>
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+
+                                                        {% if item.purpose|default('') %}
+                                                            <p class="mt-2 mb-0"><strong>{{ 'Purpose'|trans }}:</strong> {{ item.purpose }}</p>
+                                                        {% endif %}
+
+                                                        {% if item.feedback|default('') %}
+                                                            <p class="mt-2 mb-0">{{ item.feedback }}</p>
+                                                        {% elseif item.purpose|default('') is empty and item.recommendations|default([]) is empty %}
+                                                            <p class="mt-2 mb-0 text-gray-60">{{ 'No item-specific AI feedback was returned.'|trans }}</p>
+                                                        {% endif %}
+
+                                                        {% if item.questions|default([]) is not empty %}
+                                                            <div class="mt-3 rounded-lg border border-gray-25 bg-white p-3">
+                                                                <strong>{{ 'Question feedback'|trans }}</strong>
+                                                                <div class="mt-2 space-y-2">
+                                                                    {% for question in item.questions %}
+                                                                        <div class="rounded-lg bg-gray-15 p-2">
+                                                                            <p class="mb-1 font-semibold">{{ question.question|default('Question') }}</p>
+                                                                            {% if question.feedback|default('') %}
+                                                                                <p class="mb-1">{{ question.feedback }}</p>
+                                                                            {% endif %}
+                                                                            {% if question.answersFeedback|default('') %}
+                                                                                <p class="mb-1"><strong>{{ 'Answers'|trans }}:</strong> {{ question.answersFeedback }}</p>
+                                                                            {% endif %}
+                                                                            {% if question.recommendations|default([]) is not empty %}
+                                                                                <ul class="mb-0 list-disc pl-5">
+                                                                                    {% for recommendation in question.recommendations %}
+                                                                                        <li>{{ recommendation }}</li>
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+
+                                                        {% if item.recommendations|default([]) is not empty %}
+                                                            <ul class="mt-2 mb-0 list-disc pl-5">
+                                                                {% for recommendation in item.recommendations %}
+                                                                    <li>{{ recommendation }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if lesson.recommendations|default([]) is not empty %}
+                                            <ul class="mt-3 mb-0 list-disc pl-5">
+                                                {% for recommendation in lesson.recommendations %}
+                                                    <li>{{ recommendation }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    {% if structured.standaloneDocuments|default([]) is not empty %}
+                        <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-4 text-lg font-bold text-gray-90">{{ 'Standalone document feedback'|trans }}</h2>
+                            <div class="space-y-2">
+                                {% for document in structured.standaloneDocuments %}
+                                    {% set payload_document = payload.standaloneDocuments[loop.index0]|default(null) %}
+                                    <article class="rounded-xl border border-gray-25 bg-white p-4">
+                                        <div class="mb-2 flex items-start justify-between gap-3">
+                                            <strong>{{ document.title|default('Document') }}</strong>
+                                            {% if payload_document and payload_document.editUrl|default('') %}
+                                                <a
+                                                        href="{{ payload_document.editUrl }}"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="inline-flex items-center gap-1 rounded-lg border border-gray-25 px-2 py-1 text-sm text-gray-90 hover:bg-gray-15"
+                                                        title="{{ 'Edit document'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-pencil ch-tool-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Edit document'|trans }}</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        {% if document.feedback|default('') %}
+                                            <p>{{ document.feedback }}</p>
+                                        {% elseif document.recommendations|default([]) is empty %}
+                                            <p class="text-gray-60">{{ 'No document-specific AI feedback was returned.'|trans }}</p>
+                                        {% endif %}
+                                        {% if document.recommendations|default([]) is not empty %}
+                                            <ul class="m-0 list-disc pl-5">
+                                                {% for recommendation in document.recommendations %}
+                                                    <li>{{ recommendation }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    {% if structured.standaloneExercises|default([]) is not empty %}
+                        <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                            <h2 class="mb-4 text-lg font-bold text-gray-90">{{ 'Standalone exercise feedback'|trans }}</h2>
+                            <div class="space-y-2">
+                                {% for exercise in structured.standaloneExercises %}
+                                    {% set payload_exercise = payload.standaloneExercises[loop.index0]|default(null) %}
+                                    <article class="rounded-xl border border-gray-25 bg-white p-4">
+                                        <div class="mb-2 flex items-start justify-between gap-3">
+                                            <strong>{{ exercise.title|default('Exercise') }}</strong>
+                                            {% if payload_exercise and payload_exercise.editUrl|default('') %}
+                                                <a
+                                                        href="{{ payload_exercise.editUrl }}"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="inline-flex items-center gap-1 rounded-lg border border-gray-25 px-2 py-1 text-sm text-gray-90 hover:bg-gray-15"
+                                                        title="{{ 'Edit exercise'|trans }}"
+                                                >
+                                                    <span class="mdi mdi-pencil ch-tool-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">{{ 'Edit exercise'|trans }}</span>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        {% if exercise.feedback|default('') %}
+                                            <p>{{ exercise.feedback }}</p>
+                                        {% elseif exercise.questions|default([]) is empty and exercise.recommendations|default([]) is empty %}
+                                            <p class="text-gray-60">{{ 'No exercise-specific AI feedback was returned.'|trans }}</p>
+                                        {% endif %}
+                                        {% if exercise.questions|default([]) is not empty %}
+                                            <div class="mb-3 rounded-lg border border-gray-25 bg-gray-15 p-3">
+                                                <strong>{{ 'Question feedback'|trans }}</strong>
+                                                <div class="mt-2 space-y-2">
+                                                    {% for question in exercise.questions %}
+                                                        <div class="rounded-lg bg-white p-2">
+                                                            <p class="mb-1 font-semibold">{{ question.question|default('Question') }}</p>
+                                                            {% if question.feedback|default('') %}
+                                                                <p class="mb-1">{{ question.feedback }}</p>
+                                                            {% endif %}
+                                                            {% if question.answersFeedback|default('') %}
+                                                                <p class="mb-1"><strong>{{ 'Answers'|trans }}:</strong> {{ question.answersFeedback }}</p>
+                                                            {% endif %}
+                                                            {% if question.recommendations|default([]) is not empty %}
+                                                                <ul class="mb-0 list-disc pl-5">
+                                                                    {% for recommendation in question.recommendations %}
+                                                                        <li>{{ recommendation }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if exercise.recommendations|default([]) is not empty %}
+                                            <ul class="m-0 list-disc pl-5">
+                                                {% for recommendation in exercise.recommendations %}
+                                                    <li>{{ recommendation }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                {% else %}
+                    <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                        <h2 class="mb-3 text-lg font-bold text-gray-90">{{ 'AI response'|trans }}</h2>
+                        <p>{{ 'The provider did not return valid JSON. Showing the raw response.'|trans }}</p>
+                        <pre class="max-h-[480px] overflow-auto whitespace-pre-wrap break-words rounded-xl bg-gray-90 p-4 text-gray-15">{{ result.rawResponse }}</pre>
+                    </section>
+                {% endif %}
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('ai-course-analyzer-form')
+        const submitButton = document.getElementById('ai-course-analyzer-submit')
+        const loadingIndicator = document.getElementById('ai-course-analyzer-loading')
+
+        if (!form || !submitButton) {
+          return
+        }
+
+        form.addEventListener('submit', function () {
+          const label = submitButton.querySelector('.ai-course-analyzer-button-label')
+          const loadingText = submitButton.dataset.loadingText || 'Analyzing…'
+
+          submitButton.disabled = true
+          submitButton.setAttribute('aria-busy', 'true')
+
+          if (label) {
+            label.textContent = loadingText
+          }
+
+          if (loadingIndicator) {
+            loadingIndicator.classList.remove('hidden')
+            loadingIndicator.classList.add('inline-flex')
+            loadingIndicator.setAttribute('aria-hidden', 'false')
+          }
+        })
+      })
+    </script>
+{% endblock %}

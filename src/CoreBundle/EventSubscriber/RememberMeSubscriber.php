@@ -27,16 +27,16 @@ use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterfa
 
 final class RememberMeSubscriber implements EventSubscriberInterface
 {
-    private const COOKIE_NAME = 'ch_remember_me';
+    private const string COOKIE_NAME = 'ch_remember_me';
 
     /**
      * Extended session lifetime (seconds).
      * 14 days = 14 * 24 * 60 * 60 = 1209600.
      */
-    private const TTL_SECONDS = 1209600;
+    private const int TTL_SECONDS = 1209600;
 
     // Toggle to debug quickly via PHP error log.
-    private const DEBUG = false;
+    private const bool DEBUG = false;
 
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,

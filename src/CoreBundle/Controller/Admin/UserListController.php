@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -23,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/admin/user-list-data')]
 class UserListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'officialCode' => 'u.officialCode',
         'firstname' => 'u.firstname',
         'lastname' => 'u.lastname',
@@ -34,7 +36,7 @@ class UserListController extends AbstractController
         'lastLogin' => 'u.lastLogin',
     ];
 
-    private const ROLE_LABELS = [
+    private const array ROLE_LABELS = [
         'ROLE_STUDENT' => 'Learner',
         'ROLE_TEACHER' => 'Teacher',
         'ROLE_HR' => 'Human Resources Manager',
@@ -50,6 +52,7 @@ class UserListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $userRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly TranslatorInterface $translator,
     ) {}
@@ -82,6 +85,16 @@ class UserListController extends AbstractController
             ->setParameter('fallback', User::ROLE_FALLBACK)
         ;
 
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl) {
+                $qb->innerJoin('u.portals', 'p')
+                    ->andWhere('p.url = :currentUrlId')
+                    ->setParameter('currentUrlId', $currentUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
         if ($showDeleted) {
             $qb->andWhere('u.active = :softDeleted')
                 ->setParameter('softDeleted', User::SOFT_DELETED)
@@ -100,9 +113,13 @@ class UserListController extends AbstractController
         }
 
         if ('' !== $keyword) {
-            $qb->andWhere('(u.firstname LIKE :kw OR u.lastname LIKE :kw OR u.username LIKE :kw OR u.email LIKE :kw OR u.officialCode LIKE :kw)')
-                ->setParameter('kw', '%'.$keyword.'%')
-            ;
+            $terms = array_values(array_filter(array_map('trim', preg_split('/\s+/', $keyword))));
+            foreach ($terms as $i => $term) {
+                $param = 'kw'.$i;
+                $qb->andWhere("(u.firstname LIKE :{$param} OR u.lastname LIKE :{$param} OR u.username LIKE :{$param} OR u.email LIKE :{$param} OR u.officialCode LIKE :{$param})")
+                    ->setParameter($param, '%'.$term.'%')
+                ;
+            }
         } else {
             if ('' !== $keywordFirstname) {
                 $qb->andWhere('u.firstname LIKE :kwfn')->setParameter('kwfn', '%'.$keywordFirstname.'%');
@@ -171,14 +188,6 @@ class UserListController extends AbstractController
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
         $isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER') && !$isPlatformAdmin;
 
-        $adminTable = $this->em->getConnection()->createQueryBuilder()
-            ->select('user_id')
-            ->from('admin')
-            ->executeQuery()
-            ->fetchFirstColumn()
-        ;
-        $adminIds = array_map('intval', $adminTable);
-
         $items = [];
         $now = new DateTime();
 
@@ -193,8 +202,7 @@ class UserListController extends AbstractController
             $isAnonymous = \in_array('ROLE_ANONYMOUS', $allRoles, true);
             $isUserAdmin = \in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
                 || \in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
-                || \in_array('ROLE_ADMIN', $allRoles, true)
-                || \in_array($userId, $adminIds, true);
+                || \in_array('ROLE_ADMIN', $allRoles, true);
             $isStudent = \in_array('ROLE_STUDENT', $allRoles, true);
             $isSessionManager = \in_array('ROLE_SESSION_MANAGER', $allRoles, true);
             $isHR = \in_array('ROLE_HR', $allRoles, true);

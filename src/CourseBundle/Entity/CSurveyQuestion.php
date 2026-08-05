@@ -279,7 +279,7 @@ class CSurveyQuestion
         return $this->parent;
     }
 
-    public function setParent(self $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
@@ -306,7 +306,7 @@ class CSurveyQuestion
         return $this->parentOption;
     }
 
-    public function setParentOption(CSurveyQuestionOption $parentOption): self
+    public function setParentOption(?CSurveyQuestionOption $parentOption): self
     {
         $this->parentOption = $parentOption;
 

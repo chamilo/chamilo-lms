@@ -154,6 +154,28 @@ each commit to a category. Apply in priority order — stop at the first match:
 | **Removed** | `Remove`, `Delete`, `Drop`, `Deprecate` |
 | **Changed** | Everything else (Internal, Display, Refactor, Plugin, Auth, Learnpath, Exercise, …) |
 
+### 4a. "Add" verb fallback (Changed → Added only)
+
+A commit whose own prefix doesn't match Security fixes / Fixed / Added / Removed
+(so it would otherwise land in the **Changed** catch-all) should be reclassified
+into **Added** if the first word after the prefix is `add` or `Add`. To find that
+word: strip the first `Category:` prefix, then keep stripping any further
+`Subcategory:` prefixes (e.g. `Plugin: BuyCourses: Add country info in sales
+detail` — strip `Plugin:`, then `BuyCourses:`, leaving `Add country info...`).
+If the resulting first word is `add`/`Add`, use Added instead of Changed.
+
+This fallback only ever moves a commit out of **Changed** — it never overrides
+Security fixes, Fixed, or Removed, even when their message also starts with
+"Add" right after the colon:
+
+- `Security: Add native FIM feature` → stays **Security fixes**
+- `Language: Add missing translation for Back to account` → stays **Fixed**
+  (`Language` already matches the Fixed prefix list)
+- `Learnpath: Add support for post-unload event Chrome...` → **Changed → Added**
+- `User: Add invitation to course/session...` → **Changed → Added**
+- `Plugin: CStudio: Add AI-assisted content generation` → **Changed → Added**
+  (nested prefix stripped: `Plugin:` then `CStudio:`)
+
 Omit a category section entirely if it has zero entries.
 
 ---

@@ -68,8 +68,8 @@ final readonly class PortfolioCommentActionProcessor implements ProcessorInterfa
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->cidReqHelper);
-        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $advancedSharing = $course instanceof Course && $this->portfolioBoolean(
             $this->settingsManager->getSetting('platform.portfolio_advanced_sharing', true),
         );

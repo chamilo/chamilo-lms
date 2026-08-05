@@ -43,7 +43,7 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         if (null !== $session || null !== $group) {

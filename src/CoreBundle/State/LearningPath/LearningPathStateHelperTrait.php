@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
@@ -86,46 +85,14 @@ trait LearningPathStateHelperTrait
             || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
     private function getContextCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('Missing course id.');
-        }
-
-        $course = $cidReqHelper->getDoctrineCourseEntity();
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('Course not found.');
-        }
-
-        return $course;
-    }
-
-    private function getContextSession(
-        EntityManagerInterface $entityManager,
-        CidReqHelper $cidReqHelper,
-        Course $course,
-    ): ?Session {
-        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $cidReqHelper->getDoctrineSessionEntity();
-        if (!$session instanceof Session) {
-            throw new NotFoundHttpException('Session not found.');
-        }
-
-        $sessionCourse = $entityManager->getRepository(SessionRelCourse::class)->findOneBy([
-            'course' => $course,
-            'session' => $session,
-        ]);
-
-        if (!$sessionCourse instanceof SessionRelCourse) {
-            throw new AccessDeniedHttpException('The requested session is not linked to this course.');
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('Missing course id.');
     }
 
     private function getContextGroup(

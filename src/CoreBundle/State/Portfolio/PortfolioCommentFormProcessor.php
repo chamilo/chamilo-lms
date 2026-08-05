@@ -71,8 +71,8 @@ final readonly class PortfolioCommentFormProcessor implements ProcessorInterface
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, $payload);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->cidReqHelper);
-        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($course instanceof Course && !$this->canReadPortfolioCourse(
             $this->security,
             $this->userHelper,

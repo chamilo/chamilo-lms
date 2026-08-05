@@ -74,7 +74,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $currentUser = $this->security->getUser();
         if (!$currentUser instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');

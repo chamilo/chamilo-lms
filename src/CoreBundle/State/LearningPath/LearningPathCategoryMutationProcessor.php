@@ -46,7 +46,7 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
     {
         $this->assertLearningPathTeacher($this->security);
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $categoryId = (int) ($uriVariables['id'] ?? 0);
         $category = $categoryId > 0 ? $this->entityManager->getRepository(CLpCategory::class)->find($categoryId) : new CLpCategory();

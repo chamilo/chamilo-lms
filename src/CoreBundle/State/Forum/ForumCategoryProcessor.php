@@ -57,7 +57,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
 
         if ('create_forum_category' === $operation->getName()) {
             $course = $this->getCourse($this->cidReqHelper);
-            $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+            $session = $this->cidReqHelper->getDoctrineSessionEntity();
             $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
             $this->assertParentResourceNodeIsWritableInForumContext(
@@ -149,7 +149,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $targetVisible = $this->getTargetVisibility($payload, $category, $course, $session);
         $visible = $this->setForumResourceVisibility($category, $this->categoryRepository, $course, $session, $targetVisible);
         $this->entityManager->flush();
@@ -176,7 +176,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $position = $this->moveForumResource($category, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();

@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -46,46 +45,6 @@ trait PortfolioAccessHelperTrait
         }
 
         return $user;
-    }
-
-    private function getPortfolioCourse(CidReqHelper $cidReqHelper): ?Course
-    {
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
-        if ($courseId <= 0) {
-            return null;
-        }
-
-        $course = $cidReqHelper->getDoctrineCourseEntity();
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getPortfolioSession(
-        CidReqHelper $cidReqHelper,
-        ?Course $course,
-    ): ?Session {
-        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('A session requires a course context.');
-        }
-
-        $session = $cidReqHelper->getDoctrineSessionEntity();
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-        }
-
-        return $session;
     }
 
     private function getPortfolioRequestedUser(

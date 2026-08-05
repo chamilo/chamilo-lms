@@ -92,7 +92,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->getLearningPath((int) ($uriVariables['lpId'] ?? 0));
         $user = $this->security->getUser();

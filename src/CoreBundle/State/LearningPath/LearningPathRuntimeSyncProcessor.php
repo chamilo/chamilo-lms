@@ -66,7 +66,7 @@ final readonly class LearningPathRuntimeSyncProcessor implements ProcessorInterf
         }
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $user = $this->security->getUser();
 

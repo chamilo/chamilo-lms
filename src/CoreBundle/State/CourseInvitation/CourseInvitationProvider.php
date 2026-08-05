@@ -41,7 +41,7 @@ final readonly class CourseInvitationProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|CourseInvitationItem|null
     {
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canManageCourseInvitations($this->security, $course, $session)) {

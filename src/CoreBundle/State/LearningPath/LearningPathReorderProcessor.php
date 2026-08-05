@@ -46,7 +46,7 @@ final readonly class LearningPathReorderProcessor implements ProcessorInterface
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $order = $payload['order'] ?? $payload['ids'] ?? null;

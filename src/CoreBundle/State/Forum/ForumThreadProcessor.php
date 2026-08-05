@@ -116,7 +116,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
@@ -380,7 +380,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
         $targetVisible = $this->getTargetVisibility($payload, $data, $course, $session);
         $visible = $this->setForumResourceVisibility($data, $this->threadRepository, $course, $session, $targetVisible);
@@ -424,7 +424,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($targetForum->getResourceNode(), $this->security);
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
         $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);

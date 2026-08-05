@@ -15,34 +15,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 trait CourseInvitationAccessHelperTrait
 {
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
     private function getCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $cidReqHelper->getDoctrineCourseEntity();
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(CidReqHelper $cidReqHelper): ?Session
-    {
-        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $cidReqHelper->getDoctrineSessionEntity();
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
     }
 
     private function assertSessionBelongsToCourse(?Session $session, Course $course): void

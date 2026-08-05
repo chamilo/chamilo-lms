@@ -180,7 +180,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $qualifyUser = $this->security->getUser();
         if (!$qualifyUser instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');

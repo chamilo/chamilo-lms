@@ -57,8 +57,8 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->cidReqHelper);
-        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($course instanceof Course && !$this->canReadPortfolioCourse(
             $this->security,
             $this->userHelper,

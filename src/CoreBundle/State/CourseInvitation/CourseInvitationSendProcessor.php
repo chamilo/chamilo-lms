@@ -51,7 +51,7 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canManageCourseInvitations($this->security, $course, $session)) {

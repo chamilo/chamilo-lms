@@ -104,7 +104,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
 
         $this->assertLearningPathTeacher($this->security);
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         if ($data instanceof LearningPathBuilderItemUpdateInput

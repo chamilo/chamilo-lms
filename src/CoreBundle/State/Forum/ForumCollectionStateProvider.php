@@ -83,7 +83,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         $this->assertForumMemberAccess($this->security, 'You are not allowed to access forums.');
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $parentNode = $this->getParentNode($this->entityManager, $request);
         $showHidden = $this->canManageForumsInCurrentView($this->security, $request);

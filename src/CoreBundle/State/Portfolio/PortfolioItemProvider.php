@@ -76,8 +76,8 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         }
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->cidReqHelper);
-        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
         if ($course instanceof Course
             && !$this->canReadPortfolioCourse(

@@ -72,7 +72,7 @@ final readonly class LearningPathQuickTestProcessor implements ProcessorInterfac
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lp = $this->lpRepository->find($data->lpId);

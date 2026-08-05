@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -57,51 +56,14 @@ trait ForumStateHelperTrait
         return $this->isTeacher($security) && !$this->isStudentView($request);
     }
 
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
     private function getCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('Missing course id.');
-        }
-
-        $course = $cidReqHelper->getDoctrineCourseEntity();
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('Course not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?Session
-    {
-        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $cidReqHelper->getDoctrineSessionEntity();
-        if (!$session instanceof Session) {
-            throw new NotFoundHttpException('Session not found.');
-        }
-
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
-        if ($courseId > 0) {
-            $course = $cidReqHelper->getDoctrineCourseEntity();
-            if (!$course instanceof Course) {
-                throw new NotFoundHttpException('Course not found.');
-            }
-
-            $sessionCourse = $entityManager->getRepository(SessionRelCourse::class)->findOneBy([
-                'course' => $course,
-                'session' => $session,
-            ]);
-
-            if (!$sessionCourse instanceof SessionRelCourse) {
-                throw new AccessDeniedHttpException('The requested session is not linked to this course.');
-            }
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('Missing course id.');
     }
 
     private function getGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?CGroup

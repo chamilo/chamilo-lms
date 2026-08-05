@@ -429,9 +429,7 @@ final readonly class CourseClassManager
         }
 
         /** @var Usergroup[] $groups */
-        $groups = $queryBuilder->getQuery()->getResult();
-
-        return $groups;
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -503,7 +501,7 @@ final readonly class CourseClassManager
         $sort = $sortMap[(string) $request->query->get('sort', 'title')] ?? 'title';
         $direction = 'desc' === strtolower((string) $request->query->get('order', 'asc')) ? -1 : 1;
 
-        \usort($items, static function (array $first, array $second) use ($sort, $direction): int {
+        usort($items, static function (array $first, array $second) use ($sort, $direction): int {
             $firstValue = $first[$sort] ?? '';
             $secondValue = $second[$sort] ?? '';
 

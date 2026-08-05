@@ -65,8 +65,8 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
         $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
 
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->cidReqHelper);
-        $session = $this->getPortfolioSession($this->cidReqHelper, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $canManageTags = $course instanceof Course
             && $this->canManagePortfolioCourse($this->security, $currentUser, $course, $session);
         $result = new PortfolioManagement();

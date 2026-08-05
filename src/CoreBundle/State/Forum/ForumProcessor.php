@@ -75,7 +75,7 @@ final class ForumProcessor implements ProcessorInterface
 
         if ('create_forum' === $operationName) {
             $course = $this->getCourse($this->cidReqHelper);
-            $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+            $session = $this->cidReqHelper->getDoctrineSessionEntity();
             $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
             $this->assertParentResourceNodeIsWritableInForumContext(
@@ -142,7 +142,7 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
 
         $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
@@ -185,7 +185,7 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $targetVisible = $this->getTargetVisibility($payload, $forum, $course, $session);
         $visible = $this->setForumResourceVisibility($forum, $this->forumRepository, $course, $session, $targetVisible);
         $this->entityManager->flush();
@@ -212,7 +212,7 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $position = $this->moveForumResource($forum, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();

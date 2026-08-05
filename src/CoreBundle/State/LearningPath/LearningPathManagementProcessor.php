@@ -79,7 +79,7 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lpId = (int) ($uriVariables['lpId'] ?? $data->lpId ?? 0);

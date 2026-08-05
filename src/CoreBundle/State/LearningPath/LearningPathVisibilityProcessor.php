@@ -54,7 +54,7 @@ final readonly class LearningPathVisibilityProcessor implements ProcessorInterfa
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $resourceLink = $this->getEditableResourceLink($data, $course, $session, $group, $this->security);
         $visible = $this->getTargetVisibility($payload, $resourceLink);

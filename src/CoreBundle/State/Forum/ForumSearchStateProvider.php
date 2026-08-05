@@ -89,7 +89,7 @@ final class ForumSearchStateProvider implements ProviderInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
         $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($this->cidReqHelper);
         $terms = $this->getSearchTerms($query);

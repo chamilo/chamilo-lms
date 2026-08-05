@@ -130,7 +130,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $canManage = $this->canManageForumsInCurrentView($this->security, $request);
         $user = $this->getCurrentUser();

@@ -77,7 +77,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         }
 
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $item = $this->lpItemRepository->find($data->itemId);
         $user = $this->security->getUser();

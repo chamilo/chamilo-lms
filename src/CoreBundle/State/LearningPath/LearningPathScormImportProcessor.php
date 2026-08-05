@@ -57,7 +57,7 @@ final readonly class LearningPathScormImportProcessor implements ProcessorInterf
             throw new AccessDeniedHttpException('The requested resource node does not belong to this course.');
         }
 
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $package = $request->files->get('package');

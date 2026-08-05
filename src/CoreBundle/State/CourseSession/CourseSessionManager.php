@@ -227,7 +227,7 @@ final readonly class CourseSessionManager
             ];
         }
 
-        \usort(
+        usort(
             $users,
             static fn (array $left, array $right): int => strcasecmp(
                 (string) $left['fullname'],
@@ -287,7 +287,7 @@ final readonly class CourseSessionManager
         $keyword = trim((string) $request->query->get('search', ''));
         $scope = 'no_session' === (string) $request->query->get('scope') ? 'no_session' : 'all';
         $firstLetter = mb_strtoupper(trim((string) $request->query->get('firstLetter', '')));
-        if (1 !== mb_strlen($firstLetter) || 1 !== \preg_match('/^[[:alpha:]]$/u', $firstLetter)) {
+        if (1 !== mb_strlen($firstLetter) || 1 !== preg_match('/^[[:alpha:]]$/u', $firstLetter)) {
             $firstLetter = '';
         }
 
@@ -487,9 +487,7 @@ final readonly class CourseSessionManager
         }
 
         if ([] !== $sessionCourseIds && \count($avoidedCourseIds) === \count($sessionCourseIds)) {
-            throw new UnprocessableEntityHttpException(
-                'A user cannot be blocked from every course in the session. Unsubscribe the user instead.',
-            );
+            throw new UnprocessableEntityHttpException('A user cannot be blocked from every course in the session. Unsubscribe the user instead.');
         }
 
         $currentAvoidedIds = array_map(
@@ -609,9 +607,7 @@ final readonly class CourseSessionManager
         }
 
         /** @var Session[] $sessions */
-        $sessions = $queryBuilder->getQuery()->getResult();
-
-        return $sessions;
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -808,9 +804,7 @@ final readonly class CourseSessionManager
                 continue;
             }
 
-            throw new UnprocessableEntityHttpException(
-                CourseManager::getUsersPerCourseLimitCancelMessage($courseId).' '.$course->getTitle(),
-            );
+            throw new UnprocessableEntityHttpException(CourseManager::getUsersPerCourseLimitCancelMessage($courseId).' '.$course->getTitle());
         }
     }
 
@@ -831,11 +825,11 @@ final readonly class CourseSessionManager
             return false;
         }
 
-        if ('' !== $courses && (!\ctype_digit($courses) || (int) $courses !== (int) $item['nbrCourses'])) {
+        if ('' !== $courses && (!ctype_digit($courses) || (int) $courses !== (int) $item['nbrCourses'])) {
             return false;
         }
 
-        if ('' !== $users && (!\ctype_digit($users) || (int) $users !== (int) $item['nbrUsers'])) {
+        if ('' !== $users && (!ctype_digit($users) || (int) $users !== (int) $item['nbrUsers'])) {
             return false;
         }
 
@@ -1013,7 +1007,7 @@ final readonly class CourseSessionManager
         }
 
         $direction = 'desc' === strtolower((string) $request->query->get('order', 'asc')) ? -1 : 1;
-        \usort(
+        usort(
             $items,
             static fn (array $left, array $right): int => $direction * strnatcasecmp(
                 (string) ($left[$sort] ?? ''),

@@ -70,7 +70,7 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
     {
         $this->assertLearningPathTeacher($this->security);
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lpId = (int) ($uriVariables['id'] ?? 0);

@@ -130,7 +130,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
@@ -410,7 +410,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->entityManager->persist($forum);
         $this->entityManager->flush();
 
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $author = $data->getUser();
         if (!$wasVisible && $author instanceof User) {
             $this->sendForumSubscriptionNotifications($this->entityManager, $request, $course, $session, $forum, $thread, $data, $author, $this->messageHelper, $this->cidReqHelper);
@@ -572,7 +572,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
 
         $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->getSession($this->entityManager, $this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $sourceForum->getResourceNode(),

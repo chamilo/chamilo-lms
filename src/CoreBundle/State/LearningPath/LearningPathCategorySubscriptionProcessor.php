@@ -73,7 +73,7 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         $this->assertLearningPathTeacher($this->security);
         $this->validateActionToken($this->csrfTokenManager, $data->csrfTokenInput);
         $course = $this->getContextCourse($this->cidReqHelper);
-        $session = $this->getContextSession($this->entityManager, $this->cidReqHelper, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $category = $this->getCategory($uriVariables);
         $this->assertCategoryContext($category, $course, $session, $group);

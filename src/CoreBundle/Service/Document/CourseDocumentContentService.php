@@ -112,8 +112,7 @@ final readonly class CourseDocumentContentService
         int $parentResourceNodeId,
         string $title,
         ?int $excludeDocumentId = null,
-    ): bool
-    {
+    ): bool {
         $title = trim($title);
         if ('' === $title) {
             return false;

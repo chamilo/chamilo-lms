@@ -28,10 +28,14 @@ import forum from "./forum"
 import survey from "./survey"
 import exercise from "./exercise"
 import courseDescription from "./courseDescription"
+import courseInvitation from "./courseInvitation"
 import notebook from "./notebook"
 import portfolio from "./portfolio"
 import wiki from "./wiki"
 import courseProgress from "./courseProgress"
+import courseUser from "./courseUser"
+import courseSession from "./courseSession"
+import myClass from "./myClass"
 import announcement from "./announcement"
 import ticket from "./ticket"
 import glossary from "./glossary"
@@ -525,9 +529,13 @@ const router = createRouter({
     survey,
     exercise,
     courseDescription,
+    courseInvitation,
     notebook,
     wiki,
     courseProgress,
+    courseUser,
+    courseSession,
+    myClass,
     announcement,
     ticket,
     glossary,

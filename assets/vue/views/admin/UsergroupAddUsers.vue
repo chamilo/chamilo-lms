@@ -16,6 +16,7 @@ const groupTitle = ref("")
 const isSocialGroup = ref(false)
 const relationType = ref(2)
 const csrfToken = ref("")
+const orderByOfficialCode = ref(false)
 
 // Full platform user list — loaded once on mount and on relation change only
 const allUsers = ref([])
@@ -38,6 +39,10 @@ const relationOptions = [
 ]
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+const userCollator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base",
+})
 
 // Right panel: all selected users (unfiltered)
 const usersInGroup = computed(() => allUsers.value.filter((u) => selectedIds.value.has(u.id)))
@@ -46,13 +51,56 @@ const usersInGroup = computed(() => allUsers.value.filter((u) => selectedIds.val
 const usersNotInGroup = computed(() => {
   const kw = keyword.value.trim().toLowerCase()
   const fl = firstLetter.value
-  return allUsers.value.filter((u) => {
-    if (selectedIds.value.has(u.id)) return false
-    if (fl && fl !== "%" && !u.label.toLowerCase().startsWith(fl.toLowerCase())) return false
-    if (kw && !u.label.toLowerCase().includes(kw)) return false
+
+  return allUsers.value.filter((user) => {
+    if (selectedIds.value.has(user.id)) {
+      return false
+    }
+
+    const lastName = String(user.lastName || "").toLowerCase()
+    if (fl && fl !== "%" && !lastName.startsWith(fl.toLowerCase())) {
+      return false
+    }
+
+    if (kw && !user.label.toLowerCase().includes(kw)) {
+      return false
+    }
+
     return true
   })
 })
+
+function compareUsers(a, b) {
+  if (orderByOfficialCode.value) {
+    const firstOfficialCode = String(a.officialCode || "").trim()
+    const secondOfficialCode = String(b.officialCode || "").trim()
+
+    if (!firstOfficialCode && secondOfficialCode) {
+      return 1
+    }
+
+    if (firstOfficialCode && !secondOfficialCode) {
+      return -1
+    }
+
+    const officialCodeComparison = userCollator.compare(firstOfficialCode, secondOfficialCode)
+    if (officialCodeComparison !== 0) {
+      return officialCodeComparison
+    }
+  }
+
+  const lastNameComparison = userCollator.compare(String(a.lastName || ""), String(b.lastName || ""))
+  if (lastNameComparison !== 0) {
+    return lastNameComparison
+  }
+
+  const firstNameComparison = userCollator.compare(String(a.firstName || ""), String(b.firstName || ""))
+  if (firstNameComparison !== 0) {
+    return firstNameComparison
+  }
+
+  return userCollator.compare(String(a.username || ""), String(b.username || ""))
+}
 
 async function loadData() {
   isLoading.value = true
@@ -62,9 +110,9 @@ async function loadData() {
     groupTitle.value = data.groupTitle
     isSocialGroup.value = data.isSocialGroup
     csrfToken.value = data.csrfToken
-    // Merge both sides into a single sorted list
-    const merged = [...data.usersInGroup, ...data.usersNotInGroup].sort((a, b) => a.label.localeCompare(b.label))
-    allUsers.value = merged
+    orderByOfficialCode.value = true === data.orderByOfficialCode
+    // Merge both sides into a single list so transfers preserve the configured ordering.
+    allUsers.value = [...data.usersInGroup, ...data.usersNotInGroup].sort(compareUsers)
     selectedIds.value = new Set(data.usersInGroup.map((u) => u.id))
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")

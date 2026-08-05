@@ -37570,3 +37570,1431 @@ msgstr "このコースのトピックを表す、クリーンなフラットデ
 msgid "Back to account"
 msgstr "アカウントに戻る"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ご意見は今後の研修改善に役立てられます。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "ご意見をお寄せいただきありがとうございます。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "研修全体の質にご満足いただけましたか？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "内容の関連性にご満足いただけましたか？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "説明の分かりやすさにご満足いただけましたか？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "研修の構成と進行ペースにご満足いただけましたか？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "学んだ内容の実践的有用性にご満足いただけましたか？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "この研修を他の方にお勧めいただけますか？"
+
+msgid "What should we improve in future editions?"
+msgstr "今後の研修で改善すべき点は何ですか？"
+
+msgid "Very satisfied"
+msgstr "非常に満足"
+
+msgid "Satisfied"
+msgstr "満足"
+
+msgid "Neutral"
+msgstr "普通"
+
+msgid "Dissatisfied"
+msgstr "不満"
+
+msgid "Very dissatisfied"
+msgstr "非常に不満"
+
+msgid "Add destination"
+msgstr "宛先を追加"
+
+msgid "Add this test to the assessment tool"
+msgstr "このテストを評価ツールに追加"
+
+msgid "Attempts and timing"
+msgstr "受験回数と制限時間"
+
+msgid "Available questions"
+msgstr "利用可能な問題"
+
+msgid "Cancel and return to learning path"
+msgstr "キャンセルして学習パスに戻る"
+
+msgid "Category destinations"
+msgstr "カテゴリ宛先"
+
+msgid "Classification"
+msgstr "分類"
+
+msgid "Context"
+msgstr "コンテキスト"
+
+msgid "Could not load exercise configuration"
+msgstr "演習設定を読み込めませんでした"
+
+msgid "Could not save exercise"
+msgstr "演習を保存できませんでした"
+
+msgid "Display and learning path"
+msgstr "表示と学習パス"
+
+msgid "Edit test"
+msgstr "テストを編集"
+
+msgid "Exercise settings saved."
+msgstr "演習設定を保存しました。"
+
+msgid "Extra settings"
+msgstr "追加設定"
+
+msgid "Feedback and results"
+msgstr "フィードバックと結果"
+
+msgid "Finish exercise"
+msgstr "演習を終了"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "この演習の言語をリソースメタデータとして識別します。検索インデックス作成は有効になりません。"
+
+msgid "Maximum score (%)"
+msgstr "最大スコア (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "メタデータには演習用に設定されたスキルと追加フィールドが含まれます。任意であり、開くまで非表示です。"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "この演習で利用可能な問題カテゴリはまだありません。"
+
+msgid "Question categories matrix"
+msgstr "問題カテゴリマトリックス"
+
+msgid "Questions behavior"
+msgstr "問題の動作"
+
+msgid "Random by category"
+msgstr "カテゴリ別ランダム"
+
+msgid "Remove destination"
+msgstr "宛先を削除"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "ルールはスコアのパーセンテージで昇順に評価されます。テストを終了するには「演習を終了」を選択してください。"
+
+msgid "Score and final messages"
+msgstr "スコアと最終メッセージ"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "演習作成後は一部のオプションがロックされます。"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "この値は分単位の合計時間として保存されます。"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "0 を使用すると利用可能なすべての問題を保持します。-1 を使用すると利用可能なすべての問題が許可されます。"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "これらのフィールドを使用して、表示オプションとは別に演習を分類します。"
+
+msgid "Invite by email"
+msgstr "メールで招待"
+
+msgid "Invitation has been sent"
+msgstr "招待を送信しました"
+
+msgid "Sent on"
+msgstr "送信日時"
+
+msgid "Accepted on"
+msgstr "承諾日時"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "このコースはセッションで開かれています。ここで招待を送信すると、受信者はこのコースだけでなくセッション全体 %s に登録されます。"
+
+msgid "Revoke"
+msgstr "取り消し"
+
+msgid "Revoked"
+msgstr "取り消し済み"
+
+msgid "Invitation has been revoked"
+msgstr "招待を取り消しました"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "%s 宛に送信した招待を取り消しますか？"
+
+msgid "No default room"
+msgstr "既定の部屋がありません"
+
+msgid "Floor"
+msgstr "階"
+
+msgid "Capacity"
+msgstr "定員"
+
+msgid "Use attendance default room"
+msgstr "出席の既定部屋を使用"
+
+msgid "Floor number"
+msgstr "階数"
+
+msgid "Copy to students"
+msgstr "受講者にコピー"
+
+msgid "Generate a quick test on this topic"
+msgstr "このトピックでクイックテストを作成"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "保存したドキュメントの内容を AI モデルに送信して処理します。"
+
+msgid "MCP API key"
+msgstr "MCP API キー"
+
+msgid "Authorized applications"
+msgstr "承認済みアプリケーション"
+
+msgid "Your session is about to expire"
+msgstr "セッションの有効期限が近づいています"
+
+msgid "Do you want to continue your session?"
+msgstr "セッションを継続しますか？"
+
+msgid "Stay connected"
+msgstr "接続を維持"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s 秒後にサインアウトします。"
+
+msgid "No descriptions available yet."
+msgstr "説明はまだありません。"
+
+msgid "%s users selected"
+msgstr "%s 人のユーザーを選択"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "選択したユーザーをコースに登録しました"
+
+msgid "Import teachers"
+msgstr "教員をインポート"
+
+msgid "Import learners"
+msgstr "学習者をインポート"
+
+msgid "Select CSV file"
+msgstr "CSVファイルを選択"
+
+msgid "Some users could not be subscribed"
+msgstr "一部のユーザーを登録できませんでした"
+
+msgid "Browse available classes"
+msgstr "利用可能なクラスを参照"
+
+msgid "Back to linked classes"
+msgstr "リンク済みクラスに戻る"
+
+msgid "No classes are currently linked to this course."
+msgstr "このコースにリンクされているクラスはありません。"
+
+msgid "No available classes were found for this course."
+msgstr "このコースで利用可能なクラスが見つかりませんでした。"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "選択したユーザーの登録を解除してもよろしいですか？"
+
+msgid "Learning path access"
+msgstr "ラーニングパスのアクセス"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "選択したユーザーとグループのみがこのラーニングパスにアクセスできます。保存後に管理してください。"
+
+msgid "All current and future course users can access this learning path."
+msgstr "現在のコースユーザーと今後のコースユーザーは全員、このラーニングパスにアクセスできます。"
+
+msgid "All course users"
+msgstr "すべてのコースユーザー"
+
+msgid "Selected users and groups"
+msgstr "選択したユーザーとグループ"
+
+msgid "No access"
+msgstr "アクセス不可"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "ここに追加されたユーザーとグループのみがこのラーニングパスにアクセスできます。"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "設問数は最大 %s までに制限されています"
+
+msgid "Open exercise player"
+msgstr "演習プレイヤーを開く"
+
+msgid "The score is hidden for this exercise."
+msgstr "この演習の得点は非表示です。"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "演習結果の設定により、採点は非表示になっています。"
+
+msgid "Progressive adaptive result"
+msgstr "段階的適応型結果"
+
+msgid "Achieved level"
+msgstr "達成レベル"
+
+msgid "Correction history"
+msgstr "採点履歴"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "この試行に対する手動採点の履歴です。"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "この演習はレーダー／スパイダーウェブ形式の結果モードを使用しています。チャートはこのページでは利用できません。"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "演習結果の設定により、設問の詳細は非表示になっています。"
+
+msgid "Media question"
+msgstr "メディア設問"
+
+msgid "Pending correction"
+msgstr "採点待ち"
+
+msgid "No answer"
+msgstr "未回答"
+
+msgid "Blank %s"
+msgstr "空欄 %s"
+
+msgid "Your order"
+msgstr "あなたの順序"
+
+msgid "Correct order"
+msgstr "正しい順序"
+
+msgid "Delineation review"
+msgstr "輪郭確認"
+
+msgid "Learner clicks"
+msgstr "学習者のクリック"
+
+msgid "Question image"
+msgstr "設問画像"
+
+msgid "No hotspot image available"
+msgstr "ホットスポット画像がありません"
+
+msgid "Learner delineation"
+msgstr "学習者の輪郭"
+
+msgid "Expected delineation"
+msgstr "期待される輪郭"
+
+msgid "Expected zones"
+msgstr "期待される領域"
+
+msgid "Zone"
+msgstr "領域"
+
+msgid "Learner annotation"
+msgstr "学習者の注釈"
+
+msgid "No annotation image available"
+msgstr "注釈画像がありません"
+
+msgid "This answer is pending teacher correction."
+msgstr "この解答は教員による採点待ちです。"
+
+msgid "Teacher comment"
+msgstr "教員コメント"
+
+msgid "Teacher correction"
+msgstr "教員採点"
+
+msgid "Save correction"
+msgstr "採点を保存"
+
+msgid "Learner audio"
+msgstr "学習者音声"
+
+msgid "Download audio"
+msgstr "音声をダウンロード"
+
+msgid "No uploaded audio"
+msgstr "アップロードされた音声はありません"
+
+msgid "Learner Office document"
+msgstr "学習者Office文書"
+
+msgid "Learner file"
+msgstr "学習者ファイル"
+
+msgid "Download Office document"
+msgstr "Office文書をダウンロード"
+
+msgid "No submitted document"
+msgstr "提出されたドキュメントはありません"
+
+msgid "No uploaded file"
+msgstr "アップロードされたファイルはありません"
+
+msgid "Content item"
+msgstr "コンテンツアイテム"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "この問題タイプは、このページではレビューできません。"
+
+msgid "Exercise completed"
+msgstr "演習が完了しました"
+
+msgid "Could not start the attempt"
+msgstr "受験を開始できませんでした"
+
+msgid "Invalid exercise attempt"
+msgstr "無効な演習受験です"
+
+msgid "Could not load exercise result"
+msgstr "演習結果を読み込めませんでした"
+
+msgid "Could not load AI providers"
+msgstr "AIプロバイダーを読み込めませんでした"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI提案を生成できませんでした"
+
+msgid "Correction saved"
+msgstr "採点が保存されました"
+
+msgid "Could not save correction"
+msgstr "採点を保存できませんでした"
+
+msgid "Create exercise"
+msgstr "演習を作成"
+
+msgid "Exercise categories"
+msgstr "演習カテゴリ"
+
+msgid "Question categories"
+msgstr "問題カテゴリ"
+
+msgid "Search by exercise title or description."
+msgstr "演習のタイトルまたは説明で検索します。"
+
+msgid "Search exercises"
+msgstr "演習を検索"
+
+msgid "No exercises found"
+msgstr "演習が見つかりません"
+
+msgid "Open exercise"
+msgstr "演習を開く"
+
+msgid "Disable autolaunch"
+msgstr "自動起動を無効にする"
+
+msgid "Enable autolaunch"
+msgstr "自動起動を有効にする"
+
+msgid "Export QTI2"
+msgstr "QTI2をエクスポート"
+
+msgid "Bulk actions"
+msgstr "一括操作"
+
+msgid "Selected exercises"
+msgstr "選択した演習"
+
+msgid "No exercises selected"
+msgstr "演習が選択されていません"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "選択した演習にこの操作を適用してもよろしいですか？"
+
+msgid "Bulk action completed"
+msgstr "一括操作が完了しました"
+
+msgid "Could not update exercises"
+msgstr "演習を更新できませんでした"
+
+msgid "Could not update exercise"
+msgstr "演習を更新できませんでした"
+
+msgid "Copy exercise"
+msgstr "演習をコピー"
+
+msgid "Delete exercise"
+msgstr "演習を削除"
+
+msgid "Could not load exercises"
+msgstr "演習を読み込めませんでした"
+
+msgid "No limit"
+msgstr "制限なし"
+
+msgid "Add selected questions to the test"
+msgstr "選択した問題をテストに追加"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "この問題はアクティブなテストで使用されているため、ここでは編集できません。"
+
+msgid "This question cannot be edited here."
+msgstr "この問題はここでは編集できません。"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "この問題はアクティブなテストで使用されているため、ここでは削除できません。"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "プラットフォーム設定によりアクセスが制限されているため、この問題を削除できません。"
+
+msgid "Already in test"
+msgstr "すでにテストに含まれています"
+
+msgid "Select at least one question."
+msgstr "少なくとも1つの問題を選択してください。"
+
+msgid "Question bank updated"
+msgstr "問題バンクが更新されました"
+
+msgid "Could not update the question bank"
+msgstr "問題バンクを更新できませんでした"
+
+msgid "Could not load the question bank"
+msgstr "問題バンクを読み込めませんでした"
+
+msgid "Total score"
+msgstr "合計得点"
+
+msgid "Starting"
+msgstr "開始中"
+
+msgid "Attempt history"
+msgstr "受験履歴"
+
+msgid "No attempts yet"
+msgstr "まだ受験がありません"
+
+msgid "Invalid exercise"
+msgstr "無効な演習です"
+
+msgid "Could not load exercise overview"
+msgstr "演習の概要を読み込めませんでした"
+
+msgid "Open test"
+msgstr "テストを開く"
+
+msgid "Random answers"
+msgstr "ランダム回答"
+
+msgid "Prevent moving backwards"
+msgstr "戻る操作を禁止"
+
+msgid "Previous button hidden"
+msgstr "戻るボタンを非表示"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "この演習は異なるテストプレイヤーを必要とするオプションを使用しています。"
+
+msgid "Continue test"
+msgstr "テストを続ける"
+
+msgid "Attempt started"
+msgstr "受験開始"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "教師プレビューでは追跡対象の受験は作成されません。"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "演習の受験を開始または再開します。最終提出前に下書きを保存できます。"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "制限時間に達しました。受験を終了します。"
+
+msgid "Question time reached. Saving your answer."
+msgstr "設問の制限時間に達しました。回答を保存します。"
+
+msgid "Finishing"
+msgstr "終了中"
+
+msgid "Draft saved"
+msgstr "下書きを保存しました"
+
+msgid "Statement"
+msgstr "設問文"
+
+msgid "Drop each option on the matching answer"
+msgstr "各選択肢を対応する回答にドロップしてください"
+
+msgid "Clear match"
+msgstr "マッチを解除"
+
+msgid "Click to place the selected option here"
+msgstr "選択した選択肢をここに配置"
+
+msgid "Select an option, then click here"
+msgstr "選択肢を選んでからここをクリック"
+
+msgid "Already matched"
+msgstr "既にマッチ済み"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "選択肢を回答にドラッグするか、選択肢を選んでからターゲットボックスをクリックできます。"
+
+msgid "Put the items in the correct order."
+msgstr "項目を正しい順序に並べ替えてください。"
+
+msgid "Move left"
+msgstr "左へ移動"
+
+msgid "Move right"
+msgstr "右へ移動"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "項目を左右にドラッグするか、移動ボタンを使用して順序を変更できます。"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "項目をドラッグするか、移動ボタンを使用して順序を変更できます。"
+
+msgid "Or upload an audio file"
+msgstr "または音声ファイルをアップロード"
+
+msgid "Selected audio"
+msgstr "選択した音声"
+
+msgid "Uploaded audio"
+msgstr "アップロードした音声"
+
+msgid "Office document"
+msgstr "オフィス文書"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "下のエディタで文書を完成させてください。ファイルはこの受験に添付され、教師が採点します。"
+
+msgid "Reload Office editor"
+msgstr "Officeエディタを再読み込み"
+
+msgid "Prepare Office document"
+msgstr "Office文書を準備"
+
+msgid "Open in new tab"
+msgstr "新しいタブで開く"
+
+msgid "Preparing Office document"
+msgstr "Office文書を準備中"
+
+msgid "Submitted document"
+msgstr "提出済み文書"
+
+msgid "Annotation tools"
+msgstr "注釈ツール"
+
+msgid "Text to place"
+msgstr "配置するテキスト"
+
+msgid "Click the image to place the text annotation."
+msgstr "画像をクリックしてテキスト注釈を配置してください。"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "画像をクリックしてパスポイントを追加します。新しいパスを開始してパスを分離してください。"
+
+msgid "Start new path"
+msgstr "新しいパスを開始"
+
+msgid "Current annotations"
+msgstr "現在の注釈"
+
+msgid "Remove point"
+msgstr "ポイントを削除"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "画像をクリックして輪郭ポリゴンを描画してください。"
+
+msgid "Click a marker to remove it."
+msgstr "マーカーをクリックして削除します。"
+
+msgid "Placed"
+msgstr "配置済み"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "回答を選択してから画像をクリックしてマークしてください。"
+
+msgid "Reading speed"
+msgstr "読む速度"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "この設問タイプはこのプレイヤーでは表示できません。"
+
+msgid "Save draft"
+msgstr "下書きを保存"
+
+msgid "I confirm that my answers were saved."
+msgstr "回答が保存されたことを確認します。"
+
+msgid "Finish test"
+msgstr "テストを終了"
+
+msgid "Attempt finished"
+msgstr "受験完了"
+
+msgid "Question category"
+msgstr "設問カテゴリ"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "この設問カテゴリに関連する設問を完了しました。戻ってこれらの設問を見直す最後の機会です。"
+
+msgid "Question time left"
+msgstr "設問残り時間"
+
+msgid "Time left"
+msgstr "残り時間"
+
+msgid "Current attempt"
+msgstr "現在の受験"
+
+msgid "Could not save draft answer"
+msgstr "下書き回答を保存できませんでした"
+
+msgid "Could not load exercise"
+msgstr "演習を読み込めませんでした"
+
+msgid "Draft answer saved"
+msgstr "下書き回答を保存しました"
+
+msgid "Could not finish the attempt"
+msgstr "受験を完了できませんでした"
+
+msgid "Could not prepare Office document"
+msgstr "Officeドキュメントを準備できませんでした"
+
+msgid "Back to learner score"
+msgstr "学習者スコアに戻る"
+
+msgid "Disable auto refresh"
+msgstr "自動更新を無効にする"
+
+msgid "Enable auto refresh"
+msgstr "自動更新を有効にする"
+
+msgid "Live window"
+msgstr "ライブウィンドウ"
+
+msgid "Ongoing attempts"
+msgstr "進行中の受験"
+
+msgid "Completed attempts"
+msgstr "完了した受験"
+
+msgid "Started"
+msgstr "開始"
+
+msgid "Last activity"
+msgstr "最終活動"
+
+msgid "Could not load live results"
+msgstr "ライブ結果を読み込めませんでした"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "この演習は学習パスに含まれているため読み取り専用です。"
+
+msgid "Select a question type to create a question."
+msgstr "設問を作成するには設問タイプを選択してください。"
+
+msgid "Click to preview"
+msgstr "クリックしてプレビュー"
+
+msgid "Hide preview"
+msgstr "プレビューを非表示"
+
+msgid "Shape"
+msgstr "図形"
+
+msgid "Coordinates"
+msgstr "座標"
+
+msgid "Blanks"
+msgstr "空欄"
+
+msgid "Switchable blanks"
+msgstr "切り替え可能な空欄"
+
+msgid "Blank"
+msgstr "空欄"
+
+msgid "Input width"
+msgstr "入力幅"
+
+msgid "Orientation"
+msgstr "向き"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "現在の演習フィードバックモードでは利用できません"
+
+msgid "Not available in the learning path creation flow"
+msgstr "学習パス作成フローでは利用できません"
+
+msgid "Delete question"
+msgstr "設問を削除"
+
+msgid "Could not update exercise questions"
+msgstr "演習設問を更新できませんでした"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "演習を学習パスに追加できませんでした"
+
+msgid "A valid exercise id is required."
+msgstr "有効な演習IDが必要です。"
+
+msgid "Could not load exercise questions"
+msgstr "演習設問を読み込めませんでした"
+
+msgid "Delete selected attempts"
+msgstr "選択した受験を削除"
+
+msgid "Before date"
+msgstr "日付より前"
+
+msgid "Pending corrections"
+msgstr "未採点"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "この演習は成績表によってロックされています。受験クリーンアップ操作は無効です。"
+
+msgid "No attempts found"
+msgstr "受験が見つかりません"
+
+msgid "Review"
+msgstr "レビュー"
+
+msgid "Print/PDF"
+msgstr "印刷／PDF"
+
+msgid "Could not load exercise report"
+msgstr "演習レポートを読み込めませんでした"
+
+msgid "Select at least one attempt"
+msgstr "少なくとも1つの受験を選択してください"
+
+msgid "Delete selected attempts?"
+msgstr "選択した受験を削除しますか？"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "レビュー済み受験結果のメールを送信しますか？"
+
+msgid "Could not send emails"
+msgstr "メールを送信できませんでした"
+
+msgid "Exercise result emails sent"
+msgstr "演習結果メールを送信しました"
+
+msgid "Skipped"
+msgstr "スキップ"
+
+msgid "Close attempt?"
+msgstr "受験を終了しますか？"
+
+msgid "Attempt closed"
+msgstr "受験を終了しました"
+
+msgid "Could not close attempt"
+msgstr "受験を終了できませんでした"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "この受験結果をメールで学習者に送信しますか？"
+
+msgid "Email sent"
+msgstr "メールを送信しました"
+
+msgid "Could not send email"
+msgstr "メールを送信できませんでした"
+
+msgid "Attempt deleted"
+msgstr "受験を削除しました"
+
+msgid "Could not delete attempt"
+msgstr "受験を削除できませんでした"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "タイトルと説明の列を含むCSVファイルを選択してください。"
+
+msgid "Manage categories used to classify questions."
+msgstr "設問を分類するためのカテゴリを管理します。"
+
+msgid "Manage categories used to classify exercises."
+msgstr "演習を分類するためのカテゴリを管理します。"
+
+msgid "Could not load categories"
+msgstr "カテゴリを読み込めませんでした"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "インポートしたカテゴリ: %s。スキップした行: %s。"
+
+msgid "Imported categories: %s."
+msgstr "インポートしたカテゴリ: %s。"
+
+msgid "Could not import categories"
+msgstr "カテゴリをインポートできませんでした"
+
+msgid "Could not save category"
+msgstr "カテゴリを保存できませんでした"
+
+msgid "Answer distribution"
+msgstr "回答分布"
+
+msgid "Configured answers"
+msgstr "設定済みの回答"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "一部の設問タイプの詳細な回答集計は、移行後のレポートではまだ利用できません。"
+
+msgid "No report by question data found"
+msgstr "設問別レポートデータが見つかりません"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "この設問タイプの詳細な回答集計は、移行後のレポートではまだ利用できません。"
+
+msgid "No answer distribution found"
+msgstr "回答分布が見つかりません"
+
+msgid "Could not load report by question"
+msgstr "設問別レポートを読み込めませんでした"
+
+msgid "Question settings"
+msgstr "設問設定"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "時間制限なしの場合は空欄または0にしてください。"
+
+msgid "Time limit in seconds"
+msgstr "制限時間（秒）"
+
+msgid "Attached questions"
+msgstr "添付された設問"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "現在の演習内でこのメディア設問に添付された設問のみがここに表示されます。"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "現在の演習内でこのメディア設問に添付された設問はありません。"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "学習者がOnlyOfficeで編集するOffice文書テンプレートをアップロードしてください。"
+
+msgid "Replace Office document"
+msgstr "Office文書を置き換え"
+
+msgid "Current Office document"
+msgstr "現在のOffice文書"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "この設問は、学習者が編集した文書を提出した後に手動で採点されます。"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "合計得点はホットスポット得点の合計として計算されます。"
+
+msgid "Global score"
+msgstr "総合得点"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "ホットスポットの行を選択し、形状を選択してから画像上に描画してください。多角形の場合は各点をクリックして多角形を完成させるか、ダブルクリックして終了します。"
+
+msgid "Finish polygon"
+msgstr "多角形を完了"
+
+msgid "Calculated answer"
+msgstr "計算式回答"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "下のテキストを入力し、角括弧 [...] で1つ以上の空欄を定義してください。"
+
+msgid "Lowest value"
+msgstr "最小値"
+
+msgid "Highest value"
+msgstr "最大値"
+
+msgid "Fill in blanks"
+msgstr "空欄補充"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "選択したマーカーを使用して空欄を定義します。例: ペルーの首都は [リマ] です。"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ドロップダウンの選択肢を1行に1つずつ入力してください。次に、従来のツールと同様に、期待される回答を以下でマークします。"
+
+msgid "Refresh answers"
+msgstr "回答を更新"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "このドロップダウン組み合わせ設問は、従来と同様に1つの総合得点を使用します。"
+
+msgid "Please enter at least two dropdown options."
+msgstr "少なくとも2つのドロップダウン選択肢を入力してください。"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "まず宛先オプションを作成し、各項目を正しいオプションにリンクしてください。"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "この組み合わせ問題は、従来の方式と同様にグローバルスコアを使用します。"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "手順を作成し、それぞれの正しい位置を選択します。従来のドラッグ可能問題と同様です。"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "学習者は正誤を選択し、解答時に確信度を選択します。エディタは従来と同じ正誤スコアと確信度レベルを保存します。"
+
+msgid "Hotspot combination"
+msgstr "ホットスポット組み合わせ"
+
+msgid "Add delineation"
+msgstr "境界線を追加"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "このOffice文書問題には解答オプションがありません。スコアは採点・結果確認時に割り当てられます。"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "このアップロード問題には解答オプションがありません。スコアは採点・結果確認時に割り当てられます。"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "この口頭表現問題には解答オプションがありません。スコアは採点・結果確認時に割り当てられます。"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "この記述問題には解答オプションがありません。スコアは採点・結果確認時に割り当てられます。"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "スクロール速度設定付きの読解テキストを追加します。"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "スコアを追加せずにコンテンツ、メディア、または読解文脈を追加します。"
+
+msgid "Insert a page break without adding score."
+msgstr "スコアを追加せずに改ページを挿入します。"
+
+msgid "Could not save question"
+msgstr "問題を保存できませんでした"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "DOC、DOCX、XLS、XLSX形式の文書のみ許可されています。"
+
+msgid "Please select an Office document."
+msgstr "Office文書を選択してください。"
+
+msgid "Please draw at least one hotspot."
+msgstr "少なくとも1つのホットスポットを描画してください。"
+
+msgid "Please draw at least one delineation."
+msgstr "少なくとも1つの境界線を描画してください。"
+
+msgid "The fill in blanks text is required."
+msgstr "穴埋めテキストは必須です。"
+
+msgid "At least one expected answer is required."
+msgstr "少なくとも1つの正解が必要です。"
+
+msgid "At least two draggable items are required."
+msgstr "少なくとも2つのドラッグ可能アイテムが必要です。"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "各ドラッグ可能アイテムは有効なターゲット位置にリンクする必要があります。"
+
+msgid "At least two matching options are required."
+msgstr "少なくとも2つの組み合わせオプションが必要です。"
+
+msgid "At least two matching pairs are required."
+msgstr "少なくとも2つの組み合わせペアが必要です。"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "各組み合わせペアは有効なオプションにリンクする必要があります。"
+
+msgid "At least two answers are required."
+msgstr "少なくとも2つの解答が必要です。"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "各正誤解答には「正しい」または「誤り」を選択する必要があります。"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "一意解答問題には正解が1つだけ必要です。"
+
+msgid "At least one correct answer is required."
+msgstr "少なくとも1つの正解が必要です。"
+
+msgid "Could not load question"
+msgstr "問題を読み込めませんでした"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "コースを選択し、全体の演習結果レポートをCSV形式でエクスポートします。"
+
+msgid "Back to reports catalog"
+msgstr "レポートカタログに戻る"
+
+msgid "Could not load exercise global report"
+msgstr "演習全体レポートを読み込めませんでした"
+
+msgid "Imported questions"
+msgstr "インポートされた問題"
+
+msgid "Aiken content"
+msgstr "Aikenコンテンツ"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken生成ツールを読み込めませんでした"
+
+msgid "Could not generate Aiken content"
+msgstr "Aikenコンテンツを生成できませんでした"
+
+msgid "Could not import generated Aiken content"
+msgstr "生成されたAikenコンテンツをインポートできませんでした"
+
+msgid "Back to my courses"
+msgstr "マイコースに戻る"
+
+msgid "Open report"
+msgstr "レポートを開く"
+
+msgid "Questions with no automatic correction"
+msgstr "自動採点なしの問題"
+
+msgid "Could not load pending attempts"
+msgstr "保留中の受験を読み込めませんでした"
+
+msgid "Skipped questions"
+msgstr "スキップされた問題"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aikenインポートは、問題でSCOREが定義されていない限り、インポートされた問題全体にこの総配点を分配します。"
+
+msgid "Import warnings"
+msgstr "インポート警告"
+
+msgid "Could not import questions"
+msgstr "問題をインポートできませんでした"
+
+msgid "No question statistics found"
+msgstr "問題の統計が見つかりません"
+
+msgid "Could not load question statistics"
+msgstr "問題の統計を読み込めませんでした"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "MCPクライアントを次のエンドポイントに直接接続することもできます："
+
+msgid "No applications are currently connected to your account."
+msgstr "現在、アカウントに接続されているアプリケーションはありません。"
+
+msgid "Connected on"
+msgstr "接続日時"
+
+msgid "Last used"
+msgstr "最終使用"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s は今後あなたの Chamilo アカウントにアクセスできなくなります。続行しますか？"
+
+msgid "Application revoked"
+msgstr "アプリケーションのアクセス権を取り消しました"
+
+msgid "Copied to clipboard"
+msgstr "クリップボードにコピーしました"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP エンドポイントをコピーできませんでした"
+
+msgid "MCP endpoint"
+msgstr "MCP エンドポイント"
+
+msgid "API key"
+msgstr "API キー"
+
+msgid "Last used at"
+msgstr "最終使用日時"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "今すぐこのキーをコピーしてください。再表示されません。"
+
+msgid "Rotate API key"
+msgstr "API キーを更新"
+
+msgid "Revoke API key"
+msgstr "API キーを取り消す"
+
+msgid "Remote MCP connection"
+msgstr "リモート MCP 接続"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "MCP クライアントに以下の値を設定してください："
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "現在のキーはすぐに使用できなくなります。続行しますか？"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "新しい個人用 MCP API キーを生成します。続行しますか？"
+
+msgid "MCP API key generated"
+msgstr "MCP API キーを生成しました"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "このキーを使用している接続済みの MCP クライアントはすぐに使用できなくなります。続行しますか？"
+
+msgid "MCP API key revoked"
+msgstr "MCP API キーを取り消しました"
+
+msgid "Could not copy the API key"
+msgstr "API キーをコピーできませんでした"
+
+msgid "Project"
+msgstr "プロジェクト"
+
+msgid "Close old tickets"
+msgstr "古いチケットを閉じる"
+
+msgid "Close tickets older than seven days?"
+msgstr "7 日以上前のチケットを閉じますか？"
+
+msgid "Assignment history"
+msgstr "課題履歴"
+
+msgid "Translate with AI"
+msgstr "AI で翻訳"
+
+msgid "Target language"
+msgstr "対象言語"
+
+msgid "Please select a provider"
+msgstr "プロバイダを選択してください"
+
+msgid "Generate translation"
+msgstr "翻訳を生成"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "利用規約のセクションには少なくとも 1 つテキストを含める必要があります。"
+
+msgid "No active target languages are available."
+msgstr "有効な対象言語がありません。"
+
+msgid "Tutor"
+msgstr "チューター"
+
+msgid "Access dates"
+msgstr "アクセス日"
+
+msgid "Coach access dates"
+msgstr "コーチのアクセス日"
+
+msgid "No sessions found"
+msgstr "セッションが見つかりません"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "このセッションでユーザーがアクセスできないコースを選択してください。"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "セッション内のすべてのコースからユーザーをブロックすることはできません。代わりにユーザーの登録を解除してください。"
+
+msgid "Users subscribed to this session"
+msgstr "このセッションに登録されているユーザー"
+
+msgid "No available users found"
+msgstr "利用可能なユーザーが見つかりません"
+
+msgid "Subscribe this user to the session?"
+msgstr "このユーザーをセッションに登録しますか？"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "選択したユーザーをセッションに登録しますか？"
+
+msgid "General tutor planning"
+msgstr "チューターの全体計画"
+
+msgid "User is already registered by another tutor."
+msgstr "このユーザーは別のチューターによって既に登録されています。"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "コースのチューターであるためコピーを受信しています"
+
+msgid "General tutor"
+msgstr "一般チューター"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "コース、チューター、技術サポート、教員、教材の利用可能性を考慮してください。"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "コース %s で教員として登録されているチューター"
+
+msgid "Tutor name"
+msgstr "チューター名"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "セッション・チューターはセッションのコーディネーターであり、セッション内の各コースのチューターとして活動できます。教員ロールを持つユーザーのみがセッション・チューターとして選択できます。"
+
+msgid "Access start date for tutors"
+msgstr "チューターのアクセス開始日"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "学生が接続する前に準備できるよう、セッションがチューターに利用可能になる日付"
+
+msgid "Access end date for tutors"
+msgstr "チューターのアクセス終了日"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "チューターがセッションを終了する日付。追加の猶予期間により、関連するすべてのトラッキング情報をエクスポートできます。"
+
+msgid "Tutor and student"
+msgstr "チューターおよび学習者"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "このレポートは、選択した期間における一般チューターごとのセッションの週次分布を示します。"
+
+msgid "User is general tutor in some sessions"
+msgstr "ユーザーは一部のセッションで一般チューターです"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "教員はすべてのコースセッションでチューターとして追加されます。"
+
+msgid "Delete failed: invalid question id."
+msgstr "削除に失敗しました：無効な質問IDです。"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "一般セッション・チューターあたりの平均セッション数"
+
+msgid "No room"
+msgstr "部屋なし"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "コース教員をセッションのコースチューターとしてインポート"
+
+msgid "Clean and update course tutors"
+msgstr "コースチューターのクリーンアップと更新"
+
+msgid "Add me as tutor"
+msgstr "自分をチューターとして追加"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "ラーニングパスにアンケートを追加できません"
+
+msgid "Access dates for tutors"
+msgstr "チューターのアクセス日"
+
+msgid "Tutor and group member"
+msgstr "チューターおよびグループメンバー"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "1日のAIトークン上限に達しました。明日再度お試しください。"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "月間AIトークン上限に達しました。来月再度お試しください。"
+
+msgid "This course code already exists, please choose another code."
+msgstr "このコースコードは既に存在します。別のコードを選択してください。"
+
+msgid "This course title already exists, please choose another title."
+msgstr "このコースタイトルは既に存在します。別のタイトルを選択してください。"
+
+msgid "This tool visibility cannot be changed"
+msgstr "このツールの表示設定は変更できません"
+
+msgid "Invalid visibility"
+msgstr "無効な表示設定"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "コースチューターの1人であるため、コピーを受信しています"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "コースチューターであるため、コピーを受信しています"
+
+msgid "Manual completion"
+msgstr "手動完了"
+
+msgid "Send to tutors"
+msgstr "チューターに送信"
+
+msgid "Lab title"
+msgstr "ラボタイトル"
+
+msgid "Lab week"
+msgstr "ラボ週"
+
+msgid "Final exam access rule"
+msgstr "最終試験アクセスルール"
+
+msgid "Course completion rule"
+msgstr "コース完了ルール"
+
+msgid "You have been invited to join a course"
+msgstr "コースへの参加に招待されました"
+
+msgid "No user has been found"
+msgstr "ユーザーが見つかりません"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "選択したユーザーはこのコンテキストに登録できません"
+
+msgid "No change has been made"
+msgstr "変更はありません"
+
+msgid "Back to group list"
+msgstr "グループ一覧に戻る"
+
+msgid "Remove class link"
+msgstr "クラスリンクを削除"
+
+msgid "Group settings"
+msgstr "グループ設定"
+
+msgid "Self-registration allowed"
+msgstr "自己登録を許可"
+
+msgid "Self-unregistration allowed"
+msgstr "自己登録解除を許可"
+
+msgid "This group is linked to the class"
+msgstr "このグループはクラスにリンクされています"
+
+msgid "Create one or more empty course groups"
+msgstr "1つ以上の空のコースグループを作成"
+
+msgid "Number of places"
+msgstr "定員数"
+
+msgid "Base group"
+msgstr "ベースグループ"
+
+msgid "Share"
+msgstr "共有"
+
+msgid "Collaboration"
+msgstr "コラボレーション"
+
+msgid "The group title is required."
+msgstr "グループタイトルは必須です。"
+
+msgid "Back to group area"
+msgstr "グループエリアに戻る"
+
+msgid "Members are managed by the linked class"
+msgstr "メンバーはリンクされたクラスによって管理されます"
+
+msgid "%s groups selected"
+msgstr "%s グループが選択されました"
+
+msgid "Fill selected groups"
+msgstr "選択したグループを埋める"
+
+msgid "Empty selected groups"
+msgstr "選択したグループを空にする"
+
+msgid "Fill group"
+msgstr "グループを埋める"
+
+msgid "Empty group"
+msgstr "空のグループ"
+
+msgid "Groups per user"
+msgstr "ユーザーごとのグループ"
+
+msgid "No tutors"
+msgstr "チューターなし"
+
+msgid "No users"
+msgstr "ユーザーなし"
+

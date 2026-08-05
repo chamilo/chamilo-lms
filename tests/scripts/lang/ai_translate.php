@@ -871,6 +871,19 @@ foreach ($langCodes as $lang) {
 
     $entryIndex = 0;
 
+    // Progress is noisy when printed on every 50-entry batch even though most
+    // batches make no change (nothing needed translating). Only print it as an
+    // occasional heartbeat (every 1000 entries) or right before an API call is
+    // about to be made, so the log shows where we were when something actually happened.
+    $lastProgressLoggedAt = 0;
+    $logProgress = function () use (&$lastProgressLoggedAt, &$processedCount, $totalTerms, $lang) {
+        if ($processedCount === $lastProgressLoggedAt) {
+            return;
+        }
+        $lastProgressLoggedAt = $processedCount;
+        eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+    };
+
     // Helper to write current state to disk (used on success AND on failure)
     $writeCurrentState = function (?Throwable $error = null) use (
         &$targetTranslations,
@@ -899,9 +912,8 @@ foreach ($langCodes as $lang) {
 
             if ($entry['isHeader'] || $entry['hasPlural']) {
                 $processedCount++;
-                if ($processedCount % 50 === 0) {
-                    eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).",
-                        true);
+                if ($processedCount % 1000 === 0) {
+                    $logProgress();
                 }
                 continue;
             }
@@ -941,6 +953,7 @@ foreach ($langCodes as $lang) {
                 // Send batch when full
                 if (count($pendingBatch) >= $batchSize) {
                     $apiBatchCount++;
+                    $logProgress();
                     eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
                         .count($pendingBatch)." terms).", true);
 
@@ -1010,14 +1023,15 @@ foreach ($langCodes as $lang) {
             }
 
             $processedCount++;
-            if ($processedCount % 50 === 0) {
-                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+            if ($processedCount % 1000 === 0) {
+                $logProgress();
             }
         }
 
         // Final batch (if any)
         if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
             $apiBatchCount++;
+            $logProgress();
             eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
                 .count($pendingBatch)." terms).", true);
 

@@ -196,7 +196,7 @@
               />
 
               <BaseSelect
-                v-if="showCategorySelectionOptions"
+                v-if="showRandomByCategoryOptions"
                 id="exercise-random-by-category"
                 v-model="form.randomByCategory"
                 :label="t('Random by category')"
@@ -1008,7 +1008,10 @@ const questionSelectionTypeOptions = computed(() => mapTranslatedOptions(options
 const randomByCategoryOptions = computed(() => mapTranslatedOptions(options.value.randomByCategoryOptions || []))
 const notificationOptions = computed(() => mapTranslatedOptions(options.value.notificationOptions || []))
 const saveCorrectAnswerOptions = computed(() => mapTranslatedOptions(options.value.saveCorrectAnswerOptions || []))
-const showRandomQuestionCount = computed(() => [2, 3, 4, 5, 6].includes(Number(form.questionSelectionType)))
+const showRandomQuestionCount = computed(() => 2 === Number(form.questionSelectionType))
+const showRandomByCategoryOptions = computed(
+  () => showRandomQuestionCount.value && 0 !== Number(form.random),
+)
 const showCategorySelectionOptions = computed(() => 3 <= Number(form.questionSelectionType))
 const showCategoryDestinations = computed(
   () => Number(form.feedbackType || 0) === 4 && true === settings.value.quizQuestionCategoryDestinations,
@@ -1530,7 +1533,17 @@ watch(
 watch(
   () => form.questionSelectionType,
   (selectionType) => {
-    if (3 > Number(selectionType)) {
+    if (2 !== Number(selectionType)) {
+      form.random = 0
+      form.randomByCategory = 0
+    }
+  },
+)
+
+watch(
+  () => form.random,
+  (randomCount) => {
+    if (0 === Number(randomCount)) {
       form.randomByCategory = 0
     }
   },

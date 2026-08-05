@@ -858,6 +858,18 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $model = (string) ($cfg['model'] ?? 'gpt-image-1');
         $normalizedModel = strtolower(trim($model));
         $size = (string) ($cfg['size'] ?? '1024x1024');
+        $requestedFormat = strtolower(trim((string) ($options['format'] ?? '')));
+        if (\in_array($requestedFormat, ['square', 'landscape', 'portrait'], true)) {
+            $size = match ($requestedFormat) {
+                'landscape' => 'dall-e-3' === $normalizedModel ? '1792x1024' : '1536x1024',
+                'portrait' => 'dall-e-3' === $normalizedModel ? '1024x1792' : '1024x1536',
+                default => '1024x1024',
+            };
+
+            if ('dall-e-2' === $normalizedModel) {
+                $size = '1024x1024';
+            }
+        }
         $configuredQuality = isset($cfg['quality']) ? trim((string) $cfg['quality']) : '';
         $quality = '' !== $configuredQuality ? $configuredQuality : ($this->isGptImageModel($normalizedModel) ? 'auto' : 'standard');
         if ($this->isGptImageModel($normalizedModel) && 'standard' === strtolower($quality)) {

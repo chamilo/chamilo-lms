@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Category;
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\DBAL\Connection;
@@ -20,6 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
+use UserManager;
+
+use const PHP_INT_MAX;
+use const STUDENT;
 
 #[AsCommand(
     name: 'chamilo:migration:process-achievement-certificates',
@@ -190,27 +196,19 @@ final class ProcessAchievementCertificatesCommand extends Command
                 ['courseId' => $courseId]
             );
             if (false === $course) {
-                throw new RuntimeException(sprintf('Course %d was not found.', $courseId));
+                throw new RuntimeException(\sprintf('Course %d was not found.', $courseId));
             }
 
             if (
                 'course-rule' === $completionMode
                 && !$this->evaluator->supports($courseId)
             ) {
-                throw new RuntimeException(sprintf(
-                    'Course %d has no persisted completion rule. '
-                    .'Use --completion-mode=gradebook only for a course whose legacy '
-                    .'automatic process was verified to use the native gradebook result.',
-                    $courseId
-                ));
+                throw new RuntimeException(\sprintf('Course %d has no persisted completion rule. Use --completion-mode=gradebook only for a course whose legacy automatic process was verified to use the native gradebook result.', $courseId));
             }
 
             $notification = $this->resolveNotification($courseId);
             if ([] === $notification) {
-                throw new RuntimeException(sprintf(
-                    'Course %d has no unambiguous certificate notification subject/message configuration.',
-                    $courseId
-                ));
+                throw new RuntimeException(\sprintf('Course %d has no unambiguous certificate notification subject/message configuration.', $courseId));
             }
 
             $category = $this->resolveCategory($courseId, $categoryId);
@@ -223,16 +221,13 @@ final class ProcessAchievementCertificatesCommand extends Command
                 $resolvedCategoryId
             );
             if (!$categoryEntity instanceof GradebookCategory) {
-                throw new RuntimeException(sprintf(
-                    'Gradebook category %d could not be loaded.',
-                    $resolvedCategoryId
-                ));
+                throw new RuntimeException(\sprintf('Gradebook category %d could not be loaded.', $resolvedCategoryId));
             }
 
             $notification['sender_id'] = $senderId ?? 0;
 
             $io->definitionList(
-                ['Course' => sprintf('%s — %s', $course['code'], $course['title'])],
+                ['Course' => \sprintf('%s — %s', $course['code'], $course['title'])],
                 ['Course ID' => $courseId],
                 ['Category ID' => $resolvedCategoryId],
                 ['Category title' => (string) $category['title']],
@@ -358,13 +353,12 @@ final class ProcessAchievementCertificatesCommand extends Command
                 if (null !== $userId) {
                     break;
                 }
-
             }
 
             if ([] !== $previewRows) {
                 $io->table(
                     ['User ID', 'Result', 'Calculated score'],
-                    array_slice($previewRows, 0, 100)
+                    \array_slice($previewRows, 0, 100)
                 );
             }
 
@@ -398,7 +392,7 @@ final class ProcessAchievementCertificatesCommand extends Command
                 && $summary['scanned'] >= $scanLimit
                 && !$this->generationLimitReached($summary, $limit, $dryRun)
             ) {
-                $io->note(sprintf(
+                $io->note(\sprintf(
                     'The scan limit was reached. Continue with --after-user-id=%d.',
                     $summary['last_user_id']
                 ));
@@ -433,7 +427,7 @@ final class ProcessAchievementCertificatesCommand extends Command
             );
         }
 
-        $score = \Category::getCurrentScore(
+        $score = Category::getCurrentScore(
             $userId,
             $category,
             true,
@@ -451,7 +445,7 @@ final class ProcessAchievementCertificatesCommand extends Command
     {
         $globalFile = $this->kernel->getProjectDir().'/public/main/inc/global.inc.php';
         if (!is_file($globalFile)) {
-            throw new RuntimeException(sprintf('Legacy bootstrap was not found: %s', $globalFile));
+            throw new RuntimeException(\sprintf('Legacy bootstrap was not found: %s', $globalFile));
         }
 
         require_once $globalFile;
@@ -463,17 +457,11 @@ final class ProcessAchievementCertificatesCommand extends Command
         $sender = $this->entityManager->find(User::class, $senderId);
 
         if (!$sender instanceof User || !$sender->isActive()) {
-            throw new RuntimeException(sprintf(
-                'Sender %d was not found or is inactive.',
-                $senderId
-            ));
+            throw new RuntimeException(\sprintf('Sender %d was not found or is inactive.', $senderId));
         }
 
-        if (!\UserManager::is_admin($senderId)) {
-            throw new RuntimeException(sprintf(
-                'Sender %d must be a platform administrator.',
-                $senderId
-            ));
+        if (!UserManager::is_admin($senderId)) {
+            throw new RuntimeException(\sprintf('Sender %d must be a platform administrator.', $senderId));
         }
     }
 
@@ -497,7 +485,7 @@ final class ProcessAchievementCertificatesCommand extends Command
                    AND variable = :variable
                  LIMIT 1',
                 [
-                    'itemType' => \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+                    'itemType' => ExtraField::COURSE_FIELD_TYPE,
                     'variable' => $variable,
                 ]
             );
@@ -524,14 +512,8 @@ final class ProcessAchievementCertificatesCommand extends Command
                 ]
             );
 
-            if (count($rows) > 1) {
-                throw new RuntimeException(sprintf(
-                    'Course %d has duplicate values for %s.',
-                    $courseId,
-                    'subject' === $key
-                        ? self::CERTIFICATE_SUBJECT_FIELD
-                        : self::CERTIFICATE_MESSAGE_FIELD
-                ));
+            if (\count($rows) > 1) {
+                throw new RuntimeException(\sprintf('Course %d has duplicate values for %s.', $courseId, 'subject' === $key ? self::CERTIFICATE_SUBJECT_FIELD : self::CERTIFICATE_MESSAGE_FIELD));
             }
 
             $notification[$key] = trim((string) ($rows[0] ?? ''));
@@ -570,24 +552,16 @@ final class ProcessAchievementCertificatesCommand extends Command
         );
 
         if ([] === $categories) {
-            throw new RuntimeException(sprintf(
-                'No eligible root certificate category was found for course %d.',
-                $courseId
-            ));
+            throw new RuntimeException(\sprintf('No eligible root certificate category was found for course %d.', $courseId));
         }
 
-        if (count($categories) > 1 && null === $requestedCategoryId) {
+        if (\count($categories) > 1 && null === $requestedCategoryId) {
             $ids = array_map(
                 static fn (array $category): string => (string) $category['id'],
                 $categories
             );
 
-            throw new RuntimeException(sprintf(
-                'Course %d has multiple eligible root categories (%s). '
-                .'Re-run with --category-id.',
-                $courseId,
-                implode(', ', $ids)
-            ));
+            throw new RuntimeException(\sprintf('Course %d has multiple eligible root categories (%s). Re-run with --category-id.', $courseId, implode(', ', $ids)));
         }
 
         return $categories[0];
@@ -607,7 +581,7 @@ final class ProcessAchievementCertificatesCommand extends Command
         $params = [
             'courseId' => $courseId,
             'categoryId' => $categoryId,
-            'studentStatus' => \STUDENT,
+            'studentStatus' => STUDENT,
             'afterUserId' => $afterUserId,
         ];
 
@@ -647,7 +621,7 @@ final class ProcessAchievementCertificatesCommand extends Command
         bool $sendNotification,
         array $notification
     ): bool {
-        \Category::generateUserCertificate(
+        Category::generateUserCertificate(
             $category,
             $userId,
             $sendNotification,
@@ -721,7 +695,7 @@ final class ProcessAchievementCertificatesCommand extends Command
         }
 
         if (!ctype_digit($rawValue) || (int) $rawValue <= 0) {
-            throw new RuntimeException(sprintf('--%s must be a positive integer.', $name));
+            throw new RuntimeException(\sprintf('--%s must be a positive integer.', $name));
         }
 
         return (int) $rawValue;
@@ -735,11 +709,7 @@ final class ProcessAchievementCertificatesCommand extends Command
         $value = $this->optionalPositiveOption($input, $name);
 
         if (null === $value || $value > $maximum) {
-            throw new RuntimeException(sprintf(
-                '--%s must be between 1 and %d.',
-                $name,
-                $maximum
-            ));
+            throw new RuntimeException(\sprintf('--%s must be between 1 and %d.', $name, $maximum));
         }
 
         return $value;
@@ -753,20 +723,13 @@ final class ProcessAchievementCertificatesCommand extends Command
         $rawValue = trim((string) $input->getOption($name));
 
         if ('' === $rawValue || !ctype_digit($rawValue)) {
-            throw new RuntimeException(sprintf(
-                '--%s must be a non-negative integer.',
-                $name
-            ));
+            throw new RuntimeException(\sprintf('--%s must be a non-negative integer.', $name));
         }
 
         $value = (int) $rawValue;
 
         if ($value > $maximum) {
-            throw new RuntimeException(sprintf(
-                '--%s must be between 0 and %d.',
-                $name,
-                $maximum
-            ));
+            throw new RuntimeException(\sprintf('--%s must be between 0 and %d.', $name, $maximum));
         }
 
         return $value;

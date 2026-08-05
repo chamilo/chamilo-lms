@@ -19428,7 +19428,7 @@ msgid "Webcam Clip allow to users capture images from his webcam and send them t
 msgstr "Klip tal-Webcam jippermetti lill-utenti jaqbdu immaġnijiet mill-webcam tagħhom u jibagħtuhom lis-server f'format JPEG (.jpg jew .jpeg)"
 
 msgid "AUTO RESIZE (default)"
-msgstr "AUTO RESIZE (default)"
+msgstr "AĠĠUSTA AWTOMATIKAMENT (default)"
 
 msgid "This slideshow will resize automatically to your screen size. This is the default option."
 msgstr "Dan is-slideshow jirriżolva awtomatikament għad-daqs tal-iskrin tiegħek. Din hija l-għażla default."
@@ -37504,4 +37504,1432 @@ msgstr "Illustrazzjoni moderna u milqugħa li tirrappreżenta s-suġġett ta' da
 
 msgid "Back to account"
 msgstr "Lura għall-kont"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Thank you for sharing your feedback."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "How satisfied are you with the overall quality of the training?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "How satisfied are you with the relevance of the content?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "How satisfied are you with the clarity of the explanations?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "How satisfied are you with the organization and pace of the training?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "How satisfied are you with the practical usefulness of what you learned?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Tirrakkomanda din it-taħriġ lil persuni oħra?"
+
+msgid "What should we improve in future editions?"
+msgstr "X'għandna ntejbu fl-edizzjonijiet futuri?"
+
+msgid "Very satisfied"
+msgstr "Sodisfatt ħafna"
+
+msgid "Satisfied"
+msgstr "Sodisfatt"
+
+msgid "Neutral"
+msgstr "Newtrali"
+
+msgid "Dissatisfied"
+msgstr "Mhux sodisfatt"
+
+msgid "Very dissatisfied"
+msgstr "Mhux sodisfatt ħafna"
+
+msgid "Add destination"
+msgstr "Żid destinazzjoni"
+
+msgid "Add this test to the assessment tool"
+msgstr "Żid dan it-test mal-għodda tal-valutazzjoni"
+
+msgid "Attempts and timing"
+msgstr "Tentattivi u ħin"
+
+msgid "Available questions"
+msgstr "Mistoqsijiet disponibbli"
+
+msgid "Cancel and return to learning path"
+msgstr "Ikkanċella u rritorna għall-mogħdija tat-tagħlim"
+
+msgid "Category destinations"
+msgstr "Destinazzjonijiet tal-kategorija"
+
+msgid "Classification"
+msgstr "Klassifikazzjoni"
+
+msgid "Context"
+msgstr "Kuntest"
+
+msgid "Could not load exercise configuration"
+msgstr "Ma setax jitgħabba l-konfigurazzjoni tal-eżerċizzju"
+
+msgid "Could not save exercise"
+msgstr "Ma setax jiġi ssejvjat l-eżerċizzju"
+
+msgid "Display and learning path"
+msgstr "Wirja u mogħdija tat-tagħlim"
+
+msgid "Edit test"
+msgstr "Editja t-test"
+
+msgid "Exercise settings saved."
+msgstr "Is-settings tal-eżerċizzju ġew issejvjati."
+
+msgid "Extra settings"
+msgstr "Settings addizzjonali"
+
+msgid "Feedback and results"
+msgstr "Feedback u riżultati"
+
+msgid "Finish exercise"
+msgstr "Temmi l-eżerċizzju"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Jidentifika l-lingwa ta' dan l-eżerċizzju bħala metadata tar-riżorsa. Ma jippermettix l-indiċjar għat-tfittxija waħdu."
+
+msgid "Maximum score (%)"
+msgstr "Punteġġ massimu (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Il-metadata tinkludi ħiliet u oqsma addizzjonali kkonfigurati għall-eżerċizzji. Hija fakultattiva u tibqa' moħbija sakemm tinfetaħ."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "M'hemm l-ebda kategoriji ta' mistoqsijiet disponibbli għal dan l-eżerċizzju s'issa."
+
+msgid "Question categories matrix"
+msgstr "Matriċi tal-kategoriji tal-mistoqsijiet"
+
+msgid "Questions behavior"
+msgstr "Imġiba tal-mistoqsijiet"
+
+msgid "Random by category"
+msgstr "Random skont il-kategorija"
+
+msgid "Remove destination"
+msgstr "Neħħi d-destinazzjoni"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Ir-regoli jiġu evalwati skont il-persentaġġ tal-punteġġ f'ordni axxendenti. Agħżel Temmi l-eżerċizzju biex ttemm it-test."
+
+msgid "Score and final messages"
+msgstr "Punteġġ u messaġġi finali"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Xi għażliet jissakkru wara li jkun ġie maħluq l-eżerċizzju."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Dan il-valur jinħażen bħala tul totali f'minuti."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Uża 0 biex iżżomm il-mistoqsijiet kollha disponibbli. Uża -1 fejn il-mistoqsijiet kollha disponibbli huma permessi."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Uża dawn l-oqsma biex tikkklassifika l-eżerċizzju indipendentement mill-għażliet tal-wiri tiegħu."
+
+msgid "Invite by email"
+msgstr "Ivvita bl-email"
+
+msgid "Invitation has been sent"
+msgstr "L-istedina ġiet mibgħuta"
+
+msgid "Sent on"
+msgstr "Mibgħut fi"
+
+msgid "Accepted on"
+msgstr "Aċċettat fi"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Dan il-kors huwa miftuħ f'sessjoni. Jekk tibgħat stedina hawn, il-persuna li tirċieviha tiġi rreġistrata għas-sessjoni kollha %s, mhux biss għal dan il-kors."
+
+msgid "Revoke"
+msgstr "Irtira"
+
+msgid "Revoked"
+msgstr "Irtiro"
+
+msgid "Invitation has been revoked"
+msgstr "L-istedina ġiet irtirata"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Żgur li trid tirtira l-istedina mibgħuta lil %s?"
+
+msgid "No default room"
+msgstr "L-ebda kamra default"
+
+msgid "Floor"
+msgstr "Sular"
+
+msgid "Capacity"
+msgstr "Kapaċità"
+
+msgid "Use attendance default room"
+msgstr "Uża l-kamra default tal-attendenza"
+
+msgid "Floor number"
+msgstr "Numru tas-sular"
+
+msgid "Copy to students"
+msgstr "Ikkopja lill-istudenti"
+
+msgid "Generate a quick test on this topic"
+msgstr "Iġġenera test malajr fuq dan is-suġġett"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Il-kontenut tad-dokument salvat jintbagħat lil mudell tal-AI għall-ipproċessar."
+
+msgid "MCP API key"
+msgstr "Ċavetta API MCP"
+
+msgid "Authorized applications"
+msgstr "Applikazzjonijiet awtorizzati"
+
+msgid "Your session is about to expire"
+msgstr "Is-sessjoni tiegħek waslet biex tiskadi"
+
+msgid "Do you want to continue your session?"
+msgstr "Trid tkompli s-sessjoni tiegħek?"
+
+msgid "Stay connected"
+msgstr "Ibqa' konness"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Se tiġi ffirmat barra fi %s sekondi."
+
+msgid "No descriptions available yet."
+msgstr "M'hemmx deskrizzjonijiet disponibbli s'issa."
+
+msgid "%s users selected"
+msgstr "%s utenti magħżula"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "L-utenti magħżula ġew irreġistrati fil-kors"
+
+msgid "Import teachers"
+msgstr "Importa għalliema"
+
+msgid "Import learners"
+msgstr "Importa studenti"
+
+msgid "Select CSV file"
+msgstr "Agħżel fajl CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Xi utenti ma setgħux jiġu rreġistrati"
+
+msgid "Browse available classes"
+msgstr "Esplora klassijiet disponibbli"
+
+msgid "Back to linked classes"
+msgstr "Lura għall-klassijiet marbuta"
+
+msgid "No classes are currently linked to this course."
+msgstr "M'hemmx klassijiet marbuta bħalissa ma' dan il-kors."
+
+msgid "No available classes were found for this course."
+msgstr "Ma nstabu l-ebda klassijiet disponibbli għal dan il-kors."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Żgur li trid tneħħi r-reġistrazzjoni tal-utenti magħżula?"
+
+msgid "Learning path access"
+msgstr "Aċċess għall-mogħdija tat-tagħlim"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "L-utenti u l-gruppi magħżula biss jistgħu jaċċessaw din il-mogħdija tat-tagħlim. Immaniġġjahom wara li tissejvja."
+
+msgid "All current and future course users can access this learning path."
+msgstr "L-utenti kollha attwali u futuri tal-kors jistgħu jaċċessaw din il-mogħdija tat-tagħlim."
+
+msgid "All course users"
+msgstr "L-utenti kollha tal-kors"
+
+msgid "Selected users and groups"
+msgstr "Utenti u gruppi magħżula"
+
+msgid "No access"
+msgstr "L-ebda aċċess"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "L-utenti u l-gruppi miżjuda hawn biss jistgħu jaċċessaw din il-mogħdija tat-tagħlim."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "In-numru ta' mistoqsijiet limitat għal massimu ta' %s"
+
+msgid "Open exercise player"
+msgstr "Iftaħ il-plejer tal-eżerċizzju"
+
+msgid "The score is hidden for this exercise."
+msgstr "Il-punteġġ huwa moħbi għal dan l-eżerċizzju."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Il-korrezzjonijiet huma moħbija skont is-settings tar-riżultat tal-eżerċizzju."
+
+msgid "Progressive adaptive result"
+msgstr "Riżultat adattiv progressiv"
+
+msgid "Achieved level"
+msgstr "Livell miksub"
+
+msgid "Correction history"
+msgstr "Storja tal-korrezzjoni"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Storja tal-korrezzjonijiet manwali magħmula għal dan it-tentattiv."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Dan l-eżerċizzju juża l-modalità tar-riżultat tar-radar/spiderweb. Il-grafika mhix disponibbli f’din il-paġna."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Id-dettalji tal-mistoqsija huma moħbija skont is-settings tar-riżultat tal-eżerċizzju."
+
+msgid "Media question"
+msgstr "Mistoqsija tal-midja"
+
+msgid "Pending correction"
+msgstr "Korrezzjoni pendenti"
+
+msgid "No answer"
+msgstr "L-ebda tweġiba"
+
+msgid "Blank %s"
+msgstr "Vojt %s"
+
+msgid "Your order"
+msgstr "L-ordni tiegħek"
+
+msgid "Correct order"
+msgstr "Ordni korretta"
+
+msgid "Delineation review"
+msgstr "Reviżjoni tad-delineazzjoni"
+
+msgid "Learner clicks"
+msgstr "Klikks tal-istudent"
+
+msgid "Question image"
+msgstr "Immaġni tal-mistoqsija"
+
+msgid "No hotspot image available"
+msgstr "L-ebda immaġni hotspot disponibbli"
+
+msgid "Learner delineation"
+msgstr "Delineazzjoni tal-istudent"
+
+msgid "Expected delineation"
+msgstr "Delineazzjoni mistennija"
+
+msgid "Expected zones"
+msgstr "Żoni mistennija"
+
+msgid "Zone"
+msgstr "Żona"
+
+msgid "Learner annotation"
+msgstr "Annotazzjoni tal-istudent"
+
+msgid "No annotation image available"
+msgstr "L-ebda immaġni ta’ annotazzjoni disponibbli"
+
+msgid "This answer is pending teacher correction."
+msgstr "Din it-tweġiba qed tistenna korrezzjoni mill-għalliem."
+
+msgid "Teacher comment"
+msgstr "Kumment tal-għalliem"
+
+msgid "Teacher correction"
+msgstr "Korrezzjoni tal-għalliem"
+
+msgid "Save correction"
+msgstr "Ħlief il-korrezzjoni"
+
+msgid "Learner audio"
+msgstr "Awdyo tal-istudent"
+
+msgid "Download audio"
+msgstr "Niżżel l-awdyo"
+
+msgid "No uploaded audio"
+msgstr "L-ebda awdyo mniżżel"
+
+msgid "Learner Office document"
+msgstr "Dokument Office tal-istudent"
+
+msgid "Learner file"
+msgstr "Fajl tal-istudent"
+
+msgid "Download Office document"
+msgstr "Niżżel id-dokument Office"
+
+msgid "No submitted document"
+msgstr "L-ebda dokument mibgħut"
+
+msgid "No uploaded file"
+msgstr "L-ebda fajl mniżżel"
+
+msgid "Content item"
+msgstr "Element tal-kontenut"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Dan it-tip ta’ mistoqsija ma jistax jiġi rivedut f’din il-paġna."
+
+msgid "Exercise completed"
+msgstr "Eżerċizzju komplut"
+
+msgid "Could not start the attempt"
+msgstr "Ma setax jibda l-attentat"
+
+msgid "Invalid exercise attempt"
+msgstr "Attentat ta’ eżerċizzju invalidu"
+
+msgid "Could not load exercise result"
+msgstr "Ma setax jitgħabba r-riżultat tal-eżerċizzju"
+
+msgid "Could not load AI providers"
+msgstr "Ma setgħux jitgħabbew il-fornituri tal-AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Ma setgħetx tiġi ġġenerata s-suġġeriment tal-AI"
+
+msgid "Correction saved"
+msgstr "Korrezzjoni salvata"
+
+msgid "Could not save correction"
+msgstr "Ma setgħetx tiġi salvata l-korrezzjoni"
+
+msgid "Create exercise"
+msgstr "Oħloq eżerċizzju"
+
+msgid "Exercise categories"
+msgstr "Kategoriji tal-eżerċizzji"
+
+msgid "Question categories"
+msgstr "Kategoriji tal-mistoqsijiet"
+
+msgid "Search by exercise title or description."
+msgstr "Fittex bl-isem jew id-deskrizzjoni tal-eżerċizzju."
+
+msgid "Search exercises"
+msgstr "Fittex eżerċizzji"
+
+msgid "No exercises found"
+msgstr "L-ebda eżerċizzju misjub"
+
+msgid "Open exercise"
+msgstr "Iftaħ l-eżerċizzju"
+
+msgid "Disable autolaunch"
+msgstr "Itfi l-awtolaunch"
+
+msgid "Enable autolaunch"
+msgstr "Ixgħel l-awtolaunch"
+
+msgid "Export QTI2"
+msgstr "Esporta QTI2"
+
+msgid "Bulk actions"
+msgstr "Azzjonijiet bl-ingrossa"
+
+msgid "Selected exercises"
+msgstr "Eżerċizzji magħżula"
+
+msgid "No exercises selected"
+msgstr "L-ebda eżerċizzju magħżul"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Int żgur li trid tapplika din l-azzjoni għall-eżerċizzji magħżula?"
+
+msgid "Bulk action completed"
+msgstr "Azzjoni bl-ingrossa kompluta"
+
+msgid "Could not update exercises"
+msgstr "Ma setax jaġġorna l-eżerċizzji"
+
+msgid "Could not update exercise"
+msgstr "Ma setax jaġġorna l-eżerċizzju"
+
+msgid "Copy exercise"
+msgstr "Ikkopja l-eżerċizzju"
+
+msgid "Delete exercise"
+msgstr "Ħassar l-eżerċizzju"
+
+msgid "Could not load exercises"
+msgstr "Ma setax jitgħabba l-eżerċizzji"
+
+msgid "No limit"
+msgstr "L-ebda limitu"
+
+msgid "Add selected questions to the test"
+msgstr "Żid il-mistoqsijiet magħżula mat-test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Din il-mistoqsija tintuża f'test attiv u ma tistax tiġi editjata hawn."
+
+msgid "This question cannot be edited here."
+msgstr "Din il-mistoqsija ma tistax tiġi editjata hawn."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Din il-mistoqsija tintuża f'test attiv u ma tistax tiġi mħassra hawn."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Din il-mistoqsija ma tistax tiġi mħassra għaliex l-aċċess tiegħek huwa limitat mill-issettjar tal-pjattaforma."
+
+msgid "Already in test"
+msgstr "Diġà fit-test"
+
+msgid "Select at least one question."
+msgstr "Agħżel mill-inqas mistoqsija waħda."
+
+msgid "Question bank updated"
+msgstr "Bank tal-mistoqsijiet aġġornat"
+
+msgid "Could not update the question bank"
+msgstr "Ma setax jaġġorna l-bank tal-mistoqsijiet"
+
+msgid "Could not load the question bank"
+msgstr "Ma setax jitgħabba l-bank tal-mistoqsijiet"
+
+msgid "Total score"
+msgstr "Punteġġ totali"
+
+msgid "Starting"
+msgstr "Bidu"
+
+msgid "Attempt history"
+msgstr "Storja tal-attentati"
+
+msgid "No attempts yet"
+msgstr "L-ebda attentat s'issa"
+
+msgid "Invalid exercise"
+msgstr "Eżerċizzju invalidu"
+
+msgid "Could not load exercise overview"
+msgstr "Ma setax jitgħabba l-ħarsa ġenerali tal-eżerċizzju"
+
+msgid "Open test"
+msgstr "Iftaħ it-test"
+
+msgid "Random answers"
+msgstr "Tweġibiet każwali"
+
+msgid "Prevent moving backwards"
+msgstr "Ipprevjeni lura"
+
+msgid "Previous button hidden"
+msgstr "Buttuna preċedenti moħbija"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Dan l-eżerċizzju juża għażliet li jeħtieġu plejer tat-test differenti."
+
+msgid "Continue test"
+msgstr "Kompli t-test"
+
+msgid "Attempt started"
+msgstr "Attentat mibdi"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Preview tal-għalliem ma joħloqx attentat immonitorjat."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Ibda jew irridu attentat ta' eżerċizzju. Tweġibiet abbozzati jistgħu jiġu ssejvjati qabel is-sottomissjoni finali."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Limitu ta' ħin milħuq. Qed jintemm l-attentat."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Ħin tal-mistoqsija milħuq. Qed jissejvja t-tweġiba tiegħek."
+
+msgid "Finishing"
+msgstr "Qed jintemm"
+
+msgid "Draft saved"
+msgstr "Abbozz issejvjat"
+
+msgid "Statement"
+msgstr "Dikjarazzjoni"
+
+msgid "Drop each option on the matching answer"
+msgstr "Waqqa' kull għażla fuq it-tweġiba li tqabbelha"
+
+msgid "Clear match"
+msgstr "Ħassar il-qbil"
+
+msgid "Click to place the selected option here"
+msgstr "Ikklikkja biex tpoġġi l-għażla magħżula hawn"
+
+msgid "Select an option, then click here"
+msgstr "Agħżel għażla, imbagħad ikklikkja hawn"
+
+msgid "Already matched"
+msgstr "Diġà mqabbel"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Tista' tkaxkar għażla għal tweġiba, jew tagħżel għażla u mbagħad tikklikkja fuq kaxxa fil-mira."
+
+msgid "Put the items in the correct order."
+msgstr "Poġġi l-oġġetti fl-ordni korretta."
+
+msgid "Move left"
+msgstr "Mexxi xellug"
+
+msgid "Move right"
+msgstr "Mexxi lemin"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Tista' tkaxkar l-oġġetti lemin jew xellug, jew tuża l-buttuni tal-moviment biex tibdel l-ordni."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Tista' tkaxkar l-oġġetti jew tuża l-buttuni tal-moviment biex tibdel l-ordni."
+
+msgid "Or upload an audio file"
+msgstr "Jew ittella' fajl awdjo"
+
+msgid "Selected audio"
+msgstr "Awdjo magħżul"
+
+msgid "Uploaded audio"
+msgstr "Awdjo mtella'"
+
+msgid "Office document"
+msgstr "Dokument tal-uffiċċju"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Imla d-dokument fl-editur hawn taħt. Il-fajl se jiġi mehmuż ma' dan l-attentat għall-korrezzjoni mill-għalliem."
+
+msgid "Reload Office editor"
+msgstr "Ittella' mill-ġdid l-editur tal-uffiċċju"
+
+msgid "Prepare Office document"
+msgstr "Ipprepara d-dokument tal-uffiċċju"
+
+msgid "Open in new tab"
+msgstr "Iftaħ f'tab ġdid"
+
+msgid "Preparing Office document"
+msgstr "Qed jitħejja d-dokument tal-uffiċċju"
+
+msgid "Submitted document"
+msgstr "Dokument sottomess"
+
+msgid "Annotation tools"
+msgstr "Għodod tal-anotazzjoni"
+
+msgid "Text to place"
+msgstr "Test li jkun imqiegħed"
+
+msgid "Click the image to place the text annotation."
+msgstr "Ikklikkja l-immaġni biex tpoġġi l-anotazzjoni tat-test."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Ikklikkja l-immaġni biex iżżid il-punti tal-mogħdija. Uża Bidu ta' mogħdija ġdida biex tissepara l-mogħdijiet."
+
+msgid "Start new path"
+msgstr "Bidu ta' mogħdija ġdida"
+
+msgid "Current annotations"
+msgstr "Anotazzjonijiet kurrenti"
+
+msgid "Remove point"
+msgstr "Neħħi punt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Ikklikkja l-immaġni biex tpinġi l-poligon tad-delineazzjoni."
+
+msgid "Click a marker to remove it."
+msgstr "Ikklikkja marker biex tneħħih."
+
+msgid "Placed"
+msgstr "Imqiegħed"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Agħżel tweġiba, imbagħad ikklikkja fuq l-immaġni biex timmarkaha."
+
+msgid "Reading speed"
+msgstr "Veloċità tal-qari"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Dan it-tip ta' mistoqsija ma jistax jintwera f'dan il-plejer."
+
+msgid "Save draft"
+msgstr "Ħlief abbozz"
+
+msgid "I confirm that my answers were saved."
+msgstr "Nikkonferma li t-tweġibiet tiegħi ġew salvati."
+
+msgid "Finish test"
+msgstr "Temmi t-test"
+
+msgid "Attempt finished"
+msgstr "Attentat mitmum"
+
+msgid "Question category"
+msgstr "Kategorija tal-mistoqsija"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Intemmiet il-mistoqsijiet relatati ma' din il-kategorija tal-mistoqsija, din hija l-aħħar ċans tiegħek biex tmur lura u tirrevedi dawk il-mistoqsijiet."
+
+msgid "Question time left"
+msgstr "Ħin li fadal għall-mistoqsija"
+
+msgid "Time left"
+msgstr "Ħin li fadal"
+
+msgid "Current attempt"
+msgstr "Attentat kurrenti"
+
+msgid "Could not save draft answer"
+msgstr "Ma setax jiġi ssejvjat it-tweġiba abbozz"
+
+msgid "Could not load exercise"
+msgstr "Ma setax jitgħabba l-eżerċizzju"
+
+msgid "Draft answer saved"
+msgstr "Tweġiba abbozz salvata"
+
+msgid "Could not finish the attempt"
+msgstr "Ma setax jintemm l-attentat"
+
+msgid "Could not prepare Office document"
+msgstr "Ma setax jitħejja d-dokument tal-uffiċċju"
+
+msgid "Back to learner score"
+msgstr "Lura għall-punteġġ tal-istudent"
+
+msgid "Disable auto refresh"
+msgstr "Itfi l-aġġornament awtomatiku"
+
+msgid "Enable auto refresh"
+msgstr "Ixgħel l-aġġornament awtomatiku"
+
+msgid "Live window"
+msgstr "Tieqa diretta"
+
+msgid "Ongoing attempts"
+msgstr "Attentati għaddejjin"
+
+msgid "Completed attempts"
+msgstr "Attentati mitmuma"
+
+msgid "Started"
+msgstr "Beda"
+
+msgid "Last activity"
+msgstr "Attività aħħarija"
+
+msgid "Could not load live results"
+msgstr "Ma setgħux jitgħabbew ir-riżultati diretti"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Dan l-eżerċizzju huwa biss għall-qari għax huwa inkluż f'mogħdija ta' tagħlim."
+
+msgid "Select a question type to create a question."
+msgstr "Agħżel tip ta' mistoqsija biex toħloq mistoqsija."
+
+msgid "Click to preview"
+msgstr "Ikklikkja biex tara l-anteprima"
+
+msgid "Hide preview"
+msgstr "Aħbi l-anteprima"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Koordinati"
+
+msgid "Blanks"
+msgstr "Voċijiet vojta"
+
+msgid "Switchable blanks"
+msgstr "Voċijiet vojta li jistgħu jinbidlu"
+
+msgid "Blank"
+msgstr "Voċi vojta"
+
+msgid "Input width"
+msgstr "Wisa' tal-input"
+
+msgid "Orientation"
+msgstr "Orjentazzjoni"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Mhux disponibbli bil-modalità attwali ta' feedback tal-eżerċizzju"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Mhux disponibbli fil-fluss tal-ħolqien tal-perkors ta' tagħlim"
+
+msgid "Delete question"
+msgstr "Ħassar il-mistoqsija"
+
+msgid "Could not update exercise questions"
+msgstr "Ma setax jaġġorna l-mistoqsijiet tal-eżerċizzju"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Ma setax iżid l-eżerċizzju mal-perkors ta' tagħlim"
+
+msgid "A valid exercise id is required."
+msgstr "Id tal-eżerċizzju validu huwa meħtieġ."
+
+msgid "Could not load exercise questions"
+msgstr "Ma setax jitgħabba l-mistoqsijiet tal-eżerċizzju"
+
+msgid "Delete selected attempts"
+msgstr "Ħassar l-attentati magħżula"
+
+msgid "Before date"
+msgstr "Qabel id-data"
+
+msgid "Pending corrections"
+msgstr "Korrezzjonijiet pendenti"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Dan l-eżerċizzju huwa msakkar mill-gradebook. L-azzjonijiet ta' tindif tal-attentati huma diżattivati."
+
+msgid "No attempts found"
+msgstr "Ma nstabu l-ebda attentati"
+
+msgid "Review"
+msgstr "Irrevedi"
+
+msgid "Print/PDF"
+msgstr "Stampa/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Ma setax jitgħabba r-rapport tal-eżerċizzju"
+
+msgid "Select at least one attempt"
+msgstr "Agħżel mill-inqas attentat wieħed"
+
+msgid "Delete selected attempts?"
+msgstr "Ħassar l-attentati magħżula?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Ibgħat l-emails tar-riżultat tal-attentat rivedut?"
+
+msgid "Could not send emails"
+msgstr "Ma setgħux jintbagħtu l-emails"
+
+msgid "Exercise result emails sent"
+msgstr "Emails tar-riżultat tal-eżerċizzju mibgħuta"
+
+msgid "Skipped"
+msgstr "Maqbuż"
+
+msgid "Close attempt?"
+msgstr "Agħlaq l-attentat?"
+
+msgid "Attempt closed"
+msgstr "Attentat magħluq"
+
+msgid "Could not close attempt"
+msgstr "Ma setax jagħlaq l-attentat"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Ibgħat ir-riżultat ta' dan l-attentat bl-email lill-istudent?"
+
+msgid "Email sent"
+msgstr "Email mibgħuta"
+
+msgid "Could not send email"
+msgstr "Ma setax jintbagħat l-email"
+
+msgid "Attempt deleted"
+msgstr "Attentat imħassar"
+
+msgid "Could not delete attempt"
+msgstr "Ma setax jitħassar l-attentat"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Agħżel fajl CSV li jkun fih kolonni tat-titlu u d-deskrizzjoni."
+
+msgid "Manage categories used to classify questions."
+msgstr "Immaniġġja l-kategoriji użati biex tikkklassifika l-mistoqsijiet."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Immaniġġja l-kategoriji użati biex tikkklassifika l-eżerċizzji."
+
+msgid "Could not load categories"
+msgstr "Ma setgħux jitgħabbew il-kategoriji"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Kategoriji importati: %s. Ringieli maqbuża: %s."
+
+msgid "Imported categories: %s."
+msgstr "Kategoriji importati: %s."
+
+msgid "Could not import categories"
+msgstr "Ma setgħux jiġu importati l-kategoriji"
+
+msgid "Could not save category"
+msgstr "Ma setax jiġi ssejvjat il-kategorija"
+
+msgid "Answer distribution"
+msgstr "Distribuzzjoni tat-tweġibiet"
+
+msgid "Configured answers"
+msgstr "Tweġibiet ikkonfigurati"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Għadd dettaljat tat-tweġibiet għal ċerti tipi ta' mistoqsijiet għadu mhux disponibbli fir-rapport migrat."
+
+msgid "No report by question data found"
+msgstr "Ma nstab l-ebda data tar-rapport skont il-mistoqsija"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Għadd dettaljat tat-tweġibiet għal dan it-tip ta' mistoqsija għadu mhux disponibbli fir-rapport migrat."
+
+msgid "No answer distribution found"
+msgstr "Ma nstab l-ebda distribuzzjoni tat-tweġibiet"
+
+msgid "Could not load report by question"
+msgstr "Ma setax jitgħabba r-rapport skont il-mistoqsija"
+
+msgid "Question settings"
+msgstr "Settings tal-mistoqsija"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Ħalli vojt jew 0 għal ebda limitu ta' ħin."
+
+msgid "Time limit in seconds"
+msgstr "Limitu ta' ħin f'sekondi"
+
+msgid "Attached questions"
+msgstr "Mistoqsijiet mehmuża"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Hawnhekk jidhru biss il-mistoqsijiet mehmuża ma' din il-mistoqsija tal-midja fl-eżerċizzju attwali."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Ma hemm l-ebda mistoqsija mehmuża ma' din il-mistoqsija tal-midja fl-eżerċizzju attwali."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Tella' t-template tad-dokument Office li l-istudenti jeditjaw b'OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Ibdel id-dokument Office"
+
+msgid "Current Office document"
+msgstr "Dokument Office attwali"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Din il-mistoqsija tiġi kkoreġuta manwalment wara li l-istudent jissottometti d-dokument editjat."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Il-punteġġ totali jiġi kkalkulat bħala s-somma tal-punteġġi tal-hotspot."
+
+msgid "Global score"
+msgstr "Punteġġ globali"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Agħżel ringiela ta' hotspot, agħżel il-forma tagħha, imbagħad iġbed fuq l-immaġni. Għall-poligoni, ikklikkja kull punt u spiċċa l-poligon, jew iddoppja-klikkja biex tispiċċa."
+
+msgid "Finish polygon"
+msgstr "Spiċċa l-poligon"
+
+msgid "Calculated answer"
+msgstr "Tweġiba kkalkulata"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Jekk jogħġbok ittajpja t-test tiegħek hawn taħt u uża l-parentesi kwadri [...] biex tiddefinixxi vojt wieħed jew aktar."
+
+msgid "Lowest value"
+msgstr "L-inqas valur"
+
+msgid "Highest value"
+msgstr "L-ogħla valur"
+
+msgid "Fill in blanks"
+msgstr "Imla l-vojt"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Uża l-markaturi magħżula biex tiddefinixxi l-vojt. Eżempju: Il-kapitali ta' Peru hija [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Daħħal l-għażliet tad-dropdown, tweġiba waħda għal kull linja. Imbagħad immarka t-tweġibiet mistennija hawn taħt, bħall-għodda legacy."
+
+msgid "Refresh answers"
+msgstr "Aġġorna t-tweġibiet"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Din il-mistoqsija ta' kombinazzjoni dropdown tuża punteġġ globali wieħed, bħal fil-legacy."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Jekk jogħġbok daħħal mill-inqas żewġ għażliet tad-dropdown."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Oħloq l-ewwel l-għażliet tad-destinazzjoni, imbagħad illinkja kull oġġett mal-għażla korretta."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Din il-mistoqsija ta' kombinazzjoni ta' qbil tuża punteġġ globali wieħed, bħal fil-legacy."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Oħloq il-passi u agħżel il-pożizzjoni mistennija għal kull wieħed, bħal fil-legacy Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "L-istudenti jagħżlu True jew False u mbagħad jagħżlu l-livell ta' ċertezza tagħhom waqt l-attentat. L-editur jaħżen l-istess punteġġi Correct/Wrong u livelli ta' ċertezza bħal fil-legacy."
+
+msgid "Hotspot combination"
+msgstr "Kombinazzjoni ta' hotspot"
+
+msgid "Add delineation"
+msgstr "Żid delineazzjoni"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Din il-mistoqsija tad-dokument Office m'għandhiex għażliet ta' tweġiba. Il-punteġġ tagħha jiġi assenjat waqt il-korrezzjoni/r-reviżjoni tar-riżultati."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Din il-mistoqsija tat-tlugħ m'għandhiex għażliet ta' tweġiba. Il-punteġġ tagħha jiġi assenjat waqt il-korrezzjoni/r-reviżjoni tar-riżultati."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Din il-mistoqsija tal-espressjoni orali m'għandhiex għażliet ta' tweġiba. Il-punteġġ tagħha jiġi assenjat waqt il-korrezzjoni/r-reviżjoni tar-riżultati."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Din il-mistoqsija miftuħa m'għandhiex għażliet ta' tweġiba. Il-punteġġ tagħha jiġi assenjat waqt il-korrezzjoni/r-reviżjoni tar-riżultati."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Żid test ta' qari b'settings tal-veloċità tal-iscroll."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Żid kontenut, midja jew kuntest ta' qari mingħajr ma żżid punteġġ."
+
+msgid "Insert a page break without adding score."
+msgstr "Daħħal break tal-paġna mingħajr ma żżid punteġġ."
+
+msgid "Could not save question"
+msgstr "Ma setax jiġi ssejvjat il-mistoqsija"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Jippermetti biss dokumenti DOC, DOCX, XLS jew XLSX."
+
+msgid "Please select an Office document."
+msgstr "Jekk jogħġbok agħżel dokument Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Jekk jogħġbok iġbed mill-inqas hotspot wieħed."
+
+msgid "Please draw at least one delineation."
+msgstr "Jekk jogħġbok iġbed mill-inqas delineazzjoni waħda."
+
+msgid "The fill in blanks text is required."
+msgstr "It-test tal-mili tal-vojt huwa meħtieġ."
+
+msgid "At least one expected answer is required."
+msgstr "Mill-inqas tweġiba mistennija waħda hija meħtieġa."
+
+msgid "At least two draggable items are required."
+msgstr "Mill-inqas żewġ oġġetti draggable huma meħtieġa."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Kull oġġett draggable għandu jkun marbut ma' pożizzjoni valida fil-mira."
+
+msgid "At least two matching options are required."
+msgstr "Mill-inqas żewġ għażliet ta' qbil huma meħtieġa."
+
+msgid "At least two matching pairs are required."
+msgstr "Huma meħtieġa mill-inqas żewġ pari li jaqblu."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Kull par li jaqbel irid ikun marbut ma' għażla valida."
+
+msgid "At least two answers are required."
+msgstr "Huma meħtieġa mill-inqas żewġ tweġibiet."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Kull tweġiba vera/żbaljata trid ikollha True jew False magħżula."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Mistoqsija b'tweġiba unika trid ikollha eżattament tweġiba korretta waħda."
+
+msgid "At least one correct answer is required."
+msgstr "Hija meħtieġa mill-inqas tweġiba korretta waħda."
+
+msgid "Could not load question"
+msgstr "Ma setax jitgħabba l-mistoqsija"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Agħżel kors u esporta r-rapport globali tar-riżultati tal-eżerċizzju bħala CSV."
+
+msgid "Back to reports catalog"
+msgstr "Lura lejn il-katalgu tar-rapporti"
+
+msgid "Could not load exercise global report"
+msgstr "Ma setax jitgħabba r-rapport globali tal-eżerċizzju"
+
+msgid "Imported questions"
+msgstr "Mistoqsijiet importati"
+
+msgid "Aiken content"
+msgstr "Kontenut Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Ma setax jitgħabba l-ġeneratur AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Ma setax jiġġenera l-kontenut Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Ma setax jimporta l-kontenut Aiken ġġenerat"
+
+msgid "Back to my courses"
+msgstr "Lura lejn il-korsijiet tiegħi"
+
+msgid "Open report"
+msgstr "Iftaħ ir-rapport"
+
+msgid "Questions with no automatic correction"
+msgstr "Mistoqsijiet mingħajr korrezzjoni awtomatika"
+
+msgid "Could not load pending attempts"
+msgstr "Ma setax jitgħabba l-attentati pendenti"
+
+msgid "Skipped questions"
+msgstr "Mistoqsijiet maqbuża"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "L-importazzjoni Aiken tqassam dan il-piż totali fuq il-mistoqsijiet importati sakemm mistoqsija ma tiddefinixxix SCORE."
+
+msgid "Import warnings"
+msgstr "Twissijiet tal-importazzjoni"
+
+msgid "Could not import questions"
+msgstr "Ma setax jimporta l-mistoqsijiet"
+
+msgid "No question statistics found"
+msgstr "Ma nstabet l-ebda statistika tal-mistoqsijiet"
+
+msgid "Could not load question statistics"
+msgstr "Ma setax jitgħabba l-istatistika tal-mistoqsijiet"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Tista' wkoll tikkonnettja klijent MCP direttament billi tippuntah lejn l-endpoint li ġej:"
+
+msgid "No applications are currently connected to your account."
+msgstr "M'hemm l-ebda applikazzjoni konnessa bħalissa mal-kont tiegħek."
+
+msgid "Connected on"
+msgstr "Konness f'"
+
+msgid "Last used"
+msgstr "Użat l-aħħar"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ma jkunx jista' jidħol aktar fil-kont Chamilo tiegħek. Tkompli?"
+
+msgid "Application revoked"
+msgstr "Applikazzjoni revokata"
+
+msgid "Copied to clipboard"
+msgstr "Ikkopjat fil-clipboard"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Ma setax jikkopja l-endpoint MCP"
+
+msgid "MCP endpoint"
+msgstr "Endpoint MCP"
+
+msgid "API key"
+msgstr "Ċavetta API"
+
+msgid "Last used at"
+msgstr "Użat l-aħħar f'"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Ikkopja din iċ-ċavetta issa. Ma tintweriex mill-ġdid."
+
+msgid "Rotate API key"
+msgstr "Irrotola ċ-ċavetta API"
+
+msgid "Revoke API key"
+msgstr "Revoka ċ-ċavetta API"
+
+msgid "Remote MCP connection"
+msgstr "Konnessjoni remota MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Ikkonfigura l-klijent MCP tiegħek bil-valuri li ġejjin:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Iċ-ċavetta attwali tieqaf taħdem immedjatament. Tkompli?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Ċavetta API MCP personali ġdida se tiġi ġġenerata. Tkompli?"
+
+msgid "MCP API key generated"
+msgstr "Ċavetta API MCP ġġenerata"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Klijenti MCP konnessi li jużaw din iċ-ċavetta jieqfu jaħdmu immedjatament. Tkompli?"
+
+msgid "MCP API key revoked"
+msgstr "Ċavetta API MCP revokata"
+
+msgid "Could not copy the API key"
+msgstr "Ma setax jikkopja ċ-ċavetta API"
+
+msgid "Project"
+msgstr "Proġett"
+
+msgid "Close old tickets"
+msgstr "Agħlaq it-tickets qodma"
+
+msgid "Close tickets older than seven days?"
+msgstr "Agħlaq it-tickets li għandhom aktar minn sebat ijiem?"
+
+msgid "Assignment history"
+msgstr "Storja tal-inkarigi"
+
+msgid "Translate with AI"
+msgstr "Ittraduċi bl-AI"
+
+msgid "Target language"
+msgstr "Lingwa mmirata"
+
+msgid "Please select a provider"
+msgstr "Jekk jogħġbok agħżel fornitur"
+
+msgid "Generate translation"
+msgstr "Iġġenera traduzzjoni"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Mill-inqas sezzjoni waħda tat-termini u l-kundizzjonijiet trid ikun fiha test."
+
+msgid "No active target languages are available."
+msgstr "M'hemmx lingwi mmirati attivi disponibbli."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Dati tal-aċċess"
+
+msgid "Coach access dates"
+msgstr "Dati tal-aċċess tal-kowċ"
+
+msgid "No sessions found"
+msgstr "Ma nstabu l-ebda sessjonijiet"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Agħżel il-korsijiet li dan l-utent m'għandux ikun jista' jaċċessa f'din is-sessjoni."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Utent ma jistax jiġi mblukkat minn kull kors fis-sessjoni. Minflok neħħi l-abbonament tal-utent."
+
+msgid "Users subscribed to this session"
+msgstr "Utenti abbonati għal din is-sessjoni"
+
+msgid "No available users found"
+msgstr "Ma nstabu l-ebda utenti disponibbli"
+
+msgid "Subscribe this user to the session?"
+msgstr "Abbona dan l-utent għas-sessjoni?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Abbona l-utenti magħżula għas-sessjoni?"
+
+msgid "General tutor planning"
+msgstr "Ippjanar ġenerali tat-tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "L-utent diġà huwa rreġistrat minn tutor ieħor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Int qed tirċievi kopja għax int tutor tal-kors"
+
+msgid "General tutor"
+msgstr "Tutor ġenerali"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Ikkunsidra l-korsijiet, it-tuturi, l-helpdesk tekniku, l-għalliema, u/jew il-materjali disponibbli."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tuturi abbonati bħala għalliema fil-kors %s"
+
+msgid "Tutor name"
+msgstr "Isem it-tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "It-tuturi tas-sessjoni huma koordinaturi għas-sessjoni u jistgħu jaġixxu bħala tuturi għal kull kors fis-sessjoni. Biss utenti b'rwol ta' għalliem jistgħu jintgħażlu bħala tuturi tas-sessjoni."
+
+msgid "Access start date for tutors"
+msgstr "Data tal-bidu tal-aċċess għat-tuturi"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Id-data li fiha s-sessjoni ssir disponibbli għat-tuturi, sabiex ikunu jistgħu jippreparawha qabel ma jikkonnettjaw l-istudenti"
+
+msgid "Access end date for tutors"
+msgstr "Data tat-tmiem tal-aċċess għat-tuturi"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Id-data li fiha s-sessjoni tingħalaq għat-tuturi. Id-dewmien addizzjonali jippermettilhom jesportaw l-informazzjoni rilevanti kollha tat-traċċar"
+
+msgid "Tutor and student"
+msgstr "Tutor u student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Dan ir-rapport juri d-distribuzzjoni fil-ġimgħa tas-sessjonijiet għal kull tutor ġenerali fil-medda tad-dati magħżula."
+
+msgid "User is general tutor in some sessions"
+msgstr "L-utent huwa tutor ġenerali f'xi sessjonijiet"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "L-għalliema se jiġu miżjuda bħala tuturi f'kull sessjoni tal-kors."
+
+msgid "Delete failed: invalid question id."
+msgstr "It-tħassir falliet: id tal-mistoqsija invalidu."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Numru medju ta' sessjonijiet għal kull tutor ġenerali tas-sessjoni"
+
+msgid "No room"
+msgstr "L-ebda kamra"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importa l-għalliema tal-kors bħala tuturi tal-kors fis-sessjoni"
+
+msgid "Clean and update course tutors"
+msgstr "Naddaf u aġġorna t-tuturi tal-kors"
+
+msgid "Add me as tutor"
+msgstr "Żid lili bħala tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ma setax jiżdied l-istħarriġ mal-mogħdija tat-tagħlim"
+
+msgid "Access dates for tutors"
+msgstr "Dati tal-aċċess għat-tuturi"
+
+msgid "Tutor and group member"
+msgstr "Tutor u membru tal-grupp"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Il-limitu ta' kuljum tat-token tal-AI tiegħek ġie milħuq. Jekk jogħġbok erġa' pprova għada."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Il-limitu ta' kull xahar tat-token tal-AI tiegħek ġie milħuq. Jekk jogħġbok erġa' pprova x-xahar id-dieħel."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Dan il-kodiċi tal-kors diġà jeżisti, jekk jogħġbok agħżel kodiċi ieħor."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Dan it-titlu tal-kors diġà jeżisti, jekk jogħġbok agħżel titlu ieħor."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Il-viżibilità ta' dan l-għodda ma tistax tinbidel"
+
+msgid "Invalid visibility"
+msgstr "Viżibilità invalida"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Int qed tirċievi kopja għax int wieħed mit-tuturi tal-kors"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Int qed tirċievi kopja għax int it-tutor tal-kors"
+
+msgid "Manual completion"
+msgstr "Tlestija manwali"
+
+msgid "Send to tutors"
+msgstr "Ibgħat lit-tuturi"
+
+msgid "Lab title"
+msgstr "Titlu tal-laboratorju"
+
+msgid "Lab week"
+msgstr "Ġimgħa tal-laboratorju"
+
+msgid "Final exam access rule"
+msgstr "Regola ta' aċċess għall-eżami finali"
+
+msgid "Course completion rule"
+msgstr "Regola ta' tlestija tal-kors"
+
+msgid "You have been invited to join a course"
+msgstr "Ġejt mistieden biex tingħaqad ma' kors"
+
+msgid "No user has been found"
+msgstr "Ma nstab l-ebda utent"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "L-utent magħżul ma jistax jiġi rreġistrat f'dan il-kuntest"
+
+msgid "No change has been made"
+msgstr "Ma sar l-ebda tibdil"
+
+msgid "Back to group list"
+msgstr "Lura għal-lista tal-gruppi"
+
+msgid "Remove class link"
+msgstr "Neħħi l-link tal-klassi"
+
+msgid "Group settings"
+msgstr "Settings tal-grupp"
+
+msgid "Self-registration allowed"
+msgstr "Reġistrazzjoni waħdanija permessa"
+
+msgid "Self-unregistration allowed"
+msgstr "Tneħħija waħdanija permessa"
+
+msgid "This group is linked to the class"
+msgstr "Dan il-grupp huwa marbut mal-klassi"
+
+msgid "Create one or more empty course groups"
+msgstr "Oħloq grupp jew aktar ta' kors vojta"
+
+msgid "Number of places"
+msgstr "Numru ta' postijiet"
+
+msgid "Base group"
+msgstr "Grupp bażi"
+
+msgid "Share"
+msgstr "Aqsam"
+
+msgid "Collaboration"
+msgstr "Kollaborazzjoni"
+
+msgid "The group title is required."
+msgstr "It-titlu tal-grupp huwa meħtieġ."
+
+msgid "Back to group area"
+msgstr "Lura għaż-żona tal-grupp"
+
+msgid "Members are managed by the linked class"
+msgstr "Il-membri huma mmaniġġjati mill-klassi marbuta"
+
+msgid "%s groups selected"
+msgstr "%s gruppi magħżula"
+
+msgid "Fill selected groups"
+msgstr "Imla l-gruppi magħżula"
+
+msgid "Empty selected groups"
+msgstr "Iżvojta l-gruppi magħżula"
+
+msgid "Fill group"
+msgstr "Imla l-grupp"
+
+msgid "Empty group"
+msgstr "Iżvojta l-grupp"
+
+msgid "Groups per user"
+msgstr "Gruppi għal kull utent"
+
+msgid "No tutors"
+msgstr "L-ebda tuturi"
+
+msgid "No users"
+msgstr "L-ebda utenti"
 

@@ -2021,7 +2021,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:कपीराइट,, no:कपीराइट नभएको"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:फोल्डर,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:व्यायाम,,      simulation:सिमुलेशन,,      questionnaire:प्रश्नावली,,      diagram:डायाग्राम,,      figure:चित्र,,      graph:ग्राफ,,      index:सूची,,      slide:स्लाइड,,      table:तालिका,,      narrative text:कथन पाठ,,      exam:परीक्षा,,      experiment:प्रयोग,,      problem statement:समस्या कथन,,      self assessment:आत्म मूल्याङ्कन,,      lecture:व्याख्यान"
@@ -37503,4 +37503,1432 @@ msgstr "यो कोर्सको विषयलाई प्रतिनि
 
 msgid "Back to account"
 msgstr "खातामा फर्कनुहोस्"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "तपाईंको प्रतिक्रियाले हामीलाई भविष्यका तालिम सत्रहरू सुधार्न मद्दत गर्नेछ।"
+
+msgid "Thank you for sharing your feedback."
+msgstr "तपाईंको प्रतिक्रिया साझा गर्नुभएकोमा धन्यवाद।"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "तालिमको समग्र गुणस्तरप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "सामग्रीको प्रासंगिकताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "व्याख्याको स्पष्टताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "तालिमको संगठन र गतिप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "तपाईंले सिकेको कुराको व्यावहारिक उपयोगिताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "के तपाईं यो तालिम अरूलाई सिफारिस गर्नुहुन्छ?"
+
+msgid "What should we improve in future editions?"
+msgstr "भविष्यका संस्करणहरूमा हामीले के सुधार गर्नुपर्छ?"
+
+msgid "Very satisfied"
+msgstr "धेरै सन्तुष्ट"
+
+msgid "Satisfied"
+msgstr "सन्तुष्ट"
+
+msgid "Neutral"
+msgstr "तटस्थ"
+
+msgid "Dissatisfied"
+msgstr "असन्तुष्ट"
+
+msgid "Very dissatisfied"
+msgstr "धेरै असन्तुष्ट"
+
+msgid "Add destination"
+msgstr "गन्तव्य थप्नुहोस्"
+
+msgid "Add this test to the assessment tool"
+msgstr "यो परीक्षा मूल्यांकन उपकरणमा थप्नुहोस्"
+
+msgid "Attempts and timing"
+msgstr "प्रयास र समय"
+
+msgid "Available questions"
+msgstr "उपलब्ध प्रश्नहरू"
+
+msgid "Cancel and return to learning path"
+msgstr "रद्द गर्नुहोस् र सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Category destinations"
+msgstr "कोटि गन्तव्यहरू"
+
+msgid "Classification"
+msgstr "वर्गीकरण"
+
+msgid "Context"
+msgstr "सन्दर्भ"
+
+msgid "Could not load exercise configuration"
+msgstr "व्यायाम कन्फिगरेसन लोड गर्न सकिएन"
+
+msgid "Could not save exercise"
+msgstr "व्यायाम बचत गर्न सकिएन"
+
+msgid "Display and learning path"
+msgstr "प्रदर्शन र सिकाइ मार्ग"
+
+msgid "Edit test"
+msgstr "परीक्षा सम्पादन गर्नुहोस्"
+
+msgid "Exercise settings saved."
+msgstr "व्यायाम सेटिङहरू बचत गरियो।"
+
+msgid "Extra settings"
+msgstr "अतिरिक्त सेटिङहरू"
+
+msgid "Feedback and results"
+msgstr "प्रतिक्रिया र नतिजाहरू"
+
+msgid "Finish exercise"
+msgstr "व्यायाम समाप्त गर्नुहोस्"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "यो व्यायामको भाषा स्रोत मेटाडेटाको रूपमा पहिचान गर्दछ। यसले आफैं खोज अनुक्रमणिका सक्षम गर्दैन।"
+
+msgid "Maximum score (%)"
+msgstr "अधिकतम अंक (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "मेटाडेटामा व्यायामका लागि कन्फिगर गरिएका सीप र अतिरिक्त क्षेत्रहरू समावेश छन्। यो वैकल्पिक छ र खोलिएसम्म लुकाइएको रहन्छ।"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "यो व्यायामका लागि अहिलेसम्म कुनै प्रश्न कोटि उपलब्ध छैन।"
+
+msgid "Question categories matrix"
+msgstr "प्रश्न कोटि म्याट्रिक्स"
+
+msgid "Questions behavior"
+msgstr "प्रश्न व्यवहार"
+
+msgid "Random by category"
+msgstr "कोटि अनुसार अनियमित"
+
+msgid "Remove destination"
+msgstr "गन्तव्य हटाउनुहोस्"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "नियमहरू अंक प्रतिशत अनुसार आरोही क्रममा मूल्यांकन गरिन्छ। परीक्षा समाप्त गर्न समाप्त व्यायाम चयन गर्नुहोस्।"
+
+msgid "Score and final messages"
+msgstr "अंक र अन्तिम सन्देशहरू"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "व्यायाम सिर्जना भएपछि केही विकल्पहरू लक हुन्छन्।"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "यो मान मिनेटमा कुल अवधिको रूपमा भण्डारण गरिन्छ।"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "सबै उपलब्ध प्रश्नहरू राख्न ० प्रयोग गर्नुहोस्। सबै उपलब्ध प्रश्नहरूलाई अनुमति दिइएको ठाउँमा -१ प्रयोग गर्नुहोस्।"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "यी क्षेत्रहरू प्रयोग गरेर अभ्यासलाई यसको प्रदर्शन विकल्पहरूबाट स्वतन्त्र रूपमा वर्गीकरण गर्नुहोस्।"
+
+msgid "Invite by email"
+msgstr "इमेल मार्फत आमन्त्रण गर्नुहोस्"
+
+msgid "Invitation has been sent"
+msgstr "आमन्त्रण पठाइएको छ"
+
+msgid "Sent on"
+msgstr "पठाइएको मिति"
+
+msgid "Accepted on"
+msgstr "स्वीकृत मिति"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "यो पाठ्यक्रम सत्रमा खुला छ। यहाँ आमन्त्रण पठाउँदा प्राप्तकर्ता सम्पूर्ण सत्र %s मा सदस्यता लिनेछ, केवल यो पाठ्यक्रममा होइन।"
+
+msgid "Revoke"
+msgstr "रद्द गर्नुहोस्"
+
+msgid "Revoked"
+msgstr "रद्द गरिएको"
+
+msgid "Invitation has been revoked"
+msgstr "आमन्त्रण रद्द गरिएको छ"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "के तपाईं %s लाई पठाइएको आमन्त्रण रद्द गर्न निश्चित हुनुहुन्छ?"
+
+msgid "No default room"
+msgstr "पूर्वनिर्धारित कोठा छैन"
+
+msgid "Floor"
+msgstr "तला"
+
+msgid "Capacity"
+msgstr "क्षमता"
+
+msgid "Use attendance default room"
+msgstr "उपस्थिति पूर्वनिर्धारित कोठा प्रयोग गर्नुहोस्"
+
+msgid "Floor number"
+msgstr "तला नम्बर"
+
+msgid "Copy to students"
+msgstr "विद्यार्थीहरूलाई प्रतिलिपि गर्नुहोस्"
+
+msgid "Generate a quick test on this topic"
+msgstr "यस विषयमा द्रुत परीक्षण उत्पन्न गर्नुहोस्"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "सेभ गरिएको कागजात सामग्री प्रशोधनका लागि AI मोडेलमा पठाइनेछ।"
+
+msgid "MCP API key"
+msgstr "MCP API कुञ्जी"
+
+msgid "Authorized applications"
+msgstr "अधिकृत अनुप्रयोगहरू"
+
+msgid "Your session is about to expire"
+msgstr "तपाईंको सत्र समाप्त हुन लागेको छ"
+
+msgid "Do you want to continue your session?"
+msgstr "के तपाईं आफ्नो सत्र जारी राख्न चाहनुहुन्छ?"
+
+msgid "Stay connected"
+msgstr "जडान रहनुहोस्"
+
+msgid "You will be signed out in %s seconds."
+msgstr "तपाईं %s सेकेन्डमा साइन आउट हुनुहुनेछ।"
+
+msgid "No descriptions available yet."
+msgstr "अहिलेसम्म कुनै विवरण उपलब्ध छैन।"
+
+msgid "%s users selected"
+msgstr "%s प्रयोगकर्ताहरू चयन गरिएको"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "चयन गरिएका प्रयोगकर्ताहरू पाठ्यक्रममा सदस्यता लिएका छन्"
+
+msgid "Import teachers"
+msgstr "शिक्षकहरू आयात गर्नुहोस्"
+
+msgid "Import learners"
+msgstr "विद्यार्थीहरू आयात गर्नुहोस्"
+
+msgid "Select CSV file"
+msgstr "CSV फाइल चयन गर्नुहोस्"
+
+msgid "Some users could not be subscribed"
+msgstr "केही प्रयोगकर्ताहरू सदस्यता लिन सकिएन"
+
+msgid "Browse available classes"
+msgstr "उपलब्ध कक्षा ब्राउज गर्नुहोस्"
+
+msgid "Back to linked classes"
+msgstr "लिङ्क गरिएका कक्षामा फर्कनुहोस्"
+
+msgid "No classes are currently linked to this course."
+msgstr "यस कोर्ससँग हाल कुनै कक्षा लिङ्क गरिएको छैन।"
+
+msgid "No available classes were found for this course."
+msgstr "यस कोर्सका लागि कुनै उपलब्ध कक्षा फेला परेन।"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "के तपाईं चयन गरिएका प्रयोगकर्ताहरूलाई सदस्यता रद्द गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Learning path access"
+msgstr "शिक्षण मार्ग पहुँच"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "केवल चयन गरिएका प्रयोगकर्ता र समूहहरूले यो शिक्षण मार्ग पहुँच गर्न सक्छन्। बचत गरेपछि तिनीहरूलाई व्यवस्थापन गर्नुहोस्।"
+
+msgid "All current and future course users can access this learning path."
+msgstr "हालका र भविष्यका सबै कोर्स प्रयोगकर्ताहरूले यो शिक्षण मार्ग पहुँच गर्न सक्छन्।"
+
+msgid "All course users"
+msgstr "सबै कोर्स प्रयोगकर्ता"
+
+msgid "Selected users and groups"
+msgstr "चयन गरिएका प्रयोगकर्ता र समूह"
+
+msgid "No access"
+msgstr "पहुँच छैन"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "यहाँ थपिएका प्रयोगकर्ता र समूहहरूले मात्र यो शिक्षण मार्ग पहुँच गर्न सक्छन्।"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "प्रश्नहरूको संख्या अधिकतम %s सम्म सीमित"
+
+msgid "Open exercise player"
+msgstr "खुला अभ्यास प्लेयर"
+
+msgid "The score is hidden for this exercise."
+msgstr "यो अभ्यासको स्कोर लुकाइएको छ।"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "अभ्यास परिणाम सेटिङ अनुसार सुधार लुकाइएको छ।"
+
+msgid "Progressive adaptive result"
+msgstr "प्रगतिशील अनुकूलन परिणाम"
+
+msgid "Achieved level"
+msgstr "प्राप्त स्तर"
+
+msgid "Correction history"
+msgstr "सुधार इतिहास"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "यो प्रयासका लागि गरिएका म्यानुअल सुधारको इतिहास।"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "यो अभ्यासले राडार/स्पाइडरवेब परिणाम मोड प्रयोग गर्दछ। चार्ट यस पृष्ठमा उपलब्ध छैन।"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "अभ्यास परिणाम सेटिङ अनुसार प्रश्न विवरण लुकाइएको छ।"
+
+msgid "Media question"
+msgstr "मिडिया प्रश्न"
+
+msgid "Pending correction"
+msgstr "सुधार बाँकी"
+
+msgid "No answer"
+msgstr "उत्तर छैन"
+
+msgid "Blank %s"
+msgstr "खाली %s"
+
+msgid "Your order"
+msgstr "तपाईंको क्रम"
+
+msgid "Correct order"
+msgstr "सही क्रम"
+
+msgid "Delineation review"
+msgstr "सीमांकन समीक्षा"
+
+msgid "Learner clicks"
+msgstr "सिकारु क्लिक"
+
+msgid "Question image"
+msgstr "प्रश्न छवि"
+
+msgid "No hotspot image available"
+msgstr "कुनै हटस्पट छवि उपलब्ध छैन"
+
+msgid "Learner delineation"
+msgstr "सिकारु सीमांकन"
+
+msgid "Expected delineation"
+msgstr "अपेक्षित सीमांकन"
+
+msgid "Expected zones"
+msgstr "अपेक्षित क्षेत्र"
+
+msgid "Zone"
+msgstr "क्षेत्र"
+
+msgid "Learner annotation"
+msgstr "सिकारु एनोटेसन"
+
+msgid "No annotation image available"
+msgstr "कुनै एनोटेसन छवि उपलब्ध छैन"
+
+msgid "This answer is pending teacher correction."
+msgstr "यो उत्तर शिक्षक सुधारको लागि बाँकी छ।"
+
+msgid "Teacher comment"
+msgstr "शिक्षक टिप्पणी"
+
+msgid "Teacher correction"
+msgstr "शिक्षक सुधार"
+
+msgid "Save correction"
+msgstr "सुधार बचत गर्नुहोस्"
+
+msgid "Learner audio"
+msgstr "सिकारु अडियो"
+
+msgid "Download audio"
+msgstr "अडियो डाउनलोड गर्नुहोस्"
+
+msgid "No uploaded audio"
+msgstr "कुनै अपलोड गरिएको अडियो छैन"
+
+msgid "Learner Office document"
+msgstr "सिकारु अफिस कागजात"
+
+msgid "Learner file"
+msgstr "सिकारु फाइल"
+
+msgid "Download Office document"
+msgstr "अफिस कागजात डाउनलोड गर्नुहोस्"
+
+msgid "No submitted document"
+msgstr "कुनै पनि कागजात पेस गरिएको छैन"
+
+msgid "No uploaded file"
+msgstr "कुनै पनि फाइल अपलोड गरिएको छैन"
+
+msgid "Content item"
+msgstr "सामग्री वस्तु"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "यो प्रश्न प्रकार यस पृष्ठमा समीक्षा गर्न सकिँदैन।"
+
+msgid "Exercise completed"
+msgstr "अभ्यास सम्पन्न भयो"
+
+msgid "Could not start the attempt"
+msgstr "प्रयास सुरु गर्न सकिएन"
+
+msgid "Invalid exercise attempt"
+msgstr "अवैध अभ्यास प्रयास"
+
+msgid "Could not load exercise result"
+msgstr "अभ्यास परिणाम लोड गर्न सकिएन"
+
+msgid "Could not load AI providers"
+msgstr "AI प्रदायकहरू लोड गर्न सकिएन"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI सुझाव उत्पन्न गर्न सकिएन"
+
+msgid "Correction saved"
+msgstr "सुधार बचत गरियो"
+
+msgid "Could not save correction"
+msgstr "सुधार बचत गर्न सकिएन"
+
+msgid "Create exercise"
+msgstr "अभ्यास सिर्जना गर्नुहोस्"
+
+msgid "Exercise categories"
+msgstr "अभ्यास कोटिहरू"
+
+msgid "Question categories"
+msgstr "प्रश्न कोटिहरू"
+
+msgid "Search by exercise title or description."
+msgstr "अभ्यास शीर्षक वा विवरणद्वारा खोज्नुहोस्।"
+
+msgid "Search exercises"
+msgstr "अभ्यासहरू खोज्नुहोस्"
+
+msgid "No exercises found"
+msgstr "कुनै पनि अभ्यास फेला परेन"
+
+msgid "Open exercise"
+msgstr "अभ्यास खोल्नुहोस्"
+
+msgid "Disable autolaunch"
+msgstr "स्वतः सुरु अक्षम गर्नुहोस्"
+
+msgid "Enable autolaunch"
+msgstr "स्वतः सुरु सक्षम गर्नुहोस्"
+
+msgid "Export QTI2"
+msgstr "QTI2 निर्यात गर्नुहोस्"
+
+msgid "Bulk actions"
+msgstr "थोक कार्यहरू"
+
+msgid "Selected exercises"
+msgstr "चयन गरिएका अभ्यासहरू"
+
+msgid "No exercises selected"
+msgstr "कुनै पनि अभ्यास चयन गरिएको छैन"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "के तपाईं चयन गरिएका अभ्यासहरूमा यो कार्य लागू गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Bulk action completed"
+msgstr "थोक कार्य सम्पन्न भयो"
+
+msgid "Could not update exercises"
+msgstr "अभ्यासहरू अद्यावधिक गर्न सकिएन"
+
+msgid "Could not update exercise"
+msgstr "अभ्यास अद्यावधिक गर्न सकिएन"
+
+msgid "Copy exercise"
+msgstr "अभ्यास प्रतिलिपि गर्नुहोस्"
+
+msgid "Delete exercise"
+msgstr "अभ्यास मेटाउनुहोस्"
+
+msgid "Could not load exercises"
+msgstr "अभ्यासहरू लोड गर्न सकिएन"
+
+msgid "No limit"
+msgstr "कुनै सीमा छैन"
+
+msgid "Add selected questions to the test"
+msgstr "चयन गरिएका प्रश्नहरू परीक्षामा थप्नुहोस्"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "यो प्रश्न सक्रिय परीक्षामा प्रयोग भएको छ र यहाँ सम्पादन गर्न सकिँदैन।"
+
+msgid "This question cannot be edited here."
+msgstr "यो प्रश्न यहाँ सम्पादन गर्न सकिँदैन।"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "यो प्रश्न सक्रिय परीक्षामा प्रयोग भएको छ र यहाँ मेटाउन सकिँदैन।"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "यो प्रश्न मेटाउन सकिँदैन किनकि तपाईंको पहुँच प्लेटफर्म सेटिङद्वारा सीमित छ।"
+
+msgid "Already in test"
+msgstr "पहिले नै परीक्षामा छ"
+
+msgid "Select at least one question."
+msgstr "कम्तीमा एउटा प्रश्न चयन गर्नुहोस्।"
+
+msgid "Question bank updated"
+msgstr "प्रश्न बैंक अद्यावधिक गरियो"
+
+msgid "Could not update the question bank"
+msgstr "प्रश्न बैंक अद्यावधिक गर्न सकिएन"
+
+msgid "Could not load the question bank"
+msgstr "प्रश्न बैंक लोड गर्न सकिएन"
+
+msgid "Total score"
+msgstr "कुल स्कोर"
+
+msgid "Starting"
+msgstr "सुरु गर्दै"
+
+msgid "Attempt history"
+msgstr "प्रयास इतिहास"
+
+msgid "No attempts yet"
+msgstr "अहिलेसम्म कुनै प्रयास छैन"
+
+msgid "Invalid exercise"
+msgstr "अवैध अभ्यास"
+
+msgid "Could not load exercise overview"
+msgstr "अभ्यास अवलोकन लोड गर्न सकिएन"
+
+msgid "Open test"
+msgstr "परीक्षा खोल्नुहोस्"
+
+msgid "Random answers"
+msgstr "अनियमित उत्तरहरू"
+
+msgid "Prevent moving backwards"
+msgstr "पछाडि जान निषेध गर्नुहोस्"
+
+msgid "Previous button hidden"
+msgstr "अघिल्लो बटन लुकाइएको"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "यो अभ्यासले फरक परीक्षण प्लेयर आवश्यक पर्ने विकल्पहरू प्रयोग गर्दछ।"
+
+msgid "Continue test"
+msgstr "परीक्षण जारी राख्नुहोस्"
+
+msgid "Attempt started"
+msgstr "प्रयास सुरु गरियो"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "शिक्षक पूर्वावलोकनले ट्र्याक गरिएको प्रयास सिर्जना गर्दैन।"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "अभ्यास प्रयास सुरु गर्नुहोस् वा पुनः सुरु गर्नुहोस्। अन्तिम बुझाउनुअघि मस्यौदा उत्तरहरू बचत गर्न सकिन्छ।"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "समय सीमा पुग्यो। प्रयास समाप्त गर्दै।"
+
+msgid "Question time reached. Saving your answer."
+msgstr "प्रश्न समय पुग्यो। तपाईंको उत्तर बचत गर्दै।"
+
+msgid "Finishing"
+msgstr "समाप्त गर्दै"
+
+msgid "Draft saved"
+msgstr "मस्यौदा बचत गरियो"
+
+msgid "Statement"
+msgstr "कथन"
+
+msgid "Drop each option on the matching answer"
+msgstr "प्रत्येक विकल्प मिल्दो उत्तरमा छोड्नुहोस्"
+
+msgid "Clear match"
+msgstr "मिलान खाली गर्नुहोस्"
+
+msgid "Click to place the selected option here"
+msgstr "यहाँ चयन गरिएको विकल्प राख्न क्लिक गर्नुहोस्"
+
+msgid "Select an option, then click here"
+msgstr "एउटा विकल्प चयन गर्नुहोस्, त्यसपछि यहाँ क्लिक गर्नुहोस्"
+
+msgid "Already matched"
+msgstr "पहिले नै मिलाइएको"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "तपाईं विकल्पलाई उत्तरमा तान्न सक्नुहुन्छ, वा विकल्प चयन गरेर लक्ष्य बक्समा क्लिक गर्न सक्नुहुन्छ।"
+
+msgid "Put the items in the correct order."
+msgstr "वस्तुहरूलाई सही क्रममा राख्नुहोस्।"
+
+msgid "Move left"
+msgstr "बायाँ सार्नुहोस्"
+
+msgid "Move right"
+msgstr "दायाँ सार्नुहोस्"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "तपाईं वस्तुहरूलाई बायाँ वा दायाँ तान्न सक्नुहुन्छ, वा क्रम परिवर्तन गर्न सार्ने बटनहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "तपाईं वस्तुहरू तान्न सक्नुहुन्छ वा क्रम परिवर्तन गर्न सार्ने बटनहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "Or upload an audio file"
+msgstr "वा अडियो फाइल अपलोड गर्नुहोस्"
+
+msgid "Selected audio"
+msgstr "चयन गरिएको अडियो"
+
+msgid "Uploaded audio"
+msgstr "अपलोड गरिएको अडियो"
+
+msgid "Office document"
+msgstr "अफिस कागजात"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "तलको सम्पादकमा कागजात पूरा गर्नुहोस्। फाइल शिक्षक सुधारका लागि यस प्रयासमा संलग्न गरिनेछ।"
+
+msgid "Reload Office editor"
+msgstr "अफिस सम्पादक पुनः लोड गर्नुहोस्"
+
+msgid "Prepare Office document"
+msgstr "अफिस कागजात तयार गर्नुहोस्"
+
+msgid "Open in new tab"
+msgstr "नयाँ ट्याबमा खोल्नुहोस्"
+
+msgid "Preparing Office document"
+msgstr "अफिस कागजात तयार गर्दै"
+
+msgid "Submitted document"
+msgstr "बुझाइएको कागजात"
+
+msgid "Annotation tools"
+msgstr "एनोटेसन उपकरणहरू"
+
+msgid "Text to place"
+msgstr "राख्ने पाठ"
+
+msgid "Click the image to place the text annotation."
+msgstr "पाठ एनोटेसन राख्न छविमा क्लिक गर्नुहोस्।"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "पथ बिन्दुहरू थप्न छविमा क्लिक गर्नुहोस्। बाटोहरू अलग गर्न नयाँ बाटो सुरु गर्नुहोस्।"
+
+msgid "Start new path"
+msgstr "नयाँ बाटो सुरु गर्नुहोस्"
+
+msgid "Current annotations"
+msgstr "हालका एनोटेसनहरू"
+
+msgid "Remove point"
+msgstr "बिन्दु हटाउनुहोस्"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "सीमांकन बहुभुज कोर्न छविमा क्लिक गर्नुहोस्।"
+
+msgid "Click a marker to remove it."
+msgstr "मार्कर हटाउन क्लिक गर्नुहोस्।"
+
+msgid "Placed"
+msgstr "राखिएको"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "उत्तर चयन गर्नुहोस्, त्यसपछि यसलाई चिन्ह लगाउन छविमा क्लिक गर्नुहोस्।"
+
+msgid "Reading speed"
+msgstr "पढ्ने गति"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "यो प्रश्न प्रकार यस प्लेयरमा प्रदर्शन गर्न सकिँदैन।"
+
+msgid "Save draft"
+msgstr "मस्यौदा बचत गर्नुहोस्"
+
+msgid "I confirm that my answers were saved."
+msgstr "मेरो उत्तरहरू बचत भएको पुष्टि गर्दछु।"
+
+msgid "Finish test"
+msgstr "परीक्षण समाप्त गर्नुहोस्"
+
+msgid "Attempt finished"
+msgstr "प्रयास समाप्त"
+
+msgid "Question category"
+msgstr "प्रश्न कोटि"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "तपाईंले यस प्रश्न कोटिसँग सम्बन्धित प्रश्नहरू समाप्त गर्नुभयो, ती प्रश्नहरूमा फर्केर संशोधन गर्ने तपाईंको अन्तिम मौका हो।"
+
+msgid "Question time left"
+msgstr "प्रश्नको बाँकी समय"
+
+msgid "Time left"
+msgstr "बाँकी समय"
+
+msgid "Current attempt"
+msgstr "हालको प्रयास"
+
+msgid "Could not save draft answer"
+msgstr "ड्राफ्ट उत्तर बचत गर्न सकिएन"
+
+msgid "Could not load exercise"
+msgstr "अभ्यास लोड गर्न सकिएन"
+
+msgid "Draft answer saved"
+msgstr "ड्राफ्ट उत्तर बचत भयो"
+
+msgid "Could not finish the attempt"
+msgstr "प्रयास समाप्त गर्न सकिएन"
+
+msgid "Could not prepare Office document"
+msgstr "अफिस कागजात तयार गर्न सकिएन"
+
+msgid "Back to learner score"
+msgstr "सिकारुको स्कोरमा फर्कनुहोस्"
+
+msgid "Disable auto refresh"
+msgstr "स्वतः रिफ्रेस असक्षम गर्नुहोस्"
+
+msgid "Enable auto refresh"
+msgstr "स्वतः रिफ्रेस सक्षम गर्नुहोस्"
+
+msgid "Live window"
+msgstr "लाइभ विन्डो"
+
+msgid "Ongoing attempts"
+msgstr "चलिरहेका प्रयासहरू"
+
+msgid "Completed attempts"
+msgstr "सम्पन्न प्रयासहरू"
+
+msgid "Started"
+msgstr "सुरु गरिएको"
+
+msgid "Last activity"
+msgstr "अन्तिम गतिविधि"
+
+msgid "Could not load live results"
+msgstr "लाइभ नतिजा लोड गर्न सकिएन"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "यो अभ्यास पढ्न-मात्र हो किनकि यो सिकाइ मार्गमा समावेश गरिएको छ।"
+
+msgid "Select a question type to create a question."
+msgstr "प्रश्न सिर्जना गर्न प्रश्न प्रकार चयन गर्नुहोस्।"
+
+msgid "Click to preview"
+msgstr "पूर्वावलोकनका लागि क्लिक गर्नुहोस्"
+
+msgid "Hide preview"
+msgstr "पूर्वावलोकन लुकाउनुहोस्"
+
+msgid "Shape"
+msgstr "आकार"
+
+msgid "Coordinates"
+msgstr "समन्वय"
+
+msgid "Blanks"
+msgstr "खाली ठाउँहरू"
+
+msgid "Switchable blanks"
+msgstr "स्विच गर्न मिल्ने खाली ठाउँहरू"
+
+msgid "Blank"
+msgstr "खाली ठाउँ"
+
+msgid "Input width"
+msgstr "इनपुट चौडाइ"
+
+msgid "Orientation"
+msgstr "अभिमुखीकरण"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "हालको अभ्यास प्रतिक्रिया मोडसँग उपलब्ध छैन"
+
+msgid "Not available in the learning path creation flow"
+msgstr "सिकाइ मार्ग सिर्जना प्रक्रियामा उपलब्ध छैन"
+
+msgid "Delete question"
+msgstr "प्रश्न मेटाउनुहोस्"
+
+msgid "Could not update exercise questions"
+msgstr "अभ्यास प्रश्नहरू अद्यावधिक गर्न सकिएन"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "अभ्यासलाई सिकाइ मार्गमा थप्न सकिएन"
+
+msgid "A valid exercise id is required."
+msgstr "मान्य अभ्यास आईडी आवश्यक छ।"
+
+msgid "Could not load exercise questions"
+msgstr "अभ्यास प्रश्नहरू लोड गर्न सकिएन"
+
+msgid "Delete selected attempts"
+msgstr "चयन गरिएका प्रयासहरू मेटाउनुहोस्"
+
+msgid "Before date"
+msgstr "मिति अघि"
+
+msgid "Pending corrections"
+msgstr "पेन्डिङ सुधारहरू"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "यो अभ्यास ग्रेडबुकद्वारा लक गरिएको छ। प्रयास सफाइ कार्यहरू असक्षम छन्।"
+
+msgid "No attempts found"
+msgstr "कुनै प्रयास फेला परेन"
+
+msgid "Review"
+msgstr "समीक्षा"
+
+msgid "Print/PDF"
+msgstr "प्रिन्ट/पीडीएफ"
+
+msgid "Could not load exercise report"
+msgstr "अभ्यास प्रतिवेदन लोड गर्न सकिएन"
+
+msgid "Select at least one attempt"
+msgstr "कम्तीमा एउटा प्रयास चयन गर्नुहोस्"
+
+msgid "Delete selected attempts?"
+msgstr "चयन गरिएका प्रयासहरू मेटाउने हो?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "समीक्षा गरिएको प्रयास नतिजा इमेलहरू पठाउने हो?"
+
+msgid "Could not send emails"
+msgstr "इमेलहरू पठाउन सकिएन"
+
+msgid "Exercise result emails sent"
+msgstr "अभ्यास नतिजा इमेलहरू पठाइयो"
+
+msgid "Skipped"
+msgstr "छोडियो"
+
+msgid "Close attempt?"
+msgstr "प्रयास बन्द गर्ने?"
+
+msgid "Attempt closed"
+msgstr "प्रयास बन्द गरियो"
+
+msgid "Could not close attempt"
+msgstr "प्रयास बन्द गर्न सकिएन"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "यो प्रयासको नतिजा सिकारुलाई इमेल मार्फत पठाउने?"
+
+msgid "Email sent"
+msgstr "इमेल पठाइयो"
+
+msgid "Could not send email"
+msgstr "इमेल पठाउन सकिएन"
+
+msgid "Attempt deleted"
+msgstr "प्रयास मेटाइयो"
+
+msgid "Could not delete attempt"
+msgstr "प्रयास मेटाउन सकिएन"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "शीर्षक र विवरण स्तम्भहरू समावेश भएको CSV फाइल चयन गर्नुहोस्।"
+
+msgid "Manage categories used to classify questions."
+msgstr "प्रश्नहरू वर्गीकरण गर्न प्रयोग हुने कोटिहरू व्यवस्थापन गर्नुहोस्।"
+
+msgid "Manage categories used to classify exercises."
+msgstr "अभ्यासहरू वर्गीकरण गर्न प्रयोग हुने कोटिहरू व्यवस्थापन गर्नुहोस्।"
+
+msgid "Could not load categories"
+msgstr "कोटिहरू लोड गर्न सकिएन"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "आयात गरिएका कोटिहरू: %s। छोडिएका पङ्क्तिहरू: %s।"
+
+msgid "Imported categories: %s."
+msgstr "आयात गरिएका कोटिहरू: %s।"
+
+msgid "Could not import categories"
+msgstr "कोटिहरू आयात गर्न सकिएन"
+
+msgid "Could not save category"
+msgstr "कोटि बचत गर्न सकिएन"
+
+msgid "Answer distribution"
+msgstr "उत्तर वितरण"
+
+msgid "Configured answers"
+msgstr "कन्फिगर गरिएका उत्तरहरू"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "केही प्रश्न प्रकारहरूको लागि विस्तृत उत्तर गणना अझै माइग्रेट गरिएको रिपोर्टमा उपलब्ध छैन।"
+
+msgid "No report by question data found"
+msgstr "प्रश्न अनुसारको रिपोर्ट डाटा फेला परेन"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "यो प्रश्न प्रकारको लागि विस्तृत उत्तर गणना अझै माइग्रेट गरिएको रिपोर्टमा उपलब्ध छैन।"
+
+msgid "No answer distribution found"
+msgstr "उत्तर वितरण फेला परेन"
+
+msgid "Could not load report by question"
+msgstr "प्रश्न अनुसारको रिपोर्ट लोड गर्न सकिएन"
+
+msgid "Question settings"
+msgstr "प्रश्न सेटिङहरू"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "समय सीमा नराख्न खाली वा ० छोड्नुहोस्।"
+
+msgid "Time limit in seconds"
+msgstr "सेकेन्डमा समय सीमा"
+
+msgid "Attached questions"
+msgstr "संलग्न प्रश्नहरू"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "हालको अभ्यासभित्र यो मिडिया प्रश्नसँग संलग्न प्रश्नहरू मात्र यहाँ सूचीबद्ध छन्।"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "हालको अभ्यासमा यो मिडिया प्रश्नसँग कुनै प्रश्न संलग्न छैनन्।"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "OnlyOffice सँग सिकारुहरूले सम्पादन गर्ने Office कागजात टेम्प्लेट अपलोड गर्नुहोस्।"
+
+msgid "Replace Office document"
+msgstr "Office कागजात बदल्नुहोस्"
+
+msgid "Current Office document"
+msgstr "हालको Office कागजात"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "सिकारुले सम्पादित कागजात पेस गरेपछि यो प्रश्न म्यानुअल रूपमा सुधारिन्छ।"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "कुल स्कोर हटस्पट स्कोरहरूको योगफलको रूपमा गणना गरिन्छ।"
+
+msgid "Global score"
+msgstr "विश्वव्यापी स्कोर"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "हटस्पट पङ्क्ति चयन गर्नुहोस्, यसको आकार छान्नुहोस्, त्यसपछि छविमाथि कोर्नुहोस्। बहुभुजका लागि, प्रत्येक बिन्दुमा क्लिक गर्नुहोस् र बहुभुज समाप्त गर्नुहोस्, वा समाप्त गर्न डबल-क्लिक गर्नुहोस्।"
+
+msgid "Finish polygon"
+msgstr "बहुभुज समाप्त गर्नुहोस्"
+
+msgid "Calculated answer"
+msgstr "गणना गरिएको उत्तर"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "कृपया तल आफ्नो पाठ टाइप गर्नुहोस् र एक वा बढी खाली ठाउँ परिभाषित गर्न वर्ग कोष्ठक [...] प्रयोग गर्नुहोस्।"
+
+msgid "Lowest value"
+msgstr "सबैभन्दा कम मान"
+
+msgid "Highest value"
+msgstr "सबैभन्दा बढी मान"
+
+msgid "Fill in blanks"
+msgstr "खाली ठाउँ भर्नुहोस्"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "चयन गरिएका मार्करहरू प्रयोग गरेर खाली ठाउँ परिभाषित गर्नुहोस्। उदाहरण: पेरुको राजधानी [लिमा] हो।"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ड्रपडाउन विकल्पहरू प्रविष्ट गर्नुहोस्, एउटा उत्तर प्रति लाइन। त्यसपछि तल अपेक्षित उत्तरहरू चिन्ह लगाउनुहोस्, जस्तै लिगेसी उपकरण।"
+
+msgid "Refresh answers"
+msgstr "उत्तरहरू ताजा गर्नुहोस्"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "यो ड्रपडाउन संयोजन प्रश्नले लिगेसी जस्तै एउटा विश्वव्यापी स्कोर प्रयोग गर्दछ।"
+
+msgid "Please enter at least two dropdown options."
+msgstr "कृपया कम्तिमा दुई ड्रपडाउन विकल्पहरू प्रविष्ट गर्नुहोस्।"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "पहिले गन्तव्य विकल्पहरू सिर्जना गर्नुहोस्, त्यसपछि प्रत्येक वस्तुलाई सही विकल्पसँग लिङ्क गर्नुहोस्।"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "यो मिलान संयोजन प्रश्नले एउटा विश्वव्यापी स्कोर प्रयोग गर्दछ, जस्तै पुरानो प्रणालीमा।"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "चरणहरू सिर्जना गर्नुहोस् र प्रत्येकको लागि अपेक्षित स्थान चयन गर्नुहोस्, जस्तै पुरानो ड्र्यागेबल।"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "सिकारुहरूले सही वा गलत चयन गर्नेछन् र त्यसपछि प्रयासको क्रममा आफ्नो निश्चितताको स्तर चयन गर्नेछन्। सम्पादकले पुरानो प्रणाली जस्तै सही/गलत स्कोर र निश्चितता स्तरहरू भण्डारण गर्दछ।"
+
+msgid "Hotspot combination"
+msgstr "हटस्पट संयोजन"
+
+msgid "Add delineation"
+msgstr "सीमांकन थप्नुहोस्"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो अफिस कागजात प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो अपलोड प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो मौखिक अभिव्यक्ति प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो खुला प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "स्क्रोलिङ गति सेटिङहरूसहित पठन पाठ थप्नुहोस्।"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "स्कोर थप नगरी सामग्री, मिडिया वा पठन सन्दर्भ थप्नुहोस्।"
+
+msgid "Insert a page break without adding score."
+msgstr "स्कोर थप नगरी पृष्ठ ब्रेक घुसाउनुहोस्।"
+
+msgid "Could not save question"
+msgstr "प्रश्न बचत गर्न सकिएन"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "केवल DOC, DOCX, XLS वा XLSX कागजातहरू अनुमति दिइएको छ।"
+
+msgid "Please select an Office document."
+msgstr "कृपया एउटा अफिस कागजात चयन गर्नुहोस्।"
+
+msgid "Please draw at least one hotspot."
+msgstr "कृपया कम्तिमा एउटा हटस्पट कोर्नुहोस्।"
+
+msgid "Please draw at least one delineation."
+msgstr "कृपया कम्तिमा एउटा सीमांकन कोर्नुहोस्।"
+
+msgid "The fill in blanks text is required."
+msgstr "खाली ठाउँ भर्ने पाठ आवश्यक छ।"
+
+msgid "At least one expected answer is required."
+msgstr "कम्तिमा एउटा अपेक्षित उत्तर आवश्यक छ।"
+
+msgid "At least two draggable items are required."
+msgstr "कम्तिमा दुई ड्र्यागेबल वस्तुहरू आवश्यक छन्।"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "प्रत्येक ड्र्यागेबल वस्तु वैध लक्ष्य स्थानसँग जोडिएको हुनुपर्छ।"
+
+msgid "At least two matching options are required."
+msgstr "कम्तिमा दुई मिलान विकल्पहरू आवश्यक छन्।"
+
+msgid "At least two matching pairs are required."
+msgstr "कम्तिमा दुई मिलान जोडीहरू आवश्यक छन्।"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "प्रत्येक मिलान जोडी वैध विकल्पसँग जोडिएको हुनुपर्छ।"
+
+msgid "At least two answers are required."
+msgstr "कम्तिमा दुई उत्तरहरू आवश्यक छन्।"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "प्रत्येक सही/गलत उत्तरमा सही वा गलत चयन गरिएको हुनुपर्छ।"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "एउटा अद्वितीय उत्तर प्रश्नमा ठ्याक्कै एउटा सही उत्तर हुनुपर्छ।"
+
+msgid "At least one correct answer is required."
+msgstr "कम्तिमा एउटा सही उत्तर आवश्यक छ।"
+
+msgid "Could not load question"
+msgstr "प्रश्न लोड गर्न सकिएन"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "पाठ्यक्रम चयन गर्नुहोस् र विश्वव्यापी अभ्यास परिणाम रिपोर्ट CSV को रूपमा निर्यात गर्नुहोस्।"
+
+msgid "Back to reports catalog"
+msgstr "रिपोर्ट क्याटलगमा फर्कनुहोस्"
+
+msgid "Could not load exercise global report"
+msgstr "अभ्यास विश्वव्यापी रिपोर्ट लोड गर्न सकिएन"
+
+msgid "Imported questions"
+msgstr "आयात गरिएका प्रश्नहरू"
+
+msgid "Aiken content"
+msgstr "Aiken सामग्री"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken जनरेटर लोड गर्न सकिएन"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken सामग्री उत्पन्न गर्न सकिएन"
+
+msgid "Could not import generated Aiken content"
+msgstr "उत्पन्न गरिएको Aiken सामग्री आयात गर्न सकिएन"
+
+msgid "Back to my courses"
+msgstr "मेरा पाठ्यक्रमहरूमा फर्कनुहोस्"
+
+msgid "Open report"
+msgstr "रिपोर्ट खोल्नुहोस्"
+
+msgid "Questions with no automatic correction"
+msgstr "स्वचालित सुधार नभएका प्रश्नहरू"
+
+msgid "Could not load pending attempts"
+msgstr "पेन्डिङ प्रयासहरू लोड गर्न सकिएन"
+
+msgid "Skipped questions"
+msgstr "छोडिएका प्रश्नहरू"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken आयातले आयात गरिएका प्रश्नहरूमा यो कुल तौल वितरण गर्दछ जबसम्म प्रश्नले SCORE परिभाषित गर्दैन।"
+
+msgid "Import warnings"
+msgstr "आयात चेतावनीहरू"
+
+msgid "Could not import questions"
+msgstr "प्रश्नहरू आयात गर्न सकिएन"
+
+msgid "No question statistics found"
+msgstr "कुनै प्रश्न तथ्याङ्क फेला परेन"
+
+msgid "Could not load question statistics"
+msgstr "प्रश्न तथ्याङ्क लोड गर्न सकिएन"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "तपाईं निम्न अन्तबिन्दुमा औंल्याएर MCP क्लाइन्ट सिधै जडान गर्न सक्नुहुन्छ:"
+
+msgid "No applications are currently connected to your account."
+msgstr "हाल तपाईंको खातामा कुनै एप्लिकेसनहरू जडान गरिएको छैन।"
+
+msgid "Connected on"
+msgstr "जडान गरिएको मिति"
+
+msgid "Last used"
+msgstr "पछिल्लो प्रयोग"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ले तपाईंको Chamilo खातामा पहुँच गर्न सक्नेछैन। जारी राख्नुहुन्छ?"
+
+msgid "Application revoked"
+msgstr "अनुप्रयोग रद्द गरियो"
+
+msgid "Copied to clipboard"
+msgstr "क्लिपबोर्डमा प्रतिलिपि गरियो"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP अन्त्यबिन्दु प्रतिलिपि गर्न सकिएन"
+
+msgid "MCP endpoint"
+msgstr "MCP अन्त्यबिन्दु"
+
+msgid "API key"
+msgstr "API कुञ्जी"
+
+msgid "Last used at"
+msgstr "पछिल्लो प्रयोग"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "यो कुञ्जी अहिले प्रतिलिपि गर्नुहोस्। यो फेरि देखाइने छैन।"
+
+msgid "Rotate API key"
+msgstr "API कुञ्जी घुमाउनुहोस्"
+
+msgid "Revoke API key"
+msgstr "API कुञ्जी रद्द गर्नुहोस्"
+
+msgid "Remote MCP connection"
+msgstr "दूरस्थ MCP जडान"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "तलका मानहरूसँग आफ्नो MCP क्लाइन्ट कन्फिगर गर्नुहोस्:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "हालको कुञ्जी तुरुन्तै काम गर्न बन्द हुनेछ। जारी राख्नुहुन्छ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "नयाँ व्यक्तिगत MCP API कुञ्जी उत्पन्न गरिनेछ। जारी राख्नुहुन्छ?"
+
+msgid "MCP API key generated"
+msgstr "MCP API कुञ्जी उत्पन्न गरियो"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "यो कुञ्जी प्रयोग गर्ने जडान गरिएका MCP क्लाइन्टहरू तुरुन्तै काम गर्न बन्द हुनेछन्। जारी राख्नुहुन्छ?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API कुञ्जी रद्द गरियो"
+
+msgid "Could not copy the API key"
+msgstr "API कुञ्जी प्रतिलिपि गर्न सकिएन"
+
+msgid "Project"
+msgstr "परियोजना"
+
+msgid "Close old tickets"
+msgstr "पुराना टिकटहरू बन्द गर्नुहोस्"
+
+msgid "Close tickets older than seven days?"
+msgstr "सात दिनभन्दा पुराना टिकटहरू बन्द गर्नुहुन्छ?"
+
+msgid "Assignment history"
+msgstr "असाइनमेन्ट इतिहास"
+
+msgid "Translate with AI"
+msgstr "AI सँग अनुवाद गर्नुहोस्"
+
+msgid "Target language"
+msgstr "लक्ष्य भाषा"
+
+msgid "Please select a provider"
+msgstr "कृपया प्रदायक चयन गर्नुहोस्"
+
+msgid "Generate translation"
+msgstr "अनुवाद उत्पन्न गर्नुहोस्"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "कम्तीमा एउटा नियम र सर्त खण्डमा पाठ हुनुपर्छ।"
+
+msgid "No active target languages are available."
+msgstr "कुनै सक्रिय लक्ष्य भाषाहरू उपलब्ध छैनन्।"
+
+msgid "Tutor"
+msgstr "ट्यूटर"
+
+msgid "Access dates"
+msgstr "पहुँच मितिहरू"
+
+msgid "Coach access dates"
+msgstr "कोच पहुँच मितिहरू"
+
+msgid "No sessions found"
+msgstr "कुनै सत्र फेला परेन"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "यो सत्रमा प्रयोगकर्ताले पहुँच गर्न नसक्ने पाठ्यक्रमहरू चयन गर्नुहोस्।"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "प्रयोगकर्तालाई सत्रका सबै पाठ्यक्रमबाट रोक्न सकिँदैन। यसको सट्टा प्रयोगकर्ता अनसब्स्क्राइब गर्नुहोस्।"
+
+msgid "Users subscribed to this session"
+msgstr "यो सत्रमा सदस्यता लिएका प्रयोगकर्ताहरू"
+
+msgid "No available users found"
+msgstr "कुनै उपलब्ध प्रयोगकर्ता फेला परेन"
+
+msgid "Subscribe this user to the session?"
+msgstr "यो प्रयोगकर्तालाई सत्रमा सदस्यता दिनुहुन्छ?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "चयन गरिएका प्रयोगकर्ताहरूलाई सत्रमा सदस्यता दिनुहुन्छ?"
+
+msgid "General tutor planning"
+msgstr "सामान्य ट्यूटर योजना"
+
+msgid "User is already registered by another tutor."
+msgstr "प्रयोगकर्ता अर्को ट्यूटरद्वारा पहिले नै दर्ता गरिएको छ।"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "तपाईं पाठ्यक्रम ट्यूटर भएकोले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ"
+
+msgid "General tutor"
+msgstr "सामान्य ट्यूटर"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "पाठ्यक्रमहरू, ट्यूटरहरू, प्राविधिक सहायता डेस्क, शिक्षकहरू र/वा उपलब्ध सामग्रीहरूलाई विचार गर्नुहोस्।"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "%s पाठ्यक्रममा शिक्षकको रूपमा सदस्यता लिएका ट्यूटरहरू"
+
+msgid "Tutor name"
+msgstr "ट्यूटरको नाम"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "सत्र ट्यूटरहरू सत्रका समन्वयकर्ता हुन् र सत्रका प्रत्येक पाठ्यक्रमका लागि ट्यूटरको रूपमा काम गर्न सक्छन्। केवल शिक्षक भूमिका भएका प्रयोगकर्ताहरूलाई सत्र ट्यूटरको रूपमा चयन गर्न सकिन्छ।"
+
+msgid "Access start date for tutors"
+msgstr "ट्यूटरहरूका लागि पहुँच सुरु मिति"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "विद्यार्थीहरू जडान हुनुअघि तयारी गर्न सक्ने गरी सत्र ट्यूटरहरूलाई उपलब्ध गराइने मिति"
+
+msgid "Access end date for tutors"
+msgstr "ट्यूटरहरूका लागि पहुँच अन्त्य मिति"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "सत्र ट्युटरहरूका लागि बन्द हुने मिति। थप ढिलाइले उनीहरूलाई सम्बन्धित ट्र्याकिङ जानकारी निर्यात गर्न अनुमति दिनेछ"
+
+msgid "Tutor and student"
+msgstr "ट्युटर र विद्यार्थी"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "यो प्रतिवेदनले चयन गरिएको मिति दायरामा सामान्य ट्युटर अनुसार सत्रहरूको साप्ताहिक वितरण देखाउँछ।"
+
+msgid "User is general tutor in some sessions"
+msgstr "प्रयोगकर्ता केही सत्रहरूमा सामान्य ट्युटर हो"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "शिक्षकहरूलाई सबै कोर्स सत्रहरूमा ट्युटरको रूपमा थपिनेछ।"
+
+msgid "Delete failed: invalid question id."
+msgstr "मेटाउन असफल: अवैध प्रश्न आईडी।"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "सामान्य सत्र ट्युटर प्रति औसत सत्र संख्या"
+
+msgid "No room"
+msgstr "कोठा छैन"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "सत्रमा कोर्स शिक्षकहरूलाई कोर्स ट्युटरको रूपमा आयात गर्नुहोस्"
+
+msgid "Clean and update course tutors"
+msgstr "कोर्स ट्युटरहरू सफा र अद्यावधिक गर्नुहोस्"
+
+msgid "Add me as tutor"
+msgstr "मलाई ट्युटरको रूपमा थप्नुहोस्"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "सर्भेलाई सिकाइ मार्गमा थप्न असमर्थ"
+
+msgid "Access dates for tutors"
+msgstr "ट्युटरहरूका लागि पहुँच मितिहरू"
+
+msgid "Tutor and group member"
+msgstr "ट्युटर र समूह सदस्य"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "तपाईंको दैनिक एआई टोकन सीमा पुगेको छ। कृपया भोलि फेरि प्रयास गर्नुहोस्।"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "तपाईंको मासिक एआई टोकन सीमा पुगेको छ। कृपया अर्को महिना फेरि प्रयास गर्नुहोस्।"
+
+msgid "This course code already exists, please choose another code."
+msgstr "यो कोर्स कोड पहिले नै अवस्थित छ, कृपया अर्को कोड चयन गर्नुहोस्।"
+
+msgid "This course title already exists, please choose another title."
+msgstr "यो कोर्स शीर्षक पहिले नै अवस्थित छ, कृपया अर्को शीर्षक चयन गर्नुहोस्।"
+
+msgid "This tool visibility cannot be changed"
+msgstr "यो उपकरण दृश्यता परिवर्तन गर्न सकिँदैन"
+
+msgid "Invalid visibility"
+msgstr "अवैध दृश्यता"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "तपाईंले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ किनकि तपाईं कोर्स ट्युटरहरूमध्ये एक हुनुहुन्छ"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "तपाईंले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ किनकि तपाईं कोर्स ट्युटर हुनुहुन्छ"
+
+msgid "Manual completion"
+msgstr "म्यानुअल सम्पन्नता"
+
+msgid "Send to tutors"
+msgstr "ट्युटरहरूलाई पठाउनुहोस्"
+
+msgid "Lab title"
+msgstr "ल्याब शीर्षक"
+
+msgid "Lab week"
+msgstr "ल्याब हप्ता"
+
+msgid "Final exam access rule"
+msgstr "अन्तिम परीक्षा पहुँच नियम"
+
+msgid "Course completion rule"
+msgstr "कोर्स सम्पन्नता नियम"
+
+msgid "You have been invited to join a course"
+msgstr "तपाईंलाई कोर्समा सामेल हुन आमन्त्रित गरिएको छ"
+
+msgid "No user has been found"
+msgstr "कुनै प्रयोगकर्ता फेला परेन"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "चयन गरिएको प्रयोगकर्तालाई यस सन्दर्भमा सदस्यता दिन सकिँदैन"
+
+msgid "No change has been made"
+msgstr "कुनै परिवर्तन गरिएको छैन"
+
+msgid "Back to group list"
+msgstr "समूह सूचीमा फर्कनुहोस्"
+
+msgid "Remove class link"
+msgstr "कक्षा लिङ्क हटाउनुहोस्"
+
+msgid "Group settings"
+msgstr "समूह सेटिङहरू"
+
+msgid "Self-registration allowed"
+msgstr "स्व-दर्ता अनुमति दिइएको"
+
+msgid "Self-unregistration allowed"
+msgstr "स्व-अद्यावधिक अनुमति दिइएको"
+
+msgid "This group is linked to the class"
+msgstr "यो समूह कक्षासँग लिङ्क गरिएको छ"
+
+msgid "Create one or more empty course groups"
+msgstr "एक वा बढी खाली कोर्स समूहहरू सिर्जना गर्नुहोस्"
+
+msgid "Number of places"
+msgstr "स्थानहरूको संख्या"
+
+msgid "Base group"
+msgstr "आधार समूह"
+
+msgid "Share"
+msgstr "साझेदारी गर्नुहोस्"
+
+msgid "Collaboration"
+msgstr "सहकार्य"
+
+msgid "The group title is required."
+msgstr "समूह शीर्षक आवश्यक छ।"
+
+msgid "Back to group area"
+msgstr "समूह क्षेत्रमा फर्कनुहोस्"
+
+msgid "Members are managed by the linked class"
+msgstr "सदस्यहरू लिङ्क गरिएको कक्षाद्वारा व्यवस्थापन गरिन्छ"
+
+msgid "%s groups selected"
+msgstr "%s समूहहरू चयन गरिएको"
+
+msgid "Fill selected groups"
+msgstr "चयन गरिएका समूहहरू भर्नुहोस्"
+
+msgid "Empty selected groups"
+msgstr "चयन गरिएका समूहहरू खाली गर्नुहोस्"
+
+msgid "Fill group"
+msgstr "समूह भर्नुहोस्"
+
+msgid "Empty group"
+msgstr "खाली समूह"
+
+msgid "Groups per user"
+msgstr "प्रति प्रयोगकर्ता समूहहरू"
+
+msgid "No tutors"
+msgstr "कुनै ट्यूटरहरू छैनन्"
+
+msgid "No users"
+msgstr "कुनै प्रयोगकर्ताहरू छैनन्"
 

@@ -37505,3 +37505,1431 @@ msgstr "Šiuolaikiška, kviečianti iliustracija, vaizduojanti šio kurso temą,
 msgid "Back to account"
 msgstr "Grįžti į paskyrą"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Jūsų atsiliepimai padės mums tobulinti būsimus mokymus."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Dėkojame, kad pasidalinote savo atsiliepimais."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kiek esate patenkinti bendra mokymų kokybe?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kiek esate patenkinti turinio aktualumu?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kiek esate patenkinti paaiškinimų aiškumu?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kiek esate patenkinti mokymų organizavimu ir tempu?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kiek esate patenkinti praktine to, ko išmokote, nauda?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ar rekomenduotumėte šiuos mokymus kitiems?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ką turėtume tobulinti būsimuose leidiniuose?"
+
+msgid "Very satisfied"
+msgstr "Labai patenkintas (-a)"
+
+msgid "Satisfied"
+msgstr "Patenkintas (-a)"
+
+msgid "Neutral"
+msgstr "Neutralus (-i)"
+
+msgid "Dissatisfied"
+msgstr "Nepatenkintas (-a)"
+
+msgid "Very dissatisfied"
+msgstr "Labai nepatenkintas (-a)"
+
+msgid "Add destination"
+msgstr "Pridėti paskirties vietą"
+
+msgid "Add this test to the assessment tool"
+msgstr "Pridėti šį testą prie vertinimo įrankio"
+
+msgid "Attempts and timing"
+msgstr "Bandymai ir laikas"
+
+msgid "Available questions"
+msgstr "Turimi klausimai"
+
+msgid "Cancel and return to learning path"
+msgstr "Atšaukti ir grįžti į mokymosi kelią"
+
+msgid "Category destinations"
+msgstr "Kategorijų paskirties vietos"
+
+msgid "Classification"
+msgstr "Klasifikacija"
+
+msgid "Context"
+msgstr "Kontekstas"
+
+msgid "Could not load exercise configuration"
+msgstr "Nepavyko įkelti pratimo konfigūracijos"
+
+msgid "Could not save exercise"
+msgstr "Nepavyko išsaugoti pratimo"
+
+msgid "Display and learning path"
+msgstr "Rodymas ir mokymosi kelias"
+
+msgid "Edit test"
+msgstr "Redaguoti testą"
+
+msgid "Exercise settings saved."
+msgstr "Pratimo nustatymai išsaugoti."
+
+msgid "Extra settings"
+msgstr "Papildomi nustatymai"
+
+msgid "Feedback and results"
+msgstr "Grįžtamasis ryšys ir rezultatai"
+
+msgid "Finish exercise"
+msgstr "Baigti pratimą"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Nurodo šio pratimo kalbą kaip ištekliaus metaduomenis. Pats savaime neįgalina paieškos indeksavimo."
+
+msgid "Maximum score (%)"
+msgstr "Maksimalus balas (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metaduomenyse yra pratimams sukonfigūruoti įgūdžiai ir papildomi laukai. Tai neprivaloma ir lieka paslėpta, kol nebus atidaryta."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Šiam pratimui dar nėra prieinamų klausimų kategorijų."
+
+msgid "Question categories matrix"
+msgstr "Klausimų kategorijų matrica"
+
+msgid "Questions behavior"
+msgstr "Klausimų elgsena"
+
+msgid "Random by category"
+msgstr "Atsitiktinai pagal kategoriją"
+
+msgid "Remove destination"
+msgstr "Pašalinti paskirties vietą"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Taisyklės vertinamos pagal balų procentą didėjimo tvarka. Norėdami baigti testą, pasirinkite Baigti pratimą."
+
+msgid "Score and final messages"
+msgstr "Balas ir galutiniai pranešimai"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Kai kurios parinktys užrakinamos sukūrus pratimą."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ši reikšmė saugoma kaip bendra trukmė minutėmis."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Naudokite 0, kad išsaugotumėte visus turimus klausimus. Naudokite -1, jei leidžiami visi turimi klausimai."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Naudokite šiuos laukus pratimui klasifikuoti nepriklausomai nuo jo rodymo parinkčių."
+
+msgid "Invite by email"
+msgstr "Kviesti el. paštu"
+
+msgid "Invitation has been sent"
+msgstr "Kvietimas išsiųstas"
+
+msgid "Sent on"
+msgstr "Išsiųsta"
+
+msgid "Accepted on"
+msgstr "Priimta"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Šis kursas atidarytas sesijoje. Siunčiant kvietimą čia, gavėjas bus užregistruotas visai sesijai %s, o ne tik šiam kursui."
+
+msgid "Revoke"
+msgstr "Atšaukti"
+
+msgid "Revoked"
+msgstr "Atšaukta"
+
+msgid "Invitation has been revoked"
+msgstr "Kvietimas atšauktas"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Ar tikrai norite atšaukti kvietimą, išsiųstą %s?"
+
+msgid "No default room"
+msgstr "Nėra numatytosios patalpos"
+
+msgid "Floor"
+msgstr "Aukštas"
+
+msgid "Capacity"
+msgstr "Talpa"
+
+msgid "Use attendance default room"
+msgstr "Naudoti lankomumo numatytąją patalpą"
+
+msgid "Floor number"
+msgstr "Aukšto numeris"
+
+msgid "Copy to students"
+msgstr "Kopijuoti studentams"
+
+msgid "Generate a quick test on this topic"
+msgstr "Sugeneruoti greitą testą šia tema"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Išsaugotas dokumento turinys bus išsiųstas apdoroti AI modeliui."
+
+msgid "MCP API key"
+msgstr "MCP API raktas"
+
+msgid "Authorized applications"
+msgstr "Įgaliotos programos"
+
+msgid "Your session is about to expire"
+msgstr "Jūsų sesija netrukus baigsis"
+
+msgid "Do you want to continue your session?"
+msgstr "Ar norite tęsti sesiją?"
+
+msgid "Stay connected"
+msgstr "Likti prisijungusiam"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Jūs būsite atjungtas po %s sekundžių."
+
+msgid "No descriptions available yet."
+msgstr "Aprašymų dar nėra."
+
+msgid "%s users selected"
+msgstr "Pasirinkta %s naudotojų"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Pasirinkti naudotojai užregistruoti į kursą"
+
+msgid "Import teachers"
+msgstr "Importuoti dėstytojus"
+
+msgid "Import learners"
+msgstr "Importuoti besimokančiuosius"
+
+msgid "Select CSV file"
+msgstr "Pasirinkti CSV failą"
+
+msgid "Some users could not be subscribed"
+msgstr "Kai kurių vartotojų negalima užregistruoti"
+
+msgid "Browse available classes"
+msgstr "Naršyti galimas klases"
+
+msgid "Back to linked classes"
+msgstr "Grįžti prie susietų klasių"
+
+msgid "No classes are currently linked to this course."
+msgstr "Šiuo metu su šiuo kursu nėra susietų klasių."
+
+msgid "No available classes were found for this course."
+msgstr "Šiam kursui nerasta galimų klasių."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ar tikrai norite atšaukti pasirinktų vartotojų registraciją?"
+
+msgid "Learning path access"
+msgstr "Mokymosi kelio prieiga"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Tik pasirinkti vartotojai ir grupės gali pasiekti šį mokymosi kelią. Tvarkykite juos išsaugoję."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Visi dabartiniai ir būsimi kurso vartotojai gali pasiekti šį mokymosi kelią."
+
+msgid "All course users"
+msgstr "Visi kurso vartotojai"
+
+msgid "Selected users and groups"
+msgstr "Pasirinkti vartotojai ir grupės"
+
+msgid "No access"
+msgstr "Nėra prieigos"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Tik čia pridėti vartotojai ir grupės gali pasiekti šį mokymosi kelią."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Klausimų skaičius ribojamas iki maksimalaus %s"
+
+msgid "Open exercise player"
+msgstr "Atidaryti pratimų grotuvą"
+
+msgid "The score is hidden for this exercise."
+msgstr "Šio pratimo rezultatas paslėptas."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Korekcijos paslėptos pagal pratimo rezultatų nustatymus."
+
+msgid "Progressive adaptive result"
+msgstr "Progresyvus prisitaikantis rezultatas"
+
+msgid "Achieved level"
+msgstr "Pasiektas lygis"
+
+msgid "Correction history"
+msgstr "Korekcijų istorija"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Šio bandymo rankinių korekcijų istorija."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Šis pratimas naudoja radaro/voratinklio rezultatų režimą. Diagrama šiame puslapyje nepasiekiama."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Klausimų detalės paslėptos pagal pratimo rezultatų nustatymus."
+
+msgid "Media question"
+msgstr "Medijos klausimas"
+
+msgid "Pending correction"
+msgstr "Laukiama korekcijos"
+
+msgid "No answer"
+msgstr "Nėra atsakymo"
+
+msgid "Blank %s"
+msgstr "Tuščia %s"
+
+msgid "Your order"
+msgstr "Jūsų tvarka"
+
+msgid "Correct order"
+msgstr "Teisinga tvarka"
+
+msgid "Delineation review"
+msgstr "Apibrėžimo peržiūra"
+
+msgid "Learner clicks"
+msgstr "Besimokančiojo paspaudimai"
+
+msgid "Question image"
+msgstr "Klausimo vaizdas"
+
+msgid "No hotspot image available"
+msgstr "Nėra prieinamo aktyviosios zonos vaizdo"
+
+msgid "Learner delineation"
+msgstr "Besimokančiojo apibrėžimas"
+
+msgid "Expected delineation"
+msgstr "Numatytas apibrėžimas"
+
+msgid "Expected zones"
+msgstr "Numatytos zonos"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "Learner annotation"
+msgstr "Besimokančiojo anotacija"
+
+msgid "No annotation image available"
+msgstr "Nėra prieinamo anotacijos vaizdo"
+
+msgid "This answer is pending teacher correction."
+msgstr "Šis atsakymas laukia mokytojo korekcijos."
+
+msgid "Teacher comment"
+msgstr "Mokytojo komentaras"
+
+msgid "Teacher correction"
+msgstr "Mokytojo korekcija"
+
+msgid "Save correction"
+msgstr "Išsaugoti korekciją"
+
+msgid "Learner audio"
+msgstr "Besimokančiojo garso įrašas"
+
+msgid "Download audio"
+msgstr "Atsisiųsti garso įrašą"
+
+msgid "No uploaded audio"
+msgstr "Nėra įkelto garso įrašo"
+
+msgid "Learner Office document"
+msgstr "Besimokančiojo „Office“ dokumentas"
+
+msgid "Learner file"
+msgstr "Besimokančiojo failas"
+
+msgid "Download Office document"
+msgstr "Atsisiųsti „Office“ dokumentą"
+
+msgid "No submitted document"
+msgstr "Nepateiktas dokumentas"
+
+msgid "No uploaded file"
+msgstr "Neįkeltas failas"
+
+msgid "Content item"
+msgstr "Turinio elementas"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Šio klausimo tipo negalima peržiūrėti šiame puslapyje."
+
+msgid "Exercise completed"
+msgstr "Pratimas baigtas"
+
+msgid "Could not start the attempt"
+msgstr "Nepavyko pradėti bandymo"
+
+msgid "Invalid exercise attempt"
+msgstr "Neteisingas pratimo bandymas"
+
+msgid "Could not load exercise result"
+msgstr "Nepavyko įkelti pratimo rezultato"
+
+msgid "Could not load AI providers"
+msgstr "Nepavyko įkelti DI teikėjų"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nepavyko sugeneruoti DI pasiūlymo"
+
+msgid "Correction saved"
+msgstr "Korekcija išsaugota"
+
+msgid "Could not save correction"
+msgstr "Nepavyko išsaugoti korekcijos"
+
+msgid "Create exercise"
+msgstr "Sukurti pratimą"
+
+msgid "Exercise categories"
+msgstr "Pratimų kategorijos"
+
+msgid "Question categories"
+msgstr "Klausimų kategorijos"
+
+msgid "Search by exercise title or description."
+msgstr "Ieškoti pagal pratimo pavadinimą arba aprašymą."
+
+msgid "Search exercises"
+msgstr "Ieškoti pratimų"
+
+msgid "No exercises found"
+msgstr "Pratimų nerasta"
+
+msgid "Open exercise"
+msgstr "Atidaryti pratimą"
+
+msgid "Disable autolaunch"
+msgstr "Išjungti automatinį paleidimą"
+
+msgid "Enable autolaunch"
+msgstr "Įjungti automatinį paleidimą"
+
+msgid "Export QTI2"
+msgstr "Eksportuoti QTI2"
+
+msgid "Bulk actions"
+msgstr "Masiniai veiksmai"
+
+msgid "Selected exercises"
+msgstr "Pasirinkti pratimai"
+
+msgid "No exercises selected"
+msgstr "Nepasirinkta pratimų"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ar tikrai norite taikyti šį veiksmą pasirinktiems pratimams?"
+
+msgid "Bulk action completed"
+msgstr "Masinis veiksmas atliktas"
+
+msgid "Could not update exercises"
+msgstr "Nepavyko atnaujinti pratimų"
+
+msgid "Could not update exercise"
+msgstr "Nepavyko atnaujinti pratimo"
+
+msgid "Copy exercise"
+msgstr "Kopijuoti pratimą"
+
+msgid "Delete exercise"
+msgstr "Ištrinti pratimą"
+
+msgid "Could not load exercises"
+msgstr "Nepavyko įkelti pratimų"
+
+msgid "No limit"
+msgstr "Be apribojimų"
+
+msgid "Add selected questions to the test"
+msgstr "Pridėti pasirinktus klausimus prie testo"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Šis klausimas naudojamas aktyviame teste ir čia negali būti redaguojamas."
+
+msgid "This question cannot be edited here."
+msgstr "Šio klausimo čia negalima redaguoti."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Šis klausimas naudojamas aktyviame teste ir čia negali būti ištrintas."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Šio klausimo negalima ištrinti, nes jūsų prieiga apribota platformos nustatymų."
+
+msgid "Already in test"
+msgstr "Jau teste"
+
+msgid "Select at least one question."
+msgstr "Pasirinkite bent vieną klausimą."
+
+msgid "Question bank updated"
+msgstr "Klausimų bankas atnaujintas"
+
+msgid "Could not update the question bank"
+msgstr "Nepavyko atnaujinti klausimų banko"
+
+msgid "Could not load the question bank"
+msgstr "Nepavyko įkelti klausimų banko"
+
+msgid "Total score"
+msgstr "Bendras balas"
+
+msgid "Starting"
+msgstr "Pradedama"
+
+msgid "Attempt history"
+msgstr "Bandymų istorija"
+
+msgid "No attempts yet"
+msgstr "Dar nėra bandymų"
+
+msgid "Invalid exercise"
+msgstr "Neteisingas pratimas"
+
+msgid "Could not load exercise overview"
+msgstr "Nepavyko įkelti pratimo apžvalgos"
+
+msgid "Open test"
+msgstr "Atidaryti testą"
+
+msgid "Random answers"
+msgstr "Atsitiktiniai atsakymai"
+
+msgid "Prevent moving backwards"
+msgstr "Neleisti grįžti atgal"
+
+msgid "Previous button hidden"
+msgstr "Ankstesnio mygtuko paslėptas"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Šis pratimas naudoja parinktis, kurioms reikia kito testų leistuvo."
+
+msgid "Continue test"
+msgstr "Tęsti testą"
+
+msgid "Attempt started"
+msgstr "Bandymas pradėtas"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Mokytojo peržiūra nesukuria stebimo bandymo."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Pradėti arba tęsti pratimo bandymą. Juodraščio atsakymus galima išsaugoti prieš galutinį pateikimą."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Laiko limitas pasiektas. Baigiamas bandymas."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Klausimo laikas pasiektas. Jūsų atsakymas išsaugomas."
+
+msgid "Finishing"
+msgstr "Baigiama"
+
+msgid "Draft saved"
+msgstr "Juodraštis išsaugotas"
+
+msgid "Statement"
+msgstr "Teiginys"
+
+msgid "Drop each option on the matching answer"
+msgstr "Nuvilkite kiekvieną parinktį prie atitinkamo atsakymo"
+
+msgid "Clear match"
+msgstr "Išvalyti atitikimą"
+
+msgid "Click to place the selected option here"
+msgstr "Spustelėkite, kad čia patalpintumėte pasirinktą parinktį"
+
+msgid "Select an option, then click here"
+msgstr "Pasirinkite parinktį, tada spustelėkite čia"
+
+msgid "Already matched"
+msgstr "Jau atitinka"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Galite nuvilkti parinktį prie atsakymo arba pasirinkti parinktį ir tada spustelėti tikslinį lauką."
+
+msgid "Put the items in the correct order."
+msgstr "Sudėkite elementus teisinga tvarka."
+
+msgid "Move left"
+msgstr "Perkelti kairėn"
+
+msgid "Move right"
+msgstr "Perkelti dešinėn"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Galite vilkti elementus kairėn arba dešinėn arba naudoti perkėlimo mygtukus tvarkai pakeisti."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Galite vilkti elementus arba naudoti perkėlimo mygtukus tvarkai pakeisti."
+
+msgid "Or upload an audio file"
+msgstr "Arba įkelti garso failą"
+
+msgid "Selected audio"
+msgstr "Pasirinktas garsas"
+
+msgid "Uploaded audio"
+msgstr "Įkeltas garsas"
+
+msgid "Office document"
+msgstr "Biuro dokumentas"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Užpildykite dokumentą žemiau esančiame rengyklėje. Failas bus pridėtas prie šio bandymo mokytojo taisymui."
+
+msgid "Reload Office editor"
+msgstr "Iš naujo įkelti Office rengyklę"
+
+msgid "Prepare Office document"
+msgstr "Paruošti Office dokumentą"
+
+msgid "Open in new tab"
+msgstr "Atidaryti naujoje kortelėje"
+
+msgid "Preparing Office document"
+msgstr "Ruošiamas Office dokumentas"
+
+msgid "Submitted document"
+msgstr "Pateiktas dokumentas"
+
+msgid "Annotation tools"
+msgstr "Anotavimo įrankiai"
+
+msgid "Text to place"
+msgstr "Tekstas, kurį reikia patalpinti"
+
+msgid "Click the image to place the text annotation."
+msgstr "Spustelėkite paveikslėlį, kad patalpintumėte teksto anotaciją."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Spustelėkite paveikslėlį, kad pridėtumėte kelio taškus. Naudokite „Pradėti naują kelią“, kad atskirtumėte kelius."
+
+msgid "Start new path"
+msgstr "Pradėti naują kelią"
+
+msgid "Current annotations"
+msgstr "Dabartinės anotacijos"
+
+msgid "Remove point"
+msgstr "Pašalinti tašką"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Spustelėkite paveikslėlį, kad nubrėžtumėte apibrėžimo daugiakampį."
+
+msgid "Click a marker to remove it."
+msgstr "Spustelėkite žymeklį, kad jį pašalintumėte."
+
+msgid "Placed"
+msgstr "Patalpinta"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Pasirinkite atsakymą, tada spustelėkite paveikslėlį, kad jį pažymėtumėte."
+
+msgid "Reading speed"
+msgstr "Skaitymo greitis"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Šio tipo klausimo negalima rodyti šiame leistuve."
+
+msgid "Save draft"
+msgstr "Išsaugoti juodraštį"
+
+msgid "I confirm that my answers were saved."
+msgstr "Patvirtinu, kad mano atsakymai buvo išsaugoti."
+
+msgid "Finish test"
+msgstr "Baigti testą"
+
+msgid "Attempt finished"
+msgstr "Bandymas baigtas"
+
+msgid "Question category"
+msgstr "Klausimo kategorija"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Baigėte klausimus, susijusius su šia klausimo kategorija. Tai paskutinė galimybė grįžti ir peržiūrėti šiuos klausimus."
+
+msgid "Question time left"
+msgstr "Klausimui likęs laikas"
+
+msgid "Time left"
+msgstr "Likęs laikas"
+
+msgid "Current attempt"
+msgstr "Dabartinis bandymas"
+
+msgid "Could not save draft answer"
+msgstr "Nepavyko išsaugoti juodraščio atsakymo"
+
+msgid "Could not load exercise"
+msgstr "Nepavyko įkelti pratimo"
+
+msgid "Draft answer saved"
+msgstr "Juodraščio atsakymas išsaugotas"
+
+msgid "Could not finish the attempt"
+msgstr "Nepavyko baigti bandymo"
+
+msgid "Could not prepare Office document"
+msgstr "Nepavyko paruošti „Office“ dokumento"
+
+msgid "Back to learner score"
+msgstr "Grįžti prie besimokančiojo rezultatų"
+
+msgid "Disable auto refresh"
+msgstr "Išjungti automatinį atnaujinimą"
+
+msgid "Enable auto refresh"
+msgstr "Įjungti automatinį atnaujinimą"
+
+msgid "Live window"
+msgstr "Gyvas langas"
+
+msgid "Ongoing attempts"
+msgstr "Vykdomi bandymai"
+
+msgid "Completed attempts"
+msgstr "Baigti bandymai"
+
+msgid "Started"
+msgstr "Pradėta"
+
+msgid "Last activity"
+msgstr "Paskutinė veikla"
+
+msgid "Could not load live results"
+msgstr "Nepavyko įkelti gyvų rezultatų"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Šis pratimas skirtas tik skaitymui, nes jis įtrauktas į mokymosi kelią."
+
+msgid "Select a question type to create a question."
+msgstr "Pasirinkite klausimo tipą, kad sukurtumėte klausimą."
+
+msgid "Click to preview"
+msgstr "Spustelėkite peržiūrai"
+
+msgid "Hide preview"
+msgstr "Slėpti peržiūrą"
+
+msgid "Shape"
+msgstr "Forma"
+
+msgid "Coordinates"
+msgstr "Koordinatės"
+
+msgid "Blanks"
+msgstr "Tušti laukai"
+
+msgid "Switchable blanks"
+msgstr "Perjungiami tušti laukai"
+
+msgid "Blank"
+msgstr "Tuščias laukas"
+
+msgid "Input width"
+msgstr "Įvesties plotis"
+
+msgid "Orientation"
+msgstr "Orientacija"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Neprieinama esamu pratimo atsiliepimų režimu"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Neprieinama mokymosi kelio kūrimo eigoje"
+
+msgid "Delete question"
+msgstr "Ištrinti klausimą"
+
+msgid "Could not update exercise questions"
+msgstr "Nepavyko atnaujinti pratimo klausimų"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nepavyko pridėti pratimo prie mokymosi kelio"
+
+msgid "A valid exercise id is required."
+msgstr "Reikalingas galiojantis pratimo ID."
+
+msgid "Could not load exercise questions"
+msgstr "Nepavyko įkelti pratimo klausimų"
+
+msgid "Delete selected attempts"
+msgstr "Ištrinti pasirinktus bandymus"
+
+msgid "Before date"
+msgstr "Prieš datą"
+
+msgid "Pending corrections"
+msgstr "Laukiančios pataisos"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Šis pratimas užrakintas vertinimų knygelės. Bandymų valymo veiksmai išjungti."
+
+msgid "No attempts found"
+msgstr "Bandymų nerasta"
+
+msgid "Review"
+msgstr "Peržiūrėti"
+
+msgid "Print/PDF"
+msgstr "Spausdinti / PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nepavyko įkelti pratimo ataskaitos"
+
+msgid "Select at least one attempt"
+msgstr "Pasirinkite bent vieną bandymą"
+
+msgid "Delete selected attempts?"
+msgstr "Ištrinti pasirinktus bandymus?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Siųsti peržiūrėtų bandymų rezultatų el. laiškus?"
+
+msgid "Could not send emails"
+msgstr "Nepavyko išsiųsti el. laiškų"
+
+msgid "Exercise result emails sent"
+msgstr "Pratimų rezultatų el. laiškai išsiųsti"
+
+msgid "Skipped"
+msgstr "Praleista"
+
+msgid "Close attempt?"
+msgstr "Uždaryti bandymą?"
+
+msgid "Attempt closed"
+msgstr "Bandymas uždarytas"
+
+msgid "Could not close attempt"
+msgstr "Nepavyko uždaryti bandymo"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Siųsti šio bandymo rezultatą el. paštu besimokančiajam?"
+
+msgid "Email sent"
+msgstr "El. laiškas išsiųstas"
+
+msgid "Could not send email"
+msgstr "Nepavyko išsiųsti el. laiško"
+
+msgid "Attempt deleted"
+msgstr "Bandymas ištrintas"
+
+msgid "Could not delete attempt"
+msgstr "Nepavyko ištrinti bandymo"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Pasirinkite CSV failą, kuriame yra pavadinimo ir aprašymo stulpeliai."
+
+msgid "Manage categories used to classify questions."
+msgstr "Tvarkyti kategorijas, naudojamas klausimams klasifikuoti."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Tvarkyti kategorijas, naudojamas pratimams klasifikuoti."
+
+msgid "Could not load categories"
+msgstr "Nepavyko įkelti kategorijų"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importuotos kategorijos: %s. Praleistos eilutės: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importuotos kategorijos: %s."
+
+msgid "Could not import categories"
+msgstr "Nepavyko importuoti kategorijų"
+
+msgid "Could not save category"
+msgstr "Nepavyko išsaugoti kategorijos"
+
+msgid "Answer distribution"
+msgstr "Atsakymų pasiskirstymas"
+
+msgid "Configured answers"
+msgstr "Sukonfigūruoti atsakymai"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Išsami atsakymų skaičiavimo ataskaita kai kuriems klausimų tipams dar nepasiekiama perkeltame ataskaitų rodinyje."
+
+msgid "No report by question data found"
+msgstr "Nerasta ataskaitos pagal klausimą duomenų"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Išsami atsakymų skaičiavimo ataskaita šiam klausimo tipui dar nepasiekiama perkeltame ataskaitų rodinyje."
+
+msgid "No answer distribution found"
+msgstr "Nerastas atsakymų pasiskirstymas"
+
+msgid "Could not load report by question"
+msgstr "Nepavyko įkelti ataskaitos pagal klausimą"
+
+msgid "Question settings"
+msgstr "Klausimo nustatymai"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Palikite tuščią arba 0, jei nėra laiko apribojimo."
+
+msgid "Time limit in seconds"
+msgstr "Laiko limitas sekundėmis"
+
+msgid "Attached questions"
+msgstr "Priskirti klausimai"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Čia rodomi tik tie klausimai, kurie šiame pratime yra priskirti šiam medijos klausimui."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Šiam medijos klausimui šiame pratime nepriskirti jokie klausimai."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Įkelkite „Office“ dokumento šabloną, kurį besimokantieji redaguos naudodami „OnlyOffice“."
+
+msgid "Replace Office document"
+msgstr "Pakeisti „Office“ dokumentą"
+
+msgid "Current Office document"
+msgstr "Dabartinis „Office“ dokumentas"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Šis klausimas taisomas rankiniu būdu, kai besimokantysis pateikia redaguotą dokumentą."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Bendras balas apskaičiuojamas kaip visų aktyviųjų sričių balų suma."
+
+msgid "Global score"
+msgstr "Bendras balas"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Pasirinkite aktyviosios srities eilutę, pasirinkite jos formą, tada pieškite ant paveikslėlio. Daugiakampiams spustelėkite kiekvieną tašką ir užbaikite daugiakampį arba dukart spustelėkite, kad užbaigtumėte."
+
+msgid "Finish polygon"
+msgstr "Užbaigti daugiakampį"
+
+msgid "Calculated answer"
+msgstr "Apskaičiuotas atsakymas"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Įveskite tekstą žemiau ir naudokite laužtinius skliaustus [...] vienam ar keliems tarpams apibrėžti."
+
+msgid "Lowest value"
+msgstr "Mažiausia reikšmė"
+
+msgid "Highest value"
+msgstr "Didžiausia reikšmė"
+
+msgid "Fill in blanks"
+msgstr "Užpildyti tarpus"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Naudokite pasirinktus žymeklius tarpams apibrėžti. Pavyzdys: Peru sostinė yra [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Įveskite išskleidžiamojo sąrašo parinktis, po vieną atsakymą eilutėje. Tada pažymėkite tikėtinus atsakymus žemiau, kaip senajame įrankyje."
+
+msgid "Refresh answers"
+msgstr "Atnaujinti atsakymus"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Šis išskleidžiamojo sąrašo kombinacinis klausimas naudoja vieną bendrą balą, kaip ir senasis."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Įveskite bent dvi išskleidžiamojo sąrašo parinktis."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Pirmiausia sukurkite paskirties parinktis, tada susiekite kiekvieną elementą su tinkama parinktimi."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Šis atitikimo kombinacijos klausimas naudoja vieną bendrą balą, kaip senojoje versijoje."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Sukurkite žingsnius ir pasirinkite kiekvieno laukiamą poziciją, kaip senojoje vilkimo užduotyje."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Besimokantieji pasirinks „Teisinga“ arba „Klaidinga“, o bandymo metu nurodys savo tikrumo laipsnį. Redaktorius saugo tuos pačius Teisingo/Klaidingo balus ir tikrumo lygius kaip senojoje versijoje."
+
+msgid "Hotspot combination"
+msgstr "Karštųjų taškų kombinacija"
+
+msgid "Add delineation"
+msgstr "Pridėti ribojimą"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šis „Office“ dokumento klausimas neturi atsakymų parinkčių. Jo balas priskiriamas taisymo/rezultatų peržiūros metu."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šis įkėlimo klausimas neturi atsakymų parinkčių. Jo balas priskiriamas taisymo/rezultatų peržiūros metu."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šis žodinio atsakymo klausimas neturi atsakymų parinkčių. Jo balas priskiriamas taisymo/rezultatų peržiūros metu."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Šis atviras klausimas neturi atsakymų parinkčių. Jo balas priskiriamas taisymo/rezultatų peržiūros metu."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Pridėti skaitomą tekstą su slinkties greičio nustatymais."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Pridėti turinį, mediją ar skaitymo kontekstą nepridedant balo."
+
+msgid "Insert a page break without adding score."
+msgstr "Įterpti puslapio lūžį nepridedant balo."
+
+msgid "Could not save question"
+msgstr "Nepavyko išsaugoti klausimo"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Leidžiami tik DOC, DOCX, XLS arba XLSX dokumentai."
+
+msgid "Please select an Office document."
+msgstr "Pasirinkite „Office“ dokumentą."
+
+msgid "Please draw at least one hotspot."
+msgstr "Nubrėžkite bent vieną karštąjį tašką."
+
+msgid "Please draw at least one delineation."
+msgstr "Nubrėžkite bent vieną ribojimą."
+
+msgid "The fill in blanks text is required."
+msgstr "Reikalingas užpildyti tuščių vietų tekstas."
+
+msgid "At least one expected answer is required."
+msgstr "Reikalingas bent vienas laukiamas atsakymas."
+
+msgid "At least two draggable items are required."
+msgstr "Reikalingi bent du vilktini elementai."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Kiekvienas vilktinas elementas turi būti susietas su tinkama tiksline pozicija."
+
+msgid "At least two matching options are required."
+msgstr "Reikalingos bent dvi atitikimo parinktys."
+
+msgid "At least two matching pairs are required."
+msgstr "Reikalingos bent dvi atitikimo poros."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Kiekviena atitikimo pora turi būti susieta su tinkama parinktimi."
+
+msgid "At least two answers are required."
+msgstr "Reikalingi bent du atsakymai."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Kiekvienas teisingo/klaidingo atsakymas turi turėti pasirinktą „Teisinga“ arba „Klaidinga“."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Unikalaus atsakymo klausimas turi turėti lygiai vieną teisingą atsakymą."
+
+msgid "At least one correct answer is required."
+msgstr "Reikalingas bent vienas teisingas atsakymas."
+
+msgid "Could not load question"
+msgstr "Nepavyko įkelti klausimo"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Pasirinkite kursą ir eksportuokite bendrą pratimų rezultatų ataskaitą CSV formatu."
+
+msgid "Back to reports catalog"
+msgstr "Grįžti į ataskaitų katalogą"
+
+msgid "Could not load exercise global report"
+msgstr "Nepavyko įkelti bendros pratimų ataskaitos"
+
+msgid "Imported questions"
+msgstr "Importuoti klausimai"
+
+msgid "Aiken content"
+msgstr "Aiken turinys"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Nepavyko įkelti AI Aiken generatoriaus"
+
+msgid "Could not generate Aiken content"
+msgstr "Nepavyko sugeneruoti Aiken turinio"
+
+msgid "Could not import generated Aiken content"
+msgstr "Nepavyko importuoti sugeneruoto Aiken turinio"
+
+msgid "Back to my courses"
+msgstr "Grįžti į mano kursus"
+
+msgid "Open report"
+msgstr "Atidaryti ataskaitą"
+
+msgid "Questions with no automatic correction"
+msgstr "Klausimai be automatinio taisymo"
+
+msgid "Could not load pending attempts"
+msgstr "Nepavyko įkelti laukiančių bandymų"
+
+msgid "Skipped questions"
+msgstr "Praleisti klausimai"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken importas paskirsto šį bendrą svorį tarp importuotų klausimų, nebent klausimas apibrėžia SCORE."
+
+msgid "Import warnings"
+msgstr "Importo įspėjimai"
+
+msgid "Could not import questions"
+msgstr "Nepavyko importuoti klausimų"
+
+msgid "No question statistics found"
+msgstr "Klausimų statistikos nerasta"
+
+msgid "Could not load question statistics"
+msgstr "Nepavyko įkelti klausimų statistikos"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Taip pat galite tiesiogiai prijungti MCP klientą, nurodydami šį galinį tašką:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Šiuo metu prie jūsų paskyros nėra prijungta jokių programų."
+
+msgid "Connected on"
+msgstr "Prisijungta"
+
+msgid "Last used"
+msgstr "Paskutinį kartą naudota"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s nebegalės prisijungti prie jūsų Chamilo paskyros. Tęsti?"
+
+msgid "Application revoked"
+msgstr "Programa atšaukta"
+
+msgid "Copied to clipboard"
+msgstr "Nukopijuota į iškarpinę"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nepavyko nukopijuoti MCP galinio taško"
+
+msgid "MCP endpoint"
+msgstr "MCP galinis taškas"
+
+msgid "API key"
+msgstr "API raktas"
+
+msgid "Last used at"
+msgstr "Paskutinį kartą naudota"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Nukopijuokite šį raktą dabar. Jis daugiau nebus rodomas."
+
+msgid "Rotate API key"
+msgstr "Atnaujinti API raktą"
+
+msgid "Revoke API key"
+msgstr "Atšaukti API raktą"
+
+msgid "Remote MCP connection"
+msgstr "Nuotolinis MCP ryšys"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Sukonfigūruokite savo MCP klientą naudodami šias reikšmes:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Dabartinis raktas iš karto nustos veikti. Tęsti?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Bus sugeneruotas naujas asmeninis MCP API raktas. Tęsti?"
+
+msgid "MCP API key generated"
+msgstr "MCP API raktas sugeneruotas"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "MCP klientai, naudojantys šį raktą, iš karto nustos veikti. Tęsti?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API raktas atšauktas"
+
+msgid "Could not copy the API key"
+msgstr "Nepavyko nukopijuoti API rakto"
+
+msgid "Project"
+msgstr "Projektas"
+
+msgid "Close old tickets"
+msgstr "Uždaryti senus bilietus"
+
+msgid "Close tickets older than seven days?"
+msgstr "Uždaryti bilietus, senesnius nei septynios dienos?"
+
+msgid "Assignment history"
+msgstr "Užduočių istorija"
+
+msgid "Translate with AI"
+msgstr "Versti naudojant DI"
+
+msgid "Target language"
+msgstr "Tikslinė kalba"
+
+msgid "Please select a provider"
+msgstr "Pasirinkite teikėją"
+
+msgid "Generate translation"
+msgstr "Generuoti vertimą"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Bent viename taisyklių ir sąlygų skyriuje turi būti tekstas."
+
+msgid "No active target languages are available."
+msgstr "Nėra aktyvių tikslinių kalbų."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Prieigos datos"
+
+msgid "Coach access dates"
+msgstr "Instruktoriaus prieigos datos"
+
+msgid "No sessions found"
+msgstr "Sesijų nerasta"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Pasirinkite kursus, prie kurių šis vartotojas neturės prieigos šioje sesijoje."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Vartotojas negali būti užblokuotas nuo visų sesijos kursų. Vietoj to atšaukite vartotojo prenumeratą."
+
+msgid "Users subscribed to this session"
+msgstr "Vartotojai, užsiregistravę į šią sesiją"
+
+msgid "No available users found"
+msgstr "Nerasta galimų vartotojų"
+
+msgid "Subscribe this user to the session?"
+msgstr "Užregistruoti šį vartotoją į sesiją?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Užregistruoti pasirinktus vartotojus į sesiją?"
+
+msgid "General tutor planning"
+msgstr "Bendrasis tutoriaus planavimas"
+
+msgid "User is already registered by another tutor."
+msgstr "Vartotojas jau užregistruotas kito tutoriaus."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Gaunate kopiją, nes esate kurso tutorius"
+
+msgid "General tutor"
+msgstr "Bendrasis tutorius"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Atsižvelkite į kursus, tutorius, techninę pagalbą, mokytojus ir/arba turimas medžiagas."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutorai, užsiregistravę kaip mokytojai kurse %s"
+
+msgid "Tutor name"
+msgstr "Tutoriaus vardas"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Sesijos tutoriai yra sesijos koordinatoriai ir gali veikti kaip tutoriai kiekvienam sesijos kursui. Tik vartotojai, turintys mokytojo vaidmenį, gali būti pasirinkti kaip sesijos tutoriai."
+
+msgid "Access start date for tutors"
+msgstr "Tutorių prieigos pradžios data"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Data, nuo kurios sesija tampa prieinama tutoriams, kad jie galėtų ją paruošti prieš prisijungiant studentams"
+
+msgid "Access end date for tutors"
+msgstr "Prieigos pabaigos data dėstytojams"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Data, nuo kurios sesija uždaroma dėstytojams. Papildomas laikas leis jiems eksportuoti visą svarbią stebėjimo informaciją"
+
+msgid "Tutor and student"
+msgstr "Dėstytojas ir studentas"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Šioje ataskaitoje rodomas savaitinis sesijų pasiskirstymas pagal bendrąjį dėstytoją pasirinktu laikotarpiu."
+
+msgid "User is general tutor in some sessions"
+msgstr "Vartotojas yra bendrasis dėstytojas kai kuriose sesijose"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Dėstytojai bus pridėti kaip kurso dėstytojai visose kurso sesijose."
+
+msgid "Delete failed: invalid question id."
+msgstr "Nepavyko ištrinti: neteisingas klausimo ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Vidutinis sesijų skaičius vienam bendrajam sesijos dėstytojui"
+
+msgid "No room"
+msgstr "Nėra patalpos"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importuoti kurso dėstytojus kaip kurso dėstytojus sesijoje"
+
+msgid "Clean and update course tutors"
+msgstr "Išvalyti ir atnaujinti kurso dėstytojus"
+
+msgid "Add me as tutor"
+msgstr "Pridėti mane kaip dėstytoją"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nepavyko pridėti apklausos prie mokymosi kelio"
+
+msgid "Access dates for tutors"
+msgstr "Prieigos datos dėstytojams"
+
+msgid "Tutor and group member"
+msgstr "Dėstytojas ir grupės narys"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Pasiektas jūsų dienos AI žetonų limitas. Bandykite dar kartą rytoj."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Pasiektas jūsų mėnesio AI žetonų limitas. Bandykite dar kartą kitą mėnesį."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Toks kurso kodas jau egzistuoja, pasirinkite kitą kodą."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Toks kurso pavadinimas jau egzistuoja, pasirinkite kitą pavadinimą."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Šio įrankio matomumo negalima keisti"
+
+msgid "Invalid visibility"
+msgstr "Neteisingas matomumas"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Gaunate kopiją, nes esate vienas iš kurso dėstytojų"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Gaunate kopiją, nes esate kurso dėstytojas"
+
+msgid "Manual completion"
+msgstr "Rankinis užbaigimas"
+
+msgid "Send to tutors"
+msgstr "Siųsti dėstytojams"
+
+msgid "Lab title"
+msgstr "Laboratorijos pavadinimas"
+
+msgid "Lab week"
+msgstr "Laboratorijos savaitė"
+
+msgid "Final exam access rule"
+msgstr "Baigiamojo egzamino prieigos taisyklė"
+
+msgid "Course completion rule"
+msgstr "Kurso užbaigimo taisyklė"
+
+msgid "You have been invited to join a course"
+msgstr "Buvote pakviesti prisijungti prie kurso"
+
+msgid "No user has been found"
+msgstr "Vartotojas nerastas"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Pasirinkto vartotojo negalima užregistruoti šiame kontekste"
+
+msgid "No change has been made"
+msgstr "Pakeitimų nebuvo atlikta"
+
+msgid "Back to group list"
+msgstr "Grįžti į grupių sąrašą"
+
+msgid "Remove class link"
+msgstr "Pašalinti klasės nuorodą"
+
+msgid "Group settings"
+msgstr "Grupės nustatymai"
+
+msgid "Self-registration allowed"
+msgstr "Leidžiama savarankiška registracija"
+
+msgid "Self-unregistration allowed"
+msgstr "Leidžiama savarankiška išregistracija"
+
+msgid "This group is linked to the class"
+msgstr "Ši grupė susieta su klase"
+
+msgid "Create one or more empty course groups"
+msgstr "Sukurti vieną ar daugiau tuščių kurso grupių"
+
+msgid "Number of places"
+msgstr "Vietų skaičius"
+
+msgid "Base group"
+msgstr "Bazinė grupė"
+
+msgid "Share"
+msgstr "Dalintis"
+
+msgid "Collaboration"
+msgstr "Bendradarbiavimas"
+
+msgid "The group title is required."
+msgstr "Grupės pavadinimas yra privalomas."
+
+msgid "Back to group area"
+msgstr "Grįžti į grupės sritį"
+
+msgid "Members are managed by the linked class"
+msgstr "Narius valdo susieta klasė"
+
+msgid "%s groups selected"
+msgstr "Pasirinkta %s grupių"
+
+msgid "Fill selected groups"
+msgstr "Užpildyti pasirinktas grupes"
+
+msgid "Empty selected groups"
+msgstr "Išvalyti pasirinktas grupes"
+
+msgid "Fill group"
+msgstr "Užpildyti grupę"
+
+msgid "Empty group"
+msgstr "Ištuštinti grupę"
+
+msgid "Groups per user"
+msgstr "Grupės vienam vartotojui"
+
+msgid "No tutors"
+msgstr "Nėra dėstytojų"
+
+msgid "No users"
+msgstr "Nėra vartotojų"
+

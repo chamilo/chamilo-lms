@@ -17,6 +17,7 @@ class ValidationTokenHelper
     public const int TYPE_TICKET = 1;
     public const int TYPE_USER = 2;
     public const int TYPE_REMEMBER_ME = 3;
+    public const int TYPE_COURSE_INVITATION = 4;
 
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,
@@ -41,6 +42,7 @@ class ValidationTokenHelper
             'ticket' => self::TYPE_TICKET,
             'user' => self::TYPE_USER,
             'remember_me' => self::TYPE_REMEMBER_ME,
+            'course_invitation' => self::TYPE_COURSE_INVITATION,
             default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }
@@ -51,6 +53,7 @@ class ValidationTokenHelper
             self::TYPE_TICKET => 'ticket',
             self::TYPE_USER => 'user',
             self::TYPE_REMEMBER_ME => 'remember_me',
+            self::TYPE_COURSE_INVITATION => 'course_invitation',
             default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }

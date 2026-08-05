@@ -28,6 +28,7 @@ use RuntimeException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
+use const DATE_ATOM;
 use const JSON_THROW_ON_ERROR;
 
 final readonly class ScormRuntimeManager
@@ -63,6 +64,11 @@ final readonly class ScormRuntimeManager
     public function isScormItem(CLpItem $item): bool
     {
         return 'sco' === strtolower(trim($item->getItemType()));
+    }
+
+    public function isScormPackageItem(CLpItem $item): bool
+    {
+        return \in_array(strtolower(trim($item->getItemType())), ['sco', 'asset'], true);
     }
 
     public function resolveVersion(CLp $lp): string
@@ -138,7 +144,11 @@ final readonly class ScormRuntimeManager
      *     itemType: string,
      *     forceCommit: bool,
      *     debug: bool,
-     *     values: array<string, string>
+     *     values: array<string, string>,
+     *     packageEntryPath: string,
+     *     packageParameters: string,
+     *     packageFingerprint: string,
+     *     packageSize: int
      * }
      */
     public function buildRuntimeConfiguration(
@@ -147,43 +157,111 @@ final readonly class ScormRuntimeManager
         ?CLpItemView $itemView,
         User $user,
     ): array {
-        if (!$this->isScormLearningPath($lp)
+        $itemType = strtolower(trim($item->getItemType()));
+        $localPackageItem = $this->isScormLearningPath($lp)
+            && $this->isScormPackageItem($item)
+            && 1 !== preg_match('#^https?://#i', trim((string) $item->getPath()));
+        $packageEntryPath = $localPackageItem ? $this->buildPackageEntryPath($lp, $item) : '';
+        $packageParameters = $localPackageItem ? $this->buildPackageParameters($item) : '';
+        $packageFingerprint = $localPackageItem ? $this->buildPackageFingerprint($lp) : '';
+        $packageSize = $localPackageItem ? max(0, (int) ($lp->getAsset()?->getSize() ?? 0)) : 0;
+        $version = $localPackageItem ? $this->resolveVersion($lp) : '';
+
+        $configuration = [
+            'enabled' => false,
+            'version' => $version,
+            'itemViewId' => 0,
+            'lpViewId' => 0,
+            'userId' => (int) $user->getId(),
+            'lpType' => $lp->getLpType(),
+            'itemType' => $itemType,
+            'forceCommit' => false,
+            'debug' => false,
+            'values' => [],
+            'packageEntryPath' => $packageEntryPath,
+            'packageParameters' => $packageParameters,
+            'packageFingerprint' => $packageFingerprint,
+            'packageSize' => $packageSize,
+        ];
+
+        if (!$localPackageItem
             || !$this->isScormItem($item)
-            || 1 === preg_match('#^https?://#i', trim((string) $item->getPath()))
             || !$itemView instanceof CLpItemView
             || null === $itemView->getIid()
         ) {
-            return [
-                'enabled' => false,
-                'version' => '',
-                'itemViewId' => 0,
-                'lpViewId' => 0,
-                'userId' => 0,
-                'lpType' => 0,
-                'itemType' => '',
-                'forceCommit' => false,
-                'debug' => false,
-                'values' => [],
-            ];
+            return $configuration;
         }
 
-        $version = $this->resolveVersion($lp);
         $values = self::VERSION_2004 === $version
             ? $this->buildScorm2004Values($item, $itemView, $user)
             : $this->buildScorm12Values($item, $itemView, $user);
 
         return [
+            ...$configuration,
             'enabled' => true,
-            'version' => $version,
             'itemViewId' => (int) $itemView->getIid(),
             'lpViewId' => (int) $itemView->getView()->getIid(),
-            'userId' => (int) $user->getId(),
-            'lpType' => $lp->getLpType(),
-            'itemType' => (string) $item->getItemType(),
             'forceCommit' => $lp->getForceCommit(),
             'debug' => $lp->getDebug(),
             'values' => $values,
         ];
+    }
+
+    private function buildPackageEntryPath(CLp $lp, CLpItem $item): string
+    {
+        $lpPath = $this->normalizeRelativePath((string) $lp->getPath(), true);
+        $parts = '' !== $lpPath ? explode('/', $lpPath) : [];
+        if ([] !== $parts) {
+            array_shift($parts);
+        }
+
+        $manifestDirectory = implode('/', $parts);
+        $itemPath = $this->normalizeRelativePath((string) $item->getPath());
+
+        return $this->normalizeRelativePath(
+            ('' !== $manifestDirectory ? $manifestDirectory.'/' : '').$itemPath,
+        );
+    }
+
+    private function buildPackageParameters(CLpItem $item): string
+    {
+        $parameters = ltrim(trim((string) $item->getParameters()), '?&');
+        if ('' === $parameters) {
+            return '';
+        }
+
+        parse_str($parameters, $query);
+        if (!\is_array($query)) {
+            return '';
+        }
+
+        /** @var array<string, scalar> $safeQuery */
+        $safeQuery = [];
+        foreach ($query as $key => $value) {
+            if (\is_scalar($value)) {
+                $safeQuery[(string) $key] = $value;
+            }
+        }
+
+        return http_build_query($safeQuery);
+    }
+
+    private function buildPackageFingerprint(CLp $lp): string
+    {
+        $asset = $lp->getAsset();
+        $assetId = $asset instanceof Asset ? (string) $asset->getId() : '';
+        $updatedAt = $asset instanceof Asset && null !== $asset->getUpdatedAt()
+            ? $asset->getUpdatedAt()->format(DATE_ATOM)
+            : '';
+        $size = $asset instanceof Asset ? (string) max(0, (int) $asset->getSize()) : '0';
+
+        return hash('sha256', implode('|', [
+            (string) $lp->getIid(),
+            (string) $lp->getPath(),
+            $assetId,
+            $updatedAt,
+            $size,
+        ]));
     }
 
     public function resolveAssetFilePath(CLp $lp, string $relativePath): string

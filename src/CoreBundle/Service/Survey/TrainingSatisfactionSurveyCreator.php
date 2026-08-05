@@ -152,7 +152,8 @@ final readonly class TrainingSatisfactionSurveyCreator
             ->setParameter('surveyId', $surveyId, Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->getSingleScalarResult() > 0
+        ;
 
         if (!$verifiedInCourse) {
             throw new RuntimeException('Chamilo created the survey but it could not be verified in the selected course.');
@@ -358,27 +359,21 @@ PROMPT,
      */
     private function fallbackQuestions(string $language): array
     {
-        $spanish = str_starts_with(strtolower($language), 'es');
+        $scale = [
+            get_lang('Very satisfied', $language),
+            get_lang('Satisfied', $language),
+            get_lang('Neutral', $language),
+            get_lang('Dissatisfied', $language),
+            get_lang('Very dissatisfied', $language),
+        ];
 
-        $scale = $spanish
-            ? ['Muy satisfecho', 'Satisfecho', 'Neutral', 'Insatisfecho', 'Muy insatisfecho']
-            : ['Very satisfied', 'Satisfied', 'Neutral', 'Dissatisfied', 'Very dissatisfied'];
-
-        $texts = $spanish
-            ? [
-                '¿Qué tan satisfecho está con la calidad general de la formación?',
-                '¿Qué tan satisfecho está con la relevancia de los contenidos?',
-                '¿Qué tan satisfecho está con la claridad de las explicaciones?',
-                '¿Qué tan satisfecho está con la organización y el ritmo de la formación?',
-                '¿Qué tan satisfecho está con la utilidad práctica de lo aprendido?',
-            ]
-            : [
-                'How satisfied are you with the overall quality of the training?',
-                'How satisfied are you with the relevance of the content?',
-                'How satisfied are you with the clarity of the explanations?',
-                'How satisfied are you with the organization and pace of the training?',
-                'How satisfied are you with the practical usefulness of what you learned?',
-            ];
+        $texts = [
+            get_lang('How satisfied are you with the overall quality of the training?', $language),
+            get_lang('How satisfied are you with the relevance of the content?', $language),
+            get_lang('How satisfied are you with the clarity of the explanations?', $language),
+            get_lang('How satisfied are you with the organization and pace of the training?', $language),
+            get_lang('How satisfied are you with the practical usefulness of what you learned?', $language),
+        ];
 
         $questions = [];
         foreach ($texts as $text) {
@@ -391,29 +386,21 @@ PROMPT,
         }
 
         $questions[] = [
-            'text' => $spanish
-                ? '¿Recomendaría esta formación a otras personas?'
-                : 'Would you recommend this training to other people?',
+            'text' => get_lang('Would you recommend this training to other people?', $language),
             'type' => 'yesno',
             'required' => true,
-            'options' => $spanish ? ['Sí', 'No'] : ['Yes', 'No'],
+            'options' => [get_lang('Yes', $language), get_lang('No', $language)],
         ];
         $questions[] = [
-            'text' => $spanish
-                ? '¿Qué deberíamos mejorar en futuras ediciones?'
-                : 'What should we improve in future editions?',
+            'text' => get_lang('What should we improve in future editions?', $language),
             'type' => 'open',
             'required' => false,
             'options' => [],
         ];
 
         return [
-            'introduction' => $spanish
-                ? 'Su opinión nos ayudará a mejorar futuras formaciones.'
-                : 'Your feedback will help us improve future training sessions.',
-            'thanks' => $spanish
-                ? 'Gracias por compartir su opinión.'
-                : 'Thank you for sharing your feedback.',
+            'introduction' => get_lang('Your feedback will help us improve future training sessions.', $language),
+            'thanks' => get_lang('Thank you for sharing your feedback.', $language),
             'questions' => $questions,
         ];
     }

@@ -37504,3 +37504,1431 @@ msgstr "이 강의 주제를 나타내는 현대적이고 친근한 일러스트
 msgid "Back to account"
 msgstr "계정으로 돌아가기"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "귀하의 피드백은 향후 교육 세션 개선에 도움이 됩니다."
+
+msgid "Thank you for sharing your feedback."
+msgstr "피드백을 공유해 주셔서 감사합니다."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "교육의 전반적인 품질에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "콘텐츠의 관련성에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "설명의 명확성에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "교육의 구성 및 진행 속도에 얼마나 만족하십니까?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "배운 내용의 실질적 유용성에 얼마나 만족하십니까?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "이 교육을 다른 사람에게 추천하시겠습니까?"
+
+msgid "What should we improve in future editions?"
+msgstr "향후 교육에서 개선해야 할 점은 무엇입니까?"
+
+msgid "Very satisfied"
+msgstr "매우 만족"
+
+msgid "Satisfied"
+msgstr "만족"
+
+msgid "Neutral"
+msgstr "보통"
+
+msgid "Dissatisfied"
+msgstr "불만족"
+
+msgid "Very dissatisfied"
+msgstr "매우 불만족"
+
+msgid "Add destination"
+msgstr "대상 추가"
+
+msgid "Add this test to the assessment tool"
+msgstr "이 시험을 평가 도구에 추가"
+
+msgid "Attempts and timing"
+msgstr "응시 및 시간 설정"
+
+msgid "Available questions"
+msgstr "사용 가능한 문제"
+
+msgid "Cancel and return to learning path"
+msgstr "취소하고 학습 경로로 돌아가기"
+
+msgid "Category destinations"
+msgstr "카테고리 대상"
+
+msgid "Classification"
+msgstr "분류"
+
+msgid "Context"
+msgstr "컨텍스트"
+
+msgid "Could not load exercise configuration"
+msgstr "연습 구성 로드 실패"
+
+msgid "Could not save exercise"
+msgstr "연습 저장 실패"
+
+msgid "Display and learning path"
+msgstr "표시 및 학습 경로"
+
+msgid "Edit test"
+msgstr "시험 편집"
+
+msgid "Exercise settings saved."
+msgstr "연습 설정이 저장되었습니다."
+
+msgid "Extra settings"
+msgstr "추가 설정"
+
+msgid "Feedback and results"
+msgstr "피드백 및 결과"
+
+msgid "Finish exercise"
+msgstr "연습 종료"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "이 연습의 언어를 리소스 메타데이터로 식별합니다. 검색 색인 생성은 활성화되지 않습니다."
+
+msgid "Maximum score (%)"
+msgstr "최대 점수 (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "메타데이터에는 연습에 대해 구성된 기술 및 추가 필드가 포함됩니다. 선택 사항이며 열기 전까지 숨겨져 있습니다."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "이 연습에 사용할 수 있는 문제 카테고리가 아직 없습니다."
+
+msgid "Question categories matrix"
+msgstr "문제 카테고리 매트릭스"
+
+msgid "Questions behavior"
+msgstr "문제 동작"
+
+msgid "Random by category"
+msgstr "카테고리별 무작위"
+
+msgid "Remove destination"
+msgstr "대상 제거"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "규칙은 점수 백분율에 따라 오름차순으로 평가됩니다. 시험을 종료하려면 연습 종료를 선택하세요."
+
+msgid "Score and final messages"
+msgstr "점수 및 최종 메시지"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "일부 옵션은 연습이 생성된 후 잠깁니다."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "이 값은 총 소요 시간(분)으로 저장됩니다."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "사용 가능한 모든 문제를 유지하려면 0을 사용하세요. 모든 사용 가능한 문제를 허용하려면 -1을 사용하세요."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "이 필드를 사용하여 연습문제를 표시 옵션과 독립적으로 분류하십시오."
+
+msgid "Invite by email"
+msgstr "이메일로 초대"
+
+msgid "Invitation has been sent"
+msgstr "초대가 전송되었습니다"
+
+msgid "Sent on"
+msgstr "전송일"
+
+msgid "Accepted on"
+msgstr "수락일"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "이 강의는 세션으로 열려 있습니다. 여기에서 초대를 보내면 수신자가 이 강의뿐만 아니라 전체 세션 %s에 등록됩니다."
+
+msgid "Revoke"
+msgstr "취소"
+
+msgid "Revoked"
+msgstr "취소됨"
+
+msgid "Invitation has been revoked"
+msgstr "초대가 취소되었습니다"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "%s에게 보낸 초대를 취소하시겠습니까?"
+
+msgid "No default room"
+msgstr "기본 강의실 없음"
+
+msgid "Floor"
+msgstr "층"
+
+msgid "Capacity"
+msgstr "수용 인원"
+
+msgid "Use attendance default room"
+msgstr "출석 기본 강의실 사용"
+
+msgid "Floor number"
+msgstr "층 번호"
+
+msgid "Copy to students"
+msgstr "학생에게 복사"
+
+msgid "Generate a quick test on this topic"
+msgstr "이 주제로 빠른 테스트 생성"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "저장된 문서 내용이 AI 모델로 전송되어 처리됩니다."
+
+msgid "MCP API key"
+msgstr "MCP API 키"
+
+msgid "Authorized applications"
+msgstr "인증된 애플리케이션"
+
+msgid "Your session is about to expire"
+msgstr "세션이 곧 만료됩니다"
+
+msgid "Do you want to continue your session?"
+msgstr "세션을 계속하시겠습니까?"
+
+msgid "Stay connected"
+msgstr "연결 유지"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s초 후에 로그아웃됩니다."
+
+msgid "No descriptions available yet."
+msgstr "아직 설명이 없습니다."
+
+msgid "%s users selected"
+msgstr "%s명의 사용자 선택됨"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "선택한 사용자가 강의에 등록되었습니다"
+
+msgid "Import teachers"
+msgstr "교사 가져오기"
+
+msgid "Import learners"
+msgstr "학습자 가져오기"
+
+msgid "Select CSV file"
+msgstr "CSV 파일 선택"
+
+msgid "Some users could not be subscribed"
+msgstr "일부 사용자를 등록할 수 없습니다"
+
+msgid "Browse available classes"
+msgstr "사용 가능한 클래스 찾아보기"
+
+msgid "Back to linked classes"
+msgstr "연결된 클래스로 돌아가기"
+
+msgid "No classes are currently linked to this course."
+msgstr "현재 이 강좌에 연결된 클래스가 없습니다."
+
+msgid "No available classes were found for this course."
+msgstr "이 강좌에 사용할 수 있는 클래스를 찾을 수 없습니다."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "선택한 사용자의 등록을 취소하시겠습니까?"
+
+msgid "Learning path access"
+msgstr "학습 경로 접근"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "선택된 사용자와 그룹만 이 학습 경로에 접근할 수 있습니다. 저장 후 관리하세요."
+
+msgid "All current and future course users can access this learning path."
+msgstr "현재 및 미래의 모든 강좌 사용자가 이 학습 경로에 접근할 수 있습니다."
+
+msgid "All course users"
+msgstr "모든 강좌 사용자"
+
+msgid "Selected users and groups"
+msgstr "선택된 사용자와 그룹"
+
+msgid "No access"
+msgstr "접근 불가"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "여기에 추가된 사용자와 그룹만 이 학습 경로에 접근할 수 있습니다."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "문항 수는 최대 %s개로 제한됩니다"
+
+msgid "Open exercise player"
+msgstr "연습 문제 플레이어 열기"
+
+msgid "The score is hidden for this exercise."
+msgstr "이 연습 문제의 점수는 숨겨져 있습니다."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "연습 결과 설정에 따라 정답은 숨겨져 있습니다."
+
+msgid "Progressive adaptive result"
+msgstr "점진적 적응형 결과"
+
+msgid "Achieved level"
+msgstr "달성 수준"
+
+msgid "Correction history"
+msgstr "정답 수정 내역"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "이 시도에 대한 수동 수정 내역입니다."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "이 연습 문제는 레이더/스파이더웹 결과 모드를 사용합니다. 차트는 이 페이지에서 사용할 수 없습니다."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "문항 세부 정보는 연습 결과 설정에 따라 숨겨져 있습니다."
+
+msgid "Media question"
+msgstr "미디어 문항"
+
+msgid "Pending correction"
+msgstr "수정 대기 중"
+
+msgid "No answer"
+msgstr "답변 없음"
+
+msgid "Blank %s"
+msgstr "빈칸 %s"
+
+msgid "Your order"
+msgstr "제출한 순서"
+
+msgid "Correct order"
+msgstr "정답 순서"
+
+msgid "Delineation review"
+msgstr "윤곽선 검토"
+
+msgid "Learner clicks"
+msgstr "학습자 클릭"
+
+msgid "Question image"
+msgstr "문항 이미지"
+
+msgid "No hotspot image available"
+msgstr "핫스팟 이미지를 사용할 수 없습니다"
+
+msgid "Learner delineation"
+msgstr "학습자 윤곽선"
+
+msgid "Expected delineation"
+msgstr "예상 윤곽선"
+
+msgid "Expected zones"
+msgstr "예상 영역"
+
+msgid "Zone"
+msgstr "영역"
+
+msgid "Learner annotation"
+msgstr "학습자 주석"
+
+msgid "No annotation image available"
+msgstr "주석 이미지를 사용할 수 없습니다"
+
+msgid "This answer is pending teacher correction."
+msgstr "이 답변은 교사 수정 대기 중입니다."
+
+msgid "Teacher comment"
+msgstr "교사 코멘트"
+
+msgid "Teacher correction"
+msgstr "교사 수정"
+
+msgid "Save correction"
+msgstr "수정 저장"
+
+msgid "Learner audio"
+msgstr "학습자 오디오"
+
+msgid "Download audio"
+msgstr "오디오 다운로드"
+
+msgid "No uploaded audio"
+msgstr "업로드된 오디오 없음"
+
+msgid "Learner Office document"
+msgstr "학습자 Office 문서"
+
+msgid "Learner file"
+msgstr "학습자 파일"
+
+msgid "Download Office document"
+msgstr "Office 문서 다운로드"
+
+msgid "No submitted document"
+msgstr "제출된 문서 없음"
+
+msgid "No uploaded file"
+msgstr "업로드된 파일 없음"
+
+msgid "Content item"
+msgstr "콘텐츠 항목"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "이 문제 유형은 이 페이지에서 검토할 수 없습니다."
+
+msgid "Exercise completed"
+msgstr "연습 완료"
+
+msgid "Could not start the attempt"
+msgstr "시도를 시작할 수 없습니다"
+
+msgid "Invalid exercise attempt"
+msgstr "유효하지 않은 연습 시도"
+
+msgid "Could not load exercise result"
+msgstr "연습 결과를 불러올 수 없습니다"
+
+msgid "Could not load AI providers"
+msgstr "AI 제공자를 불러올 수 없습니다"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI 제안을 생성할 수 없습니다"
+
+msgid "Correction saved"
+msgstr "채점 저장됨"
+
+msgid "Could not save correction"
+msgstr "채점을 저장할 수 없습니다"
+
+msgid "Create exercise"
+msgstr "연습 생성"
+
+msgid "Exercise categories"
+msgstr "연습 카테고리"
+
+msgid "Question categories"
+msgstr "문제 카테고리"
+
+msgid "Search by exercise title or description."
+msgstr "연습 제목 또는 설명으로 검색하세요."
+
+msgid "Search exercises"
+msgstr "연습 검색"
+
+msgid "No exercises found"
+msgstr "연습을 찾을 수 없습니다"
+
+msgid "Open exercise"
+msgstr "연습 열기"
+
+msgid "Disable autolaunch"
+msgstr "자동 실행 비활성화"
+
+msgid "Enable autolaunch"
+msgstr "자동 실행 활성화"
+
+msgid "Export QTI2"
+msgstr "QTI2 내보내기"
+
+msgid "Bulk actions"
+msgstr "일괄 작업"
+
+msgid "Selected exercises"
+msgstr "선택한 연습"
+
+msgid "No exercises selected"
+msgstr "선택한 연습 없음"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "선택한 연습에 이 작업을 적용하시겠습니까?"
+
+msgid "Bulk action completed"
+msgstr "일괄 작업 완료"
+
+msgid "Could not update exercises"
+msgstr "연습을 업데이트할 수 없습니다"
+
+msgid "Could not update exercise"
+msgstr "연습을 업데이트할 수 없습니다"
+
+msgid "Copy exercise"
+msgstr "연습 복사"
+
+msgid "Delete exercise"
+msgstr "연습 삭제"
+
+msgid "Could not load exercises"
+msgstr "연습을 불러올 수 없습니다"
+
+msgid "No limit"
+msgstr "제한 없음"
+
+msgid "Add selected questions to the test"
+msgstr "선택한 문제를 시험에 추가"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "이 문제는 활성 시험에서 사용 중이므로 여기에서 편집할 수 없습니다."
+
+msgid "This question cannot be edited here."
+msgstr "이 문제는 여기에서 편집할 수 없습니다."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "이 문제는 활성 시험에서 사용 중이므로 여기에서 삭제할 수 없습니다."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "플랫폼 설정에 따라 접근이 제한되어 이 문제를 삭제할 수 없습니다."
+
+msgid "Already in test"
+msgstr "이미 시험에 포함됨"
+
+msgid "Select at least one question."
+msgstr "최소 한 개의 문제를 선택하세요."
+
+msgid "Question bank updated"
+msgstr "문제 은행 업데이트됨"
+
+msgid "Could not update the question bank"
+msgstr "문제 은행을 업데이트할 수 없습니다"
+
+msgid "Could not load the question bank"
+msgstr "문제 은행을 불러올 수 없습니다"
+
+msgid "Total score"
+msgstr "총점"
+
+msgid "Starting"
+msgstr "시작 중"
+
+msgid "Attempt history"
+msgstr "시도 기록"
+
+msgid "No attempts yet"
+msgstr "아직 시도 없음"
+
+msgid "Invalid exercise"
+msgstr "유효하지 않은 연습"
+
+msgid "Could not load exercise overview"
+msgstr "연습 개요를 불러올 수 없습니다"
+
+msgid "Open test"
+msgstr "시험 열기"
+
+msgid "Random answers"
+msgstr "무작위 답안"
+
+msgid "Prevent moving backwards"
+msgstr "뒤로 이동 방지"
+
+msgid "Previous button hidden"
+msgstr "이전 버튼 숨김"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "이 연습은 다른 시험 플레이어가 필요한 옵션을 사용합니다."
+
+msgid "Continue test"
+msgstr "시험 계속하기"
+
+msgid "Attempt started"
+msgstr "응시 시작됨"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "교사 미리보기는 추적되는 응시를 생성하지 않습니다."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "연습 응시를 시작하거나 재개합니다. 최종 제출 전에 임시 답안을 저장할 수 있습니다."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "시간 제한에 도달했습니다. 응시를 종료합니다."
+
+msgid "Question time reached. Saving your answer."
+msgstr "문항 시간에 도달했습니다. 답안을 저장합니다."
+
+msgid "Finishing"
+msgstr "종료 중"
+
+msgid "Draft saved"
+msgstr "임시 저장됨"
+
+msgid "Statement"
+msgstr "문제"
+
+msgid "Drop each option on the matching answer"
+msgstr "각 옵션을 해당 답안에 놓으세요"
+
+msgid "Clear match"
+msgstr "매칭 지우기"
+
+msgid "Click to place the selected option here"
+msgstr "선택한 옵션을 여기에 놓으려면 클릭하세요"
+
+msgid "Select an option, then click here"
+msgstr "옵션을 선택한 후 여기를 클릭하세요"
+
+msgid "Already matched"
+msgstr "이미 매칭됨"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "옵션을 답안으로 드래그하거나 옵션을 선택한 후 대상 상자를 클릭할 수 있습니다."
+
+msgid "Put the items in the correct order."
+msgstr "항목을 올바른 순서로 배치하세요."
+
+msgid "Move left"
+msgstr "왼쪽으로 이동"
+
+msgid "Move right"
+msgstr "오른쪽으로 이동"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "항목을 왼쪽이나 오른쪽으로 드래그하거나 이동 버튼을 사용하여 순서를 변경할 수 있습니다."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "항목을 드래그하거나 이동 버튼을 사용하여 순서를 변경할 수 있습니다."
+
+msgid "Or upload an audio file"
+msgstr "또는 오디오 파일 업로드"
+
+msgid "Selected audio"
+msgstr "선택된 오디오"
+
+msgid "Uploaded audio"
+msgstr "업로드된 오디오"
+
+msgid "Office document"
+msgstr "오피스 문서"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "아래 편집기에서 문서를 완성하세요. 파일은 교사 채점을 위해 이 응시에 첨부됩니다."
+
+msgid "Reload Office editor"
+msgstr "오피스 편집기 새로고침"
+
+msgid "Prepare Office document"
+msgstr "오피스 문서 준비"
+
+msgid "Open in new tab"
+msgstr "새 탭에서 열기"
+
+msgid "Preparing Office document"
+msgstr "오피스 문서 준비 중"
+
+msgid "Submitted document"
+msgstr "제출된 문서"
+
+msgid "Annotation tools"
+msgstr "주석 도구"
+
+msgid "Text to place"
+msgstr "배치할 텍스트"
+
+msgid "Click the image to place the text annotation."
+msgstr "이미지를 클릭하여 텍스트 주석을 배치하세요."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "이미지를 클릭하여 경로 점을 추가하세요. 새 경로 시작을 사용하여 경로를 분리하세요."
+
+msgid "Start new path"
+msgstr "새 경로 시작"
+
+msgid "Current annotations"
+msgstr "현재 주석"
+
+msgid "Remove point"
+msgstr "점 제거"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "이미지를 클릭하여 윤곽 다각형을 그리세요."
+
+msgid "Click a marker to remove it."
+msgstr "마커를 클릭하여 제거하세요."
+
+msgid "Placed"
+msgstr "배치됨"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "답안을 선택한 후 이미지에서 표시하세요."
+
+msgid "Reading speed"
+msgstr "읽기 속도"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "이 문항 유형은 이 플레이어에서 표시할 수 없습니다."
+
+msgid "Save draft"
+msgstr "임시 저장"
+
+msgid "I confirm that my answers were saved."
+msgstr "내 답안이 저장되었음을 확인합니다."
+
+msgid "Finish test"
+msgstr "시험 종료"
+
+msgid "Attempt finished"
+msgstr "응시 종료됨"
+
+msgid "Question category"
+msgstr "문제 범주"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "이 문제 범주와 관련된 문제를 모두 완료했습니다. 이전으로 돌아가 해당 문제를 수정할 수 있는 마지막 기회입니다."
+
+msgid "Question time left"
+msgstr "문제 남은 시간"
+
+msgid "Time left"
+msgstr "남은 시간"
+
+msgid "Current attempt"
+msgstr "현재 시도"
+
+msgid "Could not save draft answer"
+msgstr "임시 답안을 저장할 수 없습니다"
+
+msgid "Could not load exercise"
+msgstr "연습문제를 불러올 수 없습니다"
+
+msgid "Draft answer saved"
+msgstr "임시 답안이 저장되었습니다"
+
+msgid "Could not finish the attempt"
+msgstr "시도를 완료할 수 없습니다"
+
+msgid "Could not prepare Office document"
+msgstr "Office 문서를 준비할 수 없습니다"
+
+msgid "Back to learner score"
+msgstr "학습자 점수로 돌아가기"
+
+msgid "Disable auto refresh"
+msgstr "자동 새로고침 비활성화"
+
+msgid "Enable auto refresh"
+msgstr "자동 새로고침 활성화"
+
+msgid "Live window"
+msgstr "실시간 창"
+
+msgid "Ongoing attempts"
+msgstr "진행 중인 시도"
+
+msgid "Completed attempts"
+msgstr "완료된 시도"
+
+msgid "Started"
+msgstr "시작됨"
+
+msgid "Last activity"
+msgstr "마지막 활동"
+
+msgid "Could not load live results"
+msgstr "실시간 결과를 불러올 수 없습니다"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "이 연습문제는 학습 경로에 포함되어 있어 읽기 전용입니다."
+
+msgid "Select a question type to create a question."
+msgstr "문제를 생성하려면 문제 유형을 선택하세요."
+
+msgid "Click to preview"
+msgstr "미리보기 클릭"
+
+msgid "Hide preview"
+msgstr "미리보기 숨기기"
+
+msgid "Shape"
+msgstr "도형"
+
+msgid "Coordinates"
+msgstr "좌표"
+
+msgid "Blanks"
+msgstr "빈칸"
+
+msgid "Switchable blanks"
+msgstr "전환 가능한 빈칸"
+
+msgid "Blank"
+msgstr "빈칸"
+
+msgid "Input width"
+msgstr "입력 너비"
+
+msgid "Orientation"
+msgstr "방향"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "현재 연습문제 피드백 모드에서는 사용할 수 없습니다"
+
+msgid "Not available in the learning path creation flow"
+msgstr "학습 경로 생성 흐름에서는 사용할 수 없습니다"
+
+msgid "Delete question"
+msgstr "문제 삭제"
+
+msgid "Could not update exercise questions"
+msgstr "연습문제 문제를 업데이트할 수 없습니다"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "연습문제를 학습 경로에 추가할 수 없습니다"
+
+msgid "A valid exercise id is required."
+msgstr "유효한 연습문제 ID가 필요합니다."
+
+msgid "Could not load exercise questions"
+msgstr "연습문제 문제를 불러올 수 없습니다"
+
+msgid "Delete selected attempts"
+msgstr "선택한 시도 삭제"
+
+msgid "Before date"
+msgstr "이전 날짜"
+
+msgid "Pending corrections"
+msgstr "보류 중인 채점"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "이 연습문제는 성적부에 의해 잠겨 있습니다. 시도 정리 작업이 비활성화됩니다."
+
+msgid "No attempts found"
+msgstr "시도를 찾을 수 없습니다"
+
+msgid "Review"
+msgstr "검토"
+
+msgid "Print/PDF"
+msgstr "인쇄/PDF"
+
+msgid "Could not load exercise report"
+msgstr "연습문제 보고서를 불러올 수 없습니다"
+
+msgid "Select at least one attempt"
+msgstr "시도를 하나 이상 선택하세요"
+
+msgid "Delete selected attempts?"
+msgstr "선택한 시도를 삭제하시겠습니까?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "검토된 시도 결과 이메일을 보내시겠습니까?"
+
+msgid "Could not send emails"
+msgstr "이메일을 보낼 수 없습니다"
+
+msgid "Exercise result emails sent"
+msgstr "연습문제 결과 이메일이 전송되었습니다"
+
+msgid "Skipped"
+msgstr "건너뜀"
+
+msgid "Close attempt?"
+msgstr "시도 종료?"
+
+msgid "Attempt closed"
+msgstr "시도 종료됨"
+
+msgid "Could not close attempt"
+msgstr "시도를 종료할 수 없습니다"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "이 시도 결과를 학습자에게 이메일로 전송하시겠습니까?"
+
+msgid "Email sent"
+msgstr "이메일 전송됨"
+
+msgid "Could not send email"
+msgstr "이메일을 전송할 수 없습니다"
+
+msgid "Attempt deleted"
+msgstr "시도 삭제됨"
+
+msgid "Could not delete attempt"
+msgstr "시도를 삭제할 수 없습니다"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "제목과 설명 열이 포함된 CSV 파일을 선택하세요."
+
+msgid "Manage categories used to classify questions."
+msgstr "질문 분류에 사용되는 범주를 관리합니다."
+
+msgid "Manage categories used to classify exercises."
+msgstr "연습 문제 분류에 사용되는 범주를 관리합니다."
+
+msgid "Could not load categories"
+msgstr "범주를 불러올 수 없습니다"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "가져온 범주: %s. 건너뛴 행: %s."
+
+msgid "Imported categories: %s."
+msgstr "가져온 범주: %s."
+
+msgid "Could not import categories"
+msgstr "범주를 가져올 수 없습니다"
+
+msgid "Could not save category"
+msgstr "범주를 저장할 수 없습니다"
+
+msgid "Answer distribution"
+msgstr "답변 분포"
+
+msgid "Configured answers"
+msgstr "구성된 답변"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "일부 문제 유형에 대한 상세 답변 집계는 아직 마이그레이션된 보고서에서 사용할 수 없습니다."
+
+msgid "No report by question data found"
+msgstr "문제별 보고서 데이터를 찾을 수 없습니다"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "이 문제 유형에 대한 상세 답변 집계는 아직 마이그레이션된 보고서에서 사용할 수 없습니다."
+
+msgid "No answer distribution found"
+msgstr "답변 분포를 찾을 수 없습니다"
+
+msgid "Could not load report by question"
+msgstr "문제별 보고서를 불러올 수 없습니다"
+
+msgid "Question settings"
+msgstr "문제 설정"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "시간 제한이 없으면 비워 두거나 0으로 설정하세요."
+
+msgid "Time limit in seconds"
+msgstr "시간 제한(초)"
+
+msgid "Attached questions"
+msgstr "첨부된 문제"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "현재 연습 문제 내 이 미디어 문제에 첨부된 문제만 여기에 표시됩니다."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "현재 연습 문제에서 이 미디어 문제에 첨부된 문제가 없습니다."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "학습자가 OnlyOffice로 편집할 Office 문서 템플릿을 업로드하세요."
+
+msgid "Replace Office document"
+msgstr "Office 문서 교체"
+
+msgid "Current Office document"
+msgstr "현재 Office 문서"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "이 문제는 학습자가 편집한 문서를 제출한 후 수동으로 채점됩니다."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "총 점수는 핫스팟 점수의 합으로 계산됩니다."
+
+msgid "Global score"
+msgstr "전체 점수"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "핫스팟 행을 선택하고 모양을 지정한 다음 이미지 위에 그립니다. 다각형의 경우 각 점을 클릭하고 다각형을 완성하거나, 더블 클릭하여 완성하세요."
+
+msgid "Finish polygon"
+msgstr "다각형 완성"
+
+msgid "Calculated answer"
+msgstr "계산된 답변"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "아래에 텍스트를 입력하고 대괄호 [...]를 사용하여 하나 이상의 빈칸을 정의하세요."
+
+msgid "Lowest value"
+msgstr "최소값"
+
+msgid "Highest value"
+msgstr "최대값"
+
+msgid "Fill in blanks"
+msgstr "빈칸 채우기"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "선택한 마커를 사용하여 빈칸을 정의하세요. 예: 페루의 수도는 [리마]입니다."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "드롭다운 옵션을 한 줄에 하나씩 입력하세요. 그런 다음 아래에서 정답을 표시하세요(기존 도구와 동일)."
+
+msgid "Refresh answers"
+msgstr "답변 새로고침"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "이 드롭다운 조합 문제는 기존 방식과 동일하게 하나의 전체 점수를 사용합니다."
+
+msgid "Please enter at least two dropdown options."
+msgstr "드롭다운 옵션을 두 개 이상 입력하세요."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "먼저 대상 옵션을 생성한 다음 각 항목을 올바른 옵션에 연결하세요."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "이 매칭 조합 문제는 기존 방식과 동일하게 하나의 전체 점수를 사용합니다."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "단계를 생성하고 각 단계의 예상 위치를 선택하세요. 기존 드래그 앤 드롭 방식과 유사합니다."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "학습자는 시도 중에 참 또는 거짓을 선택한 후 확신도를 선택합니다. 편집기는 기존과 동일한 정답/오답 점수와 확신 수준을 저장합니다."
+
+msgid "Hotspot combination"
+msgstr "핫스팟 조합"
+
+msgid "Add delineation"
+msgstr "경계선 추가"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "이 Office 문서 문제에는 답안 옵션이 없습니다. 점수는 채점/결과 검토 중에 부여됩니다."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "이 업로드 문제에는 답안 옵션이 없습니다. 점수는 채점/결과 검토 중에 부여됩니다."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "이 구두 표현 문제에는 답안 옵션이 없습니다. 점수는 채점/결과 검토 중에 부여됩니다."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "이 서술형 문제에는 답안 옵션이 없습니다. 점수는 채점/결과 검토 중에 부여됩니다."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "스크롤 속도 설정이 포함된 읽기 텍스트를 추가합니다."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "점수 없이 콘텐츠, 미디어 또는 읽기 맥락을 추가합니다."
+
+msgid "Insert a page break without adding score."
+msgstr "점수 없이 페이지 나누기를 삽입합니다."
+
+msgid "Could not save question"
+msgstr "문제를 저장할 수 없습니다"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "DOC, DOCX, XLS 또는 XLSX 문서만 허용됩니다."
+
+msgid "Please select an Office document."
+msgstr "Office 문서를 선택하세요."
+
+msgid "Please draw at least one hotspot."
+msgstr "최소 하나의 핫스팟을 그려야 합니다."
+
+msgid "Please draw at least one delineation."
+msgstr "최소 하나의 경계선을 그려야 합니다."
+
+msgid "The fill in blanks text is required."
+msgstr "빈칸 채우기 텍스트가 필요합니다."
+
+msgid "At least one expected answer is required."
+msgstr "최소 하나의 예상 답안이 필요합니다."
+
+msgid "At least two draggable items are required."
+msgstr "최소 두 개의 드래그 가능한 항목이 필요합니다."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "각 드래그 가능한 항목은 유효한 대상 위치와 연결되어야 합니다."
+
+msgid "At least two matching options are required."
+msgstr "최소 두 개의 매칭 옵션이 필요합니다."
+
+msgid "At least two matching pairs are required."
+msgstr "최소 두 개의 매칭 쌍이 필요합니다."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "각 매칭 쌍은 유효한 옵션과 연결되어야 합니다."
+
+msgid "At least two answers are required."
+msgstr "최소 두 개의 답안이 필요합니다."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "각 참/거짓 답안은 참 또는 거짓을 선택해야 합니다."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "유일 답안 문제는 정확히 하나의 정답을 가져야 합니다."
+
+msgid "At least one correct answer is required."
+msgstr "최소 하나의 정답이 필요합니다."
+
+msgid "Could not load question"
+msgstr "문제를 불러올 수 없습니다"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "과정을 선택하고 전체 시험 결과 보고서를 CSV로 내보냅니다."
+
+msgid "Back to reports catalog"
+msgstr "보고서 카탈로그로 돌아가기"
+
+msgid "Could not load exercise global report"
+msgstr "시험 전체 보고서를 불러올 수 없습니다"
+
+msgid "Imported questions"
+msgstr "가져온 문제"
+
+msgid "Aiken content"
+msgstr "Aiken 콘텐츠"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken 생성기를 불러올 수 없습니다"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken 콘텐츠를 생성할 수 없습니다"
+
+msgid "Could not import generated Aiken content"
+msgstr "생성된 Aiken 콘텐츠를 가져올 수 없습니다"
+
+msgid "Back to my courses"
+msgstr "내 과정으로 돌아가기"
+
+msgid "Open report"
+msgstr "보고서 열기"
+
+msgid "Questions with no automatic correction"
+msgstr "자동 채점이 없는 문제"
+
+msgid "Could not load pending attempts"
+msgstr "보류 중인 시도를 불러올 수 없습니다"
+
+msgid "Skipped questions"
+msgstr "건너뛴 문제"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken 가져오기는 질문에 SCORE가 정의되지 않은 경우 가져온 문제 전체에 이 총 가중치를 분배합니다."
+
+msgid "Import warnings"
+msgstr "가져오기 경고"
+
+msgid "Could not import questions"
+msgstr "문제를 가져올 수 없습니다"
+
+msgid "No question statistics found"
+msgstr "문제 통계를 찾을 수 없습니다"
+
+msgid "Could not load question statistics"
+msgstr "문제 통계를 불러올 수 없습니다"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "다음 엔드포인트를 가리켜 MCP 클라이언트를 직접 연결할 수도 있습니다:"
+
+msgid "No applications are currently connected to your account."
+msgstr "현재 계정에 연결된 애플리케이션이 없습니다."
+
+msgid "Connected on"
+msgstr "연결된 날짜"
+
+msgid "Last used"
+msgstr "마지막 사용"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s 님은 더 이상 Chamilo 계정에 접근할 수 없습니다. 계속하시겠습니까?"
+
+msgid "Application revoked"
+msgstr "애플리케이션 취소됨"
+
+msgid "Copied to clipboard"
+msgstr "클립보드에 복사됨"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP 엔드포인트를 복사할 수 없습니다"
+
+msgid "MCP endpoint"
+msgstr "MCP 엔드포인트"
+
+msgid "API key"
+msgstr "API 키"
+
+msgid "Last used at"
+msgstr "마지막 사용 시각"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "이 키를 지금 복사하세요. 다시 표시되지 않습니다."
+
+msgid "Rotate API key"
+msgstr "API 키 교체"
+
+msgid "Revoke API key"
+msgstr "API 키 취소"
+
+msgid "Remote MCP connection"
+msgstr "원격 MCP 연결"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "MCP 클라이언트를 다음 값으로 구성하세요:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "현재 키는 즉시 작동이 중지됩니다. 계속하시겠습니까?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "새로운 개인 MCP API 키가 생성됩니다. 계속하시겠습니까?"
+
+msgid "MCP API key generated"
+msgstr "MCP API 키가 생성됨"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "이 키를 사용하는 연결된 MCP 클라이언트는 즉시 작동이 중지됩니다. 계속하시겠습니까?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API 키 취소됨"
+
+msgid "Could not copy the API key"
+msgstr "API 키를 복사할 수 없습니다"
+
+msgid "Project"
+msgstr "프로젝트"
+
+msgid "Close old tickets"
+msgstr "오래된 티켓 닫기"
+
+msgid "Close tickets older than seven days?"
+msgstr "7일 이상 된 티켓을 닫으시겠습니까?"
+
+msgid "Assignment history"
+msgstr "과제 기록"
+
+msgid "Translate with AI"
+msgstr "AI로 번역"
+
+msgid "Target language"
+msgstr "대상 언어"
+
+msgid "Please select a provider"
+msgstr "제공자를 선택하세요"
+
+msgid "Generate translation"
+msgstr "번역 생성"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "이용 약관 섹션 중 하나 이상에 텍스트가 포함되어야 합니다."
+
+msgid "No active target languages are available."
+msgstr "활성화된 대상 언어가 없습니다."
+
+msgid "Tutor"
+msgstr "튜터"
+
+msgid "Access dates"
+msgstr "접근 기간"
+
+msgid "Coach access dates"
+msgstr "코치 접근 기간"
+
+msgid "No sessions found"
+msgstr "세션을 찾을 수 없습니다"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "이 세션에서 이 사용자가 접근할 수 없는 강좌를 선택하세요."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "사용자는 세션의 모든 강좌에서 차단될 수 없습니다. 대신 사용자를 구독 취소하세요."
+
+msgid "Users subscribed to this session"
+msgstr "이 세션에 구독된 사용자"
+
+msgid "No available users found"
+msgstr "사용 가능한 사용자를 찾을 수 없습니다"
+
+msgid "Subscribe this user to the session?"
+msgstr "이 사용자를 세션에 구독하시겠습니까?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "선택한 사용자를 세션에 구독하시겠습니까?"
+
+msgid "General tutor planning"
+msgstr "일반 튜터 계획"
+
+msgid "User is already registered by another tutor."
+msgstr "다른 튜터가 이미 등록했습니다."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "강좌 튜터이므로 사본을 받습니다"
+
+msgid "General tutor"
+msgstr "일반 튜터"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "강좌, 튜터, 기술 지원팀, 교사 및/또는 사용 가능한 자료를 고려하세요."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "%s 강좌에서 교사로 구독된 튜터"
+
+msgid "Tutor name"
+msgstr "튜터 이름"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "세션 튜터는 세션의 조정자이며 세션 내 각 강좌의 튜터 역할을 수행할 수 있습니다. 교사 역할을 가진 사용자만 세션 튜터로 선택할 수 있습니다."
+
+msgid "Access start date for tutors"
+msgstr "튜터 접근 시작일"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "학생이 접속하기 전에 준비할 수 있도록 세션이 튜터에게 제공되는 날짜"
+
+msgid "Access end date for tutors"
+msgstr "튜터 접근 종료일"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "세션이 튜터에게 닫히는 날짜. 추가 지연은 관련 추적 정보를 모두 내보낼 수 있게 합니다"
+
+msgid "Tutor and student"
+msgstr "튜터 및 학생"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "이 보고서는 선택한 기간 동안 일반 튜터별 세션 주간 분포를 보여줍니다."
+
+msgid "User is general tutor in some sessions"
+msgstr "사용자는 일부 세션의 일반 튜터입니다"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "교사는 모든 코스 세션에 튜터로 추가됩니다."
+
+msgid "Delete failed: invalid question id."
+msgstr "삭제 실패: 잘못된 질문 ID입니다."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "일반 세션 튜터당 평균 세션 수"
+
+msgid "No room"
+msgstr "강의실 없음"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "코스 교사를 세션의 코스 튜터로 가져오기"
+
+msgid "Clean and update course tutors"
+msgstr "코스 튜터 정리 및 업데이트"
+
+msgid "Add me as tutor"
+msgstr "나를 튜터로 추가"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "학습 경로에 설문을 추가할 수 없습니다"
+
+msgid "Access dates for tutors"
+msgstr "튜터 접근 날짜"
+
+msgid "Tutor and group member"
+msgstr "튜터 및 그룹 구성원"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "일일 AI 토큰 한도에 도달했습니다. 내일 다시 시도하세요."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "월간 AI 토큰 한도에 도달했습니다. 다음 달에 다시 시도하세요."
+
+msgid "This course code already exists, please choose another code."
+msgstr "이 코스 코드가 이미 존재합니다. 다른 코드를 선택하세요."
+
+msgid "This course title already exists, please choose another title."
+msgstr "이 코스 제목이 이미 존재합니다. 다른 제목을 선택하세요."
+
+msgid "This tool visibility cannot be changed"
+msgstr "이 도구의 표시 여부는 변경할 수 없습니다"
+
+msgid "Invalid visibility"
+msgstr "잘못된 표시 여부"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "코스 튜터 중 한 명이므로 사본을 받습니다"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "코스 튜터이므로 사본을 받습니다"
+
+msgid "Manual completion"
+msgstr "수동 완료"
+
+msgid "Send to tutors"
+msgstr "튜터에게 보내기"
+
+msgid "Lab title"
+msgstr "실험실 제목"
+
+msgid "Lab week"
+msgstr "실험실 주차"
+
+msgid "Final exam access rule"
+msgstr "기말고사 접근 규칙"
+
+msgid "Course completion rule"
+msgstr "코스 완료 규칙"
+
+msgid "You have been invited to join a course"
+msgstr "코스 참여 초대를 받았습니다"
+
+msgid "No user has been found"
+msgstr "사용자를 찾을 수 없습니다"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "선택한 사용자는 이 컨텍스트에 등록할 수 없습니다"
+
+msgid "No change has been made"
+msgstr "변경 사항이 없습니다"
+
+msgid "Back to group list"
+msgstr "그룹 목록으로 돌아가기"
+
+msgid "Remove class link"
+msgstr "클래스 링크 제거"
+
+msgid "Group settings"
+msgstr "그룹 설정"
+
+msgid "Self-registration allowed"
+msgstr "자체 등록 허용"
+
+msgid "Self-unregistration allowed"
+msgstr "자체 등록 취소 허용"
+
+msgid "This group is linked to the class"
+msgstr "이 그룹은 클래스에 연결되어 있습니다"
+
+msgid "Create one or more empty course groups"
+msgstr "하나 이상의 빈 코스 그룹 만들기"
+
+msgid "Number of places"
+msgstr "자리 수"
+
+msgid "Base group"
+msgstr "기본 그룹"
+
+msgid "Share"
+msgstr "공유"
+
+msgid "Collaboration"
+msgstr "협업"
+
+msgid "The group title is required."
+msgstr "그룹 제목은 필수입니다."
+
+msgid "Back to group area"
+msgstr "그룹 영역으로 돌아가기"
+
+msgid "Members are managed by the linked class"
+msgstr "구성원은 연결된 클래스에서 관리합니다"
+
+msgid "%s groups selected"
+msgstr "%s개 그룹 선택됨"
+
+msgid "Fill selected groups"
+msgstr "선택한 그룹 채우기"
+
+msgid "Empty selected groups"
+msgstr "선택한 그룹 비우기"
+
+msgid "Fill group"
+msgstr "그룹 채우기"
+
+msgid "Empty group"
+msgstr "그룹 비우기"
+
+msgid "Groups per user"
+msgstr "사용자당 그룹 수"
+
+msgid "No tutors"
+msgstr "튜터 없음"
+
+msgid "No users"
+msgstr "사용자 없음"
+

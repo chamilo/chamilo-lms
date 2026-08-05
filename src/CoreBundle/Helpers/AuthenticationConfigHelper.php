@@ -194,12 +194,12 @@ readonly class AuthenticationConfigHelper
                 'clientSecret' => $config['client_secret'],
                 'clientCertificatePrivateKey' => $config['client_certificate_private_key'] ?? null,
                 'clientCertificateThumbprint' => $config['client_certificate_thumbprint'] ?? null,
-                'urlLogin' => $config['url_login'] ?? null,
+                'urlLogin' => $this->normalizeUrlLogin($config['url_login'] ?? null),
                 'pathAuthorize' => $config['path_authorize'] ?? null,
                 'pathToken' => $config['path_token'] ?? null,
                 'scope' => $config['scope'] ?? null,
                 'tenant' => $config['tenant'] ?? null,
-                'urlAPI' => $config['url_api'] ?? null,
+                'urlAPI' => $this->normalizeBaseUrl($config['url_api'] ?? null),
                 'resource' => $config['resource'] ?? null,
                 'API_VERSION' => $config['api_version'] ?? null,
                 'authWithResource' => $config['auth_with_resource'] ?? null,
@@ -246,5 +246,35 @@ readonly class AuthenticationConfigHelper
             'enabled' => $config['enabled'] ?? false,
             'auth_source' => $config['auth_source'] ?? UserAuthSource::PLATFORM,
         ];
+    }
+
+    /**
+     * Drops the trailing slash of a configured base URL. Returns null when unset or empty,
+     * letting the provider fall back to its own default.
+     *
+     * Used as-is for urlAPI: every Graph reference Chamilo sends already starts with a
+     * slash ('/v1.0/users'), and the Azure provider concatenates it straight onto urlAPI,
+     * so a trailing slash here would build a double slash Graph rejects.
+     */
+    private function normalizeBaseUrl(?string $url): ?string
+    {
+        $url = trim((string) $url);
+
+        if ('' === $url) {
+            return null;
+        }
+
+        return rtrim($url, '/');
+    }
+
+    /**
+     * Unlike urlAPI, urlLogin must keep a trailing slash: the Azure provider concatenates
+     * it directly with the tenant id, with no separator of its own.
+     */
+    private function normalizeUrlLogin(?string $urlLogin): ?string
+    {
+        $urlLogin = $this->normalizeBaseUrl($urlLogin);
+
+        return null === $urlLogin ? null : $urlLogin.'/';
     }
 }

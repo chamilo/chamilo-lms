@@ -142,7 +142,11 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             );
         }
 
-        if ((int) $quiz->getRandomByCategory() > 0 && (int) $quiz->getRandom() <= 0) {
+        if (
+            self::QUESTION_SELECTION_RANDOM === (int) ($quiz->getQuestionSelectionType() ?? 0)
+            && (int) $quiz->getRandomByCategory() > 0
+            && 0 === (int) $quiz->getRandom()
+        ) {
             return $this->createLegacyRequiredResponse(
                 $quiz,
                 $course,
@@ -618,14 +622,18 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $selectionType = (int) ($quiz->getQuestionSelectionType() ?? 0);
         $randomCount = (int) $quiz->getRandom();
-        if ((int) $quiz->getRandomByCategory() > 0 && 0 !== $randomCount) {
-            return $this->buildRandomByCategoryQuestionList($quiz, $relations, $randomCount);
-        }
 
         if ($selectionType >= self::QUESTION_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED
             && $selectionType <= self::QUESTION_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM
         ) {
             return $this->buildCategoryMatrixQuestionList($quiz, $relations, $selectionType);
+        }
+
+        if (self::QUESTION_SELECTION_RANDOM === $selectionType
+            && (int) $quiz->getRandomByCategory() > 0
+            && 0 !== $randomCount
+        ) {
+            return $this->buildRandomByCategoryQuestionList($quiz, $relations, $randomCount);
         }
 
         $mustShuffle = self::QUESTION_SELECTION_RANDOM === $selectionType;

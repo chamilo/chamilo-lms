@@ -14205,61 +14205,61 @@ msgid "URL of this company"
 msgstr "Selle ettevõtte URL"
 
 msgid "User DB"
-msgstr ""
+msgstr "User DB"
 
 msgid "Please check these values"
-msgstr ""
+msgstr "Please check these values"
 
 msgid "Please go back to step 1"
-msgstr ""
+msgstr "Please go back to step 1"
 
 msgid "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
-msgstr ""
+msgstr "<p><b>Adding users</b></p> <p>You can subscribe existing learners one by one to your course, by clicking on the link 'Subscribe users to this course'. Usually however it's better to open your course to self-registration and let learners register themselves. </p> <p><b>Description</b></p> <p>The description has no computer related function and does not indicate any particular rights or privileges within the system. It simply indicates who is who, in human terms. You can therefore modify this by clicking on the pencil, then typing whatever you want: professor, assistant, student, visitor, expert etc.</p><p><b>Admin rights</b></p><p>Admin rights, on the other hand, provide technical authorization to modify the content and organization of this course area. You can choose between allowing full admin rights or none.</p><p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click on the pencil, then check 'Teacher', then 'Ok'.</p><p><b>Co-Trainers</b></p><p>To mention the name of a co-teacher in the heading (co-chairman, etc.), use the 'Course settings' tool. This modification does not automatically register your co-Trainer as a course member. The 'Teachers' field is completely independent of the 'Users' list.</p> <p><b>Tracking and Personal Home Pages</b></p> <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher to define headings for personal home pages to be completed by users.</p>"
 
 msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
-msgstr ""
+msgstr "<p><b>Introduction</b></p><p>This tool allows you to create and manage workgroups. On first creation (Create groups), groups are 'empty'. There are many ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, first ask users to self-register.Then if you find some of them didn't register, decide to fill groups automatically (random) in order to complete them. You can also edit each group to determine membership, user by user, after or before self-registration and/or automatically on registration.</p><p>Filling groups, whether automatically or manually, is possible only for users registered on the course. The users list is visible in <b>Users</b> tool. </p><hr noshade size=1><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and decide the number of groups to create.</p><hr noshade size=1><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users may self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is handy for trainers unfamiliar with the users list when creating groups.</p><b>Tools</b>:</p><p>Every group is assigned either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><hr noshade size=1><p><b>Manual editing</b></p><p>Once groups have been created (Create groups), you will see, at the bottom of the page, a list of groups along with with several options:<ul><li><b>Edit</b>Manually modify group name, description, tutor, members list.</li><li><b>Delete</b> Delete a group.</li></ul><hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
-msgstr ""
+msgstr "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr ""
+msgstr "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
-msgstr ""
+msgstr "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 
 msgid "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
-msgstr ""
+msgstr "<p>The Links tool allows you to create a library of resources for your students, particularly of resources that you have not created yourself.</p><p>As the list grows, it might prove useful to organise it into categories to help your students find the right information at the right place. You can edit every link to re-assign it to a new category (you will need to create this category first).</p><p>The Description field can be used to provide advance-information on the target web pages but also to describe what you expect the student to do with the link. If, for instance, you point to a website on Aristotle, the description field may ask the student to study the difference between synthesis and analysis."
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
-msgstr ""
+msgstr "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
 
 msgid "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
-msgstr ""
+msgstr "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
 
 msgid "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
-msgstr ""
+msgstr "<p> The Announcements tool allows you to send an e-mail to some or all of your students, or to specific groups.  to might want to alert them to the addition of a new document, to remind them of a deadline for submission of an assignment or to highlight and share a particularly good piece of work. Sending such e-mail announcements can also serve as a useful prompt to re-engage students who have not visited the site for some time (as long as it's not overdone!). </p> <b> Contacting specific users </b> <p> In addition to sending a general one to all members of the course, you can send an e-mail to one or more individuals/groups groups. When you create a new announcement, just click <i>Visible to</i> and select users from the left hand lists and and add them as recipients using the arrows.</p>"
 
 msgid "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
-msgstr ""
+msgstr "<p>The Chat tool allows you to chat 'live' with your students in real time. </p> In contrast to most commercial chat tools, the chat in Chamilo is web based and does not require any additional install (e.g.  MSN® Yahoo Messenger®. Skype® etc.) A key advantage of this solution is therefore it's immediate availablilty for students, allowing chat to be easily integrated into the course. Moreover, the Chamilo chat tool will automatically archive discussions and save them for ready access later via the Documents tool. (Be warned that the message may take from 1 to 5 seconds to refresh with each exchange - this doesn't mean anything is wrong!!). </p> If learners have uploaded a profile picture it will appear (reduced in size) in the left column -  otherwise, it will show a default image. </p> It is the responsibility of the teacher to delete threads whenever he/she deems relevant. </p> <b>Educational Use</b> <p>Adding Chat to your course is not always a good idea. To make best use of this tool, you need to ensure discussions remain focussed on course content. You might, for example, decide to keep the chat facility hidden until it is time for a 'formal' scheduled session. That way,while the freedom of discussions may admittedly be curbed, you are able to better guarantee thatsuch live meetings will be beneficial .</p>"
 
 msgid "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
-msgstr ""
+msgstr "<p>The assignments tool  is a very simple tool that allows your students to upload documents to the course.It can be used to accept responses to open questions from individuals or groups, or for uploading any other form of document</p><p>You can make files visible to all students by default, or only visible to yourself according to the requirements of your course. Making all files visible is useful when, for instance, you want to ask students to share opinions on each others papers, or when you want to give them experience in publishing texts globally. Keep files invisible if, for example, you want ask everybody the same question but to avoid 'cheating'. Making the documents invisible will also allow you to have some form of control over when a document is available to all the other students. </p><p>If you want  students to hand in a document for grading you're best, from within the tool, to assign submissions to a folder.</p> <p>You can use the the tool to set deadlines and instructions for delivery, as well as a maximum grade/score.</p>"
 
 msgid "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
-msgstr ""
+msgstr "<p>The Reporting tool helps you track your students' attendance and progress: Did they connect to the system, When? How many times? How much do they score in tests? Did they already upload their assignment paper? When? If you use SCORM courses, you can even track how much time a student spent on a particular module or chapter. Reporting provides two levels of information:<ul><li><b>Global</b>: How many students have accessed the course? What are the most frequently visited pages and links?</i><li><b>Specific</b>: What pages has John Doe visited? What score does he get in tests? When did he last connect to the platform?</li></ul>"
 
 msgid "Course settings Help"
-msgstr ""
+msgstr "Course settings Help"
 
 msgid "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
-msgstr ""
+msgstr "<p>The Course Settings allows you to manage the global parameters of your course: Title, code, language, name of trainer etc.</p><p>The options situated in the centre of the page deal with confidentiality settings : is the course public or private? Can users register to it? You can use these settings dynamically e.g. allow self-registration for one week > ask your students to register > close access to self-registration > remove possible intruders through the Users list. This way you keep control of who is registered while avoiding the administrative hassle of registering them yourself.</p>(Note - some organizations prefer not to use this method and opt to centralise registration. In this case, participants cannot enrol in your course at all, even if you, as a trainer / teacher, wish to give them access. To check this, look at the home page of your campus (as opposed to your course homepage) to see if the 'Register' link is present.) </p> <p>At the bottom of the page, you can back up the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally so that there will be two backups each in different places. If you back up a course and then delete it you will not be be able to restore it yourself, but the system administrator can do this for you if you give him/her the code of your course. Backing up a course is also a good way to get all your documents transferred to your own computer. You will need a tool, like Winzip® to UNZIP the archive. Note that backing up a course does not automatically remove it.</p>"
 
 msgid "Add a Link help"
-msgstr ""
+msgstr "Add a Link help"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr ""
+msgstr "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
 
 msgid "Clear content"
 msgstr "Tühjenda sisu"
@@ -37504,4 +37504,1432 @@ msgstr "Kaasaegne, tervitatav illustratsioon, mis esindab selle kursuse teemat p
 
 msgid "Back to account"
 msgstr "Tagasi kontole"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Teie tagasiside aitab meil tulevasi koolitusi parendada."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Täname tagasiside jagamise eest."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Kui rahul olete koolituse üldise kvaliteediga?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Kui rahul olete sisu asjakohasusega?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Kui rahul olete selgituste selgusega?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Kui rahul olete koolituse korralduse ja tempoga?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Kui rahul olete õpitu praktilise kasulikkusega?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Kas soovitaksite seda koolitust teistele?"
+
+msgid "What should we improve in future editions?"
+msgstr "Mida peaksime tulevastes väljaannetes parendama?"
+
+msgid "Very satisfied"
+msgstr "Väga rahul"
+
+msgid "Satisfied"
+msgstr "Rahul"
+
+msgid "Neutral"
+msgstr "Neutraalne"
+
+msgid "Dissatisfied"
+msgstr "Rahulolematu"
+
+msgid "Very dissatisfied"
+msgstr "Väga rahulolematu"
+
+msgid "Add destination"
+msgstr "Lisa sihtkoht"
+
+msgid "Add this test to the assessment tool"
+msgstr "Lisa see test hindamisvahendisse"
+
+msgid "Attempts and timing"
+msgstr "Katsed ja ajastus"
+
+msgid "Available questions"
+msgstr "Saadaolevad küsimused"
+
+msgid "Cancel and return to learning path"
+msgstr "Tühista ja naase õpiteele"
+
+msgid "Category destinations"
+msgstr "Kategooria sihtkohad"
+
+msgid "Classification"
+msgstr "Klassifikatsioon"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Could not load exercise configuration"
+msgstr "Harjutuse seadistust ei õnnestunud laadida"
+
+msgid "Could not save exercise"
+msgstr "Harjutust ei õnnestunud salvestada"
+
+msgid "Display and learning path"
+msgstr "Kuvamine ja õpitee"
+
+msgid "Edit test"
+msgstr "Muuda testi"
+
+msgid "Exercise settings saved."
+msgstr "Harjutuse seaded salvestatud."
+
+msgid "Extra settings"
+msgstr "Lisaseaded"
+
+msgid "Feedback and results"
+msgstr "Tagasiside ja tulemused"
+
+msgid "Finish exercise"
+msgstr "Lõpeta harjutus"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Määrab selle harjutuse keele ressursi metaandmetena. See ei luba otsingu indekseerimist iseenesest."
+
+msgid "Maximum score (%)"
+msgstr "Maksimaalne tulemus (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metaandmed sisaldavad oskusi ja harjutuste jaoks seadistatud lisavälju. See on valikuline ja jääb peidetuks, kuni see avatakse."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Selle harjutuse jaoks ei ole veel küsimuste kategooriaid saadaval."
+
+msgid "Question categories matrix"
+msgstr "Küsimuste kategooriate maatriks"
+
+msgid "Questions behavior"
+msgstr "Küsimuste käitumine"
+
+msgid "Random by category"
+msgstr "Juhuslik kategooria järgi"
+
+msgid "Remove destination"
+msgstr "Eemalda sihtkoht"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reeglid hinnatakse tulemuse protsendi järgi kasvavas järjekorras. Valige Harjutus lõpetama, et test lõpetada."
+
+msgid "Score and final messages"
+msgstr "Tulemus ja lõppsõnumid"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Mõned valikud lukustatakse pärast harjutuse loomist."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "See väärtus salvestatakse kogukestusena minutites."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Kasutage 0, et hoida kõik saadaolevad küsimused. Kasutage -1, kus kõik saadaolevad küsimused on lubatud."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Kasutage neid välju harjutuse klassifitseerimiseks sõltumatult selle kuvamisvalikutest."
+
+msgid "Invite by email"
+msgstr "Kutsu e-posti teel"
+
+msgid "Invitation has been sent"
+msgstr "Kutse on saadetud"
+
+msgid "Sent on"
+msgstr "Saadetud"
+
+msgid "Accepted on"
+msgstr "Vastu võetud"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "See kursus on avatud sessioonis. Kutse saatmine siin registreerib saaja kogu sessiooni %s, mitte ainult sellele kursusele."
+
+msgid "Revoke"
+msgstr "Tühista"
+
+msgid "Revoked"
+msgstr "Tühistatud"
+
+msgid "Invitation has been revoked"
+msgstr "Kutse on tühistatud"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Kas olete kindel, et soovite tühistada kutse, mis saadeti kasutajale %s?"
+
+msgid "No default room"
+msgstr "Vaikimisi ruumi pole"
+
+msgid "Floor"
+msgstr "Korrus"
+
+msgid "Capacity"
+msgstr "Mahutavus"
+
+msgid "Use attendance default room"
+msgstr "Kasuta kohaloleku vaikimisi ruumi"
+
+msgid "Floor number"
+msgstr "Korruse number"
+
+msgid "Copy to students"
+msgstr "Kopeeri õpilastele"
+
+msgid "Generate a quick test on this topic"
+msgstr "Loo sellel teemal kiirtest"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Salvestatud dokumendi sisu saadetakse AI-mudelile töötlemiseks."
+
+msgid "MCP API key"
+msgstr "MCP API võti"
+
+msgid "Authorized applications"
+msgstr "Volitatud rakendused"
+
+msgid "Your session is about to expire"
+msgstr "Teie sessioon aegub peagi"
+
+msgid "Do you want to continue your session?"
+msgstr "Kas soovite jätkata sessiooni?"
+
+msgid "Stay connected"
+msgstr "Jää ühendusse"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Teid logitakse välja %s sekundi pärast."
+
+msgid "No descriptions available yet."
+msgstr "Kirjeldusi pole veel saadaval."
+
+msgid "%s users selected"
+msgstr "%s kasutajat valitud"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Valitud kasutajad on kursusele registreeritud"
+
+msgid "Import teachers"
+msgstr "Impordi õpetajad"
+
+msgid "Import learners"
+msgstr "Impordi õppijad"
+
+msgid "Select CSV file"
+msgstr "Vali CSV-fail"
+
+msgid "Some users could not be subscribed"
+msgstr "Mõnda kasutajat ei saanud registreerida"
+
+msgid "Browse available classes"
+msgstr "Sirvi saadaolevaid klasse"
+
+msgid "Back to linked classes"
+msgstr "Tagasi lingitud klasside juurde"
+
+msgid "No classes are currently linked to this course."
+msgstr "Sellele kursusele pole praegu ühtegi klassi lingitud."
+
+msgid "No available classes were found for this course."
+msgstr "Selle kursuse jaoks ei leitud saadaolevaid klasse."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Kas olete kindel, et soovite valitud kasutajad kursuselt välja registreerida?"
+
+msgid "Learning path access"
+msgstr "Õpitee juurdepääs"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Ainult valitud kasutajad ja grupid pääsevad sellele õpiteele ligi. Hallake neid pärast salvestamist."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Kõik praegused ja tulevased kursuse kasutajad pääsevad sellele õpiteele ligi."
+
+msgid "All course users"
+msgstr "Kõik kursuse kasutajad"
+
+msgid "Selected users and groups"
+msgstr "Valitud kasutajad ja rühmad"
+
+msgid "No access"
+msgstr "Juurdepääs puudub"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Ainult siia lisatud kasutajad ja rühmad pääsevad sellele õpiteele ligi."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Küsimuste arv on piiratud maksimaalselt %s-ga"
+
+msgid "Open exercise player"
+msgstr "Ava harjutuse esitaja"
+
+msgid "The score is hidden for this exercise."
+msgstr "Selle harjutuse tulemus on peidetud."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Parandused on peidetud vastavalt harjutuse tulemuste seadetele."
+
+msgid "Progressive adaptive result"
+msgstr "Progressiivne kohanduv tulemus"
+
+msgid "Achieved level"
+msgstr "Saavutatud tase"
+
+msgid "Correction history"
+msgstr "Paranduste ajalugu"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Selle katse jaoks tehtud käsitsi paranduste ajalugu."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "See harjutus kasutab radari/ämblikvõrgu tulemuste režiimi. Diagramm ei ole sellel lehel saadaval."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Küsimuste üksikasjad on peidetud vastavalt harjutuse tulemuste seadetele."
+
+msgid "Media question"
+msgstr "Meediaküsimus"
+
+msgid "Pending correction"
+msgstr "Ootel parandus"
+
+msgid "No answer"
+msgstr "Vastus puudub"
+
+msgid "Blank %s"
+msgstr "Tühi %s"
+
+msgid "Your order"
+msgstr "Sinu järjekord"
+
+msgid "Correct order"
+msgstr "Õige järjekord"
+
+msgid "Delineation review"
+msgstr "Piiritlemise ülevaade"
+
+msgid "Learner clicks"
+msgstr "Õppija klikid"
+
+msgid "Question image"
+msgstr "Küsimuse pilt"
+
+msgid "No hotspot image available"
+msgstr "Kuumtsooni pilti pole saadaval"
+
+msgid "Learner delineation"
+msgstr "Õppija piiritlemine"
+
+msgid "Expected delineation"
+msgstr "Oodatud piiritlemine"
+
+msgid "Expected zones"
+msgstr "Oodatud tsoonid"
+
+msgid "Zone"
+msgstr "Tsoon"
+
+msgid "Learner annotation"
+msgstr "Õppija märkus"
+
+msgid "No annotation image available"
+msgstr "Märkuste pilti pole saadaval"
+
+msgid "This answer is pending teacher correction."
+msgstr "See vastus ootab õpetaja parandust."
+
+msgid "Teacher comment"
+msgstr "Õpetaja kommentaar"
+
+msgid "Teacher correction"
+msgstr "Õpetaja parandus"
+
+msgid "Save correction"
+msgstr "Salvesta parandus"
+
+msgid "Learner audio"
+msgstr "Õppija heli"
+
+msgid "Download audio"
+msgstr "Laadi alla heli"
+
+msgid "No uploaded audio"
+msgstr "Üleslaetud heli puudub"
+
+msgid "Learner Office document"
+msgstr "Õppija Office'i dokument"
+
+msgid "Learner file"
+msgstr "Õppija fail"
+
+msgid "Download Office document"
+msgstr "Laadi alla Office'i dokument"
+
+msgid "No submitted document"
+msgstr "Esitatud dokument puudub"
+
+msgid "No uploaded file"
+msgstr "Üleslaetud fail puudub"
+
+msgid "Content item"
+msgstr "Sisuüksus"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Seda küsimuse tüüpi ei saa sellel lehel üle vaadata."
+
+msgid "Exercise completed"
+msgstr "Harjutus lõpetatud"
+
+msgid "Could not start the attempt"
+msgstr "Katset ei saanud alustada"
+
+msgid "Invalid exercise attempt"
+msgstr "Vigane harjutuse katse"
+
+msgid "Could not load exercise result"
+msgstr "Harjutuse tulemust ei saanud laadida"
+
+msgid "Could not load AI providers"
+msgstr "AI teenuse pakkujaid ei saanud laadida"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI soovitust ei saanud genereerida"
+
+msgid "Correction saved"
+msgstr "Parandus salvestatud"
+
+msgid "Could not save correction"
+msgstr "Parandust ei õnnestunud salvestada"
+
+msgid "Create exercise"
+msgstr "Loo harjutus"
+
+msgid "Exercise categories"
+msgstr "Harjutuste kategooriad"
+
+msgid "Question categories"
+msgstr "Küsimuste kategooriad"
+
+msgid "Search by exercise title or description."
+msgstr "Otsi harjutuse pealkirja või kirjelduse järgi."
+
+msgid "Search exercises"
+msgstr "Otsi harjutusi"
+
+msgid "No exercises found"
+msgstr "Harjutusi ei leitud"
+
+msgid "Open exercise"
+msgstr "Ava harjutus"
+
+msgid "Disable autolaunch"
+msgstr "Keela automaatne käivitamine"
+
+msgid "Enable autolaunch"
+msgstr "Luba automaatne käivitamine"
+
+msgid "Export QTI2"
+msgstr "Ekspordi QTI2"
+
+msgid "Bulk actions"
+msgstr "Hulgitoimingud"
+
+msgid "Selected exercises"
+msgstr "Valitud harjutused"
+
+msgid "No exercises selected"
+msgstr "Harjutusi pole valitud"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Kas olete kindel, et soovite seda toimingut rakendada valitud harjutustele?"
+
+msgid "Bulk action completed"
+msgstr "Hulgitoiming lõpetatud"
+
+msgid "Could not update exercises"
+msgstr "Harjutusi ei õnnestunud uuendada"
+
+msgid "Could not update exercise"
+msgstr "Harjutust ei õnnestunud uuendada"
+
+msgid "Copy exercise"
+msgstr "Kopeeri harjutus"
+
+msgid "Delete exercise"
+msgstr "Kustuta harjutus"
+
+msgid "Could not load exercises"
+msgstr "Harjutusi ei õnnestunud laadida"
+
+msgid "No limit"
+msgstr "Piirang puudub"
+
+msgid "Add selected questions to the test"
+msgstr "Lisa valitud küsimused testile"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Seda küsimust kasutatakse aktiivses testis ja seda ei saa siin muuta."
+
+msgid "This question cannot be edited here."
+msgstr "Seda küsimust ei saa siin muuta."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Seda küsimust kasutatakse aktiivses testis ja seda ei saa siin kustutada."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Seda küsimust ei saa kustutada, kuna teie juurdepääsu piiravad platvormi seaded."
+
+msgid "Already in test"
+msgstr "Juba testis"
+
+msgid "Select at least one question."
+msgstr "Valige vähemalt üks küsimus."
+
+msgid "Question bank updated"
+msgstr "Küsimustepank uuendatud"
+
+msgid "Could not update the question bank"
+msgstr "Küsimustepanka ei õnnestunud uuendada"
+
+msgid "Could not load the question bank"
+msgstr "Küsimustepanka ei õnnestunud laadida"
+
+msgid "Total score"
+msgstr "Koguskoor"
+
+msgid "Starting"
+msgstr "Alustamine"
+
+msgid "Attempt history"
+msgstr "Katsete ajalugu"
+
+msgid "No attempts yet"
+msgstr "Katseid pole veel"
+
+msgid "Invalid exercise"
+msgstr "Vigane harjutus"
+
+msgid "Could not load exercise overview"
+msgstr "Harjutuse ülevaadet ei õnnestunud laadida"
+
+msgid "Open test"
+msgstr "Ava test"
+
+msgid "Random answers"
+msgstr "Juhuslikud vastused"
+
+msgid "Prevent moving backwards"
+msgstr "Tagasiliikumise keelamine"
+
+msgid "Previous button hidden"
+msgstr "Eelmise nupp peidetud"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "See harjutus kasutab valikuid, mis nõuavad teistsugust testipleierit."
+
+msgid "Continue test"
+msgstr "Jätka testi"
+
+msgid "Attempt started"
+msgstr "Katse alustatud"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Õpetaja eelvaade ei loo jälgitavat katset."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Alusta või jätka harjutuse katset. Mustandvastuseid saab enne lõplikku esitamist salvestada."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Ajalimiit saavutatud. Katse lõpetamine."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Küsimuse aeg saavutatud. Vastus salvestatakse."
+
+msgid "Finishing"
+msgstr "Lõpetamine"
+
+msgid "Draft saved"
+msgstr "Mustand salvestatud"
+
+msgid "Statement"
+msgstr "Väide"
+
+msgid "Drop each option on the matching answer"
+msgstr "Lohista iga valik vastavale vastusele"
+
+msgid "Clear match"
+msgstr "Tühista sobitus"
+
+msgid "Click to place the selected option here"
+msgstr "Klõpsa siia valitud valiku paigutamiseks"
+
+msgid "Select an option, then click here"
+msgstr "Vali valik, seejärel klõpsa siin"
+
+msgid "Already matched"
+msgstr "Juba sobitatud"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Saad lohistada valiku vastusele või valida valiku ja seejärel klõpsata sihtmärgi kastil."
+
+msgid "Put the items in the correct order."
+msgstr "Aseta esemed õigesse järjekorda."
+
+msgid "Move left"
+msgstr "Liiguta vasakule"
+
+msgid "Move right"
+msgstr "Liiguta paremale"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Saad lohistada esemeid vasakule või paremale või kasutada liigutusnuppe järjekorra muutmiseks."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Saad lohistada esemeid või kasutada liigutusnuppe järjekorra muutmiseks."
+
+msgid "Or upload an audio file"
+msgstr "Või laadi üles helifail"
+
+msgid "Selected audio"
+msgstr "Valitud heli"
+
+msgid "Uploaded audio"
+msgstr "Üleslaetud heli"
+
+msgid "Office document"
+msgstr "Kontoridokument"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Täida dokument allolevas redaktoris. Fail lisatakse sellele katsele õpetaja parandamiseks."
+
+msgid "Reload Office editor"
+msgstr "Laadi Office'i redaktor uuesti"
+
+msgid "Prepare Office document"
+msgstr "Valmista Office'i dokument ette"
+
+msgid "Open in new tab"
+msgstr "Ava uuel vahekaardil"
+
+msgid "Preparing Office document"
+msgstr "Office'i dokumendi ettevalmistamine"
+
+msgid "Submitted document"
+msgstr "Esitatud dokument"
+
+msgid "Annotation tools"
+msgstr "Märkimisvahendid"
+
+msgid "Text to place"
+msgstr "Paigutatav tekst"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klõpsa pildil teksti märkuse paigutamiseks."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klõpsa pildil tee punktide lisamiseks. Kasuta Uus tee alustamiseks teede eraldamiseks."
+
+msgid "Start new path"
+msgstr "Alusta uus tee"
+
+msgid "Current annotations"
+msgstr "Praegused märkused"
+
+msgid "Remove point"
+msgstr "Eemalda punkt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klõpsa pildil piiritleva hulknurga joonistamiseks."
+
+msgid "Click a marker to remove it."
+msgstr "Klõpsa markeril selle eemaldamiseks."
+
+msgid "Placed"
+msgstr "Paigutatud"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Vali vastus, seejärel klõpsa pildil selle märkimiseks."
+
+msgid "Reading speed"
+msgstr "Lugemiskiirus"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Seda küsimuse tüüpi ei saa selles mängijas kuvada."
+
+msgid "Save draft"
+msgstr "Salvesta mustand"
+
+msgid "I confirm that my answers were saved."
+msgstr "Kinnitan, et minu vastused on salvestatud."
+
+msgid "Finish test"
+msgstr "Lõpeta test"
+
+msgid "Attempt finished"
+msgstr "Katse lõpetatud"
+
+msgid "Question category"
+msgstr "Küsimuse kategooria"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Lõpetasid selle küsimuse kategooriaga seotud küsimused, see on sinu viimane võimalus tagasi minna ja neid küsimusi üle vaadata."
+
+msgid "Question time left"
+msgstr "Küsimusele jäänud aeg"
+
+msgid "Time left"
+msgstr "Jäänud aeg"
+
+msgid "Current attempt"
+msgstr "Praegune katse"
+
+msgid "Could not save draft answer"
+msgstr "Mustandvastust ei saanud salvestada"
+
+msgid "Could not load exercise"
+msgstr "Harjutust ei saanud laadida"
+
+msgid "Draft answer saved"
+msgstr "Mustandvastus salvestatud"
+
+msgid "Could not finish the attempt"
+msgstr "Katset ei saanud lõpetada"
+
+msgid "Could not prepare Office document"
+msgstr "Kontoritööriista dokumenti ei saanud ette valmistada"
+
+msgid "Back to learner score"
+msgstr "Tagasi õppija tulemuste juurde"
+
+msgid "Disable auto refresh"
+msgstr "Keela automaatne värskendus"
+
+msgid "Enable auto refresh"
+msgstr "Luba automaatne värskendus"
+
+msgid "Live window"
+msgstr "Reaalajas aken"
+
+msgid "Ongoing attempts"
+msgstr "Käimasolevad katsed"
+
+msgid "Completed attempts"
+msgstr "Lõpetatud katsed"
+
+msgid "Started"
+msgstr "Alustatud"
+
+msgid "Last activity"
+msgstr "Viimane tegevus"
+
+msgid "Could not load live results"
+msgstr "Reaalajas tulemusi ei saanud laadida"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "See harjutus on kirjutuskaitstud, kuna see on osa õpiteest."
+
+msgid "Select a question type to create a question."
+msgstr "Vali küsimuse tüüp, et luua küsimus."
+
+msgid "Click to preview"
+msgstr "Klõpsa eelvaateks"
+
+msgid "Hide preview"
+msgstr "Peida eelvaade"
+
+msgid "Shape"
+msgstr "Kuju"
+
+msgid "Coordinates"
+msgstr "Koordinaadid"
+
+msgid "Blanks"
+msgstr "Tühikud"
+
+msgid "Switchable blanks"
+msgstr "Vahetatavad tühikud"
+
+msgid "Blank"
+msgstr "Tühik"
+
+msgid "Input width"
+msgstr "Sisendi laius"
+
+msgid "Orientation"
+msgstr "Orientatsioon"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Pole saadaval praeguse harjutuse tagasiside režiimiga"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Pole saadaval õpitee loomise voos"
+
+msgid "Delete question"
+msgstr "Kustuta küsimus"
+
+msgid "Could not update exercise questions"
+msgstr "Harjutuse küsimusi ei saanud uuendada"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Harjutust ei saanud õpiteele lisada"
+
+msgid "A valid exercise id is required."
+msgstr "Vajalik on kehtiv harjutuse ID."
+
+msgid "Could not load exercise questions"
+msgstr "Harjutuse küsimusi ei saanud laadida"
+
+msgid "Delete selected attempts"
+msgstr "Kustuta valitud katsed"
+
+msgid "Before date"
+msgstr "Enne kuupäeva"
+
+msgid "Pending corrections"
+msgstr "Ootel parandused"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "See harjutus on lukustatud hinnetelehega. Katsete puhastamise toimingud on keelatud."
+
+msgid "No attempts found"
+msgstr "Katseid ei leitud"
+
+msgid "Review"
+msgstr "Ülevaade"
+
+msgid "Print/PDF"
+msgstr "Prindi/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Harjutuse aruannet ei saanud laadida"
+
+msgid "Select at least one attempt"
+msgstr "Vali vähemalt üks katse"
+
+msgid "Delete selected attempts?"
+msgstr "Kustuta valitud katsed?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Saada läbivaadatud katse tulemused e-postiga?"
+
+msgid "Could not send emails"
+msgstr "E-kirju ei saanud saata"
+
+msgid "Exercise result emails sent"
+msgstr "Harjutuse tulemuste e-kirjad saadetud"
+
+msgid "Skipped"
+msgstr "Vahele jäetud"
+
+msgid "Close attempt?"
+msgstr "Sulge katse?"
+
+msgid "Attempt closed"
+msgstr "Katse suletud"
+
+msgid "Could not close attempt"
+msgstr "Katset ei saanud sulgeda"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Saada selle katse tulemus e-postiga õppijale?"
+
+msgid "Email sent"
+msgstr "E-kiri saadetud"
+
+msgid "Could not send email"
+msgstr "E-kirja ei saanud saata"
+
+msgid "Attempt deleted"
+msgstr "Katse kustutatud"
+
+msgid "Could not delete attempt"
+msgstr "Katset ei saanud kustutada"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Vali CSV-fail, mis sisaldab pealkirja ja kirjelduse veerge."
+
+msgid "Manage categories used to classify questions."
+msgstr "Halda kategooriaid, mida kasutatakse küsimuste klassifitseerimiseks."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Halda kategooriaid, mida kasutatakse harjutuste klassifitseerimiseks."
+
+msgid "Could not load categories"
+msgstr "Kategooriaid ei õnnestunud laadida"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Imporditud kategooriad: %s. Vahele jäetud read: %s."
+
+msgid "Imported categories: %s."
+msgstr "Imporditud kategooriad: %s."
+
+msgid "Could not import categories"
+msgstr "Kategooriaid ei õnnestunud importida"
+
+msgid "Could not save category"
+msgstr "Kategooriat ei õnnestunud salvestada"
+
+msgid "Answer distribution"
+msgstr "Vastuste jaotus"
+
+msgid "Configured answers"
+msgstr "Seadistatud vastused"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Mõne küsimusetüübi üksikasjalik vastuste loendus ei ole veel migreeritud aruandes saadaval."
+
+msgid "No report by question data found"
+msgstr "Küsimuste aruande andmeid ei leitud"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Selle küsimusetüübi üksikasjalik vastuste loendus ei ole veel migreeritud aruandes saadaval."
+
+msgid "No answer distribution found"
+msgstr "Vastuste jaotust ei leitud"
+
+msgid "Could not load report by question"
+msgstr "Küsimuste aruannet ei õnnestunud laadida"
+
+msgid "Question settings"
+msgstr "Küsimuse seaded"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Jäta tühjaks või sisesta 0, kui ajapiirangut ei ole."
+
+msgid "Time limit in seconds"
+msgstr "Ajalimiit sekundites"
+
+msgid "Attached questions"
+msgstr "Lisatud küsimused"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Siin on loetletud ainult praeguse harjutuse meediaküsimusega seotud küsimused."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Praeguses harjutuses ei ole selle meediaküsimusega seotud küsimusi."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Laadi üles Office'i dokumendi mall, mida õppijad OnlyOffice'iga redigeerivad."
+
+msgid "Replace Office document"
+msgstr "Asenda Office'i dokument"
+
+msgid "Current Office document"
+msgstr "Praegune Office'i dokument"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "See küsimus parandatakse käsitsi pärast seda, kui õppija on redigeeritud dokumendi esitanud."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Koguskoor arvutatakse hotspot-tulemuste summana."
+
+msgid "Global score"
+msgstr "Üldskoor"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Vali hotspot-rida, vali selle kuju ja joonista seejärel pildile. Hulknurkade puhul klõpsa igal punktil ja lõpeta hulknurk või topeltklõpsa lõpetamiseks."
+
+msgid "Finish polygon"
+msgstr "Lõpeta hulknurk"
+
+msgid "Calculated answer"
+msgstr "Arvutatud vastus"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Palun sisesta oma tekst allpool ja kasuta tühikute määratlemiseks nurksulge [...]."
+
+msgid "Lowest value"
+msgstr "Madalaim väärtus"
+
+msgid "Highest value"
+msgstr "Kõrgeim väärtus"
+
+msgid "Fill in blanks"
+msgstr "Täida tühikud"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Kasuta valitud markereid tühikute määratlemiseks. Näide: Peruu pealinn on [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Sisesta rippmenüü valikud, üks vastus rea kohta. Seejärel märgi oodatud vastused allpool, nagu pärand-tööriistas."
+
+msgid "Refresh answers"
+msgstr "Värskenda vastuseid"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "See rippmenüü kombinatsiooniküsimus kasutab ühte globaalset skoori, nagu pärand."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Palun sisesta vähemalt kaks rippmenüü valikut."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Loo esmalt sihtkoha valikud, seejärel seosta iga üksus õige valikuga."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "See sobitamise kombinatsiooniküsimus kasutab ühte globaalset skoori, nagu pärand."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Loo sammud ja vali igaühe jaoks oodatud asukoht, nagu pärand Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Õppijad valivad Tõene või Väär ning seejärel oma kindlustunde astme katse ajal. Redaktor salvestab samad Õige/Vale skoorid ja kindlustasemed nagu pärand."
+
+msgid "Hotspot combination"
+msgstr "Hotspoti kombinatsioon"
+
+msgid "Add delineation"
+msgstr "Lisa piiritlemine"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Sellel Office'i dokumendi küsimusel puuduvad vastusevalikud. Selle skoor määratakse parandamise/tulemuste ülevaatamise käigus."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Selle üleslaadimisküsimusel puuduvad vastusevalikud. Selle skoor määratakse parandamise/tulemuste ülevaatamise käigus."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Sellel suulise väljenduse küsimusel puuduvad vastusevalikud. Selle skoor määratakse parandamise/tulemuste ülevaatamise käigus."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Sellel avatud küsimusel puuduvad vastusevalikud. Selle skoor määratakse parandamise/tulemuste ülevaatamise käigus."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Lisa lugemistekst kerimiskiiruse seadetega."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Lisa sisu, meedia või lugemiskontekst ilma hindepunktideta."
+
+msgid "Insert a page break without adding score."
+msgstr "Lisa leheküljevahe ilma hindepunktideta."
+
+msgid "Could not save question"
+msgstr "Küsimust ei saanud salvestada"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Lubatud on ainult DOC, DOCX, XLS või XLSX dokumendid."
+
+msgid "Please select an Office document."
+msgstr "Palun vali Office'i dokument."
+
+msgid "Please draw at least one hotspot."
+msgstr "Palun joonista vähemalt üks hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Palun joonista vähemalt üks piirjoon."
+
+msgid "The fill in blanks text is required."
+msgstr "Täitmiskohtade tekst on nõutav."
+
+msgid "At least one expected answer is required."
+msgstr "Vaja on vähemalt ühte oodatud vastust."
+
+msgid "At least two draggable items are required."
+msgstr "Vaja on vähemalt kahte lohistatavat elementi."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Iga lohistatav element peab olema seotud kehtiva sihtkohaga."
+
+msgid "At least two matching options are required."
+msgstr "Vaja on vähemalt kahte sobitusvalikut."
+
+msgid "At least two matching pairs are required."
+msgstr "Vaja on vähemalt kahte sobituspaari."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Iga sobituspaar peab olema seotud kehtiva valikuga."
+
+msgid "At least two answers are required."
+msgstr "Vaja on vähemalt kahte vastust."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Igal tõene/väär vastusel peab olema valitud Tõene või Väär."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Ainult ühe õige vastusega küsimusel peab olema täpselt üks õige vastus."
+
+msgid "At least one correct answer is required."
+msgstr "Vaja on vähemalt ühte õiget vastust."
+
+msgid "Could not load question"
+msgstr "Küsimust ei saanud laadida"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Vali kursus ja ekspordi globaalse harjutuse tulemuste aruanne CSV-na."
+
+msgid "Back to reports catalog"
+msgstr "Tagasi aruannete kataloogi"
+
+msgid "Could not load exercise global report"
+msgstr "Harjutuse globaalset aruannet ei saanud laadida"
+
+msgid "Imported questions"
+msgstr "Imporditud küsimused"
+
+msgid "Aiken content"
+msgstr "Aikeni sisu"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aikeni generaatorit ei saanud laadida"
+
+msgid "Could not generate Aiken content"
+msgstr "Aikeni sisu ei saanud genereerida"
+
+msgid "Could not import generated Aiken content"
+msgstr "Genereeritud Aikeni sisu ei saanud importida"
+
+msgid "Back to my courses"
+msgstr "Tagasi minu kursustele"
+
+msgid "Open report"
+msgstr "Ava aruanne"
+
+msgid "Questions with no automatic correction"
+msgstr "Küsimused ilma automaatse paranduseta"
+
+msgid "Could not load pending attempts"
+msgstr "Ootel katseid ei saanud laadida"
+
+msgid "Skipped questions"
+msgstr "Vahele jäetud küsimused"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aikeni import jaotab selle kogukaalu imporditud küsimuste vahel, välja arvatud juhul, kui küsimus määratleb SCORE'i."
+
+msgid "Import warnings"
+msgstr "Impordi hoiatused"
+
+msgid "Could not import questions"
+msgstr "Küsimusi ei saanud importida"
+
+msgid "No question statistics found"
+msgstr "Küsimuste statistikat ei leitud"
+
+msgid "Could not load question statistics"
+msgstr "Küsimuste statistikat ei saanud laadida"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Saad ka ühendada MCP kliendi otse, suunates selle järgmisele lõpp-punktile:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Sinu kontoga pole praegu ühendatud ühtegi rakendust."
+
+msgid "Connected on"
+msgstr "Ühendatud"
+
+msgid "Last used"
+msgstr "Viimati kasutatud"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ei saa enam sinu Chamilo kontole juurde pääseda. Jätka?"
+
+msgid "Application revoked"
+msgstr "Rakendus tühistatud"
+
+msgid "Copied to clipboard"
+msgstr "Kopeeritud lõikelauale"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP lõpp-punkti ei saanud kopeerida"
+
+msgid "MCP endpoint"
+msgstr "MCP lõpp-punkt"
+
+msgid "API key"
+msgstr "API võti"
+
+msgid "Last used at"
+msgstr "Viimati kasutatud"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopeeri see võti nüüd. Seda ei näidata enam."
+
+msgid "Rotate API key"
+msgstr "Pööra API võti"
+
+msgid "Revoke API key"
+msgstr "Tühista API võti"
+
+msgid "Remote MCP connection"
+msgstr "Kaug-MCP ühendus"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Seadista oma MCP klient järgmiste väärtustega:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Praegune võti lakkab kohe töötamast. Kas jätkata?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Luua uus isiklik MCP API võti. Kas jätkata?"
+
+msgid "MCP API key generated"
+msgstr "MCP API võti loodud"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Selle võtit kasutavad ühendatud MCP kliendid lakkavad kohe töötamast. Kas jätkata?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API võti tühistatud"
+
+msgid "Could not copy the API key"
+msgstr "API võtme kopeerimine ebaõnnestus"
+
+msgid "Project"
+msgstr "Projekt"
+
+msgid "Close old tickets"
+msgstr "Sulge vanad piletid"
+
+msgid "Close tickets older than seven days?"
+msgstr "Sulgeda üle seitsme päeva vanad piletid?"
+
+msgid "Assignment history"
+msgstr "Määramise ajalugu"
+
+msgid "Translate with AI"
+msgstr "Tõlgi tehisintellektiga"
+
+msgid "Target language"
+msgstr "Sihtkeel"
+
+msgid "Please select a provider"
+msgstr "Palun vali teenusepakkuja"
+
+msgid "Generate translation"
+msgstr "Loo tõlge"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Vähemalt üks kasutustingimuste osa peab sisaldama teksti."
+
+msgid "No active target languages are available."
+msgstr "Aktiivseid sihtkeeli pole saadaval."
+
+msgid "Tutor"
+msgstr "Juhendaja"
+
+msgid "Access dates"
+msgstr "Juurdepääsu kuupäevad"
+
+msgid "Coach access dates"
+msgstr "Juhendaja juurdepääsu kuupäevad"
+
+msgid "No sessions found"
+msgstr "Seansse ei leitud"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Vali kursused, millele see kasutaja selles seansis juurde ei tohi pääseda."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Kasutajat ei saa kõigist seansi kursustest blokeerida. Tühista kasutaja registreerimine selle asemel."
+
+msgid "Users subscribed to this session"
+msgstr "Selle seansiga liitunud kasutajad"
+
+msgid "No available users found"
+msgstr "Saadaolevaid kasutajaid ei leitud"
+
+msgid "Subscribe this user to the session?"
+msgstr "Liida see kasutaja seansiga?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Liida valitud kasutajad seansiga?"
+
+msgid "General tutor planning"
+msgstr "Üldine juhendaja planeerimine"
+
+msgid "User is already registered by another tutor."
+msgstr "Kasutaja on juba teise juhendaja poolt registreeritud."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Saate koopia, kuna olete kursuse juhendaja"
+
+msgid "General tutor"
+msgstr "Üldine juhendaja"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Arvestage kursusi, juhendajaid, tehnilist tugiteenust, õpetajaid ja/või saadaolevaid materjale."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Juhendajad, kes on registreeritud õpetajatena kursusel %s"
+
+msgid "Tutor name"
+msgstr "Juhendaja nimi"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Seansi juhendajad on seansi koordinaatorid ja saavad tegutseda juhendajatena igal seansi kursusel. Seansi juhendajateks saab valida ainult õpetajarolliga kasutajaid."
+
+msgid "Access start date for tutors"
+msgstr "Juhendajate juurdepääsu alguskuupäev"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Kuupäev, millal seanss tehakse juhendajatele kättesaadavaks, et nad saaksid selle ette valmistada enne õpilaste ühendumist"
+
+msgid "Access end date for tutors"
+msgstr "Juhendajate juurdepääsu lõppkuupäev"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Kuupäev, millal seanss juhendajatele suletakse. Lisaaeg võimaldab neil eksportida kogu asjakohase jälgimisteabe"
+
+msgid "Tutor and student"
+msgstr "Juhendaja ja õpilane"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "See aruanne näitab seansside nädalast jaotust üldise juhendaja kohta valitud kuupäevavahemikus."
+
+msgid "User is general tutor in some sessions"
+msgstr "Kasutaja on üldine juhendaja mõnes seansis"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Õpetajad lisatakse juhendajatena kõikidesse kursuse seanssidesse."
+
+msgid "Delete failed: invalid question id."
+msgstr "Kustutamine ebaõnnestus: vigane küsimuse ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Keskmine seansside arv üldise seansi juhendaja kohta"
+
+msgid "No room"
+msgstr "Ruumi pole"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Impordi kursuse õpetajad kursuse juhendajatena seansis"
+
+msgid "Clean and update course tutors"
+msgstr "Puhasta ja värskenda kursuse juhendajad"
+
+msgid "Add me as tutor"
+msgstr "Lisa mind juhendajaks"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Küsitlust ei saa õpperajale lisada"
+
+msgid "Access dates for tutors"
+msgstr "Juhendajate juurdepääsu kuupäevad"
+
+msgid "Tutor and group member"
+msgstr "Juhendaja ja grupi liige"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Teie igapäevane AI märgendi limiit on täis. Palun proovige homme uuesti."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Teie igakuine AI märgendi limiit on täis. Palun proovige järgmisel kuul uuesti."
+
+msgid "This course code already exists, please choose another code."
+msgstr "See kursuse kood on juba olemas, palun valige teine kood."
+
+msgid "This course title already exists, please choose another title."
+msgstr "See kursuse pealkiri on juba olemas, palun valige teine pealkiri."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Selle tööriista nähtavust ei saa muuta"
+
+msgid "Invalid visibility"
+msgstr "Vigane nähtavus"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Saate koopia, kuna olete üks kursuse juhendajatest"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Saate koopia, kuna olete kursuse juhendaja"
+
+msgid "Manual completion"
+msgstr "Käsitsi lõpetamine"
+
+msgid "Send to tutors"
+msgstr "Saada juhendajatele"
+
+msgid "Lab title"
+msgstr "Labori pealkiri"
+
+msgid "Lab week"
+msgstr "Labori nädal"
+
+msgid "Final exam access rule"
+msgstr "Lõpueksami juurdepääsureegel"
+
+msgid "Course completion rule"
+msgstr "Kursuse lõpetamise reegel"
+
+msgid "You have been invited to join a course"
+msgstr "Teid on kutsutud kursusele liituma"
+
+msgid "No user has been found"
+msgstr "Kasutajat ei leitud"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Valitud kasutajat ei saa selles kontekstis registreerida"
+
+msgid "No change has been made"
+msgstr "Muudatusi ei tehtud"
+
+msgid "Back to group list"
+msgstr "Tagasi rühmade loendisse"
+
+msgid "Remove class link"
+msgstr "Eemalda klassi link"
+
+msgid "Group settings"
+msgstr "Rühma seaded"
+
+msgid "Self-registration allowed"
+msgstr "Lubatud iseregistreerumine"
+
+msgid "Self-unregistration allowed"
+msgstr "Lubatud iseregistreeringust loobumine"
+
+msgid "This group is linked to the class"
+msgstr "See rühm on lingitud klassiga"
+
+msgid "Create one or more empty course groups"
+msgstr "Loo üks või mitu tühja kursuserühma"
+
+msgid "Number of places"
+msgstr "Kohtade arv"
+
+msgid "Base group"
+msgstr "Baasrühm"
+
+msgid "Share"
+msgstr "Jaga"
+
+msgid "Collaboration"
+msgstr "Koostöö"
+
+msgid "The group title is required."
+msgstr "Rühma pealkiri on kohustuslik."
+
+msgid "Back to group area"
+msgstr "Tagasi rühma alale"
+
+msgid "Members are managed by the linked class"
+msgstr "Liikmeid haldab lingitud klass"
+
+msgid "%s groups selected"
+msgstr "%s rühma valitud"
+
+msgid "Fill selected groups"
+msgstr "Täida valitud rühmad"
+
+msgid "Empty selected groups"
+msgstr "Tühjenda valitud rühmad"
+
+msgid "Fill group"
+msgstr "Täida rühm"
+
+msgid "Empty group"
+msgstr "Tühjenda rühm"
+
+msgid "Groups per user"
+msgstr "Rühmi kasutaja kohta"
+
+msgid "No tutors"
+msgstr "Juhendajaid pole"
+
+msgid "No users"
+msgstr "Kasutajaid pole"
 

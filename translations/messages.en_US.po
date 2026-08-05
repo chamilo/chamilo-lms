@@ -37505,3 +37505,1429 @@ msgstr "A modern, welcoming illustration representing this course's topic, in a 
 
 msgid "Back to account"
 msgstr "Back to account"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Thank you for sharing your feedback."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "How satisfied are you with the overall quality of the training?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "How satisfied are you with the relevance of the content?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "How satisfied are you with the clarity of the explanations?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "How satisfied are you with the organization and pace of the training?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "How satisfied are you with the practical usefulness of what you learned?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Would you recommend this training to other people?"
+
+msgid "What should we improve in future editions?"
+msgstr "What should we improve in future editions?"
+
+msgid "Very satisfied"
+msgstr "Very satisfied"
+
+msgid "Satisfied"
+msgstr "Satisfied"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Dissatisfied"
+msgstr "Dissatisfied"
+
+msgid "Very dissatisfied"
+msgstr "Very dissatisfied"
+
+msgid "Add destination"
+msgstr "Add destination"
+
+msgid "Add this test to the assessment tool"
+msgstr "Add this test to the assessment tool"
+
+msgid "Attempts and timing"
+msgstr "Attempts and timing"
+
+msgid "Available questions"
+msgstr "Available questions"
+
+msgid "Cancel and return to learning path"
+msgstr "Cancel and return to learning path"
+
+msgid "Category destinations"
+msgstr "Category destinations"
+
+msgid "Classification"
+msgstr "Classification"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Could not load exercise configuration"
+msgstr "Could not load exercise configuration"
+
+msgid "Could not save exercise"
+msgstr "Could not save exercise"
+
+msgid "Display and learning path"
+msgstr "Display and learning path"
+
+msgid "Edit test"
+msgstr "Edit test"
+
+msgid "Exercise settings saved."
+msgstr "Exercise settings saved."
+
+msgid "Extra settings"
+msgstr "Extra settings"
+
+msgid "Feedback and results"
+msgstr "Feedback and results"
+
+msgid "Finish exercise"
+msgstr "Finish exercise"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+
+msgid "Maximum score (%)"
+msgstr "Maximum score (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "No question categories are available for this exercise yet."
+
+msgid "Question categories matrix"
+msgstr "Question categories matrix"
+
+msgid "Questions behavior"
+msgstr "Questions behavior"
+
+msgid "Random by category"
+msgstr "Random by category"
+
+msgid "Remove destination"
+msgstr "Remove destination"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+
+msgid "Score and final messages"
+msgstr "Score and final messages"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Some options are locked after the exercise has been created."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "This value is stored as total duration in minutes."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Use these fields to classify the exercise independently from its display options."
+msgid "Invite by email"
+msgstr "Invite by email"
+
+msgid "Invitation has been sent"
+msgstr "Invitation has been sent"
+
+msgid "Sent on"
+msgstr "Sent on"
+
+msgid "Accepted on"
+msgstr "Accepted on"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgid "Revoke"
+msgstr "Revoke"
+
+msgid "Revoked"
+msgstr "Revoked"
+
+msgid "Invitation has been revoked"
+msgstr "Invitation has been revoked"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Are you sure you want to revoke the invitation sent to %s?"
+
+msgid "No default room"
+msgstr "No default room"
+
+msgid "Floor"
+msgstr "Floor"
+
+msgid "Capacity"
+msgstr "Capacity"
+
+msgid "Use attendance default room"
+msgstr "Use attendance default room"
+
+msgid "Floor number"
+msgstr "Floor number"
+
+msgid "Copy to students"
+msgstr "Copy to students"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generate a quick test on this topic"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "The saved document content will be sent to an AI model for processing."
+
+msgid "MCP API key"
+msgstr "MCP API key"
+
+msgid "Authorized applications"
+msgstr "Authorized applications"
+
+msgid "Your session is about to expire"
+msgstr "Your session is about to expire"
+
+msgid "Do you want to continue your session?"
+msgstr "Do you want to continue your session?"
+
+msgid "Stay connected"
+msgstr "Stay connected"
+
+msgid "You will be signed out in %s seconds."
+msgstr "You will be signed out in %s seconds."
+
+msgid "No descriptions available yet."
+msgstr "No descriptions available yet."
+
+msgid "%s users selected"
+msgstr "%s users selected"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "The selected users have been subscribed to the course"
+
+msgid "Import teachers"
+msgstr "Import teachers"
+
+msgid "Import learners"
+msgstr "Import learners"
+
+msgid "Select CSV file"
+msgstr "Select CSV file"
+
+msgid "Some users could not be subscribed"
+msgstr "Some users could not be subscribed"
+
+msgid "Browse available classes"
+msgstr "Browse available classes"
+
+msgid "Back to linked classes"
+msgstr "Back to linked classes"
+
+msgid "No classes are currently linked to this course."
+msgstr "No classes are currently linked to this course."
+
+msgid "No available classes were found for this course."
+msgstr "No available classes were found for this course."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Are you sure you want to unsubscribe the selected users?"
+
+msgid "Learning path access"
+msgstr "Learning path access"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Only selected users and groups can access this learning path. Manage them after saving."
+
+msgid "All current and future course users can access this learning path."
+msgstr "All current and future course users can access this learning path."
+
+msgid "All course users"
+msgstr "All course users"
+
+msgid "Selected users and groups"
+msgstr "Selected users and groups"
+
+msgid "No access"
+msgstr "No access"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Only users and groups added here can access this learning path."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Number of questions limited to a maximum of %s"
+
+msgid "Open exercise player"
+msgstr "Open exercise player"
+
+msgid "The score is hidden for this exercise."
+msgstr "The score is hidden for this exercise."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Corrections are hidden according to the exercise result settings."
+
+msgid "Progressive adaptive result"
+msgstr "Progressive adaptive result"
+
+msgid "Achieved level"
+msgstr "Achieved level"
+
+msgid "Correction history"
+msgstr "Correction history"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "History of manual corrections made for this attempt."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Question details are hidden according to the exercise result settings."
+
+msgid "Media question"
+msgstr "Media question"
+
+msgid "Pending correction"
+msgstr "Pending correction"
+
+msgid "No answer"
+msgstr "No answer"
+
+msgid "Blank %s"
+msgstr "Blank %s"
+
+msgid "Your order"
+msgstr "Your order"
+
+msgid "Correct order"
+msgstr "Correct order"
+
+msgid "Delineation review"
+msgstr "Delineation review"
+
+msgid "Learner clicks"
+msgstr "Learner clicks"
+
+msgid "Question image"
+msgstr "Question image"
+
+msgid "No hotspot image available"
+msgstr "No hotspot image available"
+
+msgid "Learner delineation"
+msgstr "Learner delineation"
+
+msgid "Expected delineation"
+msgstr "Expected delineation"
+
+msgid "Expected zones"
+msgstr "Expected zones"
+
+msgid "Zone"
+msgstr "Zone"
+
+msgid "Learner annotation"
+msgstr "Learner annotation"
+
+msgid "No annotation image available"
+msgstr "No annotation image available"
+
+msgid "This answer is pending teacher correction."
+msgstr "This answer is pending teacher correction."
+
+msgid "Teacher comment"
+msgstr "Teacher comment"
+
+msgid "Teacher correction"
+msgstr "Teacher correction"
+
+msgid "Save correction"
+msgstr "Save correction"
+
+msgid "Learner audio"
+msgstr "Learner audio"
+
+msgid "Download audio"
+msgstr "Download audio"
+
+msgid "No uploaded audio"
+msgstr "No uploaded audio"
+
+msgid "Learner Office document"
+msgstr "Learner Office document"
+
+msgid "Learner file"
+msgstr "Learner file"
+
+msgid "Download Office document"
+msgstr "Download Office document"
+
+msgid "No submitted document"
+msgstr "No submitted document"
+
+msgid "No uploaded file"
+msgstr "No uploaded file"
+
+msgid "Content item"
+msgstr "Content item"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "This question type cannot be reviewed on this page."
+
+msgid "Exercise completed"
+msgstr "Exercise completed"
+
+msgid "Could not start the attempt"
+msgstr "Could not start the attempt"
+
+msgid "Invalid exercise attempt"
+msgstr "Invalid exercise attempt"
+
+msgid "Could not load exercise result"
+msgstr "Could not load exercise result"
+
+msgid "Could not load AI providers"
+msgstr "Could not load AI providers"
+
+msgid "Could not generate AI suggestion"
+msgstr "Could not generate AI suggestion"
+
+msgid "Correction saved"
+msgstr "Correction saved"
+
+msgid "Could not save correction"
+msgstr "Could not save correction"
+
+msgid "Create exercise"
+msgstr "Create exercise"
+
+msgid "Exercise categories"
+msgstr "Exercise categories"
+
+msgid "Question categories"
+msgstr "Question categories"
+
+msgid "Search by exercise title or description."
+msgstr "Search by exercise title or description."
+
+msgid "Search exercises"
+msgstr "Search exercises"
+
+msgid "No exercises found"
+msgstr "No exercises found"
+
+msgid "Open exercise"
+msgstr "Open exercise"
+
+msgid "Disable autolaunch"
+msgstr "Disable autolaunch"
+
+msgid "Enable autolaunch"
+msgstr "Enable autolaunch"
+
+msgid "Export QTI2"
+msgstr "Export QTI2"
+
+msgid "Bulk actions"
+msgstr "Bulk actions"
+
+msgid "Selected exercises"
+msgstr "Selected exercises"
+
+msgid "No exercises selected"
+msgstr "No exercises selected"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Are you sure you want to apply this action to the selected exercises?"
+
+msgid "Bulk action completed"
+msgstr "Bulk action completed"
+
+msgid "Could not update exercises"
+msgstr "Could not update exercises"
+
+msgid "Could not update exercise"
+msgstr "Could not update exercise"
+
+msgid "Copy exercise"
+msgstr "Copy exercise"
+
+msgid "Delete exercise"
+msgstr "Delete exercise"
+
+msgid "Could not load exercises"
+msgstr "Could not load exercises"
+
+msgid "No limit"
+msgstr "No limit"
+
+msgid "Add selected questions to the test"
+msgstr "Add selected questions to the test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "This question is used in an active test and cannot be edited here."
+
+msgid "This question cannot be edited here."
+msgstr "This question cannot be edited here."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "This question is used in an active test and cannot be deleted here."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "This question cannot be deleted because your access is limited by the platform settings."
+
+msgid "Already in test"
+msgstr "Already in test"
+
+msgid "Select at least one question."
+msgstr "Select at least one question."
+
+msgid "Question bank updated"
+msgstr "Question bank updated"
+
+msgid "Could not update the question bank"
+msgstr "Could not update the question bank"
+
+msgid "Could not load the question bank"
+msgstr "Could not load the question bank"
+
+msgid "Total score"
+msgstr "Total score"
+
+msgid "Starting"
+msgstr "Starting"
+
+msgid "Attempt history"
+msgstr "Attempt history"
+
+msgid "No attempts yet"
+msgstr "No attempts yet"
+
+msgid "Invalid exercise"
+msgstr "Invalid exercise"
+
+msgid "Could not load exercise overview"
+msgstr "Could not load exercise overview"
+
+msgid "Open test"
+msgstr "Open test"
+
+msgid "Random answers"
+msgstr "Random answers"
+
+msgid "Prevent moving backwards"
+msgstr "Prevent moving backwards"
+
+msgid "Previous button hidden"
+msgstr "Previous button hidden"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "This exercise uses options that require a different test player."
+
+msgid "Continue test"
+msgstr "Continue test"
+
+msgid "Attempt started"
+msgstr "Attempt started"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Teacher preview does not create a tracked attempt."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Time limit reached. Finishing the attempt."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Question time reached. Saving your answer."
+
+msgid "Finishing"
+msgstr "Finishing"
+
+msgid "Draft saved"
+msgstr "Draft saved"
+
+msgid "Statement"
+msgstr "Statement"
+
+msgid "Drop each option on the matching answer"
+msgstr "Drop each option on the matching answer"
+
+msgid "Clear match"
+msgstr "Clear match"
+
+msgid "Click to place the selected option here"
+msgstr "Click to place the selected option here"
+
+msgid "Select an option, then click here"
+msgstr "Select an option, then click here"
+
+msgid "Already matched"
+msgstr "Already matched"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "You can drag an option to an answer, or select an option and then click a target box."
+
+msgid "Put the items in the correct order."
+msgstr "Put the items in the correct order."
+
+msgid "Move left"
+msgstr "Move left"
+
+msgid "Move right"
+msgstr "Move right"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "You can drag items left or right, or use the move buttons to change the order."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "You can drag items or use the move buttons to change the order."
+
+msgid "Or upload an audio file"
+msgstr "Or upload an audio file"
+
+msgid "Selected audio"
+msgstr "Selected audio"
+
+msgid "Uploaded audio"
+msgstr "Uploaded audio"
+
+msgid "Office document"
+msgstr "Office document"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+
+msgid "Reload Office editor"
+msgstr "Reload Office editor"
+
+msgid "Prepare Office document"
+msgstr "Prepare Office document"
+
+msgid "Open in new tab"
+msgstr "Open in new tab"
+
+msgid "Preparing Office document"
+msgstr "Preparing Office document"
+
+msgid "Submitted document"
+msgstr "Submitted document"
+
+msgid "Annotation tools"
+msgstr "Annotation tools"
+
+msgid "Text to place"
+msgstr "Text to place"
+
+msgid "Click the image to place the text annotation."
+msgstr "Click the image to place the text annotation."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Click the image to add path points. Use Start new path to separate paths."
+
+msgid "Start new path"
+msgstr "Start new path"
+
+msgid "Current annotations"
+msgstr "Current annotations"
+
+msgid "Remove point"
+msgstr "Remove point"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Click the image to draw the delineation polygon."
+
+msgid "Click a marker to remove it."
+msgstr "Click a marker to remove it."
+
+msgid "Placed"
+msgstr "Placed"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Select an answer, then click on the image to mark it."
+
+msgid "Reading speed"
+msgstr "Reading speed"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "This question type cannot be displayed in this player."
+
+msgid "Save draft"
+msgstr "Save draft"
+
+msgid "I confirm that my answers were saved."
+msgstr "I confirm that my answers were saved."
+
+msgid "Finish test"
+msgstr "Finish test"
+
+msgid "Attempt finished"
+msgstr "Attempt finished"
+
+msgid "Question category"
+msgstr "Question category"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+
+msgid "Question time left"
+msgstr "Question time left"
+
+msgid "Time left"
+msgstr "Time left"
+
+msgid "Current attempt"
+msgstr "Current attempt"
+
+msgid "Could not save draft answer"
+msgstr "Could not save draft answer"
+
+msgid "Could not load exercise"
+msgstr "Could not load exercise"
+
+msgid "Draft answer saved"
+msgstr "Draft answer saved"
+
+msgid "Could not finish the attempt"
+msgstr "Could not finish the attempt"
+
+msgid "Could not prepare Office document"
+msgstr "Could not prepare Office document"
+
+msgid "Back to learner score"
+msgstr "Back to learner score"
+
+msgid "Disable auto refresh"
+msgstr "Disable auto refresh"
+
+msgid "Enable auto refresh"
+msgstr "Enable auto refresh"
+
+msgid "Live window"
+msgstr "Live window"
+
+msgid "Ongoing attempts"
+msgstr "Ongoing attempts"
+
+msgid "Completed attempts"
+msgstr "Completed attempts"
+
+msgid "Started"
+msgstr "Started"
+
+msgid "Last activity"
+msgstr "Last activity"
+
+msgid "Could not load live results"
+msgstr "Could not load live results"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "This exercise is read-only because it is included in a learning path."
+
+msgid "Select a question type to create a question."
+msgstr "Select a question type to create a question."
+
+msgid "Click to preview"
+msgstr "Click to preview"
+
+msgid "Hide preview"
+msgstr "Hide preview"
+
+msgid "Shape"
+msgstr "Shape"
+
+msgid "Coordinates"
+msgstr "Coordinates"
+
+msgid "Blanks"
+msgstr "Blanks"
+
+msgid "Switchable blanks"
+msgstr "Switchable blanks"
+
+msgid "Blank"
+msgstr "Blank"
+
+msgid "Input width"
+msgstr "Input width"
+
+msgid "Orientation"
+msgstr "Orientation"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Not available with the current exercise feedback mode"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Not available in the learning path creation flow"
+
+msgid "Delete question"
+msgstr "Delete question"
+
+msgid "Could not update exercise questions"
+msgstr "Could not update exercise questions"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Could not add the exercise to the learning path"
+
+msgid "A valid exercise id is required."
+msgstr "A valid exercise id is required."
+
+msgid "Could not load exercise questions"
+msgstr "Could not load exercise questions"
+
+msgid "Delete selected attempts"
+msgstr "Delete selected attempts"
+
+msgid "Before date"
+msgstr "Before date"
+
+msgid "Pending corrections"
+msgstr "Pending corrections"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+
+msgid "No attempts found"
+msgstr "No attempts found"
+
+msgid "Review"
+msgstr "Review"
+
+msgid "Print/PDF"
+msgstr "Print/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Could not load exercise report"
+
+msgid "Select at least one attempt"
+msgstr "Select at least one attempt"
+
+msgid "Delete selected attempts?"
+msgstr "Delete selected attempts?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Send reviewed attempt result emails?"
+
+msgid "Could not send emails"
+msgstr "Could not send emails"
+
+msgid "Exercise result emails sent"
+msgstr "Exercise result emails sent"
+
+msgid "Skipped"
+msgstr "Skipped"
+
+msgid "Close attempt?"
+msgstr "Close attempt?"
+
+msgid "Attempt closed"
+msgstr "Attempt closed"
+
+msgid "Could not close attempt"
+msgstr "Could not close attempt"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Send this attempt result by email to the learner?"
+
+msgid "Email sent"
+msgstr "Email sent"
+
+msgid "Could not send email"
+msgstr "Could not send email"
+
+msgid "Attempt deleted"
+msgstr "Attempt deleted"
+
+msgid "Could not delete attempt"
+msgstr "Could not delete attempt"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Select a CSV file containing title and description columns."
+
+msgid "Manage categories used to classify questions."
+msgstr "Manage categories used to classify questions."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Manage categories used to classify exercises."
+
+msgid "Could not load categories"
+msgstr "Could not load categories"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Imported categories: %s. Skipped rows: %s."
+
+msgid "Imported categories: %s."
+msgstr "Imported categories: %s."
+
+msgid "Could not import categories"
+msgstr "Could not import categories"
+
+msgid "Could not save category"
+msgstr "Could not save category"
+
+msgid "Answer distribution"
+msgstr "Answer distribution"
+
+msgid "Configured answers"
+msgstr "Configured answers"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Detailed answer counting for some question types is not available in the migrated report yet."
+
+msgid "No report by question data found"
+msgstr "No report by question data found"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Detailed answer counting for this question type is not available in the migrated report yet."
+
+msgid "No answer distribution found"
+msgstr "No answer distribution found"
+
+msgid "Could not load report by question"
+msgstr "Could not load report by question"
+
+msgid "Question settings"
+msgstr "Question settings"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Leave empty or 0 for no time limit."
+
+msgid "Time limit in seconds"
+msgstr "Time limit in seconds"
+
+msgid "Attached questions"
+msgstr "Attached questions"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Only questions attached to this media question inside the current exercise are listed here."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "No questions are attached to this media question in the current exercise."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Upload the Office document template that learners will edit with OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Replace Office document"
+
+msgid "Current Office document"
+msgstr "Current Office document"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "This question is corrected manually after the learner submits the edited document."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Total score is calculated as the sum of hotspot scores."
+
+msgid "Global score"
+msgstr "Global score"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+
+msgid "Finish polygon"
+msgstr "Finish polygon"
+
+msgid "Calculated answer"
+msgstr "Calculated answer"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Please type your text below and use square brackets [...] to define one or more blanks."
+
+msgid "Lowest value"
+msgstr "Lowest value"
+
+msgid "Highest value"
+msgstr "Highest value"
+
+msgid "Fill in blanks"
+msgstr "Fill in blanks"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+
+msgid "Refresh answers"
+msgstr "Refresh answers"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "This dropdown combination question uses one global score, like legacy."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Please enter at least two dropdown options."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Create destination options first, then link each item to the correct option."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "This matching combination question uses one global score, like legacy."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Create the steps and choose the expected position for each one, like legacy Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+
+msgid "Hotspot combination"
+msgstr "Hotspot combination"
+
+msgid "Add delineation"
+msgstr "Add delineation"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "This Office document question has no answer options. Its score is assigned during correction/results review."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "This upload question has no answer options. Its score is assigned during correction/results review."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "This oral expression question has no answer options. Its score is assigned during correction/results review."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "This open question has no answer options. Its score is assigned during correction/results review."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Add a reading text with scrolling speed settings."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Add content, media or reading context without adding score."
+
+msgid "Insert a page break without adding score."
+msgstr "Insert a page break without adding score."
+
+msgid "Could not save question"
+msgstr "Could not save question"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Only DOC, DOCX, XLS or XLSX documents are allowed."
+
+msgid "Please select an Office document."
+msgstr "Please select an Office document."
+
+msgid "Please draw at least one hotspot."
+msgstr "Please draw at least one hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Please draw at least one delineation."
+
+msgid "The fill in blanks text is required."
+msgstr "The fill in blanks text is required."
+
+msgid "At least one expected answer is required."
+msgstr "At least one expected answer is required."
+
+msgid "At least two draggable items are required."
+msgstr "At least two draggable items are required."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Each draggable item must be linked to a valid target position."
+
+msgid "At least two matching options are required."
+msgstr "At least two matching options are required."
+
+msgid "At least two matching pairs are required."
+msgstr "At least two matching pairs are required."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Each matching pair must be linked to a valid option."
+
+msgid "At least two answers are required."
+msgstr "At least two answers are required."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Each true/false answer must have True or False selected."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "A unique answer question must have exactly one correct answer."
+
+msgid "At least one correct answer is required."
+msgstr "At least one correct answer is required."
+
+msgid "Could not load question"
+msgstr "Could not load question"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Select a course and export the global exercise results report as CSV."
+
+msgid "Back to reports catalog"
+msgstr "Back to reports catalog"
+
+msgid "Could not load exercise global report"
+msgstr "Could not load exercise global report"
+
+msgid "Imported questions"
+msgstr "Imported questions"
+
+msgid "Aiken content"
+msgstr "Aiken content"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Could not load AI Aiken generator"
+
+msgid "Could not generate Aiken content"
+msgstr "Could not generate Aiken content"
+
+msgid "Could not import generated Aiken content"
+msgstr "Could not import generated Aiken content"
+
+msgid "Back to my courses"
+msgstr "Back to my courses"
+
+msgid "Open report"
+msgstr "Open report"
+
+msgid "Questions with no automatic correction"
+msgstr "Questions with no automatic correction"
+
+msgid "Could not load pending attempts"
+msgstr "Could not load pending attempts"
+
+msgid "Skipped questions"
+msgstr "Skipped questions"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+
+msgid "Import warnings"
+msgstr "Import warnings"
+
+msgid "Could not import questions"
+msgstr "Could not import questions"
+
+msgid "No question statistics found"
+msgstr "No question statistics found"
+
+msgid "Could not load question statistics"
+msgstr "Could not load question statistics"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "You can also connect an MCP client directly by pointing it to the following endpoint:"
+
+msgid "No applications are currently connected to your account."
+msgstr "No applications are currently connected to your account."
+
+msgid "Connected on"
+msgstr "Connected on"
+
+msgid "Last used"
+msgstr "Last used"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s will no longer be able to access your Chamilo account. Continue?"
+
+msgid "Application revoked"
+msgstr "Application revoked"
+
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Could not copy the MCP endpoint"
+
+msgid "MCP endpoint"
+msgstr "MCP endpoint"
+
+msgid "API key"
+msgstr "API key"
+
+msgid "Last used at"
+msgstr "Last used at"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copy this key now. It will not be shown again."
+
+msgid "Rotate API key"
+msgstr "Rotate API key"
+
+msgid "Revoke API key"
+msgstr "Revoke API key"
+
+msgid "Remote MCP connection"
+msgstr "Remote MCP connection"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configure your MCP client with the following values:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "The current key will stop working immediately. Continue?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "A new personal MCP API key will be generated. Continue?"
+
+msgid "MCP API key generated"
+msgstr "MCP API key generated"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Connected MCP clients using this key will stop working immediately. Continue?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API key revoked"
+
+msgid "Could not copy the API key"
+msgstr "Could not copy the API key"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Close old tickets"
+msgstr "Close old tickets"
+
+msgid "Close tickets older than seven days?"
+msgstr "Close tickets older than seven days?"
+
+msgid "Assignment history"
+msgstr "Assignment history"
+
+msgid "Translate with AI"
+msgstr "Translate with AI"
+
+msgid "Target language"
+msgstr "Target language"
+
+msgid "Please select a provider"
+msgstr "Please select a provider"
+
+msgid "Generate translation"
+msgstr "Generate translation"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "At least one terms and conditions section must contain text."
+
+msgid "No active target languages are available."
+msgstr "No active target languages are available."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Access dates"
+
+msgid "Coach access dates"
+msgstr "Coach access dates"
+
+msgid "No sessions found"
+msgstr "No sessions found"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Select the courses that this user must not be able to access in this session."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+
+msgid "Users subscribed to this session"
+msgstr "Users subscribed to this session"
+
+msgid "No available users found"
+msgstr "No available users found"
+
+msgid "Subscribe this user to the session?"
+msgstr "Subscribe this user to the session?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Subscribe the selected users to the session?"
+
+msgid "General tutor planning"
+msgstr "General tutor planning"
+
+msgid "User is already registered by another tutor."
+msgstr "User is already registered by another tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "You're receiving a copy because you're a course tutor"
+
+msgid "General tutor"
+msgstr "General tutor"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutors subscribed as teachers in course %s"
+
+msgid "Tutor name"
+msgstr "Tutor name"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+
+msgid "Access start date for tutors"
+msgstr "Access start date for tutors"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+
+msgid "Access end date for tutors"
+msgstr "Access end date for tutors"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+
+msgid "Tutor and student"
+msgstr "Tutor and student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+
+msgid "User is general tutor in some sessions"
+msgstr "User is general tutor in some sessions"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Teachers will be added as tutors in all course sessions."
+
+msgid "Delete failed: invalid question id."
+msgstr "Delete failed: invalid question id."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Average number of sessions per general session tutor"
+
+msgid "No room"
+msgstr "No room"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Import course teachers as course tutors in the session"
+
+msgid "Clean and update course tutors"
+msgstr "Clean and update course tutors"
+
+msgid "Add me as tutor"
+msgstr "Add me as tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Unable to add the survey to the learning path"
+
+msgid "Access dates for tutors"
+msgstr "Access dates for tutors"
+
+msgid "Tutor and group member"
+msgstr "Tutor and group member"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Your daily AI token limit has been reached. Please try again tomorrow."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Your monthly AI token limit has been reached. Please try again next month."
+
+msgid "This course code already exists, please choose another code."
+msgstr "This course code already exists, please choose another code."
+
+msgid "This course title already exists, please choose another title."
+msgstr "This course title already exists, please choose another title."
+
+msgid "This tool visibility cannot be changed"
+msgstr "This tool visibility cannot be changed"
+
+msgid "Invalid visibility"
+msgstr "Invalid visibility"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "You are receiving a copy because you are one of the course tutors"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "You are receiving a copy because you are the course tutor"
+
+msgid "Manual completion"
+msgstr "Manual completion"
+
+msgid "Send to tutors"
+msgstr "Send to tutors"
+
+msgid "Lab title"
+msgstr "Lab title"
+
+msgid "Lab week"
+msgstr "Lab week"
+
+msgid "Final exam access rule"
+msgstr "Final exam access rule"
+
+msgid "Course completion rule"
+msgstr "Course completion rule"
+
+msgid "You have been invited to join a course"
+msgstr "You have been invited to join a course"
+
+msgid "No user has been found"
+msgstr "No user has been found"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "The selected user cannot be subscribed in this context"
+
+msgid "No change has been made"
+msgstr "No change has been made"
+
+msgid "Back to group list"
+msgstr "Back to group list"
+
+msgid "Remove class link"
+msgstr "Remove class link"
+
+msgid "Group settings"
+msgstr "Group settings"
+
+msgid "Self-registration allowed"
+msgstr "Self-registration allowed"
+
+msgid "Self-unregistration allowed"
+msgstr "Self-unregistration allowed"
+
+msgid "This group is linked to the class"
+msgstr "This group is linked to the class"
+
+msgid "Create one or more empty course groups"
+msgstr "Create one or more empty course groups"
+
+msgid "Number of places"
+msgstr "Number of places"
+
+msgid "Base group"
+msgstr "Base group"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Collaboration"
+msgstr "Collaboration"
+
+msgid "The group title is required."
+msgstr "The group title is required."
+
+msgid "Back to group area"
+msgstr "Back to group area"
+
+msgid "Members are managed by the linked class"
+msgstr "Members are managed by the linked class"
+
+msgid "%s groups selected"
+msgstr "%s groups selected"
+
+msgid "Fill selected groups"
+msgstr "Fill selected groups"
+
+msgid "Empty selected groups"
+msgstr "Empty selected groups"
+
+msgid "Fill group"
+msgstr "Fill group"
+
+msgid "Empty group"
+msgstr "Empty group"
+
+msgid "Groups per user"
+msgstr "Groups per user"
+
+msgid "No tutors"
+msgstr "No tutors"
+
+msgid "No users"
+msgstr "No users"

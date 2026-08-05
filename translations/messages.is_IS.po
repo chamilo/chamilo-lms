@@ -13005,61 +13005,61 @@ msgid "Edit term"
 msgstr "Breyta hugtaki"
 
 msgid "Delete term"
-msgstr ""
+msgstr "Eyða hugtaki"
 
 msgid "Pre-defined"
-msgstr ""
+msgstr "Forstillt"
 
 msgid "Term added"
-msgstr ""
+msgstr "Hugtak bætt við"
 
 msgid "You must enter a term"
-msgstr ""
+msgstr "Þú verður að slá inn hugtak"
 
 msgid "You must enter a term definition"
-msgstr ""
+msgstr "Þú verður að slá inn skilgreiningu hugtaks"
 
 msgid "This glossary term already exists. Please change the term name."
-msgstr ""
+msgstr "Þetta hugtak er þegar til í orðasafninu. Vinsamlegast breyttu nafni hugtaksins."
 
 msgid "Glossary management"
-msgstr ""
+msgstr "Stjórnun orðasafns"
 
 msgid "The term has moved"
-msgstr ""
+msgstr "Hugtakið hefur verið fært"
 
 msgid "Forums Help"
-msgstr ""
+msgstr "Hjálp um spjallborð"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr ""
+msgstr "<p> Spjallborðið er umræðutæki fyrir ósamstillt skriflegt starf.  Í samanburði við tölvupóst er spjallborð fyrir opinberar eða hálfopinberar hópumræður. </p>Til að nota Chamilo spjallborðið þurfa meðlimir einfaldlega að nota vafrann sinn - þeir þurfa ekki sérstakan biðlara. </p>Til að skipuleggja spjallborð, smelltu á Spjallborðstólið. Umræður eru skipulagðar stigveldis samkvæmt eftirfarandi uppbyggingu: </ p><b> Flokkur> Spjallborð> Umræðuefni> Innlegg</ b> </ p> Til að tryggja að meðlimir geti tekið þátt í spjallborðinu á skipulegan og skilvirkan hátt er nauðsynlegt í fyrstu að búa til flokka og spjallborð; þá er það þátttakenda að búa til umræðuefni og innlegg. Sjálfgefið inniheldur spjallborðið einn (opinberan) flokk, dæmi um umræðuefni og dæmi um innlegg. Þú getur bætt spjallborðum við flokkinn,  breytt titli hans eða búið til aðra flokka þar sem þú gætir síðan búið til ný spjallborð. (Ekki rugla saman flokkum og spjallborðum, og mundu að flokkur sem inniheldur ekkert spjallborð er gagnslaus og er ekki sýndur.)</p>\n<p>Lýsing spjallborðs gæti innihaldið lista yfir meðlimi þess, skilgreiningu á tilgangi þess, markmið, verkefni, þema o.s.frv.</p><p>Hópaspjallborð ætti ekki að búa til í gegnum Spjallborðstólið heldur í gegnum Hópatólið, þar sem þú getur ákveðið hvort hópaspjallborð þín eigi að vera einkarekin eða opinber, á sama tíma og þú gefur stað fyrir að deila hópaskjölum.</p><b> Kennsluráð</ b></ p> Námsspjallborð er ekki alveg það sama og spjallborðin sem þú ert vanur að sjá á internetinu. Í fyrsta lagi er ekki mögulegt fyrir nemendur að breyta innleggjum sínum eftir að þau hafa verið birt þar sem námskeiðið er röklega geymt til að leyfa að rekja það sem hefur verið sagt áður. Ennfremur leyfa Chamilo spjallborð sérstaka notkun sem skiptir máli fyrir kennslu. Til dæmis birta sumir kennarar/þjálfarar leiðréttingar beint í spjallborðum á eftirfarandi hátt: <li> Nemanda er beðið um að birta skýrslu beint í spjallborðinu, </ li> Kennarinn leiðréttir hana með því að smella á Breyta (gul blýantur) og merkja hana með grafískum ritli (lit, undirstrikun o.s.frv.) </ li> Að lokum njóta aðrir nemendur góðs af því að sjá leiðréttingarnar sem gerðar voru á framleiðslu eins þeirra, </ li> Athugaðu að sama meginreglan er hægt að beita á milli nemenda, en mun krefjast þess að hann afriti/lími skilaboð félaga síns vegna þess að nemendur / þjálfanemendur geta ekki breytt innleggjum hvors annars. <. li> </ ul>"
 
 msgid "Dropbox Help"
-msgstr ""
+msgstr "Hjálp um Dropbox"
 
 msgid "<p>The dropbox tool is a Content Management Tool facilitating peer-to-peer data exchange. It accepts any filetype (Word, Excel, PDF etc.) It will overwrite existing files with the same name only if directed to do so.<br /> <br /> Learners can can only send a file to their teacher, unless the system administrator has enabled sharing between users. A course manager, however, can opt to to send a file to all course users. <br /> <br />The system administrator can configure the dropbox so that a user can receive but not send files.<br /> <br /> If the file list gets too long, some or all files can be deleted from the list, although the  file itself remaims available to other users until all users have deleted  it.<br /> </p><p>In the received folder, the dropbox tool displays files that have been sent to you and in the sent folder it shows files sent to other course members.</p><p>To send a document to more than one person, you need to hold CTRLand check the multiple select box(i.e.the  field showing the list of members).</p>"
-msgstr ""
+msgstr "<p>Dropbox-tólið er efnisstjórnunartól sem auðveldar jafningjaskipti gagna. Það tekur við hvaða skráargerð sem er (Word, Excel, PDF o.s.frv.) Það mun aðeins skrifa yfir núverandi skrár með sama nafni ef það er beint til þess.<br /> <br /> Nemendur geta aðeins sent skrá til kennara síns, nema kerfisstjórinn hafi virkjað deilingu milli notenda. Námskeiðsstjóri getur hins vegar valið að senda skrá til allra notenda námskeiðsins. <br /> <br />Kerfisstjórinn getur stillt dropbox svo að notandi geti tekið á móti en ekki sent skrár.<br /> <br /> Ef skráalistin verður of löng er hægt að eyða sumum eða öllum skrám úr listanum, þó að skráin sjálf haldist tiltæk fyrir aðra notendur þar til allir notendur hafa eytt henni.<br /> </p><p>Í mótteknum möppu sýnir dropbox-tólið skrár sem hafa verið sendar til þín og í sendum möppu sýnir það skrár sem sendar hafa verið til annarra námskeiðsmeðlima.</p><p>Til að senda skjal til fleiri en eins manns þarftu að halda CTRL og haka við margvalskassann (þ.e. reitinn sem sýnir listann yfir meðlimi).</p>"
 
 msgid "Homepage Help"
-msgstr ""
+msgstr "Hjálp um heimasíðu"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr ""
+msgstr "<p>Námskeiðsheimasíðan sýnir ýmis tól (inngangstexta,  lýsingu, skjalastjóra o.s.frv.) Þessi síða er mátbundin í þeim skilningi að þú getur falið eða sýnt hvaða tól sem er í nemendasýn með einum smelli á 'auga' táknið (falin tól er hægt að virkja aftur hvenær sem er. </p><b>Leiðsögn</b><p>Til að vafra um námskeiðið geturðu einfaldlega smellt á táknin; 'brauðmolaslóð' leiðsagnarverkfæri efst á síðunni gerir þér kleift að rekja skref þín aftur til námskeiðsheimasíðunnar.</p><b>Besta starfsvenja</b><p>Til að hjálpa til við að hvetja nemendur er gagnlegt að láta námskeiðið þitt virðast 'lifandi' með því að gefa til kynna að alltaf sé einhver til staðar 'á bak við skjáinn'. Áhrifarík leið til að gefa þessa tilfinningu er að uppfæra inngangstextann (smelltu bara á gula blýantinn) að minnsta kosti einu sinni í viku með nýjustu fréttum, skiladögum o.s.frv.</p><p>Þegar þú býrð til námskeiðið þitt, reyndu eftirfarandi skref:<ol><li>Í námskeiðsstillingum, gerðu námskeiðsaðgang einkareknan og áskrift aðeins tiltæka fyrir þjálfara. Þannig getur enginn farið inn á námskeiðssvæðið þitt á meðan það er í smíðum,</li><li>Notaðu hvaða tól sem þú þarft til að 'fylla' svæðið þitt með efni, athöfnum, leiðbeiningum, prófum o.s.frv.,</li><li>Feldu nú öll tól svo heimasíðan þín sé tóm í nemendasýn með því að smella á augun til að gera táknin grá. </li><li>Notaðu Námsleiðartólið til að búa til námsleið til að skipuleggja hvernig nemendur munu fylgja henni og læra innan hennar. Þannig, þó að þú munir nota hin tólin, þarftu ekki upphaflega að sýna þau á heimasíðunni. </li><li>Smelltu á augatáknið við hlið leiðarinnar sem þú bjóst til til að sýna hana á heimasíðunni.</li><li>Námskeiðið þitt er tilbúið til skoðunar. Heimasíða þess mun sýna inngangstexta fylgt eftir með einum hlekk til að leiða nemendur inn í og í gegnum námskeiðið. Smelltu á Nemendasýn hnappinn (efst til hægri) til að sjá námskeiðið frá sjónarhóli nemandans.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
-msgstr ""
+msgstr "Hjálp um Chamilo LIVE"
 
 msgid "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
-msgstr ""
+msgstr "GoogleMaps viðbótin þarf að vera virkjuð af kerfisstjóra til að sýna kortið."
 
 msgid "Chamilo Help"
-msgstr ""
+msgstr "Chamilo Hjálp"
 
 msgid "Documents Help"
-msgstr ""
+msgstr "Hjálp um skjöl"
 
 msgid "Users Help"
-msgstr ""
+msgstr "Hjálp um notendur"
 
 msgid "Tests Help"
 msgstr "Próf – Hjálp"
@@ -14112,40 +14112,40 @@ msgid "Add to gradebook"
 msgstr "Bæta við einkunnabók"
 
 msgid "Weight inside assessment"
-msgstr ""
+msgstr "Vægi innan mats"
 
 msgid "Date limits"
-msgstr ""
+msgstr "Dagsetningarmörk"
 
 msgid "Posted sending deadline"
-msgstr ""
+msgstr "Frestur fyrir innsendingu"
 
 msgid "Directory created"
-msgstr ""
+msgstr "Mappa búin til"
 
 msgid "Deadline for assignments"
-msgstr ""
+msgstr "Frestur fyrir verkefni"
 
 msgid "Enable handing over deadline (visible to learners)"
-msgstr ""
+msgstr "Virkja frest fyrir afhendingu (sýnilegt nemendum)"
 
 msgid "Enable final acceptance date (invisible to learners)"
-msgstr ""
+msgstr "Virkja lokadagsetningu (ósýnilegt nemendum)"
 
 msgid "Impossible to save the document"
-msgstr ""
+msgstr "Ekki hægt að vista skjalið"
 
 msgid "End date cannot be before the expiry date"
-msgstr ""
+msgstr "Lokadagsetning getur ekki verið á undan fyrningardagsetningu"
 
 msgid "Select a filter"
-msgstr ""
+msgstr "Veldu síu"
 
 msgid "Filter by not expired"
-msgstr ""
+msgstr "Sía eftir ekki útrunnum"
 
 msgid "Filter assignments"
-msgstr ""
+msgstr "Sía verkefni"
 
 msgid "Minimum score expected"
 msgstr ""
@@ -26910,7 +26910,7 @@ msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue 
 msgstr "HTTP Public Key Pinning verndar vefsvæðið þitt gegn MiTM árásum með því að nota sviknar X.509 vottorð. Með því að leyfa aðeins auðkenni sem vafrinn ætti að treysta á eru notendur þínir verndaðir ef vottorðayfirvald er brotið."
 
 msgid "HTTP Public Key Pinning report only"
-msgstr "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning skýrsla aðeins"
 
 msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
 msgstr "Þessi stilling gerir þér kleift að prófa með því að tilkynna en ekki framfylgja einhverri HTTP Public Key Pinning."
@@ -26934,7 +26934,7 @@ msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the cont
 msgstr "X-Content-Type-Options kemur í veg fyrir að vafrinn reyni að MIME-sniffa efnistegundina og neyðir hann til að halda sig við tilgreinda efnistegund. Eina gilda gildið fyrir þessa haus er 'nosniff'."
 
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Öryggis tilvísunarstefna"
 
 msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
 msgstr "Referrer Policy er nýr haus sem gerir vefsvæði kleift að stjórna hversu miklar upplýsingar vafrinn inniheldur við leiðsögn frá skjali og ætti að vera stilltur af öllum vefsvæðum."
@@ -31512,37 +31512,37 @@ msgid "Unknown course"
 msgstr "Óþekkt námskeið"
 
 msgid "Certificate not found."
-msgstr ""
+msgstr "Skírteini fannst ekki."
 
 msgid "Security token expired. Please reload the page and try again."
-msgstr ""
+msgstr "Öryggistákn er útrunnið. Vinsamlegast endurhlaðið síðuna og reynið aftur."
 
 msgid "Only platform administrators can change the course visibility."
-msgstr ""
+msgstr "Aðeins kerfisstjórar geta breytt sýnileika námskeiðs."
 
 msgid "Unexpected error while subscribing the user"
-msgstr ""
+msgstr "Óvænt villa við að skrá notandann"
 
 msgid "Search in resource logs"
-msgstr ""
+msgstr "Leita í auðlindaskrám"
 
 msgid "Include this learning path in the global search results"
-msgstr ""
+msgstr "Hafa þessa námsleið með í almennum leitarniðurstöðum"
 
 msgid "The course code already exists"
-msgstr ""
+msgstr "Námskeiðskóði er þegar til"
 
 msgid "Latest news"
-msgstr ""
+msgstr "Nýjustu fréttir"
 
 msgid "Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators."
-msgstr ""
+msgstr "Fáðu nýjustu fréttir frá Chamilo, þar á meðal öryggisveikleika og viðburði, beint inn í stjórnunarborðið þitt. Þessar fréttir verða athugaðar á Chamilo fréttamiðlaranum í hvert skipti sem þú hleður inn stjórnunarsíðunni og eru aðeins sýnilegar stjórnendum."
 
 msgid "Chamilo support block"
-msgstr ""
+msgstr "Chamilo stuðningskassi"
 
 msgid "Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page."
-msgstr ""
+msgstr "Fáðu fagleg ráð og auðvelda leið til að hafa samband við opinbera þjónustuaðila fyrir faglegan stuðning, beint frá framleiðendum Chamilo. Þessi kassi birtist á stjórnunarsíðunni þinni, er aðeins sýnilegur stjórnendum og uppfærist í hvert skipti sem þú hleður inn stjórnunarsíðunni."
 
 msgid "Hide option to send announcements to HR users"
 msgstr "Fela valkost til að senda tilkynningar til HR-notenda"
@@ -37504,4 +37504,1432 @@ msgstr "Nútímaleg, velkomin mynd sem sýnir efnisviðfangsefni þessa námskei
 
 msgid "Back to account"
 msgstr "Til baka á reikning"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Þín endurgjöf mun hjálpa okkur að bæta framtíðarþjálfun."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Þakka þér fyrir að deila endurgjöf þinni."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Hversu ánægður ertu með heildargæði þjálfunarinnar?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Hversu ánægður ertu með viðeigandi efnisins?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Hversu ánægður ertu með skýrleika skýringanna?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Hversu ánægður ertu með skipulag og hraða þjálfunarinnar?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Hversu ánægður ertu með hagnýta nytsemi þess sem þú lærðir?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Myndirðu mæla með þessari þjálfun fyrir aðra?"
+
+msgid "What should we improve in future editions?"
+msgstr "Hvað ættum við að bæta í framtíðarútgáfum?"
+
+msgid "Very satisfied"
+msgstr "Mjög ánægður"
+
+msgid "Satisfied"
+msgstr "Ánægður"
+
+msgid "Neutral"
+msgstr "Hlutlaus"
+
+msgid "Dissatisfied"
+msgstr "Óánægður"
+
+msgid "Very dissatisfied"
+msgstr "Mjög óánægður"
+
+msgid "Add destination"
+msgstr "Bæta við áfangastað"
+
+msgid "Add this test to the assessment tool"
+msgstr "Bæta þessu prófi við matsverkfærið"
+
+msgid "Attempts and timing"
+msgstr "Tilraunir og tímasetning"
+
+msgid "Available questions"
+msgstr "Tiltækar spurningar"
+
+msgid "Cancel and return to learning path"
+msgstr "Hætta við og fara aftur í námsleið"
+
+msgid "Category destinations"
+msgstr "Flokka áfangastaði"
+
+msgid "Classification"
+msgstr "Flokkun"
+
+msgid "Context"
+msgstr "Samhengi"
+
+msgid "Could not load exercise configuration"
+msgstr "Ekki tókst að hlaða inn stillingum æfingar"
+
+msgid "Could not save exercise"
+msgstr "Ekki tókst að vista æfingu"
+
+msgid "Display and learning path"
+msgstr "Birting og námsleið"
+
+msgid "Edit test"
+msgstr "Breyta prófi"
+
+msgid "Exercise settings saved."
+msgstr "Stillingar æfingar vistaðar."
+
+msgid "Extra settings"
+msgstr "Viðbótarstillingar"
+
+msgid "Feedback and results"
+msgstr "Endurgjöf og niðurstöður"
+
+msgid "Finish exercise"
+msgstr "Ljúka æfingu"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Tilgreinir tungumál þessarar æfingar sem auðlindalýsigögn. Virkjar ekki leitarskráningu sjálfkrafa."
+
+msgid "Maximum score (%)"
+msgstr "Hámarksstig (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Lýsigögn innihalda færni og viðbótarreiti sem stilltir eru fyrir æfingar. Það er valfrjálst og haldist falið þar til það er opnað."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Engir spurningaflokkar eru tiltækir fyrir þessa æfingu ennþá."
+
+msgid "Question categories matrix"
+msgstr "Spurningaflokka fylki"
+
+msgid "Questions behavior"
+msgstr "Hegðun spurninga"
+
+msgid "Random by category"
+msgstr "Slembið eftir flokki"
+
+msgid "Remove destination"
+msgstr "Fjarlægja áfangastað"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reglur eru metnar eftir stigaprósentu í hækkandi röð. Veldu Ljúka æfingu til að enda prófið."
+
+msgid "Score and final messages"
+msgstr "Stig og loka skilaboð"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Sumir valkostir eru læstir eftir að æfingin hefur verið búin til."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Þetta gildi er geymt sem heildartímalengd í mínútum."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Notaðu 0 til að halda öllum tiltækum spurningum. Notaðu -1 þar sem allar tiltækar spurningar eru leyfðar."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Notaðu þessi reiti til að flokka æfinguna óháð birtingarvalkostum hennar."
+
+msgid "Invite by email"
+msgstr ""
+
+msgid "Invitation has been sent"
+msgstr ""
+
+msgid "Sent on"
+msgstr ""
+
+msgid "Accepted on"
+msgstr ""
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr ""
+
+msgid "Revoke"
+msgstr ""
+
+msgid "Revoked"
+msgstr ""
+
+msgid "Invitation has been revoked"
+msgstr ""
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr ""
+
+msgid "No default room"
+msgstr ""
+
+msgid "Floor"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Use attendance default room"
+msgstr ""
+
+msgid "Floor number"
+msgstr ""
+
+msgid "Copy to students"
+msgstr ""
+
+msgid "Generate a quick test on this topic"
+msgstr ""
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr ""
+
+msgid "MCP API key"
+msgstr ""
+
+msgid "Authorized applications"
+msgstr ""
+
+msgid "Your session is about to expire"
+msgstr ""
+
+msgid "Do you want to continue your session?"
+msgstr ""
+
+msgid "Stay connected"
+msgstr "Vertu tengdur"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Þú verður skráður út eftir %s sekúndur."
+
+msgid "No descriptions available yet."
+msgstr "Engar lýsingar tiltækar enn."
+
+msgid "%s users selected"
+msgstr "%s notendur valdir"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Valdir notendur hafa verið skráðir á námskeiðið"
+
+msgid "Import teachers"
+msgstr "Flytja inn kennara"
+
+msgid "Import learners"
+msgstr "Flytja inn nemendur"
+
+msgid "Select CSV file"
+msgstr "Velja CSV-skrá"
+
+msgid "Some users could not be subscribed"
+msgstr "Sumir notendur gátu ekki verið skráðir"
+
+msgid "Browse available classes"
+msgstr "Skoða tiltæka flokka"
+
+msgid "Back to linked classes"
+msgstr "Til baka í tengda flokka"
+
+msgid "No classes are currently linked to this course."
+msgstr "Engir flokkar eru núna tengdir þessu námskeiði."
+
+msgid "No available classes were found for this course."
+msgstr "Engir tiltækir flokkar fundust fyrir þetta námskeið."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ertu viss um að þú viljir afskrá valda notendur?"
+
+msgid "Learning path access"
+msgstr "Aðgangur að námsleið"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Aðeins valdir notendur og hópar geta fengið aðgang að þessari námsleið. Stjórnaðu þeim eftir vistun."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Allir núverandi og framtíðar notendur námskeiðsins geta fengið aðgang að þessari námsleið."
+
+msgid "All course users"
+msgstr "Allir námskeiðsnotendur"
+
+msgid "Selected users and groups"
+msgstr "Valdir notendur og hópar"
+
+msgid "No access"
+msgstr "Enginn aðgangur"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Aðeins notendur og hópar sem bætt er við hér geta fengið aðgang að þessari námsleið."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Fjöldi spurninga takmarkaður við hámark %s"
+
+msgid "Open exercise player"
+msgstr "Opna æfingaspilara"
+
+msgid "The score is hidden for this exercise."
+msgstr "Stigin eru falin fyrir þessa æfingu."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Leiðréttingar eru faldar samkvæmt stillingum æfinganiðurstöðu."
+
+msgid "Progressive adaptive result"
+msgstr "Stigvaxandi aðlögunarniðurstaða"
+
+msgid "Achieved level"
+msgstr "Náð stig"
+
+msgid "Correction history"
+msgstr "Leiðréttingarsaga"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Saga handvirkra leiðréttinga sem gerðar voru fyrir þessa tilraun."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Þessi æfing notar radar-/köngulóarnet-niðurstöðustillingu. Myndritið er ekki tiltækt á þessari síðu."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Spurningaupplýsingar eru faldar samkvæmt stillingum æfinganiðurstöðu."
+
+msgid "Media question"
+msgstr "Fjölmiðlaspurning"
+
+msgid "Pending correction"
+msgstr "Bið eftir leiðréttingu"
+
+msgid "No answer"
+msgstr "Ekkert svar"
+
+msgid "Blank %s"
+msgstr "Tómt %s"
+
+msgid "Your order"
+msgstr "Pöntun þín"
+
+msgid "Correct order"
+msgstr "Rétt röð"
+
+msgid "Delineation review"
+msgstr "Útlínuskoðun"
+
+msgid "Learner clicks"
+msgstr "Smellir nemanda"
+
+msgid "Question image"
+msgstr "Spurningsmynd"
+
+msgid "No hotspot image available"
+msgstr "Engin hotspot-mynd tiltæk"
+
+msgid "Learner delineation"
+msgstr "Útlína nemanda"
+
+msgid "Expected delineation"
+msgstr "Væntanleg útlína"
+
+msgid "Expected zones"
+msgstr "Væntanleg svæði"
+
+msgid "Zone"
+msgstr "Svæði"
+
+msgid "Learner annotation"
+msgstr "Athugasemd nemanda"
+
+msgid "No annotation image available"
+msgstr "Engin athugasemdamynd tiltæk"
+
+msgid "This answer is pending teacher correction."
+msgstr "Þetta svar bíður leiðréttingar kennara."
+
+msgid "Teacher comment"
+msgstr "Athugasemd kennara"
+
+msgid "Teacher correction"
+msgstr "Leiðrétting kennara"
+
+msgid "Save correction"
+msgstr "Vista leiðréttingu"
+
+msgid "Learner audio"
+msgstr "Hljóð nemanda"
+
+msgid "Download audio"
+msgstr "Sækja hljóð"
+
+msgid "No uploaded audio"
+msgstr "Ekkert hljóðsent"
+
+msgid "Learner Office document"
+msgstr "Office-skjal nemanda"
+
+msgid "Learner file"
+msgstr "Skrá nemanda"
+
+msgid "Download Office document"
+msgstr "Sækja Office-skjal"
+
+msgid "No submitted document"
+msgstr "Ekkert skjal sent inn"
+
+msgid "No uploaded file"
+msgstr "Engin skrá send inn"
+
+msgid "Content item"
+msgstr "Efnisatriði"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Ekki er hægt að yfirfara þessa spurningu á þessari síðu."
+
+msgid "Exercise completed"
+msgstr "Æfing lokið"
+
+msgid "Could not start the attempt"
+msgstr "Ekki tókst að hefja tilraun"
+
+msgid "Invalid exercise attempt"
+msgstr "Ógild tilraun við æfingu"
+
+msgid "Could not load exercise result"
+msgstr "Ekki tókst að hlaða niðurstöðum æfingar"
+
+msgid "Could not load AI providers"
+msgstr "Ekki tókst að hlaða AI-veitum"
+
+msgid "Could not generate AI suggestion"
+msgstr "Ekki tókst að búa til AI-tillögu"
+
+msgid "Correction saved"
+msgstr "Leiðrétting vistuð"
+
+msgid "Could not save correction"
+msgstr "Ekki tókst að vista leiðréttingu"
+
+msgid "Create exercise"
+msgstr "Búa til æfingu"
+
+msgid "Exercise categories"
+msgstr "Æfingaflokkar"
+
+msgid "Question categories"
+msgstr "Spurningaflokkar"
+
+msgid "Search by exercise title or description."
+msgstr "Leita eftir titli eða lýsingu æfingar."
+
+msgid "Search exercises"
+msgstr "Leita æfinga"
+
+msgid "No exercises found"
+msgstr "Engar æfingar fundust"
+
+msgid "Open exercise"
+msgstr "Opna æfingu"
+
+msgid "Disable autolaunch"
+msgstr "Slökkva á sjálfvirkri ræsingu"
+
+msgid "Enable autolaunch"
+msgstr "Virkja sjálfvirka ræsingu"
+
+msgid "Export QTI2"
+msgstr "Flytja út QTI2"
+
+msgid "Bulk actions"
+msgstr "Magnvinnsluaðgerðir"
+
+msgid "Selected exercises"
+msgstr "Valdar æfingar"
+
+msgid "No exercises selected"
+msgstr "Engar æfingar valdar"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ertu viss um að þú viljir framkvæma þessa aðgerð á völdum æfingum?"
+
+msgid "Bulk action completed"
+msgstr "Magnvinnsluaðgerð lokið"
+
+msgid "Could not update exercises"
+msgstr "Ekki tókst að uppfæra æfingar"
+
+msgid "Could not update exercise"
+msgstr "Ekki tókst að uppfæra æfingu"
+
+msgid "Copy exercise"
+msgstr "Afrita æfingu"
+
+msgid "Delete exercise"
+msgstr "Eyða æfingu"
+
+msgid "Could not load exercises"
+msgstr "Ekki tókst að hlaða æfingum"
+
+msgid "No limit"
+msgstr "Engin takmörk"
+
+msgid "Add selected questions to the test"
+msgstr "Bæta völdum spurningum við prófið"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Þessi spurning er notuð í virku prófi og ekki er hægt að breyta henni hér."
+
+msgid "This question cannot be edited here."
+msgstr "Ekki er hægt að breyta þessari spurningu hér."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Þessi spurning er notuð í virku prófi og ekki er hægt að eyða henni hér."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Ekki er hægt að eyða þessari spurningu vegna takmarkana í stillingum kerfisins."
+
+msgid "Already in test"
+msgstr "Þegar í prófi"
+
+msgid "Select at least one question."
+msgstr "Veldu að minnsta kosti eina spurningu."
+
+msgid "Question bank updated"
+msgstr "Spurningaleit uppfærð"
+
+msgid "Could not update the question bank"
+msgstr "Ekki tókst að uppfæra spurningaleit"
+
+msgid "Could not load the question bank"
+msgstr "Ekki tókst að hlaða spurningaleit"
+
+msgid "Total score"
+msgstr "Heildareinkunn"
+
+msgid "Starting"
+msgstr "Byrja"
+
+msgid "Attempt history"
+msgstr "Tilraunasaga"
+
+msgid "No attempts yet"
+msgstr "Engar tilraunir enn"
+
+msgid "Invalid exercise"
+msgstr "Ógilt verkefni"
+
+msgid "Could not load exercise overview"
+msgstr "Ekki tókst að hlaða yfirliti verkefnis"
+
+msgid "Open test"
+msgstr "Opna próf"
+
+msgid "Random answers"
+msgstr "Slembin svör"
+
+msgid "Prevent moving backwards"
+msgstr "Koma í veg fyrir að fara aftur"
+
+msgid "Previous button hidden"
+msgstr "Fyrri hnappur falinn"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Þetta verkefni notar valkosti sem krefjast annars prófunaraðila."
+
+msgid "Continue test"
+msgstr "Halda áfram prófi"
+
+msgid "Attempt started"
+msgstr "Tilraun hafin"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Kennaraforskoðun býr ekki til rakna tilraun."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Byrja eða halda áfram tilraun á verkefni. Drög að svörum má vista áður en þau eru send inn."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tímamörk náð. Ljúka tilraun."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Spurningatími náð. Vista svarið þitt."
+
+msgid "Finishing"
+msgstr "Ljúka"
+
+msgid "Draft saved"
+msgstr "Drög vistuð"
+
+msgid "Statement"
+msgstr "Yfirlýsing"
+
+msgid "Drop each option on the matching answer"
+msgstr "Dragðu hvern valkost á samsvarandi svar"
+
+msgid "Clear match"
+msgstr "Hreinsa samsvörun"
+
+msgid "Click to place the selected option here"
+msgstr "Smelltu til að setja valinn valkost hér"
+
+msgid "Select an option, then click here"
+msgstr "Veldu valkost, smelltu síðan hér"
+
+msgid "Already matched"
+msgstr "Þegar samsvarað"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Þú getur dregið valkost að svari eða valið valkost og smellt síðan á markreit."
+
+msgid "Put the items in the correct order."
+msgstr "Raðaðu atriðunum í rétta röð."
+
+msgid "Move left"
+msgstr "Færa til vinstri"
+
+msgid "Move right"
+msgstr "Færa til hægri"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Þú getur dregið atriði til vinstri eða hægri eða notað færsluhnappa til að breyta röðinni."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Þú getur dregið atriði eða notað færsluhnappa til að breyta röðinni."
+
+msgid "Or upload an audio file"
+msgstr "Eða hala upp hljóðskrá"
+
+msgid "Selected audio"
+msgstr "Valið hljóð"
+
+msgid "Uploaded audio"
+msgstr "Innhlaðið hljóð"
+
+msgid "Office document"
+msgstr "Skrifstofuskjal"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Ljúktu við skjalið í ritlinum hér að neðan. Skráin verður hengd við þessa tilraun til leiðréttingar kennara."
+
+msgid "Reload Office editor"
+msgstr "Endurhlaða Office-ritil"
+
+msgid "Prepare Office document"
+msgstr "Undirbúa Office-skjal"
+
+msgid "Open in new tab"
+msgstr "Opna í nýjum flipa"
+
+msgid "Preparing Office document"
+msgstr "Undirbý Office-skjal"
+
+msgid "Submitted document"
+msgstr "Innsent skjal"
+
+msgid "Annotation tools"
+msgstr "Glósutæki"
+
+msgid "Text to place"
+msgstr "Texti til að setja"
+
+msgid "Click the image to place the text annotation."
+msgstr "Smelltu á myndina til að setja textaglósu."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Smelltu á myndina til að bæta við leiðarpunktum. Notaðu Byrja nýja leið til að aðskilja leiðir."
+
+msgid "Start new path"
+msgstr "Byrja nýja leið"
+
+msgid "Current annotations"
+msgstr "Núverandi glósur"
+
+msgid "Remove point"
+msgstr "Fjarlægja punkt"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Smelltu á myndina til að teikna afmörkunarferhyrning."
+
+msgid "Click a marker to remove it."
+msgstr "Smelltu á merki til að fjarlægja það."
+
+msgid "Placed"
+msgstr "Sett"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Veldu svar og smelltu síðan á myndina til að merkja það."
+
+msgid "Reading speed"
+msgstr "Leshraði"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Ekki er hægt að birta þessa spurningategund í þessum spilara."
+
+msgid "Save draft"
+msgstr "Vista drög"
+
+msgid "I confirm that my answers were saved."
+msgstr "Ég staðfesti að svörin mín voru vistuð."
+
+msgid "Finish test"
+msgstr "Ljúka prófi"
+
+msgid "Attempt finished"
+msgstr "Tilraun lokið"
+
+msgid "Question category"
+msgstr "Spurningaflokkur"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Þú hefur lokið spurningum sem tengjast þessum spurningaflokki. Þetta er síðasta tækifærið þitt til að fara til baka og endurskoða þær."
+
+msgid "Question time left"
+msgstr "Spurningatími eftir"
+
+msgid "Time left"
+msgstr "Tími eftir"
+
+msgid "Current attempt"
+msgstr "Núverandi tilraun"
+
+msgid "Could not save draft answer"
+msgstr "Ekki tókst að vista drög að svari"
+
+msgid "Could not load exercise"
+msgstr "Ekki tókst að hlaða inn æfingu"
+
+msgid "Draft answer saved"
+msgstr "Drög að svari vistuð"
+
+msgid "Could not finish the attempt"
+msgstr "Ekki tókst að ljúka tilraun"
+
+msgid "Could not prepare Office document"
+msgstr "Ekki tókst að undirbúa Office-skjal"
+
+msgid "Back to learner score"
+msgstr "Til baka í einkunn nemanda"
+
+msgid "Disable auto refresh"
+msgstr "Slökkva á sjálfvirkri endurhleðslu"
+
+msgid "Enable auto refresh"
+msgstr "Kveikja á sjálfvirkri endurhleðslu"
+
+msgid "Live window"
+msgstr "Beint gluggi"
+
+msgid "Ongoing attempts"
+msgstr "Í gangi tilraunir"
+
+msgid "Completed attempts"
+msgstr "Lokið tilraunir"
+
+msgid "Started"
+msgstr "Hófst"
+
+msgid "Last activity"
+msgstr "Síðasta virkni"
+
+msgid "Could not load live results"
+msgstr "Ekki tókst að hlaða inn beinum niðurstöðum"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Þessi æfing er aðeins til lestrar vegna þess að hún er hluti af námsleið."
+
+msgid "Select a question type to create a question."
+msgstr "Veldu spurningategund til að búa til spurningu."
+
+msgid "Click to preview"
+msgstr "Smelltu til að forskoða"
+
+msgid "Hide preview"
+msgstr "Fela forskoðun"
+
+msgid "Shape"
+msgstr "Lögun"
+
+msgid "Coordinates"
+msgstr "Hnit"
+
+msgid "Blanks"
+msgstr "Auð"
+
+msgid "Switchable blanks"
+msgstr "Skiptanleg auð"
+
+msgid "Blank"
+msgstr "Auð"
+
+msgid "Input width"
+msgstr "Breidd innsláttar"
+
+msgid "Orientation"
+msgstr "Stefna"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ekki tiltækt með núverandi endurgjöf æfingar"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ekki tiltækt í flæði námsleiðarsköpunar"
+
+msgid "Delete question"
+msgstr "Eyða spurningu"
+
+msgid "Could not update exercise questions"
+msgstr "Ekki tókst að uppfæra spurningar æfingar"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Ekki tókst að bæta æfingunni við námsleiðina"
+
+msgid "A valid exercise id is required."
+msgstr "Gilt æfingakenni er krafist."
+
+msgid "Could not load exercise questions"
+msgstr "Ekki tókst að hlaða inn spurningum æfingar"
+
+msgid "Delete selected attempts"
+msgstr "Eyða völdum tilraunum"
+
+msgid "Before date"
+msgstr "Fyrir dagsetningu"
+
+msgid "Pending corrections"
+msgstr "Bið eftir leiðréttingum"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Þessi æfing er læst af einkunnabók. Aðgerðir til að hreinsa tilraunir eru óvirkar."
+
+msgid "No attempts found"
+msgstr "Engar tilraunir fundust"
+
+msgid "Review"
+msgstr "Yfirferð"
+
+msgid "Print/PDF"
+msgstr "Prenta/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Ekki tókst að hlaða inn æfingaskýrslu"
+
+msgid "Select at least one attempt"
+msgstr "Veldu að minnsta kosti eina tilraun"
+
+msgid "Delete selected attempts?"
+msgstr "Eyða völdum tilraunum?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Senda tölvupóst með niðurstöðum yfirfarinnar tilraunar?"
+
+msgid "Could not send emails"
+msgstr "Ekki tókst að senda tölvupósta"
+
+msgid "Exercise result emails sent"
+msgstr "Tölvupóstar með niðurstöðum æfingar sendir"
+
+msgid "Skipped"
+msgstr "Sleppt"
+
+msgid "Close attempt?"
+msgstr "Loka tilraun?"
+
+msgid "Attempt closed"
+msgstr "Tilraun lokað"
+
+msgid "Could not close attempt"
+msgstr "Ekki tókst að loka tilraun"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Senda niðurstöður þessarar tilraunar með tölvupósti til nemanda?"
+
+msgid "Email sent"
+msgstr "Tölvupóstur sendur"
+
+msgid "Could not send email"
+msgstr "Ekki tókst að senda tölvupóst"
+
+msgid "Attempt deleted"
+msgstr "Tilraun eytt"
+
+msgid "Could not delete attempt"
+msgstr "Ekki tókst að eyða tilraun"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Veldu CSV-skrá sem inniheldur dálka fyrir titil og lýsingu."
+
+msgid "Manage categories used to classify questions."
+msgstr "Stjórna flokkum sem notaðir eru til að flokka spurningar."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Stjórna flokkum sem notaðir eru til að flokka æfingar."
+
+msgid "Could not load categories"
+msgstr "Ekki tókst að hlaða inn flokkum"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Innfluttir flokkar: %s. Slepptar línur: %s."
+
+msgid "Imported categories: %s."
+msgstr "Innfluttir flokkar: %s."
+
+msgid "Could not import categories"
+msgstr "Ekki tókst að flytja inn flokka"
+
+msgid "Could not save category"
+msgstr "Ekki tókst að vista flokk"
+
+msgid "Answer distribution"
+msgstr "Svaradreifing"
+
+msgid "Configured answers"
+msgstr "Skilgreind svör"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Nákvæm talning svara fyrir sumar spurningagerðir er ekki tiltæk í fluttri skýrslu ennþá."
+
+msgid "No report by question data found"
+msgstr "Engin skýrslugögn eftir spurningu fundust"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Nákvæm talning svara fyrir þessa spurningagerð er ekki tiltæk í fluttri skýrslu ennþá."
+
+msgid "No answer distribution found"
+msgstr "Engin svaradreifing fundust"
+
+msgid "Could not load report by question"
+msgstr "Ekki tókst að hlaða inn skýrslu eftir spurningu"
+
+msgid "Question settings"
+msgstr "Spurningarstillingar"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Skildu eftir autt eða 0 ef engin tímamörk."
+
+msgid "Time limit in seconds"
+msgstr "Tímamörk í sekúndum"
+
+msgid "Attached questions"
+msgstr "Viðhengdar spurningar"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Aðeins eru taldar upp spurningar sem eru viðhengdar þessari miðlunarspurningu innan núverandi æfingar."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Engar spurningar eru viðhengdar þessari miðlunarspurningu í núverandi æfingu."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Hladdu upp sniðmáti fyrir Office-skjal sem nemendur munu breyta með OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Skipta út Office-skjali"
+
+msgid "Current Office document"
+msgstr "Núverandi Office-skjal"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Þessari spurningu er leiðrétt handvirkt eftir að nemandi skilar breyttu skjali."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Heildareinkunn er reiknuð sem summa einkunna heita punkta."
+
+msgid "Global score"
+msgstr "Heildareinkunn"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Veldu röð heita punkta, veldu lögun hennar og teiknaðu síðan yfir myndina. Fyrir marglínur, smelltu á hvern punkt og ljúktu marglínu, eða tvísmelltu til að ljúka."
+
+msgid "Finish polygon"
+msgstr "Ljúka marglínu"
+
+msgid "Calculated answer"
+msgstr "Reiknað svar"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Vinsamlegast sláðu inn textann þinn hér að neðan og notaðu hornklofa [...] til að skilgreina eitt eða fleiri auð svæði."
+
+msgid "Lowest value"
+msgstr "Lægsta gildi"
+
+msgid "Highest value"
+msgstr "Hæsta gildi"
+
+msgid "Fill in blanks"
+msgstr "Fylla út auð"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Notið valda merki til að skilgreina auð. Dæmi: Höfuðborg Perú er [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Sláið inn valkostina fyrir fellilista, eitt svar á línu. Merkið síðan væntanleg svör hér að neðan, eins og í eldri útgáfu."
+
+msgid "Refresh answers"
+msgstr "Uppfæra svör"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Þessi fellilista-spurning notar eina heildareinkunn, eins og eldri útgáfa."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Vinsamlegast sláið inn að minnsta kosti tvo valkosti fyrir fellilista."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Búið til áfangastaði fyrst, tengið síðan hvert atriði við réttan valkost."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Þessi pörunarspurning notar eina heildareinkunn, eins og eldri útgáfa."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Búið til skrefin og veljið væntanlega staðsetningu fyrir hvert, eins og í eldri Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Nemandar velja Rétt eða Rangt og síðan ákveða vissustig sitt við tilraun. Ritillinn geymir sömu Rétt/Rangt einkunnir og vissustig og eldri útgáfa."
+
+msgid "Hotspot combination"
+msgstr "Heitblettapörun"
+
+msgid "Add delineation"
+msgstr "Bæta við afmörkun"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Þessi Office-skjalspurning hefur enga svarvalkosti. Einkunn hennar er ákveðin við leiðréttingu/niðurstöðuskoðun."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Þessi upphleðsluspurning hefur enga svarvalkosti. Einkunn hennar er ákveðin við leiðréttingu/niðurstöðuskoðun."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Þessi munnlegra tjáningarspurning hefur enga svarvalkosti. Einkunn hennar er ákveðin við leiðréttingu/niðurstöðuskoðun."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Þessi opin spurning hefur enga svarvalkosti. Einkunn hennar er ákveðin við leiðréttingu/niðurstöðuskoðun."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Bæta við lestrartexta með stillingum fyrir skrunhraða."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Bæta við efni, miðli eða lestrarsamhengi án þess að bæta við einkunn."
+
+msgid "Insert a page break without adding score."
+msgstr "Setja inn síðuskil án þess að bæta við einkunn."
+
+msgid "Could not save question"
+msgstr "Ekki tókst að vista spurningu"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Aðeins DOC, DOCX, XLS eða XLSX skjöl eru leyfð."
+
+msgid "Please select an Office document."
+msgstr "Vinsamlegast veljið Office-skjal."
+
+msgid "Please draw at least one hotspot."
+msgstr "Vinsamlegast teiknið að minnsta kosti einn heitblett."
+
+msgid "Please draw at least one delineation."
+msgstr "Vinsamlegast teiknið að minnsta kosti eina afmörkun."
+
+msgid "The fill in blanks text is required."
+msgstr "Texti til að fylla út auð er nauðsynlegur."
+
+msgid "At least one expected answer is required."
+msgstr "Að minnsta kosti eitt væntanlegt svar er nauðsynlegt."
+
+msgid "At least two draggable items are required."
+msgstr "Að minnsta kosti tvö dragaatriði eru nauðsynleg."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Hvert dragaatriði verður að vera tengt við gilda markstaðsetningu."
+
+msgid "At least two matching options are required."
+msgstr "Að minnsta kosti tveir pörunarvalkostir eru nauðsynlegir."
+
+msgid "At least two matching pairs are required."
+msgstr "Að minnsta kosti tvö pörunarpör eru nauðsynleg."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Hvert pörunarpör verður að vera tengt við gildan valkost."
+
+msgid "At least two answers are required."
+msgstr "Að minnsta kosti tvö svör eru nauðsynleg."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Hvert rétt/rangt svar verður að hafa Rétt eða Rangt valið."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Spurning með einu svari verður að hafa nákvæmlega eitt rétt svar."
+
+msgid "At least one correct answer is required."
+msgstr "Að minnsta kosti eitt rétt svar er nauðsynlegt."
+
+msgid "Could not load question"
+msgstr "Ekki tókst að hlaða spurningu"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Veljið námskeið og flytjið út heildarskýrslu æfingar sem CSV."
+
+msgid "Back to reports catalog"
+msgstr "Til baka í skýrsluskrá"
+
+msgid "Could not load exercise global report"
+msgstr "Ekki tókst að hlaða heildarskýrslu æfingar"
+
+msgid "Imported questions"
+msgstr "Innfluttar spurningar"
+
+msgid "Aiken content"
+msgstr "Aiken-efni"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Ekki tókst að hlaða AI Aiken-generator"
+
+msgid "Could not generate Aiken content"
+msgstr "Ekki tókst að búa til Aiken-efni"
+
+msgid "Could not import generated Aiken content"
+msgstr "Ekki tókst að flytja inn búið til Aiken-efni"
+
+msgid "Back to my courses"
+msgstr "Til baka í mín námskeið"
+
+msgid "Open report"
+msgstr "Opna skýrslu"
+
+msgid "Questions with no automatic correction"
+msgstr "Spurningar án sjálfvirkrar leiðréttingar"
+
+msgid "Could not load pending attempts"
+msgstr "Ekki tókst að hlaða biðraðir tilrauna"
+
+msgid "Skipped questions"
+msgstr "Slepptar spurningar"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-innflutningur dreifir þessari heildarþyngd yfir innfluttar spurningar nema spurning skilgreini SCORE."
+
+msgid "Import warnings"
+msgstr "Viðvaranir við innflutning"
+
+msgid "Could not import questions"
+msgstr "Ekki tókst að flytja inn spurningar"
+
+msgid "No question statistics found"
+msgstr "Engin tölfræði spurninga fannst"
+
+msgid "Could not load question statistics"
+msgstr "Ekki tókst að hlaða tölfræði spurninga"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Þú getur einnig tengt MCP-viðskiptavin beint með því að vísa honum á eftirfarandi endapunkt:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Engin forrit eru núna tengd við reikninginn þinn."
+
+msgid "Connected on"
+msgstr "Tengt þann"
+
+msgid "Last used"
+msgstr "Síðast notað"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s mun ekki lengur hafa aðgang að Chamilo-reikningnum þínum. Halda áfram?"
+
+msgid "Application revoked"
+msgstr "Forrit afturkallað"
+
+msgid "Copied to clipboard"
+msgstr "Afritað á klippiborð"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Ekki tókst að afrita MCP-endapunkt"
+
+msgid "MCP endpoint"
+msgstr "MCP-endapunktur"
+
+msgid "API key"
+msgstr "API-lykill"
+
+msgid "Last used at"
+msgstr "Síðast notað"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Afritaðu þennan lykil núna. Hann verður ekki sýndur aftur."
+
+msgid "Rotate API key"
+msgstr "Snúa API-lykli"
+
+msgid "Revoke API key"
+msgstr "Afturkalla API-lykil"
+
+msgid "Remote MCP connection"
+msgstr "Fjartengd MCP-tenging"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Stilltu MCP-viðskiptavininn með eftirfarandi gildum:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Núverandi lykill hættir að virka strax. Halda áfram?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Nýr persónulegur MCP API-lykill verður búinn til. Halda áfram?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-lykill búinn til"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Tengdir MCP-viðskiptavinir sem nota þennan lykil hætta að virka strax. Halda áfram?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-lykill afturkallaður"
+
+msgid "Could not copy the API key"
+msgstr "Ekki tókst að afrita API-lykilinn"
+
+msgid "Project"
+msgstr "Verkefni"
+
+msgid "Close old tickets"
+msgstr "Loka gömlum miðum"
+
+msgid "Close tickets older than seven days?"
+msgstr "Loka miðum eldri en sjö daga?"
+
+msgid "Assignment history"
+msgstr "Sögu verkefna"
+
+msgid "Translate with AI"
+msgstr "Þýða með gervigreind"
+
+msgid "Target language"
+msgstr "Markmál"
+
+msgid "Please select a provider"
+msgstr "Veldu þjónustuaðila"
+
+msgid "Generate translation"
+msgstr "Búa til þýðingu"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Að minnsta kosti einn hluti skilmála og skilyrða verður að innihalda texta."
+
+msgid "No active target languages are available."
+msgstr "Engin virk markmál eru tiltæk."
+
+msgid "Tutor"
+msgstr "Leiðbeinandi"
+
+msgid "Access dates"
+msgstr "Aðgangsdagsetningar"
+
+msgid "Coach access dates"
+msgstr "Aðgangsdagsetningar leiðbeinanda"
+
+msgid "No sessions found"
+msgstr "Engar lotur fundust"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Veldu námskeiðin sem þessi notandi má ekki hafa aðgang að í þessari lotu."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Ekki er hægt að loka notanda frá öllum námskeiðum í lotunni. Afskráðu notandann í staðinn."
+
+msgid "Users subscribed to this session"
+msgstr "Notendur skráðir í þessa lotu"
+
+msgid "No available users found"
+msgstr "Engir tiltækir notendur fundust"
+
+msgid "Subscribe this user to the session?"
+msgstr "Skrá þennan notanda í lotuna?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Skrá valda notendur í lotuna?"
+
+msgid "General tutor planning"
+msgstr "Almenn áætlun leiðbeinanda"
+
+msgid "User is already registered by another tutor."
+msgstr "Notandi er þegar skráður af öðrum leiðbeinanda."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Þú færð afrit vegna þess að þú ert námskeiðsleiðbeinandi"
+
+msgid "General tutor"
+msgstr "Almennur leiðbeinandi"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Hugleiddu námskeiðin, leiðbeinendur, tæknilega hjálparþjónustu, kennara og/eða tiltækt efni."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Leiðbeinendur skráðir sem kennarar í námskeiði %s"
+
+msgid "Tutor name"
+msgstr "Nafn leiðbeinanda"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Leiðbeinendur lotu eru samhæfingaraðilar lotunnar og geta starfað sem leiðbeinendur fyrir hvert námskeið í lotunni. Aðeins notendur með kennarahlutverk geta verið valdir sem leiðbeinendur lotu."
+
+msgid "Access start date for tutors"
+msgstr "Aðgangsbyrjunardagsetning fyrir leiðbeinendur"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Dagsetning þegar lotan er gerð aðgengileg leiðbeinendum svo þeir geti undirbúið hana áður en nemendur tengjast"
+
+msgid "Access end date for tutors"
+msgstr "Aðgangslokadagsetning fyrir leiðbeinendur"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Dagsetning þegar lotan er lokað fyrir leiðbeinendur. Viðbótartíminn gerir þeim kleift að flytja út allar viðeigandi upplýsingar um framvindu"
+
+msgid "Tutor and student"
+msgstr "Leiðbeinandi og nemandi"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Þessi skýrsla sýnir vikulega dreifingu lota eftir almennum leiðbeinanda á valnu tímabili."
+
+msgid "User is general tutor in some sessions"
+msgstr "Notandi er almennur leiðbeinandi í sumum lotum"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Kennarar verða bættir við sem leiðbeinendur í öllum námskeiðslotum."
+
+msgid "Delete failed: invalid question id."
+msgstr "Eyðing mistókst: ógilt spurningarauðkenni."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Meðalfjöldi lota á hvern almennan leiðbeinanda lotu"
+
+msgid "No room"
+msgstr "Enginn salur"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Flytja inn námskeiðskennara sem námskeiðsleiðbeinendur í lotunni"
+
+msgid "Clean and update course tutors"
+msgstr "Hreinsa og uppfæra námskeiðsleiðbeinendur"
+
+msgid "Add me as tutor"
+msgstr "Bæta mér við sem leiðbeinanda"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ekki tókst að bæta könnuninni við námsleiðina"
+
+msgid "Access dates for tutors"
+msgstr "Aðgangsdagsetningar fyrir leiðbeinendur"
+
+msgid "Tutor and group member"
+msgstr "Leiðbeinandi og hópmeðlimur"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Daglegu AI-táknamörkum þínum hefur verið náð. Reyndu aftur á morgun."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Mánaðarlegu AI-táknamörkum þínum hefur verið náð. Reyndu aftur næsta mánuð."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Þetta námskeiðskóði er þegar til, veldu annan kóða."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Þetta námskeiðsheiti er þegar til, veldu annað heiti."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Ekki er hægt að breyta sýnileika þessa tóls"
+
+msgid "Invalid visibility"
+msgstr "Ógildur sýnileiki"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Þú færð afrit vegna þess að þú ert einn af námskeiðsleiðbeinendunum"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Þú færð afrit vegna þess að þú ert námskeiðsleiðbeinandinn"
+
+msgid "Manual completion"
+msgstr "Handvirk klárun"
+
+msgid "Send to tutors"
+msgstr "Senda til leiðbeinenda"
+
+msgid "Lab title"
+msgstr "Rannsóknarstofuheiti"
+
+msgid "Lab week"
+msgstr "Rannsóknarstofuvika"
+
+msgid "Final exam access rule"
+msgstr "Aðgangsregla lokaprófs"
+
+msgid "Course completion rule"
+msgstr "Regla um námskeiðsklárun"
+
+msgid "You have been invited to join a course"
+msgstr "Þér hefur verið boðið að taka þátt í námskeiði"
+
+msgid "No user has been found"
+msgstr "Enginn notandi fannst"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Valda notandann er ekki hægt að skrá í þetta samhengi"
+
+msgid "No change has been made"
+msgstr "Engin breyting hefur verið gerð"
+
+msgid "Back to group list"
+msgstr "Aftur á hópalista"
+
+msgid "Remove class link"
+msgstr "Fjarlægja bekkjatengil"
+
+msgid "Group settings"
+msgstr "Hópstillingar"
+
+msgid "Self-registration allowed"
+msgstr "Sjálfsskráning leyfð"
+
+msgid "Self-unregistration allowed"
+msgstr "Sjálfsaðskráning leyfð"
+
+msgid "This group is linked to the class"
+msgstr "Þessi hópur er tengdur bekknum"
+
+msgid "Create one or more empty course groups"
+msgstr "Búa til eitt eða fleiri auð námskeiðshópa"
+
+msgid "Number of places"
+msgstr "Fjöldi plássa"
+
+msgid "Base group"
+msgstr "Grunnhópur"
+
+msgid "Share"
+msgstr "Deila"
+
+msgid "Collaboration"
+msgstr "Samvinna"
+
+msgid "The group title is required."
+msgstr "Titill hópsins er nauðsynlegur."
+
+msgid "Back to group area"
+msgstr "Til baka á hópasvæði"
+
+msgid "Members are managed by the linked class"
+msgstr "Meðlimir eru stýrðir af tengdum bekk"
+
+msgid "%s groups selected"
+msgstr "%s hópar valdir"
+
+msgid "Fill selected groups"
+msgstr "Fylla valda hópa"
+
+msgid "Empty selected groups"
+msgstr "Tæma valda hópa"
+
+msgid "Fill group"
+msgstr "Fylla hóp"
+
+msgid "Empty group"
+msgstr "Tæma hóp"
+
+msgid "Groups per user"
+msgstr "Hópar á notanda"
+
+msgid "No tutors"
+msgstr "Engir leiðbeinendur"
+
+msgid "No users"
+msgstr "Engir notendur"
 

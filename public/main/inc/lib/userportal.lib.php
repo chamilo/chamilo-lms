@@ -690,7 +690,7 @@ class IndexManager
             foreach ($usergroup_list as $group_id) {
                 $data = $usergroup->get($group_id);
                 $items[] = [
-                    'link' => api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id'],
+                    'link' => api_get_path(WEB_PATH).'my-classes?id='.(int) $data['id'],
                     'title' => $data['name'],
                 ];
             }

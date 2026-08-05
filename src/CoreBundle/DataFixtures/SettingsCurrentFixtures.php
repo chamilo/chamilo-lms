@@ -2407,6 +2407,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'scorm_complete_on_leave_when_incomplete',
+                    'title' => 'Complete SCO on leave when status stays incomplete',
+                    'comment' => "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO.",
+                ],
+                [
                     'name' => 'scorm_lms_update_sco_status_all_time',
                     'title' => 'Update SCO status autonomously',
                     'comment' => 'If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo.',
@@ -3449,6 +3454,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'hide_legal_accept_checkbox',
                     'title' => 'Hide legal accept checkbox in Terms and Conditions page',
                     'comment' => 'If set to true, removes the "I have read and accept" checkbox in the Terms and Conditions page flow.',
+                ],
+                [
+                    'name' => 'allow_invitation_registration',
+                    'title' => 'Allow registration via course invitation links',
+                    'comment' => 'When enabled, a teacher/admin can send a one-time invitation link from a course\'s Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled.',
                 ],
             ],
             'work' => [

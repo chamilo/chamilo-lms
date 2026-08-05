@@ -279,14 +279,28 @@ const form = reactive({
   content: "",
   personalEmail: "",
   phone: "",
-  sessionId: Number(route.query.session_id || 0) || null,
-  courseId: Number(route.query.course_id || 0) || null,
+  sessionId: Number(route.query.session_id || route.query.sid || 0) || null,
+  courseId: Number(route.query.course_id || route.query.cid || 0) || null,
   priorityId: null,
   statusId: null,
   source: "PLA",
 })
 
-const listQuery = computed(() => (form.projectId ? { project_id: String(form.projectId) } : {}))
+const listQuery = computed(() => {
+  const query = {}
+
+  if (form.projectId) query.project_id = String(form.projectId)
+
+  const courseId = Number(route.query.course_id || route.query.cid || 0)
+  const sessionId = Number(route.query.session_id || route.query.sid || 0)
+  const groupId = Number(route.query.gid || 0)
+
+  if (courseId > 0) query.cid = String(courseId)
+  if (sessionId > 0) query.sid = String(sessionId)
+  if (groupId > 0) query.gid = String(groupId)
+
+  return query
+})
 const selectedCategory = computed(() =>
   formData.value?.categories?.find((category) => Number(category.id) === Number(form.categoryId)),
 )
@@ -304,12 +318,15 @@ async function loadForm({ preserveValues = false } = {}) {
     const response = await ticketService.getForm({
       projectId: form.projectId || undefined,
       sessionId: form.sessionId || undefined,
+      courseId: form.courseId || undefined,
     })
     formData.value = response
 
     if (!preserveValues) {
       form.projectId = Number(response.projectId || 0) || null
       form.categoryId = response.categories?.[0]?.id || null
+      form.sessionId = Number(response.sessionId || form.sessionId || 0) || null
+      form.courseId = Number(response.courseId || form.courseId || 0) || null
       form.priorityId = Number(response.defaultPriorityId || 1)
       form.statusId = Number(response.defaultStatusId || 1)
       form.source = response.defaultSource || "PLA"

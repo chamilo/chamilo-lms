@@ -31,7 +31,8 @@ final class Version20260729215300 extends AbstractMigrationChamilo
 
         $hasCompletionSource = $schema
             ->getTable('c_lp_view')
-            ->hasColumn('compdate');
+            ->hasColumn('compdate')
+        ;
         $hasParamedicSource = $schema->hasTable('paramedic');
         $hasTrackProgressSource = $schema->hasTable('track_progress');
 
@@ -42,7 +43,7 @@ final class Version20260729215300 extends AbstractMigrationChamilo
                 'SELECT COUNT(*) FROM c_lp_view WHERE completion_date IS NOT NULL'
             );
 
-            $this->write(sprintf(
+            $this->write(\sprintf(
                 'Legacy column c_lp_view.compdate is not present; completion-date backfill skipped. Existing normalized dates: %d.',
                 $existingCompletionDates
             ));
@@ -97,7 +98,7 @@ WHERE compdate IS NOT NULL
 SQL);
         $this->abortIf(
             $completionConflicts > 0,
-            sprintf(
+            \sprintf(
                 'Legacy LP evidence migration refused because %d completion-date conflicts already exist.',
                 $completionConflicts
             )
@@ -111,7 +112,7 @@ WHERE compdate IS NOT NULL
   AND completion_date IS NULL
 SQL);
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Completion dates pending: %d.',
             $completionPending
         ));
@@ -159,7 +160,7 @@ FROM (
 SQL);
         $this->abortIf(
             $paramedicValueConflicts > 0,
-            sprintf(
+            \sprintf(
                 'Legacy LP evidence migration refused because %d LPs have conflicting legacy lab metadata.',
                 $paramedicValueConflicts
             )
@@ -175,7 +176,7 @@ SQL);
         );
         $this->abortIf(
             $labTitleConflicts + $labWeekConflicts > 0,
-            sprintf(
+            \sprintf(
                 'Legacy LP evidence migration refused because %d conflicting normalized lab values already exist.',
                 $labTitleConflicts + $labWeekConflicts
             )
@@ -204,7 +205,7 @@ FROM (
 ) mapped
 SQL) ?: [];
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Paramedic rows: %d matched, %d unresolved, %d ambiguous.',
             (int) ($paramedicSummary['matched_rows'] ?? 0),
             (int) ($paramedicSummary['unresolved_rows'] ?? 0),
@@ -239,10 +240,11 @@ SQL) ?: [];
         $manualCompletionConflicts = $this
             ->existingManualCompletionConflicts(
                 $manualCompletionFieldId
-            );
+            )
+        ;
         $this->abortIf(
             $manualCompletionConflicts > 0,
-            sprintf(
+            \sprintf(
                 'Legacy LP evidence migration refused because %d conflicting manual-completion values already exist.',
                 $manualCompletionConflicts
             )
@@ -276,7 +278,7 @@ FROM (
 ) mapped
 SQL) ?: [];
 
-        $this->write(sprintf(
+        $this->write(\sprintf(
             'Track progress: %d covered by progress, %d manual fallback, %d unresolved, %d ambiguous.',
             (int) ($trackProgressSummary['covered_by_progress'] ?? 0),
             (int) ($trackProgressSummary['manual_completion_rows'] ?? 0),
@@ -550,12 +552,12 @@ SQL, [
         );
 
         $this->abortIf(
-            1 !== count($rows),
-            sprintf(
+            1 !== \count($rows),
+            \sprintf(
                 'Expected exactly one %s extra field with item type %d, found %d.',
                 $variable,
                 $itemType,
-                count($rows)
+                \count($rows)
             )
         );
 
@@ -568,14 +570,14 @@ SQL, [
     ): int {
         $allowedColumns = ['title', 'weekofday'];
         $this->abortIf(
-            !in_array($legacyColumn, $allowedColumns, true),
-            sprintf(
+            !\in_array($legacyColumn, $allowedColumns, true),
+            \sprintf(
                 'Unsupported legacy lab column: %s.',
                 $legacyColumn
             )
         );
 
-        $sql = sprintf(<<<'SQL'
+        $sql = \sprintf(<<<'SQL'
 SELECT COUNT(*)
 FROM (
     SELECT mapped.lp_iid
@@ -691,7 +693,7 @@ SQL, ['field_id' => $fieldId]);
         foreach ($columns as $column) {
             $this->abortIf(
                 !$table->hasColumn($column),
-                sprintf(
+                \sprintf(
                     'Required target column %s.%s does not exist.',
                     $tableName,
                     $column
@@ -706,7 +708,7 @@ SQL, ['field_id' => $fieldId]);
     ): void {
         $this->abortIf(
             !$schema->hasTable($tableName),
-            sprintf(
+            \sprintf(
                 'Required target table %s does not exist.',
                 $tableName
             )

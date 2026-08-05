@@ -84,7 +84,7 @@ class ExerciseLib
         if (MEDIA_QUESTION === $answerType) {
             $mediaHtml = $objQuestionTmp->selectDescription();
             if (!empty($mediaHtml)) {
-                echo '<div class="media-content wysiwyg">'. $mediaHtml .'</div>';
+                echo '<div class="media-content tiny-content">'. $mediaHtml .'</div>';
             }
             return 0;
         }
@@ -92,7 +92,7 @@ class ExerciseLib
         if (PAGE_BREAK === $answerType) {
             $description = $objQuestionTmp->selectDescription();
             if (!$only_questions && !empty($description)) {
-                echo '<div class="page-break-content wysiwyg">'
+                echo '<div class="page-break-content tiny-content">'
                     . $description .
                     '</div>';
             }
@@ -134,7 +134,7 @@ class ExerciseLib
                 if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
                     echo Display::div(
                         $questionDescription,
-                        ['class' => 'question_description wysiwyg']
+                        ['class' => 'question_description tiny-content']
                     );
                 }
             }

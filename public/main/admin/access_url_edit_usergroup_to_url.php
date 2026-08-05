@@ -25,8 +25,8 @@ $tool_name = get_lang('Edit groups for one URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
-$add_type = $_REQUEST['add_type'] ?? 'multiple';
-$access_url_id = $_REQUEST['access_url_id'] ?? 1;
+$add_type = 'unique' === ($_REQUEST['add_type'] ?? '') ? 'unique' : 'multiple';
+$access_url_id = (int) ($_REQUEST['access_url_id'] ?? 1);
 
 $userGroup = new UserGroupModel();
 

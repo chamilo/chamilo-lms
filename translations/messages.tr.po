@@ -37506,3 +37506,1431 @@ msgstr "Bu kursun konusunu temsil eden, temiz düz tasarım tarzında, platform 
 msgid "Back to account"
 msgstr "Hesaba geri dön"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Geri bildiriminiz gelecek eğitim oturumlarını iyileştirmemize yardımcı olacaktır."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Geri bildiriminizi paylaştığınız için teşekkür ederiz."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Eğitimin genel kalitesinden ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "İçeriğin uygunluğundan ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Açıklamaların netliğinden ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Eğitimin organizasyonu ve temposundan ne kadar memnunsunuz?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Öğrendiklerinizin pratik yararlılığından ne kadar memnunsunuz?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Bu eğitimi başkalarına önerir misiniz?"
+
+msgid "What should we improve in future editions?"
+msgstr "Gelecek baskılarda neyi iyileştirmeliyiz?"
+
+msgid "Very satisfied"
+msgstr "Çok memnunum"
+
+msgid "Satisfied"
+msgstr "Memnunum"
+
+msgid "Neutral"
+msgstr "Nötr"
+
+msgid "Dissatisfied"
+msgstr "Memnun değilim"
+
+msgid "Very dissatisfied"
+msgstr "Hiç memnun değilim"
+
+msgid "Add destination"
+msgstr "Hedef ekle"
+
+msgid "Add this test to the assessment tool"
+msgstr "Bu testi değerlendirme aracına ekle"
+
+msgid "Attempts and timing"
+msgstr "Deneme ve zamanlama"
+
+msgid "Available questions"
+msgstr "Mevcut sorular"
+
+msgid "Cancel and return to learning path"
+msgstr "İptal et ve öğrenme yoluna dön"
+
+msgid "Category destinations"
+msgstr "Kategori hedefleri"
+
+msgid "Classification"
+msgstr "Sınıflandırma"
+
+msgid "Context"
+msgstr "Bağlam"
+
+msgid "Could not load exercise configuration"
+msgstr "Alıştırma yapılandırması yüklenemedi"
+
+msgid "Could not save exercise"
+msgstr "Alıştırma kaydedilemedi"
+
+msgid "Display and learning path"
+msgstr "Görüntüleme ve öğrenme yolu"
+
+msgid "Edit test"
+msgstr "Testi düzenle"
+
+msgid "Exercise settings saved."
+msgstr "Alıştırma ayarları kaydedildi."
+
+msgid "Extra settings"
+msgstr "Ek ayarlar"
+
+msgid "Feedback and results"
+msgstr "Geri bildirim ve sonuçlar"
+
+msgid "Finish exercise"
+msgstr "Alıştırmayı bitir"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Bu alıştırmanın dilini kaynak meta verisi olarak tanımlar. Tek başına arama dizinlemesini etkinleştirmez."
+
+msgid "Maximum score (%)"
+msgstr "Maksimum puan (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Meta veriler, alıştırmalar için yapılandırılmış becerileri ve ek alanları içerir. İsteğe bağlıdır ve açılana kadar gizli kalır."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Bu alıştırma için henüz soru kategorisi mevcut değil."
+
+msgid "Question categories matrix"
+msgstr "Soru kategorileri matrisi"
+
+msgid "Questions behavior"
+msgstr "Soru davranışı"
+
+msgid "Random by category"
+msgstr "Kategoriye göre rastgele"
+
+msgid "Remove destination"
+msgstr "Hedefi kaldır"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Kurallar puan yüzdesine göre artan sırada değerlendirilir. Testi bitirmek için Alıştırmayı bitir'i seçin."
+
+msgid "Score and final messages"
+msgstr "Puan ve son mesajlar"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Alıştırma oluşturulduktan sonra bazı seçenekler kilitlenir."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Bu değer dakika cinsinden toplam süre olarak saklanır."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Tüm mevcut soruları korumak için 0 kullanın. Tüm mevcut sorulara izin verilen yerlerde -1 kullanın."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Bu alanları alıştırmayı görüntüleme seçeneklerinden bağımsız olarak sınıflandırmak için kullanın."
+
+msgid "Invite by email"
+msgstr "E-posta ile davet et"
+
+msgid "Invitation has been sent"
+msgstr "Davetiye gönderildi"
+
+msgid "Sent on"
+msgstr "Gönderilme tarihi"
+
+msgid "Accepted on"
+msgstr "Kabul edilme tarihi"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Bu ders bir oturum içinde açılmıştır. Burada gönderilen davetiye alıcıyı yalnızca bu derse değil, tüm oturuma %s abone edecektir."
+
+msgid "Revoke"
+msgstr "İptal et"
+
+msgid "Revoked"
+msgstr "İptal edildi"
+
+msgid "Invitation has been revoked"
+msgstr "Davetiye iptal edildi"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "%s adresine gönderilen davetiyeyi iptal etmek istediğinizden emin misiniz?"
+
+msgid "No default room"
+msgstr "Varsayılan oda yok"
+
+msgid "Floor"
+msgstr "Kat"
+
+msgid "Capacity"
+msgstr "Kapasite"
+
+msgid "Use attendance default room"
+msgstr "Varsayılan katılım odasını kullan"
+
+msgid "Floor number"
+msgstr "Kat numarası"
+
+msgid "Copy to students"
+msgstr "Öğrencilere kopyala"
+
+msgid "Generate a quick test on this topic"
+msgstr "Bu konuyla ilgili hızlı bir test oluştur"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Kaydedilen belge içeriği işlenmek üzere bir yapay zekâ modeline gönderilecektir."
+
+msgid "MCP API key"
+msgstr "MCP API anahtarı"
+
+msgid "Authorized applications"
+msgstr "Yetkili uygulamalar"
+
+msgid "Your session is about to expire"
+msgstr "Oturumunuz sona ermek üzere"
+
+msgid "Do you want to continue your session?"
+msgstr "Oturumunuza devam etmek istiyor musunuz?"
+
+msgid "Stay connected"
+msgstr "Bağlı kal"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s saniye içinde oturumunuz kapatılacak."
+
+msgid "No descriptions available yet."
+msgstr "Henüz açıklama yok."
+
+msgid "%s users selected"
+msgstr "%s kullanıcı seçildi"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Seçilen kullanıcılar derse kaydedildi"
+
+msgid "Import teachers"
+msgstr "Öğretmenleri içe aktar"
+
+msgid "Import learners"
+msgstr "Öğrencileri içe aktar"
+
+msgid "Select CSV file"
+msgstr "CSV dosyası seç"
+
+msgid "Some users could not be subscribed"
+msgstr "Bazı kullanıcılar kaydedilemedi"
+
+msgid "Browse available classes"
+msgstr "Mevcut sınıfları görüntüle"
+
+msgid "Back to linked classes"
+msgstr "Bağlantılı sınıflara dön"
+
+msgid "No classes are currently linked to this course."
+msgstr "Bu derse bağlı sınıf bulunmuyor."
+
+msgid "No available classes were found for this course."
+msgstr "Bu ders için mevcut sınıf bulunamadı."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Seçilen kullanıcıların kaydını silmek istediğinizden emin misiniz?"
+
+msgid "Learning path access"
+msgstr "Öğrenme yolu erişimi"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Yalnızca seçili kullanıcılar ve gruplar bu öğrenme yoluna erişebilir. Kaydettikten sonra bunları yönetin."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tüm mevcut ve gelecekteki ders kullanıcıları bu öğrenme yoluna erişebilir."
+
+msgid "All course users"
+msgstr "Tüm ders kullanıcıları"
+
+msgid "Selected users and groups"
+msgstr "Seçili kullanıcılar ve gruplar"
+
+msgid "No access"
+msgstr "Erişim yok"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Yalnızca buraya eklenen kullanıcılar ve gruplar bu öğrenme yoluna erişebilir."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Soru sayısı en fazla %s ile sınırlıdır"
+
+msgid "Open exercise player"
+msgstr "Alıştırma oynatıcısını aç"
+
+msgid "The score is hidden for this exercise."
+msgstr "Bu alıştırma için puan gizlidir."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Düzeltmeler, alıştırma sonucu ayarlarına göre gizlidir."
+
+msgid "Progressive adaptive result"
+msgstr "Aşamalı uyarlanabilir sonuç"
+
+msgid "Achieved level"
+msgstr "Ulaşılan seviye"
+
+msgid "Correction history"
+msgstr "Düzeltme geçmişi"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Bu deneme için yapılan manuel düzeltmelerin geçmişi."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Bu alıştırma radar/örümcek ağı sonuç modunu kullanır. Grafik bu sayfada mevcut değildir."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Soru ayrıntıları, alıştırma sonucu ayarlarına göre gizlidir."
+
+msgid "Media question"
+msgstr "Medya sorusu"
+
+msgid "Pending correction"
+msgstr "Düzeltme bekleniyor"
+
+msgid "No answer"
+msgstr "Cevap yok"
+
+msgid "Blank %s"
+msgstr "Boşluk %s"
+
+msgid "Your order"
+msgstr "Sizin sıralamanız"
+
+msgid "Correct order"
+msgstr "Doğru sıralama"
+
+msgid "Delineation review"
+msgstr "Sınırlandırma incelemesi"
+
+msgid "Learner clicks"
+msgstr "Öğrenci tıklamaları"
+
+msgid "Question image"
+msgstr "Soru görseli"
+
+msgid "No hotspot image available"
+msgstr "Sıcak nokta görseli mevcut değil"
+
+msgid "Learner delineation"
+msgstr "Öğrenci sınırlandırması"
+
+msgid "Expected delineation"
+msgstr "Beklenen sınırlandırma"
+
+msgid "Expected zones"
+msgstr "Beklenen bölgeler"
+
+msgid "Zone"
+msgstr "Bölge"
+
+msgid "Learner annotation"
+msgstr "Öğrenci açıklaması"
+
+msgid "No annotation image available"
+msgstr "Açıklama görseli mevcut değil"
+
+msgid "This answer is pending teacher correction."
+msgstr "Bu cevap öğretmen düzeltmesi bekliyor."
+
+msgid "Teacher comment"
+msgstr "Öğretmen yorumu"
+
+msgid "Teacher correction"
+msgstr "Öğretmen düzeltmesi"
+
+msgid "Save correction"
+msgstr "Düzeltmeyi kaydet"
+
+msgid "Learner audio"
+msgstr "Öğrenci sesi"
+
+msgid "Download audio"
+msgstr "Sesi indir"
+
+msgid "No uploaded audio"
+msgstr "Yüklenen ses yok"
+
+msgid "Learner Office document"
+msgstr "Öğrenci Office belgesi"
+
+msgid "Learner file"
+msgstr "Öğrenci dosyası"
+
+msgid "Download Office document"
+msgstr "Office belgesini indir"
+
+msgid "No submitted document"
+msgstr "Gönderilen belge yok"
+
+msgid "No uploaded file"
+msgstr "Yüklenen dosya yok"
+
+msgid "Content item"
+msgstr "İçerik öğesi"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Bu soru türü bu sayfada incelenemez."
+
+msgid "Exercise completed"
+msgstr "Alıştırma tamamlandı"
+
+msgid "Could not start the attempt"
+msgstr "Deneme başlatılamadı"
+
+msgid "Invalid exercise attempt"
+msgstr "Geçersiz alıştırma denemesi"
+
+msgid "Could not load exercise result"
+msgstr "Alıştırma sonucu yüklenemedi"
+
+msgid "Could not load AI providers"
+msgstr "AI sağlayıcıları yüklenemedi"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI önerisi oluşturulamadı"
+
+msgid "Correction saved"
+msgstr "Düzeltme kaydedildi"
+
+msgid "Could not save correction"
+msgstr "Düzeltme kaydedilemedi"
+
+msgid "Create exercise"
+msgstr "Alıştırma oluştur"
+
+msgid "Exercise categories"
+msgstr "Alıştırma kategorileri"
+
+msgid "Question categories"
+msgstr "Soru kategorileri"
+
+msgid "Search by exercise title or description."
+msgstr "Alıştırma başlığı veya açıklamasına göre ara."
+
+msgid "Search exercises"
+msgstr "Alıştırmaları ara"
+
+msgid "No exercises found"
+msgstr "Alıştırma bulunamadı"
+
+msgid "Open exercise"
+msgstr "Alıştırmayı aç"
+
+msgid "Disable autolaunch"
+msgstr "Otomatik başlatmayı devre dışı bırak"
+
+msgid "Enable autolaunch"
+msgstr "Otomatik başlatmayı etkinleştir"
+
+msgid "Export QTI2"
+msgstr "QTI2 olarak dışa aktar"
+
+msgid "Bulk actions"
+msgstr "Toplu işlemler"
+
+msgid "Selected exercises"
+msgstr "Seçilen alıştırmalar"
+
+msgid "No exercises selected"
+msgstr "Hiçbir alıştırma seçilmedi"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Bu işlemi seçilen alıştırmalara uygulamak istediğinizden emin misiniz?"
+
+msgid "Bulk action completed"
+msgstr "Toplu işlem tamamlandı"
+
+msgid "Could not update exercises"
+msgstr "Alıştırmalar güncellenemedi"
+
+msgid "Could not update exercise"
+msgstr "Alıştırma güncellenemedi"
+
+msgid "Copy exercise"
+msgstr "Alıştırmayı kopyala"
+
+msgid "Delete exercise"
+msgstr "Alıştırmayı sil"
+
+msgid "Could not load exercises"
+msgstr "Alıştırmalar yüklenemedi"
+
+msgid "No limit"
+msgstr "Sınırsız"
+
+msgid "Add selected questions to the test"
+msgstr "Seçilen soruları teste ekle"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Bu soru aktif bir testte kullanıldığı için burada düzenlenemez."
+
+msgid "This question cannot be edited here."
+msgstr "Bu soru burada düzenlenemez."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Bu soru aktif bir testte kullanıldığı için burada silinemez."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Bu soru silinemez çünkü erişiminiz platform ayarları tarafından sınırlandırılmış."
+
+msgid "Already in test"
+msgstr "Zaten testte"
+
+msgid "Select at least one question."
+msgstr "En az bir soru seçin."
+
+msgid "Question bank updated"
+msgstr "Soru bankası güncellendi"
+
+msgid "Could not update the question bank"
+msgstr "Soru bankası güncellenemedi"
+
+msgid "Could not load the question bank"
+msgstr "Soru bankası yüklenemedi"
+
+msgid "Total score"
+msgstr "Toplam puan"
+
+msgid "Starting"
+msgstr "Başlıyor"
+
+msgid "Attempt history"
+msgstr "Deneme geçmişi"
+
+msgid "No attempts yet"
+msgstr "Henüz deneme yok"
+
+msgid "Invalid exercise"
+msgstr "Geçersiz alıştırma"
+
+msgid "Could not load exercise overview"
+msgstr "Alıştırma özeti yüklenemedi"
+
+msgid "Open test"
+msgstr "Testi aç"
+
+msgid "Random answers"
+msgstr "Rastgele cevaplar"
+
+msgid "Prevent moving backwards"
+msgstr "Geriye gitmeyi engelle"
+
+msgid "Previous button hidden"
+msgstr "Önceki düğmesi gizli"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Bu alıştırma farklı bir test oynatıcısı gerektiren seçenekler kullanıyor."
+
+msgid "Continue test"
+msgstr "Teste devam et"
+
+msgid "Attempt started"
+msgstr "Deneme başlatıldı"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Öğretmen önizlemesi izlenen bir deneme oluşturmaz."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Bir alıştırma denemesi başlatın veya devam edin. Taslak cevaplar son gönderimden önce kaydedilebilir."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Zaman sınırı aşıldı. Deneme sonlandırılıyor."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Soru süresi doldu. Cevabınız kaydediliyor."
+
+msgid "Finishing"
+msgstr "Sonlandırılıyor"
+
+msgid "Draft saved"
+msgstr "Taslak kaydedildi"
+
+msgid "Statement"
+msgstr "Açıklama"
+
+msgid "Drop each option on the matching answer"
+msgstr "Her seçeneği eşleşen cevaba sürükleyin"
+
+msgid "Clear match"
+msgstr "Eşleştirmeyi temizle"
+
+msgid "Click to place the selected option here"
+msgstr "Seçilen seçeneği buraya yerleştirmek için tıklayın"
+
+msgid "Select an option, then click here"
+msgstr "Bir seçenek seçin, ardından buraya tıklayın"
+
+msgid "Already matched"
+msgstr "Zaten eşleştirildi"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Bir seçeneği bir cevaba sürükleyebilir veya bir seçenek seçip ardından bir hedef kutuya tıklayabilirsiniz."
+
+msgid "Put the items in the correct order."
+msgstr "Öğeleri doğru sıraya koyun."
+
+msgid "Move left"
+msgstr "Sola taşı"
+
+msgid "Move right"
+msgstr "Sağa taşı"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Öğeleri sola veya sağa sürükleyebilir veya sırayı değiştirmek için taşıma düğmelerini kullanabilirsiniz."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Öğeleri sürükleyebilir veya sırayı değiştirmek için taşıma düğmelerini kullanabilirsiniz."
+
+msgid "Or upload an audio file"
+msgstr "Veya bir ses dosyası yükleyin"
+
+msgid "Selected audio"
+msgstr "Seçilen ses"
+
+msgid "Uploaded audio"
+msgstr "Yüklenen ses"
+
+msgid "Office document"
+msgstr "Ofis belgesi"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Aşağıdaki düzenleyicide belgeyi tamamlayın. Dosya, öğretmen düzeltmesi için bu denemeye eklenecektir."
+
+msgid "Reload Office editor"
+msgstr "Ofis düzenleyicisini yeniden yükle"
+
+msgid "Prepare Office document"
+msgstr "Ofis belgesini hazırla"
+
+msgid "Open in new tab"
+msgstr "Yeni sekmede aç"
+
+msgid "Preparing Office document"
+msgstr "Ofis belgesi hazırlanıyor"
+
+msgid "Submitted document"
+msgstr "Gönderilen belge"
+
+msgid "Annotation tools"
+msgstr "Açıklama araçları"
+
+msgid "Text to place"
+msgstr "Yerleştirilecek metin"
+
+msgid "Click the image to place the text annotation."
+msgstr "Metin açıklamasını yerleştirmek için resme tıklayın."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Yol noktaları eklemek için resme tıklayın. Yolları ayırmak için Yeni yol başlat'ı kullanın."
+
+msgid "Start new path"
+msgstr "Yeni yol başlat"
+
+msgid "Current annotations"
+msgstr "Mevcut açıklamalar"
+
+msgid "Remove point"
+msgstr "Noktayı kaldır"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Sınırlandırma çokgenini çizmek için resme tıklayın."
+
+msgid "Click a marker to remove it."
+msgstr "Bir işaretçiyi kaldırmak için tıklayın."
+
+msgid "Placed"
+msgstr "Yerleştirildi"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Bir cevap seçin, ardından işaretlemek için resme tıklayın."
+
+msgid "Reading speed"
+msgstr "Okuma hızı"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Bu soru türü bu oynatıcıda görüntülenemez."
+
+msgid "Save draft"
+msgstr "Taslağı kaydet"
+
+msgid "I confirm that my answers were saved."
+msgstr "Cevaplarımın kaydedildiğini onaylıyorum."
+
+msgid "Finish test"
+msgstr "Testi bitir"
+
+msgid "Attempt finished"
+msgstr "Deneme tamamlandı"
+
+msgid "Question category"
+msgstr "Soru kategorisi"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Bu soru kategorisiyle ilgili soruları tamamladınız, geri dönüp bu soruları gözden geçirmek için son şansınız."
+
+msgid "Question time left"
+msgstr "Soru için kalan süre"
+
+msgid "Time left"
+msgstr "Kalan süre"
+
+msgid "Current attempt"
+msgstr "Mevcut deneme"
+
+msgid "Could not save draft answer"
+msgstr "Taslak cevap kaydedilemedi"
+
+msgid "Could not load exercise"
+msgstr "Alıştırma yüklenemedi"
+
+msgid "Draft answer saved"
+msgstr "Taslak cevap kaydedildi"
+
+msgid "Could not finish the attempt"
+msgstr "Deneme tamamlanamadı"
+
+msgid "Could not prepare Office document"
+msgstr "Office belgesi hazırlanamadı"
+
+msgid "Back to learner score"
+msgstr "Öğrenci puanına geri dön"
+
+msgid "Disable auto refresh"
+msgstr "Otomatik yenilemeyi devre dışı bırak"
+
+msgid "Enable auto refresh"
+msgstr "Otomatik yenilemeyi etkinleştir"
+
+msgid "Live window"
+msgstr "Canlı pencere"
+
+msgid "Ongoing attempts"
+msgstr "Devam eden denemeler"
+
+msgid "Completed attempts"
+msgstr "Tamamlanan denemeler"
+
+msgid "Started"
+msgstr "Başladı"
+
+msgid "Last activity"
+msgstr "Son etkinlik"
+
+msgid "Could not load live results"
+msgstr "Canlı sonuçlar yüklenemedi"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Bu alıştırma salt okunur çünkü bir öğrenme yolunda yer alıyor."
+
+msgid "Select a question type to create a question."
+msgstr "Soru oluşturmak için bir soru türü seçin."
+
+msgid "Click to preview"
+msgstr "Önizlemek için tıklayın"
+
+msgid "Hide preview"
+msgstr "Önizlemeyi gizle"
+
+msgid "Shape"
+msgstr "Şekil"
+
+msgid "Coordinates"
+msgstr "Koordinatlar"
+
+msgid "Blanks"
+msgstr "Boşluklar"
+
+msgid "Switchable blanks"
+msgstr "Değiştirilebilir boşluklar"
+
+msgid "Blank"
+msgstr "Boşluk"
+
+msgid "Input width"
+msgstr "Giriş genişliği"
+
+msgid "Orientation"
+msgstr "Yönlendirme"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Mevcut alıştırma geri bildirim modunda kullanılamaz"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Öğrenme yolu oluşturma akışında kullanılamaz"
+
+msgid "Delete question"
+msgstr "Soruyu sil"
+
+msgid "Could not update exercise questions"
+msgstr "Alıştırma soruları güncellenemedi"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Alıştırma öğrenme yoluna eklenemedi"
+
+msgid "A valid exercise id is required."
+msgstr "Geçerli bir alıştırma kimliği gerekli."
+
+msgid "Could not load exercise questions"
+msgstr "Alıştırma soruları yüklenemedi"
+
+msgid "Delete selected attempts"
+msgstr "Seçili denemeleri sil"
+
+msgid "Before date"
+msgstr "Tarihinden önce"
+
+msgid "Pending corrections"
+msgstr "Bekleyen düzeltmeler"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Bu alıştırma not defteri tarafından kilitlendi. Deneme temizleme işlemleri devre dışı."
+
+msgid "No attempts found"
+msgstr "Deneme bulunamadı"
+
+msgid "Review"
+msgstr "İncele"
+
+msgid "Print/PDF"
+msgstr "Yazdır/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Alıştırma raporu yüklenemedi"
+
+msgid "Select at least one attempt"
+msgstr "En az bir deneme seçin"
+
+msgid "Delete selected attempts?"
+msgstr "Seçili denemeler silinsin mi?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "İncelenmiş deneme sonucu e-postaları gönderilsin mi?"
+
+msgid "Could not send emails"
+msgstr "E-postalar gönderilemedi"
+
+msgid "Exercise result emails sent"
+msgstr "Alıştırma sonucu e-postaları gönderildi"
+
+msgid "Skipped"
+msgstr "Atlandı"
+
+msgid "Close attempt?"
+msgstr "Deneme kapatılsın mı?"
+
+msgid "Attempt closed"
+msgstr "Deneme kapatıldı"
+
+msgid "Could not close attempt"
+msgstr "Deneme kapatılamadı"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Bu deneme sonucu e-posta ile öğrenciye gönderilsin mi?"
+
+msgid "Email sent"
+msgstr "E-posta gönderildi"
+
+msgid "Could not send email"
+msgstr "E-posta gönderilemedi"
+
+msgid "Attempt deleted"
+msgstr "Deneme silindi"
+
+msgid "Could not delete attempt"
+msgstr "Deneme silinemedi"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Başlık ve açıklama sütunları içeren bir CSV dosyası seçin."
+
+msgid "Manage categories used to classify questions."
+msgstr "Soruları sınıflandırmak için kullanılan kategorileri yönetin."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Alıştırmaları sınıflandırmak için kullanılan kategorileri yönetin."
+
+msgid "Could not load categories"
+msgstr "Kategoriler yüklenemedi"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "İçe aktarılan kategoriler: %s. Atlanan satırlar: %s."
+
+msgid "Imported categories: %s."
+msgstr "İçe aktarılan kategoriler: %s."
+
+msgid "Could not import categories"
+msgstr "Kategoriler içe aktarılamadı"
+
+msgid "Could not save category"
+msgstr "Kategori kaydedilemedi"
+
+msgid "Answer distribution"
+msgstr "Cevap dağılımı"
+
+msgid "Configured answers"
+msgstr "Yapılandırılan cevaplar"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Bazı soru türleri için ayrıntılı cevap sayımı, taşınan raporda henüz mevcut değil."
+
+msgid "No report by question data found"
+msgstr "Soru bazlı rapor verisi bulunamadı"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Bu soru türü için ayrıntılı cevap sayımı, taşınan raporda henüz mevcut değil."
+
+msgid "No answer distribution found"
+msgstr "Cevap dağılımı bulunamadı"
+
+msgid "Could not load report by question"
+msgstr "Soru bazlı rapor yüklenemedi"
+
+msgid "Question settings"
+msgstr "Soru ayarları"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Süre sınırı olmaması için boş bırakın veya 0 girin."
+
+msgid "Time limit in seconds"
+msgstr "Saniye cinsinden süre sınırı"
+
+msgid "Attached questions"
+msgstr "İlişkilendirilmiş sorular"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Burada yalnızca geçerli alıştırma içindeki bu medya sorusuna iliştirilmiş sorular listelenir."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Geçerli alıştırmada bu medya sorusuna iliştirilmiş soru yok."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Öğrencilerin OnlyOffice ile düzenleyeceği Office belge şablonunu yükleyin."
+
+msgid "Replace Office document"
+msgstr "Office belgesini değiştir"
+
+msgid "Current Office document"
+msgstr "Geçerli Office belgesi"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Bu soru, öğrenci düzenlenmiş belgeyi gönderdikten sonra el ile düzeltilir."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Toplam puan, hotspot puanlarının toplamı olarak hesaplanır."
+
+msgid "Global score"
+msgstr "Genel puan"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Bir hotspot satırı seçin, şeklini belirleyin, ardından görüntü üzerinde çizin. Çokgenler için her noktaya tıklayın ve çokgeni tamamlayın veya bitirmek için çift tıklayın."
+
+msgid "Finish polygon"
+msgstr "Çokgeni bitir"
+
+msgid "Calculated answer"
+msgstr "Hesaplanmış cevap"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Lütfen metninizi aşağıya yazın ve bir veya daha fazla boşluk tanımlamak için köşeli parantez [...] kullanın."
+
+msgid "Lowest value"
+msgstr "En düşük değer"
+
+msgid "Highest value"
+msgstr "En yüksek değer"
+
+msgid "Fill in blanks"
+msgstr "Boşlukları doldur"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Boşlukları tanımlamak için seçilen işaretleyicileri kullanın. Örnek: Peru'nun başkenti [Lima]'dır."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Açılır liste seçeneklerini girin, her satıra bir cevap. Ardından beklenen cevapları aşağıda, eski araçtaki gibi işaretleyin."
+
+msgid "Refresh answers"
+msgstr "Cevapları yenile"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Bu açılır liste kombinasyon sorusu, eski araç gibi tek bir genel puan kullanır."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Lütfen en az iki açılır liste seçeneği girin."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Önce hedef seçenekleri oluşturun, ardından her öğeyi doğru seçeneğe bağlayın."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Bu eşleştirme kombinasyon sorusu, eski araç gibi tek bir genel puan kullanır."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Adımları oluşturun ve her biri için beklenen konumu seçin, eski Sürüklenebilir araç gibi."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Öğrenciler Doğru veya Yanlış'ı seçer ve ardından deneme sırasında kesinlik derecelerini belirtir. Düzenleyici, eski araçla aynı Doğru/Yanlış puanlarını ve kesinlik düzeylerini saklar."
+
+msgid "Hotspot combination"
+msgstr "Hotspot kombinasyonu"
+
+msgid "Add delineation"
+msgstr "Sınır çizgisi ekle"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Bu Office belge sorusunun cevap seçenekleri yoktur. Puanı düzeltme/sonuç inceleme sırasında atanır."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Bu yükleme sorusunun cevap seçenekleri yoktur. Puanı düzeltme/sonuç inceleme sırasında atanır."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Bu sözlü ifade sorusunun cevap seçenekleri yoktur. Puanı düzeltme/sonuç inceleme sırasında atanır."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Bu açık uçlu sorunun cevap seçenekleri yoktur. Puanı düzeltme/sonuç inceleme sırasında verilir."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Kaydırma hızı ayarlarıyla bir okuma metni ekleyin."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Puan eklemeden içerik, medya veya okuma bağlamı ekleyin."
+
+msgid "Insert a page break without adding score."
+msgstr "Puan eklemeden sayfa sonu ekleyin."
+
+msgid "Could not save question"
+msgstr "Soru kaydedilemedi"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Yalnızca DOC, DOCX, XLS veya XLSX belgelerine izin verilir."
+
+msgid "Please select an Office document."
+msgstr "Lütfen bir Office belgesi seçin."
+
+msgid "Please draw at least one hotspot."
+msgstr "Lütfen en az bir sıcak nokta çizin."
+
+msgid "Please draw at least one delineation."
+msgstr "Lütfen en az bir sınır çizimi yapın."
+
+msgid "The fill in blanks text is required."
+msgstr "Boşluk doldurma metni gereklidir."
+
+msgid "At least one expected answer is required."
+msgstr "En az bir beklenen cevap gereklidir."
+
+msgid "At least two draggable items are required."
+msgstr "En az iki sürüklenebilir öğe gereklidir."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Her sürüklenebilir öğe geçerli bir hedef konuma bağlanmalıdır."
+
+msgid "At least two matching options are required."
+msgstr "En az iki eşleştirme seçeneği gereklidir."
+
+msgid "At least two matching pairs are required."
+msgstr "En az iki eşleştirme çifti gereklidir."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Her eşleştirme çifti geçerli bir seçeneğe bağlanmalıdır."
+
+msgid "At least two answers are required."
+msgstr "En az iki cevap gereklidir."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Her doğru/yanlış cevabı için Doğru veya Yanlış seçilmelidir."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Tek doğru cevaplı bir sorunun tam olarak bir doğru cevabı olmalıdır."
+
+msgid "At least one correct answer is required."
+msgstr "En az bir doğru cevap gereklidir."
+
+msgid "Could not load question"
+msgstr "Soru yüklenemedi"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Bir ders seçin ve genel alıştırma sonuç raporunu CSV olarak dışa aktarın."
+
+msgid "Back to reports catalog"
+msgstr "Rapor kataloğuna dön"
+
+msgid "Could not load exercise global report"
+msgstr "Genel alıştırma raporu yüklenemedi"
+
+msgid "Imported questions"
+msgstr "İçe aktarılan sorular"
+
+msgid "Aiken content"
+msgstr "Aiken içeriği"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken oluşturucu yüklenemedi"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken içeriği oluşturulamadı"
+
+msgid "Could not import generated Aiken content"
+msgstr "Oluşturulan Aiken içeriği içe aktarılamadı"
+
+msgid "Back to my courses"
+msgstr "Derslerime dön"
+
+msgid "Open report"
+msgstr "Raporu aç"
+
+msgid "Questions with no automatic correction"
+msgstr "Otomatik düzeltme olmayan sorular"
+
+msgid "Could not load pending attempts"
+msgstr "Bekleyen denemeler yüklenemedi"
+
+msgid "Skipped questions"
+msgstr "Atlanan sorular"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken içe aktarma, bir soru SCORE tanımlamadıkça bu toplam ağırlığı içe aktarılan sorular arasında dağıtır."
+
+msgid "Import warnings"
+msgstr "İçe aktarma uyarıları"
+
+msgid "Could not import questions"
+msgstr "Sorular içe aktarılamadı"
+
+msgid "No question statistics found"
+msgstr "Soru istatistiği bulunamadı"
+
+msgid "Could not load question statistics"
+msgstr "Soru istatistikleri yüklenemedi"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Ayrıca bir MCP istemcisini doğrudan aşağıdaki uç noktaya yönlendirerek bağlayabilirsiniz:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Şu anda hesabınıza bağlı hiçbir uygulama yok."
+
+msgid "Connected on"
+msgstr "Bağlanma tarihi"
+
+msgid "Last used"
+msgstr "Son kullanım"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s artık Chamilo hesabınıza erişemeyecek. Devam edilsin mi?"
+
+msgid "Application revoked"
+msgstr "Uygulama iptal edildi"
+
+msgid "Copied to clipboard"
+msgstr "Panoya kopyalandı"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP uç noktası kopyalanamadı"
+
+msgid "MCP endpoint"
+msgstr "MCP uç noktası"
+
+msgid "API key"
+msgstr "API anahtarı"
+
+msgid "Last used at"
+msgstr "Son kullanım tarihi"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Bu anahtarı şimdi kopyalayın. Bir daha gösterilmeyecek."
+
+msgid "Rotate API key"
+msgstr "API anahtarını döndür"
+
+msgid "Revoke API key"
+msgstr "API anahtarını iptal et"
+
+msgid "Remote MCP connection"
+msgstr "Uzak MCP bağlantısı"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "MCP istemcinizi aşağıdaki değerlerle yapılandırın:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Mevcut anahtar hemen çalışmayı durduracak. Devam edilsin mi?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Yeni bir kişisel MCP API anahtarı oluşturulacak. Devam edilsin mi?"
+
+msgid "MCP API key generated"
+msgstr "MCP API anahtarı oluşturuldu"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Bu anahtarı kullanan bağlı MCP istemcileri hemen çalışmayı durduracak. Devam edilsin mi?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API anahtarı iptal edildi"
+
+msgid "Could not copy the API key"
+msgstr "API anahtarı kopyalanamadı"
+
+msgid "Project"
+msgstr "Proje"
+
+msgid "Close old tickets"
+msgstr "Eski biletleri kapat"
+
+msgid "Close tickets older than seven days?"
+msgstr "Yedi günden eski biletler kapatılsın mı?"
+
+msgid "Assignment history"
+msgstr "Atama geçmişi"
+
+msgid "Translate with AI"
+msgstr "Yapay zekâ ile çevir"
+
+msgid "Target language"
+msgstr "Hedef dil"
+
+msgid "Please select a provider"
+msgstr "Lütfen bir sağlayıcı seçin"
+
+msgid "Generate translation"
+msgstr "Çeviri oluştur"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "En az bir şartlar ve koşullar bölümü metin içermelidir."
+
+msgid "No active target languages are available."
+msgstr "Etkin hedef dil mevcut değil."
+
+msgid "Tutor"
+msgstr "Eğitmen"
+
+msgid "Access dates"
+msgstr "Erişim tarihleri"
+
+msgid "Coach access dates"
+msgstr "Koç erişim tarihleri"
+
+msgid "No sessions found"
+msgstr "Oturum bulunamadı"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Bu kullanıcının bu oturumda erişememesi gereken dersleri seçin."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Bir kullanıcı oturumdaki tüm derslerden engellenemez. Bunun yerine kullanıcının kaydını silin."
+
+msgid "Users subscribed to this session"
+msgstr "Bu oturuma abone olan kullanıcılar"
+
+msgid "No available users found"
+msgstr "Kullanılabilir kullanıcı bulunamadı"
+
+msgid "Subscribe this user to the session?"
+msgstr "Bu kullanıcı oturuma abone edilsin mi?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Seçilen kullanıcılar oturuma abone edilsin mi?"
+
+msgid "General tutor planning"
+msgstr "Genel eğitmen planlaması"
+
+msgid "User is already registered by another tutor."
+msgstr "Kullanıcı başka bir eğitmen tarafından zaten kaydedilmiş."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Ders eğitmeni olduğunuz için bir kopya alıyorsunuz"
+
+msgid "General tutor"
+msgstr "Genel eğitmen"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Dersleri, eğitmenleri, teknik yardım masasını, öğretmenleri ve/veya mevcut materyalleri göz önünde bulundurun."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "%s dersinde öğretmen olarak abone olan eğitmenler"
+
+msgid "Tutor name"
+msgstr "Eğitmen adı"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Oturum eğitmenleri oturumun koordinatörleridir ve oturumdaki her ders için eğitmen olarak görev yapabilir. Yalnızca öğretmen rolüne sahip kullanıcılar oturum eğitmeni olarak seçilebilir."
+
+msgid "Access start date for tutors"
+msgstr "Eğitmenler için erişim başlangıç tarihi"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Öğrenciler bağlanmadan önce eğitmenlerin hazırlık yapabilmesi için oturumun eğitmenlere açıldığı tarih"
+
+msgid "Access end date for tutors"
+msgstr "Eğitmenler için erişim bitiş tarihi"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Oturumun eğitmenlere kapatıldığı tarih. Ek süre, ilgili tüm izleme bilgilerini dışa aktarmalarına olanak tanır"
+
+msgid "Tutor and student"
+msgstr "Eğitmen ve öğrenci"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Bu rapor, seçilen tarih aralığında genel eğitmen başına oturumların haftalık dağılımını gösterir."
+
+msgid "User is general tutor in some sessions"
+msgstr "Kullanıcı bazı oturumlarda genel eğitmen"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Öğretmenler tüm ders oturumlarında eğitmen olarak eklenecek."
+
+msgid "Delete failed: invalid question id."
+msgstr "Silme başarısız: geçersiz soru kimliği."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Genel oturum eğitmeni başına ortalama oturum sayısı"
+
+msgid "No room"
+msgstr "Oda yok"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Ders öğretmenlerini oturumda ders eğitmeni olarak içe aktar"
+
+msgid "Clean and update course tutors"
+msgstr "Ders eğitmenlerini temizle ve güncelle"
+
+msgid "Add me as tutor"
+msgstr "Beni eğitmen olarak ekle"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Anket öğrenme yoluna eklenemiyor"
+
+msgid "Access dates for tutors"
+msgstr "Eğitmenler için erişim tarihleri"
+
+msgid "Tutor and group member"
+msgstr "Eğitmen ve grup üyesi"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Günlük yapay zeka token sınırınıza ulaşıldı. Lütfen yarın tekrar deneyin."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Aylık yapay zeka token sınırınıza ulaşıldı. Lütfen gelecek ay tekrar deneyin."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Bu ders kodu zaten mevcut, lütfen başka bir kod seçin."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Bu ders başlığı zaten mevcut, lütfen başka bir başlık seçin."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Bu aracın görünürlüğü değiştirilemez"
+
+msgid "Invalid visibility"
+msgstr "Geçersiz görünürlük"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Ders eğitmenlerinden biri olduğunuz için bir kopya alıyorsunuz"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Ders eğitmeni olduğunuz için bir kopya alıyorsunuz"
+
+msgid "Manual completion"
+msgstr "Manuel tamamlama"
+
+msgid "Send to tutors"
+msgstr "Eğitmenlere gönder"
+
+msgid "Lab title"
+msgstr "Laboratuvar başlığı"
+
+msgid "Lab week"
+msgstr "Laboratuvar haftası"
+
+msgid "Final exam access rule"
+msgstr "Final sınavı erişim kuralı"
+
+msgid "Course completion rule"
+msgstr "Ders tamamlama kuralı"
+
+msgid "You have been invited to join a course"
+msgstr "Bir derse katılmaya davet edildiniz"
+
+msgid "No user has been found"
+msgstr "Kullanıcı bulunamadı"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Seçilen kullanıcı bu bağlamda kaydolamaz"
+
+msgid "No change has been made"
+msgstr "Herhangi bir değişiklik yapılmadı"
+
+msgid "Back to group list"
+msgstr "Grup listesine geri dön"
+
+msgid "Remove class link"
+msgstr "Sınıf bağlantısını kaldır"
+
+msgid "Group settings"
+msgstr "Grup ayarları"
+
+msgid "Self-registration allowed"
+msgstr "Kendi kendine kayıt yapılabilir"
+
+msgid "Self-unregistration allowed"
+msgstr "Kendi kendine kayıttan çıkılabilir"
+
+msgid "This group is linked to the class"
+msgstr "Bu grup sınıfa bağlı"
+
+msgid "Create one or more empty course groups"
+msgstr "Bir veya daha fazla boş ders grubu oluştur"
+
+msgid "Number of places"
+msgstr "Yer sayısı"
+
+msgid "Base group"
+msgstr "Temel grup"
+
+msgid "Share"
+msgstr "Paylaş"
+
+msgid "Collaboration"
+msgstr "İşbirliği"
+
+msgid "The group title is required."
+msgstr "Grup başlığı gereklidir."
+
+msgid "Back to group area"
+msgstr "Grup alanına geri dön"
+
+msgid "Members are managed by the linked class"
+msgstr "Üyeler bağlı sınıf tarafından yönetiliyor"
+
+msgid "%s groups selected"
+msgstr "%s grup seçildi"
+
+msgid "Fill selected groups"
+msgstr "Seçilen grupları doldur"
+
+msgid "Empty selected groups"
+msgstr "Seçilen grupları boşalt"
+
+msgid "Fill group"
+msgstr "Grubu doldur"
+
+msgid "Empty group"
+msgstr "Grubu boşalt"
+
+msgid "Groups per user"
+msgstr "Kullanıcı başına grup"
+
+msgid "No tutors"
+msgstr "Eğitmen yok"
+
+msgid "No users"
+msgstr "Kullanıcı yok"
+

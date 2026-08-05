@@ -37504,3 +37504,1431 @@ msgstr "Այս դասընթացի թեման ներկայացնող ժամանա
 msgid "Back to account"
 msgstr "Վերադառնալ հաշվին"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Ձեր կարծիքը կօգնի մեզ բարելավել ապագա վերապատրաստման դասընթացները։"
+
+msgid "Thank you for sharing your feedback."
+msgstr "Շնորհակալություն Ձեր կարծիքը կիսելու համար։"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Որքա՞ն գոհ եք վերապատրաստման ընդհանուր որակից։"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Որքա՞ն գոհ եք բովանդակության համապատասխանությունից։"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Որքա՞ն գոհ եք բացատրությունների հստակությունից։"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Որքա՞ն գոհ եք վերապատրաստման կազմակերպումից և տեմպից։"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Որքա՞ն գոհ եք սովորածի գործնական օգտակարությունից։"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Կառաջարկե՞ք այս վերապատրաստումը այլ մարդկանց։"
+
+msgid "What should we improve in future editions?"
+msgstr "Ի՞նչ պետք է բարելավենք ապագա թողարկումներում։"
+
+msgid "Very satisfied"
+msgstr "Շատ գոհ"
+
+msgid "Satisfied"
+msgstr "Գոհ"
+
+msgid "Neutral"
+msgstr "Չեզոք"
+
+msgid "Dissatisfied"
+msgstr "Անգոհ"
+
+msgid "Very dissatisfied"
+msgstr "Շատ անգոհ"
+
+msgid "Add destination"
+msgstr "Ավելացնել նպատակակետ"
+
+msgid "Add this test to the assessment tool"
+msgstr "Ավելացնել այս թեստը գնահատման գործիքին"
+
+msgid "Attempts and timing"
+msgstr "Փորձեր և ժամանակացույց"
+
+msgid "Available questions"
+msgstr "Հասանելի հարցեր"
+
+msgid "Cancel and return to learning path"
+msgstr "Չեղարկել և վերադառնալ ուսումնական ուղի"
+
+msgid "Category destinations"
+msgstr "Կատեգորիայի նպատակակետեր"
+
+msgid "Classification"
+msgstr "Դասակարգում"
+
+msgid "Context"
+msgstr "Համատեքստ"
+
+msgid "Could not load exercise configuration"
+msgstr "Չհաջողվեց բեռնել վարժության կազմաձևումը"
+
+msgid "Could not save exercise"
+msgstr "Չհաջողվեց պահպանել վարժությունը"
+
+msgid "Display and learning path"
+msgstr "Ցուցադրում և ուսումնական ուղի"
+
+msgid "Edit test"
+msgstr "Խմբագրել թեստը"
+
+msgid "Exercise settings saved."
+msgstr "Վարժության կարգավորումները պահպանվեցին։"
+
+msgid "Extra settings"
+msgstr "Լրացուցիչ կարգավորումներ"
+
+msgid "Feedback and results"
+msgstr "Հետադարձ կապ և արդյունքներ"
+
+msgid "Finish exercise"
+msgstr "Ավարտել վարժությունը"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Նույնականացնում է այս վարժության լեզուն որպես ռեսուրսի մետատվյալներ։ Այն ինքնին չի ապահովում որոնման ինդեքսավորում։"
+
+msgid "Maximum score (%)"
+msgstr "Առավելագույն միավոր (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Մետատվյալները պարունակում են հմտություններ և վարժությունների համար կազմաձևված լրացուցիչ դաշտեր։ Այն կամընտիր է և մնում է թաքնված մինչև բացվելը։"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Այս վարժության համար դեռ հասանելի հարցերի կատեգորիաներ չկան։"
+
+msgid "Question categories matrix"
+msgstr "Հարցերի կատեգորիաների մատրից"
+
+msgid "Questions behavior"
+msgstr "Հարցերի վարքագիծ"
+
+msgid "Random by category"
+msgstr "Պատահական ըստ կատեգորիայի"
+
+msgid "Remove destination"
+msgstr "Հեռացնել նշանակումը"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Կանոնները գնահատվում են միավորների տոկոսով աճման կարգով։ Ընտրեք «Ավարտել վարժությունը»՝ թեստն ավարտելու համար։"
+
+msgid "Score and final messages"
+msgstr "Միավորներ և վերջնական հաղորդագրություններ"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Որոշ ընտրանքներ արգելափակվում են վարժությունը ստեղծելուց հետո։"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Այս արժեքը պահվում է որպես ընդհանուր տևողություն րոպեներով։"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Օգտագործեք 0՝ բոլոր հասանելի հարցերը պահպանելու համար։ Օգտագործեք -1՝ բոլոր հասանելի հարցերը թույլատրելու համար։"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Օգտագործեք այս դաշտերը՝ վարժությունը դասակարգելու համար՝ անկախ դրա ցուցադրման ընտրանքներից։"
+
+msgid "Invite by email"
+msgstr "Հրավիրել էլ․ փոստով"
+
+msgid "Invitation has been sent"
+msgstr "Հրավերը ուղարկվել է"
+
+msgid "Sent on"
+msgstr "Ուղարկվել է"
+
+msgid "Accepted on"
+msgstr "Ընդունվել է"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Այս դասընթացը բացված է սեսիայի մեջ։ Այստեղ հրավեր ուղարկելը կգրանցի ստացողին ամբողջ սեսիայում %s, ոչ միայն այս դասընթացում։"
+
+msgid "Revoke"
+msgstr "Չեղարկել"
+
+msgid "Revoked"
+msgstr "Չեղարկված"
+
+msgid "Invitation has been revoked"
+msgstr "Հրավերը չեղարկվել է"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք չեղարկել %s-ին ուղարկված հրավերը։"
+
+msgid "No default room"
+msgstr "Կանխադրված սենյակ չկա"
+
+msgid "Floor"
+msgstr "Հարկ"
+
+msgid "Capacity"
+msgstr "Տարողություն"
+
+msgid "Use attendance default room"
+msgstr "Օգտագործել ներկայության կանխադրված սենյակը"
+
+msgid "Floor number"
+msgstr "Հարկի համար"
+
+msgid "Copy to students"
+msgstr "Պատճենել ուսանողներին"
+
+msgid "Generate a quick test on this topic"
+msgstr "Արագ թեստ ստեղծել այս թեմայի վերաբերյալ"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Պահպանված փաստաթղթի բովանդակությունը կուղարկվի AI մոդելի մշակման համար։"
+
+msgid "MCP API key"
+msgstr "MCP API բանալի"
+
+msgid "Authorized applications"
+msgstr "Լիազորված հավելվածներ"
+
+msgid "Your session is about to expire"
+msgstr "Ձեր սեսիան շուտով կավարտվի"
+
+msgid "Do you want to continue your session?"
+msgstr "Ցանկանո՞ւմ եք շարունակել ձեր սեսիան։"
+
+msgid "Stay connected"
+msgstr "Մնալ կապված"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Դուք կդուրս գրվեք %s վայրկյանից։"
+
+msgid "No descriptions available yet."
+msgstr "Նկարագրություններ դեռ հասանելի չեն։"
+
+msgid "%s users selected"
+msgstr "%s օգտատեր ընտրված է"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Ընտրված օգտատերերը գրանցվել են դասընթացին"
+
+msgid "Import teachers"
+msgstr "Ներմուծել դասախոսներ"
+
+msgid "Import learners"
+msgstr "Ներմուծել ուսանողներ"
+
+msgid "Select CSV file"
+msgstr "Ընտրել CSV ֆայլ"
+
+msgid "Some users could not be subscribed"
+msgstr "Որոշ օգտատերեր չեն կարողացել գրանցվել"
+
+msgid "Browse available classes"
+msgstr "Դիտել հասանելի խմբերը"
+
+msgid "Back to linked classes"
+msgstr "Վերադառնալ կապված խմբերին"
+
+msgid "No classes are currently linked to this course."
+msgstr "Այս դասընթացին ներկայումս կապված խմբեր չկան։"
+
+msgid "No available classes were found for this course."
+msgstr "Այս դասընթացի համար հասանելի խմբեր չեն գտնվել։"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք չեղարկել ընտրված օգտատերերի գրանցումը։"
+
+msgid "Learning path access"
+msgstr "Ուսումնական ուղու հասանելիություն"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Միայն ընտրված օգտատերերը և խմբերը կարող են մուտք գործել այս ուսումնական ուղի։ Կառավարեք դրանք պահպանումից հետո։"
+
+msgid "All current and future course users can access this learning path."
+msgstr "Բոլոր ընթացիկ և ապագա դասընթացի օգտատերերը կարող են մուտք գործել այս ուսումնական ուղի։"
+
+msgid "All course users"
+msgstr "Բոլոր դասընթացի օգտատերեր"
+
+msgid "Selected users and groups"
+msgstr "Ընտրված օգտատերեր և խմբեր"
+
+msgid "No access"
+msgstr "Հասանելիություն չկա"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Միայն այստեղ ավելացված օգտատերերը և խմբերը կարող են մուտք գործել այս ուսումնական ուղի։"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Հարցերի քանակը սահմանափակված է առավելագույնը %s-ով"
+
+msgid "Open exercise player"
+msgstr "Բացել վարժության խաղացիչը"
+
+msgid "The score is hidden for this exercise."
+msgstr "Այս վարժության համար միավորը թաքցված է։"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Ուղղումները թաքցված են համաձայն վարժության արդյունքների կարգավորումների։"
+
+msgid "Progressive adaptive result"
+msgstr "Աստիճանական հարմարվողական արդյունք"
+
+msgid "Achieved level"
+msgstr "Ձեռք բերված մակարդակ"
+
+msgid "Correction history"
+msgstr "Ուղղումների պատմություն"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Այս փորձի համար կատարված ձեռքով ուղղումների պատմություն։"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Այս վարժությունն օգտագործում է ռադարային/սարդոստայնային արդյունքի ռեժիմ։ Գրաֆիկը հասանելի չէ այս էջում։"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Հարցերի մանրամասները թաքցված են համաձայն վարժության արդյունքների կարգավորումների։"
+
+msgid "Media question"
+msgstr "Մեդիա հարց"
+
+msgid "Pending correction"
+msgstr "Սպասում է ուղղման"
+
+msgid "No answer"
+msgstr "Պատասխան չկա"
+
+msgid "Blank %s"
+msgstr "Դատարկ %s"
+
+msgid "Your order"
+msgstr "Ձեր կարգը"
+
+msgid "Correct order"
+msgstr "Ճիշտ կարգը"
+
+msgid "Delineation review"
+msgstr "Սահմանագծման վերանայում"
+
+msgid "Learner clicks"
+msgstr "Ուսանողի սեղմումներ"
+
+msgid "Question image"
+msgstr "Հարցի պատկեր"
+
+msgid "No hotspot image available"
+msgstr "Հասանելի չէ թեժ կետի պատկեր"
+
+msgid "Learner delineation"
+msgstr "Ուսանողի սահմանագիծ"
+
+msgid "Expected delineation"
+msgstr "Սպասվող սահմանագիծ"
+
+msgid "Expected zones"
+msgstr "Սպասվող գոտիներ"
+
+msgid "Zone"
+msgstr "Գոտի"
+
+msgid "Learner annotation"
+msgstr "Ուսանողի ծանոթագրություն"
+
+msgid "No annotation image available"
+msgstr "Հասանելի չէ ծանոթագրության պատկեր"
+
+msgid "This answer is pending teacher correction."
+msgstr "Այս պատասխանը սպասում է դասախոսի ուղղման։"
+
+msgid "Teacher comment"
+msgstr "Դասախոսի մեկնաբանություն"
+
+msgid "Teacher correction"
+msgstr "Դասախոսի ուղղում"
+
+msgid "Save correction"
+msgstr "Պահպանել ուղղումը"
+
+msgid "Learner audio"
+msgstr "Ուսանողի աուդիո"
+
+msgid "Download audio"
+msgstr "Ներբեռնել աուդիո"
+
+msgid "No uploaded audio"
+msgstr "Աուդիո չի վերբեռնվել"
+
+msgid "Learner Office document"
+msgstr "Ուսանողի Office փաստաթուղթ"
+
+msgid "Learner file"
+msgstr "Ուսանողի ֆայլ"
+
+msgid "Download Office document"
+msgstr "Ներբեռնել Office փաստաթուղթ"
+
+msgid "No submitted document"
+msgstr "Փաստաթուղթ չի ներկայացվել"
+
+msgid "No uploaded file"
+msgstr "Ֆայլ չի վերբեռնվել"
+
+msgid "Content item"
+msgstr "Բովանդակության տարր"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Այս հարցի տեսակը չի կարող վերանայվել այս էջում։"
+
+msgid "Exercise completed"
+msgstr "Վարժությունը ավարտված է"
+
+msgid "Could not start the attempt"
+msgstr "Չհաջողվեց սկսել փորձը"
+
+msgid "Invalid exercise attempt"
+msgstr "Անվավեր վարժության փորձ"
+
+msgid "Could not load exercise result"
+msgstr "Չհաջողվեց բեռնել վարժության արդյունքը"
+
+msgid "Could not load AI providers"
+msgstr "Չհաջողվեց բեռնել AI մատակարարները"
+
+msgid "Could not generate AI suggestion"
+msgstr "Չհաջողվեց ստեղծել AI առաջարկ"
+
+msgid "Correction saved"
+msgstr "Ուղղումը պահպանվեց"
+
+msgid "Could not save correction"
+msgstr "Չհաջողվեց պահպանել ուղղումը"
+
+msgid "Create exercise"
+msgstr "Ստեղծել վարժություն"
+
+msgid "Exercise categories"
+msgstr "Վարժությունների կատեգորիաներ"
+
+msgid "Question categories"
+msgstr "Հարցերի կատեգորիաներ"
+
+msgid "Search by exercise title or description."
+msgstr "Որոնել վարժության վերնագրով կամ նկարագրությամբ։"
+
+msgid "Search exercises"
+msgstr "Որոնել վարժություններ"
+
+msgid "No exercises found"
+msgstr "Վարժություններ չեն գտնվել"
+
+msgid "Open exercise"
+msgstr "Բացել վարժությունը"
+
+msgid "Disable autolaunch"
+msgstr "Անջատել ավտոմատ գործարկումը"
+
+msgid "Enable autolaunch"
+msgstr "Միացնել ավտոմատ գործարկումը"
+
+msgid "Export QTI2"
+msgstr "Արտահանել QTI2"
+
+msgid "Bulk actions"
+msgstr "Զանգվածային գործողություններ"
+
+msgid "Selected exercises"
+msgstr "Ընտրված վարժություններ"
+
+msgid "No exercises selected"
+msgstr "Վարժություններ չեն ընտրվել"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Համոզվա՞ծ եք, որ ցանկանում եք կիրառել այս գործողությունը ընտրված վարժությունների վրա։"
+
+msgid "Bulk action completed"
+msgstr "Զանգվածային գործողությունը ավարտվեց"
+
+msgid "Could not update exercises"
+msgstr "Չհաջողվեց թարմացնել վարժությունները"
+
+msgid "Could not update exercise"
+msgstr "Չհաջողվեց թարմացնել վարժությունը"
+
+msgid "Copy exercise"
+msgstr "Պատճենել վարժությունը"
+
+msgid "Delete exercise"
+msgstr "Ջնջել վարժությունը"
+
+msgid "Could not load exercises"
+msgstr "Չհաջողվեց բեռնել վարժությունները"
+
+msgid "No limit"
+msgstr "Առանց սահմանափակման"
+
+msgid "Add selected questions to the test"
+msgstr "Ավելացնել ընտրված հարցերը թեստին"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Այս հարցը օգտագործվում է ակտիվ թեստում և չի կարող խմբագրվել այստեղ։"
+
+msgid "This question cannot be edited here."
+msgstr "Այս հարցը չի կարող խմբագրվել այստեղ։"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Այս հարցը օգտագործվում է ակտիվ թեստում և չի կարող ջնջվել այստեղ։"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Այս հարցը չի կարող ջնջվել, քանի որ ձեր մուտքը սահմանափակված է հարթակի կարգավորումներով։"
+
+msgid "Already in test"
+msgstr "Արդեն թեստում է"
+
+msgid "Select at least one question."
+msgstr "Ընտրեք առնվազն մեկ հարց։"
+
+msgid "Question bank updated"
+msgstr "Հարցերի բանկը թարմացվեց"
+
+msgid "Could not update the question bank"
+msgstr "Չհաջողվեց թարմացնել հարցերի բանկը"
+
+msgid "Could not load the question bank"
+msgstr "Չհաջողվեց բեռնել հարցերի բանկը"
+
+msgid "Total score"
+msgstr "Ընդհանուր միավոր"
+
+msgid "Starting"
+msgstr "Սկսվում է"
+
+msgid "Attempt history"
+msgstr "Փորձերի պատմություն"
+
+msgid "No attempts yet"
+msgstr "Դեռ փորձեր չկան"
+
+msgid "Invalid exercise"
+msgstr "Անվավեր վարժություն"
+
+msgid "Could not load exercise overview"
+msgstr "Չհաջողվեց բեռնել վարժության ակնարկը"
+
+msgid "Open test"
+msgstr "Բացել թեստը"
+
+msgid "Random answers"
+msgstr "Պատահական պատասխաններ"
+
+msgid "Prevent moving backwards"
+msgstr "Կանխել հետընթացը"
+
+msgid "Previous button hidden"
+msgstr "Նախորդ կոճակը թաքցված է"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Այս վարժությունը օգտագործում է ընտրանքներ, որոնք պահանջում են այլ թեստային խաղացող։"
+
+msgid "Continue test"
+msgstr "Շարունակել թեստը"
+
+msgid "Attempt started"
+msgstr "Փորձը սկսվել է"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Ուսուցչի նախադիտումը չի ստեղծում հետևվող փորձ։"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Սկսել կամ վերսկսել վարժության փորձը։ Նախագծային պատասխանները կարող են պահպանվել մինչև վերջնական ներկայացումը։"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Ժամանակի սահմանը հասել է։ Ավարտվում է փորձը։"
+
+msgid "Question time reached. Saving your answer."
+msgstr "Հարցի ժամանակը հասել է։ Պահպանվում է ձեր պատասխանը։"
+
+msgid "Finishing"
+msgstr "Ավարտվում է"
+
+msgid "Draft saved"
+msgstr "Նախագիծը պահպանվել է"
+
+msgid "Statement"
+msgstr "Հայտարարություն"
+
+msgid "Drop each option on the matching answer"
+msgstr "Տեղադրեք յուրաքանչյուր տարբերակ համապատասխան պատասխանի վրա"
+
+msgid "Clear match"
+msgstr "Մաքրել համընկնումը"
+
+msgid "Click to place the selected option here"
+msgstr "Սեղմեք՝ ընտրված տարբերակը այստեղ տեղադրելու համար"
+
+msgid "Select an option, then click here"
+msgstr "Ընտրեք տարբերակ, ապա սեղմեք այստեղ"
+
+msgid "Already matched"
+msgstr "Արդեն համընկնել է"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Դուք կարող եք քաշել տարբերակը պատասխանի վրա կամ ընտրել տարբերակ և սեղմել նպատակային դաշտի վրա։"
+
+msgid "Put the items in the correct order."
+msgstr "Տեղադրեք տարրերը ճիշտ հերթականությամբ։"
+
+msgid "Move left"
+msgstr "Տեղափոխել ձախ"
+
+msgid "Move right"
+msgstr "Տեղափոխել աջ"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Դուք կարող եք քաշել տարրերը ձախ կամ աջ կամ օգտագործել տեղափոխման կոճակները՝ հերթականությունը փոխելու համար։"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Դուք կարող եք քաշել տարրերը կամ օգտագործել տեղափոխման կոճակները՝ հերթականությունը փոխելու համար։"
+
+msgid "Or upload an audio file"
+msgstr "Կամ վերբեռնել ձայնային ֆայլ"
+
+msgid "Selected audio"
+msgstr "Ընտրված ձայն"
+
+msgid "Uploaded audio"
+msgstr "Վերբեռնված ձայն"
+
+msgid "Office document"
+msgstr "Օֆիսային փաստաթուղթ"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Լրացրեք փաստաթուղթը ստորև նշված խմբագրիչում։ Ֆայլը կկցվի այս փորձին ուսուցչի ստուգման համար։"
+
+msgid "Reload Office editor"
+msgstr "Վերաբեռնել Office խմբագրիչը"
+
+msgid "Prepare Office document"
+msgstr "Պատրաստել Office փաստաթուղթ"
+
+msgid "Open in new tab"
+msgstr "Բացել նոր ներդիրում"
+
+msgid "Preparing Office document"
+msgstr "Պատրաստվում է Office փաստաթուղթ"
+
+msgid "Submitted document"
+msgstr "Ներկայացված փաստաթուղթ"
+
+msgid "Annotation tools"
+msgstr "Անոտացիայի գործիքներ"
+
+msgid "Text to place"
+msgstr "Տեղադրվող տեքստ"
+
+msgid "Click the image to place the text annotation."
+msgstr "Սեղմեք պատկերի վրա՝ տեքստային անոտացիան տեղադրելու համար։"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Սեղմեք պատկերի վրա՝ ուղու կետեր ավելացնելու համար։ Օգտագործեք «Սկսել նոր ուղի»՝ ուղիները առանձնացնելու համար։"
+
+msgid "Start new path"
+msgstr "Սկսել նոր ուղի"
+
+msgid "Current annotations"
+msgstr "Ընթացիկ անոտացիաներ"
+
+msgid "Remove point"
+msgstr "Հեռացնել կետը"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Սեղմեք պատկերի վրա՝ սահմանագծային բազմանկյունը գծելու համար։"
+
+msgid "Click a marker to remove it."
+msgstr "Սեղմեք նշիչի վրա՝ այն հեռացնելու համար։"
+
+msgid "Placed"
+msgstr "Տեղադրված"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Ընտրեք պատասխան, ապա սեղմեք պատկերի վրա՝ այն նշելու համար։"
+
+msgid "Reading speed"
+msgstr "Ընթերցման արագություն"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Այս հարցի տեսակը չի կարող ցուցադրվել այս նվագարկիչում։"
+
+msgid "Save draft"
+msgstr "Պահպանել սևագիրը"
+
+msgid "I confirm that my answers were saved."
+msgstr "Հաստատում եմ, որ իմ պատասխանները պահպանվել են։"
+
+msgid "Finish test"
+msgstr "Ավարտել թեստը"
+
+msgid "Attempt finished"
+msgstr "Փորձը ավարտված է"
+
+msgid "Question category"
+msgstr "Հարցի կատեգորիա"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Դուք ավարտեցիք այս հարցի կատեգորիայի հետ կապված հարցերը, սա ձեր վերջին հնարավորությունն է վերադառնալու և վերանայելու այդ հարցերը։"
+
+msgid "Question time left"
+msgstr "Հարցի մնացած ժամանակը"
+
+msgid "Time left"
+msgstr "Մնացած ժամանակը"
+
+msgid "Current attempt"
+msgstr "Ընթացիկ փորձ"
+
+msgid "Could not save draft answer"
+msgstr "Չհաջողվեց պահպանել սևագիր պատասխանը"
+
+msgid "Could not load exercise"
+msgstr "Չհաջողվեց բեռնել վարժությունը"
+
+msgid "Draft answer saved"
+msgstr "Սևագիր պատասխանը պահպանվեց"
+
+msgid "Could not finish the attempt"
+msgstr "Չհաջողվեց ավարտել փորձը"
+
+msgid "Could not prepare Office document"
+msgstr "Չհաջողվեց պատրաստել Office փաստաթուղթը"
+
+msgid "Back to learner score"
+msgstr "Վերադառնալ սովորողի միավորին"
+
+msgid "Disable auto refresh"
+msgstr "Անջատել ավտոմատ թարմացումը"
+
+msgid "Enable auto refresh"
+msgstr "Միացնել ավտոմատ թարմացումը"
+
+msgid "Live window"
+msgstr "Կենդանի պատուհան"
+
+msgid "Ongoing attempts"
+msgstr "Ընթացիկ փորձեր"
+
+msgid "Completed attempts"
+msgstr "Ավարտված փորձեր"
+
+msgid "Started"
+msgstr "Սկսված"
+
+msgid "Last activity"
+msgstr "Վերջին գործունեություն"
+
+msgid "Could not load live results"
+msgstr "Չհաջողվեց բեռնել կենդանի արդյունքները"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Այս վարժությունը միայն ընթերցման համար է, քանի որ այն ներառված է ուսումնական ուղու մեջ։"
+
+msgid "Select a question type to create a question."
+msgstr "Ընտրեք հարցի տեսակ՝ հարց ստեղծելու համար։"
+
+msgid "Click to preview"
+msgstr "Սեղմեք նախադիտման համար"
+
+msgid "Hide preview"
+msgstr "Թաքցնել նախադիտումը"
+
+msgid "Shape"
+msgstr "Ձև"
+
+msgid "Coordinates"
+msgstr "Կոորդինատներ"
+
+msgid "Blanks"
+msgstr "Բացատներ"
+
+msgid "Switchable blanks"
+msgstr "Փոխարկելի բացատներ"
+
+msgid "Blank"
+msgstr "Բացատ"
+
+msgid "Input width"
+msgstr "Մուտքագրման լայնություն"
+
+msgid "Orientation"
+msgstr "Կողմնորոշում"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Հասանելի չէ ընթացիկ վարժության արձագանքման ռեժիմով"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Հասանելի չէ ուսումնական ուղու ստեղծման ընթացքում"
+
+msgid "Delete question"
+msgstr "Ջնջել հարցը"
+
+msgid "Could not update exercise questions"
+msgstr "Չհաջողվեց թարմացնել վարժության հարցերը"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Չհաջողվեց ավելացնել վարժությունը ուսումնական ուղու մեջ"
+
+msgid "A valid exercise id is required."
+msgstr "Պահանջվում է վավեր վարժության ID։"
+
+msgid "Could not load exercise questions"
+msgstr "Չհաջողվեց բեռնել վարժության հարցերը"
+
+msgid "Delete selected attempts"
+msgstr "Ջնջել ընտրված փորձերը"
+
+msgid "Before date"
+msgstr "Մինչև ամսաթիվը"
+
+msgid "Pending corrections"
+msgstr "Սպասող ուղղումներ"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Այս վարժությունը կողպված է գնահատականների գրքույկի կողմից։ Փորձերի մաքրման գործողությունները անջատված են։"
+
+msgid "No attempts found"
+msgstr "Փորձեր չեն գտնվել"
+
+msgid "Review"
+msgstr "Վերանայում"
+
+msgid "Print/PDF"
+msgstr "Տպել/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Չհաջողվեց բեռնել վարժության հաշվետվությունը"
+
+msgid "Select at least one attempt"
+msgstr "Ընտրեք առնվազն մեկ փորձ"
+
+msgid "Delete selected attempts?"
+msgstr "Ջնջե՞լ ընտրված փորձերը"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Ուղարկե՞լ վերանայված փորձի արդյունքների էլեկտրոնային նամակներ"
+
+msgid "Could not send emails"
+msgstr "Չհաջողվեց ուղարկել էլեկտրոնային նամակներ"
+
+msgid "Exercise result emails sent"
+msgstr "Վարժության արդյունքների էլեկտրոնային նամակներն ուղարկվել են"
+
+msgid "Skipped"
+msgstr "Բաց թողնված"
+
+msgid "Close attempt?"
+msgstr "Փակե՞լ փորձը"
+
+msgid "Attempt closed"
+msgstr "Փորձը փակված է"
+
+msgid "Could not close attempt"
+msgstr "Չհաջողվեց փակել փորձը"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Ուղարկե՞լ այս փորձի արդյունքը էլեկտրոնային նամակով սովորողին"
+
+msgid "Email sent"
+msgstr "Էլեկտրոնային նամակն ուղարկվել է"
+
+msgid "Could not send email"
+msgstr "Չհաջողվեց ուղարկել էլեկտրոնային նամակ"
+
+msgid "Attempt deleted"
+msgstr "Փորձը ջնջվել է"
+
+msgid "Could not delete attempt"
+msgstr "Չհաջողվեց ջնջել փորձը"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Ընտրեք CSV ֆայլ, որը պարունակում է վերնագիր և նկարագրություն սյունակներ։"
+
+msgid "Manage categories used to classify questions."
+msgstr "Կառավարեք հարցերը դասակարգելու համար օգտագործվող կատեգորիաները։"
+
+msgid "Manage categories used to classify exercises."
+msgstr "Կառավարեք վարժությունները դասակարգելու համար օգտագործվող կատեգորիաները։"
+
+msgid "Could not load categories"
+msgstr "Չհաջողվեց բեռնել կատեգորիաները"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Ներմուծված կատեգորիաներ՝ %s։ Բաց թողնված տողեր՝ %s։"
+
+msgid "Imported categories: %s."
+msgstr "Ներմուծված կատեգորիաներ՝ %s։"
+
+msgid "Could not import categories"
+msgstr "Չհաջողվեց ներմուծել կատեգորիաները"
+
+msgid "Could not save category"
+msgstr "Չհաջողվեց պահպանել կատեգորիան"
+
+msgid "Answer distribution"
+msgstr "Պատասխանների բաշխում"
+
+msgid "Configured answers"
+msgstr "Կարգավորված պատասխաններ"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Որոշ հարցերի տեսակների համար մանրամասն պատասխանների հաշվարկը դեռ հասանելի չէ տեղափոխված հաշվետվությունում։"
+
+msgid "No report by question data found"
+msgstr "Հարցի հաշվետվության տվյալներ չեն գտնվել"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Այս հարցի տեսակի համար մանրամասն պատասխանների հաշվարկը դեռ հասանելի չէ տեղափոխված հաշվետվությունում։"
+
+msgid "No answer distribution found"
+msgstr "Պատասխանների բաշխում չի գտնվել"
+
+msgid "Could not load report by question"
+msgstr "Չհաջողվեց բեռնել հարցի հաշվետվությունը"
+
+msgid "Question settings"
+msgstr "Հարցի կարգավորումներ"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Թողեք դատարկ կամ 0՝ ժամանակի սահմանափակում չլինելու համար։"
+
+msgid "Time limit in seconds"
+msgstr "Ժամանակի սահմանափակում վայրկյաններով"
+
+msgid "Attached questions"
+msgstr "Կցված հարցեր"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Այստեղ թվարկված են միայն այն հարցերը, որոնք կցված են այս մեդիա հարցին ընթացիկ վարժության ներսում։"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Ընթացիկ վարժության մեջ այս մեդիա հարցին կցված հարցեր չկան։"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Վերբեռնեք Office փաստաթղթի ձևանմուշը, որը սովորողները կխմբագրեն OnlyOffice-ով։"
+
+msgid "Replace Office document"
+msgstr "Փոխարինել Office փաստաթուղթը"
+
+msgid "Current Office document"
+msgstr "Ընթացիկ Office փաստաթուղթ"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Այս հարցը ձեռքով է ստուգվում սովորողի կողմից խմբագրված փաստաթուղթը ներկայացնելուց հետո։"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Ընդհանուր միավորը հաշվարկվում է որպես hotspot միավորների գումար։"
+
+msgid "Global score"
+msgstr "Գլոբալ միավոր"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Ընտրեք hotspot տող, ընտրեք դրա ձևը, ապա նկարեք պատկերի վրա։ Բազմանկյունների համար սեղմեք յուրաքանչյուր կետի վրա և ավարտեք բազմանկյունը, կամ կրկնակի սեղմեք՝ ավարտելու համար։"
+
+msgid "Finish polygon"
+msgstr "Ավարտել բազմանկյունը"
+
+msgid "Calculated answer"
+msgstr "Հաշվարկված պատասխան"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Խնդրում ենք մուտքագրել ձեր տեքստը ստորև և օգտագործել քառակուսի փակագծեր [...]՝ մեկ կամ մի քանի դատարկ տեղեր սահմանելու համար։"
+
+msgid "Lowest value"
+msgstr "Ամենացածր արժեք"
+
+msgid "Highest value"
+msgstr "Ամենաբարձր արժեք"
+
+msgid "Fill in blanks"
+msgstr "Լրացնել դատարկ տեղերը"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Օգտագործեք ընտրված նշիչները՝ դատարկ տեղերը սահմանելու համար։ Օրինակ՝ Պերուի մայրաքաղաքը [Լիմա] է։"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Մուտքագրեք բացվող ընտրացանկի տարբերակները՝ յուրաքանչյուր պատասխանը առանձին տողով։ Այնուհետև նշեք սպասվող պատասխանները ստորև, ինչպես հին գործիքում։"
+
+msgid "Refresh answers"
+msgstr "Թարմացնել պատասխանները"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Այս բացվող ընտրացանկի համակցված հարցն օգտագործում է մեկ ընդհանուր միավոր, ինչպես հին տարբերակում։"
+
+msgid "Please enter at least two dropdown options."
+msgstr "Խնդրում ենք մուտքագրել առնվազն երկու բացվող ընտրացանկի տարբերակ։"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Ստեղծեք նպատակակետի տարբերակները նախ, ապա կապեք յուրաքանչյուր տարր ճիշտ տարբերակի հետ։"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Այս համապատասխանեցման համակցված հարցն օգտագործում է մեկ ընդհանուր միավոր, ինչպես հին տարբերակում։"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Ստեղծեք քայլերը և ընտրեք յուրաքանչյուրի սպասվող դիրքը, ինչպես հին Draggable գործիքում։"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Ուսանողները կընտրեն Ճիշտ կամ Սխալ, ապա կնշեն իրենց վստահության աստիճանը փորձի ընթացքում։ Խմբագրիչը պահպանում է Ճիշտ/Սխալ միավորները և վստահության մակարդակները, ինչպես հին տարբերակում։"
+
+msgid "Hotspot combination"
+msgstr "Թեժ կետերի համակցում"
+
+msgid "Add delineation"
+msgstr "Ավելացնել սահմանագծում"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Այս Office փաստաթղթի հարցը չունի պատասխանի տարբերակներ։ Դրա միավորը նշանակվում է ստուգման/արդյունքների վերանայման ընթացքում։"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Այս վերբեռնման հարցը չունի պատասխանի տարբերակներ։ Դրա միավորը նշանակվում է ստուգման/արդյունքների վերանայման ընթացքում։"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Այս բանավոր արտահայտման հարցը չունի պատասխանի տարբերակներ։ Դրա միավորը նշանակվում է ստուգման/արդյունքների վերանայման ընթացքում։"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Այս բաց հարցը չունի պատասխանի տարբերակներ։ Դրա միավորը նշանակվում է ստուգման/արդյունքների վերանայման ընթացքում։"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Ավելացնել ընթերցման տեքստ՝ ոլորման արագության կարգավորումներով։"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Ավելացնել բովանդակություն, մեդիա կամ ընթերցման համատեքստ՝ առանց միավոր ավելացնելու։"
+
+msgid "Insert a page break without adding score."
+msgstr "Տեղադրել էջի ընդհատում՝ առանց միավոր ավելացնելու։"
+
+msgid "Could not save question"
+msgstr "Հնարավոր չէ պահպանել հարցը"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Թույլատրվում են միայն DOC, DOCX, XLS կամ XLSX փաստաթղթեր։"
+
+msgid "Please select an Office document."
+msgstr "Խնդրում ենք ընտրել Office փաստաթուղթ։"
+
+msgid "Please draw at least one hotspot."
+msgstr "Խնդրում ենք գծել առնվազն մեկ թեժ կետ։"
+
+msgid "Please draw at least one delineation."
+msgstr "Խնդրում ենք գծել առնվազն մեկ սահմանագիծ։"
+
+msgid "The fill in blanks text is required."
+msgstr "Դատարկ տեղերը լրացնելու տեքստը պարտադիր է։"
+
+msgid "At least one expected answer is required."
+msgstr "Պահանջվում է առնվազն մեկ սպասվող պատասխան։"
+
+msgid "At least two draggable items are required."
+msgstr "Պահանջվում է առնվազն երկու քաշվող տարր։"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Յուրաքանչյուր քաշվող տարր պետք է կապված լինի վավեր թիրախային դիրքի հետ։"
+
+msgid "At least two matching options are required."
+msgstr "Պահանջվում է առնվազն երկու համապատասխանեցման տարբերակ։"
+
+msgid "At least two matching pairs are required."
+msgstr "Պահանջվում է առնվազն երկու համապատասխանեցման զույգ։"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Յուրաքանչյուր համապատասխանեցման զույգ պետք է կապված լինի վավեր տարբերակի հետ։"
+
+msgid "At least two answers are required."
+msgstr "Պահանջվում է առնվազն երկու պատասխան։"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Յուրաքանչյուր Ճիշտ/Սխալ պատասխան պետք է ունենա ընտրված Ճիշտ կամ Սխալ։"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Միայն մեկ ճիշտ պատասխան ունեցող հարցը պետք է ունենա ճիշտ մեկ ճիշտ պատասխան։"
+
+msgid "At least one correct answer is required."
+msgstr "Պահանջվում է առնվազն մեկ ճիշտ պատասխան։"
+
+msgid "Could not load question"
+msgstr "Հնարավոր չէ բեռնել հարցը"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Ընտրեք դասընթաց և արտահանեք վարժության ընդհանուր արդյունքների զեկույցը CSV ձևաչափով։"
+
+msgid "Back to reports catalog"
+msgstr "Վերադառնալ զեկույցների կատալոգ"
+
+msgid "Could not load exercise global report"
+msgstr "Հնարավոր չէ բեռնել վարժության ընդհանուր զեկույցը"
+
+msgid "Imported questions"
+msgstr "Ներմուծված հարցեր"
+
+msgid "Aiken content"
+msgstr "Aiken բովանդակություն"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Հնարավոր չէ բեռնել AI Aiken գեներատորը"
+
+msgid "Could not generate Aiken content"
+msgstr "Հնարավոր չէ ստեղծել Aiken բովանդակություն"
+
+msgid "Could not import generated Aiken content"
+msgstr "Հնարավոր չէ ներմուծել ստեղծված Aiken բովանդակությունը"
+
+msgid "Back to my courses"
+msgstr "Վերադառնալ իմ դասընթացներին"
+
+msgid "Open report"
+msgstr "Բացել զեկույցը"
+
+msgid "Questions with no automatic correction"
+msgstr "Ավտոմատ ստուգում չունեցող հարցեր"
+
+msgid "Could not load pending attempts"
+msgstr "Հնարավոր չէ բեռնել սպասվող փորձերը"
+
+msgid "Skipped questions"
+msgstr "Բաց թողնված հարցեր"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken ներմուծումը բաշխում է այս ընդհանուր կշիռը ներմուծված հարցերի միջև, եթե հարցը չի սահմանում SCORE։"
+
+msgid "Import warnings"
+msgstr "Ներմուծման նախազգուշացումներ"
+
+msgid "Could not import questions"
+msgstr "Հարցերը չհաջողվեց ներմուծել"
+
+msgid "No question statistics found"
+msgstr "Հարցերի վիճակագրություն չի գտնվել"
+
+msgid "Could not load question statistics"
+msgstr "Հարցերի վիճակագրությունը չհաջողվեց բեռնել"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Կարող եք նաև MCP հաճախորդը անմիջապես միացնել՝ այն ուղղորդելով հետևյալ վերջնակետին․"
+
+msgid "No applications are currently connected to your account."
+msgstr "Ձեր հաշվին ներկայումս ոչ մի հավելված միացված չէ։"
+
+msgid "Connected on"
+msgstr "Միացված է"
+
+msgid "Last used"
+msgstr "Վերջին օգտագործում"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s այլևս չի կարողանա մուտք գործել Ձեր Chamilo հաշիվ։ Շարունակե՞լ"
+
+msgid "Application revoked"
+msgstr "Հավելվածը չեղարկվել է"
+
+msgid "Copied to clipboard"
+msgstr "Պատճենվել է սեղմատախտակին"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP վերջնակետը չհաջողվեց պատճենել"
+
+msgid "MCP endpoint"
+msgstr "MCP վերջնակետ"
+
+msgid "API key"
+msgstr "API բանալի"
+
+msgid "Last used at"
+msgstr "Վերջին օգտագործում"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Պատճենեք այս բանալին հիմա։ Այն այլևս չի ցուցադրվի։"
+
+msgid "Rotate API key"
+msgstr "Պտտել API բանալին"
+
+msgid "Revoke API key"
+msgstr "Չեղարկել API բանալին"
+
+msgid "Remote MCP connection"
+msgstr "Հեռակա MCP կապ"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Կարգավորեք Ձեր MCP հաճախորդը հետևյալ արժեքներով․"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Ընթացիկ բանալին անմիջապես կդադարի աշխատել։ Շարունակե՞լ"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Կստեղծվի նոր անձնական MCP API բանալի։ Շարունակե՞լ"
+
+msgid "MCP API key generated"
+msgstr "MCP API բանալին ստեղծվել է"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Այս բանալին օգտագործող MCP հաճախորդները անմիջապես կդադարեն աշխատել։ Շարունակե՞լ"
+
+msgid "MCP API key revoked"
+msgstr "MCP API բանալին չեղարկվել է"
+
+msgid "Could not copy the API key"
+msgstr "API բանալին չհաջողվեց պատճենել"
+
+msgid "Project"
+msgstr "Նախագիծ"
+
+msgid "Close old tickets"
+msgstr "Փակել հին տոմսերը"
+
+msgid "Close tickets older than seven days?"
+msgstr "Փակե՞լ յոթ օրից հին տոմսերը"
+
+msgid "Assignment history"
+msgstr "Առաջադրանքների պատմություն"
+
+msgid "Translate with AI"
+msgstr "Թարգմանել AI-ով"
+
+msgid "Target language"
+msgstr "Թիրախ լեզու"
+
+msgid "Please select a provider"
+msgstr "Խնդրում ենք ընտրել մատակարար"
+
+msgid "Generate translation"
+msgstr "Ստեղծել թարգմանություն"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Պայմանների և դրույթների առնվազն մեկ բաժին պետք է պարունակի տեքստ։"
+
+msgid "No active target languages are available."
+msgstr "Ակտիվ թիրախ լեզուներ հասանելի չեն։"
+
+msgid "Tutor"
+msgstr "Դասախոս"
+
+msgid "Access dates"
+msgstr "Մուտքի ամսաթվեր"
+
+msgid "Coach access dates"
+msgstr "Դասախոսի մուտքի ամսաթվեր"
+
+msgid "No sessions found"
+msgstr "Սեսիաներ չեն գտնվել"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Ընտրեք այն դասընթացները, որոնց մուտքը այս օգտատերը չպետք է ունենա այս սեսիայում։"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Օգտատերը չի կարող արգելափակվել սեսիայի բոլոր դասընթացներից։ Փոխարենը հեռացրեք օգտատերին։"
+
+msgid "Users subscribed to this session"
+msgstr "Այս սեսիայում գրանցված օգտատերեր"
+
+msgid "No available users found"
+msgstr "Հասանելի օգտատերեր չեն գտնվել"
+
+msgid "Subscribe this user to the session?"
+msgstr "Գրանցե՞լ այս օգտատերին սեսիայում"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Գրանցե՞լ ընտրված օգտատերերին սեսիայում"
+
+msgid "General tutor planning"
+msgstr "Դասախոսի ընդհանուր պլանավորում"
+
+msgid "User is already registered by another tutor."
+msgstr "Օգտատերն արդեն գրանցված է մեկ այլ դասախոսի կողմից։"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Դուք ստանում եք պատճեն, քանի որ դուք դասընթացի դասախոս եք"
+
+msgid "General tutor"
+msgstr "Ընդհանուր դասախոս"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Հաշվի առեք հասանելի դասընթացները, դասախոսները, տեխնիկական աջակցությունը, ուսուցիչները և/կամ նյութերը։"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Դասախոսները գրանցված են որպես դասընթացի %s ուսուցիչներ"
+
+msgid "Tutor name"
+msgstr "Դասախոսի անուն"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Սեսիայի դասախոսները սեսիայի համակարգողներ են և կարող են հանդես գալ որպես դասախոսներ սեսիայի յուրաքանչյուր դասընթացում: Միայն ուսուցչի դեր ունեցող օգտատերերը կարող են ընտրվել որպես սեսիայի դասախոսներ:"
+
+msgid "Access start date for tutors"
+msgstr "Դասախոսների մուտքի սկզբի ամսաթիվ"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Ամսաթիվ, երբ սեսիան հասանելի է դառնում դասախոսների համար, որպեսզի նրանք կարողանան պատրաստել այն մինչև ուսանողների միացումը"
+
+msgid "Access end date for tutors"
+msgstr "Դասախոսների մուտքի ավարտի ամսաթիվ"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Ամսաթիվ, երբ սեսիան փակվում է դասախոսների համար: Լրացուցիչ ժամանակը թույլ կտա նրանց արտահանել բոլոր համապատասխան հետևման տվյալները"
+
+msgid "Tutor and student"
+msgstr "Դասախոս և ուսանող"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Այս զեկույցը ցույց է տալիս սեսիաների շաբաթական բաշխումը ընդհանուր դասախոսի կողմից ընտրված ժամանակահատվածում:"
+
+msgid "User is general tutor in some sessions"
+msgstr "Օգտատերը ընդհանուր դասախոս է որոշ սեսիաներում"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Ուսուցիչները կավելացվեն որպես դասախոսներ բոլոր դասընթացների սեսիաներում:"
+
+msgid "Delete failed: invalid question id."
+msgstr "Ջնջումը ձախողվեց՝ հարցի անվավեր ID:"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Մեկ ընդհանուր սեսիայի դասախոսի միջին սեսիաների քանակ"
+
+msgid "No room"
+msgstr "Սենյակ չկա"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Ներմուծել դասընթացի ուսուցիչներին որպես դասընթացի դասախոսներ սեսիայում"
+
+msgid "Clean and update course tutors"
+msgstr "Մաքրել և թարմացնել դասընթացի դասախոսներին"
+
+msgid "Add me as tutor"
+msgstr "Ավելացնել ինձ որպես դասախոս"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Հնարավոր չէ ավելացնել հարցումը ուսումնական ուղուն"
+
+msgid "Access dates for tutors"
+msgstr "Դասախոսների մուտքի ամսաթվեր"
+
+msgid "Tutor and group member"
+msgstr "Դասախոս և խմբի անդամ"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Ձեր օրական AI թոքենների սահմանաչափը հասել է: Խնդրում ենք փորձել վաղը:"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Ձեր ամսական AI թոքենների սահմանաչափը հասել է: Խնդրում ենք փորձել հաջորդ ամիս:"
+
+msgid "This course code already exists, please choose another code."
+msgstr "Այս դասընթացի կոդն արդեն գոյություն ունի, խնդրում ենք ընտրել այլ կոդ:"
+
+msgid "This course title already exists, please choose another title."
+msgstr "Այս դասընթացի անունն արդեն գոյություն ունի, խնդրում ենք ընտրել այլ անուն:"
+
+msgid "This tool visibility cannot be changed"
+msgstr "Այս գործիքի տեսանելիությունը չի կարող փոխվել"
+
+msgid "Invalid visibility"
+msgstr "Անվավեր տեսանելիություն"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Դուք ստանում եք պատճեն, քանի որ դուք դասընթացի դասախոսներից մեկն եք"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Դուք ստանում եք պատճեն, քանի որ դուք դասընթացի դասախոսն եք"
+
+msgid "Manual completion"
+msgstr "Ձեռքով ավարտում"
+
+msgid "Send to tutors"
+msgstr "Ուղարկել դասախոսներին"
+
+msgid "Lab title"
+msgstr "Լաբորատորիայի անուն"
+
+msgid "Lab week"
+msgstr "Լաբորատորիայի շաբաթ"
+
+msgid "Final exam access rule"
+msgstr "Վերջնական քննության մուտքի կանոն"
+
+msgid "Course completion rule"
+msgstr "Դասընթացի ավարտման կանոն"
+
+msgid "You have been invited to join a course"
+msgstr "Ձեզ հրավիրել են միանալու դասընթացին"
+
+msgid "No user has been found"
+msgstr "Օգտատեր չի գտնվել"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Ընտրված օգտատերը չի կարող գրանցվել այս համատեքստում"
+
+msgid "No change has been made"
+msgstr "Ոչ մի փոփոխություն չի կատարվել"
+
+msgid "Back to group list"
+msgstr "Վերադառնալ խմբերի ցանկին"
+
+msgid "Remove class link"
+msgstr "Հեռացնել դասի հղումը"
+
+msgid "Group settings"
+msgstr "Խմբի կարգավորումներ"
+
+msgid "Self-registration allowed"
+msgstr "Ինքնագրանցումը թույլատրված է"
+
+msgid "Self-unregistration allowed"
+msgstr "Ինքնագրանցումից հրաժարվելը թույլատրված է"
+
+msgid "This group is linked to the class"
+msgstr "Այս խումբը կապված է դասի հետ"
+
+msgid "Create one or more empty course groups"
+msgstr "Ստեղծել մեկ կամ մի քանի դատարկ դասընթացային խմբեր"
+
+msgid "Number of places"
+msgstr "Տեղերի քանակ"
+
+msgid "Base group"
+msgstr "Հիմնական խումբ"
+
+msgid "Share"
+msgstr "Կիսվել"
+
+msgid "Collaboration"
+msgstr "Համագործակցություն"
+
+msgid "The group title is required."
+msgstr "Խմբի անունը պարտադիր է:"
+
+msgid "Back to group area"
+msgstr "Վերադառնալ խմբի տարածք"
+
+msgid "Members are managed by the linked class"
+msgstr "Անդամները կառավարվում են կապված դասարանի կողմից"
+
+msgid "%s groups selected"
+msgstr "%s խումբ ընտրված է"
+
+msgid "Fill selected groups"
+msgstr "Լրացնել ընտրված խմբերը"
+
+msgid "Empty selected groups"
+msgstr "Դատարկել ընտրված խմբերը"
+
+msgid "Fill group"
+msgstr "Լրացնել խումբը"
+
+msgid "Empty group"
+msgstr "Դատարկել խումբը"
+
+msgid "Groups per user"
+msgstr "Խմբեր օգտատերի համար"
+
+msgid "No tutors"
+msgstr "Ուսուցիչներ չկան"
+
+msgid "No users"
+msgstr "Օգտատերեր չկան"
+

@@ -41,6 +41,12 @@ define('QUOTED_CONTENT', '((?:\\\\.|(?!\\1)[^\\\\])*)');
 // Parse messages.pot to get all msgids
 $msgids = parsePotFile($potPath);
 
+// $this->get_lang()/$plugin->get_lang() falls back to core get_lang() only when
+// the plugin's own lang file doesn't define the key (see Plugin::get_lang()).
+// Load every plugin's own keys so such calls aren't flagged as missing from
+// messages.pot when the plugin already translates them itself.
+$pluginLangKeys = loadPluginLangKeys($root);
+
 $missing = [];
 // For terms found in assets/vue, keep the original term (with {0}/{1} or %s/%d
 // placeholders exactly as written in the source) keyed by its normalized lookup
@@ -102,6 +108,11 @@ foreach ($dirsToScan as $dir) {
                 }
             }
             foreach ($hiddenTerms as $term) {
+                if (isset($pluginLangKeys[$term])) {
+                    // A plugin already defines this key itself, so
+                    // Plugin::get_lang() never falls back to core get_lang().
+                    continue;
+                }
                 $lookupTerm = normalizePlaceholders($term, $isVue);
                 $isMissing = !isset($msgids[$lookupTerm]);
                 if ($isMissing) {
@@ -237,6 +248,24 @@ function toJsonValue(string $term): string
         },
         $term
     );
+}
+
+/**
+ * Collect every key defined by any plugin's own English lang file
+ * (public/plugin/*\/lang/en_US.php), each of which sets a local $strings array.
+ */
+function loadPluginLangKeys(string $root): array
+{
+    $keys = [];
+    foreach (glob($root.'/public/plugin/*/lang/en_US.php') as $file) {
+        $strings = [];
+        include $file;
+        foreach (array_keys($strings) as $key) {
+            $keys[$key] = true;
+        }
+    }
+
+    return $keys;
 }
 
 function parsePotFile(string $filePath): array

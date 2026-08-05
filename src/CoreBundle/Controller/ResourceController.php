@@ -174,6 +174,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceFile = null;
         if ($resourceFileId) {
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
+
+            // The selected file must belong to the resource node in the path; otherwise the
+            // resourceFileId parameter is an IDOR oracle for arbitrary resource files.
+            if ($resourceFile instanceof ResourceFile
+                && $resourceFile->getResourceNode()?->getId() !== $resourceNode->getId()
+            ) {
+                throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
+            }
         }
 
         $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
@@ -669,6 +677,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $resourceNode = $variant->getResourceNode();
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        // Require edit permission on the owning resource node (admins pass via ROLE_ADMIN).
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        // Only genuine access-URL variants may be removed here, never a primary resource file.
+        if (null === $variant->getAccessUrl()) {
+            throw new NotFoundHttpException();
+        }
+
         $em->remove($variant);
         $em->flush();
 
@@ -704,6 +729,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // This covers files uploaded before the MIME-type allowlist was introduced.
         $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
 
+        // Such files are always delivered as a neutral download, so the browser can never
+        // execute them in the Chamilo origin, whatever the requested mode is.
+        $forceSocialHtmlDownload = $isSocialAttachment && str_contains($mimeType, 'html');
+        if ($forceSocialHtmlDownload) {
+            $mimeType = 'application/octet-stream';
+        }
+
         // SVG: sanitize before serving in any mode (view or download).
         // Glide is raster-only and cannot process SVG; sanitization strips embedded scripts regardless of how the file was stored.
         if ('image/svg+xml' === $mimeType) {
@@ -734,7 +766,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             case 'show':
             default:
-                $forceDownload = false;
+                $forceDownload = $forceSocialHtmlDownload;
 
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {
@@ -922,6 +954,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        if ($forceSocialHtmlDownload) {
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+        }
+
         $response->headers->set('Content-Length', (string) $length);
         $response->headers->set('Accept-Ranges', 'bytes');
         $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");

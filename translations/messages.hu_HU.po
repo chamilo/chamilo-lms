@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37503,4 +37503,1432 @@ msgstr "Egy modern, barátságos illusztráció, amely a kurzus témáját ábr�
 
 msgid "Back to account"
 msgstr "Vissza a fiókhoz"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Visszajelzése segít nekünk a jövőbeli képzések javításában."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Köszönjük, hogy megosztotta visszajelzését."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Mennyire elégedett a képzés általános minőségével?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Mennyire elégedett a tartalom relevanciájával?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Mennyire elégedett a magyarázatok érthetőségével?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Mennyire elégedett a képzés szervezésével és tempójával?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Mennyire elégedett a tanultak gyakorlati hasznosságával?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ajánlaná ezt a képzést másoknak?"
+
+msgid "What should we improve in future editions?"
+msgstr "Mit kellene javítanunk a jövőbeli kiadásokban?"
+
+msgid "Very satisfied"
+msgstr "Nagyon elégedett"
+
+msgid "Satisfied"
+msgstr "Elégedett"
+
+msgid "Neutral"
+msgstr "Semleges"
+
+msgid "Dissatisfied"
+msgstr "Elégedetlen"
+
+msgid "Very dissatisfied"
+msgstr "Nagyon elégedetlen"
+
+msgid "Add destination"
+msgstr "Cél hozzáadása"
+
+msgid "Add this test to the assessment tool"
+msgstr "Teszt hozzáadása az értékelési eszközhöz"
+
+msgid "Attempts and timing"
+msgstr "Kísérletek és időzítés"
+
+msgid "Available questions"
+msgstr "Elérhető kérdések"
+
+msgid "Cancel and return to learning path"
+msgstr "Mégse és visszatérés a tanulási útvonalhoz"
+
+msgid "Category destinations"
+msgstr "Kategória célok"
+
+msgid "Classification"
+msgstr "Osztályozás"
+
+msgid "Context"
+msgstr "Kontextus"
+
+msgid "Could not load exercise configuration"
+msgstr "Nem sikerült betölteni a gyakorlat konfigurációját"
+
+msgid "Could not save exercise"
+msgstr "Nem sikerült menteni a gyakorlatot"
+
+msgid "Display and learning path"
+msgstr "Megjelenítés és tanulási útvonal"
+
+msgid "Edit test"
+msgstr "Teszt szerkesztése"
+
+msgid "Exercise settings saved."
+msgstr "Gyakorlat beállításai mentve."
+
+msgid "Extra settings"
+msgstr "Extra beállítások"
+
+msgid "Feedback and results"
+msgstr "Visszajelzés és eredmények"
+
+msgid "Finish exercise"
+msgstr "Gyakorlat befejezése"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Azonosítja ennek a gyakorlatnak a nyelvét erőforrás-metaadatként. Ez önmagában nem engedélyezi a keresési indexelést."
+
+msgid "Maximum score (%)"
+msgstr "Maximális pontszám (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "A metaadat tartalmazza a gyakorlatokhoz konfigurált készségeket és további mezőket. Opcionális, és rejtve marad, amíg meg nem nyitják."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Ehhez a gyakorlathoz még nincsenek elérhető kérdéskategóriák."
+
+msgid "Question categories matrix"
+msgstr "Kérdéskategóriák mátrixa"
+
+msgid "Questions behavior"
+msgstr "Kérdések viselkedése"
+
+msgid "Random by category"
+msgstr "Véletlenszerű kategória szerint"
+
+msgid "Remove destination"
+msgstr "Cél eltávolítása"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "A szabályok pontszázalék szerint növekvő sorrendben kerülnek kiértékelésre. A teszt befejezéséhez válassza a Gyakorlat befejezése lehetőséget."
+
+msgid "Score and final messages"
+msgstr "Pontszám és végső üzenetek"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Néhány beállítás zárolva van a gyakorlat létrehozása után."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ez az érték percben tárolódik mint teljes időtartam."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Használjon 0-t az összes elérhető kérdés megtartásához. Használjon -1-et, ha az összes elérhető kérdés engedélyezett."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Használja ezeket a mezőket a gyakorlat osztályozásához függetlenül a megjelenítési beállításaitól."
+
+msgid "Invite by email"
+msgstr "Meghívás e-mailben"
+
+msgid "Invitation has been sent"
+msgstr "A meghívót elküldtük"
+
+msgid "Sent on"
+msgstr "Elküldve"
+
+msgid "Accepted on"
+msgstr "Elfogadva"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Ez a kurzus egy munkamenetben van megnyitva. A meghívó küldése itt a címzettet az egész %s munkamenetre feliratkoztatja, nem csak erre a kurzusra."
+
+msgid "Revoke"
+msgstr "Visszavonás"
+
+msgid "Revoked"
+msgstr "Visszavonva"
+
+msgid "Invitation has been revoked"
+msgstr "A meghívót visszavontuk"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Biztosan visszavonja a(z) %s számára küldött meghívót?"
+
+msgid "No default room"
+msgstr "Nincs alapértelmezett terem"
+
+msgid "Floor"
+msgstr "Emelet"
+
+msgid "Capacity"
+msgstr "Kapacitás"
+
+msgid "Use attendance default room"
+msgstr "Alapértelmezett terem használata a jelenléthez"
+
+msgid "Floor number"
+msgstr "Emelet száma"
+
+msgid "Copy to students"
+msgstr "Másolás a hallgatóknak"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gyors teszt generálása erről a témáról"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "A mentett dokumentum tartalma feldolgozásra kerül egy AI-modell által."
+
+msgid "MCP API key"
+msgstr "MCP API kulcs"
+
+msgid "Authorized applications"
+msgstr "Engedélyezett alkalmazások"
+
+msgid "Your session is about to expire"
+msgstr "A munkamenet hamarosan lejár"
+
+msgid "Do you want to continue your session?"
+msgstr "Szeretné folytatni a munkamenetet?"
+
+msgid "Stay connected"
+msgstr "Maradjon csatlakozva"
+
+msgid "You will be signed out in %s seconds."
+msgstr "%s másodperc múlva ki lesz jelentkeztetve."
+
+msgid "No descriptions available yet."
+msgstr "Még nincs elérhető leírás."
+
+msgid "%s users selected"
+msgstr "%s felhasználó kiválasztva"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "A kiválasztott felhasználókat feliratkoztattuk a kurzusra"
+
+msgid "Import teachers"
+msgstr "Tanárok importálása"
+
+msgid "Import learners"
+msgstr "Tanulók importálása"
+
+msgid "Select CSV file"
+msgstr "CSV-fájl kiválasztása"
+
+msgid "Some users could not be subscribed"
+msgstr "Néhány felhasználót nem sikerült felvenni"
+
+msgid "Browse available classes"
+msgstr "Elérhető osztályok böngészése"
+
+msgid "Back to linked classes"
+msgstr "Vissza a csatolt osztályokhoz"
+
+msgid "No classes are currently linked to this course."
+msgstr "Jelenleg nincs csatolt osztály ehhez a kurzushoz."
+
+msgid "No available classes were found for this course."
+msgstr "Nem található elérhető osztály ehhez a kurzushoz."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Biztosan leiratkoztatja a kijelölt felhasználókat?"
+
+msgid "Learning path access"
+msgstr "Tanulási útvonal hozzáférése"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Csak a kijelölt felhasználók és csoportok férhetnek hozzá ehhez a tanulási útvonalhoz. A kezelés a mentés után lehetséges."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Minden jelenlegi és jövőbeli kurzusfelhasználó hozzáférhet ehhez a tanulási útvonalhoz."
+
+msgid "All course users"
+msgstr "Minden kurzusfelhasználó"
+
+msgid "Selected users and groups"
+msgstr "Kijelölt felhasználók és csoportok"
+
+msgid "No access"
+msgstr "Nincs hozzáférés"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Csak a hozzáadott felhasználók és csoportok férhetnek hozzá ehhez a tanulási útvonalhoz."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "A kérdések száma legfeljebb %s lehet"
+
+msgid "Open exercise player"
+msgstr "Gyakorlat lejátszó megnyitása"
+
+msgid "The score is hidden for this exercise."
+msgstr "A pontszám rejtve van ennél a gyakorlatnál."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "A javítások a gyakorlat eredménybeállításai szerint rejtve vannak."
+
+msgid "Progressive adaptive result"
+msgstr "Progresszív adaptív eredmény"
+
+msgid "Achieved level"
+msgstr "Elért szint"
+
+msgid "Correction history"
+msgstr "Javítási előzmények"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Ezen a kísérleten végzett kézi javítások előzményei."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Ez a gyakorlat radár/pókháló eredmény módot használ. A diagram ezen az oldalon nem érhető el."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "A kérdés részletei a gyakorlat eredménybeállításai szerint rejtve vannak."
+
+msgid "Media question"
+msgstr "Média kérdés"
+
+msgid "Pending correction"
+msgstr "Javításra vár"
+
+msgid "No answer"
+msgstr "Nincs válasz"
+
+msgid "Blank %s"
+msgstr "%s üres"
+
+msgid "Your order"
+msgstr "Sorrendje"
+
+msgid "Correct order"
+msgstr "Helyes sorrend"
+
+msgid "Delineation review"
+msgstr "Delineáció áttekintése"
+
+msgid "Learner clicks"
+msgstr "Tanuló kattintásai"
+
+msgid "Question image"
+msgstr "Kérdés képe"
+
+msgid "No hotspot image available"
+msgstr "Nincs hotspot kép elérhető"
+
+msgid "Learner delineation"
+msgstr "Tanuló delineációja"
+
+msgid "Expected delineation"
+msgstr "Elvárt delineáció"
+
+msgid "Expected zones"
+msgstr "Elvárt zónák"
+
+msgid "Zone"
+msgstr "Zóna"
+
+msgid "Learner annotation"
+msgstr "Tanuló megjegyzése"
+
+msgid "No annotation image available"
+msgstr "Nincs megjegyzés kép elérhető"
+
+msgid "This answer is pending teacher correction."
+msgstr "Ez a válasz tanári javításra vár."
+
+msgid "Teacher comment"
+msgstr "Tanári megjegyzés"
+
+msgid "Teacher correction"
+msgstr "Tanári javítás"
+
+msgid "Save correction"
+msgstr "Javítás mentése"
+
+msgid "Learner audio"
+msgstr "Tanuló hangja"
+
+msgid "Download audio"
+msgstr "Hang letöltése"
+
+msgid "No uploaded audio"
+msgstr "Nincs feltöltött hang"
+
+msgid "Learner Office document"
+msgstr "Tanuló Office dokumentuma"
+
+msgid "Learner file"
+msgstr "Tanuló fájlja"
+
+msgid "Download Office document"
+msgstr "Office-dokumentum letöltése"
+
+msgid "No submitted document"
+msgstr "Nincs beküldött dokumentum"
+
+msgid "No uploaded file"
+msgstr "Nincs feltöltött fájl"
+
+msgid "Content item"
+msgstr "Tartalomelem"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Ez a kérdéstípus ezen az oldalon nem tekinthető át."
+
+msgid "Exercise completed"
+msgstr "Gyakorlat befejezve"
+
+msgid "Could not start the attempt"
+msgstr "Nem sikerült elindítani a próbálkozást"
+
+msgid "Invalid exercise attempt"
+msgstr "Érvénytelen gyakorlati próbálkozás"
+
+msgid "Could not load exercise result"
+msgstr "Nem sikerült betölteni a gyakorlati eredményt"
+
+msgid "Could not load AI providers"
+msgstr "Nem sikerült betölteni az AI-szolgáltatókat"
+
+msgid "Could not generate AI suggestion"
+msgstr "Nem sikerült AI-javaslatot generálni"
+
+msgid "Correction saved"
+msgstr "Javítás mentve"
+
+msgid "Could not save correction"
+msgstr "Nem sikerült menteni a javítást"
+
+msgid "Create exercise"
+msgstr "Gyakorlat létrehozása"
+
+msgid "Exercise categories"
+msgstr "Gyakorlatkategóriák"
+
+msgid "Question categories"
+msgstr "Kérdéskategóriák"
+
+msgid "Search by exercise title or description."
+msgstr "Keresés gyakorlat címe vagy leírása alapján."
+
+msgid "Search exercises"
+msgstr "Gyakorlatok keresése"
+
+msgid "No exercises found"
+msgstr "Nem található gyakorlat"
+
+msgid "Open exercise"
+msgstr "Gyakorlat megnyitása"
+
+msgid "Disable autolaunch"
+msgstr "Automatikus indítás letiltása"
+
+msgid "Enable autolaunch"
+msgstr "Automatikus indítás engedélyezése"
+
+msgid "Export QTI2"
+msgstr "QTI2 exportálása"
+
+msgid "Bulk actions"
+msgstr "Tömeges műveletek"
+
+msgid "Selected exercises"
+msgstr "Kiválasztott gyakorlatok"
+
+msgid "No exercises selected"
+msgstr "Nincs kiválasztott gyakorlat"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Biztosan alkalmazza ezt a műveletet a kiválasztott gyakorlatokra?"
+
+msgid "Bulk action completed"
+msgstr "Tömeges művelet befejezve"
+
+msgid "Could not update exercises"
+msgstr "Nem sikerült frissíteni a gyakorlatokat"
+
+msgid "Could not update exercise"
+msgstr "Nem sikerült frissíteni a gyakorlatot"
+
+msgid "Copy exercise"
+msgstr "Gyakorlat másolása"
+
+msgid "Delete exercise"
+msgstr "Gyakorlat törlése"
+
+msgid "Could not load exercises"
+msgstr "Nem sikerült betölteni a gyakorlatokat"
+
+msgid "No limit"
+msgstr "Nincs korlát"
+
+msgid "Add selected questions to the test"
+msgstr "Kiválasztott kérdések hozzáadása a teszthez"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Ez a kérdés egy aktív tesztben szerepel, és itt nem szerkeszthető."
+
+msgid "This question cannot be edited here."
+msgstr "Ez a kérdés itt nem szerkeszthető."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Ez a kérdés egy aktív tesztben szerepel, és itt nem törölhető."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Ez a kérdés nem törölhető, mert a hozzáférését a platformbeállítások korlátozzák."
+
+msgid "Already in test"
+msgstr "Már szerepel a tesztben"
+
+msgid "Select at least one question."
+msgstr "Válasszon ki legalább egy kérdést."
+
+msgid "Question bank updated"
+msgstr "Kérdésbank frissítve"
+
+msgid "Could not update the question bank"
+msgstr "Nem sikerült frissíteni a kérdésbankot"
+
+msgid "Could not load the question bank"
+msgstr "Nem sikerült betölteni a kérdésbankot"
+
+msgid "Total score"
+msgstr "Összes pontszám"
+
+msgid "Starting"
+msgstr "Indítás"
+
+msgid "Attempt history"
+msgstr "Próbálkozások előzményei"
+
+msgid "No attempts yet"
+msgstr "Még nincsenek próbálkozások"
+
+msgid "Invalid exercise"
+msgstr "Érvénytelen gyakorlat"
+
+msgid "Could not load exercise overview"
+msgstr "Nem sikerült betölteni a gyakorlat áttekintését"
+
+msgid "Open test"
+msgstr "Teszt megnyitása"
+
+msgid "Random answers"
+msgstr "Véletlenszerű válaszok"
+
+msgid "Prevent moving backwards"
+msgstr "Visszalépés megakadályozása"
+
+msgid "Previous button hidden"
+msgstr "Előző gomb rejtve"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Ez a gyakorlat olyan beállításokat használ, amelyekhez másik tesztlejátszó szükséges."
+
+msgid "Continue test"
+msgstr "Teszt folytatása"
+
+msgid "Attempt started"
+msgstr "Kísérlet elindítva"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "A tanári előnézet nem hoz létre követett kísérletet."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Gyakorlatkísérlet indítása vagy folytatása. A vázlatválaszok elmenthetők a végleges beküldés előtt."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Időkorlát elérve. Kísérlet befejezése."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Kérdés ideje lejárt. Válasz mentése."
+
+msgid "Finishing"
+msgstr "Befejezés"
+
+msgid "Draft saved"
+msgstr "Vázlat mentve"
+
+msgid "Statement"
+msgstr "Állítás"
+
+msgid "Drop each option on the matching answer"
+msgstr "Húzza az egyes opciókat a megfelelő válaszra"
+
+msgid "Clear match"
+msgstr "Párosítás törlése"
+
+msgid "Click to place the selected option here"
+msgstr "Kattintson ide a kiválasztott opció elhelyezéséhez"
+
+msgid "Select an option, then click here"
+msgstr "Válasszon egy opciót, majd kattintson ide"
+
+msgid "Already matched"
+msgstr "Már párosítva"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Húzhat egy opciót egy válaszra, vagy választhat egy opciót, majd kattinthat egy célmezőre."
+
+msgid "Put the items in the correct order."
+msgstr "Rendezze az elemeket a megfelelő sorrendbe."
+
+msgid "Move left"
+msgstr "Mozgatás balra"
+
+msgid "Move right"
+msgstr "Mozgatás jobbra"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Húzhatja az elemeket balra vagy jobbra, vagy használhatja a mozgatás gombokat a sorrend megváltoztatásához."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Húzhatja az elemeket, vagy használhatja a mozgatás gombokat a sorrend megváltoztatásához."
+
+msgid "Or upload an audio file"
+msgstr "Vagy töltsön fel hangfájlt"
+
+msgid "Selected audio"
+msgstr "Kiválasztott hang"
+
+msgid "Uploaded audio"
+msgstr "Feltöltött hang"
+
+msgid "Office document"
+msgstr "Irodai dokumentum"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Töltse ki a dokumentumot az alábbi szerkesztőben. A fájl csatolva lesz ehhez a kísérlethez a tanári javításhoz."
+
+msgid "Reload Office editor"
+msgstr "Office szerkesztő újratöltése"
+
+msgid "Prepare Office document"
+msgstr "Office dokumentum előkészítése"
+
+msgid "Open in new tab"
+msgstr "Megnyitás új lapon"
+
+msgid "Preparing Office document"
+msgstr "Office dokumentum előkészítése"
+
+msgid "Submitted document"
+msgstr "Beküldött dokumentum"
+
+msgid "Annotation tools"
+msgstr "Annotációs eszközök"
+
+msgid "Text to place"
+msgstr "Elhelyezendő szöveg"
+
+msgid "Click the image to place the text annotation."
+msgstr "Kattintson a képre a szöveges megjegyzés elhelyezéséhez."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Kattintson a képre az útvonalpontok hozzáadásához. Használja az Új útvonal indítása lehetőséget az útvonalak elkülönítéséhez."
+
+msgid "Start new path"
+msgstr "Új útvonal indítása"
+
+msgid "Current annotations"
+msgstr "Jelenlegi megjegyzések"
+
+msgid "Remove point"
+msgstr "Pont eltávolítása"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Kattintson a képre a határoló sokszög megrajzolásához."
+
+msgid "Click a marker to remove it."
+msgstr "Kattintson egy jelölőre az eltávolításához."
+
+msgid "Placed"
+msgstr "Elhelyezve"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Válasszon egy választ, majd kattintson a képre a megjelöléséhez."
+
+msgid "Reading speed"
+msgstr "Olvasási sebesség"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Ez a kérdéstípus nem jeleníthető meg ebben a lejátszóban."
+
+msgid "Save draft"
+msgstr "Vázlat mentése"
+
+msgid "I confirm that my answers were saved."
+msgstr "Megerősítem, hogy a válaszaim mentésre kerültek."
+
+msgid "Finish test"
+msgstr "Teszt befejezése"
+
+msgid "Attempt finished"
+msgstr "Kísérlet befejezve"
+
+msgid "Question category"
+msgstr "Kérdéskategória"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Befejezte a kérdéseket ebben a kategóriában, ez az utolsó lehetőség a visszalépésre és a javításra."
+
+msgid "Question time left"
+msgstr "Kérdésre hátralévő idő"
+
+msgid "Time left"
+msgstr "Hátralévő idő"
+
+msgid "Current attempt"
+msgstr "Jelenlegi kísérlet"
+
+msgid "Could not save draft answer"
+msgstr "Nem sikerült menteni a vázlatválaszt"
+
+msgid "Could not load exercise"
+msgstr "Nem sikerült betölteni a gyakorlatot"
+
+msgid "Draft answer saved"
+msgstr "Vázlatválasz mentve"
+
+msgid "Could not finish the attempt"
+msgstr "Nem sikerült befejezni a kísérletet"
+
+msgid "Could not prepare Office document"
+msgstr "Nem sikerült előkészíteni az Office-dokumentumot"
+
+msgid "Back to learner score"
+msgstr "Vissza a tanulói eredményhez"
+
+msgid "Disable auto refresh"
+msgstr "Automatikus frissítés letiltása"
+
+msgid "Enable auto refresh"
+msgstr "Automatikus frissítés engedélyezése"
+
+msgid "Live window"
+msgstr "Élő ablak"
+
+msgid "Ongoing attempts"
+msgstr "Folyamatban lévő kísérletek"
+
+msgid "Completed attempts"
+msgstr "Befejezett kísérletek"
+
+msgid "Started"
+msgstr "Kezdés"
+
+msgid "Last activity"
+msgstr "Utolsó tevékenység"
+
+msgid "Could not load live results"
+msgstr "Nem sikerült betölteni az élő eredményeket"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ez a gyakorlat csak olvasható, mert egy tanulási útvonal része."
+
+msgid "Select a question type to create a question."
+msgstr "Válasszon kérdéstípust a kérdés létrehozásához."
+
+msgid "Click to preview"
+msgstr "Kattintson az előnézethez"
+
+msgid "Hide preview"
+msgstr "Előnézet elrejtése"
+
+msgid "Shape"
+msgstr "Alakzat"
+
+msgid "Coordinates"
+msgstr "Koordináták"
+
+msgid "Blanks"
+msgstr "Hiányzó részek"
+
+msgid "Switchable blanks"
+msgstr "Változtatható hiányzó részek"
+
+msgid "Blank"
+msgstr "Hiányzó rész"
+
+msgid "Input width"
+msgstr "Beviteli mező szélessége"
+
+msgid "Orientation"
+msgstr "Tájolás"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Nem elérhető az aktuális gyakorlat visszajelzési módjával"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Nem elérhető a tanulási útvonal létrehozási folyamatában"
+
+msgid "Delete question"
+msgstr "Kérdés törlése"
+
+msgid "Could not update exercise questions"
+msgstr "Nem sikerült frissíteni a gyakorlat kérdéseit"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Nem sikerült hozzáadni a gyakorlatot a tanulási útvonalhoz"
+
+msgid "A valid exercise id is required."
+msgstr "Érvényes gyakorlat-azonosító szükséges."
+
+msgid "Could not load exercise questions"
+msgstr "Nem sikerült betölteni a gyakorlat kérdéseit"
+
+msgid "Delete selected attempts"
+msgstr "Kijelölt kísérletek törlése"
+
+msgid "Before date"
+msgstr "Dátum előtt"
+
+msgid "Pending corrections"
+msgstr "Függőben lévő javítások"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Ez a gyakorlat a jegyzetfüzet által zárolt. A kísérlet-törlési műveletek le vannak tiltva."
+
+msgid "No attempts found"
+msgstr "Nem található kísérlet"
+
+msgid "Review"
+msgstr "Áttekintés"
+
+msgid "Print/PDF"
+msgstr "Nyomtatás/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Nem sikerült betölteni a gyakorlat jelentését"
+
+msgid "Select at least one attempt"
+msgstr "Válasszon ki legalább egy kísérletet"
+
+msgid "Delete selected attempts?"
+msgstr "Törli a kijelölt kísérleteket?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Elküldi az áttekintett kísérlet eredményeit e-mailben?"
+
+msgid "Could not send emails"
+msgstr "Nem sikerült elküldeni az e-maileket"
+
+msgid "Exercise result emails sent"
+msgstr "Gyakorlat eredmények e-mailben elküldve"
+
+msgid "Skipped"
+msgstr "Kihagyva"
+
+msgid "Close attempt?"
+msgstr "Bezárja a próbálkozást?"
+
+msgid "Attempt closed"
+msgstr "Próbálkozás lezárva"
+
+msgid "Could not close attempt"
+msgstr "Nem sikerült lezárni a próbálkozást"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Elküldi ezt a próbálkozás eredményét e-mailben a tanulónak?"
+
+msgid "Email sent"
+msgstr "E-mail elküldve"
+
+msgid "Could not send email"
+msgstr "Nem sikerült elküldeni az e-mailt"
+
+msgid "Attempt deleted"
+msgstr "Próbálkozás törölve"
+
+msgid "Could not delete attempt"
+msgstr "Nem sikerült törölni a próbálkozást"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Válasszon egy CSV-fájlt, amely cím és leírás oszlopokat tartalmaz."
+
+msgid "Manage categories used to classify questions."
+msgstr "Kérdések osztályozásához használt kategóriák kezelése."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gyakorlatok osztályozásához használt kategóriák kezelése."
+
+msgid "Could not load categories"
+msgstr "Nem sikerült betölteni a kategóriákat"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importált kategóriák: %s. Kihagyott sorok: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importált kategóriák: %s."
+
+msgid "Could not import categories"
+msgstr "Nem sikerült importálni a kategóriákat"
+
+msgid "Could not save category"
+msgstr "Nem sikerült menteni a kategóriát"
+
+msgid "Answer distribution"
+msgstr "Válaszok eloszlása"
+
+msgid "Configured answers"
+msgstr "Beállított válaszok"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Néhány kérdéstípus részletes válaszszámlálása még nem érhető el az áttelepített jelentésben."
+
+msgid "No report by question data found"
+msgstr "Nem található kérdés szerinti jelentésadat"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Ehhez a kérdéstípushoz a részletes válaszszámlálás még nem érhető el az áttelepített jelentésben."
+
+msgid "No answer distribution found"
+msgstr "Nem található válaszeloszlás"
+
+msgid "Could not load report by question"
+msgstr "Nem sikerült betölteni a kérdés szerinti jelentést"
+
+msgid "Question settings"
+msgstr "Kérdésbeállítások"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Időkorlát nélküli működéshez hagyja üresen vagy írjon 0-t."
+
+msgid "Time limit in seconds"
+msgstr "Időkorlát másodpercben"
+
+msgid "Attached questions"
+msgstr "Csatolt kérdések"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Csak a jelenlegi gyakorlatban ehhez a médiatartalmú kérdéshez csatolt kérdések jelennek meg itt."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Nincsenek ehhez a médiatartalmú kérdéshez csatolt kérdések a jelenlegi gyakorlatban."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Töltse fel az OnlyOffice-szal szerkeszthető irodai dokumentumsablont, amelyet a tanulók szerkeszteni fogják."
+
+msgid "Replace Office document"
+msgstr "Irodai dokumentum cseréje"
+
+msgid "Current Office document"
+msgstr "Jelenlegi irodai dokumentum"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Ezt a kérdést a tanuló által szerkesztett dokumentum beküldése után kézzel kell javítani."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "A teljes pontszám a hotspot pontszámok összegeként kerül kiszámításra."
+
+msgid "Global score"
+msgstr "Globális pontszám"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Válasszon egy hotspot sort, válassza ki az alakzatot, majd rajzoljon a képre. Sokszögek esetén kattintson minden pontra és fejezze be a sokszöget, vagy kattintson duplán a befejezéshez."
+
+msgid "Finish polygon"
+msgstr "Sokszög befejezése"
+
+msgid "Calculated answer"
+msgstr "Számított válasz"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Kérjük, írja be a szöveget alább, és használjon szögletes zárójeleket [...] egy vagy több üres hely meghatározásához."
+
+msgid "Lowest value"
+msgstr "Legalacsonyabb érték"
+
+msgid "Highest value"
+msgstr "Legmagasabb érték"
+
+msgid "Fill in blanks"
+msgstr "Hiányzó részek kitöltése"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Használja a kiválasztott jelölőket az üres helyek meghatározásához. Példa: Peru fővárosa [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Adja meg a legördülő menü opcióit, soronként egy választ. Ezután jelölje meg az elvárt válaszokat lent, a hagyományos eszközhöz hasonlóan."
+
+msgid "Refresh answers"
+msgstr "Válaszok frissítése"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Ez a legördülő kombinációs kérdés egy globális pontszámot használ, a hagyományoshoz hasonlóan."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Kérjük, adjon meg legalább két legördülő opciót."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Először hozza létre a célopciókat, majd kapcsolja össze az egyes elemeket a megfelelő opcióval."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Ez a párosító kombinációs kérdés egyetlen globális pontszámot használ, mint a korábbi verzió."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Hozza létre a lépéseket, és válassza ki az egyes lépések elvárt pozícióját, mint a korábbi Húzható típusnál."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "A tanulók Igaz vagy Hamis választ adnak, majd megjelölik a bizonyosságuk mértékét a próbálkozás során. A szerkesztő ugyanazokat a Helyes/Hibás pontszámokat és bizonyossági szinteket tárolja, mint a korábbi verzió."
+
+msgid "Hotspot combination"
+msgstr "Hotspot kombináció"
+
+msgid "Add delineation"
+msgstr "Delineáció hozzáadása"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ennek az Office-dokumentum kérdésnek nincsenek válaszlehetőségei. A pontszámot a javítás/eredmények áttekintése során kell megadni."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ennek a feltöltési kérdésnek nincsenek válaszlehetőségei. A pontszámot a javítás/eredmények áttekintése során kell megadni."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ennek a szóbeli kifejezés kérdésnek nincsenek válaszlehetőségei. A pontszámot a javítás/eredmények áttekintése során kell megadni."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ennek a nyitott kérdésnek nincsenek válaszlehetőségei. A pontszámot a javítás/eredmények áttekintése során kell megadni."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Adjon hozzá olvasási szöveget görgetési sebesség beállításokkal."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Tartalom, média vagy olvasási kontextus hozzáadása pontszám nélkül."
+
+msgid "Insert a page break without adding score."
+msgstr "Oldaltörés beszúrása pontszám nélkül."
+
+msgid "Could not save question"
+msgstr "A kérdést nem sikerült menteni"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Csak DOC, DOCX, XLS vagy XLSX dokumentumok engedélyezettek."
+
+msgid "Please select an Office document."
+msgstr "Kérjük, válasszon egy Office-dokumentumot."
+
+msgid "Please draw at least one hotspot."
+msgstr "Kérjük, rajzoljon legalább egy hotspotot."
+
+msgid "Please draw at least one delineation."
+msgstr "Kérjük, rajzoljon legalább egy delineációt."
+
+msgid "The fill in blanks text is required."
+msgstr "A kitöltendő szöveg megadása kötelező."
+
+msgid "At least one expected answer is required."
+msgstr "Legalább egy elvárt válasz megadása kötelező."
+
+msgid "At least two draggable items are required."
+msgstr "Legalább két húzható elem megadása kötelező."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Minden húzható elemet érvényes célpozícióhoz kell kapcsolni."
+
+msgid "At least two matching options are required."
+msgstr "Legalább két párosítási opció megadása kötelező."
+
+msgid "At least two matching pairs are required."
+msgstr "Legalább két párosítási pár megadása kötelező."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Minden párosítási párt érvényes opcióhoz kell kapcsolni."
+
+msgid "At least two answers are required."
+msgstr "Legalább két válasz megadása kötelező."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Minden Igaz/Hamis válasznál ki kell választani az Igaz vagy Hamis értéket."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Az egyedi válasz típusú kérdésnek pontosan egy helyes választ kell tartalmaznia."
+
+msgid "At least one correct answer is required."
+msgstr "Legalább egy helyes válasz megadása kötelező."
+
+msgid "Could not load question"
+msgstr "A kérdést nem sikerült betölteni"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Válasszon egy kurzust, és exportálja a globális gyakorlati eredmények jelentését CSV formátumban."
+
+msgid "Back to reports catalog"
+msgstr "Vissza a jelentéskatalógushoz"
+
+msgid "Could not load exercise global report"
+msgstr "A globális gyakorlati jelentést nem sikerült betölteni"
+
+msgid "Imported questions"
+msgstr "Importált kérdések"
+
+msgid "Aiken content"
+msgstr "Aiken tartalom"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Az AI Aiken generátort nem sikerült betölteni"
+
+msgid "Could not generate Aiken content"
+msgstr "Az Aiken tartalmat nem sikerült létrehozni"
+
+msgid "Could not import generated Aiken content"
+msgstr "A létrehozott Aiken tartalmat nem sikerült importálni"
+
+msgid "Back to my courses"
+msgstr "Vissza a kurzusaidhoz"
+
+msgid "Open report"
+msgstr "Jelentés megnyitása"
+
+msgid "Questions with no automatic correction"
+msgstr "Automatikus javítás nélküli kérdések"
+
+msgid "Could not load pending attempts"
+msgstr "A függőben lévő próbálkozásokat nem sikerült betölteni"
+
+msgid "Skipped questions"
+msgstr "Kihagyott kérdések"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Az Aiken importálás ezt a teljes súlyt az importált kérdések között osztja el, kivéve, ha egy kérdés SCORE értéket határoz meg."
+
+msgid "Import warnings"
+msgstr "Importálási figyelmeztetések"
+
+msgid "Could not import questions"
+msgstr "A kérdéseket nem sikerült importálni"
+
+msgid "No question statistics found"
+msgstr "Nem található kérdésstatisztika"
+
+msgid "Could not load question statistics"
+msgstr "A kérdésstatisztikát nem sikerült betölteni"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Közvetlenül is csatlakoztathat egy MCP-klienst az alábbi végpont megadásával:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Jelenleg nincs alkalmazás csatlakoztatva a fiókjához."
+
+msgid "Connected on"
+msgstr "Csatlakozva"
+
+msgid "Last used"
+msgstr "Utoljára használt"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s nem férhet hozzá többé a Chamilo fiókjához. Folytatja?"
+
+msgid "Application revoked"
+msgstr "Alkalmazás visszavonva"
+
+msgid "Copied to clipboard"
+msgstr "Vágólapra másolva"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Nem sikerült másolni az MCP végpontot"
+
+msgid "MCP endpoint"
+msgstr "MCP végpont"
+
+msgid "API key"
+msgstr "API kulcs"
+
+msgid "Last used at"
+msgstr "Utoljára használva"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Másolja ki ezt a kulcsot most. Nem jelenik meg újra."
+
+msgid "Rotate API key"
+msgstr "API kulcs cseréje"
+
+msgid "Revoke API key"
+msgstr "API kulcs visszavonása"
+
+msgid "Remote MCP connection"
+msgstr "Távoli MCP kapcsolat"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Konfigurálja az MCP klienst a következő értékekkel:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "A jelenlegi kulcs azonnal megszűnik. Folytatja?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Új személyes MCP API kulcs generálódik. Folytatja?"
+
+msgid "MCP API key generated"
+msgstr "MCP API kulcs generálva"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Az ezt a kulcsot használó MCP kliensek azonnal leállnak. Folytatja?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API kulcs visszavonva"
+
+msgid "Could not copy the API key"
+msgstr "Nem sikerült másolni az API kulcsot"
+
+msgid "Project"
+msgstr "Projekt"
+
+msgid "Close old tickets"
+msgstr "Régi jegyek lezárása"
+
+msgid "Close tickets older than seven days?"
+msgstr "Lezárja a hét napnál régebbi jegyeket?"
+
+msgid "Assignment history"
+msgstr "Feladat előzmények"
+
+msgid "Translate with AI"
+msgstr "Fordítás AI-val"
+
+msgid "Target language"
+msgstr "Célnyelv"
+
+msgid "Please select a provider"
+msgstr "Kérjük, válasszon szolgáltatót"
+
+msgid "Generate translation"
+msgstr "Fordítás generálása"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Legalább egy ÁSZF szakasznak tartalmaznia kell szöveget."
+
+msgid "No active target languages are available."
+msgstr "Nincs elérhető aktív célnyelv."
+
+msgid "Tutor"
+msgstr "Oktató"
+
+msgid "Access dates"
+msgstr "Hozzáférési dátumok"
+
+msgid "Coach access dates"
+msgstr "Oktatói hozzáférési dátumok"
+
+msgid "No sessions found"
+msgstr "Nem található munkamenet"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Válassza ki azokat a kurzusokat, amelyekhez a felhasználó nem férhet hozzá ebben a munkamenetben."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "A felhasználó nem zárható ki a munkamenet összes kurzusából. Inkább iratkoztassa le a felhasználót."
+
+msgid "Users subscribed to this session"
+msgstr "Erre a munkamenetre feliratkozott felhasználók"
+
+msgid "No available users found"
+msgstr "Nem található elérhető felhasználó"
+
+msgid "Subscribe this user to the session?"
+msgstr "Feliratkoztatja ezt a felhasználót a munkamenetre?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Feliratkoztatja a kiválasztott felhasználókat a munkamenetre?"
+
+msgid "General tutor planning"
+msgstr "Általános oktatói tervezés"
+
+msgid "User is already registered by another tutor."
+msgstr "A felhasználó már regisztrálva van egy másik oktató által."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Másolatot kap, mert kurzus oktatója"
+
+msgid "General tutor"
+msgstr "Általános oktató"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Vegye figyelembe a kurzusokat, oktatókat, technikai ügyfélszolgálatot, tanárokat és/vagy elérhető anyagokat."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Oktatóként feliratkozott oktatók a(z) %s kurzusban"
+
+msgid "Tutor name"
+msgstr "Oktató neve"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "A munkamenet oktatói a munkamenet koordinátorai, és oktatóként működhetnek a munkamenet minden kurzusában. Csak tanári szerepkörrel rendelkező felhasználók választhatók munkamenet oktatónak."
+
+msgid "Access start date for tutors"
+msgstr "Oktatók hozzáférési kezdő dátuma"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Az a dátum, amikor a munkamenet elérhetővé válik az oktatók számára, hogy előkészíthessék, mielőtt a hallgatók csatlakoznak"
+
+msgid "Access end date for tutors"
+msgstr "Oktatók hozzáférésének záró dátuma"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "A dátum, amikor a munkamenet lezárul az oktatók számára. A további késleltetés lehetővé teszi számukra az összes releváns követési információ exportálását"
+
+msgid "Tutor and student"
+msgstr "Oktató és hallgató"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Ez a jelentés a kiválasztott dátumtartományban az általános oktatók munkameneteinek heti eloszlását mutatja."
+
+msgid "User is general tutor in some sessions"
+msgstr "A felhasználó általános oktató néhány munkamenetben"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "A tanárok oktatóként lesznek hozzáadva minden kurzushoz tartozó munkamenetben."
+
+msgid "Delete failed: invalid question id."
+msgstr "Törlés sikertelen: érvénytelen kérdésazonosító."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Átlagos munkamenetszám általános munkamenet-oktatónként"
+
+msgid "No room"
+msgstr "Nincs terem"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Kurzustanárok importálása kurzusoktatóként a munkamenetbe"
+
+msgid "Clean and update course tutors"
+msgstr "Kurzusoktatók tisztítása és frissítése"
+
+msgid "Add me as tutor"
+msgstr "Hozzáadás oktatóként"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Nem sikerült hozzáadni a felmérést a tanulási útvonalhoz"
+
+msgid "Access dates for tutors"
+msgstr "Oktatók hozzáférési dátumai"
+
+msgid "Tutor and group member"
+msgstr "Oktató és csoporttag"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Elérte a napi AI tokenkorlátját. Kérjük, próbálja meg holnap újra."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Elérte a havi AI tokenkorlátját. Kérjük, próbálja meg jövő hónapban újra."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Ez a kurzusazonosító már létezik, kérjük, válasszon másikat."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Ez a kurzus címe már létezik, kérjük, válasszon másikat."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Ezen eszköz láthatósága nem módosítható"
+
+msgid "Invalid visibility"
+msgstr "Érvénytelen láthatóság"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Másolatot kap, mert a kurzus egyik oktatója"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Másolatot kap, mert a kurzus oktatója"
+
+msgid "Manual completion"
+msgstr "Kézi teljesítés"
+
+msgid "Send to tutors"
+msgstr "Küldés oktatóknak"
+
+msgid "Lab title"
+msgstr "Labor címe"
+
+msgid "Lab week"
+msgstr "Laborhét"
+
+msgid "Final exam access rule"
+msgstr "Záróvizsga-hozzáférési szabály"
+
+msgid "Course completion rule"
+msgstr "Kurzus teljesítési szabály"
+
+msgid "You have been invited to join a course"
+msgstr "Meghívást kapott egy kurzushoz való csatlakozásra"
+
+msgid "No user has been found"
+msgstr "Nem található felhasználó"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "A kiválasztott felhasználó nem iratkozhat fel ebben a környezetben"
+
+msgid "No change has been made"
+msgstr "Nem történt módosítás"
+
+msgid "Back to group list"
+msgstr "Vissza a csoportlistához"
+
+msgid "Remove class link"
+msgstr "Osztálykapcsolat eltávolítása"
+
+msgid "Group settings"
+msgstr "Csoportbeállítások"
+
+msgid "Self-registration allowed"
+msgstr "Önregisztráció engedélyezve"
+
+msgid "Self-unregistration allowed"
+msgstr "Önregisztráció megszüntetése engedélyezve"
+
+msgid "This group is linked to the class"
+msgstr "Ez a csoport az osztályhoz van kapcsolva"
+
+msgid "Create one or more empty course groups"
+msgstr "Egy vagy több üres kurzuscsoport létrehozása"
+
+msgid "Number of places"
+msgstr "Helyek száma"
+
+msgid "Base group"
+msgstr "Alapcsoport"
+
+msgid "Share"
+msgstr "Megosztás"
+
+msgid "Collaboration"
+msgstr "Együttműködés"
+
+msgid "The group title is required."
+msgstr "A csoport címe kötelező."
+
+msgid "Back to group area"
+msgstr "Vissza a csoportterületre"
+
+msgid "Members are managed by the linked class"
+msgstr "A tagokat a kapcsolódó osztály kezeli"
+
+msgid "%s groups selected"
+msgstr "%s csoport kiválasztva"
+
+msgid "Fill selected groups"
+msgstr "Kiválasztott csoportok feltöltése"
+
+msgid "Empty selected groups"
+msgstr "Kiválasztott csoportok kiürítése"
+
+msgid "Fill group"
+msgstr "Csoport feltöltése"
+
+msgid "Empty group"
+msgstr "Csoport kiürítése"
+
+msgid "Groups per user"
+msgstr "Csoportok felhasználónként"
+
+msgid "No tutors"
+msgstr "Nincsenek tutorok"
+
+msgid "No users"
+msgstr "Nincsenek felhasználók"
 

@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:สตรีมออคเต็ต,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:แบบฝึกหัด,, simulation:การจำลอง,, questionnaire:แบบสอบถาม,, diagram:ไดอะแกรม,, figure:รูปภาพ,, graph:กราฟ,, index:ดัชนี,, slide:สไลด์,, table:ตาราง,, narrative text:ข้อความบรรยาย,, exam:ข้อสอบ,, experiment:การทดลอง,, problem statement:ประโยคปัญหา,, self assessment:การประเมินตนเอง,, lecture:การบรรยาย"
@@ -37505,4 +37505,1432 @@ msgstr "ภาพประกอบสมัยใหม่ที่เป็น
 
 msgid "Back to account"
 msgstr "กลับไปยังบัญชี"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ความคิดเห็นของคุณจะช่วยให้เราปรับปรุงการฝึกอบรมในอนาคต"
+
+msgid "Thank you for sharing your feedback."
+msgstr "ขอบคุณที่แบ่งปันความคิดเห็นของคุณ"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "คุณพึงพอใจกับคุณภาพโดยรวมของการฝึกอบรมมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "คุณพึงพอใจกับความเกี่ยวข้องของเนื้อหามากน้อยเพียงใด"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "คุณพึงพอใจกับความชัดเจนของคำอธิบายมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "คุณพึงพอใจกับการจัดองค์กรและจังหวะของการฝึกอบรมมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "คุณพึงพอใจกับประโยชน์ในทางปฏิบัติของสิ่งที่คุณได้เรียนรู้มากน้อยเพียงใด"
+
+msgid "Would you recommend this training to other people?"
+msgstr "คุณจะแนะนำการฝึกอบรมนี้ให้กับผู้อื่นหรือไม่"
+
+msgid "What should we improve in future editions?"
+msgstr "เราควรปรับปรุงอะไรในรุ่นต่อไป"
+
+msgid "Very satisfied"
+msgstr "พึงพอใจมาก"
+
+msgid "Satisfied"
+msgstr "พึงพอใจ"
+
+msgid "Neutral"
+msgstr "เฉย ๆ"
+
+msgid "Dissatisfied"
+msgstr "ไม่พึงพอใจ"
+
+msgid "Very dissatisfied"
+msgstr "ไม่พึงพอใจมาก"
+
+msgid "Add destination"
+msgstr "เพิ่มปลายทาง"
+
+msgid "Add this test to the assessment tool"
+msgstr "เพิ่มแบบทดสอบนี้ไปยังเครื่องมือประเมินผล"
+
+msgid "Attempts and timing"
+msgstr "การพยายามและระยะเวลา"
+
+msgid "Available questions"
+msgstr "คำถามที่มีอยู่"
+
+msgid "Cancel and return to learning path"
+msgstr "ยกเลิกและกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Category destinations"
+msgstr "ปลายทางของหมวดหมู่"
+
+msgid "Classification"
+msgstr "การจัดหมวดหมู่"
+
+msgid "Context"
+msgstr "บริบท"
+
+msgid "Could not load exercise configuration"
+msgstr "ไม่สามารถโหลดการกำหนดค่าแบบฝึกหัดได้"
+
+msgid "Could not save exercise"
+msgstr "ไม่สามารถบันทึกแบบฝึกหัดได้"
+
+msgid "Display and learning path"
+msgstr "การแสดงผลและเส้นทางการเรียนรู้"
+
+msgid "Edit test"
+msgstr "แก้ไขแบบทดสอบ"
+
+msgid "Exercise settings saved."
+msgstr "บันทึกการตั้งค่าแบบฝึกหัดแล้ว"
+
+msgid "Extra settings"
+msgstr "การตั้งค่าเพิ่มเติม"
+
+msgid "Feedback and results"
+msgstr "ผลป้อนกลับและผลลัพธ์"
+
+msgid "Finish exercise"
+msgstr "เสร็จสิ้นแบบฝึกหัด"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "ระบุภาษาของแบบฝึกหัดนี้เป็นข้อมูลเมตาของทรัพยากร ซึ่งไม่เปิดใช้งานการจัดทำดัชนีการค้นหาโดยอัตโนมัติ"
+
+msgid "Maximum score (%)"
+msgstr "คะแนนสูงสุด (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "ข้อมูลเมตาประกอบด้วยทักษะและฟิลด์เพิ่มเติมที่กำหนดค่าสำหรับแบบฝึกหัด ซึ่งเป็นตัวเลือกและจะถูกซ่อนไว้จนกว่าจะเปิด"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "ยังไม่มีหมวดหมู่คำถามสำหรับแบบฝึกหัดนี้"
+
+msgid "Question categories matrix"
+msgstr "เมทริกซ์หมวดหมู่คำถาม"
+
+msgid "Questions behavior"
+msgstr "พฤติกรรมคำถาม"
+
+msgid "Random by category"
+msgstr "สุ่มตามหมวดหมู่"
+
+msgid "Remove destination"
+msgstr "ลบปลายทาง"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "กฎจะถูกประเมินตามเปอร์เซ็นต์คะแนนจากน้อยไปมาก เลือกเสร็จสิ้นแบบฝึกหัดเพื่อสิ้นสุดการทดสอบ"
+
+msgid "Score and final messages"
+msgstr "คะแนนและข้อความสุดท้าย"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "บางตัวเลือกจะถูกล็อกหลังจากสร้างแบบฝึกหัดแล้ว"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "ค่านี้จะถูกบันทึกเป็นระยะเวลารวมเป็นนาที"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "ใช้ 0 เพื่อเก็บคำถามทั้งหมดที่มีอยู่ ใช้ -1 เมื่ออนุญาตให้ใช้คำถามทั้งหมดที่มีอยู่"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "ใช้ช่องเหล่านี้เพื่อจัดหมวดหมู่แบบฝึกหัดโดยไม่ขึ้นกับตัวเลือกการแสดงผล"
+
+msgid "Invite by email"
+msgstr "เชิญทางอีเมล"
+
+msgid "Invitation has been sent"
+msgstr "ส่งคำเชิญแล้ว"
+
+msgid "Sent on"
+msgstr "ส่งเมื่อ"
+
+msgid "Accepted on"
+msgstr "ยอมรับเมื่อ"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "หลักสูตรนี้เปิดในเซสชัน การส่งคำเชิญที่นี่จะสมัครผู้รับเข้าร่วมเซสชันทั้งหมด %s ไม่ใช่แค่หลักสูตรนี้"
+
+msgid "Revoke"
+msgstr "เพิกถอน"
+
+msgid "Revoked"
+msgstr "เพิกถอนแล้ว"
+
+msgid "Invitation has been revoked"
+msgstr "เพิกถอนคำเชิญแล้ว"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการเพิกถอนคำเชิญที่ส่งไปยัง %s?"
+
+msgid "No default room"
+msgstr "ไม่มีห้องเริ่มต้น"
+
+msgid "Floor"
+msgstr "ชั้น"
+
+msgid "Capacity"
+msgstr "ความจุ"
+
+msgid "Use attendance default room"
+msgstr "ใช้ห้องเริ่มต้นการเข้าร่วม"
+
+msgid "Floor number"
+msgstr "เลขชั้น"
+
+msgid "Copy to students"
+msgstr "คัดลอกไปยังนักเรียน"
+
+msgid "Generate a quick test on this topic"
+msgstr "สร้างแบบทดสอบด่วนในหัวข้อนี้"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "เนื้อหาเอกสารที่บันทึกจะถูกส่งไปยังโมเดล AI เพื่อประมวลผล"
+
+msgid "MCP API key"
+msgstr "MCP API key"
+
+msgid "Authorized applications"
+msgstr "แอปพลิเคชันที่ได้รับอนุญาต"
+
+msgid "Your session is about to expire"
+msgstr "เซสชันของคุณใกล้จะหมดอายุ"
+
+msgid "Do you want to continue your session?"
+msgstr "คุณต้องการดำเนินเซสชันต่อหรือไม่?"
+
+msgid "Stay connected"
+msgstr "เชื่อมต่อต่อ"
+
+msgid "You will be signed out in %s seconds."
+msgstr "คุณจะถูกออกจากระบบใน %s วินาที"
+
+msgid "No descriptions available yet."
+msgstr "ยังไม่มีคำอธิบาย"
+
+msgid "%s users selected"
+msgstr "เลือกผู้ใช้ %s คน"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "ผู้ใช้ที่เลือกได้รับการสมัครเข้าเรียนในหลักสูตรแล้ว"
+
+msgid "Import teachers"
+msgstr "นำเข้าผู้สอน"
+
+msgid "Import learners"
+msgstr "นำเข้าผู้เรียน"
+
+msgid "Select CSV file"
+msgstr "เลือกไฟล์ CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "ผู้ใช้บางรายไม่สามารถสมัครได้"
+
+msgid "Browse available classes"
+msgstr "เรียกดูชั้นเรียนที่มีอยู่"
+
+msgid "Back to linked classes"
+msgstr "กลับไปยังชั้นเรียนที่เชื่อมโยง"
+
+msgid "No classes are currently linked to this course."
+msgstr "ไม่มีชั้นเรียนที่เชื่อมโยงกับหลักสูตรนี้ในขณะนี้"
+
+msgid "No available classes were found for this course."
+msgstr "ไม่พบชั้นเรียนที่ใช้ได้สำหรับหลักสูตรนี้"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการสมัครผู้ใช้ที่เลือก?"
+
+msgid "Learning path access"
+msgstr "การเข้าถึงเส้นทางการเรียนรู้"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "เฉพาะผู้ใช้และกลุ่มที่เลือกเท่านั้นที่สามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้ จัดการพวกเขาหลังจากบันทึก"
+
+msgid "All current and future course users can access this learning path."
+msgstr "ผู้ใช้หลักสูตรปัจจุบันและอนาคตทั้งหมดสามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้"
+
+msgid "All course users"
+msgstr "ผู้ใช้หลักสูตรทั้งหมด"
+
+msgid "Selected users and groups"
+msgstr "ผู้ใช้และกลุ่มที่เลือก"
+
+msgid "No access"
+msgstr "ไม่มีการเข้าถึง"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "เฉพาะผู้ใช้และกลุ่มที่เพิ่มที่นี่เท่านั้นที่สามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "จำนวนคำถามจำกัดสูงสุด %s"
+
+msgid "Open exercise player"
+msgstr "เปิดตัวเล่นแบบฝึกหัด"
+
+msgid "The score is hidden for this exercise."
+msgstr "คะแนนถูกซ่อนสำหรับแบบฝึกหัดนี้"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "การแก้ไขถูกซ่อนตามการตั้งค่าผลลัพธ์แบบฝึกหัด"
+
+msgid "Progressive adaptive result"
+msgstr "ผลลัพธ์แบบปรับตัวแบบก้าวหน้า"
+
+msgid "Achieved level"
+msgstr "ระดับที่บรรลุ"
+
+msgid "Correction history"
+msgstr "ประวัติการแก้ไข"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "ประวัติการแก้ไขด้วยตนเองที่ทำสำหรับความพยายามนี้"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "แบบฝึกหัดนี้ใช้โหมดผลลัพธ์เรดาร์/ใยแมงมุม แผนภูมิไม่พร้อมใช้งานในหน้านี้"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "รายละเอียดคำถามถูกซ่อนตามการตั้งค่าผลลัพธ์แบบฝึกหัด"
+
+msgid "Media question"
+msgstr "คำถามสื่อ"
+
+msgid "Pending correction"
+msgstr "รอการแก้ไข"
+
+msgid "No answer"
+msgstr "ไม่มีคำตอบ"
+
+msgid "Blank %s"
+msgstr "ช่องว่าง %s"
+
+msgid "Your order"
+msgstr "ลำดับของคุณ"
+
+msgid "Correct order"
+msgstr "ลำดับที่ถูกต้อง"
+
+msgid "Delineation review"
+msgstr "การตรวจสอบการกำหนดขอบเขต"
+
+msgid "Learner clicks"
+msgstr "การคลิกของผู้เรียน"
+
+msgid "Question image"
+msgstr "ภาพคำถาม"
+
+msgid "No hotspot image available"
+msgstr "ไม่มีภาพจุดร้อน"
+
+msgid "Learner delineation"
+msgstr "การกำหนดขอบเขตของผู้เรียน"
+
+msgid "Expected delineation"
+msgstr "การกำหนดขอบเขตที่คาดหวัง"
+
+msgid "Expected zones"
+msgstr "โซนที่คาดหวัง"
+
+msgid "Zone"
+msgstr "โซน"
+
+msgid "Learner annotation"
+msgstr "คำอธิบายประกอบของผู้เรียน"
+
+msgid "No annotation image available"
+msgstr "ไม่มีภาพคำอธิบายประกอบ"
+
+msgid "This answer is pending teacher correction."
+msgstr "คำตอบนี้รอการแก้ไขจากผู้สอน"
+
+msgid "Teacher comment"
+msgstr "ความคิดเห็นของผู้สอน"
+
+msgid "Teacher correction"
+msgstr "การแก้ไขของผู้สอน"
+
+msgid "Save correction"
+msgstr "บันทึกการแก้ไข"
+
+msgid "Learner audio"
+msgstr "เสียงของผู้เรียน"
+
+msgid "Download audio"
+msgstr "ดาวน์โหลดเสียง"
+
+msgid "No uploaded audio"
+msgstr "ไม่มีเสียงที่อัปโหลด"
+
+msgid "Learner Office document"
+msgstr "เอกสาร Office ของผู้เรียน"
+
+msgid "Learner file"
+msgstr "ไฟล์ของผู้เรียน"
+
+msgid "Download Office document"
+msgstr "ดาวน์โหลดเอกสาร Office"
+
+msgid "No submitted document"
+msgstr "ยังไม่มีเอกสารที่ส่ง"
+
+msgid "No uploaded file"
+msgstr "ยังไม่มีไฟล์ที่อัปโหลด"
+
+msgid "Content item"
+msgstr "รายการเนื้อหา"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "ไม่สามารถตรวจสอบคำถามประเภทนี้ได้ในหน้านี้"
+
+msgid "Exercise completed"
+msgstr "แบบฝึกหัดเสร็จสมบูรณ์"
+
+msgid "Could not start the attempt"
+msgstr "ไม่สามารถเริ่มการทำแบบฝึกหัดได้"
+
+msgid "Invalid exercise attempt"
+msgstr "การทำแบบฝึกหัดไม่ถูกต้อง"
+
+msgid "Could not load exercise result"
+msgstr "ไม่สามารถโหลดผลลัพธ์แบบฝึกหัดได้"
+
+msgid "Could not load AI providers"
+msgstr "ไม่สามารถโหลดผู้ให้บริการ AI ได้"
+
+msgid "Could not generate AI suggestion"
+msgstr "ไม่สามารถสร้างคำแนะนำ AI ได้"
+
+msgid "Correction saved"
+msgstr "บันทึกการแก้ไขแล้ว"
+
+msgid "Could not save correction"
+msgstr "ไม่สามารถบันทึกการแก้ไขได้"
+
+msgid "Create exercise"
+msgstr "สร้างแบบฝึกหัด"
+
+msgid "Exercise categories"
+msgstr "หมวดหมู่แบบฝึกหัด"
+
+msgid "Question categories"
+msgstr "หมวดหมู่คำถาม"
+
+msgid "Search by exercise title or description."
+msgstr "ค้นหาตามชื่อหรือคำอธิบายแบบฝึกหัด"
+
+msgid "Search exercises"
+msgstr "ค้นหาแบบฝึกหัด"
+
+msgid "No exercises found"
+msgstr "ไม่พบแบบฝึกหัด"
+
+msgid "Open exercise"
+msgstr "เปิดแบบฝึกหัด"
+
+msgid "Disable autolaunch"
+msgstr "ปิดการเปิดอัตโนมัติ"
+
+msgid "Enable autolaunch"
+msgstr "เปิดการเปิดอัตโนมัติ"
+
+msgid "Export QTI2"
+msgstr "ส่งออก QTI2"
+
+msgid "Bulk actions"
+msgstr "การดำเนินการเป็นกลุ่ม"
+
+msgid "Selected exercises"
+msgstr "แบบฝึกหัดที่เลือก"
+
+msgid "No exercises selected"
+msgstr "ยังไม่ได้เลือกแบบฝึกหัด"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการดำเนินการนี้กับแบบฝึกหัดที่เลือก?"
+
+msgid "Bulk action completed"
+msgstr "ดำเนินการเป็นกลุ่มเสร็จสมบูรณ์"
+
+msgid "Could not update exercises"
+msgstr "ไม่สามารถอัปเดตแบบฝึกหัดได้"
+
+msgid "Could not update exercise"
+msgstr "ไม่สามารถอัปเดตแบบฝึกหัดได้"
+
+msgid "Copy exercise"
+msgstr "คัดลอกแบบฝึกหัด"
+
+msgid "Delete exercise"
+msgstr "ลบแบบฝึกหัด"
+
+msgid "Could not load exercises"
+msgstr "ไม่สามารถโหลดแบบฝึกหัดได้"
+
+msgid "No limit"
+msgstr "ไม่จำกัด"
+
+msgid "Add selected questions to the test"
+msgstr "เพิ่มคำถามที่เลือกไปยังแบบทดสอบ"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "คำถามนี้ถูกใช้ในแบบทดสอบที่ใช้งานอยู่และไม่สามารถแก้ไขได้ที่นี่"
+
+msgid "This question cannot be edited here."
+msgstr "ไม่สามารถแก้ไขคำถามนี้ได้ที่นี่"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "คำถามนี้ถูกใช้ในแบบทดสอบที่ใช้งานอยู่และไม่สามารถลบได้ที่นี่"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "ไม่สามารถลบคำถามนี้ได้เนื่องจากการเข้าถึงของคุณถูกจำกัดโดยการตั้งค่าของแพลตฟอร์ม"
+
+msgid "Already in test"
+msgstr "อยู่ในแบบทดสอบแล้ว"
+
+msgid "Select at least one question."
+msgstr "เลือกอย่างน้อยหนึ่งคำถาม"
+
+msgid "Question bank updated"
+msgstr "อัปเดตคลังคำถามแล้ว"
+
+msgid "Could not update the question bank"
+msgstr "ไม่สามารถอัปเดตคลังคำถามได้"
+
+msgid "Could not load the question bank"
+msgstr "ไม่สามารถโหลดคลังคำถามได้"
+
+msgid "Total score"
+msgstr "คะแนนรวม"
+
+msgid "Starting"
+msgstr "กำลังเริ่มต้น"
+
+msgid "Attempt history"
+msgstr "ประวัติการทำแบบฝึกหัด"
+
+msgid "No attempts yet"
+msgstr "ยังไม่มีประวัติการทำ"
+
+msgid "Invalid exercise"
+msgstr "แบบฝึกหัดไม่ถูกต้อง"
+
+msgid "Could not load exercise overview"
+msgstr "ไม่สามารถโหลดภาพรวมแบบฝึกหัดได้"
+
+msgid "Open test"
+msgstr "เปิดแบบทดสอบ"
+
+msgid "Random answers"
+msgstr "สุ่มคำตอบ"
+
+msgid "Prevent moving backwards"
+msgstr "ป้องกันการย้อนกลับ"
+
+msgid "Previous button hidden"
+msgstr "ซ่อนปุ่มย้อนกลับ"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "แบบฝึกหัดนี้ใช้ตัวเลือกที่ต้องการผู้เล่นแบบทดสอบอื่น"
+
+msgid "Continue test"
+msgstr "ดำเนินการแบบทดสอบต่อ"
+
+msgid "Attempt started"
+msgstr "เริ่มทำแบบฝึกหัด"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "การแสดงตัวอย่างของผู้สอนจะไม่สร้างการพยายามที่ถูกติดตาม"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "เริ่มหรือดำเนินการพยายามทำแบบฝึกหัดต่อ คำตอบแบบร่างสามารถบันทึกก่อนส่งขั้นสุดท้าย"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "ถึงขีดจำกัดเวลา กำลังสิ้นสุดการพยายาม"
+
+msgid "Question time reached. Saving your answer."
+msgstr "ถึงเวลาของคำถาม กำลังบันทึกคำตอบของคุณ"
+
+msgid "Finishing"
+msgstr "กำลังสิ้นสุด"
+
+msgid "Draft saved"
+msgstr "บันทึกร่างแล้ว"
+
+msgid "Statement"
+msgstr "คำชี้แจง"
+
+msgid "Drop each option on the matching answer"
+msgstr "วางแต่ละตัวเลือกบนคำตอบที่ตรงกัน"
+
+msgid "Clear match"
+msgstr "ล้างการจับคู่"
+
+msgid "Click to place the selected option here"
+msgstr "คลิกเพื่อวางตัวเลือกที่เลือกที่นี่"
+
+msgid "Select an option, then click here"
+msgstr "เลือกตัวเลือก แล้วคลิกที่นี่"
+
+msgid "Already matched"
+msgstr "จับคู่แล้ว"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "คุณสามารถลากตัวเลือกไปยังคำตอบ หรือเลือกตัวเลือกแล้วคลิกกล่องเป้าหมาย"
+
+msgid "Put the items in the correct order."
+msgstr "จัดเรียงรายการให้ถูกต้อง"
+
+msgid "Move left"
+msgstr "เลื่อนซ้าย"
+
+msgid "Move right"
+msgstr "เลื่อนขวา"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "คุณสามารถลากรายการไปทางซ้ายหรือขวา หรือใช้ปุ่มเลื่อนเพื่อเปลี่ยนลำดับ"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "คุณสามารถลากรายการหรือใช้ปุ่มเลื่อนเพื่อเปลี่ยนลำดับ"
+
+msgid "Or upload an audio file"
+msgstr "หรืออัปโหลดไฟล์เสียง"
+
+msgid "Selected audio"
+msgstr "เสียงที่เลือก"
+
+msgid "Uploaded audio"
+msgstr "เสียงที่อัปโหลด"
+
+msgid "Office document"
+msgstr "เอกสารสำนักงาน"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "กรอกเอกสารในตัวแก้ไขด้านล่าง ไฟล์จะถูกแนบกับการพยายามนี้เพื่อให้ผู้สอนตรวจสอบ"
+
+msgid "Reload Office editor"
+msgstr "โหลดตัวแก้ไข Office ใหม่"
+
+msgid "Prepare Office document"
+msgstr "เตรียมเอกสาร Office"
+
+msgid "Open in new tab"
+msgstr "เปิดในแท็บใหม่"
+
+msgid "Preparing Office document"
+msgstr "กำลังเตรียมเอกสาร Office"
+
+msgid "Submitted document"
+msgstr "เอกสารที่ส่ง"
+
+msgid "Annotation tools"
+msgstr "เครื่องมืออธิบายประกอบ"
+
+msgid "Text to place"
+msgstr "ข้อความที่จะวาง"
+
+msgid "Click the image to place the text annotation."
+msgstr "คลิกที่ภาพเพื่อวางคำอธิบายประกอบข้อความ"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "คลิกที่ภาพเพื่อเพิ่มจุดเส้นทาง ใช้ \"เริ่มเส้นทางใหม่\" เพื่อแยกเส้นทาง"
+
+msgid "Start new path"
+msgstr "เริ่มเส้นทางใหม่"
+
+msgid "Current annotations"
+msgstr "คำอธิบายประกอบปัจจุบัน"
+
+msgid "Remove point"
+msgstr "ลบจุด"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "คลิกที่ภาพเพื่อวาดรูปหลายเหลี่ยมขอบเขต"
+
+msgid "Click a marker to remove it."
+msgstr "คลิกที่เครื่องหมายเพื่อลบ"
+
+msgid "Placed"
+msgstr "วางแล้ว"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "เลือกคำตอบ แล้วคลิกบนภาพเพื่อทำเครื่องหมาย"
+
+msgid "Reading speed"
+msgstr "ความเร็วในการอ่าน"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "ไม่สามารถแสดงประเภทคำถามนี้ในผู้เล่นนี้ได้"
+
+msgid "Save draft"
+msgstr "บันทึกร่าง"
+
+msgid "I confirm that my answers were saved."
+msgstr "ฉันยืนยันว่าคำตอบของฉันถูกบันทึกแล้ว"
+
+msgid "Finish test"
+msgstr "ส่งแบบทดสอบ"
+
+msgid "Attempt finished"
+msgstr "การทำแบบทดสอบเสร็จสิ้น"
+
+msgid "Question category"
+msgstr "หมวดคำถาม"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "คุณตอบคำถามในหมวดนี้ครบแล้ว นี่เป็นโอกาสสุดท้ายที่จะย้อนกลับไปตรวจสอบ"
+
+msgid "Question time left"
+msgstr "เวลาที่เหลือสำหรับคำถาม"
+
+msgid "Time left"
+msgstr "เวลาที่เหลือ"
+
+msgid "Current attempt"
+msgstr "การทำแบบทดสอบปัจจุบัน"
+
+msgid "Could not save draft answer"
+msgstr "ไม่สามารถบันทึกร่างคำตอบได้"
+
+msgid "Could not load exercise"
+msgstr "ไม่สามารถโหลดแบบฝึกหัดได้"
+
+msgid "Draft answer saved"
+msgstr "บันทึกร่างคำตอบแล้ว"
+
+msgid "Could not finish the attempt"
+msgstr "ไม่สามารถสิ้นสุดการทำแบบทดสอบได้"
+
+msgid "Could not prepare Office document"
+msgstr "ไม่สามารถเตรียมเอกสาร Office ได้"
+
+msgid "Back to learner score"
+msgstr "กลับไปที่คะแนนผู้เรียน"
+
+msgid "Disable auto refresh"
+msgstr "ปิดการรีเฟรชอัตโนมัติ"
+
+msgid "Enable auto refresh"
+msgstr "เปิดการรีเฟรชอัตโนมัติ"
+
+msgid "Live window"
+msgstr "หน้าต่างสด"
+
+msgid "Ongoing attempts"
+msgstr "การทำแบบทดสอบที่กำลังดำเนินอยู่"
+
+msgid "Completed attempts"
+msgstr "การทำแบบทดสอบที่เสร็จสิ้นแล้ว"
+
+msgid "Started"
+msgstr "เริ่มเมื่อ"
+
+msgid "Last activity"
+msgstr "กิจกรรมล่าสุด"
+
+msgid "Could not load live results"
+msgstr "ไม่สามารถโหลดผลลัพธ์สดได้"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "แบบฝึกหัดนี้เป็นแบบอ่านอย่างเดียวเพราะรวมอยู่ในเส้นทางการเรียนรู้"
+
+msgid "Select a question type to create a question."
+msgstr "เลือกประเภทคำถามเพื่อสร้างคำถาม"
+
+msgid "Click to preview"
+msgstr "คลิกเพื่อดูตัวอย่าง"
+
+msgid "Hide preview"
+msgstr "ซ่อนตัวอย่าง"
+
+msgid "Shape"
+msgstr "รูปร่าง"
+
+msgid "Coordinates"
+msgstr "พิกัด"
+
+msgid "Blanks"
+msgstr "ช่องว่าง"
+
+msgid "Switchable blanks"
+msgstr "ช่องว่างที่สลับได้"
+
+msgid "Blank"
+msgstr "ช่องว่าง"
+
+msgid "Input width"
+msgstr "ความกว้างของช่องป้อนข้อมูล"
+
+msgid "Orientation"
+msgstr "ทิศทาง"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "ไม่สามารถใช้ได้กับโหมดผลตอบกลับแบบฝึกหัดปัจจุบัน"
+
+msgid "Not available in the learning path creation flow"
+msgstr "ไม่สามารถใช้ได้ในขั้นตอนการสร้างเส้นทางการเรียนรู้"
+
+msgid "Delete question"
+msgstr "ลบคำถาม"
+
+msgid "Could not update exercise questions"
+msgstr "ไม่สามารถอัปเดตคำถามแบบฝึกหัดได้"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "ไม่สามารถเพิ่มแบบฝึกหัดลงในเส้นทางการเรียนรู้ได้"
+
+msgid "A valid exercise id is required."
+msgstr "ต้องระบุรหัสแบบฝึกหัดที่ถูกต้อง"
+
+msgid "Could not load exercise questions"
+msgstr "ไม่สามารถโหลดคำถามแบบฝึกหัดได้"
+
+msgid "Delete selected attempts"
+msgstr "ลบการทำแบบทดสอบที่เลือก"
+
+msgid "Before date"
+msgstr "ก่อนวันที่"
+
+msgid "Pending corrections"
+msgstr "รอการตรวจสอบ"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "แบบฝึกหัดนี้ถูกล็อกโดยสมุดเกรด การดำเนินการล้างข้อมูลการทำแบบทดสอบถูกปิดใช้งาน"
+
+msgid "No attempts found"
+msgstr "ไม่พบการทำแบบทดสอบ"
+
+msgid "Review"
+msgstr "ตรวจสอบ"
+
+msgid "Print/PDF"
+msgstr "พิมพ์/PDF"
+
+msgid "Could not load exercise report"
+msgstr "ไม่สามารถโหลดรายงานแบบฝึกหัดได้"
+
+msgid "Select at least one attempt"
+msgstr "เลือกอย่างน้อยหนึ่งการทำแบบทดสอบ"
+
+msgid "Delete selected attempts?"
+msgstr "ลบความพยายามที่เลือก?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "ส่งอีเมลผลการตรวจสอบความพยายาม?"
+
+msgid "Could not send emails"
+msgstr "ไม่สามารถส่งอีเมลได้"
+
+msgid "Exercise result emails sent"
+msgstr "ส่งอีเมลผลแบบฝึกหัดแล้ว"
+
+msgid "Skipped"
+msgstr "ข้าม"
+
+msgid "Close attempt?"
+msgstr "ปิดความพยายาม?"
+
+msgid "Attempt closed"
+msgstr "ปิดความพยายามแล้ว"
+
+msgid "Could not close attempt"
+msgstr "ไม่สามารถปิดความพยายามได้"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "ส่งผลความพยายามนี้ทางอีเมลไปยังผู้เรียน?"
+
+msgid "Email sent"
+msgstr "ส่งอีเมลแล้ว"
+
+msgid "Could not send email"
+msgstr "ไม่สามารถส่งอีเมลได้"
+
+msgid "Attempt deleted"
+msgstr "ลบความพยายามแล้ว"
+
+msgid "Could not delete attempt"
+msgstr "ไม่สามารถลบความพยายามได้"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "เลือกไฟล์ CSV ที่มีคอลัมน์ชื่อและคำอธิบาย"
+
+msgid "Manage categories used to classify questions."
+msgstr "จัดการหมวดหมู่ที่ใช้จัดประเภทคำถาม"
+
+msgid "Manage categories used to classify exercises."
+msgstr "จัดการหมวดหมู่ที่ใช้จัดประเภทแบบฝึกหัด"
+
+msgid "Could not load categories"
+msgstr "ไม่สามารถโหลดหมวดหมู่ได้"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "นำเข้าหมวดหมู่แล้ว: %s. แถวที่ข้าม: %s."
+
+msgid "Imported categories: %s."
+msgstr "นำเข้าหมวดหมู่แล้ว: %s."
+
+msgid "Could not import categories"
+msgstr "ไม่สามารถนำเข้าหมวดหมู่ได้"
+
+msgid "Could not save category"
+msgstr "ไม่สามารถบันทึกหมวดหมู่ได้"
+
+msgid "Answer distribution"
+msgstr "การกระจายคำตอบ"
+
+msgid "Configured answers"
+msgstr "คำตอบที่กำหนดค่าไว้"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "การนับคำตอบแบบละเอียดสำหรับคำถามบางประเภทยังไม่พร้อมใช้งานในรายงานที่ย้ายข้อมูล"
+
+msgid "No report by question data found"
+msgstr "ไม่พบข้อมูลรายงานตามคำถาม"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "การนับคำตอบแบบละเอียดสำหรับประเภทคำถามนี้ยังไม่พร้อมใช้งานในรายงานที่ย้ายข้อมูล"
+
+msgid "No answer distribution found"
+msgstr "ไม่พบการกระจายคำตอบ"
+
+msgid "Could not load report by question"
+msgstr "ไม่สามารถโหลดรายงานตามคำถามได้"
+
+msgid "Question settings"
+msgstr "การตั้งค่าคำถาม"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "เว้นว่างหรือใส่ 0 หากไม่จำกัดเวลา"
+
+msgid "Time limit in seconds"
+msgstr "จำกัดเวลาเป็นวินาที"
+
+msgid "Attached questions"
+msgstr "คำถามที่แนบ"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "แสดงเฉพาะคำถามที่แนบกับคำถามสื่อนี้ในแบบฝึกหัดปัจจุบัน"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "ไม่มีคำถามที่แนบกับคำถามสื่อนี้ในแบบฝึกหัดปัจจุบัน"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "อัปโหลดเทมเพลตเอกสาร Office ที่ผู้เรียนจะแก้ไขด้วย OnlyOffice"
+
+msgid "Replace Office document"
+msgstr "แทนที่เอกสาร Office"
+
+msgid "Current Office document"
+msgstr "เอกสาร Office ปัจจุบัน"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "คำถามนี้จะถูกตรวจสอบด้วยตนเองหลังจากผู้เรียนส่งเอกสารที่แก้ไขแล้ว"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "คะแนนรวมคำนวณจากผลรวมของคะแนนจุดร้อน"
+
+msgid "Global score"
+msgstr "คะแนนรวม"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "เลือกแถวจุดร้อน เลือกรูปร่าง แล้ววาดบนภาพ สำหรับรูปหลายเหลี่ยม ให้คลิกแต่ละจุดแล้วปิดรูปหลายเหลี่ยม หรือดับเบิลคลิกเพื่อปิด"
+
+msgid "Finish polygon"
+msgstr "ปิดรูปหลายเหลี่ยม"
+
+msgid "Calculated answer"
+msgstr "คำตอบที่คำนวณ"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "พิมพ์ข้อความด้านล่างและใช้เครื่องหมายวงเล็บเหลี่ยม [...] เพื่อกำหนดช่องว่างอย่างน้อยหนึ่งช่อง"
+
+msgid "Lowest value"
+msgstr "ค่าต่ำสุด"
+
+msgid "Highest value"
+msgstr "ค่าสูงสุด"
+
+msgid "Fill in blanks"
+msgstr "เติมช่องว่าง"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "ใช้เครื่องหมายที่เลือกเพื่อกำหนดช่องว่าง ตัวอย่าง: เมืองหลวงของเปรูคือ [ลิมา]"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ป้อนตัวเลือกแบบดรอปดาวน์ คำตอบละบรรทัด แล้วทำเครื่องหมายคำตอบที่คาดหวังด้านล่างเหมือนเครื่องมือเดิม"
+
+msgid "Refresh answers"
+msgstr "รีเฟรชคำตอบ"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "คำถามแบบดรอปดาวน์ผสมนี้ใช้คะแนนรวมเดียว เหมือนแบบเดิม"
+
+msgid "Please enter at least two dropdown options."
+msgstr "กรุณากรอกตัวเลือกดรอปดาวน์อย่างน้อยสองตัวเลือก"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "สร้างตัวเลือกปลายทางก่อน แล้วเชื่อมโยงแต่ละรายการกับตัวเลือกที่ถูกต้อง"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "คำถามแบบจับคู่ผสมนี้ใช้คะแนนรวมเดียว เหมือนแบบเดิม"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "สร้างขั้นตอนและเลือกตำแหน่งที่คาดหวังสำหรับแต่ละขั้นตอน เหมือนแบบลากได้เดิม"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "ผู้เรียนจะเลือกจริงหรือเท็จ แล้วระบุระดับความมั่นใจระหว่างทำแบบทดสอบ ตัวแก้ไขจะบันทึกคะแนนถูก/ผิดและระดับความมั่นใจเหมือนแบบเดิม"
+
+msgid "Hotspot combination"
+msgstr "จุดร้อนผสม"
+
+msgid "Add delineation"
+msgstr "เพิ่มการกำหนดขอบเขต"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามเอกสาร Office นี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามอัปโหลดนี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามการแสดงออกด้วยวาจานี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามเปิดนี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "เพิ่มข้อความอ่านพร้อมการตั้งค่าความเร็วการเลื่อน"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "เพิ่มเนื้อหา สื่อ หรือบริบทการอ่านโดยไม่เพิ่มคะแนน"
+
+msgid "Insert a page break without adding score."
+msgstr "แทรกตัวแบ่งหน้าโดยไม่เพิ่มคะแนน"
+
+msgid "Could not save question"
+msgstr "ไม่สามารถบันทึกคำถามได้"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "อนุญาตเฉพาะเอกสาร DOC, DOCX, XLS หรือ XLSX เท่านั้น"
+
+msgid "Please select an Office document."
+msgstr "กรุณาเลือกเอกสาร Office"
+
+msgid "Please draw at least one hotspot."
+msgstr "กรุณาวาดจุดร้อนอย่างน้อยหนึ่งจุด"
+
+msgid "Please draw at least one delineation."
+msgstr "กรุณาวาดการกำหนดขอบเขตอย่างน้อยหนึ่งรายการ"
+
+msgid "The fill in blanks text is required."
+msgstr "ต้องมีข้อความเติมคำในช่องว่าง"
+
+msgid "At least one expected answer is required."
+msgstr "ต้องมีคำตอบที่คาดหวังอย่างน้อยหนึ่งคำตอบ"
+
+msgid "At least two draggable items are required."
+msgstr "ต้องมีรายการที่ลากได้อย่างน้อยสองรายการ"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "แต่ละรายการที่ลากได้ต้องเชื่อมโยงกับตำแหน่งเป้าหมายที่ถูกต้อง"
+
+msgid "At least two matching options are required."
+msgstr "ต้องมีตัวเลือกการจับคู่อย่างน้อยสองตัวเลือก"
+
+msgid "At least two matching pairs are required."
+msgstr "ต้องมีคู่การจับคู่อย่างน้อยสองคู่"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "แต่ละคู่การจับคู่ต้องเชื่อมโยงกับตัวเลือกที่ถูกต้อง"
+
+msgid "At least two answers are required."
+msgstr "ต้องมีคำตอบอย่างน้อยสองคำตอบ"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "แต่ละคำตอบจริง/เท็จต้องเลือกจริงหรือเท็จ"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "คำถามคำตอบเดียวต้องมีคำตอบที่ถูกต้องเพียงหนึ่งคำตอบ"
+
+msgid "At least one correct answer is required."
+msgstr "ต้องมีคำตอบที่ถูกต้องอย่างน้อยหนึ่งคำตอบ"
+
+msgid "Could not load question"
+msgstr "ไม่สามารถโหลดคำถามได้"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "เลือกหลักสูตรและส่งออกรายงานผลแบบฝึกหัดทั่วโลกเป็น CSV"
+
+msgid "Back to reports catalog"
+msgstr "กลับไปที่แคตตาล็อกรายงาน"
+
+msgid "Could not load exercise global report"
+msgstr "ไม่สามารถโหลดรายงานทั่วโลกของแบบฝึกหัดได้"
+
+msgid "Imported questions"
+msgstr "คำถามที่นำเข้า"
+
+msgid "Aiken content"
+msgstr "เนื้อหา Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "ไม่สามารถโหลดตัวสร้าง AI Aiken ได้"
+
+msgid "Could not generate Aiken content"
+msgstr "ไม่สามารถสร้างเนื้อหา Aiken ได้"
+
+msgid "Could not import generated Aiken content"
+msgstr "ไม่สามารถนำเข้าเนื้อหา Aiken ที่สร้างขึ้นได้"
+
+msgid "Back to my courses"
+msgstr "กลับไปที่หลักสูตรของฉัน"
+
+msgid "Open report"
+msgstr "เปิดรายงาน"
+
+msgid "Questions with no automatic correction"
+msgstr "คำถามที่ไม่มีการตรวจสอบอัตโนมัติ"
+
+msgid "Could not load pending attempts"
+msgstr "ไม่สามารถโหลดความพยายามที่รอดำเนินการได้"
+
+msgid "Skipped questions"
+msgstr "คำถามที่ข้าม"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "การนำเข้า Aiken จะกระจายน้ำหนักรวมนี้ไปยังคำถามที่นำเข้า เว้นแต่คำถามจะกำหนด SCORE"
+
+msgid "Import warnings"
+msgstr "คำเตือนการนำเข้า"
+
+msgid "Could not import questions"
+msgstr "ไม่สามารถนำเข้าคำถามได้"
+
+msgid "No question statistics found"
+msgstr "ไม่พบสถิติคำถาม"
+
+msgid "Could not load question statistics"
+msgstr "ไม่สามารถโหลดสถิติคำถามได้"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "คุณยังสามารถเชื่อมต่อไคลเอนต์ MCP โดยตรงได้โดยชี้ไปที่จุดสิ้นสุดต่อไปนี้:"
+
+msgid "No applications are currently connected to your account."
+msgstr "ไม่มีแอปพลิเคชันที่เชื่อมต่อกับบัญชีของคุณในขณะนี้"
+
+msgid "Connected on"
+msgstr "เชื่อมต่อเมื่อ"
+
+msgid "Last used"
+msgstr "ใช้ล่าสุด"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s จะไม่สามารถเข้าถึงบัญชี Chamilo ของคุณได้อีกต่อไป ดำเนินการต่อ?"
+
+msgid "Application revoked"
+msgstr "เพิกถอนแอปพลิเคชันแล้ว"
+
+msgid "Copied to clipboard"
+msgstr "คัดลอกไปยังคลิปบอร์ดแล้ว"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "ไม่สามารถคัดลอกจุดสิ้นสุด MCP ได้"
+
+msgid "MCP endpoint"
+msgstr "จุดสิ้นสุด MCP"
+
+msgid "API key"
+msgstr "คีย์ API"
+
+msgid "Last used at"
+msgstr "ใช้ล่าสุดเมื่อ"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "คัดลอกคีย์นี้ทันที มันจะไม่แสดงอีก"
+
+msgid "Rotate API key"
+msgstr "หมุนเวียนคีย์ API"
+
+msgid "Revoke API key"
+msgstr "เพิกถอนคีย์ API"
+
+msgid "Remote MCP connection"
+msgstr "การเชื่อมต่อ MCP ระยะไกล"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "กำหนดค่าไคลเอนต์ MCP ของคุณด้วยค่าต่อไปนี้:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "คีย์ปัจจุบันจะหยุดทำงานทันที ดำเนินการต่อ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "จะมีการสร้างคีย์ API MCP ส่วนบุคคลใหม่ ดำเนินการต่อ?"
+
+msgid "MCP API key generated"
+msgstr "สร้างคีย์ API MCP แล้ว"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "ไคลเอนต์ MCP ที่เชื่อมต่อโดยใช้คีย์นี้จะหยุดทำงานทันที ดำเนินการต่อ?"
+
+msgid "MCP API key revoked"
+msgstr "เพิกถอนคีย์ API MCP แล้ว"
+
+msgid "Could not copy the API key"
+msgstr "ไม่สามารถคัดลอกคีย์ API ได้"
+
+msgid "Project"
+msgstr "โครงการ"
+
+msgid "Close old tickets"
+msgstr "ปิดตั๋วเก่า"
+
+msgid "Close tickets older than seven days?"
+msgstr "ปิดตั๋วที่เก่ากว่าเจ็ดวัน?"
+
+msgid "Assignment history"
+msgstr "ประวัติการมอบหมาย"
+
+msgid "Translate with AI"
+msgstr "แปลด้วย AI"
+
+msgid "Target language"
+msgstr "ภาษาปลายทาง"
+
+msgid "Please select a provider"
+msgstr "กรุณาเลือกผู้ให้บริการ"
+
+msgid "Generate translation"
+msgstr "สร้างการแปล"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "ส่วนข้อกำหนดและเงื่อนไขอย่างน้อยหนึ่งส่วนต้องมีข้อความ"
+
+msgid "No active target languages are available."
+msgstr "ไม่มีภาษาปลายทางที่ใช้งานอยู่"
+
+msgid "Tutor"
+msgstr "ผู้สอน"
+
+msgid "Access dates"
+msgstr "วันที่เข้าถึง"
+
+msgid "Coach access dates"
+msgstr "วันที่เข้าถึงของโค้ช"
+
+msgid "No sessions found"
+msgstr "ไม่พบเซสชัน"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "เลือกหลักสูตรที่ผู้ใช้นี้ต้องไม่สามารถเข้าถึงได้ในเซสชันนี้"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "ผู้ใช้ไม่สามารถถูกบล็อกจากทุกหลักสูตรในเซสชันได้ ให้ยกเลิกการสมัครผู้ใช้แทน"
+
+msgid "Users subscribed to this session"
+msgstr "ผู้ใช้ที่สมัครเซสชันนี้"
+
+msgid "No available users found"
+msgstr "ไม่พบผู้ใช้ที่พร้อมใช้งาน"
+
+msgid "Subscribe this user to the session?"
+msgstr "สมัครผู้ใช้นี้เข้าร่วมเซสชัน?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "สมัครผู้ใช้ที่เลือกเข้าร่วมเซสชัน?"
+
+msgid "General tutor planning"
+msgstr "การวางแผนผู้สอนทั่วไป"
+
+msgid "User is already registered by another tutor."
+msgstr "ผู้ใช้ลงทะเบียนโดยผู้สอนคนอื่นแล้ว"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นผู้สอนหลักสูตร"
+
+msgid "General tutor"
+msgstr "ผู้สอนทั่วไป"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "พิจารณาหลักสูตร ผู้สอน ฝ่ายช่วยเหลือด้านเทคนิค ครู และ/หรือสื่อที่มีอยู่"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ผู้สอนที่สมัครเป็นครูในหลักสูตร %s"
+
+msgid "Tutor name"
+msgstr "ชื่อผู้สอน"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "ผู้สอนเซสชันเป็นผู้ประสานงานสำหรับเซสชันและสามารถทำหน้าที่เป็นผู้สอนสำหรับแต่ละหลักสูตรในเซสชันได้ เฉพาะผู้ใช้ที่มีบทบาทครูเท่านั้นที่สามารถเลือกเป็นผู้สอนเซสชันได้"
+
+msgid "Access start date for tutors"
+msgstr "วันที่เริ่มต้นการเข้าถึงสำหรับผู้สอน"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "วันที่เซสชันเปิดให้ผู้สอนเข้าถึง เพื่อให้เตรียมการก่อนนักเรียนเชื่อมต่อ"
+
+msgid "Access end date for tutors"
+msgstr "วันที่สิ้นสุดการเข้าถึงสำหรับผู้สอน"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "วันที่เซสชันปิดสำหรับผู้สอน ระยะเวลาที่เพิ่มจะช่วยให้ส่งออกข้อมูลการติดตามที่เกี่ยวข้องทั้งหมด"
+
+msgid "Tutor and student"
+msgstr "ผู้สอนและนักเรียน"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "รายงานนี้แสดงการกระจายรายสัปดาห์ของเซสชันต่อผู้สอนทั่วไปในช่วงวันที่ที่เลือก"
+
+msgid "User is general tutor in some sessions"
+msgstr "ผู้ใช้เป็นผู้สอนทั่วไปในบางเซสชัน"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ครูจะถูกเพิ่มเป็นผู้สอนในทุกเซสชันของหลักสูตร"
+
+msgid "Delete failed: invalid question id."
+msgstr "ลบไม่สำเร็จ: รหัสคำถามไม่ถูกต้อง"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "จำนวนเซสชันเฉลี่ยต่อผู้สอนเซสชันทั่วไป"
+
+msgid "No room"
+msgstr "ไม่มีห้อง"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "นำเข้าครูหลักสูตรเป็นผู้สอนหลักสูตรในเซสชัน"
+
+msgid "Clean and update course tutors"
+msgstr "ล้างและอัปเดตผู้สอนหลักสูตร"
+
+msgid "Add me as tutor"
+msgstr "เพิ่มฉันเป็นผู้สอน"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "ไม่สามารถเพิ่มแบบสำรวจไปยังเส้นทางการเรียนรู้"
+
+msgid "Access dates for tutors"
+msgstr "วันที่เข้าถึงสำหรับผู้สอน"
+
+msgid "Tutor and group member"
+msgstr "ผู้สอนและสมาชิกกลุ่ม"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "คุณถึงขีดจำกัดโทเค็น AI รายวันแล้ว โปรดลองอีกครั้งในวันพรุ่งนี้"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "คุณถึงขีดจำกัดโทเค็น AI รายเดือนแล้ว โปรดลองอีกครั้งในเดือนหน้า"
+
+msgid "This course code already exists, please choose another code."
+msgstr "รหัสหลักสูตรนี้มีอยู่แล้ว โปรดเลือกรหัสอื่น"
+
+msgid "This course title already exists, please choose another title."
+msgstr "ชื่อหลักสูตรนี้มีอยู่แล้ว โปรดเลือกชื่ออื่น"
+
+msgid "This tool visibility cannot be changed"
+msgstr "ไม่สามารถเปลี่ยนการมองเห็นเครื่องมือนี้ได้"
+
+msgid "Invalid visibility"
+msgstr "การมองเห็นไม่ถูกต้อง"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นหนึ่งในผู้สอนหลักสูตร"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นผู้สอนหลักสูตร"
+
+msgid "Manual completion"
+msgstr "การเสร็จสิ้นด้วยตนเอง"
+
+msgid "Send to tutors"
+msgstr "ส่งไปยังผู้สอน"
+
+msgid "Lab title"
+msgstr "ชื่อห้องปฏิบัติการ"
+
+msgid "Lab week"
+msgstr "สัปดาห์ห้องปฏิบัติการ"
+
+msgid "Final exam access rule"
+msgstr "กฎการเข้าถึงการสอบปลายภาค"
+
+msgid "Course completion rule"
+msgstr "กฎการเสร็จสิ้นหลักสูตร"
+
+msgid "You have been invited to join a course"
+msgstr "คุณได้รับเชิญให้เข้าร่วมหลักสูตร"
+
+msgid "No user has been found"
+msgstr "ไม่พบผู้ใช้"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ไม่สามารถสมัครผู้ใช้ที่เลือกในบริบทนี้ได้"
+
+msgid "No change has been made"
+msgstr "ไม่มีการเปลี่ยนแปลงใด ๆ"
+
+msgid "Back to group list"
+msgstr "กลับไปยังรายชื่อกลุ่ม"
+
+msgid "Remove class link"
+msgstr "ลบลิงก์ชั้นเรียน"
+
+msgid "Group settings"
+msgstr "การตั้งค่ากลุ่ม"
+
+msgid "Self-registration allowed"
+msgstr "อนุญาตให้ลงทะเบียนด้วยตนเอง"
+
+msgid "Self-unregistration allowed"
+msgstr "อนุญาตให้ยกเลิกการลงทะเบียนด้วยตนเอง"
+
+msgid "This group is linked to the class"
+msgstr "กลุ่มนี้เชื่อมโยงกับชั้นเรียน"
+
+msgid "Create one or more empty course groups"
+msgstr "สร้างกลุ่มหลักสูตรว่างหนึ่งกลุ่มหรือมากกว่า"
+
+msgid "Number of places"
+msgstr "จำนวนที่นั่ง"
+
+msgid "Base group"
+msgstr "กลุ่มฐาน"
+
+msgid "Share"
+msgstr "แชร์"
+
+msgid "Collaboration"
+msgstr "การทำงานร่วมกัน"
+
+msgid "The group title is required."
+msgstr "ต้องระบุชื่อกลุ่ม"
+
+msgid "Back to group area"
+msgstr "กลับไปยังพื้นที่กลุ่ม"
+
+msgid "Members are managed by the linked class"
+msgstr "สมาชิกถูกจัดการโดยชั้นเรียนที่เชื่อมโยง"
+
+msgid "%s groups selected"
+msgstr "เลือกกลุ่ม %s กลุ่ม"
+
+msgid "Fill selected groups"
+msgstr "เติมกลุ่มที่เลือก"
+
+msgid "Empty selected groups"
+msgstr "ล้างกลุ่มที่เลือก"
+
+msgid "Fill group"
+msgstr "เติมกลุ่ม"
+
+msgid "Empty group"
+msgstr "ล้างกลุ่ม"
+
+msgid "Groups per user"
+msgstr "กลุ่มต่อผู้ใช้"
+
+msgid "No tutors"
+msgstr "ไม่มีผู้สอน"
+
+msgid "No users"
+msgstr "ไม่มีผู้ใช้"
 

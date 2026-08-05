@@ -54,6 +54,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             'lp_allow_export_to_students' => 'false',
             'show_invisible_lp_in_course_home' => 'false',
             'lp_start_and_end_date_visible_in_student_view' => 'false',
+            'scorm_complete_on_leave_when_incomplete' => 'false',
             'scorm_lms_update_sco_status_all_time' => 'false',
             'scorm_upload_from_cache' => 'false',
             'lp_prerequisite_on_quiz_unblock_if_max_attempt_reached' => 'false',
@@ -119,6 +120,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('lp_allow_export_to_students', YesNoType::class)
             ->add('show_invisible_lp_in_course_home', YesNoType::class)
             ->add('lp_start_and_end_date_visible_in_student_view', YesNoType::class)
+            ->add('scorm_complete_on_leave_when_incomplete', YesNoType::class)
             ->add('scorm_lms_update_sco_status_all_time', YesNoType::class)
             ->add('scorm_upload_from_cache', YesNoType::class)
             ->add('lp_prerequisite_on_quiz_unblock_if_max_attempt_reached', YesNoType::class)

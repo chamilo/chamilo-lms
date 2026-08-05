@@ -1,0 +1,93 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\State\CourseInvitation;
+
+use ApiPlatform\Metadata\CollectionOperationInterface;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\CourseInvitation\CourseInvitationItem;
+use Chamilo\CoreBundle\Entity\CourseInvitation;
+use Chamilo\CoreBundle\Repository\CourseInvitationRepository;
+use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationTokenService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+/**
+ * @implements ProviderInterface<CourseInvitationItem>
+ */
+final readonly class CourseInvitationProvider implements ProviderInterface
+{
+    use CourseInvitationAccessHelperTrait;
+
+    public function __construct(
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
+        private CourseInvitationRepository $invitationRepository,
+        private Security $security,
+        private CsrfTokenManagerInterface $csrfTokenManager,
+        private CourseInvitationTokenService $tokenService,
+    ) {}
+
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|CourseInvitationItem|null
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request instanceof Request) {
+            throw new BadRequestHttpException('The current request is required.');
+        }
+
+        $course = $this->getCourse($request, $this->entityManager);
+        $session = $this->getSession($request, $this->entityManager);
+        $this->assertSessionBelongsToCourse($session, $course);
+
+        if (!$this->canManageCourseInvitations($this->security, $course, $session)) {
+            throw new AccessDeniedHttpException('You are not allowed to manage course invitations in this context.');
+        }
+
+        if ($operation instanceof CollectionOperationInterface) {
+            $items = [];
+            foreach ($this->invitationRepository->findAllForCourse($course) as $invitation) {
+                $items[] = $this->toItem($invitation);
+            }
+
+            return $items;
+        }
+
+        if (isset($uriVariables['id'])) {
+            $invitation = $this->invitationRepository->find((int) $uriVariables['id']);
+            if (!$invitation instanceof CourseInvitation || $invitation->getCourse()?->getId() !== $course->getId()) {
+                throw new NotFoundHttpException('The requested invitation was not found.');
+            }
+
+            return $this->toItem($invitation);
+        }
+
+        $item = new CourseInvitationItem();
+        $item->csrfToken = (string) $this->csrfTokenManager->getToken(CourseInvitationSendProcessor::CSRF_TOKEN_ID);
+        $item->isSessionContext = null !== $session;
+        $item->contextTitle = $session?->getTitle() ?? $course->getTitle();
+
+        return $item;
+    }
+
+    private function toItem(CourseInvitation $invitation): CourseInvitationItem
+    {
+        $item = CourseInvitationItem::fromInvitation($invitation);
+        $item->invitationUrl = $this->tokenService->getActiveUrl($invitation);
+
+        return $item;
+    }
+}

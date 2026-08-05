@@ -37500,3 +37500,1431 @@ msgstr "Une ilustrazion moderne e ospitâl che rapresente l'argoment di chest co
 msgid "Back to account"
 msgstr "Torne al account"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Il to judizi al judarà a miorâ lis sessions di formazion dal futûr."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Graciis par vê condividût il to judizi."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Cuant sei sodisfat de cualitât gjenerâl de formazion?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Cuant sei sodisfat de rilevance dal contignût?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Cuant sei sodisfat de clarece des spiegazions?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Cuant sei sodisfat de organizazion e dal ritmi de formazion?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Cuant sei sodisfat de utilitât pratiche di ce che tu âs imparât?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Consiglarestu cheste formazion a altris personis?"
+
+msgid "What should we improve in future editions?"
+msgstr "Ce varessin di miorâ tes edizions dal futûr?"
+
+msgid "Very satisfied"
+msgstr "Molt sodisfat"
+
+msgid "Satisfied"
+msgstr "Sodisfat"
+
+msgid "Neutral"
+msgstr "Neutrâl"
+
+msgid "Dissatisfied"
+msgstr "No sodisfat"
+
+msgid "Very dissatisfied"
+msgstr "Molt no sodisfat"
+
+msgid "Add destination"
+msgstr "Zonte destinazion"
+
+msgid "Add this test to the assessment tool"
+msgstr "Zonte chest test al strument di valutazion"
+
+msgid "Attempts and timing"
+msgstr "Tentatîfs e timp"
+
+msgid "Available questions"
+msgstr "Domandis disponibils"
+
+msgid "Cancel and return to learning path"
+msgstr "Anule e torne al percors di aprendiment"
+
+msgid "Category destinations"
+msgstr "Destinazions di categorie"
+
+msgid "Classification"
+msgstr "Classificazion"
+
+msgid "Context"
+msgstr "Contest"
+
+msgid "Could not load exercise configuration"
+msgstr "No si è podût cjariâ la configurazion dal esercizi"
+
+msgid "Could not save exercise"
+msgstr "No si è podût salvâ l'esercizi"
+
+msgid "Display and learning path"
+msgstr "Visualizazion e percors di aprendiment"
+
+msgid "Edit test"
+msgstr "Modifiche test"
+
+msgid "Exercise settings saved."
+msgstr "Impostazions dal esercizi salvadis."
+
+msgid "Extra settings"
+msgstr "Impostazions adizionâls"
+
+msgid "Feedback and results"
+msgstr "Coment e risultâts"
+
+msgid "Finish exercise"
+msgstr "Finìs l'esercizi"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identifiche la lenghe di chest esercizi come metadâts de risorse. Nol abilite di per sè la indicizazion di ricercje."
+
+msgid "Maximum score (%)"
+msgstr "Puntegji massim (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "I metadâts a contignin competencis e cjamps adizionâls configurâts pai esercizis. Al è opzionâl e al reste platât fin cuant che al ven viert."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "No son ancjemò categoriis di domandis disponibils par chest esercizi."
+
+msgid "Question categories matrix"
+msgstr "Matricule des categoriis di domandis"
+
+msgid "Questions behavior"
+msgstr "Comportament des domandis"
+
+msgid "Random by category"
+msgstr "Casuâl par categorie"
+
+msgid "Remove destination"
+msgstr "Gjave destinazion"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Lis regulis a son valutadis in base ae percentuâl dal ponts in ordin cressint. Selezione Finìs l'esercizi par terminâ il test."
+
+msgid "Score and final messages"
+msgstr "Ponts e messaçs finals"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Cualchi opzion e je blocade dopo che l'esercizi al è stât creât."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Chest valôr al è memorizât come durade totâl in minûts."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Dopre 0 par tignî dutis lis domandis disponibii. Dopre -1 dulà che a son permetudis dutis lis domandis disponibii."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Dopre chescj cjamps par classificâ l'esercizi in maniere indipendent des sôs opzions di visualizazion."
+
+msgid "Invite by email"
+msgstr "Invitâ par email"
+
+msgid "Invitation has been sent"
+msgstr "L'invit è stât mandât"
+
+msgid "Sent on"
+msgstr "Mandât il"
+
+msgid "Accepted on"
+msgstr "Acetât il"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Chest cors al è viert intune session. Mandant un invit culì al iscriverà il destinatari a la intere session %s, no dome a chest cors."
+
+msgid "Revoke"
+msgstr "Revocâ"
+
+msgid "Revoked"
+msgstr "Revocât"
+
+msgid "Invitation has been revoked"
+msgstr "L'invit è stât revocât"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Sêstu sigûr di volê revocâ l'invit mandât a %s?"
+
+msgid "No default room"
+msgstr "Nissune stanzie predefinide"
+
+msgid "Floor"
+msgstr "Plan"
+
+msgid "Capacity"
+msgstr "Capacitât"
+
+msgid "Use attendance default room"
+msgstr "Doprâ la stanzie predefinide di presince"
+
+msgid "Floor number"
+msgstr "Numar dal plan"
+
+msgid "Copy to students"
+msgstr "Copiâ ai students"
+
+msgid "Generate a quick test on this topic"
+msgstr "Gjenerâ un test rapid su chest argoment"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Il contignût dal document salvât al sarà mandât a un model di IA par jessi elaborât."
+
+msgid "MCP API key"
+msgstr "Clâf API MCP"
+
+msgid "Authorized applications"
+msgstr "Aplicazions autorizadis"
+
+msgid "Your session is about to expire"
+msgstr "La tô session e sta par scjadê"
+
+msgid "Do you want to continue your session?"
+msgstr "Desideristu continuâ la tô session?"
+
+msgid "Stay connected"
+msgstr "Resta colegât"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Tu sarâs disconetût in %s seconds."
+
+msgid "No descriptions available yet."
+msgstr "Ancjemò nissune descrizion disponibile."
+
+msgid "%s users selected"
+msgstr "%s utents selezionâts"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "I utents selezionâts a son stâts iscrits al cors"
+
+msgid "Import teachers"
+msgstr "Impuarte insegnants"
+
+msgid "Import learners"
+msgstr "Impuarte discent"
+
+msgid "Select CSV file"
+msgstr "Selezione file CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Cualchi utent no à podût jessi iscrit"
+
+msgid "Browse available classes"
+msgstr "Sfoglie lis classis disponibilis"
+
+msgid "Back to linked classes"
+msgstr "Torne aes classis colegadis"
+
+msgid "No classes are currently linked to this course."
+msgstr "Nissune classe e je colegade a chest cors."
+
+msgid "No available classes were found for this course."
+msgstr "No son stâts cjatâts classis disponibilis par chest cors."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Sêstu sigûr di volê disiscrivî i utents selezionâts?"
+
+msgid "Learning path access"
+msgstr "Acès al percors di aprendiment"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Dome i utents e i grups selezionâts a puedin jentrâ in chest percors di aprendiment. Gjestìsju dopo vê salvât."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Ducj i utents dal cors atuâi e futûrs a puedin jentrâ in chest percors di aprendiment."
+
+msgid "All course users"
+msgstr "Ducj i utents dal cors"
+
+msgid "Selected users and groups"
+msgstr "Utents e grups selezionâts"
+
+msgid "No access"
+msgstr "Nissun acès"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Dome i utents e i grups zontâts culì a puedin jentrâ in chest percors di aprendiment."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Numar di domandis limitât a un massim di %s"
+
+msgid "Open exercise player"
+msgstr "Vierç il riprodutôr di esercizis"
+
+msgid "The score is hidden for this exercise."
+msgstr "Il risultât al è platât par chest esercizi."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Lis corezions a son platadis seconde lis impostazions dal risultât dal esercizi."
+
+msgid "Progressive adaptive result"
+msgstr "Risultât adatîf progressîf"
+
+msgid "Achieved level"
+msgstr "Nivel otignût"
+
+msgid "Correction history"
+msgstr "Storic des corezions"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Storic des corezions manuâls fatis par chest tentatîf."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Chest esercizi al dopre la modalitât di risultât radar/ragnatele. Il grafic nol è disponibil in cheste pagjine."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "I detais des domandis a son platâts seconde lis impostazions dal risultât dal esercizi."
+
+msgid "Media question"
+msgstr "Domande multimediâl"
+
+msgid "Pending correction"
+msgstr "Corezion in spiete"
+
+msgid "No answer"
+msgstr "Nissune rispueste"
+
+msgid "Blank %s"
+msgstr "Spazi vueit %s"
+
+msgid "Your order"
+msgstr "Il to ordin"
+
+msgid "Correct order"
+msgstr "Ordin just"
+
+msgid "Delineation review"
+msgstr "Revision de delineazion"
+
+msgid "Learner clicks"
+msgstr "Clics dal discent"
+
+msgid "Question image"
+msgstr "Imagjin de domande"
+
+msgid "No hotspot image available"
+msgstr "Nissune imagjin hotspot disponibile"
+
+msgid "Learner delineation"
+msgstr "Delineazion dal discent"
+
+msgid "Expected delineation"
+msgstr "Delineazion spietade"
+
+msgid "Expected zones"
+msgstr "Zonis spietadis"
+
+msgid "Zone"
+msgstr "Zone"
+
+msgid "Learner annotation"
+msgstr "Anotazion dal discent"
+
+msgid "No annotation image available"
+msgstr "Nissune imagjin di anotazion disponibile"
+
+msgid "This answer is pending teacher correction."
+msgstr "Cheste rispueste e je in spiete di corezion dal insegnant."
+
+msgid "Teacher comment"
+msgstr "Coment dal insegnant"
+
+msgid "Teacher correction"
+msgstr "Corezion dal professôr"
+
+msgid "Save correction"
+msgstr "Salve corezion"
+
+msgid "Learner audio"
+msgstr "Audio dal student"
+
+msgid "Download audio"
+msgstr "Discjame audio"
+
+msgid "No uploaded audio"
+msgstr "Nissun audio cjariât"
+
+msgid "Learner Office document"
+msgstr "Document Office dal student"
+
+msgid "Learner file"
+msgstr "File dal student"
+
+msgid "Download Office document"
+msgstr "Discjame document Office"
+
+msgid "No submitted document"
+msgstr "Nissun document presentât"
+
+msgid "No uploaded file"
+msgstr "Nissun file cjariât"
+
+msgid "Content item"
+msgstr "Element di contignût"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Cheste sorte di domande no pues jessi rivuedade su cheste pagjine."
+
+msgid "Exercise completed"
+msgstr "Esercizi completât"
+
+msgid "Could not start the attempt"
+msgstr "No si è podût iniziâ il tentatîf"
+
+msgid "Invalid exercise attempt"
+msgstr "Tentatîf di esercizi no valit"
+
+msgid "Could not load exercise result"
+msgstr "No si è podût cjariâ il risultât dal esercizi"
+
+msgid "Could not load AI providers"
+msgstr "No si è podût cjariâ i provisôrs di IA"
+
+msgid "Could not generate AI suggestion"
+msgstr "No si è podût gjenerâ il sugjeriment di IA"
+
+msgid "Correction saved"
+msgstr "Corezion salvade"
+
+msgid "Could not save correction"
+msgstr "No si è podût salvâ la corezion"
+
+msgid "Create exercise"
+msgstr "Cree esercizi"
+
+msgid "Exercise categories"
+msgstr "Categoriis di esercizis"
+
+msgid "Question categories"
+msgstr "Categoriis di domandis"
+
+msgid "Search by exercise title or description."
+msgstr "Cîr par titul o descrizion dal esercizi."
+
+msgid "Search exercises"
+msgstr "Cîr esercizis"
+
+msgid "No exercises found"
+msgstr "Nissun esercizi cjatât"
+
+msgid "Open exercise"
+msgstr "Vierç esercizi"
+
+msgid "Disable autolaunch"
+msgstr "Disative inviament automatic"
+
+msgid "Enable autolaunch"
+msgstr "Ative inviament automatic"
+
+msgid "Export QTI2"
+msgstr "Espuarte QTI2"
+
+msgid "Bulk actions"
+msgstr "Azions in masse"
+
+msgid "Selected exercises"
+msgstr "Esercizis selezionâts"
+
+msgid "No exercises selected"
+msgstr "Nissun esercizi selezionât"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Sêstu sigûr di volê aplicâ cheste azion ai esercizis selezionâts?"
+
+msgid "Bulk action completed"
+msgstr "Azion in masse completade"
+
+msgid "Could not update exercises"
+msgstr "No si è podût inzornâ i esercizis"
+
+msgid "Could not update exercise"
+msgstr "No si è podût inzornâ l'esercizi"
+
+msgid "Copy exercise"
+msgstr "Copie esercizi"
+
+msgid "Delete exercise"
+msgstr "Elimine esercizi"
+
+msgid "Could not load exercises"
+msgstr "No si è podût cjariâ i esercizis"
+
+msgid "No limit"
+msgstr "Nissun limit"
+
+msgid "Add selected questions to the test"
+msgstr "Zonte lis domandis selezionadis al test"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Cheste domande e je doprade intun test atîf e no pues jessi modificade achì."
+
+msgid "This question cannot be edited here."
+msgstr "Cheste domande no pues jessi modificade achì."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Cheste domande e je doprade intun test atîf e no pues jessi eliminade achì."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Cheste domande no pues jessi eliminade parcè che il to acès al è limitât des impostazions de plateforme."
+
+msgid "Already in test"
+msgstr "Za tal test"
+
+msgid "Select at least one question."
+msgstr "Selezione almancul une domande."
+
+msgid "Question bank updated"
+msgstr "Bancje di domandis inzornade"
+
+msgid "Could not update the question bank"
+msgstr "No si è podût inzornâ la bancje di domandis"
+
+msgid "Could not load the question bank"
+msgstr "No si è podût cjariâ la bancje des domandis"
+
+msgid "Total score"
+msgstr "Puntegji totâl"
+
+msgid "Starting"
+msgstr "Inviament"
+
+msgid "Attempt history"
+msgstr "Storic dai tentatîfs"
+
+msgid "No attempts yet"
+msgstr "Ancjemò nissun tentatîf"
+
+msgid "Invalid exercise"
+msgstr "Esercizi no valit"
+
+msgid "Could not load exercise overview"
+msgstr "No si è podût cjariâ la panoramiche dal esercizi"
+
+msgid "Open test"
+msgstr "Test viert"
+
+msgid "Random answers"
+msgstr "Rispuestis a câs"
+
+msgid "Prevent moving backwards"
+msgstr "Impedìs di tornâ indaûr"
+
+msgid "Previous button hidden"
+msgstr "Boton indaûr platât"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Chest esercizi al dopre opzions che a àn bisugne di un riprodutôr di test diferent."
+
+msgid "Continue test"
+msgstr "Continue il test"
+
+msgid "Attempt started"
+msgstr "Tentatîf iniziât"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "La anteprime dal professôr no cree un tentatîf regjistrât."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Inizie o ripie un tentatîf di esercizi. Lis rispuestis provisoriis a puedin jessi salvadis prime de consegne definitive."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Timp scjadût. Finiment dal tentatîf."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Timp de domande scjadût. Salvament de tô rispueste."
+
+msgid "Finishing"
+msgstr "Finiment"
+
+msgid "Draft saved"
+msgstr "Bozze salvade"
+
+msgid "Statement"
+msgstr "Dichiarazion"
+
+msgid "Drop each option on the matching answer"
+msgstr "Mete ogni opzion su la rispueste corispondente"
+
+msgid "Clear match"
+msgstr "Nete la corispondence"
+
+msgid "Click to place the selected option here"
+msgstr "Cliche par meti la opzion selezionade achì"
+
+msgid "Select an option, then click here"
+msgstr "Selezione une opzion, po cliche achì"
+
+msgid "Already matched"
+msgstr "Corispondence za fate"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Tu puedis strissinâ une opzion suntune rispueste, o selezionâ une opzion e po cliche un spazi di destinazion."
+
+msgid "Put the items in the correct order."
+msgstr "Mete i elements tal ordin just."
+
+msgid "Move left"
+msgstr "Môf a çampe"
+
+msgid "Move right"
+msgstr "Môf a diestre"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Tu puedis strissinâ i elements a çampe o a diestre, o doprâ i botons di spostament par cambiâ l'ordin."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Tu puedis strissinâ i elements o doprâ i botons di spostament par cambiâ l'ordin."
+
+msgid "Or upload an audio file"
+msgstr "O cjame un file audio"
+
+msgid "Selected audio"
+msgstr "Audio selezionât"
+
+msgid "Uploaded audio"
+msgstr "Audio cjariât"
+
+msgid "Office document"
+msgstr "Document di ufici"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Complete il document tal editôr chi sot. Il file al sarà tacât a chest tentatîf par la corezion dal professôr."
+
+msgid "Reload Office editor"
+msgstr "Ricariche editôr Office"
+
+msgid "Prepare Office document"
+msgstr "Preparazion document Office"
+
+msgid "Open in new tab"
+msgstr "Vierç in gnove schede"
+
+msgid "Preparing Office document"
+msgstr "Preparazion document Office"
+
+msgid "Submitted document"
+msgstr "Document consegnât"
+
+msgid "Annotation tools"
+msgstr "Struments di anotazion"
+
+msgid "Text to place"
+msgstr "Test di meti"
+
+msgid "Click the image to place the text annotation."
+msgstr "Cliche la imagjin par meti la anotazion di test."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Cliche la imagjin par zontâ ponts dal percors. Dopre Inizie gnûf percors par separâ i percors."
+
+msgid "Start new path"
+msgstr "Inizie gnûf percors"
+
+msgid "Current annotations"
+msgstr "Anotazions atuals"
+
+msgid "Remove point"
+msgstr "Gjave pont"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Cliche la imagjin par disegnâ il poligon di delineazion."
+
+msgid "Click a marker to remove it."
+msgstr "Cliccje un marcadôr par gjavâlu."
+
+msgid "Placed"
+msgstr "Metût"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Sielç une rispueste, po cliccje su la imagjin par segnâle."
+
+msgid "Reading speed"
+msgstr "Velocitât di leture"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Cheste gjenar di domande no pues jessi mostrade in chest riprodutôr."
+
+msgid "Save draft"
+msgstr "Salve bozze"
+
+msgid "I confirm that my answers were saved."
+msgstr "Conferme che lis tôs rispuestis a son stadis salvadis."
+
+msgid "Finish test"
+msgstr "Finìs la prove"
+
+msgid "Attempt finished"
+msgstr "Tentatîf finît"
+
+msgid "Question category"
+msgstr "Categoriâ di domande"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Tu âs finît lis domandis di cheste categoriâ, cheste e je la ultime oportunitât par tornâ indaûr e riviodi lis domandis."
+
+msgid "Question time left"
+msgstr "Timp restant pe domande"
+
+msgid "Time left"
+msgstr "Timp restant"
+
+msgid "Current attempt"
+msgstr "Tentatîf atuâl"
+
+msgid "Could not save draft answer"
+msgstr "No si è podût salvâ la rispueste bozze"
+
+msgid "Could not load exercise"
+msgstr "No si è podût cjariâ l'esercizi"
+
+msgid "Draft answer saved"
+msgstr "Rispueste bozze salvade"
+
+msgid "Could not finish the attempt"
+msgstr "No si è podût finî il tentatîf"
+
+msgid "Could not prepare Office document"
+msgstr "No si è podût preparâ il document Office"
+
+msgid "Back to learner score"
+msgstr "Torne al risultât dal student"
+
+msgid "Disable auto refresh"
+msgstr "Disative l'aggiornament automatic"
+
+msgid "Enable auto refresh"
+msgstr "Ative l'aggiornament automatic"
+
+msgid "Live window"
+msgstr "Viodude in direte"
+
+msgid "Ongoing attempts"
+msgstr "Tentatîfs in cors"
+
+msgid "Completed attempts"
+msgstr "Tentatîfs completâts"
+
+msgid "Started"
+msgstr "Iniziât"
+
+msgid "Last activity"
+msgstr "Ultime ativitât"
+
+msgid "Could not load live results"
+msgstr "No si è podût cjariâ i risultâts in direte"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Chest esercizi al è in sôl-leture parcè che al è includût intun percors formatîf."
+
+msgid "Select a question type to create a question."
+msgstr "Sielç un gjenar di domande par creâ une domande."
+
+msgid "Click to preview"
+msgstr "Cliccje par previsualizâ"
+
+msgid "Hide preview"
+msgstr "Plate la previsualizazion"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "Coordinates"
+msgstr "Coordenadis"
+
+msgid "Blanks"
+msgstr "Spazis vueits"
+
+msgid "Switchable blanks"
+msgstr "Spazis vueits intercambiabii"
+
+msgid "Blank"
+msgstr "Spazi vueit"
+
+msgid "Input width"
+msgstr "Largjece dal cjamp"
+
+msgid "Orientation"
+msgstr "Orientament"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "No disponibil cul mût di rispueste atuâl"
+
+msgid "Not available in the learning path creation flow"
+msgstr "No disponibil tal procès di creazion dal percors formatîf"
+
+msgid "Delete question"
+msgstr "Elimine la domande"
+
+msgid "Could not update exercise questions"
+msgstr "No si è podût inzornâ lis domandis dal esercizi"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "No si è podût zontâ l'esercizi al percors formatîf"
+
+msgid "A valid exercise id is required."
+msgstr "Al covente un ID di esercizi valit."
+
+msgid "Could not load exercise questions"
+msgstr "No si è podût cjariâ lis domandis dal esercizi"
+
+msgid "Delete selected attempts"
+msgstr "Elimine i tentatîfs selezionâts"
+
+msgid "Before date"
+msgstr "Prime de date"
+
+msgid "Pending corrections"
+msgstr "Corezions in spiete"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Chest esercizi al è blocât dal regjistri des valutazions. Lis azions di netisie dai tentatîfs a son disativadis."
+
+msgid "No attempts found"
+msgstr "Nissun tentatîf cjatât"
+
+msgid "Review"
+msgstr "Riveide"
+
+msgid "Print/PDF"
+msgstr "Stampâ/PDF"
+
+msgid "Could not load exercise report"
+msgstr "No si à podût cjariâ il rapuart dal esercizi"
+
+msgid "Select at least one attempt"
+msgstr "Selezione almancul un tentatîf"
+
+msgid "Delete selected attempts?"
+msgstr "Eliminâ i tentatîfs selezionâts?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Mandâ lis email dai risultâts dai tentatîfs riveidûts?"
+
+msgid "Could not send emails"
+msgstr "No si à podût mandâ lis email"
+
+msgid "Exercise result emails sent"
+msgstr "Email dai risultâts dai esercizis mandadis"
+
+msgid "Skipped"
+msgstr "Saltât"
+
+msgid "Close attempt?"
+msgstr "Sierâ il tentatîf?"
+
+msgid "Attempt closed"
+msgstr "Tentatîf sierât"
+
+msgid "Could not close attempt"
+msgstr "No si à podût sierâ il tentatîf"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Mandâ il risultât di chest tentatîf par email al student?"
+
+msgid "Email sent"
+msgstr "Email mandade"
+
+msgid "Could not send email"
+msgstr "No si à podût mandâ la email"
+
+msgid "Attempt deleted"
+msgstr "Tentatîf eliminât"
+
+msgid "Could not delete attempt"
+msgstr "No si à podût eliminâ il tentatîf"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Selezione un file CSV che al conten lis colonis dal titul e de descrizion."
+
+msgid "Manage categories used to classify questions."
+msgstr "Gjestì lis categoriis dopradis par classificâ lis domandis."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Gjestì lis categoriis dopradis par classificâ i esercizis."
+
+msgid "Could not load categories"
+msgstr "No si à podût cjariâ lis categoriis"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Categoriis importadis: %s. Riis saltadis: %s."
+
+msgid "Imported categories: %s."
+msgstr "Categoriis importadis: %s."
+
+msgid "Could not import categories"
+msgstr "No si à podût importâ lis categoriis"
+
+msgid "Could not save category"
+msgstr "No si à podût salvâ la categorie"
+
+msgid "Answer distribution"
+msgstr "Distribuzion des rispuestis"
+
+msgid "Configured answers"
+msgstr "Rispuestis configuradis"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Il cont des rispuestis detaiadis par cualchi gjenar di domande no al è ancjemò disponibil tal rapuart migrât."
+
+msgid "No report by question data found"
+msgstr "Nissun dât dal rapuart par domande cjatât"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Il cont des rispuestis detaiadis par chest gjenar di domande no al è ancjemò disponibil tal rapuart migrât."
+
+msgid "No answer distribution found"
+msgstr "Nissune distribuzion des rispuestis cjatade"
+
+msgid "Could not load report by question"
+msgstr "No si à podût cjariâ il rapuart par domande"
+
+msgid "Question settings"
+msgstr "Impostazions des domandis"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Lasse vueit o 0 par nissun limit di timp."
+
+msgid "Time limit in seconds"
+msgstr "Limit di timp in seconds"
+
+msgid "Attached questions"
+msgstr "Domandis tacadis"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Chi a son listadis dome lis domandis tacadis a cheste domande multimediâl dentri dal esercizi atuâl."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Nissune domande e je tacade a cheste domande multimediâl tal esercizi atuâl."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Cjame il model di document Office che i students a modificaràn cun OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Sostituî il document Office"
+
+msgid "Current Office document"
+msgstr "Document Office atuâl"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Cheste domande e je corete a man dopo che il student al à mandât il document modificât."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Il ponts totâi a son calcolâts come la some dai ponts dai hotspot."
+
+msgid "Global score"
+msgstr "Ponts globâi"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Selezione une rie dal hotspot, sielç la sô forme, po disegne sore de imagjin. Par i poligons, fâs clic su ogni pont e finìs il poligon, o fâs dopli clic par finî."
+
+msgid "Finish polygon"
+msgstr "Finìs il poligon"
+
+msgid "Calculated answer"
+msgstr "Rispueste calcolade"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Scrîf il to test chi sot e dopre lis parentesis cuadras [...] par definî un o plui spazis vueits."
+
+msgid "Lowest value"
+msgstr "Valôr plui bas"
+
+msgid "Highest value"
+msgstr "Valôr plui alt"
+
+msgid "Fill in blanks"
+msgstr "Completâ i vuots"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Dopre i marcadôrs selezionâts par definî i vuots. Esempli: La capitâl dal Perù e je [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Inserìs lis opzions dal menu a tendine, une rispueste par rie. Dopo segne lis rispuestis previodudis chi sot, come tal strument vecjo."
+
+msgid "Refresh answers"
+msgstr "Rinfriscâ lis rispuestis"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Cheste domande a combinazion cun menu a tendine e dopre un ponts globâl, come tal vecjo."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Inserìs almancul dôs opzions pal menu a tendine."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Cree prime lis opzions di destinazion, dopo coleghe ogni element ae opzion juste."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Cheste domande a combinazion di corispondence e dopre un ponts globâl, come tal vecjo."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Cree i passaçs e sielç la posizion previodude par ognun, come tal Draggable vecjo."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "I students a sielçin Vêr o Fals e dopo a selezionin il lôr nivel di sigurtât dilunc l'atempt. L'editôr al memorize i stes ponts Just/Errât e i nivei di sigurtât dal vecjo."
+
+msgid "Hotspot combination"
+msgstr "Combinazion hotspot"
+
+msgid "Add delineation"
+msgstr "Zontâ une delineazion"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Cheste domande su un document Office no à opzions di rispueste. Il so ponts al ven assegnât dilunc la corezion/riviodude dai risultâts."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Cheste domande di cjariament no à opzions di rispueste. Il so ponts al ven assegnât dilunc la corezion/riviodude dai risultâts."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Cheste domande di espression orâl no à opzions di rispueste. Il so ponts al ven assegnât dilunc la corezion/riviodude dai risultâts."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Cheste domande vierte no à opzions di rispueste. Il so ponts al ven assegnât dilunc la corezion/riviodude dai risultâts."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Zontâ un test di leture cun impostazions di velocitât di scori."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Zontâ contignût, media o contest di leture cence zontâ ponts."
+
+msgid "Insert a page break without adding score."
+msgstr "Inserìs une interuzion di pagjine cence zontâ ponts."
+
+msgid "Could not save question"
+msgstr "Impussibil salvâ la domande"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "A son permetûts dome i documents DOC, DOCX, XLS o XLSX."
+
+msgid "Please select an Office document."
+msgstr "Sielç un document Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Disegne almancul un hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Disegne almancul une delineazion."
+
+msgid "The fill in blanks text is required."
+msgstr "Il test di completament dai vuots al è obligatori."
+
+msgid "At least one expected answer is required."
+msgstr "E je necessarie almancul une rispueste previodude."
+
+msgid "At least two draggable items are required."
+msgstr "A son necessaris almancul doi elements strassinabii."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Ogni element strassinabil al scugne jessi colegât a une posizion di destinazion valide."
+
+msgid "At least two matching options are required."
+msgstr "A son necessariis almancul dôs opzions di corispondence."
+
+msgid "At least two matching pairs are required."
+msgstr "A son necessariis almancul dôs copleis di corispondence."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Ogni coplee di corispondence e scugne jessi colegade a une opzion valide."
+
+msgid "At least two answers are required."
+msgstr "A son necessariis almancul dôs rispuestis."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Ogni rispueste Vêr/Fals e scugne vê Vêr o Fals selezionât."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Une domande cun une uniche rispueste e scugne vê juste une rispueste juste."
+
+msgid "At least one correct answer is required."
+msgstr "E je necessarie almancul une rispueste juste."
+
+msgid "Could not load question"
+msgstr "Impussibil cjariâ la domande"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Sielç un cors e espuarte il rapuart globâl dai risultâts dal esercizi come CSV."
+
+msgid "Back to reports catalog"
+msgstr "Torne al catalic dai rapuarts"
+
+msgid "Could not load exercise global report"
+msgstr "Impussibil cjariâ il rapuart globâl dal esercizi"
+
+msgid "Imported questions"
+msgstr "Domandis importadis"
+
+msgid "Aiken content"
+msgstr "Contignût Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Impussibil cjariâ il gjeneradôr AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Impussibil gjenerâ il contignût Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Impussibil importâ il contignût Aiken gjenerât"
+
+msgid "Back to my courses"
+msgstr "Torne ai miei cors"
+
+msgid "Open report"
+msgstr "Vierç il rapuart"
+
+msgid "Questions with no automatic correction"
+msgstr "Domandis cence corezion automatiche"
+
+msgid "Could not load pending attempts"
+msgstr "Impussibil cjariâ i tentatîfs in spiete"
+
+msgid "Skipped questions"
+msgstr "Domandis saltadis"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "L'importazion Aiken distribuìs chest pês totâl tra lis domandis importadis, gjavât che une domande definìs SCORE."
+
+msgid "Import warnings"
+msgstr "Avîs di importazion"
+
+msgid "Could not import questions"
+msgstr "No si à podût importâ lis domandis"
+
+msgid "No question statistics found"
+msgstr "No si à cjatât statistichis des domandis"
+
+msgid "Could not load question statistics"
+msgstr "No si à podût cjariâ lis statistichis des domandis"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Tu puedis ancje colegâ un client MCP diretamentri indicant chel endpoint:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Nissune aplicazion e je colegade tal moment al to account."
+
+msgid "Connected on"
+msgstr "Colegât su"
+
+msgid "Last used"
+msgstr "Ultime utilizazion"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s nol podarà plui jentrâ tal to account Chamilo. Continuâ?"
+
+msgid "Application revoked"
+msgstr "Aplicazion revocade"
+
+msgid "Copied to clipboard"
+msgstr "Copiât tal sclip"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "No si à podût copiâ l'endpoint MCP"
+
+msgid "MCP endpoint"
+msgstr "Endpoint MCP"
+
+msgid "API key"
+msgstr "Clâf API"
+
+msgid "Last used at"
+msgstr "Ultime utilizazion a"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Copie cheste clâf cumò. No si mostrarà plui."
+
+msgid "Rotate API key"
+msgstr "Rinviâ la clâf API"
+
+msgid "Revoke API key"
+msgstr "Revocâ la clâf API"
+
+msgid "Remote MCP connection"
+msgstr "Conession remote MCP"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Configure il to client MCP cun chescj valôrs:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "La clâf atuâl no funzionarà plui. Continuâ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "E je stade gjenerade une gnove clâf API personâl MCP. Continuâ?"
+
+msgid "MCP API key generated"
+msgstr "Clâf API MCP gjenerade"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "I clients MCP colegâts cun cheste clâf no funzionaran plui. Continuâ?"
+
+msgid "MCP API key revoked"
+msgstr "Clâf API MCP revocade"
+
+msgid "Could not copy the API key"
+msgstr "No si à podût copiâ la clâf API"
+
+msgid "Project"
+msgstr "Projet"
+
+msgid "Close old tickets"
+msgstr "Sierâ i vecjos tickets"
+
+msgid "Close tickets older than seven days?"
+msgstr "Sierâ i tickets plui vecjos di siet dîs?"
+
+msgid "Assignment history"
+msgstr "Storic des assegnazions"
+
+msgid "Translate with AI"
+msgstr "Tradûs cun IA"
+
+msgid "Target language"
+msgstr "Lenghe di destinazion"
+
+msgid "Please select a provider"
+msgstr "Sielç un furnidôr"
+
+msgid "Generate translation"
+msgstr "Gjenerâ la traduzion"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Almancul une sezion des cundizions gjenerâls e scjampis à di contignî test."
+
+msgid "No active target languages are available."
+msgstr "No son disponibilis lenghis di destinazion atîvis."
+
+msgid "Tutor"
+msgstr "Tutor"
+
+msgid "Access dates"
+msgstr "Datis di acès"
+
+msgid "Coach access dates"
+msgstr "Datis di acès dal coach"
+
+msgid "No sessions found"
+msgstr "No si à cjatât sessions"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Sielç i cors che chest utent nol à di podê jentrâ in cheste session."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Un utent nol pues jessi blocât di ducj i cors de session. Anule la sotscrizion dal utent."
+
+msgid "Users subscribed to this session"
+msgstr "Utents sotscrits a cheste session"
+
+msgid "No available users found"
+msgstr "No si à cjatât utents disponibii"
+
+msgid "Subscribe this user to the session?"
+msgstr "Sotscrivi chest utent ae session?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Sotscrivi i utents selezionâts ae session?"
+
+msgid "General tutor planning"
+msgstr "Planificazion gjenerâl dal tutor"
+
+msgid "User is already registered by another tutor."
+msgstr "L'utent al è za regjistrât di un altri tutor."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Tu stâs ricevint une copie parcè che tu sês tutor dal cors"
+
+msgid "General tutor"
+msgstr "Tutor gjenerâl"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Considerâ i cors, i tutors, un supuart tecnic, i docents e/o i materiâi disponibii."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutors iscrits come docents tal cors %s"
+
+msgid "Tutor name"
+msgstr "Non dal tutor"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "I tutors di session a son coordinadôrs pe session e a puedin agî come tutors par ogni cors te session. Dome i utents cun rûl di docent a puedin jessi selezionâts come tutors di session."
+
+msgid "Access start date for tutors"
+msgstr "Date di inizi di acès pai tutors"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Date cuant che la session e je metude a disposizion dai tutors, par permeti di preparâle prime che i students si coleghin"
+
+msgid "Access end date for tutors"
+msgstr "Date di fin di acès pai tutors"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Date cuant che la session e je sierade pai tutors. Il ritard adizionâl al permetarà di espuartâ dâts di seguitament rilevants"
+
+msgid "Tutor and student"
+msgstr "Tutor e student"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Chest rapuart al mostre la distribuzion setemanâl des sessions par tutor gjenerâl tal intervâl di date selezionât."
+
+msgid "User is general tutor in some sessions"
+msgstr "L'utent al è tutor gjenerâl in cualchi session"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "I docents a saran zontâts come tutors in dutis lis sessions dai cors."
+
+msgid "Delete failed: invalid question id."
+msgstr "Eliminazion falide: ID di domande no valit."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Numar medi di sessions par tutor gjenerâl di session"
+
+msgid "No room"
+msgstr "Nissune aule"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Impuartâ i docents dal cors come tutors dal cors te session"
+
+msgid "Clean and update course tutors"
+msgstr "Netâ e inzornâ i tutors dal cors"
+
+msgid "Add me as tutor"
+msgstr "Zontimi come tutor"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Impussibil zontâ il sondagi al percors di aprendiment"
+
+msgid "Access dates for tutors"
+msgstr "Datis di acès pai tutors"
+
+msgid "Tutor and group member"
+msgstr "Tutor e membru dal grup"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Il limit gjornadîr di token AI al è stât rindiât. Prove di gnûf doman."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Il limit mensîl di token AI al è stât rindiât. Prove di gnûf il mês prossim."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Chest codiç di cors al esist za, sielç un altri codiç."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Chest titul di cors al esist za, sielç un altri titul."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Cheste visibilitât dal strument no pues jessi modificade"
+
+msgid "Invalid visibility"
+msgstr "Visibilitât no valide"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Tu ricevis une copie parcè che tu sês un dai tutors dal cors"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Tu ricevis une copie parcè che tu sês il tutor dal cors"
+
+msgid "Manual completion"
+msgstr "Completament manuâl"
+
+msgid "Send to tutors"
+msgstr "Mande ai tutors"
+
+msgid "Lab title"
+msgstr "Titul dal laboratori"
+
+msgid "Lab week"
+msgstr "Setemane dal laboratori"
+
+msgid "Final exam access rule"
+msgstr "Regule di acès al esam finâl"
+
+msgid "Course completion rule"
+msgstr "Regule di completament dal cors"
+
+msgid "You have been invited to join a course"
+msgstr "Tu sês stât invitât a jentrâ intun cors"
+
+msgid "No user has been found"
+msgstr "Nissun utent al è stât cjatât"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "L'utent selezionât no pues jessi iscrit in chest contest"
+
+msgid "No change has been made"
+msgstr "Nissun cambiament al è stât fat"
+
+msgid "Back to group list"
+msgstr "Torne ae liste dai grups"
+
+msgid "Remove class link"
+msgstr "Gjave colegament ae classe"
+
+msgid "Group settings"
+msgstr "Impostazions dal grup"
+
+msgid "Self-registration allowed"
+msgstr "Regjistrazion libare permetude"
+
+msgid "Self-unregistration allowed"
+msgstr "Anulament de regjistrazion libare permetût"
+
+msgid "This group is linked to the class"
+msgstr "Chest grup al è colegât ae classe"
+
+msgid "Create one or more empty course groups"
+msgstr "Cree un o plui grups di cors vueits"
+
+msgid "Number of places"
+msgstr "Numar di puescj"
+
+msgid "Base group"
+msgstr "Grup di base"
+
+msgid "Share"
+msgstr "Condivît"
+
+msgid "Collaboration"
+msgstr "Colaborazion"
+
+msgid "The group title is required."
+msgstr "Il titul dal grup al è obligatori."
+
+msgid "Back to group area"
+msgstr "Torne ae aree dai grups"
+
+msgid "Members are managed by the linked class"
+msgstr "I membris a son gjestîts de classe colegade"
+
+msgid "%s groups selected"
+msgstr "%s grups selezionâts"
+
+msgid "Fill selected groups"
+msgstr "Jemple i grups selezionâts"
+
+msgid "Empty selected groups"
+msgstr "Vueide i grups selezionâts"
+
+msgid "Fill group"
+msgstr "Jemple il grup"
+
+msgid "Empty group"
+msgstr "Vueide il grup"
+
+msgid "Groups per user"
+msgstr "Grups par utent"
+
+msgid "No tutors"
+msgstr "Nissun tutor"
+
+msgid "No users"
+msgstr "Nissun utent"
+

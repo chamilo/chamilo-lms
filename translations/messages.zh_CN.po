@@ -37506,3 +37506,1431 @@ msgstr "以干净的扁平设计风格，使用平台配色作为点缀，呈现
 msgid "Back to account"
 msgstr "返回账户"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "您的反馈将帮助我们改进未来的培训课程。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "感谢您分享反馈。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "您对培训的整体质量满意吗？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "您对内容的关联性满意吗？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "您对讲解的清晰度满意吗？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "您对培训的组织和节奏满意吗？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "您对所学内容的实用性满意吗？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "您会向他人推荐本次培训吗？"
+
+msgid "What should we improve in future editions?"
+msgstr "未来版本中我们应改进哪些方面？"
+
+msgid "Very satisfied"
+msgstr "非常满意"
+
+msgid "Satisfied"
+msgstr "满意"
+
+msgid "Neutral"
+msgstr "中立"
+
+msgid "Dissatisfied"
+msgstr "不满意"
+
+msgid "Very dissatisfied"
+msgstr "非常不满意"
+
+msgid "Add destination"
+msgstr "添加目标"
+
+msgid "Add this test to the assessment tool"
+msgstr "将此测试添加到评估工具"
+
+msgid "Attempts and timing"
+msgstr "尝试次数与时间"
+
+msgid "Available questions"
+msgstr "可用题目"
+
+msgid "Cancel and return to learning path"
+msgstr "取消并返回学习路径"
+
+msgid "Category destinations"
+msgstr "类别目标"
+
+msgid "Classification"
+msgstr "分类"
+
+msgid "Context"
+msgstr "上下文"
+
+msgid "Could not load exercise configuration"
+msgstr "无法加载练习配置"
+
+msgid "Could not save exercise"
+msgstr "无法保存练习"
+
+msgid "Display and learning path"
+msgstr "显示与学习路径"
+
+msgid "Edit test"
+msgstr "编辑测试"
+
+msgid "Exercise settings saved."
+msgstr "练习设置已保存。"
+
+msgid "Extra settings"
+msgstr "额外设置"
+
+msgid "Feedback and results"
+msgstr "反馈与结果"
+
+msgid "Finish exercise"
+msgstr "完成练习"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "将此练习的语言标识为资源元数据。该操作本身不会启用搜索索引。"
+
+msgid "Maximum score (%)"
+msgstr "最高得分（%）"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "元数据包含为练习配置的技能和附加字段。此项为可选，保持隐藏直至打开。"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "此练习尚无可用的题目类别。"
+
+msgid "Question categories matrix"
+msgstr "题目类别矩阵"
+
+msgid "Questions behavior"
+msgstr "题目行为"
+
+msgid "Random by category"
+msgstr "按类别随机"
+
+msgid "Remove destination"
+msgstr "移除目标"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "规则按得分百分比升序评估。选择“完成练习”以结束测试。"
+
+msgid "Score and final messages"
+msgstr "得分与最终消息"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "部分选项在练习创建后将被锁定。"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "此值以分钟为单位存储为总时长。"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "使用 0 保留所有可用题目。使用 -1 表示允许所有可用题目。"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "使用这些字段对练习进行分类，与其显示选项无关。"
+
+msgid "Invite by email"
+msgstr "通过电子邮件邀请"
+
+msgid "Invitation has been sent"
+msgstr "邀请已发送"
+
+msgid "Sent on"
+msgstr "发送于"
+
+msgid "Accepted on"
+msgstr "接受于"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "本课程在教学周期中开放。在此发送邀请将使收件人订阅整个教学周期 %s，而非仅本课程。"
+
+msgid "Revoke"
+msgstr "撤销"
+
+msgid "Revoked"
+msgstr "已撤销"
+
+msgid "Invitation has been revoked"
+msgstr "邀请已撤销"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "确定要撤销发送给 %s 的邀请吗？"
+
+msgid "No default room"
+msgstr "无默认教室"
+
+msgid "Floor"
+msgstr "楼层"
+
+msgid "Capacity"
+msgstr "容量"
+
+msgid "Use attendance default room"
+msgstr "使用考勤默认教室"
+
+msgid "Floor number"
+msgstr "楼层号"
+
+msgid "Copy to students"
+msgstr "复制给学生"
+
+msgid "Generate a quick test on this topic"
+msgstr "基于此主题快速生成测试"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "保存的文档内容将发送至 AI 模型进行处理。"
+
+msgid "MCP API key"
+msgstr "MCP API 密钥"
+
+msgid "Authorized applications"
+msgstr "已授权应用"
+
+msgid "Your session is about to expire"
+msgstr "您的会话即将过期"
+
+msgid "Do you want to continue your session?"
+msgstr "是否继续会话？"
+
+msgid "Stay connected"
+msgstr "保持连接"
+
+msgid "You will be signed out in %s seconds."
+msgstr "您将在 %s 秒后退出登录。"
+
+msgid "No descriptions available yet."
+msgstr "暂无描述。"
+
+msgid "%s users selected"
+msgstr "已选择 %s 位用户"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "所选用户已订阅课程"
+
+msgid "Import teachers"
+msgstr "导入教师"
+
+msgid "Import learners"
+msgstr "导入学员"
+
+msgid "Select CSV file"
+msgstr "选择 CSV 文件"
+
+msgid "Some users could not be subscribed"
+msgstr "部分用户无法订阅"
+
+msgid "Browse available classes"
+msgstr "浏览可用班级"
+
+msgid "Back to linked classes"
+msgstr "返回已关联班级"
+
+msgid "No classes are currently linked to this course."
+msgstr "目前没有班级与此课程关联。"
+
+msgid "No available classes were found for this course."
+msgstr "未找到此课程的可用班级。"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "确定要取消订阅所选用户吗？"
+
+msgid "Learning path access"
+msgstr "学习路径访问"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "仅选定的用户和群组可访问此学习路径。保存后进行管理。"
+
+msgid "All current and future course users can access this learning path."
+msgstr "所有当前及未来的课程用户均可访问此学习路径。"
+
+msgid "All course users"
+msgstr "所有课程用户"
+
+msgid "Selected users and groups"
+msgstr "选定用户和群组"
+
+msgid "No access"
+msgstr "无访问权限"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "仅此处添加的用户和群组可访问此学习路径。"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "题目数量上限为 %s"
+
+msgid "Open exercise player"
+msgstr "打开练习播放器"
+
+msgid "The score is hidden for this exercise."
+msgstr "此练习的得分已隐藏。"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "根据练习结果设置，批改已隐藏。"
+
+msgid "Progressive adaptive result"
+msgstr "渐进式自适应结果"
+
+msgid "Achieved level"
+msgstr "已达到的等级"
+
+msgid "Correction history"
+msgstr "批改历史"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "本次尝试的手动批改历史。"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "此练习使用雷达/蛛网结果模式。图表在此页面不可用。"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "根据练习结果设置，题目详情已隐藏。"
+
+msgid "Media question"
+msgstr "媒体题目"
+
+msgid "Pending correction"
+msgstr "待批改"
+
+msgid "No answer"
+msgstr "未作答"
+
+msgid "Blank %s"
+msgstr "空白 %s"
+
+msgid "Your order"
+msgstr "您的顺序"
+
+msgid "Correct order"
+msgstr "正确顺序"
+
+msgid "Delineation review"
+msgstr "标注审阅"
+
+msgid "Learner clicks"
+msgstr "学习者点击"
+
+msgid "Question image"
+msgstr "题目图片"
+
+msgid "No hotspot image available"
+msgstr "无热点图片可用"
+
+msgid "Learner delineation"
+msgstr "学习者标注"
+
+msgid "Expected delineation"
+msgstr "预期标注"
+
+msgid "Expected zones"
+msgstr "预期区域"
+
+msgid "Zone"
+msgstr "区域"
+
+msgid "Learner annotation"
+msgstr "学习者批注"
+
+msgid "No annotation image available"
+msgstr "无批注图片可用"
+
+msgid "This answer is pending teacher correction."
+msgstr "此答案待教师批改。"
+
+msgid "Teacher comment"
+msgstr "教师评语"
+
+msgid "Teacher correction"
+msgstr "教师批改"
+
+msgid "Save correction"
+msgstr "保存批改"
+
+msgid "Learner audio"
+msgstr "学习者音频"
+
+msgid "Download audio"
+msgstr "下载音频"
+
+msgid "No uploaded audio"
+msgstr "未上传音频"
+
+msgid "Learner Office document"
+msgstr "学习者 Office 文档"
+
+msgid "Learner file"
+msgstr "学习者文件"
+
+msgid "Download Office document"
+msgstr "下载 Office 文档"
+
+msgid "No submitted document"
+msgstr "未提交文档"
+
+msgid "No uploaded file"
+msgstr "未上传文件"
+
+msgid "Content item"
+msgstr "内容项"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "此问题类型无法在此页面审核。"
+
+msgid "Exercise completed"
+msgstr "练习已完成"
+
+msgid "Could not start the attempt"
+msgstr "无法开始尝试"
+
+msgid "Invalid exercise attempt"
+msgstr "无效的练习尝试"
+
+msgid "Could not load exercise result"
+msgstr "无法加载练习结果"
+
+msgid "Could not load AI providers"
+msgstr "无法加载 AI 提供商"
+
+msgid "Could not generate AI suggestion"
+msgstr "无法生成 AI 建议"
+
+msgid "Correction saved"
+msgstr "批改已保存"
+
+msgid "Could not save correction"
+msgstr "无法保存批改"
+
+msgid "Create exercise"
+msgstr "创建练习"
+
+msgid "Exercise categories"
+msgstr "练习分类"
+
+msgid "Question categories"
+msgstr "问题分类"
+
+msgid "Search by exercise title or description."
+msgstr "按练习标题或描述搜索。"
+
+msgid "Search exercises"
+msgstr "搜索练习"
+
+msgid "No exercises found"
+msgstr "未找到练习"
+
+msgid "Open exercise"
+msgstr "打开练习"
+
+msgid "Disable autolaunch"
+msgstr "禁用自动启动"
+
+msgid "Enable autolaunch"
+msgstr "启用自动启动"
+
+msgid "Export QTI2"
+msgstr "导出 QTI2"
+
+msgid "Bulk actions"
+msgstr "批量操作"
+
+msgid "Selected exercises"
+msgstr "已选练习"
+
+msgid "No exercises selected"
+msgstr "未选择练习"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "确定要对所选练习执行此操作吗？"
+
+msgid "Bulk action completed"
+msgstr "批量操作已完成"
+
+msgid "Could not update exercises"
+msgstr "无法更新练习"
+
+msgid "Could not update exercise"
+msgstr "无法更新练习"
+
+msgid "Copy exercise"
+msgstr "复制练习"
+
+msgid "Delete exercise"
+msgstr "删除练习"
+
+msgid "Could not load exercises"
+msgstr "无法加载练习"
+
+msgid "No limit"
+msgstr "无限制"
+
+msgid "Add selected questions to the test"
+msgstr "将所选问题添加到测试"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "此问题已用于活动测试，无法在此编辑。"
+
+msgid "This question cannot be edited here."
+msgstr "此问题无法在此编辑。"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "此问题已用于活动测试，无法在此删除。"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "此问题无法删除，因为您的访问权限受平台设置限制。"
+
+msgid "Already in test"
+msgstr "已在测试中"
+
+msgid "Select at least one question."
+msgstr "请至少选择一个问题。"
+
+msgid "Question bank updated"
+msgstr "问题库已更新"
+
+msgid "Could not update the question bank"
+msgstr "无法更新问题库"
+
+msgid "Could not load the question bank"
+msgstr "无法加载问题库"
+
+msgid "Total score"
+msgstr "总分"
+
+msgid "Starting"
+msgstr "开始"
+
+msgid "Attempt history"
+msgstr "尝试历史"
+
+msgid "No attempts yet"
+msgstr "尚无尝试"
+
+msgid "Invalid exercise"
+msgstr "无效的练习"
+
+msgid "Could not load exercise overview"
+msgstr "无法加载练习概览"
+
+msgid "Open test"
+msgstr "打开测试"
+
+msgid "Random answers"
+msgstr "随机答案"
+
+msgid "Prevent moving backwards"
+msgstr "禁止后退"
+
+msgid "Previous button hidden"
+msgstr "隐藏上一题按钮"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "此练习使用了需要不同测试播放器的选项。"
+
+msgid "Continue test"
+msgstr "继续测试"
+
+msgid "Attempt started"
+msgstr "开始答题"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "教师预览不会创建可追踪的答题记录。"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "开始或继续练习答题。草稿答案可在最终提交前保存。"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "已达到时间限制。正在结束答题。"
+
+msgid "Question time reached. Saving your answer."
+msgstr "已达到题目时间限制。正在保存您的答案。"
+
+msgid "Finishing"
+msgstr "正在结束"
+
+msgid "Draft saved"
+msgstr "草稿已保存"
+
+msgid "Statement"
+msgstr "题干"
+
+msgid "Drop each option on the matching answer"
+msgstr "将每个选项拖放到对应的答案上"
+
+msgid "Clear match"
+msgstr "清除匹配"
+
+msgid "Click to place the selected option here"
+msgstr "点击此处放置所选选项"
+
+msgid "Select an option, then click here"
+msgstr "选择一个选项，然后点击此处"
+
+msgid "Already matched"
+msgstr "已匹配"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "您可以将选项拖到答案上，或先选择选项再点击目标框。"
+
+msgid "Put the items in the correct order."
+msgstr "请按正确顺序排列项目。"
+
+msgid "Move left"
+msgstr "向左移动"
+
+msgid "Move right"
+msgstr "向右移动"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "您可以左右拖动项目，或使用移动按钮更改顺序。"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "您可以拖动项目或使用移动按钮更改顺序。"
+
+msgid "Or upload an audio file"
+msgstr "或上传音频文件"
+
+msgid "Selected audio"
+msgstr "已选音频"
+
+msgid "Uploaded audio"
+msgstr "已上传音频"
+
+msgid "Office document"
+msgstr "Office 文档"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "在下方编辑器中完成文档。该文件将作为附件提交，供教师批改。"
+
+msgid "Reload Office editor"
+msgstr "重新加载 Office 编辑器"
+
+msgid "Prepare Office document"
+msgstr "准备 Office 文档"
+
+msgid "Open in new tab"
+msgstr "在新标签页中打开"
+
+msgid "Preparing Office document"
+msgstr "正在准备 Office 文档"
+
+msgid "Submitted document"
+msgstr "已提交文档"
+
+msgid "Annotation tools"
+msgstr "标注工具"
+
+msgid "Text to place"
+msgstr "待放置文本"
+
+msgid "Click the image to place the text annotation."
+msgstr "点击图片放置文本标注。"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "点击图片添加路径点。使用“开始新路径”可分隔路径。"
+
+msgid "Start new path"
+msgstr "开始新路径"
+
+msgid "Current annotations"
+msgstr "当前标注"
+
+msgid "Remove point"
+msgstr "移除点"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "点击图片绘制轮廓多边形。"
+
+msgid "Click a marker to remove it."
+msgstr "点击标记以移除。"
+
+msgid "Placed"
+msgstr "已放置"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "选择一个答案，然后点击图片进行标记。"
+
+msgid "Reading speed"
+msgstr "阅读速度"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "此题型无法在此播放器中显示。"
+
+msgid "Save draft"
+msgstr "保存草稿"
+
+msgid "I confirm that my answers were saved."
+msgstr "我确认已保存我的答案。"
+
+msgid "Finish test"
+msgstr "结束测试"
+
+msgid "Attempt finished"
+msgstr "尝试已完成"
+
+msgid "Question category"
+msgstr "题目类别"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "您已完成与此题目类别相关的题目，这是您返回修改这些题目的最后机会。"
+
+msgid "Question time left"
+msgstr "题目剩余时间"
+
+msgid "Time left"
+msgstr "剩余时间"
+
+msgid "Current attempt"
+msgstr "当前尝试"
+
+msgid "Could not save draft answer"
+msgstr "无法保存草稿答案"
+
+msgid "Could not load exercise"
+msgstr "无法加载练习"
+
+msgid "Draft answer saved"
+msgstr "草稿答案已保存"
+
+msgid "Could not finish the attempt"
+msgstr "无法完成尝试"
+
+msgid "Could not prepare Office document"
+msgstr "无法准备 Office 文档"
+
+msgid "Back to learner score"
+msgstr "返回学习者分数"
+
+msgid "Disable auto refresh"
+msgstr "禁用自动刷新"
+
+msgid "Enable auto refresh"
+msgstr "启用自动刷新"
+
+msgid "Live window"
+msgstr "实时窗口"
+
+msgid "Ongoing attempts"
+msgstr "进行中的尝试"
+
+msgid "Completed attempts"
+msgstr "已完成的尝试"
+
+msgid "Started"
+msgstr "开始时间"
+
+msgid "Last activity"
+msgstr "最后活动"
+
+msgid "Could not load live results"
+msgstr "无法加载实时结果"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "此练习为只读，因为它已包含在学习路径中。"
+
+msgid "Select a question type to create a question."
+msgstr "请选择一个题目类型以创建题目。"
+
+msgid "Click to preview"
+msgstr "点击预览"
+
+msgid "Hide preview"
+msgstr "隐藏预览"
+
+msgid "Shape"
+msgstr "形状"
+
+msgid "Coordinates"
+msgstr "坐标"
+
+msgid "Blanks"
+msgstr "填空"
+
+msgid "Switchable blanks"
+msgstr "可切换填空"
+
+msgid "Blank"
+msgstr "填空"
+
+msgid "Input width"
+msgstr "输入框宽度"
+
+msgid "Orientation"
+msgstr "方向"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "当前练习反馈模式下不可用"
+
+msgid "Not available in the learning path creation flow"
+msgstr "学习路径创建流程中不可用"
+
+msgid "Delete question"
+msgstr "删除题目"
+
+msgid "Could not update exercise questions"
+msgstr "无法更新练习题目"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "无法将练习添加到学习路径"
+
+msgid "A valid exercise id is required."
+msgstr "需要有效的练习 ID。"
+
+msgid "Could not load exercise questions"
+msgstr "无法加载练习题目"
+
+msgid "Delete selected attempts"
+msgstr "删除选中的尝试"
+
+msgid "Before date"
+msgstr "截止日期前"
+
+msgid "Pending corrections"
+msgstr "待批改"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "此练习已被成绩册锁定。尝试清理操作已禁用。"
+
+msgid "No attempts found"
+msgstr "未找到尝试"
+
+msgid "Review"
+msgstr "审阅"
+
+msgid "Print/PDF"
+msgstr "打印/PDF"
+
+msgid "Could not load exercise report"
+msgstr "无法加载练习报告"
+
+msgid "Select at least one attempt"
+msgstr "请至少选择一次尝试"
+
+msgid "Delete selected attempts?"
+msgstr "删除选中的尝试？"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "发送已审阅尝试的结果邮件？"
+
+msgid "Could not send emails"
+msgstr "无法发送邮件"
+
+msgid "Exercise result emails sent"
+msgstr "已发送练习结果邮件"
+
+msgid "Skipped"
+msgstr "已跳过"
+
+msgid "Close attempt?"
+msgstr "关闭尝试？"
+
+msgid "Attempt closed"
+msgstr "尝试已关闭"
+
+msgid "Could not close attempt"
+msgstr "无法关闭尝试"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "通过邮件将本次尝试结果发送给学习者？"
+
+msgid "Email sent"
+msgstr "邮件已发送"
+
+msgid "Could not send email"
+msgstr "无法发送邮件"
+
+msgid "Attempt deleted"
+msgstr "尝试已删除"
+
+msgid "Could not delete attempt"
+msgstr "无法删除尝试"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "请选择包含标题和描述列的 CSV 文件。"
+
+msgid "Manage categories used to classify questions."
+msgstr "管理用于分类问题的类别。"
+
+msgid "Manage categories used to classify exercises."
+msgstr "管理用于分类练习的类别。"
+
+msgid "Could not load categories"
+msgstr "无法加载类别"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "已导入类别：%s。已跳过行：%s。"
+
+msgid "Imported categories: %s."
+msgstr "已导入类别：%s。"
+
+msgid "Could not import categories"
+msgstr "无法导入类别"
+
+msgid "Could not save category"
+msgstr "无法保存类别"
+
+msgid "Answer distribution"
+msgstr "答案分布"
+
+msgid "Configured answers"
+msgstr "已配置答案"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "某些题型的详细答案统计在迁移后的报告中暂不可用。"
+
+msgid "No report by question data found"
+msgstr "未找到按问题分类的报告数据"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "此题型的详细答案统计在迁移后的报告中暂不可用。"
+
+msgid "No answer distribution found"
+msgstr "未找到答案分布"
+
+msgid "Could not load report by question"
+msgstr "无法加载按问题分类的报告"
+
+msgid "Question settings"
+msgstr "问题设置"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "留空或填 0 表示无时间限制。"
+
+msgid "Time limit in seconds"
+msgstr "时间限制（秒）"
+
+msgid "Attached questions"
+msgstr "已附加的问题"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "此处仅列出当前练习中附加到此媒体问题的题目。"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "当前练习中没有附加到此媒体问题的题目。"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "上传学习者将使用 OnlyOffice 编辑的 Office 文档模板。"
+
+msgid "Replace Office document"
+msgstr "替换 Office 文档"
+
+msgid "Current Office document"
+msgstr "当前 Office 文档"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "学习者提交编辑后的文档后，此题将手动批改。"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "总分按热点区域得分之和计算。"
+
+msgid "Global score"
+msgstr "全局得分"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "选择一个热点行，选定形状，然后在图像上绘制。多边形请依次点击各点完成绘制，或双击结束。"
+
+msgid "Finish polygon"
+msgstr "完成多边形"
+
+msgid "Calculated answer"
+msgstr "计算型答案"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "请在下方输入文本，并使用方括号 [...] 定义一个或多个空白。"
+
+msgid "Lowest value"
+msgstr "最低值"
+
+msgid "Highest value"
+msgstr "最高值"
+
+msgid "Fill in blanks"
+msgstr "填空"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "使用选定的标记定义空白。例如：秘鲁的首都是 [利马]。"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "输入下拉选项，每行一个答案。然后在下方标记正确答案，操作方式与旧版工具相同。"
+
+msgid "Refresh answers"
+msgstr "刷新答案"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "此下拉组合题使用全局得分，与旧版一致。"
+
+msgid "Please enter at least two dropdown options."
+msgstr "请至少输入两个下拉选项。"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "请先创建目标选项，然后将每个项目链接到正确选项。"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "此匹配组合题使用全局分数，与旧版相同。"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "创建步骤并选择每个步骤的预期位置，与旧版拖拽题相同。"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "学习者在作答时选择正确或错误，然后选择其确定程度。编辑器保存与旧版相同的正确/错误分数和确定程度。"
+
+msgid "Hotspot combination"
+msgstr "热点组合"
+
+msgid "Add delineation"
+msgstr "添加划界"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "此 Office 文档题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "此上传题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "此口头表达题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "此开放题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "添加带滚动速度设置的阅读文本。"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "添加内容、媒体或阅读背景而不添加分数。"
+
+msgid "Insert a page break without adding score."
+msgstr "插入分页符而不添加分数。"
+
+msgid "Could not save question"
+msgstr "无法保存题目"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "仅允许 DOC、DOCX、XLS 或 XLSX 文档。"
+
+msgid "Please select an Office document."
+msgstr "请选择一个 Office 文档。"
+
+msgid "Please draw at least one hotspot."
+msgstr "请至少绘制一个热点。"
+
+msgid "Please draw at least one delineation."
+msgstr "请至少绘制一个划界。"
+
+msgid "The fill in blanks text is required."
+msgstr "填空文本为必填项。"
+
+msgid "At least one expected answer is required."
+msgstr "至少需要一个预期答案。"
+
+msgid "At least two draggable items are required."
+msgstr "至少需要两个可拖拽项。"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "每个可拖拽项必须链接到有效目标位置。"
+
+msgid "At least two matching options are required."
+msgstr "至少需要两个匹配选项。"
+
+msgid "At least two matching pairs are required."
+msgstr "至少需要两个匹配对。"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "每个匹配对必须链接到有效选项。"
+
+msgid "At least two answers are required."
+msgstr "至少需要两个答案。"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "每个正确/错误答案必须选择正确或错误。"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "唯一答案题必须恰好有一个正确答案。"
+
+msgid "At least one correct answer is required."
+msgstr "至少需要一个正确答案。"
+
+msgid "Could not load question"
+msgstr "无法加载题目"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "选择课程并将全局练习结果报告导出为 CSV。"
+
+msgid "Back to reports catalog"
+msgstr "返回报告目录"
+
+msgid "Could not load exercise global report"
+msgstr "无法加载练习全局报告"
+
+msgid "Imported questions"
+msgstr "已导入的题目"
+
+msgid "Aiken content"
+msgstr "Aiken 内容"
+
+msgid "Could not load AI Aiken generator"
+msgstr "无法加载 AI Aiken 生成器"
+
+msgid "Could not generate Aiken content"
+msgstr "无法生成 Aiken 内容"
+
+msgid "Could not import generated Aiken content"
+msgstr "无法导入生成的 Aiken 内容"
+
+msgid "Back to my courses"
+msgstr "返回我的课程"
+
+msgid "Open report"
+msgstr "打开报告"
+
+msgid "Questions with no automatic correction"
+msgstr "无自动批改的题目"
+
+msgid "Could not load pending attempts"
+msgstr "无法加载待处理尝试"
+
+msgid "Skipped questions"
+msgstr "已跳过的题目"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken 导入将此总权重分配到导入的题目，除非题目定义了 SCORE。"
+
+msgid "Import warnings"
+msgstr "导入警告"
+
+msgid "Could not import questions"
+msgstr "无法导入题目"
+
+msgid "No question statistics found"
+msgstr "未找到题目统计"
+
+msgid "Could not load question statistics"
+msgstr "无法加载题目统计"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "您也可以通过将 MCP 客户端指向以下端点直接连接："
+
+msgid "No applications are currently connected to your account."
+msgstr "目前没有应用程序连接到您的账户。"
+
+msgid "Connected on"
+msgstr "连接于"
+
+msgid "Last used"
+msgstr "最近使用"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s 将无法再访问您的 Chamilo 账户。继续？"
+
+msgid "Application revoked"
+msgstr "应用已撤销"
+
+msgid "Copied to clipboard"
+msgstr "已复制到剪贴板"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "无法复制 MCP 端点"
+
+msgid "MCP endpoint"
+msgstr "MCP 端点"
+
+msgid "API key"
+msgstr "API 密钥"
+
+msgid "Last used at"
+msgstr "最后使用于"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "立即复制此密钥。它不会再次显示。"
+
+msgid "Rotate API key"
+msgstr "轮换 API 密钥"
+
+msgid "Revoke API key"
+msgstr "撤销 API 密钥"
+
+msgid "Remote MCP connection"
+msgstr "远程 MCP 连接"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "使用以下值配置您的 MCP 客户端："
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "当前密钥将立即停止工作。继续？"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "将生成新的个人 MCP API 密钥。继续？"
+
+msgid "MCP API key generated"
+msgstr "MCP API 密钥已生成"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "使用此密钥的已连接 MCP 客户端将立即停止工作。继续？"
+
+msgid "MCP API key revoked"
+msgstr "MCP API 密钥已撤销"
+
+msgid "Could not copy the API key"
+msgstr "无法复制 API 密钥"
+
+msgid "Project"
+msgstr "项目"
+
+msgid "Close old tickets"
+msgstr "关闭旧工单"
+
+msgid "Close tickets older than seven days?"
+msgstr "关闭超过七天的工单？"
+
+msgid "Assignment history"
+msgstr "分配历史"
+
+msgid "Translate with AI"
+msgstr "使用 AI 翻译"
+
+msgid "Target language"
+msgstr "目标语言"
+
+msgid "Please select a provider"
+msgstr "请选择提供商"
+
+msgid "Generate translation"
+msgstr "生成翻译"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "至少一个条款与条件部分必须包含文本。"
+
+msgid "No active target languages are available."
+msgstr "没有可用的活动目标语言。"
+
+msgid "Tutor"
+msgstr "辅导教师"
+
+msgid "Access dates"
+msgstr "访问日期"
+
+msgid "Coach access dates"
+msgstr "辅导教师访问日期"
+
+msgid "No sessions found"
+msgstr "未找到会话"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "选择此用户在此会话中不得访问的课程。"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "用户不能被阻止访问会话中的所有课程。请取消订阅该用户。"
+
+msgid "Users subscribed to this session"
+msgstr "已订阅此会话的用户"
+
+msgid "No available users found"
+msgstr "未找到可用用户"
+
+msgid "Subscribe this user to the session?"
+msgstr "将此用户订阅到会话？"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "将选定用户订阅到会话？"
+
+msgid "General tutor planning"
+msgstr "辅导教师总体规划"
+
+msgid "User is already registered by another tutor."
+msgstr "用户已被另一位辅导教师注册。"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "您收到副本是因为您是课程辅导教师"
+
+msgid "General tutor"
+msgstr "总体辅导教师"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "考虑课程、辅导教师、技术支持、教师和/或可用材料。"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "在课程 %s 中作为教师订阅的辅导教师"
+
+msgid "Tutor name"
+msgstr "辅导教师姓名"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "会话辅导教师是会话的协调员，可以担任会话中每门课程的辅导教师。只有具有教师角色的用户才能被选为会话辅导教师。"
+
+msgid "Access start date for tutors"
+msgstr "辅导教师访问开始日期"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "会话对辅导教师开放的日期，以便他们在学生连接前进行准备"
+
+msgid "Access end date for tutors"
+msgstr "辅导教师访问结束日期"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "会话对辅导教师关闭的日期。额外延迟将允许他们导出所有相关跟踪信息"
+
+msgid "Tutor and student"
+msgstr "辅导教师与学生"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "此报告显示所选日期范围内每位普通辅导教师的会话周分布情况。"
+
+msgid "User is general tutor in some sessions"
+msgstr "用户是某些会话的普通辅导教师"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "教师将被添加为所有课程会话的辅导教师。"
+
+msgid "Delete failed: invalid question id."
+msgstr "删除失败：无效的问题 ID。"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "每位普通会话辅导教师的平均会话数"
+
+msgid "No room"
+msgstr "无教室"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "将课程教师导入为会话中的课程辅导教师"
+
+msgid "Clean and update course tutors"
+msgstr "清理并更新课程辅导教师"
+
+msgid "Add me as tutor"
+msgstr "将我添加为辅导教师"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "无法将调查添加到学习路径"
+
+msgid "Access dates for tutors"
+msgstr "辅导教师的访问日期"
+
+msgid "Tutor and group member"
+msgstr "辅导教师与小组成员"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "您已达到每日 AI 令牌限制。请明天再试。"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "您已达到每月 AI 令牌限制。请下月再试。"
+
+msgid "This course code already exists, please choose another code."
+msgstr "此课程代码已存在，请选择其他代码。"
+
+msgid "This course title already exists, please choose another title."
+msgstr "此课程标题已存在，请选择其他标题。"
+
+msgid "This tool visibility cannot be changed"
+msgstr "此工具的可见性无法更改"
+
+msgid "Invalid visibility"
+msgstr "无效的可见性"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "您收到副本是因为您是课程辅导教师之一"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "您收到副本是因为您是课程辅导教师"
+
+msgid "Manual completion"
+msgstr "手动完成"
+
+msgid "Send to tutors"
+msgstr "发送给辅导教师"
+
+msgid "Lab title"
+msgstr "实验标题"
+
+msgid "Lab week"
+msgstr "实验周"
+
+msgid "Final exam access rule"
+msgstr "期末考试访问规则"
+
+msgid "Course completion rule"
+msgstr "课程完成规则"
+
+msgid "You have been invited to join a course"
+msgstr "您已被邀请加入课程"
+
+msgid "No user has been found"
+msgstr "未找到用户"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "所选用户无法在此上下文中注册"
+
+msgid "No change has been made"
+msgstr "未进行任何更改"
+
+msgid "Back to group list"
+msgstr "返回小组列表"
+
+msgid "Remove class link"
+msgstr "移除班级链接"
+
+msgid "Group settings"
+msgstr "小组设置"
+
+msgid "Self-registration allowed"
+msgstr "允许自助注册"
+
+msgid "Self-unregistration allowed"
+msgstr "允许自助取消注册"
+
+msgid "This group is linked to the class"
+msgstr "此小组已链接到班级"
+
+msgid "Create one or more empty course groups"
+msgstr "创建一或多个空课程小组"
+
+msgid "Number of places"
+msgstr "名额数"
+
+msgid "Base group"
+msgstr "基础小组"
+
+msgid "Share"
+msgstr "共享"
+
+msgid "Collaboration"
+msgstr "协作"
+
+msgid "The group title is required."
+msgstr "小组标题为必填项。"
+
+msgid "Back to group area"
+msgstr "返回小组区域"
+
+msgid "Members are managed by the linked class"
+msgstr "成员由关联班级管理"
+
+msgid "%s groups selected"
+msgstr "已选择 %s 个小组"
+
+msgid "Fill selected groups"
+msgstr "填充所选小组"
+
+msgid "Empty selected groups"
+msgstr "清空所选小组"
+
+msgid "Fill group"
+msgstr "填充小组"
+
+msgid "Empty group"
+msgstr "空群组"
+
+msgid "Groups per user"
+msgstr "每用户群组数"
+
+msgid "No tutors"
+msgstr "无导师"
+
+msgid "No users"
+msgstr "无用户"
+

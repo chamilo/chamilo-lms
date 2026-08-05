@@ -2160,7 +2160,7 @@ foreach ($questionList as $questionId) {
         if (ONE_PER_PAGE == $objExercise->type || (ONE_PER_PAGE != $objExercise->type && 1 == $i)) {
             echo Display::panelCollapse(
                 get_lang('Description'),
-                Display::div($objExercise->description, ['class' => 'exercise_description wysiwyg']),
+                Display::div($objExercise->description, ['class' => 'exercise_description tiny-content']),
                 'exercise-description',
                 [],
                 'description',

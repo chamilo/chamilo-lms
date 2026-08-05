@@ -37518,3 +37518,1431 @@ msgstr "رسم توضيحي حديث وجذاب يمثل موضوع هذه ال�
 msgid "Back to account"
 msgstr "العودة إلى الحساب"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ستساعدنا ملاحظاتك في تحسين جلسات التدريب المستقبلية."
+
+msgid "Thank you for sharing your feedback."
+msgstr "شكراً لمشاركتك ملاحظاتك."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "ما مدى رضاك عن الجودة العامة للتدريب؟"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "ما مدى رضاك عن ملاءمة المحتوى؟"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "ما مدى رضاك عن وضوح الشروحات؟"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "ما مدى رضاك عن تنظيم وسرعة التدريب؟"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "ما مدى رضاك عن الفائدة العملية مما تعلمته؟"
+
+msgid "Would you recommend this training to other people?"
+msgstr "هل توصي بهذا التدريب لأشخاص آخرين؟"
+
+msgid "What should we improve in future editions?"
+msgstr "ما الذي يجب تحسينه في الإصدارات المستقبلية؟"
+
+msgid "Very satisfied"
+msgstr "راضٍ جداً"
+
+msgid "Satisfied"
+msgstr "راضٍ"
+
+msgid "Neutral"
+msgstr "محايد"
+
+msgid "Dissatisfied"
+msgstr "غير راضٍ"
+
+msgid "Very dissatisfied"
+msgstr "غير راضٍ جداً"
+
+msgid "Add destination"
+msgstr "إضافة وجهة"
+
+msgid "Add this test to the assessment tool"
+msgstr "إضافة هذا الاختبار إلى أداة التقييم"
+
+msgid "Attempts and timing"
+msgstr "المحاولات والتوقيت"
+
+msgid "Available questions"
+msgstr "الأسئلة المتاحة"
+
+msgid "Cancel and return to learning path"
+msgstr "إلغاء والعودة إلى مسار التعلم"
+
+msgid "Category destinations"
+msgstr "وجهات الفئة"
+
+msgid "Classification"
+msgstr "التصنيف"
+
+msgid "Context"
+msgstr "السياق"
+
+msgid "Could not load exercise configuration"
+msgstr "تعذر تحميل إعدادات التمرين"
+
+msgid "Could not save exercise"
+msgstr "تعذر حفظ التمرين"
+
+msgid "Display and learning path"
+msgstr "العرض ومسار التعلم"
+
+msgid "Edit test"
+msgstr "تعديل الاختبار"
+
+msgid "Exercise settings saved."
+msgstr "تم حفظ إعدادات التمرين."
+
+msgid "Extra settings"
+msgstr "إعدادات إضافية"
+
+msgid "Feedback and results"
+msgstr "التغذية الراجعة والنتائج"
+
+msgid "Finish exercise"
+msgstr "إنهاء التمرين"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "يحدد لغة هذا التمرين كبيانات وصفية للمورد. لا يُمكّن الفهرسة للبحث تلقائيًا."
+
+msgid "Maximum score (%)"
+msgstr "الدرجة القصوى (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "تحتوي البيانات الوصفية على المهارات والحقول الإضافية المُعدّة للتمارين. وهي اختيارية وتبقى مخفية حتى يتم فتحها."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "لا توجد فئات أسئلة متاحة لهذا التمرين بعد."
+
+msgid "Question categories matrix"
+msgstr "مصفوفة فئات الأسئلة"
+
+msgid "Questions behavior"
+msgstr "سلوك الأسئلة"
+
+msgid "Random by category"
+msgstr "عشوائي حسب الفئة"
+
+msgid "Remove destination"
+msgstr "إزالة الوجهة"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "تُقيَّم القواعد حسب نسبة الدرجة تصاعديًا. اختر إنهاء التمرين لإنهاء الاختبار."
+
+msgid "Score and final messages"
+msgstr "الدرجة والرسائل النهائية"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "بعض الخيارات تُقفل بعد إنشاء التمرين."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "تُخزن هذه القيمة كمدة إجمالية بالدقائق."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "استخدم 0 للاحتفاظ بجميع الأسئلة المتاحة. استخدم -1 حيث يُسمح بجميع الأسئلة المتاحة."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "استخدم هذه الحقول لتصنيف التمرين بشكل مستقل عن خيارات العرض."
+
+msgid "Invite by email"
+msgstr "دعوة عبر البريد الإلكتروني"
+
+msgid "Invitation has been sent"
+msgstr "تم إرسال الدعوة"
+
+msgid "Sent on"
+msgstr "أُرسلت في"
+
+msgid "Accepted on"
+msgstr "قُبلت في"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "هذه الدورة مفتوحة ضمن جلسة. إرسال دعوة هنا سيشترك المستلم في الجلسة بأكملها %s، وليس في هذه الدورة فقط."
+
+msgid "Revoke"
+msgstr "إلغاء"
+
+msgid "Revoked"
+msgstr "ملغى"
+
+msgid "Invitation has been revoked"
+msgstr "تم إلغاء الدعوة"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "هل أنت متأكد من رغبتك في إلغاء الدعوة المرسلة إلى %s؟"
+
+msgid "No default room"
+msgstr "لا توجد غرفة افتراضية"
+
+msgid "Floor"
+msgstr "الطابق"
+
+msgid "Capacity"
+msgstr "السعة"
+
+msgid "Use attendance default room"
+msgstr "استخدام غرفة الحضور الافتراضية"
+
+msgid "Floor number"
+msgstr "رقم الطابق"
+
+msgid "Copy to students"
+msgstr "نسخ إلى الطلاب"
+
+msgid "Generate a quick test on this topic"
+msgstr "إنشاء اختبار سريع حول هذا الموضوع"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "سيتم إرسال محتوى المستند المحفوظ إلى نموذج ذكاء اصطناعي للمعالجة."
+
+msgid "MCP API key"
+msgstr "مفتاح MCP API"
+
+msgid "Authorized applications"
+msgstr "التطبيقات المصرح بها"
+
+msgid "Your session is about to expire"
+msgstr "ستنتهي صلاحية جلستك قريبًا"
+
+msgid "Do you want to continue your session?"
+msgstr "هل تريد متابعة جلستك؟"
+
+msgid "Stay connected"
+msgstr "البقاء متصلاً"
+
+msgid "You will be signed out in %s seconds."
+msgstr "سيتم تسجيل خروجك خلال %s ثانية."
+
+msgid "No descriptions available yet."
+msgstr "لا توجد أوصاف متاحة بعد."
+
+msgid "%s users selected"
+msgstr "%s مستخدمين محددين"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "تم تسجيل المستخدمين المحددين في الدورة"
+
+msgid "Import teachers"
+msgstr "استيراد المعلمين"
+
+msgid "Import learners"
+msgstr "استيراد المتعلمين"
+
+msgid "Select CSV file"
+msgstr "اختر ملف CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "تعذر تسجيل بعض المستخدمين"
+
+msgid "Browse available classes"
+msgstr "تصفح الفصول المتاحة"
+
+msgid "Back to linked classes"
+msgstr "العودة إلى الفصول المرتبطة"
+
+msgid "No classes are currently linked to this course."
+msgstr "لا توجد فصول مرتبطة حاليًا بهذه الدورة."
+
+msgid "No available classes were found for this course."
+msgstr "لم يتم العثور على فصول متاحة لهذه الدورة."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "هل أنت متأكد من رغبتك في إلغاء تسجيل المستخدمين المحددين؟"
+
+msgid "Learning path access"
+msgstr "الوصول إلى مسار التعلم"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "يمكن للمستخدمين والمجموعات المحددة فقط الوصول إلى مسار التعلم هذا. قم بإدارتهم بعد الحفظ."
+
+msgid "All current and future course users can access this learning path."
+msgstr "يمكن لجميع مستخدمي الدورة الحاليين والمستقبليين الوصول إلى مسار التعلم هذا."
+
+msgid "All course users"
+msgstr "جميع مستخدمي الدورة"
+
+msgid "Selected users and groups"
+msgstr "المستخدمون والمجموعات المحددة"
+
+msgid "No access"
+msgstr "لا وصول"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "يمكن للمستخدمين والمجموعات المضافة هنا فقط الوصول إلى مسار التعلم هذا."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "عدد الأسئلة محدود بحد أقصى %s"
+
+msgid "Open exercise player"
+msgstr "فتح مشغل التمرين"
+
+msgid "The score is hidden for this exercise."
+msgstr "النتيجة مخفية لهذا التمرين."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "التصحيحات مخفية وفقًا لإعدادات نتيجة التمرين."
+
+msgid "Progressive adaptive result"
+msgstr "نتيجة تكيفية تدريجية"
+
+msgid "Achieved level"
+msgstr "المستوى المحقق"
+
+msgid "Correction history"
+msgstr "سجل التصحيح"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "سجل التصحيحات اليدوية التي تمت لهذه المحاولة."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "يستخدم هذا التمرين وضع نتيجة الرادار/الشبكة العنكبوتية. الرسم البياني غير متاح في هذه الصفحة."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "تفاصيل السؤال مخفية وفقًا لإعدادات نتيجة التمرين."
+
+msgid "Media question"
+msgstr "سؤال وسائط"
+
+msgid "Pending correction"
+msgstr "تصحيح معلق"
+
+msgid "No answer"
+msgstr "لا إجابة"
+
+msgid "Blank %s"
+msgstr "فراغ %s"
+
+msgid "Your order"
+msgstr "ترتيبك"
+
+msgid "Correct order"
+msgstr "الترتيب الصحيح"
+
+msgid "Delineation review"
+msgstr "مراجعة التحديد"
+
+msgid "Learner clicks"
+msgstr "نقرات المتعلم"
+
+msgid "Question image"
+msgstr "صورة السؤال"
+
+msgid "No hotspot image available"
+msgstr "لا توجد صورة نقطة ساخنة متاحة"
+
+msgid "Learner delineation"
+msgstr "تحديد المتعلم"
+
+msgid "Expected delineation"
+msgstr "التحديد المتوقع"
+
+msgid "Expected zones"
+msgstr "المناطق المتوقعة"
+
+msgid "Zone"
+msgstr "المنطقة"
+
+msgid "Learner annotation"
+msgstr "تعليق المتعلم"
+
+msgid "No annotation image available"
+msgstr "لا توجد صورة تعليق متاحة"
+
+msgid "This answer is pending teacher correction."
+msgstr "هذه الإجابة في انتظار تصحيح المعلم."
+
+msgid "Teacher comment"
+msgstr "تعليق المعلم"
+
+msgid "Teacher correction"
+msgstr "تصحيح المعلم"
+
+msgid "Save correction"
+msgstr "حفظ التصحيح"
+
+msgid "Learner audio"
+msgstr "صوت المتعلم"
+
+msgid "Download audio"
+msgstr "تنزيل الصوت"
+
+msgid "No uploaded audio"
+msgstr "لا يوجد صوت مرفوع"
+
+msgid "Learner Office document"
+msgstr "مستند أوفيس للمتعلم"
+
+msgid "Learner file"
+msgstr "ملف المتعلم"
+
+msgid "Download Office document"
+msgstr "تنزيل مستند أوفيس"
+
+msgid "No submitted document"
+msgstr "لا يوجد مستند مقدم"
+
+msgid "No uploaded file"
+msgstr "لا يوجد ملف مرفوع"
+
+msgid "Content item"
+msgstr "عنصر المحتوى"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "لا يمكن مراجعة نوع السؤال هذا في هذه الصفحة."
+
+msgid "Exercise completed"
+msgstr "تم إكمال التمرين"
+
+msgid "Could not start the attempt"
+msgstr "تعذر بدء المحاولة"
+
+msgid "Invalid exercise attempt"
+msgstr "محاولة تمرين غير صالحة"
+
+msgid "Could not load exercise result"
+msgstr "تعذر تحميل نتيجة التمرين"
+
+msgid "Could not load AI providers"
+msgstr "تعذر تحميل مزودي الذكاء الاصطناعي"
+
+msgid "Could not generate AI suggestion"
+msgstr "تعذر إنشاء اقتراح الذكاء الاصطناعي"
+
+msgid "Correction saved"
+msgstr "تم حفظ التصحيح"
+
+msgid "Could not save correction"
+msgstr "تعذر حفظ التصحيح"
+
+msgid "Create exercise"
+msgstr "إنشاء تمرين"
+
+msgid "Exercise categories"
+msgstr "فئات التمارين"
+
+msgid "Question categories"
+msgstr "فئات الأسئلة"
+
+msgid "Search by exercise title or description."
+msgstr "البحث حسب عنوان التمرين أو الوصف."
+
+msgid "Search exercises"
+msgstr "بحث التمارين"
+
+msgid "No exercises found"
+msgstr "لم يتم العثور على تمارين"
+
+msgid "Open exercise"
+msgstr "فتح التمرين"
+
+msgid "Disable autolaunch"
+msgstr "تعطيل التشغيل التلقائي"
+
+msgid "Enable autolaunch"
+msgstr "تمكين التشغيل التلقائي"
+
+msgid "Export QTI2"
+msgstr "تصدير QTI2"
+
+msgid "Bulk actions"
+msgstr "إجراءات جماعية"
+
+msgid "Selected exercises"
+msgstr "التمارين المحددة"
+
+msgid "No exercises selected"
+msgstr "لم يتم تحديد تمارين"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "هل أنت متأكد من تطبيق هذا الإجراء على التمارين المحددة؟"
+
+msgid "Bulk action completed"
+msgstr "اكتمل الإجراء الجماعي"
+
+msgid "Could not update exercises"
+msgstr "تعذر تحديث التمارين"
+
+msgid "Could not update exercise"
+msgstr "تعذر تحديث التمرين"
+
+msgid "Copy exercise"
+msgstr "نسخ التمرين"
+
+msgid "Delete exercise"
+msgstr "حذف التمرين"
+
+msgid "Could not load exercises"
+msgstr "تعذر تحميل التمارين"
+
+msgid "No limit"
+msgstr "بلا حد"
+
+msgid "Add selected questions to the test"
+msgstr "إضافة الأسئلة المحددة إلى الاختبار"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "هذا السؤال مستخدم في اختبار نشط ولا يمكن تعديله هنا."
+
+msgid "This question cannot be edited here."
+msgstr "لا يمكن تعديل هذا السؤال هنا."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "هذا السؤال مستخدم في اختبار نشط ولا يمكن حذفه هنا."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "لا يمكن حذف هذا السؤال لأن وصولك محدود بإعدادات المنصة."
+
+msgid "Already in test"
+msgstr "موجود بالفعل في الاختبار"
+
+msgid "Select at least one question."
+msgstr "حدد سؤالاً واحداً على الأقل."
+
+msgid "Question bank updated"
+msgstr "تم تحديث بنك الأسئلة"
+
+msgid "Could not update the question bank"
+msgstr "تعذر تحديث بنك الأسئلة"
+
+msgid "Could not load the question bank"
+msgstr "تعذر تحميل بنك الأسئلة"
+
+msgid "Total score"
+msgstr "الدرجة الكلية"
+
+msgid "Starting"
+msgstr "البدء"
+
+msgid "Attempt history"
+msgstr "سجل المحاولات"
+
+msgid "No attempts yet"
+msgstr "لا توجد محاولات بعد"
+
+msgid "Invalid exercise"
+msgstr "تمرين غير صالح"
+
+msgid "Could not load exercise overview"
+msgstr "تعذر تحميل نظرة عامة على التمرين"
+
+msgid "Open test"
+msgstr "فتح الاختبار"
+
+msgid "Random answers"
+msgstr "إجابات عشوائية"
+
+msgid "Prevent moving backwards"
+msgstr "منع الرجوع للخلف"
+
+msgid "Previous button hidden"
+msgstr "زر السابق مخفي"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "يستخدم هذا التمرين خيارات تتطلب مشغل اختبار مختلفاً."
+
+msgid "Continue test"
+msgstr "متابعة الاختبار"
+
+msgid "Attempt started"
+msgstr "بدأت المحاولة"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "معاينة المعلم لا تنشئ محاولة متتبعة."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "بدء أو استئناف محاولة تمرين. يمكن حفظ الإجابات المسودة قبل الإرسال النهائي."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "انتهت المدة الزمنية. إنهاء المحاولة."
+
+msgid "Question time reached. Saving your answer."
+msgstr "انتهت مدة السؤال. حفظ إجابتك."
+
+msgid "Finishing"
+msgstr "جارٍ الإنهاء"
+
+msgid "Draft saved"
+msgstr "تم حفظ المسودة"
+
+msgid "Statement"
+msgstr "البيان"
+
+msgid "Drop each option on the matching answer"
+msgstr "أسقط كل خيار على الإجابة المطابقة"
+
+msgid "Clear match"
+msgstr "مسح التطابق"
+
+msgid "Click to place the selected option here"
+msgstr "انقر لوضع الخيار المحدد هنا"
+
+msgid "Select an option, then click here"
+msgstr "اختر خيارًا، ثم انقر هنا"
+
+msgid "Already matched"
+msgstr "مطابق بالفعل"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "يمكنك سحب خيار إلى إجابة، أو اختيار خيار ثم النقر على مربع هدف."
+
+msgid "Put the items in the correct order."
+msgstr "رتب العناصر بالترتيب الصحيح."
+
+msgid "Move left"
+msgstr "تحريك لليسار"
+
+msgid "Move right"
+msgstr "تحريك لليمين"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "يمكنك سحب العناصر يمينًا أو يسارًا، أو استخدام أزرار التحريك لتغيير الترتيب."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "يمكنك سحب العناصر أو استخدام أزرار التحريك لتغيير الترتيب."
+
+msgid "Or upload an audio file"
+msgstr "أو تحميل ملف صوتي"
+
+msgid "Selected audio"
+msgstr "الصوت المحدد"
+
+msgid "Uploaded audio"
+msgstr "الصوت المرفوع"
+
+msgid "Office document"
+msgstr "مستند مكتبي"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "أكمل المستند في المحرر أدناه. سيُرفق الملف بهذه المحاولة لتصحيح المعلم."
+
+msgid "Reload Office editor"
+msgstr "إعادة تحميل محرر المكتب"
+
+msgid "Prepare Office document"
+msgstr "إعداد مستند مكتبي"
+
+msgid "Open in new tab"
+msgstr "فتح في علامة تبويب جديدة"
+
+msgid "Preparing Office document"
+msgstr "جارٍ إعداد المستند المكتبي"
+
+msgid "Submitted document"
+msgstr "المستند المقدم"
+
+msgid "Annotation tools"
+msgstr "أدوات التعليق"
+
+msgid "Text to place"
+msgstr "النص المراد وضعه"
+
+msgid "Click the image to place the text annotation."
+msgstr "انقر على الصورة لوضع تعليق نصي."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "انقر على الصورة لإضافة نقاط المسار. استخدم \"بدء مسار جديد\" لفصل المسارات."
+
+msgid "Start new path"
+msgstr "بدء مسار جديد"
+
+msgid "Current annotations"
+msgstr "التعليقات الحالية"
+
+msgid "Remove point"
+msgstr "إزالة النقطة"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "انقر على الصورة لرسم مضلع التحديد."
+
+msgid "Click a marker to remove it."
+msgstr "انقر على علامة لإزالتها."
+
+msgid "Placed"
+msgstr "تم الوضع"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "اختر إجابة، ثم انقر على الصورة لوضع علامة."
+
+msgid "Reading speed"
+msgstr "سرعة القراءة"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "لا يمكن عرض نوع السؤال هذا في هذا المشغل."
+
+msgid "Save draft"
+msgstr "حفظ المسودة"
+
+msgid "I confirm that my answers were saved."
+msgstr "أؤكد أنه تم حفظ إجاباتي."
+
+msgid "Finish test"
+msgstr "إنهاء الاختبار"
+
+msgid "Attempt finished"
+msgstr "انتهت المحاولة"
+
+msgid "Question category"
+msgstr "فئة السؤال"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "أنهيت الأسئلة المتعلقة بهذه الفئة، وهذه فرصتك الأخيرة للعودة ومراجعة تلك الأسئلة."
+
+msgid "Question time left"
+msgstr "الوقت المتبقي للسؤال"
+
+msgid "Time left"
+msgstr "الوقت المتبقي"
+
+msgid "Current attempt"
+msgstr "المحاولة الحالية"
+
+msgid "Could not save draft answer"
+msgstr "تعذر حفظ إجابة المسودة"
+
+msgid "Could not load exercise"
+msgstr "تعذر تحميل التمرين"
+
+msgid "Draft answer saved"
+msgstr "تم حفظ إجابة المسودة"
+
+msgid "Could not finish the attempt"
+msgstr "تعذر إنهاء المحاولة"
+
+msgid "Could not prepare Office document"
+msgstr "تعذر إعداد المستند المكتبي"
+
+msgid "Back to learner score"
+msgstr "العودة إلى نتيجة المتعلم"
+
+msgid "Disable auto refresh"
+msgstr "تعطيل التحديث التلقائي"
+
+msgid "Enable auto refresh"
+msgstr "تفعيل التحديث التلقائي"
+
+msgid "Live window"
+msgstr "نافذة مباشرة"
+
+msgid "Ongoing attempts"
+msgstr "المحاولات الجارية"
+
+msgid "Completed attempts"
+msgstr "المحاولات المكتملة"
+
+msgid "Started"
+msgstr "بدأت"
+
+msgid "Last activity"
+msgstr "آخر نشاط"
+
+msgid "Could not load live results"
+msgstr "تعذر تحميل النتائج المباشرة"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "هذا التمرين للقراءة فقط لأنه مدرج في مسار تعليمي."
+
+msgid "Select a question type to create a question."
+msgstr "اختر نوع السؤال لإنشاء سؤال."
+
+msgid "Click to preview"
+msgstr "انقر للمعاينة"
+
+msgid "Hide preview"
+msgstr "إخفاء المعاينة"
+
+msgid "Shape"
+msgstr "الشكل"
+
+msgid "Coordinates"
+msgstr "الإحداثيات"
+
+msgid "Blanks"
+msgstr "الفراغات"
+
+msgid "Switchable blanks"
+msgstr "فراغات قابلة للتبديل"
+
+msgid "Blank"
+msgstr "فراغ"
+
+msgid "Input width"
+msgstr "عرض حقل الإدخال"
+
+msgid "Orientation"
+msgstr "الاتجاه"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "غير متاح مع وضع التغذية الراجعة الحالي للتمرين"
+
+msgid "Not available in the learning path creation flow"
+msgstr "غير متاح في سير إنشاء المسار التعليمي"
+
+msgid "Delete question"
+msgstr "حذف السؤال"
+
+msgid "Could not update exercise questions"
+msgstr "تعذر تحديث أسئلة التمرين"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "تعذر إضافة التمرين إلى المسار التعليمي"
+
+msgid "A valid exercise id is required."
+msgstr "مطلوب معرف تمرين صالح."
+
+msgid "Could not load exercise questions"
+msgstr "تعذر تحميل أسئلة التمرين"
+
+msgid "Delete selected attempts"
+msgstr "حذف المحاولات المحددة"
+
+msgid "Before date"
+msgstr "قبل التاريخ"
+
+msgid "Pending corrections"
+msgstr "التصحيحات المعلقة"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "هذا التمرين مقفل بواسطة سجل الدرجات. إجراءات تنظيف المحاولات معطلة."
+
+msgid "No attempts found"
+msgstr "لم يتم العثور على محاولات"
+
+msgid "Review"
+msgstr "مراجعة"
+
+msgid "Print/PDF"
+msgstr "طباعة/ملف PDF"
+
+msgid "Could not load exercise report"
+msgstr "تعذر تحميل تقرير التمرين"
+
+msgid "Select at least one attempt"
+msgstr "اختر محاولة واحدة على الأقل"
+
+msgid "Delete selected attempts?"
+msgstr "حذف المحاولات المحددة؟"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "إرسال رسائل البريد الإلكتروني لنتائج المحاولات المراجعة؟"
+
+msgid "Could not send emails"
+msgstr "تعذر إرسال رسائل البريد الإلكتروني"
+
+msgid "Exercise result emails sent"
+msgstr "تم إرسال رسائل البريد الإلكتروني لنتائج التمرين"
+
+msgid "Skipped"
+msgstr "تم التخطي"
+
+msgid "Close attempt?"
+msgstr "إغلاق المحاولة؟"
+
+msgid "Attempt closed"
+msgstr "تم إغلاق المحاولة"
+
+msgid "Could not close attempt"
+msgstr "تعذر إغلاق المحاولة"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "إرسال نتيجة هذه المحاولة بالبريد الإلكتروني إلى المتعلم؟"
+
+msgid "Email sent"
+msgstr "تم إرسال البريد الإلكتروني"
+
+msgid "Could not send email"
+msgstr "تعذر إرسال البريد الإلكتروني"
+
+msgid "Attempt deleted"
+msgstr "تم حذف المحاولة"
+
+msgid "Could not delete attempt"
+msgstr "تعذر حذف المحاولة"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "اختر ملف CSV يحتوي على عمودي العنوان والوصف."
+
+msgid "Manage categories used to classify questions."
+msgstr "إدارة الفئات المستخدمة لتصنيف الأسئلة."
+
+msgid "Manage categories used to classify exercises."
+msgstr "إدارة الفئات المستخدمة لتصنيف التمارين."
+
+msgid "Could not load categories"
+msgstr "تعذر تحميل الفئات"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "الفئات المستوردة: %s. الصفوف المتخطاة: %s."
+
+msgid "Imported categories: %s."
+msgstr "الفئات المستوردة: %s."
+
+msgid "Could not import categories"
+msgstr "تعذر استيراد الفئات"
+
+msgid "Could not save category"
+msgstr "تعذر حفظ الفئة"
+
+msgid "Answer distribution"
+msgstr "توزيع الإجابات"
+
+msgid "Configured answers"
+msgstr "الإجابات المُعدة"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "لا يتوفر العد التفصيلي للإجابات لبعض أنواع الأسئلة في التقرير المُرحّل بعد."
+
+msgid "No report by question data found"
+msgstr "لم يتم العثور على بيانات التقرير حسب السؤال"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "لا يتوفر العد التفصيلي للإجابات لهذا النوع من الأسئلة في التقرير المُرحّل بعد."
+
+msgid "No answer distribution found"
+msgstr "لم يتم العثور على توزيع الإجابات"
+
+msgid "Could not load report by question"
+msgstr "تعذر تحميل التقرير حسب السؤال"
+
+msgid "Question settings"
+msgstr "إعدادات السؤال"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "اتركه فارغًا أو أدخل 0 لعدم وجود حد زمني."
+
+msgid "Time limit in seconds"
+msgstr "الحد الزمني بالثواني"
+
+msgid "Attached questions"
+msgstr "الأسئلة المرفقة"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "تُعرض هنا فقط الأسئلة المرفقة بهذا السؤال الوسائطي داخل التمرين الحالي."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "لا توجد أسئلة مرفقة بهذا السؤال الوسائطي في التمرين الحالي."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "ارفع قالب مستند أوفيس الذي سيعدله المتعلمون باستخدام OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "استبدال مستند أوفيس"
+
+msgid "Current Office document"
+msgstr "مستند أوفيس الحالي"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "يتم تصحيح هذا السؤال يدويًا بعد تقديم المتعلم للمستند المعدّل."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "يُحسب المجموع الكلي كمجموع درجات النقاط الساخنة."
+
+msgid "Global score"
+msgstr "الدرجة العامة"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "حدد صف نقطة ساخنة، اختر شكله، ثم ارسم فوق الصورة. بالنسبة للمضلعات، انقر على كل نقطة وأنهِ المضلع، أو انقر نقرًا مزدوجًا للإنهاء."
+
+msgid "Finish polygon"
+msgstr "إنهاء المضلع"
+
+msgid "Calculated answer"
+msgstr "إجابة محسوبة"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "يرجى كتابة النص أدناه واستخدام الأقواس المربعة [...] لتحديد فراغ واحد أو أكثر."
+
+msgid "Lowest value"
+msgstr "أدنى قيمة"
+
+msgid "Highest value"
+msgstr "أعلى قيمة"
+
+msgid "Fill in blanks"
+msgstr "ملء الفراغات"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "استخدم العلامات المحددة لتحديد الفراغات. مثال: عاصمة بيرو هي [ليما]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "أدخل خيارات القائمة المنسدلة، إجابة واحدة في كل سطر. ثم حدد الإجابات المتوقعة أدناه، كما في الأداة القديمة."
+
+msgid "Refresh answers"
+msgstr "تحديث الإجابات"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "يستخدم سؤال التركيب المنسدل درجة عامة واحدة، مثل الإصدار القديم."
+
+msgid "Please enter at least two dropdown options."
+msgstr "يرجى إدخال خيارين منسدلين على الأقل."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "أنشئ خيارات الوجهة أولاً، ثم اربط كل عنصر بالخيار الصحيح."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "يستخدم سؤال التركيب المطابق درجة عامة واحدة، مثل الإصدار القديم."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "أنشئ الخطوات واختر الموضع المتوقع لكل واحدة، كما في الإصدار القديم القابل للسحب."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "سيختار المتعلمون صح أو خطأ ثم يحددون درجة يقينهم أثناء المحاولة. يخزن المحرر نفس درجات الصح/الخطأ ومستويات اليقين كما في الإصدار القديم."
+
+msgid "Hotspot combination"
+msgstr "تركيب النقاط الساخنة"
+
+msgid "Add delineation"
+msgstr "إضافة تحديد"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "لا يحتوي سؤال مستند أوفيس هذا على خيارات إجابة. تُحدد درجته أثناء التصحيح/مراجعة النتائج."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "لا يحتوي سؤال الرفع هذا على خيارات إجابة. تُحدد درجته أثناء التصحيح/مراجعة النتائج."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "لا يحتوي سؤال التعبير الشفهي هذا على خيارات إجابة. تُحدد درجته أثناء التصحيح/مراجعة النتائج."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "لا يحتوي السؤال المفتوح هذا على خيارات إجابة. تُحدد درجته أثناء التصحيح/مراجعة النتائج."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "أضف نص قراءة مع إعدادات سرعة التمرير."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "أضف محتوى أو وسائط أو سياق قراءة دون إضافة درجة."
+
+msgid "Insert a page break without adding score."
+msgstr "إدراج فاصل صفحة بدون إضافة درجة."
+
+msgid "Could not save question"
+msgstr "تعذر حفظ السؤال"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "يُسمح فقط بمستندات DOC أو DOCX أو XLS أو XLSX."
+
+msgid "Please select an Office document."
+msgstr "يرجى تحديد مستند Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "يرجى رسم منطقة ساخنة واحدة على الأقل."
+
+msgid "Please draw at least one delineation."
+msgstr "يرجى رسم تحديد واحد على الأقل."
+
+msgid "The fill in blanks text is required."
+msgstr "نص ملء الفراغات مطلوب."
+
+msgid "At least one expected answer is required."
+msgstr "مطلوب إجابة متوقعة واحدة على الأقل."
+
+msgid "At least two draggable items are required."
+msgstr "مطلوب عنصران قابلان للسحب على الأقل."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "يجب ربط كل عنصر قابل للسحب بموضع هدف صالح."
+
+msgid "At least two matching options are required."
+msgstr "مطلوب خياران متطابقان على الأقل."
+
+msgid "At least two matching pairs are required."
+msgstr "مطلوب زوجان متطابقان على الأقل."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "يجب ربط كل زوج متطابق بخيار صالح."
+
+msgid "At least two answers are required."
+msgstr "مطلوب إجابتان على الأقل."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "يجب أن تحتوي كل إجابة صحيح/خطأ على خيار صح أو خطأ محدد."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "يجب أن يحتوي سؤال الإجابة الفريدة على إجابة صحيحة واحدة بالضبط."
+
+msgid "At least one correct answer is required."
+msgstr "مطلوب إجابة صحيحة واحدة على الأقل."
+
+msgid "Could not load question"
+msgstr "تعذر تحميل السؤال"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "حدد مقرراً دراسياً وقم بتصدير تقرير نتائج التمرين العام كملف CSV."
+
+msgid "Back to reports catalog"
+msgstr "العودة إلى كتالوج التقارير"
+
+msgid "Could not load exercise global report"
+msgstr "تعذر تحميل التقرير العام للتمرين"
+
+msgid "Imported questions"
+msgstr "الأسئلة المستوردة"
+
+msgid "Aiken content"
+msgstr "محتوى Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "تعذر تحميل مولد AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "تعذر إنشاء محتوى Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "تعذر استيراد محتوى Aiken المُنشأ"
+
+msgid "Back to my courses"
+msgstr "العودة إلى مقرراتي الدراسية"
+
+msgid "Open report"
+msgstr "فتح التقرير"
+
+msgid "Questions with no automatic correction"
+msgstr "الأسئلة بدون تصحيح تلقائي"
+
+msgid "Could not load pending attempts"
+msgstr "تعذر تحميل المحاولات المعلقة"
+
+msgid "Skipped questions"
+msgstr "الأسئلة التي تم تخطيها"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "يوزع استيراد Aiken هذا الوزن الإجمالي على الأسئلة المستوردة ما لم يحدد السؤال SCORE."
+
+msgid "Import warnings"
+msgstr "تحذيرات الاستيراد"
+
+msgid "Could not import questions"
+msgstr "تعذر استيراد الأسئلة"
+
+msgid "No question statistics found"
+msgstr "لم يتم العثور على إحصائيات للأسئلة"
+
+msgid "Could not load question statistics"
+msgstr "تعذر تحميل إحصائيات الأسئلة"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "يمكنك أيضاً توصيل عميل MCP مباشرةً عن طريق توجيهه إلى النقطة النهائية التالية:"
+
+msgid "No applications are currently connected to your account."
+msgstr "لا توجد تطبيقات متصلة حالياً بحسابك."
+
+msgid "Connected on"
+msgstr "متصل في"
+
+msgid "Last used"
+msgstr "آخر استخدام"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "لن يتمكن %s من الوصول إلى حساب Chamilo الخاص بك بعد الآن. هل تريد المتابعة؟"
+
+msgid "Application revoked"
+msgstr "تم إلغاء التطبيق"
+
+msgid "Copied to clipboard"
+msgstr "تم النسخ إلى الحافظة"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "تعذر نسخ نقطة نهاية MCP"
+
+msgid "MCP endpoint"
+msgstr "نقطة نهاية MCP"
+
+msgid "API key"
+msgstr "مفتاح API"
+
+msgid "Last used at"
+msgstr "آخر استخدام في"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "انسخ هذا المفتاح الآن. لن يتم عرضه مرة أخرى."
+
+msgid "Rotate API key"
+msgstr "تدوير مفتاح API"
+
+msgid "Revoke API key"
+msgstr "إلغاء مفتاح API"
+
+msgid "Remote MCP connection"
+msgstr "اتصال MCP عن بعد"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "قم بتهيئة عميل MCP بالقيم التالية:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "سيتوقف المفتاح الحالي عن العمل فورًا. هل تريد المتابعة؟"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "سيتم إنشاء مفتاح MCP API شخصي جديد. هل تريد المتابعة؟"
+
+msgid "MCP API key generated"
+msgstr "تم إنشاء مفتاح MCP API"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "سيتوقف عملاء MCP المتصلون باستخدام هذا المفتاح عن العمل فورًا. هل تريد المتابعة؟"
+
+msgid "MCP API key revoked"
+msgstr "تم إبطال مفتاح MCP API"
+
+msgid "Could not copy the API key"
+msgstr "تعذر نسخ مفتاح API"
+
+msgid "Project"
+msgstr "مشروع"
+
+msgid "Close old tickets"
+msgstr "إغلاق التذاكر القديمة"
+
+msgid "Close tickets older than seven days?"
+msgstr "إغلاق التذاكر الأقدم من سبعة أيام؟"
+
+msgid "Assignment history"
+msgstr "سجل المهام"
+
+msgid "Translate with AI"
+msgstr "ترجمة باستخدام الذكاء الاصطناعي"
+
+msgid "Target language"
+msgstr "اللغة المستهدفة"
+
+msgid "Please select a provider"
+msgstr "يرجى اختيار مزود"
+
+msgid "Generate translation"
+msgstr "إنشاء الترجمة"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "يجب أن يحتوي قسم واحد على الأقل من الأحكام والشروط على نص."
+
+msgid "No active target languages are available."
+msgstr "لا توجد لغات مستهدفة نشطة."
+
+msgid "Tutor"
+msgstr "مدرب"
+
+msgid "Access dates"
+msgstr "تواريخ الوصول"
+
+msgid "Coach access dates"
+msgstr "تواريخ وصول المدرب"
+
+msgid "No sessions found"
+msgstr "لم يتم العثور على جلسات"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "اختر المقررات التي يجب ألا يتمكن هذا المستخدم من الوصول إليها في هذه الجلسة."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "لا يمكن حظر المستخدم من جميع المقررات في الجلسة. قم بإلغاء اشتراك المستخدم بدلاً من ذلك."
+
+msgid "Users subscribed to this session"
+msgstr "المستخدمون المشتركون في هذه الجلسة"
+
+msgid "No available users found"
+msgstr "لم يتم العثور على مستخدمين متاحين"
+
+msgid "Subscribe this user to the session?"
+msgstr "اشتراك هذا المستخدم في الجلسة؟"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "اشتراك المستخدمين المحددين في الجلسة؟"
+
+msgid "General tutor planning"
+msgstr "تخطيط المدرب العام"
+
+msgid "User is already registered by another tutor."
+msgstr "المستخدم مسجل بالفعل بواسطة مدرب آخر."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "تتلقى نسخة لأنك مدرب المقرر"
+
+msgid "General tutor"
+msgstr "مدرب عام"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "ضع في الاعتبار المقررات والمدربين ومكتب المساعدة الفنية والمعلمين و/أو المواد المتاحة."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "المدربون المشتركون كمعلمين في المقرر %s"
+
+msgid "Tutor name"
+msgstr "اسم المدرب"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "مدربو الجلسة هم منسقو الجلسة ويمكنهم العمل كمدربين لكل مقرر في الجلسة. يمكن اختيار المستخدمين الذين لديهم دور المعلم فقط كمدربي جلسات."
+
+msgid "Access start date for tutors"
+msgstr "تاريخ بدء الوصول للمدربين"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "التاريخ الذي تُتاح فيه الجلسة للمدربين، حتى يتمكنوا من إعدادها قبل اتصال الطلاب"
+
+msgid "Access end date for tutors"
+msgstr "تاريخ انتهاء الوصول للمدربين"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "التاريخ الذي تُغلق فيه الجلسة أمام المدربين. سيسمح التأخير الإضافي لهم بتصدير جميع معلومات التتبع ذات الصلة"
+
+msgid "Tutor and student"
+msgstr "مدرب وطالب"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "يعرض هذا التقرير التوزيع الأسبوعي للجلسات لكل مدرب عام في نطاق التاريخ المحدد."
+
+msgid "User is general tutor in some sessions"
+msgstr "المستخدم مدرب عام في بعض الجلسات"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "سيتم إضافة المعلمين كمدربين في جميع جلسات المقرر."
+
+msgid "Delete failed: invalid question id."
+msgstr "فشل الحذف: معرّف سؤال غير صالح."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "متوسط عدد الجلسات لكل مدرب جلسة عام"
+
+msgid "No room"
+msgstr "لا توجد غرفة"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "استيراد معلمي المقرر كمدربي مقرر في الجلسة"
+
+msgid "Clean and update course tutors"
+msgstr "تنظيف وتحديث مدربي المقرر"
+
+msgid "Add me as tutor"
+msgstr "أضفني كمدرب"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "تعذر إضافة الاستبيان إلى مسار التعلم"
+
+msgid "Access dates for tutors"
+msgstr "تواريخ الوصول للمشرفين"
+
+msgid "Tutor and group member"
+msgstr "مشرف وعضو مجموعة"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "تم الوصول إلى الحد اليومي لرموز الذكاء الاصطناعي. يرجى المحاولة مرة أخرى غدًا."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "تم الوصول إلى الحد الشهري لرموز الذكاء الاصطناعي. يرجى المحاولة مرة أخرى الشهر القادم."
+
+msgid "This course code already exists, please choose another code."
+msgstr "رمز هذه الدورة موجود بالفعل، يرجى اختيار رمز آخر."
+
+msgid "This course title already exists, please choose another title."
+msgstr "عنوان هذه الدورة موجود بالفعل، يرجى اختيار عنوان آخر."
+
+msgid "This tool visibility cannot be changed"
+msgstr "لا يمكن تغيير رؤية هذه الأداة"
+
+msgid "Invalid visibility"
+msgstr "رؤية غير صالحة"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "تتلقى نسخة لأنك أحد مشرفي الدورة"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "تتلقى نسخة لأنك مشرف الدورة"
+
+msgid "Manual completion"
+msgstr "الإكمال اليدوي"
+
+msgid "Send to tutors"
+msgstr "إرسال إلى المشرفين"
+
+msgid "Lab title"
+msgstr "عنوان المعمل"
+
+msgid "Lab week"
+msgstr "أسبوع المعمل"
+
+msgid "Final exam access rule"
+msgstr "قاعدة الوصول إلى الامتحان النهائي"
+
+msgid "Course completion rule"
+msgstr "قاعدة إكمال الدورة"
+
+msgid "You have been invited to join a course"
+msgstr "تمت دعوتك للانضمام إلى دورة"
+
+msgid "No user has been found"
+msgstr "لم يتم العثور على أي مستخدم"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "لا يمكن تسجيل المستخدم المحدد في هذا السياق"
+
+msgid "No change has been made"
+msgstr "لم يتم إجراء أي تغيير"
+
+msgid "Back to group list"
+msgstr "العودة إلى قائمة المجموعات"
+
+msgid "Remove class link"
+msgstr "إزالة ارتباط الفصل"
+
+msgid "Group settings"
+msgstr "إعدادات المجموعة"
+
+msgid "Self-registration allowed"
+msgstr "التسجيل الذاتي مسموح"
+
+msgid "Self-unregistration allowed"
+msgstr "إلغاء التسجيل الذاتي مسموح"
+
+msgid "This group is linked to the class"
+msgstr "هذه المجموعة مرتبطة بالفصل"
+
+msgid "Create one or more empty course groups"
+msgstr "إنشاء مجموعة مقررات فارغة واحدة أو أكثر"
+
+msgid "Number of places"
+msgstr "عدد الأماكن"
+
+msgid "Base group"
+msgstr "المجموعة الأساسية"
+
+msgid "Share"
+msgstr "مشاركة"
+
+msgid "Collaboration"
+msgstr "تعاون"
+
+msgid "The group title is required."
+msgstr "عنوان المجموعة مطلوب."
+
+msgid "Back to group area"
+msgstr "العودة إلى منطقة المجموعة"
+
+msgid "Members are managed by the linked class"
+msgstr "يتم إدارة الأعضاء بواسطة الفصل المرتبط"
+
+msgid "%s groups selected"
+msgstr "%s مجموعات محددة"
+
+msgid "Fill selected groups"
+msgstr "ملء المجموعات المحددة"
+
+msgid "Empty selected groups"
+msgstr "إفراغ المجموعات المحددة"
+
+msgid "Fill group"
+msgstr "ملء المجموعة"
+
+msgid "Empty group"
+msgstr "إفراغ المجموعة"
+
+msgid "Groups per user"
+msgstr "المجموعات لكل مستخدم"
+
+msgid "No tutors"
+msgstr "لا يوجد مشرفون"
+
+msgid "No users"
+msgstr "لا يوجد مستخدمون"
+

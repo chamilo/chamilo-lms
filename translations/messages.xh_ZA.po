@@ -37500,3 +37500,1431 @@ msgstr "Umzekeliso wangoku, owamkelekileyo omele umxholo wale khosi, ngendlela e
 msgid "Back to account"
 msgstr "Buyela kwi-akhawunti"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Your feedback will help us improve future training sessions."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Enkosi ngokwabelana ngengxelo yakho."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Woneliseke kangakanani ngumgangatho jikelele woqeqesho?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Woneliseke kangakanani ngokufaneleka komxholo?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Woneliseke kangakanani ngokucaca kweenkcazo?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Woneliseke kangakanani ngolungelelwaniso nesantya soqeqesho?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Woneliseke kangakanani ngokusebenziseka ngokusebenzayo koko ukuqeqeshiweyo?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ungayincoma lo mqeqesho kwabanye abantu?"
+
+msgid "What should we improve in future editions?"
+msgstr "Yintoni esinokuyiphucula kwiinkqubo ezizayo?"
+
+msgid "Very satisfied"
+msgstr "Woneliseke kakhulu"
+
+msgid "Satisfied"
+msgstr "Wonelisekile"
+
+msgid "Neutral"
+msgstr "Phakathi"
+
+msgid "Dissatisfied"
+msgstr "Akanelisekanga"
+
+msgid "Very dissatisfied"
+msgstr "Akanelisekanga kwaphela"
+
+msgid "Add destination"
+msgstr "Yongeza indawo yokuya"
+
+msgid "Add this test to the assessment tool"
+msgstr "Yongeza olu vavanyo kwisixhobo sovavanyo"
+
+msgid "Attempts and timing"
+msgstr "Iinzame kunye nexesha"
+
+msgid "Available questions"
+msgstr "Imibuzo ekhoyo"
+
+msgid "Cancel and return to learning path"
+msgstr "Rhoxisa uze ubuyele kwindlela yokufunda"
+
+msgid "Category destinations"
+msgstr "Iindawo zokuya ngokwamacandelo"
+
+msgid "Classification"
+msgstr "Ukuhlela"
+
+msgid "Context"
+msgstr "Umongo"
+
+msgid "Could not load exercise configuration"
+msgstr "Ayikwazanga kulayisha uqwalaselo lomsebenzi"
+
+msgid "Could not save exercise"
+msgstr "Ayikwazanga kugcina umsebenzi"
+
+msgid "Display and learning path"
+msgstr "Ukuboniswa kunye nendlela yokufunda"
+
+msgid "Edit test"
+msgstr "Hlela uvavanyo"
+
+msgid "Exercise settings saved."
+msgstr "Iisetingi zomsebenzi zigciniwe."
+
+msgid "Extra settings"
+msgstr "Iisetingi ezongezelelweyo"
+
+msgid "Feedback and results"
+msgstr "Ingxelo kunye neziphumo"
+
+msgid "Finish exercise"
+msgstr "Gqibezela umsebenzi"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Ichonga ulwimi lwalo msebenzi njengemetadata yomthombo. Ayivuli ukukhangela ngokufaka kwisalathiso ngokwayo."
+
+msgid "Maximum score (%)"
+msgstr "Amanqaku aphezulu (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "I-metadata iqulethe izakhono kunye namacandelo ongezelelweyo aququzelelwe ngemisebenzi. Ayinyanzelekanga kwaye ihlala ifihliwe de ivulwe."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Akukho macandelo emibuzo afumanekayo kulo msebenzi okwangoku."
+
+msgid "Question categories matrix"
+msgstr "Imatriksi yamacandelo emibuzo"
+
+msgid "Questions behavior"
+msgstr "Ukuziphatha kwemibuzo"
+
+msgid "Random by category"
+msgstr "Ngokungacwangciswanga ngokwamacandelo"
+
+msgid "Remove destination"
+msgstr "Susa indawo yokuya"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Imithetho ivavanywa ngokwepesenti yamanqaku ngokwenyuka. Khetha Gqibezela umsebenzi ukuphelisa uvavanyo."
+
+msgid "Score and final messages"
+msgstr "Amanqaku kunye nemiyalezo yokugqibela"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Ezinye iinketho zitshixelwe emva kokuba umsebenzi wenziwe."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Eli xabiso ligcinwa njengexesha elipheleleyo ngemizuzu."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Sebenzisa u-0 ukugcina yonke imibuzo ekhoyo. Sebenzisa u--1 apho yonke imibuzo ekhoyo ivunyelwe."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Sebenzisa la macandelo ukuhlela umsebenzi ngokuzimeleyo kwiinketho zokuboniswa kwawo."
+
+msgid "Invite by email"
+msgstr "Mema nge-imeyile"
+
+msgid "Invitation has been sent"
+msgstr "Isimemo sithunyelwe"
+
+msgid "Sent on"
+msgstr "Kuthunyelwe nge"
+
+msgid "Accepted on"
+msgstr "Kwamkelwe nge"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Le khosi ivulwe kwiseshoni. Ukuthumela isimemo apha kuya kubhalisa umamkeli kwiseshoni yonke %s, hayi le khosi kuphela."
+
+msgid "Revoke"
+msgstr "Rhoxisa"
+
+msgid "Revoked"
+msgstr "Kurhoxisiwe"
+
+msgid "Invitation has been revoked"
+msgstr "Isimemo sirhoxisiwe"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Uqinisekile ufuna ukurhoxisa isimemo esithunyelwe ku %s?"
+
+msgid "No default room"
+msgstr "Akukho gumbi elingagqibekanga"
+
+msgid "Floor"
+msgstr "Umgangatho"
+
+msgid "Capacity"
+msgstr "Umthamo"
+
+msgid "Use attendance default room"
+msgstr "Sebenzisa igumbi elingagqibekanga lokuhamba"
+
+msgid "Floor number"
+msgstr "Inombolo yomgangatho"
+
+msgid "Copy to students"
+msgstr "Kopa kubafundi"
+
+msgid "Generate a quick test on this topic"
+msgstr "Yenza uvavanyo olukhawulezileyo ngalo mbandela"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Umxholo woxwebhu olugciniweyo uya kuthunyelwa kwimodeli ye-AI ukuze isetyenziswe."
+
+msgid "MCP API key"
+msgstr "Isitshixo se-MCP API"
+
+msgid "Authorized applications"
+msgstr "Izicelo ezigunyazisiweyo"
+
+msgid "Your session is about to expire"
+msgstr "Iseshoni yakho iza kuphelelwa"
+
+msgid "Do you want to continue your session?"
+msgstr "Ufuna ukuqhubeka neseshoni yakho?"
+
+msgid "Stay connected"
+msgstr "Hlala uqhagamshelene"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Uya kusayina ngaphandle kwimizuzwana %s."
+
+msgid "No descriptions available yet."
+msgstr "Akukho nkcazelo ifumanekayo okwangoku."
+
+msgid "%s users selected"
+msgstr "%s abasebenzisi abakhethiweyo"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Abasebenzisi abakhethiweyo babhaliswe kwikhosi"
+
+msgid "Import teachers"
+msgstr "Thatha ootitshala ngaphandle"
+
+msgid "Import learners"
+msgstr "Thatha abafundi ngaphandle"
+
+msgid "Select CSV file"
+msgstr "Khetha ifayile ye-CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Abanye abasebenzisi abakwazanga kubhaliswa"
+
+msgid "Browse available classes"
+msgstr "Bukela iiklasi ezikhoyo"
+
+msgid "Back to linked classes"
+msgstr "Buyela kwiiklasi ezidityanisiweyo"
+
+msgid "No classes are currently linked to this course."
+msgstr "Akukho ziklasi zidityanisiweyo kweli khosi okwangoku."
+
+msgid "No available classes were found for this course."
+msgstr "Akukho ziklasi zifumanekayo ezifunyenweyo kweli khosi."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Uqinisekile ufuna ukurhoxisa abasebenzisi abakhethiweyo?"
+
+msgid "Learning path access"
+msgstr "Ukufikelela kwindlela yokufunda"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Ngabasebenzisi kunye namaqela akhethiweyo kuphela anokufikelela kule ndlela yokufunda. Lawula emva kokugcina."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Bonke abasebenzisi bezi khosi zangoku nezizayo banokufikelela kule ndlela yokufunda."
+
+msgid "All course users"
+msgstr "Bonke abasebenzisi bekhosi"
+
+msgid "Selected users and groups"
+msgstr "Abasebenzisi namaqela akhethiweyo"
+
+msgid "No access"
+msgstr "Akukho kufikelela"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Ngabasebenzisi namaqela afakwe apha kuphela anokufikelela kule ndlela yokufunda."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Inani lemibuzo lithintelwe ukuya kwi %s ephezulu"
+
+msgid "Open exercise player"
+msgstr "Vula isidlali somsebenzi"
+
+msgid "The score is hidden for this exercise."
+msgstr "Inqaku lifihliwe kulo msebenzi."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Izilungiso zifihliwe ngokwezicwangciso zeziphumo zomsebenzi."
+
+msgid "Progressive adaptive result"
+msgstr "Iziphumo eziguqukayo ezizithandayo"
+
+msgid "Achieved level"
+msgstr "Inqanaba eliphunyeziweyo"
+
+msgid "Correction history"
+msgstr "Imbali yokulungiswa"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Imbali yezilungiso ezenziwe ngesandla kolu zamo."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Lo mqeqesho usebenzisa imo yeziphumo ze-radar/spiderweb. Itshati ayifumaneki kweli phepha."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Iinkcukacha zemibuzo zifihliwe ngokwezicwangciso zeziphumo zomsebenzi."
+
+msgid "Media question"
+msgstr "Umbuzo wemidiya"
+
+msgid "Pending correction"
+msgstr "Ulindele ukulungiswa"
+
+msgid "No answer"
+msgstr "Akukho mpendulo"
+
+msgid "Blank %s"
+msgstr "Isithuba %s"
+
+msgid "Your order"
+msgstr "Ukulandelelana kwakho"
+
+msgid "Correct order"
+msgstr "Ukulandelelana okuchanekileyo"
+
+msgid "Delineation review"
+msgstr "Uhlolisiso lokucacisa"
+
+msgid "Learner clicks"
+msgstr "Ukuqhotsa komfundi"
+
+msgid "Question image"
+msgstr "Umfanekiso wombuzo"
+
+msgid "No hotspot image available"
+msgstr "Akukho mfanekiso we-hotspot ofumanekayo"
+
+msgid "Learner delineation"
+msgstr "Ucaciso lomfundi"
+
+msgid "Expected delineation"
+msgstr "Ucaciso olulindelekileyo"
+
+msgid "Expected zones"
+msgstr "Iindawo ezilindelekileyo"
+
+msgid "Zone"
+msgstr "Indawo"
+
+msgid "Learner annotation"
+msgstr "Isichazi somfundi"
+
+msgid "No annotation image available"
+msgstr "Akukho mfanekiso wenkcazelo ofumanekayo"
+
+msgid "This answer is pending teacher correction."
+msgstr "Le mpendulo ilindele ukulungiswa ngutitshala."
+
+msgid "Teacher comment"
+msgstr "Izimvo zikatitshala"
+
+msgid "Teacher correction"
+msgstr "Ukulungiswa ngutitshala"
+
+msgid "Save correction"
+msgstr "Gcina ukulungiswa"
+
+msgid "Learner audio"
+msgstr "I-audio yomfundi"
+
+msgid "Download audio"
+msgstr "Khuphela i-audio"
+
+msgid "No uploaded audio"
+msgstr "Akukho audio ilayishiwe"
+
+msgid "Learner Office document"
+msgstr "Uxwebhu lwe-Office lomfundi"
+
+msgid "Learner file"
+msgstr "Ifayile yomfundi"
+
+msgid "Download Office document"
+msgstr "Khuphela uxwebhu lwe-Office"
+
+msgid "No submitted document"
+msgstr "Akukho xwebhu lingenisiweyo"
+
+msgid "No uploaded file"
+msgstr "Akukho fayile ilayishiwe"
+
+msgid "Content item"
+msgstr "Into yomxholo"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Olu hlobo lombuzo alunakuhlolisiswa kweli phepha."
+
+msgid "Exercise completed"
+msgstr "Umsebenzi ugqityiwe"
+
+msgid "Could not start the attempt"
+msgstr "Ayikwazanga ukuqala ilinge"
+
+msgid "Invalid exercise attempt"
+msgstr "Ilinge lomsebenzi elingasebenzi"
+
+msgid "Could not load exercise result"
+msgstr "Ayikwazanga ukulayisha iziphumo zomsebenzi"
+
+msgid "Could not load AI providers"
+msgstr "Ayikwazanga ukulayisha ababoneleli be-AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Ayikwazanga ukuvelisa ingcebiso ye-AI"
+
+msgid "Correction saved"
+msgstr "Ukulungiswa kugciniwe"
+
+msgid "Could not save correction"
+msgstr "Ayikwazanga ukugcina ukulungiswa"
+
+msgid "Create exercise"
+msgstr "Yenza umsebenzi"
+
+msgid "Exercise categories"
+msgstr "Iindidi zomsebenzi"
+
+msgid "Question categories"
+msgstr "Iindidi zemibuzo"
+
+msgid "Search by exercise title or description."
+msgstr "Khangela ngesihloko okanye inkcazelo yomsebenzi."
+
+msgid "Search exercises"
+msgstr "Khangela imisebenzi"
+
+msgid "No exercises found"
+msgstr "Akukho misebenzi ifunyenweyo"
+
+msgid "Open exercise"
+msgstr "Vula umsebenzi"
+
+msgid "Disable autolaunch"
+msgstr "Khubaza ukuqalisa ngokuzenzekelayo"
+
+msgid "Enable autolaunch"
+msgstr "Nika amandla ukuqalisa ngokuzenzekelayo"
+
+msgid "Export QTI2"
+msgstr "Thumela ngaphandle i-QTI2"
+
+msgid "Bulk actions"
+msgstr "Izenzo ezininzi"
+
+msgid "Selected exercises"
+msgstr "Iimvavanyo ezikhethiweyo"
+
+msgid "No exercises selected"
+msgstr "Akukho mivavanyo ikhethiweyo"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Uqinisekile ufuna ukusebenzisa esi senzo kwimivavanyo ekhethiweyo?"
+
+msgid "Bulk action completed"
+msgstr "Isenzo esininzi sigqityiwe"
+
+msgid "Could not update exercises"
+msgstr "Ayikwazanga ukuhlaziya iimvavanyo"
+
+msgid "Could not update exercise"
+msgstr "Ayikwazanga ukuhlaziya imvavanyo"
+
+msgid "Copy exercise"
+msgstr "Kopa imvavanyo"
+
+msgid "Delete exercise"
+msgstr "Cima imvavanyo"
+
+msgid "Could not load exercises"
+msgstr "Ayikwazanga ukulayisha iimvavanyo"
+
+msgid "No limit"
+msgstr "Akukho mda"
+
+msgid "Add selected questions to the test"
+msgstr "Yongeza imibuzo ekhethiweyo kuvavanyo"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Lo mbuzo usetyenziswe kuvavanyo olusebenzayo kwaye awukwazi ukuhlela apha."
+
+msgid "This question cannot be edited here."
+msgstr "Lo mbuzo awukwazi ukuhlela apha."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Lo mbuzo usetyenziswe kuvavanyo olusebenzayo kwaye awukwazi ukucima apha."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Lo mbuzo awukwazi ukucima kuba ufikelelo lwakho luthintelwe yimimiselo yeqonga."
+
+msgid "Already in test"
+msgstr "Sele kuvavanyo"
+
+msgid "Select at least one question."
+msgstr "Khetha ubuncinane umbuzo omnye."
+
+msgid "Question bank updated"
+msgstr "Ibhangqana lemibuzo lihlaziyiwe"
+
+msgid "Could not update the question bank"
+msgstr "Ayikwazanga ukuhlaziya ibhangqana lemibuzo"
+
+msgid "Could not load the question bank"
+msgstr "Ayikwazanga ukulayisha ibhangqana lemibuzo"
+
+msgid "Total score"
+msgstr "Inqaku elipheleleyo"
+
+msgid "Starting"
+msgstr "Ukuqala"
+
+msgid "Attempt history"
+msgstr "Imbali yemizamo"
+
+msgid "No attempts yet"
+msgstr "Akukho mizamo okwangoku"
+
+msgid "Invalid exercise"
+msgstr "Uhlolisiso olungasebenziyo"
+
+msgid "Could not load exercise overview"
+msgstr "Ayikwazanga ukulayisha isishwankathelo sovavanyo"
+
+msgid "Open test"
+msgstr "Vula uvavanyo"
+
+msgid "Random answers"
+msgstr "Iimpendulo ezingacwangciswanga"
+
+msgid "Prevent moving backwards"
+msgstr "Thintela ukubuyela emva"
+
+msgid "Previous button hidden"
+msgstr "Iqhosha langaphambili lifihliwe"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Olu vavanyo lusebenzisa iinketho ezifuna umdlali wovavanyo owahlukileyo."
+
+msgid "Continue test"
+msgstr "Qhubeka novavanyo"
+
+msgid "Attempt started"
+msgstr "Umzamo uqalisiwe"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Uhlolisiso lomfundisi aludali mzamo olandelwayo."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Qala okanye qhubeka nomzamo wovavanyo. Iimpendulo ezingagqitywanga zinokugcinwa phambi kokungenisa kokugqibela."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Ixesha elivumelekileyo lifikelelwe. Ukugqibezela umzamo."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Ixesha lombuzo lifikelelwe. Ukugcina impendulo yakho."
+
+msgid "Finishing"
+msgstr "Ukugqibezela"
+
+msgid "Draft saved"
+msgstr "Uyilo lugciniwe"
+
+msgid "Statement"
+msgstr "Isitatimende"
+
+msgid "Drop each option on the matching answer"
+msgstr "Lahla inketho nganye kwimpendulo ehambelanayo"
+
+msgid "Clear match"
+msgstr "Cima umdibaniso"
+
+msgid "Click to place the selected option here"
+msgstr "Cofa ukubeka inketho ekhethiweyo apha"
+
+msgid "Select an option, then click here"
+msgstr "Khetha inketho, emva koko ucofe apha"
+
+msgid "Already matched"
+msgstr "Sele idibene"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Ungatsala inketho kwimpendulo, okanye ukhethe inketho uze ucofe ibhokisi ekujoliswe kuyo."
+
+msgid "Put the items in the correct order."
+msgstr "Beka izinto ngendlela echanekileyo."
+
+msgid "Move left"
+msgstr "Yisa ekhohlo"
+
+msgid "Move right"
+msgstr "Yisa ekunene"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Ungatsala izinto ngasekhohlo okanye ngasekunene, okanye usebenzise amaqhosha okushenxisa ukutshintsha ulandelelwano."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Ungatsala izinto okanye usebenzise amaqhosha okushenxisa ukutshintsha ulandelelwano."
+
+msgid "Or upload an audio file"
+msgstr "Okanye layisha ifayile ye-audio"
+
+msgid "Selected audio"
+msgstr "I-audio ekhethiweyo"
+
+msgid "Uploaded audio"
+msgstr "I-audio elayishiweyo"
+
+msgid "Office document"
+msgstr "Uxwebhu lweofisi"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Gqibezela uxwebhu kumhleli ongezantsi. Ifayile iya kuncanyathiselwa kolu zamo ukuze utitshala ayilungise."
+
+msgid "Reload Office editor"
+msgstr "Phinda ulayishe umhleli weOfisi"
+
+msgid "Prepare Office document"
+msgstr "Lungiselela uxwebhu lweOfisi"
+
+msgid "Open in new tab"
+msgstr "Vula kwithebhu entsha"
+
+msgid "Preparing Office document"
+msgstr "Kulungiselelwa uxwebhu lweOfisi"
+
+msgid "Submitted document"
+msgstr "Uxwebhu olungenisiweyo"
+
+msgid "Annotation tools"
+msgstr "Izixhobo zokuchaza"
+
+msgid "Text to place"
+msgstr "Isiqendu sokubeka"
+
+msgid "Click the image to place the text annotation."
+msgstr "Cofa umfanekiso ukubeka inkcazo yesiqendu."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Cofa umfanekiso ukongeza iindawo zomzila. Sebenzisa Qala umzila omtsha ukwahlula imizila."
+
+msgid "Start new path"
+msgstr "Qala umzila omtsha"
+
+msgid "Current annotations"
+msgstr "Iinkcazo ezikhoyo"
+
+msgid "Remove point"
+msgstr "Susa indawo"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Cofa umfanekiso ukuzoba ipoligoni yokucanda."
+
+msgid "Click a marker to remove it."
+msgstr "Cofa isalathisi ukusisusa."
+
+msgid "Placed"
+msgstr "Kubekiweyo"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Khetha impendulo, emva koko cofa emfanekisweni ukuyiphawula."
+
+msgid "Reading speed"
+msgstr "Isantya sokufunda"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Olu hlobo lombuzo alunakuboniswa kumdlali."
+
+msgid "Save draft"
+msgstr "Gcina idrafti"
+
+msgid "I confirm that my answers were saved."
+msgstr "Ndiyaqinisekisa ukuba iimpendulo zam zigciniwe."
+
+msgid "Finish test"
+msgstr "Gqibezela uvavanyo"
+
+msgid "Attempt finished"
+msgstr "Inzame igqityiwe"
+
+msgid "Question category"
+msgstr "Udidi lombuzo"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Ugqibe imibuzo enxulumene nolu didi lombuzo, lithuba lakho lokugqibela lokubuyela emva nokuhlaziya loo mibuzo."
+
+msgid "Question time left"
+msgstr "Ixesha lombuzo eliseleyo"
+
+msgid "Time left"
+msgstr "Ixesha eliseleyo"
+
+msgid "Current attempt"
+msgstr "Inzame yangoku"
+
+msgid "Could not save draft answer"
+msgstr "Ayikwazanga kugcina impendulo eyidrafti"
+
+msgid "Could not load exercise"
+msgstr "Ayikwazanga kulayisha umsebenzi"
+
+msgid "Draft answer saved"
+msgstr "Impendulo eyidrafti igciniwe"
+
+msgid "Could not finish the attempt"
+msgstr "Ayikwazanga kugqibezela inzame"
+
+msgid "Could not prepare Office document"
+msgstr "Ayikwazanga kulungiselela uxwebhu lweOfisi"
+
+msgid "Back to learner score"
+msgstr "Buyela kumphumo womfundi"
+
+msgid "Disable auto refresh"
+msgstr "Khubaza ukuhlaziya ngokuzenzekelayo"
+
+msgid "Enable auto refresh"
+msgstr "Yenza kusebenze ukuhlaziya ngokuzenzekelayo"
+
+msgid "Live window"
+msgstr "Ifestile ephilayo"
+
+msgid "Ongoing attempts"
+msgstr "Iinzame eziqhubayo"
+
+msgid "Completed attempts"
+msgstr "Iinzame ezigqityiweyo"
+
+msgid "Started"
+msgstr "Kuqaliwe"
+
+msgid "Last activity"
+msgstr "Umsebenzi wokugqibela"
+
+msgid "Could not load live results"
+msgstr "Ayikwazanga kulayisha iziphumo eziphilayo"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Lo msebenzi ufunde kuphela kuba uqukwe kwindlela yokufunda."
+
+msgid "Select a question type to create a question."
+msgstr "Khetha uhlobo lombuzo ukwenza umbuzo."
+
+msgid "Click to preview"
+msgstr "Cofa ukuze uqwalasele"
+
+msgid "Hide preview"
+msgstr "Fihla uqwalaselo"
+
+msgid "Shape"
+msgstr "Imilo"
+
+msgid "Coordinates"
+msgstr "Izixhobo"
+
+msgid "Blanks"
+msgstr "Izithuba"
+
+msgid "Switchable blanks"
+msgstr "Izithuba ezitshintshwayo"
+
+msgid "Blank"
+msgstr "Isithuba"
+
+msgid "Input width"
+msgstr "Ububanzi bokungenisa"
+
+msgid "Orientation"
+msgstr "Ukuqhelaniswa"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ayifumaneki ngemodi yokunika ingxelo yomsebenzi yangoku"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ayifumaneki kwindlela yokudala indlela yokufunda"
+
+msgid "Delete question"
+msgstr "Cima umbuzo"
+
+msgid "Could not update exercise questions"
+msgstr "Ayikwazanga ukuhlaziya imibuzo yomsebenzi"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Ayikwazanga ukongeza umsebenzi kwindlela yokufunda"
+
+msgid "A valid exercise id is required."
+msgstr "Kufuneka i-ID yomsebenzi esebenzayo."
+
+msgid "Could not load exercise questions"
+msgstr "Ayikwazanga ukulayisha imibuzo yomsebenzi"
+
+msgid "Delete selected attempts"
+msgstr "Cima iinzame ezikhethiweyo"
+
+msgid "Before date"
+msgstr "Ngaphambi komhla"
+
+msgid "Pending corrections"
+msgstr "Izilungiso ezilindileyo"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Lo msebenzi uvaliwe yincwadi yamanqaku. Izenzo zokucoca iinzame zivaliwe."
+
+msgid "No attempts found"
+msgstr "Akukho zinzame zifunyenweyo"
+
+msgid "Review"
+msgstr "Hlola"
+
+msgid "Print/PDF"
+msgstr "Shicilela/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Ayikwazanga ukulayisha ingxelo yomsebenzi"
+
+msgid "Select at least one attempt"
+msgstr "Khetha ubuncinane inzame enye"
+
+msgid "Delete selected attempts?"
+msgstr "Cima iinzame ezikhethiweyo?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Thumela iimeyile zeziphumo zeenzame ezihloliweyo?"
+
+msgid "Could not send emails"
+msgstr "Ayikwazanga ukuthumela iimeyile"
+
+msgid "Exercise result emails sent"
+msgstr "Iimeyile zeziphumo zomsebenzi zithunyelwe"
+
+msgid "Skipped"
+msgstr "Kutsitswe"
+
+msgid "Close attempt?"
+msgstr "Vala inzame?"
+
+msgid "Attempt closed"
+msgstr "Inzame ivaliwe"
+
+msgid "Could not close attempt"
+msgstr "Ayikwazanga ukuvala inzame"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Thumela esi siphumo sezama nge-imeyile kumfundi?"
+
+msgid "Email sent"
+msgstr "I-imeyile ithunyelwe"
+
+msgid "Could not send email"
+msgstr "Ayikwazanga ukuthumela i-imeyile"
+
+msgid "Attempt deleted"
+msgstr "Inzame icinyiwe"
+
+msgid "Could not delete attempt"
+msgstr "Ayikwazanga ukucima inzame"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Khetha ifayile ye-CSV equlethe iikholam zezihloko kunye neenkcazelo."
+
+msgid "Manage categories used to classify questions."
+msgstr "Lawula iindidi ezisetyenziselwa ukuhlela imibuzo."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Lawula iindidi ezisetyenziselwa ukuhlela imisebenzi."
+
+msgid "Could not load categories"
+msgstr "Ayikwazanga ukulayisha iindidi"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Iindidi ezingenisiweyo: %s. Imiqolo etsitshiweyo: %s."
+
+msgid "Imported categories: %s."
+msgstr "Iindidi ezingenisiweyo: %s."
+
+msgid "Could not import categories"
+msgstr "Ayikwazanga ukungenisa iindidi"
+
+msgid "Could not save category"
+msgstr "Ayikwazanga ukugcina udidi"
+
+msgid "Answer distribution"
+msgstr "Ukwabiwa kweempendulo"
+
+msgid "Configured answers"
+msgstr "Iimpendulo ezicwangcisiweyo"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Ukubalwa kweempendulo ezineenkcukacha kwezinye iintlobo zemibuzo akukafumaneki kwingxelo efudukileyo okwangoku."
+
+msgid "No report by question data found"
+msgstr "Akukho ngxelo ngedatha yombuzo efunyenweyo"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Iinkcukacha zokubala iimpendulo zolu hlobo lombuzo azikafumaneki kwingxelo efudukileyo okwangoku."
+
+msgid "No answer distribution found"
+msgstr "Akukho ukwabiwa kweempendulo kufunyenweyo"
+
+msgid "Could not load report by question"
+msgstr "Ayikwazanga ukulayisha ingxelo ngombuzo"
+
+msgid "Question settings"
+msgstr "Iisetingi zombuzo"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Shiya ingenanto okanye 0 ukuba akukho mda wexesha."
+
+msgid "Time limit in seconds"
+msgstr "Ixesha elimiselweyo ngemizuzwana"
+
+msgid "Attached questions"
+msgstr "Imibuzo eqhotyoshelweyo"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Imibuzo eqhotyoshelwe kulo mbuzo wemidiya ngaphakathi kovavanyo lwangoku kuphela edweliswe apha."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Akukho mibuzo iqhotyoshelwe kulo mbuzo wemidiya kuvavanyo lwangoku."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Layisha ithempleyiti yoxwebhu lweOfisi abafundi abaza kuyihlela ngeOnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Buyisela uxwebhu lweOfisi"
+
+msgid "Current Office document"
+msgstr "Uxwebhu lweOfisi lwangoku"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Lo mbuzo ulungiswa ngesandla emva kokuba umfundi engenise uxwebhu oluhleliweyo."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Amanqaku ewonke abalwa njengesambuku samanqaku e-hotspot."
+
+msgid "Global score"
+msgstr "Amanqaku ewonke"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Khetha umqolo we-hotspot, khetha imilo yawo, emva koko zoba phezu komfanekiso. Kwipoligoni, cofa inqaku ngalinye uze ugqibe ipoligoni, okanye cofa kabini ukugqiba."
+
+msgid "Finish polygon"
+msgstr "Gqibezela ipoligoni"
+
+msgid "Calculated answer"
+msgstr "Impendulo ebalwayo"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Nceda uchwetheze isicatshulwa sakho ngezantsi kwaye usebenzise izibiyeli [...] ukuchaza isithuba esinye okanye ezingaphezulu."
+
+msgid "Lowest value"
+msgstr "Ixabiso eliphantsi"
+
+msgid "Highest value"
+msgstr "Ixabiso eliphezulu"
+
+msgid "Fill in blanks"
+msgstr "Zalisa izithuba"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Sebenzisa iziphawuli ezikhethiweyo ukuchaza izithuba. Umzekelo: Ikomkhulu lasePeru ngu [Lima]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Ngenisa iinketho zedropdown, impendulo enye ngomgca. Emva koko phawula iimpendulo ezilindelekileyo ngezantsi, njengesixhobo esidala."
+
+msgid "Refresh answers"
+msgstr "Hlaziya iimpendulo"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Lo mbuzo wokudibanisa idropdown usebenzisa amanqaku ewonke, njengakudala."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Nceda ungenise ubuncinane iinketho ezimbini zedropdown."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Yenza iinketho zendawo kuqala, emva koko nxulumanisa into nganye kwinketho eyiyo."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Lo mbuzo wokudibanisa wokufanisa usebenzisa amanqaku ewonke, njengakudala."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Yenza amanyathelo kwaye ukhethe indawo elindelekileyo yelinye nelinye, njengeDraggable yakudala."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Abafundi baya kukhetha Inyaniso okanye Ubuxoki baze bakhethe inqanaba labo lokuqiniseka ngexesha lokuzama. Umhleli ugcina amanqaku afanayo oChanekileyo/oPhosakeleyo kunye namanqanaba okuqiniseka njengakudala."
+
+msgid "Hotspot combination"
+msgstr "Umdibaniso we-hotspot"
+
+msgid "Add delineation"
+msgstr "Yongeza umda"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Lo mbuzo woxwebhu lweOfisi awunazo iinketho zeempendulo. Amanqaku awo anikwa ngexesha lokulungiswa/uphengululo lweziphumo."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Lo mbuzo wokulayisha awunazo iinketho zeempendulo. Amanqaku awo anikwa ngexesha lokulungiswa/uphengululo lweziphumo."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Lo mbuzo wokuthetha ngomlomo awunazo iinketho zeempendulo. Amanqaku awo anikwa ngexesha lokulungiswa/uphengululo lweziphumo."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Lo mbuzo ovulekileyo awunazo iinketho zeempendulo. Amanqaku awo anikwa ngexesha lokulungiswa/uphengululo lweziphumo."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Yongeza isicatshulwa sokufunda esinezicwangciso zesantya sokuskrola."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Yongeza umxholo, imidiya okanye umxholo wokufunda ngaphandle kokongeza amanqaku."
+
+msgid "Insert a page break without adding score."
+msgstr "Faka ikhefu lephepha ngaphandle kokongeza amanqaku."
+
+msgid "Could not save question"
+msgstr "Ayikwazanga kugcina umbuzo"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Kuvumelekile kuphela amaxwebhu eDOC, DOCX, XLS okanye XLSX."
+
+msgid "Please select an Office document."
+msgstr "Nceda ukhethe uxwebhu lweOfisi."
+
+msgid "Please draw at least one hotspot."
+msgstr "Nceda uzobe ubuncinane enye i-hotspot."
+
+msgid "Please draw at least one delineation."
+msgstr "Nceda uzobe ubuncinane umda omnye."
+
+msgid "The fill in blanks text is required."
+msgstr "Isicatshulwa sokuzalisa izithuba siyafuneka."
+
+msgid "At least one expected answer is required."
+msgstr "Ubuncinane impendulo enye elindelekileyo iyafuneka."
+
+msgid "At least two draggable items are required."
+msgstr "Ubuncinane izinto ezimbini ezitsalelekayo ziyafuneka."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Into nganye etsala kufuneka idityaniswe kwindawo ekujoliswe kuyo esebenzayo."
+
+msgid "At least two matching options are required."
+msgstr "Ubuncinane iinketho ezimbini zokufanisa ziyafuneka."
+
+msgid "At least two matching pairs are required."
+msgstr "Ubuncinane izibini ezimbini ezifanayo ziyafuneka."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Isibini ngasinye esifanayo kufuneka sidityaniswe nokhetho olusebenzayo."
+
+msgid "At least two answers are required."
+msgstr "Ubuncinane iimpendulo ezimbini ziyafuneka."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Impendulo nganye eyiNyaniso/Buxoki kufuneka inyanyiso lweNyaniso okanye lweBuxoki lukhethwe."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Umbuzo onempendulo enye kufuneka ube nempendulo enye echanekileyo."
+
+msgid "At least one correct answer is required."
+msgstr "Ubuncinane impendulo enye echanekileyo iyafuneka."
+
+msgid "Could not load question"
+msgstr "Ayikwazanga kulayisha umbuzo"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Khetha ikhosi uze uhlise ingxelo yeziphumo zovavanyo jikelele njengeCSV."
+
+msgid "Back to reports catalog"
+msgstr "Buyela kwikhathalogu yeengxelo"
+
+msgid "Could not load exercise global report"
+msgstr "Ayikwazanga kulayisha ingxelo yovavanyo jikelele"
+
+msgid "Imported questions"
+msgstr "Imibuzo eingenisiweyo"
+
+msgid "Aiken content"
+msgstr "Umxholo we-Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Ayikwazanga kulayisha umvelisi we-AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Ayikwazanga kuvelisa umxholo we-Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Ayikwazanga kungenisa umxholo we-Aiken ovelisiweyo"
+
+msgid "Back to my courses"
+msgstr "Buyela kwizifundo zam"
+
+msgid "Open report"
+msgstr "Vula ingxelo"
+
+msgid "Questions with no automatic correction"
+msgstr "Imibuzo engenalo uhlaziyo oluzenzekelayo"
+
+msgid "Could not load pending attempts"
+msgstr "Ayikwazanga kulayisha iinzame ezilindileyo"
+
+msgid "Skipped questions"
+msgstr "Imibuzo etshiweyo"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Ukungeniswa kwe-Aiken kusabalalisa obu bunzima bethotali kwimibuzo engenisiweyo ngaphandle kokuba umbuzo uchaza i-SCORE."
+
+msgid "Import warnings"
+msgstr "Izilumkiso zokungenisa"
+
+msgid "Could not import questions"
+msgstr "Ayikwazanga kungenisa imibuzo"
+
+msgid "No question statistics found"
+msgstr "Akukho manani-mbuzo afunyenweyo"
+
+msgid "Could not load question statistics"
+msgstr "Ayikwazanga kulayisha amanani-mbuzo"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Ungadibanisa ngokuthe ngqo neklayenti ye-MCP ngokuyalathisa kule ndawo ilandelayo:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Akukho zicelo zixhunyanisiweyo ngoku kwiakhawunti yakho."
+
+msgid "Connected on"
+msgstr "Ixhunyanisiwe nge"
+
+msgid "Last used"
+msgstr "Yokugqibela isetyenziswe"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ayisayi kuphinda ikwazi ukufikelela kwiakhawunti yakho ye-Chamilo. Qhubeka?"
+
+msgid "Application revoked"
+msgstr "Isicelo sirhoxisiwe"
+
+msgid "Copied to clipboard"
+msgstr "Ikopishwe kwibhodi yeqela"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Ayikwazanga kukopa indawo ye-MCP"
+
+msgid "MCP endpoint"
+msgstr "Indawo ye-MCP"
+
+msgid "API key"
+msgstr "Isitshixo se-API"
+
+msgid "Last used at"
+msgstr "Yokugqibela isetyenziswe nge"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopa esi sitshixo ngoku. Asiyi kuphinda siboniswe."
+
+msgid "Rotate API key"
+msgstr "Jikelezisa isitshixo se-API"
+
+msgid "Revoke API key"
+msgstr "Rhoxisa isitshixo se-API"
+
+msgid "Remote MCP connection"
+msgstr "Uqhagamshelwano lwe-MCP olukude"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Misela iklayenti yakho ye-MCP ngala maxabiso alandelayo:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Isitshixo sangoku siyakuyeka ukusebenza ngokukhawuleza. Qhubeka?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Isitshixo esitsha se-MCP API siya kuveliswa. Qhubeka?"
+
+msgid "MCP API key generated"
+msgstr "Isitshixo se-MCP API sivelisiwe"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Abaxumi be-MCP abasebenzisa esi sitshixo baya kuyeka ukusebenza ngokukhawuleza. Qhubeka?"
+
+msgid "MCP API key revoked"
+msgstr "Isitshixo se-MCP API sirhoxisiwe"
+
+msgid "Could not copy the API key"
+msgstr "Ayikwazanga kukopa isitshixo se-API"
+
+msgid "Project"
+msgstr "Iprojekthi"
+
+msgid "Close old tickets"
+msgstr "Vala amatikiti amadala"
+
+msgid "Close tickets older than seven days?"
+msgstr "Vala amatikiti amadala kuneentsuku ezisixhenxe?"
+
+msgid "Assignment history"
+msgstr "Imbali yomsebenzi ophunyeziweyo"
+
+msgid "Translate with AI"
+msgstr "Guqulela nge-AI"
+
+msgid "Target language"
+msgstr "Ulwimi olujoliswe kulo"
+
+msgid "Please select a provider"
+msgstr "Nceda ukhethe umboneleli"
+
+msgid "Generate translation"
+msgstr "Yenza inguqulelo"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Ubuncinane icandelo elinye lemiqathango kunye nemiqathango kufuneka libe nesicatshulwa."
+
+msgid "No active target languages are available."
+msgstr "Akukho zilwimi zokujolisa ezisebenzayo ezifumanekayo."
+
+msgid "Tutor"
+msgstr "Umqeqeshi"
+
+msgid "Access dates"
+msgstr "Imihla yokufikelela"
+
+msgid "Coach access dates"
+msgstr "Imihla yokufikelela komqeqeshi"
+
+msgid "No sessions found"
+msgstr "Akukho ziganeko zifunyenweyo"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Khetha izifundo apho lo msebenzisi angafanele afikelele kuzo kwesi siganeko."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Umsebenzisi akakwazi kuvalwa kuzo zonke izifundo kwisiganeko. Rhoxisa umbhaliso womsebenzisi endaweni yoko."
+
+msgid "Users subscribed to this session"
+msgstr "Abasebenzisi ababhalisele esi siganeko"
+
+msgid "No available users found"
+msgstr "Akukho basebenzisi bafumanekayo"
+
+msgid "Subscribe this user to the session?"
+msgstr "Bhalisa lo msebenzisi kwisiganeko?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Bhalisa abasebenzisi abakhethiweyo kwisiganeko?"
+
+msgid "General tutor planning"
+msgstr "Ucebo lomqeqeshi jikelele"
+
+msgid "User is already registered by another tutor."
+msgstr "Umsebenzisi sele ebhaliswe ngomnye umqeqeshi."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Ufumana ikopi kuba ungumqeqeshi wesifundo"
+
+msgid "General tutor"
+msgstr "Umqeqeshi jikelele"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Qwalasela izifundo, abaqeqeshi, inkxaso yobugcisa, ootitshala, kunye/okanye izixhobo ezifumanekayo."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Abaqeqeshi ababhaliswe njengootitshala kwisifundo %s"
+
+msgid "Tutor name"
+msgstr "Igama lomqeqeshi"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Abaqeqeshi besiganeko ngabaququzeleli besiganeko kwaye banokusebenza njengabaqeqeshi kwisifundo ngasinye kwisiganeko. Kuphela abasebenzisi abanendima yootitshala abanokukhethwa njengabaqeqeshi besiganeko."
+
+msgid "Access start date for tutors"
+msgstr "Umhla wokuqala wokufikelela kwabaqeqeshi"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Umhla apho isiganeko senziwa sifumaneke kubaqeqeshi, ukuze bakwazi ukusilungiselela ngaphambi kokuba abafundi baqhagamshelane"
+
+msgid "Access end date for tutors"
+msgstr "Umhla wokuphela wokufikelela kwabaqeqeshi"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Umhla apho isiganeko sivalwa kubaqeqeshi. Ulibaziso olongezelelweyo luza kubavumela ukuba bafumane yonke ingcombolo yokulandelela efanelekileyo"
+
+msgid "Tutor and student"
+msgstr "Umqeqeshi nomfundi"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Le ngxelo ibonisa ukwabiwa kweveki kweziganko ngomqeqeshi jikelele kuluhlu lwemihla ekhethiweyo."
+
+msgid "User is general tutor in some sessions"
+msgstr "Umsebenzisi ngumqeqeshi jikelele kwezinye iziganko"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Ootitshala baya kongezwa njengabaqeqeshi kuzo zonke iziganko zezifundo."
+
+msgid "Delete failed: invalid question id."
+msgstr "Ukucima akuphumelelanga: i-ID yombuzo ayisebenzi."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Inani eliphakathi leziganko ngomqeqeshi jikelele wesiganeko"
+
+msgid "No room"
+msgstr "Akukho gumbi"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Thatha ootitshala besifundo njengabaqeqeshi besifundo kwisiganeko"
+
+msgid "Clean and update course tutors"
+msgstr "Coca kwaye uhlaziye abaqeqeshi besifundo"
+
+msgid "Add me as tutor"
+msgstr "Ndifake njengomqeqeshi"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ayikwazi ukufaka uphando kwindlela yokufunda"
+
+msgid "Access dates for tutors"
+msgstr "Imihla yokufikelela kwabaqeqeshi"
+
+msgid "Tutor and group member"
+msgstr "Umqeqeshi kunye nelungu leqela"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Umda wakho wemihla ngemihla we-AI token ufikelele. Nceda uzame ngomso."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Umda wakho wenyanga we-AI token ufikelele. Nceda uzame kwinyanga ezayo."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Le khowudi yesifundo sele ikhona, nceda ukhethe enye ikhowudi."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Eli gama lesifundo sele likhona, nceda ukhethe elinye igama."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Ukubonakala kwesi sixhobo akunakutshintshwa"
+
+msgid "Invalid visibility"
+msgstr "Ukubonakala okungasebenziyo"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Ufumana ikopi kuba ungomnye wabaqeqeshi besifundo"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Ufumana ikopi kuba ungumqeqeshi wesifundo"
+
+msgid "Manual completion"
+msgstr "Ukugqibezela ngesandla"
+
+msgid "Send to tutors"
+msgstr "Thumela kubahlohli"
+
+msgid "Lab title"
+msgstr "Isihloko seLab"
+
+msgid "Lab week"
+msgstr "Iveki yeLab"
+
+msgid "Final exam access rule"
+msgstr "Umthetho wokufikelela kuviwo lokugqibela"
+
+msgid "Course completion rule"
+msgstr "Umthetho wokugqibezela ikhosi"
+
+msgid "You have been invited to join a course"
+msgstr "Umenywe ukuba ujoyine ikhosi"
+
+msgid "No user has been found"
+msgstr "Akukho mntu ufunyenweyo"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Umsebenzisi okhethiweyo akakwazi kubhaliswa kulo mongo"
+
+msgid "No change has been made"
+msgstr "Akukho tshintsho lwenziweyo"
+
+msgid "Back to group list"
+msgstr "Buyela kuluhlu lwamaqela"
+
+msgid "Remove class link"
+msgstr "Susa ikhonkco leklasi"
+
+msgid "Group settings"
+msgstr "Iisetingi zeqela"
+
+msgid "Self-registration allowed"
+msgstr "Ukuzibhalisa kuvumelekile"
+
+msgid "Self-unregistration allowed"
+msgstr "Ukuzikhupha kuvumelekile"
+
+msgid "This group is linked to the class"
+msgstr "Eli qela linxulunyaniswe neklasi"
+
+msgid "Create one or more empty course groups"
+msgstr "Yenza iqela elingenanto elinye okanye amaninzi"
+
+msgid "Number of places"
+msgstr "Inani lezithuba"
+
+msgid "Base group"
+msgstr "Iqela elisisiseko"
+
+msgid "Share"
+msgstr "Yabelana"
+
+msgid "Collaboration"
+msgstr "Intsebenziswano"
+
+msgid "The group title is required."
+msgstr "Isihloko seqela siyafuneka."
+
+msgid "Back to group area"
+msgstr "Buyela kwindawo yeqela"
+
+msgid "Members are managed by the linked class"
+msgstr "Amalungu alawulwa yiklasi edityanisiweyo"
+
+msgid "%s groups selected"
+msgstr "%s amaqela akhethiweyo"
+
+msgid "Fill selected groups"
+msgstr "Zalisa amaqela akhethiweyo"
+
+msgid "Empty selected groups"
+msgstr "Sula amaqela akhethiweyo"
+
+msgid "Fill group"
+msgstr "Zalisa iqela"
+
+msgid "Empty group"
+msgstr "Sula iqela"
+
+msgid "Groups per user"
+msgstr "Amaqela ngomsebenzisi"
+
+msgid "No tutors"
+msgstr "Akukho bahlohli"
+
+msgid "No users"
+msgstr "Akukho basebenzisi"
+

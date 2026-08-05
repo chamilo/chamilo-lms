@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:dosierujo,, application/msword:MsWord,, application/octet-stream:oktetfluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -37505,4 +37505,1432 @@ msgstr "Moderna, bonvena ilustraĵo reprezentanta la temon de ĉi tiu kurso, en 
 
 msgid "Back to account"
 msgstr "Reen al konto"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Via retroinformo helpos nin plibonigi estontajn trejnajn sesiojn."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Dankon pro via retroinformo."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Ĉu vi estas kontenta pri la ĝenerala kvalito de la trejnado?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Ĉu vi estas kontenta pri la taŭgeco de la enhavo?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Ĉu vi estas kontenta pri la klareco de la klarigoj?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Ĉu vi estas kontenta pri la organizo kaj ritmo de la trejnado?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Ĉu vi estas kontenta pri la praktika utileco de tio, kion vi lernis?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Ĉu vi rekomendus ĉi tiun trejnadon al aliaj homoj?"
+
+msgid "What should we improve in future editions?"
+msgstr "Kion ni devus plibonigi en estontaj eldonoj?"
+
+msgid "Very satisfied"
+msgstr "Tre kontenta"
+
+msgid "Satisfied"
+msgstr "Kontenta"
+
+msgid "Neutral"
+msgstr "Neŭtrala"
+
+msgid "Dissatisfied"
+msgstr "Malkontenta"
+
+msgid "Very dissatisfied"
+msgstr "Tre malkontenta"
+
+msgid "Add destination"
+msgstr "Aldoni celon"
+
+msgid "Add this test to the assessment tool"
+msgstr "Aldoni ĉi tiun teston al la taksa ilo"
+
+msgid "Attempts and timing"
+msgstr "Provadoj kaj tempigo"
+
+msgid "Available questions"
+msgstr "Disponeblaj demandoj"
+
+msgid "Cancel and return to learning path"
+msgstr "Nuligi kaj reveni al lernopado"
+
+msgid "Category destinations"
+msgstr "Kategoriaj celoj"
+
+msgid "Classification"
+msgstr "Klasifiko"
+
+msgid "Context"
+msgstr "Kunteksto"
+
+msgid "Could not load exercise configuration"
+msgstr "Ne eblis ŝargi la ekzercan agordon"
+
+msgid "Could not save exercise"
+msgstr "Ne eblis konservi la ekzercon"
+
+msgid "Display and learning path"
+msgstr "Montrado kaj lernopado"
+
+msgid "Edit test"
+msgstr "Redakti teston"
+
+msgid "Exercise settings saved."
+msgstr "Ekzercaj agordoj konservitaj."
+
+msgid "Extra settings"
+msgstr "Pliaj agordoj"
+
+msgid "Feedback and results"
+msgstr "Retroinformo kaj rezultoj"
+
+msgid "Finish exercise"
+msgstr "Fini ekzercon"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Identigas la lingvon de ĉi tiu ekzerco kiel rimedan metadatumon. Ĝi mem ne ebligas serĉan indeksadon."
+
+msgid "Maximum score (%)"
+msgstr "Maksimuma poentaro (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Metadatumoj enhavas kapablojn kaj pliajn kampojn agorditajn por ekzercoj. Ĝi estas laŭvola kaj restas kaŝita ĝis malfermita."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Neniuj demando-kategorioj estas ankoraŭ disponeblaj por ĉi tiu ekzerco."
+
+msgid "Question categories matrix"
+msgstr "Matrico de demandaj kategorioj"
+
+msgid "Questions behavior"
+msgstr "Konduto de demandoj"
+
+msgid "Random by category"
+msgstr "Hazarda laŭ kategorio"
+
+msgid "Remove destination"
+msgstr "Forigi celon"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Reguloj estas taksataj laŭ poentaro en kreskanta ordo. Elektu Finigi ekzercon por fini la teston."
+
+msgid "Score and final messages"
+msgstr "Poentaro kaj finaj mesaĝoj"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Iuj opcioj estas ŝlositaj post kiam la ekzerco estas kreita."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Ĉi tiu valoro estas konservata kiel totala daŭro en minutoj."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Uzu 0 por konservi ĉiujn disponeblajn demandojn. Uzu -1 kie ĉiuj disponeblaj demandoj estas permesitaj."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Uzu ĉi tiujn kampojn por klasifiki la ekzercon sendepende de ĝiaj montraj opcioj."
+
+msgid "Invite by email"
+msgstr "Inviti per retpoŝto"
+
+msgid "Invitation has been sent"
+msgstr "Invito estis sendita"
+
+msgid "Sent on"
+msgstr "Sendita je"
+
+msgid "Accepted on"
+msgstr "Akceptita je"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Ĉi tiu kurso estas malfermita en seanco. Sendi inviton ĉi tie abonos la ricevanton al la tuta seanco %s, ne nur al ĉi tiu kurso."
+
+msgid "Revoke"
+msgstr "Revoki"
+
+msgid "Revoked"
+msgstr "Revokita"
+
+msgid "Invitation has been revoked"
+msgstr "Invito estis revokita"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Ĉu vi certas, ke vi volas revoki la inviton senditan al %s?"
+
+msgid "No default room"
+msgstr "Neniu defaŭlta ĉambro"
+
+msgid "Floor"
+msgstr "Etaĝo"
+
+msgid "Capacity"
+msgstr "Kapacito"
+
+msgid "Use attendance default room"
+msgstr "Uzi defaŭltan ĉambron de ĉeesto"
+
+msgid "Floor number"
+msgstr "Etaĝonumero"
+
+msgid "Copy to students"
+msgstr "Kopii al studentoj"
+
+msgid "Generate a quick test on this topic"
+msgstr "Generi rapidan teston pri ĉi tiu temo"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "La konservita dokumentenhavo estos sendita al AI-modelo por prilaborado."
+
+msgid "MCP API key"
+msgstr "MCP API-ŝlosilo"
+
+msgid "Authorized applications"
+msgstr "Rajtigitaj aplikaĵoj"
+
+msgid "Your session is about to expire"
+msgstr "Via seanco baldaŭ eksvalidiĝos"
+
+msgid "Do you want to continue your session?"
+msgstr "Ĉu vi volas daŭrigi vian seancon?"
+
+msgid "Stay connected"
+msgstr "Resti konektita"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Vi estos elsalutita post %s sekundoj."
+
+msgid "No descriptions available yet."
+msgstr "Ankoraŭ neniu priskribo disponeblas."
+
+msgid "%s users selected"
+msgstr "%s uzantoj elektitaj"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "La elektitaj uzantoj estis enskribitaj al la kurso"
+
+msgid "Import teachers"
+msgstr "Importi instruistojn"
+
+msgid "Import learners"
+msgstr "Importi lernantojn"
+
+msgid "Select CSV file"
+msgstr "Elekti CSV-dosieron"
+
+msgid "Some users could not be subscribed"
+msgstr "Kelkaj uzantoj ne povis esti enskribitaj"
+
+msgid "Browse available classes"
+msgstr "Rigardi disponeblajn klasojn"
+
+msgid "Back to linked classes"
+msgstr "Reen al ligitaj klasoj"
+
+msgid "No classes are currently linked to this course."
+msgstr "Neniuj klasoj estas nuntempe ligitaj al ĉi tiu kurso."
+
+msgid "No available classes were found for this course."
+msgstr "Neniuj disponeblaj klasoj estis trovitaj por ĉi tiu kurso."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Ĉu vi certas, ke vi volas malenskribi la elektitajn uzantojn?"
+
+msgid "Learning path access"
+msgstr "Aliro al lernpado"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Nur elektitaj uzantoj kaj grupoj povas aliri ĉi tiun lernpadon. Administru ilin post konservado."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Ĉiuj nunaj kaj estontaj kursuzantoj povas aliri ĉi tiun lernpadon."
+
+msgid "All course users"
+msgstr "Ĉiuj kursuzantoj"
+
+msgid "Selected users and groups"
+msgstr "Elektitaj uzantoj kaj grupoj"
+
+msgid "No access"
+msgstr "Neniu aliro"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Nur uzantoj kaj grupoj aldonitaj ĉi tie povas aliri ĉi tiun lernpadon."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Nombro de demandoj limigita al maksimume %s"
+
+msgid "Open exercise player"
+msgstr "Malfermi ekzerciludilon"
+
+msgid "The score is hidden for this exercise."
+msgstr "La poentaro estas kaŝita por ĉi tiu ekzerco."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Korektoj estas kaŝitaj laŭ la agordoj de la ekzerca rezulto."
+
+msgid "Progressive adaptive result"
+msgstr "Progresema adapta rezulto"
+
+msgid "Achieved level"
+msgstr "Atingita nivelo"
+
+msgid "Correction history"
+msgstr "Korekta historio"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Historio de manaj korektoj faritaj por ĉi tiu provo."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Ĉi tiu ekzerco uzas la radar/spiderweb rezultreĝimon. La diagramo ne disponeblas sur ĉi tiu paĝo."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Demando-detaloj estas kaŝitaj laŭ la agordoj de la ekzerca rezulto."
+
+msgid "Media question"
+msgstr "Aŭdvida demando"
+
+msgid "Pending correction"
+msgstr "Atendanta korekton"
+
+msgid "No answer"
+msgstr "Neniu respondo"
+
+msgid "Blank %s"
+msgstr "Malplena %s"
+
+msgid "Your order"
+msgstr "Via ordo"
+
+msgid "Correct order"
+msgstr "Ĝusta ordo"
+
+msgid "Delineation review"
+msgstr "Revizio de delineado"
+
+msgid "Learner clicks"
+msgstr "Klako de lernanto"
+
+msgid "Question image"
+msgstr "Demanda bildo"
+
+msgid "No hotspot image available"
+msgstr "Neniu hotspot-bildo disponeblas"
+
+msgid "Learner delineation"
+msgstr "Delineado de lernanto"
+
+msgid "Expected delineation"
+msgstr "Atendata delineado"
+
+msgid "Expected zones"
+msgstr "Atendataj zonoj"
+
+msgid "Zone"
+msgstr "Zono"
+
+msgid "Learner annotation"
+msgstr "Anotacio de lernanto"
+
+msgid "No annotation image available"
+msgstr "Neniu anotacia bildo disponeblas"
+
+msgid "This answer is pending teacher correction."
+msgstr "Ĉi tiu respondo atendas korekton de la instruisto."
+
+msgid "Teacher comment"
+msgstr "Komento de la instruisto"
+
+msgid "Teacher correction"
+msgstr "Korekto de instruisto"
+
+msgid "Save correction"
+msgstr "Konservi korekton"
+
+msgid "Learner audio"
+msgstr "Aŭdio de lernanto"
+
+msgid "Download audio"
+msgstr "Elŝuti aŭdion"
+
+msgid "No uploaded audio"
+msgstr "Neniu alŝutita aŭdio"
+
+msgid "Learner Office document"
+msgstr "Oficeja dokumento de lernanto"
+
+msgid "Learner file"
+msgstr "Dosiero de lernanto"
+
+msgid "Download Office document"
+msgstr "Elŝuti oficejan dokumenton"
+
+msgid "No submitted document"
+msgstr "Neniu sendita dokumento"
+
+msgid "No uploaded file"
+msgstr "Neniu alŝutita dosiero"
+
+msgid "Content item"
+msgstr "Enhavero"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Ĉi tiu demando-tipo ne povas esti reviziita sur ĉi tiu paĝo."
+
+msgid "Exercise completed"
+msgstr "Ekzerco kompletigita"
+
+msgid "Could not start the attempt"
+msgstr "Ne eblis komenci la provon"
+
+msgid "Invalid exercise attempt"
+msgstr "Nevalida ekzerca provo"
+
+msgid "Could not load exercise result"
+msgstr "Ne eblis ŝargi ekzercan rezulton"
+
+msgid "Could not load AI providers"
+msgstr "Ne eblis ŝargi AI-provizantojn"
+
+msgid "Could not generate AI suggestion"
+msgstr "Ne eblis generi AI-sugeston"
+
+msgid "Correction saved"
+msgstr "Korekto konservita"
+
+msgid "Could not save correction"
+msgstr "Ne eblis konservi korekton"
+
+msgid "Create exercise"
+msgstr "Krei ekzercon"
+
+msgid "Exercise categories"
+msgstr "Ekzercaj kategorioj"
+
+msgid "Question categories"
+msgstr "Demando-kategorioj"
+
+msgid "Search by exercise title or description."
+msgstr "Serĉi laŭ ekzerca titolo aŭ priskribo."
+
+msgid "Search exercises"
+msgstr "Serĉi ekzercojn"
+
+msgid "No exercises found"
+msgstr "Neniuj ekzercoj trovitaj"
+
+msgid "Open exercise"
+msgstr "Malfermi ekzercon"
+
+msgid "Disable autolaunch"
+msgstr "Malebligi aŭtolanĉon"
+
+msgid "Enable autolaunch"
+msgstr "Ebligi aŭtolanĉon"
+
+msgid "Export QTI2"
+msgstr "Eksporti QTI2"
+
+msgid "Bulk actions"
+msgstr "Ampleksaj agoj"
+
+msgid "Selected exercises"
+msgstr "Elektitaj ekzercoj"
+
+msgid "No exercises selected"
+msgstr "Neniuj ekzercoj elektitaj"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Ĉu vi certas, ke vi volas apliki ĉi tiun agon al la elektitaj ekzercoj?"
+
+msgid "Bulk action completed"
+msgstr "Ampleksa ago kompletigita"
+
+msgid "Could not update exercises"
+msgstr "Ne eblis ĝisdatigi ekzercojn"
+
+msgid "Could not update exercise"
+msgstr "Ne eblis ĝisdatigi ekzercon"
+
+msgid "Copy exercise"
+msgstr "Kopii ekzercon"
+
+msgid "Delete exercise"
+msgstr "Forigi ekzercon"
+
+msgid "Could not load exercises"
+msgstr "Ne eblis ŝargi ekzercojn"
+
+msgid "No limit"
+msgstr "Neniu limo"
+
+msgid "Add selected questions to the test"
+msgstr "Aldoni elektitajn demandojn al la testo"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Ĉi tiu demando estas uzata en aktiva testo kaj ne povas esti redaktita ĉi tie."
+
+msgid "This question cannot be edited here."
+msgstr "Ĉi tiu demando ne povas esti redaktita ĉi tie."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Ĉi tiu demando estas uzata en aktiva testo kaj ne povas esti forigita ĉi tie."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Ĉi tiu demando ne povas esti forigita ĉar via aliro estas limigita de la platformaj agordoj."
+
+msgid "Already in test"
+msgstr "Jam en testo"
+
+msgid "Select at least one question."
+msgstr "Elektu almenaŭ unu demandon."
+
+msgid "Question bank updated"
+msgstr "Demando-banko ĝisdatigita"
+
+msgid "Could not update the question bank"
+msgstr "Ne eblis ĝisdatigi la demando-bankon"
+
+msgid "Could not load the question bank"
+msgstr "Ne eblis ŝargi la demandbankon"
+
+msgid "Total score"
+msgstr "Tuta poentaro"
+
+msgid "Starting"
+msgstr "Komenco"
+
+msgid "Attempt history"
+msgstr "Historio de provoj"
+
+msgid "No attempts yet"
+msgstr "Ankoraŭ neniu provo"
+
+msgid "Invalid exercise"
+msgstr "Nevalida ekzerco"
+
+msgid "Could not load exercise overview"
+msgstr "Ne eblis ŝargi la superrigardon de la ekzerco"
+
+msgid "Open test"
+msgstr "Malfermi teston"
+
+msgid "Random answers"
+msgstr "Hazardaj respondoj"
+
+msgid "Prevent moving backwards"
+msgstr "Malhelpi retroiradon"
+
+msgid "Previous button hidden"
+msgstr "Antaŭa butono kaŝita"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Ĉi tiu ekzerco uzas opciojn kiuj postulas alian testludilon."
+
+msgid "Continue test"
+msgstr "Daŭrigi teston"
+
+msgid "Attempt started"
+msgstr "Provo komenciĝis"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Instruista antaŭrigardo ne kreas spuritan provon."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Komenci aŭ daŭrigi ekzercan provon. Malnetaj respondoj povas esti konservitaj antaŭ fina sendo."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Tempolimo atingita. Finante la provon."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Demanda tempo atingita. Konservante vian respondon."
+
+msgid "Finishing"
+msgstr "Finante"
+
+msgid "Draft saved"
+msgstr "Malneto konservita"
+
+msgid "Statement"
+msgstr "Deklaro"
+
+msgid "Drop each option on the matching answer"
+msgstr "Trenu ĉiun opcion al la kongrua respondo"
+
+msgid "Clear match"
+msgstr "Forigi kongruon"
+
+msgid "Click to place the selected option here"
+msgstr "Klaku por meti la elektitan opcion ĉi tie"
+
+msgid "Select an option, then click here"
+msgstr "Elektu opcion, poste klaku ĉi tie"
+
+msgid "Already matched"
+msgstr "Jam kongruigita"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Vi povas treni opcion al respondo, aŭ elekti opcion kaj poste klaki celkeston."
+
+msgid "Put the items in the correct order."
+msgstr "Metu la erojn en la ĝustan ordon."
+
+msgid "Move left"
+msgstr "Movi maldekstren"
+
+msgid "Move right"
+msgstr "Movi dekstren"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Vi povas treni erojn maldekstren aŭ dekstren, aŭ uzi la movbutonojn por ŝanĝi la ordon."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Vi povas treni erojn aŭ uzi la movbutonojn por ŝanĝi la ordon."
+
+msgid "Or upload an audio file"
+msgstr "Aŭ alŝuti sonodosieron"
+
+msgid "Selected audio"
+msgstr "Elektita sono"
+
+msgid "Uploaded audio"
+msgstr "Alŝutita sono"
+
+msgid "Office document"
+msgstr "Oficeja dokumento"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Kompletigu la dokumenton en la suba redaktilo. La dosiero estos alkroĉita al ĉi tiu provo por instruista korektado."
+
+msgid "Reload Office editor"
+msgstr "Reŝargi Oficejan redaktilon"
+
+msgid "Prepare Office document"
+msgstr "Prepari Oficejan dokumenton"
+
+msgid "Open in new tab"
+msgstr "Malfermi en nova langeto"
+
+msgid "Preparing Office document"
+msgstr "Preparante Oficejan dokumenton"
+
+msgid "Submitted document"
+msgstr "Sendita dokumento"
+
+msgid "Annotation tools"
+msgstr "Komentiloj"
+
+msgid "Text to place"
+msgstr "Teksto por meti"
+
+msgid "Click the image to place the text annotation."
+msgstr "Klaku la bildon por meti la tekstan komentilon."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Klaku la bildon por aldoni vojpunktojn. Uzu Komenci novan vojon por apartigi vojojn."
+
+msgid "Start new path"
+msgstr "Komenci novan vojon"
+
+msgid "Current annotations"
+msgstr "Nunaj komentoj"
+
+msgid "Remove point"
+msgstr "Forigi punkton"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Klaku la bildon por desegni la limigan plurlateron."
+
+msgid "Click a marker to remove it."
+msgstr "Klaku markilon por forigi ĝin."
+
+msgid "Placed"
+msgstr "Metita"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Elektu respondon, poste alklaku la bildon por marki ĝin."
+
+msgid "Reading speed"
+msgstr "Legorapido"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Ĉi tiu demando-tipo ne povas esti montrata en ĉi tiu ludilo."
+
+msgid "Save draft"
+msgstr "Konservi malneton"
+
+msgid "I confirm that my answers were saved."
+msgstr "Mi konfirmas, ke miaj respondoj estis konservitaj."
+
+msgid "Finish test"
+msgstr "Fini teston"
+
+msgid "Attempt finished"
+msgstr "Provo finita"
+
+msgid "Question category"
+msgstr "Demando-kategorio"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Vi finis la demandojn rilatajn al ĉi tiu demando-kategorio, ĝi estas via lasta ŝanco reveni kaj revizii tiujn demandojn."
+
+msgid "Question time left"
+msgstr "Restanta demando-tempo"
+
+msgid "Time left"
+msgstr "Restanta tempo"
+
+msgid "Current attempt"
+msgstr "Nuna provo"
+
+msgid "Could not save draft answer"
+msgstr "Ne eblis konservi malnetan respondon"
+
+msgid "Could not load exercise"
+msgstr "Ne eblis ŝarĝi ekzercon"
+
+msgid "Draft answer saved"
+msgstr "Malneta respondo konservita"
+
+msgid "Could not finish the attempt"
+msgstr "Ne eblis fini la provon"
+
+msgid "Could not prepare Office document"
+msgstr "Ne eblis prepari Office-dokumenton"
+
+msgid "Back to learner score"
+msgstr "Reen al lernanto-poentaro"
+
+msgid "Disable auto refresh"
+msgstr "Malebligi aŭtomatan refreŝigon"
+
+msgid "Enable auto refresh"
+msgstr "Ebligi aŭtomatan refreŝigon"
+
+msgid "Live window"
+msgstr "Viva fenestro"
+
+msgid "Ongoing attempts"
+msgstr "Daŭrantaj provoj"
+
+msgid "Completed attempts"
+msgstr "Kompletigitaj provoj"
+
+msgid "Started"
+msgstr "Komencita"
+
+msgid "Last activity"
+msgstr "Lasta agado"
+
+msgid "Could not load live results"
+msgstr "Ne eblis ŝarĝi vivajn rezultojn"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Ĉi tiu ekzerco estas nurlegebla ĉar ĝi estas inkluzivita en lernpado."
+
+msgid "Select a question type to create a question."
+msgstr "Elektu demando-tipon por krei demandon."
+
+msgid "Click to preview"
+msgstr "Klaku por antaŭrigardi"
+
+msgid "Hide preview"
+msgstr "Kaŝi antaŭrigardon"
+
+msgid "Shape"
+msgstr "Formo"
+
+msgid "Coordinates"
+msgstr "Koordinatoj"
+
+msgid "Blanks"
+msgstr "Malplenoj"
+
+msgid "Switchable blanks"
+msgstr "Ŝanĝeblaj malplenoj"
+
+msgid "Blank"
+msgstr "Malpleno"
+
+msgid "Input width"
+msgstr "Eniga larĝo"
+
+msgid "Orientation"
+msgstr "Orientiĝo"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Ne disponebla kun la nuna ekzerca retroŝanĝa reĝimo"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Ne disponebla en la lernpada kreofluo"
+
+msgid "Delete question"
+msgstr "Forigi demandon"
+
+msgid "Could not update exercise questions"
+msgstr "Ne eblis ĝisdatigi ekzercajn demandojn"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Ne eblis aldoni la ekzercon al la lernpado"
+
+msgid "A valid exercise id is required."
+msgstr "Valida ekzerca ID estas bezonata."
+
+msgid "Could not load exercise questions"
+msgstr "Ne eblis ŝarĝi ekzercajn demandojn"
+
+msgid "Delete selected attempts"
+msgstr "Forigi elektitajn provojn"
+
+msgid "Before date"
+msgstr "Antaŭ dato"
+
+msgid "Pending corrections"
+msgstr "Pritraktendaj korektadoj"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Ĉi tiu ekzerco estas ŝlosita de la notlibro. Purigaj agoj de provoj estas malŝaltitaj."
+
+msgid "No attempts found"
+msgstr "Neniuj provoj trovitaj"
+
+msgid "Review"
+msgstr "Revizii"
+
+msgid "Print/PDF"
+msgstr "Presi/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Ne eblis ŝargi la ekzercan raporton"
+
+msgid "Select at least one attempt"
+msgstr "Elektu almenaŭ unu provon"
+
+msgid "Delete selected attempts?"
+msgstr "Ĉu forigi la elektitajn provojn?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Ĉu sendi retpoŝtojn pri reviziitaj provrezultoj?"
+
+msgid "Could not send emails"
+msgstr "Ne eblis sendi retpoŝtojn"
+
+msgid "Exercise result emails sent"
+msgstr "Retpoŝtoj pri ekzercaj rezultoj senditaj"
+
+msgid "Skipped"
+msgstr "Preterpasita"
+
+msgid "Close attempt?"
+msgstr "Ĉu fermi la provon?"
+
+msgid "Attempt closed"
+msgstr "Provo fermita"
+
+msgid "Could not close attempt"
+msgstr "Ne eblis fermi la provon"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Ĉu sendi la rezulton de ĉi tiu provo per retpoŝto al la lernanto?"
+
+msgid "Email sent"
+msgstr "Retpoŝto sendita"
+
+msgid "Could not send email"
+msgstr "Ne eblis sendi retpoŝton"
+
+msgid "Attempt deleted"
+msgstr "Provo forigita"
+
+msgid "Could not delete attempt"
+msgstr "Ne eblis forigi la provon"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Elektu CSV-dosieron enhavantan kolumnojn por titolo kaj priskribo."
+
+msgid "Manage categories used to classify questions."
+msgstr "Administri kategoriojn uzatajn por klasifiki demandojn."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Administri kategoriojn uzatajn por klasifiki ekzercojn."
+
+msgid "Could not load categories"
+msgstr "Ne eblis ŝargi kategoriojn"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Importitaj kategorioj: %s. Preterpasitaj vicoj: %s."
+
+msgid "Imported categories: %s."
+msgstr "Importitaj kategorioj: %s."
+
+msgid "Could not import categories"
+msgstr "Ne eblis importi kategoriojn"
+
+msgid "Could not save category"
+msgstr "Ne eblis konservi kategorion"
+
+msgid "Answer distribution"
+msgstr "Respondodistribuo"
+
+msgid "Configured answers"
+msgstr "Agorditaj respondoj"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Detala kalkulado de respondoj por iuj demandoj ankoraŭ ne disponeblas en la migrinta raporto."
+
+msgid "No report by question data found"
+msgstr "Neniuj datumoj trovitaj por raporto laŭ demando"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Detala kalkulado de respondoj por ĉi tiu demando ankoraŭ ne disponeblas en la migrinta raporto."
+
+msgid "No answer distribution found"
+msgstr "Neniu respondodistribuo trovita"
+
+msgid "Could not load report by question"
+msgstr "Ne eblis ŝargi raporton laŭ demando"
+
+msgid "Question settings"
+msgstr "Demando-agordoj"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Lasu malplena aŭ 0 por neniu tempolimo."
+
+msgid "Time limit in seconds"
+msgstr "Tempolimo en sekundoj"
+
+msgid "Attached questions"
+msgstr "Alligitaj demandoj"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Nur demandoj alligitaj al ĉi tiu plurmedia demando ene de la nuna ekzerco estas listigitaj ĉi tie."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Neniuj demandoj estas alligitaj al ĉi tiu plurmedia demando en la nuna ekzerco."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Alŝutu la ŝablonon de la oficeja dokumento, kiun lernantoj redaktos per OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Anstataŭigi oficejan dokumenton"
+
+msgid "Current Office document"
+msgstr "Nuna oficeja dokumento"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Ĉi tiu demando estas korektita permane post kiam la lernanto sendas la redaktitan dokumenton."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "La totala poentaro estas kalkulita kiel sumo de la poentaroj de la varmpunktoj."
+
+msgid "Global score"
+msgstr "Ĝenerala poentaro"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Elektu varmpunktan vicon, elektu ĝian formon, poste desegnu sur la bildo. Por pluranguloj, alklaku ĉiun punkton kaj finu la plurangulon, aŭ duoble alklaku por fini."
+
+msgid "Finish polygon"
+msgstr "Fini plurangulon"
+
+msgid "Calculated answer"
+msgstr "Kalkulita respondo"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Bonvolu tajpi vian tekston sube kaj uzi kvadratkrampojn [...] por difini unu aŭ plurajn malplenojn."
+
+msgid "Lowest value"
+msgstr "Plej malalta valoro"
+
+msgid "Highest value"
+msgstr "Plej alta valoro"
+
+msgid "Fill in blanks"
+msgstr "Plenigi la malplenaĵojn"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Uzu la elektitajn markilojn por difini malplenaĵojn. Ekzemplo: La ĉefurbo de Peruo estas [Limo]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Enigu la malsuprenmenuajn opciojn, unu respondo po linio. Poste marku la atendatajn respondojn sube, kiel en la hereda ilo."
+
+msgid "Refresh answers"
+msgstr "Refreŝigi respondojn"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Ĉi tiu malsuprenmenua kombinaĵa demando uzas unu ĝeneralan poentaron, kiel la hereda."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Bonvolu enigi almenaŭ du malsuprenmenuajn opciojn."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Kreu celajn opciojn unue, poste ligigu ĉiun eron al la ĝusta opcio."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Ĉi tiu kongruiga kombinaĵa demando uzas unu ĝeneralan poentaron, kiel la hereda."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Kreu la paŝojn kaj elektu la atendatan pozicion por ĉiu, kiel en la hereda Draggable."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Lernantoj elektos Vera aŭ Malvera kaj poste sian gradon de certeco dum la provo. La redaktilo konservas la samajn Ĝustajn/Malĝustajn poentarojn kaj certecajn nivelojn kiel la hereda."
+
+msgid "Hotspot combination"
+msgstr "Varma punkto kombinaĵo"
+
+msgid "Add delineation"
+msgstr "Aldoni limlinion"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ĉi tiu Oficeja dokumenta demando ne havas respondajn opciojn. Ĝia poentaro estas atribuita dum korektado/revizio de rezultoj."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ĉi tiu alŝuta demando ne havas respondajn opciojn. Ĝia poentaro estas atribuita dum korektado/revizio de rezultoj."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ĉi tiu parola esprima demando ne havas respondajn opciojn. Ĝia poentaro estas atribuita dum korektado/revizio de rezultoj."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Ĉi tiu malferma demando ne havas respondajn opciojn. Ĝia poentaro estas atribuita dum korektado/revizio de rezultoj."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Aldoni legotekston kun agordoj de rulumrapido."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Aldoni enhavon, aŭdvidaĵon aŭ legokuntekston sen aldoni poentaron."
+
+msgid "Insert a page break without adding score."
+msgstr "Enmeti paĝrompon sen aldoni poentaron."
+
+msgid "Could not save question"
+msgstr "Ne eblis konservi la demandon"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Nur DOC, DOCX, XLS aŭ XLSX dokumentoj estas permesitaj."
+
+msgid "Please select an Office document."
+msgstr "Bonvolu elekti Oficejan dokumenton."
+
+msgid "Please draw at least one hotspot."
+msgstr "Bonvolu desegni almenaŭ unu varman punkton."
+
+msgid "Please draw at least one delineation."
+msgstr "Bonvolu desegni almenaŭ unu limlinion."
+
+msgid "The fill in blanks text is required."
+msgstr "La teksto por plenigi la malplenaĵojn estas postulata."
+
+msgid "At least one expected answer is required."
+msgstr "Almenaŭ unu atendata respondo estas postulata."
+
+msgid "At least two draggable items are required."
+msgstr "Almenaŭ du treneblaj eroj estas postulataj."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Ĉiu trenebla ero devas esti ligita al valida cela pozicio."
+
+msgid "At least two matching options are required."
+msgstr "Almenaŭ du kongruigaj opcioj estas postulataj."
+
+msgid "At least two matching pairs are required."
+msgstr "Almenaŭ du kongruigaj paroj estas postulataj."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Ĉiu kongruiga paro devas esti ligita al valida opcio."
+
+msgid "At least two answers are required."
+msgstr "Almenaŭ du respondoj estas postulataj."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Ĉiu vera/malvera respondo devas havi Veran aŭ Malveran elektitan."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Demando kun unika respondo devas havi precize unu ĝustan respondon."
+
+msgid "At least one correct answer is required."
+msgstr "Almenaŭ unu ĝusta respondo estas postulata."
+
+msgid "Could not load question"
+msgstr "Ne eblis ŝargi la demandon"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Elektu kurson kaj eksportu la ĝeneralan ekzercan rezultraporton kiel CSV."
+
+msgid "Back to reports catalog"
+msgstr "Reen al raportkatalogo"
+
+msgid "Could not load exercise global report"
+msgstr "Ne eblis ŝargi la ĝeneralan raporton de ekzerco"
+
+msgid "Imported questions"
+msgstr "Importitaj demandoj"
+
+msgid "Aiken content"
+msgstr "Aiken-enhavo"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Ne eblis ŝargi la AI Aiken-generilon"
+
+msgid "Could not generate Aiken content"
+msgstr "Ne eblis generi Aiken-enhavon"
+
+msgid "Could not import generated Aiken content"
+msgstr "Ne eblis importi generitan Aiken-enhavon"
+
+msgid "Back to my courses"
+msgstr "Reen al miaj kursoj"
+
+msgid "Open report"
+msgstr "Malfermi raporton"
+
+msgid "Questions with no automatic correction"
+msgstr "Demandoj sen aŭtomata korektado"
+
+msgid "Could not load pending attempts"
+msgstr "Ne eblis ŝargi la atendatajn provojn"
+
+msgid "Skipped questions"
+msgstr "Preterpasitaj demandoj"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken-importo distribuas ĉi tiun totalan pezon inter la importitaj demandoj, krom se demando difinas SCORE."
+
+msgid "Import warnings"
+msgstr "Importaj avertoj"
+
+msgid "Could not import questions"
+msgstr "Ne eblis importi demandojn"
+
+msgid "No question statistics found"
+msgstr "Neniuj demando-statistikoj trovitaj"
+
+msgid "Could not load question statistics"
+msgstr "Ne eblis ŝargi demando-statistikojn"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Vi ankaŭ povas konekti MCP-klienton rekte per la sekva finpunkto:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Neniuj aplikaĵoj estas nuntempe konektitaj al via konto."
+
+msgid "Connected on"
+msgstr "Konektita je"
+
+msgid "Last used"
+msgstr "Laste uzita"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ne plu povos aliri vian Chamilo-konton. Ĉu daŭrigi?"
+
+msgid "Application revoked"
+msgstr "Aplikaĵo revokita"
+
+msgid "Copied to clipboard"
+msgstr "Kopiita al tondujo"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Ne eblis kopii la MCP-finpunkton"
+
+msgid "MCP endpoint"
+msgstr "MCP-finpunkto"
+
+msgid "API key"
+msgstr "API-ŝlosilo"
+
+msgid "Last used at"
+msgstr "Laste uzita je"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Kopiu ĉi tiun ŝlosilon nun. Ĝi ne estos montrata denove."
+
+msgid "Rotate API key"
+msgstr "Rotacii API-ŝlosilon"
+
+msgid "Revoke API key"
+msgstr "Revoki API-ŝlosilon"
+
+msgid "Remote MCP connection"
+msgstr "Fora MCP-konekto"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Agordu vian MCP-klienton per la sekvaj valoroj:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "La nuna ŝlosilo ĉesos funkcii tuj. Ĉu daŭrigi?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Nova persona MCP API-ŝlosilo estos generita. Ĉu daŭrigi?"
+
+msgid "MCP API key generated"
+msgstr "MCP API-ŝlosilo generita"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Konektitaj MCP-klientoj uzantaj ĉi tiun ŝlosilon ĉesos funkcii tuj. Ĉu daŭrigi?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API-ŝlosilo revokita"
+
+msgid "Could not copy the API key"
+msgstr "Ne eblis kopii la API-ŝlosilon"
+
+msgid "Project"
+msgstr "Projekto"
+
+msgid "Close old tickets"
+msgstr "Fermi malnovajn biletojn"
+
+msgid "Close tickets older than seven days?"
+msgstr "Ĉu fermi biletojn pli malnovajn ol sep tagoj?"
+
+msgid "Assignment history"
+msgstr "Taskohistorio"
+
+msgid "Translate with AI"
+msgstr "Traduki per AI"
+
+msgid "Target language"
+msgstr "Cel-lingvo"
+
+msgid "Please select a provider"
+msgstr "Bonvolu elekti provizanton"
+
+msgid "Generate translation"
+msgstr "Generi tradukon"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Almenaŭ unu sekcio de kondiĉoj kaj terminoj devas enhavi tekston."
+
+msgid "No active target languages are available."
+msgstr "Neniuj aktivaj cel-lingvoj disponeblas."
+
+msgid "Tutor"
+msgstr "Kuratoro"
+
+msgid "Access dates"
+msgstr "Alirdatoj"
+
+msgid "Coach access dates"
+msgstr "Kuratoraj alirdatoj"
+
+msgid "No sessions found"
+msgstr "Neniuj sesioj trovitaj"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Elektu la kursojn, kiujn ĉi tiu uzanto ne rajtos aliri en ĉi tiu sesio."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Uzanto ne povas esti blokita de ĉiuj kursoj en la sesio. Male, malabonu la uzanton."
+
+msgid "Users subscribed to this session"
+msgstr "Uzantoj abonitaj al ĉi tiu sesio"
+
+msgid "No available users found"
+msgstr "Neniuj disponeblaj uzantoj trovitaj"
+
+msgid "Subscribe this user to the session?"
+msgstr "Ĉu aboni ĉi tiun uzanton al la sesio?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Ĉu aboni la elektitajn uzantojn al la sesio?"
+
+msgid "General tutor planning"
+msgstr "Ĝenerala kuratora planado"
+
+msgid "User is already registered by another tutor."
+msgstr "La uzanto jam estas registrita de alia kuratoro."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Vi ricevas kopion ĉar vi estas kursa kuratoro"
+
+msgid "General tutor"
+msgstr "Ĝenerala tutoro"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Konsideru la kursojn, tutorojn, teknikan helpservon, instruistojn kaj/aŭ disponeblajn materialojn."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Tutoroj abonitaj kiel instruistoj en kurso %s"
+
+msgid "Tutor name"
+msgstr "Nomo de la tutoro"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Sesiaj tutoroj estas kunordigantoj de la sesio kaj povas agi kiel tutoroj por ĉiu kurso en la sesio. Nur uzantoj kun la instruista rolo povas esti elektitaj kiel sesiaj tutoroj."
+
+msgid "Access start date for tutors"
+msgstr "Komenca alirdato por tutoroj"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Dato kiam la sesio fariĝas disponebla por tutoroj, por ke ili povu prepari ĝin antaŭ ol la studentoj konektiĝas"
+
+msgid "Access end date for tutors"
+msgstr "Fina alirdato por tutoroj"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Dato kiam la sesio fermiĝas por tutoroj. La aldona prokrasto permesos al ili eksporti ĉiujn koncernajn spurajn informojn"
+
+msgid "Tutor and student"
+msgstr "Tutoro kaj studento"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Ĉi tiu raporto montras la semajnan distribuon de sesioj laŭ ĝenerala tutoro en la elektita datintervalo."
+
+msgid "User is general tutor in some sessions"
+msgstr "Uzanto estas ĝenerala tutoro en kelkaj sesioj"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Instruistoj aldoniĝos kiel tutoroj en ĉiuj kursaj sesioj."
+
+msgid "Delete failed: invalid question id."
+msgstr "Forigo malsukcesis: nevalida demando-ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Mezuma nombro de sesioj por ĝenerala sesia tutoro"
+
+msgid "No room"
+msgstr "Neniu ĉambro"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Importi kursajn instruistojn kiel kursajn tutorojn en la sesio"
+
+msgid "Clean and update course tutors"
+msgstr "Purigi kaj ĝisdatigi kursajn tutorojn"
+
+msgid "Add me as tutor"
+msgstr "Aldoni min kiel tutoron"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Ne eblas aldoni la enketon al la lernopado"
+
+msgid "Access dates for tutors"
+msgstr "Alirdatoj por tutoroj"
+
+msgid "Tutor and group member"
+msgstr "Tutoro kaj grupano"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Via ĉiutaga AI-ĵetona limo estas atingita. Bonvolu reprovi morgaŭ."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Via monata AI-ĵetona limo estas atingita. Bonvolu reprovi venontmonate."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Ĉi tiu kursa kodo jam ekzistas, bonvolu elekti alian kodon."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Ĉi tiu kursa titolo jam ekzistas, bonvolu elekti alian titolon."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Ĉi tiu ilo videbleco ne povas esti ŝanĝita"
+
+msgid "Invalid visibility"
+msgstr "Nevalida videbleco"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Vi ricevas kopion ĉar vi estas unu el la kursaj tutoroj"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Vi ricevas kopion ĉar vi estas la kursa tutoro"
+
+msgid "Manual completion"
+msgstr "Mana kompletigo"
+
+msgid "Send to tutors"
+msgstr "Sendi al tutoroj"
+
+msgid "Lab title"
+msgstr "Laboratoria titolo"
+
+msgid "Lab week"
+msgstr "Laboratoria semajno"
+
+msgid "Final exam access rule"
+msgstr "Fina ekzamena alirregulo"
+
+msgid "Course completion rule"
+msgstr "Kursa kompletigregulo"
+
+msgid "You have been invited to join a course"
+msgstr "Vi estas invitita aliĝi al kurso"
+
+msgid "No user has been found"
+msgstr "Neniu uzanto trovita"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "La elektita uzanto ne povas esti abonita en ĉi tiu kunteksto"
+
+msgid "No change has been made"
+msgstr "Neniu ŝanĝo farita"
+
+msgid "Back to group list"
+msgstr "Reen al grupolisto"
+
+msgid "Remove class link"
+msgstr "Forigi klasligilon"
+
+msgid "Group settings"
+msgstr "Grupagordoj"
+
+msgid "Self-registration allowed"
+msgstr "Memregistriĝo permesita"
+
+msgid "Self-unregistration allowed"
+msgstr "Memmalregistriĝo permesita"
+
+msgid "This group is linked to the class"
+msgstr "Ĉi tiu grupo estas ligita al la klaso"
+
+msgid "Create one or more empty course groups"
+msgstr "Krei unu aŭ plurajn malplenajn kursgrupojn"
+
+msgid "Number of places"
+msgstr "Nombro da lokoj"
+
+msgid "Base group"
+msgstr "Baza grupo"
+
+msgid "Share"
+msgstr "Kunhavigi"
+
+msgid "Collaboration"
+msgstr "Kunlaborado"
+
+msgid "The group title is required."
+msgstr "La gruptitolo estas deviga."
+
+msgid "Back to group area"
+msgstr "Reen al grupareo"
+
+msgid "Members are managed by the linked class"
+msgstr "Membroj estas administrataj de la ligita klaso"
+
+msgid "%s groups selected"
+msgstr "%s grupoj elektitaj"
+
+msgid "Fill selected groups"
+msgstr "Plenigi elektitajn grupojn"
+
+msgid "Empty selected groups"
+msgstr "Malplenigi elektitajn grupojn"
+
+msgid "Fill group"
+msgstr "Plenigi grupon"
+
+msgid "Empty group"
+msgstr "Malplenigi grupon"
+
+msgid "Groups per user"
+msgstr "Grupoj po uzanto"
+
+msgid "No tutors"
+msgstr "Neniuj tutoroj"
+
+msgid "No users"
+msgstr "Neniuj uzantoj"
 

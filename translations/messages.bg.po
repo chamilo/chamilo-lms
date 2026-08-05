@@ -37506,3 +37506,1431 @@ msgstr "Съвременна, приветлива илюстрация, пре�
 msgid "Back to account"
 msgstr "Обратно към профила"
 
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Вашата обратна връзка ще ни помогне да подобрим бъдещите обучения."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Благодарим ви, че споделихте мнението си."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Колко сте доволни от общото качество на обучението?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Колко сте доволни от релевантността на съдържанието?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Колко сте доволни от яснотата на обясненията?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Колко сте доволни от организацията и темпото на обучението?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Колко сте доволни от практическата полезност на наученото?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Бихте ли препоръчали това обучение на други хора?"
+
+msgid "What should we improve in future editions?"
+msgstr "Какво трябва да подобрим в бъдещите издания?"
+
+msgid "Very satisfied"
+msgstr "Много доволен"
+
+msgid "Satisfied"
+msgstr "Доволен"
+
+msgid "Neutral"
+msgstr "Неутрален"
+
+msgid "Dissatisfied"
+msgstr "Недоволен"
+
+msgid "Very dissatisfied"
+msgstr "Много недоволен"
+
+msgid "Add destination"
+msgstr "Добавяне на дестинация"
+
+msgid "Add this test to the assessment tool"
+msgstr "Добавяне на този тест към инструмента за оценяване"
+
+msgid "Attempts and timing"
+msgstr "Опити и време"
+
+msgid "Available questions"
+msgstr "Налични въпроси"
+
+msgid "Cancel and return to learning path"
+msgstr "Отказ и връщане към учебния път"
+
+msgid "Category destinations"
+msgstr "Дестинации на категория"
+
+msgid "Classification"
+msgstr "Класификация"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Could not load exercise configuration"
+msgstr "Неуспешно зареждане на конфигурацията на упражнението"
+
+msgid "Could not save exercise"
+msgstr "Неуспешно запазване на упражнението"
+
+msgid "Display and learning path"
+msgstr "Показване и учебен път"
+
+msgid "Edit test"
+msgstr "Редактиране на тест"
+
+msgid "Exercise settings saved."
+msgstr "Настройките на упражнението са запазени."
+
+msgid "Extra settings"
+msgstr "Допълнителни настройки"
+
+msgid "Feedback and results"
+msgstr "Обратна връзка и резултати"
+
+msgid "Finish exercise"
+msgstr "Завършване на упражнението"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Идентифицира езика на това упражнение като метаданни на ресурса. Сам по себе си не позволява индексиране за търсене."
+
+msgid "Maximum score (%)"
+msgstr "Максимален резултат (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Метаданните съдържат умения и допълнителни полета, конфигурирани за упражнения. Те са незадължителни и остават скрити, докато не бъдат отворени."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Все още няма налични категории въпроси за това упражнение."
+
+msgid "Question categories matrix"
+msgstr "Матрица на категориите въпроси"
+
+msgid "Questions behavior"
+msgstr "Поведение на въпросите"
+
+msgid "Random by category"
+msgstr "Случайно по категория"
+
+msgid "Remove destination"
+msgstr "Премахване на дестинация"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Правилата се оценяват по процент на резултата във възходящ ред. Изберете Завършване на упражнението, за да завършите теста."
+
+msgid "Score and final messages"
+msgstr "Резултат и крайни съобщения"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Някои опции се заключват след създаването на упражнението."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Тази стойност се съхранява като обща продължителност в минути."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Използвайте 0, за да запазите всички налични въпроси. Използвайте -1, където са разрешени всички налични въпроси."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Използвайте тези полета, за да класифицирате упражнението независимо от опциите за показване."
+
+msgid "Invite by email"
+msgstr "Покани по имейл"
+
+msgid "Invitation has been sent"
+msgstr "Поканата е изпратена"
+
+msgid "Sent on"
+msgstr "Изпратено на"
+
+msgid "Accepted on"
+msgstr "Прието на"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Този курс е отворен в сесия. Изпращането на покана тук ще запише получателя в цялата сесия %s, а не само в този курс."
+
+msgid "Revoke"
+msgstr "Отмени"
+
+msgid "Revoked"
+msgstr "Отменено"
+
+msgid "Invitation has been revoked"
+msgstr "Поканата е отменена"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Сигурни ли сте, че искате да отмените поканата, изпратена на %s?"
+
+msgid "No default room"
+msgstr "Няма стая по подразбиране"
+
+msgid "Floor"
+msgstr "Етаж"
+
+msgid "Capacity"
+msgstr "Капацитет"
+
+msgid "Use attendance default room"
+msgstr "Използвай стая по подразбиране за присъствие"
+
+msgid "Floor number"
+msgstr "Номер на етаж"
+
+msgid "Copy to students"
+msgstr "Копирай към студентите"
+
+msgid "Generate a quick test on this topic"
+msgstr "Генерирай бърз тест на тази тема"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Съдържанието на запазения документ ще бъде изпратено към AI модел за обработка."
+
+msgid "MCP API key"
+msgstr "MCP API ключ"
+
+msgid "Authorized applications"
+msgstr "Оторизирани приложения"
+
+msgid "Your session is about to expire"
+msgstr "Вашата сесия е на път да изтече"
+
+msgid "Do you want to continue your session?"
+msgstr "Искате ли да продължите сесията си?"
+
+msgid "Stay connected"
+msgstr "Остани свързан"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Ще бъдете отписани след %s секунди."
+
+msgid "No descriptions available yet."
+msgstr "Все още няма налични описания."
+
+msgid "%s users selected"
+msgstr "%s избрани потребители"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Избраните потребители бяха записани в курса"
+
+msgid "Import teachers"
+msgstr "Импортирай преподаватели"
+
+msgid "Import learners"
+msgstr "Импортирай обучаеми"
+
+msgid "Select CSV file"
+msgstr "Избери CSV файл"
+
+msgid "Some users could not be subscribed"
+msgstr "Някои потребители не можаха да бъдат записани"
+
+msgid "Browse available classes"
+msgstr "Преглед на наличните класове"
+
+msgid "Back to linked classes"
+msgstr "Назад към свързаните класове"
+
+msgid "No classes are currently linked to this course."
+msgstr "В момента няма свързани класове към този курс."
+
+msgid "No available classes were found for this course."
+msgstr "Не са намерени налични класове за този курс."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Сигурни ли сте, че искате да отпишете избраните потребители?"
+
+msgid "Learning path access"
+msgstr "Достъп до учебния път"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Само избрани потребители и групи имат достъп до този учебен път. Управлявайте ги след запазване."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Всички текущи и бъдещи потребители на курса имат достъп до този учебен път."
+
+msgid "All course users"
+msgstr "Всички потребители на курса"
+
+msgid "Selected users and groups"
+msgstr "Избрани потребители и групи"
+
+msgid "No access"
+msgstr "Без достъп"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Само потребителите и групите, добавени тук, имат достъп до този учебен път."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Броят на въпросите е ограничен до максимум %s"
+
+msgid "Open exercise player"
+msgstr "Отваряне на упражнението"
+
+msgid "The score is hidden for this exercise."
+msgstr "Резултатът е скрит за това упражнение."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Поправките са скрити според настройките за резултатите от упражнението."
+
+msgid "Progressive adaptive result"
+msgstr "Прогресивен адаптивен резултат"
+
+msgid "Achieved level"
+msgstr "Постигнато ниво"
+
+msgid "Correction history"
+msgstr "История на поправките"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "История на ръчните поправки за този опит."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Това упражнение използва режим на резултати радар/паяжина. Графиката не е достъпна на тази страница."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Подробностите за въпроса са скрити според настройките за резултатите от упражнението."
+
+msgid "Media question"
+msgstr "Медиен въпрос"
+
+msgid "Pending correction"
+msgstr "Чакаща поправка"
+
+msgid "No answer"
+msgstr "Без отговор"
+
+msgid "Blank %s"
+msgstr "Празно %s"
+
+msgid "Your order"
+msgstr "Вашият ред"
+
+msgid "Correct order"
+msgstr "Правилен ред"
+
+msgid "Delineation review"
+msgstr "Преглед на очертанията"
+
+msgid "Learner clicks"
+msgstr "Щраквания на обучаемия"
+
+msgid "Question image"
+msgstr "Изображение на въпроса"
+
+msgid "No hotspot image available"
+msgstr "Няма налично изображение на гореща точка"
+
+msgid "Learner delineation"
+msgstr "Очертание на обучаемия"
+
+msgid "Expected delineation"
+msgstr "Очаквано очертание"
+
+msgid "Expected zones"
+msgstr "Очаквани зони"
+
+msgid "Zone"
+msgstr "Зона"
+
+msgid "Learner annotation"
+msgstr "Анотация на обучаемия"
+
+msgid "No annotation image available"
+msgstr "Няма налично изображение за анотация"
+
+msgid "This answer is pending teacher correction."
+msgstr "Този отговор чака поправка от преподавателя."
+
+msgid "Teacher comment"
+msgstr "Коментар на преподавателя"
+
+msgid "Teacher correction"
+msgstr "Поправка на преподавателя"
+
+msgid "Save correction"
+msgstr "Запазване на поправката"
+
+msgid "Learner audio"
+msgstr "Аудио на обучаемия"
+
+msgid "Download audio"
+msgstr "Изтегляне на аудио"
+
+msgid "No uploaded audio"
+msgstr "Няма качено аудио"
+
+msgid "Learner Office document"
+msgstr "Офис документ на обучаемия"
+
+msgid "Learner file"
+msgstr "Файл на обучаемия"
+
+msgid "Download Office document"
+msgstr "Изтегляне на офис документ"
+
+msgid "No submitted document"
+msgstr "Няма подаден документ"
+
+msgid "No uploaded file"
+msgstr "Няма качен файл"
+
+msgid "Content item"
+msgstr "Елемент на съдържанието"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Този тип въпрос не може да бъде прегледан на тази страница."
+
+msgid "Exercise completed"
+msgstr "Упражнението е завършено"
+
+msgid "Could not start the attempt"
+msgstr "Не може да се стартира опитът"
+
+msgid "Invalid exercise attempt"
+msgstr "Невалиден опит за упражнение"
+
+msgid "Could not load exercise result"
+msgstr "Не може да се зареди резултатът от упражнението"
+
+msgid "Could not load AI providers"
+msgstr "Не може да се заредят AI доставчици"
+
+msgid "Could not generate AI suggestion"
+msgstr "Не може да се генерира AI предложение"
+
+msgid "Correction saved"
+msgstr "Корекцията е запазена"
+
+msgid "Could not save correction"
+msgstr "Не може да се запази корекцията"
+
+msgid "Create exercise"
+msgstr "Създаване на упражнение"
+
+msgid "Exercise categories"
+msgstr "Категории упражнения"
+
+msgid "Question categories"
+msgstr "Категории въпроси"
+
+msgid "Search by exercise title or description."
+msgstr "Търсене по заглавие или описание на упражнението."
+
+msgid "Search exercises"
+msgstr "Търсене на упражнения"
+
+msgid "No exercises found"
+msgstr "Няма намерени упражнения"
+
+msgid "Open exercise"
+msgstr "Отваряне на упражнение"
+
+msgid "Disable autolaunch"
+msgstr "Деактивиране на автоматично стартиране"
+
+msgid "Enable autolaunch"
+msgstr "Активиране на автоматично стартиране"
+
+msgid "Export QTI2"
+msgstr "Експортиране в QTI2"
+
+msgid "Bulk actions"
+msgstr "Групови действия"
+
+msgid "Selected exercises"
+msgstr "Избрани упражнения"
+
+msgid "No exercises selected"
+msgstr "Няма избрани упражнения"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Сигурни ли сте, че искате да приложите това действие към избраните упражнения?"
+
+msgid "Bulk action completed"
+msgstr "Груповото действие е завършено"
+
+msgid "Could not update exercises"
+msgstr "Не може да се актуализират упражненията"
+
+msgid "Could not update exercise"
+msgstr "Не може да се актуализира упражнението"
+
+msgid "Copy exercise"
+msgstr "Копиране на упражнение"
+
+msgid "Delete exercise"
+msgstr "Изтриване на упражнение"
+
+msgid "Could not load exercises"
+msgstr "Не може да се заредят упражненията"
+
+msgid "No limit"
+msgstr "Без ограничение"
+
+msgid "Add selected questions to the test"
+msgstr "Добавяне на избраните въпроси към теста"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Този въпрос се използва в активен тест и не може да бъде редактиран тук."
+
+msgid "This question cannot be edited here."
+msgstr "Този въпрос не може да бъде редактиран тук."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Този въпрос се използва в активен тест и не може да бъде изтрит тук."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Този въпрос не може да бъде изтрит, защото достъпът ви е ограничен от настройките на платформата."
+
+msgid "Already in test"
+msgstr "Вече е в теста"
+
+msgid "Select at least one question."
+msgstr "Изберете поне един въпрос."
+
+msgid "Question bank updated"
+msgstr "Банката с въпроси е актуализирана"
+
+msgid "Could not update the question bank"
+msgstr "Не може да се актуализира банката с въпроси"
+
+msgid "Could not load the question bank"
+msgstr "Не може да се зареди банката с въпроси"
+
+msgid "Total score"
+msgstr "Общ резултат"
+
+msgid "Starting"
+msgstr "Стартиране"
+
+msgid "Attempt history"
+msgstr "История на опитите"
+
+msgid "No attempts yet"
+msgstr "Все още няма опити"
+
+msgid "Invalid exercise"
+msgstr "Невалидно упражнение"
+
+msgid "Could not load exercise overview"
+msgstr "Не може да се зареди прегледът на упражнението"
+
+msgid "Open test"
+msgstr "Отваряне на теста"
+
+msgid "Random answers"
+msgstr "Случайни отговори"
+
+msgid "Prevent moving backwards"
+msgstr "Предотвратяване на връщане назад"
+
+msgid "Previous button hidden"
+msgstr "Бутон „Предишен“ скрит"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Това упражнение използва опции, които изискват различен тестов плейър."
+
+msgid "Continue test"
+msgstr "Продължи теста"
+
+msgid "Attempt started"
+msgstr "Опитът е започнат"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Прегледът от преподавател не създава проследяван опит."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Започнете или възобновете опит за упражнение. Черновите на отговорите могат да се запазят преди окончателното предаване."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Времевият лимит е достигнат. Завършване на опита."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Времето за въпроса изтече. Отговорът ви се запазва."
+
+msgid "Finishing"
+msgstr "Завършване"
+
+msgid "Draft saved"
+msgstr "Черновата е запазена"
+
+msgid "Statement"
+msgstr "Условие"
+
+msgid "Drop each option on the matching answer"
+msgstr "Поставете всяка опция върху съответния отговор"
+
+msgid "Clear match"
+msgstr "Изчистване на съответствието"
+
+msgid "Click to place the selected option here"
+msgstr "Кликнете, за да поставите избраната опция тук"
+
+msgid "Select an option, then click here"
+msgstr "Изберете опция, след което кликнете тук"
+
+msgid "Already matched"
+msgstr "Вече е съпоставено"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Можете да плъзнете опция към отговор или да изберете опция и след това да кликнете върху целевото поле."
+
+msgid "Put the items in the correct order."
+msgstr "Подредете елементите в правилния ред."
+
+msgid "Move left"
+msgstr "Премести наляво"
+
+msgid "Move right"
+msgstr "Премести надясно"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Можете да плъзгате елементите наляво или надясно или да използвате бутоните за преместване, за да промените реда."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Можете да плъзгате елементите или да използвате бутоните за преместване, за да промените реда."
+
+msgid "Or upload an audio file"
+msgstr "Или качете аудио файл"
+
+msgid "Selected audio"
+msgstr "Избрано аудио"
+
+msgid "Uploaded audio"
+msgstr "Качено аудио"
+
+msgid "Office document"
+msgstr "Офис документ"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Попълнете документа в редактора по-долу. Файлът ще бъде прикачен към този опит за проверка от преподавателя."
+
+msgid "Reload Office editor"
+msgstr "Презареди Office редактора"
+
+msgid "Prepare Office document"
+msgstr "Подготви Office документ"
+
+msgid "Open in new tab"
+msgstr "Отвори в нов раздел"
+
+msgid "Preparing Office document"
+msgstr "Подготвяне на Office документ"
+
+msgid "Submitted document"
+msgstr "Предаден документ"
+
+msgid "Annotation tools"
+msgstr "Инструменти за анотиране"
+
+msgid "Text to place"
+msgstr "Текст за поставяне"
+
+msgid "Click the image to place the text annotation."
+msgstr "Кликнете върху изображението, за да поставите текстовата анотация."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Кликнете върху изображението, за да добавите точки на пътя. Използвайте „Започни нов път“, за да разделите пътищата."
+
+msgid "Start new path"
+msgstr "Започни нов път"
+
+msgid "Current annotations"
+msgstr "Текущи анотации"
+
+msgid "Remove point"
+msgstr "Премахни точка"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Кликнете върху изображението, за да нарисувате очертаващия полигон."
+
+msgid "Click a marker to remove it."
+msgstr "Кликнете върху маркер, за да го премахнете."
+
+msgid "Placed"
+msgstr "Поставено"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Изберете отговор, след което кликнете върху изображението, за да го отбележите."
+
+msgid "Reading speed"
+msgstr "Скорост на четене"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Този тип въпрос не може да се покаже в този плейър."
+
+msgid "Save draft"
+msgstr "Запази чернова"
+
+msgid "I confirm that my answers were saved."
+msgstr "Потвърждавам, че отговорите ми са запазени."
+
+msgid "Finish test"
+msgstr "Завърши теста"
+
+msgid "Attempt finished"
+msgstr "Опитът е завършен"
+
+msgid "Question category"
+msgstr "Категория въпроси"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Завършихте въпросите от тази категория. Това е последният ви шанс да се върнете и да ги прегледате."
+
+msgid "Question time left"
+msgstr "Оставащо време за въпроса"
+
+msgid "Time left"
+msgstr "Оставащо време"
+
+msgid "Current attempt"
+msgstr "Текущ опит"
+
+msgid "Could not save draft answer"
+msgstr "Черновата не можа да бъде запазена"
+
+msgid "Could not load exercise"
+msgstr "Упражнението не можа да бъде заредено"
+
+msgid "Draft answer saved"
+msgstr "Черновата е запазена"
+
+msgid "Could not finish the attempt"
+msgstr "Опитът не можа да бъде завършен"
+
+msgid "Could not prepare Office document"
+msgstr "Документът на Office не можа да бъде подготвен"
+
+msgid "Back to learner score"
+msgstr "Обратно към резултата на обучаемия"
+
+msgid "Disable auto refresh"
+msgstr "Изключи автоматично опресняване"
+
+msgid "Enable auto refresh"
+msgstr "Включи автоматично опресняване"
+
+msgid "Live window"
+msgstr "Прозорец на живо"
+
+msgid "Ongoing attempts"
+msgstr "Текущи опити"
+
+msgid "Completed attempts"
+msgstr "Завършени опити"
+
+msgid "Started"
+msgstr "Стартиран"
+
+msgid "Last activity"
+msgstr "Последна активност"
+
+msgid "Could not load live results"
+msgstr "Резултатите на живо не можаха да бъдат заредени"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Това упражнение е само за четене, тъй като е включено в учебна пътека."
+
+msgid "Select a question type to create a question."
+msgstr "Изберете тип въпрос, за да създадете въпрос."
+
+msgid "Click to preview"
+msgstr "Кликнете за предварителен преглед"
+
+msgid "Hide preview"
+msgstr "Скрий предварителния преглед"
+
+msgid "Shape"
+msgstr "Форма"
+
+msgid "Coordinates"
+msgstr "Координати"
+
+msgid "Blanks"
+msgstr "Празни полета"
+
+msgid "Switchable blanks"
+msgstr "Превключваеми празни полета"
+
+msgid "Blank"
+msgstr "Празно поле"
+
+msgid "Input width"
+msgstr "Ширина на полето"
+
+msgid "Orientation"
+msgstr "Ориентация"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Не е налично при текущия режим на обратна връзка за упражнението"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Не е налично при създаване на учебна пътека"
+
+msgid "Delete question"
+msgstr "Изтрий въпроса"
+
+msgid "Could not update exercise questions"
+msgstr "Въпросите на упражнението не можаха да бъдат актуализирани"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Упражнението не можа да бъде добавено към учебната пътека"
+
+msgid "A valid exercise id is required."
+msgstr "Необходим е валиден идентификатор на упражнение."
+
+msgid "Could not load exercise questions"
+msgstr "Въпросите на упражнението не можаха да бъдат заредени"
+
+msgid "Delete selected attempts"
+msgstr "Изтрий избраните опити"
+
+msgid "Before date"
+msgstr "Преди дата"
+
+msgid "Pending corrections"
+msgstr "Чакащи корекции"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Това упражнение е заключено от дневника за оценки. Действията за изчистване на опити са забранени."
+
+msgid "No attempts found"
+msgstr "Не са намерени опити"
+
+msgid "Review"
+msgstr "Преглед"
+
+msgid "Print/PDF"
+msgstr "Печат/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Докладът за упражнението не можа да бъде зареден"
+
+msgid "Select at least one attempt"
+msgstr "Изберете поне един опит"
+
+msgid "Delete selected attempts?"
+msgstr "Изтрий избраните опити?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Изпрати имейли с резултатите от прегледаните опити?"
+
+msgid "Could not send emails"
+msgstr "Имейлите не можаха да бъдат изпратени"
+
+msgid "Exercise result emails sent"
+msgstr "Имейлите с резултатите от упражнението са изпратени"
+
+msgid "Skipped"
+msgstr "Пропуснато"
+
+msgid "Close attempt?"
+msgstr "Затвори опита?"
+
+msgid "Attempt closed"
+msgstr "Опитът е затворен"
+
+msgid "Could not close attempt"
+msgstr "Опитът не може да бъде затворен"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Изпрати резултата от този опит по имейл на обучаемия?"
+
+msgid "Email sent"
+msgstr "Имейлът е изпратен"
+
+msgid "Could not send email"
+msgstr "Имейлът не може да бъде изпратен"
+
+msgid "Attempt deleted"
+msgstr "Опитът е изтрит"
+
+msgid "Could not delete attempt"
+msgstr "Опитът не може да бъде изтрит"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Изберете CSV файл, съдържащ колони за заглавие и описание."
+
+msgid "Manage categories used to classify questions."
+msgstr "Управление на категории за класифициране на въпроси."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Управление на категории за класифициране на упражнения."
+
+msgid "Could not load categories"
+msgstr "Категориите не могат да бъдат заредени"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Импортирани категории: %s. Пропуснати редове: %s."
+
+msgid "Imported categories: %s."
+msgstr "Импортирани категории: %s."
+
+msgid "Could not import categories"
+msgstr "Категориите не могат да бъдат импортирани"
+
+msgid "Could not save category"
+msgstr "Категорията не може да бъде запазена"
+
+msgid "Answer distribution"
+msgstr "Разпределение на отговорите"
+
+msgid "Configured answers"
+msgstr "Конфигурирани отговори"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Подробното броене на отговори за някои типове въпроси все още не е налично в мигрирания отчет."
+
+msgid "No report by question data found"
+msgstr "Не са намерени данни за отчет по въпрос"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Подробното броене на отговори за този тип въпрос все още не е налично в мигрирания отчет."
+
+msgid "No answer distribution found"
+msgstr "Не е намерено разпределение на отговорите"
+
+msgid "Could not load report by question"
+msgstr "Отчетът по въпрос не може да бъде зареден"
+
+msgid "Question settings"
+msgstr "Настройки на въпроса"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Оставете празно или 0 за без ограничение на времето."
+
+msgid "Time limit in seconds"
+msgstr "Ограничение на времето в секунди"
+
+msgid "Attached questions"
+msgstr "Прикачени въпроси"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Тук са изброени само въпросите, прикачени към този медиен въпрос в текущото упражнение."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Няма прикачени въпроси към този медиен въпрос в текущото упражнение."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Качете шаблона на офис документа, който обучаемите ще редактират с OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Замени офис документа"
+
+msgid "Current Office document"
+msgstr "Текущ офис документ"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Този въпрос се коригира ръчно след като обучаемият изпрати редактирания документ."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Общият резултат се изчислява като сума от резултатите от горещите точки."
+
+msgid "Global score"
+msgstr "Глобален резултат"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Изберете ред с гореща точка, изберете формата му, след това нарисувайте върху изображението. За полигони кликнете всяка точка и завършете полигона или щракнете двукратно, за да завършите."
+
+msgid "Finish polygon"
+msgstr "Завърши полигона"
+
+msgid "Calculated answer"
+msgstr "Изчислен отговор"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Моля, въведете текста си по-долу и използвайте квадратни скоби [...] за да дефинирате едно или повече празни места."
+
+msgid "Lowest value"
+msgstr "Най-ниска стойност"
+
+msgid "Highest value"
+msgstr "Най-висока стойност"
+
+msgid "Fill in blanks"
+msgstr "Попълване на празни места"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Използвайте избраните маркери, за да дефинирате празните места. Пример: Столицата на Перу е [Лима]."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Въведете опциите за падащото меню, по един отговор на ред. След това отбележете очакваните отговори по-долу, както в наследения инструмент."
+
+msgid "Refresh answers"
+msgstr "Обнови отговорите"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Този въпрос с комбинирано падащо меню използва един глобален резултат, както в наследения инструмент."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Моля, въведете поне две опции за падащото меню."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Създайте първо опциите за дестинация, след това свържете всеки елемент с правилната опция."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Този въпрос с комбинирано съпоставяне използва един глобален резултат, както в наследения инструмент."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Създайте стъпките и изберете очакваната позиция за всяка, както при наследената функция „Draggable“."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Учениците ще изберат „Вярно“ или „Невярно“, а след това ще посочат степента на сигурност по време на опита. Редакторът запазва същите оценки „Правилно/Грешно“ и нива на сигурност като наследената версия."
+
+msgid "Hotspot combination"
+msgstr "Комбинация от горещи точки"
+
+msgid "Add delineation"
+msgstr "Добавяне на очертание"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Този въпрос с офис документ няма опции за отговор. Оценката му се задава по време на корекция/преглед на резултатите."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Този въпрос за качване няма опции за отговор. Оценката му се задава по време на корекция/преглед на резултатите."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Този въпрос за устно изразяване няма опции за отговор. Оценката му се задава по време на корекция/преглед на резултатите."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Този отворен въпрос няма опции за отговор. Оценката му се задава по време на корекция/преглед на резултатите."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Добавяне на текст за четене с настройки за скорост на превъртане."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Добавяне на съдържание, медия или контекст за четене без добавяне на оценка."
+
+msgid "Insert a page break without adding score."
+msgstr "Вмъкване на разделител на страница без добавяне на оценка."
+
+msgid "Could not save question"
+msgstr "Неуспешно запазване на въпроса"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Разрешени са само документи DOC, DOCX, XLS или XLSX."
+
+msgid "Please select an Office document."
+msgstr "Моля, изберете офис документ."
+
+msgid "Please draw at least one hotspot."
+msgstr "Моля, начертайте поне една гореща точка."
+
+msgid "Please draw at least one delineation."
+msgstr "Моля, начертайте поне едно очертание."
+
+msgid "The fill in blanks text is required."
+msgstr "Текстът за попълване на празните места е задължителен."
+
+msgid "At least one expected answer is required."
+msgstr "Изисква се поне един очакван отговор."
+
+msgid "At least two draggable items are required."
+msgstr "Изискват се поне два плъзгащи се елемента."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Всеки плъзгащ се елемент трябва да бъде свързан с валидна целева позиция."
+
+msgid "At least two matching options are required."
+msgstr "Изискват се поне две опции за съпоставяне."
+
+msgid "At least two matching pairs are required."
+msgstr "Изискват се поне две съответстващи двойки."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Всяка съответстваща двойка трябва да бъде свързана с валидна опция."
+
+msgid "At least two answers are required."
+msgstr "Изискват се поне два отговора."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Всеки отговор „Вярно/Невярно“ трябва да има избрано „Вярно“ или „Невярно“."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Въпрос с единствен верен отговор трябва да има точно един правилен отговор."
+
+msgid "At least one correct answer is required."
+msgstr "Изисква се поне един правилен отговор."
+
+msgid "Could not load question"
+msgstr "Неуспешно зареждане на въпроса"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Изберете курс и експортирайте глобалния отчет за резултатите от упражнението като CSV."
+
+msgid "Back to reports catalog"
+msgstr "Обратно към каталога с отчети"
+
+msgid "Could not load exercise global report"
+msgstr "Неуспешно зареждане на глобалния отчет за упражнението"
+
+msgid "Imported questions"
+msgstr "Импортирани въпроси"
+
+msgid "Aiken content"
+msgstr "Съдържание Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Неуспешно зареждане на AI генератора Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Неуспешно генериране на съдържание Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Неуспешно импортиране на генерираното съдържание Aiken"
+
+msgid "Back to my courses"
+msgstr "Обратно към моите курсове"
+
+msgid "Open report"
+msgstr "Отваряне на отчета"
+
+msgid "Questions with no automatic correction"
+msgstr "Въпроси без автоматична корекция"
+
+msgid "Could not load pending attempts"
+msgstr "Неуспешно зареждане на чакащите опити"
+
+msgid "Skipped questions"
+msgstr "Пропуснати въпроси"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Импортирането чрез Aiken разпределя тази обща тежест между импортираните въпроси, освен ако въпросът не дефинира SCORE."
+
+msgid "Import warnings"
+msgstr "Предупреждения при импортиране"
+
+msgid "Could not import questions"
+msgstr "Неуспешно импортиране на въпроси"
+
+msgid "No question statistics found"
+msgstr "Не са намерени статистики за въпроси"
+
+msgid "Could not load question statistics"
+msgstr "Неуспешно зареждане на статистиките за въпроси"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Можете също така да свържете MCP клиент директно, като го насочите към следната крайна точка:"
+
+msgid "No applications are currently connected to your account."
+msgstr "В момента няма свързани приложения към вашия акаунт."
+
+msgid "Connected on"
+msgstr "Свързан на"
+
+msgid "Last used"
+msgstr "Последно използван"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s няма да има повече достъп до вашия акаунт в Chamilo. Продължавате?"
+
+msgid "Application revoked"
+msgstr "Приложението е отказано"
+
+msgid "Copied to clipboard"
+msgstr "Копирано в клипборда"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Крайната точка на MCP не можа да бъде копирана"
+
+msgid "MCP endpoint"
+msgstr "Крайна точка на MCP"
+
+msgid "API key"
+msgstr "API ключ"
+
+msgid "Last used at"
+msgstr "Последно използван на"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Копирайте този ключ сега. Той няма да бъде показан отново."
+
+msgid "Rotate API key"
+msgstr "Смени API ключ"
+
+msgid "Revoke API key"
+msgstr "Отмени API ключ"
+
+msgid "Remote MCP connection"
+msgstr "Отдалечена MCP връзка"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Конфигурирайте вашия MCP клиент със следните стойности:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Текущият ключ ще спре да работи незабавно. Продължавате?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Ще бъде генериран нов личен MCP API ключ. Продължавате?"
+
+msgid "MCP API key generated"
+msgstr "MCP API ключът е генериран"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Свързаните MCP клиенти, използващи този ключ, ще спрат да работят незабавно. Продължавате?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API ключът е отменен"
+
+msgid "Could not copy the API key"
+msgstr "API ключът не можа да бъде копиран"
+
+msgid "Project"
+msgstr "Проект"
+
+msgid "Close old tickets"
+msgstr "Затвори стари билети"
+
+msgid "Close tickets older than seven days?"
+msgstr "Затвори билети, по-стари от седем дни?"
+
+msgid "Assignment history"
+msgstr "История на заданията"
+
+msgid "Translate with AI"
+msgstr "Преведи с ИИ"
+
+msgid "Target language"
+msgstr "Целеви език"
+
+msgid "Please select a provider"
+msgstr "Моля, изберете доставчик"
+
+msgid "Generate translation"
+msgstr "Генерирай превод"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Поне един раздел с правила и условия трябва да съдържа текст."
+
+msgid "No active target languages are available."
+msgstr "Няма налични активни целеви езици."
+
+msgid "Tutor"
+msgstr "Преподавател"
+
+msgid "Access dates"
+msgstr "Дати за достъп"
+
+msgid "Coach access dates"
+msgstr "Дати за достъп на преподавател"
+
+msgid "No sessions found"
+msgstr "Не са намерени сесии"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Изберете курсовете, до които този потребител не трябва да има достъп в тази сесия."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Потребителят не може да бъде блокиран от всички курсове в сесията. Вместо това го отпишете."
+
+msgid "Users subscribed to this session"
+msgstr "Потребители, записани в тази сесия"
+
+msgid "No available users found"
+msgstr "Не са намерени налични потребители"
+
+msgid "Subscribe this user to the session?"
+msgstr "Запишете този потребител в сесията?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Запишете избраните потребители в сесията?"
+
+msgid "General tutor planning"
+msgstr "Общо планиране на преподавател"
+
+msgid "User is already registered by another tutor."
+msgstr "Потребителят вече е регистриран от друг преподавател."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Получавате копие, защото сте преподавател в курса"
+
+msgid "General tutor"
+msgstr "Общ преподавател"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Вземете предвид курсовете, преподавателите, техническата поддръжка, учителите и/или наличните материали."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Преподаватели, записани като учители в курс %s"
+
+msgid "Tutor name"
+msgstr "Име на преподавателя"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Преподавателите в сесията са координатори на сесията и могат да действат като преподаватели за всеки курс в сесията. Само потребители с роля „учител“ могат да бъдат избрани като преподаватели в сесията."
+
+msgid "Access start date for tutors"
+msgstr "Начална дата за достъп на преподавателите"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Дата, на която сесията става достъпна за преподавателите, за да могат да я подготвят преди студентите да се свържат"
+
+msgid "Access end date for tutors"
+msgstr "Крайна дата за достъп на преподавателите"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Дата, на която сесията се затваря за преподавателите. Допълнителното време ще им позволи да експортират цялата релевантна информация за проследяване"
+
+msgid "Tutor and student"
+msgstr "Преподавател и студент"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Този отчет показва седмичното разпределение на сесиите по общ преподавател в избрания период."
+
+msgid "User is general tutor in some sessions"
+msgstr "Потребителят е общ преподавател в някои сесии"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Преподавателите ще бъдат добавени като преподаватели във всички курсови сесии."
+
+msgid "Delete failed: invalid question id."
+msgstr "Изтриването е неуспешно: невалиден идентификатор на въпрос."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Среден брой сесии на общ преподавател"
+
+msgid "No room"
+msgstr "Няма зала"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Импортиране на преподавателите от курса като преподаватели в сесията"
+
+msgid "Clean and update course tutors"
+msgstr "Изчистване и актуализиране на преподавателите в курса"
+
+msgid "Add me as tutor"
+msgstr "Добави ме като преподавател"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Неуспешно добавяне на анкетата към учебния път"
+
+msgid "Access dates for tutors"
+msgstr "Дати за достъп на преподавателите"
+
+msgid "Tutor and group member"
+msgstr "Преподавател и член на група"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Достигнахте дневния лимит на AI токени. Моля, опитайте отново утре."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Достигнахте месечния лимит на AI токени. Моля, опитайте отново следващия месец."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Този код на курса вече съществува, моля, изберете друг код."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Това заглавие на курса вече съществува, моля, изберете друго заглавие."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Видимостта на този инструмент не може да се променя"
+
+msgid "Invalid visibility"
+msgstr "Невалидна видимост"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Получавате копие, защото сте един от преподавателите на курса"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Получавате копие, защото сте преподавател на курса"
+
+msgid "Manual completion"
+msgstr "Ръчно завършване"
+
+msgid "Send to tutors"
+msgstr "Изпрати на преподавателите"
+
+msgid "Lab title"
+msgstr "Заглавие на лабораторното упражнение"
+
+msgid "Lab week"
+msgstr "Седмица на лабораторното упражнение"
+
+msgid "Final exam access rule"
+msgstr "Правило за достъп до финалния изпит"
+
+msgid "Course completion rule"
+msgstr "Правило за завършване на курса"
+
+msgid "You have been invited to join a course"
+msgstr "Поканени сте да се присъедините към курс"
+
+msgid "No user has been found"
+msgstr "Не е намерен потребител"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Избраният потребител не може да бъде записан в този контекст"
+
+msgid "No change has been made"
+msgstr "Не е направена промяна"
+
+msgid "Back to group list"
+msgstr "Обратно към списъка с групи"
+
+msgid "Remove class link"
+msgstr "Премахване на връзка с клас"
+
+msgid "Group settings"
+msgstr "Настройки на групата"
+
+msgid "Self-registration allowed"
+msgstr "Разрешена самостоятелна регистрация"
+
+msgid "Self-unregistration allowed"
+msgstr "Разрешена самостоятелна отписка"
+
+msgid "This group is linked to the class"
+msgstr "Тази група е свързана с класа"
+
+msgid "Create one or more empty course groups"
+msgstr "Създаване на една или повече празни курсови групи"
+
+msgid "Number of places"
+msgstr "Брой места"
+
+msgid "Base group"
+msgstr "Основна група"
+
+msgid "Share"
+msgstr "Споделяне"
+
+msgid "Collaboration"
+msgstr "Сътрудничество"
+
+msgid "The group title is required."
+msgstr "Заглавието на групата е задължително."
+
+msgid "Back to group area"
+msgstr "Обратно към зоната на групата"
+
+msgid "Members are managed by the linked class"
+msgstr "Членовете се управляват от свързания клас"
+
+msgid "%s groups selected"
+msgstr "%s избрани групи"
+
+msgid "Fill selected groups"
+msgstr "Попълване на избраните групи"
+
+msgid "Empty selected groups"
+msgstr "Изпразване на избраните групи"
+
+msgid "Fill group"
+msgstr "Попълване на група"
+
+msgid "Empty group"
+msgstr "Изпразване на група"
+
+msgid "Groups per user"
+msgstr "Групи на потребител"
+
+msgid "No tutors"
+msgstr "Няма преподаватели"
+
+msgid "No users"
+msgstr "Няма потребители"
+

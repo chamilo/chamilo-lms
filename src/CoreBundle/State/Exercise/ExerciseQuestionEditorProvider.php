@@ -297,6 +297,52 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return $response;
     }
 
+    private function buildGlobalExistingQuestionResponse(
+        int $questionId,
+        Course $course,
+        ?Session $session,
+    ): ExerciseQuestionEditor {
+        $question = $this->getQuestionFromCurrentContext($questionId, $course, $session);
+        $type = (int) $question->getType();
+        if (!$this->isVueSupportedQuestionType($type)) {
+            throw new BadRequestHttpException('This question type is still managed by the legacy exercise tool.');
+        }
+        if (self::ANSWER_IN_OFFICE_DOC === $type) {
+            throw new BadRequestHttpException('OnlyOffice questions must be edited from an exercise context.');
+        }
+
+        $response = new ExerciseQuestionEditor();
+        $response->exerciseId = 0;
+        $response->questionId = $questionId;
+        $response->type = $type;
+        $response->typeLabel = $this->getQuestionTypeLabel($type);
+        $response->title = $question->getQuestion();
+        $response->description = (string) $question->getDescription();
+        $response->feedback = (string) $question->getFeedback();
+        $response->dropdownListText = $this->buildDropdownListText($question);
+        $response->score = (float) $question->getPonderation();
+        $response->globalScore = $this->usesGlobalScore($type) ? (float) $question->getPonderation() : 0.0;
+        [$response->correctScore, $response->wrongScore, $response->unknownScore] = $this->getTrueFalseScores($question);
+        $response->usesGlobalScore = $this->usesGlobalScore($type);
+        $response->hasFixedUnknownAnswer = self::UNIQUE_ANSWER_NO_OPTION === $type;
+        $response->mandatory = 1 === (int) $question->getMandatory();
+        $response->duration = $question->getDuration();
+        $response->difficulty = max(1, (int) $question->getLevel());
+        $response->categoryId = $this->getFirstCategoryId($question);
+        $response->parentMediaId = (int) ($question->getParentMediaId() ?? 0);
+        $response->answers = $this->getAnswers($question);
+        $this->addAnnotationData($response, $question, $course, $session);
+        $this->addHotspotData($response, null, $question, $course, $session);
+        $this->addCalculatedData($response, $question);
+        $this->addFillBlanksData($response, $question);
+        $this->addMatchingData($response, $question);
+        $this->addDraggableData($response, $question);
+        $response->noNegativeScore = self::GLOBAL_MULTIPLE_ANSWER === $type && $this->hasNoNegativeScore($response->answers);
+        $this->addGlobalSharedEditorData($response, $course, $session);
+
+        return $response;
+    }
+
     private function addSharedEditorData(
         ExerciseQuestionEditor $response,
         CQuiz $quiz,
@@ -461,7 +507,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
     private function canManageExercises(): bool
     {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        return $this->security->isGranted('ROLE_ADMIN')
+            || $this->security->isGranted('ROLE_QUESTION_MANAGER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
@@ -1054,7 +1102,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
-    private function addHotspotData(ExerciseQuestionEditor $response, CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
+    private function addHotspotData(ExerciseQuestionEditor $response, ?CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
     {
         if (!$this->usesHotspot((int) $question->getType())) {
             return;

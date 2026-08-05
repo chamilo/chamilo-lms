@@ -791,7 +791,9 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function canManageExercises(): bool
     {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        return $this->security->isGranted('ROLE_ADMIN')
+            || $this->security->isGranted('ROLE_QUESTION_MANAGER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 

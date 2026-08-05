@@ -652,8 +652,10 @@ router.beforeEach(async (to, from, next) => {
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
   const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
   const wantsHR = to.matched.some((record) => record.meta?.requiresHR === true)
+  const wantsQuestionManager = to.matched.some((record) => record.meta?.requiresQuestionManager === true)
 
-  const mustBeLogged = !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR)
+  const mustBeLogged =
+    !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
     await securityStore.checkSession()
@@ -667,8 +669,8 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // Role-based access control: admin / session-admin / HR
-  if (wantsAdmin || wantsSessionAdmin || wantsHR) {
+  // Role-based access control: admin / session-admin / HR / question manager
+  if (wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager) {
     let allowed = true
 
     if (wantsAdmin && wantsSessionAdmin) {
@@ -686,6 +688,9 @@ router.beforeEach(async (to, from, next) => {
     } else if (wantsHR) {
       // Only HR users
       allowed = !!securityStore.isHRM
+    } else if (wantsQuestionManager) {
+      // Platform administrators and dedicated question managers.
+      allowed = !!securityStore.isAdmin || securityStore.isGranted("ROLE_QUESTION_MANAGER")
     }
 
     if (!allowed) {

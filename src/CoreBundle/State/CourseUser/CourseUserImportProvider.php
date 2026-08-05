@@ -9,9 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseUser;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseUser\CourseUserImport;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -20,7 +18,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class CourseUserImportProvider implements ProviderInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
         private CourseUserManager $courseUserManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
@@ -31,12 +28,7 @@ final readonly class CourseUserImportProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseUserImport
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
-        [$course, $session] = $this->courseUserManager->resolveContext($request);
+        [$course, $session] = $this->courseUserManager->resolveContext();
         $this->courseUserManager->assertCanManage($course, $session);
         if (!$this->courseUserManager->canUnsubscribe($course, $session)) {
             throw new AccessDeniedHttpException('Course user import is disabled for the current manager.');

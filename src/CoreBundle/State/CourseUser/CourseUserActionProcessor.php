@@ -48,7 +48,7 @@ final readonly class CourseUserActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('The CSRF token is invalid.');
         }
 
-        [$course, $session] = $this->courseUserManager->resolveContext($request);
+        [$course, $session] = $this->courseUserManager->resolveContext();
         $type = $this->courseUserManager->normalizeType($request);
         $operationName = (string) $operation->getName();
 

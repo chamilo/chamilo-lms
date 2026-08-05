@@ -445,7 +445,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-question-bank',
-            'url' => '/main/admin/questions.php',
+            'route' => ['name' => 'AdminQuestionBank'],
             'label' => $this->translator->trans('Questions'),
         ];
         $items[] = [

@@ -9,41 +9,20 @@ namespace Chamilo\CoreBundle\State\CourseInvitation;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 trait CourseInvitationAccessHelperTrait
 {
-    private function getCourse(Request $request, EntityManagerInterface $entityManager): Course
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
+    private function getCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, EntityManagerInterface $entityManager): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
     }
 
     private function assertSessionBelongsToCourse(?Session $session, Course $course): void

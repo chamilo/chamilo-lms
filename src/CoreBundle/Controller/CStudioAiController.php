@@ -32,6 +32,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 use TypeError;
 
+use const FILEINFO_MIME_TYPE;
+use const FILTER_FLAG_NO_PRIV_RANGE;
+use const FILTER_FLAG_NO_RES_RANGE;
+use const FILTER_VALIDATE_IP;
+use const FILTER_VALIDATE_URL;
+use const JSON_THROW_ON_ERROR;
+
 final class CStudioAiController extends AbstractController
 {
     private const int MAX_IMAGE_BYTES = 10 * 1024 * 1024;
@@ -308,7 +315,7 @@ final class CStudioAiController extends AbstractController
 
         $generationPrompt = \sprintf(
             "Write educational content in %s about the following request:\n%s\n\n"
-            ."Use approximately %d words. Return plain text only, with short readable paragraphs. "
+            .'Use approximately %d words. Return plain text only, with short readable paragraphs. '
             .'Do not include Markdown fences, a title unless requested, or comments about the generation process.',
             $language,
             $prompt,

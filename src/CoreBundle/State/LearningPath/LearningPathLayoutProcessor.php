@@ -9,12 +9,12 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathLayoutInput;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -28,9 +28,9 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -39,17 +39,12 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The learning path layout payload is invalid.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         if (null !== $session || null !== $group) {
             throw new AccessDeniedHttpException('Learning path category layout can only be changed in the base course context.');

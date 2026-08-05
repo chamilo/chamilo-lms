@@ -28,6 +28,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -87,6 +88,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         private CLpItemRepository $lpItemRepository,
         private ResourceNodeRepository $resourceNodeRepository,
         private ExtraFieldRepository $extraFieldRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -101,9 +103,9 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         if ($data instanceof LearningPathBuilderItemUpdateInput
             && 'update_learning_path_builder_item_form' === $operation->getName()

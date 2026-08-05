@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathRuntimeRestartInput;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -36,6 +37,7 @@ final readonly class LearningPathRuntimeRestartProcessor implements ProcessorInt
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
         private CLpRepository $lpRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
@@ -61,8 +63,8 @@ final readonly class LearningPathRuntimeRestartProcessor implements ProcessorInt
             throw new BadRequestHttpException('This learning path runtime is not supported by the Vue player yet.');
         }
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $user = $this->security->getUser();
 

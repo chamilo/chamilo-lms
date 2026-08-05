@@ -337,7 +337,7 @@ class SecurityController extends AbstractController
         // describe the server-side inactivity limit. In that standard Symfony
         // configuration, use PHP's session retention lifetime instead.
         if ($lifetime <= 1) {
-            $lifetime = max(0, (int) ini_get('session.gc_maxlifetime'));
+            $lifetime = max(0, (int) \ini_get('session.gc_maxlifetime'));
         }
 
         $configuredWarningSeconds = (int) $this->settingsManager->getSetting(

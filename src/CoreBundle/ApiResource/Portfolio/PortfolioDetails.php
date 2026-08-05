@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Portfolio;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\Portfolio\PortfolioDetailsProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -21,6 +22,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(summary: 'Read Portfolio progress and scoring details'),
             security: "is_granted('ROLE_USER')",
             name: 'get_portfolio_details',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: PortfolioDetailsProvider::class,
         ),
     ],

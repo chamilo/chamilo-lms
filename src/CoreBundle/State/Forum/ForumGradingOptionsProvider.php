@@ -10,8 +10,8 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumGradingOptions;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -25,9 +25,9 @@ final class ForumGradingOptionsProvider implements ProviderInterface
 
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly EntityManagerInterface $entityManager,
         private readonly Security $security,
         private readonly GradeBookCategoryRepository $gradeBookCategoryRepository,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -45,8 +45,8 @@ final class ForumGradingOptionsProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to manage forum grading.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $courseId = (int) $course->getId();
         $sessionId = null === $session ? null : (int) $session->getId();
 

@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
@@ -31,7 +32,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -57,7 +57,6 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         private LearningPathCopyService $learningPathCopyService,
         private CLpRepository $learningPathRepository,
         private CShortcutRepository $shortcutRepository,
-        private RequestStack $requestStack,
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
@@ -67,6 +66,7 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         private ResourceHelper $resourceHelper,
         private CDocumentRepository $documentRepository,
         private LoggerInterface $logger,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
@@ -75,17 +75,12 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('Learning path management data is required.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
         $this->assertLearningPathTeacher($this->security);
         $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
-        $group = $this->getContextGroup($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 
         $lpId = (int) ($uriVariables['lpId'] ?? $data->lpId ?? 0);
         if ($lpId <= 0) {

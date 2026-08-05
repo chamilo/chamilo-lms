@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
@@ -42,6 +43,7 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -55,8 +57,8 @@ final readonly class PortfolioDetailsProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($course instanceof Course && !$this->canReadPortfolioCourse(
             $this->security,
             $this->userHelper,

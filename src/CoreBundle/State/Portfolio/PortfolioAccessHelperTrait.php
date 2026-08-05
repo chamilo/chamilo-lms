@@ -47,47 +47,6 @@ trait PortfolioAccessHelperTrait
         return $user;
     }
 
-    private function getPortfolioCourse(EntityManagerInterface $entityManager, Request $request): ?Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            return null;
-        }
-
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getPortfolioSession(
-        EntityManagerInterface $entityManager,
-        Request $request,
-        ?Course $course,
-    ): ?Session {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('A session requires a course context.');
-        }
-
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-        }
-
-        return $session;
-    }
-
     private function getPortfolioRequestedUser(
         EntityManagerInterface $entityManager,
         Request $request,

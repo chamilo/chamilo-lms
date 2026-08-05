@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathScormCommitInput;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -41,6 +42,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
         private ScormRuntimeManager $runtimeManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(
@@ -78,8 +80,8 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
             throw new BadRequestHttpException('The current item is not an active SCORM SCO.');
         }
 
-        $course = $this->getContextCourse($this->entityManager, $request);
-        $session = $this->getContextSession($this->entityManager, $request, $course);
+        $course = $this->getContextCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $item = $this->lpItemRepository->find($itemId);
         $user = $this->security->getUser();

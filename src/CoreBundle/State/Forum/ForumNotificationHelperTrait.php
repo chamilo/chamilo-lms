@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -259,6 +260,7 @@ trait ForumNotificationHelperTrait
         CForumPost $post,
         User $author,
         MessageHelper $messageHelper,
+        CidReqHelper $cidReqHelper,
     ): int {
         if (!$this->canSendForumNotification($course, $session, $forum, $thread, $post)) {
             return 0;
@@ -270,7 +272,7 @@ trait ForumNotificationHelperTrait
         }
 
         $subject = 'New forum post: '.$forum->getTitle().' - '.$thread->getTitle();
-        $content = $this->buildForumNotificationContent($request, $course, $session, $forum, $thread, $post, $author);
+        $content = $this->buildForumNotificationContent($request, $course, $session, $forum, $thread, $post, $author, $cidReqHelper);
         $sentCount = 0;
 
         foreach ($recipientIds as $recipientId) {
@@ -348,13 +350,14 @@ trait ForumNotificationHelperTrait
         CForumThread $thread,
         CForumPost $post,
         User $author,
+        CidReqHelper $cidReqHelper,
     ): string {
         $postText = trim(strip_tags((string) $post->getPostText()));
         if (mb_strlen($postText) > 100) {
             $postText = mb_substr($postText, 0, 100).'...';
         }
 
-        $threadUrl = $this->buildForumThreadUrl($request, $course, $session, $forum, $thread);
+        $threadUrl = $this->buildForumThreadUrl($request, $course, $session, $forum, $thread, $cidReqHelper);
         $authorName = htmlspecialchars($author->getFullName(), ENT_QUOTES, 'UTF-8');
         $forumTitle = htmlspecialchars($forum->getTitle(), ENT_QUOTES, 'UTF-8');
         $threadTitle = htmlspecialchars($thread->getTitle(), ENT_QUOTES, 'UTF-8');
@@ -378,12 +381,13 @@ trait ForumNotificationHelperTrait
         ?Session $session,
         CForum $forum,
         CForumThread $thread,
+        CidReqHelper $cidReqHelper,
     ): string {
         $parentNodeId = $forum->getResourceNode()?->getParent()?->getId() ?? $forum->getResourceNode()?->getId() ?? 0;
         $query = http_build_query([
             'cid' => $course->getId(),
             'sid' => $session?->getId() ?? 0,
-            'gid' => $request->query->getInt('gid'),
+            'gid' => (int) ($cidReqHelper->getGroupId() ?? 0),
         ]);
 
         return $request->getSchemeAndHttpHost().'/resources/forum/'.$parentNodeId.'/forum/'.$forum->getIid().'/thread/'.$thread->getIid().'?'.$query;

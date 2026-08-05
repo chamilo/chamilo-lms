@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Forum;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -35,6 +36,7 @@ final class ForumDeleteProcessor implements ProcessorInterface
         private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
@@ -52,9 +54,9 @@ final class ForumDeleteProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Forum resource is required.');
         }
 
-        $course = $this->getCourse($this->entityManager, $request);
-        $session = $this->getSession($this->entityManager, $request);
-        $group = $this->getGroup($this->entityManager, $request);
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $resourceNode = $data->getResourceNode();
 
         if (null === $resourceNode) {

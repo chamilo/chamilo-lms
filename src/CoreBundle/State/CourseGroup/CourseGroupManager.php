@@ -195,10 +195,12 @@ final readonly class CourseGroupManager
 
         $groupQueryBuilder = $this->groupRepository->getResourcesByCourse($course, $session);
         $groupQueryBuilder->orderBy('resource.title', 'ASC');
+
         /** @var CGroup[] $groups */
         $groups = $groupQueryBuilder->getQuery()->getResult();
 
         $categoryQueryBuilder = $this->categoryRepository->getResourcesByCourse($course, $session);
+
         /** @var CGroupCategory[] $categories */
         $categories = $categoryQueryBuilder->getQuery()->getResult();
         if ([] === $categories && $allowCategories && $canManage) {
@@ -216,6 +218,7 @@ final readonly class CourseGroupManager
                 false,
                 1,
             );
+
             /** @var CGroupCategory[] $categories */
             $categories = $this->categoryRepository->getResourcesByCourse($course, $session)->getQuery()->getResult();
         }
@@ -224,8 +227,9 @@ final readonly class CourseGroupManager
         foreach (GroupManager::get_categories($course) as $position => $categoryData) {
             $categoryOrder[(int) ($categoryData['iid'] ?? 0)] = $position;
         }
-        usort($categories, static fn (CGroupCategory $first, CGroupCategory $second): int =>
-            ($categoryOrder[(int) $first->getIid()] ?? PHP_INT_MAX)
+        usort(
+            $categories,
+            static fn (CGroupCategory $first, CGroupCategory $second): int => ($categoryOrder[(int) $first->getIid()] ?? PHP_INT_MAX)
             <=> ($categoryOrder[(int) $second->getIid()] ?? PHP_INT_MAX)
         );
 
@@ -587,9 +591,7 @@ final readonly class CourseGroupManager
             && GroupManager::GROUP_PER_MEMBER_NO_LIMIT !== $groupsPerUser
             && GroupManager::get_current_max_groups_per_user($categoryId, $course->getCode()) > $groupsPerUser
         ) {
-            throw new BadRequestHttpException(
-                'The proposed group limit is lower than the number of groups currently assigned to a user.',
-            );
+            throw new BadRequestHttpException('The proposed group limit is lower than the number of groups currently assigned to a user.');
         }
 
         $arguments = [
@@ -746,9 +748,7 @@ final readonly class CourseGroupManager
             if (GroupManager::GROUP_PER_MEMBER_NO_LIMIT !== $groupsPerUser) {
                 foreach (array_diff($selectedIds, $currentMemberIds) as $userId) {
                     if (GroupManager::user_in_number_of_groups($userId, (int) ($category['iid'] ?? 0)) >= $groupsPerUser) {
-                        throw new BadRequestHttpException(
-                            'One or more selected users already reached the maximum number of groups allowed in this category.',
-                        );
+                        throw new BadRequestHttpException('One or more selected users already reached the maximum number of groups allowed in this category.');
                     }
                 }
             }
@@ -776,9 +776,7 @@ final readonly class CourseGroupManager
         $expectedIds = $selectedIds;
         sort($expectedIds);
         if ($savedIds !== $expectedIds) {
-            throw new BadRequestHttpException(
-                'The selected group members could not be saved completely. Check the group capacity and category membership limits.',
-            );
+            throw new BadRequestHttpException('The selected group members could not be saved completely. Check the group capacity and category membership limits.');
         }
     }
 
@@ -851,7 +849,6 @@ final readonly class CourseGroupManager
             }
             $tools[] = $definition;
         }
-
 
         return [
             'groupId' => $groupId,
@@ -1149,7 +1146,6 @@ final readonly class CourseGroupManager
             'spaceUrl' => $this->buildGroupSpaceUrl($course, $session, (int) $group->getIid()),
         ];
     }
-
 
     /**
      * @param array<int, array<string, mixed>> $items

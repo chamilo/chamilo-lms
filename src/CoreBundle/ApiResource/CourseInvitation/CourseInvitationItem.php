@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\Entity\CourseInvitation;
 use Chamilo\CoreBundle\State\CourseInvitation\CourseInvitationProvider;
 use Chamilo\CoreBundle\State\CourseInvitation\CourseInvitationRevokeProcessor;
@@ -33,12 +34,34 @@ use const DATE_ATOM;
             uriTemplate: '/course-invitation/form',
             security: "is_granted('ROLE_USER')",
             name: 'get_course_invitation_form',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseInvitationProvider::class,
         ),
         new GetCollection(
             uriTemplate: '/course-invitations',
             security: "is_granted('ROLE_USER')",
             name: 'get_course_invitations',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseInvitationProvider::class,
         ),
         new Post(
@@ -47,6 +70,17 @@ use const DATE_ATOM;
             input: CourseInvitationWriteInput::class,
             read: false,
             name: 'post_course_invitation',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: CourseInvitationSendProcessor::class,
         ),
         new Delete(
@@ -54,6 +88,17 @@ use const DATE_ATOM;
             requirements: ['id' => '\d+'],
             security: "is_granted('ROLE_USER')",
             name: 'delete_course_invitation',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: CourseInvitationProvider::class,
             processor: CourseInvitationRevokeProcessor::class,
         ),

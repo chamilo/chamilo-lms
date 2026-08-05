@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -18,8 +19,6 @@ use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -64,12 +63,12 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
     ];
 
     public function __construct(
-        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
     ) {}
 
@@ -87,16 +86,11 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
             throw new BadRequestHttpException('The request payload is invalid.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->getCourseProgressCourse($this->cidReqHelper);
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->getCourseProgressSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->assertCanManage($course, $session);
         $this->validateCsrfToken($data->csrfToken);
 
         $thematicId = isset($uriVariables['thematicId']) ? (int) $uriVariables['thematicId'] : 0;
@@ -125,7 +119,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         return $this->buildResponse($thematic);
     }
 
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
+    private function assertCanManage(Course $course, ?Session $session): void
     {
         if (!$this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())
             && $this->canManageCourseProgress(

@@ -13,14 +13,13 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematic;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,12 +38,12 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
     use CourseProgressAccessHelperTrait;
 
     public function __construct(
-        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
     ) {}
 
@@ -58,14 +57,9 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('The request payload is invalid.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->getCourseProgressCourse($this->cidReqHelper);
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->getCourseProgressSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
 
         if ($this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())

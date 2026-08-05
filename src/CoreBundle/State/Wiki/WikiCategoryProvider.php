@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiCategoryCollection;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,6 +37,7 @@ final readonly class WikiCategoryProvider implements ProviderInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiCategoryService $categoryService,
         private StudentViewHelper $studentViewHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -49,12 +51,12 @@ final readonly class WikiCategoryProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if ($this->studentViewHelper->isStudentView()) {

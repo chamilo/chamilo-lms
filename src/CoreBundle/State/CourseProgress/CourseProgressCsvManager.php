@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseProgress;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -51,12 +52,13 @@ final readonly class CourseProgressCsvManager
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
     ) {}
 
     public function export(Request $request): StreamedResponse
     {
-        [$course, $session] = $this->resolveWritableContext($request);
+        [$course, $session] = $this->resolveWritableContext();
         $rows = $this->buildExportRows($course, $session);
         $filename = 'course_progress_'.$course->getId().'.csv';
 
@@ -92,7 +94,7 @@ final readonly class CourseProgressCsvManager
      */
     public function import(Request $request): array
     {
-        [$course, $session] = $this->resolveWritableContext($request);
+        [$course, $session] = $this->resolveWritableContext();
         $this->validateCsrfToken((string) $request->request->get('csrfToken', ''));
 
         $file = $request->files->get('file');
@@ -176,11 +178,11 @@ final readonly class CourseProgressCsvManager
     /**
      * @return array{0: Course, 1: ?Session}
      */
-    private function resolveWritableContext(Request $request): array
+    private function resolveWritableContext(): array
     {
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->getCourseProgressCourse($this->cidReqHelper);
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->getCourseProgressSession($this->cidReqHelper);
         $this->assertSessionBelongsToCourse($session, $course);
 
         if ($this->isCourseProgressStudentView($this->studentViewHelper, (int) $course->getId())

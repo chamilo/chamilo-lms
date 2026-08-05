@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiSettings;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,6 +30,7 @@ final readonly class WikiSettingsProvider implements ProviderInterface
         private Security $security,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private StudentViewHelper $studentViewHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -42,11 +44,11 @@ final readonly class WikiSettingsProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if ($this->studentViewHelper->isStudentView() || !$this->canManageWikiCourseSettings($this->security, $course)) {

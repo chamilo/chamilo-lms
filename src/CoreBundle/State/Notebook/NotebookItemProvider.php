@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Notebook\NotebookItem;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -45,6 +46,7 @@ final readonly class NotebookItemProvider implements ProviderInterface
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
     ) {}
 
@@ -59,8 +61,8 @@ final readonly class NotebookItemProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getNotebookCourse($this->entityManager, $request);
-        $session = $this->getNotebookSession($this->entityManager, $request);
+        $course = $this->getNotebookCourse($this->cidReqHelper);
+        $session = $this->getNotebookSession($this->cidReqHelper);
         $this->assertNotebookSessionBelongsToCourse($session, $course);
 
         if (!$this->canReadNotebook(

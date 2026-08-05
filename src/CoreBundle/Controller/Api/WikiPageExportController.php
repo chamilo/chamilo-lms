@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Wiki\WikiAccessHelperTrait;
 use Chamilo\CoreBundle\State\Wiki\WikiPageExportService;
@@ -48,6 +50,8 @@ final class WikiPageExportController extends AbstractController
         private readonly WikiPageExportService $exportService,
         #[Autowire('%kernel.cache_dir%')]
         private readonly string $cacheDir,
+        private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     #[Route(
@@ -120,19 +124,19 @@ final class WikiPageExportController extends AbstractController
             throw new BadRequestHttpException('A valid Wiki page id is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $nodeId = $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
             throw new AccessDeniedHttpException('You are not allowed to view Wiki pages in this context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isStudentView();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

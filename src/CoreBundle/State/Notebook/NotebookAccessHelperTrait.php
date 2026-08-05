@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -20,7 +21,6 @@ use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,34 +28,25 @@ use Throwable;
 
 trait NotebookAccessHelperTrait
 {
-    private function getNotebookCourse(EntityManagerInterface $entityManager, Request $request): Course
+    /**
+     * CidReqListener already resolved and validated the course, so a missing entity here
+     * can only mean the request carried no course context at all.
+     */
+    private function getNotebookCourse(CidReqHelper $cidReqHelper): Course
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
     }
 
-    private function getNotebookSession(EntityManagerInterface $entityManager, Request $request): ?Session
+    private function getNotebookSession(CidReqHelper $cidReqHelper): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) ($cidReqHelper->getSessionId() ?? 0);
         if ($sessionId <= 0) {
             return null;
         }
 
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $cidReqHelper->getDoctrineSessionEntity()
+            ?? throw new BadRequestHttpException('The requested session was not found.');
     }
 
     private function assertNotebookSessionBelongsToCourse(?Session $session, Course $course): void

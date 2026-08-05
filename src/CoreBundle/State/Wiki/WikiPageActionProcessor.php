@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -48,6 +49,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiNotificationService $notificationService,
         private StudentViewHelper $studentViewHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -65,12 +67,12 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->getWikiCourse($this->cidReqHelper);
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->getWikiSession($this->cidReqHelper);
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->getWikiGroup($this->entityManager, $this->cidReqHelper);
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if ($this->studentViewHelper->isStudentView()) {

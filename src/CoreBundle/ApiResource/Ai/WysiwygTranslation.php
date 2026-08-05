@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Ai;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\Ai\WysiwygTranslationProcessor;
 use Chamilo\CoreBundle\State\Ai\WysiwygTranslationProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -19,6 +20,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/wysiwyg_translation',
             security: "is_granted('ROLE_USER')",
             name: 'get_wysiwyg_translation_configuration',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: WysiwygTranslationProvider::class,
         ),
         new Post(
@@ -26,6 +37,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'create_wysiwyg_translation',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: WysiwygTranslationProcessor::class,
         ),
     ],

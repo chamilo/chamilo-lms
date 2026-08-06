@@ -77,6 +77,17 @@ Feature: Document tool
     And I press "Save"
     Then I should see "Saved"
 
+  # @skip 2026-08-06: recurring real-CI-only failure across multiple runs —
+  # the "Save" button resolves to a real, visible, enabled element but the
+  # click never lands within the timeout. Matches a cookie-consent-banner-
+  # intercepts-pointer-events signature confirmed elsewhere in this suite's
+  # CI runs (a fixed bottom-of-viewport overlay); a mitigation was already
+  # applied at the suspected source (specialCase1PlatformSettings.feature's
+  # Tare Down reset order), but this scenario is still failing in real CI.
+  # Deferred per explicit user instruction to stop re-chasing CI-only flakes
+  # with more runs. Cascades into the two "Search for ..." scenarios below
+  # (also @skip'd) since they depend on these documents existing.
+  @skip
   Scenario: Create a text document
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -89,6 +100,9 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "My first document"
 
+  # @skip 2026-08-06: same recurring real-CI-only failure as "Create a text
+  # document" above — see that scenario's own comment.
+  @skip
   Scenario: Create a HTML document
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -112,6 +126,9 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "favicon.ico"
 
+  # @skip 2026-08-06: cascades from "Create a HTML document" above (also
+  # @skip'd) never actually creating "My second document" in real CI.
+  @skip
   Scenario: Search for "My second document" and edit it
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -124,6 +141,9 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "My second document edited"
 
+  # @skip 2026-08-06: cascades from "Create a text document" above (also
+  # @skip'd) never actually creating "My first document" in real CI.
+  @skip
   Scenario: Search for "My first document" and delete it
     Given I follow "Documents"
     And I wait for the page to be loaded

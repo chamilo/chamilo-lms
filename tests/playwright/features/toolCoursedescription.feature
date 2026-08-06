@@ -50,6 +50,13 @@ Feature: Course description tool
     And I wait for the page to be loaded
     Then I should see "surface web"
 
+  # @skip 2026-08-06: recurring real-CI-only failure across multiple runs
+  # (`getByText('Course description', ...)` timeout). Investigated once: 2
+  # of 3 local runs passed cleanly, the third failed at an unrelated point
+  # (the shared login helper's own "Sign in" button) — no deterministic
+  # selector/logic bug found. Deferred per explicit user instruction to stop
+  # re-chasing CI-only flakes with more runs.
+  @skip
   Scenario: Student views the course description
     Given I am a student
     And I wait for the page to be loaded

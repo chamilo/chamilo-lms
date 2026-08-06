@@ -1262,6 +1262,19 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
   # does need to be skipped in the future, and because a crash INSIDE this
   # scenario (before the session gets created) would otherwise make Tare
   # Down fail too, compounding a single crash into two reported failures.
+  #
+  # @skip 2026-08-06: recurring real-CI-only crash across multiple runs
+  # ("browser has been closed" mid-scenario), never reliably reproducible
+  # locally. A mitigation was already applied (Tare Down's critical setting
+  # resets moved to run first, so a crash here can no longer leave settings
+  # stuck platform-wide for the rest of a CI run — see that scenario's own
+  # header comment), but the crash itself remains unresolved. Deferred per
+  # explicit user instruction to stop re-chasing CI-only flakes with more
+  # runs; revisit if a future trace narrows the cause. specialCase1Sessions.
+  # feature (which depends on the session extra fields this scenario
+  # creates) is itself already fully @skip'd, so no other file is currently
+  # affected by this one being skipped too.
+  @skip
   Scenario: Add minimal session extra fields
     # 1) Je commence mon apprentissage sur la plateforme le (Date)
     Given I am on "/main/admin/extra_fields.php?type=session&action=add"

@@ -65,6 +65,36 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
             ])
         ;
 
+        $chamilo3Theme = (new ColorTheme())
+            ->setTitle('Chamilo3')
+            ->setSlug('chamilo3')
+            ->setVariables([
+                '--color-primary-base' => '32 62 97',
+                '--color-primary-gradient' => '91 123 162',
+                '--color-primary-button-text' => '32 62 97',
+                '--color-primary-button-alternative-text' => '255 255 255',
+                '--color-secondary-base' => '242 103 34',
+                '--color-secondary-gradient' => '194 57 0',
+                '--color-secondary-button-text' => '255 255 255',
+                '--color-tertiary-base' => '68 68 68',
+                '--color-tertiary-gradient' => '134 134 134',
+                '--color-tertiary-button-text' => '68 68 68',
+                '--color-success-base' => '122 166 12',
+                '--color-success-gradient' => '84 125 0',
+                '--color-success-button-text' => '255 255 255',
+                '--color-info-base' => '53 132 228',
+                '--color-info-gradient' => '0 94 187',
+                '--color-info-button-text' => '255 255 255',
+                '--color-warning-base' => '240 163 13',
+                '--color-warning-gradient' => '188 115 0',
+                '--color-warning-button-text' => '0 0 0',
+                '--color-danger-base' => '224 27 36',
+                '--color-danger-gradient' => '182 0 0',
+                '--color-danger-button-text' => '255 255 255',
+                '--color-form-base' => '32 62 97',
+            ])
+        ;
+
         /** @var AccessUrl $accessUrl */
         $accessUrl = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE, AccessUrl::class);
 
@@ -73,16 +103,27 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
             $manager->flush();
         }
 
+        // Chamilo3 is the new default style for fresh installs; the classic
+        // Chamilo theme is kept available (inactive) for those who prefer it.
         $accessUrlRel = (new AccessUrlRelColorTheme())
             ->setUrl($accessUrl)
             ->setColorTheme($theme)
+            ->setActive(false)
+        ;
+
+        $chamilo3AccessUrlRel = (new AccessUrlRelColorTheme())
+            ->setUrl($accessUrl)
+            ->setColorTheme($chamilo3Theme)
             ->setActive(true)
         ;
 
         $theme->addUrl($accessUrlRel);
+        $chamilo3Theme->addUrl($chamilo3AccessUrlRel);
 
         $manager->persist($theme);
         $manager->persist($accessUrlRel);
+        $manager->persist($chamilo3Theme);
+        $manager->persist($chamilo3AccessUrlRel);
         $manager->flush();
     }
 }

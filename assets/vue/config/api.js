@@ -1,5 +1,6 @@
 import axios from "axios"
 import { getRawCourseContext } from "../utils/courseContext"
+import { getCsrfHeaderName, issueCsrfToken, needsCsrfToken } from "../../js/csrfToken"
 
 /**
  * @type {axios.AxiosInstance}
@@ -143,6 +144,28 @@ instance.interceptors.request.use((config) => {
   }
   if (pageGid && (config.params.gid === undefined || config.params.gid === null || config.params.gid === "")) {
     config.params.gid = pageGid
+  }
+
+  return config
+})
+
+// Attach a double-submit CSRF token to every state-changing request, as the
+// second barrier CsrfProtectionListener checks on top of the request origin.
+// This covers both /api/* and the legacy /main/inc/ajax/* endpoints some
+// services still call through baseService: once any request in the session
+// validates through double-submit, Symfony requires it from all of them.
+instance.interceptors.request.use((config) => {
+  if (!needsCsrfToken(config.method)) {
+    return config
+  }
+
+  const token = issueCsrfToken()
+  const headers = config.headers
+
+  if ("function" === typeof headers?.set) {
+    headers.set(getCsrfHeaderName(), token)
+  } else {
+    config.headers = { ...(config.headers || {}), [getCsrfHeaderName()]: token }
   }
 
   return config

@@ -10,6 +10,16 @@ services:
         tags:
             - {name: kernel.event_listener, event: vich_uploader.post_remove}
 
+    # Central CSRF gate for API Platform operations and legacy AJAX endpoints.
+    # Priority 9 puts it after RouterListener (32), which resolves the API
+    # Platform route attributes it reads, and before the firewall (8), so a
+    # forged request never pays for authentication or course context lookup.
+    Chamilo\CoreBundle\EventListener\CsrfProtectionListener:
+        arguments:
+            $enforce: '%chamilo.csrf.enforce%'
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 9}
+
     Chamilo\CoreBundle\EventListener\CidReqListener:
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 6}

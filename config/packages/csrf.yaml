@@ -9,3 +9,12 @@ framework:
             - submit
             - authenticate
             - logout
+            # Single token id used by CsrfProtectionListener to guard every
+            # state-changing API Platform operation and legacy AJAX endpoint.
+            # Being stateless, it validates through the Origin/Sec-Fetch-Site
+            # headers and an optional double-submit cookie+header pair, so it
+            # never touches the session.
+            - chamilo_request
+        # Also accept the token in the 'csrf-token' header, which is how the
+        # Vue axios interceptor and the legacy jQuery ajaxSetup send it.
+        check_header: true

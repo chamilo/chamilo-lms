@@ -15,6 +15,11 @@ parameters:
     packager: '%env(PACKAGER)%'
     default_template: '%env(DEFAULT_TEMPLATE)%'
     scim_token: '%env(SCIM_TOKEN)%'
+    # Whether CsrfProtectionListener rejects requests that fail CSRF validation.
+    # Defaults to off so a deployment can first run in log-only mode and review
+    # what would have been rejected before enforcing it.
+    env(CHAMILO_CSRF_ENFORCE): '0'
+    chamilo.csrf.enforce: '%env(bool:CHAMILO_CSRF_ENFORCE)%'
     .container.dumper.inline_factories: true
     twig:
         form:

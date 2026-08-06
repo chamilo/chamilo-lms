@@ -119,6 +119,11 @@
           v-text="t('You may want to change this')"
           class="text-error"
         />
+        <input
+          v-model="installerData.stepData.passForm"
+          name="passForm"
+          type="hidden"
+        />
       </div>
 
       <!-- Parameters 3 and 4: administrator's names -->

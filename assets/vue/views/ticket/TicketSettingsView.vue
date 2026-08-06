@@ -183,6 +183,7 @@
         <BaseTinyEditor
           v-model="form.description"
           editor-id="ticket-setting-description"
+          :editor-config="descriptionEditorConfig"
           :full-page="false"
           :title="t('Description')"
         />
@@ -281,6 +282,19 @@ const selectedUsers = ref([])
 const formSubmitted = ref(false)
 const form = reactive({ title: "", description: "" })
 
+// Projects/categories/statuses/priorities only ever need a short plain-text-ish
+// description, not the platform's full ~45-plugin editor — trimming the plugin/
+// toolbar surface here cuts tinymce.init()'s own DOM-building work substantially,
+// which directly narrows the window for a confirmed CI-only race documented in
+// "I create a ticket setting with title ... and description ..." (common.steps.ts):
+// under load, this init() occasionally never completes.
+const descriptionEditorConfig = {
+  menubar: false,
+  plugins: "lists link autolink",
+  toolbar: "bold italic | bullist numlist | link",
+  height: 200,
+}
+
 const sectionOptions = computed(() => [
   { value: "projects", label: t("Projects") },
   { value: "categories", label: t("Categories") },
@@ -366,11 +380,28 @@ function openEditDialog(item) {
   isEditDialogVisible.value = true
 }
 
+// The CSRF token loaded at mount (loadConfiguration()) can go stale by the
+// time a dialog is filled in and saved — same staleness window documented
+// and fixed for UsergroupList.vue's saveForm()/performDelete(). Re-fetching
+// immediately before each mutating request closes that window regardless of
+// how long the dialog was left open. Only csrfToken is copied across (not
+// the full response) so an in-progress dialog's own form/list state isn't
+// disturbed by the refresh.
+async function refreshCsrfToken() {
+  try {
+    const response = await ticketService.getAdminConfiguration({ projectId: selectedProjectId.value || undefined })
+    csrfToken.value = response.csrfToken || csrfToken.value
+  } catch {
+    // Keep the existing token; the mutating call itself will surface any real error.
+  }
+}
+
 async function saveItem() {
   formSubmitted.value = true
   if (!form.title.trim()) return
   isSaving.value = true
   try {
+    await refreshCsrfToken()
     const payload = { title: form.title.trim(), description: form.description, csrfToken: csrfToken.value }
     const response = editingItem.value
       ? await ticketService.updateAdminItem(section.value, editingItem.value.id, payload)
@@ -400,6 +431,7 @@ function confirmDelete(item) {
 
 async function deleteItem(item) {
   try {
+    await refreshCsrfToken()
     const response = await ticketService.deleteAdminItem(section.value, item.id, csrfToken.value)
     showSuccessNotification(response.message || t("Deleted"))
     await loadConfiguration()
@@ -424,6 +456,7 @@ async function saveCategoryUsers() {
   if (!editingCategory.value) return
   isSaving.value = true
   try {
+    await refreshCsrfToken()
     const response = await ticketService.updateCategoryUsers(
       editingCategory.value.id,
       selectedUsers.value.map((user) => Number(user.id)),

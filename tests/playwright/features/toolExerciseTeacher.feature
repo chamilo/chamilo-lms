@@ -98,6 +98,67 @@
 # (not a bare "I press 'Next question'") to avoid the same
 # isSavingAnswer-window click race documented in toolExerciseAdmin.feature's
 # header comment — reran clean, same final score, 85 / 105.
+#
+# REAL APP RACE FOUND, specific to registering a course TEACHER (not covered
+# by toolUsers.feature's own admin-only scenarios): CourseUserListView.vue's
+# "Teachers"/"Learners" tabs switch the active type via a pure client-side
+# route push (history state, no new network request) — pressing "Teachers"
+# then immediately clicking "Add" can still read the PREVIOUS type (5,
+# Learners) off the "Add" link's href if the click lands before that route
+# push resolves, since neither "wait for the page to be loaded"
+# (domcontentloaded) nor "wait for the page content to settle" (networkidle)
+# reflects a client-side-only URL change at all. Confirmed live via the
+# `/api/course_rel_users` endpoint: an early version of "Subscribe the
+# teacher to the course" reported "subscribed to the course" (a generic,
+# type-agnostic success message) while actually registering mmosquera with
+# `status: 5` (STUDENT) instead of `status: 1` (TEACHER) — which then made
+# every subsequent scenario's `canManage` check silently false
+# (ExerciseListProvider::canManageExercises() requires
+# ROLE_CURRENT_COURSE_TEACHER/_SESSION_TEACHER), hanging every "I follow
+# 'Tests'"/"Question categories'"/"'Create exercise'" click for the full
+# 90s test timeout with no direct clue why. Fixed by asserting on the URL
+# itself (the one thing that DOES change synchronously with the click) via
+# the already-existing generic "the URL should contain '...'" step, both
+# right after pressing "Teachers" and right after clicking "Add" — confirmed
+# live afterward that mmosquera's course_rel_user row reads `status: 1` and
+# GET /api/exercise/list?cid=... returns `canManage: true` for her.
+#
+# REAL APP BEHAVIOR FOUND, course-lifecycle-specific (never surfaced by
+# toolExerciseAdmin.feature, since course TEMP's tools were already made
+# visible to students by whatever else set TEMP up originally):
+# CourseHome.vue hides any course tool from non-editor roles
+# (`toolsForDisplay`) unless its resourceLink `visibility` is the VISIBLE
+# state — and a brand-new course's tools are NOT visible-to-students by
+# default. Confirmed live: acostea (subscribed as a genuine
+# ROLE_CURRENT_COURSE_STUDENT via course_rel_user) loaded EXTEACH's course
+# home page fine (properly authenticated, breadcrumb and "EXTEACH" heading
+# both rendered) but got literally zero tools in the tools grid — no
+# "Tests", nothing — which is why "I follow 'Tests'" hung for the full 90s
+# with no error of any kind. The course home page's own "Tools" section header
+# has a teacher/admin-only "Show all" toggle (CourseHome.vue's
+# `onClickShowAll()`, POSTs .../change_visibility/show) that a real teacher
+# would need to click at least once for a freshly created course before
+# students can see anything in it — "Subscribe a student to try the
+# exercise" (already an admin-context scenario visiting the course home
+# page) now presses it before subscribing acostea. Confirmed live
+# afterward: same course, same student, "Tests" now visible immediately.
+#
+# REAL, EXTERNAL finding (not this file's own bug, but hit live while
+# debugging the two issues above, so recorded here for whoever investigates
+# a similar future timeout): the "Registration > Enable terms and
+# conditions" platform setting (public/main/auth/tc.php) defaults OFF, but
+# was found transiently ON mid-run on this shared box — some OTHER
+# concurrent feature file's own test toggles it and had not yet restored it
+# by teardown. While it's on, every login (any role) lands on tc.php instead
+# of its normal destination, and every subsequent navigation in that
+# scenario bounces to "/login?redirect=..." instead — the login step itself
+# never throws (it did leave /login), so the failure only surfaces several
+# steps later as an unrelated-looking timeout, exactly like the two bugs
+# above. loginAs() in common.steps.ts (used by every "I am a ..." step, not
+# just this file's) now defensively accepts the interstitial if it's ever
+# the landing page — a no-op the overwhelming rest of the time, when the
+# setting is off and tc.php never appears, and cheap insurance against the
+# same cross-file contamination hitting some other file's login next.
 @common @tools
 Feature: Exercise tool
   In order to use the exercise tool
@@ -497,6 +558,8 @@ Feature: Exercise tool
     And I wait for the page to be loaded
     And I am on course "EXTEACH" homepage
     And I wait for the page to be loaded
+    And I press "Show all"
+    And I wait for the page content to settle
     And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I click the "[title='Add']" element

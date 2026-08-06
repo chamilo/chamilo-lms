@@ -5,6 +5,29 @@
 # the original Behat file (dead scenario) and is dropped here too. Every
 # other link confirmed live to still be a real, followable link with no
 # zoom needed.
+#
+# REAL CI FAILURE (not reproduced locally): "Open Chamilo official services
+# providers" once failed almost instantly with Playwright's own "Target
+# page, context or browser has been closed" thrown out of the test's own
+# fixture setup (browser.newContext), before any of this scenario's steps
+# even ran — i.e. the shared per-worker browser was already gone by the
+# time this test started. Investigated for a code-level resource leak: this
+# file's Background and every scenario use only the standard `page` fixture
+# (one fresh context per test, closed automatically by Playwright) — no
+# `context.newPage()`, `waitForEvent('popup')`, or manually-opened
+# context/page anywhere in this file or in the "I follow"/"I am on"/"I wait
+# for the page to be loaded"/"I should not see an error" steps it uses
+# (common.steps.ts). The admin dashboard's Chamilo.org block links also have
+# no `target="_blank"` (confirmed in AdminBlock.vue/IndexBlocksController.php),
+# so "I follow" navigates the SAME page/tab rather than spawning a tab — ruling
+# out a popup/tab leak as the cause. A full local re-run of all 9 scenarios in
+# this file passed cleanly (9/9, ~2.4 min). Same signature already
+# investigated and documented as CI-runner-specific Chromium instability (not
+# a code defect) in toolGroup.feature's header comment and its "Create an
+# announcement as acostea and send only to fapple" scenario — same
+# conclusion applies here: no server error, no JS exception, likely transient
+# resource exhaustion on the 2-worker CI runner, not a leak in this suite's
+# code.
 Feature: Admin Chamilo.org block navigation
   In order to verify Chamilo.org links present in the admin dashboard
   As a platform administrator

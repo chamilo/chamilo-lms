@@ -204,6 +204,34 @@ async function loginAs(page: Page, username: string) {
   // session-establishment instead of navigation-interruption. Waiting for
   // the landing page's own load state gives that a moment to finish first.
   await page.waitForLoadState("domcontentloaded")
+
+  // Not a normal-path concern — defensive only. Real CI failure this session
+  // (toolExerciseTeacher.feature's "Try exercise", reproduced live via a
+  // direct check): the "Registration > Enable terms and conditions" platform
+  // setting (public/main/auth/tc.php) defaults OFF, but was found transiently
+  // ON on this shared box mid-run — some OTHER concurrent feature file's own
+  // test toggles it and had not yet restored it. Any login lands on tc.php
+  // instead of its normal destination while that setting is on, and every
+  // subsequent navigation in the scenario bounces to /login?redirect=...
+  // instead ("You are not allowed to see this page..."), which is what
+  // actually broke: the login step itself never threw (it did leave /login),
+  // so the failure only surfaced several steps later as an unrelated-looking
+  // timeout. Confirmed transient, not this file's own bug: the exact same
+  // login moments later (setting back off, presumably that other file's own
+  // teardown having run by then) landed on the normal destination with no
+  // special handling needed. Since concurrent worker execution is a real,
+  // supported mode for this suite (not a hypothetical), accepting the
+  // interstitial here — a no-op the overwhelming rest of the time, when the
+  // setting is off and tc.php never appears — is cheap insurance against the
+  // same contamination hitting some other file's login next.
+  if (page.url().includes("/main/auth/tc.php")) {
+    await page.locator('input[name="legal_accept"]').check()
+    await page
+      .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
+      .first()
+      .click()
+    await page.waitForLoadState("domcontentloaded")
+  }
 }
 
 Given("I am a platform administrator", async ({ page }) => {
@@ -1486,6 +1514,48 @@ Then(
     await page
       .locator(".card")
       .filter({ has: page.getByText(cardText, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
+// Not ported — new, for toolForum.feature's teardown. public/main/template/
+// default/forum/list.html.twig (viewed directly) renders each forum as
+// `<div class="card-forum">` (not `.card`, so the generic card step above
+// can't find it) and each category as `<div class="category-forum">`.
+// Scoping matters here for a genuine, reproduced-live reason, not just
+// hygiene: "Forum Test"/"Forum Category Test" have no unique-name
+// constraint, so a rerun of this file against a database that already has
+// one (confirmed by simply running the file twice locally without
+// reseeding) leaves TWO of each on this same page — and a category's own
+// delete-category icon and a forum's own delete-forum icon both render via
+// the exact same Display::getMdiIcon(ActionIcon::DELETE, ...) call, i.e. the
+// identical `i.mdi-delete` class, as every OTHER category/forum's own delete
+// icon. An unscoped "I click the 'i.mdi-delete' element" resolves to
+// whichever renders FIRST in DOM order, which is not guaranteed to be the
+// one this run itself just created — silently tearing down (or acting on)
+// the wrong, stale duplicate instead.
+Then(
+  "I click the {string} icon for the forum {string}",
+  async ({ page }, selector: string, forumTitle: string) => {
+    page.once("dialog", (dialog) => dialog.accept())
+    await page
+      .locator(".card-forum")
+      .filter({ has: page.getByText(forumTitle, { exact: true }) })
+      .locator(selector)
+      .first()
+      .click()
+  },
+)
+
+Then(
+  "I click the {string} icon for the forum category {string}",
+  async ({ page }, selector: string, categoryTitle: string) => {
+    page.once("dialog", (dialog) => dialog.accept())
+    await page
+      .locator(".category-forum")
+      .filter({ has: page.getByText(categoryTitle, { exact: true }) })
       .locator(selector)
       .first()
       .click()

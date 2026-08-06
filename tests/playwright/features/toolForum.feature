@@ -105,3 +105,42 @@ Feature: Forum tool
     And I confirm the popup
     And wait for the page to be loaded
     Then I should not see an error
+
+  # Not in the original Behat source (which never cleaned up "Forum Test"/
+  # "Forum Category Test" either) — added after a real, reproduced-live
+  # issue: this file's own "Forum Test" forum/"Forum Category Test" category
+  # have no unique-name constraint, so a repeated run of this file against a
+  # database that already has one (a rerun on a reused/self-hosted box, or
+  # two runs overlapping) leaves TWO of each on "/main/forum/index.php".
+  # "I follow {string}" (common.steps.ts) resolves ambiguous exact-text
+  # matches with a plain `.first().click()` — no error, just a silent click
+  # on whichever one DOM order happens to put first. Directly reproduced
+  # locally by running this file twice without reseeding the database: the
+  # second pass's own "Create a forum thread" scenario silently added
+  # "Thread One" to the FIRST run's stale, already fully-torn-down "Forum
+  # Test" instead of the one it had just created — every scenario still
+  # reported green, but which forum/thread each step actually acted on
+  # became non-deterministic, which is exactly the kind of drift that can
+  # surface as the cascading failures this file previously hit in CI.
+  # Tearing down the forum and its category here — the only "Forum Test"/
+  # "Forum Category Test" this file itself created — keeps every future run
+  # starting from the same database state this one found it in, regardless
+  # of environment reuse.
+  # Uses the dedicated forum-scoped/category-scoped steps (common.steps.ts)
+  # rather than a plain "I click the ... element": a category's own
+  # delete-category icon and a forum's own delete-forum icon render via the
+  # identical `i.mdi-delete` class as every OTHER category/forum's own
+  # delete icon on the same page — an unscoped click is only safe as long as
+  # exactly one category and one forum ever exist, which is precisely the
+  # invariant this teardown exists to guarantee. Scoping to the exact title
+  # removes that assumption instead of relying on it.
+  Scenario: Delete the forum and forum category
+    Given I am on "/main/forum/index.php?cid=1"
+    And I wait for the page to be loaded
+    Then I click the "i.mdi-delete" icon for the forum "Forum Test"
+    And I confirm the popup
+    And wait for the page to be loaded
+    Then I click the "i.mdi-delete" icon for the forum category "Forum Category Test"
+    And I confirm the popup
+    And wait for the page to be loaded
+    Then I should not see an error

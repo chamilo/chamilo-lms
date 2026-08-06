@@ -794,6 +794,12 @@ Then restart Apache:
   </IfModule>
     </pre>
 
+    <h4>JWT Authorization and PHP-FPM</h4>
+    If you are using PHP-FPM behind Apache, make sure you tell Apache to transfer the Authorization header to PHP-FPM, otherwise tools like ONLYOFFICE who require a JWT authentication might not work. This is done by adding this to your VirtualHost block
+    <pre>
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    </pre>
+
     <h4>Special note on sharing questions between courses</h4>
     In Chamilo 1.11.16, we added the possibility (see configuration.php) to share questions between
     several courses. This feature, although working great for pure-text questions, does however generate

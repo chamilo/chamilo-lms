@@ -324,8 +324,8 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
             ->select('question.iid')
             ->from(CQuizQuestion::class, 'question')
             ->leftJoin('question.resourceNode', 'questionNode')
-            ->andWhere('question = :question')
-            ->setParameter('question', $question)
+            ->andWhere('question.iid = :questionId')
+            ->setParameter('questionId', (int) $question->getIid())
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setMaxResults(1)
         ;

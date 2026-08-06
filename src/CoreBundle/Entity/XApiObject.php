@@ -11,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Index(name: 'idx_xapi_object_activity_id', columns: ['activity_id'])]
+#[ORM\Index(name: 'idx_xapi_object_referenced_statement', columns: ['referenced_statement_id'])]
+#[ORM\Index(name: 'idx_xapi_object_mbox', columns: ['mbox'])]
+#[ORM\Index(name: 'idx_xapi_object_account_name', columns: ['account_name'])]
 #[ORM\Entity(repositoryClass: XApiObjectRepository::class)]
 class XApiObject
 {

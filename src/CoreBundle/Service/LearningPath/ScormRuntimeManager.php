@@ -196,15 +196,14 @@ final readonly class ScormRuntimeManager
             ? $this->buildScorm2004Values($item, $itemView, $user)
             : $this->buildScorm12Values($item, $itemView, $user);
 
-        return [
-            ...$configuration,
+        return array_merge($configuration, [
             'enabled' => true,
             'itemViewId' => (int) $itemView->getIid(),
             'lpViewId' => (int) $itemView->getView()->getIid(),
             'forceCommit' => $lp->getForceCommit(),
             'debug' => $lp->getDebug(),
             'values' => $values,
-        ];
+        ]);
     }
 
     private function buildPackageEntryPath(CLp $lp, CLpItem $item): string

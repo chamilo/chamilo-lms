@@ -41,6 +41,39 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'INVITEE' => false,
                     ],
                 ],
+                [
+                    'variable' => 'proxy_settings',
+                    'json_example' => [
+                        'stream_context_create' => [
+                            'http' => [
+                                'proxy' => 'tcp://example.com:8080',
+                                'request_fulluri' => true,
+                            ],
+                        ],
+                        'curl_setopt_array' => [
+                            'CURLOPT_PROXY' => 'http://example.com',
+                            'CURLOPT_PROXYPORT' => '8080',
+                        ],
+                    ],
+                ],
+                [
+                    'variable' => 'password_requirements',
+                    'json_example' => [
+                        'min' => [
+                            'lowercase' => 2,
+                            'uppercase' => 2,
+                            'numeric' => 2,
+                            'length' => 8,
+                            'specials' => 1,
+                        ],
+                    ],
+                ],
+                [
+                    'variable' => 'allow_online_users_by_status',
+                    'json_example' => [
+                        'status' => [1, 5],
+                    ],
+                ],
             ],
             'search' => [
                 [
@@ -751,41 +784,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'STUDENT_BOSS' => 'main/my_space/student.php',
                         'INVITEE' => 'courses',
                         'ADMIN' => 'admin',
-                    ],
-                ],
-            ],
-            'security' => [
-                [
-                    'variable' => 'proxy_settings',
-                    'json_example' => [
-                        'stream_context_create' => [
-                            'http' => [
-                                'proxy' => 'tcp://example.com:8080',
-                                'request_fulluri' => true,
-                            ],
-                        ],
-                        'curl_setopt_array' => [
-                            'CURLOPT_PROXY' => 'http://example.com',
-                            'CURLOPT_PROXYPORT' => '8080',
-                        ],
-                    ],
-                ],
-                [
-                    'variable' => 'password_requirements',
-                    'json_example' => [
-                        'min' => [
-                            'lowercase' => 2,
-                            'uppercase' => 2,
-                            'numeric' => 2,
-                            'length' => 8,
-                            'specials' => 1,
-                        ],
-                    ],
-                ],
-                [
-                    'variable' => 'allow_online_users_by_status',
-                    'json_example' => [
-                        'status' => [1, 5],
                     ],
                 ],
             ],

@@ -65,27 +65,39 @@ final class AdminQuestionBank
     #[Groups(['admin_question_bank:write'])]
     public string $submittedCsrfToken = '';
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $items = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $courseOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $difficultyOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $questionTypeOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $extraFields = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['admin_question_bank:read'])]
     public array $filters = [];
 

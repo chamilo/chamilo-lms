@@ -24,7 +24,7 @@ final class CourseSettingsEntryController extends AbstractController
         private readonly CourseSettingsManager $courseSettingsManager,
     ) {}
 
-    #[Route('/course-settings/{courseId}', name: 'course_settings_entry', requirements: ['courseId' => '\\d+'], methods: ['GET'])]
+    #[Route('/course-settings/{courseId}', name: 'course_settings_entry', requirements: ['courseId' => '\d+'], methods: ['GET'])]
     public function __invoke(int $courseId, Request $request): RedirectResponse
     {
         $course = $this->courseRepository->find($courseId);
@@ -45,7 +45,7 @@ final class CourseSettingsEntryController extends AbstractController
         ];
 
         return new RedirectResponse(
-            '/resources/course-settings/'.$resourceNodeId.'/?'.\http_build_query($query),
+            '/resources/course-settings/'.$resourceNodeId.'/?'.http_build_query($query),
         );
     }
 }

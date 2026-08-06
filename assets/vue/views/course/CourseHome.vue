@@ -18,11 +18,10 @@
         <BaseButton
           v-if="isAllowedToEdit"
           :label="t('Reporting')"
-          :to-url="reportingUrl"
+          :route="reportingRoute"
           icon="tracking"
           only-icon
           type="black"
-          @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
         <template v-if="hasCourseTMenuItems">
@@ -267,10 +266,9 @@ const forumAutoLaunch = computed(() => getCourseSettingInt("enable_forum_auto_la
 
 const exerciseAutoLaunchMessage = computed(() => {
   if (exerciseAutoLaunch.value === 2) {
-    return [
-      t("The exercises auto-launch feature configuration is enabled"),
-      t("Redirect to the exercises list"),
-    ].join(" ")
+    return [t("The exercises auto-launch feature configuration is enabled"), t("Redirect to the exercises list")].join(
+      " ",
+    )
   }
 
   return t(
@@ -280,10 +278,7 @@ const exerciseAutoLaunchMessage = computed(() => {
 
 const lpAutoLaunchMessage = computed(() => {
   if (lpAutoLaunch.value === 2) {
-    return [
-      t("The learning path auto-launch setting is ON"),
-      t("Redirect to the learning paths list"),
-    ].join(" ")
+    return [t("The learning path auto-launch setting is ON"), t("Redirect to the learning paths list")].join(" ")
   }
 
   return t(
@@ -362,11 +357,18 @@ const toolsForDisplay = computed(() => {
   })
 })
 
-const reportingUrl = computed(() => {
+const reportingRoute = computed(() => {
   const cid = course.value?.id
   if (!cid) return null
-  const sid = session.value?.id || 0
-  return `/main/tracking/courseLog.php?cid=${cid}&sid=${sid}&gid=0`
+
+  return {
+    name: "CourseReportingLearners",
+    query: {
+      cid,
+      sid: session.value?.id || 0,
+      gid: 0,
+    },
+  }
 })
 
 const aiCourseAnalyzerUrl = computed(() => {
@@ -406,8 +408,7 @@ async function loadCourseTools(showSkeleton = true) {
       const tool = normalizeToolNavigation({ ...rawTool })
 
       // Convenience flag for UI states (e.g. customize mode)
-      tool.isEnabled =
-        getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE || shouldShowInvisibleLearningPathTool(tool)
+      tool.isEnabled = getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE || shouldShowInvisibleLearningPathTool(tool)
 
       return tool
     })
@@ -587,7 +588,6 @@ const showCourseSequence = computed(() => {
 
 onMounted(() => {
   enforceCourseLegalAgreement()
-
 })
 
 watch(

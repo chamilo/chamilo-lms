@@ -2608,8 +2608,12 @@ class MySpace
             $table_row[] = $avg_messages_in_course;
             $table_row[] = $avg_assignments_in_course;
 
-            //set the "from" value to know if I access the Reporting by the chamilo tab or the course link
-            $table_row[] = '<center><a href="../../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
+            $courseReportingUrl = api_get_path(WEB_PATH).'resources/course-reporting/?'.http_build_query([
+                'cid' => (int) $courseInfo['real_id'],
+                'sid' => (int) $session_id,
+                'gid' => 0,
+            ]);
+            $table_row[] = '<center><a href="'.$courseReportingUrl.'">
                              '.Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 22, get_lang('Details')).'
                              </a>
                             </center>';

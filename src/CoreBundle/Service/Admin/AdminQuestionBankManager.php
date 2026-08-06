@@ -21,6 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 final readonly class AdminQuestionBankManager
 {
@@ -165,15 +169,12 @@ final readonly class AdminQuestionBankManager
             $this->entityManager->remove($question);
             $this->entityManager->flush();
             $connection->commit();
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             if ($connection->isTransactionActive()) {
                 $connection->rollBack();
             }
 
-            throw new ConflictHttpException(
-                'This question is still referenced by another resource and could not be deleted.',
-                $throwable
-            );
+            throw new ConflictHttpException('This question is still referenced by another resource and could not be deleted.', $throwable);
         }
     }
 
@@ -604,7 +605,6 @@ final readonly class AdminQuestionBankManager
             && \in_array((int) ($row['visibility'] ?? -1), [ResourceLink::VISIBILITY_DRAFT, ResourceLink::VISIBILITY_PUBLISHED], true);
     }
 
-
     /**
      * @param array<int, array<string, mixed>> $exerciseReferences
      */
@@ -642,7 +642,7 @@ final readonly class AdminQuestionBankManager
                 $answerText = (string) preg_replace('/::.*$/s', '', $answerText);
                 $answerText = (string) preg_replace_callback(
                     '/\[([^\]]+)\]/',
-                    static fn (array $matches): string => '<mark>'.htmlspecialchars(trim((string) $matches[1]), \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8').'</mark>',
+                    static fn (array $matches): string => '<mark>'.htmlspecialchars(trim((string) $matches[1]), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</mark>',
                     $answerText
                 );
             }
@@ -842,7 +842,7 @@ final readonly class AdminQuestionBankManager
                     return '';
                 }
 
-                return ' '.$attribute.'="'.htmlspecialchars($value, \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8').'"';
+                return ' '.$attribute.'="'.htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'"';
             },
             $html
         );

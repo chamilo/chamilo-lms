@@ -5256,6 +5256,28 @@ class CourseManager
     }
 
     /**
+     * Validates a submitted course registration password.
+     *
+     * Current Chamilo 2 course settings persist the value as entered, while
+     * upgraded courses can still contain the historical SHA-1 representation.
+     */
+    public static function verifyRegistrationCode(string $submittedCode, ?string $storedCode): bool
+    {
+        $storedCode = (string) $storedCode;
+
+        if ('' === $submittedCode || '' === $storedCode) {
+            return false;
+        }
+
+        if (hash_equals($storedCode, $submittedCode)) {
+            return true;
+        }
+
+        return 1 === preg_match('/^[a-f0-9]{40}$/i', $storedCode)
+            && hash_equals(strtolower($storedCode), sha1($submittedCode));
+    }
+
+    /**
      * Return a link to go to the course, validating the visibility of the
      * course and the user status.
      *

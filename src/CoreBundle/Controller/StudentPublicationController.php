@@ -39,6 +39,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -277,6 +278,62 @@ class StudentPublicationController extends AbstractController
             'hydra:member' => $data,
             'hydra:totalItems' => $total,
         ]);
+    }
+
+    #[Route('/submissions/{id}/download', name: 'chamilo_core_assignment_submission_download', methods: ['GET'])]
+    public function downloadSubmission(
+        int $id,
+        CStudentPublicationRepository $repo,
+        ResourceNodeRepository $resourceNodeRepository,
+        SettingsManager $settingsManager
+    ): Response {
+        $submission = $repo->find($id);
+
+        if (!$submission) {
+            throw $this->createNotFoundException('Submission not found.');
+        }
+
+        $this->denyAccessUnlessGranted('VIEW', $submission->getResourceNode());
+
+        $resourceNode = $submission->getResourceNode();
+        $resourceFile = $resourceNode?->getFirstResourceFile();
+
+        if (!$resourceFile) {
+            throw $this->createNotFoundException('No file attached to this submission.');
+        }
+
+        try {
+            $path = $resourceNodeRepository->getFilename($resourceFile);
+            $content = $resourceNodeRepository->getFileSystem()->read($path);
+        } catch (Throwable) {
+            throw $this->createNotFoundException('File could not be read.');
+        }
+
+        $originalName = $resourceFile->getOriginalName();
+        $addFullname = 'true' === $settingsManager->getSetting('work.add_fullname_in_file_download');
+
+        if ($addFullname) {
+            $user = $submission->getUser();
+            $fullname = $this->cleanFilename(
+                trim(($user->getFirstname() ?? '').' '.($user->getLastname() ?? ''))
+            );
+            $filename = $fullname.'_'.$originalName;
+        } else {
+            $filename = $originalName;
+        }
+
+        $asciiFilename = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $filename) ?: $filename;
+
+        $response = new Response($content);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $asciiFilename,
+            $asciiFilename
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $resourceFile->getMimeType() ?: 'application/octet-stream');
+
+        return $response;
     }
 
     #[Route('/submissions/{id}', name: 'chamilo_core_assignment_student_submission_delete', methods: ['DELETE'])]
@@ -569,7 +626,8 @@ class StudentPublicationController extends AbstractController
     public function downloadAssignmentPackage(
         int $assignmentId,
         CStudentPublicationRepository $repo,
-        ResourceNodeRepository $resourceNodeRepository
+        ResourceNodeRepository $resourceNodeRepository,
+        SettingsManager $settingsManager
     ): Response {
         $assignment = $repo->find($assignmentId);
 
@@ -577,6 +635,7 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment not found.');
         }
 
+        $addFullname = 'true' === $settingsManager->getSetting('work.add_fullname_in_file_download');
         // Teacher-only: downloading every student's submission requires edit rights on
         // the assignment's course resource.
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
@@ -600,7 +659,15 @@ class StudentPublicationController extends AbstractController
                     $path = $resourceNodeRepository->getFilename($resourceFile);
                     $content = $resourceNodeRepository->getFileSystem()->read($path);
 
-                    $filename = \sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
+                    if ($addFullname) {
+                        $fullname = $this->cleanFilename(
+                            trim(($user->getFirstname() ?? '').' '.($user->getLastname() ?? ''))
+                        );
+                        $filename = \sprintf('%s_%s_%s', $sentDate, $fullname, $resourceFile->getOriginalName());
+                    } else {
+                        $filename = \sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
+                    }
+
                     $zip->addFromString($filename, $content);
                 } catch (Throwable) {
                     continue;

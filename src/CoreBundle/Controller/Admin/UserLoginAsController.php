@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Handles the "Login as" (user impersonation) action, replacing the legacy
  * user_list.php?action=login_as handler. Uses Symfony's built-in _switch_user.
  */
-#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER") or is_granted("ROLE_HR")'))]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserLoginAsController extends AbstractController
 {
     public function __construct(

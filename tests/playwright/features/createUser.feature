@@ -235,6 +235,20 @@ Feature: Users management as admin
     And wait very long for the page to be loaded
     Then I should not see an error
 
+  # @skip 2026-08-07: HR is no longer allowed to "log in as" a managed user in
+  # this version. An earlier fix (this session) had widened
+  # UserLoginAsController's #[IsGranted] gate to include ROLE_HR so this
+  # scenario could pass — that was a deliberate product-policy decision to
+  # revert, not a bug: the gate has been reverted back to ROLE_ADMIN/
+  # ROLE_SESSION_MANAGER only (src/CoreBundle/Controller/Admin/
+  # UserLoginAsController.php), so an HR user now gets AccessDeniedException
+  # clicking this icon, same as before that fix ever existed.  Note: the
+  # "login as" icon/link itself (my_space/teachers.php, student.php,
+  # myStudents.php) is still visible to HR — only the controller-level gate
+  # blocks the action once clicked. Revisit if the icon should be hidden
+  # from HR entirely for a cleaner UX; not done here since only the
+  # controller change was requested.
+  @skip
   Scenario: HRM logs as teacher
     Given I am not logged
     Then I am logged as "hrm"
@@ -247,6 +261,9 @@ Feature: Users management as admin
     And wait very long for the page to be loaded
     Then I should not see an error
 
+  # @skip 2026-08-07: same policy reversal as "HRM logs as teacher" above —
+  # HR can no longer "log in as" a managed user in this version.
+  @skip
   Scenario: HRM logs as student
     Given I am not logged
     Then I am logged as "hrm"

@@ -1228,6 +1228,40 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I wait for the page to be loaded
     Then I should not see an error
 
+  # NOT @skip'd, despite a real CI crash — 2026-08-06: this scenario already
+  # went through one fix-and-verify round this session (a `.check()` on a
+  # hidden non-checkbox `legal_accept` field, fixed and confirmed passing 2x
+  # clean locally, 7.8m + 5.1m). Real CI has since failed it again with a
+  # completely different, generic "Target page, context or browser has been
+  # closed" signature, no specific locator/error, never reproduced locally.
+  # This matches the same unspecific hard-crash-under-real-CI-concurrent-
+  # worker-load class already confirmed and deferred elsewhere in this suite
+  # (see toolGroup.feature's and courseCatalogue.feature's own @skip notes for
+  # the identical "not reproduced locally, real CI only" conclusion) — BUT
+  # this scenario cannot be @skip'd like those: specialCase1Sessions.feature's
+  # own session-creation scenarios hard-depend on the session extra fields
+  # created here (form fields "extra_domaine", "extra_theme_fr", "extra_
+  # ecouter" only exist on the session-creation form because this scenario
+  # defines them via extra_fields.php?type=session — confirmed by grepping
+  # those exact field variable names into specialCase1Sessions.feature).
+  # Skipping this scenario would silently break a DIFFERENT, unrelated file
+  # instead of just losing this one's own coverage — worse than the crash
+  # itself. Left running. One real, separate, verified fix DID come out of
+  # investigating this crash: Tare Down (below) used to reset the global
+  # `cookie_warning` and `hide_legal_accept_checkbox` settings as its very
+  # last steps, ~230 steps in — if Tare Down itself ever failed to reach the
+  # end (plausible under the same CI load), the cookie-consent banner this
+  # scenario turns on would stay stuck rendering on every page for the rest
+  # of the CI run, plausibly explaining unrelated-looking Save-button click
+  # timeouts seen elsewhere in the same run (e.g. toolDocument.feature). Tare
+  # Down now resets both first, before anything else, so that specific
+  # collateral damage can no longer happen regardless of this scenario's own
+  # outcome. Its "Order By Id Test Session" cleanup step was also made
+  # tolerant of the session not existing (see "I delete the session ... if
+  # present" in common.steps.ts), both as a safety net if this scenario ever
+  # does need to be skipped in the future, and because a crash INSIDE this
+  # scenario (before the session gets created) would otherwise make Tare
+  # Down fail too, compounding a single crash into two reported failures.
   Scenario: Add minimal session extra fields
     # 1) Je commence mon apprentissage sur la plateforme le (Date)
     Given I am on "/main/admin/extra_fields.php?type=session&action=add"
@@ -1921,6 +1955,37 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     Given I am a platform administrator
     And I wait for the page to be loaded
 
+    # cookie_warning and hide_legal_accept_checkbox are restored FIRST, ahead
+    # of every other setting below, on purpose: both are global/UI-visible on
+    # every page of the platform (cookie_warning renders a fixed bottom
+    # banner via CoreBundle/Resources/views/Layout/cookie_banner.html.twig
+    # that a stray page.click() can land on instead of the intended element).
+    # This scenario is huge (~230 steps) and tagged @long-scenario; if it
+    # crashes or times out partway through under real CI's concurrent-worker
+    # load (as this whole file's crash cluster investigation on 2026-08-06
+    # found plausible for the "Add minimal session extra fields" scenario
+    # right before this one), whatever hasn't run yet stays un-reset for the
+    # rest of the suite. Putting these two here first means a mid-teardown
+    # crash can no longer leave the cookie banner (or the legal-acceptance
+    # checkbox) stuck in its non-default, whole-platform-affecting state for
+    # every other file that runs afterward — confirmed plausible root cause
+    # of toolDocument.feature's unrelated-looking Save-button click timeouts
+    # in the same CI run (banner is a `fixed inset-x-0 bottom-0` overlay that
+    # can intercept pointer events on any page). The other ~100 settings
+    # below are course/admin-page-scoped, not globally rendered, so their
+    # relative order is unchanged.
+    Given I am on "/admin/settings/search_settings?keyword=cookie_warning"
+    And I wait for the page to be loaded
+    And I select "No" from "form_cookie_warning"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=hide_legal_accept_checkbox"
+    And I wait for the page to be loaded
+    And I select "No" from "form_hide_legal_accept_checkbox"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
     Given I am on "/admin/settings/search_settings?keyword=default_menu_entry_for_course_or_session"
     And I wait for the page to be loaded
     And I select "My courses" from "form_default_menu_entry_for_course_or_session"
@@ -2142,8 +2207,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     # causes) — deleting it here is what makes this file safely re-runnable.
     Given I am on "/admin/session-list?keyword=Order+By+Id+Test+Session"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Order By Id Test Session"
-    And I press "Yes"
+    And I delete the session "Order By Id Test Session" if present
     And I wait for the page to be loaded
     Then I should not see "Order By Id Test Session"
 
@@ -2203,12 +2267,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "Save settings"
     And I wait for the page to be loaded
 
-    Given I am on "/admin/settings/search_settings?keyword=hide_legal_accept_checkbox"
-    And I wait for the page to be loaded
-    And I select "No" from "form_hide_legal_accept_checkbox"
-    And I press "Save settings"
-    And I wait for the page to be loaded
-
     Given I am on "/admin/settings/search_settings?keyword=redirect_after_login"
     And I wait for the page to be loaded
     And I fill in the following:
@@ -2251,12 +2309,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     Given I am on "/admin/settings/search_settings?keyword=allow_registration"
     And I wait for the page to be loaded
     And I select "Approval" from "form_allow_registration"
-    And I press "Save settings"
-    And I wait for the page to be loaded
-
-    Given I am on "/admin/settings/search_settings?keyword=cookie_warning"
-    And I wait for the page to be loaded
-    And I select "No" from "form_cookie_warning"
     And I press "Save settings"
     And I wait for the page to be loaded
 

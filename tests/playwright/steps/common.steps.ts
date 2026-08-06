@@ -1731,6 +1731,31 @@ Then("I delete the document {string} if present", async ({ page }, rowText: stri
   await expect(page.locator("body")).not.toContainText(rowText)
 })
 
+// Not ported — new, for specialCase1PlatformSettings.feature's "Tare Down"
+// scenario's own cleanup of "Order By Id Test Session" (created by "Add
+// minimal session extra fields", the scenario right before this one in the
+// same file). That scenario has a real, unresolved, real-CI-only "browser
+// has been closed" crash (2026-08-06, never reproduced locally — see its own
+// header comment) but can't be @skip'd: specialCase1Sessions.feature hard-
+// depends on the session extra fields it creates. If it ever crashes BEFORE
+// actually creating "Order By Id Test Session", Tare Down's own cleanup step
+// used to fail outright trying to click a delete icon in a row that was
+// never created, compounding one real-CI crash into two reported failures.
+// Reuses the exact "if present" guard convention from "I delete the
+// document ... if present" above so Tare Down keeps working either way:
+// still cleans up a stray session left behind by an earlier partial/crashed
+// run, but no longer fails when there isn't one.
+Then("I delete the session {string} if present", async ({ page }, sessionName: string) => {
+  const row = page.locator("tr", { hasText: sessionName })
+  if ((await row.count()) === 0) {
+    return
+  }
+  page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
+  await row.locator(".mdi-delete").first().click()
+  await pressButton(page, "Yes")
+  await expect(page.locator("body")).not.toContainText(sessionName)
+})
+
 // Mink's built-in "I follow" (MinkContext::iClickLink(), not custom
 // FeatureContext code) clicks a link resolved by id, then title attribute,
 // then visible text/label (e.g. an image link's alt text) — course.feature

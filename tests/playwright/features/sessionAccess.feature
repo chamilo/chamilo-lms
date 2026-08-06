@@ -180,6 +180,36 @@ Feature: Session access
   # to "/" -> unreliable toast mechanism as its two siblings above (confirmed
   # via the CI trace's Location header: 302 to "/"), not the durable inline
   # alert. Same fix as those two: assert the durable URL, not toast text.
+  #
+  # @skip 2026-08-06: recurring real-CI-only failure across two separate runs,
+  # identical both times — lands GRANTED on
+  # "http://localhost/course/2/home?sid=2000&gid=0" instead of the expected
+  # denial redirect to the site root. Investigated twice this session, never
+  # reproduced locally:
+  #   Round 1: reproduced this single scenario in isolation -> passed cleanly.
+  #   Read CourseVoter/CourseAccessResolver end to end -> access logic is
+  #   correct. Queried the live DB directly -> ywarnier has NO course_rel_user
+  #   row for TEMPPRIVATE (cid=2) that would grant access.
+  #   Round 2 (this attempt): ran the FULL feature file (all 10 scenarios,
+  #   `sessionAccess.feature.spec.js`) instead of just this scenario, in case
+  #   an earlier scenario's leftover state (session creation, prior access
+  #   checks) only manifests when preceded by the rest of the file -> all 10
+  #   scenarios passed, including this one. Also checked whether "sid=2000"
+  #   is a real collision (i.e. "a session that doesn't exist" no longer
+  #   holds because some concurrent test created session id 2000 for real):
+  #   `SELECT id, title FROM session` shows only ids 4-7 exist, and
+  #   `SHOW TABLE STATUS LIKE 'session'` shows AUTO_INCREMENT=13 — id 2000 is
+  #   nowhere close to being real on this box, and `course` id 2 does
+  #   correctly resolve to TEMPPRIVATE, so the scenario's own premise is
+  #   sound; this is not an id-collision bug. No further concrete lead found
+  #   (a suspected admin/ywarnier session-fixation race across the preceding
+  #   "I am not logged" -> "I am logged as 'ywarnier'" pair was considered but
+  #   not confirmed — Symfony's built-in /logout invalidates the session by
+  #   default, and nothing in this file overrides that). Per explicit user
+  #   preference for deferring over a third chase, `@skip`-ing just this
+  #   scenario (not the whole file — its sibling scenarios above/below must
+  #   keep running). Revisit if a future CI trace narrows the cause further.
+  @skip
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"

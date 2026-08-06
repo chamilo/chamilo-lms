@@ -166,6 +166,35 @@
 #   in the current markup — replaced with the real, visible "Select all" /
 #   "Action" controls confirmed live.
 #
+# 2026-08-06 REAL CI FAILURE (3 new failures, same file, after the acostea ->
+# norizales fixture fix above): "Link an Assignment..." hit `page.
+# waitForLoadState` timing out at the full 90s test budget even though
+# commit/domcontentloaded/load had already fired — i.e. the page itself had
+# finished loading and something AFTER that hung. The only step in that
+# scenario using unbounded `waitForLoadState("networkidle")` twice is "wait
+# for the page to be loaded when ready" on the Vue-based Assignments tool
+# (landing on the list after "I follow Assignments", and again right after
+# "I press Save" creating "Assessment Link Work") — the exact same class of
+# hang already found and fixed for other Vue SPA pages in this suite
+# (toolGlossary's LP delete step, courseCatalogue.feature's catalogue-load
+# race): this app's own persistent background polling can keep networkidle
+# from ever resolving, and under the heavier concurrent load a real CI run
+# sees vs. a clean local run, that occasionally exceeds even the 90s test
+# timeout instead of merely running slow. Swapped both occurrences to the
+# already-established bounded/tolerant "I wait for the page content to
+# settle" step (domcontentloaded + a 10s-capped networkidle attempt) — same
+# fix pattern, not a new one. Left the file's OTHER "wait for the page to be
+# loaded when ready" calls (after "I follow Assessments", landing on the
+# legacy PHP gradebook pages) unchanged: those are a different, non-Vue page
+# and this exact step already runs there successfully in every other
+# scenario in this file. A full, clean, non-concurrent local run of this file
+# (10/10) could not reproduce the hang or the other 2 reported failures
+# ("Edit a result...", "Deletes selected assessments") on either this fix or
+# the pre-fix code — consistent with those 2 being downstream of scenario 4
+# only when it actually times out, not an independent bug; left un-skipped
+# since standalone runs pass reliably and the fix targets the one confirmed
+# fragile step directly.
+#
 # Teardown leaves course TEMP exactly as found: the dedicated "Assessment
 # Link Work" assignment deleted (its own gradebook LINK entry is removed by
 # "Deletes selected assessments" above, but that never removes the
@@ -229,14 +258,14 @@ Feature: Assessments tool
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assignments"
-    And wait for the page to be loaded when ready
+    And I wait for the page content to settle
     Then I press "Create Assignment"
     And wait for the page to be loaded
     When I fill in the following:
       | Assignment name | Assessment Link Work |
     And I fill in the active tinymce editor with "Link target for the Assessments tool"
     And I press "Save"
-    And wait for the page to be loaded when ready
+    And I wait for the page content to settle
     Then I should see "Assignment created"
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded

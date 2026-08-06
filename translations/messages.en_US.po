@@ -38970,3 +38970,15 @@ msgstr "Points awarded when the student posted two or more messages in the threa
 
 msgid "Optional. If left empty, one or more messages award the points for one message."
 msgstr "Optional. If left empty, one or more messages award the points for one message."
+
+msgid "Current password is required to change your password."
+msgstr "Current password is required to change your password."
+
+msgid "The 2FA code is required."
+msgstr "The 2FA code is required."
+
+msgid "Invalid 2FA configuration."
+msgstr "Invalid 2FA configuration."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "The 2FA code is invalid or expired."

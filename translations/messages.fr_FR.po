@@ -40814,3 +40814,15 @@ msgstr "Aucun tuteur"
 msgid "No users"
 msgstr "Aucun utilisateur"
 
+msgid "Current password is required to change your password."
+msgstr "Le mot de passe actuel est requis pour changer votre mot de passe."
+
+msgid "The 2FA code is required."
+msgstr "Le code 2FA est requis."
+
+msgid "Invalid 2FA configuration."
+msgstr "Configuration 2FA invalide."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Le code 2FA est invalide ou a expiré."
+

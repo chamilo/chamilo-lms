@@ -27,7 +27,7 @@
 # SELF-CONTAINMENT: course TEMP has ZERO subscribed learners on this box by
 # default (confirmed live: /api/course_rel_users?course=/api/courses/1
 # returns only the admin's own row) — the gradebook's own "grade learners"
-# step has nothing to list without one. Subscribes "acostea" as a student
+# step has nothing to list without one. Subscribes "norizales" as a student
 # in the very first scenario (reusing the exact flow already proven by
 # tests/playwright/features/course_user_registration.feature's own
 # "Subscribe ... as student" scenario, not reinvented) and unsubscribes her
@@ -37,14 +37,39 @@
 # assumes persistent shared state across files, which this migration's own
 # self-containment rule explicitly rejects).
 #
-# acostea's real numeric user id is NOT hardcoded (the Behat original's
+# REAL CI RACE FOUND: this file originally used the shared "acostea" fixture
+# for the exact same subscribe-use-unsubscribe round trip. toolReporting.
+# feature does the identical thing to the identical (acostea, TEMP) pairing,
+# and `fullyParallel: false` only serializes scenarios WITHIN one file —
+# different files still run concurrently across workers (see playwright.
+# config.ts's own comment on that distinction). A real CI run showed this
+# file's very first scenario failing to find "Andrea" in the subscribe
+# picker at all — subscribe_user.php's picker excludes users already
+# subscribed to the course (`cu.user_id IS NULL` in get_user_data(), read in
+# public/main/user/subscribe_user.php) — which is exactly what happens if
+# toolReporting.feature (or any other file that leaves acostea subscribed
+# and never tears her down: toolWork.feature, toolGroup.feature,
+# toolChat.feature, toolExerciseTeacher.feature, course_user_registration.
+# feature itself) had already subscribed her by the time this scenario ran.
+# The same live run also showed a LATER scenario here ("Edit a result...")
+# losing her row mid-file, consistent with toolReporting.feature's own
+# teardown unsubscribing her concurrently while this file was still using
+# her. Fixed by switching this file's own round trip to "norizales" (Noa
+# Orizales, status 5/STUDENT in tests/datafiller/data_users.php) — a fixture
+# confirmed unused by any other .feature file or step in this suite, so this
+# file's own subscribe/use/unsubscribe cycle can never be raced by another
+# file's independent management of the same user+course pairing.
+# toolReporting.feature was given its own, different, equally-unused
+# dedicated learner ("pperez") for the same reason — reusing the same
+# replacement user in both files would just relocate the identical race.
+#
+# norizales's real numeric user id is NOT hardcoded (the Behat original's
 # "score[5]" assumed id 5, which is not her id on this box — confirmed live
-# via /api/users?username=acostea, she is id 57 here, and that number is
-# not guaranteed stable across boxes/runs either). The new "I fill in the
-# score for ... with ..." step (added to common.steps.ts) looks her id up
-# by username right before filling, exactly mirroring the existing
-# "I have a friend named ..." step's own id-lookup-instead-of-hardcoding
-# pattern elsewhere in this suite.
+# via /api/users?username=norizales, and that number is not guaranteed
+# stable across boxes/runs either). The "I fill in the score for ... with
+# ..." step (added to common.steps.ts) looks her id up by username right
+# before filling, exactly mirroring the existing "I have a friend named ..."
+# step's own id-lookup-instead-of-hardcoding pattern elsewhere in this suite.
 #
 # Field/selector drift confirmed live vs the Behat original:
 # - gradebook_add_eval.php: "evaluation_title"/"weight_mask"/
@@ -111,8 +136,8 @@
 #   before that, even though the learner's total score already clears the
 #   minimum certification score. Once generated, a "Certificate" link
 #   appears (`target="_blank"`, opens the actual rendered certificate HTML
-#   in a new tab — manually confirmed live it shows "CERTIFICATE ... Andrea
-#   Costea ... TEMP") — "I follow"/"I should see" both still work against
+#   in a new tab — manually confirmed live it shows "CERTIFICATE ... Noa
+#   Orizales ... TEMP") — "I follow"/"I should see" both still work against
 #   the ORIGINAL page/tab (the click never navigates the current page away,
 #   by design), matching the Behat original's own equally simple assertion
 #   shape; a full new-tab content assertion was judged unnecessary
@@ -149,16 +174,16 @@
 # selected" + "Yes" flow toolWork.feature's own delete scenario uses),
 # certification minimum score restored to 75 (this box's real starting
 # value — not a hardcoded assumed default) and "Generate certificates"
-# unchecked again, and acostea unsubscribed from TEMP.
+# unchecked again, and norizales unsubscribed from TEMP.
 @common @tools
 Feature: Assessments tool
   Manage assessment settings within a course
 
   Scenario: Subscribe a learner so the assessment tool has someone to grade
     Given I am a platform administrator
-    And I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=1"
+    And I am on "/main/user/subscribe_user.php?keyword=norizales&type=5&cid=1"
     And wait for the page to be loaded
-    Then I should see "Andrea"
+    Then I should see "Noa"
     Then I follow "Register"
     And wait very long for the page to be loaded
     Then I should not see an error
@@ -194,7 +219,7 @@ Feature: Assessments tool
     And I check "Grade learners"
     And I press "add_eval_form_submit"
     And I wait for the page to be loaded
-    When I fill in the score for "acostea" with "6"
+    When I fill in the score for "norizales" with "6"
     And I press "add_result_form_submit"
     And I wait for the page to be loaded
     Then I should see "exam"
@@ -243,7 +268,7 @@ Feature: Assessments tool
     And wait for the page to be loaded when ready
     And I follow "exam"
     And I wait for the page to be loaded
-    Then I click the "i.mdi-pencil" icon in the row for "Costea"
+    Then I click the "i.mdi-pencil" icon in the row for "Orizales"
     And I wait for the page to be loaded
     When I fill in the following:
       | score | 8 |
@@ -265,7 +290,7 @@ Feature: Assessments tool
     And I wait for the page to be loaded
     Then I click the "i.mdi-certificate" element
     And wait for the page to be loaded when ready
-    Then I should see "Andrea Costea"
+    Then I should see "Noa Orizales"
     And I follow "Certificate"
     Then I should see "Certificate"
 
@@ -326,7 +351,7 @@ Feature: Assessments tool
     Then I should see "75"
     And I am on "/main/user/user.php?cid=1"
     And I wait for the page to be loaded
-    Then I should see "Costea"
+    Then I should see "Orizales"
     Then I follow "Unsubscribe"
     And I confirm the popup
     And wait very long for the page to be loaded

@@ -207,12 +207,35 @@
 # the final scenario below deletes the 4 sessions, the teacher1 account,
 # and all 3 courses (which cascades away every document/exercise/forum/LP/
 # gradebook item created inside "Testing course fr").
+# DISABLED 2026-08-06 per explicit user instruction — this file was failing
+# in CI and is being held back from execution entirely (not merely
+# deprioritized) until further notice. Do not remove the @skip tags below
+# without asking first.
+#
+# REAL bddgen BEHAVIOR FOUND while wiring this up (confirmed via systematic
+# isolation with minimal repro files, not guessed — an initial theory that
+# `@skip` on the FEATURE line itself was the trigger turned out to be a red
+# herring once tested in true isolation): when EVERY Scenario in a Feature is
+# tagged `@skip`, bddgen silently generates NO output file at all for that
+# feature (exit code 0, zero warnings/errors, .features-gen/features/
+# <name>.feature.spec.js simply never gets written) — confirmed by testing a
+# 2-scenario file with only ONE skipped, which compiled fine with a single
+# `test.skip()`, versus the same file with BOTH skipped, which produced no
+# file. This is actually the desired, stronger outcome here: a missing spec
+# file can't be discovered by the test runner at all, which is a more
+# complete "disable" than `test.skip()` would be. Every Scenario below is
+# tagged `@skip` individually (this suite's established pattern, e.g.
+# toolGroup.feature/courseCatalogue.feature/toolChat.feature) — if this file
+# is ever re-enabled by un-skipping at least one Scenario while others remain
+# skipped, expect a real spec file with `test.skip()` calls for the rest,
+# per playwright-bdd's own documented (non-buggy) behavior in that case.
 @common
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator
   I need to create courses with content, a teacher, and 4 sessions
 
+  @skip
   Scenario: Create courses, multilingual documents, exercises, forum, learning path and assessment activity
     Given I am a platform administrator
 
@@ -396,6 +419,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should see "Course validation"
 
+  @skip
   Scenario: Create teacher and configure "Present session" with settings and include course
     Given I am a platform administrator
 
@@ -473,6 +497,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
+  @skip
   Scenario: Create future session "Session in the futur" and include course
     Given I am a platform administrator
 
@@ -521,6 +546,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
+  @skip
   Scenario: Create past session "Past session" and include course
     Given I am a platform administrator
 
@@ -569,6 +595,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
+  @skip
   Scenario: Create future English session "Session in the futur en" and include course
     Given I am a platform administrator
 
@@ -621,6 +648,7 @@ Feature: Special case 1 — course/session creation
   # first (they reference the courses, not the other way around), then the
   # teacher account, then the 3 courses (cascades away every document/
   # exercise/forum/LP/gradebook item created inside "Testing course fr").
+  @skip
   Scenario: Teardown special case 1 sessions
     Given I am a platform administrator
 

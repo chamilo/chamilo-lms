@@ -225,7 +225,16 @@ async function loginAs(page: Page, username: string) {
   // setting is off and tc.php never appears — is cheap insurance against the
   // same contamination hitting some other file's login next.
   if (page.url().includes("/main/auth/tc.php")) {
-    await page.locator('input[name="legal_accept"]').check()
+    // registration.hide_legal_accept_checkbox=Yes makes ChamiloHelper::displayLegalTermsPage()
+    // render legal_accept as <input type="hidden" value="1"> instead of a real checkbox (already
+    // implicitly accepted) — real CI failure: specialCase1PlatformSettings.feature's "Add minimal
+    // session extra fields" turns this setting ON mid-scenario, then a later login (studentone)
+    // lands on this same tc.php interstitial and .check() threw "Not a checkbox or radio button"
+    // on the now-hidden field. Only check() it when it's actually a checkbox.
+    const legalAccept = page.locator('input[name="legal_accept"]')
+    if ("checkbox" === (await legalAccept.getAttribute("type"))) {
+      await legalAccept.check()
+    }
     await page
       .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
       .first()
@@ -1157,13 +1166,34 @@ registerTextSettingsGuard("@settings-courseCatalogue", "/admin/settings/catalog"
 // other otherwise.
 let lastNavigationResponse: import("@playwright/test").Response | null = null
 
+// 2026-08-06: real CI failure (courseCatalogue.feature's "Create three
+// courses for catalogue testing") threw "page.goto: net::ERR_ABORTED; maybe
+// frame was detached?" navigating to "/admin/course-list?keyword=..." right
+// after "And I press submit" -> "And I wait for the page to be loaded" on
+// course_add.php's legacy redirect-on-save flow — the SAME lingering-
+// previous-navigation race documented above ("is interrupted by another
+// navigation"), just surfacing as Playwright's OTHER wording for a frame
+// whose in-flight navigation got superseded, not Playwright's dedicated
+// "browser/context closed" crash message (that one is a real, different,
+// separately-documented signature elsewhere in this suite — see toolGroup.
+// feature/adminChamiloOrgBlock.feature). The previous string match only
+// covered one of the two phrasings this same race can throw, so this exact
+// class of failure fell through to an immediate, non-retried throw on
+// attempt 1 instead of getting the same retry treatment. Broadened rather
+// than added as a second `if`, since the retry body below applies
+// identically to both messages.
+function isRetryableNavigationRace(error: unknown): boolean {
+  const message = String(error)
+  return message.includes("is interrupted by another navigation") || message.includes("maybe frame was detached")
+}
+
 async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       lastNavigationResponse = await page.goto(path)
       return
     } catch (error) {
-      if (!String(error).includes("is interrupted by another navigation") || attempt === maxAttempts) {
+      if (!isRetryableNavigationRace(error) || attempt === maxAttempts) {
         throw error
       }
       // A real CI failure (toolLp.feature, under CI's slower/loaded response

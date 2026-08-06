@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
         new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Patch(security: "is_granted('ROLE_TEACHER')"), new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
         new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
     ],
     normalizationContext: [

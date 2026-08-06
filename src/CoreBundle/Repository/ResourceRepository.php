@@ -27,7 +27,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
 use LogicException;
@@ -632,44 +631,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function delete(ResourceInterface $resource): void
     {
         $em = $this->getEntityManager();
-        $this->scheduleForRemoval($resource, $em);
-        $em->flush();
-    }
-
-    /**
-     * Recursively marks a resource and its whole descendant tree for removal
-     * WITHOUT flushing. Deleting a resource with children used to call
-     * `$em->flush()` once per recursion level (once per child, then once
-     * more for the resource itself) — each of those flushes independently
-     * triggers ResourceDoctrineListener's own postRemove/postFlush cycle,
-     * which persists a tracking (TrackEDefault) entity and immediately
-     * flushes AGAIN from inside that listener. Confirmed live: deleting a
-     * CLinkCategory that has a single CLink nested inside it threw
-     * `Doctrine\ORM\ORMInvalidArgumentException::newEntitiesFoundThroughRelationships`
-     * on the second (outer) flush — the repeated, interleaved nested-flush
-     * cycles confuse the UnitOfWork's changeset computation. Collecting
-     * every removal first and flushing exactly ONCE at the end (here, only
-     * at the outermost `delete()` call) keeps the same public contract
-     * (resource + all descendants gone by the time `delete()` returns)
-     * while removing the repeated-flush pattern that caused it. Every child
-     * is resolved via its own resourceNode id before any removal happens
-     * (the parent's children are enumerated up front), so deferring the
-     * flush doesn't risk a later lookup seeing stale not-yet-deleted data.
-     */
-    private function scheduleForRemoval(ResourceInterface $resource, EntityManagerInterface $em): void
-    {
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
             foreach ($child->getResourceFiles() as $resourceFile) {
                 $em->remove($resourceFile);
             }
-            $childResource = $this->getResourceFromResourceNode($child->getId());
-            if (null !== $childResource) {
-                $this->scheduleForRemoval($childResource, $em);
+            $resourceNode = $this->getResourceFromResourceNode($child->getId());
+            if (null !== $resourceNode) {
+                $this->delete($resourceNode);
             }
         }
 
         $em->remove($resource);
+        $em->flush();
     }
 
     /**

@@ -58,22 +58,47 @@ nav ul {
 
 nav li {
     margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border-left: none;
+}
+
+nav li:hover {
+    background: none;
+    border-left-color: transparent;
 }
 
 nav a {
     display: block;
+    position: relative;
     padding: 12px 16px;
     color: #cfd8dc;
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
-    transition: background 0.15s, color 0.15s;
+    transition: color 0.15s;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 6px;
+    height: 2px;
+    background: #3498db;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
 }
 
 nav a:hover {
-    background: #34495e;
     color: #fff;
     text-decoration: none;
+}
+
+nav a:hover::after {
+    transform: scaleX(1);
 }
 
 /* Main content container */

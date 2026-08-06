@@ -40,6 +40,10 @@ use const PHP_URL_PATH;
  * API Platform route attributes, and before the firewall (8), so a forged
  * request is rejected before the request pays for authentication and course
  * context resolution.
+ *
+ * Note that API Platform negotiates the format earlier still, in
+ * AddFormatListener (priority 28): a write request with an unsupported content
+ * type is answered with 415 and never reaches this check.
  */
 final class CsrfProtectionListener
 {

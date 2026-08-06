@@ -172,6 +172,8 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/67d24abefe6554f582a024d27732dcf57830992f">67d24abe</a> - <a href="https://task.beeznest.com/issues/23462">BT#23462</a>) Gradebook: Add customizable grading modes and forum participation scoring</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/9fb303d500f309b6bd5f67a0e63d35056cb61c9d">9fb303d5</a>) Admin: Add assignment download fullname option</li>
         <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/81e9429c3831e1d734fca420ff3125079e616312">81e9429c</a> - <a href="https://task.beeznest.com/issues/23599">BT#23599</a>) Learnpath: Add support for post-unload event Chrome + add scorm_complete_on_leave_when_incomplete setting to enable auto-completion of bad SCOs</li>
         <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/7406c7706131bd2746aebf1a3deaa1d09392a4f1">7406c770</a>) Internal: Add 'Referrer-Policy: strict-origin-when-cross-origin' to registration script to avoid transfering registration-related hashes to other sites</li>
         <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/5226f4f90b59fad755443ba66151f9da61e85f8d">5226f4f9</a>) User: Add e-mail link invitations to course or session (adds configuration setting allow_invitation_registration) to allow teachers to invite users to register to the platform and get directly subscribed to the course. Works on portals with or without allowed auto-registration</li>
@@ -214,6 +216,24 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/fce2bcfb754170b40191ce94a54967a571d8d533">fce2bcfb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7533">GH#7533</a>) Documentation: Add info about the Authorization header in Apache+PHP-FPM cases - requires additional SetEnvIf statement</li>
+        <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/abc4dc00bed56585f46fba108678f474c43e3b98">abc4dc00</a>) Display: Introduce new Chamilo logo and style</li>
+        <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/2d04a5487c5af10d4eef778349a2257f3ccc1104">2d04a548</a>) Display: Improve documentation menu style</li>
+        <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/a2ee18128dc731e8f08ca0089ac0989dfd24a2e3">a2ee1812</a>) Internal: Improve theme from site skill</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/ae3cee527c473bc64f7af8e36d01139111492d95">ae3cee52</a>) Internal: Add missing language terms extraction helper script</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/46998eeaff42b0e2ef990e156a6cb4fb2fbae49a">46998eea</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3943">GH#3943</a>) Plugin: Persist xAPI statements in the local LRS</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f0284771793db0ea1a698e65184e22955bd8c299">f0284771</a>) Course: Migrate course reporting tool to Vue</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc765bc15b9815f3512cb6f45fb3fb6c2ed3d673">bc765bc1</a>) Internal: Fix API operations in GradebookCategory</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d296f6cb067416fd95f1d281c2c4dfc6b5d6da5a">d296f6cb</a> - <a href="https://task.beeznest.com/issues/23462">BT#23462</a>) Migration: duplicate gradebook grading columns migration in V200 and V300 to avoid errors</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4b1ed8526be8f3331aa7ad13776882875900bee">f4b1ed85</a>) Internal: fix the Psalm errors reported in src and tests</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/d3c2075025ce9881db560d4ca14f5937520a2e03">d3c20750</a>) Vendor: Bump guzzlehttp/guzzle from 7.14.2 to 7.15.3</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/06e334bb9d2516cbfa99227f58f75e68651c4a71">06e334bb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8723">GH#8723</a>) Vendor: Consume settings-bundle from Packagist instead of the fork</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/7481ccfca34e4d9794ec68fe806eac925dbfa069">7481ccfc</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8817">GH#8817</a>) Internal: fix the export controllers that still called the context helpers with their former signature</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/56900369e9a1a50810bc853ebb407903d99709bb">56900369</a>) Internal: Skip unregistered roles in ResourceAclHelper instead of crashing</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/e30e38ccdda3fd58ad7cc8781f37ee6edca5eda4">e30e38cc</a> - <a href="https://task.beeznest.com/issues/22765">BT#22765</a>) QA: fix special case behat tests and complete with test for existing platform</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ca07c7900bc203d7ef6bd4d493a9991a1f49975">1ca07c79</a>) Migration: Move work fullname setting to V300</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/740a278b820040c497b4b2fb3a31f7756fa366e0">740a278b</a>) Documentation: Update changelog</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/1115528ea95250b4a2802c3c2c24095d6e718a7b">1115528e</a>) Internal: Update changelog skill to catch 'add' verb</li>
         <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/01cc074a1a6dc853033dc52f87da966df1c58d93">01cc074a</a>) Scripts: Add language files merging script</li>
         <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/76fa2d705c136ba8c6b964ff14c7b9f4c4a0470e">76fa2d70</a>) Scripts: Add plugin lang files support to find_missing_terms.php</li>
         <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/ebabdefc850989435da7521d4eebe7b9964c4fb2">ebabdefc</a>) Admin: Migrate global question bank to Vue</li>
@@ -824,6 +844,9 @@
 
     <h3>Fixed</h3>
     <ul aria-live="off">
+        <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/858d53f94c42cf41be981103cdcb802340bf54cd">858d53f9</a> - <a href="https://task.beeznest.com/issues/23609">BT#23609</a>) Language: User: Fix missing translation of feedbacks on password changes</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/316c4156e76d46420ae627a2f1bbfa648a27484b">316c4156</a>) Fix document upload skip setting type</li>
+        <li>[2026-08-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a629a499fedf2b25294c98f755512d68c076f3e">2a629a49</a>) Language: Review translation to Lao</li>
         <li>[2026-08-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/0e01a3ba888714c58d76b665a17c8094aa2c2c8b">0e01a3ba</a>) Language: Update translations and add missing terms from tickets, exercise and others' transition to Vue</li>
         <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/80f818eebfd028086397a46102224fd4a9399a9f">80f818ee</a>) Language: Rename French 'Extensions' to 'Plugins' (over-translation, clearer as 'plugin')</li>
         <li>[2026-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/5323e0921b364726b821b61b4827cf36f499d353">5323e092</a>) Language: Update missing exercise terms</li>

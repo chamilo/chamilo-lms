@@ -229,7 +229,12 @@ systemctl restart apache2</pre>
     </ul>
     You should then reload Apache to take this new VHost configuration into account.<br />
     Enabling mod_rpaf and defining TRUSTED_PROXIES in .env *without* adding the <em>SetEnvIF</em> above in your VHost config will result in some links (quiz answers, quarter stats, ...) being called in AJAX mode, using an HTTP version of the link.
-    
+
+    <h4>JWT Authorization and PHP-FPM</h4>
+    If you are using PHP-FPM behind Apache, make sure you tell Apache to transfer the Authorization header to PHP-FPM, otherwise tools like ONLYOFFICE who require a JWT authentication might not work. This is done by adding this to your VirtualHost block
+    <pre>
+  SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    </pre>
 
 
     <h3>3.4. Files permissions</h3>

@@ -435,8 +435,13 @@ function get_courses($from, $limit, $column, $direction)
                 }
             }
 
+            $courseReportingUrl = api_get_path(WEB_PATH).'resources/course-reporting/?'.http_build_query([
+                'cid' => (int) $courseId,
+                'sid' => (int) $sessionId,
+                'gid' => 0,
+            ]);
             $courseIcon = '<a
-                href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
+                href="'.$courseReportingUrl.'">
                 '.Display::getMdiIcon(
                 ActionIcon::VIEW_DETAILS,
                 'ch-tool-icon',

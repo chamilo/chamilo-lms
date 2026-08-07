@@ -2,40 +2,128 @@
 name: create-theme-from-site
 description: >
   Create a new Chamilo color theme (colors + logo) derived from an external
-  website's actual branding, given a theme name and the site's URL. Mirrors
-  exactly what an admin can do manually through /admin/configuration/colors,
-  done entirely via the Chamilo REST API. Use when the user wants a new theme
-  "based on" / "matching" a given website, or runs /create-theme-from-site.
+  website's actual branding, given a theme name and the site's URL — or, if
+  given a local path to a logo image instead, derived from that logo's own
+  dominant colors. Mirrors exactly what an admin can do manually through
+  /admin/configuration/colors, done entirely via the Chamilo REST API. Use
+  when the user wants a new theme "based on" / "matching" a given website or
+  a given logo file, or runs /create-theme-from-site.
 ---
 
 # Create Theme From Site
 
-Given a **name** (e.g. `beeznest2`) and a **source website URL**
-(e.g. `https://beeznest.com`), create a new Chamilo `ColorTheme`, activate it
-as the platform's default theme, and attach the source site's logo — all
-through the same API the admin Vue UI (`/admin/configuration/colors`) uses.
-No direct database or filesystem writes: every step below is a real HTTP call
-against the running Chamilo instance, which is what keeps this safe and
-correct (it reuses tested code paths — entity validation, slug generation,
-`colors.css` rendering, image sanitization — instead of reinventing them).
+Given a **name** (e.g. `beeznest2`) and a **source** — either a **website URL**
+(e.g. `https://beeznest.com`) or a **local path to a logo image**
+(e.g. `/home/user/logos/acme.svg`) — create a new Chamilo `ColorTheme`,
+activate it as the platform's default theme, and attach a logo — all through
+the same API the admin Vue UI (`/admin/configuration/colors`) uses. No direct
+database or filesystem writes for the theme itself: every step from Step 5
+onward is a real HTTP call against the running Chamilo instance, which is
+what keeps this safe and correct (it reuses tested code paths — entity
+validation, slug generation, `colors.css` rendering, image sanitization —
+instead of reinventing them).
 
 ---
 
-## Step 0: Confirm inputs and scope
+## Step 0: Confirm inputs and scope, and detect the mode
 
 Ask for whichever of these are missing:
 - **Theme name** → becomes the `ColorTheme.title`; the theme's folder `slug`
   is auto-generated from it server-side (Gedmo slug) — never guess or derive
   the slug yourself, always read it back from the API response.
-- **Source URL** → the site to derive colors and a logo from.
+- **Source** → either a website URL, or a local path to a logo image file.
 - **Activate immediately?** Setting a theme "active" makes it the platform's
   default look for every user on this access URL, immediately. Default to
   yes only if the user has clearly asked for it (as in "set it as default
   theme"); otherwise create the theme and ask before activating.
 
+**Detect which mode applies** — don't ask the user to specify it, just check
+the source string itself:
+
+```bash
+if [[ "$SOURCE" =~ ^https?:// ]]; then
+    MODE=site
+elif [[ -f "$SOURCE" ]] && file --mime-type -b "$SOURCE" | grep -q '^image/'; then
+    MODE=logo
+else
+    echo "Not a URL and not a readable local image file: $SOURCE"
+fi
+```
+
+- **`site` mode** → follow Steps 1–3 as written below (scrape the site's CSS
+  for brand colors, then locate its logo separately).
+- **`logo` mode** → skip Steps 1–3 entirely and follow **Step 1–3 (logo
+  mode)** just below instead: the given file supplies *both* the colors and
+  the logo. Then continue at Step 4 as normal — everything from there on is
+  identical regardless of mode.
+
 ---
 
-## Step 1: Fetch the source site
+## Step 1–3 (logo mode): derive colors and logo from a local image file
+
+Use this instead of Steps 1–3 when `MODE=logo`.
+
+### Extract the dominant colors
+
+If the file is an **SVG**, try the cheap, exact route first — grep the source
+for literal fill colors, which are the real authored brand hex values with no
+quantization or anti-aliasing noise to filter out:
+
+```bash
+grep -oE '(fill|stop-color)\s*[:=]\s*"?#[0-9A-Fa-f]{6}' logo.svg | grep -oE '#[0-9A-Fa-f]{6}' | sort | uniq -c | sort -rn
+```
+
+If that yields nothing usable (no literal hex fills — e.g. the SVG uses
+`currentColor` or CSS classes instead), or the file is a raster format
+(PNG/JPG/WebP), fall back to a histogram of the rasterized image. Flatten
+onto an implausible fill color first (bright magenta) so transparent-
+background pixels are unambiguously distinguishable from genuine logo pixels
+— including any real white, black, or near-white/black elements the logo
+itself actually draws, which must **not** be discarded as "background":
+
+```bash
+convert logo.svg -background "#FF00FF" -flatten -resize 150x150 -colors 12 -depth 8 histogram:info:- \
+  | sed -E 's/^\s*([0-9]+):.*(#[0-9A-Fa-f]{6}).*/\1 \2/' \
+  | grep -vi '#FF00FF' \
+  | sort -rn
+```
+
+(`convert` rasterizes SVGs automatically via its delegate library — the same
+command works unchanged for PNG/JPG input.)
+
+Either way, you now have a frequency-ranked list of `count #RRGGBB` pairs.
+Map them the same way Step 2 would, minus the "grep usage context" part
+(there's no CSS to check a selector against here — frequency in the logo
+itself *is* the signal):
+- **primary** — the most frequent genuine color (excluding the magenta
+  background marker).
+- **secondary** — the next most frequent, clearly distinct color.
+- **tertiary** — a third distinct color if the logo has one; if the logo is
+  genuinely two-tone, fall back to a dark neutral (e.g. `35 35 35`) rather
+  than forcing a weak third color into the role.
+
+Continue to **Step 4** using these three as the primary/secondary base colors
+(same downstream harmonization of success/info/warning/danger applies
+unchanged).
+
+### Prepare the logo
+
+The given file *is* the logo — there's no site to search. Apply the same
+sizing rule as Step 3's site-mode logo handling:
+
+```bash
+identify logo.png   # check WxH (skip for SVG — no fixed raster size)
+convert logo.png -resize 190x60 logo_header.png   # only if it exceeds 190x60
+```
+
+If the source file is an SVG, use it directly for `header_svg`/`email_svg`,
+and additionally rasterize a PNG rendition for `header_png`/`email_png`
+(`convert logo.svg logo.png`, then resize per above if needed) — Step 8
+uploads whichever fields you have.
+
+---
+
+## Step 1 (site mode): Fetch the source site
 
 ```bash
 curl -sL -A "Mozilla/5.0 (compatible; ChamiloThemeBot/1.0)" "<url>" -o home.html
@@ -50,7 +138,7 @@ otherwise masquerade as "brand colors" if you just count frequency.
 
 ---
 
-## Step 2: Extract the real brand colors
+## Step 2 (site mode): Extract the real brand colors
 
 1. Collect every `#rrggbb` (and `rgb()`/`rgba()`) color across the fetched
    CSS, tally frequency, and shortlist the top ~20.
@@ -80,7 +168,7 @@ otherwise masquerade as "brand colors" if you just count frequency.
 
 ---
 
-## Step 3: Find the logo
+## Step 3 (site mode): Find the logo
 
 Check, in this order, stopping at the first hit:
 1. JSON-LD `"logo"` field (`<script type="application/ld+json">` containing
@@ -349,11 +437,13 @@ curl -s "http://<host>/api/access_url_rel_color_themes" -H "Authorization: Beare
 ## Step 10: Report back
 
 Summarize for the user: theme name/slug, the three chosen colors with a
-one-line justification for each (what element on the source site they came
-from), a brief note that success/info/warning/danger were harmonized rather
-than left as stock defaults or fully replaced, where the logo was found,
-whether it's now active, and a link to `/admin/configuration/colors` so they
-can review/tweak it visually.
+one-line justification for each (what element on the source site — or, in
+logo mode, which part of the logo image — they came from), a brief note that
+success/info/warning/danger were harmonized rather than left as stock
+defaults or fully replaced, where the logo came from (site mode: which
+lookup in Step 3 found it; logo mode: the given file path), whether it's now
+active, and a link to `/admin/configuration/colors` so they can review/tweak
+it visually.
 
 ---
 
@@ -373,3 +463,19 @@ can review/tweak it visually.
   permissions on that specific subdirectory rather than the whole cache tree.
 - **Don't guess the slug.** It's derived from the title server-side; always
   read it from the `POST /api/color_themes` response.
+- **Logo mode's histogram trick relies on `-background "#FF00FF"` being a
+  color the real logo doesn't use.** It's an implausible pick for virtually
+  any brand, but if the logo genuinely is magenta/pink-based, pick a
+  different rare marker color (e.g. `#00FF00`) instead and adjust the
+  `grep -vi` filter to match — otherwise you'll silently discard a real
+  brand color as if it were background.
+- **Photographic or gradient-heavy "logos" aren't real logos.** If the given
+  local image looks like a photo or a busy illustration rather than a
+  wordmark/icon (many distinct colors, no small set of 2–4 dominant ones),
+  the histogram approach will surface arbitrary noise instead of brand
+  colors. Flag this to the user rather than silently proceeding — ask them
+  to confirm the file is actually meant to be a logo.
+- **`convert` needs an SVG rasterization delegate (usually `librsvg`) to
+  handle `.svg` input.** If it's missing, `convert logo.svg ...` fails or
+  produces a blank raster. The SVG-source `grep` for literal fill colors
+  doesn't need it — prefer that path for SVGs when it yields results.

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemDownloadedEvent;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
@@ -55,6 +56,7 @@ final class PortfolioExportController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly SettingsManager $settingsManager,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     #[Route('/api/portfolio/export.pdf', name: 'api_portfolio_export_pdf', methods: ['GET'])]
@@ -138,8 +140,8 @@ final class PortfolioExportController extends AbstractController
     private function resolveExport(Request $request): array
     {
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
-        $course = $this->getPortfolioCourse($this->entityManager, $request);
-        $session = $this->getPortfolioSession($this->entityManager, $request, $course);
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($course instanceof Course && !$this->canReadPortfolioCourse(
             $this->security,
             $this->userHelper,

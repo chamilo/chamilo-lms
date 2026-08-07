@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -30,9 +31,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_TEACHER')"),
-        new Put(security: "is_granted('ROLE_TEACHER')"),
-        new Patch(security: "is_granted('ROLE_TEACHER')"), new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
     ],
     normalizationContext: [
         'groups' => ['gradebookCategory:read'],
@@ -124,31 +126,45 @@ class GradebookCategory
 
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
+
     #[Assert\NotBlank]
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected ?int $locked;
+
     #[ORM\Column(name: 'default_lowest_eval_exclude', type: 'boolean', nullable: true)]
     protected ?bool $defaultLowestEvalExclude = null;
+
     #[Assert\NotNull]
     #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
     protected bool $generateCertificates;
+
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     #[ORM\Column(name: 'certificate_validity_period', type: 'integer', nullable: true)]
     protected ?int $certificateValidityPeriod = null;
+
     #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $isRequirement;
+
     #[ORM\Column(name: 'depends', type: 'text', nullable: true)]
     protected ?string $depends = null;
+
     #[ORM\Column(name: 'minimum_to_validate', type: 'integer', nullable: true)]
     protected ?int $minimumToValidate = null;
+
     #[ORM\Column(name: 'gradebooks_to_validate_in_dependence', type: 'integer', nullable: true)]
     protected ?int $gradeBooksToValidateInDependence = null;
+
     #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
     protected ?int $allowSkillsBySubcategory;
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     #[ORM\ManyToOne(targetEntity: CDocument::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
     private ?CDocument $document = null;
+
+    #[Assert\NotNull]
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\Column(name: 'calculation_mode', type: 'string', length: 32, nullable: false, enumType: GradebookCalculationMode::class, options: ['default' => GradebookCalculationMode::WEIGHTED_AVERAGE->value])]
+    protected GradebookCalculationMode $calculationMode = GradebookCalculationMode::WEIGHTED_AVERAGE;
 
     public function __construct()
     {
@@ -551,6 +567,18 @@ class GradebookCategory
     public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
     {
         $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
+
+        return $this;
+    }
+
+    public function getCalculationMode(): GradebookCalculationMode
+    {
+        return $this->calculationMode;
+    }
+
+    public function setCalculationMode(GradebookCalculationMode $calculationMode): self
+    {
+        $this->calculationMode = $calculationMode;
 
         return $this;
     }

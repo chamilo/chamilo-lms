@@ -426,7 +426,8 @@ class CidReqListener
      * Redirects a visitor to the course password form before the modern course
      * home or one of its tools is rendered.
      */
-    private function redirectForRegistrationPassword(Course $course, int $sessionId): ?RedirectResponse {
+    private function redirectForRegistrationPassword(Course $course, int $sessionId): ?RedirectResponse
+    {
         if (true === (bool) ChamiloSession::read('course_password_'.$course->getId(), false)) {
             return null;
         }

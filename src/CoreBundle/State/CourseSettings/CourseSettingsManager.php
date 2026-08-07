@@ -41,9 +41,10 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Throwable;
 
 use const ENT_QUOTES;
-use const PHP_INT_MAX;
+use const FILTER_VALIDATE_URL;
 
 final readonly class CourseSettingsManager
 {
@@ -449,7 +450,7 @@ final readonly class CourseSettingsManager
             'activate_legal' => (int) ($course->getActivateLegal() ?? 0),
             'show_score' => (int) ($course->getShowScore() ?? 0),
             'video_url' => $course->getVideoUrl(),
-            'disk_quota_display' => \number_format((int) ($course->getDiskQuota() ?? 0), 2).' MB',
+            'disk_quota_display' => number_format((int) ($course->getDiskQuota() ?? 0), 2).' MB',
         ];
 
         foreach (self::DEFAULT_VALUES as $variable => $defaultValue) {
@@ -481,7 +482,7 @@ final readonly class CourseSettingsManager
             );
             if (null !== $extraFieldValue) {
                 $values[$variable] = $extraFieldValue->getFieldValue() ?? '';
-            } elseif (!array_key_exists($variable, $values)) {
+            } elseif (!\array_key_exists($variable, $values)) {
                 $values[$variable] = '';
             }
         }
@@ -833,7 +834,7 @@ final readonly class CourseSettingsManager
         if (!empty($integrations['ai']['enabled'])) {
             $aiFields = [];
             foreach (self::AI_FEATURES as $key => $label) {
-                if (array_key_exists($key, $values)) {
+                if (\array_key_exists($key, $values)) {
                     $aiFields[] = $this->field($key, $label, 'radio', options: [
                         ['label' => 'Yes', 'value' => 'true'],
                         ['label' => 'No', 'value' => 'false'],
@@ -895,7 +896,7 @@ final readonly class CourseSettingsManager
     private function normalizeLoadedSelectableValues(array $values): array
     {
         foreach (self::ALLOWED_INTEGER_VALUES as $key => $allowedValues) {
-            $hasLegacyDefault = array_key_exists($key, self::DEFAULT_VALUES);
+            $hasLegacyDefault = \array_key_exists($key, self::DEFAULT_VALUES);
             if (!$hasLegacyDefault && 'show_score' !== $key) {
                 continue;
             }
@@ -924,7 +925,7 @@ final readonly class CourseSettingsManager
         ) ? $documentVisibility : 'visible';
 
         foreach (self::AI_FEATURES as $key => $_label) {
-            if (!array_key_exists($key, $values)) {
+            if (!\array_key_exists($key, $values)) {
                 continue;
             }
 
@@ -982,22 +983,22 @@ final readonly class CourseSettingsManager
         $normalized = [];
 
         foreach (self::STRING_VALUE_KEYS as $key) {
-            if (array_key_exists($key, $values)) {
+            if (\array_key_exists($key, $values)) {
                 $normalized[$key] = trim((string) $values[$key]);
             }
         }
         foreach (self::INTEGER_VALUE_KEYS as $key) {
-            if (array_key_exists($key, $values)) {
+            if (\array_key_exists($key, $values)) {
                 $normalized[$key] = (int) $values[$key];
             }
         }
         foreach (self::BOOLEAN_VALUE_KEYS as $key) {
-            if (array_key_exists($key, $values)) {
+            if (\array_key_exists($key, $values)) {
                 $normalized[$key] = $this->toBool($values[$key]);
             }
         }
         foreach (self::AI_FEATURES as $key => $_label) {
-            if (array_key_exists($key, $values)) {
+            if (\array_key_exists($key, $values)) {
                 $normalized[$key] = $this->toBool($values[$key]) ? 'true' : 'false';
             }
         }
@@ -1045,7 +1046,7 @@ final readonly class CourseSettingsManager
             throw new BadRequestHttpException('Course numeric limits cannot be negative.');
         }
         foreach (self::ALLOWED_INTEGER_VALUES as $key => $allowedValues) {
-            if (array_key_exists($key, $values) && !\in_array((int) $values[$key], $allowedValues, true)) {
+            if (\array_key_exists($key, $values) && !\in_array((int) $values[$key], $allowedValues, true)) {
                 throw new BadRequestHttpException('Invalid value for course setting "'.$key.'".');
             }
         }
@@ -1118,7 +1119,8 @@ final readonly class CourseSettingsManager
             ->setParameter('accessUrlId', (int) $accessUrl->getId(), Types::INTEGER)
             ->setParameter('hidden', Course::HIDDEN, Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         if ($count >= $limit) {
             throw new BadRequestHttpException('The active courses hosting limit has been reached.');
@@ -1140,7 +1142,8 @@ final readonly class CourseSettingsManager
             ->setLegal((string) $values['legal'])
             ->setActivateLegal((int) $values['activate_legal'])
             ->setShowScore((int) $values['show_score'])
-            ->setVideoUrl(trim((string) ($values['video_url'] ?? '')));
+            ->setVideoUrl(trim((string) ($values['video_url'] ?? '')))
+        ;
 
         if (!empty($permissions['canChangeVisibility'])) {
             $course->setVisibility((int) $values['visibility']);
@@ -1148,7 +1151,8 @@ final readonly class CourseSettingsManager
         if (!empty($permissions['canChangeSubscription'])) {
             $course
                 ->setSubscribe($this->toBool($values['subscribe']))
-                ->setUnsubscribe($this->toBool($values['unsubscribe']));
+                ->setUnsubscribe($this->toBool($values['unsubscribe']))
+            ;
         }
 
         $roomId = (int) ($values['room_id'] ?? 0);
@@ -1182,7 +1186,7 @@ final readonly class CourseSettingsManager
         $values['email_alert_manager_on_new_quiz'] = implode(',', (array) ($values['email_alert_manager_on_new_quiz'] ?? []));
 
         foreach (self::COURSE_SETTING_CATEGORIES as $variable => $category) {
-            if (!array_key_exists($variable, $values)) {
+            if (!\array_key_exists($variable, $values)) {
                 continue;
             }
             if (!$this->canSaveCourseSetting($variable, (int) $course->getId())) {
@@ -1198,7 +1202,7 @@ final readonly class CourseSettingsManager
     private function saveExtraFields(Course $course, array $values): void
     {
         foreach (self::EXTRA_FIELD_VARIABLES as $variable) {
-            if (!array_key_exists($variable, $values)) {
+            if (!\array_key_exists($variable, $values)) {
                 continue;
             }
             $field = $this->extraFieldRepository->findByVariable(ExtraField::COURSE_FIELD_TYPE, $variable);
@@ -1447,7 +1451,8 @@ final readonly class CourseSettingsManager
                 ->setVariable($variable)
                 ->setTitle($variable)
                 ->setCategory($category)
-                ->setValue($value);
+                ->setValue($value)
+            ;
             $this->entityManager->persist($item);
 
             return;
@@ -1625,17 +1630,17 @@ final readonly class CourseSettingsManager
         );
 
         $subject = 'Course agreement updated';
-        $message = '<p>The course agreement for <strong>'.\htmlspecialchars($course->getTitle(), ENT_QUOTES).'</strong> was updated.</p>'
-            .'<p><a href="'.\htmlspecialchars($courseUrl, ENT_QUOTES).'">Open the course to review the agreement</a></p>';
+        $message = '<p>The course agreement for <strong>'.htmlspecialchars($course->getTitle(), ENT_QUOTES).'</strong> was updated.</p>'
+            .'<p><a href="'.htmlspecialchars($courseUrl, ENT_QUOTES).'">Open the course to review the agreement</a></p>';
         $attachmentPath = null;
         if (3 === $notificationMode) {
             $legal = $this->getCourseLegalData((int) $course->getId(), $sessionId);
-            $filename = \basename((string) ($legal['filename'] ?? ''));
+            $filename = basename((string) ($legal['filename'] ?? ''));
             if ('' !== $filename) {
                 $candidate = $this->parameterBag->get('kernel.project_dir')
                     .'/var/upload/course_legal/course_'.(int) $course->getId()
                     .'/session_'.$sessionId.'/'.$filename;
-                if (\is_file($candidate)) {
+                if (is_file($candidate)) {
                     $attachmentPath = $candidate;
                 }
             }
@@ -1650,15 +1655,16 @@ final readonly class CourseSettingsManager
                 ->from($editor->getEmail())
                 ->to($user->getEmail())
                 ->subject($subject)
-                ->html($message);
+                ->html($message)
+            ;
 
             if (null !== $attachmentPath) {
-                $email->attachFromPath($attachmentPath, \basename($attachmentPath));
+                $email->attachFromPath($attachmentPath, basename($attachmentPath));
             }
 
             try {
                 $this->mailer->send($email);
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $this->logger->error('Course legal notification could not be sent.', [
                     'courseId' => $course->getId(),
                     'sessionId' => $sessionId,
@@ -1677,7 +1683,7 @@ final readonly class CourseSettingsManager
         if (null === $session) {
             $result = $this->courseRepository->getSubscribedStudents($course)->getQuery()->getResult();
 
-            return \array_values(\array_filter($result, static fn (mixed $item): bool => $item instanceof User));
+            return array_values(array_filter($result, static fn (mixed $item): bool => $item instanceof User));
         }
 
         $relations = $this->entityManager->getRepository(SessionRelCourseRelUser::class)->findBy([
@@ -1694,7 +1700,7 @@ final readonly class CourseSettingsManager
             $users[(int) $user->getId()] = $user;
         }
 
-        return \array_values($users);
+        return array_values($users);
     }
 
     private function logCourseSettingsUpdate(Course $course, ?Session $session): void
@@ -1795,10 +1801,10 @@ final readonly class CourseSettingsManager
             if (!$item->isDir()) {
                 continue;
             }
-            $theme = \basename($item->path());
-            $options[] = ['label' => \ucfirst(\str_replace(['-', '_'], ' ', $theme)), 'value' => $theme];
+            $theme = basename($item->path());
+            $options[] = ['label' => ucfirst(str_replace(['-', '_'], ' ', $theme)), 'value' => $theme];
         }
-        \usort($options, static fn (array $left, array $right): int => strnatcasecmp($left['label'], $right['label']));
+        usort($options, static fn (array $left, array $right): int => strnatcasecmp($left['label'], $right['label']));
 
         return $options;
     }
@@ -1843,7 +1849,7 @@ final readonly class CourseSettingsManager
             return $value;
         }
 
-        return \in_array(\strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     /**
@@ -1853,7 +1859,7 @@ final readonly class CourseSettingsManager
      */
     private function normalizeStringList(mixed $value, array $allowedValues): array
     {
-        $items = \is_array($value) ? $value : \explode(',', (string) $value);
+        $items = \is_array($value) ? $value : explode(',', (string) $value);
         $normalized = [];
         foreach ($items as $item) {
             $item = trim((string) $item);
@@ -1862,7 +1868,7 @@ final readonly class CourseSettingsManager
             }
         }
 
-        return \array_values(\array_unique($normalized));
+        return array_values(array_unique($normalized));
     }
 
     /**
@@ -1972,7 +1978,7 @@ final readonly class CourseSettingsManager
             return '1970-01-01 00:00:00';
         }
 
-        return \date('Y-m-d 00:00:00', \strtotime($value) ?: 0);
+        return date('Y-m-d 00:00:00', strtotime($value) ?: 0);
     }
 
     private function getWatermarkPath(Course $course, int $accessUrlId): string

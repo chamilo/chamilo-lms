@@ -40498,3 +40498,15 @@ msgstr "Keine Tutoren"
 msgid "No users"
 msgstr "Keine Benutzer"
 
+msgid "Current password is required to change your password."
+msgstr "Das aktuelle Passwort ist erforderlich, um Ihr Passwort zu ändern."
+
+msgid "The 2FA code is required."
+msgstr "Der 2FA-Code ist erforderlich."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ungültige 2FA-Konfiguration."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Der 2FA-Code ist ungültig oder abgelaufen."
+

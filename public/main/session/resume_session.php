@@ -266,9 +266,14 @@ if (0 === $session->getNbrCourses()) {
             $codePath."user/user_export.php?file_type=csv&course_session=$courseCode:$sessionId&addcsvheader=1",
             ['class' => 'inline-flex items-center']
         );
+        $courseReportingUrl = api_get_path(WEB_PATH).'resources/course-reporting/?'.http_build_query([
+            'cid' => (int) $courseId,
+            'sid' => (int) $sessionId,
+            'gid' => 0,
+        ]);
         $courseActions .= Display::url(
             Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Reporting')),
-            $codePath."tracking/courseLog.php?sid=$sessionId&cid=$courseId$orig_param&hide_course_breadcrumb=1",
+            $courseReportingUrl,
             ['class' => 'inline-flex items-center']
         );
         $courseActions .= Display::url(

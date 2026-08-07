@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const OPENSSL_RAW_DATA;
 
@@ -33,6 +34,8 @@ class ChangePasswordType extends AbstractType
      * Legacy secrets have no prefix and remain readable for backward compatibility.
      */
     private const string MFA_SECRET_V2_PREFIX = 'v2:';
+
+    public function __construct(private readonly TranslatorInterface $translator) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -92,19 +95,25 @@ class ChangePasswordType extends AbstractType
             // Validate current password and confirmation if user wants to update password
             if (!empty($newPassword)) {
                 if (empty($currentPassword)) {
-                    $form->get('currentPassword')->addError(new FormError('Current password is required to change your password.'));
+                    $form->get('currentPassword')->addError(new FormError(
+                        $this->translator->trans('Current password is required to change your password.')
+                    ));
                 } elseif ($passwordHasher && !$passwordHasher->isPasswordValid($user, $currentPassword)) {
-                    $form->get('currentPassword')->addError(new FormError('The current password is incorrect.'));
+                    $form->get('currentPassword')->addError(new FormError(
+                        $this->translator->trans('The current password is incorrect')
+                    ));
                 }
 
                 if ($checkPasswordRequirements) {
-                    foreach (self::validatePassword($newPassword) as $error) {
+                    foreach ($this->validatePassword($newPassword) as $error) {
                         $form->get('newPassword')->addError(new FormError($error));
                     }
                 }
 
                 if (!empty($confirmPassword) && $newPassword !== $confirmPassword) {
-                    $form->get('confirmPassword')->addError(new FormError('Passwords do not match.'));
+                    $form->get('confirmPassword')->addError(new FormError(
+                        $this->translator->trans('Passwords do not match')
+                    ));
                 }
             }
 
@@ -112,14 +121,18 @@ class ChangePasswordType extends AbstractType
             if (true === $options['global_2fa_enabled'] && $form->has('confirm2FACode')) {
                 if ($user->getMfaEnabled() || $enable2FA) {
                     if (empty($code)) {
-                        $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
+                        $form->get('confirm2FACode')->addError(new FormError(
+                            $this->translator->trans('The 2FA code is required.')
+                        ));
                     } elseif ($user->getMfaSecret()) {
                         // Decrypt the stored MFA secret (supports both v2 and legacy formats).
                         $appSecret = (string) ($_ENV['APP_SECRET'] ?? '');
                         $decryptedSecret = $this->decryptTOTPSecret((string) $user->getMfaSecret(), $appSecret);
 
                         if ('' === $decryptedSecret) {
-                            $form->get('confirm2FACode')->addError(new FormError('Invalid 2FA configuration.'));
+                            $form->get('confirm2FACode')->addError(new FormError(
+                                $this->translator->trans('Invalid 2FA configuration.')
+                            ));
 
                             return;
                         }
@@ -129,7 +142,9 @@ class ChangePasswordType extends AbstractType
                         $totp->setLabel($portal.' - '.$user->getEmail());
 
                         if (!$totp->verify((string) $code)) {
-                            $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
+                            $form->get('confirm2FACode')->addError(new FormError(
+                                $this->translator->trans('The 2FA code is invalid or expired.')
+                            ));
                         }
                     }
                 }
@@ -228,7 +243,7 @@ class ChangePasswordType extends AbstractType
     /**
      * Validate password against security rules defined in settings.
      */
-    private static function validatePassword(string $password): array
+    private function validatePassword(string $password): array
     {
         $errors = [];
         $req = Security::getPasswordRequirements()['min'];
@@ -240,19 +255,19 @@ class ChangePasswordType extends AbstractType
         $specials = preg_match_all('/[^a-zA-Z0-9]/', $password);
 
         if ($len < $req['length']) {
-            $errors[] = 'Password must be at least '.$req['length'].' characters long.';
+            $errors[] = $this->translator->trans('Password must be at least %length% characters long.', ['%length%' => $req['length']]);
         }
         if ($req['lowercase'] > 0 && $lower < $req['lowercase']) {
-            $errors[] = 'Password must contain at least '.$req['lowercase'].' lowercase character(s).';
+            $errors[] = $this->translator->trans('Password must contain at least %count% lowercase characters.', ['%count%' => $req['lowercase']]);
         }
         if ($req['uppercase'] > 0 && $upper < $req['uppercase']) {
-            $errors[] = 'Password must contain at least '.$req['uppercase'].' uppercase character(s).';
+            $errors[] = $this->translator->trans('Password must contain at least %count% uppercase characters.', ['%count%' => $req['uppercase']]);
         }
         if ($req['numeric'] > 0 && $digits < $req['numeric']) {
-            $errors[] = 'Password must contain at least '.$req['numeric'].' numeric character(s).';
+            $errors[] = $this->translator->trans('Password must contain at least %count% numerical (0-9) characters.', ['%count%' => $req['numeric']]);
         }
         if ($req['specials'] > 0 && $specials < $req['specials']) {
-            $errors[] = 'Password must contain at least '.$req['specials'].' special character(s).';
+            $errors[] = $this->translator->trans('Password must contain at least %count% special characters.', ['%count%' => $req['specials']]);
         }
 
         return $errors;

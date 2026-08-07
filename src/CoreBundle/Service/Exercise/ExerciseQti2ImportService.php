@@ -786,8 +786,8 @@ final readonly class ExerciseQti2ImportService
     private function createChoiceAnswers(CQuizQuestion $question, array $questionData): void
     {
         $answerList = \is_array($questionData['answer'] ?? null) ? $questionData['answer'] : [];
-        $correctAnswersRaw = \is_array($questionData['correct_answers'] ?? null) ? $questionData['correct_answers'] : [];
-        $correctAnswerIds = array_values($correctAnswersRaw);
+        $correctAnswersRaw = $questionData['correct_answers'] ?? null;
+        $correctAnswerIds = \is_array($correctAnswersRaw) ? array_values($correctAnswersRaw) : [];
         $defaultWeight = $this->scoreFromValue($questionData['default_weighting'] ?? 0);
         $totalCorrectWeight = 0.0;
         $position = 1;

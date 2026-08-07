@@ -130,8 +130,13 @@ if (!empty($details)) {
         ];
     } else {
         if ('tracking_course' === $origin) {
+            $courseReportingUrl = api_get_path(WEB_PATH).'resources/course-reporting/?'.http_build_query([
+                'cid' => (int) $courseId,
+                'sid' => (int) api_get_session_id(),
+                'gid' => 0,
+            ]);
             $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cid='.$courseId.'&sid='.api_get_session_id(),
+                'url' => $courseReportingUrl,
                 'name' => get_lang('Reporting'),
             ];
         } else {

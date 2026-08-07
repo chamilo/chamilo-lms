@@ -331,7 +331,10 @@
             />
             <BaseButton
               :label="t('Reporting')"
-              :to-url="`/main/tracking/courseLog.php?cid=${data.id}`"
+              :route="{
+                name: 'CourseReportingLearners',
+                query: { cid: data.id, sid: 0, gid: 0 },
+              }"
               icon="tracking"
               only-icon
               size="small"

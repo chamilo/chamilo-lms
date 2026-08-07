@@ -52,6 +52,8 @@ class IndexController extends BaseController
     #[Route('/resources/wiki/{vueRouting}', name: 'resources_wiki_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-progress/{vueRouting}', name: 'resources_course_progress_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-settings/{vueRouting}', name: 'resources_course_settings_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/resources/course-reporting/', name: 'resources_course_reporting_vue_entrypoint', methods: ['GET'])]
+    #[Route('/resources/course-reporting/{vueRouting}', name: 'resources_course_reporting_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-users/{vueRouting}', name: 'resources_course_users_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/announcement/{vueRouting}', name: 'resources_announcement_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/tickets', name: 'tickets_vue_entrypoint', methods: ['GET'])]

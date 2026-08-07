@@ -15,7 +15,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\Mapping\MappingException;
 
 class SocialPostRepositoryTest extends AbstractApiTest
@@ -24,7 +23,6 @@ class SocialPostRepositoryTest extends AbstractApiTest
 
     /**
      * @throws OptimisticLockException
-     * @throws ORMException
      * @throws MappingException
      */
     public function testCreateMessageWithFeedback(): void

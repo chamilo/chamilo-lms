@@ -82,7 +82,11 @@
           <div class="flex min-w-0 items-center gap-2">
             <div
               class="min-w-0 flex-1 break-words text-lg font-semibold text-gray-90"
-              v-html="description.title || getDescriptionTypeLabel(description.descriptionType)"
+              v-html="
+                displayTranslatedHtml(
+                  description.title || getDescriptionTypeLabel(description.descriptionType),
+                )
+              "
             ></div>
             <BaseIcon
               v-if="description.sessionId"
@@ -117,7 +121,7 @@
         <div
           v-if="description.content"
           class="break-words"
-          v-html="description.content"
+          v-html="displayTranslatedHtml(description.content)"
         ></div>
         <p
           v-else
@@ -140,10 +144,13 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseDescriptionService from "../../services/courseDescriptionService"
+import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
 const { requireConfirmation } = useConfirmation()
+const platformConfigStore = usePlatformConfig()
 
 const descriptions = ref([])
 const isLoading = ref(false)
@@ -213,6 +220,22 @@ function getRouteQuery(extraQuery = {}) {
 
 function getDescriptionTypeLabel(descriptionType) {
   return t(descriptionTypeLabels[Number(descriptionType)] || "Other")
+}
+
+/**
+ * Apply translatehtml language filtering when editor.translate_html is on.
+ * Same approach as CourseIntroduction — string filter before v-html.
+ */
+function displayTranslatedHtml(html) {
+  if (!html) {
+    return ""
+  }
+
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
+    return filterTranslatedHtml(html, window.user?.locale)
+  }
+
+  return html
 }
 
 function getOwnDescriptionByType(descriptionType) {

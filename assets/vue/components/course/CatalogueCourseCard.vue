@@ -16,6 +16,7 @@ import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
 import baseService from "../../services/baseService"
+import { filterTranslatedHtml } from "../../../js/translatehtml.js"
 
 const { t } = useI18n()
 const { getOriginalLanguageName } = useLocale()
@@ -38,6 +39,21 @@ const emit = defineEmits(["rate", "subscribed"])
 const router = useRouter()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 const platformConfigStore = usePlatformConfig()
+
+/**
+ * Apply translatehtml language filtering when editor.translate_html is on.
+ */
+function displayTranslatedHtml(html) {
+  if (!html) {
+    return ""
+  }
+
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
+    return filterTranslatedHtml(html, window.user?.locale)
+  }
+
+  return html
+}
 
 const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
@@ -627,13 +643,13 @@ onMounted(() => {
         <h3
           v-if="item.title"
           class="text-lg font-semibold"
-          v-html="item.title"
+          v-html="displayTranslatedHtml(item.title)"
         ></h3>
 
         <div
           v-if="item.content"
           class="rich-html-content"
-          v-html="item.content"
+          v-html="displayTranslatedHtml(item.content)"
         />
       </section>
     </div>

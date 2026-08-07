@@ -44,7 +44,7 @@
               type="black"
               :disabled="isAtRoot"
               :title="t('Root')"
-              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"
               @click="goToRoot"
             />
 
@@ -54,7 +54,7 @@
               type="black"
               :disabled="!canGoUp"
               :title="t('Up')"
-              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"
               @click="goUpOneLevel"
             />
 
@@ -280,19 +280,15 @@ import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
-import DataFilter from "../../components/DataFilter"
-import DocumentsFilterForm from "../../components/documents/Filter"
 import resourceNodeService from "../../services/resourcenode"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
-import { useSecurityStore } from "../../store/securityStore"
-import { storeToRefs } from "pinia"
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
@@ -304,25 +300,21 @@ export default {
     BaseDialogConfirmCancel,
     BaseButton,
     BaseToolbar,
-    ResourceFileLink,
-    DocumentsFilterForm,
-    DataFilter,
   },
   mixins: [ListMixin],
   setup() {
     const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
-    const securityStore = useSecurityStore()
-    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
-    const { showUploadButton, showNewFolderButton } = useDocumentActionButtons()
+    const route = useRoute()
+    const { isAllowedToEdit } = useIsAllowedToEdit()
+    const isCertificateMode = computed(() => route.query.filetype === "certificate")
+    const showUploadButton = computed(() => isAllowedToEdit.value && !isCertificateMode.value)
+    const showNewFolderButton = computed(() => isAllowedToEdit.value && !isCertificateMode.value)
 
     return {
       t,
       relativeDatetime,
       prettyBytes,
-      isAuthenticated,
-      isAdmin,
-      isCurrentTeacher,
       showNewFolderButton,
       showUploadButton,
       selectedItems: [],

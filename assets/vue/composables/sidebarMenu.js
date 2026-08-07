@@ -547,7 +547,7 @@ export function useSidebarMenu() {
       } else {
         subItems.push({
           label: t("Progress"),
-          url: "/reporting",
+          url: "/reporting/my-progress",
         })
       }
 

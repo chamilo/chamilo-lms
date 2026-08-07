@@ -358,7 +358,7 @@ async function loadDashboard() {
   errorMessage.value = ""
 
   try {
-    const response = await globalReportingService.getDashboard(true)
+    const response = await globalReportingService.getDashboard()
     Object.assign(dashboard, response)
     if (response.redirectUrl && response.redirectUrl !== "/reporting") {
       await router.replace(response.redirectUrl)

@@ -75,9 +75,6 @@ final class CourseClassList
     public string $groupsUrl = '';
 
     #[Groups(['course_class_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_class_list:read'])]
     public string $information = '';
 
     public function getId(): string

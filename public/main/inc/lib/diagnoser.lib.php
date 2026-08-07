@@ -23,7 +23,23 @@ class Diagnoser
     public const STATUS_ERROR = 3;
     public const STATUS_INFORMATION = 4;
 
+    /**
+     * When true, build_setting() returns structured arrays suitable for JSON APIs
+     * instead of HTML table rows.
+     */
+    private bool $structuredOutput = false;
+
     public function __construct() {}
+
+    /**
+     * Enable structured (non-HTML) rows from build_setting().
+     */
+    public function withStructuredOutput(bool $enabled = true): self
+    {
+        $this->structuredOutput = $enabled;
+
+        return $this;
+    }
 
     /**
      * Render diagnostics UI with Tailwind (no Bootstrap).
@@ -1188,6 +1204,40 @@ class Diagnoser
         $formatter,
         $comment
     ) {
+        $formatted_current_value = $current_value;
+        $formatted_expected_value = $expected_value;
+
+        if ($formatter) {
+            if (method_exists($this, 'format_'.$formatter)) {
+                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
+                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
+            }
+        }
+
+        if ($this->structuredOutput) {
+            $statusMap = [
+                self::STATUS_OK => 'ok',
+                self::STATUS_WARNING => 'warning',
+                self::STATUS_ERROR => 'error',
+                self::STATUS_INFORMATION => 'info',
+            ];
+
+            $urlOut = null;
+            if (null !== $url && '' !== $url && '#' !== $url) {
+                $urlOut = (string) $url;
+            }
+
+            return [
+                'status' => $statusMap[$status] ?? 'info',
+                'section' => (string) $section,
+                'title' => (string) $title,
+                'url' => $urlOut,
+                'current' => $this->stringifyDiagnosticValue($formatted_current_value),
+                'expected' => $this->stringifyDiagnosticValue($formatted_expected_value),
+                'comment' => (string) $comment,
+            ];
+        }
+
         switch ($status) {
             case self::STATUS_OK:
                 $img = StateIcon::COMPLETE;
@@ -1212,19 +1262,29 @@ class Diagnoser
         }
 
         $image = Display::getMdiIcon($img, 'ch-tool-icon', null, ICON_SIZE_SMALL, $title);
-        $url = $this->get_link($title, $url);
+        $linkedTitle = $this->get_link($title, $url);
 
-        $formatted_current_value = $current_value;
-        $formatted_expected_value = $expected_value;
+        return [$image, $section, $linkedTitle, $formatted_current_value, $formatted_expected_value, $comment];
+    }
 
-        if ($formatter) {
-            if (method_exists($this, 'format_'.$formatter)) {
-                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
-                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
-            }
+    /**
+     * Normalize diagnostic cell values for JSON transport.
+     */
+    private function stringifyDiagnosticValue(mixed $value): string
+    {
+        if (null === $value) {
+            return '';
         }
 
-        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        return (string) json_encode($value);
     }
 
     /**

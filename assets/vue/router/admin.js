@@ -71,6 +71,12 @@ export default {
       component: () => import("../views/admin/ListIcons.vue"),
     },
     {
+      name: "AdminSystemStatus",
+      path: "system-status",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System status" },
+      component: () => import("../views/admin/SystemStatus.vue"),
+    },
+    {
       name: "AdminSystemUpdate",
       path: "system-update",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System update" },

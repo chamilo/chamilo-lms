@@ -439,7 +439,7 @@ if (api_is_platform_admin()) {
         'label' => get_lang('Periodic export'),
     ];*/
     $items[] = [
-        'url' => 'system_status.php',
+        'url' => '/admin/system-status',
         'label' => get_lang('System status'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {

@@ -663,7 +663,7 @@ class IndexBlocksController extends BaseController
         ];*/
         $items[] = [
             'class' => 'item-system-status',
-            'url' => '/main/admin/system_status.php',
+            'route' => ['name' => 'AdminSystemStatus'],
             'label' => $this->translator->trans('System status'),
         ];
         $items[] = [

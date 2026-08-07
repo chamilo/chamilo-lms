@@ -3021,7 +3021,6 @@ HTML;
      */
     public static function mySpaceMenu(?string $current = 'overview'): string
     {
-        $base = api_get_path(WEB_CODE_PATH).'my_space/';
         $items = [];
 
         $isPlatformAdmin = api_is_platform_admin();
@@ -3036,32 +3035,32 @@ HTML;
                 'students' => [
                     'icon' => ObjectIcon::USER,
                     'title' => get_lang('Learners'),
-                    'url' => $base.'student.php',
+                    'url' => '/reporting/learners',
                 ],
                 'teachers' => [
                     'icon' => ObjectIcon::TEACHER,
                     'title' => get_lang('Teachers'),
-                    'url' => $base.'teachers.php',
+                    'url' => '/reporting/teachers',
                 ],
                 'courses' => [
                     'icon' => ObjectIcon::COURSE,
                     'title' => get_lang('Courses'),
-                    'url' => $base.'course.php',
+                    'url' => '/reporting/courses',
                 ],
                 'sessions' => [
                     'icon' => ObjectIcon::SESSION,
                     'title' => get_lang('Course sessions'),
-                    'url' => $base.'session.php',
+                    'url' => '/reporting/sessions',
                 ],
                 'company_reports' => [
                     'icon' => ObjectIcon::REPORT,
                     'title' => get_lang('Corporate report'),
-                    'url' => $base.'company_reports.php',
+                    'url' => '/reporting/company',
                 ],
                 'company_reports_resumed' => [
                     'icon' => 'chart-box-outline',
                     'title' => get_lang('Corporate report, short version'),
-                    'url' => $base.'company_reports_resumed.php',
+                    'url' => '/reporting/company/summary',
                 ],
             ];
         } else {
@@ -3070,17 +3069,17 @@ HTML;
                 'overview' => [
                     'icon' => 'chart-bar',
                     'title' => get_lang('Global view'),
-                    'url' => $base.'index.php',
+                    'url' => '/reporting',
                 ],
                 'students' => [
                     'icon' => 'account-star',
                     'title' => get_lang('Learners'),
-                    'url' => $base.'student.php',
+                    'url' => '/reporting/learners',
                 ],
                 'teachers' => [
                     'icon' => 'human-male-board',
                     'title' => get_lang('Teachers'),
-                    'url' => $base.'teachers.php',
+                    'url' => '/reporting/teachers',
                 ],
             ];
 
@@ -3088,22 +3087,22 @@ HTML;
                 $items['admin_view'] = [
                     'icon' => 'star-outline',
                     'title' => get_lang('Admin view'),
-                    'url' => $base.'admin_view.php',
+                    'url' => '/reporting/admin',
                 ];
                 $items['exams'] = [
                     'icon' => 'order-bool-ascending-variant',
                     'title' => get_lang('Exam tracking'),
-                    'url' => api_get_path(WEB_CODE_PATH).'tracking/exams.php',
+                    'url' => '/reporting/exams',
                 ];
                 $items['current_courses'] = [
                     'icon' => 'book-open-page-variant',
                     'title' => get_lang('Current courses report'),
-                    'url' => $base.'current_courses.php',
+                    'url' => '/reporting/current-courses',
                 ];
                 $items['certificate_report'] = [
                     'icon' => 'certificate',
                     'title' => get_lang('See list of learner certificates'),
-                    'url' => api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php',
+                    'url' => '/reporting/certificates',
                 ];
             }
         }

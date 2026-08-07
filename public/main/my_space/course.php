@@ -28,7 +28,7 @@ if (!$allowToTrack) {
 
 $session = api_get_session_entity($sessionId);
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
     $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Course sessions')];
@@ -121,7 +121,7 @@ if (api_is_platform_admin(true, true)) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Global view')
             ),
-            api_get_path(WEB_CODE_PATH).'my_space/index.php'
+            api_get_path(WEB_PATH).'reporting'
         );
         $menu_items[] = Display::url(
             Display::getMdiIcon(

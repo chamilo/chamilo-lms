@@ -219,8 +219,9 @@ final readonly class CourseSessionManager
                 'fullname' => UserManager::formatUserFullName($user),
                 'username' => $user->getUsername(),
                 'profileUrl' => '/main/admin/user_information.php?user_id='.(int) $user->getId(),
-                'reportingUrl' => '/main/my_space/myStudents.php?student='.(int) $user->getId()
-                    .'&origin=resume_session&id_session='.(int) $session->getId(),
+                'reportingUrl' => '/reporting/learners/'.(int) $user->getId().'?'.http_build_query([
+                    'sid' => (int) $session->getId(),
+                ]),
                 'inCurrentUrl' => $inCurrentUrl,
                 'canAddToCurrentUrl' => $this->accessUrlHelper->isMultiple() && !$inCurrentUrl,
                 'canManageCourses' => $this->canManageUserCourses($session),

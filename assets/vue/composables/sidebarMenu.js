@@ -537,17 +537,17 @@ export function useSidebarMenu() {
       if (securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         subItems.push({
           label: securityStore.isHRM ? t("Course sessions") : t("Reporting"),
-          url: "/main/my_space/" + (securityStore.isHRM ? "session.php" : "index.php"),
+          url: securityStore.isHRM ? "/reporting/sessions" : "/reporting",
         })
       } else if (securityStore.isStudentBoss) {
         subItems.push({
           label: t("Learners"),
-          url: "/main/my_space/student.php",
+          url: "/reporting/learners",
         })
       } else {
         subItems.push({
           label: t("Progress"),
-          url: "/main/auth/my_progress.php",
+          url: "/reporting",
         })
       }
 

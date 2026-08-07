@@ -574,12 +574,8 @@ final readonly class CourseUserManager
                 && self::TYPE_STUDENT === $type
                 && !$user->isInvitee(),
             'canUnsubscribe' => $canUnsubscribe || $canSelfUnsubscribe,
-            'reportingUrl' => $this->buildLegacyUrl('/main/my_space/myStudents.php', $course, $session, [
-                'student' => $userId,
-                'details' => 'true',
-                'course' => (int) $course->getId(),
-                'origin' => 'user_course',
-                'id_session' => $session?->getId() ?? 0,
+            'reportingUrl' => '/reporting/learners/'.$userId.'/courses/'.(int) $course->getId().'?'.http_build_query([
+                'sid' => (int) ($session?->getId() ?? 0),
             ]),
             'loginAsUrl' => '/?_switch_user='.rawurlencode($user->getUsername()),
             'editUrl' => $this->buildLegacyUrl('/main/extra/userInfo.php', $course, $session, [

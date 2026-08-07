@@ -68,6 +68,7 @@ import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
 import { checkIsAllowedToEdit } from "../composables/userPermissions"
 import securityService from "../services/securityService"
+import globalReportingService from "../services/globalReportingService"
 import { customVueTemplateEnabled } from "../config/env"
 import { resolveCourseIdFromRoute } from "../utils/courseContext"
 
@@ -706,6 +707,23 @@ router.beforeEach(async (to, from, next) => {
       next({ name: "Home", replace: true })
 
       return
+    }
+  }
+
+  // Resolve the global reporting landing page before mounting the Overview component.
+  // This prevents users without global-report access from briefly seeing the overview UI
+  // while its component waits for the dashboard API response and redirects afterwards.
+  if (to.name === "GlobalReportingOverview") {
+    try {
+      const dashboard = await globalReportingService.getDashboard(true)
+
+      if (dashboard.redirectUrl && dashboard.redirectUrl !== "/reporting") {
+        next({ path: dashboard.redirectUrl, replace: true })
+
+        return
+      }
+    } catch (error) {
+      console.error("[Router] Failed to resolve the global reporting landing page", error)
     }
   }
 

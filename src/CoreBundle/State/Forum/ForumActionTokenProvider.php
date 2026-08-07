@@ -11,17 +11,13 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumActionToken;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ForumActionToken>
  */
 final readonly class ForumActionTokenProvider implements ProviderInterface
 {
-    private const string FORUM_ACTION_TOKEN_INTENTION = 'forum_action';
-
     public function __construct(
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private LanguageRepository $languageRepository,
     ) {}
@@ -33,7 +29,6 @@ final readonly class ForumActionTokenProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ForumActionToken
     {
         $actionToken = new ForumActionToken();
-        $actionToken->token = $this->csrfTokenManager->getToken(self::FORUM_ACTION_TOKEN_INTENTION)->getValue();
         $actionToken->settings = [
             'defaultForumView' => $this->getDefaultForumView(),
             'forumFoldCategories' => $this->isTruthySetting(

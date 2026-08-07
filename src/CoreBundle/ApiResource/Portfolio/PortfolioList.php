@@ -119,9 +119,6 @@ final class PortfolioList
     public array $filters = [];
 
     #[Groups(['portfolio_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['portfolio_list:read'])]
     public float $maxScore = 0.0;
 
     #[Groups(['portfolio_list:read'])]

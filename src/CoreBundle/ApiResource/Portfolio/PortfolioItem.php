@@ -73,9 +73,6 @@ final class PortfolioItem
     public array $comments = [];
 
     #[Groups(['portfolio_item:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['portfolio_item:read'])]
     public float $maxScore = 0.0;
 
     #[Groups(['portfolio_item:read'])]

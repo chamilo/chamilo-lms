@@ -21,7 +21,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<mixed, CForumCategory|JsonResponse>
@@ -37,7 +36,6 @@ final class ForumCategoryProcessor implements ProcessorInterface
         private readonly CForumCategoryRepository $categoryRepository,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly LanguageRepository $languageRepository,
@@ -52,7 +50,6 @@ final class ForumCategoryProcessor implements ProcessorInterface
         }
 
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if ('create_forum_category' === $operation->getName()) {

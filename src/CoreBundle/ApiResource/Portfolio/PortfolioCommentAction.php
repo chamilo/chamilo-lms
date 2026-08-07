@@ -50,9 +50,6 @@ final class PortfolioCommentAction
     public string $action = '';
 
     #[Groups(['portfolio_comment_action:write'])]
-    public string $csrfToken = '';
-
-    #[Groups(['portfolio_comment_action:write'])]
     public ?int $visibility = null;
 
     /**

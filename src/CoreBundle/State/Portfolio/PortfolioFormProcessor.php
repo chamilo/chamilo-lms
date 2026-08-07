@@ -33,7 +33,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -52,7 +51,6 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private UploadFilenamePolicy $uploadFilenamePolicy,
         private EventDispatcherInterface $eventDispatcher,
         private CidReqHelper $cidReqHelper,
@@ -70,8 +68,6 @@ final readonly class PortfolioFormProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPortfolioPayload($request);
-        $this->validatePortfolioCsrfToken($this->csrfTokenManager, $payload);
-
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
         $course = $this->cidReqHelper->getDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();

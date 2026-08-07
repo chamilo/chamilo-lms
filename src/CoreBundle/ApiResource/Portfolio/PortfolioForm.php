@@ -180,9 +180,6 @@ final class PortfolioForm
     #[Groups(['portfolio_form:read'])]
     public bool $titleAsHtml = false;
 
-    #[Groups(['portfolio_form:read'])]
-    public string $csrfToken = '';
-
     public function getId(): ?int
     {
         return $this->id;

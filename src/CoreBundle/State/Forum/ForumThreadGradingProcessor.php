@@ -34,7 +34,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<mixed, JsonResponse>
@@ -53,7 +52,6 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumThreadRepository $threadRepository,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
         private readonly CidReqHelper $cidReqHelper,
     ) {}
@@ -77,7 +75,6 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
     {
         $this->assertTeacher($this->security);
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         $thread = $this->getThread($uriVariables, $request);
         $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
@@ -165,7 +162,6 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
     private function saveThreadScore(Request $request, array $uriVariables): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         $thread = $this->getThread($uriVariables, $request);
         if ($thread->getThreadQualifyMax() <= 0) {

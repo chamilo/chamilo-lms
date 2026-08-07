@@ -18,12 +18,8 @@ use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Handles forum attachment delete operations.
@@ -33,22 +29,15 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final class ForumAttachmentProcessor implements ProcessorInterface
 {
     use ForumStateHelperTrait;
-    use ForumWriteHelperTrait;
 
     public function __construct(
         private readonly CForumAttachmentRepository $attachmentRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly RequestStack $requestStack,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        $request = $this->getCurrentRequest();
-        $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
-
         if (!$data instanceof CForumAttachment) {
             throw new NotFoundHttpException('Forum attachment not found.');
         }
@@ -101,15 +90,5 @@ final class ForumAttachmentProcessor implements ProcessorInterface
         if ((null !== $category && 0 !== $category->getLocked()) || 0 !== $forum->getLocked() || 0 !== $thread->getLocked()) {
             throw new AccessDeniedHttpException('The forum or thread is locked.');
         }
-    }
-
-    private function getCurrentRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
-        return $request;
     }
 }

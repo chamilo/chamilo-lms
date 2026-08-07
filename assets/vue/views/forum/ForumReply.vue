@@ -239,7 +239,6 @@ const securityStore = useSecurityStore()
 const courseSettingsStore = useCourseSettings()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
-const csrfToken = ref("")
 const isSubmitting = ref(false)
 const formSubmitted = ref(false)
 const forum = ref(null)
@@ -527,10 +526,7 @@ function isFormValid() {
 }
 
 async function loadInitialData() {
-  const [threadPostsData, tokenResponse] = await Promise.all([
-    forumService.getThreadPosts(threadId.value, forumId.value, baseQuery.value),
-    forumService.getActionToken(),
-  ])
+  const threadPostsData = await forumService.getThreadPosts(threadId.value, forumId.value, baseQuery.value)
 
   forum.value = threadPostsData.forum
   thread.value = threadPostsData.thread
@@ -548,8 +544,6 @@ async function loadInitialData() {
   if (shouldQuote.value && quotedPost.value) {
     form.text = buildQuotedText(quotedPost.value)
   }
-
-  csrfToken.value = tokenResponse.token || ""
 }
 
 async function submitReply() {
@@ -577,7 +571,6 @@ async function submitReply() {
       postNotification: showPostNotification.value && form.postNotification,
       giveRevision: isGivingRevision.value,
       revisionLanguage: "1",
-      csrfToken: csrfToken.value,
       attachments: allowAttachments.value ? form.attachments : [],
     })
 

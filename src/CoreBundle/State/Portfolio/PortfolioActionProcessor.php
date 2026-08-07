@@ -26,11 +26,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<PortfolioAction, PortfolioAction>
@@ -40,14 +37,12 @@ final readonly class PortfolioActionProcessor implements ProcessorInterface
     use PortfolioWriteHelperTrait;
 
     public function __construct(
-        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private PortfolioRepository $portfolioRepository,
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private EventDispatcherInterface $eventDispatcher,
         private CidReqHelper $cidReqHelper,
     ) {}
@@ -65,12 +60,6 @@ final readonly class PortfolioActionProcessor implements ProcessorInterface
         if (!$data instanceof PortfolioAction) {
             throw new BadRequestHttpException('Portfolio action data is required.');
         }
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-        $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
-
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
         $course = $this->cidReqHelper->getDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();

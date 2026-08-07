@@ -1,9 +1,21 @@
 import baseService from "./baseService"
 
+function getRuntimeViewParams() {
+  if (typeof window === "undefined") {
+    return {}
+  }
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const isStudentView = searchParams.get("isStudentView")
+
+  return isStudentView === null ? {} : { isStudentView }
+}
+
 function cleanParams(params = {}) {
   const query = {}
+  const mergedParams = { ...getRuntimeViewParams(), ...params }
 
-  for (const [key, value] of Object.entries(params)) {
+  for (const [key, value] of Object.entries(mergedParams)) {
     if (value !== undefined && value !== null && String(value) !== "") {
       query[key] = value
     }

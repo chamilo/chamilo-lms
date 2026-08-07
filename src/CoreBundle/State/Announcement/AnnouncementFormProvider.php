@@ -10,7 +10,6 @@ use AnnouncementManager;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementForm;
-use Chamilo\CoreBundle\Controller\AnnouncementAttachmentController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
@@ -28,7 +27,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Tracking;
 
 /**
@@ -38,8 +36,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
 {
     use AnnouncementAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'announcement_form';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -48,7 +44,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         private AnnouncementScheduleManager $scheduleManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -90,7 +85,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
 
         $formData = $this->recipientResolver->getFormData($course, $session, $group);
         $result = new AnnouncementForm();
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $result->canEdit = true;
         $result->isNew = !$announcement instanceof CAnnouncement;
         $result->groupContext = $group instanceof CGroup;
@@ -101,7 +95,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->tags = $this->getTags();
         $result->recipients = ['everyone'];
         $result->sendByEmail = true;
-        $result->emailCsrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementEmailProcessor::CSRF_TOKEN_ID);
         $result->sendToSessionsAvailable = !$session instanceof Session;
         $result->sendToHrmAvailable = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
@@ -117,9 +110,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
-        $result->attachmentCsrfToken = $result->attachmentsEnabled
-            ? (string) $this->csrfTokenManager->getToken(AnnouncementAttachmentController::CSRF_TOKEN_ID)
-            : '';
 
         if ($announcement instanceof CAnnouncement) {
             $result->id = $announcementId;

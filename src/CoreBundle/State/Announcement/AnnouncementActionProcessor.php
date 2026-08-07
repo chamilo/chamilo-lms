@@ -25,8 +25,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<AnnouncementAction, AnnouncementAction>
@@ -35,8 +33,6 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
 {
     use AnnouncementAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'announcement_manage';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -44,7 +40,6 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         private AnnouncementRecipientResolver $recipientResolver,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -81,8 +76,6 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         )) {
             throw new AccessDeniedHttpException('You are not allowed to manage announcements in this context.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $result = new AnnouncementAction();
         $result->success = true;
@@ -490,12 +483,5 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         }
 
         $this->entityManager->remove($announcement);
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

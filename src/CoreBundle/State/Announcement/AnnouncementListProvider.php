@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 use const ENT_HTML5;
@@ -43,7 +42,6 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         private CAnnouncementRepository $announcementRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -101,9 +99,6 @@ final readonly class AnnouncementListProvider implements ProviderInterface
         ) && !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_delete_all_announcements', true),
         );
-        $result->csrfToken = $canManage
-            ? (string) $this->csrfTokenManager->getToken(AnnouncementActionProcessor::CSRF_TOKEN_ID)
-            : '';
 
         $queryBuilder = $this->announcementRepository->getResources();
         $queryBuilder

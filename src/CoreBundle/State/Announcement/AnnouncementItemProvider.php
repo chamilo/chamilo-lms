@@ -10,7 +10,6 @@ use AnnouncementManager;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementItem;
-use Chamilo\CoreBundle\Controller\AnnouncementAttachmentController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 use const ENT_HTML5;
@@ -46,7 +44,6 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         private CAnnouncementRepository $announcementRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -141,12 +138,6 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         $result->attachmentsEnabled = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.disable_announcement_attachment', true),
         );
-        $result->csrfToken = $canManage
-            ? (string) $this->csrfTokenManager->getToken(AnnouncementActionProcessor::CSRF_TOKEN_ID)
-            : '';
-        $result->attachmentCsrfToken = $canManage && $result->attachmentsEnabled
-            ? (string) $this->csrfTokenManager->getToken(AnnouncementAttachmentController::CSRF_TOKEN_ID)
-            : '';
         $result->item = $this->normalizeAnnouncement(
             $announcement,
             $contextLinks,

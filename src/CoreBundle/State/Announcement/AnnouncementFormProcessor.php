@@ -28,8 +28,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_HTML5;
@@ -53,7 +51,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         private CCalendarEventRepository $calendarEventRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -91,7 +88,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to manage announcements in this context.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
         $selection = $this->recipientResolver->normalizeSelection(
             $data->recipients,
             $course,
@@ -109,7 +105,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
 
         if ('post_announcement_preview' === $operation->getName()) {
             $response = new AnnouncementForm();
-            $response->csrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementFormProvider::CSRF_TOKEN_ID);
             $response->recipients = $selection;
             $response->previewRecipients = $this->emailRecipientResolver->getPreviewLabels(
                 $selection,
@@ -214,7 +209,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->content = (string) $announcement->getContent();
         $response->language = (string) ($announcement->getResourceNode()?->getLanguage()?->getIsocode() ?? '');
         $response->recipients = $selection;
-        $response->csrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementFormProvider::CSRF_TOKEN_ID);
         $response->canEdit = true;
         $response->isNew = false;
         $response->groupContext = $group instanceof CGroup;
@@ -223,7 +217,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->sendToHrmUsers = $data->sendToHrmUsers;
         $response->sendCopyToSelf = $data->sendCopyToSelf;
         $response->emailAlreadySent = true === $announcement->getEmailSent();
-        $response->emailCsrfToken = (string) $this->csrfTokenManager->getToken(AnnouncementEmailProcessor::CSRF_TOKEN_ID);
         $response->scheduleAvailable = $this->scheduleManager->isAvailable($session);
         $response->scheduleByDate = $data->scheduleByDate;
         $response->scheduleDate = $data->scheduleDate;
@@ -455,13 +448,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         }
 
         return true === api_get_configuration_value('agenda_reminders');
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(AnnouncementFormProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function sanitizeTitle(string $title): string

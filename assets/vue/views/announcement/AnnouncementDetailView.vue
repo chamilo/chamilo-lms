@@ -247,8 +247,6 @@ const announcement = ref(null)
 const canManage = ref(false)
 const canViewRecipients = ref(false)
 const attachmentsEnabled = ref(false)
-const csrfToken = ref("")
-const attachmentCsrfToken = ref("")
 const isLoading = ref(false)
 const isManaging = ref(false)
 const deletingAttachmentId = ref(0)
@@ -274,7 +272,16 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of ["origin", "page", "isStudentView", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded"]) {
+  for (const key of [
+    "origin",
+    "page",
+    "isStudentView",
+    "lp_id",
+    "lp_item_id",
+    "lp_view_id",
+    "returnToLp",
+    "embedded",
+  ]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -324,12 +331,7 @@ async function changeVisibility() {
 
   try {
     const visibility = Number(announcement.value.visibility) === 2 ? 0 : 2
-    await announcementService.changeVisibility(
-      announcement.value.id,
-      visibility,
-      csrfToken.value,
-      getContextParams(),
-    )
+    await announcementService.changeVisibility(announcement.value.id, visibility, getContextParams())
     successMessage.value = t("The visibility has been changed.")
     await loadAnnouncement()
   } catch (error) {
@@ -354,7 +356,7 @@ async function deleteAnnouncement() {
   errorMessage.value = ""
 
   try {
-    await announcementService.deleteOne(announcement.value.id, csrfToken.value, getContextParams())
+    await announcementService.deleteOne(announcement.value.id, getContextParams())
     await router.push(listRoute.value)
   } catch (error) {
     console.error("Error deleting announcement", error)
@@ -379,12 +381,7 @@ async function deleteAttachment(attachment) {
   successMessage.value = ""
 
   try {
-    await announcementService.deleteAttachment(
-      announcement.value.id,
-      attachment.id,
-      attachmentCsrfToken.value,
-      getContextParams(),
-    )
+    await announcementService.deleteAttachment(announcement.value.id, attachment.id, getContextParams())
     successMessage.value = t("Attachment has been deleted")
     await loadAnnouncement()
   } catch (error) {
@@ -413,8 +410,6 @@ async function loadAnnouncement() {
     canManage.value = Boolean(response.canManage)
     canViewRecipients.value = Boolean(response.canViewRecipients)
     attachmentsEnabled.value = Boolean(response.attachmentsEnabled)
-    csrfToken.value = response.csrfToken || ""
-    attachmentCsrfToken.value = response.attachmentCsrfToken || ""
   } catch (error) {
     console.error("Error loading announcement", error)
     announcement.value = null

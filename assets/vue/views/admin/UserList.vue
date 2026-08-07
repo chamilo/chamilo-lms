@@ -42,6 +42,7 @@
             v-model="simpleKeyword"
             :placeholder="t('Search users')"
             class="form-control w-full"
+            name="keyword"
             type="text"
           />
         </div>

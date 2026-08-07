@@ -88,10 +88,21 @@ switch ($action) {
     case 'send_invitation':
         api_block_anonymous_users(false);
 
-        $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
-        $invitationContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
+        // SocialManager::sendInvitationToUser() was called here but does not
+        // exist anywhere in the codebase (a real, pre-existing bug — every
+        // call to this action 500s). The actual, currently-working
+        // implementation lives in MessageRepository::sendInvitationToFriend(),
+        // used by the modern /social-network/user-action controller
+        // (SocialController::user(), case 'send_invitation') — delegating to
+        // the same method here instead of leaving this legacy action broken.
+        $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : '';
+        $invitationContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : '';
+        $senderUser = api_get_user_entity(api_get_user_id());
+        $receiverUser = api_get_user_entity((int) $_REQUEST['user_id']);
 
-        $result = SocialManager::sendInvitationToUser($_REQUEST['user_id'], $subject, $invitationContent);
+        $result = $senderUser && $receiverUser
+            ? Container::getMessageRepository()->sendInvitationToFriend($senderUser, $receiverUser, $subject, $invitationContent)
+            : false;
         echo $result ? 1 : 0;
         break;
     case 'find_users':

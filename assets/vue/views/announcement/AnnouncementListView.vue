@@ -228,7 +228,7 @@
           :header="t('Latest update')"
         >
           <template #body="{ data }">
-            {{ formatDate(data.updatedAt) }}
+            {{ abbreviatedDatetime(data.updatedAt) ?? "-" }}
           </template>
         </Column>
 
@@ -317,9 +317,11 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const { abbreviatedDatetime } = useFormatDate()
 const route = useRoute()
 const { requireConfirmation } = useConfirmation()
 
@@ -415,22 +417,6 @@ function getEditRoute(announcement) {
     },
     query: getContextParams(),
   }
-}
-
-function formatDate(value) {
-  if (!value) {
-    return "-"
-  }
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
-
-  return new Intl.DateTimeFormat(locale.value, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
 }
 
 function toggleSearch() {

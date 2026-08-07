@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -10266,11 +10267,11 @@ class SessionManager
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)
-                FROM Chamilo\CoreBundle\Entity\SessionRelCourseRelUser scu
-                INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser su
+                FROM ".SessionRelCourseRelUser::class." scu
+                INNER JOIN ".SessionRelUser::class." su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser a
+                INNER JOIN ".AccessUrlRelUser::class." a
                     WITH a.user = su.user
                 WHERE
                     scu.course = :course AND

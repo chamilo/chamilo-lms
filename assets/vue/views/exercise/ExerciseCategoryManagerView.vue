@@ -394,7 +394,7 @@ async function importCategories() {
   } catch (error) {
     console.error("Error importing exercise categories", error)
     errorMessage.value =
-      error?.response?.data?.hydra?.description || error?.response?.data?.detail || t("Could not import categories")
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not import categories")
   } finally {
     isImporting.value = false
   }
@@ -412,6 +412,15 @@ async function saveCategory() {
   infoMessage.value = ""
 
   try {
+    // The CSRF token comes from loadCategories()'s own response, fetched once
+    // on mount — "Add category" is reachable immediately, before that GET
+    // necessarily resolves, so a submit landing in that window would send an
+    // empty token and get rejected. Refetching here if it's still empty
+    // closes that window without gating the whole form on the initial load.
+    if (!csrfToken.value) {
+      await loadCategories()
+    }
+
     await exerciseService.saveExerciseCategoryAction(
       props.categoryType,
       {
@@ -427,7 +436,8 @@ async function saveCategory() {
     await loadCategories()
   } catch (error) {
     console.error("Error saving exercise category", error)
-    errorMessage.value = error?.response?.data?.hydra?.description || error?.response?.data?.detail || t("Could not save category")
+    errorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not save category")
   } finally {
     isSaving.value = false
   }
@@ -458,7 +468,8 @@ async function deleteCategory(category) {
     await loadCategories()
   } catch (error) {
     console.error("Error deleting exercise category", error)
-    errorMessage.value = error?.response?.data?.hydra?.description || error?.response?.data?.detail || t("Could not delete category")
+    errorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not delete category")
   } finally {
     isSaving.value = false
   }

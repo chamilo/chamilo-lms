@@ -315,16 +315,33 @@ watch(
     if (legacyContainer.value) legacyContainer.value.innerHTML = ""
   },
 )
+
+// Drains window.chEditors (populated by legacy pages' own inline scripts —
+// see TinyEditor.php's editorReplace()) and initializes each queued config.
+// shift()-based so it's safe to call more than once: whichever caller runs
+// first drains whatever's there, any later call just finds an empty array.
+// Needed because the legacy page's own DOMContentLoaded handler that pushes
+// onto this queue runs on its own schedule, independent of this component's
+// lifecycle — under a slow/cold page load it can fire AFTER the watchEffect
+// below already ran once, and without re-draining on the "editor-queued"
+// event too, that config would sit in the queue forever with its editor
+// never initialized (found via a real CI failure — courseCategory.feature's
+// description field stayed a plain, un-enhanced textarea for the full test
+// timeout, with zero trace of tinymce anywhere having run).
+function drainChEditors() {
+  const chEditors = window.chEditors || []
+  while (chEditors.length) {
+    tinymce.init(chEditors.shift())
+  }
+}
+
 watchEffect(() => {
   if (!legacyContainer.value) return
   const content = document.querySelector("#sectionMainContent")
 
   if (content) {
     legacyContainer.value.appendChild(content)
-
-    const chEditors = window.chEditors || []
-    chEditors.forEach((editorConfig) => tinymce.init(editorConfig))
-
+    drainChEditors()
     content.style.display = "block"
   }
 })
@@ -333,14 +350,27 @@ if (!isEmpty(window.user)) {
   securityStore.setUser(window.user)
 }
 
-onUpdated(() => {
+// Symfony flash bag is embedded as JSON on #app[data-flashes] by the Twig
+// layout (vue_setup.html.twig). Must run on mount as well as on update:
+// legacy pages that set a flash then redirect (e.g. extra_fields.php after
+// "Item added") do a full page load — onUpdated never fires for the initial
+// paint, so toasts were silently dropped until something else re-rendered
+// the app. Consume + clear the dataset in one place so either lifecycle hook
+// is safe to call.
+function consumeFlashesFromAppDataset() {
   const app = document.getElementById("app")
 
   if (!(app && app.dataset.flashes)) {
     return
   }
 
-  const flashes = JSON.parse(app.dataset.flashes)
+  let flashes
+  try {
+    flashes = JSON.parse(app.dataset.flashes)
+  } catch {
+    app.dataset.flashes = ""
+    return
+  }
 
   if (!Array.isArray(flashes)) {
     for (const key in flashes) {
@@ -353,6 +383,10 @@ onUpdated(() => {
   }
 
   app.dataset.flashes = ""
+}
+
+onUpdated(() => {
+  consumeFlashesFromAppDataset()
 })
 
 api.interceptors.response.use(
@@ -382,11 +416,14 @@ watch(
 )
 
 onMounted(async () => {
+  consumeFlashesFromAppDataset()
+
   document.addEventListener("copy", blockCopyPasteEvent, true)
   document.addEventListener("cut", blockCopyPasteEvent, true)
   document.addEventListener("paste", blockCopyPasteEvent, true)
   document.addEventListener("contextmenu", blockCopyPasteEvent, true)
   document.addEventListener("keydown", blockCopyPasteShortcut, true)
+  window.addEventListener("chamilo:editor-queued", drainChEditors)
 
   const { loader } = useMediaElementLoader()
   loader()
@@ -500,6 +537,7 @@ onBeforeUnmount(() => {
   document.removeEventListener("paste", blockCopyPasteEvent, true)
   document.removeEventListener("contextmenu", blockCopyPasteEvent, true)
   document.removeEventListener("keydown", blockCopyPasteShortcut, true)
+  window.removeEventListener("chamilo:editor-queued", drainChEditors)
   delete window.chamiloCidReq
 })
 </script>

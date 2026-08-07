@@ -334,7 +334,20 @@ if (!isset($_GET['running'])) {
     }
 
     $loginForm = 'admin';
-    $passForm = api_generate_password(12, false);
+    // CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD is a server-side-only escape
+    // hatch for automated test installs (set via Apache's SetEnv in the
+    // CI-only .github/gh-apache vhost, never reachable via any request
+    // parameter) so a deterministic admin password can be asserted
+    // afterward instead of an unpredictable generated one. Checks $_SERVER
+    // as well as getenv(): under mod_php specifically, getenv() doesn't
+    // reliably see values Apache sets via SetEnv, while $_SERVER does.
+    // Falls back to the normal random generation whenever neither is set,
+    // i.e. for every real install.
+    $defaultAdminPassword = getenv('CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD');
+    if (false === $defaultAdminPassword || '' === $defaultAdminPassword) {
+        $defaultAdminPassword = $_SERVER['CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD'] ?? '';
+    }
+    $passForm = '' !== $defaultAdminPassword ? $defaultAdminPassword : api_generate_password(12, false);
     $institutionUrlForm = 'https://chamilo.org';
     $checkEmailByHashSent = 0;
     $userMailCanBeEmpty = 1;

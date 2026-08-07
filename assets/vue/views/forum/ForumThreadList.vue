@@ -511,16 +511,18 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import forumService from "../../services/forumService"
 import { useSecurityStore } from "../../store/securityStore"
 
-const { t, d, locale } = useI18n()
+const { t, d } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const notifications = useNotification()
 const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
+const { relativeDatetime } = useFormatDate()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
 const isLoading = ref(false)
@@ -695,16 +697,6 @@ function getThreadPreview(thread) {
   return stripTags(thread?.lastPostText || "").trim()
 }
 
-const relativeTimeFormatter = computed(() => {
-  try {
-    return new Intl.RelativeTimeFormat(locale.value || undefined, { numeric: "auto" })
-  } catch (error) {
-    console.error("Error creating relative time formatter:", error)
-
-    return null
-  }
-})
-
 function normalizeDateValue(value) {
   if (!value) {
     return ""
@@ -846,24 +838,7 @@ function formatRelativeTime(value) {
     return ""
   }
 
-  const diffInSeconds = Math.round((date.getTime() - Date.now()) / 1000)
-  const units = [
-    { unit: "year", seconds: 31536000 },
-    { unit: "month", seconds: 2592000 },
-    { unit: "week", seconds: 604800 },
-    { unit: "day", seconds: 86400 },
-    { unit: "hour", seconds: 3600 },
-    { unit: "minute", seconds: 60 },
-    { unit: "second", seconds: 1 },
-  ]
-  const selected = units.find((item) => Math.abs(diffInSeconds) >= item.seconds) || units[units.length - 1]
-  const amount = Math.round(diffInSeconds / selected.seconds)
-
-  if (relativeTimeFormatter.value) {
-    return relativeTimeFormatter.value.format(amount, selected.unit)
-  }
-
-  return formatAbsoluteDate(value)
+  return relativeDatetime(date) ?? formatAbsoluteDate(value)
 }
 
 function getThreadLastPostLabel(thread) {

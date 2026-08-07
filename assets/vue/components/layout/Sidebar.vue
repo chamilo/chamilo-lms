@@ -63,6 +63,10 @@
 </template>
 
 <script setup>
+defineOptions({
+  name: "AppSidebar",
+})
+
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
@@ -71,18 +75,15 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
 import { usePlatformConfig } from "../../store/platformConfig"
 import PageList from "../page/PageList.vue"
-import { useEnrolledStore } from "../../store/enrolledStore"
 import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
 import CategoryLinks from "../page/CategoryLinks.vue"
 
 const { t } = useI18n()
 const route = useRoute()
 const securityStore = useSecurityStore()
-const enrolledStore = useEnrolledStore()
 const platformConfigStore = usePlatformConfig()
 
-const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
-  useSidebarMenu()
+const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, initialize } = useSidebarMenu()
 
 const MOBILE_BREAKPOINT = 640
 
@@ -98,6 +99,10 @@ if (!isMobile() && storedSidebarState === null) {
 }
 const expandingDueToPanelClick = ref(false)
 const externalLogoutBehaviour = ref(null)
+
+const externalLogoutPluginEnabled = computed(
+  () => platformConfigStore.plugins?.extauthchamilologoutbuttonbehaviour?.enabled === true,
+)
 
 const currentYear = new Date().getFullYear()
 
@@ -274,7 +279,10 @@ onMounted(async () => {
 
   if (securityStore.isAuthenticated && !isAnonymous.value) {
     await initialize()
-    externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
+
+    if (externalLogoutPluginEnabled.value) {
+      externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
+    }
   }
 })
 

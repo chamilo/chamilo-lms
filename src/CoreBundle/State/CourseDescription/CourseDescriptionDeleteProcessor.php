@@ -16,17 +16,12 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use JsonException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-
-use const JSON_THROW_ON_ERROR;
 
 /**
  * @implements ProcessorInterface<CourseDescriptionItem, void>
@@ -41,7 +36,6 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -69,8 +63,6 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         )) {
             throw new AccessDeniedHttpException('You are not allowed to delete course descriptions in this context.');
         }
-
-        $this->validateCsrfToken($this->getSubmittedCsrfToken($request));
 
         $descriptionId = isset($uriVariables['iid']) ? (int) $uriVariables['iid'] : 0;
         if ($descriptionId <= 0) {
@@ -149,35 +141,6 @@ final readonly class CourseDescriptionDeleteProcessor implements ProcessorInterf
         }
 
         return false;
-    }
-
-    private function getSubmittedCsrfToken(Request $request): string
-    {
-        $content = trim($request->getContent());
-        if ('' === $content) {
-            return '';
-        }
-
-        try {
-            $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-            throw new BadRequestHttpException('The request payload is invalid.');
-        }
-
-        if (!\is_array($payload)) {
-            return '';
-        }
-
-        $token = $payload['csrfToken'] ?? '';
-
-        return \is_string($token) ? $token : '';
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(CourseDescriptionItemProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function isStudentView(Request $request): bool

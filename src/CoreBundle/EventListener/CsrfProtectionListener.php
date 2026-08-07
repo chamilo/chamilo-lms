@@ -18,8 +18,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use const PHP_URL_PATH;
 
 /**
- * Central CSRF gate for every state-changing API Platform operation and legacy
- * AJAX endpoint.
+ * Central CSRF gate for every state-changing request under /api and to the
+ * legacy AJAX endpoints.
  *
  * API Platform ships no CSRF mechanism of its own, so protection used to be
  * opt-in: each State provider emitted a token and each processor validated it
@@ -68,6 +68,8 @@ final class CsrfProtectionListener
      * Manager recognises "no double-submit was attempted".
      */
     public const string ORIGIN_CHECK_TOKEN = 'csrf-token';
+
+    private const string API_PATH = '/api';
 
     private const string LEGACY_AJAX_PATH_PREFIX = '/main/inc/ajax/';
 
@@ -145,10 +147,21 @@ final class CsrfProtectionListener
             }
         }
 
-        if (str_starts_with($this->getRequestPath($request), self::LEGACY_AJAX_PATH_PREFIX)) {
+        $path = $this->getRequestPath($request);
+
+        if (str_starts_with($path, self::LEGACY_AJAX_PATH_PREFIX)) {
             return true;
         }
 
+        if (self::API_PATH !== $path && !str_starts_with($path, self::API_PATH.'/')) {
+            return false;
+        }
+
+        // Everything under /api is guarded, not just API Platform operations:
+        // 246 of the routes there are plain Symfony controllers (ticket admin,
+        // announcements, translations…), and they are exactly the endpoints
+        // that used to carry a hand-written check. Only API Platform operations
+        // can opt out, since only they have metadata to declare it on.
         return $this->isProtectedApiOperation($request);
     }
 
@@ -182,8 +195,9 @@ final class CsrfProtectionListener
     {
         $resourceClass = $request->attributes->get('_api_resource_class');
 
+        // A plain Symfony controller under /api: no metadata, no opt-out, guarded.
         if (!\is_string($resourceClass) || '' === $resourceClass) {
-            return false;
+            return true;
         }
 
         $operationName = $request->attributes->get('_api_operation_name');
@@ -194,8 +208,8 @@ final class CsrfProtectionListener
                 ->getOperation(\is_string($operationName) ? $operationName : null)
             ;
         } catch (OperationNotFoundException) {
-            // Let API Platform report the unknown operation itself.
-            return false;
+            // Unknown operation: guard it anyway and let API Platform report it.
+            return true;
         }
 
         // Opt-out for operations called by non-browser clients, declared as

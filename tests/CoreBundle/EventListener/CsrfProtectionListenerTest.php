@@ -107,11 +107,38 @@ final class CsrfProtectionListenerTest extends TestCase
 
     public function testNonApiNonLegacyRouteIsNotValidated(): void
     {
-        // Plain Symfony controllers and legacy form posts keep their own CSRF
-        // handling; the listener must not reach into them.
+        // Legacy page form posts keep their own FormValidator token; the
+        // listener must not reach into them.
         $this->csrfTokenManager->expects(self::never())->method('isTokenValid');
 
         $this->listen($this->sessionRequest('POST', '/main/admin/user_list.php'));
+    }
+
+    public function testPlainControllerUnderApiIsValidated(): void
+    {
+        // 246 routes under /api are plain Symfony controllers rather than API
+        // Platform operations — ticket admin, announcements, translations. They
+        // carry no _api_resource_class, and skipping them left exactly the
+        // endpoints that used to hand-roll a CSRF check unguarded.
+        $this->csrfTokenManager->expects(self::once())->method('isTokenValid')->willReturn(true);
+
+        $this->listen($this->sessionRequest('POST', '/api/ticket/admin/projects'));
+    }
+
+    public function testPlainControllerUnderApiCannotOptOut(): void
+    {
+        // Only API Platform operations can opt out, since only they have
+        // metadata to declare it on. A controller route must not inherit an
+        // opt-out from some unrelated resource.
+        $this->csrfTokenManager->method('isTokenValid')->willReturn(false);
+
+        $this->expectException(AccessDeniedHttpException::class);
+
+        $this->listen(
+            $this->sessionRequest('POST', '/api/ticket/admin/projects'),
+            enforce: true,
+            extraProperties: ['csrf' => false]
+        );
     }
 
     public function testOperationOptedOutIsNotValidated(): void

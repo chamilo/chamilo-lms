@@ -22,7 +22,6 @@ use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Chamilo\CoreBundle\Service\Ticket\TicketWorkflowService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +29,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<TicketForm>
@@ -43,7 +41,6 @@ final readonly class TicketFormProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private AccessUrlHelper $accessUrlHelper,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -108,10 +105,6 @@ final readonly class TicketFormProvider implements ProviderInterface
             0,
             (int) $this->settingsManager->getSetting('message.message_max_upload_filesize'),
         );
-        $result->csrfToken = $this->csrfTokenManager
-            ->getToken(TicketWorkflowService::CSRF_TOKEN_ID)
-            ->getValue()
-        ;
 
         return $result;
     }

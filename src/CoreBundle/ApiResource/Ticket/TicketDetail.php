@@ -91,9 +91,6 @@ final class TicketDetail
     public int $maxAttachments = 6;
 
     #[Groups(['ticket_detail:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['ticket_detail:read'])]
     public string $legacyUrl = '';
 
     public function getId(): int

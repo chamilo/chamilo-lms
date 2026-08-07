@@ -21,7 +21,6 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\TicketRelUserRepository;
-use Chamilo\CoreBundle\Service\Ticket\TicketWorkflowService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -31,7 +30,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const DATE_ATOM;
@@ -52,7 +50,6 @@ final readonly class TicketDetailProvider implements ProviderInterface
         private TicketProjectHelper $ticketProjectHelper,
         private TicketMessageAttachmentRepository $attachmentRepository,
         private TicketRelUserRepository $ticketRelUserRepository,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -119,10 +116,6 @@ final readonly class TicketDetailProvider implements ProviderInterface
             0,
             (int) $this->settingsManager->getSetting('message.message_max_upload_filesize'),
         );
-        $result->csrfToken = $this->csrfTokenManager
-            ->getToken(TicketWorkflowService::CSRF_TOKEN_ID)
-            ->getValue()
-        ;
         $result->statuses = $isAdmin ? $this->getStatusOptions($accessUrl) : [];
         $result->priorities = $isAdmin ? $this->getPriorityOptions($accessUrl) : [];
         $result->assignmentHistory = $isAdmin ? $this->getAssignmentHistory($ticketId) : [];

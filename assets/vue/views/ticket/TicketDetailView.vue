@@ -549,8 +549,8 @@ async function toggleSubscription() {
   isActionLoading.value = true
   try {
     const response = detail.value.isSubscribed
-      ? await ticketService.unsubscribe(detail.value.id, detail.value.csrfToken)
-      : await ticketService.subscribe(detail.value.id, detail.value.csrfToken)
+      ? await ticketService.unsubscribe(detail.value.id)
+      : await ticketService.subscribe(detail.value.id)
     detail.value.isSubscribed = Boolean(response.subscribed)
     showSuccessNotification(response.message)
   } catch (error) {
@@ -575,7 +575,7 @@ async function closeTicket() {
 
   isActionLoading.value = true
   try {
-    const response = await ticketService.close(detail.value.id, detail.value.csrfToken)
+    const response = await ticketService.close(detail.value.id)
     showSuccessNotification(response.message)
     await loadDetail()
   } catch (error) {
@@ -606,7 +606,7 @@ async function respondToConfirmation(confirmed) {
   pendingConfirmationValue.value = confirmed
 
   try {
-    const response = await ticketService.respondToConfirmation(detail.value.id, confirmed, detail.value.csrfToken)
+    const response = await ticketService.respondToConfirmation(detail.value.id, confirmed)
     showSuccessNotification(response.message || t("Saved."))
     await loadDetail()
   } catch (error) {
@@ -651,7 +651,6 @@ async function submitReply() {
   isSubmitting.value = true
   try {
     const payload = new FormData()
-    payload.append("csrfToken", detail.value.csrfToken)
     payload.append("subject", reply.subject || "")
     payload.append("content", reply.content || "")
     payload.append("statusId", String(reply.statusId || 0))

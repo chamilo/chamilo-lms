@@ -48,7 +48,6 @@ use const STR_PAD_LEFT;
 
 final readonly class TicketWorkflowService
 {
-    public const string CSRF_TOKEN_ID = 'ticket_workflow';
     public const int MAX_ATTACHMENTS = 6;
 
     private const int PRIORITY_NORMAL = 1;

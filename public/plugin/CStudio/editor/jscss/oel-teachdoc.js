@@ -3043,6 +3043,47 @@ var refPosiPageLudi = 0;
 var refLedtAddPage = 0;
 var tplSelectPg = -1;
 var reftypeNodeV = 0;
+var addSubPageRequestPending = false;
+
+function resetSubPageEditorState(clearTitle){
+
+	var addPageEditor = $('#pageEditAdd');
+
+	refLedtAddPage = 0;
+	tplSelectPg = -1;
+	reftypeNodeV = 0;
+
+	if(clearTitle){
+		addPageEditor.find('#inputTitlePage').val('');
+	}
+
+	addPageEditor.find('#inputAddSubPage').prop('disabled', false);
+	addPageEditor.find('.oelTitlePage').css('display','');
+	addPageEditor.find('.oelChosePage').css('display','none');
+	addPageEditor.find('.oelChoseTemplatesPage').css('display','none');
+	addPageEditor.find('.oelInputAdd1').css('display','');
+	addPageEditor.find('.oelInputAdd2').css('display','none');
+	addPageEditor.find('#oelTitleload').css('display','none');
+	addPageEditor.find('.tpl-page-loader').css('display','none');
+	addPageEditor.find('.tpl-page-select').css('display','');
+	addPageEditor.find('.tpl-page-title').css('display','');
+	addPageEditor.find('.contain-pagetpl-select').css('display','');
+	addPageEditor.find('.pageDefautTplRight').css('display','none');
+	addPageEditor.find('.pageTemplateRight').css('display','none');
+
+	addPageEditor.find('#typenode2').prop('checked', true);
+	addPageEditor.find('#typenode3').prop('checked', false);
+	addPageEditor.find('#typenode4').prop('checked', false);
+
+}
+
+function restoreSubPageEditorAfterFailure(){
+
+	$('#loadsave').css('display','none');
+	resetSubPageEditorState(false);
+	$('#inputTitlePage').focus();
+
+}
 
 function selectTplPage(i){
 	tplSelectPg = i;
@@ -3051,6 +3092,10 @@ function selectTplPage(i){
 }
 
 function saveNextSubLudi(){
+
+	if(addSubPageRequestPending){
+		return false;
+	}
 	
 	var inputTitlePageStr = $('#inputTitlePage').val();	
 	
@@ -3076,8 +3121,9 @@ function saveNextSubLudi(){
 		}
 		reftypeNodeV = typeNodeV;
 		
-		// $('#inputAddSubPage').css("display","none");
 		$('#loadsave').css("display","block");
+		$('#inputAddSubPage').prop('disabled', true);
+		addSubPageRequestPending = true;
 
 		updateMenuEvent = true;
 		var formData = {
@@ -3112,37 +3158,49 @@ function saveNextSubLudi(){
 			type : "POST",
 			data : formData,
 			success : function(data,textStatus,jqXHR) {
-				if (data.indexOf("KO")==-1&&data.indexOf("error")==-1) {
-					var idNp = parseInt(data);
-					if (isNaN(idNp)) {
-					} else {
-						$('#loadsave').css("display","none");
-						refLedtAddPage = idNp;
-						//title section
-						if (reftypeNodeV==3) {
-							refreshMenu(-1);
-							$('#oelTitleload').css("display","none");
-							$('.oelInputAdd2').css("display","none");
-							$('.tpl-page-select').css("display","none");
-							$('.tpl-page-title').css("display","none");
-							$('.tpl-page-loader').css("display","block");
-							closeAllEditWindows();
-						}
-						if (reftypeNodeV==4) {
-							tplSelectPg = 1;
-							saveNextSubLudiFinal();
-						}
-					}
+				var response = $.trim(String(data));
+				var idNp = parseInt(response, 10);
+
+				if (response.indexOf("KO")!=-1||response.indexOf("error")!=-1||isNaN(idNp)||idNp<=0) {
+					$('#logMsgLoad').css("display","block");
+					$('#logMsgLoad').html("Error !");
+					restoreSubPageEditorAfterFailure();
+					return;
+				}
+
+				$('#loadsave').css("display","none");
+				refLedtAddPage = idNp;
+				//title section
+				if (reftypeNodeV==3) {
+					refreshMenu(-1);
+					$('#oelTitleload').css("display","none");
+					$('.oelInputAdd2').css("display","none");
+					$('.tpl-page-select').css("display","none");
+					$('.tpl-page-title').css("display","none");
+					$('.tpl-page-loader').css("display","block");
+					closeAllEditWindows();
+				}
+				if (reftypeNodeV==4) {
+					tplSelectPg = 1;
+					saveNextSubLudiFinal();
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{
 				$('#logMsgLoad').css("display","block");
 				$('#logMsgLoad').html("Error !");
+				restoreSubPageEditorAfterFailure();
+			},
+			complete: function()
+			{
+				addSubPageRequestPending = false;
+				$('#inputAddSubPage').prop('disabled', false);
 			}
 		});
 
 	}
+
+	return false;
 
 }
 
@@ -17297,21 +17355,13 @@ function displaySubPageEdit(i){
 		
 		windowEditorIsOpen = true;
 		loadaFunction();
+		resetSubPageEditorState(true);
 		
 		getTemplatesPageLst();
 
 		$('.ludimenu').css("display","none");
-		$('#oelTitleload').css("display","none");
-
-		$('.pageDefautTplRight').css("display","none");
-		$('.pageTemplateRight').css("display","none");
-
 		$('.ludiEditMenuContext').css("display","none");
 		$('#pageEditAdd').css("display","");
-
-		$('#typenode2').attr('checked',true);
-		$('#typenode3').attr('checked',false);
-		$('#typenode4').attr('checked',false);
 
 		cstudioFixVisibleEditorLabels();
 		$('#inputTitlePage').focus();

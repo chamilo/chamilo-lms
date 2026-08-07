@@ -38899,3 +38899,79 @@ msgstr ""
 
 msgid "The 2FA code is invalid or expired."
 msgstr ""
+
+msgid "Database load"
+msgstr ""
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr ""
+
+msgid "Click to show database server load metrics"
+msgstr ""
+
+msgid "Threads connected"
+msgstr ""
+
+msgid "Temporary tables on disk"
+msgstr ""
+
+msgid "Privilege scope"
+msgstr ""
+
+msgid "Not measurable with the current database user"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "Queries per second"
+msgstr ""
+
+msgid "Slow queries"
+msgstr ""
+
+
+msgid "Slow query log"
+msgstr ""
+
+msgid "Slow queries per second"
+msgstr ""
+
+msgid "Threads running"
+msgstr ""
+
+msgid "Threads cached"
+msgstr ""
+
+
+msgid "Table lock waits"
+msgstr ""
+
+msgid "Row lock waits"
+msgstr ""
+
+msgid "Aborted connections"
+msgstr ""
+
+msgid "Opened tables"
+msgstr ""
+
+
+msgid "Query cache"
+msgstr ""
+
+
+
+
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr ""
+
+msgid "Inserts"
+msgstr ""
+
+msgid "Hit rate"
+msgstr ""
+
+msgid "Auto-refresh every 5 seconds"
+msgstr ""

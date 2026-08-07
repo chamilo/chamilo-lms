@@ -38982,3 +38982,79 @@ msgstr "Invalid 2FA configuration."
 
 msgid "The 2FA code is invalid or expired."
 msgstr "The 2FA code is invalid or expired."
+
+msgid "Database load"
+msgstr "Database load"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL and MariaDB server load metrics"
+
+msgid "Click to show database server load metrics"
+msgstr "Click to show database server load metrics"
+
+msgid "Threads connected"
+msgstr "Threads connected"
+
+msgid "Temporary tables on disk"
+msgstr "Temporary tables on disk"
+
+msgid "Privilege scope"
+msgstr "Privilege scope"
+
+msgid "Not measurable with the current database user"
+msgstr "Not measurable with the current database user"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "Queries per second"
+msgstr "Queries per second"
+
+msgid "Slow queries"
+msgstr "Slow queries"
+
+
+msgid "Slow query log"
+msgstr "Slow query log"
+
+msgid "Slow queries per second"
+msgstr "Slow queries per second"
+
+msgid "Threads running"
+msgstr "Threads running"
+
+msgid "Threads cached"
+msgstr "Threads cached"
+
+
+msgid "Table lock waits"
+msgstr "Table lock waits"
+
+msgid "Row lock waits"
+msgstr "Row lock waits"
+
+msgid "Aborted connections"
+msgstr "Aborted connections"
+
+msgid "Opened tables"
+msgstr "Opened tables"
+
+
+msgid "Query cache"
+msgstr "Query cache"
+
+
+
+
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Database load metrics are only available for MySQL and MariaDB."
+
+msgid "Inserts"
+msgstr "Inserts"
+
+msgid "Hit rate"
+msgstr "Hit rate"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Auto-refresh every 5 seconds"

@@ -30,15 +30,10 @@
         @click="selectSection(section.key)"
       >
         <div class="flex items-center gap-3">
-          <div
-            class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-10 group-hover:bg-gray-30"
-          >
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-10 group-hover:bg-gray-30">
             <i
               class="mdi text-2xl"
-              :class="[
-                section.icon,
-                section.key === currentSection ? 'text-primary' : 'text-gray-70',
-              ]"
+              :class="[section.icon, section.key === currentSection ? 'text-primary' : 'text-gray-70']"
             />
           </div>
           <div class="min-w-0">
@@ -108,7 +103,9 @@
             @click="togglePhpCache"
           >
             <div class="flex min-w-0 items-center gap-3">
-              <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary">
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+              >
                 <i class="mdi mdi-memory text-xl" />
               </span>
               <div class="min-w-0">
@@ -151,158 +148,327 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
-            <div class="mb-4 flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary">
-                  <i class="mdi mdi-memory text-xl" />
-                </span>
-                <div>
-                  <h3 class="text-body-1 font-semibold text-gray-90">
-                    OPcache
-                  </h3>
-                  <p class="text-caption text-gray-50">
-                    {{ cacheStatusLabel(cacheData?.opcache) }}
-                  </p>
-                </div>
-              </div>
-              <BaseButton
-                :label="t('Refresh')"
-                icon="refresh"
-                type="primary-text"
-                only-icon
-                size="small"
-                :is-loading="cacheLoading"
-                @click="loadCacheData"
-              />
-            </div>
-            <div
-              v-if="cacheLoading && !cacheData"
-              class="text-caption text-gray-50"
-            >
-              {{ t("Loading") }}...
-            </div>
-            <template v-else-if="cacheData?.opcache?.enabled">
-              <div
-                v-if="opcacheMemoryBar"
-                class="mb-4"
-              >
-                <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                  <span class="font-semibold text-gray-70">
-                    {{ t("Memory used") }}
-                  </span>
-                  <span class="font-mono text-gray-90">
-                    {{ formatBytes(opcacheMemoryBar.used) }}
-                    /
-                    {{ formatBytes(opcacheMemoryBar.total) }}
-                    ({{ formatPercent(opcacheMemoryBar.percent) }})
-                  </span>
+              <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <span
+                      class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary"
+                    >
+                      <i class="mdi mdi-memory text-xl" />
+                    </span>
+                    <div>
+                      <h3 class="text-body-1 font-semibold text-gray-90">OPcache</h3>
+                      <p class="text-caption text-gray-50">
+                        {{ cacheStatusLabel(cacheData?.opcache) }}
+                      </p>
+                    </div>
+                  </div>
+                  <BaseButton
+                    :label="t('Refresh')"
+                    icon="refresh"
+                    type="primary-text"
+                    only-icon
+                    size="small"
+                    :is-loading="cacheLoading"
+                    @click="loadCacheData"
+                  />
                 </div>
                 <div
-                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
-                  role="progressbar"
-                  :aria-valuenow="opcacheMemoryBar.percent"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  :aria-label="t('Memory used')"
+                  v-if="cacheLoading && !cacheData"
+                  class="text-caption text-gray-50"
                 >
+                  {{ t("Loading") }}...
+                </div>
+                <template v-else-if="cacheData?.opcache?.enabled">
                   <div
-                    class="h-full rounded-full transition-all duration-300"
-                    :style="memoryBarFillStyle(opcacheMemoryBar.percent)"
-                  ></div>
-                </div>
-              </div>
-              <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div
-                  v-for="metric in opcacheMetrics"
-                  :key="metric.label"
-                  class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                    v-if="opcacheMemoryBar"
+                    class="mb-4"
+                  >
+                    <div class="mb-1 flex items-center justify-between gap-2 text-caption">
+                      <span class="font-semibold text-gray-70">
+                        {{ t("Memory used") }}
+                      </span>
+                      <span class="font-mono text-gray-90">
+                        {{ formatBytes(opcacheMemoryBar.used) }}
+                        /
+                        {{ formatBytes(opcacheMemoryBar.total) }}
+                        ({{ formatPercent(opcacheMemoryBar.percent) }})
+                      </span>
+                    </div>
+                    <div
+                      class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                      role="progressbar"
+                      :aria-valuenow="opcacheMemoryBar.percent"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      :aria-label="t('Memory used')"
+                    >
+                      <div
+                        class="h-full rounded-full transition-all duration-300"
+                        :style="memoryBarFillStyle(opcacheMemoryBar.percent)"
+                      ></div>
+                    </div>
+                  </div>
+                  <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div
+                      v-for="metric in opcacheMetrics"
+                      :key="metric.label"
+                      class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                    >
+                      <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        {{ metric.label }}
+                      </dt>
+                      <dd class="mt-1 font-mono text-body-2 text-gray-90">
+                        {{ metric.value }}
+                      </dd>
+                    </div>
+                  </dl>
+                </template>
+                <p
+                  v-else
+                  class="text-body-2 text-gray-50"
                 >
-                  <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
-                    {{ metric.label }}
-                  </dt>
-                  <dd class="mt-1 font-mono text-body-2 text-gray-90">
-                    {{ metric.value }}
-                  </dd>
-                </div>
-              </dl>
-            </template>
-            <p
-              v-else
-              class="text-body-2 text-gray-50"
-            >
-              {{
-                cacheData?.opcache?.available
-                  ? t("OPcache is installed but not enabled.")
-                  : t("OPcache extension is not available on this server.")
-              }}
-            </p>
-          </div>
+                  {{
+                    cacheData?.opcache?.available
+                      ? t("OPcache is installed but not enabled.")
+                      : t("OPcache extension is not available on this server.")
+                  }}
+                </p>
+              </div>
 
-          <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
-            <div class="mb-4 flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary">
-                  <i class="mdi mdi-database-outline text-xl" />
-                </span>
-                <div>
-                  <h3 class="text-body-1 font-semibold text-gray-90">
-                    APCu
-                  </h3>
-                  <p class="text-caption text-gray-50">
-                    {{ cacheStatusLabel(cacheData?.apcu) }}
-                  </p>
+              <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <span
+                      class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary"
+                    >
+                      <i class="mdi mdi-database-outline text-xl" />
+                    </span>
+                    <div>
+                      <h3 class="text-body-1 font-semibold text-gray-90">APCu</h3>
+                      <p class="text-caption text-gray-50">
+                        {{ cacheStatusLabel(cacheData?.apcu) }}
+                      </p>
+                    </div>
+                  </div>
+                  <BaseButton
+                    :label="t('Refresh')"
+                    icon="refresh"
+                    type="primary-text"
+                    only-icon
+                    size="small"
+                    :is-loading="cacheLoading"
+                    @click="loadCacheData"
+                  />
                 </div>
+                <div
+                  v-if="cacheLoading && !cacheData"
+                  class="text-caption text-gray-50"
+                >
+                  {{ t("Loading") }}...
+                </div>
+                <template v-else-if="cacheData?.apcu?.enabled">
+                  <div
+                    v-if="apcuMemoryBar"
+                    class="mb-4"
+                  >
+                    <div class="mb-1 flex items-center justify-between gap-2 text-caption">
+                      <span class="font-semibold text-gray-70">
+                        {{ t("Memory used") }}
+                      </span>
+                      <span class="font-mono text-gray-90">
+                        {{ formatBytes(apcuMemoryBar.used) }}
+                        /
+                        {{ formatBytes(apcuMemoryBar.total) }}
+                        ({{ formatPercent(apcuMemoryBar.percent) }})
+                      </span>
+                    </div>
+                    <div
+                      class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                      role="progressbar"
+                      :aria-valuenow="apcuMemoryBar.percent"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      :aria-label="t('Memory used')"
+                    >
+                      <div
+                        class="h-full rounded-full transition-all duration-300"
+                        :style="memoryBarFillStyle(apcuMemoryBar.percent)"
+                      ></div>
+                    </div>
+                  </div>
+                  <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div
+                      v-for="metric in apcuMetrics"
+                      :key="metric.label"
+                      class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                    >
+                      <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                        {{ metric.label }}
+                      </dt>
+                      <dd class="mt-1 font-mono text-body-2 text-gray-90">
+                        {{ metric.value }}
+                      </dd>
+                    </div>
+                  </dl>
+                </template>
+                <p
+                  v-else
+                  class="text-body-2 text-gray-50"
+                >
+                  {{
+                    cacheData?.apcu?.available
+                      ? t("APCu is installed but not enabled.")
+                      : t("APCu extension is not available on this server.")
+                  }}
+                </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-if="currentSection === 'database'"
+        class="space-y-4"
+      >
+        <div class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+          <button
+            id="database-load-toggle"
+            type="button"
+            name="database-load-toggle"
+            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition hover:bg-support-2"
+            :aria-expanded="dbExpanded ? 'true' : 'false'"
+            aria-controls="database-load-panel"
+            @click="toggleDbLoad"
+          >
+            <div class="flex min-w-0 items-center gap-3">
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+              >
+                <i class="mdi mdi-chart-line text-xl" />
+              </span>
+              <div class="min-w-0">
+                <h2 class="text-xl font-semibold text-gray-90">
+                  {{ t("Database load") }}
+                </h2>
+                <p class="mt-0.5 text-caption text-gray-50">
+                  {{
+                    dbExpanded
+                      ? t("Live MySQL and MariaDB server load metrics")
+                      : t("Click to show database server load metrics")
+                  }}
+                </p>
+              </div>
+            </div>
+            <i
+              class="mdi text-2xl text-gray-50"
+              :class="dbExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+            />
+          </button>
+
+          <div
+            v-if="dbExpanded"
+            id="database-load-panel"
+            class="space-y-4 border-t border-gray-20 px-5 pb-5 pt-4"
+          >
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <BaseCheckbox
+                id="database-load-auto-refresh"
+                v-model="dbAutoRefresh"
+                name="database_load_auto_refresh"
+                :label="t('Auto-refresh every 5 seconds')"
+              />
+              <span
+                v-if="dbFetchedAt"
+                class="text-caption text-gray-50"
+              >
+                {{ t("Last updated") }}: {{ formatLastVisit(dbFetchedAt) }}
+              </span>
               <BaseButton
                 :label="t('Refresh')"
                 icon="refresh"
                 type="primary-text"
                 only-icon
                 size="small"
-                :is-loading="cacheLoading"
-                @click="loadCacheData"
+                :is-loading="dbLoading"
+                @click="loadDbData"
               />
             </div>
+
             <div
-              v-if="cacheLoading && !cacheData"
+              v-if="dbLoading && !dbData"
               class="text-caption text-gray-50"
             >
               {{ t("Loading") }}...
             </div>
-            <template v-else-if="cacheData?.apcu?.enabled">
+            <template v-else-if="dbData?.server?.available">
               <div
-                v-if="apcuMemoryBar"
-                class="mb-4"
+                v-if="dbConnectionBar"
+                class="mb-2"
               >
                 <div class="mb-1 flex items-center justify-between gap-2 text-caption">
                   <span class="font-semibold text-gray-70">
-                    {{ t("Memory used") }}
+                    {{ t("Threads connected") }}
                   </span>
                   <span class="font-mono text-gray-90">
-                    {{ formatBytes(apcuMemoryBar.used) }}
+                    {{ formatNumber(dbData.server.counters?.Threads_connected) }}
                     /
-                    {{ formatBytes(apcuMemoryBar.total) }}
-                    ({{ formatPercent(apcuMemoryBar.percent) }})
+                    {{ formatNumber(dbMaxConnections) }}
+                    ({{ formatPercent(dbConnectionBar.percent) }})
                   </span>
                 </div>
                 <div
                   class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
                   role="progressbar"
-                  :aria-valuenow="apcuMemoryBar.percent"
+                  :aria-valuenow="dbConnectionBar.percent"
                   aria-valuemin="0"
                   aria-valuemax="100"
-                  :aria-label="t('Memory used')"
+                  :aria-label="t('Threads connected')"
                 >
                   <div
                     class="h-full rounded-full transition-all duration-300"
-                    :style="memoryBarFillStyle(apcuMemoryBar.percent)"
+                    :style="memoryBarFillStyle(dbConnectionBar.percent)"
                   ></div>
                 </div>
               </div>
-              <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+              <div
+                v-if="dbTmpDiskBar"
+                class="mb-2"
+              >
+                <div class="mb-1 flex items-center justify-between gap-2 text-caption">
+                  <span class="font-semibold text-gray-70">
+                    {{ t("Temporary tables on disk") }}
+                  </span>
+                  <span class="font-mono text-gray-90">
+                    {{ formatNumber(dbData.server.counters?.Created_tmp_disk_tables) }}
+                    /
+                    {{ formatNumber(dbData.server.counters?.Created_tmp_tables) }}
+                    ({{ formatPercent(dbTmpDiskBar.percent) }})
+                  </span>
+                </div>
                 <div
-                  v-for="metric in apcuMetrics"
+                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                  role="progressbar"
+                  :aria-valuenow="dbTmpDiskBar.percent"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  :aria-label="t('Temporary tables on disk')"
+                >
+                  <div
+                    class="h-full rounded-full transition-all duration-300"
+                    :style="memoryBarFillStyle(dbTmpDiskBar.percent)"
+                  ></div>
+                </div>
+              </div>
+
+              <dl
+                v-if="dbMetrics.length"
+                class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                <div
+                  v-for="metric in dbMetrics"
                   :key="metric.label"
                   class="rounded-xl border border-gray-20 bg-support-2 p-3"
                 >
@@ -314,19 +480,56 @@
                   </dd>
                 </div>
               </dl>
+              <p
+                v-else
+                class="text-body-2 text-gray-50"
+              >
+                {{ t("Not available") }}
+              </p>
+
+              <div
+                v-if="dbData.server.queryCache?.available && dbQueryCacheMetrics.length"
+                class="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm"
+              >
+                <h3 class="mb-3 text-body-1 font-semibold text-gray-90">
+                  {{ t("Query cache") }}
+                </h3>
+                <dl class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div
+                    v-for="metric in dbQueryCacheMetrics"
+                    :key="metric.label"
+                    class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                  >
+                    <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                      {{ metric.label }}
+                    </dt>
+                    <dd class="mt-1 font-mono text-body-2 text-gray-90">
+                      {{ metric.value }}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div
+                v-if="dbPrivilegeNote"
+                class="rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800"
+              >
+                <p class="font-semibold">{{ t("Privilege scope") }}: {{ dbPrivilegeNote.scopeLabel }}</p>
+                <p
+                  v-if="dbPrivilegeNote.unavailableList"
+                  class="mt-1 text-caption"
+                >
+                  {{ t("Not measurable with the current database user") }}:
+                  {{ dbPrivilegeNote.unavailableList }}
+                </p>
+              </div>
             </template>
             <p
               v-else
               class="text-body-2 text-gray-50"
             >
-              {{
-                cacheData?.apcu?.available
-                  ? t("APCu is installed but not enabled.")
-                  : t("APCu extension is not available on this server.")
-              }}
+              {{ dbUnavailableReason }}
             </p>
-          </div>
-            </div>
           </div>
         </div>
       </div>
@@ -493,6 +696,15 @@ const cacheAutoRefresh = ref(false)
 const phpCacheExpanded = ref(false)
 let cacheRefreshTimer = null
 
+const dbData = ref(null)
+const dbPrevSample = ref(null)
+const dbFetchedAt = ref(null)
+const dbLoading = ref(false)
+const dbAutoRefresh = ref(false)
+/** Folded by default — live DB load stats load only when expanded. */
+const dbExpanded = ref(false)
+let dbRefreshTimer = null
+
 const activeSectionInfo = computed(() => {
   const match = sections.value.find((s) => s.key === currentSection.value)
 
@@ -594,6 +806,182 @@ const apcuMetrics = computed(() => {
     { label: t("Expunges"), value: formatNumber(a.numExpunges) },
     { label: t("Cache start time"), value: formatLastVisit(a.startTime) },
   ]
+})
+
+/**
+ * Client-side rates from consecutive polls (mytop-style).
+ * Guard against server restart / counter reset and missing baseline.
+ */
+const dbRates = computed(() => {
+  const empty = {
+    questionsPerSec: null,
+    queriesPerSec: null,
+    slowQueriesPerSec: null,
+  }
+  const curr = dbData.value?.server
+  const prev = dbPrevSample.value?.server
+  if (!curr?.available || !prev?.available) {
+    return empty
+  }
+
+  const currUptime = Number(curr.counters?.Uptime)
+  const prevUptime = Number(prev.counters?.Uptime)
+  if (Number.isNaN(currUptime) || Number.isNaN(prevUptime) || currUptime < prevUptime) {
+    return empty
+  }
+
+  const currMs = Date.parse(dbData.value?.fetchedAt || "")
+  const prevMs = Date.parse(dbPrevSample.value?.fetchedAt || "")
+  if (Number.isNaN(currMs) || Number.isNaN(prevMs)) {
+    return empty
+  }
+
+  const dt = (currMs - prevMs) / 1000
+  if (dt <= 0) {
+    return empty
+  }
+
+  const rateFor = (key) => {
+    const c = Number(curr.counters?.[key])
+    const p = Number(prev.counters?.[key])
+    if (Number.isNaN(c) || Number.isNaN(p) || c < p) {
+      return null
+    }
+
+    return (c - p) / dt
+  }
+
+  return {
+    questionsPerSec: rateFor("Questions"),
+    queriesPerSec: rateFor("Queries"),
+    slowQueriesPerSec: rateFor("Slow_queries"),
+  }
+})
+
+const dbMaxConnections = computed(() => {
+  const raw = dbData.value?.server?.variables?.max_connections
+  if (raw === null || raw === undefined || raw === "" || Number.isNaN(Number(raw))) {
+    return null
+  }
+
+  return Number(raw)
+})
+
+const dbConnectionBar = computed(() => {
+  const percent = dbData.value?.server?.derived?.threadsConnectedPercent
+  if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
+    return null
+  }
+
+  return { percent: Number(percent) }
+})
+
+const dbTmpDiskBar = computed(() => {
+  const percent = dbData.value?.server?.derived?.tmpTablesOnDiskPercent
+  if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
+    return null
+  }
+
+  return { percent: Number(percent) }
+})
+
+const dbUnavailableReason = computed(() => {
+  const code = dbData.value?.server?.reason
+  // Map machine codes to existing/generic labels; avoid leaking raw errors.
+  if ("unsupported_platform" === code) {
+    return t("Database load metrics are only available for MySQL and MariaDB.")
+  }
+
+  return t("Not available")
+})
+
+const dbMetrics = computed(() => {
+  const s = dbData.value?.server
+  if (!s?.available) {
+    return []
+  }
+
+  const slow = s.slowQueries || {}
+  const slowLogRaw = slow.slowQueryLog
+  const slowLog =
+    slowLogRaw !== null && slowLogRaw !== undefined && String(slowLogRaw).trim() !== ""
+      ? String(slowLogRaw).toUpperCase()
+      : "—"
+  const longTime =
+    slow.longQueryTime !== null && slow.longQueryTime !== undefined && String(slow.longQueryTime).trim() !== ""
+      ? `${slow.longQueryTime}s`
+      : "—"
+
+  // Prefer existing i18n keys where they match: Version, Threshold, Questions, Hit rate.
+  return [
+    { label: t("Uptime"), value: formatDuration(s.counters?.Uptime) },
+    { label: t("Version"), value: s.version || "—" },
+    {
+      label: t("Queries per second"),
+      value: formatRate(dbRates.value.questionsPerSec ?? dbRates.value.queriesPerSec),
+    },
+    { label: t("Slow queries"), value: formatNumber(slow.count) },
+    { label: t("Threshold"), value: longTime },
+    { label: t("Slow query log"), value: slowLog },
+    { label: t("Slow queries per second"), value: formatRate(dbRates.value.slowQueriesPerSec) },
+    { label: t("Threads connected"), value: formatNumber(s.counters?.Threads_connected) },
+    { label: t("Threads running"), value: formatNumber(s.counters?.Threads_running) },
+    { label: t("Threads cached"), value: formatNumber(s.counters?.Threads_cached) },
+    { label: t("Hit rate"), value: formatPercent(s.derived?.bufferPoolHitRatePercent) },
+    { label: t("Temporary tables on disk"), value: formatPercent(s.derived?.tmpTablesOnDiskPercent) },
+    { label: t("Table lock waits"), value: formatPercent(s.derived?.tableLockWaitPercent) },
+    { label: t("Row lock waits"), value: formatNumber(s.counters?.Innodb_row_lock_waits) },
+    { label: t("Aborted connections"), value: formatNumber(s.counters?.Aborted_connects) },
+    { label: t("Opened tables"), value: formatNumber(s.counters?.Opened_tables) },
+    { label: t("Questions"), value: formatNumber(s.counters?.Questions) },
+  ]
+})
+
+const dbQueryCacheMetrics = computed(() => {
+  const s = dbData.value?.server
+  if (!s?.queryCache?.available) {
+    return []
+  }
+
+  const cacheSizeRaw = s.variables?.query_cache_size
+  const cacheSize =
+    cacheSizeRaw !== null && cacheSizeRaw !== undefined && cacheSizeRaw !== "" && !Number.isNaN(Number(cacheSizeRaw))
+      ? Number(cacheSizeRaw)
+      : null
+
+  // Reuse Type / Size / Hits / Inserts — the parent heading is "Query cache".
+  return [
+    { label: t("Type"), value: s.variables?.query_cache_type || "—" },
+    { label: t("Size"), value: formatBytes(cacheSize) },
+    { label: t("Hits"), value: formatNumber(s.counters?.Qcache_hits) },
+    { label: t("Inserts"), value: formatNumber(s.counters?.Qcache_inserts) },
+  ]
+})
+
+const dbPrivilegeNote = computed(() => {
+  const p = dbData.value?.privileges
+  if (!p) {
+    return null
+  }
+
+  let scopeLabel = t("Unknown")
+  if (false !== p.resolved) {
+    scopeLabel = p.hasGlobalPrivileges ? t("Global") : t("Database")
+  }
+
+  const unavailableList = (p.unavailable || [])
+    .map((item) => {
+      const capability = item?.capability
+      if (!capability) {
+        return null
+      }
+      // Technical identifiers: t() returns the key when no translation exists.
+      return t(capability)
+    })
+    .filter(Boolean)
+    .join(", ")
+
+  return { scopeLabel, unavailableList }
 })
 
 function statusIconClass(status) {
@@ -716,6 +1104,48 @@ function formatYesNo(value) {
   return value ? t("Yes") : t("No")
 }
 
+function formatDuration(seconds) {
+  if (seconds === null || seconds === undefined || Number.isNaN(Number(seconds))) {
+    return "—"
+  }
+
+  let remaining = Math.max(0, Math.floor(Number(seconds)))
+  const days = Math.floor(remaining / 86400)
+  remaining %= 86400
+  const hours = Math.floor(remaining / 3600)
+  remaining %= 3600
+  const minutes = Math.floor(remaining / 60)
+  const secs = remaining % 60
+
+  if (days > 0) {
+    return `${days}d ${hours}h ${minutes}m`
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}m ${secs}s`
+  }
+  if (minutes > 0) {
+    return `${minutes}m ${secs}s`
+  }
+
+  return `${secs}s`
+}
+
+function formatRate(value) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return "—"
+  }
+
+  const n = Number(value)
+  if (n >= 100) {
+    return n.toFixed(1)
+  }
+  if (n >= 10) {
+    return n.toFixed(2)
+  }
+
+  return n.toFixed(3)
+}
+
 function selectSection(key) {
   if (key === currentSection.value) {
     return
@@ -741,6 +1171,23 @@ function startCacheAutoRefresh() {
   }, 5000)
 }
 
+function stopDbAutoRefresh() {
+  if (dbRefreshTimer !== null) {
+    clearInterval(dbRefreshTimer)
+    dbRefreshTimer = null
+  }
+}
+
+function startDbAutoRefresh() {
+  stopDbAutoRefresh()
+  if (!dbAutoRefresh.value || currentSection.value !== "database" || !dbExpanded.value) {
+    return
+  }
+  dbRefreshTimer = setInterval(() => {
+    loadDbData({ silent: true })
+  }, 5000)
+}
+
 async function loadCacheData({ silent = false } = {}) {
   if (!silent) {
     cacheLoading.value = true
@@ -761,6 +1208,46 @@ async function loadCacheData({ silent = false } = {}) {
   }
 }
 
+async function loadDbData({ silent = false } = {}) {
+  if (!silent) {
+    dbLoading.value = true
+  }
+
+  try {
+    const data = await baseService.get("/admin/system-status-database-data")
+    // Guard against partial / unexpected payloads so the panel never crashes.
+    const safe = {
+      fetchedAt: data?.fetchedAt || new Date().toISOString(),
+      server:
+        data?.server && typeof data.server === "object"
+          ? data.server
+          : { available: false, reason: "status_unavailable" },
+      privileges: data?.privileges && typeof data.privileges === "object" ? data.privileges : null,
+    }
+    if (dbData.value?.server?.available && safe.server?.available) {
+      dbPrevSample.value = dbData.value
+    } else if (!safe.server?.available) {
+      dbPrevSample.value = null
+    }
+    dbData.value = safe
+    dbFetchedAt.value = safe.fetchedAt
+  } catch (e) {
+    dbPrevSample.value = null
+    dbData.value = {
+      fetchedAt: new Date().toISOString(),
+      server: { available: false, reason: "status_unavailable" },
+      privileges: null,
+    }
+    if (!silent) {
+      showErrorNotification(e)
+    }
+  } finally {
+    if (!silent) {
+      dbLoading.value = false
+    }
+  }
+}
+
 async function togglePhpCache() {
   phpCacheExpanded.value = !phpCacheExpanded.value
 
@@ -772,13 +1259,29 @@ async function togglePhpCache() {
   }
 }
 
+async function toggleDbLoad() {
+  dbExpanded.value = !dbExpanded.value
+
+  if (dbExpanded.value) {
+    await loadDbData()
+    startDbAutoRefresh()
+  } else {
+    stopDbAutoRefresh()
+  }
+}
+
 async function loadSection(sectionKey) {
   isLoading.value = true
   errorMessage.value = ""
   stopCacheAutoRefresh()
-  // Reset fold state when navigating sections so PHP cache starts collapsed again.
+  stopDbAutoRefresh()
+  // Reset fold state when navigating sections so live panels start collapsed again.
   phpCacheExpanded.value = false
   cacheAutoRefresh.value = false
+  dbExpanded.value = false
+  dbAutoRefresh.value = false
+  // Clear rate baseline so a stale sample cannot produce a bogus first rate.
+  dbPrevSample.value = null
 
   try {
     const data = await baseService.get("/admin/system-status-data", {
@@ -793,6 +1296,11 @@ async function loadSection(sectionKey) {
     if (currentSection.value !== "php") {
       cacheData.value = null
       cacheFetchedAt.value = null
+    }
+    if (currentSection.value !== "database") {
+      dbData.value = null
+      dbFetchedAt.value = null
+      dbPrevSample.value = null
     }
   } catch (e) {
     errorMessage.value = t("An unexpected error occurred.")
@@ -814,7 +1322,12 @@ watch(cacheAutoRefresh, () => {
   startCacheAutoRefresh()
 })
 
+watch(dbAutoRefresh, () => {
+  startDbAutoRefresh()
+})
+
 onBeforeUnmount(() => {
   stopCacheAutoRefresh()
+  stopDbAutoRefresh()
 })
 </script>

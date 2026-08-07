@@ -15,6 +15,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Diagnoser;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,45 @@ final class SystemStatusController extends AbstractController
             'info' => 'Disk usage per course vs disk quota',
             'icon' => 'mdi-folder-cog-outline',
         ],
+    ];
+
+    /**
+     * Status keys exposed to the admin UI (hardcoded allowlist).
+     * Full SHOW GLOBAL STATUS is fetched then filtered in PHP — no dynamic WHERE.
+     *
+     * @var list<string>
+     */
+    private const array DB_STATUS_KEYS = [
+        'Aborted_connects',
+        'Created_tmp_disk_tables',
+        'Created_tmp_tables',
+        'Innodb_buffer_pool_read_requests',
+        'Innodb_buffer_pool_reads',
+        'Innodb_row_lock_waits',
+        'Opened_tables',
+        'Qcache_hits',
+        'Qcache_inserts',
+        'Queries',
+        'Questions',
+        'Slow_queries',
+        'Table_locks_immediate',
+        'Table_locks_waited',
+        'Threads_cached',
+        'Threads_connected',
+        'Threads_running',
+        'Uptime',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    private const array DB_VARIABLE_KEYS = [
+        'long_query_time',
+        'max_connections',
+        'query_cache_size',
+        'query_cache_type',
+        'slow_query_log',
+        'version',
     ];
 
     public function __construct(
@@ -133,6 +173,375 @@ final class SystemStatusController extends AbstractController
             'opcache' => $this->getOpcacheStats(),
             'apcu' => $this->getApcuStats(),
         ]);
+    }
+
+    /**
+     * Lightweight, read-only MySQL/MariaDB load metrics for the Database section.
+     *
+     * Uses SHOW GLOBAL STATUS / VARIABLES only (no PROCESS / performance_schema).
+     * Rates (QPS, etc.) are computed client-side by diffing consecutive polls.
+     * Privilege scope is derived server-side — raw SHOW GRANTS strings are never returned
+     * (they can contain password hashes).
+     */
+    #[Route('/admin/system-status-database-data', name: 'admin_system_status_database_data', methods: ['GET'])]
+    public function databaseData(): JsonResponse
+    {
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
+        }
+
+        try {
+            $server = $this->getDatabaseServerStats();
+        } catch (Throwable) {
+            $server = $this->emptyDatabaseServerStats('status_unavailable');
+        }
+
+        try {
+            $privileges = $this->getDatabasePrivilegeScope();
+        } catch (Throwable) {
+            $privileges = [
+                'scope' => 'database',
+                'hasGlobalPrivileges' => false,
+                'resolved' => false,
+                'unavailable' => $this->databasePrivilegeUnavailableCapabilities(),
+            ];
+        }
+
+        return $this->json([
+            'fetchedAt' => (new DateTimeImmutable('now'))->format(DATE_ATOM),
+            'server' => $server,
+            'privileges' => $privileges,
+        ]);
+    }
+
+    /**
+     * @return array{
+     *     available: bool,
+     *     reason: string|null,
+     *     version: string|null,
+     *     counters: array<string, int|null>,
+     *     variables: array<string, string|null>,
+     *     derived: array{
+     *         bufferPoolHitRatePercent: float|null,
+     *         tmpTablesOnDiskPercent: float|null,
+     *         threadsConnectedPercent: float|null,
+     *         tableLockWaitPercent: float|null
+     *     },
+     *     queryCache: array{available: bool},
+     *     slowQueries: array{
+     *         count: int|null,
+     *         longQueryTime: string|null,
+     *         slowQueryLog: string|null
+     *     }
+     * }
+     */
+    private function emptyDatabaseServerStats(?string $reason = null): array
+    {
+        $emptyCounters = [];
+        foreach (self::DB_STATUS_KEYS as $key) {
+            $emptyCounters[$key] = null;
+        }
+
+        $emptyVariables = [];
+        foreach (self::DB_VARIABLE_KEYS as $key) {
+            $emptyVariables[$key] = null;
+        }
+
+        return [
+            'available' => false,
+            'reason' => $reason,
+            'version' => null,
+            'counters' => $emptyCounters,
+            'variables' => $emptyVariables,
+            'derived' => [
+                'bufferPoolHitRatePercent' => null,
+                'tmpTablesOnDiskPercent' => null,
+                'threadsConnectedPercent' => null,
+                'tableLockWaitPercent' => null,
+            ],
+            'queryCache' => [
+                'available' => false,
+            ],
+            'slowQueries' => [
+                'count' => null,
+                'longQueryTime' => null,
+                'slowQueryLog' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Aggregate MySQL/MariaDB server counters + derived ratios.
+     *
+     * Each STATUS / VARIABLES key is optional: missing or unreadable values become
+     * null so the UI can show "—" without failing the whole panel.
+     *
+     * @return array{
+     *     available: bool,
+     *     reason: string|null,
+     *     version: string|null,
+     *     counters: array<string, int|null>,
+     *     variables: array<string, string|null>,
+     *     derived: array{
+     *         bufferPoolHitRatePercent: float|null,
+     *         tmpTablesOnDiskPercent: float|null,
+     *         threadsConnectedPercent: float|null,
+     *         tableLockWaitPercent: float|null
+     *     },
+     *     queryCache: array{available: bool},
+     *     slowQueries: array{
+     *         count: int|null,
+     *         longQueryTime: string|null,
+     *         slowQueryLog: string|null
+     *     }
+     * }
+     */
+    private function getDatabaseServerStats(): array
+    {
+        try {
+            $connection = $this->em->getConnection();
+            $platform = $connection->getDatabasePlatform();
+            $driver = strtolower(str_replace('Platform', '', (new ReflectionClass($platform))->getShortName()));
+        } catch (Throwable) {
+            return $this->emptyDatabaseServerStats('platform_unknown');
+        }
+
+        // Only MySQL / MariaDB expose SHOW GLOBAL STATUS with these counters.
+        if (!str_contains($driver, 'mysql') && !str_contains($driver, 'mariadb')) {
+            return $this->emptyDatabaseServerStats('unsupported_platform');
+        }
+
+        // STATUS and VARIABLES are independent: one can fail without blanking the other.
+        $statusRows = [];
+        $variableRows = [];
+        $statusOk = false;
+        $variablesOk = false;
+
+        try {
+            $statusRaw = $connection->fetchAllKeyValue('SHOW GLOBAL STATUS');
+            if (\is_array($statusRaw)) {
+                $statusRows = $statusRaw;
+                $statusOk = [] !== $statusRows;
+            }
+        } catch (Throwable) {
+            $statusOk = false;
+        }
+
+        try {
+            $variableRaw = $connection->fetchAllKeyValue('SHOW GLOBAL VARIABLES');
+            if (\is_array($variableRaw)) {
+                $variableRows = $variableRaw;
+                $variablesOk = [] !== $variableRows;
+            }
+        } catch (Throwable) {
+            $variablesOk = false;
+        }
+
+        if (!$statusOk && !$variablesOk) {
+            return $this->emptyDatabaseServerStats('status_unavailable');
+        }
+
+        $counters = [];
+        foreach (self::DB_STATUS_KEYS as $key) {
+            if ($statusOk && \array_key_exists($key, $statusRows) && is_numeric($statusRows[$key])) {
+                $counters[$key] = (int) $statusRows[$key];
+            } else {
+                $counters[$key] = null;
+            }
+        }
+
+        $variables = [];
+        foreach (self::DB_VARIABLE_KEYS as $key) {
+            if ($variablesOk && \array_key_exists($key, $variableRows) && null !== $variableRows[$key]) {
+                $variables[$key] = (string) $variableRows[$key];
+            } else {
+                $variables[$key] = null;
+            }
+        }
+
+        // Version: prefer GLOBAL VARIABLES, then DBAL/server fallbacks — never fail hard.
+        $version = $variables['version'] ?? null;
+        if (null === $version || '' === $version) {
+            try {
+                $versionCandidate = $connection->fetchOne('SELECT VERSION()');
+                if (\is_string($versionCandidate) && '' !== $versionCandidate) {
+                    $version = $versionCandidate;
+                    $variables['version'] = $version;
+                }
+            } catch (Throwable) {
+                try {
+                    if (method_exists($connection, 'getServerVersion')) {
+                        $versionCandidate = (string) $connection->getServerVersion();
+                        if ('' !== $versionCandidate) {
+                            $version = $versionCandidate;
+                            $variables['version'] = $version;
+                        }
+                    }
+                } catch (Throwable) {
+                    $version = null;
+                }
+            }
+        }
+
+        $bufferPoolHitRate = null;
+        $readRequests = $counters['Innodb_buffer_pool_read_requests'];
+        $reads = $counters['Innodb_buffer_pool_reads'];
+        if (null !== $readRequests && null !== $reads && $readRequests > 0) {
+            $bufferPoolHitRate = round(100 * (1 - ($reads / $readRequests)), 3);
+            if ($bufferPoolHitRate < 0.0) {
+                $bufferPoolHitRate = 0.0;
+            }
+            if ($bufferPoolHitRate > 100.0) {
+                $bufferPoolHitRate = 100.0;
+            }
+        }
+
+        $tmpOnDiskPercent = null;
+        $tmpTables = $counters['Created_tmp_tables'];
+        $tmpDisk = $counters['Created_tmp_disk_tables'];
+        if (null !== $tmpTables && null !== $tmpDisk && $tmpTables > 0) {
+            $tmpOnDiskPercent = round(100 * ($tmpDisk / $tmpTables), 2);
+        }
+
+        $threadsConnectedPercent = null;
+        $threadsConnected = $counters['Threads_connected'];
+        $maxConnections = isset($variables['max_connections']) && is_numeric($variables['max_connections'])
+            ? (int) $variables['max_connections']
+            : null;
+        if (null !== $threadsConnected && null !== $maxConnections && $maxConnections > 0) {
+            $threadsConnectedPercent = round(100 * ($threadsConnected / $maxConnections), 2);
+        }
+
+        $tableLockWaitPercent = null;
+        $locksWaited = $counters['Table_locks_waited'];
+        $locksImmediate = $counters['Table_locks_immediate'];
+        if (null !== $locksWaited && null !== $locksImmediate) {
+            $lockTotal = $locksWaited + $locksImmediate;
+            if ($lockTotal > 0) {
+                $tableLockWaitPercent = round(100 * ($locksWaited / $lockTotal), 3);
+            }
+        }
+
+        // Query cache may be absent (MySQL 8 removed it) or off — hide the block unless enabled.
+        $queryCacheTypeRaw = $variables['query_cache_type'] ?? null;
+        $queryCacheType = null !== $queryCacheTypeRaw ? strtoupper(trim($queryCacheTypeRaw)) : '';
+        $queryCacheAvailable = '' !== $queryCacheType
+            && 'OFF' !== $queryCacheType
+            && '0' !== $queryCacheType;
+
+        // Panel is usable if we got STATUS (primary), or at least variables/version.
+        $available = $statusOk || null !== $version;
+
+        return [
+            'available' => $available,
+            'reason' => $available ? null : 'status_unavailable',
+            'version' => $version,
+            'counters' => $counters,
+            'variables' => $variables,
+            'derived' => [
+                'bufferPoolHitRatePercent' => $bufferPoolHitRate,
+                'tmpTablesOnDiskPercent' => $tmpOnDiskPercent,
+                'threadsConnectedPercent' => $threadsConnectedPercent,
+                'tableLockWaitPercent' => $tableLockWaitPercent,
+            ],
+            'queryCache' => [
+                'available' => $queryCacheAvailable,
+            ],
+            'slowQueries' => [
+                'count' => $counters['Slow_queries'],
+                'longQueryTime' => $variables['long_query_time'] ?? null,
+                'slowQueryLog' => $variables['slow_query_log'] ?? null,
+            ],
+        ];
+    }
+
+    /**
+     * @return list<array{capability: string, reason: string}>
+     */
+    private function databasePrivilegeUnavailableCapabilities(): array
+    {
+        // capability values are technical identifiers shown via t() in the Vue panel
+        // (unknown keys fall back to the English identifier).
+        return [
+            [
+                'capability' => 'OS load',
+                'reason' => 'No SQL primitive for host CPU or disk load',
+            ],
+            [
+                'capability' => 'InnoDB engine status',
+                'reason' => 'Requires PROCESS privilege',
+            ],
+            [
+                'capability' => 'performance_schema',
+                'reason' => 'Requires SELECT privilege on performance_schema',
+            ],
+            [
+                'capability' => 'Full processlist',
+                'reason' => 'Requires PROCESS privilege (otherwise only own threads)',
+            ],
+        ];
+    }
+
+    /**
+     * Derived privilege scope only — never returns raw SHOW GRANTS strings
+     * (they can contain IDENTIFIED BY PASSWORD hashes).
+     *
+     * @return array{
+     *     scope: string,
+     *     hasGlobalPrivileges: bool,
+     *     resolved: bool,
+     *     unavailable: list<array{capability: string, reason: string}>
+     * }
+     */
+    private function getDatabasePrivilegeScope(): array
+    {
+        $unavailable = $this->databasePrivilegeUnavailableCapabilities();
+        $hasGlobalPrivileges = false;
+        $resolved = false;
+
+        try {
+            $connection = $this->em->getConnection();
+            $grants = $connection->fetchFirstColumn('SHOW GRANTS FOR CURRENT_USER()');
+            $resolved = true;
+            foreach ($grants as $grant) {
+                if (!\is_string($grant) || '' === $grant) {
+                    continue;
+                }
+
+                // Never inspect or retain password-hash material beyond the ON clause.
+                if (!preg_match('/^GRANT\s+(.+?)\s+ON\s+(\S+)\s+TO\b/i', $grant, $matches)) {
+                    continue;
+                }
+
+                $privilegesRaw = strtoupper(trim($matches[1]));
+                $onTarget = strtoupper(trim($matches[2], '`"\''));
+
+                if ('*.*' !== $onTarget) {
+                    continue;
+                }
+
+                $parts = array_filter(
+                    array_map(static fn (string $p): string => trim($p), explode(',', $privilegesRaw)),
+                    static fn (string $p): bool => '' !== $p && 'USAGE' !== $p
+                );
+
+                if ([] !== $parts) {
+                    $hasGlobalPrivileges = true;
+
+                    break;
+                }
+            }
+        } catch (Throwable) {
+            // Grants unreadable: keep defaults, mark unresolved, never surface raw errors.
+            $resolved = false;
+        }
+
+        return [
+            'scope' => $hasGlobalPrivileges ? 'global' : 'database',
+            'hasGlobalPrivileges' => $hasGlobalPrivileges,
+            'resolved' => $resolved,
+            'unavailable' => $unavailable,
+        ];
     }
 
     /**

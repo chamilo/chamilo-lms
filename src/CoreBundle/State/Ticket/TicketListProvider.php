@@ -98,13 +98,14 @@ final readonly class TicketListProvider implements ProviderInterface
         $projectId = (int) $project->getId();
         $userId = (int) $user->getId();
         $canViewAll = $this->ticketProjectHelper->userIsAllowInProject($projectId);
+        $managedCategoryIds = $isAdmin ? [] : $this->ticketProjectHelper->getManagedCategoryIds($projectId);
         $page = max(1, $request->query->getInt('page', 1));
         $itemsPerPage = min(
             self::MAX_ITEMS_PER_PAGE,
             max(1, $request->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE)),
         );
 
-        $queryBuilder = $this->createTicketQueryBuilder($accessUrl, $project, $userId, $canViewAll);
+        $queryBuilder = $this->createTicketQueryBuilder($accessUrl, $project, $userId, $isAdmin, $managedCategoryIds);
         $this->applyFilters($queryBuilder, $request);
 
         $countQueryBuilder = clone $queryBuilder;
@@ -207,11 +208,15 @@ final readonly class TicketListProvider implements ProviderInterface
         throw new BadRequestHttpException('The requested ticket project is not available for this access URL.');
     }
 
+    /**
+     * @param int[] $managedCategoryIds
+     */
     private function createTicketQueryBuilder(
         AccessUrl $accessUrl,
         TicketProject $project,
         int $userId,
-        bool $canViewAll,
+        bool $isAdmin,
+        array $managedCategoryIds,
     ): QueryBuilder {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->from(Ticket::class, 'ticket')
@@ -228,11 +233,23 @@ final readonly class TicketListProvider implements ProviderInterface
             ->setParameter('projectId', (int) $project->getId(), Types::INTEGER)
         ;
 
-        if (!$canViewAll) {
-            $queryBuilder
-                ->andWhere('(ticket.insertUserId = :currentUserId OR assigned.id = :currentUserId)')
-                ->setParameter('currentUserId', $userId, Types::INTEGER)
-            ;
+        if (!$isAdmin) {
+            if ([] !== $managedCategoryIds) {
+                $queryBuilder
+                    ->andWhere(
+                        '(ticket.insertUserId = :currentUserId '
+                        .'OR assigned.id = :currentUserId '
+                        .'OR category.id IN (:managedCategoryIds))'
+                    )
+                    ->setParameter('currentUserId', $userId, Types::INTEGER)
+                    ->setParameter('managedCategoryIds', $managedCategoryIds)
+                ;
+            } else {
+                $queryBuilder
+                    ->andWhere('(ticket.insertUserId = :currentUserId OR assigned.id = :currentUserId)')
+                    ->setParameter('currentUserId', $userId, Types::INTEGER)
+                ;
+            }
         }
 
         return $queryBuilder;

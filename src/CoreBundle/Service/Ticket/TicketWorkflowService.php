@@ -104,10 +104,12 @@ final readonly class TicketWorkflowService
 
         $userId = (int) $user->getId();
         $projectId = (int) $ticket->getProject()->getId();
+        $categoryId = (int) $ticket->getCategory()->getId();
         $isCreator = $userId === $ticket->getInsertUserId();
         $isAssignee = $userId === (int) ($ticket->getAssignedLastUser()?->getId() ?? 0);
+        $managesCategory = \in_array($categoryId, $this->ticketProjectHelper->getManagedCategoryIds($projectId), true);
 
-        if ($this->ticketProjectHelper->userIsAllowInProject($projectId) || $isCreator || $isAssignee) {
+        if ($managesCategory || $isCreator || $isAssignee) {
             return;
         }
 

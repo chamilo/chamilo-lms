@@ -6,7 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\TicketCategoryRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 use const JSON_ERROR_NONE;
@@ -16,6 +20,7 @@ class TicketProjectHelper
     public function __construct(
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
 
     public function userIsAllowInProject(int $projectId): bool
@@ -43,6 +48,46 @@ class TicketProjectHelper
         }
 
         return false;
+    }
+
+    /**
+     * Categories, within the given project, that the current user is allowed
+     * to see beyond their own created/assigned tickets.
+     *
+     * Holding one of the roles configured in `ticket.ticket_project_user_roles`
+     * makes a user *eligible* for elevated ticket visibility, but that role is
+     * platform-wide (e.g. every teacher account) and not scoped to this
+     * project on its own. The actual scope is the categories the user is
+     * explicitly registered as responsible for (`ticket_category_rel_user`,
+     * the same relation used to auto-assign new tickets and notify category
+     * managers) — never every category in the project.
+     *
+     * @return int[]
+     */
+    public function getManagedCategoryIds(int $projectId): array
+    {
+        if ($this->security->isGranted('ROLE_ADMIN') || !$this->userIsAllowInProject($projectId)) {
+            return [];
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User || null === $user->getId()) {
+            return [];
+        }
+
+        $categoryIds = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(relation.category) AS categoryId')
+            ->from(TicketCategoryRelUser::class, 'relation')
+            ->innerJoin('relation.category', 'category')
+            ->andWhere('relation.user = :userId')
+            ->andWhere('IDENTITY(category.project) = :projectId')
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setParameter('projectId', $projectId, Types::INTEGER)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
+
+        return array_values(array_unique(array_map('intval', $categoryIds)));
     }
 
     public function getAllowedRolesFromProject(int $projectId): array

@@ -88,11 +88,15 @@ final readonly class TicketDetailProvider implements ProviderInterface
 
         $userId = (int) $user->getId();
         $isAdmin = $this->security->isGranted('ROLE_ADMIN');
-        $canViewAll = $this->ticketProjectHelper->userIsAllowInProject((int) $row['projectId']);
         $isCreator = $userId === (int) $row['creatorId'];
         $isAssignee = null !== $row['assignedUserId'] && $userId === (int) $row['assignedUserId'];
+        $managesCategory = !$isAdmin && \in_array(
+            (int) $row['categoryId'],
+            $this->ticketProjectHelper->getManagedCategoryIds((int) $row['projectId']),
+            true,
+        );
 
-        if (!$isAdmin && !$canViewAll && !$isCreator && !$isAssignee) {
+        if (!$isAdmin && !$managesCategory && !$isCreator && !$isAssignee) {
             throw new AccessDeniedHttpException('You are not allowed to view this ticket.');
         }
 

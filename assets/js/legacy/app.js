@@ -25,22 +25,6 @@ import moment from "moment"
 import Sortable from "sortablejs"
 import Swal from "sweetalert2"
 import "./vendor"
-import { getCsrfHeaderName, issueCsrfToken, needsCsrfToken } from "../csrfToken"
-
-// Attach a double-submit CSRF token to every state-changing jQuery request, so
-// legacy AJAX speaks the same protocol as the Vue axios interceptor. This is
-// not optional: Symfony remembers that a session validated through
-// double-submit and then requires it from every later request, so legacy calls
-// would start failing as soon as the SPA sends its first one.
-// ajaxSend is used rather than ajaxSetup because an individual call's own
-// beforeSend would override the global one.
-$(document).ajaxSend(function (event, jqXHR, settings) {
-  if (settings.crossDomain || !needsCsrfToken(settings.type)) {
-    return
-  }
-
-  jqXHR.setRequestHeader(getCsrfHeaderName(), issueCsrfToken())
-})
 
 // Gets HTML content from tinymce
 window.getContentFromEditor = function (id) {

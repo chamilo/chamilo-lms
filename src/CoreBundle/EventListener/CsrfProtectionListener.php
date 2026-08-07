@@ -24,17 +24,26 @@ use const PHP_URL_PATH;
  * API Platform ships no CSRF mechanism of its own, so protection used to be
  * opt-in: each State provider emitted a token and each processor validated it
  * by hand. This listener replaces that with a single check, backed by Symfony's
- * stateless SameOriginCsrfTokenManager, which accepts a request when either:
+ * stateless SameOriginCsrfTokenManager, which verifies that the request comes
+ * from this site through Sec-Fetch-Site, Origin or Referer.
  *
- * - the origin matches (Sec-Fetch-Site, Origin or Referer), or
- * - a double-submit token is present (the 'csrf-token' header, plus the
- *   matching '__Host-csrf-token_<token>' cookie the clients set).
+ * Nothing is emitted server-side and nothing is expected from the client: the
+ * manager's getToken() returns a placeholder rather than a secret, and passing
+ * that placeholder is what asks it for the origin check. Browsers attach those
+ * headers to every state-changing request on their own, so no caller has to
+ * cooperate — which matters here, where writes go out through axios, jQuery,
+ * Uppy, PrimeVue uploaders and plain fetch.
  *
- * Since the manager's getToken() returns a placeholder rather than a secret,
- * nothing has to be emitted server-side: the placeholder is enough to trigger
- * the origin check, and clients that also send the header get both checks. That
- * keeps the whole thing free of session state, so a full page reload — which
- * remounts the Vue app — has nothing to restore.
+ * The manager also supports a double-submit cookie/header pair as a second
+ * barrier. It is deliberately NOT used: once one request validates that way,
+ * Symfony's anti-downgrade rule requires it from every later request in the
+ * session, so a single caller that does not send it — an uploader, a plugin —
+ * starts failing intermittently and only after some other request has "armed"
+ * the session. Verifying the origin costs nothing and cannot be forged by a
+ * cross-site page.
+ *
+ * Being free of session state also means a full page reload — which remounts
+ * the Vue app — has nothing to restore.
  *
  * Runs at kernel.request priority 9: after RouterListener (32) has resolved the
  * API Platform route attributes, and before the firewall (8), so a forged
@@ -54,10 +63,11 @@ final class CsrfProtectionListener
     public const string TOKEN_ID = 'chamilo_request';
 
     /**
-     * Header carrying the double-submit token, matching the cookie name
-     * configured in framework.csrf_protection.cookie_name.
+     * Value handed to the manager to request an origin check. It has to equal
+     * framework.csrf_protection.cookie_name, which is how SameOriginCsrfToken-
+     * Manager recognises "no double-submit was attempted".
      */
-    public const string TOKEN_HEADER = 'csrf-token';
+    public const string ORIGIN_CHECK_TOKEN = 'csrf-token';
 
     private const string LEGACY_AJAX_PATH_PREFIX = '/main/inc/ajax/';
 
@@ -91,12 +101,7 @@ final class CsrfProtectionListener
             return;
         }
 
-        // The submitted value only feeds the double-submit check. Falling back
-        // to the cookie name is what tells the manager no double-submit was
-        // attempted, leaving the origin check as the sole criterion.
-        $submitted = (string) $request->headers->get(self::TOKEN_HEADER, self::TOKEN_HEADER);
-
-        if ($this->csrfTokenManager->isTokenValid(new CsrfToken(self::TOKEN_ID, $submitted))) {
+        if ($this->csrfTokenManager->isTokenValid(new CsrfToken(self::TOKEN_ID, self::ORIGIN_CHECK_TOKEN))) {
             return;
         }
 
@@ -112,7 +117,6 @@ final class CsrfProtectionListener
                 'has_origin' => $request->headers->has('Origin'),
                 'has_referer' => $request->headers->has('Referer'),
                 'has_sec_fetch_site' => $request->headers->has('Sec-Fetch-Site'),
-                'has_csrf_header' => $request->headers->has(self::TOKEN_HEADER),
             ]);
 
             return;

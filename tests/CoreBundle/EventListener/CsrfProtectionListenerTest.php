@@ -163,38 +163,27 @@ final class CsrfProtectionListenerTest extends TestCase
         $this->listen($this->apiRequest('POST'), logger: $logger);
     }
 
-    public function testHeaderTokenIsSubmittedForTheDoubleSubmitCheck(): void
+    public function testTheOriginCheckIsWhatGetsRequested(): void
     {
+        // Passing the placeholder is how SameOriginCsrfTokenManager is told no
+        // double-submit was attempted, leaving the origin check in charge. The
+        // listener must never derive this from a client-supplied header: a
+        // caller that omitted it would then be rejected once the session had
+        // validated through double-submit somewhere else.
         $request = $this->apiRequest('POST');
-        $request->headers->set('csrf-token', 'a-token-long-enough-to-pass');
+        $request->headers->set('csrf-token', 'a-header-the-listener-must-ignore');
 
         $this->csrfTokenManager
             ->expects(self::once())
             ->method('isTokenValid')
             ->with(self::callback(
-                fn (CsrfToken $token): bool => 'a-token-long-enough-to-pass' === $token->getValue()
+                fn (CsrfToken $token): bool => CsrfProtectionListener::ORIGIN_CHECK_TOKEN === $token->getValue()
                     && CsrfProtectionListener::TOKEN_ID === $token->getId()
             ))
             ->willReturn(true)
         ;
 
         $this->listen($request);
-    }
-
-    public function testMissingHeaderFallsBackToThePlaceholderSoOriginAloneDecides(): void
-    {
-        // The placeholder is what tells SameOriginCsrfTokenManager that no
-        // double-submit was attempted, leaving the origin check in charge.
-        $this->csrfTokenManager
-            ->expects(self::once())
-            ->method('isTokenValid')
-            ->with(self::callback(
-                fn (CsrfToken $token): bool => CsrfProtectionListener::TOKEN_HEADER === $token->getValue()
-            ))
-            ->willReturn(true)
-        ;
-
-        $this->listen($this->apiRequest('POST'));
     }
 
     private function listen(

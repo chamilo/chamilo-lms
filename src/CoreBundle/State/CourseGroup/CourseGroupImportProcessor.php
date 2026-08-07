@@ -12,8 +12,6 @@ use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupImport;
 use Import;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<mixed, CourseGroupImport>
@@ -23,7 +21,6 @@ final readonly class CourseGroupImportProcessor implements ProcessorInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CourseGroupImport
@@ -31,10 +28,6 @@ final readonly class CourseGroupImportProcessor implements ProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             throw new BadRequestHttpException('The current request is not available.');
-        }
-        $csrfToken = (string) $request->request->get('csrfToken', '');
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken($this->manager->getCsrfIntention(), $csrfToken))) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
         $file = $request->files->get('file');
         if (null === $file || !$file->isValid()) {

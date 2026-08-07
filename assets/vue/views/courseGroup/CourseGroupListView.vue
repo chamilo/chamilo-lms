@@ -492,7 +492,6 @@ const loading = ref(false)
 const saving = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
-const csrfToken = ref("")
 const canManageCourse = ref(false)
 const canCreateCategory = ref(false)
 const defaultCategoryId = ref(0)
@@ -552,7 +551,6 @@ async function loadGroups() {
   try {
     const response = await courseGroupService.getList(requestParams())
     categories.value = response.categories || []
-    csrfToken.value = response.csrfToken || ""
     canManageCourse.value = Boolean(response.canManageCourse)
     canCreateCategory.value = Boolean(response.canCreateCategory)
     defaultCategoryId.value = Number(response.defaultCategoryId || 0)
@@ -576,7 +574,7 @@ async function runAction(name, payload = {}) {
   errorMessage.value = ""
   successMessage.value = ""
   try {
-    const response = await courseGroupService.action(name, { ...payload, csrfToken: csrfToken.value }, requestParams())
+    const response = await courseGroupService.action(name, payload, requestParams())
     successMessage.value = response.message ? t(response.message) : t("Updated")
     await loadGroups()
   } catch (error) {

@@ -146,9 +146,6 @@ final class CourseGroupForm
     #[Groups(['course_group_form:read'])]
     public bool $canRemoveClassLink = false;
 
-    #[Groups(['course_group_form:read', 'course_group_form:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_group_form:read'])]
     public bool $success = false;
 

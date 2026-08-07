@@ -161,9 +161,6 @@ final class CourseGroupAction
     #[Groups(['course_group_action:write'])]
     public array $groups = [];
 
-    #[Groups(['course_group_action:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_group_action:read'])]
     public bool $success = false;
 

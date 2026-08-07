@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupImport;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseGroupImport>
@@ -21,7 +20,6 @@ final readonly class CourseGroupImportProvider implements ProviderInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseGroupImport
@@ -34,7 +32,6 @@ final readonly class CourseGroupImportProvider implements ProviderInterface
         $this->manager->assertCanManage($course, $session);
         $resource = new CourseGroupImport();
         $resource->canImport = true;
-        $resource->csrfToken = $this->csrfTokenManager->getToken($this->manager->getCsrfIntention())->getValue();
 
         return $resource;
     }

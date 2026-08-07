@@ -11,8 +11,6 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupMembers;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<CourseGroupMembers, CourseGroupMembers>
@@ -22,16 +20,12 @@ final readonly class CourseGroupMembersProcessor implements ProcessorInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CourseGroupMembers
     {
         if (!$data instanceof CourseGroupMembers) {
             throw new BadRequestHttpException('Invalid group membership payload.');
-        }
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken($this->manager->getCsrfIntention(), $data->csrfToken))) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {

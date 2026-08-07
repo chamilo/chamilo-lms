@@ -369,7 +369,6 @@ const form = reactive({
   linkedToClass: false,
   linkedClassTitle: "",
   canRemoveClassLink: false,
-  csrfToken: "",
 })
 
 const groupId = computed(() => Number(route.params.groupId || 0))
@@ -509,7 +508,6 @@ function saveGroup() {
     wikiState: Number(form.wikiState),
     chatState: Number(form.chatState),
     documentAccess: Number(form.documentAccess),
-    csrfToken: form.csrfToken,
   }
   if (memberLimitMode.value === "limited" && payload.maxStudent <= 0) {
     errorMessage.value = t("Please enter a valid number for the maximum number of members.")
@@ -524,10 +522,7 @@ function createManualGroups() {
     errorMessage.value = t("The group title is required.")
     return
   }
-  execute(
-    () => courseGroupService.action("create-groups", { groups, csrfToken: form.csrfToken }, requestParams.value),
-    "Groups created",
-  )
+  execute(() => courseGroupService.action("create-groups", { groups }, requestParams.value), "Groups created")
 }
 
 function createSubgroups() {
@@ -535,7 +530,7 @@ function createSubgroups() {
     () =>
       courseGroupService.action(
         "create-subgroups",
-        { baseGroupId: baseGroupId.value, numberOfGroups: subgroupCount.value, csrfToken: form.csrfToken },
+        { baseGroupId: baseGroupId.value, numberOfGroups: subgroupCount.value },
         requestParams.value,
       ),
     "Groups created",
@@ -551,7 +546,6 @@ function createClassGroups() {
           categoryId: classCategoryId.value,
           classIds: selectedClassIds.value,
           consistentLink: consistentLink.value,
-          csrfToken: form.csrfToken,
         },
         requestParams.value,
       ),
@@ -564,12 +558,7 @@ function confirmRemoveClassLink() {
     message: t("Please confirm your choice"),
     accept: () =>
       execute(
-        () =>
-          courseGroupService.action(
-            "remove-class-link",
-            { groupId: groupId.value, csrfToken: form.csrfToken },
-            requestParams.value,
-          ),
+        () => courseGroupService.action("remove-class-link", { groupId: groupId.value }, requestParams.value),
         "The class link was removed",
       ),
   })

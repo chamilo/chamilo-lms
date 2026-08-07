@@ -354,7 +354,7 @@ const isTinyPicker = computed(() => String(route.query.picker || "") === "tinymc
 const cbId = computed(() => String(route.query.cbId || ""))
 
 const {
-  filteredFiles: baseFilteredFiles,
+  files,
   totalFiles,
   isLoading,
   selectedFiles,
@@ -451,7 +451,7 @@ function matchesFilter(entry, type) {
 
 const filteredFiles = computed(() => {
   const type = filterType.value
-  return (baseFilteredFiles.value || []).filter((f) => matchesFilter(f, type))
+  return (files.value || []).filter((f) => matchesFilter(f, type))
 })
 
 function returnToEditor(entry) {

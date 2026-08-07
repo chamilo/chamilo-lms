@@ -797,11 +797,15 @@ function buildManagerUrl(meta) {
 
   try {
     const hasCourse = Boolean(course.value?.id)
+    // FileManagerList has My files + Documents tabs. Do not pass the course
+    // resource node as :node — that polluted personal_files listing (parent=course).
+    // Each tab resolves its own root (user vs course) inside useFileManager.
+    const personalNodeId = resolvePersonalParentNodeId()
     const resolved = router.resolve({
       name: "FileManagerList",
-      params: { node: Number(parentResourceNodeId.value || 0) },
+      params: personalNodeId > 0 ? { node: personalNodeId } : {},
       query: hasCourse
-        ? { cid: course.value.id, sid: 0, gid: 0, type, picker: "tinymce" }
+        ? { cid: course.value.id, sid: 0, gid: 0, type, picker: "tinymce", loadNode: 1 }
         : { loadNode: 1, type, picker: "tinymce" },
     })
     return resolved.href

@@ -16,8 +16,9 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const { t } = useI18n()
   const securityStore = useSecurityStore()
   const { isAuthenticated, user } = storeToRefs(securityStore)
-  const cidReqStore = isCourseDocument ? useCidReqStore() : null
-  const { course } = cidReqStore ? storeToRefs(cidReqStore) : { course: null }
+  // Always resolve course context so personal mode can reject a course root parent.
+  const cidReqStore = useCidReqStore()
+  const { course } = storeToRefs(cidReqStore)
 
   const files = ref([])
   const totalFiles = ref(0)
@@ -38,6 +39,16 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const contextMenuFile = ref(null)
   const previousFolders = ref([])
   const currentFolderTitle = ref("Root")
+
+  // Namespace browser storage so My files and Documents tabs do not share parent ids.
+  // Previously both modes used `pf_parent`, so opening Documents (course node) then
+  // switching to My files listed personal_files under the course root → empty list.
+  const storagePrefix = isCourseDocument ? "cd_" : "pf_"
+  const SS_KEY_PARENT = `${storagePrefix}parent`
+  const LS_KEY_PREVIOUS_FOLDERS = `${storagePrefix}previousFolders`
+  const LS_KEY_CURRENT_FOLDER_TITLE = `${storagePrefix}currentFolderTitle`
+  const LS_KEY_IS_UPLOADED = `${storagePrefix}isUploaded`
+  const LS_KEY_UPLOAD_PARENT = `${storagePrefix}uploadParentNodeId`
 
   // ---- Picker type filter (files/images/media) ----
   const filterType = computed(() => {
@@ -85,7 +96,41 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     return (files.value || []).filter((f) => matchesFilter(f, type))
   })
 
-  const SS_KEY_PARENT = "pf_parent"
+  function getRootParentId() {
+    if (isCourseDocument) {
+      return Number(course.value?.resourceNode?.id || 0)
+    }
+
+    return Number(user.value?.resourceNode?.id || 0)
+  }
+
+  /**
+   * Reject parents that clearly belong to the other tab's tree.
+   * Personal files must never list under a course resource node (and vice versa).
+   */
+  function isValidParentForMode(parentId) {
+    const id = Number(parentId || 0)
+    if (id <= 0) {
+      return false
+    }
+
+    const courseRootId = Number(course.value?.resourceNode?.id || 0)
+    const userRootId = Number(user.value?.resourceNode?.id || 0)
+
+    if (isCourseDocument) {
+      if (userRootId > 0 && id === userRootId) {
+        return false
+      }
+      return true
+    }
+
+    if (courseRootId > 0 && id === courseRootId) {
+      return false
+    }
+
+    return true
+  }
+
   const setParentInSession = (id) => {
     try {
       sessionStorage.setItem(SS_KEY_PARENT, String(Number(id || 0)))
@@ -169,9 +214,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       filters.value["resourceNode.parent"] = previousFolder.id
       currentFolderTitle.value = previousFolder.title
     } else {
-      filters.value["resourceNode.parent"] = isCourseDocument
-        ? course.value.resourceNode.id
-        : user.value.resourceNode.id
+      filters.value["resourceNode.parent"] = getRootParentId()
       currentFolderTitle.value = "Root"
     }
     setParentInSession(filters.value["resourceNode.parent"])
@@ -182,7 +225,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     clearParentInSession()
     previousFolders.value = []
     currentFolderTitle.value = "Root"
-    filters.value["resourceNode.parent"] = isCourseDocument ? course.value.resourceNode.id : user.value.resourceNode.id
+    filters.value["resourceNode.parent"] = getRootParentId()
     onUpdateOptions()
   }
 
@@ -397,10 +440,10 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   }
 
   const uploadDocumentHandler = async () => {
-    localStorage.setItem("previousFolders", JSON.stringify(previousFolders.value))
-    localStorage.setItem("currentFolderTitle", currentFolderTitle.value)
-    localStorage.setItem("isUploaded", "true")
-    localStorage.setItem("uploadParentNodeId", filters.value["resourceNode.parent"])
+    localStorage.setItem(LS_KEY_PREVIOUS_FOLDERS, JSON.stringify(previousFolders.value))
+    localStorage.setItem(LS_KEY_CURRENT_FOLDER_TITLE, currentFolderTitle.value)
+    localStorage.setItem(LS_KEY_IS_UPLOADED, "true")
+    localStorage.setItem(LS_KEY_UPLOAD_PARENT, String(filters.value["resourceNode.parent"] || 0))
     setParentInSession(filters.value["resourceNode.parent"])
 
     await router.push({
@@ -416,52 +459,61 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
   const onMountedCallback = () => {
     onMounted(() => {
-      const hasNodeParam =
-        route.params?.node !== undefined &&
-        route.params?.node !== null &&
-        String(route.params.node) !== "" &&
-        Number(route.params.node) > 0
+      const rootParentId = getRootParentId()
+      const routeNodeId = Number(route.params?.node || 0)
+      const queryParentId = Number(route.query?.parentResourceNodeId || route.query?.parent || 0)
 
-      const hasExplicitParentInQuery =
-        route.query?.parentResourceNodeId !== undefined &&
-        route.query?.parentResourceNodeId !== null &&
-        String(route.query.parentResourceNodeId) !== ""
+      // Only treat route parent as relevant when it belongs to this tab's tree.
+      // TinyMCE often opens FileManagerList with the course node in :node while the
+      // default tab is My files — that must not become resourceNode.parent for personal_files.
+      const hasUsableRouteParent = isValidParentForMode(routeNodeId) || isValidParentForMode(queryParentId)
 
-      if (!hasNodeParam && !hasExplicitParentInQuery) {
+      if (!hasUsableRouteParent) {
         clearParentInSession()
         previousFolders.value = []
         currentFolderTitle.value = "Root"
       }
 
-      const savedPreviousFolders = localStorage.getItem("previousFolders")
-      const savedCurrentFolderTitle = localStorage.getItem("currentFolderTitle")
-      const isUploaded = localStorage.getItem("isUploaded")
-      const uploadParentNodeId = localStorage.getItem("uploadParentNodeId")
+      const savedPreviousFolders = localStorage.getItem(LS_KEY_PREVIOUS_FOLDERS)
+      const savedCurrentFolderTitle = localStorage.getItem(LS_KEY_CURRENT_FOLDER_TITLE)
+      const isUploaded = localStorage.getItem(LS_KEY_IS_UPLOADED)
+      const uploadParentNodeId = Number(localStorage.getItem(LS_KEY_UPLOAD_PARENT) || 0)
 
-      if (isUploaded === "true" && uploadParentNodeId) {
-        filters.value["resourceNode.parent"] = Number(uploadParentNodeId)
-        localStorage.removeItem("isUploaded")
-        localStorage.removeItem("uploadParentNodeId")
-      } else if (!filters.value["resourceNode.parent"] || filters.value["resourceNode.parent"] === 0) {
+      let resolvedParent = rootParentId
+
+      if (isUploaded === "true" && isValidParentForMode(uploadParentNodeId)) {
+        resolvedParent = uploadParentNodeId
+        localStorage.removeItem(LS_KEY_IS_UPLOADED)
+        localStorage.removeItem(LS_KEY_UPLOAD_PARENT)
+      } else {
         const ssParent = getParentFromSession()
-        if (ssParent) {
-          filters.value["resourceNode.parent"] = ssParent
-        } else {
-          filters.value["resourceNode.parent"] = isCourseDocument
-            ? course.value.resourceNode.id
-            : user.value.resourceNode.id
+        if (isValidParentForMode(ssParent)) {
+          resolvedParent = ssParent
+        } else if (isValidParentForMode(queryParentId)) {
+          resolvedParent = queryParentId
+        } else if (isValidParentForMode(routeNodeId)) {
+          resolvedParent = routeNodeId
         }
       }
 
-      setParentInSession(filters.value["resourceNode.parent"])
+      if (!isValidParentForMode(resolvedParent)) {
+        resolvedParent = rootParentId
+      }
+
+      filters.value["resourceNode.parent"] = resolvedParent
+      setParentInSession(resolvedParent)
 
       if (savedPreviousFolders) {
-        previousFolders.value = JSON.parse(savedPreviousFolders)
-        localStorage.removeItem("previousFolders")
+        try {
+          previousFolders.value = JSON.parse(savedPreviousFolders)
+        } catch {
+          previousFolders.value = []
+        }
+        localStorage.removeItem(LS_KEY_PREVIOUS_FOLDERS)
       }
       if (savedCurrentFolderTitle) {
         currentFolderTitle.value = savedCurrentFolderTitle
-        localStorage.removeItem("currentFolderTitle")
+        localStorage.removeItem(LS_KEY_CURRENT_FOLDER_TITLE)
       }
 
       onUpdateOptions()

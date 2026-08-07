@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -43,7 +41,6 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -78,7 +75,6 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
             throw new AccessDeniedHttpException('You are not allowed to manage course progress in this context.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
         $title = trim($data->title);
         $content = trim($data->content);
 
@@ -138,13 +134,6 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
         }
 
         return $thematic;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(CourseProgressThematicProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function sanitizeTitle(string $title): string
@@ -209,7 +198,6 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
         $item->title = $thematic->getTitle();
         $item->content = (string) $thematic->getContent();
         $item->language = null !== $language ? (string) $language->getIsocode() : '';
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(CourseProgressThematicProvider::CSRF_TOKEN_ID);
         $item->canEdit = true;
         $item->isNew = false;
         $item->settings = [

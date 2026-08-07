@@ -118,7 +118,6 @@ const sessionTitle = ref("")
 const user = ref({})
 const courses = ref([])
 const avoidedCourseIds = ref([])
-const csrfToken = ref("")
 
 async function loadData() {
   loading.value = true
@@ -130,7 +129,6 @@ async function loadData() {
     user.value = response.user || {}
     courses.value = response.courses || []
     avoidedCourseIds.value = courses.value.filter((course) => course.avoided).map((course) => course.id)
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("[CourseSession] Failed to load user course restrictions", error)
     errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
@@ -154,12 +152,7 @@ async function save() {
   successMessage.value = ""
 
   try {
-    const response = await courseSessionService.updateUserCourses(
-      sessionId,
-      userId,
-      avoidedCourseIds.value,
-      csrfToken.value,
-    )
+    const response = await courseSessionService.updateUserCourses(sessionId, userId, avoidedCourseIds.value)
     successMessage.value = response.message ? t(response.message) : t("Update successful")
     await loadData()
   } catch (error) {

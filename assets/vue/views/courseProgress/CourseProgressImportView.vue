@@ -125,7 +125,7 @@ const loadErrorMessage = ref("")
 const formErrorMessage = ref("")
 const selectedFile = ref(null)
 const replaceCurrentProgress = ref(false)
-const csrfToken = ref("")
+const canManage = ref(false)
 const fileInputKey = ref(0)
 
 const listRoute = computed(() => ({
@@ -175,12 +175,12 @@ async function loadImportForm() {
 
     if (!response.canManage || platformConfigStore.isStudentViewActive) {
       loadErrorMessage.value = t("Access denied")
-      csrfToken.value = ""
+      canManage.value = false
 
       return
     }
 
-    csrfToken.value = response.csrfToken || ""
+    canManage.value = true
   } catch (error) {
     console.error("Error loading course progress import form", error)
     loadErrorMessage.value =
@@ -197,7 +197,7 @@ async function importCourseProgress() {
 
   formErrorMessage.value = ""
 
-  if (!(selectedFile.value instanceof File) || !csrfToken.value) {
+  if (!(selectedFile.value instanceof File) || !canManage.value) {
     formErrorMessage.value = t("Please fill all required fields")
 
     return
@@ -206,12 +206,7 @@ async function importCourseProgress() {
   isImporting.value = true
 
   try {
-    await courseProgressService.importCsv(
-      selectedFile.value,
-      replaceCurrentProgress.value,
-      csrfToken.value,
-      getContextParams(),
-    )
+    await courseProgressService.importCsv(selectedFile.value, replaceCurrentProgress.value, getContextParams())
 
     await router.push({
       ...listRoute.value,

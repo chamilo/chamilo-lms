@@ -26,8 +26,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -45,7 +43,6 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -72,7 +69,6 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
-        $this->validateCsrfToken($data->csrfToken);
 
         switch ($operation->getName()) {
             case 'post_course_progress_thematic_copy':
@@ -364,14 +360,5 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         }
 
         return array_values($thematicIds);
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseProgressThematicProvider::CSRF_TOKEN_ID, $token),
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

@@ -17,17 +17,12 @@ use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use JsonException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-
-use const JSON_THROW_ON_ERROR;
 
 /**
  * @implements ProcessorInterface<CourseProgressThematicAdvance, void>
@@ -43,7 +38,6 @@ final readonly class CourseProgressThematicAdvanceDeleteProcessor implements Pro
         private CThematicAdvanceRepository $thematicAdvanceRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -62,7 +56,6 @@ final readonly class CourseProgressThematicAdvanceDeleteProcessor implements Pro
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
-        $this->validateCsrfToken($this->getSubmittedCsrfToken($request));
 
         $thematicId = isset($uriVariables['thematicId'])
             ? (int) $uriVariables['thematicId']
@@ -130,36 +123,5 @@ final readonly class CourseProgressThematicAdvanceDeleteProcessor implements Pro
         }
 
         return $advance;
-    }
-
-    private function getSubmittedCsrfToken(Request $request): string
-    {
-        $content = trim($request->getContent());
-        if ('' === $content) {
-            return '';
-        }
-
-        try {
-            $payload = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-            throw new BadRequestHttpException('The request payload is invalid.');
-        }
-
-        if (!\is_array($payload)) {
-            return '';
-        }
-
-        $token = $payload['csrfToken'] ?? '';
-
-        return \is_string($token) ? $token : '';
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseProgressThematicAdvanceProvider::CSRF_TOKEN_ID, $token),
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

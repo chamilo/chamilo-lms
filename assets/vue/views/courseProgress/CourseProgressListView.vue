@@ -411,8 +411,6 @@ const errorMessage = ref("")
 const actionErrorMessage = ref("")
 const successMessage = ref("")
 const canManage = ref(false)
-const csrfToken = ref("")
-const completionCsrfToken = ref("")
 const deletingId = ref(null)
 const completingAdvanceId = ref(null)
 const selectedCompletionAdvanceId = ref(null)
@@ -560,7 +558,7 @@ async function copyThematic(thematic) {
   successMessage.value = ""
 
   try {
-    await courseProgressService.copyThematic(thematic.iid, csrfToken.value, getContextParams())
+    await courseProgressService.copyThematic(thematic.iid, getContextParams())
     await loadCourseProgress()
     successMessage.value = t("Update successful")
   } catch (error) {
@@ -584,7 +582,7 @@ async function moveThematic(thematic, direction) {
   successMessage.value = ""
 
   try {
-    await courseProgressService.moveThematic(thematic.iid, direction, csrfToken.value, getContextParams())
+    await courseProgressService.moveThematic(thematic.iid, direction, getContextParams())
     await loadCourseProgress()
     successMessage.value = t("Update successful")
   } catch (error) {
@@ -607,7 +605,7 @@ async function deleteSelectedThematics() {
   successMessage.value = ""
 
   try {
-    await courseProgressService.removeThematics(selectedThematicIds.value, csrfToken.value, getContextParams())
+    await courseProgressService.removeThematics(selectedThematicIds.value, getContextParams())
     selectedThematicIds.value = []
     await loadCourseProgress()
     successMessage.value = t("Deleted")
@@ -639,7 +637,7 @@ async function deleteThematic(thematic) {
   successMessage.value = ""
 
   try {
-    await courseProgressService.removeThematic(thematic.iid, { csrfToken: csrfToken.value }, getContextParams())
+    await courseProgressService.removeThematic(thematic.iid, getContextParams())
 
     await loadCourseProgress()
     successMessage.value = t("Deleted")
@@ -680,11 +678,7 @@ async function updateCompletion(advance) {
   successMessage.value = ""
 
   try {
-    const response = await courseProgressService.updateCompletion(
-      advance.iid,
-      completionCsrfToken.value,
-      getContextParams(),
-    )
+    const response = await courseProgressService.updateCompletion(advance.iid, getContextParams())
 
     applyCompletionResponse(response)
     successMessage.value = t("Update successful")
@@ -828,8 +822,6 @@ async function loadCourseProgress() {
     selectedThematicIds.value = selectedThematicIds.value.filter((thematicId) => selectableIds.has(thematicId))
     totalAverage.value = Number(response.totalAverage || 0)
     canManage.value = Boolean(response.canManage)
-    csrfToken.value = response.csrfToken || ""
-    completionCsrfToken.value = response.completionCsrfToken || ""
     selectedCompletionAdvanceId.value = Number(response.lastDoneAdvanceId || 0) || null
     lastConfirmedCompletionAdvanceId.value = selectedCompletionAdvanceId.value
   } catch (error) {

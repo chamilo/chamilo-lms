@@ -27,8 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const COURSEMANAGERLOWSECURITY;
@@ -49,7 +47,6 @@ final readonly class CourseProgressCsvManager
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function export(Request $request): StreamedResponse
@@ -91,7 +88,6 @@ final readonly class CourseProgressCsvManager
     public function import(Request $request): array
     {
         [$course, $session] = $this->resolveWritableContext($request);
-        $this->validateCsrfToken((string) $request->request->get('csrfToken', ''));
 
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || !$file->isValid()) {
@@ -435,15 +431,6 @@ final readonly class CourseProgressCsvManager
             }
 
             $this->resourceLinkRepository->removeByResourceInContext($thematic, $course, $session);
-        }
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseProgressThematicProvider::CSRF_TOKEN_ID, $token),
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
         }
     }
 

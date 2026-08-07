@@ -89,12 +89,6 @@ final class CourseProgressList
     public float $totalAverage = 0.0;
 
     #[Groups(['course_progress_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_progress_list:read'])]
-    public string $completionCsrfToken = '';
-
-    #[Groups(['course_progress_list:read'])]
     public ?int $lastDoneAdvanceId = null;
 
     public function getId(): string

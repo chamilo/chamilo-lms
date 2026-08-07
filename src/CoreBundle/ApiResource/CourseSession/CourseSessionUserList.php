@@ -70,9 +70,6 @@ final class CourseSessionUserList
     #[Groups(['course_session_user_list:read'])]
     public array $profilingFields = [];
 
-    #[Groups(['course_session_user_list:read'])]
-    public string $csrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

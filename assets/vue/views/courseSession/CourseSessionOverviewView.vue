@@ -217,7 +217,6 @@ const session = ref({})
 const courses = ref([])
 const users = ref([])
 const canManageUsers = ref(false)
-const csrfToken = ref("")
 
 const sessionId = Number(route.params.sessionId)
 
@@ -231,7 +230,6 @@ async function loadOverview() {
     courses.value = response.courses || []
     users.value = response.users || []
     canManageUsers.value = Boolean(response.canManageUsers)
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("[CourseSession] Failed to load session overview", error)
     errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
@@ -273,7 +271,7 @@ async function unsubscribeUser(userId) {
   successMessage.value = ""
 
   try {
-    const response = await courseSessionService.unsubscribeUsers(sessionId, [userId], csrfToken.value)
+    const response = await courseSessionService.unsubscribeUsers(sessionId, [userId])
     successMessage.value = response.message ? t(response.message) : t("Update successful")
     await loadOverview()
   } catch (error) {
@@ -290,7 +288,7 @@ async function addUserToCurrentUrl(user) {
   successMessage.value = ""
 
   try {
-    const response = await courseSessionService.addUserToUrl(sessionId, user.id, csrfToken.value)
+    const response = await courseSessionService.addUserToUrl(sessionId, user.id)
     successMessage.value = response.message ? t(response.message) : t("Update successful")
     await loadOverview()
   } catch (error) {

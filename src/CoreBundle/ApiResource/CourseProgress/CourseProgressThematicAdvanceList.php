@@ -59,9 +59,6 @@ final class CourseProgressThematicAdvanceList
     public int $totalItems = 0;
 
     #[Groups(['course_progress_thematic_advance_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_progress_thematic_advance_list:read'])]
     public bool $canEdit = false;
 
     public function getThematicId(): int

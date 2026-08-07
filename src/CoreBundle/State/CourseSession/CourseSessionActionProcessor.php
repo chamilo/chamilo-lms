@@ -11,8 +11,6 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseSession\CourseSessionAction;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<CourseSessionAction, CourseSessionAction>
@@ -21,7 +19,6 @@ final readonly class CourseSessionActionProcessor implements ProcessorInterface
 {
     public function __construct(
         private CourseSessionManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(
@@ -32,12 +29,6 @@ final readonly class CourseSessionActionProcessor implements ProcessorInterface
     ): CourseSessionAction {
         if (!$data instanceof CourseSessionAction) {
             throw new BadRequestHttpException('Invalid session action payload.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken('course_session_management', $data->csrfToken),
-        )) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $success = match ($operation->getName()) {

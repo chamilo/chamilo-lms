@@ -138,7 +138,6 @@ const form = ref({
   title: "",
   content: "",
   language: "",
-  csrfToken: "",
   languages: [],
 })
 
@@ -223,7 +222,6 @@ async function loadForm() {
       title: response.title || "",
       content: response.content || "",
       language: response.language || "",
-      csrfToken: response.csrfToken || "",
       languages: Array.isArray(response.languages) ? response.languages : [],
     }
     settings.value = {
@@ -253,7 +251,6 @@ async function saveThematic() {
     title: form.value.title,
     content: form.value.content,
     language: form.value.language,
-    csrfToken: form.value.csrfToken,
   }
 
   isSaving.value = true

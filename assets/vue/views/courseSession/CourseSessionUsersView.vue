@@ -228,7 +228,6 @@ const totalItems = ref(0)
 const loading = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
-const csrfToken = ref("")
 const selectedUserIds = ref([])
 const searchDraft = ref("")
 const activeSearch = ref("")
@@ -303,7 +302,6 @@ async function loadUsers() {
     users.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
     profilingFields.value = response.profilingFields || []
-    csrfToken.value = response.csrfToken || ""
     selectedUserIds.value = selectedUserIds.value.filter((id) => users.value.some((user) => user.id === id))
 
     for (const field of profilingFields.value) {
@@ -416,8 +414,8 @@ async function runAction(userIds) {
 
   try {
     const response = isAvailableView.value
-      ? await courseSessionService.subscribeUsers(sessionId, userIds, csrfToken.value)
-      : await courseSessionService.unsubscribeUsers(sessionId, userIds, csrfToken.value)
+      ? await courseSessionService.subscribeUsers(sessionId, userIds)
+      : await courseSessionService.unsubscribeUsers(sessionId, userIds)
 
     successMessage.value = response.message ? t(response.message) : t("Update successful")
     selectedUserIds.value = []

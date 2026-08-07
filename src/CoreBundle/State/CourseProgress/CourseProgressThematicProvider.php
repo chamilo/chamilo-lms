@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseProgressThematic>
@@ -31,15 +30,12 @@ final readonly class CourseProgressThematicProvider implements ProviderInterface
 {
     use CourseProgressAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'course_progress_thematic';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -80,7 +76,6 @@ final readonly class CourseProgressThematicProvider implements ProviderInterface
         }
 
         $item = new CourseProgressThematic();
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $item->canEdit = true;
         $item->isNew = !$thematic instanceof CThematic;
         $item->languages = $this->getLanguages();

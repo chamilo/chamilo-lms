@@ -66,7 +66,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                             'schema' => [
                                 'type' => 'object',
                                 'properties' => [
-                                    'submittedCsrfToken' => ['type' => 'string'],
                                     'totalWeight' => ['type' => 'number'],
                                     'useCustomScore' => ['type' => 'boolean'],
                                     'correctScore' => ['type' => 'number'],
@@ -98,9 +97,6 @@ final class ExerciseQuestionImport
 
     #[Groups(['exercise_question_import:read'])]
     public string $title = '';
-
-    #[Groups(['exercise_question_import:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['exercise_question_import:read'])]
     public bool $canManage = false;

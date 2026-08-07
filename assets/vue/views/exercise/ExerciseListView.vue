@@ -607,7 +607,6 @@ const canCreate = ref(false)
 const isLoading = ref(false)
 const successMessage = ref("")
 const errorMessage = ref("")
-const actionCsrfToken = ref("")
 const selectedExercises = ref([])
 const bulkAction = ref("")
 const searchTerm = ref(getSearchQuery())
@@ -811,7 +810,6 @@ async function runBulkAction() {
       {
         action: bulkAction.value,
         exerciseIds: selectedExerciseIds.value,
-        submittedCsrfToken: actionCsrfToken.value,
       },
       getContextParams(),
     )
@@ -837,7 +835,6 @@ async function runExerciseAction(exercise, action) {
       {
         action,
         exerciseId: Number(exercise?.iid || 0),
-        submittedCsrfToken: actionCsrfToken.value,
       },
       getContextParams(),
     )
@@ -903,7 +900,6 @@ async function loadExercises() {
     )
     categories.value = Array.isArray(response.categories) ? response.categories : []
     settings.value = response.settings || {}
-    actionCsrfToken.value = response.submittedCsrfToken || ""
     canManage.value = true === response.canManage
     canCreate.value = true === response.canCreate
   } catch (error) {

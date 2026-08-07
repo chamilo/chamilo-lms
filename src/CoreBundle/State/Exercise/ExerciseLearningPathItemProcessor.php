@@ -24,15 +24,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<ExerciseLearningPathItem, ExerciseLearningPathItem>
  */
 final readonly class ExerciseLearningPathItemProcessor implements ProcessorInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_question_action';
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_ITEM_TYPE_DIR = 'dir';
 
@@ -41,7 +38,6 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -58,8 +54,6 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
         }
-
-        $this->validateCsrfToken($data->submittedCsrfToken);
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
@@ -99,13 +93,6 @@ final readonly class ExerciseLearningPathItemProcessor implements ProcessorInter
         $response->message = 'Exercise added to learning path.';
 
         return $response;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function canManageExercises(): bool

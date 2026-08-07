@@ -55,9 +55,6 @@ final class ExerciseRuntimeReportBulkAction
     #[Groups(['exercise_runtime_report_bulk_action:read', 'exercise_runtime_report_bulk_action:write'])]
     public string $beforeDate = '';
 
-    #[Groups(['exercise_runtime_report_bulk_action:write'])]
-    public string $submittedCsrfToken = '';
-
     #[Groups(['exercise_runtime_report_bulk_action:read'])]
     public bool $success = false;
 

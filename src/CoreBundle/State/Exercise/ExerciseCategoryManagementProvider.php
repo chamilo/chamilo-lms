@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseCategoryManagement>
@@ -32,14 +31,12 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
 {
     public const TYPE_EXERCISE = 'exercise';
     public const TYPE_QUESTION = 'question';
-    public const CSRF_TOKEN_ID = 'exercise_category_management';
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -72,7 +69,6 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
         $response->items = self::TYPE_EXERCISE === $categoryType
             ? $this->getExerciseCategories($course)
             : $this->getQuestionCategories($course, $session);
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
 
         return $response;

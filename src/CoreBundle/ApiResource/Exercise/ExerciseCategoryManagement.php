@@ -81,9 +81,6 @@ final class ExerciseCategoryManagement
     public string $description = '';
 
     #[Groups(['exercise_category_management:write'])]
-    public string $submittedCsrfToken = '';
-
-    #[Groups(['exercise_category_management:write'])]
     public string $csvContent = '';
 
     #[Groups(['exercise_category_management:read'])]
@@ -103,9 +100,6 @@ final class ExerciseCategoryManagement
      */
     #[Groups(['exercise_category_management:read'])]
     public array $legacyUrls = [];
-
-    #[Groups(['exercise_category_management:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['exercise_category_management:read'])]
     public bool $canManage = false;

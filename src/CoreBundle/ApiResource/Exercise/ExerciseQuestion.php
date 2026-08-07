@@ -90,9 +90,6 @@ final class ExerciseQuestion
     #[Groups(['exercise_question:read'])]
     public string $learningPathReadOnlyMessage = '';
 
-    #[Groups(['exercise_question:read'])]
-    public string $csrfToken = '';
-
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

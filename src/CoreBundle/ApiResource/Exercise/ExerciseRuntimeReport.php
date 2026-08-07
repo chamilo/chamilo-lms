@@ -109,12 +109,6 @@ final class ExerciseRuntimeReport
     #[Groups(['exercise_runtime_report:read'])]
     public array $extraFields = [];
 
-    #[Groups(['exercise_runtime_report:read'])]
-    public string $bulkActionToken = '';
-
-    #[Groups(['exercise_runtime_report:read'])]
-    public string $emailActionToken = '';
-
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

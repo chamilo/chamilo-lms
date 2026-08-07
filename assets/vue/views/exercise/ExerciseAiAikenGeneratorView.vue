@@ -658,7 +658,6 @@ async function importGeneratedAiken() {
   const filename = `${exerciseTitle.replace(/[^a-z0-9_-]+/gi, "_").replace(/^_+|_+$/g, "") || "aiken_quiz"}.txt`
   const file = new File([text], filename, { type: "text/plain" })
   const formData = new FormData()
-  formData.append("submittedCsrfToken", config.value.csrfToken || "")
   formData.append("file", file)
   formData.append("totalWeight", totalWeight.value)
   formData.append("exerciseTitle", exerciseTitle)

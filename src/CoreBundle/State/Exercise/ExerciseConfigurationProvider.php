@@ -36,14 +36,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseConfiguration>
  */
 final readonly class ExerciseConfigurationProvider implements ProviderInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_configuration';
     private const FEEDBACK_TYPE_DIRECT = 1;
     private const FEEDBACK_TYPE_EXAM = 2;
     private const FEEDBACK_TYPE_POPUP = 3;
@@ -59,7 +57,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -95,7 +92,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->mode = 'create';
         $configuration->canCreate = true;
         $configuration->canEdit = false;
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $configuration->settings = $this->getSettings();
         $configuration->options = $this->getOptions($course, null);
         $configuration->listUrl = '';
@@ -184,7 +180,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->textWhenFinishedFailure = (string) $quiz->getTextWhenFinishedFailure();
         $configuration->canCreate = true;
         $configuration->canEdit = true;
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $configuration->settings = $this->getSettings();
         $configuration->options = $this->getOptions($course, $quiz);
         $configuration->listUrl = '';

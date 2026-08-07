@@ -376,9 +376,6 @@ final class ExerciseQuestionEditor
     public array $legacyUrls = [];
 
     #[Groups(['exercise_question_editor:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['exercise_question_editor:read'])]
     public bool $allowQuestionFeedback = false;
 
     #[Groups(['exercise_question_editor:read'])]
@@ -398,9 +395,6 @@ final class ExerciseQuestionEditor
 
     #[Groups(['exercise_question_editor:read'])]
     public string $learningPathReadOnlyMessage = '';
-
-    #[Groups(['exercise_question_editor:write'])]
-    public string $submittedCsrfToken = '';
 
     public function getExerciseId(): ?int
     {

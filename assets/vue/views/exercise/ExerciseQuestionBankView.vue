@@ -315,7 +315,6 @@ const exerciseOptions = ref([])
 const difficultyOptions = ref([])
 const questionTypeOptions = ref([])
 const selectedQuestionIds = ref([])
-const csrfToken = ref("")
 const totalItems = ref(0)
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -511,7 +510,6 @@ async function runBankAction(action, questionIds) {
         exerciseId,
         action,
         questionIds: safeQuestionIds,
-        submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
       isGlobalMode.value ? null : exerciseId,
@@ -539,7 +537,6 @@ async function loadQuestionBank() {
     exerciseOptions.value = Array.isArray(response.exerciseOptions) ? response.exerciseOptions : []
     difficultyOptions.value = Array.isArray(response.difficultyOptions) ? response.difficultyOptions : []
     questionTypeOptions.value = Array.isArray(response.questionTypeOptions) ? response.questionTypeOptions : []
-    csrfToken.value = response.csrfToken || ""
     totalItems.value = Number(response.totalItems || 0)
     filters.page = Number(response.page || filters.page || 1)
     filters.itemsPerPage = Number(response.itemsPerPage || filters.itemsPerPage || 20)

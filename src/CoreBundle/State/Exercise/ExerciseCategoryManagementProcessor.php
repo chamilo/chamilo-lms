@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<ExerciseCategoryManagement, ExerciseCategoryManagement>
@@ -42,7 +40,6 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CQuizQuestionCategoryRepository $questionCategoryRepository,
     ) {}
 
@@ -65,7 +62,6 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
             throw new AccessDeniedHttpException('You are not allowed to manage exercise categories in this context.');
         }
 
-        $this->validateCsrfToken($data->submittedCsrfToken);
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $categoryType = $this->getCategoryType($uriVariables);
@@ -146,13 +142,6 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function validateCsrfToken(string $submittedCsrfToken): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(ExerciseCategoryManagementProvider::CSRF_TOKEN_ID, $submittedCsrfToken))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function createCategory(string $categoryType, ExerciseCategoryManagement $data, Course $course, ?Session $session): string

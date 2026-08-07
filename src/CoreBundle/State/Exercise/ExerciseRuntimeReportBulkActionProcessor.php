@@ -28,8 +28,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Runs non-legacy bulk cleanup actions from the exercise learner attempts report.
@@ -49,7 +47,6 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private ExerciseAttemptScoringService $scoringService,
     ) {}
 
@@ -72,7 +69,6 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
             throw new AccessDeniedHttpException('You are not allowed to run this exercise report action.');
         }
 
-        $this->validateCsrfToken($data->submittedCsrfToken);
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
@@ -100,13 +96,6 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function validateCsrfToken(string $submittedCsrfToken): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(ExerciseRuntimeReportProvider::BULK_ACTION_CSRF_TOKEN_ID, $submittedCsrfToken))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function getCourse(Request $request): Course

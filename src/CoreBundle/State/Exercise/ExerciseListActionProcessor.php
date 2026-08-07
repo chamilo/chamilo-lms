@@ -33,15 +33,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<ExerciseList, ExerciseList>
  */
 final readonly class ExerciseListActionProcessor implements ProcessorInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_list_action';
     private const ACTION_COPY = 'copy';
     private const ACTION_DELETE = 'delete';
     private const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
@@ -66,7 +63,6 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -83,8 +79,6 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
         }
-
-        $this->validateCsrfToken($data->submittedCsrfToken);
 
         if (!$this->canManageExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
@@ -863,12 +857,5 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private function isSettingEnabled(string $name): bool
     {
         return 'true' === $this->settingsManager->getSetting($name, true);
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 }

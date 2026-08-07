@@ -318,7 +318,10 @@ export function useTopbarLoggedIn(props) {
       if (resolvedRoute?.href) {
         return resolvedRoute.href
       }
-    } catch {}
+    } catch {
+      return "/my-services"
+    }
+
     return "/my-services"
   })
 
@@ -363,6 +366,10 @@ export function useTopbarLoggedIn(props) {
   })
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+  const externalLogoutPluginEnabled = computed(
+    () => platformConfigStore.plugins?.extauthchamilologoutbuttonbehaviour?.enabled === true,
+  )
+  const justificationPluginEnabled = computed(() => platformConfigStore.plugins?.justification?.enabled === true)
 
   const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
 
@@ -375,7 +382,7 @@ export function useTopbarLoggedIn(props) {
   const showMyJustificationsLink = computed(() => !isAnonymous.value && justificationMenu.value.enabled === true)
 
   async function fetchJustificationMenu() {
-    if (isAnonymous.value) {
+    if (isAnonymous.value || !justificationPluginEnabled.value) {
       justificationMenu.value.enabled = false
 
       return
@@ -584,7 +591,7 @@ export function useTopbarLoggedIn(props) {
   onMounted(async () => {
     fetchJustificationMenu()
 
-    if (!isAnonymous.value) {
+    if (!isAnonymous.value && externalLogoutPluginEnabled.value) {
       externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
     }
   })

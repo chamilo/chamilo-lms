@@ -10,6 +10,7 @@ use Bbb;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -48,6 +49,7 @@ class PlatformConfigurationController extends AbstractController
         AuthenticationConfigHelper $authenticationConfigHelper,
         McpAccessPolicy $mcpAccessPolicy,
         UrlGeneratorInterface $urlGenerator,
+        PluginHelper $pluginHelper,
     ): Response {
         $requestSession = $this->getRequest()->getSession();
 
@@ -251,6 +253,12 @@ class PlatformConfigurationController extends AbstractController
             ];
 
             $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
+            $configuration['plugins']['extauthchamilologoutbuttonbehaviour'] = [
+                'enabled' => $pluginHelper->isPluginEnabled('ExtAuthChamiloLogoutButtonBehaviour'),
+            ];
+            $configuration['plugins']['justification'] = [
+                'enabled' => $pluginHelper->isPluginEnabled('Justification'),
+            ];
         } else {
             $configuration['settings']['security.allow_captcha'] = $settingsManager->getSetting('security.allow_captcha', true);
         }

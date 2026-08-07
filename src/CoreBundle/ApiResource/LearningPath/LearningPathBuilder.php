@@ -58,9 +58,6 @@ final class LearningPathBuilder
     #[Groups(['learning_path_builder:read'])]
     public bool $titleAsHtml = false;
 
-    #[Groups(['learning_path_builder:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */

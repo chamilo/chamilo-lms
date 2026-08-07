@@ -21,7 +21,6 @@ const FIELD_TAG = 10
 
 const props = defineProps({
   context: { type: Object, required: true },
-  csrfToken: { type: String, required: true },
   item: { type: Object, required: true },
   lpId: { type: Number, required: true },
   parentOptions: { type: Array, required: true },
@@ -213,7 +212,6 @@ async function persistItem({ notify = true, emitSaved = true } = {}) {
         content: canEditContent.value ? String(form.content || "") : null,
         exportAllowed: showExportAllowed.value && Boolean(form.exportAllowed),
         extraFields: serializeExtraFields(),
-        csrfToken: props.csrfToken,
       },
       extraFieldFiles,
     )
@@ -256,7 +254,6 @@ async function generateQuickTest() {
       Number(props.item.id),
       props.context,
       {
-        csrfToken: props.csrfToken,
         provider: quickTestProvider.value,
       },
     )

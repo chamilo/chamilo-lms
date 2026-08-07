@@ -25,7 +25,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<LearningPathCategoryInput|null, void> */
 final readonly class LearningPathCategoryMutationProcessor implements ProcessorInterface
@@ -35,7 +34,6 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CShortcutRepository $shortcutRepository,
         private ResourceLinkRepository $resourceLinkRepository,
         private SettingsManager $settingsManager,
@@ -56,7 +54,6 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
         if (!$data instanceof LearningPathCategoryInput) {
             throw new BadRequestHttpException('Learning path category data is required.');
         }
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         if ($categoryId > 0) {
             $this->assertExactCategoryContext($category, $course, $session, $group);
 

@@ -81,7 +81,6 @@
                 :canExportChamilo="canExportChamilo"
                 :canExportScorm="canExportScorm"
                 :canSeriousGame="canSeriousGame"
-                :csrf-token="actionToken"
                 :legacyContext="legacyContext"
                 :lp="element"
                 :ringDash="ringDash"
@@ -130,7 +129,6 @@
               :canExportChamilo="canExportChamilo"
               :canExportScorm="canExportScorm"
               :canSeriousGame="canSeriousGame"
-              :csrf-token="actionToken"
               :category="group.category"
               :isSessionCategory="group.isSessionCategory"
               :layout-busy="layoutBusy"
@@ -297,11 +295,7 @@ const canAddCategory = computed(
 )
 
 const canReorder = computed(
-  () =>
-    canEdit.value &&
-    Boolean(actionToken.value) &&
-    Number(session.value?.id ?? 0) === 0 &&
-    Number(route.query?.gid ?? 0) === 0,
+  () => canEdit.value && Number(session.value?.id ?? 0) === 0 && Number(route.query?.gid ?? 0) === 0,
 )
 
 const legacyContext = computed(() => {
@@ -422,7 +416,6 @@ const canSeriousGame = computed(() => {
 const items = ref([])
 const categories = ref([])
 const visibilityMap = ref({})
-const actionToken = ref("")
 
 /**
  * Keeps categorized learning paths visible when a migrated legacy category
@@ -773,17 +766,15 @@ const load = async (notifyOnError = true) => {
     }
 
     rawCanEdit.value = !!allowed
-    actionToken.value = ""
     allowChamiloExport.value = false
 
     if (rawCanEdit.value) {
-      const tokenResult = await lpService.getActionToken({
+      const settingsResult = await lpService.getActionToken({
         cid: legacyContext.value.cid,
         sid: legacyContext.value.sid ?? 0,
         gid: legacyContext.value.gid ?? 0,
       })
-      actionToken.value = tokenResult?.token ?? ""
-      allowChamiloExport.value = tokenResult?.allowChamiloExport === true
+      allowChamiloExport.value = settingsResult?.allowChamiloExport === true
     }
   } catch (error) {
     firstError = error
@@ -882,7 +873,6 @@ function buildLayoutPayload() {
       id: Number(group.category.iid),
       learningPathIds: group.list.map((learningPath) => Number(learningPath.iid)),
     })),
-    csrfToken: actionToken.value,
   }
 }
 

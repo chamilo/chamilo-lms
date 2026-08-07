@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<mixed, JsonResponse> */
 final readonly class LearningPathScormUpdateProcessor implements ProcessorInterface
@@ -33,7 +32,6 @@ final readonly class LearningPathScormUpdateProcessor implements ProcessorInterf
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CLpRepository $learningPathRepository,
         private ScormPackageImporter $packageImporter,
         private CidReqHelper $cidReqHelper,
@@ -51,7 +49,6 @@ final readonly class LearningPathScormUpdateProcessor implements ProcessorInterf
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $this->validateActionToken($this->csrfTokenManager, $request->request->get('csrfToken'));
 
         $course = $this->getContextCourse($this->cidReqHelper);
         $requestedNodeId = $request->query->getInt('node');

@@ -672,14 +672,11 @@ async function finishLearningPathSurvey() {
         sid: Number(getQueryValue(route.query.sid) || 0),
         gid: Number(getQueryValue(route.query.gid) || 0),
       }
-      const builder = await lpService.getBuilder(learningPathId.value, context)
-
       await lpService.addBuilderResource(learningPathId.value, context, {
         resourceType: "survey",
         resourceId: surveyId.value,
         parentId: Number(getQueryValue(route.query.parent) || 0) || null,
         exportAllowed: false,
-        csrfToken: builder.csrfToken,
       })
     }
 

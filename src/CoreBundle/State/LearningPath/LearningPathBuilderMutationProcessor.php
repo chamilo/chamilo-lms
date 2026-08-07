@@ -55,7 +55,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const ENT_HTML5;
@@ -82,7 +81,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
@@ -224,7 +222,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         CLp $lp,
         CLpItem $root,
     ): LearningPathBuilderItemInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $parent = $this->resolveParent($lp, $root, $data->parentId);
         $title = $this->sanitizeTitle($data->title);
 
@@ -265,7 +262,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         Request $request,
         int $itemId,
     ): LearningPathBuilderItemUpdateInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $item = $this->findValidatedItem($lp, $itemId);
         $this->assertEditableItem($item);
 
@@ -330,7 +326,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         ?CGroup $group,
         int $itemId,
     ): LearningPathBuilderItemAudioInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $item = $this->findValidatedItem($lp, $itemId);
         $this->assertEditableItem($item);
 
@@ -381,7 +376,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         CLp $lp,
         int $itemId,
     ): LearningPathBuilderItemPrerequisiteInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $item = $this->findValidatedItem($lp, $itemId);
         if ('dir' === $item->getItemType() || 'root' === $item->getItemType()) {
             throw new BadRequestHttpException('Prerequisites cannot be assigned to this learning path item.');
@@ -455,7 +449,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         ?Session $session,
         ?CGroup $group,
     ): LearningPathBuilderResourceInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $resource = $this->findValidatedResource(
             $data->resourceType,
             $data->resourceId,
@@ -529,7 +522,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         ?Session $session,
         ?CGroup $group,
     ): LearningPathBuilderFinalItemInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $title = $this->sanitizeTitle($data->title);
         $resource = $this->findValidatedResource('document', $data->documentId, $course, $session, $group);
         if (!$resource instanceof CDocument || 'certificate' !== strtolower(trim($resource->getFiletype()))) {
@@ -630,7 +622,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         CLpItem $root,
         int $itemId,
     ): LearningPathBuilderDeleteInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $item = $this->findValidatedItem($lp, $itemId);
         if ('root' === $item->getItemType()) {
             throw new BadRequestHttpException('The learning path root item cannot be deleted.');
@@ -660,7 +651,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         CLp $lp,
         CLpItem $root,
     ): LearningPathBuilderOrderInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         if ([] === $data->order) {
             throw new BadRequestHttpException('The item order is required.');
         }
@@ -713,7 +703,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         LearningPathBuilderPrerequisiteInput $data,
         CLp $lp,
     ): LearningPathBuilderPrerequisiteInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $items = array_values($this->getItemsById($lp));
 
         if ('clear' === $data->action) {
@@ -798,14 +787,12 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             : null;
         $data->exportAllowed = filter_var($payload['exportAllowed'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $data->extraFields = \is_array($payload['extraFields'] ?? null) ? $payload['extraFields'] : [];
-        $data->csrfToken = (string) ($payload['csrfToken'] ?? '');
     }
 
     private function updateBulkAuthorPrice(
         LearningPathBuilderBulkAuthorPriceInput $data,
         CLp $lp,
     ): LearningPathBuilderBulkAuthorPriceInput {
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('Only platform administrators can update learning path authors and prices.');
         }

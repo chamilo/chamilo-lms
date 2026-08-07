@@ -490,7 +490,6 @@ const form = reactive({
   extraFields: [],
   skillOptions: [],
   skillIds: [],
-  csrfToken: "",
 })
 
 const context = computed(() => ({
@@ -628,7 +627,6 @@ function buildPayload() {
     removePicture: form.removePicture,
     extraFields: serializeExtraFields(),
     skillIds: form.skillIds.map(Number),
-    csrfToken: form.csrfToken,
   }
 }
 

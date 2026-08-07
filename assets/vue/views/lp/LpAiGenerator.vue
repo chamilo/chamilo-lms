@@ -270,7 +270,6 @@ const configuration = reactive({
   enabled: false,
   language: "en",
   providers: [],
-  csrfToken: "",
 })
 
 const form = reactive({
@@ -322,7 +321,6 @@ async function loadConfiguration() {
     configuration.enabled = Boolean(data?.enabled)
     configuration.language = String(data?.language || "en")
     configuration.providers = Array.isArray(data?.providers) ? data.providers : []
-    configuration.csrfToken = String(data?.csrfToken || "")
 
     if (configuration.providers.length > 0) {
       form.provider = String(configuration.providers[0].value || "")
@@ -371,7 +369,6 @@ async function generate() {
 
     const saved = await lpService.saveAiLearningPath(contextParams.value, {
       lpData: generated.data,
-      csrfToken: configuration.csrfToken,
     })
 
     const lpId = Number(saved?.id ?? 0)

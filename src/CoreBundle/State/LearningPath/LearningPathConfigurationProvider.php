@@ -35,7 +35,6 @@ use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const DATE_ATOM;
@@ -51,7 +50,6 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CLpRepository $lpRepository,
         private CLpCategoryRepository $categoryRepository,
         private LanguageRepository $languageRepository,
@@ -142,7 +140,6 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         }
 
         $result->extraFields = $this->getExtraFieldDefinitions($lp);
-        $result->csrfToken = $this->csrfTokenManager->getToken('learning_path_action')->getValue();
 
         return $result;
     }

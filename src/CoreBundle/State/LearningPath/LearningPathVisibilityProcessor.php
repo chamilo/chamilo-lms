@@ -17,7 +17,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<object, JsonResponse>
@@ -30,7 +29,6 @@ final readonly class LearningPathVisibilityProcessor implements ProcessorInterfa
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -46,7 +44,6 @@ final readonly class LearningPathVisibilityProcessor implements ProcessorInterfa
         }
 
         $payload = $this->getJsonData($request);
-        $this->validateActionToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         if ($data instanceof CLp && 1 === $data->getSubscribeUsers()) {
             throw new BadRequestHttpException('Visibility is managed by learning path subscriptions.');

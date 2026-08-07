@@ -140,7 +140,7 @@ function closeLearnerDetail() {
 }
 
 function confirmReset(userIds) {
-  if (!userIds.length || !report.value?.csrfToken) {
+  if (!userIds.length) {
     return
   }
 
@@ -157,7 +157,6 @@ async function resetUsers(userIds) {
     await lpService.resetReporting(lpId.value, reportingParams(0), {
       userIds,
       deleteExerciseAttempts: deleteExerciseAttempts.value,
-      csrfToken: report.value.csrfToken,
     })
 
     if (userIds.includes(selectedStudentId.value)) {
@@ -179,7 +178,7 @@ function confirmResetAll() {
 }
 
 function confirmRecalculate(userId) {
-  if (userId <= 0 || !report.value?.csrfToken) {
+  if (userId <= 0) {
     return
   }
 
@@ -195,7 +194,6 @@ async function recalculateUser(userId) {
   try {
     await lpService.recalculateReporting(lpId.value, reportingParams(0), {
       userId,
-      csrfToken: report.value.csrfToken,
     })
 
     showSuccessNotification(t("Results recalculated"))

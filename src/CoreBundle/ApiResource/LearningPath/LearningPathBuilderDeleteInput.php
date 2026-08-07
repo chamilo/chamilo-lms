@@ -51,9 +51,6 @@ final class LearningPathBuilderDeleteInput
     #[Groups(['learning_path_builder_delete:write'])]
     public int $lpId = 0;
 
-    #[Groups(['learning_path_builder_delete:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_delete:read'])]
     public bool $deleted = false;
 

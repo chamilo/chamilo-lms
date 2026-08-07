@@ -79,9 +79,6 @@ final class LearningPathCategorySubscription
     #[Groups(['lp_category_subscription:read'])]
     public bool $allowUserGroups = false;
 
-    #[Groups(['lp_category_subscription:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array{id: int, title: string}>
      */
@@ -126,9 +123,6 @@ final class LearningPathCategorySubscription
      */
     #[Groups(['lp_category_subscription:write'])]
     public array $selectedIds = [];
-
-    #[Groups(['lp_category_subscription:write'])]
-    public string $csrfTokenInput = '';
 
     public function getCategoryId(): ?int
     {

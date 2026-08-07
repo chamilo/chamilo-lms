@@ -10,7 +10,6 @@ import lpService from "../../services/lpService"
 
 const props = defineProps({
   context: { type: Object, required: true },
-  csrfToken: { type: String, required: true },
   item: { type: Object, required: true },
   items: { type: Array, required: true },
   lpId: { type: Number, required: true },
@@ -77,7 +76,6 @@ async function savePrerequisite() {
       prerequisiteId: Number(prerequisiteId.value || 0),
       minScore: Number(scores.min || 0),
       maxScore: Number(scores.max || 100),
-      csrfToken: props.csrfToken,
     })
     showSuccessNotification(t("Update successful"))
     emit("saved", Number(props.item.id))

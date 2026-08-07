@@ -12,7 +12,6 @@ import lpService from "../../services/lpService"
 const props = defineProps({
   certificate: { type: Object, default: () => ({}) },
   context: { type: Object, required: true },
-  csrfToken: { type: String, required: true },
   documentsRootNodeId: { type: Number, required: true },
   lpId: { type: Number, required: true },
 })
@@ -99,7 +98,6 @@ async function saveCertificate() {
       documentId,
       title: String(form.title).trim(),
       gradebookCategoryId: form.gradebookCategoryId ? Number(form.gradebookCategoryId) : null,
-      csrfToken: props.csrfToken,
     })
 
     form.documentId = documentId

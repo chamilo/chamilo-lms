@@ -16,7 +16,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<mixed, JsonResponse>
@@ -30,7 +29,6 @@ final readonly class LearningPathReorderProcessor implements ProcessorInterface
         private CLpRepository $learningPathRepository,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -42,7 +40,6 @@ final readonly class LearningPathReorderProcessor implements ProcessorInterface
         }
 
         $payload = $this->getJsonData($request);
-        $this->validateActionToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);

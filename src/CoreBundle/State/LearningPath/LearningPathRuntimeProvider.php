@@ -48,7 +48,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
@@ -69,7 +68,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private LpAdvancedAccessHelper $advancedAccessHelper,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private ResourceNodeRepository $resourceNodeRepository,
         private LearningPathAccessChecker $accessChecker,
         private LearningPathFinalItemManager $finalItemManager,
@@ -328,7 +326,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $runtime->legacyFallbackUrl = CLp::AICC_TYPE === $lp->getLpType()
             ? $this->buildLegacyFallbackUrl($lp, $course, $session, $group, $request)
             : '';
-        $runtime->csrfToken = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
         $runtime->items = $rows;
 
         return $runtime;

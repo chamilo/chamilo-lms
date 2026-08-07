@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /** @implements ProcessorInterface<LearningPathReportingResetInput, void> */
@@ -44,7 +43,6 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private LearningPathReportingProvider $reportingProvider,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
@@ -76,7 +74,6 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->getLearningPath($uriVariables);
         $this->getEditableResourceLink($lp, $course, $session, $group, $this->security);
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
 
         $userIds = $this->normalizeIds($data->userIds);
         if ([] === $userIds) {

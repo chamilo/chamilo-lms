@@ -51,9 +51,6 @@ final class LearningPathRuntimeItemInput
     #[Groups(['learning_path_runtime_item:write'])]
     public bool $allowNewAttempt = false;
 
-    #[Groups(['learning_path_runtime_item:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): ?int
     {
         return $this->lpId;

@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
@@ -62,7 +62,6 @@ const { course, session } = storeToRefs(cidReqStore)
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const packageFile = ref(null)
-const csrfToken = ref("")
 const saving = ref(false)
 
 const learningPathId = computed(() => Number(route.params.lpId ?? 0))
@@ -75,15 +74,6 @@ const contextParams = computed(() => ({
   isStudentView: "false",
 }))
 
-onMounted(async () => {
-  try {
-    const result = await lpService.getActionToken(contextParams.value)
-    csrfToken.value = result?.token ?? ""
-  } catch (error) {
-    showErrorNotification(error)
-  }
-})
-
 async function submit() {
   if (!(packageFile.value instanceof File)) {
     showErrorNotification(t("No file selected."))
@@ -94,7 +84,6 @@ async function submit() {
   try {
     const formData = new FormData()
     formData.append("package", packageFile.value)
-    formData.append("csrfToken", csrfToken.value)
 
     await lpService.updateScormPackage(learningPathId.value, contextParams.value, formData)
     showSuccessNotification(t("Update successful"))

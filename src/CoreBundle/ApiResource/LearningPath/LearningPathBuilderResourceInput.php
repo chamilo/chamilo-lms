@@ -60,9 +60,6 @@ final class LearningPathBuilderResourceInput
     #[Groups(['learning_path_builder_resource:read', 'learning_path_builder_resource:write'])]
     public bool $exportAllowed = false;
 
-    #[Groups(['learning_path_builder_resource:write'])]
-    public string $csrfToken = '';
-
     #[ApiProperty(identifier: false)]
     #[Groups(['learning_path_builder_resource:read'])]
     public ?int $id = null;

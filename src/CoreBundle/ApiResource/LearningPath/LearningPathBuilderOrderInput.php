@@ -54,9 +54,6 @@ final class LearningPathBuilderOrderInput
     #[Groups(['learning_path_builder_order:write'])]
     public array $order = [];
 
-    #[Groups(['learning_path_builder_order:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_order:read'])]
     public bool $saved = false;
 

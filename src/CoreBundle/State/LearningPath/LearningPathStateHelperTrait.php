@@ -21,15 +21,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const JSON_THROW_ON_ERROR;
 
 trait LearningPathStateHelperTrait
 {
-    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
-
     /**
      * @return array<string, mixed>
      */
@@ -46,17 +42,6 @@ trait LearningPathStateHelperTrait
         }
 
         return $data;
-    }
-
-    private function validateActionToken(CsrfTokenManagerInterface $csrfTokenManager, mixed $token): void
-    {
-        if (!\is_string($token) || '' === trim($token)) {
-            throw new BadRequestHttpException('Missing CSRF token.');
-        }
-
-        if (!$csrfTokenManager->isTokenValid(new CsrfToken(self::ACTION_TOKEN_INTENTION, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function isStudentViewRequest(RequestStack $requestStack): bool

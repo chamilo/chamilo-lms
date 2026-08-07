@@ -32,7 +32,6 @@ const props = defineProps({
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: false },
   isSessionCategory: { type: Boolean, default: false },
-  csrfToken: { type: String, default: "" },
 })
 
 const emit = defineEmits([
@@ -82,7 +81,7 @@ const categoryIsVisible = computed(() => {
 })
 
 const onCatToggleVisibility = async () => {
-  if (!props.csrfToken) {
+  if (!props.canEdit) {
     return
   }
 
@@ -96,7 +95,6 @@ const onCatToggleVisibility = async () => {
       },
       {
         visible: !categoryIsVisible.value,
-        csrfToken: props.csrfToken,
       },
     )
     emit("visibility-changed")
@@ -106,7 +104,7 @@ const onCatToggleVisibility = async () => {
 }
 
 const onCatTogglePublish = async () => {
-  if (!props.csrfToken) {
+  if (!props.canEdit) {
     return
   }
 
@@ -114,7 +112,7 @@ const onCatTogglePublish = async () => {
     await lpService.manageCategory(
       props.category.iid,
       { cid: cid.value || 0, sid: sid.value || 0, gid: gid.value || 0 },
-      { action: "toggle_publish", csrfToken: props.csrfToken },
+      { action: "toggle_publish" },
     )
     emit("management-changed")
   } catch (error) {
@@ -128,11 +126,11 @@ const onCatDelete = () => {
     message: t("Are you sure you want to delete {0}?", [label]),
     accept: async () => {
       try {
-        await lpService.deleteCategory(
-          props.category.iid,
-          { cid: cid.value || 0, sid: sid.value || 0, gid: gid.value || 0 },
-          props.csrfToken,
-        )
+        await lpService.deleteCategory(props.category.iid, {
+          cid: cid.value || 0,
+          sid: sid.value || 0,
+          gid: gid.value || 0,
+        })
         emit("management-changed")
       } catch (error) {
         showErrorNotification(error)
@@ -338,7 +336,6 @@ const toggleOpen = () => {
             :canExportChamilo="canExportChamilo"
             :canExportScorm="canExportScorm"
             :canSeriousGame="canSeriousGame"
-            :csrf-token="csrfToken"
             :lp="element"
             :ringDash="ringDash"
             :ringValue="ringValue"

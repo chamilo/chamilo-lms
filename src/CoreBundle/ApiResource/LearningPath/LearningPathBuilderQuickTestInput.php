@@ -51,9 +51,6 @@ final class LearningPathBuilderQuickTestInput
     #[Groups(['learning_path_builder_quick_test:write'])]
     public int $lpId = 0;
 
-    #[Groups(['learning_path_builder_quick_test:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_quick_test:read', 'learning_path_builder_quick_test:write'])]
     public string $provider = '';
 

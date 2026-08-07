@@ -63,9 +63,6 @@ final class LearningPathBuilderItemPrerequisiteInput
     #[Groups(['learning_path_builder_item_prerequisite:read', 'learning_path_builder_item_prerequisite:write'])]
     public float $maxScore = 100.0;
 
-    #[Groups(['learning_path_builder_item_prerequisite:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_item_prerequisite:read'])]
     public bool $saved = false;
 

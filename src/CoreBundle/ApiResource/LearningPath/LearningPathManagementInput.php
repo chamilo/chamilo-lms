@@ -57,9 +57,6 @@ final class LearningPathManagementInput
     #[Groups(['learning_path_management:write'])]
     public ?bool $enabled = null;
 
-    #[Groups(['learning_path_management:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): ?int
     {
         return $this->lpId;

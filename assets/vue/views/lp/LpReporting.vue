@@ -48,10 +48,7 @@ const contextParams = computed(() => ({
   sid: Number(route.query.sid || 0),
   gid: Number(route.query.gid || 0),
 }))
-const filterOptions = computed(() => [
-  { label: t("All"), value: "" },
-  ...(report.value?.groupOptions || []),
-])
+const filterOptions = computed(() => [{ label: t("All"), value: "" }, ...(report.value?.groupOptions || [])])
 const selectedLearner = computed(() => {
   const detailUser = report.value?.detail?.user
   if (detailUser?.id) {
@@ -217,6 +214,34 @@ function goBack() {
     return
   }
 
+  if ("global-reporting-learner-course-detail" === route.query.returnTo) {
+    const returnUserId = Number(route.query.returnUserId || route.query.studentId || 0)
+    const returnCourseId = Number(route.query.returnCourseId || route.query.cid || 0)
+
+    if (returnUserId > 0 && returnCourseId > 0) {
+      router.push({
+        name: "GlobalReportingLearnerCourseDetail",
+        params: {
+          userId: returnUserId,
+          courseId: returnCourseId,
+        },
+        query: {
+          sid: Number(route.query.returnSessionId || route.query.sid || 0) || undefined,
+          returnPage: route.query.returnPage || undefined,
+          returnItemsPerPage: route.query.returnItemsPerPage || undefined,
+          returnKeyword: route.query.returnKeyword || undefined,
+          returnActive: route.query.returnActive || undefined,
+          returnSleepingDays: route.query.returnSleepingDays || undefined,
+          returnTo: route.query.returnParentTo || undefined,
+          returnList: route.query.returnList || undefined,
+          returnStatus: route.query.returnStatus || undefined,
+        },
+      })
+
+      return
+    }
+  }
+
   if (selfMode.value) {
     router.push({
       name: "LpRuntime",
@@ -284,7 +309,9 @@ function formatAttemptScore(attempt) {
 }
 
 function statusLabel(status) {
-  const normalized = String(status || "not attempted").trim().toLowerCase()
+  const normalized = String(status || "not attempted")
+    .trim()
+    .toLowerCase()
   const labels = {
     browsed: "Browsed",
     completed: "Completed",
@@ -357,15 +384,7 @@ function exportLearnerCsv() {
   }
 
   const rows = [
-    [
-      t("Learning object name"),
-      t("Type"),
-      t("Attempt"),
-      t("Status"),
-      t("Score"),
-      t("Time"),
-      t("Start date"),
-    ],
+    [t("Learning object name"), t("Type"), t("Attempt"), t("Status"), t("Score"), t("Time"), t("Start date")],
   ]
 
   for (const item of detailItems.value) {
@@ -395,10 +414,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
 
 <template>
   <section
-    :class="[
-      'flex flex-col gap-6',
-      { 'min-h-full rounded-lg border border-gray-25 bg-white p-5 lg:p-7': embedded },
-    ]"
+    :class="['flex flex-col gap-6', { 'min-h-full rounded-lg border border-gray-25 bg-white p-5 lg:p-7': embedded }]"
   >
     <SectionHeader
       :show-student-view-button="false"
@@ -613,7 +629,8 @@ onMounted(() => loadReporting(selectedStudentId.value))
             {{ selectedLearner?.firstname }} {{ selectedLearner?.lastname }}
           </h2>
           <p class="text-sm text-gray-60">
-            {{ selectedLearner?.username }}<template v-if="selectedLearner?.email"> · {{ selectedLearner.email }}</template>
+            {{ selectedLearner?.username
+            }}<template v-if="selectedLearner?.email"> · {{ selectedLearner.email }}</template>
           </p>
         </div>
 
@@ -761,7 +778,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
                           <td class="p-2">{{ interaction.id }}</td>
                           <td class="p-2">{{ interaction.type }}</td>
                           <td class="p-2">{{ interaction.result }}</td>
-                          <td class="p-2">{{ interaction.latency || interaction.time || '-' }}</td>
+                          <td class="p-2">{{ interaction.latency || interaction.time || "-" }}</td>
                         </tr>
                       </tbody>
                     </table>

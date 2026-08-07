@@ -190,7 +190,7 @@ if (!empty($details)) {
         }
     } elseif ('teacher_details' === $origin) {
         $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+        $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
         $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Trainers')];
         $nameTools = $completeName;
     } else {

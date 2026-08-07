@@ -179,6 +179,7 @@ export const chamiloIconToClass = {
   "xmark": "mdi mdi-close",
   "health-check": "mdi mdi-clipboard-pulse-outline",
   "promotion": "mdi mdi-school-outline",
+  "progress-star": "mdi mdi-progress-star",
   "help": "mdi mdi-face-agent",
   "robot": "mdi mdi-robot",
   "compass": "mdi mdi-compass-outline",

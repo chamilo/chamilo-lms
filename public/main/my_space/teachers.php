@@ -33,7 +33,7 @@ $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : n
 $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
-    'url' => 'index.php',
+    'url' => api_get_path(WEB_PATH).'reporting',
     'name' => get_lang('Reporting'),
 ];
 

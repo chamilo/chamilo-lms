@@ -371,7 +371,7 @@
             <BaseButton
               :disabled="!data.isStudent"
               :label="t('Reporting')"
-              :to-url="data.isStudent ? `/main/my_space/myStudents.php?student=${data.id}` : null"
+              :route="data.isStudent ? { name: 'GlobalReportingLearnerDetail', params: { userId: data.id } } : null"
               icon="tracking"
               only-icon
               size="small"

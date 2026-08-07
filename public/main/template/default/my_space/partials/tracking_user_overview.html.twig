@@ -38,10 +38,11 @@
                                                 <h5 class="text-sm md:text-base font-semibold text-gray-900">
                                                     <a
                                                             title="{{ 'Course'|get_lang }} - {{ course.title }}"
-                                                            href="{{ '/main/my_space/myStudents.php?details=true&course='
-                                                            ~ course.code
-                                                            ~ '&origin=tracking_course&id_session=0&student='
-                                                            ~ item.id }}"
+                                                            href="{{ '/reporting/learners/'
+                                                            ~ item.id
+                                                            ~ '/courses/'
+                                                            ~ course.real_id
+                                                            ~ '?sid=0' }}"
                                                             target="_blank"
                                                             class="hover:text-sky-600"
                                                     >

@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 $tool_name = get_lang('Import users list');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 $id_session = '';
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
     $id_session = intval($_GET['id_session']);

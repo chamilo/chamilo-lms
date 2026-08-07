@@ -256,10 +256,19 @@ const detail = reactive({
   resourceAccess: [],
 })
 
-const backRoute = computed(() => ({
-  name: "CourseReportingLearners",
-  query: contextQuery.value,
-}))
+const backRoute = computed(() => {
+  if (route.query.returnTo === "global-reporting-learner-detail") {
+    return {
+      name: "GlobalReportingLearnerDetail",
+      params: { userId: route.query.returnUserId || route.params.userId },
+    }
+  }
+
+  return {
+    name: "CourseReportingLearners",
+    query: contextQuery.value,
+  }
+})
 
 function formatDateTime(value) {
   if (!value) {

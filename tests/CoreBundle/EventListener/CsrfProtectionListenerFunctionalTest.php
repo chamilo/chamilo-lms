@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
@@ -26,6 +27,10 @@ final class CsrfProtectionListenerFunctionalTest extends WebTestCase
     private const string API_ROUTE = '/api/terms_and_conditions_translation';
 
     private const string ENFORCE_VAR = 'CHAMILO_CSRF_ENFORCE';
+
+    /** Message CsrfProtectionListener rejects with, used to tell its 403 apart
+     * from an authorization one on the same endpoint. */
+    private const string CSRF_REJECTION_MESSAGE = 'The security token is invalid.';
 
     private ?string $previousEnv = null;
 
@@ -134,6 +139,58 @@ final class CsrfProtectionListenerFunctionalTest extends WebTestCase
         $client->request('GET', self::API_ROUTE);
 
         self::assertNotSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * The two cases below use a real logged-in admin, so they exercise what the
+     * SPA actually does rather than just the status code of an anonymous call.
+     * Same user, same endpoint, same payload — only the origin differs.
+     */
+    public function testAuthenticatedWriteFromTheSameOriginPassesTheCsrfGate(): void
+    {
+        $client = $this->authenticatedClient();
+
+        $this->post($client, ['HTTP_ORIGIN' => 'http://localhost']);
+
+        // Deliberately not asserting on the status code: whatever the endpoint
+        // answers past this point (validation, authorization) is not this
+        // listener's business. What matters is that the rejection is not ours.
+        self::assertStringNotContainsString(
+            self::CSRF_REJECTION_MESSAGE,
+            (string) $client->getResponse()->getContent()
+        );
+    }
+
+    public function testAuthenticatedWriteWithoutOriginIsRejectedAsCsrf(): void
+    {
+        $client = $this->authenticatedClient();
+
+        $this->post($client, []);
+
+        // Same user, same endpoint, same payload as the case above — only the
+        // origin differs, so the message is what pins the CSRF gate as the one
+        // that rejected it rather than authorization.
+        self::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+        self::assertStringContainsString(
+            self::CSRF_REJECTION_MESSAGE,
+            (string) $client->getResponse()->getContent()
+        );
+    }
+
+    /**
+     * Logs in the admin account shipped by the fixtures, which yields a real
+     * session cookie instead of the fabricated one the other cases use.
+     */
+    private function authenticatedClient(): KernelBrowser
+    {
+        $client = self::createClient();
+        $admin = self::getContainer()->get(UserRepository::class)->findOneBy(['username' => 'admin']);
+
+        self::assertNotNull($admin, 'The admin fixture must exist; run doctrine:fixtures:load.');
+
+        $client->loginUser($admin);
+
+        return $client;
     }
 
     /**

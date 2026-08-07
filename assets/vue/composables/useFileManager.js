@@ -2,7 +2,6 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useStore } from "vuex"
 import { storeToRefs } from "pinia"
-import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
 import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
@@ -13,7 +12,6 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const route = useRoute()
   const router = useRouter()
   const store = useStore()
-  const { t } = useI18n()
   const securityStore = useSecurityStore()
   const { isAuthenticated, user } = storeToRefs(securityStore)
   // Always resolve course context so personal mode can reject a course root parent.
@@ -45,6 +43,8 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   // switching to My files listed personal_files under the course root → empty list.
   const storagePrefix = isCourseDocument ? "cd_" : "pf_"
   const SS_KEY_PARENT = `${storagePrefix}parent`
+  const SS_KEY_PREVIOUS_FOLDERS = `${storagePrefix}previousFolders`
+  const SS_KEY_CURRENT_FOLDER_TITLE = `${storagePrefix}currentFolderTitle`
   const LS_KEY_PREVIOUS_FOLDERS = `${storagePrefix}previousFolders`
   const LS_KEY_CURRENT_FOLDER_TITLE = `${storagePrefix}currentFolderTitle`
   const LS_KEY_IS_UPLOADED = `${storagePrefix}isUploaded`
@@ -134,7 +134,9 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const setParentInSession = (id) => {
     try {
       sessionStorage.setItem(SS_KEY_PARENT, String(Number(id || 0)))
-    } catch {}
+    } catch {
+      // Ignore browser storage errors.
+    }
   }
   const getParentFromSession = () => {
     try {
@@ -146,7 +148,46 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const clearParentInSession = () => {
     try {
       sessionStorage.removeItem(SS_KEY_PARENT)
-    } catch {}
+    } catch {
+      // Ignore browser storage errors.
+    }
+  }
+
+  const persistNavigationInSession = () => {
+    try {
+      sessionStorage.setItem(SS_KEY_PREVIOUS_FOLDERS, JSON.stringify(previousFolders.value))
+      sessionStorage.setItem(SS_KEY_CURRENT_FOLDER_TITLE, currentFolderTitle.value)
+    } catch {
+      // Ignore browser storage errors.
+    }
+  }
+
+  const restoreNavigationFromSession = () => {
+    try {
+      const storedFolders = sessionStorage.getItem(SS_KEY_PREVIOUS_FOLDERS)
+      const storedTitle = sessionStorage.getItem(SS_KEY_CURRENT_FOLDER_TITLE)
+
+      if (storedFolders) {
+        const parsedFolders = JSON.parse(storedFolders)
+        previousFolders.value = Array.isArray(parsedFolders) ? parsedFolders : []
+      }
+
+      if (storedTitle) {
+        currentFolderTitle.value = storedTitle
+      }
+    } catch {
+      previousFolders.value = []
+      currentFolderTitle.value = "Root"
+    }
+  }
+
+  const clearNavigationInSession = () => {
+    try {
+      sessionStorage.removeItem(SS_KEY_PREVIOUS_FOLDERS)
+      sessionStorage.removeItem(SS_KEY_CURRENT_FOLDER_TITLE)
+    } catch {
+      // Ignore browser storage errors.
+    }
   }
 
   const flattenFilters = (filtersObj) => {
@@ -204,6 +245,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       filters.value["resourceNode.parent"] = data.resourceNode.id
       currentFolderTitle.value = data.resourceNode.title
       setParentInSession(filters.value["resourceNode.parent"])
+      persistNavigationInSession()
       onUpdateOptions()
     }
   }
@@ -218,11 +260,13 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       currentFolderTitle.value = "Root"
     }
     setParentInSession(filters.value["resourceNode.parent"])
+    persistNavigationInSession()
     onUpdateOptions()
   }
 
   const resetToRoot = () => {
     clearParentInSession()
+    clearNavigationInSession()
     previousFolders.value = []
     currentFolderTitle.value = "Root"
     filters.value["resourceNode.parent"] = getRootParentId()
@@ -260,17 +304,23 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     // postMessage fallback (both formats)
     try {
       window.parent.postMessage(tinymcePayload, window.location.origin)
-    } catch {}
+    } catch {
+      // Ignore cross-window access errors.
+    }
     try {
       window.parent.postMessage({ url }, "*")
-    } catch {}
+    } catch {
+      // Ignore cross-window access errors.
+    }
 
     // Close TinyMCE dialog if present
     try {
       if (parent?.tinymce?.activeEditor?.windowManager) {
         parent.tinymce.activeEditor.windowManager.close()
       }
-    } catch {}
+    } catch {
+      // Ignore cross-window access errors.
+    }
 
     // CKEditor legacy support
     function getUrlParam(paramName) {
@@ -445,6 +495,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     localStorage.setItem(LS_KEY_IS_UPLOADED, "true")
     localStorage.setItem(LS_KEY_UPLOAD_PARENT, String(filters.value["resourceNode.parent"] || 0))
     setParentInSession(filters.value["resourceNode.parent"])
+    persistNavigationInSession()
 
     await router.push({
       name: uploadRoute,
@@ -470,6 +521,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
       if (!hasUsableRouteParent) {
         clearParentInSession()
+        clearNavigationInSession()
         previousFolders.value = []
         currentFolderTitle.value = "Root"
       }
@@ -478,6 +530,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       const savedCurrentFolderTitle = localStorage.getItem(LS_KEY_CURRENT_FOLDER_TITLE)
       const isUploaded = localStorage.getItem(LS_KEY_IS_UPLOADED)
       const uploadParentNodeId = Number(localStorage.getItem(LS_KEY_UPLOAD_PARENT) || 0)
+      const sessionParentId = getParentFromSession()
 
       let resolvedParent = rootParentId
 
@@ -485,15 +538,12 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
         resolvedParent = uploadParentNodeId
         localStorage.removeItem(LS_KEY_IS_UPLOADED)
         localStorage.removeItem(LS_KEY_UPLOAD_PARENT)
-      } else {
-        const ssParent = getParentFromSession()
-        if (isValidParentForMode(ssParent)) {
-          resolvedParent = ssParent
-        } else if (isValidParentForMode(queryParentId)) {
-          resolvedParent = queryParentId
-        } else if (isValidParentForMode(routeNodeId)) {
-          resolvedParent = routeNodeId
-        }
+      } else if (isValidParentForMode(sessionParentId)) {
+        resolvedParent = sessionParentId
+      } else if (isValidParentForMode(queryParentId)) {
+        resolvedParent = queryParentId
+      } else if (isValidParentForMode(routeNodeId)) {
+        resolvedParent = routeNodeId
       }
 
       if (!isValidParentForMode(resolvedParent)) {
@@ -503,17 +553,34 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       filters.value["resourceNode.parent"] = resolvedParent
       setParentInSession(resolvedParent)
 
+      let restoredNavigation = false
+
       if (savedPreviousFolders) {
         try {
-          previousFolders.value = JSON.parse(savedPreviousFolders)
+          const parsedFolders = JSON.parse(savedPreviousFolders)
+          previousFolders.value = Array.isArray(parsedFolders) ? parsedFolders : []
         } catch {
           previousFolders.value = []
         }
         localStorage.removeItem(LS_KEY_PREVIOUS_FOLDERS)
+        restoredNavigation = true
       }
       if (savedCurrentFolderTitle) {
         currentFolderTitle.value = savedCurrentFolderTitle
         localStorage.removeItem(LS_KEY_CURRENT_FOLDER_TITLE)
+        restoredNavigation = true
+      }
+
+      if (!restoredNavigation && resolvedParent === sessionParentId && resolvedParent !== rootParentId) {
+        restoreNavigationFromSession()
+      }
+
+      if (resolvedParent === rootParentId) {
+        previousFolders.value = []
+        currentFolderTitle.value = "Root"
+        clearNavigationInSession()
+      } else {
+        persistNavigationInSession()
       }
 
       onUpdateOptions()

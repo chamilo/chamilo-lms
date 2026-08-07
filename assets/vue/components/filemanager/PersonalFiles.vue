@@ -40,13 +40,22 @@
         </div>
       </div>
       <div class="breadcrumbs">
-        <span
-          v-for="(folder, index) in previousFolders"
-          :key="index"
+        <button
+          type="button"
+          class="text-primary hover:underline"
+          @click="resetToRoot"
         >
-          <span>{{ folder.title }}</span> /
-        </span>
-        <span>{{ currentFolderTitle }}</span>
+          Root
+        </button>
+        <template v-if="currentFolderTitle !== 'Root'">
+          <span
+            v-for="(folder, index) in previousFolders.slice(1)"
+            :key="`${folder.id}-${index}`"
+          >
+            / {{ folder.title }}
+          </span>
+          <span>/ {{ currentFolderTitle }}</span>
+        </template>
       </div>
     </div>
 
@@ -374,6 +383,7 @@ const {
   currentFolderTitle,
   handleClickFile,
   goBack,
+  resetToRoot,
   returnToEditor: baseReturnToEditor,
   toggleViewMode,
   viewModeIcon,

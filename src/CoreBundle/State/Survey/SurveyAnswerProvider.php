@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<SurveyAnswer>
@@ -38,8 +37,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 {
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
-
-    public const string CSRF_TOKEN_ID = 'survey_answer';
 
     /**
      * @var array<int, string>
@@ -64,7 +61,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -123,7 +119,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         $response->profileFields = $user instanceof User ? $this->getSurveyAnswerProfileFields($survey, $user) : [];
         $response->pages = $this->buildPages($survey, $response->questions);
         $response->settings = $this->getSettings();
-        $response->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->isFinished = $isFinished;
         $response->message = $message;
 

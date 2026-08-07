@@ -395,7 +395,6 @@ const settings = ref({})
 const anonymousLink = ref("")
 const selectedUserIds = ref([])
 const selectedGroupIds = ref([])
-const csrfToken = ref("")
 const mailSubject = ref("")
 const mailText = ref("")
 const sendMail = ref(true)
@@ -568,7 +567,6 @@ async function loadInvitationData() {
     }
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : []
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : []
-    csrfToken.value = response.csrfToken || ""
     mailSubject.value = response.mailSubject || defaultSubject()
     mailText.value = response.mailText || defaultMailText()
 
@@ -598,7 +596,6 @@ async function publishSurvey() {
   try {
     const response = await surveyService.publishSurveyInvitations(
       {
-        csrfToken: csrfToken.value,
         selectedUserIds: selectedUserIds.value,
         selectedGroupIds: selectedGroupIds.value,
         mailSubject: mailSubject.value,
@@ -620,7 +617,6 @@ async function publishSurvey() {
     invitations.value = Array.isArray(response.invitations) ? response.invitations : invitations.value
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : selectedUserIds.value
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : selectedGroupIds.value
-    csrfToken.value = response.csrfToken || csrfToken.value
     settings.value = response.settings || settings.value
     if (settings.value?.canShowAnsweredDetails === false && activeTab.value === "answered") {
       activeTab.value = "invited"

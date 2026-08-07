@@ -75,9 +75,6 @@ final class SurveyCopy
     #[Groups(['survey_copy:read'])]
     public ?int $newSurveyId = null;
 
-    #[Groups(['survey_copy:read', 'survey_copy:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['survey_copy:write'])]
     public ?int $targetCourseId = null;
 

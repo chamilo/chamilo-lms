@@ -424,7 +424,6 @@ const firstInvalidFieldId = ref("")
 const questionUrl = ref("")
 const settings = ref({})
 const options = ref({})
-const csrfToken = ref("")
 const showAdvancedSettings = ref(false)
 
 const form = ref(createEmptyForm())
@@ -666,7 +665,6 @@ function normalizeForm(data) {
 
   settings.value = data.settings || {}
   options.value = data.options || {}
-  csrfToken.value = data.csrfToken || ""
   questionUrl.value = data.questionUrl || ""
 }
 
@@ -740,7 +738,6 @@ function buildPayload() {
     duration: durationValue.value > 0 ? durationValue.value : null,
     availableFrom: toPayloadDate(form.value.availableFrom),
     availableUntil: toPayloadDate(form.value.availableUntil),
-    csrfToken: csrfToken.value,
   }
 
   if (payload.anonymous || !payload.showFormProfile) {
@@ -793,7 +790,6 @@ async function submitForm() {
     )
 
     questionUrl.value = saved.questionUrl || questionUrl.value
-    csrfToken.value = saved.csrfToken || csrfToken.value
 
     if (isEditMode.value && isLearningPathContext.value) {
       await router.push(buildLearningPathBuilderRoute())

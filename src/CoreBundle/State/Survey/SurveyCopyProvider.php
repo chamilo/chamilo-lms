@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<SurveyCopy>
@@ -38,7 +37,6 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -71,7 +69,6 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         $copy = new SurveyCopy();
         $copy->surveyId = $surveyId;
         $copy->canCopy = true;
-        $copy->csrfToken = (string) $this->csrfTokenManager->getToken(SurveyActionProcessor::CSRF_TOKEN_ID);
         $copy->survey = [
             'iid' => $surveyId,
             'title' => $survey->getTitle(),

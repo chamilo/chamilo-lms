@@ -33,8 +33,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -42,10 +40,7 @@ use Throwable;
  */
 final readonly class SurveyActionProcessor implements ProcessorInterface
 {
-    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
-
-    public const string CSRF_TOKEN_ID = 'survey_action';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -53,7 +48,6 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -74,7 +68,6 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, self::CSRF_TOKEN_ID, $payload);
 
         $operationName = (string) $operation->getName();
         if ('post_survey_action_bulk_delete' === $operationName) {
@@ -277,19 +270,11 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
         if ($data instanceof SurveyAction) {
             return [
-                'csrfToken' => $data->csrfToken,
                 'surveyIds' => $data->surveyIds,
             ];
         }
 
         return [];
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function duplicateSurvey(CSurvey $source, Course $course, ?Session $session): CSurvey

@@ -61,9 +61,6 @@ final class SurveyInvitation
     #[Groups(['survey_invitation:read', 'survey_invitation:write'])]
     public ?int $surveyId = null;
 
-    #[Groups(['survey_invitation:read', 'survey_invitation:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['survey_invitation:read'])]
     public bool $canManage = false;
 

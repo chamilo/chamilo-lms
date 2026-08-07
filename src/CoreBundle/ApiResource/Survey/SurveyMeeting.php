@@ -131,9 +131,6 @@ final class SurveyMeeting
     #[Groups(['survey_meeting:read', 'survey_meeting:write'])]
     public string $surveyLanguage = '';
 
-    #[Groups(['survey_meeting:read', 'survey_meeting:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */

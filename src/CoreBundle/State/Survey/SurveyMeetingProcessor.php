@@ -26,8 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -35,8 +33,6 @@ use Throwable;
  */
 final readonly class SurveyMeetingProcessor implements ProcessorInterface
 {
-    use SurveyCsrfTokenValidationTrait;
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -44,7 +40,6 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         private SurveyMeetingProvider $surveyMeetingProvider,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
     ) {}
 
@@ -60,7 +55,6 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyMeetingProvider::CSRF_TOKEN_ID, $payload);
 
         $course = $this->surveyMeetingProvider->getCourse($request);
         $session = $this->surveyMeetingProvider->getSession($request);
@@ -138,18 +132,10 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
                 'surveyLanguage' => $data->surveyLanguage,
                 'slots' => $data->slots,
                 'selectedSlots' => $data->selectedSlots,
-                'csrfToken' => $data->csrfToken,
             ];
         }
 
         return [];
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(SurveyMeetingProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     /**

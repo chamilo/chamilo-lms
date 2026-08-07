@@ -491,9 +491,6 @@ const searchTerm = ref(getSearchQuery())
 const isSearchVisible = ref(Boolean(getSearchQuery()))
 const activeSearch = computed(() => getSearchQuery())
 const selectableSurveys = computed(() => surveys.value.filter((survey) => survey.canDelete))
-const selectedSurveys = computed(() =>
-  surveys.value.filter((survey) => selectedSurveyIds.value.includes(Number(survey.iid))),
-)
 const areAllSelectableSurveysSelected = computed(
   () =>
     selectableSurveys.value.length > 0 &&
@@ -766,10 +763,6 @@ function pruneSelection() {
   selectedSurveyIds.value = selectedSurveyIds.value.filter((id) => availableIds.has(id))
 }
 
-function getBulkActionCsrfToken() {
-  return selectedSurveys.value.find((survey) => survey.actionCsrfToken)?.actionCsrfToken || ""
-}
-
 function confirmBulkDelete() {
   if (selectedSurveyIds.value.length === 0) {
     return
@@ -788,11 +781,7 @@ async function performBulkDelete() {
   isLoading.value = true
 
   try {
-    const response = await surveyService.runSurveyBulkDelete(
-      getContextParams(),
-      selectedSurveyIds.value,
-      getBulkActionCsrfToken(),
-    )
+    const response = await surveyService.runSurveyBulkDelete(getContextParams(), selectedSurveyIds.value)
 
     successMessage.value = response.message ? t(response.message) : t("Updated")
     clearSelection()
@@ -864,7 +853,7 @@ async function performSurveyAction(survey, action) {
   isLoading.value = true
 
   try {
-    const response = await surveyService.runSurveyAction(getContextParams(), survey.iid, action, survey.actionCsrfToken)
+    const response = await surveyService.runSurveyAction(getContextParams(), survey.iid, action)
 
     successMessage.value = response.message ? t(response.message) : t("Updated")
     await loadSurveys()

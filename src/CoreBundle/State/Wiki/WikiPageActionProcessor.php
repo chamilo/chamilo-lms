@@ -27,8 +27,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -44,7 +42,6 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiNotificationService $notificationService,
     ) {}
 
@@ -85,8 +82,6 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         )) {
             throw new AccessDeniedHttpException('You are not allowed to manage Wiki pages in this context.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $user = $this->security->getUser();
         if (!$user instanceof User) {
@@ -603,12 +598,5 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         ;
 
         return $mailCue instanceof CWikiMailcue ? $mailCue : null;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiPageAction::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

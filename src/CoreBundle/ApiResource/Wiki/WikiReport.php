@@ -88,9 +88,6 @@ final class WikiReport
     public bool $allChangesSubscribed = false;
 
     #[Groups(['wiki_report:read'])]
-    public string $managementCsrfToken = '';
-
-    #[Groups(['wiki_report:read'])]
     public bool $studentView = false;
 
     #[Groups(['wiki_report:read'])]

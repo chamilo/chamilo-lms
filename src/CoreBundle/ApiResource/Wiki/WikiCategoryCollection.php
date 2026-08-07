@@ -48,9 +48,6 @@ final class WikiCategoryCollection
     #[Groups(['wiki_categories:read'])]
     public bool $canManage = false;
 
-    #[Groups(['wiki_categories:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array{id:int, title:string, label:string, pathTitle:string, parentId:?int, level:int, pageCount:int, descendantCount:int}>
      */

@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 
@@ -42,7 +41,6 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiDiscussionScoreCalculator $scoreCalculator,
     ) {}
@@ -188,9 +186,6 @@ final readonly class WikiDiscussionProvider implements ProviderInterface
         $discussion->canComment = $canComment;
         $discussion->canRate = $canRate;
         $discussion->canSubscribe = $canSubscribe;
-        $discussion->csrfToken = $canComment || $canManage || $canSubscribe
-            ? (string) $this->csrfTokenManager->getToken(WikiDiscussion::CSRF_TOKEN_ID)
-            : '';
         $discussion->commentCount = \count($items);
         $discussion->scoredCommentCount = \count($ratings);
         $discussion->averageRating = $this->scoreCalculator->average($ratings);

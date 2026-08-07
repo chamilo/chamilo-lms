@@ -268,7 +268,6 @@ function createEmptyCategoryData() {
   return {
     enabled: false,
     canManage: false,
-    csrfToken: "",
     categories: [],
   };
 }
@@ -381,7 +380,6 @@ async function saveCategory() {
     const payload = {
       title,
       parentId: Number(categoryForm.parentId || 0) || null,
-      csrfToken: categoryData.csrfToken,
     };
 
     if (editingCategoryId.value > 0) {
@@ -438,11 +436,7 @@ async function deleteCategory(category) {
   successMessage.value = "";
 
   try {
-    await wikiService.deleteCategory(
-      Number(category.id),
-      getContextParams(),
-      categoryData.csrfToken,
-    );
+    await wikiService.deleteCategory(Number(category.id), getContextParams());
     if (Number(editingCategoryId.value) === Number(category.id)) {
       resetForm();
     }

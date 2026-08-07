@@ -185,9 +185,6 @@ final class WikiPage
     public bool $canPrint = false;
 
     #[Groups(['wiki_page:read'])]
-    public string $managementCsrfToken = '';
-
-    #[Groups(['wiki_page:read'])]
     public bool $canCreate = false;
 
     #[Groups(['wiki_page:read'])]

@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Wiki\WikiPageExportProcessor;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     shortName: 'WikiPageExportAction',
@@ -46,9 +45,6 @@ final class WikiPageExportAction
 
     #[ApiProperty(identifier: true)]
     public ?int $pageId = null;
-
-    #[Groups(['wiki_page_export:write'])]
-    public string $csrfToken = '';
 
     public function getPageId(): ?int
     {

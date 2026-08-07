@@ -160,9 +160,6 @@ final class WikiPageForm
     public bool $canManageCategories = false;
 
     #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
-    public string $csrfToken = '';
-
-    #[Groups(['wiki_page_form:read', 'wiki_page_form:write'])]
     public int $baseVersion = 0;
 
     #[Groups(['wiki_page_form:read'])]

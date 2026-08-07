@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<WikiCategoryCollection>
@@ -25,14 +24,11 @@ final readonly class WikiCategoryProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'wiki_category_management';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiCategoryService $categoryService,
     ) {}
 
@@ -81,7 +77,6 @@ final readonly class WikiCategoryProvider implements ProviderInterface
         $resource = new WikiCategoryCollection();
         $resource->enabled = $enabled;
         $resource->canManage = true;
-        $resource->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $resource->categories = $enabled ? $this->categoryService->getManagementRows($course, $session) : [];
 
         return $resource;

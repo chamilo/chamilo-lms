@@ -63,8 +63,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 final class WikiDiscussion
 {
-    public const string CSRF_TOKEN_ID = 'wiki_discussion';
-
     #[ApiProperty(identifier: true)]
     #[Groups(['wiki_discussion:read'])]
     public ?int $pageId = null;
@@ -118,9 +116,6 @@ final class WikiDiscussion
     public bool $canSubscribe = false;
 
     #[Groups(['wiki_discussion:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['wiki_discussion:read'])]
     public int $commentCount = 0;
 
     #[Groups(['wiki_discussion:read'])]
@@ -140,9 +135,6 @@ final class WikiDiscussion
 
     #[Groups(['wiki_discussion:write'])]
     public ?int $rating = null;
-
-    #[Groups(['wiki_discussion:write'])]
-    public string $writeCsrfToken = '';
 
     public function getPageId(): ?int
     {

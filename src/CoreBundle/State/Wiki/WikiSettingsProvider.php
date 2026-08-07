@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProviderInterface<WikiSettings> */
 final readonly class WikiSettingsProvider implements ProviderInterface
@@ -26,7 +25,6 @@ final readonly class WikiSettingsProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -71,7 +69,6 @@ final readonly class WikiSettingsProvider implements ProviderInterface
             'wiki_html_strict_filtering',
             false,
         );
-        $settings->csrfToken = (string) $this->csrfTokenManager->getToken(WikiSettings::CSRF_TOKEN_ID);
 
         return $settings;
     }

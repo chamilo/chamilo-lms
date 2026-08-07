@@ -37,7 +37,7 @@ final class CsrfProtectionListenerTest extends TestCase
     private const string RESOURCE_CLASS = 'App\Entity\Dummy';
     private const string OPERATION_NAME = 'dummy_post';
 
-    private MockObject&CsrfTokenManagerInterface $csrfTokenManager;
+    private CsrfTokenManagerInterface&MockObject $csrfTokenManager;
 
     protected function setUp(): void
     {

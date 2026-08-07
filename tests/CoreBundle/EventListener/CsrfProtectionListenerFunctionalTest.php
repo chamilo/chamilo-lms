@@ -25,19 +25,58 @@ final class CsrfProtectionListenerFunctionalTest extends WebTestCase
 {
     private const string API_ROUTE = '/api/terms_and_conditions_translation';
 
+    private const string ENFORCE_VAR = 'CHAMILO_CSRF_ENFORCE';
+
+    private ?string $previousEnv = null;
+
+    private ?string $previousServer = null;
+
     protected function setUp(): void
     {
         // The listener only rejects when enforcing; the shipped default is
         // log-only. The kernel must be down so the parameter is re-resolved.
-        static::ensureKernelShutdown();
-        $_SERVER['CHAMILO_CSRF_ENFORCE'] = '1';
+        self::ensureKernelShutdown();
+
+        $this->previousEnv = $_ENV[self::ENFORCE_VAR] ?? null;
+        $this->previousServer = $_SERVER[self::ENFORCE_VAR] ?? null;
+
+        // Both superglobals, in this order of importance: EnvVarProcessor reads
+        // $_ENV first and only falls back to $_SERVER. Setting $_SERVER alone
+        // works on a machine whose .env does not define the variable, and stops
+        // working wherever it does -- which is exactly what CI does, since
+        // .env.dist ships it set to false.
+        $_ENV[self::ENFORCE_VAR] = $_SERVER[self::ENFORCE_VAR] = '1';
     }
 
     protected function tearDown(): void
     {
-        unset($_SERVER['CHAMILO_CSRF_ENFORCE']);
+        // Put both back the way they were, so a value coming from .env is not
+        // wiped for whatever runs next in the same process.
+        if (null === $this->previousEnv) {
+            unset($_ENV[self::ENFORCE_VAR]);
+        } else {
+            $_ENV[self::ENFORCE_VAR] = $this->previousEnv;
+        }
+
+        if (null === $this->previousServer) {
+            unset($_SERVER[self::ENFORCE_VAR]);
+        } else {
+            $_SERVER[self::ENFORCE_VAR] = $this->previousServer;
+        }
 
         parent::tearDown();
+    }
+
+    /**
+     * Sanity check: if enforcement does not actually reach the listener, every
+     * rejection test below would fail with a confusing "401 is not 403" rather
+     * than pointing at the configuration.
+     */
+    public function testEnforcementReachesTheListener(): void
+    {
+        self::createClient();
+
+        self::assertTrue(self::getContainer()->getParameter('chamilo.csrf.enforce'));
     }
 
     public function testForgedRequestIsRejectedBeforeAuthentication(): void
@@ -81,7 +120,7 @@ final class CsrfProtectionListenerFunctionalTest extends WebTestCase
 
     public function testRequestWithoutSessionCookieIsNotValidated(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $this->post($client, []);
 
@@ -126,8 +165,8 @@ final class CsrfProtectionListenerFunctionalTest extends WebTestCase
      */
     private function clientWithSessionCookie(): KernelBrowser
     {
-        $client = static::createClient();
-        $sessionName = static::getContainer()->get('session.factory')->createSession()->getName();
+        $client = self::createClient();
+        $sessionName = self::getContainer()->get('session.factory')->createSession()->getName();
 
         $client->getCookieJar()->set(new Cookie($sessionName, 'a-session-id'));
 

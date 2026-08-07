@@ -59,6 +59,17 @@ mcp:
         get_course_test_questions. Unlike the other course tools, these three are also available
         platform-wide (not only for the test's own course) to users with a question manager or
         administrator role.
+
+        To rewrite exercise HTML bodies without renaming titles, use
+        edit_course_test_question_description (question description HTML only — the short
+        question title text stays English) and edit_course_test_answer_description (answer body
+        HTML only — correctness/score/feedback stay as they are). Those two write tools require
+        the authenticated teacher of the course.
+
+        For surveys, get_course_surveys and get_course_survey_questions list structure and HTML
+        bodies. edit_course_survey_description updates the survey intro only (title unchanged).
+        edit_course_survey_question_description and edit_course_survey_answer_description update
+        question and option HTML bodies. Survey write tools also require the course teacher.
     client_transports:
         stdio: true
         http: true

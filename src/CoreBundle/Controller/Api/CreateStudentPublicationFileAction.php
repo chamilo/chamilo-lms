@@ -42,6 +42,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         }
 
         $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
+        $resourceLinkList = $this->buildResourceLinkListFromContext($request, []);
 
         $studentPublication = new CStudentPublication();
 
@@ -51,7 +52,10 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             $request,
             $em,
             $fileExistsOption,
-            $translator
+            $translator,
+            null,
+            null,
+            $resourceLinkList,
         );
 
         $studentPublication->setTitle($result['title']);

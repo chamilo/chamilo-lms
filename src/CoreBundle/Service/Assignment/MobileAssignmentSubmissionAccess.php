@@ -72,11 +72,22 @@ final readonly class MobileAssignmentSubmissionAccess
         Course $course,
         ?Session $session,
     ): CStudentPublication {
-        foreach ($this->studentPublicationRepository->findVisibleAssignmentsForStudent($course, $session) as $row) {
-            $assignment = \is_array($row) ? ($row[0] ?? null) : $row;
+        $assignment = $this->findVisibleAssignment($assignmentId, $course, $session);
+        if ($assignment instanceof CStudentPublication) {
+            return $assignment;
+        }
 
-            if ($assignment instanceof CStudentPublication && $assignment->getIid() === $assignmentId) {
-                return $assignment;
+        if ($session instanceof Session) {
+            $candidate = $this->studentPublicationRepository->find($assignmentId);
+            $sessionLink = $candidate instanceof CStudentPublication
+                ? $candidate->getResourceNode()?->getResourceLinkByContext($course, $session)
+                : null;
+
+            if (null === $sessionLink) {
+                $assignment = $this->findVisibleAssignment($assignmentId, $course, null);
+                if ($assignment instanceof CStudentPublication) {
+                    return $assignment;
+                }
             }
         }
 
@@ -185,6 +196,22 @@ final readonly class MobileAssignmentSubmissionAccess
         if (!$capabilities['canDelete']) {
             throw new AccessDeniedHttpException('This assignment submission cannot be deleted.');
         }
+    }
+
+    private function findVisibleAssignment(
+        int $assignmentId,
+        Course $course,
+        ?Session $session,
+    ): ?CStudentPublication {
+        foreach ($this->studentPublicationRepository->findVisibleAssignmentsForStudent($course, $session) as $row) {
+            $assignment = \is_array($row) ? ($row[0] ?? null) : $row;
+
+            if ($assignment instanceof CStudentPublication && $assignment->getIid() === $assignmentId) {
+                return $assignment;
+            }
+        }
+
+        return null;
     }
 
     private function assertStudentSubscribed(User $user, Course $course, ?Session $session): void

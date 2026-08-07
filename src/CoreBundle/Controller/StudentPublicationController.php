@@ -175,12 +175,21 @@ class StudentPublicationController extends AbstractController
         $user = $security->getUser();
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
+        $groupId = (int) ($this->cidReqHelper->getGroupId() ?? 0);
+        $group = $this->cidReqHelper->getGroupEntity();
         $assignment = $repo->find($assignmentId);
 
-        if (
-            !$assignment instanceof CStudentPublication
-            || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
-        ) {
+        if (!$assignment instanceof CStudentPublication) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $resourceNode = $assignment->getResourceNode();
+        $contextLink = $resourceNode?->getResourceLinkByContext($course, $session, $group);
+        if (null === $contextLink && null !== $session && null === $group) {
+            $contextLink = $resourceNode?->getResourceLinkByContext($course);
+        }
+
+        if (null === $contextLink) {
             return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
         }
 
@@ -197,6 +206,10 @@ class StudentPublicationController extends AbstractController
                 $managementContext['session'],
             );
         } catch (AccessDeniedHttpException|NotFoundHttpException) {
+            if (!$security->isGranted('EDIT', $resourceNode)) {
+                return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+            }
+
             // Reading the assignment remains available to teachers and administrators.
             // Management capabilities are exposed only when the student context is valid.
         }
@@ -208,6 +221,9 @@ class StudentPublicationController extends AbstractController
         [$submissions, $total] = $repo->findAssignmentSubmissionsPaginated(
             $assignmentId,
             $user,
+            $course,
+            $session,
+            $groupId,
             $page,
             $itemsPerPage,
             $order

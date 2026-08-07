@@ -353,6 +353,45 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <script src="../vendor/tinymce/js/tinymce/jquery.tinymce.min.js?v=<?php echo $version; ?>" defer></script>
     <script src="jscss/oel-teachdoc-x.js?v=<?php echo $version; ?>"></script>
     <script src="../resources/js/cstudio-i18n.js?v=<?php echo $version; ?>"></script>
+    <?php
+$cstudioProjectId = $id_parent > 0 ? (int) $id_parent : (int) $idPage;
+$cstudioLpId = 0;
+$cstudioCourseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$cstudioSessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$cstudioGroupId = isset($_GET['gid']) ? (int) $_GET['gid'] : 0;
+
+if ($cstudioProjectId > 0) {
+    $cstudioLpId = (int) $VDB->get_value_by_query(
+        'SELECT lp_id FROM plugin_oel_tools_teachdoc WHERE id = '.(int) $cstudioProjectId,
+        'lp_id'
+    );
+}
+
+if ($cstudioLpId > 0) {
+    $cstudioLp = Container::getLpRepository()->find($cstudioLpId);
+    $cstudioResourceLink = $cstudioLp?->getFirstResourceLink();
+
+    if ($cstudioCourseId <= 0) {
+        $cstudioCourseId = (int) ($cstudioResourceLink?->getCourse()?->getId() ?? 0);
+    }
+    if (!isset($_GET['sid'])) {
+        $cstudioSessionId = (int) ($cstudioResourceLink?->getSession()?->getId() ?? 0);
+    }
+    if (!isset($_GET['gid'])) {
+        $cstudioGroupId = (int) ($cstudioResourceLink?->getGroup()?->getIid() ?? 0);
+    }
+}
+?>
+    <script>
+      window.cstudioChamiloContentConfig = <?php echo json_encode([
+          'enabled' => $cstudioLpId > 0 && $cstudioCourseId > 0,
+          'lpId' => $cstudioLpId,
+          'cid' => $cstudioCourseId,
+          'sid' => $cstudioSessionId,
+          'gid' => $cstudioGroupId,
+          'apiBase' => api_get_path(WEB_PATH).'api',
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+    </script>
     <script src="jscss/oel-teachdoc.js?v=<?php echo $version; ?>"></script>
     <script>
       window.cstudioAiConfig = <?php echo json_encode([

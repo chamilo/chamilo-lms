@@ -8,7 +8,6 @@
     >
       {{ t("Loading...") }}
     </div>
-
     <div
       v-else
       class="space-y-6"
@@ -24,7 +23,6 @@
           type="black"
           @click="goBack"
         />
-
         <template v-if="forceStudentView && !isAfterEndDate && canSubmitMore">
           <BaseButton
             v-if="allowTextFlag && !allowFileFlag"
@@ -57,8 +55,7 @@
             />
           </template>
         </template>
-
-        <template v-else-if="isTeacherUI">
+        <template v-else-if="isTeacherUI && !forceStudentView">
           <BaseButton
             :label="t('Add document')"
             icon="file-add"
@@ -120,7 +117,6 @@
           />
         </template>
       </div>
-
       <div
         v-if="forceStudentView && isAfterEndDate"
         class="text-red-600 border border-red-300 p-4 rounded bg-red-50"
@@ -136,7 +132,6 @@
           v-html="assignment.description"
         />
       </div>
-
       <div
         v-if="addedDocuments.length"
         class="bg-gray-10 border-t border-gray-25 p-4 mt-0"
@@ -157,7 +152,6 @@
           </li>
         </ul>
       </div>
-
       <div>
         <StudentSubmissionList
           v-if="forceStudentView"
@@ -176,7 +170,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -186,12 +179,10 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
-
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
-
 const { t } = useI18n()
 const { cid, sid, gid } = getCourseContext()
 const route = useRoute()
@@ -202,10 +193,14 @@ const notification = useNotification()
 
 const assignmentId = parseInt(route.params.id, 10)
 const fromLearnpath = route.query.origin === "learnpath"
+const requestedStudentView = computed(() =>
+  ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
+)
 
 const isTeacherUI = computed(() => securityStore.isCurrentTeacher)
-
-const forceStudentView = computed(() => !isTeacherUI.value || platformConfigStore.isStudentViewActive)
+const forceStudentView = computed(
+  () => requestedStudentView.value || !isTeacherUI.value || platformConfigStore.isStudentViewActive,
+)
 
 const assignment = ref(null)
 const addedDocuments = ref([])
@@ -216,7 +211,6 @@ const oneSubmissionPerUser = computed(
   () => platformConfigStore.getSetting("work.allow_only_one_student_publication_per_user") === "true",
 )
 const canSubmitMore = computed(() => !oneSubmissionPerUser.value || studentSubmissionCount.value === 0)
-
 function buildCidParams() {
   return {
     cid,
@@ -230,7 +224,6 @@ function fromApiLocal(str) {
   const s = String(str).includes("T") ? String(str) : String(str).replace(" ", "T")
   return new Date(s)
 }
-
 const expiresOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.expiresOn))
 const endsOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.endsOn))
 const isAfterEndDate = computed(() => (endsOnDate.value ? new Date() > endsOnDate.value : false))
@@ -239,7 +232,6 @@ const isAfterDeadline = isAfterEndDate
 const allowTextFlag = computed(
   () => assignment.value?.allowTextAssignment === 0 || assignment.value?.allowTextAssignment === 1,
 )
-
 const allowFileFlag = computed(
   () => assignment.value?.allowTextAssignment === 0 || assignment.value?.allowTextAssignment === 2,
 )
@@ -255,7 +247,6 @@ async function loadAddedDocuments() {
     console.warn("[AssignmentDetail] Failed to load added documents", e)
   }
 }
-
 onMounted(async () => {
   assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
   await loadAddedDocuments()
@@ -264,12 +255,12 @@ onMounted(async () => {
 function goBack() {
   router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
 }
-
 function goToSubmit(flags) {
   router.push({
     name: "AssignmentSubmit",
     params: { id: assignmentId, node: route.params.node },
     query: {
+      ...route.query,
       cid,
       sid,
       gid,
@@ -278,7 +269,6 @@ function goToSubmit(flags) {
     },
   })
 }
-
 function uploadMyAssignment(flags) {
   router.push({
     name: "AssignmentSubmit",
@@ -287,6 +277,7 @@ function uploadMyAssignment(flags) {
       node: route.params.node,
     },
     query: {
+      ...route.query,
       cid,
       sid,
       gid,
@@ -300,7 +291,6 @@ function addDocument() {
   if (!isTeacherUI.value) return
   router.push({ name: "AssignmentAddDocument", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
-
 function addUsers() {
   if (!isTeacherUI.value) return
   router.push({ name: "AssignmentAddUser", params: { id: assignmentId }, query: { cid, sid, gid } })
@@ -314,12 +304,10 @@ function editAssignment() {
     query: { ...route.query, from: "AssignmentDetail", node: route.params.node },
   })
 }
-
 function showUnsubmittedUsers() {
   if (!isTeacherUI.value) return
   router.push({ name: "AssignmentMissing", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
-
 async function exportPdf() {
   if (!isTeacherUI.value) return
   try {
@@ -335,7 +323,6 @@ async function exportPdf() {
     notification.showErrorNotification(t("Failed to export PDF"))
   }
 }
-
 async function downloadAssignments() {
   if (!isTeacherUI.value) return
   try {
@@ -351,7 +338,6 @@ async function downloadAssignments() {
     notification.showErrorNotification(t("Failed to download package"))
   }
 }
-
 async function uploadCorrections() {
   if (!isTeacherUI.value) return
   const input = document.createElement("input")
@@ -361,7 +347,6 @@ async function uploadCorrections() {
   input.addEventListener("change", async () => {
     const file = input.files?.[0]
     if (!file) return
-
     try {
       const res = await cStudentPublicationService.uploadCorrectionsPackage(assignmentId, file)
       notification.showSuccessNotification(
@@ -375,7 +360,6 @@ async function uploadCorrections() {
 
   input.click()
 }
-
 async function deleteAllCorrections() {
   if (!isTeacherUI.value) return
   if (!confirm(t("Are you sure you want to delete all corrections?"))) return
@@ -383,7 +367,6 @@ async function deleteAllCorrections() {
   try {
     await cStudentPublicationService.deleteAllCorrections(assignmentId, cid, sid)
     notification.showSuccessNotification(t("All corrections deleted"))
-
     assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
     submissionListKey.value++
   } catch {

@@ -41,10 +41,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  csrfToken: {
-    type: String,
-    required: true,
-  },
 })
 
 const emit = defineEmits(["uploaded", "error"])
@@ -82,9 +78,6 @@ const uppy = shallowRef(
       endpoint: props.endpoint,
       fieldName: "file",
       formData: true,
-      headers: {
-        "X-CSRF-TOKEN": props.csrfToken,
-      },
     })
     .on("upload-success", (_file, response) => {
       emit("uploaded", response?.body || {})

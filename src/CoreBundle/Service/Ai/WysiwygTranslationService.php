@@ -32,8 +32,6 @@ use const LIBXML_NOWARNING;
 
 final readonly class WysiwygTranslationService
 {
-    public const string CSRF_TOKEN_ID = 'wysiwyg_translation';
-
     private const string TOOL_NAME = 'wysiwyg_translation';
     private const int MAX_HTML_LENGTH = 100000;
     private const int MAX_OUTPUT_TOKENS = 12000;

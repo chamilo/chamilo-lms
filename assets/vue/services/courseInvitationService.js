@@ -19,10 +19,9 @@ export default {
     return await baseService.post("/api/course-invitation", payload, {}, { params: cleanParams(params) })
   },
 
-  async revoke(id, payload, params = {}) {
+  async revoke(id, params = {}) {
     return await baseService.delete(`/api/course-invitation/${id}`, {
       params: cleanParams(params),
-      data: payload,
     })
   },
 }

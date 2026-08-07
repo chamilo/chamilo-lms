@@ -16,8 +16,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<WysiwygTranslation, WysiwygTranslation> */
 final readonly class WysiwygTranslationProcessor implements ProcessorInterface
@@ -27,7 +25,6 @@ final readonly class WysiwygTranslationProcessor implements ProcessorInterface
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WysiwygTranslationService $translationService,
     ) {}
 
@@ -49,12 +46,6 @@ final readonly class WysiwygTranslationProcessor implements ProcessorInterface
         if (!$this->translationService->isEnabled()) {
             throw new AccessDeniedHttpException('AI WYSIWYG translation is disabled.');
         }
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(WysiwygTranslationService::CSRF_TOKEN_ID, $data->csrfToken)
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
-
         $requestedLanguages = array_values(array_unique(array_filter(array_map(
             static fn (mixed $language): string => trim((string) $language),
             $data->targetLanguages,

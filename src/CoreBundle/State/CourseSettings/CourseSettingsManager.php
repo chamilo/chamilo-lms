@@ -48,7 +48,6 @@ use const FILTER_VALIDATE_URL;
 
 final readonly class CourseSettingsManager
 {
-    private const string CSRF_INTENTION = 'course_settings_management';
     private const array EXTRA_FIELD_VARIABLES = [
         'tags',
         'video_url',
@@ -304,11 +303,6 @@ final readonly class CourseSettingsManager
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
     ) {}
-
-    public function getCsrfIntention(): string
-    {
-        return self::CSRF_INTENTION;
-    }
 
     public function isWatermarkEnabled(): bool
     {

@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationTokenService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseInvitationItem>
@@ -29,7 +28,6 @@ final readonly class CourseInvitationProvider implements ProviderInterface
     public function __construct(
         private CourseInvitationRepository $invitationRepository,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CourseInvitationTokenService $tokenService,
         private CidReqHelper $cidReqHelper,
     ) {}
@@ -67,7 +65,6 @@ final readonly class CourseInvitationProvider implements ProviderInterface
         }
 
         $item = new CourseInvitationItem();
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(CourseInvitationSendProcessor::CSRF_TOKEN_ID);
         $item->isSessionContext = null !== $session;
         $item->contextTitle = $session?->getTitle() ?? $course->getTitle();
 

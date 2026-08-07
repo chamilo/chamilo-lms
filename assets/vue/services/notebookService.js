@@ -23,10 +23,9 @@ export default {
     return await baseService.patch(`/api/notebook/${iid}`, payload, { params: cleanParams(params) })
   },
 
-  async remove(iid, payload, params = {}) {
+  async remove(iid, params = {}) {
     return await baseService.delete(`/api/notebook/${iid}`, {
       params: cleanParams(params),
-      data: payload,
     })
   },
 }

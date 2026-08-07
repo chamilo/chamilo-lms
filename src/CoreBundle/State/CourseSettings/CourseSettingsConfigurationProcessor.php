@@ -11,8 +11,6 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseSettings\CourseSettingsConfiguration;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<CourseSettingsConfiguration, CourseSettingsConfiguration>
@@ -22,19 +20,12 @@ final readonly class CourseSettingsConfigurationProcessor implements ProcessorIn
     public function __construct(
         private RequestStack $requestStack,
         private CourseSettingsManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CourseSettingsConfiguration
     {
         if (!$data instanceof CourseSettingsConfiguration) {
             throw new BadRequestHttpException('Invalid course settings payload.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken($this->manager->getCsrfIntention(), $data->submittedCsrfToken),
-        )) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $request = $this->requestStack->getCurrentRequest();

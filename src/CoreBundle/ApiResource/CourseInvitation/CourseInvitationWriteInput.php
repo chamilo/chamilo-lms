@@ -13,6 +13,4 @@ final class CourseInvitationWriteInput
     #[Assert\NotBlank]
     #[Assert\Email]
     public string $email = '';
-
-    public string $csrfToken = '';
 }

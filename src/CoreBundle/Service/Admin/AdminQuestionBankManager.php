@@ -20,7 +20,6 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const ENT_QUOTES;
@@ -28,11 +27,8 @@ use const ENT_SUBSTITUTE;
 
 final readonly class AdminQuestionBankManager
 {
-    public const string CSRF_TOKEN_ID = 'admin_question_bank_action';
-
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -91,7 +87,6 @@ final readonly class AdminQuestionBankManager
             'itemsPerPage' => $itemsPerPage,
             'totalItems' => $totalItems,
             'searched' => $searched,
-            'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue(),
         ];
     }
 

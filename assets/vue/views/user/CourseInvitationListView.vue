@@ -172,7 +172,6 @@ const actionErrorMessage = ref("")
 const successMessage = ref("")
 const isSessionContext = ref(false)
 const contextTitle = ref("")
-const csrfToken = ref("")
 const email = ref("")
 
 function getQueryValue(value) {
@@ -196,7 +195,6 @@ async function loadForm() {
   const form = await courseInvitationService.getForm(getContextParams())
   isSessionContext.value = Boolean(form.isSessionContext)
   contextTitle.value = form.contextTitle || ""
-  csrfToken.value = form.csrfToken || ""
 }
 
 async function loadInvitations() {
@@ -231,7 +229,7 @@ async function sendInvitation() {
   successMessage.value = ""
 
   try {
-    await courseInvitationService.create({ email: email.value, csrfToken: csrfToken.value }, getContextParams())
+    await courseInvitationService.create({ email: email.value }, getContextParams())
     email.value = ""
     successMessage.value = t("Invitation has been sent")
     await loadAll()
@@ -277,7 +275,7 @@ async function revokeInvitation(invitation) {
   successMessage.value = ""
 
   try {
-    await courseInvitationService.revoke(invitation.id, { csrfToken: csrfToken.value }, getContextParams())
+    await courseInvitationService.revoke(invitation.id, getContextParams())
     successMessage.value = t("Invitation has been revoked")
     await loadInvitations()
   } catch (error) {

@@ -98,12 +98,6 @@ final class CourseSettingsConfiguration
     public array $integrations = [];
 
     #[Groups(['course_settings:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_settings:write'])]
-    public string $submittedCsrfToken = '';
-
-    #[Groups(['course_settings:read'])]
     public bool $success = false;
 
     #[Groups(['course_settings:read'])]

@@ -6,10 +6,9 @@ function cleanParams(params = {}) {
   )
 }
 
-function formData(file, csrfToken, extra = {}) {
+function formData(file, extra = {}) {
   const data = new FormData()
   data.append("file", file)
-  data.append("csrfToken", csrfToken)
 
   Object.entries(extra).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
@@ -25,28 +24,17 @@ export default {
     return await baseService.get("/api/course-settings", cleanParams(params))
   },
 
-  async save(values, csrfToken, params = {}) {
-    return await baseService.post(
-      "/api/course-settings",
-      { values, submittedCsrfToken: csrfToken },
-      {},
-      { params: cleanParams(params) },
-    )
+  async save(values, params = {}) {
+    return await baseService.post("/api/course-settings", { values }, {}, { params: cleanParams(params) })
   },
 
-  async uploadPicture(file, csrfToken, params = {}) {
-    return await baseService.post(
-      "/api/course-settings/picture",
-      formData(file, csrfToken),
-      {},
-      { params: cleanParams(params) },
-    )
+  async uploadPicture(file, params = {}) {
+    return await baseService.post("/api/course-settings/picture", formData(file), {}, { params: cleanParams(params) })
   },
 
-  async deletePicture(csrfToken, params = {}) {
+  async deletePicture(params = {}) {
     return await baseService.delete("/api/course-settings/picture", {
       params: cleanParams(params),
-      headers: { "X-CSRF-TOKEN": csrfToken },
     })
   },
 
@@ -58,35 +46,28 @@ export default {
     })
   },
 
-  async uploadWatermark(file, csrfToken, params = {}) {
-    return await baseService.post(
-      "/api/course-settings/watermark",
-      formData(file, csrfToken),
-      {},
-      { params: cleanParams(params) },
-    )
+  async uploadWatermark(file, params = {}) {
+    return await baseService.post("/api/course-settings/watermark", formData(file), {}, { params: cleanParams(params) })
   },
 
-  async deleteWatermark(csrfToken, params = {}) {
+  async deleteWatermark(params = {}) {
     return await baseService.delete("/api/course-settings/watermark", {
       params: cleanParams(params),
-      headers: { "X-CSRF-TOKEN": csrfToken },
     })
   },
 
-  async uploadCourseLegalFile(file, csrfToken, params = {}) {
+  async uploadCourseLegalFile(file, params = {}) {
     return await baseService.post(
       "/api/course-settings/course-legal-file",
-      formData(file, csrfToken),
+      formData(file),
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async deleteCourseLegalFile(csrfToken, params = {}) {
+  async deleteCourseLegalFile(params = {}) {
     return await baseService.delete("/api/course-settings/course-legal-file", {
       params: cleanParams(params),
-      headers: { "X-CSRF-TOKEN": csrfToken },
     })
   },
 
@@ -94,19 +75,18 @@ export default {
     return `/api/course-settings/course-legal-file?${new URLSearchParams(cleanParams(params)).toString()}`
   },
 
-  async uploadCertificateMedia(field, file, csrfToken, params = {}) {
+  async uploadCertificateMedia(field, file, params = {}) {
     return await baseService.post(
       `/api/course-settings/custom-certificate-media/${encodeURIComponent(field)}`,
-      formData(file, csrfToken),
+      formData(file),
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async deleteCertificateMedia(field, csrfToken, params = {}) {
+  async deleteCertificateMedia(field, params = {}) {
     return await baseService.delete(`/api/course-settings/custom-certificate-media/${encodeURIComponent(field)}`, {
       params: cleanParams(params),
-      headers: { "X-CSRF-TOKEN": csrfToken },
     })
   },
 

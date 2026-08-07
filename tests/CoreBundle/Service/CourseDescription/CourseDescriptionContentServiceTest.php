@@ -189,4 +189,40 @@ final class CourseDescriptionContentServiceTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->service->delete($this->course, null, CCourseDescription::TYPE_CUSTOM);
     }
+
+    public function testReadReturnsFullHtmlContentForAllAndForASingleSection(): void
+    {
+        $title = 'Assessment '.bin2hex(random_bytes(6));
+        $created = $this->service->createOrUpdate(
+            $this->course,
+            CCourseDescription::TYPE_ASSESSMENT,
+            $title,
+            '<p>Assessment body for the read check.</p>',
+            null,
+        );
+
+        $all = $this->service->read($this->course);
+        self::assertGreaterThanOrEqual(1, $all['total']);
+        self::assertSame($this->course->getId(), $all['course_id']);
+
+        $found = null;
+        foreach ($all['items'] as $item) {
+            if ($item['description_id'] === $created['description_id']) {
+                $found = $item;
+            }
+        }
+        self::assertNotNull($found);
+        self::assertStringContainsString('Assessment body for the read check.', $found['content']);
+        self::assertSame($title, $found['title']);
+        self::assertSame(CCourseDescription::TYPE_ASSESSMENT, $found['description_type']);
+
+        $byType = $this->service->read($this->course, null, CCourseDescription::TYPE_ASSESSMENT);
+        self::assertSame(1, $byType['total']);
+        self::assertSame($created['description_id'], $byType['items'][0]['description_id']);
+        self::assertStringContainsString('Assessment body for the read check.', $byType['items'][0]['content']);
+
+        $byId = $this->service->read($this->course, (int) $created['description_id'], null);
+        self::assertSame(1, $byId['total']);
+        self::assertSame($created['description_id'], $byId['items'][0]['description_id']);
+    }
 }

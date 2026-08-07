@@ -141,6 +141,76 @@ final readonly class CourseDescriptionContentService
     }
 
     /**
+     * Returns the full HTML content of course description items. When neither
+     * descriptionId nor descriptionType is given, every base-course item is
+     * returned (standard sections ordered 1-7, then custom "Other" items).
+     * With a filter, returns the single matching item (custom/"Other" items
+     * require descriptionId — a course can have several of type 8).
+     *
+     * @return array{
+     *     course_id: int,
+     *     total: int,
+     *     items: list<array<string, mixed>>
+     * }
+     */
+    public function read(Course $course, ?int $descriptionId = null, ?int $descriptionType = null): array
+    {
+        $descriptionId = (null !== $descriptionId && $descriptionId > 0) ? $descriptionId : null;
+        $descriptionType = (null !== $descriptionType && $descriptionType > 0) ? $descriptionType : null;
+
+        if (null !== $descriptionId || null !== $descriptionType) {
+            $description = $this->resolveByIdOrType($course, $descriptionId, $descriptionType);
+            $items = [$this->normalize($description)];
+
+            return [
+                'course_id' => (int) $course->getId(),
+                'total' => 1,
+                'items' => $items,
+            ];
+        }
+
+        /** @var array<int, CCourseDescription> $standardByType */
+        $standardByType = [];
+        $customItems = [];
+
+        foreach ($this->courseDescriptionRepository->findAllInCourse($course) as $description) {
+            if (!$description instanceof CCourseDescription || !$this->belongsToBaseCourse($description, $course)) {
+                continue;
+            }
+
+            if (CCourseDescription::TYPE_CUSTOM === $description->getDescriptionType()) {
+                $customItems[] = $description;
+
+                continue;
+            }
+
+            $standardByType[$description->getDescriptionType()] ??= $description;
+        }
+
+        $items = [];
+        foreach (array_keys(self::TYPE_LABELS) as $type) {
+            if (CCourseDescription::TYPE_CUSTOM === $type) {
+                continue;
+            }
+
+            $existing = $standardByType[$type] ?? null;
+            if ($existing instanceof CCourseDescription) {
+                $items[] = $this->normalize($existing);
+            }
+        }
+
+        foreach ($customItems as $custom) {
+            $items[] = $this->normalize($custom);
+        }
+
+        return [
+            'course_id' => (int) $course->getId(),
+            'total' => \count($items),
+            'items' => $items,
+        ];
+    }
+
+    /**
      * Creates a new item, or — for the 7 standard section types — updates
      * the existing one in place so repeated calls stay idempotent (a course
      * only ever has one Description, one Objectives item, etc., matching

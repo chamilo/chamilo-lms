@@ -42,8 +42,10 @@ mcp:
 
         For the "Course Description" tool, call get_course_description_template first: it returns
         the 7 standard sections (Description, Objectives, Topics, Methodology, Course material,
-        Resources, Assessment) with a guiding question for each and whether it already has content.
-        Ask the user the guiding question for each section they want to write, then call
+        Resources, Assessment) with a guiding question for each and whether it already has content
+        (title/word count only — not the HTML body). Use read_course_description to load the actual
+        HTML of existing sections (all of them, or one by descriptionId / descriptionType) before
+        editing. Ask the user the guiding question for each section they want to write, then call
         create_course_description with the matching descriptionType. Calling it again with the same
         descriptionType (1-7) updates that section in place instead of duplicating it; descriptionType
         8 always adds a new custom "Other" item. Use edit_course_description to change content, title

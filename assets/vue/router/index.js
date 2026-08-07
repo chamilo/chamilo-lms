@@ -35,6 +35,7 @@ import wiki from "./wiki"
 import courseProgress from "./courseProgress"
 import courseSettings from "./courseSettings"
 import courseReporting from "./courseReporting"
+import globalReporting from "./globalReporting"
 import courseUser from "./courseUser"
 import courseSession from "./courseSession"
 import myClass from "./myClass"
@@ -235,6 +236,10 @@ function derivePageTypeClasses(to) {
 
   if (p.startsWith("/admin")) {
     return ["page-administration", "page-administration-platform"]
+  }
+
+  if (p.startsWith("/reporting")) {
+    return ["page-reporting"]
   }
 
   if (p.startsWith("/tracking")) {
@@ -537,6 +542,7 @@ const router = createRouter({
     courseProgress,
     courseSettings,
     courseReporting,
+    globalReporting,
     courseUser,
     courseSession,
     myClass,

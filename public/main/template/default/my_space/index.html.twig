@@ -27,7 +27,7 @@
                         <span class="text-3xl font-semibold text-gray-900">{{ students }}</span>
                     </div>
                     <div class="card-title mt-2 text-sm text-gray-500">
-                        <a href="/main/my_space/student.php" class="font-medium text-gray-900 hover:text-primary underline">
+                        <a href="/reporting/learners?returnTo=global-reporting-overview" class="font-medium text-gray-900 hover:text-primary underline">
                             {{ 'Followed students' | trans }}
                         </a>
                     </div>
@@ -39,7 +39,7 @@
                         <span class="text-3xl font-semibold text-gray-900">{{ studentbosses }}</span>
                     </div>
                     <div class="card-title mt-2 text-sm text-gray-500">
-                        <a href="/main/my_space/users.php?status={{ studentboss }}" class="font-medium text-gray-900 hover:text-primary underline">
+                        <a href="/reporting/users?status={{ studentboss }}&returnTo=global-reporting-overview" class="font-medium text-gray-900 hover:text-primary underline">
                             {{ 'Followed student bosses' | trans }}
                         </a>
                     </div>
@@ -51,7 +51,7 @@
                         <span class="text-3xl font-semibold text-gray-900">{{ numberTeachers }}</span>
                     </div>
                     <div class="card-title mt-2 text-sm text-gray-500">
-                        <a href="/main/my_space/teachers.php" class="font-medium text-gray-900 hover:text-primary underline">
+                        <a href="/reporting/teachers?returnTo=global-reporting-overview" class="font-medium text-gray-900 hover:text-primary underline">
                             {{ 'Followed teachers' | trans }}
                         </a>
                     </div>
@@ -63,7 +63,7 @@
                         <span class="text-3xl font-semibold text-gray-900">{{ humanresources }}</span>
                     </div>
                     <div class="card-title mt-2 text-sm text-gray-500">
-                        <a href="/main/my_space/users.php?status={{ drh }}" class="font-medium text-gray-900 hover:text-primary underline">
+                        <a href="/reporting/users?status={{ drh }}&returnTo=global-reporting-overview" class="font-medium text-gray-900 hover:text-primary underline">
                             {{ 'Followed HR directors' | trans }}
                         </a>
                     </div>
@@ -84,7 +84,7 @@
                         </span>
                         </div>
                         <div class="mt-3 text-sm text-gray-900 flex items-center gap-2">
-                            <a class="hover:underline inline-flex items-center gap-1" href="/main/my_space/users.php">
+                            <a class="hover:underline inline-flex items-center gap-1" href="/reporting/users?returnTo=global-reporting-overview">
                                 {{ 'ObjectIcon::USER'|mdi_icon(16) }}
                                 <span>{{ 'Followed users' | trans }}</span>
                             </a>
@@ -114,7 +114,7 @@
                         <div class="mt-3 text-sm text-gray-900">
                             <a
                                     class="hover:underline inline-flex items-center gap-1"
-                                    href="/main/my_space/course.php"
+                                    href="/reporting/courses?mode=assigned&returnTo=global-reporting-overview"
                             >
                                 {{ 'ObjectIcon::COURSE'|mdi_icon(16) }}
                                 <span>{{ 'Assigned courses' | trans }}</span>
@@ -135,7 +135,7 @@
                         </span>
                         </div>
                         <div class="mt-3 text-sm text-gray-900">
-                            <a class="hover:underline inline-flex items-center gap-1" href="/main/my_space/course.php?follow">
+                            <a class="hover:underline inline-flex items-center gap-1" href="/reporting/courses?mode=followed&returnTo=global-reporting-overview">
                                 {{ 'ObjectIcon::COURSE'|mdi_icon(16) }}
                                 <span>{{ 'Followed courses' | trans }}</span>
                             </a>
@@ -157,7 +157,7 @@
                         <div class="mt-3 text-sm text-gray-900 flex items-center gap-2">
                             <a
                                     class="hover:underline inline-flex items-center gap-1"
-                                    href="/main/my_space/session.php"
+                                    href="/reporting/sessions?returnTo=global-reporting-overview"
                             >
                                 {{ 'ObjectIcon::SESSION'|mdi_icon(16) }}
                                 <span>{{ 'Followed sessions' | trans }}</span>

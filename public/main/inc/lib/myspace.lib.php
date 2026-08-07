@@ -22,55 +22,55 @@ class MySpace
     {
         $actions = [
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=coaches',
+                'url' => '/reporting/admin/trainers',
                 'content' => get_lang('Trainers Overview'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=user',
+                'url' => '/reporting/admin/users',
                 'content' => get_lang('User overview'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=session',
+                'url' => '/reporting/admin/sessions',
                 'content' => get_lang('Sessions overview'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=course',
+                'url' => '/reporting/admin/courses',
                 'content' => get_lang('Courses overview'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin',
+                'url' => '/reporting/admin/learning-results',
                 'content' => get_lang('Learning paths exercises results list'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin',
+                'url' => '/reporting/admin/session-results',
                 'content' => get_lang('Results of learning paths exercises by session'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=accessoverview',
+                'url' => '/reporting/admin/accesses',
                 'content' => get_lang('Accesses by user overview').' ('.get_lang('Beta').')',
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/exercise_category_report.php',
+                'url' => '/reporting/admin/exercise-categories',
                 'content' => get_lang('Exercise report by category for all sessions'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/survey_report.php',
+                'url' => '/reporting/admin/surveys',
                 'content' => get_lang('Surveys report'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/tc_report.php',
+                'url' => '/reporting/admin/student-bosses',
                 'content' => get_lang("Student's superior follow up"),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/ti_report.php',
+                'url' => '/reporting/admin/tutor-planning',
                 'content' => get_lang('General tutor planning'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/question_stats_global.php',
+                'url' => '/reporting/admin/question-stats',
                 'content' => get_lang('Question stats'),
             ],
             [
-                'url' => api_get_path(WEB_CODE_PATH).'my_space/question_stats_global_detail.php',
+                'url' => '/reporting/admin/question-stats-detail',
                 'content' => get_lang('Detailed questions stats'),
             ],
         ];
@@ -80,7 +80,7 @@ class MySpace
         if (!empty($companyField)) {
             $actions[] =
                 [
-                    'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=company',
+                    'url' => '/reporting/admin/organization',
                     'content' => get_lang('User by organization'),
                 ];
         }
@@ -89,7 +89,7 @@ class MySpace
         if (!empty($authorsField)) {
             $actions[] =
                 [
-                    'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=learningPath',
+                    'url' => '/reporting/admin/learning-path-authors',
                     'content' => get_lang('Learning path by author'),
                 ];
         }
@@ -98,7 +98,7 @@ class MySpace
         if (!empty($authorsItemField)) {
             $actions[] =
                 [
-                    'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=learningPathByItem',
+                    'url' => '/reporting/admin/learning-path-item-authors',
                     'content' => get_lang('LP item by author'),
                 ];
         }
@@ -115,14 +115,14 @@ class MySpace
         // Always available: student's own progress
         $menuItems[] = Display::url(
             Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('View my progress')),
-            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+            '/reporting/my-progress'
         );
 
         // Trainer view: only for course teachers / coaches
         if (api_is_allowed_to_edit(null, true)) {
             $menuItems[] = Display::url(
                 Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
-                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=teacher'
+                '/reporting'
             );
         }
 
@@ -130,7 +130,7 @@ class MySpace
         if (api_is_platform_admin() || api_is_drh()) {
             $menuItems[] = Display::url(
                 Display::getMdiIcon('star', 'ch-tool-icon', null, 32, get_lang('Admin view')),
-                api_get_path(WEB_CODE_PATH).'my_space/index.php?view=admin'
+                '/reporting/admin'
             );
         }
 
@@ -138,7 +138,7 @@ class MySpace
         if (api_is_platform_admin() || api_is_drh() || api_is_allowed_to_edit(null, true)) {
             $menuItems[] = Display::url(
                 Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
-                api_get_path(WEB_CODE_PATH).'tracking/exams.php'
+                '/reporting/exams'
             );
         }
 
@@ -1037,10 +1037,9 @@ class MySpace
                     foreach ($row['studentList'] as $student) {
                         $reportLink = Display::url(
                             Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Statistics')),
-                            api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.
-                            $student['id']
-                            .'&id_session='.$lpInfo['session_id']
-                            .'&course='.$lpInfo['courseCode']
+                            '/reporting/learners/'.(int) $student['id'].'/courses/'.(int) $lpInfo['c_id'].'?'.http_build_query([
+                                'sid' => (int) $lpInfo['session_id'],
+                            ])
                         );
                         $table .= "$reportLink ".$student['complete_name']."<br>";
                         $totalStudent++;

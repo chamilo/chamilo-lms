@@ -1068,13 +1068,8 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
 
     private function buildGeneralReportingUrl(Course $course, ?Session $session, int $userId): string
     {
-        return '/main/my_space/myStudents.php?'.http_build_query([
-            'details' => 'true',
-            'cid' => (int) $course->getId(),
+        return '/reporting/learners/'.$userId.'/courses/'.(int) $course->getId().'?'.http_build_query([
             'sid' => (int) ($session?->getId() ?? 0),
-            'course' => $course->getCode(),
-            'origin' => 'tracking_course',
-            'student' => $userId,
         ]);
     }
 

@@ -443,7 +443,7 @@ if (isset($_GET['export'])) {
 $pageTitle = get_lang('Current courses report');
 $pageSubtitle = get_lang('This table summarizes learner progress and activity per learning path in your current courses.');
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 Display::display_header($pageTitle);
 
 // ------------------------------------------------------------------------
@@ -469,7 +469,7 @@ $actionsRight = Display::url(
         ICON_SIZE_MEDIUM,
         get_lang('Back')
     ),
-    api_get_path(WEB_CODE_PATH).'my_space/index.php'
+    api_get_path(WEB_PATH).'reporting'
 );
 
 $actionsRight .= Display::url(

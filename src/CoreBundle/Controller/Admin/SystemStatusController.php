@@ -17,6 +17,7 @@ use Diagnoser;
 use Doctrine\ORM\EntityManagerInterface;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -105,6 +106,25 @@ final class SystemStatusController extends AbstractController
         'query_cache_type',
         'slow_query_log',
         'version',
+    ];
+
+    /**
+     * Localhost-only Apache mod_status paths (tried in order).
+     *
+     * @var list<string>
+     */
+    private const array WEBSERVER_APACHE_STATUS_PATHS = [
+        '/server-status?auto',
+    ];
+
+    /**
+     * Localhost-only Nginx stub_status paths (tried in order).
+     *
+     * @var list<string>
+     */
+    private const array WEBSERVER_NGINX_STATUS_PATHS = [
+        '/nginx_status',
+        '/stub_status',
     ];
 
     public function __construct(
@@ -211,6 +231,37 @@ final class SystemStatusController extends AbstractController
             'fetchedAt' => (new DateTimeImmutable('now'))->format(DATE_ATOM),
             'server' => $server,
             'privileges' => $privileges,
+        ]);
+    }
+
+    /**
+     * Lightweight Apache/Nginx load metrics for the Web server section.
+     *
+     * Requires the engine status module to answer on localhost (no configurable URL —
+     * fixed paths only). Detects Apache vs Nginx from SERVER_SOFTWARE.
+     * Cumulative counters are returned so the UI can compute live rates between polls.
+     */
+    #[Route('/admin/system-status-webserver-data', name: 'admin_system_status_webserver_data', methods: ['GET'])]
+    public function webserverData(Request $request): JsonResponse
+    {
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
+        }
+
+        try {
+            $payload = $this->getWebserverLoadStats($request);
+        } catch (Throwable) {
+            $payload = $this->emptyWebserverLoadStats(
+                detected: null,
+                software: $this->readServerSoftware($request),
+                scannedPaths: [],
+                reason: 'status_unavailable',
+            );
+        }
+
+        return $this->json([
+            'fetchedAt' => (new DateTimeImmutable('now'))->format(DATE_ATOM),
+            ...$payload,
         ]);
     }
 
@@ -541,6 +592,459 @@ final class SystemStatusController extends AbstractController
             'hasGlobalPrivileges' => $hasGlobalPrivileges,
             'resolved' => $resolved,
             'unavailable' => $unavailable,
+        ];
+    }
+
+    /**
+     * @return array{
+     *     detected: string|null,
+     *     software: string|null,
+     *     scannedPaths: list<string>,
+     *     status: array{
+     *         available: bool,
+     *         reason: string|null,
+     *         path: string|null,
+     *         engine: string|null,
+     *         apache: array<string, mixed>|null,
+     *         nginx: array<string, mixed>|null
+     *     }
+     * }
+     */
+    private function getWebserverLoadStats(Request $request): array
+    {
+        $software = $this->readServerSoftware($request);
+        $detected = $this->detectWebserverEngine($software);
+
+        if (null === $detected) {
+            return $this->emptyWebserverLoadStats(
+                detected: null,
+                software: $software,
+                scannedPaths: [],
+                reason: 'unsupported_server',
+            );
+        }
+
+        $scannedPaths = 'apache' === $detected
+            ? self::WEBSERVER_APACHE_STATUS_PATHS
+            : self::WEBSERVER_NGINX_STATUS_PATHS;
+
+        $ports = $this->webserverProbePorts($request);
+        $hosts = ['127.0.0.1', '[::1]'];
+
+        foreach ($scannedPaths as $path) {
+            $body = $this->fetchLocalhostStatusBody($path, $hosts, $ports);
+            if (null === $body) {
+                continue;
+            }
+
+            if ('apache' === $detected) {
+                $apache = $this->parseApacheStatusAuto($body);
+                if (null === $apache) {
+                    continue;
+                }
+
+                return [
+                    'detected' => 'apache',
+                    'software' => $software,
+                    'scannedPaths' => $scannedPaths,
+                    'status' => [
+                        'available' => true,
+                        'reason' => null,
+                        'path' => $path,
+                        'engine' => 'apache',
+                        'apache' => $apache,
+                        'nginx' => null,
+                    ],
+                ];
+            }
+
+            $nginx = $this->parseNginxStubStatus($body);
+            if (null === $nginx) {
+                continue;
+            }
+
+            return [
+                'detected' => 'nginx',
+                'software' => $software,
+                'scannedPaths' => $scannedPaths,
+                'status' => [
+                    'available' => true,
+                    'reason' => null,
+                    'path' => $path,
+                    'engine' => 'nginx',
+                    'apache' => null,
+                    'nginx' => $nginx,
+                ],
+            ];
+        }
+
+        return $this->emptyWebserverLoadStats(
+            detected: $detected,
+            software: $software,
+            scannedPaths: $scannedPaths,
+            reason: 'status_unavailable',
+        );
+    }
+
+    /**
+     * @param list<string> $scannedPaths
+     *
+     * @return array{
+     *     detected: string|null,
+     *     software: string|null,
+     *     scannedPaths: list<string>,
+     *     status: array{
+     *         available: bool,
+     *         reason: string|null,
+     *         path: string|null,
+     *         engine: string|null,
+     *         apache: null,
+     *         nginx: null
+     *     }
+     * }
+     */
+    private function emptyWebserverLoadStats(
+        ?string $detected,
+        ?string $software,
+        array $scannedPaths,
+        string $reason,
+    ): array {
+        return [
+            'detected' => $detected,
+            'software' => $software,
+            'scannedPaths' => $scannedPaths,
+            'status' => [
+                'available' => false,
+                'reason' => $reason,
+                'path' => null,
+                'engine' => $detected,
+                'apache' => null,
+                'nginx' => null,
+            ],
+        ];
+    }
+
+    private function readServerSoftware(Request $request): ?string
+    {
+        $raw = trim((string) $request->server->get('SERVER_SOFTWARE', ''));
+
+        return '' !== $raw ? $raw : null;
+    }
+
+    /**
+     * @return 'apache'|'nginx'|null
+     */
+    private function detectWebserverEngine(?string $software): ?string
+    {
+        if (null === $software || '' === $software) {
+            return null;
+        }
+
+        $lower = strtolower($software);
+        if (str_contains($lower, 'apache') || str_contains($lower, 'httpd')) {
+            return 'apache';
+        }
+        if (str_contains($lower, 'nginx')) {
+            return 'nginx';
+        }
+
+        return null;
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function webserverProbePorts(Request $request): array
+    {
+        $ports = [];
+        $requestPort = (int) $request->server->get('SERVER_PORT', 0);
+        if ($requestPort > 0 && $requestPort < 65536) {
+            $ports[] = $requestPort;
+        }
+        // Prefer plain HTTP status listeners (typical localhost allowlists).
+        foreach ([80, 8080] as $fallback) {
+            if (!\in_array($fallback, $ports, true)) {
+                $ports[] = $fallback;
+            }
+        }
+
+        return $ports;
+    }
+
+    /**
+     * Fetch a status body from hardcoded localhost hosts/ports only (no user URL).
+     *
+     * @param list<string> $hosts
+     * @param list<int>    $ports
+     */
+    private function fetchLocalhostStatusBody(string $path, array $hosts, array $ports): ?string
+    {
+        if (!str_starts_with($path, '/')) {
+            return null;
+        }
+
+        $client = HttpClient::create([
+            'timeout' => 1.5,
+            'max_redirects' => 0,
+            'headers' => [
+                'User-Agent' => 'Chamilo-SystemStatus/1.0',
+                'Accept' => 'text/plain,text/*;q=0.9,*/*;q=0.1',
+            ],
+        ]);
+
+        foreach ($hosts as $host) {
+            if ('127.0.0.1' !== $host && '[::1]' !== $host) {
+                continue;
+            }
+
+            foreach ($ports as $port) {
+                if ($port <= 0 || $port > 65535) {
+                    continue;
+                }
+
+                $url = \sprintf('http://%s:%d%s', $host, $port, $path);
+
+                try {
+                    $response = $client->request('GET', $url);
+                    if (200 !== $response->getStatusCode()) {
+                        continue;
+                    }
+
+                    $body = $response->getContent(false);
+                    if (\is_string($body) && '' !== trim($body)) {
+                        return $body;
+                    }
+                } catch (Throwable) {
+                    continue;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse Apache mod_status machine-readable output (?auto).
+     *
+     * @return array{
+     *     serverVersion: string|null,
+     *     serverMpm: string|null,
+     *     uptimeSeconds: int|null,
+     *     totalAccesses: int|null,
+     *     totalKBytes: int|null,
+     *     reqPerSec: float|null,
+     *     bytesPerSec: float|null,
+     *     bytesPerReq: float|null,
+     *     busyWorkers: int|null,
+     *     idleWorkers: int|null,
+     *     gracefulWorkers: int|null,
+     *     cpuLoad: float|null,
+     *     load1: float|null,
+     *     load5: float|null,
+     *     load15: float|null,
+     *     workersBusyPercent: float|null,
+     *     scoreboard: array{
+     *         waiting: int,
+     *         starting: int,
+     *         reading: int,
+     *         sending: int,
+     *         keepalive: int,
+     *         dns: int,
+     *         closing: int,
+     *         logging: int,
+     *         graceful: int,
+     *         idleCleanup: int,
+     *         open: int,
+     *         other: int,
+     *         totalSlots: int
+     *     }|null
+     * }|null
+     */
+    private function parseApacheStatusAuto(string $body): ?array
+    {
+        // Reject HTML error pages and unrelated content.
+        if (!preg_match('/^\s*(?:ServerVersion|BusyWorkers|Scoreboard|Total Accesses)\s*:/mi', $body)) {
+            return null;
+        }
+
+        $fields = [];
+        foreach (preg_split("/\r\n|\n|\r/", $body) ?: [] as $line) {
+            $line = trim($line);
+            if ('' === $line || !str_contains($line, ':')) {
+                continue;
+            }
+            [$key, $value] = explode(':', $line, 2);
+            $fields[trim($key)] = trim($value);
+        }
+
+        if ([] === $fields) {
+            return null;
+        }
+
+        $int = static function (array $fields, string $key): ?int {
+            if (!isset($fields[$key]) || !is_numeric($fields[$key])) {
+                return null;
+            }
+
+            return (int) $fields[$key];
+        };
+        $float = static function (array $fields, string $key): ?float {
+            if (!isset($fields[$key]) || !is_numeric($fields[$key])) {
+                return null;
+            }
+
+            return (float) $fields[$key];
+        };
+
+        $busy = $int($fields, 'BusyWorkers');
+        $idle = $int($fields, 'IdleWorkers');
+        $workersBusyPercent = null;
+        if (null !== $busy && null !== $idle) {
+            $workerTotal = $busy + $idle;
+            if ($workerTotal > 0) {
+                $workersBusyPercent = round(100 * $busy / $workerTotal, 2);
+            }
+        }
+
+        $scoreboard = null;
+        if (isset($fields['Scoreboard']) && '' !== $fields['Scoreboard']) {
+            $scoreboard = $this->summarizeApacheScoreboard($fields['Scoreboard']);
+        }
+
+        // Require at least one load-related signal so random text cannot pass.
+        if (null === $busy && null === $int($fields, 'Total Accesses') && null === $scoreboard) {
+            return null;
+        }
+
+        return [
+            'serverVersion' => $fields['ServerVersion'] ?? null,
+            'serverMpm' => $fields['ServerMPM'] ?? null,
+            'uptimeSeconds' => $int($fields, 'ServerUptimeSeconds') ?? $int($fields, 'Uptime'),
+            'totalAccesses' => $int($fields, 'Total Accesses'),
+            'totalKBytes' => $int($fields, 'Total kBytes'),
+            'reqPerSec' => $float($fields, 'ReqPerSec'),
+            'bytesPerSec' => $float($fields, 'BytesPerSec'),
+            'bytesPerReq' => $float($fields, 'BytesPerReq'),
+            'busyWorkers' => $busy,
+            'idleWorkers' => $idle,
+            'gracefulWorkers' => $int($fields, 'GracefulWorkers'),
+            'cpuLoad' => $float($fields, 'CPULoad'),
+            'load1' => $float($fields, 'Load1'),
+            'load5' => $float($fields, 'Load5'),
+            'load15' => $float($fields, 'Load15'),
+            'workersBusyPercent' => $workersBusyPercent,
+            'scoreboard' => $scoreboard,
+        ];
+    }
+
+    /**
+     * @return array{
+     *     waiting: int,
+     *     starting: int,
+     *     reading: int,
+     *     sending: int,
+     *     keepalive: int,
+     *     dns: int,
+     *     closing: int,
+     *     logging: int,
+     *     graceful: int,
+     *     idleCleanup: int,
+     *     open: int,
+     *     other: int,
+     *     totalSlots: int
+     * }
+     */
+    private function summarizeApacheScoreboard(string $scoreboard): array
+    {
+        $counts = [
+            'waiting' => 0,
+            'starting' => 0,
+            'reading' => 0,
+            'sending' => 0,
+            'keepalive' => 0,
+            'dns' => 0,
+            'closing' => 0,
+            'logging' => 0,
+            'graceful' => 0,
+            'idleCleanup' => 0,
+            'open' => 0,
+            'other' => 0,
+            'totalSlots' => 0,
+        ];
+
+        $map = [
+            '_' => 'waiting',
+            'S' => 'starting',
+            'R' => 'reading',
+            'W' => 'sending',
+            'K' => 'keepalive',
+            'D' => 'dns',
+            'C' => 'closing',
+            'L' => 'logging',
+            'G' => 'graceful',
+            'I' => 'idleCleanup',
+            '.' => 'open',
+        ];
+
+        $length = \strlen($scoreboard);
+        $counts['totalSlots'] = $length;
+        for ($i = 0; $i < $length; ++$i) {
+            $ch = $scoreboard[$i];
+            if (isset($map[$ch])) {
+                ++$counts[$map[$ch]];
+            } else {
+                ++$counts['other'];
+            }
+        }
+
+        return $counts;
+    }
+
+    /**
+     * Parse Nginx stub_status plain-text body.
+     *
+     * @return array{
+     *     activeConnections: int|null,
+     *     accepts: int|null,
+     *     handled: int|null,
+     *     requests: int|null,
+     *     reading: int|null,
+     *     writing: int|null,
+     *     waiting: int|null
+     * }|null
+     */
+    private function parseNginxStubStatus(string $body): ?array
+    {
+        if (!preg_match('/Active connections:\s*(\d+)/i', $body, $activeMatch)) {
+            return null;
+        }
+
+        $accepts = null;
+        $handled = null;
+        $requests = null;
+        if (preg_match('/server\s+accepts\s+handled\s+requests\s+(\d+)\s+(\d+)\s+(\d+)/is', $body, $counters)) {
+            $accepts = (int) $counters[1];
+            $handled = (int) $counters[2];
+            $requests = (int) $counters[3];
+        }
+
+        $reading = null;
+        $writing = null;
+        $waiting = null;
+        if (preg_match('/Reading:\s*(\d+)\s+Writing:\s*(\d+)\s+Waiting:\s*(\d+)/i', $body, $states)) {
+            $reading = (int) $states[1];
+            $writing = (int) $states[2];
+            $waiting = (int) $states[3];
+        }
+
+        return [
+            'activeConnections' => (int) $activeMatch[1],
+            'accepts' => $accepts,
+            'handled' => $handled,
+            'requests' => $requests,
+            'reading' => $reading,
+            'writing' => $writing,
+            'waiting' => $waiting,
         ];
     }
 

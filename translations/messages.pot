@@ -38977,3 +38977,114 @@ msgstr ""
 
 msgid "Auto-refresh every 5 seconds"
 msgstr ""
+
+msgid "Web server load"
+msgstr ""
+
+msgid "Live Apache or Nginx status metrics"
+msgstr ""
+
+msgid "Click to show web server load metrics"
+msgstr ""
+
+msgid "Requires a local web server status module"
+msgstr ""
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr ""
+
+msgid "Paths scanned"
+msgstr ""
+
+msgid "Detected"
+msgstr ""
+
+msgid "Status path"
+msgstr ""
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr ""
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr ""
+
+msgid "Busy workers"
+msgstr ""
+
+msgid "Idle workers"
+msgstr ""
+
+msgid "Graceful workers"
+msgstr ""
+
+msgid "Server MPM"
+msgstr ""
+
+msgid "Requests per second (live)"
+msgstr ""
+
+msgid "Requests per second (since start)"
+msgstr ""
+
+msgid "Bytes per second (live)"
+msgstr ""
+
+msgid "Bytes per second (since start)"
+msgstr ""
+
+msgid "Bytes per request"
+msgstr ""
+
+msgid "Total accesses"
+msgstr ""
+
+msgid "Total traffic"
+msgstr ""
+
+msgid "CPU load"
+msgstr ""
+
+msgid "Load average (1 min)"
+msgstr ""
+
+msgid "Load average (5 min)"
+msgstr ""
+
+msgid "Load average (15 min)"
+msgstr ""
+
+msgid "Scoreboard sending"
+msgstr ""
+
+msgid "Scoreboard reading"
+msgstr ""
+
+msgid "Scoreboard keepalive"
+msgstr ""
+
+msgid "Scoreboard waiting"
+msgstr ""
+
+msgid "Scoreboard open slots"
+msgstr ""
+
+msgid "Active connections"
+msgstr ""
+
+msgid "Reading"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Total requests"
+msgstr ""
+
+msgid "Accepts"
+msgstr ""
+
+msgid "Handled"
+msgstr ""
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr ""

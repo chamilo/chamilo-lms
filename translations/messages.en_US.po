@@ -39060,3 +39060,114 @@ msgstr "Hit rate"
 
 msgid "Auto-refresh every 5 seconds"
 msgstr "Auto-refresh every 5 seconds"
+
+msgid "Web server load"
+msgstr "Web server load"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live Apache or Nginx status metrics"
+
+msgid "Click to show web server load metrics"
+msgstr "Click to show web server load metrics"
+
+msgid "Requires a local web server status module"
+msgstr "Requires a local web server status module"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+
+msgid "Paths scanned"
+msgstr "Paths scanned"
+
+msgid "Detected"
+msgstr "Detected"
+
+msgid "Status path"
+msgstr "Status path"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Web server load metrics are only available for Apache and Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "None of the scanned status paths responded on localhost."
+
+msgid "Busy workers"
+msgstr "Busy workers"
+
+msgid "Idle workers"
+msgstr "Idle workers"
+
+msgid "Graceful workers"
+msgstr "Graceful workers"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Requests per second (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Requests per second (since start)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes per second (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes per second (since start)"
+
+msgid "Bytes per request"
+msgstr "Bytes per request"
+
+msgid "Total accesses"
+msgstr "Total accesses"
+
+msgid "Total traffic"
+msgstr "Total traffic"
+
+msgid "CPU load"
+msgstr "CPU load"
+
+msgid "Load average (1 min)"
+msgstr "Load average (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Load average (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Load average (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard sending"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard reading"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard waiting"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard open slots"
+
+msgid "Active connections"
+msgstr "Active connections"
+
+msgid "Reading"
+msgstr "Reading"
+
+msgid "Writing"
+msgstr "Writing"
+
+msgid "Total requests"
+msgstr "Total requests"
+
+msgid "Accepts"
+msgstr "Accepts"
+
+msgid "Handled"
+msgstr "Handled"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."

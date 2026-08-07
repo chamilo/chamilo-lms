@@ -39013,6 +39013,8 @@ msgstr "Queries per second"
 msgid "Slow queries"
 msgstr "Slow queries"
 
+msgid "Slow query time limit"
+msgstr "Slow query time limit"
 
 msgid "Slow query log"
 msgstr "Slow query log"

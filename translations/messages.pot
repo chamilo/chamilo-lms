@@ -38930,6 +38930,8 @@ msgstr ""
 msgid "Slow queries"
 msgstr ""
 
+msgid "Slow query time limit"
+msgstr ""
 
 msgid "Slow query log"
 msgstr ""

@@ -912,7 +912,8 @@ const dbMetrics = computed(() => {
       ? `${slow.longQueryTime}s`
       : "—"
 
-  // Prefer existing i18n keys where they match: Version, Threshold, Questions, Hit rate.
+  // Prefer existing i18n keys where they match: Version, Questions, Hit rate.
+  // "Questions" follows MySQL SHOW GLOBAL STATUS naming (client statements).
   return [
     { label: t("Uptime"), value: formatDuration(s.counters?.Uptime) },
     { label: t("Version"), value: s.version || "—" },
@@ -921,7 +922,7 @@ const dbMetrics = computed(() => {
       value: formatRate(dbRates.value.questionsPerSec ?? dbRates.value.queriesPerSec),
     },
     { label: t("Slow queries"), value: formatNumber(slow.count) },
-    { label: t("Threshold"), value: longTime },
+    { label: t("Slow query time limit"), value: longTime },
     { label: t("Slow query log"), value: slowLog },
     { label: t("Slow queries per second"), value: formatRate(dbRates.value.slowQueriesPerSec) },
     { label: t("Threads connected"), value: formatNumber(s.counters?.Threads_connected) },

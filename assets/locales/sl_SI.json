@@ -3666,6 +3666,7 @@
     "Uptime": "Uptime",
     "Queries per second": "Queries per second",
     "Slow queries": "Slow queries",
+    "Slow query time limit": "Slow query time limit",
     "Slow query log": "Slow query log",
     "Slow queries per second": "Slow queries per second",
     "Threads running": "Threads running",

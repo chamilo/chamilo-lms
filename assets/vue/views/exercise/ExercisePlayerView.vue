@@ -860,14 +860,17 @@
                 <p v-if="question.onlyoffice?.templateName" class="mb-3">
                   {{ t("Template") }}: {{ question.onlyoffice.templateName }}
                 </p>
-                <p class="mb-3">
+                <p v-if="!canManage" class="mb-3">
                   {{ t("Complete the document in the editor below. The file will be attached to this attempt for teacher correction.") }}
                 </p>
-                <div class="flex flex-wrap gap-2">
+                <div
+                  v-if="onlyofficeEditorUrl(question) || (answers[question.id]?.onlyofficeError && !canManage)"
+                  class="flex flex-wrap gap-2"
+                >
                   <BaseButton
+                    v-if="answers[question.id]?.onlyofficeError && !canManage"
                     :disabled="answers[question.id]?.onlyofficePreparing || isSavingDraft"
-                    :label="onlyofficeEditorUrl(question) ? t('Reload Office editor') : t('Prepare Office document')"
-                    icon="onlyoffice"
+                    :label="t('Prepare Office document')"
                     size="small"
                     type="primary"
                     @click="prepareOnlyofficeDocument(question, true)"
@@ -902,7 +905,7 @@
                 <iframe
                   :key="onlyofficeEditorUrl(question)"
                   :src="onlyofficeEditorUrl(question)"
-                  class="h-[72vh] min-h-[560px] w-full"
+                  class="h-[78vh] min-h-[680px] w-full border-0"
                   :title="question.onlyoffice?.templateName || t('Office document')"
                 />
               </div>

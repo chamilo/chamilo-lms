@@ -1151,7 +1151,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'calculated' => $this->getCalculatedRuntime($question, $attempt),
             'annotation' => $this->getImageRuntime($question, $course, $session, [20]),
             'hotspot' => $this->getHotspotRuntime($question, $course, $session, $canManage),
-            'onlyoffice' => $this->getOnlyofficeRuntime($question, $course, $session, $attempt),
+            'onlyoffice' => $this->getOnlyofficeRuntime($question, $relation->getQuiz(), $course, $session, $attempt, $canManage),
             'reading' => $this->getReadingRuntime($question),
             'content' => $this->getContentRuntime($question),
             'isContent' => \in_array($type, self::STRUCTURAL_CONTENT_TYPES, true),
@@ -1930,8 +1930,14 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function getOnlyofficeRuntime(CQuizQuestion $question, Course $course, ?Session $session, ?TrackEExercise $attempt): ?array
-    {
+    private function getOnlyofficeRuntime(
+        CQuizQuestion $question,
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+        ?TrackEExercise $attempt,
+        bool $canManage,
+    ): ?array {
         if (self::ANSWER_IN_OFFICE_DOC !== (int) $question->getType()) {
             return null;
         }
@@ -1960,6 +1966,8 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                     }
                 }
             }
+        } elseif ($canManage && $resourceNode instanceof ResourceNode) {
+            $editorUrl = $this->getOnlyofficePreviewEditorUrl($quiz, $question, $resourceNode, $course, $session);
         }
 
         return [
@@ -1968,6 +1976,38 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'editorUrl' => $editorUrl,
             'manualCorrection' => true,
         ];
+    }
+
+    private function getOnlyofficePreviewEditorUrl(
+        CQuiz $quiz,
+        CQuizQuestion $question,
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session,
+    ): string {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        $questionId = (int) ($question->getIid() ?? 0);
+        $resourceNodeId = (int) ($resourceNode->getId() ?? 0);
+
+        if ($exerciseId <= 0 || $questionId <= 0 || $resourceNodeId <= 0) {
+            return '';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $query = [
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'questionId' => $questionId,
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'origin' => 'exercise',
+            'embedded' => 1,
+            'readOnly' => 1,
+            'exercisePreview' => 1,
+        ];
+
+        return '/plugin/Onlyoffice/editor.php?'.http_build_query($query);
     }
 
     private function getOnlyofficeAttemptRow(int $attemptId, int $questionId): ?TrackEAttempt

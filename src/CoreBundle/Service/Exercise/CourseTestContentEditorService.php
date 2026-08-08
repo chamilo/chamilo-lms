@@ -59,7 +59,7 @@ final readonly class CourseTestContentEditorService
 
     /**
      * Updates the HTML body of a proposed answer (CQuizAnswer::$answer).
-     * Score, correctness and feedback comment are left unchanged.
+     * Score, correctness and feedback are left unchanged (see editAnswerFeedback).
      *
      * @return array{updated: true, answer: array<string, mixed>, question: array<string, mixed>}
      */
@@ -75,6 +75,35 @@ final readonly class CourseTestContentEditorService
         $html = $this->sanitizeHtmlDescription($description, allowEmpty: false);
 
         $answer->setAnswer($html);
+        $this->entityManager->persist($answer);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'question' => $this->testReader->normalizeQuestion($question, $resolved['position']),
+            'answer' => $this->testReader->normalizeAnswer($answer),
+        ];
+    }
+
+    /**
+     * Updates the HTML feedback comment of a proposed answer (CQuizAnswer::$comment),
+     * shown to learners after answering. The answer body, score and correctness are
+     * left unchanged. Feedback may be cleared by passing an empty string.
+     *
+     * @return array{updated: true, answer: array<string, mixed>, question: array<string, mixed>}
+     */
+    public function editAnswerFeedback(
+        CQuiz $quiz,
+        int $questionId,
+        int $answerId,
+        string $feedback,
+    ): array {
+        $resolved = $this->testReader->resolveQuestionWithPosition($quiz, $questionId);
+        $question = $resolved['question'];
+        $answer = $this->resolveAnswer($question, $answerId);
+        $html = $this->sanitizeHtmlDescription($feedback, allowEmpty: true);
+
+        $answer->setComment($html);
         $this->entityManager->persist($answer);
         $this->entityManager->flush();
 
@@ -164,6 +193,60 @@ final readonly class CourseTestContentEditorService
         );
 
         $answer->setAnswer($result['html']);
+        $this->entityManager->persist($answer);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'quiz_id' => (int) $quiz->getIid(),
+            'question_id' => (int) $question->getIid(),
+            'answer_id' => (int) $answer->getIid(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * Add or replace one language variant of an answer's feedback comment
+     * (CQuizAnswer::$comment), without rewriting the full multi-language body.
+     * The answer body, score and correctness are never touched here.
+     *
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertAnswerFeedbackLanguage(
+        Course $course,
+        CQuiz $quiz,
+        int $questionId,
+        int $answerId,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $resolved = $this->testReader->resolveQuestionWithPosition($quiz, $questionId);
+        $question = $resolved['question'];
+        $answer = $this->resolveAnswer($question, $answerId);
+        $languageIso = $this->testReader->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->testReader->resolveSourceLanguageIsoCode($course, $sourceLanguage);
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $answer->getComment(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: true),
+        );
+
+        $answer->setComment($result['html']);
         $this->entityManager->persist($answer);
         $this->entityManager->flush();
 

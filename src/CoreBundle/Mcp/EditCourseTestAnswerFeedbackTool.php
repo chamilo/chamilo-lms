@@ -16,7 +16,7 @@ use RuntimeException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Throwable;
 
-final readonly class EditCourseTestAnswerDescriptionTool
+final readonly class EditCourseTestAnswerFeedbackTool
 {
     public function __construct(
         private McpTeacherCourseContext $courseContext,
@@ -34,14 +34,14 @@ final readonly class EditCourseTestAnswerDescriptionTool
      * }
      */
     #[McpTool(
-        name: 'edit_course_test_answer_description',
-        description: 'Replace the HTML text of one proposed answer in a test question, in a base course managed by the authenticated teacher. Locate the test by testId or exact testTitle, the question by questionId, and the answer by answerId (from get_course_test_question_answers). Only the answer body HTML is changed — correctness, score and feedback comment stay as they are (use edit_course_test_answer_feedback to change the feedback). Pass clean semantic HTML; it is sanitized like course documents. Call get_course_test_question_answers first to inspect the current text.',
+        name: 'edit_course_test_answer_feedback',
+        description: 'Replace the HTML feedback comment shown to learners after they pick one proposed answer in a test question, in a base course managed by the authenticated teacher. Locate the test by testId or exact testTitle, the question by questionId, and the answer by answerId (from get_course_test_question_answers). Only the feedback is changed — the answer body, correctness and score stay as they are. Pass clean semantic HTML; it is sanitized like course documents. Pass an empty string to clear the feedback. Call get_course_test_question_answers first to inspect the current text.',
     )]
-    public function editCourseTestAnswerDescription(
+    public function editCourseTestAnswerFeedback(
         int $courseId,
         int $questionId,
         int $answerId,
-        string $description,
+        string $feedback,
         ?int $testId = null,
         ?string $testTitle = null,
     ): array {
@@ -49,11 +49,11 @@ final readonly class EditCourseTestAnswerDescriptionTool
             $context = $this->courseContext->resolve($courseId);
             $course = $context['course'];
             $quiz = $this->testReader->resolveQuiz($course, $testId, $testTitle);
-            $result = $this->testContentEditor->editAnswerDescription(
+            $result = $this->testContentEditor->editAnswerFeedback(
                 $quiz,
                 $questionId,
                 $answerId,
-                $description,
+                $feedback,
             );
 
             return [
@@ -71,7 +71,7 @@ final readonly class EditCourseTestAnswerDescriptionTool
         } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
             throw new ToolCallException($exception->getMessage());
         } catch (Throwable $throwable) {
-            throw new ToolCallException('The test answer description could not be edited because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
+            throw new ToolCallException('The test answer feedback could not be edited because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
         }
     }
 }

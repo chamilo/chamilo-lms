@@ -94,6 +94,11 @@ final class TranslateHtmlLanguageService
      * Project an HTML field for MCP read modes (full / inventory / source).
      * Inventory and source omit the multi-language body under $bodyKey.
      *
+     * $metaPrefix namespaces the metadata keys (has_markers, present_languages, …)
+     * so a normalize method can project more than one HTML field on the same
+     * entity without the two calls' metadata colliding. Leave it null for the
+     * entity's primary field to keep the unprefixed keys other callers expect.
+     *
      * @return array<string, mixed>
      */
     public function projectHtmlField(
@@ -101,34 +106,36 @@ final class TranslateHtmlLanguageService
         string $mode,
         string $sourceLanguage,
         string $bodyKey = 'content',
+        ?string $metaPrefix = null,
     ): array {
         $mode = $this->assertReadMode($mode);
         $sourceLanguage = $this->normalizeLanguageCode($sourceLanguage);
         $inspection = $this->inspect($html, $sourceLanguage);
+        $prefix = $metaPrefix ?? '';
 
         $base = [
-            'has_markers' => $inspection['hasMarkers'],
-            'present_languages' => $inspection['presentLanguages'],
-            'per_language' => $inspection['perLanguage'],
-            'content_sha256' => $inspection['contentSha256'],
-            'source_language' => $sourceLanguage,
+            $prefix.'has_markers' => $inspection['hasMarkers'],
+            $prefix.'present_languages' => $inspection['presentLanguages'],
+            $prefix.'per_language' => $inspection['perLanguage'],
+            $prefix.'content_sha256' => $inspection['contentSha256'],
+            $prefix.'source_language' => $sourceLanguage,
         ];
 
         if (self::READ_MODE_INVENTORY === $mode) {
-            $base['word_count'] = $this->countWords($html);
+            $base[$prefix.'word_count'] = $this->countWords($html);
 
             return $base;
         }
 
         if (self::READ_MODE_SOURCE === $mode) {
-            $base['source_html'] = $inspection['sourceHtml'];
-            $base['word_count'] = $this->countWords($inspection['sourceHtml']);
+            $base[$prefix.'source_html'] = $inspection['sourceHtml'];
+            $base[$prefix.'word_count'] = $this->countWords($inspection['sourceHtml']);
 
             return $base;
         }
 
         $base[$bodyKey] = $html;
-        $base['word_count'] = $this->countWords($html);
+        $base[$prefix.'word_count'] = $this->countWords($html);
 
         return $base;
     }

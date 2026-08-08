@@ -34,7 +34,7 @@ final readonly class GetCourseTestQuestionAnswersTool
      */
     #[McpTool(
         name: 'get_course_test_question_answers',
-        description: 'Read the proposed answers of a single question in a test (exercise), including each answer\'s feedback and score. Modes full/inventory/source project each answer HTML body (field "text") for translatehtml workflows. Prefer mode=source + upsert_course_test_answer_description_language for iterative translation. Locate the test by testId or exact testTitle, and the question by questionId (from get_course_test_questions). Available to the course\'s own teacher, and platform-wide to question managers and administrators.',
+        description: 'Read the proposed answers of a single question in a test (exercise), including each answer\'s feedback and score. Modes full/inventory/source project both the answer HTML body (field "text") and its feedback comment (field "feedback", metadata under feedback_has_markers/feedback_present_languages/feedback_per_language/feedback_source_language/feedback_word_count, source under feedback_source_html) for translatehtml workflows. Prefer mode=source + upsert_course_test_answer_description_language (answer text) or upsert_course_test_answer_feedback_language (feedback) for iterative translation. Locate the test by testId or exact testTitle, and the question by questionId (from get_course_test_questions). Available to the course\'s own teacher, and platform-wide to question managers and administrators.',
     )]
     public function getCourseTestQuestionAnswers(
         int $courseId,

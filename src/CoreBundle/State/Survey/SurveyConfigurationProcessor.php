@@ -106,7 +106,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         }
 
         $language = $this->getSurveyLanguage($data, $course);
-        if ($this->surveyCodeExists($code, $language, null)) {
+        if ($this->surveyCodeExists($code, $language, null, $course, $session)) {
             throw new BadRequestHttpException('This survey code already exists in this language.');
         }
 
@@ -144,7 +144,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 
         $this->validatePayload($data, true);
         $language = $this->getSurveyLanguage($data, $course);
-        if ($this->surveyCodeExists((string) $survey->getCode(), $language, $surveyId)) {
+        if ($this->surveyCodeExists((string) $survey->getCode(), $language, $surveyId, $course, $session)) {
             throw new BadRequestHttpException('This survey code already exists in this language.');
         }
 
@@ -262,20 +262,25 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         return substr($normalized, 0, 40);
     }
 
-    private function surveyCodeExists(string $code, string $language, ?int $exceptSurveyId): bool
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('COUNT(survey.iid)')
-            ->from(CSurvey::class, 'survey')
-            ->andWhere('survey.code = :code')
-            ->andWhere('survey.lang = :language')
+    private function surveyCodeExists(
+        string $code,
+        string $language,
+        ?int $exceptSurveyId,
+        Course $course,
+        ?Session $session
+    ): bool {
+        $queryBuilder = $this->surveyRepository
+            ->getResourcesByCourse($course, $session, null, null, false, false)
+            ->select('COUNT(DISTINCT resource.iid)')
+            ->andWhere('resource.code = :code')
+            ->andWhere('resource.lang = :language')
             ->setParameter('code', $code)
             ->setParameter('language', $language)
         ;
 
         if (null !== $exceptSurveyId) {
             $queryBuilder
-                ->andWhere('survey.iid <> :surveyId')
+                ->andWhere('resource.iid <> :surveyId')
                 ->setParameter('surveyId', $exceptSurveyId, Types::INTEGER)
             ;
         }

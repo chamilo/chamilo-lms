@@ -960,7 +960,7 @@ class MoodleExport
 
                 if ('quiz' === $itemType) {
                     $moduleName = 'quiz';
-                    $instanceId = is_numeric($path) ? (int) $path : null;
+                    $instanceId = $this->resolveLpCurrentResourceId('quiz', $path, $title);
                 } elseif ('link' === $itemType) {
                     $moduleName = 'url';
                     $instanceId = is_numeric($path) ? (int) $path : null;
@@ -969,7 +969,7 @@ class MoodleExport
                     $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ('survey' === $itemType) {
                     $moduleName = 'feedback';
-                    $instanceId = is_numeric($path) ? (int) $path : null;
+                    $instanceId = $this->resolveLpCurrentResourceId('survey', $path, $title);
                 } elseif ('forum' === $itemType) {
                     $moduleName = 'forum';
                     $instanceId = is_numeric($path) ? (int) $path : null;
@@ -1559,6 +1559,106 @@ class MoodleExport
     }
 
     /**
+     * Resolve stale LP quiz/survey references against the current course resources.
+     *
+     * Imported LPs can keep source ids in path/identifierref while the restored
+     * quiz/survey receives a new iid. Keep valid current ids unchanged and only
+     * fall back to an exact, unique title match when the numeric id is stale.
+     * Ambiguous or missing matches are left unresolved instead of exporting a
+     * different activity under the stale id.
+     *
+     * @param mixed $path
+     */
+    private function resolveLpCurrentResourceId(
+        string $itemType,
+        $path,
+        string $title,
+        bool $logFailure = true
+    ): ?int {
+        $normalizedType = $this->normalizeItemTypeForLpComparison($itemType);
+        $candidateId = is_numeric($path) ? (int) $path : 0;
+
+        if (!\in_array($normalizedType, ['quiz', 'survey'], true)) {
+            return $candidateId > 0 ? $candidateId : null;
+        }
+
+        $normalizedTitle = mb_strtolower(trim($title));
+        $titleMatches = [];
+
+        foreach ((array) ($this->course->resources ?? []) as $resourceType => $resources) {
+            if (!\is_array($resources) || empty($resources)) {
+                continue;
+            }
+
+            $matchesType = 'quiz' === $normalizedType
+                ? $this->isType($resourceType, 'RESOURCE_QUIZ', ['quiz', 'quizzes'])
+                : $this->isType($resourceType, 'RESOURCE_SURVEY', ['survey', 'surveys', 'feedback']);
+
+            if (!$matchesType) {
+                continue;
+            }
+
+            foreach ($resources as $resourceKey => $resource) {
+                if (!\is_object($resource)) {
+                    continue;
+                }
+
+                $obj = isset($resource->obj) && \is_object($resource->obj) ? $resource->obj : null;
+                $params = isset($resource->params) && \is_array($resource->params) ? $resource->params : [];
+
+                if ('quiz' === $normalizedType) {
+                    $currentId = (int) ($obj->iid ?? $obj->id ?? $resource->source_id ?? $resourceKey);
+                    $currentTitle = (string) ($obj->title ?? $resource->title ?? '');
+                } else {
+                    $currentId = (int) ($resource->source_id ?? $params['iid'] ?? $obj->iid ?? $resourceKey);
+                    $currentTitle = (string) ($params['title'] ?? $obj->title ?? $resource->title ?? '');
+                }
+
+                if ($currentId <= 0) {
+                    continue;
+                }
+
+                if ($candidateId > 0 && $currentId === $candidateId) {
+                    return $currentId;
+                }
+
+                if (
+                    '' !== $normalizedTitle
+                    && $normalizedTitle === mb_strtolower(trim($currentTitle))
+                ) {
+                    $titleMatches[$currentId] = true;
+                }
+            }
+        }
+
+        $matchedIds = array_map('intval', array_keys($titleMatches));
+        if (1 === count($matchedIds)) {
+            return $matchedIds[0];
+        }
+
+        if ($logFailure) {
+            if (count($matchedIds) > 1) {
+                @error_log(sprintf(
+                    '[MoodleExport] Ambiguous LP %s reference: path=%s title=%s matches=%s',
+                    $normalizedType,
+                    (string) $path,
+                    $title,
+                    implode(',', $matchedIds)
+                ));
+            } elseif ($candidateId > 0 || '' !== $normalizedTitle) {
+                @error_log(sprintf(
+                    '[MoodleExport] Unresolved LP %s reference: path=%s title=%s',
+                    $normalizedType,
+                    (string) $path,
+                    $title
+                ));
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Determine whether a legacy activity is already linked inside a learnpath.
      */
     private function isActivityInLearnpath(string $itemType, int $resourceId, ?string $documentPath = null): bool
@@ -1584,6 +1684,21 @@ class MoodleExport
                 }
 
                 $lpPath = (string) ($item['path'] ?? '');
+
+                if (\in_array($needleType, ['quiz', 'survey'], true)) {
+                    $resolvedId = $this->resolveLpCurrentResourceId(
+                        $needleType,
+                        $lpPath,
+                        (string) ($item['title'] ?? ''),
+                        false
+                    );
+                    if ($resolvedId === $resourceId) {
+                        return true;
+                    }
+
+                    continue;
+                }
+
                 if ('' !== $lpPath && ctype_digit($lpPath) && (int) $lpPath === $resourceId) {
                     return true;
                 }

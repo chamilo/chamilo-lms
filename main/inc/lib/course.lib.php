@@ -1980,11 +1980,11 @@ class CourseManager
             // We get the session coach.
             $sql = "SELECT id_coach FROM $table WHERE id = $session_id";
             $rs = Database::query($sql);
-            $session_id_coach = Database::result($rs, 0, 'id_coach');
-            if (is_int($session_id_coach)) {
-                $userInfo = api_get_user_info($session_id_coach);
+            $sessionCoachId = (int) Database::result($rs, 0, 'id_coach');
+            if ($sessionCoachId > 0) {
+                $userInfo = api_get_user_info($sessionCoachId);
                 if ($userInfo) {
-                    $users[$session_id_coach] = $userInfo;
+                    $users[$sessionCoachId] = $userInfo;
                 }
             }
         }

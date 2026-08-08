@@ -27,9 +27,9 @@ final class SafeHttpClientHelper
      * SSRF-safe HTTP client. Construction has no side effects, so it is safe to
      * call from any context (no platform settings or container required).
      */
-    public static function create(): HttpClientInterface
+    public static function create(?HttpClientInterface $client = null): HttpClientInterface
     {
-        return new NoPrivateNetworkHttpClient(HttpClient::create());
+        return new NoPrivateNetworkHttpClient($client ?? HttpClient::create());
     }
 
     /**

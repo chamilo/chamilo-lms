@@ -43,9 +43,11 @@ function buildFallbackCandidates(locale, fallbackLocales) {
   return candidates
 }
 
-function findByLangIn(root, selector, candidates) {
+function findByLang(elements, candidates) {
   for (var i = 0; i < candidates.length; i++) {
-    var matches = root.querySelectorAll(selector.replace("{lang}", candidates[i]))
+    var matches = elements.filter(function (el) {
+      return el.getAttribute("lang") === candidates[i]
+    })
 
     if (matches.length > 0) {
       return matches
@@ -69,28 +71,55 @@ function showMatches(matches) {
 }
 
 /**
- * Hides every element of a lang-tagged group, then re-shows whichever
- * candidate matches first. If none of the candidates match anything, falls
- * back to the first language actually present in the group rather than
- * leaving the group blank — mirrors the legacy
- * api_get_filtered_multilingual_HTML_string() behavior.
+ * Groups elements by their immediate parent. A page (or an editor field) can
+ * contain several *independent* lang-tagged groups (e.g. the course "about"
+ * page renders one multilingual block per description section) — they must
+ * never be pooled together, or a language match in one group hides an
+ * unrelated group that has no matching language at all.
  */
-function applyGroup(root, allSelector, langSelector, candidates) {
-  var group = root.querySelectorAll(allSelector)
+function groupByParent(elements) {
+  var parents = []
+  var groups = []
 
-  if (group.length === 0) {
+  elements.forEach(function (el) {
+    var index = parents.indexOf(el.parentNode)
+
+    if (index === -1) {
+      parents.push(el.parentNode)
+      groups.push([el])
+    } else {
+      groups[index].push(el)
+    }
+  })
+
+  return groups
+}
+
+/**
+ * Within each independent lang-tagged group found under root, hides every
+ * element then re-shows whichever candidate matches first. If none of the
+ * candidates match anything in that group, falls back to the first language
+ * actually present in the group rather than leaving it blank — mirrors the
+ * legacy api_get_filtered_multilingual_HTML_string() behavior.
+ */
+function applyGroup(root, allSelector, candidates) {
+  var all = Array.prototype.slice.call(root.querySelectorAll(allSelector))
+
+  if (all.length === 0) {
     return
   }
 
-  hideMatches(group)
+  groupByParent(all).forEach(function (group) {
+    hideMatches(group)
 
-  var matches = findByLangIn(root, langSelector, candidates)
+    var matches = findByLang(group, candidates)
 
-  if (matches.length === 0) {
-    matches = findByLangIn(root, langSelector, buildLocaleCandidates(group[0].getAttribute("lang")))
-  }
+    if (matches.length === 0) {
+      matches = findByLang(group, buildLocaleCandidates(group[0].getAttribute("lang")))
+    }
 
-  showMatches(matches)
+    showMatches(matches)
+  })
 }
 
 /**
@@ -114,10 +143,10 @@ export default function translateHtml(fallbackLocales) {
     return
   }
 
-  applyGroup(document, ".mce-translatehtml", '[lang="{lang}"].mce-translatehtml', candidates)
+  applyGroup(document, ".mce-translatehtml", candidates)
 
   // Legacy translate_html content
-  applyGroup(document, "span[lang]:not(.mce-translatehtml)", 'span[lang="{lang}"]:not(.mce-translatehtml)', candidates)
+  applyGroup(document, "span[lang]:not(.mce-translatehtml)", candidates)
 }
 
 /**
@@ -146,10 +175,10 @@ export function filterTranslatedHtml(html, locale, fallbackLocales = []) {
   container.innerHTML = html
 
   // Editor-created content (.mce-translatehtml)
-  applyGroup(container, ".mce-translatehtml", '[lang="{lang}"].mce-translatehtml', candidates)
+  applyGroup(container, ".mce-translatehtml", candidates)
 
   // Legacy content (span[lang])
-  applyGroup(container, "span[lang]:not(.mce-translatehtml)", 'span[lang="{lang}"]:not(.mce-translatehtml)', candidates)
+  applyGroup(container, "span[lang]:not(.mce-translatehtml)", candidates)
 
   return container.innerHTML
 }

@@ -105,13 +105,35 @@ final class CsrfProtectionListenerTest extends TestCase
         $this->listen($request);
     }
 
-    public function testNonApiNonLegacyRouteIsNotValidated(): void
+    public function testLegacyPageWithNoResolvedRouteIsNotValidated(): void
     {
         // Legacy page form posts keep their own FormValidator token; the
-        // listener must not reach into them.
+        // listener must not reach into them. The web server executes them and
+        // only then boots the kernel, so no route is ever resolved — that
+        // absence is what keeps them out of scope.
         $this->csrfTokenManager->expects(self::never())->method('isTokenValid');
 
-        $this->listen($this->sessionRequest('POST', '/main/admin/user_list.php'));
+        $this->listen($this->sessionRequest('POST', '/main/admin/user_list.php', null));
+    }
+
+    public function testRoutedControllerOutsideApiIsValidated(): void
+    {
+        // Scope is default-protected: a resolved route is guarded whatever its
+        // prefix. 136 write routes live outside /api — /admin, /social-network,
+        // /resources and friends — and an allowlist of prefixes would leave
+        // every new one silently unguarded.
+        $this->csrfTokenManager->expects(self::once())->method('isTokenValid')->willReturn(true);
+
+        $this->listen($this->sessionRequest('POST', '/resources/lp/1/advanced-access/user'));
+    }
+
+    public function testExcludedRouteIsNotValidated(): void
+    {
+        // LTI Deep Linking returns the user through a cross-site form post the
+        // origin check would legitimately reject.
+        $this->csrfTokenManager->expects(self::never())->method('isTokenValid');
+
+        $this->listen($this->sessionRequest('POST', '/courses/1/lti/item_return', 'chamilo_lti_return_item'));
     }
 
     public function testPlainControllerUnderApiIsValidated(): void
@@ -263,14 +285,23 @@ final class CsrfProtectionListenerTest extends TestCase
     /**
      * Builds a request carrying a session cookie, which is what makes it a
      * CSRF candidate in the first place.
+     *
+     * The _route attribute stands for what RouterListener sets at priority 32,
+     * before this listener runs: its presence is what separates a routed
+     * request from a legacy page the web server executed on its own. Pass null
+     * to simulate the latter.
      */
-    private function sessionRequest(string $method, string $uri): Request
+    private function sessionRequest(string $method, string $uri, ?string $route = 'a_resolved_route'): Request
     {
         $request = Request::create($uri, $method);
         $session = new Session(new MockArraySessionStorage());
 
         $request->setSession($session);
         $request->cookies->set($session->getName(), 'a-session-id');
+
+        if (null !== $route) {
+            $request->attributes->set('_route', $route);
+        }
 
         return $request;
     }

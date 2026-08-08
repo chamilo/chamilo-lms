@@ -26,8 +26,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 #[Route('/resources/lp/{lpId}/advanced-access')]
@@ -39,7 +37,6 @@ final class LpAdvancedAccessController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         SettingsManager $settingsManager,
-        CsrfTokenManagerInterface $csrfTokenManager,
     ): JsonResponse {
         $context = $this->resolveContext($lpId, $request, $entityManager);
         if (!$context['valid']) {
@@ -79,7 +76,6 @@ final class LpAdvancedAccessController extends AbstractController
             'userGroups' => $allowUserGroups
                 ? $this->getUserGroups($entityManager, $course, $lp, $session)
                 : [],
-            'csrfToken' => $csrfTokenManager->getToken('learning_path_advanced_access')->getValue(),
         ]);
     }
 
@@ -311,7 +307,6 @@ final class LpAdvancedAccessController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         SettingsManager $settingsManager,
-        CsrfTokenManagerInterface $csrfTokenManager,
     ): JsonResponse {
         $context = $this->resolveContext($lpId, $request, $entityManager);
         if (!$context['valid']) {
@@ -334,14 +329,6 @@ final class LpAdvancedAccessController extends AbstractController
         }
 
         $payload = $this->decodePayload($request);
-        $csrfToken = new CsrfToken(
-            'learning_path_advanced_access',
-            (string) ($payload['csrfToken'] ?? ''),
-        );
-        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], 403);
-        }
-
         $selectedIds = $this->normalizeIds($payload['selectedUserGroupIds'] ?? []);
         $allowedUserGroups = $this->getAllowedUserGroups($entityManager, $course);
         if ([] !== array_diff($selectedIds, array_keys($allowedUserGroups))) {

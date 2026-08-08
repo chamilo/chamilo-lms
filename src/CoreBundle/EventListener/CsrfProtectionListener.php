@@ -18,8 +18,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use const PHP_URL_PATH;
 
 /**
- * Central CSRF gate for every state-changing request under /api and to the
- * legacy AJAX endpoints.
+ * Central CSRF gate for every state-changing request the router resolves, plus
+ * the legacy AJAX endpoints.
  *
  * API Platform ships no CSRF mechanism of its own, so protection used to be
  * opt-in: each State provider emitted a token and each processor validated it
@@ -45,10 +45,17 @@ use const PHP_URL_PATH;
  * Being free of session state also means a full page reload — which remounts
  * the Vue app — has nothing to restore.
  *
+ * Scope is default-protected: any request whose route the router resolved is
+ * guarded, regardless of prefix. Only three things are outside it — requests
+ * with no session cookie or with a credential header (no CSRF surface), the
+ * routes in EXCLUDED_ROUTES, and legacy pages under public/main/, which the
+ * web server executes without a route being resolved and which keep their own
+ * FormValidator token.
+ *
  * Runs at kernel.request priority 9: after RouterListener (32) has resolved the
- * API Platform route attributes, and before the firewall (8), so a forged
- * request is rejected before the request pays for authentication and course
- * context resolution.
+ * route and its API Platform attributes, and before the firewall (8), so a
+ * forged request is rejected before the request pays for authentication and
+ * course context resolution.
  *
  * Note that API Platform negotiates the format earlier still, in
  * AddFormatListener (priority 28): a write request with an unsupported content
@@ -69,9 +76,23 @@ final class CsrfProtectionListener
      */
     public const string ORIGIN_CHECK_TOKEN = 'csrf-token';
 
-    private const string API_PATH = '/api';
-
     private const string LEGACY_AJAX_PATH_PREFIX = '/main/inc/ajax/';
+
+    /**
+     * Routes that legitimately receive a cross-site POST from a browser which
+     * carries a Chamilo session, so origin verification would reject a valid
+     * request. They are the only category that needs listing: everything else
+     * a third party calls arrives either without a session cookie or with a
+     * credential header, and is already skipped above.
+     *
+     * Keep this list as short as the protocol demands. Adding a route here
+     * removes its only CSRF defense.
+     */
+    private const array EXCLUDED_ROUTES = [
+        // LTI Deep Linking: the external tool returns the user to Chamilo by
+        // auto-submitting a form from the tool's own origin.
+        'chamilo_lti_return_item',
+    ];
 
     /**
      * Headers whose presence means the client authenticates with credentials
@@ -153,15 +174,30 @@ final class CsrfProtectionListener
             return true;
         }
 
-        if (self::API_PATH !== $path && !str_starts_with($path, self::API_PATH.'/')) {
+        // Everything the router resolved is guarded, whatever its prefix. An
+        // allowlist of protected prefixes was tried and rejected: it has to be
+        // extended for every new route, and forgetting leaves the route
+        // silently unguarded — the exact failure the per-endpoint token had.
+        // Defaulting to protected inverts the failure mode: forgetting to
+        // exclude a route that needs it surfaces as a 403 the first time the
+        // feature is exercised.
+        //
+        // Legacy pages under public/main/ are the deliberate exception. The web
+        // server executes them and only then boots the kernel, so no route is
+        // resolved, and their form posts keep validating their own
+        // FormValidator token.
+        $route = $request->attributes->get('_route');
+
+        if (!\is_string($route) || '' === $route) {
             return false;
         }
 
-        // Everything under /api is guarded, not just API Platform operations:
-        // 246 of the routes there are plain Symfony controllers (ticket admin,
-        // announcements, translations…), and they are exactly the endpoints
-        // that used to carry a hand-written check. Only API Platform operations
-        // can opt out, since only they have metadata to declare it on.
+        if (\in_array($route, self::EXCLUDED_ROUTES, true)) {
+            return false;
+        }
+
+        // API Platform operations may still opt out through their metadata;
+        // plain controllers have none, so they are simply guarded.
         return $this->isProtectedApiOperation($request);
     }
 

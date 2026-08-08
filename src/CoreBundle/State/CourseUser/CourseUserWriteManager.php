@@ -17,8 +17,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use UserManager;
 
-use const ANONYMOUS;
-
 final readonly class CourseUserWriteManager
 {
     public function __construct(
@@ -201,7 +199,8 @@ final readonly class CourseUserWriteManager
             $user = $this->entityManager->getRepository(User::class)->find($userId);
             if (!$user instanceof User
                 || User::SOFT_DELETED === $user->getActive()
-                || ANONYMOUS === $user->getStatus()
+                || $user->hasRole('ROLE_ANONYMOUS')
+                || !$this->hasPersistedPlatformRole($user)
             ) {
                 continue;
             }
@@ -212,6 +211,7 @@ final readonly class CourseUserWriteManager
                 continue;
             }
 
+            // Teacher eligibility is roles-based only (never user.status).
             if (CourseUserManager::TYPE_TEACHER === $type
                 && !$user->isTeacher()
                 && !$user->isAdmin()
@@ -224,5 +224,22 @@ final readonly class CourseUserWriteManager
         }
 
         return $result;
+    }
+
+    /**
+     * System accounts (anonymous / fallback) often have an empty roles array.
+     * Require at least one real platform role from the roles column.
+     */
+    private function hasPersistedPlatformRole(User $user): bool
+    {
+        return $user->isStudent()
+            || $user->isTeacher()
+            || $user->isAdmin()
+            || $user->isSessionAdmin()
+            || $user->isHRM()
+            || $user->isStudentBoss()
+            || $user->isInvitee()
+            || $user->hasRole('ROLE_GLOBAL_ADMIN')
+            || $user->hasRole('ROLE_QUESTION_MANAGER');
     }
 }

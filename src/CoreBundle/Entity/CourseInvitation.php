@@ -11,10 +11,15 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * A pending or accepted course/session invitation sent to an email address
- * that may not have a Chamilo account yet. Referenced by a ValidationToken
- * (type COURSE_INVITATION) via that token's resourceId, which carries the
- * one-time secret hash; this entity carries what the hash actually grants.
+ * A pending or accepted course/session invitation sent to an email address.
+ * Two modes:
+ * - registration invite (invited_user_id NULL): unknown email opens registration.php
+ * - existing-user invite (invited_user_id set): bound to that account, redeem via
+ *   /course-invitation/accept after login
+ *
+ * Referenced by a ValidationToken (type COURSE_INVITATION) via that token's
+ * resourceId, which carries the one-time secret hash; this entity carries
+ * what the hash actually grants.
  *
  * Course and session subscription are mutually exclusive in Chamilo (you can
  * subscribe to a base course, or to a whole session, never "this course
@@ -73,6 +78,15 @@ class CourseInvitation
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'registered_user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $registeredUser = null;
+
+    /**
+     * When set, this invitation targets an existing platform account: the
+     * redeem link requires that user to log in and then auto-subscribes them.
+     * Null means a classic registration invitation for an unknown email.
+     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'invited_user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?User $invitedUser = null;
 
     public function __construct(string $email, User $createdBy, AccessUrl $accessUrl)
     {
@@ -156,6 +170,23 @@ class CourseInvitation
     public function getRegisteredUser(): ?User
     {
         return $this->registeredUser;
+    }
+
+    public function getInvitedUser(): ?User
+    {
+        return $this->invitedUser;
+    }
+
+    public function setInvitedUser(?User $invitedUser): self
+    {
+        $this->invitedUser = $invitedUser;
+
+        return $this;
+    }
+
+    public function isForExistingUser(): bool
+    {
+        return null !== $this->invitedUser;
     }
 
     public function isAccepted(): bool

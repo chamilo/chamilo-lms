@@ -91,6 +91,9 @@ final class CourseUserAvailable
     public bool $showClasses = false;
 
     #[Groups(['course_user_available:read'])]
+    public bool $canInviteByEmail = false;
+
+    #[Groups(['course_user_available:read'])]
     public string $groupsUrl = '';
 
     #[Groups(['course_user_available:read'])]

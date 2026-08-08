@@ -51,6 +51,7 @@ final readonly class CourseInvitationTokenService
         ?int $exerciseId,
         string $email,
         User $createdBy,
+        ?User $invitedUser = null,
     ): array {
         if (null === $course && null === $session) {
             throw new InvalidArgumentException('An invitation needs either a course or a session.');
@@ -65,12 +66,13 @@ final readonly class CourseInvitationTokenService
         $invitation->setCourse($course);
         $invitation->setSession($session);
         $invitation->setExerciseId($exerciseId);
+        $invitation->setInvitedUser($invitedUser);
         $this->invitationRepository->save($invitation, true);
 
         $token = new ValidationToken(ValidationTokenHelper::TYPE_COURSE_INVITATION, (int) $invitation->getId());
         $this->tokenRepository->save($token, true);
 
-        $url = $this->buildUrl($token);
+        $url = $this->buildUrl($token, $invitation);
 
         $this->eventLoggerHelper->addEvent(
             'course_invitation_sent',
@@ -79,6 +81,7 @@ final readonly class CourseInvitationTokenService
                 'email' => $email,
                 'invitation_id' => $invitation->getId(),
                 'hash' => $token->getHash(),
+                'invited_user_id' => $invitedUser?->getId(),
             ],
             null,
             (int) $createdBy->getId(),
@@ -150,7 +153,7 @@ final readonly class CourseInvitationTokenService
             return null;
         }
 
-        return $this->buildUrl($token);
+        return $this->buildUrl($token, $invitation);
     }
 
     /**
@@ -171,6 +174,7 @@ final readonly class CourseInvitationTokenService
                 'email' => $invitation->getEmail(),
                 'invitation_id' => $invitation->getId(),
                 'registered_user_id' => $registeredUser->getId(),
+                'invited_user_id' => $invitation->getInvitedUser()?->getId(),
             ],
             null,
             (int) $registeredUser->getId(),
@@ -219,8 +223,16 @@ final readonly class CourseInvitationTokenService
         );
     }
 
-    private function buildUrl(ValidationToken $token): string
+    private function buildUrl(ValidationToken $token, CourseInvitation $invitation): string
     {
-        return api_get_path(WEB_CODE_PATH).'auth/registration.php?invitation='.$token->getHash();
+        $hash = $token->getHash();
+
+        // Existing accounts go through a login-and-subscribe endpoint; unknown
+        // emails still open the registration form with the same token hash.
+        if ($invitation->isForExistingUser()) {
+            return api_get_path(WEB_PATH).'course-invitation/accept?invitation='.rawurlencode($hash);
+        }
+
+        return api_get_path(WEB_CODE_PATH).'auth/registration.php?invitation='.rawurlencode($hash);
     }
 }

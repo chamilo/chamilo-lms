@@ -14,7 +14,11 @@
         </p>
     </div>
 
-    <p>{{ 'Click the link below to create your account and join automatically.'|trans }}</p>
+    {% if is_existing_user %}
+        <p>{{ 'Click the link below to log in (if needed) and join automatically.'|trans }}</p>
+    {% else %}
+        <p>{{ 'Click the link below to create your account and join automatically.'|trans }}</p>
+    {% endif %}
     <p><a style="font-weight: bold; color: #2BA6CB;" href="{{ url }}">{{ url }}</a></p>
     <p>{{ 'This link can only be used once and will expire after a few days.'|trans }}</p>
 

@@ -1065,9 +1065,16 @@ class CourseRestorer
         //    Pass B: HTML files (rewrite using URL maps)
         $urlMapByRel  = [];
         $urlMapByBase = [];
+        // old ResourceNode UUID → new resource file URL (modern /r/document/files/{uuid}/view embeds)
+        $urlMapByUuid = [];
 
-        $addToMaps = function (string $srcRelKey, int $iid) use (&$urlMapByRel, &$urlMapByBase, $docRepo): void {
-            if ($srcRelKey === '' || $iid <= 0) {
+        $addToMaps = function (string $srcRelKey, int $iid, ?string $srcUuid = null) use (
+            &$urlMapByRel,
+            &$urlMapByBase,
+            &$urlMapByUuid,
+            $docRepo
+        ): void {
+            if ($iid <= 0) {
                 return;
             }
 
@@ -1081,14 +1088,71 @@ class CourseRestorer
                 return;
             }
 
-            if (!isset($urlMapByRel[$srcRelKey])) {
+            if ('' !== $srcRelKey && !isset($urlMapByRel[$srcRelKey])) {
                 $urlMapByRel[$srcRelKey] = $url;
             }
 
-            $base = basename($srcRelKey);
-            if ($base !== '' && (!isset($urlMapByBase[$base]) || !$urlMapByBase[$base])) {
-                $urlMapByBase[$base] = $url;
+            // Also index common path variants used in HTML embeds.
+            if ('' !== $srcRelKey) {
+                $variants = [
+                    $srcRelKey,
+                    ltrim($srcRelKey, '/'),
+                    'document/'.ltrim(preg_replace('#^/?document/#i', '', $srcRelKey) ?: '', '/'),
+                    '/document/'.ltrim(preg_replace('#^/?document/#i', '', $srcRelKey) ?: '', '/'),
+                ];
+                foreach ($variants as $variant) {
+                    $variant = (string) $variant;
+                    if ('' === $variant) {
+                        continue;
+                    }
+                    if (!isset($urlMapByRel[$variant])) {
+                        $urlMapByRel[$variant] = $url;
+                    }
+                }
+
+                $base = basename(str_replace('\\', '/', $srcRelKey));
+                if ('' !== $base && (!isset($urlMapByBase[$base]) || !$urlMapByBase[$base])) {
+                    $urlMapByBase[$base] = $url;
+                }
             }
+
+            $uuid = strtolower(trim((string) $srcUuid));
+            if ('' !== $uuid && preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                $urlMapByUuid[$uuid] = $url;
+            }
+        };
+
+        /**
+         * Resolve the source ResourceNode UUID for a bag item (export sidecar or copy-mode source).
+         */
+        $resolveSourceUuid = function ($item) use ($copyMode, $docRepo): ?string {
+            if (!\is_object($item)) {
+                return null;
+            }
+            $candidates = [
+                $item->resource_node_uuid ?? null,
+                (isset($item->obj) && \is_object($item->obj)) ? ($item->obj->resource_node_uuid ?? null) : null,
+            ];
+            foreach ($candidates as $c) {
+                $u = strtolower(trim((string) $c));
+                if ('' !== $u && preg_match('/^[0-9a-f-]{16,64}$/', $u)) {
+                    return $u;
+                }
+            }
+
+            // Course copy within the same portal: read UUID from the source CDocument.
+            if ($copyMode && !empty($item->source_id)) {
+                try {
+                    $srcDoc = $docRepo->find((int) $item->source_id);
+                    if ($srcDoc instanceof CDocument && $srcDoc->getResourceNode()?->getUuid()) {
+                        return strtolower((string) $srcDoc->getResourceNode()->getUuid());
+                    }
+                } catch (Throwable $e) {
+                    // ignore
+                }
+            }
+
+            return null;
         };
 
         $resolveSrcPath = function ($item) use ($copyMode, $srcRoot, $docRepo): ?string {
@@ -1159,8 +1223,10 @@ class CourseRestorer
             $isHtmlFile,
             &$urlMapByRel,
             &$urlMapByBase,
+            &$urlMapByUuid,
             $addToMaps,
             $resolveSrcPath,
+            $resolveSourceUuid,
             $DBG,
             $syncContextLinkParent,
             $resolveItemVisibility,
@@ -1171,11 +1237,12 @@ class CourseRestorer
             }
 
             $srcRelKey = (string) ($item->path ?? '');
+            $srcUuid = $resolveSourceUuid($item);
 
             if (!empty($item->destination_id)) {
                 $existing = $docRepo->find((int) $item->destination_id);
                 if ($existing) {
-                    $addToMaps($srcRelKey, (int) $item->destination_id);
+                    $addToMaps($srcRelKey, (int) $item->destination_id, $srcUuid);
 
                     return;
                 }
@@ -1235,7 +1302,7 @@ class CourseRestorer
             if ($existsIid) {
                 if (\defined('FILE_SKIP') && FILE_SKIP === (int) $this->file_option) {
                     $docResources[$k]->destination_id = (int) $existsIid;
-                    $addToMaps($srcRelKey, (int) $existsIid);
+                    $addToMaps($srcRelKey, (int) $existsIid, $srcUuid);
 
                     return;
                 }
@@ -1272,7 +1339,8 @@ class CourseRestorer
                     $raw,
                     $courseDir,
                     $urlMapByRel,
-                    $urlMapByBase
+                    $urlMapByBase,
+                    $urlMapByUuid
                 );
 
                 $content = $rew['html'];
@@ -1281,6 +1349,7 @@ class CourseRestorer
                     'file'     => $finalTitle,
                     'replaced' => (int) ($rew['replaced'] ?? 0),
                     'misses'   => (int) ($rew['misses'] ?? 0),
+                    'uuidMap'  => \count($urlMapByUuid),
                 ]);
             } else {
                 $realPath = $srcPath;
@@ -1333,19 +1402,19 @@ class CourseRestorer
             }
 
             $docResources[$k]->destination_id = $iid;
-            $addToMaps($srcRelKey, $iid);
+            $addToMaps($srcRelKey, $iid, $srcUuid);
 
             if ($iid > 0) {
                 $syncContextLinkParent((int) $iid, (int) $parentId);
             }
         };
 
-        // Pass A: non-HTML
+        // Pass A: non-HTML (images, PDFs, …) — build path + UUID URL maps first.
         foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, false);
         }
 
-        // Pass B: HTML
+        // Pass B: HTML — rewrite embeds (legacy /courses/... and modern /r/document/files/{uuid}/...).
         foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, true);
         }
@@ -1354,6 +1423,7 @@ class CourseRestorer
             'bucket'     => $docBucketKey,
             'mapByRel'   => \count($urlMapByRel),
             'mapByBase'  => \count($urlMapByBase),
+            'mapByUuid'  => \count($urlMapByUuid),
         ]);
 
         $this->documentsRestored = true;
@@ -5531,15 +5601,42 @@ class CourseRestorer
             }
         }
 
-        // Build minimal bags from the snapshot using ONLY needed IDs
+        // Build minimal bags from the snapshot using ONLY needed IDs.
+        // Match bag key OR source_id fields so Moodle-imported sequential keys still resolve.
         $filterBag = static function (array $sourceBag, array $idSet): array {
             if (empty($idSet)) {
                 return [];
             }
             $out = [];
             foreach ($idSet as $legacyId => $_) {
+                $legacyId = (int) $legacyId;
+                if ($legacyId <= 0) {
+                    continue;
+                }
                 if (isset($sourceBag[$legacyId])) {
                     $out[$legacyId] = $sourceBag[$legacyId];
+                    continue;
+                }
+                foreach ($sourceBag as $key => $wrap) {
+                    if (!\is_object($wrap)) {
+                        continue;
+                    }
+                    $candidates = [
+                        (int) $key,
+                        (int) ($wrap->source_id ?? 0),
+                        (int) ($wrap->id ?? 0),
+                        (int) ($wrap->iid ?? 0),
+                    ];
+                    if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                        $candidates[] = (int) ($wrap->obj->source_id ?? 0);
+                        $candidates[] = (int) ($wrap->obj->id ?? 0);
+                        $candidates[] = (int) ($wrap->obj->iid ?? 0);
+                        $candidates[] = (int) ($wrap->obj->source_moduleid ?? 0);
+                    }
+                    if (\in_array($legacyId, $candidates, true)) {
+                        $out[$key] = $wrap;
+                        break;
+                    }
                 }
             }
 
@@ -5643,10 +5740,111 @@ class CourseRestorer
         $surveyRepo = method_exists(Container::class, 'getSurveyRepository') ? Container::getSurveyRepository() : null;
         $workRepo  = method_exists(Container::class, 'getStudentPublicationRepository') ? Container::getStudentPublicationRepository() : null;
 
+        /**
+         * Resolve source/backup resource id → destination iid after restore.
+         *
+         * Bags are often keyed by sequential import ids while LP items still
+         * reference the original source iid in path/identifierref. Match by:
+         *  1) bag key
+         *  2) wrap.source_id / wrap.id / obj.source_id / obj.iid / obj.id
+         * across the bag and common aliases (quiz/quizzes, survey/surveys, …).
+         */
         $getDst = function (string $bag, $legacyId): int {
-            $wrap = $this->course->resources[$bag][$legacyId] ?? null;
+            $legacyId = (int) $legacyId;
+            if ($legacyId <= 0) {
+                return 0;
+            }
 
-            return ($wrap && isset($wrap->destination_id)) ? (int) $wrap->destination_id : 0;
+            $bagsToSearch = [$bag];
+            // Include known aliases so MoodleImport 'surveys'/'quizzes' keys still resolve.
+            $aliasMap = [
+                RESOURCE_QUIZ => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                'quiz' => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                'quizzes' => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                RESOURCE_SURVEY => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                'survey' => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                'surveys' => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                RESOURCE_DOCUMENT => [RESOURCE_DOCUMENT, 'document', 'documents'],
+                'document' => [RESOURCE_DOCUMENT, 'document', 'documents'],
+                RESOURCE_LINK => [RESOURCE_LINK, 'link', 'links'],
+                'link' => [RESOURCE_LINK, 'link', 'links'],
+                RESOURCE_WORK => [RESOURCE_WORK, 'works', 'work', 'student_publication'],
+                'works' => [RESOURCE_WORK, 'works', 'work', 'student_publication'],
+                'forum' => ['forum', 'forums'],
+            ];
+            if (isset($aliasMap[$bag])) {
+                $bagsToSearch = $aliasMap[$bag];
+            }
+
+            $readDest = static function ($wrap): int {
+                if (!\is_object($wrap)) {
+                    return 0;
+                }
+                $dest = (int) ($wrap->destination_id ?? 0);
+                if ($dest > 0) {
+                    return $dest;
+                }
+                if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                    return (int) ($wrap->obj->destination_id ?? 0);
+                }
+
+                return 0;
+            };
+
+            $matchesSource = static function ($wrap, int $want): bool {
+                if (!\is_object($wrap)) {
+                    return false;
+                }
+                $candidates = [
+                    (int) ($wrap->source_id ?? 0),
+                    (int) ($wrap->id ?? 0),
+                    (int) ($wrap->iid ?? 0),
+                ];
+                if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                    $candidates[] = (int) ($wrap->obj->source_id ?? 0);
+                    $candidates[] = (int) ($wrap->obj->id ?? 0);
+                    $candidates[] = (int) ($wrap->obj->iid ?? 0);
+                    $candidates[] = (int) ($wrap->obj->source_moduleid ?? 0);
+                    $candidates[] = (int) ($wrap->obj->source_activity_id ?? 0);
+                }
+                $candidates[] = (int) ($wrap->source_moduleid ?? 0);
+                $candidates[] = (int) ($wrap->source_activity_id ?? 0);
+
+                return \in_array($want, $candidates, true);
+            };
+
+            foreach ($bagsToSearch as $bagName) {
+                $bucket = $this->course->resources[$bagName] ?? null;
+                if (!\is_array($bucket) || empty($bucket)) {
+                    continue;
+                }
+
+                // Fast path: bag keyed by the legacy/source id.
+                if (isset($bucket[$legacyId])) {
+                    $dest = $readDest($bucket[$legacyId]);
+                    if ($dest > 0) {
+                        return $dest;
+                    }
+                }
+
+                // Slow path: scan for matching source_id (Moodle sequential bag keys).
+                foreach ($bucket as $key => $wrap) {
+                    if ((int) $key === $legacyId) {
+                        $dest = $readDest($wrap);
+                        if ($dest > 0) {
+                            return $dest;
+                        }
+                    }
+                    if ($matchesSource($wrap, $legacyId)) {
+                        $dest = $readDest($wrap);
+                        if ($dest > 0) {
+                            return $dest;
+                        }
+                    }
+                }
+            }
+
+            return 0;
         };
 
         $findDocIidByTitle = function (string $title) use ($docRepo, $courseEnt, $sessionEnt): int {
@@ -8187,6 +8385,20 @@ class CourseRestorer
             return $parentId;
         };
 
+        // Prefer UUID rewrite from already-restored document bag (old → new resource URLs).
+        $urlMapByUuid = $this->buildRestoredDocumentUuidUrlMap($docRepo);
+        if (!empty($urlMapByUuid) && str_contains($html, '/r/document/files/')) {
+            $modern = ChamiloHelper::rewriteModernResourceUrlsWithMap($html, $urlMapByUuid);
+            if ((int) ($modern['replaced'] ?? 0) > 0) {
+                $html = (string) ($modern['html'] ?? $html);
+                $DBG('html.rewrite.uuid', [
+                    'replaced' => (int) $modern['replaced'],
+                    'misses' => (int) ($modern['misses'] ?? 0),
+                    'mapSize' => \count($urlMapByUuid),
+                ]);
+            }
+        }
+
         // Once documents are already restored, avoid the helper path that can recreate dependencies.
         if ($this->documentsRestored) {
             $fallback = $this->rewriteHtmlDocumentUrlsFallback(
@@ -8203,9 +8415,7 @@ class CourseRestorer
                 $DBG
             );
 
-            $fallbackHtml = (string) ($fallback['html'] ?? $html);
-
-            return $fallbackHtml;
+            return (string) ($fallback['html'] ?? $html);
         }
 
         try {
@@ -8230,9 +8440,16 @@ class CourseRestorer
             $DBG('html.rewrite.map', [
                 'byRel' => is_array($byRel) ? count($byRel) : 0,
                 'byBase' => is_array($byBase) ? count($byBase) : 0,
+                'byUuid' => \count($urlMapByUuid),
             ]);
 
-            $result = ChamiloHelper::rewriteLegacyCourseUrlsWithMap($html, $courseDir, $byRel, $byBase);
+            $result = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
+                $html,
+                $courseDir,
+                $byRel,
+                $byBase,
+                $urlMapByUuid
+            );
 
             $DBG('html.rewrite.result', [
                 'replaced' => (int) ($result['replaced'] ?? 0),
@@ -8274,6 +8491,74 @@ class CourseRestorer
         }
 
         return $html;
+    }
+
+    /**
+     * Build old ResourceNode UUID → new resource file URL from the document bag
+     * after documents have been restored (destination_id populated).
+     *
+     * @return array<string,string>
+     */
+    private function buildRestoredDocumentUuidUrlMap($docRepo): array
+    {
+        $map = [];
+        $bag = null;
+        foreach ([RESOURCE_DOCUMENT, 'document', 'documents'] as $key) {
+            if (!empty($this->course->resources[$key]) && \is_array($this->course->resources[$key])) {
+                $bag = $this->course->resources[$key];
+                break;
+            }
+        }
+        if (null === $bag) {
+            return [];
+        }
+
+        foreach ($bag as $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+            $destId = (int) ($wrap->destination_id ?? 0);
+            if ($destId <= 0) {
+                continue;
+            }
+            $uuid = strtolower(trim((string) (
+                $wrap->resource_node_uuid
+                ?? ((isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->resource_node_uuid ?? '') : '')
+                ?? ''
+            )));
+            if ('' === $uuid || !preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                // Copy mode: resolve from source document.
+                $srcId = (int) ($wrap->source_id ?? 0);
+                if ($srcId > 0) {
+                    try {
+                        $srcDoc = $docRepo->find($srcId);
+                        if ($srcDoc instanceof CDocument && $srcDoc->getResourceNode()?->getUuid()) {
+                            $uuid = strtolower((string) $srcDoc->getResourceNode()->getUuid());
+                        }
+                    } catch (Throwable $e) {
+                        $uuid = '';
+                    }
+                }
+            }
+            if ('' === $uuid || !preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                continue;
+            }
+
+            try {
+                $dstDoc = $docRepo->find($destId);
+                if (!$dstDoc instanceof CDocument) {
+                    continue;
+                }
+                $url = (string) $docRepo->getResourceFileUrl($dstDoc);
+                if ('' !== $url) {
+                    $map[$uuid] = $url;
+                }
+            } catch (Throwable $e) {
+                // skip
+            }
+        }
+
+        return $map;
     }
 
     private function getImportBackupZipPath(): string

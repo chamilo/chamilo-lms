@@ -2041,9 +2041,47 @@ class MoodleImport
             }
         }
 
-        // PRE-SCAN: build URL maps for HTML rewriting if helpers exist
+        // Build maps in two passes: non-HTML first (images), then rewrite HTML.
         $urlMapByRel = [];
         $urlMapByBase = [];
+        $urlMapByUuid = [];
+
+        $registerRestoredDoc = static function ($wrap, $entity) use (
+            &$urlMapByRel,
+            &$urlMapByBase,
+            &$urlMapByUuid,
+            $docRepo,
+            $effectiveEntity
+        ): void {
+            if (!$entity || !method_exists($entity, 'getIid')) {
+                return;
+            }
+            $url = (string) $docRepo->getResourceFileUrl($entity);
+            if ('' === $url) {
+                return;
+            }
+            $e = $effectiveEntity($wrap);
+            $path = (string) ($e->path ?? $wrap->path ?? '');
+            if ('' !== $path) {
+                $urlMapByRel[$path] = $urlMapByRel[$path] ?? $url;
+                $urlMapByRel[ltrim($path, '/')] = $urlMapByRel[ltrim($path, '/')] ?? $url;
+                $base = basename(str_replace('\\', '/', $path));
+                if ('' !== $base) {
+                    $urlMapByBase[$base] = $urlMapByBase[$base] ?? $url;
+                }
+            }
+            $uuid = strtolower(trim((string) (
+                $wrap->resource_node_uuid
+                ?? $e->resource_node_uuid
+                ?? ((isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->resource_node_uuid ?? '') : '')
+                ?? ''
+            )));
+            if ('' !== $uuid && preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                $urlMapByUuid[$uuid] = $url;
+            }
+        };
+
+        // PRE-SCAN: package-based legacy map (best-effort for old /courses/... embeds)
         foreach ($docs as $k => $wrap) {
             $e = $effectiveEntity($wrap);
             if ($isFolderItem($wrap)) {
@@ -2095,9 +2133,92 @@ class MoodleImport
                 $DBG('html:map:failed', ['err' => $te->getMessage()]);
             }
         }
-        $DBG('global.map.stats', ['byRel' => \count($urlMapByRel), 'byBase' => \count($urlMapByBase)]);
 
-        // Import files (HTML rewritten before addDocument; binaries via realPath)
+        // Pass A: import non-HTML binaries first and register path/uuid maps.
+        foreach ($docs as $k => $wrap) {
+            $e = $effectiveEntity($wrap);
+            if ($isFolderItem($wrap)) {
+                continue;
+            }
+            $rawTitle = (string) ($e->title ?? basename((string) $e->path));
+            $srcPath = $srcRoot.(string) $e->path;
+            if (!is_file($srcPath) || !is_readable($srcPath) || $isHtmlFile($srcPath, $rawTitle)) {
+                continue;
+            }
+
+            $rel = $normalizeMoodleRel((string) $e->path);
+            $parentRel = rtrim(\dirname($rel), '/');
+            $parentId = $folders[$parentRel] ?? 0;
+            if (!$parentId) {
+                $parentId = $ensureFolder($parentRel);
+                $folders[$parentRel] = $parentId;
+            }
+            $parentRes = $parentId ? $docRepo->find($parentId) : $courseEntity;
+            $findExistingIid = function (string $title) use ($docRepo, $parentRes, $courseEntity, $sessionEntity, $groupEntity): ?int {
+                $ex = $docRepo->findCourseResourceByTitle(
+                    $title,
+                    $parentRes->getResourceNode(),
+                    $courseEntity,
+                    $sessionEntity,
+                    $groupEntity
+                );
+
+                return $ex && method_exists($ex, 'getIid') ? (int) $ex->getIid() : null;
+            };
+            $finalTitle = $rawTitle;
+            $existsIid = $findExistingIid($finalTitle);
+            if ($existsIid && FILE_SKIP === $filePolicy) {
+                if (isset($legacy->resources['document'][$k])) {
+                    $legacy->resources['document'][$k]->destination_id = $existsIid;
+                }
+                $existing = $docRepo->find($existsIid);
+                $registerRestoredDoc($wrap, $existing);
+                continue;
+            }
+            if ($existsIid && FILE_RENAME === $filePolicy) {
+                $pi = pathinfo($rawTitle);
+                $name = $pi['filename'] ?? $rawTitle;
+                $ext2 = isset($pi['extension']) && '' !== $pi['extension'] ? '.'.$pi['extension'] : '';
+                $i = 1;
+                while ($findExistingIid($finalTitle)) {
+                    $finalTitle = $name.'_'.$i.$ext2;
+                    $i++;
+                }
+            }
+
+            try {
+                $entity = DocumentManager::addDocument(
+                    ['real_id' => (int) $courseInfo['real_id'], 'code' => (string) $courseInfo['code']],
+                    $rel,
+                    'file',
+                    (int) (@filesize($srcPath) ?: 0),
+                    $finalTitle,
+                    (string) ($e->comment ?? ''),
+                    0,
+                    null,
+                    0,
+                    (int) $sessionId,
+                    0,
+                    false,
+                    '',
+                    $parentId,
+                    $srcPath
+                );
+                if (isset($legacy->resources['document'][$k]) && $entity && method_exists($entity, 'getIid')) {
+                    $legacy->resources['document'][$k]->destination_id = (int) $entity->getIid();
+                }
+                $registerRestoredDoc($wrap, $entity);
+            } catch (Throwable $te) {
+                $DBG('file:binary:error', ['title' => $finalTitle, 'err' => $te->getMessage()]);
+            }
+        }
+        $DBG('global.map.stats', [
+            'byRel' => \count($urlMapByRel),
+            'byBase' => \count($urlMapByBase),
+            'byUuid' => \count($urlMapByUuid),
+        ]);
+
+        // Pass B: import HTML files with rewritten image embeds.
         $nFiles = 0;
         foreach ($docs as $k => $wrap) {
             $e = $effectiveEntity($wrap);
@@ -2111,6 +2232,10 @@ class MoodleImport
             if (!is_file($srcPath) || !is_readable($srcPath)) {
                 $DBG('file:skip:src-missing', ['src' => $srcPath, 'title' => $rawTitle]);
 
+                continue;
+            }
+            // Non-HTML already imported in pass A.
+            if (!$isHtmlFile($srcPath, $rawTitle)) {
                 continue;
             }
 
@@ -2164,32 +2289,34 @@ class MoodleImport
             }
 
             // Prepare payload for addDocument
-            $isHtml = $isHtmlFile($srcPath, $rawTitle);
             $content = '';
             $realPath = '';
 
-            if ($isHtml) {
-                $raw = @file_get_contents($srcPath) ?: '';
-                if (\defined('UTF8_CONVERT') && UTF8_CONVERT) {
-                    $raw = utf8_encode($raw);
-                }
-                $DBG('html:rewrite:before', ['title' => $finalTitle, 'maps' => [\count($urlMapByRel), \count($urlMapByBase)]]);
+            $raw = @file_get_contents($srcPath) ?: '';
+            if (\defined('UTF8_CONVERT') && UTF8_CONVERT) {
+                $raw = utf8_encode($raw);
+            }
+            $DBG('html:rewrite:before', [
+                'title' => $finalTitle,
+                'maps' => [\count($urlMapByRel), \count($urlMapByBase), \count($urlMapByUuid)],
+            ]);
 
-                try {
-                    $rew = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
-                        $raw,
-                        $courseDir,
-                        $urlMapByRel,
-                        $urlMapByBase
-                    );
-                    $content = (string) ($rew['html'] ?? $raw);
-                    $DBG('html:rewrite:after', ['replaced' => (int) ($rew['replaced'] ?? 0), 'misses' => (int) ($rew['misses'] ?? 0)]);
-                } catch (Throwable $te) {
-                    $content = $raw; // fallback to original HTML
-                    $DBG('html:rewrite:error', ['err' => $te->getMessage()]);
-                }
-            } else {
-                $realPath = $srcPath; // binary: pass physical path to be streamed into ResourceFile
+            try {
+                $rew = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
+                    $raw,
+                    $courseDir,
+                    $urlMapByRel,
+                    $urlMapByBase,
+                    $urlMapByUuid
+                );
+                $content = (string) ($rew['html'] ?? $raw);
+                $DBG('html:rewrite:after', [
+                    'replaced' => (int) ($rew['replaced'] ?? 0),
+                    'misses' => (int) ($rew['misses'] ?? 0),
+                ]);
+            } catch (Throwable $te) {
+                $content = $raw; // fallback to original HTML
+                $DBG('html:rewrite:error', ['err' => $te->getMessage()]);
             }
 
             try {
@@ -3477,6 +3604,30 @@ class MoodleImport
             $items = [];
             foreach ($rawItems as $it) {
                 $mappedRef = $this->mapLpItemRef($it, $idx, $resources);
+                $srcPath = (string) ($it['path'] ?? '');
+                $srcRef = $it['ref'] ?? null;
+                $srcIdRef = (string) ($it['identifierref'] ?? '');
+
+                // When we resolved a local bag id, rewrite path/identifierref so
+                // CourseRestorer can look up destination_id by bag key after quizzes/surveys restore.
+                // Keep original values under _src for diagnostics.
+                $pathForRestore = $srcPath;
+                $idRefForRestore = $srcIdRef;
+                if (null !== $mappedRef && $mappedRef > 0) {
+                    $itype = strtolower((string) ($it['item_type'] ?? ''));
+                    if (\in_array(
+                        $itype,
+                        [
+                            'document', 'quiz', 'quizzes', 'exercise',
+                            'survey', 'feedback', 'link', 'weblink', 'url',
+                            'work', 'works', 'student_publication', 'forum',
+                        ],
+                        true
+                    )) {
+                        $pathForRestore = (string) $mappedRef;
+                        $idRefForRestore = (string) $mappedRef;
+                    }
+                }
 
                 $items[] = [
                     'id' => (int) ($it['id'] ?? 0),
@@ -3485,7 +3636,8 @@ class MoodleImport
                     'title' => (string) ($it['title'] ?? ''),
                     'name' => (string) ($it['name'] ?? $lpTitle),
                     'description' => (string) ($it['description'] ?? ''),
-                    'path' => (string) ($it['path'] ?? ''),
+                    'path' => $pathForRestore,
+                    'identifierref' => $idRefForRestore,
                     'min_score' => (float) ($it['min_score'] ?? 0),
                     'max_score' => isset($it['max_score']) ? (float) $it['max_score'] : null,
                     'mastery_score' => isset($it['mastery_score']) ? (float) $it['mastery_score'] : null,
@@ -3498,8 +3650,10 @@ class MoodleImport
                     'launch_data' => (string) ($it['launch_data'] ?? ''),
                     'audio' => (string) ($it['audio'] ?? ''),
                     '_src' => [
-                        'ref' => $it['ref'] ?? null,
-                        'path' => $it['path'] ?? null,
+                        'ref' => $srcRef,
+                        'path' => $srcPath,
+                        'identifierref' => $srcIdRef,
+                        'mapped_ref' => $mappedRef,
                     ],
                 ];
             }
@@ -3632,115 +3786,287 @@ class MoodleImport
 
     /**
      * Build look-up indexes over the freshly collected resources to resolve LP item refs.
-     * We index by multiple keys to increase match odds (path, title, url, etc.)
+     * Index by bag key, source_id, path, title, url — LP items usually store the source iid in path.
      */
     private function buildResourceIndexes(array $resources): array
     {
         $idx = [
             'documentByPath' => [],
             'documentByTitle' => [],
+            'documentBySourceId' => [],
             'linkByUrl' => [],
+            'linkBySourceId' => [],
             'forumByTitle' => [],
+            'forumBySourceId' => [],
             'quizByTitle' => [],
+            'quizBySourceId' => [],
+            'surveyByTitle' => [],
+            'surveyBySourceId' => [],
             'workByTitle' => [],
+            'workBySourceId' => [],
             'scormByTitle' => [],
         ];
 
-        foreach ((array) ($resources['document'] ?? []) as $id => $doc) {
+        $indexSourceIds = static function (array &$target, int $bagId, $wrap): void {
+            $ids = [(int) $bagId];
+            if (\is_object($wrap)) {
+                $ids[] = (int) ($wrap->source_id ?? 0);
+                $ids[] = (int) ($wrap->id ?? 0);
+                $ids[] = (int) ($wrap->iid ?? 0);
+                $ids[] = (int) ($wrap->source_moduleid ?? 0);
+                $ids[] = (int) ($wrap->source_activity_id ?? 0);
+                if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                    $ids[] = (int) ($wrap->obj->source_id ?? 0);
+                    $ids[] = (int) ($wrap->obj->id ?? 0);
+                    $ids[] = (int) ($wrap->obj->iid ?? 0);
+                    $ids[] = (int) ($wrap->obj->source_moduleid ?? 0);
+                    $ids[] = (int) ($wrap->obj->source_activity_id ?? 0);
+                }
+            } elseif (\is_array($wrap)) {
+                $ids[] = (int) ($wrap['source_id'] ?? 0);
+                $ids[] = (int) ($wrap['id'] ?? 0);
+                $ids[] = (int) ($wrap['iid'] ?? 0);
+            }
+            foreach ($ids as $sid) {
+                if ($sid > 0) {
+                    $target[$sid] = $bagId;
+                }
+            }
+        };
+
+        $docBag = (array) (
+            $resources['document']
+            ?? $resources['documents']
+            ?? ($resources[\defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document'] ?? [])
+        );
+        foreach ($docBag as $id => $doc) {
+            $bagId = (int) $id;
             $arr = \is_object($doc) ? get_object_vars($doc) : (array) $doc;
-            $p   = (string) ($arr['path'] ?? '');
-            $t   = (string) ($arr['title'] ?? '');
-            if ($p !== '') { $idx['documentByPath'][$p] = (int) $id; }
-            if ($t !== '') { $idx['documentByTitle'][mb_strtolower($t)][] = (int) $id; }
+            if (isset($doc->obj) && \is_object($doc->obj)) {
+                $arr = array_merge(get_object_vars($doc->obj), $arr);
+            }
+            $p = (string) ($arr['path'] ?? '');
+            $t = (string) ($arr['title'] ?? '');
+            if ('' !== $p) {
+                $idx['documentByPath'][$p] = $bagId;
+                // Numeric path is often the source document iid.
+                if (ctype_digit($p)) {
+                    $idx['documentBySourceId'][(int) $p] = $bagId;
+                }
+            }
+            if ('' !== $t) {
+                $idx['documentByTitle'][mb_strtolower($t)][] = $bagId;
+            }
+            $indexSourceIds($idx['documentBySourceId'], $bagId, $doc);
         }
-        foreach ((array) ($resources['link'] ?? []) as $id => $lnk) {
+
+        $linkBag = (array) (
+            $resources['link']
+            ?? $resources['links']
+            ?? ($resources[\defined('RESOURCE_LINK') ? RESOURCE_LINK : 'link'] ?? [])
+        );
+        foreach ($linkBag as $id => $lnk) {
+            $bagId = (int) $id;
             $arr = \is_object($lnk) ? get_object_vars($lnk) : (array) $lnk;
-            $u   = (string) ($arr['url'] ?? '');
-            if ($u !== '') { $idx['linkByUrl'][$u] = (int) $id; }
+            $u = (string) ($arr['url'] ?? '');
+            if ('' !== $u) {
+                $idx['linkByUrl'][$u] = $bagId;
+            }
+            $indexSourceIds($idx['linkBySourceId'], $bagId, $lnk);
         }
-        foreach ((array) ($resources['forum'] ?? []) as $id => $f) {
+
+        foreach ((array) ($resources['forum'] ?? $resources['forums'] ?? []) as $id => $f) {
+            $bagId = (int) $id;
             $arr = \is_object($f) ? get_object_vars($f) : (array) $f;
-            $t   = (string) ($arr['forum_title'] ?? $arr['title'] ?? '');
-            if ($t !== '') { $idx['forumByTitle'][mb_strtolower($t)][] = (int) $id; }
+            $t = (string) ($arr['forum_title'] ?? $arr['title'] ?? '');
+            if ('' !== $t) {
+                $idx['forumByTitle'][mb_strtolower($t)][] = $bagId;
+            }
+            $indexSourceIds($idx['forumBySourceId'], $bagId, $f);
         }
-        foreach ((array) ($resources['quizzes'] ?? []) as $id => $q) {
+
+        $quizBag = (array) (
+            $resources['quizzes']
+            ?? $resources['quiz']
+            ?? ($resources[\defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : 'quiz'] ?? [])
+        );
+        foreach ($quizBag as $id => $q) {
+            $bagId = (int) $id;
             $arr = \is_object($q) ? get_object_vars($q) : (array) $q;
-            $t   = (string) ($arr['name'] ?? $arr['title'] ?? '');
-            if ($t !== '') { $idx['quizByTitle'][mb_strtolower($t)][] = (int) $id; }
+            if (isset($q->obj) && \is_object($q->obj)) {
+                $arr = array_merge(get_object_vars($q->obj), $arr);
+            }
+            $t = (string) ($arr['name'] ?? $arr['title'] ?? '');
+            if ('' !== $t) {
+                $idx['quizByTitle'][mb_strtolower($t)][] = $bagId;
+            }
+            $indexSourceIds($idx['quizBySourceId'], $bagId, $q);
         }
-        foreach ((array) ($resources['works'] ?? []) as $id => $w) {
+
+        $surveyBag = (array) (
+            $resources['surveys']
+            ?? $resources['survey']
+            ?? ($resources[\defined('RESOURCE_SURVEY') ? RESOURCE_SURVEY : 'survey'] ?? [])
+        );
+        foreach ($surveyBag as $id => $s) {
+            $bagId = (int) $id;
+            $arr = \is_object($s) ? get_object_vars($s) : (array) $s;
+            if (isset($s->obj) && \is_object($s->obj)) {
+                $arr = array_merge(get_object_vars($s->obj), $arr);
+            }
+            $t = (string) ($arr['name'] ?? $arr['title'] ?? '');
+            if ('' !== $t) {
+                $idx['surveyByTitle'][mb_strtolower($t)][] = $bagId;
+            }
+            $indexSourceIds($idx['surveyBySourceId'], $bagId, $s);
+        }
+
+        $workBag = (array) (
+            $resources['works']
+            ?? $resources['work']
+            ?? ($resources[\defined('RESOURCE_WORK') ? RESOURCE_WORK : 'work'] ?? [])
+        );
+        foreach ($workBag as $id => $w) {
+            $bagId = (int) $id;
             $arr = \is_object($w) ? get_object_vars($w) : (array) $w;
-            $t   = (string) ($arr['name'] ?? $arr['title'] ?? '');
-            if ($t !== '') { $idx['workByTitle'][mb_strtolower($t)][] = (int) $id; }
+            $t = (string) ($arr['name'] ?? $arr['title'] ?? '');
+            if ('' !== $t) {
+                $idx['workByTitle'][mb_strtolower($t)][] = $bagId;
+            }
+            $indexSourceIds($idx['workBySourceId'], $bagId, $w);
         }
+
         foreach ((array) ($resources['scorm'] ?? $resources['scorm_documents'] ?? []) as $id => $s) {
             $arr = \is_object($s) ? get_object_vars($s) : (array) $s;
-            $t   = (string) ($arr['title'] ?? $arr['name'] ?? '');
-            if ($t !== '') { $idx['scormByTitle'][mb_strtolower($t)][] = (int) $id; }
+            $t = (string) ($arr['title'] ?? $arr['name'] ?? '');
+            if ('' !== $t) {
+                $idx['scormByTitle'][mb_strtolower($t)][] = (int) $id;
+            }
         }
 
         return $idx;
     }
 
     /**
-     * Resolve LP item "ref" from meta (which refers to the source system) into a local resource id.
-     * Strategy:
-     *  1) For documents: match by path (strong), or by title (weak).
-     *  2) For links: match by url.
-     *  3) For forum/quizzes/works/scorm: match by title.
-     * If not resolvable, return null and keep original _src in item for later diagnostics.
+     * Resolve LP item reference from meta (source system) into a local bag resource id.
+     *
+     * LP items store the source resource iid in path / identifierref (ref is often empty).
+     * Prefer source-id / path matches over title so renames or duplicate titles stay correct.
      */
     private function mapLpItemRef(array $item, array $idx, array $resources): ?int
     {
-        $type = (string) ($item['item_type'] ?? '');
+        $type = strtolower((string) ($item['item_type'] ?? ''));
         $srcRef = $item['ref'] ?? null;
-        $path   = (string) ($item['path'] ?? '');
-        $title  = mb_strtolower((string) ($item['title'] ?? ''));
+        $path = (string) ($item['path'] ?? '');
+        $idRef = (string) ($item['identifierref'] ?? '');
+        $title = mb_strtolower((string) ($item['title'] ?? ''));
+
+        $numericCandidates = [];
+        foreach ([$srcRef, $path, $idRef] as $cand) {
+            if (null === $cand || '' === $cand) {
+                continue;
+            }
+            if (ctype_digit((string) $cand)) {
+                $numericCandidates[] = (int) $cand;
+            }
+        }
+        $numericCandidates = array_values(array_unique($numericCandidates));
+
+        $firstFrom = static function (array $map, array $ids): ?int {
+            foreach ($ids as $id) {
+                if ($id > 0 && isset($map[$id])) {
+                    return (int) $map[$id];
+                }
+            }
+
+            return null;
+        };
 
         switch ($type) {
             case 'document':
-                if ($path !== '' && isset($idx['documentByPath'][$path])) {
-                    return $idx['documentByPath'][$path];
+                $hit = $firstFrom($idx['documentBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
                 }
-                if ($title !== '' && !empty($idx['documentByTitle'][$title])) {
-                    // If multiple, pick the first; could be improved with size/hash if available
-                    return $idx['documentByTitle'][$title][0];
+                if ('' !== $path && isset($idx['documentByPath'][$path])) {
+                    return (int) $idx['documentByPath'][$path];
                 }
+                if ('' !== $title && !empty($idx['documentByTitle'][$title])) {
+                    return (int) $idx['documentByTitle'][$title][0];
+                }
+
                 return null;
 
             case 'link':
-                if (isset($idx['linkByUrl'][$srcRef])) {
-                    return $idx['linkByUrl'][$srcRef];
+            case 'weblink':
+            case 'url':
+                $hit = $firstFrom($idx['linkBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
                 }
-                // Sometimes meta keeps URL in "path"
-                if ($path !== '' && isset($idx['linkByUrl'][$path])) {
-                    return $idx['linkByUrl'][$path];
+                if (null !== $srcRef && isset($idx['linkByUrl'][$srcRef])) {
+                    return (int) $idx['linkByUrl'][$srcRef];
                 }
+                if ('' !== $path && isset($idx['linkByUrl'][$path])) {
+                    return (int) $idx['linkByUrl'][$path];
+                }
+
                 return null;
 
             case 'forum':
-                if ($title !== '' && !empty($idx['forumByTitle'][$title])) {
-                    return $idx['forumByTitle'][$title][0];
+                $hit = $firstFrom($idx['forumBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
                 }
+                if ('' !== $title && !empty($idx['forumByTitle'][$title])) {
+                    return (int) $idx['forumByTitle'][$title][0];
+                }
+
                 return null;
 
             case 'quiz':
             case 'quizzes':
-                if ($title !== '' && !empty($idx['quizByTitle'][$title])) {
-                    return $idx['quizByTitle'][$title][0];
+            case 'exercise':
+                $hit = $firstFrom($idx['quizBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
                 }
+                if ('' !== $title && !empty($idx['quizByTitle'][$title])) {
+                    return (int) $idx['quizByTitle'][$title][0];
+                }
+
                 return null;
 
-            case 'works':
-                if ($title !== '' && !empty($idx['workByTitle'][$title])) {
-                    return $idx['workByTitle'][$title][0];
+            case 'survey':
+            case 'feedback':
+                $hit = $firstFrom($idx['surveyBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
                 }
+                if ('' !== $title && !empty($idx['surveyByTitle'][$title])) {
+                    return (int) $idx['surveyByTitle'][$title][0];
+                }
+
+                return null;
+
+            case 'work':
+            case 'works':
+            case 'student_publication':
+                $hit = $firstFrom($idx['workBySourceId'] ?? [], $numericCandidates);
+                if (null !== $hit) {
+                    return $hit;
+                }
+                if ('' !== $title && !empty($idx['workByTitle'][$title])) {
+                    return (int) $idx['workByTitle'][$title][0];
+                }
+
                 return null;
 
             case 'scorm':
-                if ($title !== '' && !empty($idx['scormByTitle'][$title])) {
-                    return $idx['scormByTitle'][$title][0];
+                if ('' !== $title && !empty($idx['scormByTitle'][$title])) {
+                    return (int) $idx['scormByTitle'][$title][0];
                 }
+
                 return null;
 
             default:
@@ -4233,6 +4559,10 @@ class MoodleImport
             if (null !== $visibility) {
                 $payload['visibility'] = $visibility;
             }
+            $resourceNodeUuid = trim((string) ($row['resource_node_uuid'] ?? ''));
+            if ('' !== $resourceNodeUuid && preg_match('/^[0-9a-fA-F-]{16,64}$/', $resourceNodeUuid)) {
+                $payload['resource_node_uuid'] = $resourceNodeUuid;
+            }
 
             $resources['document'][$docId] = $this->mkLegacyItem(
                 'document',
@@ -4384,6 +4714,92 @@ class MoodleImport
             unset($res[$k]);
         }
         if ($merged) { $res[$GB_KEY] = $merged; }
+
+        // ---- Surveys (RESOURCE_SURVEY = 'survey'; importer historically used 'surveys') ----
+        $SURVEY_KEY = \defined('RESOURCE_SURVEY') ? RESOURCE_SURVEY : 'survey';
+        $mergedSurvey = [];
+        foreach (['surveys', 'survey', $SURVEY_KEY] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedSurvey[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedSurvey) {
+            $res[$SURVEY_KEY] = $mergedSurvey;
+        }
+
+        $SQ_KEY = \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : 'survey_question';
+        $mergedSQ = [];
+        foreach (['survey_question', 'survey_questions', $SQ_KEY] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedSQ[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedSQ) {
+            $res[$SQ_KEY] = $mergedSQ;
+        }
+
+        // ---- Documents ----
+        $DOC_KEY = \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : 'document';
+        $mergedDoc = [];
+        foreach (['document', 'documents', $DOC_KEY] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedDoc[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedDoc) {
+            $res[$DOC_KEY] = $mergedDoc;
+        }
+
+        // ---- Links / works / forums (aliases used across importer + restorer) ----
+        $LINK_KEY = \defined('RESOURCE_LINK') ? RESOURCE_LINK : 'link';
+        $mergedLink = [];
+        foreach (['link', 'links', $LINK_KEY] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedLink[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedLink) {
+            $res[$LINK_KEY] = $mergedLink;
+        }
+
+        $WORK_KEY = \defined('RESOURCE_WORK') ? RESOURCE_WORK : 'work';
+        $mergedWork = [];
+        foreach (['works', 'work', 'student_publication', $WORK_KEY] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedWork[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedWork) {
+            $res[$WORK_KEY] = $mergedWork;
+        }
+
+        $mergedForum = [];
+        foreach (['forum', 'forums'] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                foreach ($res[$k] as $id => $it) {
+                    $mergedForum[(int) $id] = $it;
+                }
+            }
+            unset($res[$k]);
+        }
+        if ($mergedForum) {
+            $res['forum'] = $mergedForum;
+        }
 
         return $res;
     }

@@ -322,13 +322,40 @@ class CourseBuilder
             $path = $decoded;
         }
 
-        // Most common patterns:
+        // Modern Chamilo resource viewer:
+        // /r/document/files/{uuid}/view|download|link
+        $trimmed = trim($path, '/');
+        if (preg_match(
+            '~^(?:r/)?document/files/(?P<uuid>[0-9a-fA-F-]{16,64})/(?:view|download|link)/?$~i',
+            $trimmed,
+            $m
+        )) {
+            $fromUuid = $this->resolveDocumentRelPathFromResourceUuid((string) $m['uuid']);
+            if ('' !== $fromUuid) {
+                return $fromUuid;
+            }
+        }
+
+        // Most common legacy patterns:
         // - /courses/COURSECODE/document/Folder/file.png
         // - /document/Folder/file.png
         // - document/Folder/file.png
         $pos = stripos($path, '/document/');
         if (false !== $pos) {
-            return substr($path, $pos + \strlen('/document/')) ?: '';
+            $tail = substr($path, $pos + \strlen('/document/')) ?: '';
+            // Avoid treating modern files/{uuid}/view as a relative path.
+            if (preg_match('~^files/[0-9a-fA-F-]{16,64}/(?:view|download|link)/?$~i', $tail)) {
+                if (preg_match('~^files/(?P<uuid>[0-9a-fA-F-]{16,64})/~i', $tail, $m2)) {
+                    $fromUuid = $this->resolveDocumentRelPathFromResourceUuid((string) $m2['uuid']);
+                    if ('' !== $fromUuid) {
+                        return $fromUuid;
+                    }
+                }
+
+                return '';
+            }
+
+            return $tail;
         }
 
         if (str_starts_with($path, 'document/')) {
@@ -3245,6 +3272,17 @@ class CourseBuilder
                 // Keep export resilient; missing visibility defaults to published on restore.
             }
 
+            // ResourceNode UUID powers modern HTML embeds: /r/document/files/{uuid}/view
+            $resourceNodeUuid = null;
+            try {
+                $uuidObj = $node->getUuid();
+                if (null !== $uuidObj) {
+                    $resourceNodeUuid = (string) $uuidObj;
+                }
+            } catch (Throwable $e) {
+                // optional
+            }
+
             $exportDoc = new Document(
                 $iid,
                 $pathForSelector,
@@ -3252,7 +3290,8 @@ class CourseBuilder
                 $title,
                 $filetype,
                 (string) $size,
-                $visibility
+                $visibility,
+                $resourceNodeUuid
             );
 
             $this->course->add_resource($exportDoc);

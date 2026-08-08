@@ -1740,6 +1740,17 @@ class MoodleExport
                 $entry['visibility'] = $visibility;
             }
 
+            // ResourceNode UUID for rewriting /r/document/files/{uuid}/view in HTML docs.
+            $uuid = trim((string) (
+                $doc->resource_node_uuid
+                ?? $wrap->resource_node_uuid
+                ?? ((isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->resource_node_uuid ?? '') : '')
+                ?? ''
+            ));
+            if ('' !== $uuid) {
+                $entry['resource_node_uuid'] = $uuid;
+            }
+
             if (!$isFolder) {
                 $lookupId = (int) ($wrap->source_id ?? $doc->iid ?? $id);
                 $contentHash = (string) ($hashById[$lookupId] ?? '');

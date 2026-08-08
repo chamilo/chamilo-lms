@@ -67,10 +67,25 @@ readonly class ResourceAclHelper
         // Add a security resource.
         $acl->addResource(new GenericResource((string) $resourceLink->getId()));
 
-        // Check all the right this link has.
-        // Set rights from the ResourceRight.
+        // ResourceRight masks are Symfony ACL bitmasks, while Laminas ACL privileges
+        // are literal values. Register every individual bit so a combined mask such
+        // as VIEW|EDIT also grants VIEW and EDIT when checked independently.
         foreach ($rights as $right) {
-            $acl->allow($right->getRole(), null, (string) $right->getMask());
+            $mask = $right->getMask();
+
+            $acl->allow($right->getRole(), null, (string) $mask);
+
+            $remainingMask = $mask;
+            $bit = 1;
+
+            while ($remainingMask > 0) {
+                if (1 === ($remainingMask & 1)) {
+                    $acl->allow($right->getRole(), null, (string) $bit);
+                }
+
+                $remainingMask >>= 1;
+                $bit <<= 1;
+            }
         }
 
         return $acl;

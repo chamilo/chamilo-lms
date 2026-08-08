@@ -40,6 +40,7 @@ final readonly class UpdatePostApplyChecker
 
     public function __construct(
         private UpdateConfiguration $updateConfiguration,
+        private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -237,7 +238,7 @@ final readonly class UpdatePostApplyChecker
             }
         }
 
-        foreach ($this->extractPlannedV210MigrationPaths($applyPlan) as $migrationPath) {
+        foreach ($this->extractPlannedMigrationPaths($applyPlan) as $migrationPath) {
             $this->appendDetectedPath($detectedPaths['migrations'], $migrationPath);
         }
 
@@ -255,7 +256,7 @@ final readonly class UpdatePostApplyChecker
      *
      * @return string[]
      */
-    private function extractPlannedV210MigrationPaths(array $applyPlan): array
+    private function extractPlannedMigrationPaths(array $applyPlan): array
     {
         $filePlan = $applyPlan['file_plan'] ?? [];
         if (!\is_array($filePlan)) {
@@ -384,7 +385,7 @@ final readonly class UpdatePostApplyChecker
 
     private function isMigrationPath(string $relativePath): bool
     {
-        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
+        return $this->migrationPolicy->isSupportedMigrationPath($relativePath);
     }
 
     private function shouldSkipPath(string $relativePath): bool

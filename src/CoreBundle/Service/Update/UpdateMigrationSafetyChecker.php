@@ -28,11 +28,9 @@ final readonly class UpdateMigrationSafetyChecker
     private const int DRY_RUN_OUTPUT_LIMIT = 20000;
     private const int BASELINE_OUTPUT_LIMIT = 30000;
 
-    private const string SUPPORTED_MIGRATION_PREFIX = 'src/CoreBundle/Migrations/Schema/V210/';
-    private const string SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
-
     public function __construct(
         private UpdateConfiguration $updateConfiguration,
+        private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -136,15 +134,15 @@ final readonly class UpdateMigrationSafetyChecker
             $historicalIssueCount = (int) ($baseline['historical_issue_count'] ?? 0);
             $targetRegistered = true === ($baseline['target_registered'] ?? false);
             if ($historicalIssueCount > 0 || !$targetRegistered) {
-                $this->addCheck($checks, 'migration_baseline', 'warning', 'Doctrine reports historical migration baseline warnings, but only staged V210 migrations will be reviewed and executed explicitly.', [
+                $this->addCheck($checks, 'migration_baseline', 'warning', 'Doctrine reports historical migration baseline warnings, but only staged '.$this->migrationPolicy->getMigrationSeries().' migrations will be reviewed and executed explicitly.', [
                     'migration_target' => $migrationTarget,
                     'executed_unavailable_count' => $baseline['executed_unavailable_count'] ?? null,
                     'pending_before_target_count' => \is_array($baseline['pending_before_target'] ?? null) ? \count($baseline['pending_before_target']) : null,
                     'target_registered' => $targetRegistered,
                 ]);
-                $warnings[] = 'Doctrine reports historical migration baseline warnings. The updater will execute only staged V210 migration classes after explicit confirmation.';
+                $warnings[] = 'Doctrine reports historical migration baseline warnings. The updater will execute only staged '.$this->migrationPolicy->getMigrationSeries().' migration classes after explicit confirmation.';
             } else {
-                $this->addCheck($checks, 'migration_baseline', 'passed', 'Doctrine baseline has no blocking issue for the staged V210 migrations.', [
+                $this->addCheck($checks, 'migration_baseline', 'passed', 'Doctrine baseline has no blocking issue for the staged '.$this->migrationPolicy->getMigrationSeries().' migrations.', [
                     'migration_target' => $migrationTarget,
                     'current' => $baseline['current'] ?? null,
                     'next' => $baseline['next'] ?? null,
@@ -325,7 +323,7 @@ final readonly class UpdateMigrationSafetyChecker
      */
     private function collectStagedMigrations(string $applicationPath, array $applyPlan): array
     {
-        $plannedMigrationPaths = $this->extractPlannedV210MigrationPaths($applyPlan);
+        $plannedMigrationPaths = $this->extractPlannedMigrationPaths($applyPlan);
         $migrations = [];
 
         if ([] !== $plannedMigrationPaths) {
@@ -343,7 +341,7 @@ final readonly class UpdateMigrationSafetyChecker
             return $migrations;
         }
 
-        $directory = $applicationPath.'/'.rtrim(self::SUPPORTED_MIGRATION_PREFIX, '/');
+        $directory = $applicationPath.'/'.rtrim($this->migrationPolicy->getMigrationPathPrefix(), '/');
         if (!is_dir($directory)) {
             return [];
         }
@@ -376,7 +374,7 @@ final readonly class UpdateMigrationSafetyChecker
      *
      * @return string[]
      */
-    private function extractPlannedV210MigrationPaths(array $applyPlan): array
+    private function extractPlannedMigrationPaths(array $applyPlan): array
     {
         $filePlan = $applyPlan['file_plan'] ?? [];
         if (!\is_array($filePlan)) {
@@ -405,8 +403,7 @@ final readonly class UpdateMigrationSafetyChecker
 
     private function isSupportedMigrationPath(string $relativePath): bool
     {
-        return str_starts_with($relativePath, self::SUPPORTED_MIGRATION_PREFIX)
-            && 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
+        return $this->migrationPolicy->isSupportedMigrationPath($relativePath);
     }
 
     /**
@@ -440,8 +437,8 @@ final readonly class UpdateMigrationSafetyChecker
             }
         }
 
-        if (!str_starts_with($fullyQualifiedClass, self::SUPPORTED_MIGRATION_CLASS_PREFIX)) {
-            throw new RuntimeException('Only V210 staged migrations are supported by the update runner: '.$relativePath);
+        if (!$this->migrationPolicy->isSupportedMigrationClass($fullyQualifiedClass)) {
+            throw new RuntimeException('Only '.$this->migrationPolicy->getMigrationSeries().' staged migrations are supported by the update runner: '.$relativePath);
         }
 
         return [
@@ -501,18 +498,18 @@ final readonly class UpdateMigrationSafetyChecker
         }
 
         if ([] !== $stagedMigrationsAlreadyExecuted) {
-            $errors[] = 'At least one staged V210 migration has already been executed.';
+            $errors[] = 'At least one staged '.$this->migrationPolicy->getMigrationSeries().' migration has already been executed.';
         }
 
         $historicalIssueCount = \count($pendingBeforeTarget) + \count($executedUnavailableMigrations);
         $baselineWarnings = [];
 
         if (!$targetRegistered) {
-            $baselineWarnings[] = 'The staged V210 migration target is not listed by Doctrine, but explicit execute dry-run remains the source of truth.';
+            $baselineWarnings[] = 'The staged '.$this->migrationPolicy->getMigrationSeries().' migration target is not listed by Doctrine, but explicit execute dry-run remains the source of truth.';
         }
 
         if ($historicalIssueCount > 0) {
-            $baselineWarnings[] = 'Doctrine reports historical migration baseline issues outside the staged V210 update migrations.';
+            $baselineWarnings[] = 'Doctrine reports historical migration baseline issues outside the staged '.$this->migrationPolicy->getMigrationSeries().' update migrations.';
         }
 
         return [

@@ -147,7 +147,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 summary: 'Reorder learning paths within the current course context',
                 description: 'Sets the display order for the learning paths in the current course, session and group context.',
                 requestBody: new RequestBody(
-                    description: 'Ordered learning path IDs, optional category and CSRF token',
+                    description: 'Ordered learning path IDs and optional category',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -159,9 +159,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'description' => 'Ordered list of learning path IDs',
                                     ],
                                     'categoryId' => ['type' => 'integer', 'description' => 'Category identifier (optional)'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['order', 'csrfToken'],
+                                'required' => ['order'],
                             ],
                         ],
                     ]),
@@ -195,7 +194,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 summary: 'Save the complete learning path category layout',
                 description: 'Atomically persists category order, learning path order and category assignment in the base course context.',
                 requestBody: new RequestBody(
-                    description: 'Complete category layout, uncategorized learning paths and CSRF token',
+                    description: 'Complete category layout and uncategorized learning paths',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -219,9 +218,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
                                     ],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['categories', 'uncategorized', 'csrfToken'],
+                                'required' => ['categories', 'uncategorized'],
                             ],
                         ],
                     ]),

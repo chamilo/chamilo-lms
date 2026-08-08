@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AnnouncementsForumExport;
@@ -1732,6 +1733,13 @@ class MoodleExport
                 'parent_path' => $parentPath,
             ];
 
+            // Chamilo-only: ResourceLink visibility (0=draft, 1=pending, 2=published).
+            // Moodle ignores chamilo/document/index.json entirely.
+            $visibility = $this->resolveDocumentVisibility($doc, $wrap);
+            if (null !== $visibility) {
+                $entry['visibility'] = $visibility;
+            }
+
             if (!$isFolder) {
                 $lookupId = (int) ($wrap->source_id ?? $doc->iid ?? $id);
                 $contentHash = (string) ($hashById[$lookupId] ?? '');
@@ -1769,6 +1777,45 @@ class MoodleExport
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
             )
         );
+    }
+
+    /**
+     * Resolve ResourceLink visibility from a document bag entry.
+     *
+     * @return int|null 0=draft, 1=pending, 2=published
+     */
+    private function resolveDocumentVisibility(object $doc, object $wrap): ?int
+    {
+        $candidates = [
+            $doc->visibility ?? null,
+            $wrap->visibility ?? null,
+            (isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->visibility ?? null) : null,
+        ];
+
+        foreach ($candidates as $raw) {
+            if (null === $raw || '' === $raw) {
+                continue;
+            }
+            if (\is_bool($raw)) {
+                return $raw
+                    ? ResourceLink::VISIBILITY_PUBLISHED
+                    : ResourceLink::VISIBILITY_DRAFT;
+            }
+            $value = (int) $raw;
+            if (\in_array(
+                $value,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            )) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     private function buildExportedDocumentHashMap(string $exportDir): array

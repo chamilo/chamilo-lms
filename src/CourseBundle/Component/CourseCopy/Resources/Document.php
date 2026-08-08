@@ -15,7 +15,14 @@ class Document extends Resource
     public string $size;
     public string $title;
 
-    public function __construct($id, $fullPath, $comment, $title, $file_type, $size)
+    /**
+     * ResourceLink visibility for the document in the export context.
+     * Uses ResourceLink constants: 0=draft, 1=pending, 2=published.
+     * Null means "unknown / keep destination default".
+     */
+    public ?int $visibility = null;
+
+    public function __construct($id, $fullPath, $comment, $title, $file_type, $size, ?int $visibility = null)
     {
         parent::__construct($id, RESOURCE_DOCUMENT);
 
@@ -27,6 +34,7 @@ class Document extends Resource
         $this->file_type = (string) $file_type;
         $this->filetype = (string) $file_type;
         $this->size = (string) $size;
+        $this->visibility = $visibility;
     }
 
     public function show(): void

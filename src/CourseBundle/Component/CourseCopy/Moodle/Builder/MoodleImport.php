@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
@@ -2408,23 +2409,68 @@ class MoodleImport
 
     /**
      * Create (if missing) a legacy folder entry at $folderPath in $bucket and return its id.
+     *
+     * @param int|null $visibility ResourceLink visibility (0/1/2); applied to leaf when provided
      */
-    private function ensureFolderLegacy(array &$bucket, string $folderPath, string $title): int
+    private function ensureFolderLegacy(array &$bucket, string $folderPath, string $title, ?int $visibility = null): int
     {
         foreach ($bucket as $k => $it) {
             if (($it->file_type ?? '') === 'folder' && (($it->path ?? '') === $folderPath)) {
+                if (null !== $visibility) {
+                    $it->visibility = $visibility;
+                    if (isset($it->obj) && \is_object($it->obj)) {
+                        $it->obj->visibility = $visibility;
+                    }
+                    $bucket[$k] = $it;
+                }
+
                 return (int) $k;
             }
         }
-        $id = $this->nextId($bucket);
-        $bucket[$id] = $this->mkLegacyItem('document', $id, [
+        $payload = [
             'file_type' => 'folder',
             'path' => $folderPath,
             'title' => $title,
             'size' => '0',
-        ]);
+        ];
+        if (null !== $visibility) {
+            $payload['visibility'] = $visibility;
+        }
+        $id = $this->nextId($bucket);
+        $bucket[$id] = $this->mkLegacyItem('document', $id, $payload);
 
         return $id;
+    }
+
+    /**
+     * Normalize document visibility from sidecar JSON / bag values.
+     *
+     * @return int|null ResourceLink visibility constant, or null when absent/invalid
+     */
+    private function normalizeDocumentVisibility(mixed $raw): ?int
+    {
+        if (null === $raw || '' === $raw) {
+            return null;
+        }
+        if (\is_bool($raw)) {
+            return $raw
+                ? ResourceLink::VISIBILITY_PUBLISHED
+                : ResourceLink::VISIBILITY_DRAFT;
+        }
+        $value = (int) $raw;
+        if (\in_array(
+            $value,
+            [
+                ResourceLink::VISIBILITY_DRAFT,
+                ResourceLink::VISIBILITY_PENDING,
+                ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+            true
+        )) {
+            return $value;
+        }
+
+        return null;
     }
 
     /**
@@ -4087,9 +4133,22 @@ class MoodleImport
             $title = trim((string) ($row['title'] ?? basename($relative)));
             $comment = (string) ($row['comment'] ?? '');
             $size = (int) ($row['size'] ?? 0);
+            $visibility = $this->normalizeDocumentVisibility($row['visibility'] ?? null);
 
             if ('folder' === $fileType) {
-                $ensureFolderChain($relative);
+                // Build parent chain without forcing intermediate visibility; apply leaf visibility.
+                $parent = trim((string) dirname($relative), '.');
+                if ('.' === $parent) {
+                    $parent = '';
+                }
+                if ('' !== $parent) {
+                    $ensureFolderChain($parent);
+                }
+                $legacyFolderPath = '/document/'.$relative;
+                $this->ensureDir($workDir.$legacyFolderPath);
+                $leafTitle = '' !== $title ? $title : basename($relative);
+                $this->ensureFolderLegacy($resources['document'], $legacyFolderPath, $leafTitle, $visibility);
+                $existing[$legacyFolderPath] = true;
                 continue;
             }
 
@@ -4142,21 +4201,43 @@ class MoodleImport
             $materialized++;
 
             if (isset($existing[$legacyPath])) {
+                // Still refresh visibility if sidecar provides it (authoritative for C2 reimport).
+                if (null !== $visibility) {
+                    foreach ($resources['document'] as $k => $it) {
+                        $p = \is_object($it) ? (string) ($it->path ?? '') : '';
+                        if ($p === $legacyPath) {
+                            $it->visibility = $visibility;
+                            if (isset($it->obj) && \is_object($it->obj)) {
+                                $it->obj->visibility = $visibility;
+                            }
+                            $resources['document'][$k] = $it;
+                            break;
+                        }
+                    }
+                }
                 continue;
             }
 
             $docId = $this->nextId($resources['document']);
+            $payload = [
+                'file_type' => 'file',
+                'path' => $legacyPath,
+                'title' => '' !== $title ? $title : basename($relative),
+                'comment' => $comment,
+                'size' => (string) ($size > 0 ? $size : (@filesize($targetAbs) ?: 0)),
+                'source_id' => (int) ($row['source_id'] ?? $row['id'] ?? $docId),
+            ];
+            if ($payload['source_id'] <= 0) {
+                $payload['source_id'] = $docId;
+            }
+            if (null !== $visibility) {
+                $payload['visibility'] = $visibility;
+            }
+
             $resources['document'][$docId] = $this->mkLegacyItem(
                 'document',
                 $docId,
-                [
-                    'file_type' => 'file',
-                    'path' => $legacyPath,
-                    'title' => '' !== $title ? $title : basename($relative),
-                    'comment' => $comment,
-                    'size' => (string) ($size > 0 ? $size : (@filesize($targetAbs) ?: 0)),
-                    'source_id' => (int) ($row['source_id'] ?? $row['id'] ?? $docId),
-                ]
+                $payload
             );
 
             $existing[$legacyPath] = true;

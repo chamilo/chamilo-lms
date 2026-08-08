@@ -3230,13 +3230,29 @@ class CourseBuilder
                 $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
 
+            // Preserve learner-facing visibility (ResourceLink) for restore confidentiality.
+            $visibility = null;
+            try {
+                $link = $doc->getFirstResourceLinkFromCourseSession($course, $session);
+                if (null === $link && null !== $session) {
+                    // Session export of base content may only have a base-course link.
+                    $link = $doc->getFirstResourceLinkFromCourseSession($course, null);
+                }
+                if (null !== $link) {
+                    $visibility = (int) $link->getVisibility();
+                }
+            } catch (Throwable $e) {
+                // Keep export resilient; missing visibility defaults to published on restore.
+            }
+
             $exportDoc = new Document(
                 $iid,
                 $pathForSelector,
                 $comment,
                 $title,
                 $filetype,
-                (string) $size
+                (string) $size,
+                $visibility
             );
 
             $this->course->add_resource($exportDoc);

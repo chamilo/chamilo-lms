@@ -783,8 +783,40 @@ class CourseRestorer
             return $rel;
         };
 
+        // Read optional ResourceLink visibility from a document bag item (0/1/2).
+        $resolveItemVisibility = static function ($item): ?int {
+            if (!\is_object($item)) {
+                return null;
+            }
+            $raw = null;
+            if (isset($item->visibility) && '' !== $item->visibility && null !== $item->visibility) {
+                $raw = $item->visibility;
+            } elseif (isset($item->obj) && \is_object($item->obj)
+                && isset($item->obj->visibility) && '' !== $item->obj->visibility && null !== $item->obj->visibility
+            ) {
+                $raw = $item->obj->visibility;
+            }
+            if (null === $raw) {
+                return null;
+            }
+            if (\is_bool($raw)) {
+                return $raw ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
+            }
+            $value = (int) $raw;
+
+            return \in_array(
+                $value,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            ) ? $value : null;
+        };
+
         // Ensure a folder chain exists under Documents (skipping "document" as root)
-        $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $session, $groupCtx, $DBG, $syncContextLinkParent) {
+        $ensureFolder = function (string $relPath, ?int $leafVisibility = null) use ($docRepo, $courseEntity, $courseInfo, $session_id, $session, $groupCtx, $DBG, $syncContextLinkParent) {
             $rel = '/'.ltrim($relPath, '/');
             if ('/' === $rel || '' === $rel) {
                 return 0;
@@ -798,6 +830,7 @@ class CourseRestorer
 
             $accum    = '';
             $parentId = 0;
+            $lastIndex = \count($parts) - 1;
 
             for ($i = $start; $i < \count($parts); $i++) {
                 $seg   = $parts[$i];
@@ -816,10 +849,21 @@ class CourseRestorer
 
                 if ($existing) {
                     $parentId = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
+                    // Apply leaf visibility when restoring an existing folder that was draft.
+                    if ($i === $lastIndex && null !== $leafVisibility && $parentId > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $parentId,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                     continue;
                 }
 
                 $oldParentId = $parentId;
+                $visibility = ($i === $lastIndex) ? $leafVisibility : null;
 
                 $entity = DocumentManager::addDocument(
                     ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
@@ -829,7 +873,7 @@ class CourseRestorer
                     $title,
                     null,
                     0,
-                    null,
+                    $visibility,
                     0,
                     (int) $session_id,
                     0,
@@ -844,7 +888,7 @@ class CourseRestorer
                     $syncContextLinkParent((int) $parentId, (int) $oldParentId);
                 }
 
-                $DBG('ensureFolder:create', ['accum' => $accum, 'iid' => $parentId]);
+                $DBG('ensureFolder:create', ['accum' => $accum, 'iid' => $parentId, 'visibility' => $visibility]);
             }
 
             return $parentId;
@@ -929,19 +973,30 @@ class CourseRestorer
             $parts    = array_values(array_filter(explode('/', $rel)));
             $accum    = '';
             $parentId = 0;
+            $leafVisibility = $resolveItemVisibility($item);
+            $lastIndex = \count($parts) - 1;
 
             foreach ($parts as $i => $seg) {
                 $accum .= '/'.$seg;
 
                 if (isset($folders[$accum])) {
                     $parentId = $folders[$accum];
+                    if ($i === $lastIndex && null !== $leafVisibility && $parentId > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $parentId,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                     continue;
                 }
 
                 $parentResource = $parentId ? $docRepo->find($parentId) : $courseEntity;
                 $title = $seg;
 
-                if ($i === \count($parts) - 1 && !empty($item->title)) {
+                if ($i === $lastIndex && !empty($item->title)) {
                     $itemTitle = (string) $item->title;
                     if (0 === strcasecmp($itemTitle, $seg)) {
                         $title = $itemTitle;
@@ -958,8 +1013,18 @@ class CourseRestorer
 
                 if ($existing) {
                     $iid = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
+                    if ($i === $lastIndex && null !== $leafVisibility && $iid > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $iid,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                 } else {
                     $oldParentId = $parentId;
+                    $visibility = ($i === $lastIndex) ? $leafVisibility : null;
                     $entity = DocumentManager::addDocument(
                         ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                         $accum,
@@ -968,7 +1033,7 @@ class CourseRestorer
                         $title,
                         null,
                         0,
-                        null,
+                        $visibility,
                         0,
                         (int) $session_id,
                         0,
@@ -985,7 +1050,7 @@ class CourseRestorer
                 }
 
                 $folders[$accum] = $iid;
-                if ($i === \count($parts) - 1) {
+                if ($i === $lastIndex) {
                     $docResources[$k]->destination_id = $iid;
                 }
                 $parentId = $iid;
@@ -1098,6 +1163,7 @@ class CourseRestorer
             $resolveSrcPath,
             $DBG,
             $syncContextLinkParent,
+            $resolveItemVisibility,
             &$docResources
         ): void {
             if (DOCUMENT !== $item->file_type) {
@@ -1220,6 +1286,8 @@ class CourseRestorer
                 $realPath = $srcPath;
             }
 
+            $visibility = $resolveItemVisibility($item);
+
             $entity = DocumentManager::addDocument(
                 ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                 $rel,
@@ -1228,7 +1296,7 @@ class CourseRestorer
                 $finalTitle,
                 $item->comment ?? '',
                 0,
-                null,
+                $visibility,
                 0,
                 (int) $session_id,
                 0,
@@ -1250,6 +1318,18 @@ class CourseRestorer
                     Database::getManager()->persist($resourceFile);
                     Database::getManager()->flush();
                 }
+            }
+
+            // When addDocument returns an existing document (same title), still enforce
+            // the source visibility so a re-import does not leave hidden files published.
+            if ($iid > 0 && null !== $visibility) {
+                $this->applyDocumentResourceLinkVisibility(
+                    $iid,
+                    $visibility,
+                    $courseEntity,
+                    $session,
+                    $groupCtx
+                );
             }
 
             $docResources[$k]->destination_id = $iid;
@@ -1277,6 +1357,88 @@ class CourseRestorer
         ]);
 
         $this->documentsRestored = true;
+    }
+
+    /**
+     * Apply ResourceLink visibility for a restored document in the current context.
+     *
+     * Used both for newly created documents and for re-imports where addDocument
+     * returns an existing entity without changing its link visibility.
+     */
+    private function applyDocumentResourceLinkVisibility(
+        int $docIid,
+        int $visibility,
+        CourseEntity $courseEntity,
+        $session,
+        $groupCtx
+    ): void {
+        if ($docIid <= 0) {
+            return;
+        }
+        if (!\in_array(
+            $visibility,
+            [
+                ResourceLink::VISIBILITY_DRAFT,
+                ResourceLink::VISIBILITY_PENDING,
+                ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+            true
+        )) {
+            return;
+        }
+
+        try {
+            $docRepo = Container::getDocumentRepository();
+            $doc = $docRepo->find($docIid);
+            if (!$doc instanceof CDocument || null === $doc->getResourceNode()) {
+                return;
+            }
+
+            $em = Database::getManager();
+            /** @var \Chamilo\CoreBundle\Repository\ResourceLinkRepository $linkRepo */
+            $linkRepo = $em->getRepository(ResourceLink::class);
+            $link = $linkRepo->findLinkForResourceInContext(
+                $doc,
+                $courseEntity,
+                $session,
+                $groupCtx,
+                null,
+                null
+            );
+            if (null === $link) {
+                // Fallback: first matching course(+session) link on the node.
+                foreach ($doc->getResourceNode()->getResourceLinks() as $candidate) {
+                    if ($candidate->getCourse()?->getId() !== $courseEntity->getId()) {
+                        continue;
+                    }
+                    $candSessionId = $candidate->getSession()?->getId();
+                    $wantSessionId = \is_object($session) && method_exists($session, 'getId')
+                        ? $session->getId()
+                        : null;
+                    if ($candSessionId !== $wantSessionId && !(null === $candSessionId && null === $wantSessionId)) {
+                        continue;
+                    }
+                    $link = $candidate;
+                    break;
+                }
+            }
+
+            if (null === $link) {
+                return;
+            }
+            if ((int) $link->getVisibility() === $visibility) {
+                return;
+            }
+            $link->setVisibility($visibility);
+            $em->persist($link);
+            $em->flush();
+        } catch (Throwable $e) {
+            $this->dlog('applyDocumentResourceLinkVisibility failed', [
+                'iid' => $docIid,
+                'visibility' => $visibility,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

@@ -71,6 +71,58 @@ final class CourseMetaImportTest extends TestCase
         self::assertSame('image/png', $resources['course_illustration'][1]->mimetype);
     }
 
+    public function testImportDocumentMetaPreservesVisibility(): void
+    {
+        $hash = str_repeat('ef', 20);
+        mkdir($this->workDir.'/files/ef', 0775, true);
+        mkdir($this->workDir.'/chamilo/document', 0775, true);
+        file_put_contents($this->workDir.'/files/ef/'.$hash, 'secret-bytes');
+        file_put_contents($this->workDir.'/chamilo/document/index.json', json_encode([
+            'documents' => [
+                [
+                    'file_type' => 'folder',
+                    'path' => 'Secret',
+                    'title' => 'Secret',
+                    'visibility' => 0,
+                ],
+                [
+                    'file_type' => 'file',
+                    'path' => 'Secret/private.txt',
+                    'title' => 'private.txt',
+                    'contenthash' => $hash,
+                    'visibility' => 0,
+                    'size' => 12,
+                ],
+                [
+                    'file_type' => 'file',
+                    'path' => 'public.txt',
+                    'title' => 'public.txt',
+                    'contenthash' => $hash,
+                    'visibility' => 2,
+                    'size' => 12,
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $resources = ['document' => []];
+        $ok = $this->invokePrivate('tryImportDocumentMeta', [$this->workDir, &$resources]);
+
+        self::assertTrue($ok);
+
+        $byPath = [];
+        foreach ($resources['document'] as $item) {
+            $path = (string) ($item->path ?? '');
+            $byPath[$path] = $item;
+        }
+
+        self::assertArrayHasKey('/document/Secret', $byPath);
+        self::assertSame(0, (int) $byPath['/document/Secret']->visibility);
+        self::assertArrayHasKey('/document/Secret/private.txt', $byPath);
+        self::assertSame(0, (int) $byPath['/document/Secret/private.txt']->visibility);
+        self::assertArrayHasKey('/document/public.txt', $byPath);
+        self::assertSame(2, (int) $byPath['/document/public.txt']->visibility);
+    }
+
     public function testImportIllustrationFallsBackToFilesXml(): void
     {
         $hash = str_repeat('cd', 20);

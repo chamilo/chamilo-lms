@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Dto;
 
+use Chamilo\CoreBundle\Validator\Constraints\EmailRfc6531;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,7 +17,7 @@ class CreateUserOnAccessUrlInput
     private string $username;
 
     #[Assert\NotBlank]
-    #[Assert\Email]
+    #[EmailRfc6531]
     #[Groups(['user:write'])]
     private string $email;
 

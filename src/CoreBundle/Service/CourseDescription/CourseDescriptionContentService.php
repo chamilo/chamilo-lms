@@ -165,15 +165,7 @@ final readonly class CourseDescriptionContentService
         string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
         ?string $sourceLanguage = null,
     ): array {
-        $mode = strtolower(trim($mode));
-        if (!\in_array($mode, $this->translateHtmlLanguageService->supportedReadModes(), true)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid read mode "%s". Use one of: %s.',
-                $mode,
-                implode(', ', $this->translateHtmlLanguageService->supportedReadModes()),
-            ));
-        }
-
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
         $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $descriptionId = (null !== $descriptionId && $descriptionId > 0) ? $descriptionId : null;
         $descriptionType = (null !== $descriptionType && $descriptionType > 0) ? $descriptionType : null;
@@ -265,21 +257,17 @@ final readonly class CourseDescriptionContentService
         $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $currentHtml = (string) $description->getContent();
 
-        $result = $this->translateHtmlLanguageService->upsertLanguage(
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
             $currentHtml,
             $languageIso,
             $content,
             $mode,
             $sourceLanguageIso,
             $ifMatchSha256,
+            fn (string $html): string => $this->assertValidContent($html),
         );
 
-        // Sanitize the merged document with the same profile as create/edit.
-        $merged = $this->assertValidContent($result['html']);
-        // Re-inspect after sanitization (tags may shift slightly).
-        $after = $this->translateHtmlLanguageService->inspect($merged, $sourceLanguageIso);
-
-        $description->setContent($merged);
+        $description->setContent($result['html']);
         $this->courseDescriptionRepository->update($description);
 
         $normalized = $this->normalize($description);
@@ -295,12 +283,12 @@ final readonly class CourseDescriptionContentService
             'updated' => true,
             'action' => $result['action'],
             'language' => $result['language'],
-            'present_languages' => $after['presentLanguages'],
-            'content_sha256' => $after['contentSha256'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
             'chars' => $result['chars'],
             'words' => $result['words'],
-            'has_markers' => $after['hasMarkers'],
-            'per_language' => $after['perLanguage'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
         ];
     }
 
@@ -613,41 +601,19 @@ final readonly class CourseDescriptionContentService
      */
     private function normalizeForRead(CCourseDescription $description, string $mode, string $sourceLanguage): array
     {
-        $base = [
+        return [
             'description_id' => (int) $description->getIid(),
             'description_type' => (int) $description->getDescriptionType(),
             'type_label' => $this->typeLabel((int) $description->getDescriptionType()),
             'title' => (string) $description->getTitle(),
             'language' => $this->resourceLanguageIsoCode($description),
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $description->getContent(),
+                $mode,
+                $sourceLanguage,
+                'content',
+            ),
         ];
-
-        $content = (string) $description->getContent();
-        $inspection = $this->translateHtmlLanguageService->inspect($content, $sourceLanguage);
-
-        $base['has_markers'] = $inspection['hasMarkers'];
-        $base['present_languages'] = $inspection['presentLanguages'];
-        $base['per_language'] = $inspection['perLanguage'];
-        $base['content_sha256'] = $inspection['contentSha256'];
-        $base['source_language'] = $sourceLanguage;
-
-        if (TranslateHtmlLanguageService::READ_MODE_INVENTORY === $mode) {
-            $base['word_count'] = $this->countWords($content);
-
-            return $base;
-        }
-
-        if (TranslateHtmlLanguageService::READ_MODE_SOURCE === $mode) {
-            $base['source_html'] = $inspection['sourceHtml'];
-            $base['word_count'] = $this->countWords($inspection['sourceHtml']);
-
-            return $base;
-        }
-
-        // full
-        $base['content'] = $content;
-        $base['word_count'] = $this->countWords($content);
-
-        return $base;
     }
 
     private function countWords(string $html): int

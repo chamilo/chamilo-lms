@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Mcp;
 
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use Chamilo\CoreBundle\Service\Survey\CourseSurveyContentService;
 use InvalidArgumentException;
@@ -23,16 +24,18 @@ final readonly class GetCourseSurveysTool
     ) {}
 
     /**
-     * @return array{course_id: int, surveys: list<array<string, mixed>>}
+     * @return array{course_id: int, mode: string, surveys: list<array<string, mixed>>}
      */
     #[McpTool(
         name: 'get_course_surveys',
-        description: 'List surveys in a base course managed by the authenticated teacher, including each survey\'s title (unchanged English label), HTML description/intro, language and question count. Optionally filter to a single survey by surveyId or exact surveyTitle. Use get_course_survey_questions next, then the edit_course_survey_*_description tools to update HTML bodies without renaming titles.',
+        description: 'List surveys in a base course managed by the authenticated teacher, including each survey\'s title (unchanged English label), language and question count. Modes for the HTML intro: full (default), inventory, source — same translatehtml projection as course descriptions/documents. Optionally filter to a single survey by surveyId or exact surveyTitle. Prefer mode=source + upsert_course_survey_description_language for iterative translation of intros. Use get_course_survey_questions next for question/option bodies.',
     )]
     public function getCourseSurveys(
         int $courseId,
         ?int $surveyId = null,
         ?string $surveyTitle = null,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
     ): array {
         try {
             $context = $this->courseContext->resolve($courseId);
@@ -46,8 +49,9 @@ final readonly class GetCourseSurveysTool
 
             return [
                 'course_id' => $courseId,
+                'mode' => $mode,
                 'surveys' => array_map(
-                    fn ($survey) => $this->surveyContentService->normalizeSurvey($survey, $course),
+                    fn ($survey) => $this->surveyContentService->normalizeSurvey($survey, $course, $mode, $sourceLanguage),
                     $surveys,
                 ),
             ];

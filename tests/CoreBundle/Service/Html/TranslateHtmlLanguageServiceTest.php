@@ -173,4 +173,33 @@ final class TranslateHtmlLanguageServiceTest extends TestCase
         self::assertStringContainsString('lang="it"', $merged);
         self::assertStringContainsString('Ciao', $merged);
     }
+
+    public function testProjectHtmlFieldInventoryOmitsBody(): void
+    {
+        $html = '<div class="mce-translatehtml" lang="en"><p>Hello</p></div>';
+        $projected = $this->service->projectHtmlField($html, 'inventory', 'en', 'description');
+
+        self::assertArrayNotHasKey('description', $projected);
+        self::assertArrayNotHasKey('content', $projected);
+        self::assertArrayHasKey('present_languages', $projected);
+        self::assertArrayHasKey('content_sha256', $projected);
+    }
+
+    public function testUpsertLanguageSanitizedRunsSanitizer(): void
+    {
+        $html = '<div class="mce-translatehtml" lang="en"><p>Hello</p></div>';
+        $result = $this->service->upsertLanguageSanitized(
+            $html,
+            'fr',
+            '<p>Bonjour</p>',
+            'upsert',
+            'en',
+            null,
+            static fn (string $merged): string => str_replace('Bonjour', 'Bonjour!', $merged),
+        );
+
+        self::assertStringContainsString('Bonjour!', $result['html']);
+        self::assertSame('created', $result['action']);
+        self::assertArrayHasKey('present_languages', $result);
+    }
 }

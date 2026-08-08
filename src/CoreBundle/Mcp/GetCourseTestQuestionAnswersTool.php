@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Service\Exercise\CourseTestReaderService;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CoreBundle\Service\Mcp\McpTestReadCourseContext;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
@@ -25,6 +26,7 @@ final readonly class GetCourseTestQuestionAnswersTool
     /**
      * @return array{
      *     course_id: int,
+     *     mode: string,
      *     test: array{quiz_id: int, title: string},
      *     question: array<string, mixed>,
      *     answers: list<array<string, mixed>>
@@ -32,13 +34,15 @@ final readonly class GetCourseTestQuestionAnswersTool
      */
     #[McpTool(
         name: 'get_course_test_question_answers',
-        description: 'Read the proposed answers of a single question in a test (exercise), including each answer\'s feedback and score. Locate the test by testId or exact testTitle, and the question by questionId (from get_course_test_questions). Available to the course\'s own teacher, and platform-wide to question managers and administrators.',
+        description: 'Read the proposed answers of a single question in a test (exercise), including each answer\'s feedback and score. Modes full/inventory/source project each answer HTML body (field "text") for translatehtml workflows. Prefer mode=source + upsert_course_test_answer_description_language for iterative translation. Locate the test by testId or exact testTitle, and the question by questionId (from get_course_test_questions). Available to the course\'s own teacher, and platform-wide to question managers and administrators.',
     )]
     public function getCourseTestQuestionAnswers(
         int $courseId,
         int $questionId,
         ?int $testId = null,
         ?string $testTitle = null,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
     ): array {
         try {
             $context = $this->courseContext->resolve($courseId);
@@ -47,17 +51,24 @@ final readonly class GetCourseTestQuestionAnswersTool
             $resolved = $this->testReader->resolveQuestionWithPosition($quiz, $questionId);
 
             $answers = array_map(
-                fn ($answer) => $this->testReader->normalizeAnswer($answer),
+                fn ($answer) => $this->testReader->normalizeAnswer($answer, $mode, $sourceLanguage, $course),
                 $this->testReader->listAnswers($resolved['question']),
             );
 
             return [
                 'course_id' => $courseId,
+                'mode' => $mode,
                 'test' => [
                     'quiz_id' => (int) $quiz->getIid(),
                     'title' => $quiz->getTitle(),
                 ],
-                'question' => $this->testReader->normalizeQuestion($resolved['question'], $resolved['position']),
+                'question' => $this->testReader->normalizeQuestion(
+                    $resolved['question'],
+                    $resolved['position'],
+                    $mode,
+                    $sourceLanguage,
+                    $course,
+                ),
                 'answers' => $answers,
             ];
         } catch (ToolCallException $exception) {

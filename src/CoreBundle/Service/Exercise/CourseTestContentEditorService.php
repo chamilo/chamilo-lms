@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Exercise;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -27,6 +29,7 @@ final readonly class CourseTestContentEditorService
         private CourseTestReaderService $testReader,
         private CourseDocumentContentService $documentContentService,
         private EntityManagerInterface $entityManager,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
     ) {}
 
     /**
@@ -79,6 +82,148 @@ final readonly class CourseTestContentEditorService
             'updated' => true,
             'question' => $this->testReader->normalizeQuestion($question, $resolved['position']),
             'answer' => $this->testReader->normalizeAnswer($answer),
+        ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertQuestionDescriptionLanguage(
+        Course $course,
+        CQuiz $quiz,
+        int $questionId,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $resolved = $this->testReader->resolveQuestionWithPosition($quiz, $questionId);
+        $question = $resolved['question'];
+        $languageIso = $this->testReader->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->testReader->resolveSourceLanguageIsoCode($course, $sourceLanguage);
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $question->getDescription(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: true),
+        );
+
+        $question->setDescription($result['html']);
+        $this->entityManager->persist($question);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'quiz_id' => (int) $quiz->getIid(),
+            'question_id' => (int) $question->getIid(),
+            'position' => $resolved['position'],
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertAnswerDescriptionLanguage(
+        Course $course,
+        CQuiz $quiz,
+        int $questionId,
+        int $answerId,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $resolved = $this->testReader->resolveQuestionWithPosition($quiz, $questionId);
+        $question = $resolved['question'];
+        $answer = $this->resolveAnswer($question, $answerId);
+        $languageIso = $this->testReader->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->testReader->resolveSourceLanguageIsoCode($course, $sourceLanguage);
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $answer->getAnswer(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: false),
+        );
+
+        $answer->setAnswer($result['html']);
+        $this->entityManager->persist($answer);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'quiz_id' => (int) $quiz->getIid(),
+            'question_id' => (int) $question->getIid(),
+            'answer_id' => (int) $answer->getIid(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertTestDescriptionLanguage(
+        Course $course,
+        CQuiz $quiz,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $languageIso = $this->testReader->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->testReader->resolveSourceLanguageIsoCode($course, $sourceLanguage);
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $quiz->getDescription(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: true),
+        );
+
+        $quiz->setDescription($result['html']);
+        $this->entityManager->persist($quiz);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'quiz_id' => (int) $quiz->getIid(),
+            'title' => $quiz->getTitle(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
         ];
     }
 

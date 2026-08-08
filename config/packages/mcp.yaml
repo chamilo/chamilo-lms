@@ -20,7 +20,10 @@ mcp:
 
         Documents can be filtered by title with list_documents and then read or edited by title.
         create_course_document automatically assigns a unique title when an exact title already
-        exists. Use update_course_settings to change safe course properties and
+        exists. For iterative translation of HTML documents, call read_course_document with
+        mode=source (or inventory), then upsert_course_document_language with one language's
+        INNER HTML at a time — do not resend the full multi-language body via edit_course_document.
+        Use update_course_settings to change safe course properties and
         update_course_test_settings to edit test configuration. New MCP-created tests randomize
         answer order by default.
         To create an AI image, use create_course_illustration. To place an image in a specific
@@ -57,24 +60,26 @@ mcp:
         other languages). There is no delete tool for course descriptions yet. Write HTML with the
         same style conventions as create_course_document.
 
-        get_course_tests, get_course_test_questions and get_course_test_question_answers are
-        read-only: use them to review a test's title/settings, then its questions (type, total
-        score, category) and finally the proposed answers of one question (feedback, score).
+        get_course_tests, get_course_test_questions and get_course_test_question_answers support
+        modes full/inventory/source on HTML fields (test description, question description,
+        answer text). Use them to review structure, then translate with
+        upsert_course_test_description_language, upsert_course_test_question_description_language
+        and upsert_course_test_answer_description_language (one language INNER HTML per call).
         Locate a test by testId or exact testTitle, and a question by questionId from
-        get_course_test_questions. Unlike the other course tools, these three are also available
-        platform-wide (not only for the test's own course) to users with a question manager or
-        administrator role.
+        get_course_test_questions. Unlike the other course tools, these three read tools are also
+        available platform-wide (not only for the test's own course) to users with a question
+        manager or administrator role; the upsert_* write tools require the course teacher.
 
-        To rewrite exercise HTML bodies without renaming titles, use
-        edit_course_test_question_description (question description HTML only — the short
-        question title text stays English) and edit_course_test_answer_description (answer body
-        HTML only — correctness/score/feedback stay as they are). Those two write tools require
-        the authenticated teacher of the course.
+        Full-document rewrites without renaming titles remain available via
+        edit_course_test_question_description and edit_course_test_answer_description, but prefer
+        the upsert_*_language tools for multi-language translation.
 
-        For surveys, get_course_surveys and get_course_survey_questions list structure and HTML
-        bodies. edit_course_survey_description updates the survey intro only (title unchanged).
-        edit_course_survey_question_description and edit_course_survey_answer_description update
-        question and option HTML bodies. Survey write tools also require the course teacher.
+        For surveys, get_course_surveys and get_course_survey_questions support the same
+        full/inventory/source modes. Prefer upsert_course_survey_description_language,
+        upsert_course_survey_question_description_language and
+        upsert_course_survey_answer_description_language for iterative translation. Full replace
+        tools (edit_course_survey_*_description) remain for non-translation edits. Survey write
+        tools require the course teacher.
     client_transports:
         stdio: true
         http: true

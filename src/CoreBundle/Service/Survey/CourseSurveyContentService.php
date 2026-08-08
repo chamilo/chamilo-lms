@@ -7,8 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\Survey;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
@@ -34,6 +37,8 @@ final readonly class CourseSurveyContentService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CourseDocumentContentService $documentContentService,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
+        private LanguageRepository $languageRepository,
     ) {}
 
     /**
@@ -152,15 +157,20 @@ final readonly class CourseSurveyContentService
     /**
      * @return array<string, mixed>
      */
-    public function normalizeSurvey(CSurvey $survey, Course $course): array
-    {
+    public function normalizeSurvey(
+        CSurvey $survey,
+        Course $course,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $survey->getLang());
         $resourceLink = $survey->getResourceNode()?->getResourceLinkByContext($course, null, null);
 
         return [
             'survey_id' => (int) $survey->getIid(),
             'title' => $survey->getTitle(),
             'code' => $survey->getCode(),
-            'description' => (string) $survey->getIntro(),
             'thanks' => (string) $survey->getSurveythanks(),
             'language' => $survey->getLang(),
             'anonymous' => '1' === (string) $survey->getAnonymous(),
@@ -170,41 +180,77 @@ final readonly class CourseSurveyContentService
                 && ResourceLink::VISIBILITY_PUBLISHED === $resourceLink->getVisibility(),
             'available_from' => $survey->getAvailFrom()?->format(DATE_ATOM),
             'available_until' => $survey->getAvailTill()?->format(DATE_ATOM),
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $survey->getIntro(),
+                $mode,
+                $sourceLanguage,
+                'description',
+            ),
         ];
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function normalizeQuestion(CSurveyQuestion $question, int $position): array
-    {
+    public function normalizeQuestion(
+        CSurveyQuestion $question,
+        int $position,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+        ?Course $course = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode(
+            $course,
+            $sourceLanguage,
+            $question->getSurvey()?->getLang(),
+        );
         $options = array_map(
-            fn (CSurveyQuestionOption $option): array => $this->normalizeOption($option),
+            fn (CSurveyQuestionOption $option): array => $this->normalizeOption($option, $mode, $sourceLanguage),
             $this->listOptions($question),
         );
 
         return [
             'question_id' => (int) $question->getIid(),
             'position' => $position,
-            'description' => $question->getSurveyQuestion(),
             'comment' => (string) $question->getSurveyQuestionComment(),
             'type' => $question->getType(),
             'required' => $question->isMandatory(),
             'answer_count' => \count($options),
             'answers' => $options,
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $question->getSurveyQuestion(),
+                $mode,
+                $sourceLanguage,
+                'description',
+            ),
         ];
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function normalizeOption(CSurveyQuestionOption $option): array
-    {
+    public function normalizeOption(
+        CSurveyQuestionOption $option,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->translateHtmlLanguageService->normalizeLanguageCode($sourceLanguage ?: 'en');
+
         return [
             'answer_id' => (int) $option->getIid(),
             'position' => $option->getSort(),
-            'description' => $option->getOptionText(),
             'value' => $option->getValue(),
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $option->getOptionText(),
+                $mode,
+                $sourceLanguage,
+                'description',
+            ),
         ];
     }
 
@@ -243,7 +289,7 @@ final readonly class CourseSurveyContentService
 
         return [
             'updated' => true,
-            'question' => $this->normalizeQuestion($question, $resolved['position']),
+            'question' => $this->normalizeQuestion($question, $resolved['position'], TranslateHtmlLanguageService::READ_MODE_FULL, null, $course),
         ];
     }
 
@@ -266,11 +312,208 @@ final readonly class CourseSurveyContentService
         $this->entityManager->persist($option);
         $this->entityManager->flush();
 
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, null, $survey->getLang());
+
         return [
             'updated' => true,
-            'question' => $this->normalizeQuestion($question, $resolved['position']),
-            'answer' => $this->normalizeOption($option),
+            'question' => $this->normalizeQuestion($question, $resolved['position'], TranslateHtmlLanguageService::READ_MODE_FULL, $sourceLanguage, $course),
+            'answer' => $this->normalizeOption($option, TranslateHtmlLanguageService::READ_MODE_FULL, $sourceLanguage),
         ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertSurveyDescriptionLanguage(
+        Course $course,
+        CSurvey $survey,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $languageIso = $this->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $survey->getLang());
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $survey->getIntro(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: true),
+        );
+
+        $survey->setIntro($result['html']);
+        $this->entityManager->persist($survey);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'survey_id' => (int) $survey->getIid(),
+            'title' => $survey->getTitle(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertQuestionDescriptionLanguage(
+        Course $course,
+        CSurvey $survey,
+        int $questionId,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $resolved = $this->resolveQuestionWithPosition($survey, $questionId);
+        $question = $resolved['question'];
+        $languageIso = $this->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $survey->getLang());
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $question->getSurveyQuestion(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: false),
+        );
+
+        $question->setSurveyQuestion($result['html']);
+        $this->entityManager->persist($question);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'survey_id' => (int) $survey->getIid(),
+            'question_id' => (int) $question->getIid(),
+            'position' => $resolved['position'],
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertAnswerDescriptionLanguage(
+        Course $course,
+        CSurvey $survey,
+        int $questionId,
+        int $answerId,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $resolved = $this->resolveQuestionWithPosition($survey, $questionId);
+        $question = $resolved['question'];
+        $option = $this->resolveOption($question, $answerId);
+        $languageIso = $this->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $survey->getLang());
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            (string) $option->getOptionText(),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: false),
+        );
+
+        $option->setOptionText($result['html']);
+        $this->entityManager->persist($option);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'survey_id' => (int) $survey->getIid(),
+            'question_id' => (int) $question->getIid(),
+            'answer_id' => (int) $option->getIid(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    private function resolveRequiredLanguageIsoCode(string $language): string
+    {
+        $language = trim($language);
+        if ('' === $language) {
+            throw new InvalidArgumentException('The language is required.');
+        }
+
+        $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
+        if (!$resolved instanceof Language) {
+            throw new InvalidArgumentException(\sprintf(
+                'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
+                $language,
+            ));
+        }
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());
+    }
+
+    private function resolveSourceLanguageIsoCode(
+        ?Course $course,
+        ?string $sourceLanguage,
+        ?string $fallbackIso = null,
+    ): string {
+        if (null !== $sourceLanguage && '' !== trim($sourceLanguage)) {
+            return $this->resolveRequiredLanguageIsoCode($sourceLanguage);
+        }
+
+        if (null !== $fallbackIso && '' !== trim($fallbackIso)) {
+            $fromFallback = $this->languageRepository->findOneAvailableByTitleOrCode($fallbackIso);
+            if ($fromFallback instanceof Language) {
+                return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $fromFallback->getIsocode());
+            }
+
+            return $this->translateHtmlLanguageService->normalizeLanguageCode($fallbackIso);
+        }
+
+        if ($course instanceof Course) {
+            $courseLanguage = trim((string) $course->getCourseLanguage());
+            if ('' !== $courseLanguage) {
+                $fromCourse = $this->languageRepository->findOneAvailableByTitleOrCode($courseLanguage);
+                if ($fromCourse instanceof Language) {
+                    return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $fromCourse->getIsocode());
+                }
+
+                return $this->translateHtmlLanguageService->normalizeLanguageCode($courseLanguage);
+            }
+        }
+
+        $platformDefault = $this->languageRepository->getPlatformDefaultIso();
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode($platformDefault ?: 'en');
     }
 
     private function baseSurveyQueryBuilder(Course $course): QueryBuilder

@@ -62,6 +62,128 @@ final class TranslateHtmlLanguageService
         ];
     }
 
+    public function assertReadMode(string $mode): string
+    {
+        $mode = strtolower(trim($mode));
+        if (!\in_array($mode, $this->supportedReadModes(), true)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid read mode "%s". Use one of: %s.',
+                $mode,
+                implode(', ', $this->supportedReadModes()),
+            ));
+        }
+
+        return $mode;
+    }
+
+    public function assertWriteMode(string $mode): string
+    {
+        $mode = strtolower(trim($mode));
+        if (!\in_array($mode, $this->supportedWriteModes(), true)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid mode "%s". Use one of: %s.',
+                $mode,
+                implode(', ', $this->supportedWriteModes()),
+            ));
+        }
+
+        return $mode;
+    }
+
+    /**
+     * Project an HTML field for MCP read modes (full / inventory / source).
+     * Inventory and source omit the multi-language body under $bodyKey.
+     *
+     * @return array<string, mixed>
+     */
+    public function projectHtmlField(
+        string $html,
+        string $mode,
+        string $sourceLanguage,
+        string $bodyKey = 'content',
+    ): array {
+        $mode = $this->assertReadMode($mode);
+        $sourceLanguage = $this->normalizeLanguageCode($sourceLanguage);
+        $inspection = $this->inspect($html, $sourceLanguage);
+
+        $base = [
+            'has_markers' => $inspection['hasMarkers'],
+            'present_languages' => $inspection['presentLanguages'],
+            'per_language' => $inspection['perLanguage'],
+            'content_sha256' => $inspection['contentSha256'],
+            'source_language' => $sourceLanguage,
+        ];
+
+        if (self::READ_MODE_INVENTORY === $mode) {
+            $base['word_count'] = $this->countWords($html);
+
+            return $base;
+        }
+
+        if (self::READ_MODE_SOURCE === $mode) {
+            $base['source_html'] = $inspection['sourceHtml'];
+            $base['word_count'] = $this->countWords($inspection['sourceHtml']);
+
+            return $base;
+        }
+
+        $base[$bodyKey] = $html;
+        $base['word_count'] = $this->countWords($html);
+
+        return $base;
+    }
+
+    /**
+     * Upsert one language, then run $sanitizeFullHtml on the merged document.
+     *
+     * @param callable(string): string $sanitizeFullHtml
+     *
+     * @return array{
+     *     html: string,
+     *     action: 'created'|'replaced',
+     *     language: string,
+     *     present_languages: list<string>,
+     *     content_sha256: string,
+     *     chars: int,
+     *     words: int,
+     *     has_markers: bool,
+     *     per_language: array<string, array{chars: int, words: int}>
+     * }
+     */
+    public function upsertLanguageSanitized(
+        string $currentHtml,
+        string $language,
+        string $innerHtml,
+        string $mode,
+        string $sourceLanguageForWrap,
+        ?string $ifMatchSha256,
+        callable $sanitizeFullHtml,
+    ): array {
+        $result = $this->upsertLanguage(
+            $currentHtml,
+            $language,
+            $innerHtml,
+            $mode,
+            $sourceLanguageForWrap,
+            $ifMatchSha256,
+        );
+
+        $merged = $sanitizeFullHtml($result['html']);
+        $after = $this->inspect($merged, $this->normalizeLanguageCode($sourceLanguageForWrap) ?: $result['language']);
+
+        return [
+            'html' => $merged,
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $after['presentLanguages'],
+            'content_sha256' => $after['contentSha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $after['hasMarkers'],
+            'per_language' => $after['perLanguage'],
+        ];
+    }
+
     public function normalizeLanguageCode(string $language): string
     {
         $language = str_replace('-', '_', trim($language));

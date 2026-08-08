@@ -4,16 +4,26 @@
     </div>
 </div>
 <script>
-  $(function() {
-    if ($("input[name='tool_type']").length > 0) {
-      var toolType = $("input[name='tool_type']:checked").val();
-      selectToolProvider(toolType)
-    }
-  });
   function selectToolProvider(tool) {
+    $(".sbox-tool").each(function() {
+      if ($(this).hasClass('select2-hidden-accessible')) {
+        $(this).select2('destroy');
+      }
+    });
     $(".sbox-tool").attr('disabled', 'disabled');
     $(".select-tool").hide();
     $("#select-"+tool).show();
-    $("#sbox-tool-"+tool).removeAttr('disabled');
+    var $select = $("#sbox-tool-"+tool);
+    $select.removeAttr('disabled');
+    $select.select2({ width: '100%' });
   }
+  $(function() {
+    if ($("input[name='tool_type']").length > 0) {
+      var toolType = $("input[name='tool_type']:checked").val();
+      selectToolProvider(toolType);
+      $("input[name='tool_type']").on('change', function() {
+        selectToolProvider($(this).val());
+      });
+    }
+  });
 </script>

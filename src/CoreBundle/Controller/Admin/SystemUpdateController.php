@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
@@ -52,7 +51,6 @@ final class SystemUpdateController extends AbstractController
         private readonly UpdateOperationLogger $operationLogger,
         private readonly InstalledChamiloVersionProvider $installedVersionProvider,
         private readonly UpdateTrustedKeyring $trustedKeyring,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('/status', name: 'status', methods: ['GET'])]
@@ -78,7 +76,6 @@ final class SystemUpdateController extends AbstractController
             'trustedKeyIds' => $this->trustedKeyring->getTrustedKeyIds(),
             'allowUiPostApplyCommands' => $this->updateConfiguration->allowsUiPostApplyCommands(),
             'commandTimeout' => $this->updateConfiguration->getCommandTimeoutSeconds(),
-            'csrfToken' => $this->csrfTokenManager->getToken('system_update')->getValue(),
         ]);
     }
 
@@ -86,10 +83,6 @@ final class SystemUpdateController extends AbstractController
     public function check(Request $request): JsonResponse
     {
         $payload = $this->readJsonPayload($request);
-
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
 
         try {
             $manifestSource = $this->readManifestSource($payload);
@@ -112,10 +105,6 @@ final class SystemUpdateController extends AbstractController
     public function verify(Request $request): JsonResponse
     {
         $payload = $this->readJsonPayload($request);
-
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
 
         try {
             $manifestSource = $this->readManifestSource($payload);
@@ -162,10 +151,6 @@ final class SystemUpdateController extends AbstractController
     {
         $payload = $this->readJsonPayload($request);
 
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             $manifestSource = $this->readManifestSource($payload);
             $packagePath = $this->normalizeNullableLocalPath($this->readNullableString($payload, 'packagePath'), 'package');
@@ -189,10 +174,6 @@ final class SystemUpdateController extends AbstractController
     public function stage(Request $request): JsonResponse
     {
         $payload = $this->readJsonPayload($request);
-
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
 
         try {
             $manifestSource = $this->readManifestSource($payload);
@@ -281,10 +262,6 @@ final class SystemUpdateController extends AbstractController
     {
         $payload = $this->readJsonPayload($request);
 
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             $stagingPath = $this->readRequiredString($payload, 'stagingPath');
             $result = $this->applyPlanner->buildPlan($stagingPath);
@@ -318,10 +295,6 @@ final class SystemUpdateController extends AbstractController
     {
         $payload = $this->readJsonPayload($request);
 
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             $stagingPath = $this->readRequiredString($payload, 'stagingPath');
             $confirmed = $this->readApplyFilesConfirmation($payload);
@@ -344,10 +317,6 @@ final class SystemUpdateController extends AbstractController
     {
         $payload = $this->readJsonPayload($request);
 
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             $stagingPath = $this->readRequiredString($payload, 'stagingPath');
             $result = $this->postApplyChecker->check($stagingPath);
@@ -367,10 +336,6 @@ final class SystemUpdateController extends AbstractController
     {
         $payload = $this->readJsonPayload($request);
 
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             $stagingPath = $this->readRequiredString($payload, 'stagingPath');
             $result = $this->migrationSafetyChecker->check($stagingPath);
@@ -389,10 +354,6 @@ final class SystemUpdateController extends AbstractController
     public function runPostApply(Request $request): JsonResponse
     {
         $payload = $this->readJsonPayload($request);
-
-        if (!$this->isValidCsrfPayload($request, $payload)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
 
         try {
             if (!$this->updateConfiguration->allowsUiPostApplyCommands()) {
@@ -426,20 +387,6 @@ final class SystemUpdateController extends AbstractController
                 'error' => $exception->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     */
-    private function isValidCsrfPayload(Request $request, array $payload): bool
-    {
-        $token = (string) ($request->headers->get('X-CSRF-Token') ?? '');
-
-        if ('' === $token && isset($payload['csrfToken']) && \is_string($payload['csrfToken'])) {
-            $token = $payload['csrfToken'];
-        }
-
-        return $this->isCsrfTokenValid('system_update', $token);
     }
 
     /**

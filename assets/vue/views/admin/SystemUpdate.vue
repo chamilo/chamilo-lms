@@ -1250,7 +1250,6 @@ const status = reactive({
   trustedPublicKeyFingerprint: "",
   allowUiPostApplyCommands: false,
   commandTimeout: 900,
-  csrfToken: "",
 })
 
 const form = reactive({
@@ -1268,7 +1267,6 @@ const form = reactive({
   confirmDatabaseBackup: false,
   databaseMigrationConfirmationText: "",
   postApplyRunConfirmationText: "",
-  csrfToken: "",
 })
 
 const manifest = ref(null)
@@ -1717,8 +1715,6 @@ onMounted(async () => {
     status.trustedPublicKeyFingerprint = data.trustedPublicKeyFingerprint || ""
     status.allowUiPostApplyCommands = Boolean(data.allowUiPostApplyCommands)
     status.commandTimeout = Number(data.commandTimeout || 900)
-    status.csrfToken = data.csrfToken || ""
-    form.csrfToken = data.csrfToken || ""
 
     applyUpdateEntryQuery()
 
@@ -1798,9 +1794,9 @@ async function checkManifest() {
   isChecking.value = true
 
   try {
-    const data = await adminService.checkSystemUpdateManifest(withCsrfPayload({
+    const data = await adminService.checkSystemUpdateManifest({
       manifestSource: form.manifestSource,
-    }))
+    })
 
     manifest.value = data.manifest
     availability.value = data.availability || null
@@ -1841,10 +1837,10 @@ async function runPreflight() {
   isRunningPreflight.value = true
 
   try {
-    const data = await adminService.runSystemUpdatePreflight(withCsrfPayload({
+    const data = await adminService.runSystemUpdatePreflight({
       manifestSource: form.manifestSource,
       packagePath: status.allowLocalPaths ? form.packagePath || null : null,
-    }))
+    })
 
     manifest.value = data.manifest
     preflight.value = data
@@ -1929,9 +1925,9 @@ async function buildApplyPlan() {
   isPlanningApply.value = true
 
   try {
-    const data = await adminService.buildSystemUpdateApplyPlan(withCsrfPayload({
+    const data = await adminService.buildSystemUpdateApplyPlan({
       stagingPath: form.stagingPath,
-    }))
+    })
 
     applyPlan.value = data
     applyFilesResult.value = null
@@ -1973,12 +1969,12 @@ async function applyUpdateFiles() {
   startApplyProgressPolling()
 
   try {
-    const data = await adminService.applySystemUpdateFiles(withCsrfPayload({
+    const data = await adminService.applySystemUpdateFiles({
       stagingPath: form.stagingPath,
       confirmApply: form.confirmApply,
       confirmationText: form.confirmationText,
       operationId: applyOperationId.value,
-    }))
+    })
 
     applyFilesResult.value = data
     if (data.operationId) {
@@ -2007,9 +2003,9 @@ async function runPostApplyChecks() {
   isCheckingPostApply.value = true
 
   try {
-    const data = await adminService.runSystemUpdatePostApplyChecks(withCsrfPayload({
+    const data = await adminService.runSystemUpdatePostApplyChecks({
       stagingPath: form.stagingPath,
-    }))
+    })
 
     postApplyChecks.value = data
     migrationSafety.value = null
@@ -2045,9 +2041,9 @@ async function runMigrationSafetyChecks() {
   migrationSafety.value = null
 
   try {
-    const data = await adminService.runSystemUpdateMigrationSafetyChecks(withCsrfPayload({
+    const data = await adminService.runSystemUpdateMigrationSafetyChecks({
       stagingPath: form.stagingPath,
-    }))
+    })
 
     migrationSafety.value = data
     form.confirmDatabaseBackup = false
@@ -2081,7 +2077,7 @@ async function runPostApplyActions() {
   startPostApplyRunProgressPolling()
 
   try {
-    const data = await adminService.runSystemUpdatePostApplyActions(withCsrfPayload({
+    const data = await adminService.runSystemUpdatePostApplyActions({
       stagingPath: form.stagingPath,
       actions: form.selectedPostApplyActionKeys,
       confirmPostApplyRun: form.confirmPostApplyRun,
@@ -2090,7 +2086,7 @@ async function runPostApplyActions() {
       databaseMigrationConfirmationText: form.databaseMigrationConfirmationText,
       postApplyRunConfirmationText: form.postApplyRunConfirmationText,
       operationId: postApplyRunOperationId.value,
-    }))
+    })
 
     postApplyRunResult.value = data
     if (data.operationId) {
@@ -2353,19 +2349,12 @@ function getOperationLevelClass(level) {
 }
 
 function buildUpdatePayload() {
-  return withCsrfPayload({
+  return {
     manifestSource: form.manifestSource,
     packagePath: status.allowLocalPaths ? form.packagePath || null : null,
     signaturePath: status.allowLocalPaths ? form.signaturePath || null : null,
     trustedPublicKey: showTrustedPublicKeyInput.value ? form.trustedPublicKey || null : null,
     skipSignature: status.allowSkipSignature && form.skipSignature,
-  })
-}
-
-function withCsrfPayload(payload = {}) {
-  return {
-    ...payload,
-    csrfToken: form.csrfToken,
   }
 }
 

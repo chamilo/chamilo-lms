@@ -3,6 +3,8 @@ window.user = {{ user_json is defined ? user_json | raw : '{}' }};
 window.is_login_url = {{ is_login_url }};
 window.access_url_id = {{ access_url_id | default(1) }};
 window.languages = {{ languages_json is defined ? languages_json | raw : '{}' }};
+window.course_language = {{ (course is defined and course ? course.courseLanguage : '')|json_encode|raw }};
+window.platform_language = {{ (chamilo_settings_get('language.platform_language')|default(''))|json_encode|raw }};
 {% if legacy_breadcrumb is defined %}
 window.breadcrumb = {{ legacy_breadcrumb | raw }};
 {% else %}

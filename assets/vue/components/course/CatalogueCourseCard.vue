@@ -16,7 +16,7 @@ import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
 import baseService from "../../services/baseService"
-import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
 const { getOriginalLanguageName } = useLocale()
@@ -40,27 +40,16 @@ const router = useRouter()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 const platformConfigStore = usePlatformConfig()
 
-/**
- * Apply translatehtml language filtering when editor.translate_html is on.
- */
-function displayTranslatedHtml(html) {
-  if (!html) {
-    return ""
-  }
-
-  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
-    return filterTranslatedHtml(html, window.user?.locale)
-  }
-
-  return html
-}
-
 const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
 const ratingResetKey = ref(0)
 
 const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
 const localVote = ref(props.course?.userVote?.vote || 0)
+
+// This card's own course language is the correct fallback here — not cidReq's
+// course, which may hold a different course visited earlier in the SPA session.
+const { displayTranslatedHtml } = useTranslatedHtml(() => localCourse.value?.courseLanguage)
 
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
 localCourse.value.ratingCount = Number(

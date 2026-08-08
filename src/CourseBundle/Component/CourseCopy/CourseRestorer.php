@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -855,20 +856,31 @@ class CourseRestorer
                 return true;
             }
 
-            $peek = (string) @file_get_contents($filePath, false, null, 0, 2048);
+            // Inspect enough of the actual payload to classify extensionless Chamilo
+            // documents. Some HTML pages contain a large preamble, so a 2 KiB sample
+            // is not sufficient and finfo can legitimately report text/plain.
+            $peek = (string) @file_get_contents($filePath, false, null, 0, 65536);
             if ($peek === '') {
                 return false;
             }
 
-            $s = strtolower($peek);
-            if (str_contains($s, '<html') || str_contains($s, '<!doctype html')) {
+            $normalized = ltrim($peek, "\xEF\xBB\xBF \t\r\n");
+            $lower = strtolower($normalized);
+            if (str_contains($lower, '<html') || str_contains($lower, '<!doctype html')) {
+                return true;
+            }
+
+            // Chamilo HTML documents can be stored as fragments without an extension,
+            // <html> or <!doctype>. Detect normal structural/content tags before
+            // falling back to finfo.
+            if (preg_match('/<\s*\/?\s*(?:body|div|p|span|section|article|header|footer|main|nav|h[1-6]|ul|ol|li|table|thead|tbody|tfoot|tr|td|th|a|img|strong|em|b|i|br|hr)\b/i', $normalized)) {
                 return true;
             }
 
             if (\function_exists('finfo_open')) {
                 $fi = finfo_open(FILEINFO_MIME_TYPE);
                 if ($fi) {
-                    $mt = @finfo_buffer($fi, $peek) ?: '';
+                    $mt = @finfo_buffer($fi, $normalized) ?: '';
                     finfo_close($fi);
                     if (str_starts_with($mt, 'text/html')) {
                         return true;
@@ -1225,6 +1237,18 @@ class CourseRestorer
             );
 
             $iid = method_exists($entity, 'getIid') ? (int) $entity->getIid() : 0;
+
+            // ResourceFile MIME detection can still classify extensionless HTML as
+            // text/plain. We already classified the source payload as HTML, so keep
+            // persisted metadata aligned with the actual content.
+            if ($isHtml && $entity instanceof CDocument) {
+                $resourceFile = $entity->getResourceNode()?->getFirstResourceFile();
+                if ($resourceFile instanceof ResourceFile) {
+                    $resourceFile->setMimeType('text/html');
+                    Database::getManager()->persist($resourceFile);
+                    Database::getManager()->flush();
+                }
+            }
 
             $docResources[$k]->destination_id = $iid;
             $addToMaps($srcRelKey, $iid);
@@ -5729,6 +5753,28 @@ class CourseRestorer
                 }
 
                 $createdCount = \count($createdMap);
+
+                $em->flush();
+
+                // LP prerequisites reference source item IDs. After all destination
+                // items have their IIDs, remap numeric prerequisites to those new IIDs.
+                foreach ($createdMap as $legacyItemId => $createdItem) {
+                    $rawPrerequisite = trim((string) ($byId[$legacyItemId]['prerequisite'] ?? ''));
+                    if ($rawPrerequisite === '' || !ctype_digit($rawPrerequisite)) {
+                        continue;
+                    }
+
+                    $legacyPrerequisiteId = (int) $rawPrerequisite;
+                    $destinationPrerequisite = $createdMap[$legacyPrerequisiteId] ?? null;
+                    if (!$destinationPrerequisite instanceof CLpItem) {
+                        continue;
+                    }
+
+                    $destinationPrerequisiteId = (int) ($destinationPrerequisite->getIid() ?? 0);
+                    if ($destinationPrerequisiteId > 0) {
+                        $createdItem->setPrerequisite((string) $destinationPrerequisiteId);
+                    }
+                }
 
                 $em->flush();
             }

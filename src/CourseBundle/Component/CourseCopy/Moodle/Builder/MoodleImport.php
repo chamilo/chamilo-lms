@@ -108,7 +108,7 @@ class MoodleImport
         $courseXmlPath = $workDir.'/course/course.xml';
         $courseMeta = $this->readCourseMeta($courseXmlPath); // NEW: safe, tolerant
         if ($this->debug) {
-            $cm = array_intersect_key((array)$courseMeta, array_flip(['fullname','shortname','idnumber','format']));
+            $cm = array_intersect_key((array)$courseMeta, array_flip(['fullname','shortname','idnumber','format','language']));
             error_log("MBZ[$rid] course_meta ".json_encode($cm, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
         }
 
@@ -839,6 +839,7 @@ class MoodleImport
                 'startdate' => (int)    ($courseMeta['startdate'] ?? 0),
                 'enddate'   => (int)    ($courseMeta['enddate'] ?? 0),
                 'format'    => (string) ($courseMeta['format'] ?? ''),
+                'language'  => (string) ($courseMeta['language'] ?? ''),
             ],
         ];
 
@@ -2707,6 +2708,7 @@ class MoodleImport
         $idnumber  = $get('//course/idnumber');
         $summary   = $get('//course/summary');
         $format    = $get('//course/format');
+        $language  = $get('//course/lang');
 
         $startdate = (int) ($get('//course/startdate') ?: 0);
         $enddate   = (int) ($get('//course/enddate')   ?: 0);
@@ -2717,6 +2719,7 @@ class MoodleImport
             'idnumber'  => $idnumber,
             'summary'   => $summary,
             'format'    => $format,
+            'language'  => $language,
             'startdate' => $startdate,
             'enddate'   => $enddate,
         ];

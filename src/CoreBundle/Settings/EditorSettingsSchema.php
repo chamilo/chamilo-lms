@@ -33,7 +33,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             'htmlpurifier_wiki' => '',
             'enable_iframe_inclusion' => '',
             'enabled_mathjax' => '',
-            'translate_html' => 'false',
+            'translate_html' => 'true',
             'save_titles_as_html' => 'false',
             'full_editor_toolbar_set' => 'false',
             'editor_block_image_copy_paste' => 'false',

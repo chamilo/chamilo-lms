@@ -38934,3 +38934,237 @@ msgstr "Ei ohjaajia"
 msgid "No users"
 msgstr "Ei käyttäjiä"
 
+msgid "Calculation mode"
+msgstr "Laskentatapa"
+
+msgid "Weighted average"
+msgstr "Painotettu keskiarvo"
+
+msgid "Points sum"
+msgstr "Pisteiden summa"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Painotettu keskiarvo normalisoi painojen summan mukaan; pisteiden summa käsittelee kutakin painoa maksimipisteinä ja laskee ne yhteen ilman normalisointia."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Kunkin kohteen painoa käsitellään sen maksimipisteinä; arvosana on pisteiden summa, ei normalisoitu."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Arvosana on kohteiden painotettu keskiarvo, normalisoitu painojen summan mukaan."
+
+msgid "Forum participation"
+msgstr "Foorumiosallistuminen"
+
+msgid "Forum thread"
+msgstr "Foorumiketju"
+
+msgid "Points for one message"
+msgstr "Pisteet yhdestä viestistä"
+
+msgid "Points for two or more messages"
+msgstr "Pisteet kahdesta tai useammasta viestistä"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Pisteet myönnetään, kun opiskelija lähetti ketjuun tasan yhden viestin."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Pisteet myönnetään, kun opiskelija lähetti ketjuun kaksi tai useampia viestejä."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Valinnainen. Jos tyhjä, yksi tai useampi viesti antaa pisteet yhdestä viestistä."
+
+msgid "Current password is required to change your password."
+msgstr "Nykyinen salasana vaaditaan salasanan vaihtamiseen."
+
+msgid "The 2FA code is required."
+msgstr "2FA-koodi vaaditaan."
+
+msgid "Invalid 2FA configuration."
+msgstr "Virheellinen 2FA-määritys."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA-koodi on virheellinen tai vanhentunut."
+
+msgid "Database load"
+msgstr "Tietokannan kuorma"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL- ja MariaDB-palvelimen kuormitusmittarit"
+
+msgid "Click to show database server load metrics"
+msgstr "Napsauta näyttääksesi tietokantapalvelimen kuormitusmittarit"
+
+msgid "Threads connected"
+msgstr "Yhdistetyt säikeet"
+
+msgid "Temporary tables on disk"
+msgstr "Väliaikaiset taulut levyllä"
+
+msgid "Privilege scope"
+msgstr "Käyttöoikeuksien laajuus"
+
+msgid "Not measurable with the current database user"
+msgstr "Ei mitattavissa nykyisellä tietokantakäyttäjällä"
+
+msgid "Uptime"
+msgstr "Käynnissäoloaika"
+
+msgid "Queries per second"
+msgstr "Kyselyt sekunnissa"
+
+msgid "Slow queries"
+msgstr "Hitaat kyselyt"
+
+msgid "Slow query time limit"
+msgstr "Hitaan kyselyn aikaraja"
+
+msgid "Slow query log"
+msgstr "Hitaan kyselyn loki"
+
+msgid "Slow queries per second"
+msgstr "Hitaat kyselyt sekunnissa"
+
+msgid "Threads running"
+msgstr "Käynnissä olevat säikeet"
+
+msgid "Threads cached"
+msgstr "Välimuistissa olevat säikeet"
+
+msgid "Table lock waits"
+msgstr "Taululukitusodotukset"
+
+msgid "Row lock waits"
+msgstr "Rivin lukitusodotukset"
+
+msgid "Aborted connections"
+msgstr "Keskeytyneet yhteydet"
+
+msgid "Opened tables"
+msgstr "Avatut taulut"
+
+msgid "Query cache"
+msgstr "Kyselyvälimuisti"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Tietokannan kuormitusmittarit ovat saatavilla vain MySQL- ja MariaDB-tietokannoille."
+
+msgid "Inserts"
+msgstr "Lisäykset"
+
+msgid "Hit rate"
+msgstr "Osumaprosentti"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automaattinen päivitys 5 sekunnin välein"
+
+msgid "Web server load"
+msgstr "Verkkopalvelimen kuorma"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Apache- tai Nginx-palvelimen reaaliaikaiset kuormitusmittarit"
+
+msgid "Click to show web server load metrics"
+msgstr "Napsauta näyttääksesi verkkopalvelimen kuormitusmittarit"
+
+msgid "Requires a local web server status module"
+msgstr "Vaatii paikallisen verkkopalvelimen tilamoduulin"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Verkkopalvelimen kuormitus luetaan Apache mod_status- tai Nginx stub_status -tilasivulta vain localhostista. Tilasivun on sallittava pyynnöt osoitteesta 127.0.0.1 (tai ::1)."
+
+msgid "Paths scanned"
+msgstr "Skannatut polut"
+
+msgid "Detected"
+msgstr "Havaittu"
+
+msgid "Status path"
+msgstr "Tilapolku"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Verkkopalvelimen kuormitusmittarit ovat saatavilla vain Apache- ja Nginx-palvelimille."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Mikään skannatuista tilapoluista ei vastannut localhostista."
+
+msgid "Busy workers"
+msgstr "Käytössä olevat työntekijät"
+
+msgid "Idle workers"
+msgstr "Joutilaina olevat työntekijät"
+
+msgid "Graceful workers"
+msgstr "Sulkeutuvat työntekijät"
+
+msgid "Server MPM"
+msgstr "Palvelimen MPM"
+
+msgid "Requests per second (live)"
+msgstr "Pyyntöjä sekunnissa (reaaliaikainen)"
+
+msgid "Requests per second (since start)"
+msgstr "Pyyntöjä sekunnissa (käynnistyksestä)"
+
+msgid "Bytes per second (live)"
+msgstr "Tavuja sekunnissa (reaaliaikainen)"
+
+msgid "Bytes per second (since start)"
+msgstr "Tavuja sekunnissa (käynnistyksestä)"
+
+msgid "Bytes per request"
+msgstr "Tavuja pyyntöä kohden"
+
+msgid "Total accesses"
+msgstr "Yhteensä pääsyjä"
+
+msgid "Total traffic"
+msgstr "Yhteensä liikennettä"
+
+msgid "CPU load"
+msgstr "Suorittimen kuorma"
+
+msgid "Load average (1 min)"
+msgstr "Kuormituskeskiarvo (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Kuormituskeskiarvo (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Kuormituskeskiarvo (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Taulukko lähetetään"
+
+msgid "Scoreboard reading"
+msgstr "Taulukko luetaan"
+
+msgid "Scoreboard keepalive"
+msgstr "Taulukko keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Taulukko odottaa"
+
+msgid "Scoreboard open slots"
+msgstr "Taulukko avoimet paikat"
+
+msgid "Active connections"
+msgstr "Aktiiviset yhteydet"
+
+msgid "Reading"
+msgstr "Luetaan"
+
+msgid "Writing"
+msgstr "Kirjoitetaan"
+
+msgid "Total requests"
+msgstr "Yhteensä pyyntöjä"
+
+msgid "Accepts"
+msgstr "Hyväksytyt"
+
+msgid "Handled"
+msgstr "Käsitellyt"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ota käyttöön mod_status (ExtendedStatus On) ja salli localhost osoitteeseen /server-status. Nginx: ota käyttöön stub_status localhost-osoitteessa, kuten /nginx_status tai /stub_status."
+

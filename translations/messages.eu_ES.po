@@ -38939,3 +38939,237 @@ msgstr "Ez dago tutorerik"
 msgid "No users"
 msgstr "Ez dago erabiltzailerik"
 
+msgid "Calculation mode"
+msgstr "Kalkulu modua"
+
+msgid "Weighted average"
+msgstr "Batez besteko ponderatua"
+
+msgid "Points sum"
+msgstr "Puntuen batuketa"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Batez besteko ponderatua pisuen batuketa normalizatzen du; puntuen batuketak pisu bakoitza gehienezko puntu gisa hartzen du eta normalizatu gabe batzen ditu."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Elementu bakoitzaren pisua bere gehienezko puntu gisa hartzen da; nota puntuen batuketa da, ez da normalizatzen."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Nota elementuen batez besteko ponderatua da, pisuen batuketa normalizatuta."
+
+msgid "Forum participation"
+msgstr "Foroan parte-hartzea"
+
+msgid "Forum thread"
+msgstr "Foro-haria"
+
+msgid "Points for one message"
+msgstr "Mezu bakoitzeko puntuak"
+
+msgid "Points for two or more messages"
+msgstr "Bi mezu edo gehiagoko puntuak"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Ikasleak hariaren barruan mezu bakar bat bidali duenean ematen diren puntuak."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Ikasleak hariaren barruan bi mezu edo gehiago bidali dituenean ematen diren puntuak."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Aukerakoa. Hutsik utziz gero, mezu bat edo gehiagok mezu bakoitzeko puntuak ematen dituzte."
+
+msgid "Current password is required to change your password."
+msgstr "Zure pasahitza aldatzeko uneko pasahitza beharrezkoa da."
+
+msgid "The 2FA code is required."
+msgstr "2FA kodea beharrezkoa da."
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA konfigurazio baliogabea."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kodea baliogabea edo iraungita dago."
+
+msgid "Database load"
+msgstr "Datu-basearen karga"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL eta MariaDB zerbitzariaren karga-metrikoak zuzenean"
+
+msgid "Click to show database server load metrics"
+msgstr "Egin klik datu-basearen zerbitzariaren karga-metrikoak erakusteko"
+
+msgid "Threads connected"
+msgstr "Konektatutako hariak"
+
+msgid "Temporary tables on disk"
+msgstr "Aldi baterako taulak diskoan"
+
+msgid "Privilege scope"
+msgstr "Pribilegioen irismena"
+
+msgid "Not measurable with the current database user"
+msgstr "Ezin da neurtu uneko datu-base erabiltzailearekin"
+
+msgid "Uptime"
+msgstr "Jardunaldi-denbora"
+
+msgid "Queries per second"
+msgstr "Kontsultak segundoko"
+
+msgid "Slow queries"
+msgstr "Kontsulta motelak"
+
+msgid "Slow query time limit"
+msgstr "Kontsulta motelaren denbora-muga"
+
+msgid "Slow query log"
+msgstr "Kontsulta motelaren erregistroa"
+
+msgid "Slow queries per second"
+msgstr "Kontsulta motelak segundoko"
+
+msgid "Threads running"
+msgstr "Exekutatzen ari diren hariak"
+
+msgid "Threads cached"
+msgstr "Katxeatutako hariak"
+
+msgid "Table lock waits"
+msgstr "Taula-blokeoen itxaronaldiak"
+
+msgid "Row lock waits"
+msgstr "Errenkada-blokeoen itxaronaldiak"
+
+msgid "Aborted connections"
+msgstr "Konexio bertan behera utziak"
+
+msgid "Opened tables"
+msgstr "Irekitako taulak"
+
+msgid "Query cache"
+msgstr "Kontsulta-katxea"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Datu-basearen karga-neurriak MySQL eta MariaDB-rako soilik daude erabilgarri."
+
+msgid "Inserts"
+msgstr "Txertaketak"
+
+msgid "Hit rate"
+msgstr "Asmatze-tasa"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Auto-eguneratzea 5 segundoro"
+
+msgid "Web server load"
+msgstr "Web-zerbitzariaren karga"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Apache edo Nginx egoera-neurri zuzenak"
+
+msgid "Click to show web server load metrics"
+msgstr "Egin klik web-zerbitzariaren karga-neurriak ikusteko"
+
+msgid "Requires a local web server status module"
+msgstr "Web-zerbitzariaren egoera-modulu lokala behar du"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web-zerbitzariaren karga Apache mod_status edo Nginx stub_status-etik irakurtzen da localhost-ean soilik. Egoera-orriak 127.0.0.1 (edo ::1) helbideetatik jasotako eskaerak onartu behar ditu."
+
+msgid "Paths scanned"
+msgstr "Eskaneatutako bideak"
+
+msgid "Detected"
+msgstr "Detektatuta"
+
+msgid "Status path"
+msgstr "Egoera-bidea"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Web-zerbitzariaren karga-neurriak Apache eta Nginx-rako soilik daude erabilgarri."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ez da eskaneatutako egoera-bideetako bat ere erantzun localhost-ean."
+
+msgid "Busy workers"
+msgstr "Lan-buru lanpetuak"
+
+msgid "Idle workers"
+msgstr "Lan-buru inaktiboak"
+
+msgid "Graceful workers"
+msgstr "Lan-buru adeitsuak"
+
+msgid "Server MPM"
+msgstr "Zerbitzariaren MPM"
+
+msgid "Requests per second (live)"
+msgstr "Eskaerak segundoko (zuzenean)"
+
+msgid "Requests per second (since start)"
+msgstr "Eskaerak segundoko (hasieratik)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte segundoko (zuzenean)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte segundoko (hasieratik)"
+
+msgid "Bytes per request"
+msgstr "Byte eskaerako"
+
+msgid "Total accesses"
+msgstr "Sarbide guztiak"
+
+msgid "Total traffic"
+msgstr "Trafiko guztia"
+
+msgid "CPU load"
+msgstr "CPU karga"
+
+msgid "Load average (1 min)"
+msgstr "Karga batez bestekoa (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Karga batez bestekoa (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Karga batez bestekoa (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Puntuazio-taula bidaltzen"
+
+msgid "Scoreboard reading"
+msgstr "Puntuazio-taula irakurtzen"
+
+msgid "Scoreboard keepalive"
+msgstr "Puntuazio-taula keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Puntuazio-taula itxaroten"
+
+msgid "Scoreboard open slots"
+msgstr "Puntuazio-taula irekitako lekuak"
+
+msgid "Active connections"
+msgstr "Konexio aktiboak"
+
+msgid "Reading"
+msgstr "Irakurtzen"
+
+msgid "Writing"
+msgstr "Idazten"
+
+msgid "Total requests"
+msgstr "Eskaera guztiak"
+
+msgid "Accepts"
+msgstr "Onartuak"
+
+msgid "Handled"
+msgstr "Kudeatuak"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status-era. Nginx: gaitu stub_status localhost soilik den kokapen batean, adibidez /nginx_status edo /stub_status."
+

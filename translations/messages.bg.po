@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:запазени права,, no:свободен"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Папка,, application/msword:MsWord,, application/octet-stream:Октетен поток,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
@@ -38933,4 +38933,238 @@ msgstr "Няма преподаватели"
 
 msgid "No users"
 msgstr "Няма потребители"
+
+msgid "Calculation mode"
+msgstr "Режим на изчисление"
+
+msgid "Weighted average"
+msgstr "Претеглена средна стойност"
+
+msgid "Points sum"
+msgstr "Сума от точки"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Претеглената средна стойност нормализира по сумата от теглата; сумата от точки третира всяко тегло като максимални точки и ги сумира без нормализиране."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Теглото на всеки елемент се третира като негови максимални точки; оценката е сумата от точките, без нормализиране."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Оценката е претеглената средна стойност на елементите, нормализирана по сумата от теглата."
+
+msgid "Forum participation"
+msgstr "Участие във форум"
+
+msgid "Forum thread"
+msgstr "Тема във форум"
+
+msgid "Points for one message"
+msgstr "Точки за едно съобщение"
+
+msgid "Points for two or more messages"
+msgstr "Точки за две или повече съобщения"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Точки, присъждани, когато студентът е публикувал точно едно съобщение в темата."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Точки, присъждани, когато студентът е публикувал две или повече съобщения в темата."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "По избор. Ако остане празно, едно или повече съобщения дават точките за едно съобщение."
+
+msgid "Current password is required to change your password."
+msgstr "Текущата парола е необходима за промяна на паролата."
+
+msgid "The 2FA code is required."
+msgstr "Кодът за 2FA е задължителен."
+
+msgid "Invalid 2FA configuration."
+msgstr "Невалидна конфигурация на 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Кодът за 2FA е невалиден или е изтекъл."
+
+msgid "Database load"
+msgstr "Натоварване на базата данни"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Метрики за натоварване на MySQL и MariaDB сървъра в реално време"
+
+msgid "Click to show database server load metrics"
+msgstr "Кликнете, за да покажете метриките за натоварване на сървъра с базата данни"
+
+msgid "Threads connected"
+msgstr "Свързани нишки"
+
+msgid "Temporary tables on disk"
+msgstr "Временни таблици на диска"
+
+msgid "Privilege scope"
+msgstr "Обхват на привилегиите"
+
+msgid "Not measurable with the current database user"
+msgstr "Не може да се измери с текущия потребител на базата данни"
+
+msgid "Uptime"
+msgstr "Време на работа"
+
+msgid "Queries per second"
+msgstr "Заявки в секунда"
+
+msgid "Slow queries"
+msgstr "Бавни заявки"
+
+msgid "Slow query time limit"
+msgstr "Ограничение за време на бавна заявка"
+
+msgid "Slow query log"
+msgstr "Журнал на бавните заявки"
+
+msgid "Slow queries per second"
+msgstr "Бавни заявки в секунда"
+
+msgid "Threads running"
+msgstr "Изпълняващи се нишки"
+
+msgid "Threads cached"
+msgstr "Кеширани нишки"
+
+msgid "Table lock waits"
+msgstr "Изчаквания за заключване на таблица"
+
+msgid "Row lock waits"
+msgstr "Изчаквания за заключване на ред"
+
+msgid "Aborted connections"
+msgstr "Преустановени връзки"
+
+msgid "Opened tables"
+msgstr "Отворени таблици"
+
+msgid "Query cache"
+msgstr "Кеш на заявките"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Метриките за натоварване на базата данни са достъпни само за MySQL и MariaDB."
+
+msgid "Inserts"
+msgstr "Вмъквания"
+
+msgid "Hit rate"
+msgstr "Степен на попадения"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Автоматично опресняване на всеки 5 секунди"
+
+msgid "Web server load"
+msgstr "Натоварване на уеб сървъра"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Метрики за състоянието на Apache или Nginx в реално време"
+
+msgid "Click to show web server load metrics"
+msgstr "Кликнете, за да покажете метриките за натоварване на уеб сървъра"
+
+msgid "Requires a local web server status module"
+msgstr "Изисква локален модул за състояние на уеб сървъра"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Натоварването на уеб сървъра се чете от Apache mod_status или Nginx stub_status само на localhost. Страницата за състояние трябва да позволява заявки от 127.0.0.1 (или ::1)."
+
+msgid "Paths scanned"
+msgstr "Сканирани пътища"
+
+msgid "Detected"
+msgstr "Открито"
+
+msgid "Status path"
+msgstr "Път за състояние"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Метриките за натоварване на уеб сървъра са достъпни само за Apache и Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Нито един от сканираните пътища за състояние не отговори на localhost."
+
+msgid "Busy workers"
+msgstr "Заетите работници"
+
+msgid "Idle workers"
+msgstr "Свободни работници"
+
+msgid "Graceful workers"
+msgstr "Работници в режим graceful"
+
+msgid "Server MPM"
+msgstr "MPM на сървъра"
+
+msgid "Requests per second (live)"
+msgstr "Заявки в секунда (на живо)"
+
+msgid "Requests per second (since start)"
+msgstr "Заявки в секунда (от старта)"
+
+msgid "Bytes per second (live)"
+msgstr "Байтове в секунда (на живо)"
+
+msgid "Bytes per second (since start)"
+msgstr "Байтове в секунда (от старта)"
+
+msgid "Bytes per request"
+msgstr "Байтове на заявка"
+
+msgid "Total accesses"
+msgstr "Общ брой достъпи"
+
+msgid "Total traffic"
+msgstr "Общ трафик"
+
+msgid "CPU load"
+msgstr "Натоварване на процесора"
+
+msgid "Load average (1 min)"
+msgstr "Средно натоварване (1 мин)"
+
+msgid "Load average (5 min)"
+msgstr "Средно натоварване (5 мин)"
+
+msgid "Load average (15 min)"
+msgstr "Средно натоварване (15 мин)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard изпращане"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard четене"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard изчакване"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard свободни слотове"
+
+msgid "Active connections"
+msgstr "Активни връзки"
+
+msgid "Reading"
+msgstr "Четене"
+
+msgid "Writing"
+msgstr "Запис"
+
+msgid "Total requests"
+msgstr "Общ брой заявки"
+
+msgid "Accepts"
+msgstr "Приети"
+
+msgid "Handled"
+msgstr "Обработени"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: активирайте mod_status (ExtendedStatus On) и разрешете localhost достъп до /server-status. Nginx: активирайте stub_status на локална локация като /nginx_status или /stub_status."
 

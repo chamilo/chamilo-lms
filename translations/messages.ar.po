@@ -38946,3 +38946,237 @@ msgstr "لا يوجد مشرفون"
 msgid "No users"
 msgstr "لا يوجد مستخدمون"
 
+msgid "Calculation mode"
+msgstr "وضع الحساب"
+
+msgid "Weighted average"
+msgstr "المتوسط المرجح"
+
+msgid "Points sum"
+msgstr "مجموع النقاط"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "يُطبّع المتوسط المرجح بمجموع الأوزان؛ أما مجموع النقاط فيعامل كل وزن كحد أقصى للنقاط ويجمعها دون تطبيع."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "يُعامل وزن كل عنصر كحد أقصى لنقاطه؛ والدرجة هي مجموع النقاط، غير مُطبّعة."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "الدرجة هي المتوسط المرجح للعناصر، مُطبّعة بمجموع الأوزان."
+
+msgid "Forum participation"
+msgstr "المشاركة في المنتدى"
+
+msgid "Forum thread"
+msgstr "موضوع المنتدى"
+
+msgid "Points for one message"
+msgstr "نقاط لرسالة واحدة"
+
+msgid "Points for two or more messages"
+msgstr "نقاط لرسالتين أو أكثر"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "النقاط الممنوحة عندما ينشر الطالب رسالة واحدة بالضبط في الموضوع."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "النقاط الممنوحة عندما ينشر الطالب رسالتين أو أكثر في الموضوع."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "اختياري. إذا تُرك فارغًا، تُمنح نقطة واحدة أو أكثر نقاط الرسالة الواحدة."
+
+msgid "Current password is required to change your password."
+msgstr "كلمة المرور الحالية مطلوبة لتغيير كلمة المرور."
+
+msgid "The 2FA code is required."
+msgstr "رمز التحقق الثنائي مطلوب."
+
+msgid "Invalid 2FA configuration."
+msgstr "تكوين التحقق الثنائي غير صالح."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "رمز التحقق الثنائي غير صالح أو منتهي الصلاحية."
+
+msgid "Database load"
+msgstr "حمل قاعدة البيانات"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "مقاييس حمل خادم MySQL وMariaDB المباشر"
+
+msgid "Click to show database server load metrics"
+msgstr "انقر لعرض مقاييس حمل خادم قاعدة البيانات"
+
+msgid "Threads connected"
+msgstr "الخيوط المتصلة"
+
+msgid "Temporary tables on disk"
+msgstr "الجداول المؤقتة على القرص"
+
+msgid "Privilege scope"
+msgstr "نطاق الامتياز"
+
+msgid "Not measurable with the current database user"
+msgstr "غير قابل للقياس بمستخدم قاعدة البيانات الحالي"
+
+msgid "Uptime"
+msgstr "مدة التشغيل"
+
+msgid "Queries per second"
+msgstr "الاستعلامات في الثانية"
+
+msgid "Slow queries"
+msgstr "الاستعلامات البطيئة"
+
+msgid "Slow query time limit"
+msgstr "حد زمن الاستعلام البطيء"
+
+msgid "Slow query log"
+msgstr "سجل الاستعلامات البطيئة"
+
+msgid "Slow queries per second"
+msgstr "الاستعلامات البطيئة في الثانية"
+
+msgid "Threads running"
+msgstr "الخيوط الجارية"
+
+msgid "Threads cached"
+msgstr "الخيوط المخزنة مؤقتًا"
+
+msgid "Table lock waits"
+msgstr "انتظارات قفل الجدول"
+
+msgid "Row lock waits"
+msgstr "انتظارات قفل الصف"
+
+msgid "Aborted connections"
+msgstr "الاتصالات الملغاة"
+
+msgid "Opened tables"
+msgstr "الجداول المفتوحة"
+
+msgid "Query cache"
+msgstr "ذاكرة التخزين المؤقت للاستعلامات"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "مقاييس حمل قاعدة البيانات متاحة فقط لـ MySQL وMariaDB."
+
+msgid "Inserts"
+msgstr "إدراجات"
+
+msgid "Hit rate"
+msgstr "معدل الإصابة"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "التحديث التلقائي كل 5 ثوانٍ"
+
+msgid "Web server load"
+msgstr "حمل خادم الويب"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "مقاييس حالة Apache أو Nginx المباشرة"
+
+msgid "Click to show web server load metrics"
+msgstr "انقر لعرض مقاييس حمل خادم الويب"
+
+msgid "Requires a local web server status module"
+msgstr "يتطلب وحدة حالة خادم ويب محلية"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "يُقرأ حمل خادم الويب من Apache mod_status أو Nginx stub_status على المضيف المحلي فقط. يجب أن تسمح صفحة الحالة بالطلبات من 127.0.0.1 (أو ::1)."
+
+msgid "Paths scanned"
+msgstr "المسارات المفحوصة"
+
+msgid "Detected"
+msgstr "تم الكشف"
+
+msgid "Status path"
+msgstr "مسار الحالة"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "مقاييس حمل خادم الويب متاحة فقط لـ Apache و Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "لم تستجب أي من مسارات الحالة المفحوصة على المضيف المحلي."
+
+msgid "Busy workers"
+msgstr "العمال المشغولون"
+
+msgid "Idle workers"
+msgstr "العمال الخاملون"
+
+msgid "Graceful workers"
+msgstr "العمال المهذبون"
+
+msgid "Server MPM"
+msgstr "خادم MPM"
+
+msgid "Requests per second (live)"
+msgstr "الطلبات في الثانية (مباشر)"
+
+msgid "Requests per second (since start)"
+msgstr "الطلبات في الثانية (منذ البدء)"
+
+msgid "Bytes per second (live)"
+msgstr "البايتات في الثانية (مباشر)"
+
+msgid "Bytes per second (since start)"
+msgstr "البايتات في الثانية (منذ البدء)"
+
+msgid "Bytes per request"
+msgstr "البايتات لكل طلب"
+
+msgid "Total accesses"
+msgstr "إجمالي الوصولات"
+
+msgid "Total traffic"
+msgstr "إجمالي حركة البيانات"
+
+msgid "CPU load"
+msgstr "حمل المعالج"
+
+msgid "Load average (1 min)"
+msgstr "متوسط الحمل (دقيقة واحدة)"
+
+msgid "Load average (5 min)"
+msgstr "متوسط الحمل (5 دقائق)"
+
+msgid "Load average (15 min)"
+msgstr "متوسط الحمل (15 دقيقة)"
+
+msgid "Scoreboard sending"
+msgstr "لوحة النتائج إرسال"
+
+msgid "Scoreboard reading"
+msgstr "لوحة النتائج قراءة"
+
+msgid "Scoreboard keepalive"
+msgstr "لوحة النتائج keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "لوحة النتائج انتظار"
+
+msgid "Scoreboard open slots"
+msgstr "لوحة النتائج فتح الفتحات"
+
+msgid "Active connections"
+msgstr "الاتصالات النشطة"
+
+msgid "Reading"
+msgstr "قراءة"
+
+msgid "Writing"
+msgstr "كتابة"
+
+msgid "Total requests"
+msgstr "إجمالي الطلبات"
+
+msgid "Accepts"
+msgstr "مقبولات"
+
+msgid "Handled"
+msgstr "معالجة"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: فعّل mod_status (ExtendedStatus On) وسمح للمضيف المحلي بالوصول إلى /server-status. Nginx: فعّل stub_status في موقع يقتصر على المضيف المحلي مثل /nginx_status أو /stub_status."
+

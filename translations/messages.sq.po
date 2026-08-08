@@ -38932,3 +38932,237 @@ msgstr "Asnjë tutor"
 msgid "No users"
 msgstr "Asnjë përdorues"
 
+msgid "Calculation mode"
+msgstr "Mënyra e llogaritjes"
+
+msgid "Weighted average"
+msgstr "Mesatare e ponderuar"
+
+msgid "Points sum"
+msgstr "Shuma e pikëve"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Mesatarja e ponderuar normalizohet sipas shumës së peshave; shuma e pikëve i trajton çdo peshë si pikë maksimale dhe i shton pa normalizim."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Çdo peshë elementi trajtohet si pikët e tij maksimale; nota është shuma e pikëve, jo e normalizuar."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Nota është mesatarja e ponderuar e elementeve, e normalizuar sipas shumës së peshave."
+
+msgid "Forum participation"
+msgstr "Pjesëmarrja në forum"
+
+msgid "Forum thread"
+msgstr "Tema e forumit"
+
+msgid "Points for one message"
+msgstr "Pikë për një mesazh"
+
+msgid "Points for two or more messages"
+msgstr "Pikë për dy ose më shumë mesazhe"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Pikët që jepen kur studenti ka postuar saktësisht një mesazh në temë."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Pikët që jepen kur studenti ka postuar dy ose më shumë mesazhe në temë."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opsionale. Nëse lihet bosh, një ose më shumë mesazhe marrin pikët për një mesazh."
+
+msgid "Current password is required to change your password."
+msgstr "Fjalëkalimi aktual kërkohet për të ndryshuar fjalëkalimin tuaj."
+
+msgid "The 2FA code is required."
+msgstr "Kodi 2FA kërkohet."
+
+msgid "Invalid 2FA configuration."
+msgstr "Konfigurim i pavlefshëm 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Kodi 2FA është i pavlefshëm ose ka skaduar."
+
+msgid "Database load"
+msgstr "Ngarkesa e bazës së të dhënave"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metrikat e ngarkesës së serverit Live MySQL dhe MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "Klikoni për të shfaqur metrikat e ngarkesës së serverit të bazës së të dhënave"
+
+msgid "Threads connected"
+msgstr "Thread-et e lidhur"
+
+msgid "Temporary tables on disk"
+msgstr "Tabela të përkohshme në disk"
+
+msgid "Privilege scope"
+msgstr "Fusha e privilegjit"
+
+msgid "Not measurable with the current database user"
+msgstr "Nuk matet me përdoruesin aktual të bazës së të dhënave"
+
+msgid "Uptime"
+msgstr "Koha e funksionimit"
+
+msgid "Queries per second"
+msgstr "Kërkesa për sekondë"
+
+msgid "Slow queries"
+msgstr "Kërkesa të ngadalta"
+
+msgid "Slow query time limit"
+msgstr "Kufiri i kohës së kërkesave të ngadalta"
+
+msgid "Slow query log"
+msgstr "Regjistri i kërkesave të ngadalta"
+
+msgid "Slow queries per second"
+msgstr "Kërkesa të ngadalta për sekondë"
+
+msgid "Threads running"
+msgstr "Thread-e në ekzekutim"
+
+msgid "Threads cached"
+msgstr "Thread-e të ruajtura në cache"
+
+msgid "Table lock waits"
+msgstr "Pritje për bllokimin e tabelave"
+
+msgid "Row lock waits"
+msgstr "Pritje për bllokimin e rreshtave"
+
+msgid "Aborted connections"
+msgstr "Lidhje të ndërprera"
+
+msgid "Opened tables"
+msgstr "Tabela të hapura"
+
+msgid "Query cache"
+msgstr "Cache i kërkesave"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Metrikat e ngarkesës së bazës së të dhënave janë të disponueshme vetëm për MySQL dhe MariaDB."
+
+msgid "Inserts"
+msgstr "Futje"
+
+msgid "Hit rate"
+msgstr "Shkalla e goditjeve"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Rifreskim automatik çdo 5 sekonda"
+
+msgid "Web server load"
+msgstr "Ngarkesa e serverit web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metrika të gjendjes së drejtpërdrejtë të Apache ose Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Klikoni për të shfaqur metrikat e ngarkesës së serverit web"
+
+msgid "Requires a local web server status module"
+msgstr "Kërkon një modul të statusit të serverit web lokal"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ngarkesa e serverit web lexohet vetëm nga Apache mod_status ose Nginx stub_status në localhost. Faqja e statusit duhet të lejojë kërkesa nga 127.0.0.1 (ose ::1)."
+
+msgid "Paths scanned"
+msgstr "Shtigje të skanuara"
+
+msgid "Detected"
+msgstr "Të zbuluara"
+
+msgid "Status path"
+msgstr "Shtegu i statusit"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Metrikat e ngarkesës së serverit web janë të disponueshme vetëm për Apache dhe Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Asnjë nga shtigjet e statusit të skanuara nuk u përgjigj në localhost."
+
+msgid "Busy workers"
+msgstr "Punonjës të zënë"
+
+msgid "Idle workers"
+msgstr "Punonjës të papunë"
+
+msgid "Graceful workers"
+msgstr "Punonjës të qetë"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Kërkesa për sekondë (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Kërkesa për sekondë (që nga fillimi)"
+
+msgid "Bytes per second (live)"
+msgstr "Bajt për sekondë (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bajt për sekondë (që nga fillimi)"
+
+msgid "Bytes per request"
+msgstr "Bajt për kërkesë"
+
+msgid "Total accesses"
+msgstr "Qasje totale"
+
+msgid "Total traffic"
+msgstr "Trafik total"
+
+msgid "CPU load"
+msgstr "Ngarkesa e CPU-së"
+
+msgid "Load average (1 min)"
+msgstr "Mesatarja e ngarkesës (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Mesatarja e ngarkesës (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Mesatarja e ngarkesës (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Tabela e rezultateve duke dërguar"
+
+msgid "Scoreboard reading"
+msgstr "Tabela e rezultateve duke lexuar"
+
+msgid "Scoreboard keepalive"
+msgstr "Tabela e rezultateve keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Tabela e rezultateve në pritje"
+
+msgid "Scoreboard open slots"
+msgstr "Vendndodhje të hapura në tabelën e rezultateve"
+
+msgid "Active connections"
+msgstr "Lidhje aktive"
+
+msgid "Reading"
+msgstr "Duke lexuar"
+
+msgid "Writing"
+msgstr "Shkrimi"
+
+msgid "Total requests"
+msgstr "Kërkesat totale"
+
+msgid "Accepts"
+msgstr "Pranuar"
+
+msgid "Handled"
+msgstr "Trajtuar"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: aktivizo mod_status (ExtendedStatus On) dhe lejo localhost në /server-status. Nginx: aktivizo stub_status në një vendndodhje vetëm për localhost si /nginx_status ose /stub_status."
+

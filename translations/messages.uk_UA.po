@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Зразок формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Зразок формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -38927,4 +38927,238 @@ msgstr "Немає викладачів"
 
 msgid "No users"
 msgstr "Немає користувачів"
+
+msgid "Calculation mode"
+msgstr "Режим обчислення"
+
+msgid "Weighted average"
+msgstr "Середньозважене значення"
+
+msgid "Points sum"
+msgstr "Сума балів"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Середньозважене нормалізує за сумою ваг; сума балів трактує кожну вагу як максимум балів і додає їх без нормалізації."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Вага кожного елемента вважається його максимальними балами; оцінка — це сума балів, без нормалізації."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Оцінка — це середньозважене значення елементів, нормалізоване за сумою ваг."
+
+msgid "Forum participation"
+msgstr "Участь у форумі"
+
+msgid "Forum thread"
+msgstr "Тема форуму"
+
+msgid "Points for one message"
+msgstr "Бали за одне повідомлення"
+
+msgid "Points for two or more messages"
+msgstr "Бали за два або більше повідомлень"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Бали, що нараховуються, коли студент опублікував рівно одне повідомлення в темі."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Бали, що нараховуються, коли студент опублікував два або більше повідомлень у темі."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Необов’язково. Якщо залишити порожнім, одне або більше повідомлень нараховують бали за одне повідомлення."
+
+msgid "Current password is required to change your password."
+msgstr "Поточний пароль потрібен для зміни пароля."
+
+msgid "The 2FA code is required."
+msgstr "Потрібен код 2FA."
+
+msgid "Invalid 2FA configuration."
+msgstr "Неправильна конфігурація 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Код 2FA недійсний або прострочений."
+
+msgid "Database load"
+msgstr "Навантаження бази даних"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Метрики навантаження сервера MySQL і MariaDB у реальному часі"
+
+msgid "Click to show database server load metrics"
+msgstr "Натисніть, щоб показати метрики навантаження сервера бази даних"
+
+msgid "Threads connected"
+msgstr "Підключені потоки"
+
+msgid "Temporary tables on disk"
+msgstr "Тимчасові таблиці на диску"
+
+msgid "Privilege scope"
+msgstr "Обсяг привілеїв"
+
+msgid "Not measurable with the current database user"
+msgstr "Неможливо виміряти поточним користувачем бази даних"
+
+msgid "Uptime"
+msgstr "Час безперервної роботи"
+
+msgid "Queries per second"
+msgstr "Запитів за секунду"
+
+msgid "Slow queries"
+msgstr "Повільні запити"
+
+msgid "Slow query time limit"
+msgstr "Ліміт часу повільного запиту"
+
+msgid "Slow query log"
+msgstr "Журнал повільних запитів"
+
+msgid "Slow queries per second"
+msgstr "Повільних запитів за секунду"
+
+msgid "Threads running"
+msgstr "Потоки, що виконуються"
+
+msgid "Threads cached"
+msgstr "Потоки в кеші"
+
+msgid "Table lock waits"
+msgstr "Очікування блокувань таблиць"
+
+msgid "Row lock waits"
+msgstr "Очікування блокувань рядків"
+
+msgid "Aborted connections"
+msgstr "Перервані з’єднання"
+
+msgid "Opened tables"
+msgstr "Відкритих таблиць"
+
+msgid "Query cache"
+msgstr "Кеш запитів"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Метрики навантаження бази даних доступні лише для MySQL та MariaDB."
+
+msgid "Inserts"
+msgstr "Вставки"
+
+msgid "Hit rate"
+msgstr "Частота попадань"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Автооновлення кожні 5 секунд"
+
+msgid "Web server load"
+msgstr "Навантаження вебсервера"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Метрики стану Apache або Nginx у реальному часі"
+
+msgid "Click to show web server load metrics"
+msgstr "Натисніть, щоб переглянути метрики навантаження вебсервера"
+
+msgid "Requires a local web server status module"
+msgstr "Потрібен модуль статусу локального вебсервера"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Метрики навантаження вебсервера зчитуються лише з Apache mod_status або Nginx stub_status на localhost. Сторінка статусу має дозволяти запити з 127.0.0.1 (або ::1)."
+
+msgid "Paths scanned"
+msgstr "Переглянуто шляхів"
+
+msgid "Detected"
+msgstr "Виявлено"
+
+msgid "Status path"
+msgstr "Шлях статусу"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Метрики навантаження вебсервера доступні лише для Apache та Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Жоден зі шляхів статусу не відповів на localhost."
+
+msgid "Busy workers"
+msgstr "Зайняті робочі процеси"
+
+msgid "Idle workers"
+msgstr "Вільні робочі процеси"
+
+msgid "Graceful workers"
+msgstr "Робочі процеси graceful"
+
+msgid "Server MPM"
+msgstr "MPM сервера"
+
+msgid "Requests per second (live)"
+msgstr "Запитів за секунду (наживо)"
+
+msgid "Requests per second (since start)"
+msgstr "Запитів за секунду (з моменту запуску)"
+
+msgid "Bytes per second (live)"
+msgstr "Байт за секунду (наживо)"
+
+msgid "Bytes per second (since start)"
+msgstr "Байт за секунду (з моменту запуску)"
+
+msgid "Bytes per request"
+msgstr "Байт на запит"
+
+msgid "Total accesses"
+msgstr "Усього звернень"
+
+msgid "Total traffic"
+msgstr "Загальний трафік"
+
+msgid "CPU load"
+msgstr "Навантаження ЦП"
+
+msgid "Load average (1 min)"
+msgstr "Середнє навантаження (1 хв)"
+
+msgid "Load average (5 min)"
+msgstr "Середнє навантаження (5 хв)"
+
+msgid "Load average (15 min)"
+msgstr "Середнє навантаження (15 хв)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard: надсилання"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard: читання"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard: keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard: очікування"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard: вільні слоти"
+
+msgid "Active connections"
+msgstr "Активні з’єднання"
+
+msgid "Reading"
+msgstr "Читання"
+
+msgid "Writing"
+msgstr "Запис"
+
+msgid "Total requests"
+msgstr "Усього запитів"
+
+msgid "Accepts"
+msgstr "Прийнято"
+
+msgid "Handled"
+msgstr "Оброблено"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: увімкніть mod_status (ExtendedStatus On) і дозвольте localhost доступ до /server-status. Nginx: увімкніть stub_status у локальній локації, наприклад /nginx_status або /stub_status."
 

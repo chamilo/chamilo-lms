@@ -38928,3 +38928,237 @@ msgstr "بدون مربی"
 msgid "No users"
 msgstr "بدون کاربر"
 
+msgid "Calculation mode"
+msgstr "حالت محاسبه"
+
+msgid "Weighted average"
+msgstr "میانگین وزنی"
+
+msgid "Points sum"
+msgstr "جمع امتیازات"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "میانگین وزنی با جمع وزن‌ها نرمال‌سازی می‌شود؛ جمع امتیازات هر وزن را به عنوان حداکثر امتیاز در نظر می‌گیرد و بدون نرمال‌سازی جمع می‌زند."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "هر وزن مورد به عنوان حداکثر امتیاز آن در نظر گرفته می‌شود؛ نمره جمع امتیازات است و نرمال‌سازی نمی‌شود."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "نمره میانگین وزنی موارد است که با جمع وزن‌ها نرمال‌سازی می‌شود."
+
+msgid "Forum participation"
+msgstr "مشارکت در فروم"
+
+msgid "Forum thread"
+msgstr "موضوع فروم"
+
+msgid "Points for one message"
+msgstr "امتیاز برای یک پیام"
+
+msgid "Points for two or more messages"
+msgstr "امتیاز برای دو یا چند پیام"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "امتیاز اعطا شده وقتی دانشجو دقیقاً یک پیام در موضوع ارسال کرده است."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "امتیاز اعطا شده وقتی دانشجو دو یا چند پیام در موضوع ارسال کرده است."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "اختیاری. اگر خالی بماند، یک یا چند پیام امتیاز یک پیام را اعطا می‌کنند."
+
+msgid "Current password is required to change your password."
+msgstr "رمز عبور فعلی برای تغییر رمز عبور الزامی است."
+
+msgid "The 2FA code is required."
+msgstr "کد ۲FA الزامی است."
+
+msgid "Invalid 2FA configuration."
+msgstr "پیکربندی ۲FA نامعتبر است."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "کد ۲FA نامعتبر یا منقضی شده است."
+
+msgid "Database load"
+msgstr "بارگذاری پایگاه داده"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "معیارهای بارگذاری زنده سرور MySQL و MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "برای نمایش معیارهای بارگذاری سرور پایگاه داده کلیک کنید"
+
+msgid "Threads connected"
+msgstr "رشته‌های متصل"
+
+msgid "Temporary tables on disk"
+msgstr "جدول‌های موقت روی دیسک"
+
+msgid "Privilege scope"
+msgstr "محدوده امتیاز"
+
+msgid "Not measurable with the current database user"
+msgstr "با کاربر فعلی پایگاه داده قابل اندازه‌گیری نیست"
+
+msgid "Uptime"
+msgstr "زمان کارکرد"
+
+msgid "Queries per second"
+msgstr "پرس‌وجو در ثانیه"
+
+msgid "Slow queries"
+msgstr "پرس‌وجوهای کند"
+
+msgid "Slow query time limit"
+msgstr "محدودیت زمانی پرس‌وجوی کند"
+
+msgid "Slow query log"
+msgstr "گزارش پرس‌وجوی کند"
+
+msgid "Slow queries per second"
+msgstr "پرس‌وجوهای کند در ثانیه"
+
+msgid "Threads running"
+msgstr "رشته‌های در حال اجرا"
+
+msgid "Threads cached"
+msgstr "رشته‌های کش‌شده"
+
+msgid "Table lock waits"
+msgstr "انتظار قفل جدول"
+
+msgid "Row lock waits"
+msgstr "انتظار قفل سطر"
+
+msgid "Aborted connections"
+msgstr "اتصال‌های قطع‌شده"
+
+msgid "Opened tables"
+msgstr "جدول‌های بازشده"
+
+msgid "Query cache"
+msgstr "حافظه نهان پرس‌وجو"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "معیارهای بارگذاری پایگاه داده فقط برای MySQL و MariaDB در دسترس است."
+
+msgid "Inserts"
+msgstr "درج‌ها"
+
+msgid "Hit rate"
+msgstr "نرخ ضربه"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "تازه‌سازی خودکار هر ۵ ثانیه"
+
+msgid "Web server load"
+msgstr "بارگذاری وب‌سرور"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "معیارهای وضعیت زنده Apache یا Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "برای نمایش معیارهای بارگذاری وب‌سرور کلیک کنید"
+
+msgid "Requires a local web server status module"
+msgstr "نیاز به ماژول وضعیت وب‌سرور محلی دارد"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "بار سرور وب فقط از Apache mod_status یا Nginx stub_status در localhost خوانده می‌شود. صفحه وضعیت باید درخواست‌ها را از 127.0.0.1 (یا ::1) بپذیرد."
+
+msgid "Paths scanned"
+msgstr "مسیرهای اسکن‌شده"
+
+msgid "Detected"
+msgstr "تشخیص‌داده‌شده"
+
+msgid "Status path"
+msgstr "مسیر وضعیت"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "معیارهای بار سرور وب فقط برای Apache و Nginx در دسترس است."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "هیچ‌کدام از مسیرهای وضعیت اسکن‌شده در localhost پاسخ ندادند."
+
+msgid "Busy workers"
+msgstr "کارگران مشغول"
+
+msgid "Idle workers"
+msgstr "کارگران بیکار"
+
+msgid "Graceful workers"
+msgstr "کارگران graceful"
+
+msgid "Server MPM"
+msgstr "MPM سرور"
+
+msgid "Requests per second (live)"
+msgstr "درخواست‌ها در ثانیه (زنده)"
+
+msgid "Requests per second (since start)"
+msgstr "درخواست‌ها در ثانیه (از شروع)"
+
+msgid "Bytes per second (live)"
+msgstr "بایت‌ها در ثانیه (زنده)"
+
+msgid "Bytes per second (since start)"
+msgstr "بایت‌ها در ثانیه (از شروع)"
+
+msgid "Bytes per request"
+msgstr "بایت‌ها در هر درخواست"
+
+msgid "Total accesses"
+msgstr "مجموع دسترسی‌ها"
+
+msgid "Total traffic"
+msgstr "مجموع ترافیک"
+
+msgid "CPU load"
+msgstr "بار CPU"
+
+msgid "Load average (1 min)"
+msgstr "میانگین بار (۱ دقیقه)"
+
+msgid "Load average (5 min)"
+msgstr "میانگین بار (۵ دقیقه)"
+
+msgid "Load average (15 min)"
+msgstr "میانگین بار (۱۵ دقیقه)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard در حال ارسال"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard در حال خواندن"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard در حال انتظار"
+
+msgid "Scoreboard open slots"
+msgstr "اسلات‌های باز Scoreboard"
+
+msgid "Active connections"
+msgstr "اتصال‌های فعال"
+
+msgid "Reading"
+msgstr "در حال خواندن"
+
+msgid "Writing"
+msgstr "در حال نوشتن"
+
+msgid "Total requests"
+msgstr "مجموع درخواست‌ها"
+
+msgid "Accepts"
+msgstr "پذیرفته‌شده‌ها"
+
+msgid "Handled"
+msgstr "مدیریت‌شده‌ها"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status را فعال کنید (ExtendedStatus On) و localhost را برای /server-status مجاز کنید. Nginx: stub_status را در یک مکان فقط localhost مانند /nginx_status یا /stub_status فعال کنید."
+

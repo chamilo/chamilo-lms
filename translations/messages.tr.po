@@ -38934,3 +38934,237 @@ msgstr "Eğitmen yok"
 msgid "No users"
 msgstr "Kullanıcı yok"
 
+msgid "Calculation mode"
+msgstr "Hesaplama modu"
+
+msgid "Weighted average"
+msgstr "Ağırlıklı ortalama"
+
+msgid "Points sum"
+msgstr "Puan toplamı"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Ağırlıklı ortalama, ağırlıkların toplamına göre normalleştirir; puan toplamı her ağırlığı maksimum puan olarak kabul eder ve normalleştirmeden toplar."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Her öğenin ağırlığı, onun maksimum puanı olarak kabul edilir; not, normalleştirilmeden puanların toplamıdır."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Not, ağırlıkların toplamına göre normalleştirilmiş öğelerin ağırlıklı ortalamasıdır."
+
+msgid "Forum participation"
+msgstr "Forum katılımı"
+
+msgid "Forum thread"
+msgstr "Forum konusu"
+
+msgid "Points for one message"
+msgstr "Bir mesaj için puan"
+
+msgid "Points for two or more messages"
+msgstr "İki veya daha fazla mesaj için puan"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Öğrenci konu içinde tam olarak bir mesaj gönderdiğinde verilen puan."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Öğrenci konu içinde iki veya daha fazla mesaj gönderdiğinde verilen puan."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "İsteğe bağlı. Boş bırakılırsa, bir veya daha fazla mesaj bir mesaj için puan kazandırır."
+
+msgid "Current password is required to change your password."
+msgstr "Parolanızı değiştirmek için mevcut parolanız gereklidir."
+
+msgid "The 2FA code is required."
+msgstr "2FA kodu gereklidir."
+
+msgid "Invalid 2FA configuration."
+msgstr "Geçersiz 2FA yapılandırması."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kodu geçersiz veya süresi dolmuş."
+
+msgid "Database load"
+msgstr "Veritabanı yükü"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Canlı MySQL ve MariaDB sunucu yükü metrikleri"
+
+msgid "Click to show database server load metrics"
+msgstr "Veritabanı sunucusu yükü metriklerini göstermek için tıklayın"
+
+msgid "Threads connected"
+msgstr "Bağlı iş parçacıkları"
+
+msgid "Temporary tables on disk"
+msgstr "Diskteki geçici tablolar"
+
+msgid "Privilege scope"
+msgstr "Yetki kapsamı"
+
+msgid "Not measurable with the current database user"
+msgstr "Mevcut veritabanı kullanıcısıyla ölçülemez"
+
+msgid "Uptime"
+msgstr "Çalışma süresi"
+
+msgid "Queries per second"
+msgstr "Saniyedeki sorgu sayısı"
+
+msgid "Slow queries"
+msgstr "Yavaş sorgular"
+
+msgid "Slow query time limit"
+msgstr "Yavaş sorgu zaman sınırı"
+
+msgid "Slow query log"
+msgstr "Yavaş sorgu günlüğü"
+
+msgid "Slow queries per second"
+msgstr "Saniyedeki yavaş sorgu sayısı"
+
+msgid "Threads running"
+msgstr "Çalışan iş parçacıkları"
+
+msgid "Threads cached"
+msgstr "Önbelleğe alınmış iş parçacıkları"
+
+msgid "Table lock waits"
+msgstr "Tablo kilidi beklemeleri"
+
+msgid "Row lock waits"
+msgstr "Satır kilidi beklemeleri"
+
+msgid "Aborted connections"
+msgstr "İptal edilen bağlantılar"
+
+msgid "Opened tables"
+msgstr "Açılan tablolar"
+
+msgid "Query cache"
+msgstr "Sorgu önbelleği"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Veritabanı yük metrikleri yalnızca MySQL ve MariaDB için kullanılabilir."
+
+msgid "Inserts"
+msgstr "Ekleme"
+
+msgid "Hit rate"
+msgstr "İsabet oranı"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Her 5 saniyede bir otomatik yenile"
+
+msgid "Web server load"
+msgstr "Web sunucusu yükü"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Canlı Apache veya Nginx durum metrikleri"
+
+msgid "Click to show web server load metrics"
+msgstr "Web sunucusu yük metriklerini göstermek için tıklayın"
+
+msgid "Requires a local web server status module"
+msgstr "Yerel bir web sunucusu durum modülü gerektirir"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web sunucusu yükü yalnızca localhost üzerinde Apache mod_status veya Nginx stub_status'tan okunur. Durum sayfası 127.0.0.1 (veya ::1) adresinden gelen istekleri kabul etmelidir."
+
+msgid "Paths scanned"
+msgstr "Taranan yollar"
+
+msgid "Detected"
+msgstr "Algılandı"
+
+msgid "Status path"
+msgstr "Durum yolu"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Web sunucusu yük metrikleri yalnızca Apache ve Nginx için kullanılabilir."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Taranan durum yollarının hiçbiri localhost üzerinde yanıt vermedi."
+
+msgid "Busy workers"
+msgstr "Meşgul çalışanlar"
+
+msgid "Idle workers"
+msgstr "Boşta çalışanlar"
+
+msgid "Graceful workers"
+msgstr "Nazik çalışanlar"
+
+msgid "Server MPM"
+msgstr "Sunucu MPM"
+
+msgid "Requests per second (live)"
+msgstr "Saniyedeki istekler (canlı)"
+
+msgid "Requests per second (since start)"
+msgstr "Saniyedeki istekler (başlangıçtan beri)"
+
+msgid "Bytes per second (live)"
+msgstr "Saniyedeki bayt (canlı)"
+
+msgid "Bytes per second (since start)"
+msgstr "Saniyedeki bayt (başlangıçtan beri)"
+
+msgid "Bytes per request"
+msgstr "İstek başına bayt"
+
+msgid "Total accesses"
+msgstr "Toplam erişim"
+
+msgid "Total traffic"
+msgstr "Toplam trafik"
+
+msgid "CPU load"
+msgstr "CPU yükü"
+
+msgid "Load average (1 min)"
+msgstr "Yük ortalaması (1 dk)"
+
+msgid "Load average (5 min)"
+msgstr "Yük ortalaması (5 dk)"
+
+msgid "Load average (15 min)"
+msgstr "Yük ortalaması (15 dk)"
+
+msgid "Scoreboard sending"
+msgstr "Skor tahtası gönderiliyor"
+
+msgid "Scoreboard reading"
+msgstr "Skor tahtası okunuyor"
+
+msgid "Scoreboard keepalive"
+msgstr "Skor tahtası keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Skor tahtası bekliyor"
+
+msgid "Scoreboard open slots"
+msgstr "Skor tahtası açık slotlar"
+
+msgid "Active connections"
+msgstr "Aktif bağlantılar"
+
+msgid "Reading"
+msgstr "Okunuyor"
+
+msgid "Writing"
+msgstr "Yazılıyor"
+
+msgid "Total requests"
+msgstr "Toplam istek"
+
+msgid "Accepts"
+msgstr "Kabul"
+
+msgid "Handled"
+msgstr "İşlendi"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status'u etkinleştirin (ExtendedStatus On) ve localhost'un /server-status'a erişimine izin verin. Nginx: localhost'a özel bir konumda (örneğin /nginx_status veya /stub_status) stub_status'u etkinleştirin."
+

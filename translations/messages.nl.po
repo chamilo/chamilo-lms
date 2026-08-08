@@ -41012,3 +41012,237 @@ msgstr "Geen begeleiders"
 msgid "No users"
 msgstr "Geen gebruikers"
 
+msgid "Calculation mode"
+msgstr "Berekeningsmodus"
+
+msgid "Weighted average"
+msgstr "Gewogen gemiddelde"
+
+msgid "Points sum"
+msgstr "Punten som"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Gewogen gemiddelde normaliseert op basis van de som van de gewichten; punten som behandelt elk gewicht als maximale punten en telt ze op zonder normalisatie."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Elk itemgewicht wordt behandeld als zijn maximale punten; het cijfer is de som van de punten, niet genormaliseerd."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Het cijfer is het gewogen gemiddelde van de items, genormaliseerd op basis van de som van de gewichten."
+
+msgid "Forum participation"
+msgstr "Forumdeelname"
+
+msgid "Forum thread"
+msgstr "Forumthread"
+
+msgid "Points for one message"
+msgstr "Punten voor één bericht"
+
+msgid "Points for two or more messages"
+msgstr "Punten voor twee of meer berichten"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Punten toegekend wanneer de student precies één bericht in de thread heeft geplaatst."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Punten toegekend wanneer de student twee of meer berichten in de thread heeft geplaatst."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Optioneel. Indien leeg gelaten, worden één of meer berichten beloond met de punten voor één bericht."
+
+msgid "Current password is required to change your password."
+msgstr "Het huidige wachtwoord is vereist om uw wachtwoord te wijzigen."
+
+msgid "The 2FA code is required."
+msgstr "De 2FA-code is vereist."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ongeldige 2FA-configuratie."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "De 2FA-code is ongeldig of verlopen."
+
+msgid "Database load"
+msgstr "Databasebelasting"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL- en MariaDB-serverbelastingsstatistieken"
+
+msgid "Click to show database server load metrics"
+msgstr "Klik om de database-serverbelastingsstatistieken te tonen"
+
+msgid "Threads connected"
+msgstr "Verbonden threads"
+
+msgid "Temporary tables on disk"
+msgstr "Tijdelijke tabellen op schijf"
+
+msgid "Privilege scope"
+msgstr "Privilegescope"
+
+msgid "Not measurable with the current database user"
+msgstr "Niet meetbaar met de huidige databasegebruiker"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "Queries per second"
+msgstr "Query's per seconde"
+
+msgid "Slow queries"
+msgstr "Langzame query's"
+
+msgid "Slow query time limit"
+msgstr "Limiet voor langzame query's"
+
+msgid "Slow query log"
+msgstr "Logboek langzame query's"
+
+msgid "Slow queries per second"
+msgstr "Langzame query's per seconde"
+
+msgid "Threads running"
+msgstr "Threads actief"
+
+msgid "Threads cached"
+msgstr "Threads in cache"
+
+msgid "Table lock waits"
+msgstr "Tabelvergrendelingen wachten"
+
+msgid "Row lock waits"
+msgstr "Rijvergrendelingen wachten"
+
+msgid "Aborted connections"
+msgstr "Afgebroken verbindingen"
+
+msgid "Opened tables"
+msgstr "Geopende tabellen"
+
+msgid "Query cache"
+msgstr "Querycache"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Databasebelastingsstatistieken zijn alleen beschikbaar voor MySQL en MariaDB."
+
+msgid "Inserts"
+msgstr "Inserts"
+
+msgid "Hit rate"
+msgstr "Hitratio"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatisch vernieuwen elke 5 seconden"
+
+msgid "Web server load"
+msgstr "Webserverbelasting"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live Apache- of Nginx-statusstatistieken"
+
+msgid "Click to show web server load metrics"
+msgstr "Klik om de webserverbelastingsstatistieken te tonen"
+
+msgid "Requires a local web server status module"
+msgstr "Vereist een lokale webserverstatusmodule"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "De webserverbelasting wordt alleen gelezen van Apache mod_status of Nginx stub_status op localhost. De statuspagina moet verzoeken van 127.0.0.1 (of ::1) toestaan."
+
+msgid "Paths scanned"
+msgstr "Gescande paden"
+
+msgid "Detected"
+msgstr "Gedetecteerd"
+
+msgid "Status path"
+msgstr "Statuspad"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Webserverbelastingsstatistieken zijn alleen beschikbaar voor Apache en Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Geen van de gescande statuspaden reageerde op localhost."
+
+msgid "Busy workers"
+msgstr "Bezig met werkers"
+
+msgid "Idle workers"
+msgstr "Inactieve werkers"
+
+msgid "Graceful workers"
+msgstr "Graceful werkers"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Verzoeken per seconde (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Verzoeken per seconde (sinds start)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes per seconde (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes per seconde (sinds start)"
+
+msgid "Bytes per request"
+msgstr "Bytes per verzoek"
+
+msgid "Total accesses"
+msgstr "Totaal aantal toegangen"
+
+msgid "Total traffic"
+msgstr "Totaal verkeer"
+
+msgid "CPU load"
+msgstr "CPU-belasting"
+
+msgid "Load average (1 min)"
+msgstr "Gemiddelde belasting (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Gemiddelde belasting (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Gemiddelde belasting (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scorebord verzenden"
+
+msgid "Scoreboard reading"
+msgstr "Scorebord lezen"
+
+msgid "Scoreboard keepalive"
+msgstr "Scorebord keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scorebord wachten"
+
+msgid "Scoreboard open slots"
+msgstr "Scorebord open slots"
+
+msgid "Active connections"
+msgstr "Actieve verbindingen"
+
+msgid "Reading"
+msgstr "Lezen"
+
+msgid "Writing"
+msgstr "Schrijven"
+
+msgid "Total requests"
+msgstr "Totaal aantal verzoeken"
+
+msgid "Accepts"
+msgstr "Accepteert"
+
+msgid "Handled"
+msgstr "Afgehandeld"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: activeer mod_status (ExtendedStatus On) en sta localhost toe op /server-status. Nginx: activeer stub_status op een alleen-localhost-locatie zoals /nginx_status of /stub_status."
+

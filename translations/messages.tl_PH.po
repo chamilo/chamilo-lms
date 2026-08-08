@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -37684,7 +37684,7 @@ msgid "The saved document content will be sent to an AI model for processing."
 msgstr "Ipapadala ang naka-save na nilalaman ng dokumento sa isang modelo ng AI para sa pagproseso."
 
 msgid "MCP API key"
-msgstr "MCP API key"
+msgstr "Susi ng MCP API"
 
 msgid "Authorized applications"
 msgstr "Mga awtorisadong aplikasyon"
@@ -37771,7 +37771,7 @@ msgid "Corrections are hidden according to the exercise result settings."
 msgstr "Nakatago ang mga pagwawasto ayon sa mga setting ng resulta ng exercise."
 
 msgid "Progressive adaptive result"
-msgstr "Progressive adaptive result"
+msgstr "Progresibong adaptive na resulta"
 
 msgid "Achieved level"
 msgstr "Naabot na antas"
@@ -38458,7 +38458,7 @@ msgid "Refresh answers"
 msgstr "I-refresh ang mga sagot"
 
 msgid "This dropdown combination question uses one global score, like legacy."
-msgstr "Ang dropdown combination question na ito ay gumagamit ng isang global score, tulad ng legacy."
+msgstr "Ang dropdown combination question na ito ay gumagamit ng isang global score, katulad ng legacy."
 
 msgid "Please enter at least two dropdown options."
 msgstr "Mangyaring maglagay ng hindi bababa sa dalawang opsyon sa dropdown."
@@ -38467,7 +38467,7 @@ msgid "Create destination options first, then link each item to the correct opti
 msgstr "Gumawa muna ng mga opsyon sa destinasyon, pagkatapos ay i-link ang bawat item sa tamang opsyon."
 
 msgid "This matching combination question uses one global score, like legacy."
-msgstr "Ang matching combination question na ito ay gumagamit ng isang global score, tulad ng legacy."
+msgstr "Ang matching combination question na ito ay gumagamit ng isang global score, katulad ng legacy."
 
 msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
 msgstr "Gumawa ng mga hakbang at piliin ang inaasahang posisyon para sa bawat isa, tulad ng legacy Draggable."
@@ -38927,4 +38927,238 @@ msgstr "Walang mga tutor"
 
 msgid "No users"
 msgstr "Walang mga gumagamit"
+
+msgid "Calculation mode"
+msgstr "Calculation mode"
+
+msgid "Weighted average"
+msgstr "Weighted average"
+
+msgid "Points sum"
+msgstr "Points sum"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Ang weighted average ay nag-normalize ayon sa kabuuan ng weights; ang points sum ay itinuturing ang bawat weight bilang maximum points at idinadagdag nang hindi nag-normalize."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Ang bawat item weight ay itinuturing bilang maximum points nito; ang grade ay ang kabuuan ng points, hindi normalized."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Ang grade ay ang weighted average ng mga item, normalized ayon sa kabuuan ng weights."
+
+msgid "Forum participation"
+msgstr "Pakikilahok sa forum"
+
+msgid "Forum thread"
+msgstr "Thread ng forum"
+
+msgid "Points for one message"
+msgstr "Points para sa isang mensahe"
+
+msgid "Points for two or more messages"
+msgstr "Points para sa dalawa o higit pang mensahe"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Points na ibinibigay kapag ang estudyante ay nag-post ng eksaktong isang mensahe sa thread."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Points na ibinibigay kapag ang estudyante ay nag-post ng dalawa o higit pang mensahe sa thread."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opsyonal. Kung walang laman, ang isa o higit pang mensahe ay nagbibigay ng points para sa isang mensahe."
+
+msgid "Current password is required to change your password."
+msgstr "Kinakailangan ang kasalukuyang password upang baguhin ang iyong password."
+
+msgid "The 2FA code is required."
+msgstr "Kinakailangan ang 2FA code."
+
+msgid "Invalid 2FA configuration."
+msgstr "Di-wastong 2FA configuration."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Di-wasto o nag-expire na ang 2FA code."
+
+msgid "Database load"
+msgstr "Database load"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL at MariaDB server load metrics"
+
+msgid "Click to show database server load metrics"
+msgstr "I-click upang ipakita ang database server load metrics"
+
+msgid "Threads connected"
+msgstr "Threads connected"
+
+msgid "Temporary tables on disk"
+msgstr "Temporary tables on disk"
+
+msgid "Privilege scope"
+msgstr "Privilege scope"
+
+msgid "Not measurable with the current database user"
+msgstr "Hindi masusukat gamit ang kasalukuyang database user"
+
+msgid "Uptime"
+msgstr "Uptime"
+
+msgid "Queries per second"
+msgstr "Queries per second"
+
+msgid "Slow queries"
+msgstr "Slow queries"
+
+msgid "Slow query time limit"
+msgstr "Slow query time limit"
+
+msgid "Slow query log"
+msgstr "Slow query log"
+
+msgid "Slow queries per second"
+msgstr "Slow queries per second"
+
+msgid "Threads running"
+msgstr "Threads running"
+
+msgid "Threads cached"
+msgstr "Threads cached"
+
+msgid "Table lock waits"
+msgstr "Table lock waits"
+
+msgid "Row lock waits"
+msgstr "Row lock waits"
+
+msgid "Aborted connections"
+msgstr "Aborted connections"
+
+msgid "Opened tables"
+msgstr "Opened tables"
+
+msgid "Query cache"
+msgstr "Query cache"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Available lamang ang database load metrics para sa MySQL at MariaDB."
+
+msgid "Inserts"
+msgstr "Inserts"
+
+msgid "Hit rate"
+msgstr "Hit rate"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Awtomatikong pag-refresh tuwing 5 segundo"
+
+msgid "Web server load"
+msgstr "Karga ng web server"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Mga live na sukatan ng katayuan ng Apache o Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "I-click para ipakita ang mga sukatan ng karga ng web server"
+
+msgid "Requires a local web server status module"
+msgstr "Nangangailangan ng lokal na module ng katayuan ng web server"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ang karga ng web server ay binabasa mula sa Apache mod_status o Nginx stub_status sa localhost lamang. Dapat payagan ng pahina ng katayuan ang mga kahilingan mula sa 127.0.0.1 (o ::1)."
+
+msgid "Paths scanned"
+msgstr "Mga na-scan na landas"
+
+msgid "Detected"
+msgstr "Natukoy"
+
+msgid "Status path"
+msgstr "Landas ng katayuan"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Ang mga sukatan ng karga ng web server ay magagamit lamang para sa Apache at Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Wala sa mga na-scan na landas ng katayuan ang tumugon sa localhost."
+
+msgid "Busy workers"
+msgstr "Abalang manggagawa"
+
+msgid "Idle workers"
+msgstr "Hindi abalang manggagawa"
+
+msgid "Graceful workers"
+msgstr "Mabait na manggagawa"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Mga kahilingan bawat segundo (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Mga kahilingan bawat segundo (mula noong simula)"
+
+msgid "Bytes per second (live)"
+msgstr "Mga byte bawat segundo (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Mga byte bawat segundo (mula noong simula)"
+
+msgid "Bytes per request"
+msgstr "Mga byte bawat kahilingan"
+
+msgid "Total accesses"
+msgstr "Kabuuang pag-access"
+
+msgid "Total traffic"
+msgstr "Kabuuang trapiko"
+
+msgid "CPU load"
+msgstr "Karga ng CPU"
+
+msgid "Load average (1 min)"
+msgstr "Average na karga (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Average na karga (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Average na karga (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard nagpapadala"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard nagbabasa"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard naghihintay"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard bukas na puwang"
+
+msgid "Active connections"
+msgstr "Aktibong koneksyon"
+
+msgid "Reading"
+msgstr "Nagbabasa"
+
+msgid "Writing"
+msgstr "Nagsusulat"
+
+msgid "Total requests"
+msgstr "Kabuuang kahilingan"
+
+msgid "Accepts"
+msgstr "Tumatanggap"
+
+msgid "Handled"
+msgstr "Hinahawakan"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang lokasyon na localhost lamang tulad ng /nginx_status o /stub_status."
 

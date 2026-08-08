@@ -38928,3 +38928,237 @@ msgstr "Macallimiin ma jiraan"
 msgid "No users"
 msgstr "Isticmaalayaal ma jiraan"
 
+msgid "Calculation mode"
+msgstr "Habka xisaabinta"
+
+msgid "Weighted average"
+msgstr "Celceliska miisaanka leh"
+
+msgid "Points sum"
+msgstr "Wadarta dhibcaha"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Celceliska miisaanka leh wuxuu isu celceliyaa wadarta miisaanka; wadarta dhibcaha waxay u tixgelisaa miisaan kasta inuu yahay dhibco ugu badan oo isku daraysa iyada oo aan la celcelin."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Miisaanka shay kasta waxaa loo tixgeliyaa dhibco ugu badan; darajada waa wadarta dhibcaha, ma aha mid la celceliyay."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Darajada waa celceliska miisaanka leh ee shayada, oo la celceliyay wadarta miisaanka."
+
+msgid "Forum participation"
+msgstr "Ka qaybqaadashada golaha"
+
+msgid "Forum thread"
+msgstr "Mawduuca golaha"
+
+msgid "Points for one message"
+msgstr "Dhibco farriin kasta"
+
+msgid "Points for two or more messages"
+msgstr "Dhibco labo ama ka badan farriimo"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Dhibco la siiyo marka ardaygu soo dhejiyo hal farriin oo keliya mawduuca."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Dhibco la siiyo marka ardaygu soo dhejiyo labo ama ka badan farriimo mawduuca."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Ikhtiyaari. Haddii laga tago madhan, hal ama ka badan farriimo waxay helayaan dhibcaha hal farriin."
+
+msgid "Current password is required to change your password."
+msgstr "Furaha hadda waa loo baahan yahay si loo beddelo furahaaga."
+
+msgid "The 2FA code is required."
+msgstr "Koodhka 2FA waa loo baahan yahay."
+
+msgid "Invalid 2FA configuration."
+msgstr "Habaynta 2FA waa khaldan tahay."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Koodhka 2FA waa khaldan yahay ama wuu dhacay."
+
+msgid "Database load"
+msgstr "Culeyska xogta"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Cabbirrada culeyska server-ka MySQL iyo MariaDB ee tooska ah"
+
+msgid "Click to show database server load metrics"
+msgstr "Guji si aad u muujiso cabbirrada culeyska server-ka xogta"
+
+msgid "Threads connected"
+msgstr "Dunta ku xidhan"
+
+msgid "Temporary tables on disk"
+msgstr "Jadwalka ku meel gaarka ah ee diskiga"
+
+msgid "Privilege scope"
+msgstr "Baaxadda xuquuqda"
+
+msgid "Not measurable with the current database user"
+msgstr "Lama qiyaasi karo isticmaalaha xogta hadda"
+
+msgid "Uptime"
+msgstr "Waqtiga shaqada"
+
+msgid "Queries per second"
+msgstr "Wejiyada ilbiriqsi kasta"
+
+msgid "Slow queries"
+msgstr "Wejiyada gaabiska ah"
+
+msgid "Slow query time limit"
+msgstr "Xadka waqtiga wejiyada gaabiska ah"
+
+msgid "Slow query log"
+msgstr "Diiwaanka wejiyada gaabiska ah"
+
+msgid "Slow queries per second"
+msgstr "Wejiyada gaabiska ah ilbiriqsi kasta"
+
+msgid "Threads running"
+msgstr "Dunta socota"
+
+msgid "Threads cached"
+msgstr "Dunta kaydsan"
+
+msgid "Table lock waits"
+msgstr "Sugidda qufulka miiska"
+
+msgid "Row lock waits"
+msgstr "Sugidda qufulka safka"
+
+msgid "Aborted connections"
+msgstr "Xidhiidhada la joojiyay"
+
+msgid "Opened tables"
+msgstr "Jadwalka la furay"
+
+msgid "Query cache"
+msgstr "Keydka wejiyada"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Cabbirrada culeyska xogta waxay kaliya u diyaar yihiin MySQL iyo MariaDB."
+
+msgid "Inserts"
+msgstr "Gelinta"
+
+msgid "Hit rate"
+msgstr "Heerka ku dhufashada"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Dib-u-cusboonaysiinta otomaatig ah 5 ilbiriqsi kasta"
+
+msgid "Web server load"
+msgstr "Culeyska server-ka webka"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Cabbirrada xaaladda tooska ah ee Apache ama Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Guji si aad u muujiso cabbirrada culeyska server-ka webka"
+
+msgid "Requires a local web server status module"
+msgstr "Waxay u baahan tahay module xaaladda server-ka webka ee maxaliga ah"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Culeyska server-ka webka waxaa laga akhriyaa Apache mod_status ama Nginx stub_status oo keliya localhost. Bogga xaaladda waa inuu oggolaado codsiyada 127.0.0.1 (ama ::1)."
+
+msgid "Paths scanned"
+msgstr "Waddooyinka la baadhay"
+
+msgid "Detected"
+msgstr "La ogaaday"
+
+msgid "Status path"
+msgstr "Waddada xaaladda"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Cabbirrada culeyska server-ka webka waxay kaliya u diyaar yihiin Apache iyo Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Mid ka mid ah dariiqooyinka xaaladda la baadhay kama jawaabin localhost."
+
+msgid "Busy workers"
+msgstr "Shaqaalaha mashquulka ah"
+
+msgid "Idle workers"
+msgstr "Shaqaalaha bilaa shaqada ah"
+
+msgid "Graceful workers"
+msgstr "Shaqaalaha naxariista leh"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Codsiyada ilbiriqsi kasta (toos ah)"
+
+msgid "Requests per second (since start)"
+msgstr "Codsiyada ilbiriqsi kasta (bilowga ilaa)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes ilbiriqsi kasta (toos ah)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes ilbiriqsi kasta (bilowga ilaa)"
+
+msgid "Bytes per request"
+msgstr "Bytes codsi kasta"
+
+msgid "Total accesses"
+msgstr "Wadarta gelitaanka"
+
+msgid "Total traffic"
+msgstr "Wadarta taraafikada"
+
+msgid "CPU load"
+msgstr "Culeyska CPU"
+
+msgid "Load average (1 min)"
+msgstr "Celceliska culeyska (1 daqiiqo)"
+
+msgid "Load average (5 min)"
+msgstr "Celceliska culeyska (5 daqiiqo)"
+
+msgid "Load average (15 min)"
+msgstr "Celceliska culeyska (15 daqiiqo)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard dirid"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard akhris"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard sugid"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard boosaska furan"
+
+msgid "Active connections"
+msgstr "Xidhiidhada firfircoon"
+
+msgid "Reading"
+msgstr "Akhris"
+
+msgid "Writing"
+msgstr "Qorid"
+
+msgid "Total requests"
+msgstr "Wadarta codsiyada"
+
+msgid "Accepts"
+msgstr "Aqbalid"
+
+msgid "Handled"
+msgstr "Maamulid"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: karti mod_status (ExtendedStatus On) oo u oggol localhost inuu /server-status galo. Nginx: karti stub_status meel localhost-keliya ah sida /nginx_status ama /stub_status."
+

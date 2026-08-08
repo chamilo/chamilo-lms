@@ -38932,3 +38932,237 @@ msgstr "Gan teagascóirí"
 msgid "No users"
 msgstr "Gan úsáideoirí"
 
+msgid "Calculation mode"
+msgstr "Mód ríomh"
+
+msgid "Weighted average"
+msgstr "Meán ualaithe"
+
+msgid "Points sum"
+msgstr "Suim pointí"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Normalaíonn an meán ualaithe de réir shuim na meáchain; déanann suim pointí gach meáchan a láimhseáil mar phointí uasta agus cuireann sé iad le chéile gan normalú."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Láimhseáiltear meáchan gach míre mar phointí uasta; is é an grád suim na bpointí, gan normalú."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Is é an grád meán ualaithe na míreanna, normalaithe de réir shuim na meáchain."
+
+msgid "Forum participation"
+msgstr "Rannpháirtíocht fóraim"
+
+msgid "Forum thread"
+msgstr "Snáithe fóraim"
+
+msgid "Points for one message"
+msgstr "Pointí do theachtaireacht amháin"
+
+msgid "Points for two or more messages"
+msgstr "Pointí do dhá theachtaireacht nó níos mó"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Pointí a bhronntar nuair a phostáil an mac léinn teachtaireacht amháin go díreach sa snáithe."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Pointí a bhronntar nuair a phostáil an mac léinn dhá theachtaireacht nó níos mó sa snáithe."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Roghnach. Mura bhfágtar folamh, bronnann teachtaireacht amháin nó níos mó na pointí do theachtaireacht amháin."
+
+msgid "Current password is required to change your password."
+msgstr "Tá an focal faire reatha riachtanach chun do fhocal faire a athrú."
+
+msgid "The 2FA code is required."
+msgstr "Tá cód 2FA riachtanach."
+
+msgid "Invalid 2FA configuration."
+msgstr "Cumraíocht 2FA neamhbhailí."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Tá an cód 2FA neamhbhailí nó as feidhm."
+
+msgid "Database load"
+msgstr "Ualach bunachar sonraí"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Méadrachtaí ualaigh freastalaí MySQL agus MariaDB beo"
+
+msgid "Click to show database server load metrics"
+msgstr "Cliceáil chun méadrachtaí ualaigh freastalaí bunachar sonraí a thaispeáint"
+
+msgid "Threads connected"
+msgstr "Snáitheanna ceangailte"
+
+msgid "Temporary tables on disk"
+msgstr "Táblaí sealadacha ar dhiosca"
+
+msgid "Privilege scope"
+msgstr "Scóip pribhléidí"
+
+msgid "Not measurable with the current database user"
+msgstr "Ní féidir a thomhas leis an úsáideoir bunachar sonraí reatha"
+
+msgid "Uptime"
+msgstr "Am suas"
+
+msgid "Queries per second"
+msgstr "Ceisteanna in aghaidh an tsoicind"
+
+msgid "Slow queries"
+msgstr "Ceisteanna mall"
+
+msgid "Slow query time limit"
+msgstr "Teorainn ama ceiste mall"
+
+msgid "Slow query log"
+msgstr "Log ceiste mall"
+
+msgid "Slow queries per second"
+msgstr "Ceisteanna mall in aghaidh an tsoicind"
+
+msgid "Threads running"
+msgstr "Snáitheanna ag rith"
+
+msgid "Threads cached"
+msgstr "Snáitheanna i dtaisce"
+
+msgid "Table lock waits"
+msgstr "Fanachtaí glasála tábla"
+
+msgid "Row lock waits"
+msgstr "Fanachtaí glasála ró"
+
+msgid "Aborted connections"
+msgstr "Ceangail scortha"
+
+msgid "Opened tables"
+msgstr "Táblaí oscailte"
+
+msgid "Query cache"
+msgstr "Taisce ceisteanna"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Níl méadrachtaí ualaigh bunachar sonraí ar fáil ach amháin do MySQL agus MariaDB."
+
+msgid "Inserts"
+msgstr "Ionsáigh"
+
+msgid "Hit rate"
+msgstr "Ráta buailte"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Uath-athnuachan gach 5 soicind"
+
+msgid "Web server load"
+msgstr "Ualach freastalaí gréasáin"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Méadrachtaí stádais Apache nó Nginx beo"
+
+msgid "Click to show web server load metrics"
+msgstr "Cliceáil chun méadrachtaí ualaigh freastalaí gréasáin a thaispeáint"
+
+msgid "Requires a local web server status module"
+msgstr "Teastaíonn modúl stádais freastalaí gréasáin áitiúil"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Léitear ualach freastalaí gréasáin ó Apache mod_status nó Nginx stub_status ar localhost amháin. Caithfidh an leathanach stádais cead a thabhairt d’iarratais ó 127.0.0.1 (nó ::1)."
+
+msgid "Paths scanned"
+msgstr "Conairí scanta"
+
+msgid "Detected"
+msgstr "Braite"
+
+msgid "Status path"
+msgstr "Conair stádais"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Níl méadrachtaí ualaigh freastalaí gréasáin ar fáil ach amháin do Apache agus Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Níor fhreagair aon cheann de na conairí stádais scanta ar localhost."
+
+msgid "Busy workers"
+msgstr "Oibrithe gnóthacha"
+
+msgid "Idle workers"
+msgstr "Oibrithe díomhaoin"
+
+msgid "Graceful workers"
+msgstr "Oibrithe galánta"
+
+msgid "Server MPM"
+msgstr "MPM an fhreastalaí"
+
+msgid "Requests per second (live)"
+msgstr "Iarratais in aghaidh an tsoicind (beo)"
+
+msgid "Requests per second (since start)"
+msgstr "Iarratais in aghaidh an tsoicind (ó thús)"
+
+msgid "Bytes per second (live)"
+msgstr "Bearta in aghaidh an tsoicind (beo)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bearta in aghaidh an tsoicind (ó thús)"
+
+msgid "Bytes per request"
+msgstr "Bearta in aghaidh an iarratais"
+
+msgid "Total accesses"
+msgstr "Rochtainí iomlána"
+
+msgid "Total traffic"
+msgstr "Trácht iomlán"
+
+msgid "CPU load"
+msgstr "Ualach LAP"
+
+msgid "Load average (1 min)"
+msgstr "Meánualach (1 nóim)"
+
+msgid "Load average (5 min)"
+msgstr "Meánualach (5 nóim)"
+
+msgid "Load average (15 min)"
+msgstr "Meánualach (15 nóim)"
+
+msgid "Scoreboard sending"
+msgstr "Scórchlár ag seoladh"
+
+msgid "Scoreboard reading"
+msgstr "Scórchlár ag léamh"
+
+msgid "Scoreboard keepalive"
+msgstr "Scórchlár ag coinneáil beo"
+
+msgid "Scoreboard waiting"
+msgstr "Scórchlár ag fanacht"
+
+msgid "Scoreboard open slots"
+msgstr "Sliotáin oscailte scórchláir"
+
+msgid "Active connections"
+msgstr "Naisc ghníomhacha"
+
+msgid "Reading"
+msgstr "Ag léamh"
+
+msgid "Writing"
+msgstr "Ag scríobh"
+
+msgid "Total requests"
+msgstr "Iarratais iomlána"
+
+msgid "Accepts"
+msgstr "Glactha"
+
+msgid "Handled"
+msgstr "Láimhseáilte"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shuíomh localhost amháin mar /nginx_status nó /stub_status."
+

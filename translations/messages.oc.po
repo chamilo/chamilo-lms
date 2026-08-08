@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Cordialament"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemple de formula : sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemple de formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervals de variables"
@@ -38927,4 +38927,238 @@ msgstr "Pas de tutors"
 
 msgid "No users"
 msgstr "Pas d'utilizaires"
+
+msgid "Calculation mode"
+msgstr "Mòde de calcul"
+
+msgid "Weighted average"
+msgstr "Mejana ponderada"
+
+msgid "Points sum"
+msgstr "Soma de punts"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "La mejana ponderada normaliza per la soma dels pesos; la soma de punts tracta cada pes coma punts maximum e los sòma sens normalizar."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Cada pes d'element es tractat coma sos punts maximum; la nòta es la soma dels punts, pas normalizada."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "La nòta es la mejana ponderada dels elements, normalizada per la soma dels pesos."
+
+msgid "Forum participation"
+msgstr "Participacion al fòrum"
+
+msgid "Forum thread"
+msgstr "Fial del fòrum"
+
+msgid "Points for one message"
+msgstr "Punts per un messatge"
+
+msgid "Points for two or more messages"
+msgstr "Punts per dos messatges o mai"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Punts atribuits quand l'estudiant a publicat exactament un messatge dins lo fial."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Punts atribuits quand l'estudiant a publicat dos messatges o mai dins lo fial."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opcional. Se demòra void, un o mai messatges atribuis los punts per un messatge."
+
+msgid "Current password is required to change your password."
+msgstr "Lo senhal actual es requesit per cambiar vòstre senhal."
+
+msgid "The 2FA code is required."
+msgstr "Lo còdi 2FA es obligatòri."
+
+msgid "Invalid 2FA configuration."
+msgstr "Configuracion 2FA invalida."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Lo còdi 2FA es invalid o expirat."
+
+msgid "Database load"
+msgstr "Carga de la basa de donadas"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Mesuras en dirècte de la carga del servidor MySQL e MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "Clicatz per afichar las mesuras de carga del servidor de basa de donadas"
+
+msgid "Threads connected"
+msgstr "Fils connectats"
+
+msgid "Temporary tables on disk"
+msgstr "Taulas temporàrias sul disc"
+
+msgid "Privilege scope"
+msgstr "Portada dels privilègis"
+
+msgid "Not measurable with the current database user"
+msgstr "Pas mesurable amb l'utilizaire actual de la basa de donadas"
+
+msgid "Uptime"
+msgstr "Temps de foncionament"
+
+msgid "Queries per second"
+msgstr "Requèstas per segonda"
+
+msgid "Slow queries"
+msgstr "Requèstas lentas"
+
+msgid "Slow query time limit"
+msgstr "Limit de temps de las requèstas lentas"
+
+msgid "Slow query log"
+msgstr "Jornal de las requèstas lentas"
+
+msgid "Slow queries per second"
+msgstr "Requèstas lentas per segonda"
+
+msgid "Threads running"
+msgstr "Fils en cors d'execucion"
+
+msgid "Threads cached"
+msgstr "Fils en memòria tampon"
+
+msgid "Table lock waits"
+msgstr "Espèras de verrolhatge de taula"
+
+msgid "Row lock waits"
+msgstr "Espèras de verrolhatge de linha"
+
+msgid "Aborted connections"
+msgstr "Connexions anulladas"
+
+msgid "Opened tables"
+msgstr "Taulas dobèrtas"
+
+msgid "Query cache"
+msgstr "Escondedor de requèstas"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Las mesuras de carga de la basa de donadas son pas disponiblas que per MySQL e MariaDB."
+
+msgid "Inserts"
+msgstr "Insercions"
+
+msgid "Hit rate"
+msgstr "Taus de succès"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Auto-actualizacion cada 5 segondas"
+
+msgid "Web server load"
+msgstr "Carga del servidor web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Mesuras en dirècte de l'estat d'Apache o Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Clicatz per afichar las mesuras de carga del servidor web"
+
+msgid "Requires a local web server status module"
+msgstr "Necessita un modul d'estat del servidor web local"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "La carga del servidor web es legida dempuèi Apache mod_status o Nginx stub_status solament en local. La pagina d'estat deu autorizar las requèstas dempuèi 127.0.0.1 (o ::1)."
+
+msgid "Paths scanned"
+msgstr "Camins explorats"
+
+msgid "Detected"
+msgstr "Detectat"
+
+msgid "Status path"
+msgstr "Camin d'estat"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Las mesuras de carga del servidor web son pas disponiblas que per Apache e Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Cap dels camins d'estat explorats a pas respondut en local."
+
+msgid "Busy workers"
+msgstr "Trabalhaires ocupats"
+
+msgid "Idle workers"
+msgstr "Trabalhaires inactius"
+
+msgid "Graceful workers"
+msgstr "Trabalhaires en mòde graceful"
+
+msgid "Server MPM"
+msgstr "MPM del servidor"
+
+msgid "Requests per second (live)"
+msgstr "Requèstas per segonda (en dirècte)"
+
+msgid "Requests per second (since start)"
+msgstr "Requèstas per segonda (dempuèi l'aviada)"
+
+msgid "Bytes per second (live)"
+msgstr "Octets per segonda (en dirècte)"
+
+msgid "Bytes per second (since start)"
+msgstr "Octets per segonda (dempuèi l'aviada)"
+
+msgid "Bytes per request"
+msgstr "Octets per requèsta"
+
+msgid "Total accesses"
+msgstr "Accesses totals"
+
+msgid "Total traffic"
+msgstr "Trafic total"
+
+msgid "CPU load"
+msgstr "Carga CPU"
+
+msgid "Load average (1 min)"
+msgstr "Mejana de carga (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Carga mejana (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Carga mejana (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Mandadís del tablèu de resultats"
+
+msgid "Scoreboard reading"
+msgstr "Lectura del tablèu de resultats"
+
+msgid "Scoreboard keepalive"
+msgstr "Manteniment del tablèu de resultats"
+
+msgid "Scoreboard waiting"
+msgstr "Espèra del tablèu de resultats"
+
+msgid "Scoreboard open slots"
+msgstr "Plasas dobèrtas del tablèu de resultats"
+
+msgid "Active connections"
+msgstr "Connexions activas"
+
+msgid "Reading"
+msgstr "Lectura"
+
+msgid "Writing"
+msgstr "Escritura"
+
+msgid "Total requests"
+msgstr "Requèstas totalas"
+
+msgid "Accepts"
+msgstr "Acceptadas"
+
+msgid "Handled"
+msgstr "Tractadas"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: activar mod_status (ExtendedStatus On) e autorizar localhost a /server-status. Nginx: activar stub_status sus una localizacion solament localhost coma /nginx_status o /stub_status."
 

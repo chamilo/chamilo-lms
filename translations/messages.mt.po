@@ -38933,3 +38933,237 @@ msgstr "L-ebda tuturi"
 msgid "No users"
 msgstr "L-ebda utenti"
 
+msgid "Calculation mode"
+msgstr "Calculation mode"
+
+msgid "Weighted average"
+msgstr "Medja peżata"
+
+msgid "Points sum"
+msgstr "Somma ta' punti"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Il-medja peżata tinnormalizza bis-somma tal-piżijiet; is-somma ta' punti tittratta kull piż bħala punti massimi u żżidhom mingħajr ma tinnormalizza."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Kull piż tal-oġġett jittratta bħala l-punti massimi tiegħu; il-voti huma s-somma tal-punti, mhux normalizzati."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Il-voti huma l-medja peżata tal-oġġetti, normalizzati bis-somma tal-piżijiet."
+
+msgid "Forum participation"
+msgstr "Parteċipazzjoni fil-forum"
+
+msgid "Forum thread"
+msgstr "Ħajta tal-forum"
+
+msgid "Points for one message"
+msgstr "Punti għal messaġġ wieħed"
+
+msgid "Points for two or more messages"
+msgstr "Punti għal żewġ messaġġi jew aktar"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Punti mogħtija meta l-istudent ippubblika eżattament messaġġ wieħed fil-ħajta."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Punti mogħtija meta l-istudent ippubblika żewġ messaġġi jew aktar fil-ħajta."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Fakultattiv. Jekk jitħalla vojt, messaġġ wieħed jew aktar jagħtu l-punti għal messaġġ wieħed."
+
+msgid "Current password is required to change your password."
+msgstr "Il-password attwali hija meħtieġa biex tibdel il-password tiegħek."
+
+msgid "The 2FA code is required."
+msgstr "Il-kodiċi 2FA huwa meħtieġ."
+
+msgid "Invalid 2FA configuration."
+msgstr "Konfigurazzjoni 2FA invalida."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Il-kodiċi 2FA huwa invalidu jew skada."
+
+msgid "Database load"
+msgstr "Tagħbija tad-database"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metriċi ħajjin tat-tagħbija tas-server MySQL u MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "Ikklikkja biex turi l-metriċi tat-tagħbija tas-server tad-database"
+
+msgid "Threads connected"
+msgstr "Ħjut konnessi"
+
+msgid "Temporary tables on disk"
+msgstr "Tabelli temporanji fuq id-diska"
+
+msgid "Privilege scope"
+msgstr "Ambitu tal-privileġġi"
+
+msgid "Not measurable with the current database user"
+msgstr "Mhux jista' jitkejjel bl-utent attwali tad-database"
+
+msgid "Uptime"
+msgstr "Ħin ta' tħaddim"
+
+msgid "Queries per second"
+msgstr "Mistoqsijiet kull sekonda"
+
+msgid "Slow queries"
+msgstr "Mistoqsijiet bil-mod"
+
+msgid "Slow query time limit"
+msgstr "Limitu ta' ħin għall-mistoqsijiet bil-mod"
+
+msgid "Slow query log"
+msgstr "Log tal-mistoqsijiet bil-mod"
+
+msgid "Slow queries per second"
+msgstr "Mistoqsijiet bil-mod kull sekonda"
+
+msgid "Threads running"
+msgstr "Ħjut qed jaħdmu"
+
+msgid "Threads cached"
+msgstr "Ħjut fil-cache"
+
+msgid "Table lock waits"
+msgstr "Stennija għall-illokkjar tat-tabelli"
+
+msgid "Row lock waits"
+msgstr "Stennija għall-illokkjar tar-ringieli"
+
+msgid "Aborted connections"
+msgstr "Konnessjonijiet imwaqqfa"
+
+msgid "Opened tables"
+msgstr "Tabelli miftuħa"
+
+msgid "Query cache"
+msgstr "Cache tal-mistoqsijiet"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Il-metriċi tat-tagħbija tad-database huma disponibbli biss għal MySQL u MariaDB."
+
+msgid "Inserts"
+msgstr "Inserzjonijiet"
+
+msgid "Hit rate"
+msgstr "Rata ta' suċċess"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Aġġornament awtomatiku kull 5 sekondi"
+
+msgid "Web server load"
+msgstr "Tagħbija tas-server tal-web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metriċi ħajjin tal-istatus ta' Apache jew Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Ikklikkja biex turi l-metriċi tat-tagħbija tas-server tal-web"
+
+msgid "Requires a local web server status module"
+msgstr "Jeħtieġ modulu tal-istatus tas-server tal-web lokali"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "It-tagħbija tas-server tal-web tinqara minn Apache mod_status jew Nginx stub_status biss fuq localhost. Il-paġna tal-istatus trid tippermetti talbiet minn 127.0.0.1 (jew ::1)."
+
+msgid "Paths scanned"
+msgstr "Paths skannjati"
+
+msgid "Detected"
+msgstr "Skoperti"
+
+msgid "Status path"
+msgstr "Path tal-istatus"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Il-metriċi tat-tagħbija tas-server tal-web huma disponibbli biss għal Apache u Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "L-ebda wieħed mill-paths tal-istatus skannjati ma wieġeb fuq localhost."
+
+msgid "Busy workers"
+msgstr "Ħaddiema okkupati"
+
+msgid "Idle workers"
+msgstr "Ħaddiema inattivi"
+
+msgid "Graceful workers"
+msgstr "Ħaddiema bil-grazzja"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Talbiet kull sekonda (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Talba kull sekonda (mill-bidu)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes kull sekonda (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes kull sekonda (mill-bidu)"
+
+msgid "Bytes per request"
+msgstr "Bytes kull talba"
+
+msgid "Total accesses"
+msgstr "Aċċessi totali"
+
+msgid "Total traffic"
+msgstr "Traffiku totali"
+
+msgid "CPU load"
+msgstr "Tagħbija tal-CPU"
+
+msgid "Load average (1 min)"
+msgstr "Medja tat-tagħbija (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Medja tat-tagħbija (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Medja tat-tagħbija (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard qed jibgħat"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard qed jaqra"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard qed jistenna"
+
+msgid "Scoreboard open slots"
+msgstr "Slots miftuħin tal-Scoreboard"
+
+msgid "Active connections"
+msgstr "Konnessjonijiet attivi"
+
+msgid "Reading"
+msgstr "Qed jaqra"
+
+msgid "Writing"
+msgstr "Qed jikteb"
+
+msgid "Total requests"
+msgstr "Talba totali"
+
+msgid "Accepts"
+msgstr "Aċċetti"
+
+msgid "Handled"
+msgstr "Immaniġġjati"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: attiva mod_status (ExtendedStatus On) u ħalli localhost għal /server-status. Nginx: attiva stub_status f'post riservat għal localhost biss bħal /nginx_status jew /stub_status."
+

@@ -38934,3 +38934,237 @@ msgstr "无导师"
 msgid "No users"
 msgstr "无用户"
 
+msgid "Calculation mode"
+msgstr "计算模式"
+
+msgid "Weighted average"
+msgstr "加权平均"
+
+msgid "Points sum"
+msgstr "分数总和"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "加权平均按权重总和归一化；分数总和将每个权重视为最高分并直接相加，不进行归一化。"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "每个项目的权重视为其最高分；成绩为分数总和，不进行归一化。"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "成绩为各项目的加权平均值，按权重总和归一化。"
+
+msgid "Forum participation"
+msgstr "论坛参与"
+
+msgid "Forum thread"
+msgstr "论坛主题"
+
+msgid "Points for one message"
+msgstr "单条消息得分"
+
+msgid "Points for two or more messages"
+msgstr "两条及以上消息得分"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "学生在主题中仅发布一条消息时获得的得分。"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "学生在主题中发布两条及以上消息时获得的得分。"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "可选。若留空，则一条或多条消息均按单条消息得分计算。"
+
+msgid "Current password is required to change your password."
+msgstr "修改密码需要当前密码。"
+
+msgid "The 2FA code is required."
+msgstr "需要 2FA 验证码。"
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA 配置无效。"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA 验证码无效或已过期。"
+
+msgid "Database load"
+msgstr "数据库负载"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL 和 MariaDB 服务器实时负载指标"
+
+msgid "Click to show database server load metrics"
+msgstr "点击查看数据库服务器负载指标"
+
+msgid "Threads connected"
+msgstr "已连接线程"
+
+msgid "Temporary tables on disk"
+msgstr "磁盘上的临时表"
+
+msgid "Privilege scope"
+msgstr "权限范围"
+
+msgid "Not measurable with the current database user"
+msgstr "当前数据库用户无法测量"
+
+msgid "Uptime"
+msgstr "运行时间"
+
+msgid "Queries per second"
+msgstr "每秒查询数"
+
+msgid "Slow queries"
+msgstr "慢查询"
+
+msgid "Slow query time limit"
+msgstr "慢查询时间限制"
+
+msgid "Slow query log"
+msgstr "慢查询日志"
+
+msgid "Slow queries per second"
+msgstr "每秒慢查询数"
+
+msgid "Threads running"
+msgstr "运行中的线程"
+
+msgid "Threads cached"
+msgstr "缓存中的线程"
+
+msgid "Table lock waits"
+msgstr "表锁等待"
+
+msgid "Row lock waits"
+msgstr "行锁等待"
+
+msgid "Aborted connections"
+msgstr "中止的连接"
+
+msgid "Opened tables"
+msgstr "已打开的表"
+
+msgid "Query cache"
+msgstr "查询缓存"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "数据库负载指标仅适用于 MySQL 和 MariaDB。"
+
+msgid "Inserts"
+msgstr "插入"
+
+msgid "Hit rate"
+msgstr "命中率"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "每 5 秒自动刷新"
+
+msgid "Web server load"
+msgstr "Web 服务器负载"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "实时 Apache 或 Nginx 状态指标"
+
+msgid "Click to show web server load metrics"
+msgstr "点击显示 Web 服务器负载指标"
+
+msgid "Requires a local web server status module"
+msgstr "需要本地 Web 服务器状态模块"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web 服务器负载仅从本地主机的 Apache mod_status 或 Nginx stub_status 读取。状态页面必须允许来自 127.0.0.1（或 ::1）的请求。"
+
+msgid "Paths scanned"
+msgstr "已扫描路径"
+
+msgid "Detected"
+msgstr "已检测"
+
+msgid "Status path"
+msgstr "状态路径"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Web 服务器负载指标仅适用于 Apache 和 Nginx。"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "本地主机上没有扫描到的状态路径有响应。"
+
+msgid "Busy workers"
+msgstr "繁忙的工作进程"
+
+msgid "Idle workers"
+msgstr "空闲的工作进程"
+
+msgid "Graceful workers"
+msgstr "优雅退出的工作进程"
+
+msgid "Server MPM"
+msgstr "服务器 MPM"
+
+msgid "Requests per second (live)"
+msgstr "每秒请求数（实时）"
+
+msgid "Requests per second (since start)"
+msgstr "每秒请求数（自启动起）"
+
+msgid "Bytes per second (live)"
+msgstr "每秒字节数（实时）"
+
+msgid "Bytes per second (since start)"
+msgstr "每秒字节数（自启动起）"
+
+msgid "Bytes per request"
+msgstr "每请求字节数"
+
+msgid "Total accesses"
+msgstr "总访问量"
+
+msgid "Total traffic"
+msgstr "总流量"
+
+msgid "CPU load"
+msgstr "CPU 负载"
+
+msgid "Load average (1 min)"
+msgstr "负载平均值（1 分钟）"
+
+msgid "Load average (5 min)"
+msgstr "负载平均值（5 分钟）"
+
+msgid "Load average (15 min)"
+msgstr "负载平均值（15 分钟）"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard 发送中"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard 读取中"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard 等待中"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard 空闲槽位"
+
+msgid "Active connections"
+msgstr "活动连接"
+
+msgid "Reading"
+msgstr "读取中"
+
+msgid "Writing"
+msgstr "写入中"
+
+msgid "Total requests"
+msgstr "总请求数"
+
+msgid "Accepts"
+msgstr "接受"
+
+msgid "Handled"
+msgstr "已处理"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache：启用 mod_status（ExtendedStatus On）并允许本地主机访问 /server-status。Nginx：在仅限本地主机的位置（如 /nginx_status 或 /stub_status）启用 stub_status。"
+

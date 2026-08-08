@@ -38932,3 +38932,237 @@ msgstr "Tidak ada tutor"
 msgid "No users"
 msgstr "Tidak ada pengguna"
 
+msgid "Calculation mode"
+msgstr "Mode perhitungan"
+
+msgid "Weighted average"
+msgstr "Rata-rata tertimbang"
+
+msgid "Points sum"
+msgstr "Jumlah poin"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Rata-rata tertimbang dinormalisasi berdasarkan jumlah bobot; jumlah poin memperlakukan setiap bobot sebagai poin maksimum dan menjumlahkannya tanpa normalisasi."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Setiap bobot item diperlakukan sebagai poin maksimumnya; nilai adalah jumlah poin, bukan dinormalisasi."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Nilai adalah rata-rata tertimbang dari item, dinormalisasi berdasarkan jumlah bobot."
+
+msgid "Forum participation"
+msgstr "Partisipasi forum"
+
+msgid "Forum thread"
+msgstr "Utas forum"
+
+msgid "Points for one message"
+msgstr "Poin untuk satu pesan"
+
+msgid "Points for two or more messages"
+msgstr "Poin untuk dua pesan atau lebih"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Poin yang diberikan ketika siswa memposting tepat satu pesan dalam utas."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Poin yang diberikan ketika siswa memposting dua pesan atau lebih dalam utas."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opsional. Jika dibiarkan kosong, satu atau lebih pesan akan memberikan poin untuk satu pesan."
+
+msgid "Current password is required to change your password."
+msgstr "Kata sandi saat ini diperlukan untuk mengubah kata sandi Anda."
+
+msgid "The 2FA code is required."
+msgstr "Kode 2FA diperlukan."
+
+msgid "Invalid 2FA configuration."
+msgstr "Konfigurasi 2FA tidak valid."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Kode 2FA tidak valid atau kedaluwarsa."
+
+msgid "Database load"
+msgstr "Beban basis data"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metrik beban server MySQL dan MariaDB langsung"
+
+msgid "Click to show database server load metrics"
+msgstr "Klik untuk menampilkan metrik beban server basis data"
+
+msgid "Threads connected"
+msgstr "Utas terhubung"
+
+msgid "Temporary tables on disk"
+msgstr "Tabel sementara di disk"
+
+msgid "Privilege scope"
+msgstr "Cakupan hak istimewa"
+
+msgid "Not measurable with the current database user"
+msgstr "Tidak dapat diukur dengan pengguna basis data saat ini"
+
+msgid "Uptime"
+msgstr "Waktu aktif"
+
+msgid "Queries per second"
+msgstr "Kueri per detik"
+
+msgid "Slow queries"
+msgstr "Kueri lambat"
+
+msgid "Slow query time limit"
+msgstr "Batas waktu kueri lambat"
+
+msgid "Slow query log"
+msgstr "Log kueri lambat"
+
+msgid "Slow queries per second"
+msgstr "Kueri lambat per detik"
+
+msgid "Threads running"
+msgstr "Utas berjalan"
+
+msgid "Threads cached"
+msgstr "Utas di-cache"
+
+msgid "Table lock waits"
+msgstr "Tunggu kunci tabel"
+
+msgid "Row lock waits"
+msgstr "Tunggu kunci baris"
+
+msgid "Aborted connections"
+msgstr "Koneksi yang dibatalkan"
+
+msgid "Opened tables"
+msgstr "Tabel yang dibuka"
+
+msgid "Query cache"
+msgstr "Cache kueri"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Metrik beban basis data hanya tersedia untuk MySQL dan MariaDB."
+
+msgid "Inserts"
+msgstr "Penyisipan"
+
+msgid "Hit rate"
+msgstr "Tingkat hit"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Penyegaran otomatis setiap 5 detik"
+
+msgid "Web server load"
+msgstr "Beban server web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metrik status Apache atau Nginx langsung"
+
+msgid "Click to show web server load metrics"
+msgstr "Klik untuk menampilkan metrik beban server web"
+
+msgid "Requires a local web server status module"
+msgstr "Memerlukan modul status server web lokal"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Beban server web dibaca dari Apache mod_status atau Nginx stub_status hanya di localhost. Halaman status harus mengizinkan permintaan dari 127.0.0.1 (atau ::1)."
+
+msgid "Paths scanned"
+msgstr "Jalur yang dipindai"
+
+msgid "Detected"
+msgstr "Terdeteksi"
+
+msgid "Status path"
+msgstr "Jalur status"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Metrik beban server web hanya tersedia untuk Apache dan Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Tidak ada jalur status yang dipindai merespons di localhost."
+
+msgid "Busy workers"
+msgstr "Pekerja sibuk"
+
+msgid "Idle workers"
+msgstr "Pekerja menganggur"
+
+msgid "Graceful workers"
+msgstr "Pekerja graceful"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Permintaan per detik (langsung)"
+
+msgid "Requests per second (since start)"
+msgstr "Permintaan per detik (sejak mulai)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte per detik (langsung)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte per detik (sejak mulai)"
+
+msgid "Bytes per request"
+msgstr "Byte per permintaan"
+
+msgid "Total accesses"
+msgstr "Total akses"
+
+msgid "Total traffic"
+msgstr "Total lalu lintas"
+
+msgid "CPU load"
+msgstr "Beban CPU"
+
+msgid "Load average (1 min)"
+msgstr "Rata-rata beban (1 menit)"
+
+msgid "Load average (5 min)"
+msgstr "Rata-rata beban (5 menit)"
+
+msgid "Load average (15 min)"
+msgstr "Rata-rata beban (15 menit)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard mengirim"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard membaca"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard menunggu"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard slot terbuka"
+
+msgid "Active connections"
+msgstr "Koneksi aktif"
+
+msgid "Reading"
+msgstr "Membaca"
+
+msgid "Writing"
+msgstr "Menulis"
+
+msgid "Total requests"
+msgstr "Total permintaan"
+
+msgid "Accepts"
+msgstr "Menerima"
+
+msgid "Handled"
+msgstr "Ditangani"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: aktifkan mod_status (ExtendedStatus On) dan izinkan localhost ke /server-status. Nginx: aktifkan stub_status pada lokasi khusus localhost seperti /nginx_status atau /stub_status."
+

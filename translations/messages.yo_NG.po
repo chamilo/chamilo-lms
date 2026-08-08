@@ -38928,3 +38928,237 @@ msgstr "Kò sí olùkọ́"
 msgid "No users"
 msgstr "Kò sí àwọn olùlò"
 
+msgid "Calculation mode"
+msgstr "Ìṣirò"
+
+msgid "Weighted average"
+msgstr "Ìpín àpapọ̀"
+
+msgid "Points sum"
+msgstr "Àpapọ̀ àwọn àmì"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Ìpín àpapọ̀ máa ń ṣe ìwọ̀n nípa àpapọ̀ àwọn ìwọn; àpapọ̀ àmì máa ń ka ìwọn kọ̀ọ̀kan gẹ́gẹ́ bí àmì tó pọ̀jùlọ̀ tí ó sì máa ń ṣàfikún wọn láì ṣe ìwọ̀n."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Ìwọn ohun kọ̀ọ̀kan máa ń jẹ́ àmì tó pọ̀jùlọ̀ rẹ̀; ìdájọ́ jẹ́ àpapọ̀ àwọn àmì, kò sì ṣe ìwọ̀n."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Ìdájọ́ jẹ́ ìpín àpapọ̀ àwọn ohun, tí a ṣe ìwọ̀n nípa àpapọ̀ àwọn ìwọn."
+
+msgid "Forum participation"
+msgstr "Ìkópa fọ́rọ̀mù"
+
+msgid "Forum thread"
+msgstr "Àkọ́lé fọ́rọ̀mù"
+
+msgid "Points for one message"
+msgstr "Àmì fún ìránṣẹ́ kan"
+
+msgid "Points for two or more messages"
+msgstr "Àmì fún ìránṣẹ́ méjì tàbí jù bẹ́ẹ̀ lọ"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Àmì tí a fún nígbà tí akẹ́kọ̀ọ́ fi ìránṣẹ́ kan péré sí àkọ́lé náà."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Àmì tí a fún nígbà tí akẹ́kọ̀ọ́ fi ìránṣẹ́ méjì tàbí jù bẹ́ẹ̀ lọ sí àkọ́lé náà."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Kò pọndandan. Tí a bá fi òfo, ìránṣẹ́ kan tàbí jù bẹ́ẹ̀ lọ máa gba àmì fún ìránṣẹ́ kan."
+
+msgid "Current password is required to change your password."
+msgstr "Ọ̀rọ̀ ìgbaniwọlé lọ́wọ́lọ́wọ́ ni a nílò láti yí ọ̀rọ̀ ìgbaniwolé rẹ̀ padà."
+
+msgid "The 2FA code is required."
+msgstr "Àmì 2FA ni a nílò."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ìṣètò 2FA tí kò tọ́."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Àmì 2FA kò tọ́ tàbí tí ó ti parí."
+
+msgid "Database load"
+msgstr "Ìdárayá ibùdó data"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Àwọn ìwọ̀n ìdárayá ẹ̀rọ MySQL àti MariaDB ní àkókò gidi"
+
+msgid "Click to show database server load metrics"
+msgstr "Tẹ láti fi àwọn ìwọ̀n ìdárayá ẹ̀rọ ibùdó data hàn"
+
+msgid "Threads connected"
+msgstr "Àwọn ìsopọ̀ àkọ́lé"
+
+msgid "Temporary tables on disk"
+msgstr "Àwọn tábìlì ìgbàlódì lórí dísìkì"
+
+msgid "Privilege scope"
+msgstr "Ààyè ààyè ààyè"
+
+msgid "Not measurable with the current database user"
+msgstr "Kò ṣeé ṣe láti wọn pẹ̀lú olùmúlò ibùdó data lọ́wọ́lọ́wọ́"
+
+msgid "Uptime"
+msgstr "Àkókò ìṣiṣẹ́"
+
+msgid "Queries per second"
+msgstr "Àwọn ìbéèrè ní ìṣẹ́jú kan"
+
+msgid "Slow queries"
+msgstr "Àwọn ìbéèrè tí ó lọra"
+
+msgid "Slow query time limit"
+msgstr "Ìdíwọ̀n àkókò ìbéèrè tí ó lọra"
+
+msgid "Slow query log"
+msgstr "Àkọsílẹ̀ ìbéèrè tí ó lọra"
+
+msgid "Slow queries per second"
+msgstr "Àwọn ìbéèrè tí ó lọra ní ìṣẹ́jú kan"
+
+msgid "Threads running"
+msgstr "Àwọn àkọ́lé tí ó ń ṣiṣẹ́"
+
+msgid "Threads cached"
+msgstr "Àwọn àkọ́lé tí a fi pamọ́"
+
+msgid "Table lock waits"
+msgstr "Àwọn ìdúró títìlẹ̀ tábìlì"
+
+msgid "Row lock waits"
+msgstr "Àwọn ìdúró títìlẹ̀ ìlà"
+
+msgid "Aborted connections"
+msgstr "Àwọn ìsopọ̀ tí a dá dúró"
+
+msgid "Opened tables"
+msgstr "Àwọn tábìlì tí a ṣí"
+
+msgid "Query cache"
+msgstr "Àkójọpọ̀ ìbéèrè"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Àwọn ìwọ̀n ìdárayá ibùdó data wà fún MySQL àti MariaDB nìkan."
+
+msgid "Inserts"
+msgstr "Àwọn ìfisi"
+
+msgid "Hit rate"
+msgstr "Ìwọ̀n ìgbàlódì"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Ìtúnṣe ara-ẹni ní gbogbo ìṣẹ́jú 5"
+
+msgid "Web server load"
+msgstr "Ìdárayá ẹ̀rọ ayélujára"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Àwọn ìwọ̀n ipò Apache tàbí Nginx ní àkókò gidi"
+
+msgid "Click to show web server load metrics"
+msgstr "Tẹ láti fi àwọn ìwọ̀n ìdárayá ẹ̀rọ ayélujára hàn"
+
+msgid "Requires a local web server status module"
+msgstr "Ó nílò mọ́dúlù ipò ẹ̀rọ ayélujára tó wà ní àdúgbò"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ìdárayá ẹ̀rọ ayélujára ni a máa ń ka láti Apache mod_status tàbí Nginx stub_status ní localhost nìkan. Ojú-ìwé ipò gbọdọ̀ gba àwọn ìbéèrè láti 127.0.0.1 (tàbí ::1)."
+
+msgid "Paths scanned"
+msgstr "Àwọn ọ̀nà tí a ṣàyẹ̀wò"
+
+msgid "Detected"
+msgstr "Ti rí"
+
+msgid "Status path"
+msgstr "Ọ̀nà ipò"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Àwọn ìwọ̀n ìdárayá ẹ̀rọ ayélujára wà fún Apache àti Nginx nìkan."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Kò sí ọ̀nà ipò tí a ṣàyẹ̀wò tí ó dáhùn ní localhost."
+
+msgid "Busy workers"
+msgstr "Àwọn òṣìṣẹ́ tí ń ṣiṣẹ́"
+
+msgid "Idle workers"
+msgstr "Àwọn òṣìṣẹ́ tí kò ṣiṣẹ́"
+
+msgid "Graceful workers"
+msgstr "Àwọn òṣìṣẹ́ oníwàpẹ̀lẹ́"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Àwọn ìbéèrè ní ìṣẹ́jú kan (lọ́wọ́lọ́wọ́)"
+
+msgid "Requests per second (since start)"
+msgstr "Àwọn ìbéèrè ní ìṣẹ́jú kan (láti ìbẹ̀rẹ̀)"
+
+msgid "Bytes per second (live)"
+msgstr "Àwọn báìtì ní ìṣẹ́jú kan (lọ́wọ́lọ́wọ́)"
+
+msgid "Bytes per second (since start)"
+msgstr "Àwọn báìtì ní ìṣẹ́jú kan (láti ìbẹ̀rẹ̀)"
+
+msgid "Bytes per request"
+msgstr "Àwọn báìtì ní ìbéèrè kan"
+
+msgid "Total accesses"
+msgstr "Àpapọ̀ àwọn ìráàyè"
+
+msgid "Total traffic"
+msgstr "Àpapọ̀ ìbáraẹni"
+
+msgid "CPU load"
+msgstr "Ìdáwọ́lé CPU"
+
+msgid "Load average (1 min)"
+msgstr "Ìpín ìdáwọ́lé (ìṣẹ́jú kan)"
+
+msgid "Load average (5 min)"
+msgstr "Ìpín ìdáwọ́lé (ìṣẹ́jú márùn)"
+
+msgid "Load average (15 min)"
+msgstr "Ìpín ìdáwọ́lé (ìṣẹ́jú mẹ́ẹ̀ẹ́dógún)"
+
+msgid "Scoreboard sending"
+msgstr "Ìwé ìròyìn ń fi ránṣẹ́"
+
+msgid "Scoreboard reading"
+msgstr "Ìwé ìròyìn ń ka"
+
+msgid "Scoreboard keepalive"
+msgstr "Ìwé ìròyìn keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Ìwé ìròyìn ń dúró"
+
+msgid "Scoreboard open slots"
+msgstr "Àwọn ààyè tí ó ṣí sílẹ̀ nínú ìwé ìròyìn"
+
+msgid "Active connections"
+msgstr "Àwọn ìsopọ̀ tí ó ń ṣiṣẹ́"
+
+msgid "Reading"
+msgstr "Ń ka"
+
+msgid "Writing"
+msgstr "Ń kọ"
+
+msgid "Total requests"
+msgstr "Àpapọ̀ àwọn ìbéèrè"
+
+msgid "Accepts"
+msgstr "Àwọn ìtẹ́wọ́gbà"
+
+msgid "Handled"
+msgstr "Àwọn tí a ti ṣètò"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ṣe ìdàgbàsókè mod_status (ExtendedStatus On) kí o sì gba localhost láàyè sí /server-status. Nginx: ṣe ìdàgbàsókè stub_status ní ààyè localhost nìkan bíi /nginx_status tàbí /stub_status."
+

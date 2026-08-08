@@ -38928,3 +38928,237 @@ msgstr "कोई ट्यूटर नहीं"
 msgid "No users"
 msgstr "कोई उपयोगकर्ता नहीं"
 
+msgid "Calculation mode"
+msgstr "गणना मोड"
+
+msgid "Weighted average"
+msgstr "भारित औसत"
+
+msgid "Points sum"
+msgstr "अंक योग"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "भारित औसत वज़न के योग से सामान्यीकृत करता है; अंक योग प्रत्येक वज़न को अधिकतम अंक मानता है और बिना सामान्यीकरण के जोड़ता है।"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "प्रत्येक आइटम का वज़न उसके अधिकतम अंकों के रूप में लिया जाता है; ग्रेड अंकों का योग है, सामान्यीकृत नहीं।"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "ग्रेड आइटमों का भारित औसत है, वज़न के योग से सामान्यीकृत।"
+
+msgid "Forum participation"
+msgstr "फोरम भागीदारी"
+
+msgid "Forum thread"
+msgstr "फोरम थ्रेड"
+
+msgid "Points for one message"
+msgstr "एक संदेश के लिए अंक"
+
+msgid "Points for two or more messages"
+msgstr "दो या अधिक संदेशों के लिए अंक"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "जब छात्र ने थ्रेड में ठीक एक संदेश पोस्ट किया हो तो दिए गए अंक।"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "जब छात्र ने थ्रेड में दो या अधिक संदेश पोस्ट किए हों तो दिए गए अंक।"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "वैकल्पिक। यदि खाली छोड़ा जाए, तो एक या अधिक संदेशों पर एक संदेश के अंक दिए जाएंगे।"
+
+msgid "Current password is required to change your password."
+msgstr "पासवर्ड बदलने के लिए वर्तमान पासवर्ड आवश्यक है।"
+
+msgid "The 2FA code is required."
+msgstr "2FA कोड आवश्यक है।"
+
+msgid "Invalid 2FA configuration."
+msgstr "अमान्य 2FA कॉन्फ़िगरेशन।"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA कोड अमान्य या समाप्त हो चुका है।"
+
+msgid "Database load"
+msgstr "डेटाबेस लोड"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "लाइव MySQL और MariaDB सर्वर लोड मेट्रिक्स"
+
+msgid "Click to show database server load metrics"
+msgstr "डेटाबेस सर्वर लोड मेट्रिक्स दिखाने के लिए क्लिक करें"
+
+msgid "Threads connected"
+msgstr "कनेक्टेड थ्रेड्स"
+
+msgid "Temporary tables on disk"
+msgstr "डिस्क पर अस्थायी टेबल्स"
+
+msgid "Privilege scope"
+msgstr "अधिकार क्षेत्र"
+
+msgid "Not measurable with the current database user"
+msgstr "वर्तमान डेटाबेस उपयोगकर्ता से मापने योग्य नहीं"
+
+msgid "Uptime"
+msgstr "अपटाइम"
+
+msgid "Queries per second"
+msgstr "प्रति सेकंड क्वेरीज़"
+
+msgid "Slow queries"
+msgstr "धीमी क्वेरीज़"
+
+msgid "Slow query time limit"
+msgstr "धीमी क्वेरी समय सीमा"
+
+msgid "Slow query log"
+msgstr "धीमी क्वेरी लॉग"
+
+msgid "Slow queries per second"
+msgstr "धीमी क्वेरी प्रति सेकंड"
+
+msgid "Threads running"
+msgstr "चल रहे थ्रेड"
+
+msgid "Threads cached"
+msgstr "कैश किए गए थ्रेड"
+
+msgid "Table lock waits"
+msgstr "टेबल लॉक प्रतीक्षा"
+
+msgid "Row lock waits"
+msgstr "पंक्ति लॉक प्रतीक्षा"
+
+msgid "Aborted connections"
+msgstr "रद्द कनेक्शन"
+
+msgid "Opened tables"
+msgstr "खोली गई टेबल"
+
+msgid "Query cache"
+msgstr "क्वेरी कैश"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "डेटाबेस लोड मेट्रिक्स केवल MySQL और MariaDB के लिए उपलब्ध हैं।"
+
+msgid "Inserts"
+msgstr "इंसर्ट"
+
+msgid "Hit rate"
+msgstr "हिट दर"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "हर 5 सेकंड में ऑटो-रिफ्रेश"
+
+msgid "Web server load"
+msgstr "वेब सर्वर लोड"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "लाइव Apache या Nginx स्थिति मेट्रिक्स"
+
+msgid "Click to show web server load metrics"
+msgstr "वेब सर्वर लोड मेट्रिक्स दिखाने के लिए क्लिक करें"
+
+msgid "Requires a local web server status module"
+msgstr "स्थानीय वेब सर्वर स्थिति मॉड्यूल की आवश्यकता"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "वेब सर्वर लोड केवल localhost पर Apache mod_status या Nginx stub_status से पढ़ा जाता है। स्थिति पृष्ठ को 127.0.0.1 (या ::1) से अनुरोध की अनुमति देनी चाहिए।"
+
+msgid "Paths scanned"
+msgstr "स्कैन किए गए पथ"
+
+msgid "Detected"
+msgstr "पहचाना गया"
+
+msgid "Status path"
+msgstr "स्थिति पथ"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "वेब सर्वर लोड मेट्रिक्स केवल Apache और Nginx के लिए उपलब्ध हैं।"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "स्कैन किए गए स्थिति पथों में से कोई भी localhost पर प्रतिक्रिया नहीं दे रहा।"
+
+msgid "Busy workers"
+msgstr "व्यस्त वर्कर"
+
+msgid "Idle workers"
+msgstr "निष्क्रिय वर्कर"
+
+msgid "Graceful workers"
+msgstr "ग्रेसफुल वर्कर"
+
+msgid "Server MPM"
+msgstr "सर्वर MPM"
+
+msgid "Requests per second (live)"
+msgstr "अनुरोध प्रति सेकंड (लाइव)"
+
+msgid "Requests per second (since start)"
+msgstr "अनुरोध प्रति सेकंड (शुरू से)"
+
+msgid "Bytes per second (live)"
+msgstr "बाइट प्रति सेकंड (लाइव)"
+
+msgid "Bytes per second (since start)"
+msgstr "बाइट प्रति सेकंड (शुरू से)"
+
+msgid "Bytes per request"
+msgstr "बाइट प्रति अनुरोध"
+
+msgid "Total accesses"
+msgstr "कुल एक्सेस"
+
+msgid "Total traffic"
+msgstr "कुल ट्रैफिक"
+
+msgid "CPU load"
+msgstr "CPU लोड"
+
+msgid "Load average (1 min)"
+msgstr "लोड औसत (1 मिनट)"
+
+msgid "Load average (5 min)"
+msgstr "लोड औसत (5 मिनट)"
+
+msgid "Load average (15 min)"
+msgstr "लोड औसत (15 मिनट)"
+
+msgid "Scoreboard sending"
+msgstr "स्कोरबोर्ड भेजना"
+
+msgid "Scoreboard reading"
+msgstr "स्कोरबोर्ड पढ़ना"
+
+msgid "Scoreboard keepalive"
+msgstr "स्कोरबोर्ड कीपअलाइव"
+
+msgid "Scoreboard waiting"
+msgstr "स्कोरबोर्ड प्रतीक्षा"
+
+msgid "Scoreboard open slots"
+msgstr "स्कोरबोर्ड खुले स्लॉट"
+
+msgid "Active connections"
+msgstr "सक्रिय कनेक्शन"
+
+msgid "Reading"
+msgstr "पढ़ रहा"
+
+msgid "Writing"
+msgstr "लिख रहा"
+
+msgid "Total requests"
+msgstr "कुल अनुरोध"
+
+msgid "Accepts"
+msgstr "स्वीकार"
+
+msgid "Handled"
+msgstr "हैंडल किया गया"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status सक्षम करें (ExtendedStatus On) और localhost को /server-status की अनुमति दें। Nginx: localhost-only स्थान जैसे /nginx_status या /stub_status पर stub_status सक्षम करें।"
+

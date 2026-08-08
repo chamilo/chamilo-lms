@@ -38928,3 +38928,237 @@ msgstr "Nissun tutor"
 msgid "No users"
 msgstr "Nissun utent"
 
+msgid "Calculation mode"
+msgstr "Modalitât di calcul"
+
+msgid "Weighted average"
+msgstr "Medie ponderade"
+
+msgid "Points sum"
+msgstr "Some di ponts"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "La medie ponderade normalizze par la some dai pês; la some di ponts trate ogni pês come ponts massims e ju somee cence normalizâ."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Ogni pês dal element al è tratât come i siei ponts massims; il vôt al è la some dai ponts, cence normalizazion."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Il vôt al è la medie ponderade dai elements, normalizade par la some dai pês."
+
+msgid "Forum participation"
+msgstr "Partecipazion al forum"
+
+msgid "Forum thread"
+msgstr "Thread dal forum"
+
+msgid "Points for one message"
+msgstr "Ponts par un messaç"
+
+msgid "Points for two or more messages"
+msgstr "Ponts par doi o plui messaçs"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Ponts assegnâts cuant che l'student al à publicât un messaç esat tal thread."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Ponts assegnâts cuant che l'student al à publicât doi o plui messaçs tal thread."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opzionâl. Se lassât vueit, un o plui messaçs assegnin i ponts par un messaç."
+
+msgid "Current password is required to change your password."
+msgstr "La password atuâl e je necessarie par cambiâ la tô password."
+
+msgid "The 2FA code is required."
+msgstr "Il codiç 2FA al è necessari."
+
+msgid "Invalid 2FA configuration."
+msgstr "Configurazion 2FA no valide."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Il codiç 2FA al è no valit o scjadût."
+
+msgid "Database load"
+msgstr "Cjariament de base di dâts"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metriche di cjariament dal servidôr MySQL e MariaDB in viv"
+
+msgid "Click to show database server load metrics"
+msgstr "Clicâ par mostrâ lis metriche di cjariament dal servidôr de base di dâts"
+
+msgid "Threads connected"
+msgstr "Thread colegâts"
+
+msgid "Temporary tables on disk"
+msgstr "Tabelis temporaniis sul disc"
+
+msgid "Privilege scope"
+msgstr "Ambit dai privileçs"
+
+msgid "Not measurable with the current database user"
+msgstr "No misurabil cul utent de base di dâts atuâl"
+
+msgid "Uptime"
+msgstr "Timp di ativazion"
+
+msgid "Queries per second"
+msgstr "Interogazions par secont"
+
+msgid "Slow queries"
+msgstr "Interogazions lentis"
+
+msgid "Slow query time limit"
+msgstr "Limit di timp pes interogazions lentis"
+
+msgid "Slow query log"
+msgstr "Regjistri des interogazions lentis"
+
+msgid "Slow queries per second"
+msgstr "Interogazions lentis par secont"
+
+msgid "Threads running"
+msgstr "Thread in esecuzion"
+
+msgid "Threads cached"
+msgstr "Thread in cache"
+
+msgid "Table lock waits"
+msgstr "Spetis di bloc di tabele"
+
+msgid "Row lock waits"
+msgstr "Spetis di bloc di rie"
+
+msgid "Aborted connections"
+msgstr "Conessions interutis"
+
+msgid "Opened tables"
+msgstr "Tabelis vierzudis"
+
+msgid "Query cache"
+msgstr "Cache des interogazions"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Lis metricis dal cjariament de base di dâts a son disponibils dome par MySQL e MariaDB."
+
+msgid "Inserts"
+msgstr "Inseriments"
+
+msgid "Hit rate"
+msgstr "Tasse di colp"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Auto-rinfrescament ogni 5 seconts"
+
+msgid "Web server load"
+msgstr "Cjariament dal servidôr web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metricis dal stât in viv di Apache o Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Clicâ par mostrâ lis metricis dal cjariament dal servidôr web"
+
+msgid "Requires a local web server status module"
+msgstr "Al à bisugne di un modul di stât dal servidôr web locâl"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Il cjariament dal servidôr web al è let di Apache mod_status o Nginx stub_status dome su localhost. La pagjine di stât e scugne permeti lis richiestis di 127.0.0.1 (o ::1)."
+
+msgid "Paths scanned"
+msgstr "Percors scansionâts"
+
+msgid "Detected"
+msgstr "Rilevâts"
+
+msgid "Status path"
+msgstr "Percors di stât"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Lis metricis dal cjariament dal servidôr web a son disponibils dome par Apache e Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Nissun dai percors di stât scansionâts al à rispuindût su localhost."
+
+msgid "Busy workers"
+msgstr "Lavoradôrs ocupâts"
+
+msgid "Idle workers"
+msgstr "Lavoradôrs inatîfs"
+
+msgid "Graceful workers"
+msgstr "Lavoradôrs graciôs"
+
+msgid "Server MPM"
+msgstr "MPM dal servidôr"
+
+msgid "Requests per second (live)"
+msgstr "Richiestis par secont (in viv)"
+
+msgid "Requests per second (since start)"
+msgstr "Richiestis par secont (dal inizi)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte par secont (in viv)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte par secont (dal inizi)"
+
+msgid "Bytes per request"
+msgstr "Byte par richieste"
+
+msgid "Total accesses"
+msgstr "Acès totâi"
+
+msgid "Total traffic"
+msgstr "Traffic totâl"
+
+msgid "CPU load"
+msgstr "Cjariament CPU"
+
+msgid "Load average (1 min)"
+msgstr "Medie di cjariament (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Medie di cjariament (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Medie di cjariament (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard in invî"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard in leture"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard in spiete"
+
+msgid "Scoreboard open slots"
+msgstr "Spazis vierts tal tabele dai risultâts"
+
+msgid "Active connections"
+msgstr "Conessions atîvis"
+
+msgid "Reading"
+msgstr "Leture"
+
+msgid "Writing"
+msgstr "Scriture"
+
+msgid "Total requests"
+msgstr "Domandis totâls"
+
+msgid "Accepts"
+msgstr "Acetâts"
+
+msgid "Handled"
+msgstr "Gjestîts"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: abilitâ mod_status (ExtendedStatus On) e permeti al localhost di /server-status. Nginx: abilitâ stub_status suntun percors riservât al localhost come /nginx_status o /stub_status."
+

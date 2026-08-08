@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -38932,4 +38932,238 @@ msgstr "Nav pasniedzēju"
 
 msgid "No users"
 msgstr "Nav lietotāju"
+
+msgid "Calculation mode"
+msgstr "Aprēķinu režīms"
+
+msgid "Weighted average"
+msgstr "Svērtā vidējā vērtība"
+
+msgid "Points sum"
+msgstr "Punktu summa"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Svērtā vidējā vērtība normalizē pēc svaru summas; punktu summa uzskata katru svaru par maksimālo punktu skaitu un saskaita tos bez normalizācijas."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Katrs vienuma svars tiek uzskatīts par tā maksimālo punktu skaitu; vērtējums ir punktu summa, nevis normalizēta."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Vērtējums ir vienumu svērtā vidējā vērtība, normalizēta pēc svaru summas."
+
+msgid "Forum participation"
+msgstr "Foruma dalība"
+
+msgid "Forum thread"
+msgstr "Foruma pavediens"
+
+msgid "Points for one message"
+msgstr "Punkti par vienu ziņojumu"
+
+msgid "Points for two or more messages"
+msgstr "Punkti par diviem vai vairāk ziņojumiem"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Punkti, kas piešķirti, kad students pavedienā publicēja tieši vienu ziņojumu."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Punkti, kas piešķirti, kad students pavedienā publicēja divus vai vairāk ziņojumus."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Neobligāti. Ja atstāts tukšs, viens vai vairāki ziņojumi piešķir punktus par vienu ziņojumu."
+
+msgid "Current password is required to change your password."
+msgstr "Lai mainītu paroli, nepieciešama pašreizējā parole."
+
+msgid "The 2FA code is required."
+msgstr "Nepieciešams 2FA kods."
+
+msgid "Invalid 2FA configuration."
+msgstr "Nederīga 2FA konfigurācija."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kods ir nederīgs vai beidzies."
+
+msgid "Database load"
+msgstr "Datubāzes noslodze"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL un MariaDB servera noslodzes rādītāji"
+
+msgid "Click to show database server load metrics"
+msgstr "Noklikšķiniet, lai parādītu datubāzes servera noslodzes rādītājus"
+
+msgid "Threads connected"
+msgstr "Savienotās pavedienu"
+
+msgid "Temporary tables on disk"
+msgstr "Pagaidu tabulas diskā"
+
+msgid "Privilege scope"
+msgstr "Privileģiju apjoms"
+
+msgid "Not measurable with the current database user"
+msgstr "Nav izmērāms ar pašreizējo datu bāzes lietotāju"
+
+msgid "Uptime"
+msgstr "Darbības laiks"
+
+msgid "Queries per second"
+msgstr "Vaicājumi sekundē"
+
+msgid "Slow queries"
+msgstr "Lēnie vaicājumi"
+
+msgid "Slow query time limit"
+msgstr "Lēno vaicājumu laika limits"
+
+msgid "Slow query log"
+msgstr "Lēno vaicājumu žurnāls"
+
+msgid "Slow queries per second"
+msgstr "Lēnie vaicājumi sekundē"
+
+msgid "Threads running"
+msgstr "Aktīvās pavedienu"
+
+msgid "Threads cached"
+msgstr "Kešatmiņā saglabātie pavedieni"
+
+msgid "Table lock waits"
+msgstr "Tabulu slēgšanas gaidīšana"
+
+msgid "Row lock waits"
+msgstr "Rindu slēgšanas gaidīšana"
+
+msgid "Aborted connections"
+msgstr "Pārtrauktie savienojumi"
+
+msgid "Opened tables"
+msgstr "Atvērtās tabulas"
+
+msgid "Query cache"
+msgstr "Vaicājumu kešatmiņa"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Datu bāzes slodzes metrika ir pieejama tikai MySQL un MariaDB."
+
+msgid "Inserts"
+msgstr "Ievietojumi"
+
+msgid "Hit rate"
+msgstr "Trāpījumu īpatsvars"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automātiska atsvaidzināšana ik pēc 5 sekundēm"
+
+msgid "Web server load"
+msgstr "Tīmekļa servera slodze"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Aktīvie Apache vai Nginx statusa rādītāji"
+
+msgid "Click to show web server load metrics"
+msgstr "Noklikšķiniet, lai parādītu tīmekļa servera slodzes rādītājus"
+
+msgid "Requires a local web server status module"
+msgstr "Nepieciešams lokālā tīmekļa servera statusa modulis"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Tīmekļa servera slodze tiek nolasīta tikai no Apache mod_status vai Nginx stub_status localhost. Statusa lapai jāatļauj pieprasījumi no 127.0.0.1 (vai ::1)."
+
+msgid "Paths scanned"
+msgstr "Skenētie ceļi"
+
+msgid "Detected"
+msgstr "Noteikts"
+
+msgid "Status path"
+msgstr "Statusa ceļš"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Tīmekļa servera slodzes metrika ir pieejama tikai Apache un Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Neviens no skenētajiem statusa ceļiem neatbildēja localhost."
+
+msgid "Busy workers"
+msgstr "Aizņemtie darbinieki"
+
+msgid "Idle workers"
+msgstr "Neaizņemtie darbinieki"
+
+msgid "Graceful workers"
+msgstr "Gludie darbinieki"
+
+msgid "Server MPM"
+msgstr "Servera MPM"
+
+msgid "Requests per second (live)"
+msgstr "Pieprasījumi sekundē (tiešsaistē)"
+
+msgid "Requests per second (since start)"
+msgstr "Pieprasījumi sekundē (kopš sākuma)"
+
+msgid "Bytes per second (live)"
+msgstr "Baiti sekundē (tiešsaistē)"
+
+msgid "Bytes per second (since start)"
+msgstr "Baiti sekundē (kopš sākuma)"
+
+msgid "Bytes per request"
+msgstr "Baiti uz pieprasījumu"
+
+msgid "Total accesses"
+msgstr "Kopējie piekļuves"
+
+msgid "Total traffic"
+msgstr "Kopējā datu plūsma"
+
+msgid "CPU load"
+msgstr "CPU slodze"
+
+msgid "Load average (1 min)"
+msgstr "Slodzes vidējais (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Slodzes vidējais (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Slodzes vidējais (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard sūtīšana"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard lasīšana"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard gaidīšana"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard atvērtās vietas"
+
+msgid "Active connections"
+msgstr "Aktīvie savienojumi"
+
+msgid "Reading"
+msgstr "Lasīšana"
+
+msgid "Writing"
+msgstr "Rakstīšana"
+
+msgid "Total requests"
+msgstr "Kopējie pieprasījumi"
+
+msgid "Accepts"
+msgstr "Pieņemtie"
+
+msgid "Handled"
+msgstr "Apstrādātie"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 

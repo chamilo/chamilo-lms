@@ -38933,3 +38933,237 @@ msgstr "Juhendajaid pole"
 msgid "No users"
 msgstr "Kasutajaid pole"
 
+msgid "Calculation mode"
+msgstr "Arvutusviis"
+
+msgid "Weighted average"
+msgstr "Kaalutud keskmine"
+
+msgid "Points sum"
+msgstr "Punktide summa"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Kaalutud keskmine normaliseerib kaalude summa järgi; punktide summa käsitleb igat kaalu maksimaalsete punktidena ja liidab need ilma normaliseerimiseta."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Iga üksuse kaalu käsitletakse selle maksimaalsete punktidena; hinne on punktide summa, mitte normaliseeritud."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Hinne on üksuste kaalutud keskmine, normaliseeritud kaalude summa järgi."
+
+msgid "Forum participation"
+msgstr "Foorumis osalemine"
+
+msgid "Forum thread"
+msgstr "Foorumi teema"
+
+msgid "Points for one message"
+msgstr "Punktid ühe sõnumi eest"
+
+msgid "Points for two or more messages"
+msgstr "Punktid kahe või enama sõnumi eest"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Punktid, mis antakse, kui õpilane postitas teemasse täpselt ühe sõnumi."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Punktid, mis antakse, kui õpilane postitas teemasse kaks või enam sõnumi."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Valikuline. Kui jätta tühjaks, annab üks või enam sõnumit punktid ühe sõnumi eest."
+
+msgid "Current password is required to change your password."
+msgstr "Parooli muutmiseks on vaja praegust parooli."
+
+msgid "The 2FA code is required."
+msgstr "2FA kood on nõutav."
+
+msgid "Invalid 2FA configuration."
+msgstr "Vigane 2FA seadistus."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kood on vigane või aegunud."
+
+msgid "Database load"
+msgstr "Andmebaasi koormus"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL ja MariaDB serveri koormuse mõõdikud"
+
+msgid "Click to show database server load metrics"
+msgstr "Klõpsa andmebaasiserveri koormuse mõõdikute kuvamiseks"
+
+msgid "Threads connected"
+msgstr "Ühendatud lõimed"
+
+msgid "Temporary tables on disk"
+msgstr "Ajutised tabelid kettal"
+
+msgid "Privilege scope"
+msgstr "Õiguste ulatus"
+
+msgid "Not measurable with the current database user"
+msgstr "Praeguse andmebaasi kasutajaga ei ole mõõdetav"
+
+msgid "Uptime"
+msgstr "Tööaeg"
+
+msgid "Queries per second"
+msgstr "Päringuid sekundis"
+
+msgid "Slow queries"
+msgstr "Aeglased päringud"
+
+msgid "Slow query time limit"
+msgstr "Aeglase päringu ajapiirang"
+
+msgid "Slow query log"
+msgstr "Aeglase päringu logi"
+
+msgid "Slow queries per second"
+msgstr "Aeglaseid päringuid sekundis"
+
+msgid "Threads running"
+msgstr "Töötavad lõimed"
+
+msgid "Threads cached"
+msgstr "Vahemälus lõimed"
+
+msgid "Table lock waits"
+msgstr "Tabeli lukustamise ootamised"
+
+msgid "Row lock waits"
+msgstr "Rea lukustamise ootamised"
+
+msgid "Aborted connections"
+msgstr "Katkestatud ühendused"
+
+msgid "Opened tables"
+msgstr "Avatud tabelid"
+
+msgid "Query cache"
+msgstr "Päringute vahemälu"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Andmebaasi koormuse mõõdikud on saadaval ainult MySQL ja MariaDB jaoks."
+
+msgid "Inserts"
+msgstr "Lisad"
+
+msgid "Hit rate"
+msgstr "Tabamuste määr"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automaatne värskendus iga 5 sekundi järel"
+
+msgid "Web server load"
+msgstr "Veebiserveri koormus"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live Apache või Nginx oleku mõõdikud"
+
+msgid "Click to show web server load metrics"
+msgstr "Klõpsa veebiserveri koormuse mõõdikute kuvamiseks"
+
+msgid "Requires a local web server status module"
+msgstr "Nõuab kohalikku veebiserveri oleku moodulit"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Veebiserveri koormust loetakse ainult Apache mod_status või Nginx stub_status kaudu localhostist. Olekuleht peab lubama päringuid aadressilt 127.0.0.1 (või ::1)."
+
+msgid "Paths scanned"
+msgstr "Skannitud teed"
+
+msgid "Detected"
+msgstr "Tuvastatud"
+
+msgid "Status path"
+msgstr "Oleku tee"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Veebiserveri koormuse mõõdikud on saadaval ainult Apache ja Nginx jaoks."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ükski skannitud olekuteedest ei vastanud localhostis."
+
+msgid "Busy workers"
+msgstr "Hõivatud töötajad"
+
+msgid "Idle workers"
+msgstr "Jõudeolevad töötajad"
+
+msgid "Graceful workers"
+msgstr "Graatsilised töötajad"
+
+msgid "Server MPM"
+msgstr "Serveri MPM"
+
+msgid "Requests per second (live)"
+msgstr "Päringuid sekundis (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Päringuid sekundis (alates käivitamisest)"
+
+msgid "Bytes per second (live)"
+msgstr "Baite sekundis (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Baite sekundis (alates käivitamisest)"
+
+msgid "Bytes per request"
+msgstr "Baite päringu kohta"
+
+msgid "Total accesses"
+msgstr "Kokku juurdepääse"
+
+msgid "Total traffic"
+msgstr "Kokku liiklust"
+
+msgid "CPU load"
+msgstr "CPU koormus"
+
+msgid "Load average (1 min)"
+msgstr "Keskmine koormus (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Keskmine koormus (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Keskmine koormus (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard saatmine"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard lugemine"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard ootel"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard avatud pesad"
+
+msgid "Active connections"
+msgstr "Aktiivsed ühendused"
+
+msgid "Reading"
+msgstr "Lugemine"
+
+msgid "Writing"
+msgstr "Kirjutamine"
+
+msgid "Total requests"
+msgstr "Kokku päringuid"
+
+msgid "Accepts"
+msgstr "Vastu võetud"
+
+msgid "Handled"
+msgstr "Käideldud"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: luba mod_status (ExtendedStatus On) ja luba localhostile /server-status. Nginx: luba stub_status ainult localhosti asukohas nagu /nginx_status või /stub_status."
+

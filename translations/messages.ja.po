@@ -38998,3 +38998,237 @@ msgstr "チューターなし"
 msgid "No users"
 msgstr "ユーザーなし"
 
+msgid "Calculation mode"
+msgstr "計算モード"
+
+msgid "Weighted average"
+msgstr "加重平均"
+
+msgid "Points sum"
+msgstr "得点合計"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "加重平均は重みの合計で正規化します。得点合計は各重みを最大得点として扱い、正規化せずに合計します。"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "各項目の重みをその最大得点として扱い、得点の合計を正規化せずに算出します。"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "成績は各項目の加重平均で、重みの合計で正規化されます。"
+
+msgid "Forum participation"
+msgstr "フォーラム参加"
+
+msgid "Forum thread"
+msgstr "フォーラムスレッド"
+
+msgid "Points for one message"
+msgstr "1件のメッセージの得点"
+
+msgid "Points for two or more messages"
+msgstr "2件以上のメッセージの得点"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "学生がスレッドにちょうど1件のメッセージを投稿した場合に与えられる得点。"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "学生がスレッドに2件以上のメッセージを投稿した場合に与えられる得点。"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "任意。空欄の場合、1件以上のメッセージで1件のメッセージの得点が与えられます。"
+
+msgid "Current password is required to change your password."
+msgstr "パスワードを変更するには現在のパスワードが必要です。"
+
+msgid "The 2FA code is required."
+msgstr "2FAコードが必要です。"
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA設定が無効です。"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FAコードが無効または期限切れです。"
+
+msgid "Database load"
+msgstr "データベース負荷"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQLおよびMariaDBサーバーの負荷メトリクス（ライブ）"
+
+msgid "Click to show database server load metrics"
+msgstr "クリックしてデータベースサーバーの負荷メトリクスを表示"
+
+msgid "Threads connected"
+msgstr "接続中のスレッド"
+
+msgid "Temporary tables on disk"
+msgstr "ディスク上のテンポラリテーブル"
+
+msgid "Privilege scope"
+msgstr "権限範囲"
+
+msgid "Not measurable with the current database user"
+msgstr "現在のデータベースユーザーでは測定できません"
+
+msgid "Uptime"
+msgstr "稼働時間"
+
+msgid "Queries per second"
+msgstr "1秒あたりのクエリ数"
+
+msgid "Slow queries"
+msgstr "スロークエリ"
+
+msgid "Slow query time limit"
+msgstr "スロークエリ時間制限"
+
+msgid "Slow query log"
+msgstr "スロークエリログ"
+
+msgid "Slow queries per second"
+msgstr "1秒あたりのスロークエリ数"
+
+msgid "Threads running"
+msgstr "実行中のスレッド"
+
+msgid "Threads cached"
+msgstr "キャッシュされたスレッド"
+
+msgid "Table lock waits"
+msgstr "テーブルロック待機"
+
+msgid "Row lock waits"
+msgstr "行ロック待機"
+
+msgid "Aborted connections"
+msgstr "中断された接続"
+
+msgid "Opened tables"
+msgstr "開かれたテーブル"
+
+msgid "Query cache"
+msgstr "クエリキャッシュ"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "データベース負荷メトリクスはMySQLおよびMariaDBでのみ利用可能です。"
+
+msgid "Inserts"
+msgstr "挿入"
+
+msgid "Hit rate"
+msgstr "ヒット率"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "5秒ごとに自動更新"
+
+msgid "Web server load"
+msgstr "Webサーバー負荷"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "ApacheまたはNginxのライブステータスメトリクス"
+
+msgid "Click to show web server load metrics"
+msgstr "クリックしてWebサーバー負荷メトリクスを表示"
+
+msgid "Requires a local web server status module"
+msgstr "ローカルWebサーバーステータスモジュールが必要です"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Webサーバー負荷はlocalhost上のApache mod_statusまたはNginx stub_statusからのみ読み取られます。ステータスページは127.0.0.1（または::1）からのリクエストを許可する必要があります。"
+
+msgid "Paths scanned"
+msgstr "スキャンされたパス"
+
+msgid "Detected"
+msgstr "検出済み"
+
+msgid "Status path"
+msgstr "ステータスパス"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Webサーバー負荷メトリクスはApacheおよびNginxでのみ利用可能です。"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "スキャンされたステータスパスのいずれもlocalhostで応答しませんでした。"
+
+msgid "Busy workers"
+msgstr "ビジーワーカー"
+
+msgid "Idle workers"
+msgstr "アイドルワーカー"
+
+msgid "Graceful workers"
+msgstr "グレースフルワーカー"
+
+msgid "Server MPM"
+msgstr "サーバーMPM"
+
+msgid "Requests per second (live)"
+msgstr "1秒あたりのリクエスト数（ライブ）"
+
+msgid "Requests per second (since start)"
+msgstr "1秒あたりのリクエスト数（起動以降）"
+
+msgid "Bytes per second (live)"
+msgstr "1秒あたりのバイト数（ライブ）"
+
+msgid "Bytes per second (since start)"
+msgstr "1秒あたりのバイト数（起動以降）"
+
+msgid "Bytes per request"
+msgstr "リクエストあたりのバイト数"
+
+msgid "Total accesses"
+msgstr "総アクセス数"
+
+msgid "Total traffic"
+msgstr "総トラフィック"
+
+msgid "CPU load"
+msgstr "CPU負荷"
+
+msgid "Load average (1 min)"
+msgstr "ロードアベレージ（1分）"
+
+msgid "Load average (5 min)"
+msgstr "ロードアベレージ（5分）"
+
+msgid "Load average (15 min)"
+msgstr "ロードアベレージ（15分）"
+
+msgid "Scoreboard sending"
+msgstr "送信中"
+
+msgid "Scoreboard reading"
+msgstr "受信中"
+
+msgid "Scoreboard keepalive"
+msgstr "キープアライブ"
+
+msgid "Scoreboard waiting"
+msgstr "待機中"
+
+msgid "Scoreboard open slots"
+msgstr "オープンスロット"
+
+msgid "Active connections"
+msgstr "アクティブ接続"
+
+msgid "Reading"
+msgstr "読み取り中"
+
+msgid "Writing"
+msgstr "書き込み中"
+
+msgid "Total requests"
+msgstr "総リクエスト数"
+
+msgid "Accepts"
+msgstr "受け入れ"
+
+msgid "Handled"
+msgstr "処理済み"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_statusを有効にし（ExtendedStatus On）、localhostに/server-statusを許可してください。Nginx: localhost限定のロケーション（例: /nginx_status または /stub_status）でstub_statusを有効にしてください。"
+

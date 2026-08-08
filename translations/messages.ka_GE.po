@@ -38928,3 +38928,237 @@ msgstr "მასწავლებლები არ არიან"
 msgid "No users"
 msgstr "მომხმარებლები არ არიან"
 
+msgid "Calculation mode"
+msgstr "გამოთვლის რეჟიმი"
+
+msgid "Weighted average"
+msgstr "შეწონილი საშუალო"
+
+msgid "Points sum"
+msgstr "ქულების ჯამი"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "შეწონილი საშუალო ნორმალიზდება წონების ჯამით; ქულების ჯამი თითოეულ წონას მაქსიმალურ ქულად მიიჩნევს და მათ ნორმალიზაციის გარეშე აჯამებს."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "თითოეული ელემენტის წონა მის მაქსიმალურ ქულად მიიჩნევა; შეფასება არის ქულების ჯამი, არა ნორმალიზებული."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "შეფასება არის ელემენტების შეწონილი საშუალო, ნორმალიზებული წონების ჯამით."
+
+msgid "Forum participation"
+msgstr "ფორუმში მონაწილეობა"
+
+msgid "Forum thread"
+msgstr "ფორუმის თემა"
+
+msgid "Points for one message"
+msgstr "ქულები ერთი შეტყობინებისთვის"
+
+msgid "Points for two or more messages"
+msgstr "ქულები ორი ან მეტი შეტყობინებისთვის"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "ქულები, რომლებიც ენიჭება, როდესაც სტუდენტმა თემაში ზუსტად ერთი შეტყობინება გამოაქვეყნა."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "ქულები, რომლებიც ენიჭება, როდესაც სტუდენტმა თემაში ორი ან მეტი შეტყობინება გამოაქვეყნა."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "არასავალდებულო. თუ ცარიელი დარჩება, ერთი ან მეტი შეტყობინება იძლევა ერთი შეტყობინების ქულებს."
+
+msgid "Current password is required to change your password."
+msgstr "პაროლის შესაცვლელად საჭიროა მიმდინარე პაროლი."
+
+msgid "The 2FA code is required."
+msgstr "საჭიროა 2FA კოდი."
+
+msgid "Invalid 2FA configuration."
+msgstr "არასწორი 2FA კონფიგურაცია."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA კოდი არასწორია ან ვადაგასულია."
+
+msgid "Database load"
+msgstr "მონაცემთა ბაზის დატვირთვა"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL და MariaDB სერვერის დატვირთვის მეტრიკები"
+
+msgid "Click to show database server load metrics"
+msgstr "დააჭირეთ მონაცემთა ბაზის სერვერის დატვირთვის მეტრიკების საჩვენებლად"
+
+msgid "Threads connected"
+msgstr "დაკავშირებული ნაკადები"
+
+msgid "Temporary tables on disk"
+msgstr "დროებითი ცხრილები დისკზე"
+
+msgid "Privilege scope"
+msgstr "პრივილეგიების ფარგლები"
+
+msgid "Not measurable with the current database user"
+msgstr "მიმდინარე მონაცემთა ბაზის მომხმარებლით არ იზომება"
+
+msgid "Uptime"
+msgstr "მუშაობის დრო"
+
+msgid "Queries per second"
+msgstr "მოთხოვნები წამში"
+
+msgid "Slow queries"
+msgstr "ნელი მოთხოვნები"
+
+msgid "Slow query time limit"
+msgstr "ნელი მოთხოვნის დროის ლიმიტი"
+
+msgid "Slow query log"
+msgstr "ნელი მოთხოვნების ჟურნალი"
+
+msgid "Slow queries per second"
+msgstr "ნელი მოთხოვნები წამში"
+
+msgid "Threads running"
+msgstr "მიმდინარე თრედები"
+
+msgid "Threads cached"
+msgstr "ქეშირებული თრედები"
+
+msgid "Table lock waits"
+msgstr "ცხრილის დაბლოკვის მოლოდინები"
+
+msgid "Row lock waits"
+msgstr "მწკრივის დაბლოკვის მოლოდინები"
+
+msgid "Aborted connections"
+msgstr "გაწყვეტილი კავშირები"
+
+msgid "Opened tables"
+msgstr "გახსნილი ცხრილები"
+
+msgid "Query cache"
+msgstr "მოთხოვნების ქეში"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "მონაცემთა ბაზის დატვირთვის მეტრიკები ხელმისაწვდომია მხოლოდ MySQL და MariaDB-სთვის."
+
+msgid "Inserts"
+msgstr "ჩანაწერები"
+
+msgid "Hit rate"
+msgstr "დარტყმის მაჩვენებელი"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "ავტომატური განახლება ყოველ 5 წამში"
+
+msgid "Web server load"
+msgstr "ვებ სერვერის დატვირთვა"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Apache-ის ან Nginx-ის სტატუსის მეტრიკები რეალურ დროში"
+
+msgid "Click to show web server load metrics"
+msgstr "დააჭირეთ ვებ სერვერის დატვირთვის მეტრიკების საჩვენებლად"
+
+msgid "Requires a local web server status module"
+msgstr "მოითხოვს ლოკალური ვებ სერვერის სტატუსის მოდულს"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ვებ სერვერის დატვირთვა იკითხება Apache mod_status-იდან ან Nginx stub_status-იდან მხოლოდ localhost-ზე. სტატუსის გვერდი უნდა იძლეოდეს მოთხოვნებს 127.0.0.1-დან (ან ::1-დან)."
+
+msgid "Paths scanned"
+msgstr "სკანირებული ბილიკები"
+
+msgid "Detected"
+msgstr "აღმოჩენილი"
+
+msgid "Status path"
+msgstr "სტატუსის ბილიკი"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "ვებ სერვერის დატვირთვის მეტრიკები ხელმისაწვდომია მხოლოდ Apache-ისა და Nginx-ისთვის."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "სკანირებულ სტატუსის ბილიკებიდან არცერთი არ უპასუხა localhost-ზე."
+
+msgid "Busy workers"
+msgstr "დაკავებული მუშები"
+
+msgid "Idle workers"
+msgstr "უმოქმედო მუშები"
+
+msgid "Graceful workers"
+msgstr "მშვიდობიანი მუშები"
+
+msgid "Server MPM"
+msgstr "სერვერის MPM"
+
+msgid "Requests per second (live)"
+msgstr "მოთხოვნები წამში (რეალურ დროში)"
+
+msgid "Requests per second (since start)"
+msgstr "მოთხოვნები წამში (დაწყებიდან)"
+
+msgid "Bytes per second (live)"
+msgstr "ბაიტები წამში (რეალურ დროში)"
+
+msgid "Bytes per second (since start)"
+msgstr "ბაიტები წამში (დაწყებიდან)"
+
+msgid "Bytes per request"
+msgstr "ბაიტები მოთხოვნაზე"
+
+msgid "Total accesses"
+msgstr "სულ წვდომები"
+
+msgid "Total traffic"
+msgstr "სულ ტრაფიკი"
+
+msgid "CPU load"
+msgstr "CPU დატვირთვა"
+
+msgid "Load average (1 min)"
+msgstr "საშუალო დატვირთვა (1 წთ)"
+
+msgid "Load average (5 min)"
+msgstr "საშუალო დატვირთვა (5 წთ)"
+
+msgid "Load average (15 min)"
+msgstr "საშუალო დატვირთვა (15 წთ)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard გაგზავნა"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard კითხვა"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard მოლოდინი"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard ღია სლოტები"
+
+msgid "Active connections"
+msgstr "აქტიური კავშირები"
+
+msgid "Reading"
+msgstr "კითხვა"
+
+msgid "Writing"
+msgstr "ჩაწერა"
+
+msgid "Total requests"
+msgstr "სულ მოთხოვნები"
+
+msgid "Accepts"
+msgstr "მიღებები"
+
+msgid "Handled"
+msgstr "დამუშავებული"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ჩართეთ mod_status (ExtendedStatus On) და დაუშვით localhost-ს წვდომა /server-status-ზე. Nginx: ჩართეთ stub_status მხოლოდ localhost-ისთვის განკუთვნილ მდებარეობაზე, მაგალითად /nginx_status ან /stub_status."
+

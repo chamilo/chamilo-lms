@@ -38932,3 +38932,237 @@ msgstr "튜터 없음"
 msgid "No users"
 msgstr "사용자 없음"
 
+msgid "Calculation mode"
+msgstr "계산 모드"
+
+msgid "Weighted average"
+msgstr "가중 평균"
+
+msgid "Points sum"
+msgstr "점수 합계"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "가중 평균은 가중치 합계로 정규화합니다. 점수 합계는 각 가중치를 최대 점수로 취급하여 정규화 없이 합산합니다."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "각 항목의 가중치를 최대 점수로 취급하며, 점수는 정규화되지 않고 합산됩니다."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "성적은 가중치 합계로 정규화된 항목들의 가중 평균입니다."
+
+msgid "Forum participation"
+msgstr "포럼 참여"
+
+msgid "Forum thread"
+msgstr "포럼 스레드"
+
+msgid "Points for one message"
+msgstr "메시지 1개당 점수"
+
+msgid "Points for two or more messages"
+msgstr "메시지 2개 이상 점수"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "학생이 스레드에 정확히 한 개의 메시지를 게시했을 때 부여되는 점수입니다."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "학생이 스레드에 두 개 이상의 메시지를 게시했을 때 부여되는 점수입니다."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "선택 사항. 비워두면 한 개 이상의 메시지에 대해 한 개 메시지 점수가 부여됩니다."
+
+msgid "Current password is required to change your password."
+msgstr "비밀번호를 변경하려면 현재 비밀번호가 필요합니다."
+
+msgid "The 2FA code is required."
+msgstr "2FA 코드가 필요합니다."
+
+msgid "Invalid 2FA configuration."
+msgstr "잘못된 2FA 구성입니다."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA 코드가 유효하지 않거나 만료되었습니다."
+
+msgid "Database load"
+msgstr "데이터베이스 부하"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "실시간 MySQL 및 MariaDB 서버 부하 지표"
+
+msgid "Click to show database server load metrics"
+msgstr "데이터베이스 서버 부하 지표를 보려면 클릭하세요"
+
+msgid "Threads connected"
+msgstr "연결된 스레드"
+
+msgid "Temporary tables on disk"
+msgstr "디스크의 임시 테이블"
+
+msgid "Privilege scope"
+msgstr "권한 범위"
+
+msgid "Not measurable with the current database user"
+msgstr "현재 데이터베이스 사용자로는 측정할 수 없습니다"
+
+msgid "Uptime"
+msgstr "가동 시간"
+
+msgid "Queries per second"
+msgstr "초당 쿼리 수"
+
+msgid "Slow queries"
+msgstr "느린 쿼리"
+
+msgid "Slow query time limit"
+msgstr "느린 쿼리 시간 제한"
+
+msgid "Slow query log"
+msgstr "느린 쿼리 로그"
+
+msgid "Slow queries per second"
+msgstr "초당 느린 쿼리"
+
+msgid "Threads running"
+msgstr "실행 중인 스레드"
+
+msgid "Threads cached"
+msgstr "캐시된 스레드"
+
+msgid "Table lock waits"
+msgstr "테이블 잠금 대기"
+
+msgid "Row lock waits"
+msgstr "행 잠금 대기"
+
+msgid "Aborted connections"
+msgstr "중단된 연결"
+
+msgid "Opened tables"
+msgstr "열린 테이블"
+
+msgid "Query cache"
+msgstr "쿼리 캐시"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "데이터베이스 부하 지표는 MySQL 및 MariaDB에서만 사용할 수 있습니다."
+
+msgid "Inserts"
+msgstr "삽입"
+
+msgid "Hit rate"
+msgstr "적중률"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "5초마다 자동 새로고침"
+
+msgid "Web server load"
+msgstr "웹 서버 부하"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "실시간 Apache 또는 Nginx 상태 지표"
+
+msgid "Click to show web server load metrics"
+msgstr "웹 서버 부하 지표를 보려면 클릭"
+
+msgid "Requires a local web server status module"
+msgstr "로컬 웹 서버 상태 모듈 필요"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "웹 서버 부하 지표는 localhost의 Apache mod_status 또는 Nginx stub_status에서만 읽어옵니다. 상태 페이지는 127.0.0.1(또는 ::1)에서의 요청을 허용해야 합니다."
+
+msgid "Paths scanned"
+msgstr "스캔된 경로"
+
+msgid "Detected"
+msgstr "감지됨"
+
+msgid "Status path"
+msgstr "상태 경로"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "웹 서버 부하 지표는 Apache 및 Nginx에서만 사용할 수 있습니다."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "스캔된 상태 경로 중 localhost에서 응답한 경로가 없습니다."
+
+msgid "Busy workers"
+msgstr "사용 중인 작업자"
+
+msgid "Idle workers"
+msgstr "대기 중인 작업자"
+
+msgid "Graceful workers"
+msgstr "정상 종료 중인 작업자"
+
+msgid "Server MPM"
+msgstr "서버 MPM"
+
+msgid "Requests per second (live)"
+msgstr "초당 요청 수 (실시간)"
+
+msgid "Requests per second (since start)"
+msgstr "초당 요청 수 (시작 이후)"
+
+msgid "Bytes per second (live)"
+msgstr "초당 바이트 수 (실시간)"
+
+msgid "Bytes per second (since start)"
+msgstr "초당 바이트 수 (시작 이후)"
+
+msgid "Bytes per request"
+msgstr "요청당 바이트 수"
+
+msgid "Total accesses"
+msgstr "총 접근 수"
+
+msgid "Total traffic"
+msgstr "총 트래픽"
+
+msgid "CPU load"
+msgstr "CPU 부하"
+
+msgid "Load average (1 min)"
+msgstr "부하 평균 (1분)"
+
+msgid "Load average (5 min)"
+msgstr "부하 평균 (5분)"
+
+msgid "Load average (15 min)"
+msgstr "부하 평균 (15분)"
+
+msgid "Scoreboard sending"
+msgstr "스코어보드 전송 중"
+
+msgid "Scoreboard reading"
+msgstr "스코어보드 읽기 중"
+
+msgid "Scoreboard keepalive"
+msgstr "스코어보드 keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "스코어보드 대기 중"
+
+msgid "Scoreboard open slots"
+msgstr "스코어보드 열린 슬롯"
+
+msgid "Active connections"
+msgstr "활성 연결"
+
+msgid "Reading"
+msgstr "읽기"
+
+msgid "Writing"
+msgstr "쓰기"
+
+msgid "Total requests"
+msgstr "총 요청 수"
+
+msgid "Accepts"
+msgstr "수락"
+
+msgid "Handled"
+msgstr "처리됨"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status(ExtendedStatus On)를 활성화하고 localhost가 /server-status에 접근할 수 있도록 허용하세요. Nginx: /nginx_status 또는 /stub_status와 같은 localhost 전용 위치에서 stub_status를 활성화하세요."
+

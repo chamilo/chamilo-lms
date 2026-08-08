@@ -40814,6 +40814,45 @@ msgstr "Aucun tuteur"
 msgid "No users"
 msgstr "Aucun utilisateur"
 
+msgid "Calculation mode"
+msgstr "Mode de calcul"
+
+msgid "Weighted average"
+msgstr "Moyenne pondérée"
+
+msgid "Points sum"
+msgstr "Somme des points"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "La moyenne pondérée normalise par la somme des pondérations ; la somme des points considère chaque pondération comme un maximum de points et les additionne sans normalisation."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Chaque pondération d’élément est traitée comme son maximum de points ; la note est la somme des points, non normalisée."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "La note est la moyenne pondérée des éléments, normalisée par la somme des pondérations."
+
+msgid "Forum participation"
+msgstr "Participation au forum"
+
+msgid "Forum thread"
+msgstr "Fil de discussion du forum"
+
+msgid "Points for one message"
+msgstr "Points pour un message"
+
+msgid "Points for two or more messages"
+msgstr "Points pour deux messages ou plus"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Points attribués lorsque l’étudiant a publié exactement un message dans le fil."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Points attribués lorsque l’étudiant a publié deux messages ou plus dans le fil."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Optionnel. Si laissé vide, un ou plusieurs messages attribuent les points pour un message."
+
 msgid "Current password is required to change your password."
 msgstr "Le mot de passe actuel est requis pour changer votre mot de passe."
 
@@ -40825,4 +40864,187 @@ msgstr "Configuration 2FA invalide."
 
 msgid "The 2FA code is invalid or expired."
 msgstr "Le code 2FA est invalide ou a expiré."
+
+msgid "Database load"
+msgstr "Charge de la base de données"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Métriques de charge du serveur MySQL et MariaDB en direct"
+
+msgid "Click to show database server load metrics"
+msgstr "Cliquez pour afficher les métriques de charge du serveur de base de données"
+
+msgid "Threads connected"
+msgstr "Threads connectés"
+
+msgid "Temporary tables on disk"
+msgstr "Tables temporaires sur disque"
+
+msgid "Privilege scope"
+msgstr "Portée des privilèges"
+
+msgid "Not measurable with the current database user"
+msgstr "Non mesurable avec l’utilisateur de base de données actuel"
+
+msgid "Uptime"
+msgstr "Temps de disponibilité"
+
+msgid "Queries per second"
+msgstr "Requêtes par seconde"
+
+msgid "Slow queries"
+msgstr "Requêtes lentes"
+
+msgid "Slow query time limit"
+msgstr "Limite de temps des requêtes lentes"
+
+msgid "Slow query log"
+msgstr "Journal des requêtes lentes"
+
+msgid "Slow queries per second"
+msgstr "Requêtes lentes par seconde"
+
+msgid "Threads running"
+msgstr "Threads en cours d'exécution"
+
+msgid "Threads cached"
+msgstr "Threads en cache"
+
+msgid "Table lock waits"
+msgstr "Attentes de verrouillage de table"
+
+msgid "Row lock waits"
+msgstr "Attentes de verrouillage de ligne"
+
+msgid "Aborted connections"
+msgstr "Connexions interrompues"
+
+msgid "Opened tables"
+msgstr "Tables ouvertes"
+
+msgid "Query cache"
+msgstr "Cache de requêtes"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Les métriques de charge de la base de données ne sont disponibles que pour MySQL et MariaDB."
+
+msgid "Inserts"
+msgstr "Insertions"
+
+msgid "Hit rate"
+msgstr "Taux de succès"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Actualisation automatique toutes les 5 secondes"
+
+msgid "Web server load"
+msgstr "Charge du serveur web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Métriques de statut Apache ou Nginx en direct"
+
+msgid "Click to show web server load metrics"
+msgstr "Cliquez pour afficher les métriques de charge du serveur web"
+
+msgid "Requires a local web server status module"
+msgstr "Nécessite un module de statut du serveur web local"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "La charge du serveur web est lue depuis Apache mod_status ou Nginx stub_status uniquement sur localhost. La page de statut doit autoriser les requêtes depuis 127.0.0.1 (ou ::1)."
+
+msgid "Paths scanned"
+msgstr "Chemins analysés"
+
+msgid "Detected"
+msgstr "Détecté"
+
+msgid "Status path"
+msgstr "Chemin de statut"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Les métriques de charge du serveur web ne sont disponibles que pour Apache et Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Aucun des chemins de statut analysés n'a répondu sur localhost."
+
+msgid "Busy workers"
+msgstr "Workers occupés"
+
+msgid "Idle workers"
+msgstr "Workers inactifs"
+
+msgid "Graceful workers"
+msgstr "Workers gracieux"
+
+msgid "Server MPM"
+msgstr "MPM du serveur"
+
+msgid "Requests per second (live)"
+msgstr "Requêtes par seconde (en direct)"
+
+msgid "Requests per second (since start)"
+msgstr "Requêtes par seconde (depuis le démarrage)"
+
+msgid "Bytes per second (live)"
+msgstr "Octets par seconde (en direct)"
+
+msgid "Bytes per second (since start)"
+msgstr "Octets par seconde (depuis le démarrage)"
+
+msgid "Bytes per request"
+msgstr "Octets par requête"
+
+msgid "Total accesses"
+msgstr "Accès totaux"
+
+msgid "Total traffic"
+msgstr "Trafic total"
+
+msgid "CPU load"
+msgstr "Charge CPU"
+
+msgid "Load average (1 min)"
+msgstr "Moyenne de charge (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Moyenne de charge (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Moyenne de charge (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard envoi"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard lecture"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard attente"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard emplacements libres"
+
+msgid "Active connections"
+msgstr "Connexions actives"
+
+msgid "Reading"
+msgstr "Lecture"
+
+msgid "Writing"
+msgstr "Écriture"
+
+msgid "Total requests"
+msgstr "Requêtes totales"
+
+msgid "Accepts"
+msgstr "Acceptées"
+
+msgid "Handled"
+msgstr "Traités"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache : activez mod_status (ExtendedStatus On) et autorisez localhost vers /server-status. Nginx : activez stub_status sur un emplacement localhost uniquement tel que /nginx_status ou /stub_status."
 

@@ -38933,3 +38933,237 @@ msgstr "Engir leiðbeinendur"
 msgid "No users"
 msgstr "Engir notendur"
 
+msgid "Calculation mode"
+msgstr "Útreikningshamur"
+
+msgid "Weighted average"
+msgstr "Vægið meðaltal"
+
+msgid "Points sum"
+msgstr "Stigasumma"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Vægið meðaltal normaliserar eftir summu væga; stigasumma meðhöndlar hvert vægi sem hámarksstig og leggur þau saman án normaliseringar."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Hvert atriði er meðhöndlað sem hámarksstig; einkunnin er summa stiga, ekki normaliseruð."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Einkunnin er vægið meðaltal atriða, normaliseruð eftir summu væga."
+
+msgid "Forum participation"
+msgstr "Þátttaka í umræðum"
+
+msgid "Forum thread"
+msgstr "Umræðuþráður"
+
+msgid "Points for one message"
+msgstr "Stig fyrir eina skilaboð"
+
+msgid "Points for two or more messages"
+msgstr "Stig fyrir tvö eða fleiri skilaboð"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Stig sem veitt eru þegar nemandi sendi nákvæmlega eitt skilaboð í þráðnum."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Stig sem veitt eru þegar nemandi sendi tvö eða fleiri skilaboð í þráðnum."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Valfrjálst. Ef látið er autt, veitir eitt eða fleiri skilaboð stig fyrir eina skilaboð."
+
+msgid "Current password is required to change your password."
+msgstr "Núverandi lykilorð er nauðsynlegt til að breyta lykilorði þínu."
+
+msgid "The 2FA code is required."
+msgstr "2FA kóði er nauðsynlegur."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ógild 2FA uppsetning."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kóði er ógildur eða útrunninn."
+
+msgid "Database load"
+msgstr "Gagnagrunnsálag"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL og MariaDB netþjónsálagsmælingar"
+
+msgid "Click to show database server load metrics"
+msgstr "Smelltu til að sýna gagnagrunnsnetþjónsálagsmælingar"
+
+msgid "Threads connected"
+msgstr "Tengdir þræðir"
+
+msgid "Temporary tables on disk"
+msgstr "Tímabundnar töflur á diski"
+
+msgid "Privilege scope"
+msgstr "Réttindasvið"
+
+msgid "Not measurable with the current database user"
+msgstr "Ekki mælanlegt með núverandi gagnagrunnsnotanda"
+
+msgid "Uptime"
+msgstr "Uppitími"
+
+msgid "Queries per second"
+msgstr "Fyrirspurnir á sekúndu"
+
+msgid "Slow queries"
+msgstr "Hægar fyrirspurnir"
+
+msgid "Slow query time limit"
+msgstr "Tímamörk hægra fyrirspurna"
+
+msgid "Slow query log"
+msgstr "Logi hægra fyrirspurna"
+
+msgid "Slow queries per second"
+msgstr "Hægar fyrirspurnir á sekúndu"
+
+msgid "Threads running"
+msgstr "Keyrandi þræðir"
+
+msgid "Threads cached"
+msgstr "Í skyndiminni þræðir"
+
+msgid "Table lock waits"
+msgstr "Bið eftir töflulæsingum"
+
+msgid "Row lock waits"
+msgstr "Bið eftir raðlæsingum"
+
+msgid "Aborted connections"
+msgstr "Aflokaðar tengingar"
+
+msgid "Opened tables"
+msgstr "Opnaðar töflur"
+
+msgid "Query cache"
+msgstr "Fyrirspurnaskyndiminni"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Gagnagrunnsálagsmælingar eru aðeins tiltækar fyrir MySQL og MariaDB."
+
+msgid "Inserts"
+msgstr "Innsetningar"
+
+msgid "Hit rate"
+msgstr "Vinnsluhlutfall"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Sjálfvirk endurnýjun á 5 sekúndna fresti"
+
+msgid "Web server load"
+msgstr "Vefþjónsálag"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live Apache eða Nginx stöðumælingar"
+
+msgid "Click to show web server load metrics"
+msgstr "Smelltu til að sýna vefþjónsálagsmælingar"
+
+msgid "Requires a local web server status module"
+msgstr "Krefst staðbundins vefþjóns stöðueiningar"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Vefþjónsálag er lesið úr Apache mod_status eða Nginx stub_status eingöngu á localhost. Stöðusíðan verður að leyfa beiðnir frá 127.0.0.1 (eða ::1)."
+
+msgid "Paths scanned"
+msgstr "Skannaðar slóðir"
+
+msgid "Detected"
+msgstr "Greint"
+
+msgid "Status path"
+msgstr "Stöðuslóð"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Vefþjónsálagsmælingar eru aðeins tiltækar fyrir Apache og Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Engin af skönnuðu stöðuleiðunum svaraði á localhost."
+
+msgid "Busy workers"
+msgstr "Uppteknir starfsmenn"
+
+msgid "Idle workers"
+msgstr "Óvirkir starfsmenn"
+
+msgid "Graceful workers"
+msgstr "Náðir starfsmenn"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Fyrirspurnir á sekúndu (lifandi)"
+
+msgid "Requests per second (since start)"
+msgstr "Fyrirspurnir á sekúndu (frá byrjun)"
+
+msgid "Bytes per second (live)"
+msgstr "Bæti á sekúndu (lifandi)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bæti á sekúndu (frá byrjun)"
+
+msgid "Bytes per request"
+msgstr "Bæti á beiðni"
+
+msgid "Total accesses"
+msgstr "Heildaraðgangar"
+
+msgid "Total traffic"
+msgstr "Heildarumferð"
+
+msgid "CPU load"
+msgstr "CPU-hleðsla"
+
+msgid "Load average (1 min)"
+msgstr "Meðaltal hleðslu (1 mín)"
+
+msgid "Load average (5 min)"
+msgstr "Meðaltal hleðslu (5 mín)"
+
+msgid "Load average (15 min)"
+msgstr "Meðaltal hleðslu (15 mín)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard sending"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard lestur"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard bið"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard opin sæti"
+
+msgid "Active connections"
+msgstr "Virkar tengingar"
+
+msgid "Reading"
+msgstr "Lestur"
+
+msgid "Writing"
+msgstr "Skrifun"
+
+msgid "Total requests"
+msgstr "Heildarfyrirspurnir"
+
+msgid "Accepts"
+msgstr "Samþykktir"
+
+msgid "Handled"
+msgstr "Meðhöndlaðir"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: virkjaðu mod_status (ExtendedStatus On) og leyfðu localhost aðgang að /server-status. Nginx: virkjaðu stub_status á staðsetningu sem er aðeins fyrir localhost eins og /nginx_status eða /stub_status."
+

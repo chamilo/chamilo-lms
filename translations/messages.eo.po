@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:dosierujo,, application/msword:MsWord,, application/octet-stream:oktetfluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -38933,4 +38933,238 @@ msgstr "Neniuj tutoroj"
 
 msgid "No users"
 msgstr "Neniuj uzantoj"
+
+msgid "Calculation mode"
+msgstr "Kalkulreĝimo"
+
+msgid "Weighted average"
+msgstr "Peza mezumo"
+
+msgid "Points sum"
+msgstr "Sumo de poentoj"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Peza mezumo normaligas per la sumo de pezoj; sumo de poentoj traktas ĉiun pezon kiel maksimumajn poentojn kaj adicias ilin sen normaligo."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Ĉiu eropezo estas traktata kiel ĝiaj maksimumaj poentoj; la noto estas la sumo de poentoj, ne normaligita."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "La noto estas la peza mezumo de eroj, normaligita per la sumo de pezoj."
+
+msgid "Forum participation"
+msgstr "Partopreno en forumo"
+
+msgid "Forum thread"
+msgstr "Forumfadeno"
+
+msgid "Points for one message"
+msgstr "Poentoj por unu mesaĝo"
+
+msgid "Points for two or more messages"
+msgstr "Poentoj por du aŭ pli da mesaĝoj"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Poentoj aljuĝitaj kiam la studento afiŝis precize unu mesaĝon en la fadeno."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Poentoj aljuĝitaj kiam la studento afiŝis du aŭ pli da mesaĝoj en la fadeno."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Laŭvola. Se lasita malplena, unu aŭ pli da mesaĝoj aljuĝas la poentojn por unu mesaĝo."
+
+msgid "Current password is required to change your password."
+msgstr "La nuna pasvorto estas bezonata por ŝanĝi vian pasvorton."
+
+msgid "The 2FA code is required."
+msgstr "La 2FA-kodo estas bezonata."
+
+msgid "Invalid 2FA configuration."
+msgstr "Nevalida 2FA-agordo."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "La 2FA-kodo estas nevalida aŭ eksvalidiĝinta."
+
+msgid "Database load"
+msgstr "Datumbaza ŝarĝo"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Vivaj MySQL kaj MariaDB-servilaj ŝarĝaj metrikoj"
+
+msgid "Click to show database server load metrics"
+msgstr "Klaku por montri datumbazajn servilajn ŝarĝajn metrikojn"
+
+msgid "Threads connected"
+msgstr "Konektitaj fadenoj"
+
+msgid "Temporary tables on disk"
+msgstr "Provizoraj tabeloj sur disko"
+
+msgid "Privilege scope"
+msgstr "Privilegia amplekso"
+
+msgid "Not measurable with the current database user"
+msgstr "Ne mezurebla kun la nuna datumbaza uzanto"
+
+msgid "Uptime"
+msgstr "Funkciada tempo"
+
+msgid "Queries per second"
+msgstr "Demandoj por sekundo"
+
+msgid "Slow queries"
+msgstr "Malrapidaj demandoj"
+
+msgid "Slow query time limit"
+msgstr "Limo de malrapida demando"
+
+msgid "Slow query log"
+msgstr "Protokolo de malrapidaj demandoj"
+
+msgid "Slow queries per second"
+msgstr "Malrapidaj demandoj por sekundo"
+
+msgid "Threads running"
+msgstr "Fadenoj funkciantaj"
+
+msgid "Threads cached"
+msgstr "Fadenoj kaŝmemorigitaj"
+
+msgid "Table lock waits"
+msgstr "Atendoj de tabelŝlosado"
+
+msgid "Row lock waits"
+msgstr "Atendoj de vicoŝlosado"
+
+msgid "Aborted connections"
+msgstr "Ĉesigitaj konektoj"
+
+msgid "Opened tables"
+msgstr "Malfermitaj tabeloj"
+
+msgid "Query cache"
+msgstr "Demanda kaŝmemoro"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Datumbazaj ŝarĝaj metrikoj disponeblas nur por MySQL kaj MariaDB."
+
+msgid "Inserts"
+msgstr "Enmetoj"
+
+msgid "Hit rate"
+msgstr "Trafaĵo-proporcio"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Aŭtomata refreŝigo ĉiujn 5 sekundojn"
+
+msgid "Web server load"
+msgstr "Ŝarĝo de retservilo"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Vivaj metrikoj de Apache aŭ Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Alklaku por montri ŝarĝajn metrikojn de retservilo"
+
+msgid "Requires a local web server status module"
+msgstr "Postulas lokan retservilan statmodulon"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ŝarĝo de retservilo estas legita nur el Apache mod_status aŭ Nginx stub_status sur localhost. La statpaĝo devas permesi petojn de 127.0.0.1 (aŭ ::1)."
+
+msgid "Paths scanned"
+msgstr "Skanitaj vojoj"
+
+msgid "Detected"
+msgstr "Detektita"
+
+msgid "Status path"
+msgstr "Statvojo"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Ŝarĝaj metrikoj de retservilo disponeblas nur por Apache kaj Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Neniu el la skanitaj statvojoj respondis sur localhost."
+
+msgid "Busy workers"
+msgstr "Okupataj laborantoj"
+
+msgid "Idle workers"
+msgstr "Neaktivaj laborantoj"
+
+msgid "Graceful workers"
+msgstr "Graciaj laborantoj"
+
+msgid "Server MPM"
+msgstr "Servila MPM"
+
+msgid "Requests per second (live)"
+msgstr "Petoj por sekundo (viva)"
+
+msgid "Requests per second (since start)"
+msgstr "Petoj por sekundo (ekde komenco)"
+
+msgid "Bytes per second (live)"
+msgstr "Bajtoj por sekundo (viva)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bajtoj por sekundo (ekde komenco)"
+
+msgid "Bytes per request"
+msgstr "Bajtoj por peto"
+
+msgid "Total accesses"
+msgstr "Totalaj aliroj"
+
+msgid "Total traffic"
+msgstr "Totala trafiko"
+
+msgid "CPU load"
+msgstr "CPU-ŝarĝo"
+
+msgid "Load average (1 min)"
+msgstr "Ŝarĝmezumo (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Ŝarĝmezumo (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Ŝarĝmezumo (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Tabulo sendanta"
+
+msgid "Scoreboard reading"
+msgstr "Tabulo leganta"
+
+msgid "Scoreboard keepalive"
+msgstr "Tabulo daŭriganta"
+
+msgid "Scoreboard waiting"
+msgstr "Tabulo atendanta"
+
+msgid "Scoreboard open slots"
+msgstr "Malfermitaj lokoj en la poenttabulo"
+
+msgid "Active connections"
+msgstr "Aktivaj konektoj"
+
+msgid "Reading"
+msgstr "Legado"
+
+msgid "Writing"
+msgstr "Skribado"
+
+msgid "Total requests"
+msgstr "Totalaj petoj"
+
+msgid "Accepts"
+msgstr "Akceptitaj"
+
+msgid "Handled"
+msgstr "Traktitaj"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ebligu mod_status (ExtendedStatus On) kaj permesu localhost al /server-status. Nginx: ebligu stub_status en loka nur-loko kiel /nginx_status aŭ /stub_status."
 

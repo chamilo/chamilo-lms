@@ -38928,3 +38928,237 @@ msgstr "Hakuna wakufunzi"
 msgid "No users"
 msgstr "Hakuna watumiaji"
 
+msgid "Calculation mode"
+msgstr "Calculation mode"
+
+msgid "Weighted average"
+msgstr "Weighted average"
+
+msgid "Points sum"
+msgstr "Points sum"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "The grade is the weighted average of items, normalized by the sum of weights."
+
+msgid "Forum participation"
+msgstr "Forum participation"
+
+msgid "Forum thread"
+msgstr "Uzi wa jukwaa"
+
+msgid "Points for one message"
+msgstr "Pointi kwa ujumbe mmoja"
+
+msgid "Points for two or more messages"
+msgstr "Pointi kwa jumbe mbili au zaidi"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Pointi zinazotolewa wakati mwanafunzi alichapisha ujumbe mmoja tu kwenye uzi."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Pointi zinazotolewa wakati mwanafunzi alichapisha jumbe mbili au zaidi kwenye uzi."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Si lazima. Ikiachwa tupu, jumbe moja au zaidi zitatoa pointi za ujumbe mmoja."
+
+msgid "Current password is required to change your password."
+msgstr "Nenosiri la sasa linahitajika ili kubadilisha nenosiri lako."
+
+msgid "The 2FA code is required."
+msgstr "Msimbo wa 2FA unahitajika."
+
+msgid "Invalid 2FA configuration."
+msgstr "Usanidi batili wa 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Msimbo wa 2FA si sahihi au umekwisha muda wake."
+
+msgid "Database load"
+msgstr "Mzigo wa hifadhidata"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Vipimo vya mzigo wa seva ya MySQL na MariaDB moja kwa moja"
+
+msgid "Click to show database server load metrics"
+msgstr "Bofya ili kuonyesha vipimo vya mzigo wa seva ya hifadhidata"
+
+msgid "Threads connected"
+msgstr "Nyuzi zilizounganishwa"
+
+msgid "Temporary tables on disk"
+msgstr "Majedwali ya muda kwenye diski"
+
+msgid "Privilege scope"
+msgstr "Wigo wa haki"
+
+msgid "Not measurable with the current database user"
+msgstr "Haiwezi kupimwa na mtumiaji wa hifadhidata wa sasa"
+
+msgid "Uptime"
+msgstr "Muda wa kufanya kazi"
+
+msgid "Queries per second"
+msgstr "Maswali kwa sekunde"
+
+msgid "Slow queries"
+msgstr "Maswali ya polepole"
+
+msgid "Slow query time limit"
+msgstr "Kikomo cha muda wa maswali ya polepole"
+
+msgid "Slow query log"
+msgstr "Kumbukumbu ya maswali ya polepole"
+
+msgid "Slow queries per second"
+msgstr "Maswali ya polepole kwa sekunde"
+
+msgid "Threads running"
+msgstr "Nyuzi zinazofanya kazi"
+
+msgid "Threads cached"
+msgstr "Nyuzi zilizohifadhiwa"
+
+msgid "Table lock waits"
+msgstr "Kusubiri kwa kufuli za jedwali"
+
+msgid "Row lock waits"
+msgstr "Kusubiri kwa kufuli za safu"
+
+msgid "Aborted connections"
+msgstr "Miunganisho iliyokatizwa"
+
+msgid "Opened tables"
+msgstr "Majedwali yaliyofunguliwa"
+
+msgid "Query cache"
+msgstr "Kache ya maswali"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Vipimo vya mzigo wa hifadhidata vinapatikana tu kwa MySQL na MariaDB."
+
+msgid "Inserts"
+msgstr "Viingizo"
+
+msgid "Hit rate"
+msgstr "Kiwango cha kugonga"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Sasisha kiotomatiki kila sekunde 5"
+
+msgid "Web server load"
+msgstr "Mzigo wa seva ya wavuti"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Vipimo vya hali ya Apache au Nginx moja kwa moja"
+
+msgid "Click to show web server load metrics"
+msgstr "Bofya ili kuonyesha vipimo vya mzigo wa seva ya wavuti"
+
+msgid "Requires a local web server status module"
+msgstr "Inahitaji moduli ya hali ya seva ya wavuti ya ndani"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Mzigo wa seva ya wavuti husomwa kutoka Apache mod_status au Nginx stub_status kwenye localhost pekee. Ukurasa wa hali lazima uruhusu maombi kutoka 127.0.0.1 (au ::1)."
+
+msgid "Paths scanned"
+msgstr "Njia zilizochanganuliwa"
+
+msgid "Detected"
+msgstr "Zimegunduliwa"
+
+msgid "Status path"
+msgstr "Njia ya hali"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Vipimo vya mzigo wa seva ya wavuti vinapatikana tu kwa Apache na Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Hakuna njia za hali zilizochanganuliwa zilizojibu kwenye localhost."
+
+msgid "Busy workers"
+msgstr "Wafanyakazi wanaofanya kazi"
+
+msgid "Idle workers"
+msgstr "Wafanyakazi wasiofanya kazi"
+
+msgid "Graceful workers"
+msgstr "Wafanyakazi wenye neema"
+
+msgid "Server MPM"
+msgstr "MPM ya seva"
+
+msgid "Requests per second (live)"
+msgstr "Maombi kwa sekunde (moja kwa moja)"
+
+msgid "Requests per second (since start)"
+msgstr "Maombi kwa sekunde (tangu kuanza)"
+
+msgid "Bytes per second (live)"
+msgstr "Baiti kwa sekunde (moja kwa moja)"
+
+msgid "Bytes per second (since start)"
+msgstr "Baiti kwa sekunde (tangu kuanza)"
+
+msgid "Bytes per request"
+msgstr "Baiti kwa ombi"
+
+msgid "Total accesses"
+msgstr "Jumla ya ufikiaji"
+
+msgid "Total traffic"
+msgstr "Jumla ya trafiki"
+
+msgid "CPU load"
+msgstr "Mzigo wa CPU"
+
+msgid "Load average (1 min)"
+msgstr "Wastani wa mzigo (dakika 1)"
+
+msgid "Load average (5 min)"
+msgstr "Wastani wa mzigo (dakika 5)"
+
+msgid "Load average (15 min)"
+msgstr "Wastani wa mzigo (dakika 15)"
+
+msgid "Scoreboard sending"
+msgstr "Ubao wa alama unatuma"
+
+msgid "Scoreboard reading"
+msgstr "Ubao wa alama unasoma"
+
+msgid "Scoreboard keepalive"
+msgstr "Ubao wa alama unaendelea"
+
+msgid "Scoreboard waiting"
+msgstr "Ubao wa alama unasubiri"
+
+msgid "Scoreboard open slots"
+msgstr "Nafasi zilizo wazi za ubao wa alama"
+
+msgid "Active connections"
+msgstr "Miunganisho inayofanya kazi"
+
+msgid "Reading"
+msgstr "Inasoma"
+
+msgid "Writing"
+msgstr "Inaandika"
+
+msgid "Total requests"
+msgstr "Jumla ya maombi"
+
+msgid "Accepts"
+msgstr "Inakubali"
+
+msgid "Handled"
+msgstr "Imeshughulikiwa"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: wezesha mod_status (ExtendedStatus On) na ruhusu localhost kufikia /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status."
+

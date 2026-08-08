@@ -38945,3 +38945,237 @@ msgstr "אין מנחים"
 msgid "No users"
 msgstr "אין משתמשים"
 
+msgid "Calculation mode"
+msgstr "מצב חישוב"
+
+msgid "Weighted average"
+msgstr "ממוצע משוקלל"
+
+msgid "Points sum"
+msgstr "סכום נקודות"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "הממוצע המשוקלל מנורמל לפי סכום המשקולות; סכום הנקודות מתייחס לכל משקל כנקודות מקסימליות וסוכם אותן ללא נרמול."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "כל פריט משקל נחשב לנקודות המקסימליות שלו; הציון הוא סכום הנקודות, ללא נרמול."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "הציון הוא הממוצע המשוקלל של הפריטים, מנורמל לפי סכום המשקולות."
+
+msgid "Forum participation"
+msgstr "השתתפות בפורום"
+
+msgid "Forum thread"
+msgstr "שרשור בפורום"
+
+msgid "Points for one message"
+msgstr "נקודות להודעה אחת"
+
+msgid "Points for two or more messages"
+msgstr "נקודות לשתי הודעות או יותר"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "נקודות הניתנות כאשר הסטודנט פרסם בדיוק הודעה אחת בשרשור."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "נקודות הניתנות כאשר הסטודנט פרסם שתי הודעות או יותר בשרשור."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "אופציונלי. אם נשאר ריק, הודעה אחת או יותר מעניקות את הנקודות להודעה אחת."
+
+msgid "Current password is required to change your password."
+msgstr "נדרשת הסיסמה הנוכחית כדי לשנות את הסיסמה."
+
+msgid "The 2FA code is required."
+msgstr "נדרש קוד 2FA."
+
+msgid "Invalid 2FA configuration."
+msgstr "תצורת 2FA לא תקינה."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "קוד ה-2FA אינו תקין או שפג תוקפו."
+
+msgid "Database load"
+msgstr "עומס מסד נתונים"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "מדדי עומס שרת MySQL ו-MariaDB בזמן אמת"
+
+msgid "Click to show database server load metrics"
+msgstr "לחץ להצגת מדדי עומס שרת מסד הנתונים"
+
+msgid "Threads connected"
+msgstr "חיבורי תהליכונים"
+
+msgid "Temporary tables on disk"
+msgstr "טבלאות זמניות בדיסק"
+
+msgid "Privilege scope"
+msgstr "היקף הרשאות"
+
+msgid "Not measurable with the current database user"
+msgstr "לא ניתן למדוד עם משתמש מסד הנתונים הנוכחי"
+
+msgid "Uptime"
+msgstr "זמן פעולה"
+
+msgid "Queries per second"
+msgstr "שאילתות לשנייה"
+
+msgid "Slow queries"
+msgstr "שאילתות איטיות"
+
+msgid "Slow query time limit"
+msgstr "מגבלת זמן שאילתה איטית"
+
+msgid "Slow query log"
+msgstr "יומן שאילתות איטיות"
+
+msgid "Slow queries per second"
+msgstr "שאילתות איטיות לשנייה"
+
+msgid "Threads running"
+msgstr "תהליכונים פעילים"
+
+msgid "Threads cached"
+msgstr "תהליכונים במטמון"
+
+msgid "Table lock waits"
+msgstr "המתנות לנעילת טבלה"
+
+msgid "Row lock waits"
+msgstr "המתנות לנעילת שורה"
+
+msgid "Aborted connections"
+msgstr "חיבורים שבוטלו"
+
+msgid "Opened tables"
+msgstr "טבלאות שנפתחו"
+
+msgid "Query cache"
+msgstr "מטמון שאילתות"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "מדדי עומס מסד נתונים זמינים רק עבור MySQL ו-MariaDB."
+
+msgid "Inserts"
+msgstr "הוספות"
+
+msgid "Hit rate"
+msgstr "שיעור פגיעות"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "רענון אוטומטי כל 5 שניות"
+
+msgid "Web server load"
+msgstr "עומס שרת אינטרנט"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "מדדי סטטוס Apache או Nginx בזמן אמת"
+
+msgid "Click to show web server load metrics"
+msgstr "לחץ להצגת מדדי עומס שרת אינטרנט"
+
+msgid "Requires a local web server status module"
+msgstr "דורש מודול סטטוס שרת אינטרנט מקומי"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "עומס שרת אינטרנט נקרא מ-Apache mod_status או Nginx stub_status ב-localhost בלבד. דף הסטטוס חייב לאפשר בקשות מ-127.0.0.1 (או ::1)."
+
+msgid "Paths scanned"
+msgstr "נתיבים שנסרקו"
+
+msgid "Detected"
+msgstr "זוהה"
+
+msgid "Status path"
+msgstr "נתיב סטטוס"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "מדדי עומס שרת אינטרנט זמינים רק עבור Apache ו-Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "אף אחד מהנתיבים שנסרקו לא הגיב ב-localhost."
+
+msgid "Busy workers"
+msgstr "עובדים עסוקים"
+
+msgid "Idle workers"
+msgstr "עובדים לא פעילים"
+
+msgid "Graceful workers"
+msgstr "עובדים חינניים"
+
+msgid "Server MPM"
+msgstr "שרת MPM"
+
+msgid "Requests per second (live)"
+msgstr "בקשות לשנייה (בזמן אמת)"
+
+msgid "Requests per second (since start)"
+msgstr "בקשות לשנייה (מאז ההתחלה)"
+
+msgid "Bytes per second (live)"
+msgstr "בתים לשנייה (בזמן אמת)"
+
+msgid "Bytes per second (since start)"
+msgstr "בתים לשנייה (מאז ההתחלה)"
+
+msgid "Bytes per request"
+msgstr "בתים לבקשה"
+
+msgid "Total accesses"
+msgstr "סה\"כ גישות"
+
+msgid "Total traffic"
+msgstr "סה\"כ תעבורה"
+
+msgid "CPU load"
+msgstr "עומס מעבד"
+
+msgid "Load average (1 min)"
+msgstr "ממוצע עומס (דקה אחת)"
+
+msgid "Load average (5 min)"
+msgstr "ממוצע עומס (5 דקות)"
+
+msgid "Load average (15 min)"
+msgstr "ממוצע עומס (15 דקות)"
+
+msgid "Scoreboard sending"
+msgstr "לוח תוצאות שולח"
+
+msgid "Scoreboard reading"
+msgstr "לוח תוצאות קורא"
+
+msgid "Scoreboard keepalive"
+msgstr "לוח תוצאות keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "לוח תוצאות ממתין"
+
+msgid "Scoreboard open slots"
+msgstr "חריצים פתוחים בלוח תוצאות"
+
+msgid "Active connections"
+msgstr "חיבורים פעילים"
+
+msgid "Reading"
+msgstr "קורא"
+
+msgid "Writing"
+msgstr "כותב"
+
+msgid "Total requests"
+msgstr "סה\"כ בקשות"
+
+msgid "Accepts"
+msgstr "מקבל"
+
+msgid "Handled"
+msgstr "מטופל"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: הפעל mod_status (ExtendedStatus On) ואפשר ל-localhost לגשת ל-/server-status. Nginx: הפעל stub_status במיקום localhost בלבד כגון /nginx_status או /stub_status."
+

@@ -2533,6 +2533,19 @@ function syncLearnpathParentFromFinish(response) {
   } catch (error) {
     console.warn("Could not update learning path navigation after exercise finish", error)
   }
+
+  try {
+    parentWindow.postMessage(
+      {
+        type: "chamilo:learning-path-runtime-refresh",
+        itemId,
+        status,
+      },
+      window.location.origin,
+    )
+  } catch (error) {
+    console.warn("Could not request learning path runtime refresh after exercise finish", error)
+  }
 }
 
 function getExerciseId() {

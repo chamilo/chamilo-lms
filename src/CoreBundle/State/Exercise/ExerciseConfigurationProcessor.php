@@ -53,7 +53,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private const FEEDBACK_TYPE_POPUP = 3;
     private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
     private const QUESTION_SELECTION_RANDOM = 2;
-    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const CSRF_TOKEN_ID = 'exercise_configuration';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
@@ -172,22 +171,19 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $type = CQuiz::ONE_PER_PAGE;
         }
 
-        $lockLearningPathFields = $this->shouldLockFieldsForEdit($quiz);
         $questionSelectionType = $this->normalizeQuestionSelectionType($data->questionSelectionType);
         $random = 0;
         $randomByCategory = 0;
         if (self::QUESTION_SELECTION_RANDOM === $questionSelectionType) {
-            $random = $lockLearningPathFields
-                ? (int) $quiz->getRandom()
-                : $this->normalizeRandomQuestionCount($data->random);
+            $random = $this->normalizeRandomQuestionCount($data->random);
             if (0 !== $random) {
                 $randomByCategory = $this->normalizeRandomByCategory($data->randomByCategory);
             }
         }
-        $maxAttempt = $lockLearningPathFields ? $quiz->getMaxAttempt() : max(0, $data->maxAttempt);
-        $propagateNeg = $lockLearningPathFields ? $quiz->getPropagateNeg() : ($data->propagateNeg ? 1 : 0);
-        $reviewAnswers = $lockLearningPathFields ? $quiz->getReviewAnswers() : ($data->reviewAnswers ? 1 : 0);
-        $expiredTime = $lockLearningPathFields ? $quiz->getExpiredTime() : max(0, $data->expiredTime);
+        $maxAttempt = max(0, $data->maxAttempt);
+        $propagateNeg = $data->propagateNeg ? 1 : 0;
+        $reviewAnswers = $data->reviewAnswers ? 1 : 0;
+        $expiredTime = max(0, $data->expiredTime);
 
         $quiz
             ->setTitle(trim($data->title))
@@ -529,7 +525,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $configuration->skillIds = $this->getSelectedSkillIds($quiz);
         $configuration->extraFieldValues = $this->getExerciseExtraFieldValues($quiz);
         $configuration->extraNotification = '';
-        $configuration->lockedFields = $this->getLockedFieldsForEdit($quiz);
+        $configuration->lockedFields = [];
         $configuration->startTime = $this->formatDateForInput($quiz->getStartTime());
         $configuration->endTime = $this->formatDateForInput($quiz->getEndTime());
         $configuration->duration = $quiz->getDuration();
@@ -709,50 +705,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             $item->setTitle($quiz->getTitle());
             $this->entityManager->persist($item);
         }
-    }
-
-    /**
-     * Legacy freezes these fields only when the exercise is linked to a learning path
-     * and the platform does not explicitly allow editing it there.
-     *
-     * @return array<int, string>
-     */
-    private function getLockedFieldsForEdit(CQuiz $quiz): array
-    {
-        if (!$this->shouldLockFieldsForEdit($quiz)) {
-            return [];
-        }
-
-        return [
-            'random',
-            'maxAttempt',
-            'propagateNeg',
-            'enableTimeControl',
-            'expiredTime',
-            'reviewAnswers',
-        ];
-    }
-
-    private function shouldLockFieldsForEdit(CQuiz $quiz): bool
-    {
-        if (
-            null === $quiz->getIid()
-            || $this->isSettingEnabled('lp.force_edit_exercise_in_lp')
-        ) {
-            return false;
-        }
-
-        return null !== $this->entityManager->createQueryBuilder()
-            ->select('lpItem.iid')
-            ->from(CLpItem::class, 'lpItem')
-            ->andWhere('lpItem.itemType = :itemType')
-            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
-            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
-            ->setParameter('exerciseId', (string) $quiz->getIid(), Types::STRING)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
     }
 
     private function saveCategoryMatrix(CQuiz $quiz, ExerciseConfiguration $data): void

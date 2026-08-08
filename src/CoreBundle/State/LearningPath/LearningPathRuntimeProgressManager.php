@@ -299,7 +299,7 @@ final readonly class LearningPathRuntimeProgressManager
 
             $itemView
                 ->setScore($attempt->getScore())
-                ->setStatus($this->getExerciseItemViewStatus($itemView->getItem(), $attempt))
+                ->setStatus($this->getExerciseItemViewStatus($attempt))
             ;
 
             $maxScore = $attempt->getMaxScore();
@@ -311,20 +311,23 @@ final readonly class LearningPathRuntimeProgressManager
         }
     }
 
-    private function getExerciseItemViewStatus(CLpItem $item, TrackEExercise $attempt): string
+    private function getExerciseItemViewStatus(TrackEExercise $attempt): string
     {
         $score = $attempt->getScore();
         $maxScore = $attempt->getMaxScore();
+        $passPercentage = (float) ($attempt->getQuiz()?->getPassPercentage() ?? 0);
+
+        if ($passPercentage <= 0.0) {
+            return 'passed';
+        }
+
         if ($maxScore <= 0.0) {
             return 'completed';
         }
 
-        $minimumScore = (float) ($item->getMasteryScore() ?: $item->getMinScore());
-        if ($minimumScore > 0.0) {
-            return $score >= $minimumScore ? 'passed' : 'failed';
-        }
+        $percentage = ($score / $maxScore) * 100;
 
-        return $score >= $maxScore ? 'passed' : 'completed';
+        return $percentage >= $passPercentage ? 'passed' : 'failed';
     }
 
     /**

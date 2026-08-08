@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import Draggable from "vuedraggable"
 import LpCardItem from "./LpCardItem.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import { useI18n } from "vue-i18n"
@@ -80,6 +81,12 @@ const categoryIsVisible = computed(() => {
 
   return typeof value === "undefined" || value === null ? true : Boolean(value)
 })
+
+const categoryVisibilityAction = computed(() => ({
+  label: categoryIsVisible.value ? t("Hide") : t("Show"),
+  icon: categoryIsVisible.value ? "eye-on" : "eye-off",
+  disabled: !props.csrfToken,
+}))
 
 const onCatToggleVisibility = async () => {
   if (!props.csrfToken) {
@@ -208,6 +215,17 @@ const toggleOpen = () => {
       <div class="flex items-center gap-2">
         <div class="text-tiny text-gray-50">{{ list.length }} {{ t("Learning paths") }}</div>
 
+        <BaseButton
+          v-if="canManageCategory"
+          :disabled="categoryVisibilityAction.disabled"
+          :label="categoryVisibilityAction.label"
+          :icon="categoryVisibilityAction.icon"
+          only-icon
+          size="small"
+          type="tertiary-alternative-text"
+          @click="onCatToggleVisibility"
+        />
+
         <BaseDropdownMenu
           v-if="canManageCategory"
           :dropdown-id="`category-${category.iid}`"
@@ -246,13 +264,6 @@ const toggleOpen = () => {
               </button>
 
               <div class="my-1 h-px bg-gray-15"></div>
-
-              <button
-                class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
-                @click="onCatToggleVisibility"
-              >
-                {{ t("Toggle visibility") }}
-              </button>
 
               <button
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"

@@ -101,8 +101,8 @@ class LearnpathLink extends AbstractLink
 
         $sql = "SELECT * FROM $tbl_stats
                 WHERE c_id = ".$this->getCourseId()."
-                  AND lp_id = ".$this->get_ref_id()."
-                  AND session_id = ".(int) $sessionId;
+                  AND lp_id = ".$this->get_ref_id();
+        $sql .= api_get_session_condition($sessionId, true, true);
 
         if (isset($studentId)) {
             $sql .= ' AND user_id = '.(int) $studentId;

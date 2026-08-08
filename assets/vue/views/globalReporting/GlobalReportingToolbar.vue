@@ -153,10 +153,13 @@ const returnAction = computed(() => {
 
 const internalActions = computed(() => {
   if (route.name === "GlobalReportingMyProgress") {
-    const actions = [
-      { label: "Follow up", icon: "tracking", route: { name: "GlobalReportingOverview" } },
-      { label: "View my progress", icon: "progress-star", route: { name: "GlobalReportingMyProgress" } },
-    ]
+    const actions = [{ label: "View my progress", icon: "progress-star", route: { name: "GlobalReportingMyProgress" } }]
+
+    if (dashboard.isSessionAdministratorOnly) {
+      actions.unshift({ label: "Course sessions", icon: "sessions", route: { name: "GlobalReportingSessions" } })
+    } else if (dashboard.canViewGlobalReports) {
+      actions.unshift({ label: "Follow up", icon: "tracking", route: { name: "GlobalReportingOverview" } })
+    }
 
     if (dashboard.isHumanResourcesManager) {
       actions.push(

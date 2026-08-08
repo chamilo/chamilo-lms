@@ -38,6 +38,7 @@
     <div class="border-b border-gray-25 bg-white px-4 pt-4">
       <div class="flex flex-wrap gap-2">
         <button
+          v-if="showPersonalFilesTab"
           :class="tabButtonClass('personalFiles')"
           class="rounded-t-xl border-b-2 px-4 py-2.5 text-body-2 font-semibold transition"
           @click="changeTab('personalFiles')"
@@ -58,7 +59,7 @@
 
     <div class="bg-white p-4 md:p-5">
       <div
-        v-if="activeTab === 'personalFiles'"
+        v-if="activeTab === 'personalFiles' && showPersonalFilesTab"
         class="min-h-[180px]"
       >
         <PersonalFiles />
@@ -89,6 +90,8 @@
 </template>
 
 <script setup>
+defineOptions({ name: "FileManagerList" })
+
 import { onMounted, ref, watch, computed, provide } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import PersonalFiles from "../../components/filemanager/PersonalFiles.vue"
@@ -98,6 +101,7 @@ import { useI18n } from "vue-i18n"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { pickUrlForTinyMce } from "../../utils/tinyPickerBridge"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const PICKER_CONTEXT_STORAGE_KEY = "chamilo_filemanager_tinymce_picker_context"
 
@@ -140,7 +144,7 @@ function buildStoredPickerContext(query) {
   const picker = String(query?.picker || "")
   const cbId = String(query?.cbId || "")
   const type = normalizePickerType(query?.type)
-  const tab = String(query?.tab || "personalFiles")
+  const tab = normalizeTabForContext(query?.tab)
   const returnTo = String(query?.returnTo || "FileManagerList")
   const loadNode = String(query?.loadNode || "1")
   const parentResourceNodeId = String(query?.parentResourceNodeId || query?.parent || "")
@@ -172,13 +176,13 @@ function sanitizeQuery(query) {
 }
 
 const storedContext = ref(readStoredPickerContext())
-const activeTab = ref(String(route.query.tab || storedContext.value?.tab || "personalFiles"))
 const { isAllowedToEdit } = useIsAllowedToEdit()
 const isLoading = ref(true)
 const { t } = useI18n()
 
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
+const platformConfigStore = usePlatformConfig()
 
 const isTinyPicker = computed(() => {
   const queryPicker = String(route.query.picker || "")
@@ -198,9 +202,41 @@ const cbId = computed(() => {
   return String(route.query.cbId || (isTinyPicker.value ? storedContext.value?.cbId || "" : ""))
 })
 
+const hasCourseContext = computed(() => {
+  return Number(course.value?.id || route.query.cid || 0) > 0
+})
+
+const allowPersonalFilesInCourse = computed(() => {
+  const value = String(platformConfigStore.getSetting("security.access_to_personal_file_for_all") ?? "")
+    .trim()
+    .toLowerCase()
+
+  return value === "true" || value === "1"
+})
+
+const showPersonalFilesTab = computed(() => {
+  return !hasCourseContext.value || allowPersonalFilesInCourse.value
+})
+
 const showDocumentsTab = computed(() => {
   return isAllowedToEdit.value && !!course.value
 })
+
+function normalizeTabForContext(tab) {
+  const requestedTab = String(tab || "")
+
+  if (hasCourseContext.value) {
+    if (requestedTab === "personalFiles" && showPersonalFilesTab.value) {
+      return "personalFiles"
+    }
+
+    return "documents"
+  }
+
+  return "personalFiles"
+}
+
+const activeTab = ref(normalizeTabForContext(route.query.tab || storedContext.value?.tab))
 
 const pickerTypeLabel = computed(() => {
   if (pickerType.value === "images") return t("Images")
@@ -224,7 +260,7 @@ function tabButtonClass(tab) {
 
 function buildNormalizedQuery(tabOverride = null) {
   const baseStored = storedContext.value || {}
-  const nextTab = String(tabOverride || route.query.tab || baseStored.tab || "personalFiles")
+  const nextTab = normalizeTabForContext(tabOverride || route.query.tab || baseStored.tab)
   const nextType = normalizePickerType(route.query.type || baseStored.type)
   const nextPicker = String(route.query.picker || baseStored.picker || "")
   const nextCbId = String(route.query.cbId || baseStored.cbId || "")
@@ -276,7 +312,7 @@ function changeTab(tab) {
 watch(
   () => route.query,
   (newQuery) => {
-    const nextTab = String(newQuery.tab || storedContext.value?.tab || "personalFiles")
+    const nextTab = normalizeTabForContext(newQuery.tab || storedContext.value?.tab)
     if (nextTab !== activeTab.value) {
       activeTab.value = nextTab
     }
@@ -289,6 +325,13 @@ watch(
   },
   { deep: true },
 )
+
+watch([hasCourseContext, showPersonalFilesTab], () => {
+  const nextTab = normalizeTabForContext(activeTab.value)
+  if (nextTab !== activeTab.value) {
+    changeTab(nextTab)
+  }
+})
 
 provide("chamiloTinyPickerContext", {
   isTinyPicker,
@@ -321,7 +364,7 @@ onMounted(async () => {
     await router.replace({ query: nextQuery })
   }
 
-  activeTab.value = String(nextQuery.tab || "personalFiles")
+  activeTab.value = normalizeTabForContext(nextQuery.tab)
   isLoading.value = false
 })
 </script>

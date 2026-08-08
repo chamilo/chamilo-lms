@@ -397,15 +397,8 @@ const goCreateLp = () => {
   router.push({ name: "LpCreate", query: managementQuery.value })
 }
 
-const canAutoLaunch = computed(() => {
-  if (!canEdit.value) {
-    return false
-  }
-
-  const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
-
-  return String(val) === "true" || Number(val) === 1
-})
+const serverCanAutoLaunch = ref(false)
+const canAutoLaunch = computed(() => canEdit.value && serverCanAutoLaunch.value)
 
 const canSeriousGame = computed(() => {
   const value = platformConfig.getSetting("workflows.gamification_mode")
@@ -767,6 +760,7 @@ const load = async (notifyOnError = true) => {
 
     rawCanEdit.value = !!allowed
     allowChamiloExport.value = false
+    serverCanAutoLaunch.value = false
 
     if (rawCanEdit.value) {
       const settingsResult = await lpService.getActionToken({
@@ -775,6 +769,7 @@ const load = async (notifyOnError = true) => {
         gid: legacyContext.value.gid ?? 0,
       })
       allowChamiloExport.value = settingsResult?.allowChamiloExport === true
+      serverCanAutoLaunch.value = settingsResult?.canAutoLaunch === true
     }
   } catch (error) {
     firstError = error

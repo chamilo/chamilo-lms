@@ -611,6 +611,10 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         $minScore = (float) $item->getPrerequisiteMinScore();
+        if ($minScore <= 0.0) {
+            return true;
+        }
+
         $maxScore = (float) $item->getPrerequisiteMaxScore();
         $score = (float) $prerequisiteView->getScore();
 

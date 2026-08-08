@@ -13,7 +13,6 @@
     <hr />
 
     <h1 class="text-2xl font-bold">{{ t("Upload your assignment") }} – {{ publicationTitle }}</h1>
-
     <p
       v-if="allowedExtensions.length > 0"
       class="text-gray-600"
@@ -22,7 +21,6 @@
         t("Allowed file formats: {0}", [allowedExtensions.map((ext) => "." + ext).join(", ")])
       }}</span>
     </p>
-
     <div
       v-if="allowText && !allowFile"
       class="space-y-4"
@@ -46,14 +44,12 @@
         @click="submitText"
       />
     </div>
-
     <div v-else-if="allowFile && !allowText">
       <Dashboard
         :uppy="uppy"
         :props="{ width: '100%', height: 300 }"
       />
     </div>
-
     <div
       v-else
       class="space-y-4"
@@ -74,7 +70,6 @@
           {{ t("File") }}
         </button>
       </div>
-
       <div
         v-if="activeTab === 'text'"
         class="space-y-2"
@@ -91,7 +86,6 @@
           :placeholder="t('Write your answer here')"
         />
       </div>
-
       <div
         v-else
         class="space-y-2"
@@ -111,7 +105,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
@@ -127,7 +120,6 @@ import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useUppyLocale } from "../../composables/uppyLocale"
-
 const { t } = useI18n()
 const { uppyLocale } = useUppyLocale()
 const route = useRoute()
@@ -144,12 +136,17 @@ const submissionTitle = ref("")
 const activeTab = ref(allowText ? "text" : "file")
 const allowedExtensions = ref([])
 const endsOn = ref(null)
+const returnQuery = () => ({
+  ...route.query,
+  cid,
+  ...(sid && { sid }),
+  ...(gid && { gid }),
+})
 function isDeadlinePassed() {
   if (!endsOn.value) return false
   const s = String(endsOn.value)
   return new Date() > new Date(s.includes("T") ? s : s.replace(" ", "T"))
 }
-
 onMounted(loadPublicationTitle)
 async function loadPublicationTitle() {
   try {
@@ -167,7 +164,6 @@ async function loadPublicationTitle() {
         .map((ext) => ext.trim().toLowerCase())
         .filter((ext) => ext.length > 0)
     }
-
     endsOn.value = data.assignment?.endsOn ?? null
 
     if (isDeadlinePassed()) {
@@ -175,14 +171,13 @@ async function loadPublicationTitle() {
       router.push({
         name: "AssignmentDetail",
         params: { id: publicationId, node: parentResourceNodeId },
-        query: { cid, ...(sid && { sid }) },
+        query: returnQuery(),
       })
     }
   } catch (e) {
     console.error("Error loading publication metadata", e)
   }
 }
-
 function isFileExtensionAllowed(filename) {
   if (allowedExtensions.value.length === 0) {
     return true
@@ -197,7 +192,6 @@ const queryParams = new URLSearchParams({
   ...(sid && { sid }),
   ...(gid && { gid }),
 }).toString()
-
 const uppy = new Uppy({
   restrictions: { maxNumberOfFiles: 1 },
   autoProceed: true,
@@ -237,13 +231,12 @@ uppy.on("upload-success", () => {
   router.push({
     name: "AssignmentDetail",
     params: { id: publicationId, node: parentResourceNodeId },
-    query: { cid, ...(sid && { sid }) },
+    query: returnQuery(),
   })
 })
 uppy.on("upload-error", () => {
   showErrorNotification(t("Failed to upload file"))
 })
-
 async function submitText() {
   if (isDeadlinePassed()) {
     return showErrorNotification(t("The submission deadline has passed. You can no longer submit."))
@@ -251,24 +244,22 @@ async function submitText() {
   if (!submissionTitle.value.trim() || !text.value.trim()) {
     return showErrorNotification(t("Please provide a title and some text"))
   }
-
   const blob = new Blob([text.value], { type: "text/plain" })
   const formData = new FormData()
   formData.append("title", submissionTitle.value)
   formData.append("description", text.value)
   formData.append("uploadFile", blob, `${submissionTitle.value}.txt`)
-  formData.append("filetype", "file") // ahora sí "file"
+  formData.append("filetype", "file") // Keep file-based publication mode for text submissions.
   formData.append("parentId", publicationId)
   formData.append("parentResourceNodeId", parentResourceNodeId)
   formData.append("resourceLinkList", JSON.stringify([{ visibility: 2 }]))
-
   try {
     await cStudentPublicationService.uploadStudentAssignment(formData, queryParams)
     showSuccessNotification(t("Text submitted successfully"))
     router.push({
       name: "AssignmentDetail",
       params: { id: publicationId, node: parentResourceNodeId },
-      query: { cid, ...(sid && { sid }) },
+      query: returnQuery(),
     })
   } catch (e) {
     showErrorNotification(e)
@@ -280,12 +271,11 @@ function submitMixed() {
     return submitText()
   }
 }
-
 function goBack() {
   router.push({
     name: "AssignmentDetail",
     params: { id: publicationId, node: parentResourceNodeId },
-    query: { cid, ...(sid && { sid }) },
+    query: returnQuery(),
   })
 }
 

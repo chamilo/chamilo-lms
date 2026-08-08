@@ -2142,7 +2142,20 @@ function getContextParams() {
     gid: getQueryValue(route.query.gid),
   }
 
-  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+  for (const key of [
+    "origin",
+    "lp_id",
+    "learnpath_id",
+    "node",
+    "parent",
+    "lp_parent_id",
+    "lp_item_id",
+    "type",
+    "returnToLp",
+    "isStudentView",
+    "gradebook",
+    "lpTool",
+  ]) {
     const value = getQueryValue(route.query[key])
     if (value !== undefined && value !== null && String(value) !== "") {
       params[key] = value

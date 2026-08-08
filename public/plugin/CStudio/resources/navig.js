@@ -39,6 +39,115 @@ function appendCStudioQueryParam(query, name, value){
     return query + '&' + encodeURIComponent(name) + '=' + encodeURIComponent(value);
 }
 
+function getCStudioRuntimeContextUrls(){
+    var urls = [];
+
+    try {
+        if (
+            window.parent
+            && window.parent !== window
+            && window.parent.chamiloCidReq
+            && window.parent.chamiloCidReq.queryParams
+        ) {
+            urls.push('?' + window.parent.chamiloCidReq.queryParams);
+        }
+    } catch (ignoreParentCidContextError) {
+        // Keep the URL fallbacks below.
+    }
+
+    try {
+        if (
+            window.top
+            && window.top !== window
+            && window.top.chamiloCidReq
+            && window.top.chamiloCidReq.queryParams
+        ) {
+            urls.push('?' + window.top.chamiloCidReq.queryParams);
+        }
+    } catch (ignoreTopCidContextError) {
+        // Keep the URL fallbacks below.
+    }
+
+    try {
+        if (window.top && window.top.location && window.top.location.href) {
+            urls.push(window.top.location.href);
+        }
+    } catch (ignoreTopLocationError) {
+        // Keep the accessible URL fallbacks below.
+    }
+
+    try {
+        if (window.parent && window.parent.location && window.parent.location.href) {
+            urls.push(window.parent.location.href);
+        }
+    } catch (ignoreParentLocationError) {
+        // Keep the local URL fallback below.
+    }
+
+    try {
+        urls.push(window.location.href);
+    } catch (ignoreLocalLocationError) {
+        // No accessible runtime URL is available.
+    }
+
+    return urls;
+}
+
+function refreshCStudioChamiloResourceContext(){
+    var contextUrls = getCStudioRuntimeContextUrls();
+    var cid = getCStudioQueryParamFromUrls(contextUrls, 'cid');
+    var sid = getCStudioQueryParamFromUrls(contextUrls, 'sid');
+    var gid = getCStudioQueryParamFromUrls(contextUrls, 'gid');
+
+    if (cid === '' && sid === '' && gid === '') {
+        return;
+    }
+
+    var frames = document.querySelectorAll('iframe.cstudio-chamilo-resource-frame');
+
+    for (var i = 0; i < frames.length; i++) {
+        var frame = frames[i];
+        var source = frame.getAttribute('src') || '';
+
+        if (source === '') {
+            continue;
+        }
+
+        try {
+            var url = new URL(source, window.location.href);
+
+            if (cid !== '') {
+                url.searchParams.set('cid', cid);
+            }
+            if (sid !== '') {
+                url.searchParams.set('sid', sid);
+            }
+            if (gid !== '') {
+                url.searchParams.set('gid', gid);
+            }
+
+            var nextSource = url.toString();
+            if (frame.src !== nextSource) {
+                frame.src = nextSource;
+            }
+        } catch (ignoreInvalidResourceUrl) {
+            // Keep the authoring-time URL when the browser cannot parse it.
+        }
+    }
+}
+
+function scheduleCStudioChamiloResourceContextRefresh(){
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', refreshCStudioChamiloResourceContext);
+
+        return;
+    }
+
+    refreshCStudioChamiloResourceContext();
+}
+
+scheduleCStudioChamiloResourceContextRefresh();
+
 function getCStudioQueryParamFromUrls(urls, name, defaultValue){
     for (var i = 0; i < urls.length; i++) {
         if (!urls[i]) {

@@ -186,7 +186,7 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
 
-  async function checkSession() {
+  async function checkSession(context = {}) {
     // Only check user session when user info is stored
     if (!isAuthenticated.value) {
       isLoading.value = false
@@ -195,7 +195,7 @@ export const useSecurityStore = defineStore("security", () => {
 
     isLoading.value = true
     try {
-      const response = await securityService.checkSession()
+      const response = await securityService.checkSession(context)
       if (response.isAuthenticated) {
         user.value = response.user
       } else {

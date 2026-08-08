@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\Exercise;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
@@ -31,6 +34,8 @@ final readonly class CourseTestReaderService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
+        private LanguageRepository $languageRepository,
     ) {}
 
     /**
@@ -140,8 +145,14 @@ final readonly class CourseTestReaderService
     /**
      * @return array<string, mixed>
      */
-    public function normalizeTest(CQuiz $quiz, Course $course): array
-    {
+    public function normalizeTest(
+        CQuiz $quiz,
+        Course $course,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $resourceLink = $quiz->getResourceNode()?->getResourceLinkByContext($course, null, null);
         $quizCategory = $quiz->getQuizCategory();
         $duration = $quiz->getDuration();
@@ -149,7 +160,6 @@ final readonly class CourseTestReaderService
         return [
             'quiz_id' => (int) $quiz->getIid(),
             'title' => $quiz->getTitle(),
-            'description' => (string) $quiz->getDescription(),
             'display_mode' => CQuiz::ONE_PER_PAGE === $quiz->getType() ? 'one_per_page' : 'all_on_one_page',
             'random_answers' => $quiz->getRandomAnswers(),
             'max_attempts' => $quiz->getMaxAttempt(),
@@ -169,21 +179,34 @@ final readonly class CourseTestReaderService
             'published' => $resourceLink instanceof ResourceLink
                 && ResourceLink::VISIBILITY_PUBLISHED === $resourceLink->getVisibility(),
             'content_url' => '/resources/exercise/'.$quiz->getResourceNode()?->getId().'/'.$quiz->getIid().'/overview?cid='.(int) $course->getId(),
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $quiz->getDescription(),
+                $mode,
+                $sourceLanguage,
+                'description',
+            ),
         ];
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function normalizeQuestion(CQuizQuestion $question, int $position): array
-    {
+    public function normalizeQuestion(
+        CQuizQuestion $question,
+        int $position,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+        ?Course $course = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $category = $this->firstCategory($question);
 
         return [
             'question_id' => (int) $question->getIid(),
             'position' => $position,
             'text' => $question->getQuestion(),
-            'description' => (string) $question->getDescription(),
             'type' => $question->getType(),
             'type_label' => $this->questionTypeLabel($question->getType()),
             'total_score' => (float) $question->getPonderation(),
@@ -192,25 +215,94 @@ final readonly class CourseTestReaderService
                 : null,
             'mandatory' => (bool) $question->getMandatory(),
             'answer_count' => \count($question->getAnswers()),
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $question->getDescription(),
+                $mode,
+                $sourceLanguage,
+                'description',
+            ),
         ];
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function normalizeAnswer(CQuizAnswer $answer): array
-    {
+    public function normalizeAnswer(
+        CQuizAnswer $answer,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+        ?Course $course = null,
+    ): array {
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $correct = $answer->getCorrect();
 
         return [
             'answer_id' => (int) $answer->getIid(),
             'position' => $answer->getPosition(),
-            'text' => $answer->getAnswer(),
             'correct' => $correct,
             'is_correct' => null !== $correct && $correct > 0,
             'feedback' => (string) $answer->getComment(),
             'score' => $answer->getPonderation(),
+            'mode' => $mode,
+            // Answer body is the translatehtml field (historically exposed as "text").
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $answer->getAnswer(),
+                $mode,
+                $sourceLanguage,
+                'text',
+            ),
         ];
+    }
+
+    public function resolveSourceLanguageIsoCode(?Course $course, ?string $sourceLanguage): string
+    {
+        if (null !== $sourceLanguage && '' !== trim($sourceLanguage)) {
+            $resolved = $this->languageRepository->findOneAvailableByTitleOrCode(trim($sourceLanguage));
+            if (!$resolved instanceof Language) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
+                    $sourceLanguage,
+                ));
+            }
+
+            return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());
+        }
+
+        if ($course instanceof Course) {
+            $courseLanguage = trim((string) $course->getCourseLanguage());
+            if ('' !== $courseLanguage) {
+                $fromCourse = $this->languageRepository->findOneAvailableByTitleOrCode($courseLanguage);
+                if ($fromCourse instanceof Language) {
+                    return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $fromCourse->getIsocode());
+                }
+
+                return $this->translateHtmlLanguageService->normalizeLanguageCode($courseLanguage);
+            }
+        }
+
+        $platformDefault = $this->languageRepository->getPlatformDefaultIso();
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode($platformDefault ?: 'en');
+    }
+
+    public function resolveRequiredLanguageIsoCode(string $language): string
+    {
+        $language = trim($language);
+        if ('' === $language) {
+            throw new InvalidArgumentException('The language is required.');
+        }
+
+        $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
+        if (!$resolved instanceof Language) {
+            throw new InvalidArgumentException(\sprintf(
+                'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
+                $language,
+            ));
+        }
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());
     }
 
     public function questionTypeLabel(int $type): string

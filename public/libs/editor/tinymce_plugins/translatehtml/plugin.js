@@ -53,6 +53,14 @@
       .replace(/'/g, "&#039;");
   }
 
+  // Block-level elements that cannot legally live inside a <span>. When the
+  // selection contains these (or fully covers one or more editor blocks),
+  // wrap with <div class="mce-translatehtml"> instead of <span>.
+  var BLOCK_SELECTOR =
+    "p,div,section,article,header,footer,main,nav,aside,h1,h2,h3,h4,h5,h6," +
+    "ul,ol,li,dl,dt,dd,table,thead,tbody,tfoot,tr,th,td,blockquote,pre," +
+    "figure,figcaption,hr,address,form";
+
   function unwrapExistingTranslationBlocks(container) {
     var blocks = Array.prototype.slice.call(
       container.querySelectorAll(".mce-translatehtml[lang]"),
@@ -91,13 +99,102 @@
     });
   }
 
-  function cleanSelectedContent(html) {
+  function parseHtmlFragment(html) {
     var container = document.createElement("div");
     container.innerHTML = String(html || "");
+
+    return container;
+  }
+
+  function contentHasBlockElements(html) {
+    return parseHtmlFragment(html).querySelector(BLOCK_SELECTOR) !== null;
+  }
+
+  /**
+   * Prepare selected HTML for wrapping.
+   * - Always strip nested translation markers so we do not nest lang blocks.
+   * - For inline (span) mode, also flatten p/div/section/article so the
+   *   result stays valid phrasing content.
+   * - For block (div) mode, keep the document structure intact.
+   */
+  function prepareTranslatedContent(html, keepBlocks) {
+    var container = parseHtmlFragment(html);
     unwrapExistingTranslationBlocks(container);
-    unwrapBlockElements(container);
+    if (!keepBlocks) {
+      unwrapBlockElements(container);
+    }
 
     return String(container.innerHTML || "").trim();
+  }
+
+  function normalizeComparableText(value) {
+    return String(value || "")
+      .replace(/\u00a0/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isEntireEditorSelected(editor) {
+    var selectedText = normalizeComparableText(
+      editor.selection.getContent({ format: "text" }),
+    );
+    var fullText = normalizeComparableText(
+      editor.getContent({ format: "text" }),
+    );
+
+    return selectedText !== "" && selectedText === fullText;
+  }
+
+  function isBlockFullySelected(editor, block) {
+    if (!block) {
+      return false;
+    }
+
+    try {
+      var selectionText = normalizeComparableText(editor.selection.getContent({
+        format: "text",
+      }));
+      var blockText = normalizeComparableText(block.textContent || "");
+
+      return selectionText !== "" && selectionText === blockText;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function shouldUseDivWrapper(editor, selectedHtml) {
+    if (isEntireEditorSelected(editor)) {
+      return true;
+    }
+
+    if (contentHasBlockElements(selectedHtml)) {
+      return true;
+    }
+
+    var blocks = editor.selection.getSelectedBlocks() || [];
+    if (blocks.length > 1) {
+      return true;
+    }
+
+    if (blocks.length === 1 && isBlockFullySelected(editor, blocks[0])) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function buildLanguageWrapper(tagName, languageCode, content) {
+    return (
+      "<" +
+      tagName +
+      ' class="mce-translatehtml" lang="' +
+      languageCode +
+      '">' +
+      content +
+      "</" +
+      tagName +
+      ">"
+    );
   }
 
   function getErrorMessage(error, fallback) {
@@ -256,32 +353,72 @@
       );
     }
 
-    function insertTranslatedSpan(languageCode) {
+    function insertTranslatedMarkup(languageCode) {
       var code = normalizeLanguageCode(languageCode);
       if (!isValidLanguageCode(code)) {
         notifyInvalidLanguage();
         return;
       }
 
-      var selectedContent = cleanSelectedContent(
-        editor.selection.getContent({ format: "html" }),
-      );
-      if (!selectedContent) {
-        selectedContent = encodeHtml("Translated content");
+      var selectedHtml = editor.selection.getContent({ format: "html" });
+      var entireEditor = isEntireEditorSelected(editor);
+      var useDiv = shouldUseDivWrapper(editor, selectedHtml);
+      var sourceHtml = selectedHtml;
+      var selectedBlocks = editor.selection.getSelectedBlocks() || [];
+      var fullySelectedBlock =
+        useDiv &&
+        !entireEditor &&
+        selectedBlocks.length === 1 &&
+        isBlockFullySelected(editor, selectedBlocks[0])
+          ? selectedBlocks[0]
+          : null;
+
+      // When a whole block is selected, TinyMCE often returns only the inner
+      // HTML (no outer <p>/<h1>/…). Rebuild from the block node so we wrap a
+      // valid block fragment inside the language <div>.
+      if (
+        fullySelectedBlock &&
+        !contentHasBlockElements(selectedHtml) &&
+        fullySelectedBlock.outerHTML
+      ) {
+        sourceHtml = fullySelectedBlock.outerHTML;
       }
 
-      editor.insertContent(
-        '<span class="mce-translatehtml" lang="' +
-          code +
-          '">' +
-          selectedContent +
-          "</span>",
-      );
+      if (entireEditor) {
+        sourceHtml = editor.getContent({ format: "html" });
+        useDiv = true;
+      }
+
+      var content = prepareTranslatedContent(sourceHtml, useDiv);
+      if (!content) {
+        if (entireEditor) {
+          notify("The editor content is empty.", "warning");
+          return;
+        }
+        content = encodeHtml("Translated content");
+        useDiv = false;
+      }
+
+      var tagName = useDiv ? "div" : "span";
+      var markup = buildLanguageWrapper(tagName, code, content);
+
+      editor.undoManager.transact(function () {
+        if (entireEditor) {
+          editor.setContent(markup);
+        } else {
+          if (fullySelectedBlock) {
+            editor.selection.select(fullySelectedBlock);
+          }
+          editor.insertContent(markup);
+        }
+      });
+      editor.nodeChanged();
+      editor.fire("change");
     }
 
     function openCustomLanguageDialog() {
       editor.windowManager.open({
-        title: "Translated HTML span",
+        title: "Translated HTML block",
         body: {
           type: "panel",
           items: [
@@ -314,7 +451,7 @@
             return;
           }
 
-          insertTranslatedSpan(code);
+          insertTranslatedMarkup(code);
           api.close();
         },
       });
@@ -547,7 +684,8 @@
 
     editor.ui.registry.addMenuButton("translatehtml", {
       text: "Lang ISO",
-      tooltip: "Insert translated HTML span with Chamilo ISO code",
+      tooltip:
+        "Mark selection as translated HTML (span for inline text, div for blocks/documents) with a Chamilo ISO code",
       fetch: function (callback) {
         loadConfiguration().then(function (configuration) {
           var items = [];
@@ -568,7 +706,7 @@
               type: "menuitem",
               text: language.label + " (" + language.code + ")",
               onAction: function () {
-                insertTranslatedSpan(language.code);
+                insertTranslatedMarkup(language.code);
               },
             });
           });
@@ -588,7 +726,7 @@
     return {
       getMetadata: function () {
         return {
-          name: "Chamilo translated HTML ISO spans",
+          name: "Chamilo translated HTML ISO blocks",
           url: "https://chamilo.org",
         };
       },

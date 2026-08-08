@@ -42,8 +42,14 @@
             :key="idx"
             class="p-4 bg-gray-10 rounded-lg shadow-sm"
           >
-            <h4 class="font-semibold text-gray-90 mb-2">{{ item.title }}</h4>
-            <div class="text-gray-50" v-html="item.content"></div>
+            <h4
+              class="font-semibold text-gray-90 mb-2"
+              v-html="displayTranslatedHtml(item.title)"
+            ></h4>
+            <div
+              class="text-gray-50"
+              v-html="displayTranslatedHtml(item.content)"
+            ></div>
           </div>
         </div>
       </template>
@@ -234,6 +240,7 @@ import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { filterTranslatedHtml } from "../../../js/translatehtml.js"
 
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
@@ -245,6 +252,21 @@ const platformConfigStore = usePlatformConfig()
 const extraFieldKey = platformConfigStore.getSetting(
   "workflows.session_admin_user_subscription_search_extra_field_to_search",
 )
+
+/**
+ * Apply translatehtml language filtering when editor.translate_html is on.
+ */
+function displayTranslatedHtml(html) {
+  if (!html) {
+    return ""
+  }
+
+  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
+    return filterTranslatedHtml(html, window.user?.locale)
+  }
+
+  return html
+}
 
 const isFetching = ref(true)
 const course = ref({

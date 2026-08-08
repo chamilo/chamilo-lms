@@ -8,9 +8,12 @@ namespace Chamilo\CoreBundle\Service\Document;
 
 use Chamilo\CoreBundle\Cache\DocumentListCacheInvalidator;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
@@ -21,6 +24,7 @@ use RuntimeException;
 use Security;
 use Throwable;
 
+use const DATE_ATOM;
 use const PATHINFO_EXTENSION;
 
 /**
@@ -32,12 +36,16 @@ use const PATHINFO_EXTENSION;
  */
 final readonly class CourseDocumentContentService
 {
+    private const int MAX_CONTENT_LENGTH = 2_000_000;
+
     public function __construct(
         private CDocumentRepository $documentRepository,
         private ResourceNodeRepository $resourceNodeRepository,
         private EntityManager $entityManager,
         private DocumentListCacheInvalidator $cacheInvalidator,
         private ResourceHelper $resourceHelper,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
+        private LanguageRepository $languageRepository,
     ) {}
 
     /**
@@ -206,6 +214,100 @@ final readonly class CourseDocumentContentService
         return $this->documentRepository->getResourceFileContent($document);
     }
 
+    /**
+     * Read an HTML document with full / inventory / source projection.
+     *
+     * @return array<string, mixed>
+     */
+    public function readProjected(
+        Course $course,
+        CDocument $document,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+    ): array {
+        $this->assertEditableHtmlDocument($document);
+        $mode = $this->translateHtmlLanguageService->assertReadMode($mode);
+        $content = $this->readContent($document);
+        $resourceFile = $document->getResourceNode()?->getFirstResourceFile();
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $resourceFile?->getLanguage()?->getIsocode());
+
+        return [
+            'document_id' => (int) $document->getIid(),
+            'title' => $document->getTitle(),
+            'content_type' => 'text/html',
+            'size' => (int) ($resourceFile?->getSize() ?? 0),
+            'resource_language' => $resourceFile?->getLanguage()?->getIsocode(),
+            'modified_at' => $resourceFile?->getUpdatedAt()?->format(DATE_ATOM),
+            'mode' => $mode,
+            ...$this->translateHtmlLanguageService->projectHtmlField($content, $mode, $sourceLanguage, 'content'),
+        ];
+    }
+
+    /**
+     * Upsert one translatehtml language block in a document body.
+     *
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertLanguage(
+        Course $course,
+        CDocument $document,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $this->assertEditableHtmlDocument($document);
+        $languageIso = $this->resolveRequiredLanguageIsoCode($language);
+        $resourceFile = $document->getResourceNode()?->getFirstResourceFile();
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode(
+            $course,
+            $sourceLanguage,
+            $resourceFile?->getLanguage()?->getIsocode(),
+        );
+        $currentHtml = $this->readContent($document);
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            $currentHtml,
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            function (string $html): string {
+                $html = trim($html);
+                if ('' === $html) {
+                    throw new InvalidArgumentException('The document content is empty.');
+                }
+                if (mb_strlen($html) > self::MAX_CONTENT_LENGTH) {
+                    throw new InvalidArgumentException('The document content is too large.');
+                }
+                $html = $this->sanitizeHtml($html);
+                if ('' === trim(strip_tags($html))) {
+                    throw new InvalidArgumentException('The document content is empty after sanitization.');
+                }
+
+                return $html;
+            },
+        );
+
+        $this->writeContent($document, $result['html']);
+
+        return [
+            'updated' => true,
+            'document_id' => (int) $document->getIid(),
+            'title' => $document->getTitle(),
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
     public function sanitizeHtml(string $content): string
     {
         if (!class_exists(Security::class)) {
@@ -220,6 +322,52 @@ final readonly class CourseDocumentContentService
         }
 
         return (string) Security::remove_XSS($content);
+    }
+
+    private function resolveRequiredLanguageIsoCode(string $language): string
+    {
+        $language = trim($language);
+        if ('' === $language) {
+            throw new InvalidArgumentException('The language is required.');
+        }
+
+        $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
+        if (!$resolved instanceof Language) {
+            throw new InvalidArgumentException(\sprintf(
+                'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
+                $language,
+            ));
+        }
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());
+    }
+
+    private function resolveSourceLanguageIsoCode(
+        Course $course,
+        ?string $sourceLanguage,
+        ?string $resourceLanguageIso = null,
+    ): string {
+        if (null !== $sourceLanguage && '' !== trim($sourceLanguage)) {
+            return $this->resolveRequiredLanguageIsoCode($sourceLanguage);
+        }
+
+        if (null !== $resourceLanguageIso && '' !== trim($resourceLanguageIso)) {
+            return $this->translateHtmlLanguageService->normalizeLanguageCode($resourceLanguageIso);
+        }
+
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' !== $courseLanguage) {
+            $fromCourse = $this->languageRepository->findOneAvailableByTitleOrCode($courseLanguage);
+            if ($fromCourse instanceof Language) {
+                return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $fromCourse->getIsocode());
+            }
+
+            return $this->translateHtmlLanguageService->normalizeLanguageCode($courseLanguage);
+        }
+
+        $platformDefault = $this->languageRepository->getPlatformDefaultIso();
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode($platformDefault ?: 'en');
     }
 
     public function writeContent(CDocument $document, string $newContent): void

@@ -322,6 +322,28 @@ async function generateQuickTest() {
       name="url"
     />
 
+    <BaseTinyEditor
+      v-if="canEditContent"
+      :editor-id="contentEditorId"
+      v-model="form.content"
+      :editor-config="contentEditorConfig"
+      :title="t('Content')"
+    />
+
+    <BaseCheckbox
+      v-if="showExportAllowed"
+      id="lp-builder-item-export-pdf"
+      v-model="form.exportAllowed"
+      :label="t('Export to PDF')"
+      name="exportAllowed"
+    />
+
+    <LpExtraFields
+      v-model="extraFieldValues"
+      :fields="item.extraFields || []"
+      @file-selected="onExtraFileSelected"
+    />
+
     <div
       v-if="canGenerateQuickTest"
       class="rounded-lg border border-gray-20 bg-gray-5 p-3"
@@ -350,28 +372,6 @@ async function generateQuickTest() {
         {{ t("The saved document content will be sent to an AI model for processing.") }}
       </p>
     </div>
-
-    <BaseTinyEditor
-      v-if="canEditContent"
-      :editor-id="contentEditorId"
-      v-model="form.content"
-      :editor-config="contentEditorConfig"
-      :title="t('Content')"
-    />
-
-    <BaseCheckbox
-      v-if="showExportAllowed"
-      id="lp-builder-item-export-pdf"
-      v-model="form.exportAllowed"
-      :label="t('Export to PDF')"
-      name="exportAllowed"
-    />
-
-    <LpExtraFields
-      v-model="extraFieldValues"
-      :fields="item.extraFields || []"
-      @file-selected="onExtraFileSelected"
-    />
 
     <div class="flex justify-end">
       <BaseButton

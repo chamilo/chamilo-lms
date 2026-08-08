@@ -534,6 +534,179 @@
         </div>
       </div>
 
+      <div
+        v-if="currentSection === 'webserver'"
+        class="space-y-4"
+      >
+        <div class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+          <button
+            id="webserver-load-toggle"
+            type="button"
+            name="webserver-load-toggle"
+            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition hover:bg-support-2"
+            :aria-expanded="wsExpanded ? 'true' : 'false'"
+            aria-controls="webserver-load-panel"
+            @click="toggleWsLoad"
+          >
+            <div class="flex min-w-0 items-center gap-3">
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+              >
+                <i class="mdi mdi-chart-timeline-variant text-xl" />
+              </span>
+              <div class="min-w-0">
+                <h2 class="text-xl font-semibold text-gray-90">
+                  {{ t("Web server load") }}
+                </h2>
+                <p class="mt-0.5 text-caption text-gray-50">
+                  {{
+                    wsExpanded
+                      ? t("Live Apache or Nginx status metrics")
+                      : t("Click to show web server load metrics")
+                  }}
+                </p>
+              </div>
+            </div>
+            <i
+              class="mdi text-2xl text-gray-50"
+              :class="wsExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+            />
+          </button>
+
+          <div
+            v-if="wsExpanded"
+            id="webserver-load-panel"
+            class="space-y-4 border-t border-gray-20 px-5 pb-5 pt-4"
+          >
+            <div class="flex flex-wrap items-center justify-end gap-3">
+              <BaseCheckbox
+                id="webserver-load-auto-refresh"
+                v-model="wsAutoRefresh"
+                name="webserver_load_auto_refresh"
+                :label="t('Auto-refresh every 5 seconds')"
+              />
+              <span
+                v-if="wsFetchedAt"
+                class="text-caption text-gray-50"
+              >
+                {{ t("Last updated") }}: {{ formatLastVisit(wsFetchedAt) }}
+                <span
+                  v-if="wsFetchedAt"
+                  class="ml-1 font-mono"
+                >
+                  ({{ wsFetchedAt }})
+                </span>
+              </span>
+              <BaseButton
+                :label="t('Refresh')"
+                icon="refresh"
+                type="primary-text"
+                only-icon
+                size="small"
+                :is-loading="wsLoading"
+                @click="loadWsData"
+              />
+            </div>
+
+            <div class="rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+              <p class="font-semibold">
+                {{ t("Requires a local web server status module") }}
+              </p>
+              <p class="mt-1 text-caption">
+                {{ t("Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1).") }}
+              </p>
+              <p class="mt-1 text-caption">
+                {{ t("Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.") }}
+              </p>
+              <p
+                v-if="wsScannedPathsLabel"
+                class="mt-2 text-caption"
+              >
+                <span class="font-semibold">{{ t("Paths scanned") }}:</span>
+                {{ wsScannedPathsLabel }}
+              </p>
+              <p
+                v-if="wsData?.software || wsData?.detected"
+                class="mt-1 text-caption"
+              >
+                <span class="font-semibold">{{ t("Detected") }}:</span>
+                {{ wsData?.software || wsDetectedLabel }}
+              </p>
+            </div>
+
+            <div
+              v-if="wsLoading && !wsData"
+              class="text-caption text-gray-50"
+            >
+              {{ t("Loading") }}...
+            </div>
+            <template v-else-if="wsData?.status?.available">
+              <div
+                v-if="wsBusyBar"
+                class="mb-2"
+              >
+                <div class="mb-1 flex items-center justify-between gap-2 text-caption">
+                  <span class="font-semibold text-gray-70">
+                    {{ t("Busy workers") }}
+                  </span>
+                  <span class="font-mono text-gray-90">
+                    {{ formatNumber(wsBusyBar.busy) }}
+                    /
+                    {{ formatNumber(wsBusyBar.total) }}
+                    ({{ formatPercent(wsBusyBar.percent) }})
+                  </span>
+                </div>
+                <div
+                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                  role="progressbar"
+                  :aria-valuenow="wsBusyBar.percent"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  :aria-label="t('Busy workers')"
+                >
+                  <div
+                    class="h-full rounded-full transition-all duration-300"
+                    :style="memoryBarFillStyle(wsBusyBar.percent)"
+                  ></div>
+                </div>
+              </div>
+
+              <p
+                v-if="wsData.status.path"
+                class="text-caption text-gray-50"
+              >
+                <span class="font-semibold">{{ t("Status path") }}:</span>
+                <span class="font-mono">{{ wsData.status.path }}</span>
+              </p>
+
+              <dl
+                v-if="wsMetrics.length"
+                class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                <div
+                  v-for="metric in wsMetrics"
+                  :key="metric.label"
+                  class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                >
+                  <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
+                    {{ metric.label }}
+                  </dt>
+                  <dd class="mt-1 font-mono text-body-2 text-gray-90">
+                    {{ metric.value }}
+                  </dd>
+                </div>
+              </dl>
+            </template>
+            <p
+              v-else
+              class="text-body-2 text-gray-50"
+            >
+              {{ wsUnavailableReason }}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <BaseTable
         v-if="rowType === 'generic'"
         :values="rows"
@@ -704,6 +877,15 @@ const dbAutoRefresh = ref(false)
 /** Folded by default — live DB load stats load only when expanded. */
 const dbExpanded = ref(false)
 let dbRefreshTimer = null
+
+const wsData = ref(null)
+const wsPrevSample = ref(null)
+const wsFetchedAt = ref(null)
+const wsLoading = ref(false)
+const wsAutoRefresh = ref(false)
+/** Folded by default — live web server load stats load only when expanded. */
+const wsExpanded = ref(false)
+let wsRefreshTimer = null
 
 const activeSectionInfo = computed(() => {
   const match = sections.value.find((s) => s.key === currentSection.value)
@@ -895,6 +1077,170 @@ const dbUnavailableReason = computed(() => {
   return t("Not available")
 })
 
+const wsScannedPathsLabel = computed(() => {
+  const paths = wsData.value?.scannedPaths
+  if (!Array.isArray(paths) || !paths.length) {
+    // Default expected paths before first response (Apache is most common).
+    return "/server-status?auto · /nginx_status · /stub_status"
+  }
+
+  return paths.join(" · ")
+})
+
+const wsDetectedLabel = computed(() => {
+  const d = wsData.value?.detected
+  if ("apache" === d) {
+    return "Apache"
+  }
+  if ("nginx" === d) {
+    return "Nginx"
+  }
+
+  return t("Unknown")
+})
+
+const wsUnavailableReason = computed(() => {
+  const code = wsData.value?.status?.reason
+  if ("unsupported_server" === code) {
+    return t("Web server load metrics are only available for Apache and Nginx.")
+  }
+  if ("status_unavailable" === code) {
+    return t("None of the scanned status paths responded on localhost.")
+  }
+
+  return t("Not available")
+})
+
+/**
+ * Live rates from consecutive polls (screenshot-friendly quantification over time).
+ */
+const wsRates = computed(() => {
+  const empty = { requestsPerSec: null, bytesPerSec: null }
+  const curr = wsData.value?.status
+  const prev = wsPrevSample.value?.status
+  if (!curr?.available || !prev?.available) {
+    return empty
+  }
+
+  const currMs = Date.parse(wsData.value?.fetchedAt || "")
+  const prevMs = Date.parse(wsPrevSample.value?.fetchedAt || "")
+  if (Number.isNaN(currMs) || Number.isNaN(prevMs)) {
+    return empty
+  }
+
+  const dt = (currMs - prevMs) / 1000
+  if (dt <= 0) {
+    return empty
+  }
+
+  let requestsPerSec = null
+  let bytesPerSec = null
+
+  if ("apache" === curr.engine && curr.apache && prev.apache) {
+    const cAcc = Number(curr.apache.totalAccesses)
+    const pAcc = Number(prev.apache.totalAccesses)
+    if (!Number.isNaN(cAcc) && !Number.isNaN(pAcc) && cAcc >= pAcc) {
+      requestsPerSec = (cAcc - pAcc) / dt
+    }
+    const cKb = Number(curr.apache.totalKBytes)
+    const pKb = Number(prev.apache.totalKBytes)
+    if (!Number.isNaN(cKb) && !Number.isNaN(pKb) && cKb >= pKb) {
+      bytesPerSec = ((cKb - pKb) * 1024) / dt
+    }
+  }
+
+  if ("nginx" === curr.engine && curr.nginx && prev.nginx) {
+    const cReq = Number(curr.nginx.requests)
+    const pReq = Number(prev.nginx.requests)
+    if (!Number.isNaN(cReq) && !Number.isNaN(pReq) && cReq >= pReq) {
+      requestsPerSec = (cReq - pReq) / dt
+    }
+  }
+
+  return { requestsPerSec, bytesPerSec }
+})
+
+const wsBusyBar = computed(() => {
+  const a = wsData.value?.status?.apache
+  if (!a) {
+    return null
+  }
+  const percent = a.workersBusyPercent
+  const busy = a.busyWorkers
+  const idle = a.idleWorkers
+  if (percent === null || percent === undefined || Number.isNaN(Number(percent))) {
+    return null
+  }
+  const total =
+    busy !== null && busy !== undefined && idle !== null && idle !== undefined
+      ? Number(busy) + Number(idle)
+      : null
+
+  return {
+    percent: Number(percent),
+    busy: busy !== null && busy !== undefined ? Number(busy) : null,
+    total,
+  }
+})
+
+const wsMetrics = computed(() => {
+  const status = wsData.value?.status
+  if (!status?.available) {
+    return []
+  }
+
+  if ("apache" === status.engine && status.apache) {
+    const a = status.apache
+    const sb = a.scoreboard
+    const metrics = [
+      { label: t("Uptime"), value: formatDuration(a.uptimeSeconds) },
+      { label: t("Server MPM"), value: a.serverMpm || "—" },
+      { label: t("Busy workers"), value: formatNumber(a.busyWorkers) },
+      { label: t("Idle workers"), value: formatNumber(a.idleWorkers) },
+      { label: t("Graceful workers"), value: formatNumber(a.gracefulWorkers) },
+      { label: t("Requests per second (live)"), value: formatRate(wsRates.value.requestsPerSec) },
+      { label: t("Requests per second (since start)"), value: formatRate(a.reqPerSec) },
+      { label: t("Bytes per second (live)"), value: formatBytesPerSec(wsRates.value.bytesPerSec) },
+      { label: t("Bytes per second (since start)"), value: formatBytesPerSec(a.bytesPerSec) },
+      { label: t("Bytes per request"), value: formatBytes(a.bytesPerReq) },
+      { label: t("Total accesses"), value: formatNumber(a.totalAccesses) },
+      { label: t("Total traffic"), value: formatApacheTotalKBytes(a.totalKBytes) },
+      { label: t("CPU load"), value: formatRate(a.cpuLoad) },
+      { label: t("Load average (1 min)"), value: formatRate(a.load1) },
+      { label: t("Load average (5 min)"), value: formatRate(a.load5) },
+      { label: t("Load average (15 min)"), value: formatRate(a.load15) },
+    ]
+    if (sb) {
+      metrics.push(
+        { label: t("Scoreboard sending"), value: formatNumber(sb.sending) },
+        { label: t("Scoreboard reading"), value: formatNumber(sb.reading) },
+        { label: t("Scoreboard keepalive"), value: formatNumber(sb.keepalive) },
+        { label: t("Scoreboard waiting"), value: formatNumber(sb.waiting) },
+        { label: t("Scoreboard open slots"), value: formatNumber(sb.open) },
+      )
+    }
+
+    return metrics
+  }
+
+  if ("nginx" === status.engine && status.nginx) {
+    const n = status.nginx
+
+    return [
+      { label: t("Active connections"), value: formatNumber(n.activeConnections) },
+      { label: t("Reading"), value: formatNumber(n.reading) },
+      { label: t("Writing"), value: formatNumber(n.writing) },
+      { label: t("Waiting"), value: formatNumber(n.waiting) },
+      { label: t("Requests per second (live)"), value: formatRate(wsRates.value.requestsPerSec) },
+      { label: t("Total requests"), value: formatNumber(n.requests) },
+      { label: t("Accepts"), value: formatNumber(n.accepts) },
+      { label: t("Handled"), value: formatNumber(n.handled) },
+    ]
+  }
+
+  return []
+})
+
 const dbMetrics = computed(() => {
   const s = dbData.value?.server
   if (!s?.available) {
@@ -912,7 +1258,8 @@ const dbMetrics = computed(() => {
       ? `${slow.longQueryTime}s`
       : "—"
 
-  // Prefer existing i18n keys where they match: Version, Threshold, Questions, Hit rate.
+  // Prefer existing i18n keys where they match: Version, Questions, Hit rate.
+  // "Questions" follows MySQL SHOW GLOBAL STATUS naming (client statements).
   return [
     { label: t("Uptime"), value: formatDuration(s.counters?.Uptime) },
     { label: t("Version"), value: s.version || "—" },
@@ -921,7 +1268,7 @@ const dbMetrics = computed(() => {
       value: formatRate(dbRates.value.questionsPerSec ?? dbRates.value.queriesPerSec),
     },
     { label: t("Slow queries"), value: formatNumber(slow.count) },
-    { label: t("Threshold"), value: longTime },
+    { label: t("Slow query time limit"), value: longTime },
     { label: t("Slow query log"), value: slowLog },
     { label: t("Slow queries per second"), value: formatRate(dbRates.value.slowQueriesPerSec) },
     { label: t("Threads connected"), value: formatNumber(s.counters?.Threads_connected) },
@@ -1146,6 +1493,22 @@ function formatRate(value) {
   return n.toFixed(3)
 }
 
+function formatBytesPerSec(value) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return "—"
+  }
+
+  return `${formatBytes(value)}/s`
+}
+
+function formatApacheTotalKBytes(kbytes) {
+  if (kbytes === null || kbytes === undefined || Number.isNaN(Number(kbytes))) {
+    return "—"
+  }
+
+  return formatBytes(Number(kbytes) * 1024)
+}
+
 function selectSection(key) {
   if (key === currentSection.value) {
     return
@@ -1185,6 +1548,23 @@ function startDbAutoRefresh() {
   }
   dbRefreshTimer = setInterval(() => {
     loadDbData({ silent: true })
+  }, 5000)
+}
+
+function stopWsAutoRefresh() {
+  if (wsRefreshTimer !== null) {
+    clearInterval(wsRefreshTimer)
+    wsRefreshTimer = null
+  }
+}
+
+function startWsAutoRefresh() {
+  stopWsAutoRefresh()
+  if (!wsAutoRefresh.value || currentSection.value !== "webserver" || !wsExpanded.value) {
+    return
+  }
+  wsRefreshTimer = setInterval(() => {
+    loadWsData({ silent: true })
   }, 5000)
 }
 
@@ -1270,18 +1650,76 @@ async function toggleDbLoad() {
   }
 }
 
+async function loadWsData({ silent = false } = {}) {
+  if (!silent) {
+    wsLoading.value = true
+  }
+
+  try {
+    const data = await baseService.get("/admin/system-status-webserver-data")
+    const safe = {
+      fetchedAt: data?.fetchedAt || new Date().toISOString(),
+      detected: data?.detected ?? null,
+      software: data?.software ?? null,
+      scannedPaths: Array.isArray(data?.scannedPaths) ? data.scannedPaths : [],
+      status:
+        data?.status && typeof data.status === "object"
+          ? data.status
+          : { available: false, reason: "status_unavailable" },
+    }
+    if (wsData.value?.status?.available && safe.status?.available) {
+      wsPrevSample.value = wsData.value
+    } else if (!safe.status?.available) {
+      wsPrevSample.value = null
+    }
+    wsData.value = safe
+    wsFetchedAt.value = safe.fetchedAt
+  } catch (e) {
+    wsPrevSample.value = null
+    wsData.value = {
+      fetchedAt: new Date().toISOString(),
+      detected: null,
+      software: null,
+      scannedPaths: [],
+      status: { available: false, reason: "status_unavailable" },
+    }
+    if (!silent) {
+      showErrorNotification(e)
+    }
+  } finally {
+    if (!silent) {
+      wsLoading.value = false
+    }
+  }
+}
+
+async function toggleWsLoad() {
+  wsExpanded.value = !wsExpanded.value
+
+  if (wsExpanded.value) {
+    await loadWsData()
+    startWsAutoRefresh()
+  } else {
+    stopWsAutoRefresh()
+  }
+}
+
 async function loadSection(sectionKey) {
   isLoading.value = true
   errorMessage.value = ""
   stopCacheAutoRefresh()
   stopDbAutoRefresh()
+  stopWsAutoRefresh()
   // Reset fold state when navigating sections so live panels start collapsed again.
   phpCacheExpanded.value = false
   cacheAutoRefresh.value = false
   dbExpanded.value = false
   dbAutoRefresh.value = false
+  wsExpanded.value = false
+  wsAutoRefresh.value = false
   // Clear rate baseline so a stale sample cannot produce a bogus first rate.
   dbPrevSample.value = null
+  wsPrevSample.value = null
 
   try {
     const data = await baseService.get("/admin/system-status-data", {
@@ -1301,6 +1739,11 @@ async function loadSection(sectionKey) {
       dbData.value = null
       dbFetchedAt.value = null
       dbPrevSample.value = null
+    }
+    if (currentSection.value !== "webserver") {
+      wsData.value = null
+      wsFetchedAt.value = null
+      wsPrevSample.value = null
     }
   } catch (e) {
     errorMessage.value = t("An unexpected error occurred.")
@@ -1326,8 +1769,13 @@ watch(dbAutoRefresh, () => {
   startDbAutoRefresh()
 })
 
+watch(wsAutoRefresh, () => {
+  startWsAutoRefresh()
+})
+
 onBeforeUnmount(() => {
   stopCacheAutoRefresh()
   stopDbAutoRefresh()
+  stopWsAutoRefresh()
 })
 </script>

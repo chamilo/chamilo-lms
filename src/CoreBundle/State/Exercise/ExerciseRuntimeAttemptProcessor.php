@@ -1284,6 +1284,21 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return $savedAnswers;
     }
 
+    private function isEmbeddedRuntimeWithoutLearnpathItem(Request $request): bool
+    {
+        if ('learnpath' !== $request->query->getString('origin') || !$request->query->getBoolean('embedded')) {
+            return false;
+        }
+
+        return $request->query->getInt('learnpath_id') <= 0
+            && $request->query->getInt('lp_id') <= 0
+            && $request->query->getInt('learnpath_item_id') <= 0
+            && $request->query->getInt('lp_item_id') <= 0
+            && $request->query->getInt('item_id') <= 0
+            && $request->query->getInt('learnpath_item_view_id') <= 0
+            && $request->query->getInt('lp_item_view_id') <= 0;
+    }
+
     /**
      * @return array<string, string>
      */
@@ -1318,6 +1333,19 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             if (null !== $value && '' !== (string) $value) {
                 $baseParams[$key] = (string) $value;
             }
+        }
+
+        if ($this->isEmbeddedRuntimeWithoutLearnpathItem($request)) {
+            $baseParams['origin'] = 'embeddable';
+            unset(
+                $baseParams['learnpath_id'],
+                $baseParams['learnpath_item_id'],
+                $baseParams['learnpath_item_view_id'],
+                $baseParams['lp_id'],
+                $baseParams['lp_init'],
+                $baseParams['item_id'],
+                $baseParams['returnToLp'],
+            );
         }
 
         return [

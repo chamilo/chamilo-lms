@@ -8,12 +8,18 @@ namespace Chamilo\CoreBundle\State\CourseUser;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use ExtraField;
 use ExtraFieldOption;
 use ExtraFieldValue;
@@ -22,10 +28,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use UserManager;
-
-use const ANONYMOUS;
-use const INVITEE;
 
 final readonly class CourseUserManager
 {
@@ -37,6 +39,7 @@ final readonly class CourseUserManager
         private Security $security,
         private SettingsManager $settingsManager,
         private IllustrationRepository $illustrationRepository,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
     /**
@@ -311,36 +314,51 @@ final readonly class CourseUserManager
         $keyword = trim((string) $request->query->get('search', ''));
         $extraFieldId = $request->query->getInt('extraFieldId');
         $extraFieldValue = trim((string) $request->query->get('extraFieldValue', ''));
-        $memberIds = $this->getContextMemberIds($course, $session);
-        $rows = UserManager::get_user_list([], [$this->getUserOrderExpression($request)]);
-        $items = [];
+        $page = max(1, $request->query->getInt('page', 1));
+        $itemsPerPage = min(100, max(5, $request->query->getInt('itemsPerPage', 20)));
         $showEmail = $this->isEnabled($this->settingsManager->getSetting('show_email_addresses', true));
 
-        foreach ($rows as $row) {
-            $userId = (int) ($row['user_id'] ?? $row['id'] ?? 0);
-            if ($userId <= 0 || isset($memberIds[$userId])) {
-                continue;
-            }
+        $qb = $this->createAvailableUsersQueryBuilder(
+            $course,
+            $session,
+            $type,
+            $keyword,
+            $extraFieldId,
+            $extraFieldValue,
+        );
 
-            $user = $this->entityManager->getRepository(User::class)->find($userId);
-            if (!$user instanceof User
-                || User::SOFT_DELETED === $user->getActive()
-                || ANONYMOUS === $user->getStatus()
-                || !$this->matchesAvailableKeyword($user, $keyword)
-                || !$this->matchesRequestedRole($user, $type)
-                || !$this->matchesExtraField($userId, $extraFieldId, $extraFieldValue)
-            ) {
-                continue;
-            }
+        $totalItems = (int) (clone $qb)
+            ->select('COUNT(DISTINCT u.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-            if ((self::TYPE_STUDENT === $type || $session instanceof Session)
-                && 'ADMIN' === strtoupper((string) $user->getOfficialCode())
-            ) {
+        [$sortField, $sortDirection] = $this->resolveAvailableSort($request);
+        $qb
+            ->select('u')
+            ->orderBy($sortField, $sortDirection)
+        ;
+        if ('u.firstname' === $sortField) {
+            $qb->addOrderBy('u.lastname', $sortDirection);
+        } elseif ('u.lastname' === $sortField) {
+            $qb->addOrderBy('u.firstname', $sortDirection);
+        }
+        $users = $qb
+            ->addOrderBy('u.id', 'ASC')
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $items = [];
+        foreach ($users as $user) {
+            if (!$user instanceof User) {
                 continue;
             }
 
             $items[] = [
-                'id' => $userId,
+                'id' => (int) $user->getId(),
                 'officialCode' => (string) $user->getOfficialCode(),
                 'firstname' => (string) $user->getFirstname(),
                 'lastname' => (string) $user->getLastname(),
@@ -352,11 +370,8 @@ final readonly class CourseUserManager
             ];
         }
 
-        $items = $this->sortItems($items, $request);
-        $totalItems = \count($items);
-
         return [
-            'items' => $this->paginate($items, $request),
+            'items' => $items,
             'totalItems' => $totalItems,
             'courseId' => (int) $course->getId(),
             'sessionId' => $session?->getId(),
@@ -374,6 +389,212 @@ final readonly class CourseUserManager
             'extraFields' => $this->getProfilingFields(),
             'warning' => self::TYPE_STUDENT === $type ? $this->getLimitWarning($course, $session) : '',
         ];
+    }
+
+    /**
+     * Builds a SQL-level filter for users available to subscribe.
+     * Pagination, sorting, keyword search and membership exclusion all happen in the database
+     * so large portals (5k+ users) do not load every row into PHP memory.
+     */
+    private function createAvailableUsersQueryBuilder(
+        Course $course,
+        ?Session $session,
+        int $type,
+        string $keyword,
+        int $extraFieldId,
+        string $extraFieldValue,
+    ): QueryBuilder {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->from(User::class, 'u')
+            ->andWhere('u.active != :softDeleted')
+            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
+        ;
+
+        // Role checks always use the persisted roles JSON, never user.status.
+        $this->applyPersistedPlatformRoleFilter($qb);
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl) {
+                $qb->innerJoin('u.portals', 'p')
+                    ->andWhere('p.url = :currentUrlId')
+                    ->setParameter('currentUrlId', (int) $currentUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
+        $courseId = (int) $course->getId();
+        if ($session instanceof Session) {
+            $qb->andWhere('NOT EXISTS (
+                SELECT 1
+                FROM '.SessionRelCourseRelUser::class.' scru
+                WHERE scru.user = u
+                  AND scru.course = :courseId
+                  AND scru.session = :sessionId
+            )')
+                ->setParameter('courseId', $courseId, Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $qb->andWhere('NOT EXISTS (
+                SELECT 1
+                FROM '.CourseRelUser::class.' cru
+                WHERE cru.user = u
+                  AND cru.course = :courseId
+            )')
+                ->setParameter('courseId', $courseId, Types::INTEGER)
+            ;
+        }
+
+        if (self::TYPE_TEACHER === $type) {
+            $this->applyTeacherRoleFilter($qb);
+        }
+
+        if (self::TYPE_STUDENT === $type || $session instanceof Session) {
+            $qb->andWhere('u.officialCode IS NULL OR UPPER(u.officialCode) != :adminCode')
+                ->setParameter('adminCode', 'ADMIN', Types::STRING)
+            ;
+        }
+
+        $this->applyAvailableKeywordFilter($qb, $keyword);
+        $this->applyAvailableExtraFieldFilter($qb, $extraFieldId, $extraFieldValue);
+
+        return $qb;
+    }
+
+    /**
+     * Keep only users that have a real platform role in the roles column.
+     * System accounts (anonymous / fallback) typically have an empty roles array or ROLE_ANONYMOUS.
+     */
+    private function applyPersistedPlatformRoleFilter(QueryBuilder $qb): void
+    {
+        $qb->andWhere('u.roles NOT LIKE :roleAnonymous')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'u.roles LIKE :roleStudent',
+                    'u.roles LIKE :roleTeacher',
+                    'u.roles LIKE :roleAdmin',
+                    'u.roles LIKE :roleGlobalAdmin',
+                    'u.roles LIKE :roleSessionManager',
+                    'u.roles LIKE :roleHr',
+                    'u.roles LIKE :roleStudentBoss',
+                    'u.roles LIKE :roleInvitee',
+                    'u.roles LIKE :roleQuestionManager',
+                )
+            )
+            ->setParameter('roleAnonymous', '%"ROLE_ANONYMOUS"%', Types::STRING)
+            ->setParameter('roleStudent', '%"ROLE_STUDENT"%', Types::STRING)
+            ->setParameter('roleTeacher', '%"ROLE_TEACHER"%', Types::STRING)
+            ->setParameter('roleAdmin', '%"ROLE_ADMIN"%', Types::STRING)
+            ->setParameter('roleGlobalAdmin', '%"ROLE_GLOBAL_ADMIN"%', Types::STRING)
+            ->setParameter('roleSessionManager', '%"ROLE_SESSION_MANAGER"%', Types::STRING)
+            ->setParameter('roleHr', '%"ROLE_HR"%', Types::STRING)
+            ->setParameter('roleStudentBoss', '%"ROLE_STUDENT_BOSS"%', Types::STRING)
+            ->setParameter('roleInvitee', '%"ROLE_INVITEE"%', Types::STRING)
+            ->setParameter('roleQuestionManager', '%"ROLE_QUESTION_MANAGER"%', Types::STRING)
+        ;
+    }
+
+    private function applyTeacherRoleFilter(QueryBuilder $qb): void
+    {
+        $qb->andWhere(
+            $qb->expr()->orX(
+                'u.roles LIKE :roleTeacher',
+                'u.roles LIKE :roleAdmin',
+                'u.roles LIKE :roleGlobalAdmin',
+                'u.roles LIKE :roleSessionManager',
+            )
+        )
+            ->setParameter('roleTeacher', '%"ROLE_TEACHER"%', Types::STRING)
+            ->setParameter('roleAdmin', '%"ROLE_ADMIN"%', Types::STRING)
+            ->setParameter('roleGlobalAdmin', '%"ROLE_GLOBAL_ADMIN"%', Types::STRING)
+            ->setParameter('roleSessionManager', '%"ROLE_SESSION_MANAGER"%', Types::STRING)
+        ;
+    }
+
+    private function applyAvailableKeywordFilter(QueryBuilder $qb, string $keyword): void
+    {
+        if ('' === $keyword) {
+            return;
+        }
+
+        $terms = array_values(array_filter(array_map('trim', preg_split('/\s+/', $keyword) ?: [])));
+        if ([] === $terms) {
+            return;
+        }
+
+        $nameMatchParts = [];
+        foreach ($terms as $index => $term) {
+            $param = 'kw'.$index;
+            $nameMatchParts[] = '(
+                u.firstname LIKE :'.$param.' OR
+                u.lastname LIKE :'.$param.' OR
+                u.username LIKE :'.$param.' OR
+                u.email LIKE :'.$param.' OR
+                u.officialCode LIKE :'.$param.'
+            )';
+            $qb->setParameter($param, '%'.$term.'%', Types::STRING);
+        }
+
+        $nameMatch = implode(' AND ', $nameMatchParts);
+        $profilingEnabled = $this->isEnabled(
+            $this->settingsManager->getSetting('course.profiling_filter_adding_users', true),
+        );
+
+        if (!$profilingEnabled) {
+            $qb->andWhere($nameMatch);
+
+            return;
+        }
+
+        $qb->andWhere('('.$nameMatch.' OR EXISTS (
+            SELECT 1
+            FROM '.ExtraFieldValues::class.' efv_kw
+            JOIN efv_kw.field ef_kw
+            WHERE efv_kw.itemId = u.id
+              AND ef_kw.itemType = :userItemType
+              AND ef_kw.filter = true
+              AND efv_kw.fieldValue LIKE :kwFull
+        ))')
+            ->setParameter('userItemType', ExtraFieldEntity::USER_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('kwFull', '%'.$keyword.'%', Types::STRING)
+        ;
+    }
+
+    private function applyAvailableExtraFieldFilter(QueryBuilder $qb, int $extraFieldId, string $extraFieldValue): void
+    {
+        if ($extraFieldId <= 0 || '' === $extraFieldValue) {
+            return;
+        }
+
+        $qb->andWhere('EXISTS (
+            SELECT 1
+            FROM '.ExtraFieldValues::class.' efv_filter
+            WHERE efv_filter.itemId = u.id
+              AND IDENTITY(efv_filter.field) = :extraFieldId
+              AND efv_filter.fieldValue = :extraFieldValue
+        )')
+            ->setParameter('extraFieldId', $extraFieldId, Types::INTEGER)
+            ->setParameter('extraFieldValue', $extraFieldValue, Types::STRING)
+        ;
+    }
+
+    /**
+     * @return array{0: string, 1: string}
+     */
+    private function resolveAvailableSort(Request $request): array
+    {
+        $field = match ((string) $request->query->get('sort', 'lastname')) {
+            'firstname' => 'u.firstname',
+            'username' => 'u.username',
+            'officialCode' => 'u.officialCode',
+            'email' => 'u.email',
+            'fullName' => 'u.lastname',
+            default => 'u.lastname',
+        };
+        $direction = 'desc' === strtolower((string) $request->query->get('order', 'asc')) ? 'DESC' : 'ASC';
+
+        return [$field, $direction];
     }
 
     /**
@@ -434,28 +655,6 @@ final readonly class CourseUserManager
         ], static fn (mixed $value): bool => null !== $value && '' !== $value && 0 !== $value);
 
         return $path.'?'.http_build_query($query);
-    }
-
-    private function matchesRequestedRole(User $user, int $type): bool
-    {
-        if (self::TYPE_STUDENT === $type) {
-            return true;
-        }
-
-        return $user->isTeacher() || $user->isAdmin() || $user->isSessionAdmin();
-    }
-
-    private function matchesExtraField(int $userId, int $fieldId, string $expectedValue): bool
-    {
-        if ($fieldId <= 0 || '' === $expectedValue) {
-            return true;
-        }
-
-        $valueManager = new ExtraFieldValue('user');
-        $data = $valueManager->get_values_by_handler_and_field_id($userId, $fieldId);
-        $value = (string) ($data['value'] ?? $data['field_value'] ?? '');
-
-        return $expectedValue === $value;
     }
 
     /**
@@ -565,7 +764,7 @@ final readonly class CourseUserManager
             'status' => $status,
             'active' => $user->isActive(),
             'isTutor' => $isTutor,
-            'isInvitee' => INVITEE === $user->getStatus() || $user->isInvitee(),
+            'isInvitee' => $user->isInvitee(),
             'extraValues' => $extraValues,
             'canReport' => $canManage,
             'canLoginAs' => $this->security->isGranted('ROLE_ADMIN'),
@@ -651,45 +850,6 @@ final readonly class CourseUserManager
         }
 
         return true;
-    }
-
-    private function matchesAvailableKeyword(User $user, string $keyword): bool
-    {
-        if ($this->matchesKeyword($user, $keyword, true)) {
-            return true;
-        }
-
-        if ('' === $keyword
-            || !$this->isEnabled($this->settingsManager->getSetting('course.profiling_filter_adding_users', true))
-        ) {
-            return false;
-        }
-
-        $valueManager = new ExtraFieldValue('user');
-        foreach ($this->getFilteredExtraFields() as $field) {
-            $fieldId = (int) ($field['id'] ?? 0);
-            if ($fieldId <= 0) {
-                continue;
-            }
-
-            $data = $valueManager->get_values_by_handler_and_field_id((int) $user->getId(), $fieldId);
-            $value = (string) ($data['value'] ?? $data['field_value'] ?? '');
-            if (false !== mb_stripos($value, $keyword)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function getUserOrderExpression(Request $request): string
-    {
-        return match ((string) $request->query->get('sort', 'lastname')) {
-            'firstname' => 'firstname ASC, lastname ASC',
-            'username' => 'username ASC',
-            'officialCode' => 'official_code ASC',
-            default => 'lastname ASC, firstname ASC',
-        };
     }
 
     /**

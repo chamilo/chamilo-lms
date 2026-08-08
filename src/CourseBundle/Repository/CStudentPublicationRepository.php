@@ -291,6 +291,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function findAssignmentSubmissionsPaginated(
         int $assignmentId,
         User $user,
+        Course $course,
+        ?Session $session,
+        int $groupId,
         int $page,
         int $itemsPerPage,
         array $order = []
@@ -305,17 +308,41 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->where('submission.publicationParent = :assignmentId')
             ->andWhere('submission.filetype = :filetype')
             ->andWhere('resourceLink.visibility = :publishedVisibility')
+            ->andWhere('resourceLink.course = :course')
             ->setParameter('assignmentId', $assignmentId)
             ->setParameter('filetype', 'file')
             ->setParameter('publishedVisibility', 2)
+            ->setParameter('course', $course)
         ;
+
+        if ($session instanceof Session) {
+            $qb->andWhere('resourceLink.session = :session')
+                ->setParameter('session', $session)
+            ;
+        } else {
+            $qb->andWhere('resourceLink.session IS NULL');
+        }
+
+        if ($groupId > 0) {
+            $qb->andWhere('IDENTITY(resourceLink.group) = :groupId')
+                ->setParameter('groupId', $groupId)
+            ;
+        } else {
+            $qb->andWhere('resourceLink.group IS NULL');
+        }
 
         $qb->andWhere('submission.user = :user')
             ->setParameter('user', $user)
         ;
 
+        $allowedOrderFields = ['title', 'sentDate', 'qualification'];
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.'.$field, $direction);
+            if (!\in_array($field, $allowedOrderFields, true)) {
+                continue;
+            }
+
+            $sortDirection = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+            $qb->addOrderBy('submission.'.$field, $sortDirection);
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)

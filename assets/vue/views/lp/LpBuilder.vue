@@ -146,25 +146,6 @@ const previewUrl = computed(() =>
   }),
 )
 
-const newTestUrl = computed(() => {
-  const search = new URLSearchParams({
-    cid: String(context.value.cid),
-    sid: String(context.value.sid),
-    gid: String(context.value.gid),
-    lp_id: String(lpId.value),
-    origin: "learnpath",
-    returnToLp: "1",
-    node: String(nodeId.value),
-    parent: String(selectedSectionId.value || route.query.parent || ""),
-    type: "step",
-    isStudentView: "false",
-    gradebook: String(Number(route.query.gradebook || 0)),
-    lpTool: "tests",
-  })
-
-  return `/main/exercise/exercise_admin.php?${search.toString()}`
-})
-
 const learningPathQuery = computed(() => ({
   ...route.query,
   cid: context.value.cid,
@@ -370,24 +351,6 @@ function selectItem(id) {
   }
 }
 
-function buildExerciseEditUrl(item) {
-  const search = new URLSearchParams({
-    cid: String(context.value.cid),
-    sid: String(context.value.sid),
-    gid: String(context.value.gid),
-    modifyExercise: "yes",
-    exerciseId: String(Number(item?.resourceId || 0)),
-    origin: "learnpath",
-    lp_id: String(lpId.value),
-    lp_item_id: String(Number(item?.id || 0)),
-    node: String(nodeId.value),
-    returnToLp: "1",
-    gradebook: String(Number(route.query.gradebook || 0)),
-  })
-
-  return `/main/exercise/exercise_admin.php?${search.toString()}`
-}
-
 function openItemEditor(id) {
   const item = findItem(tree.value, id)
   if (!item) {
@@ -395,7 +358,15 @@ function openItemEditor(id) {
   }
 
   if (item.itemType === "quiz" && Number(item.resourceId || 0) > 0) {
-    window.location.assign(buildExerciseEditUrl(item))
+    router.push({
+      name: "ExerciseEdit",
+      params: { node: nodeId.value, exerciseId: Number(item.resourceId) },
+      query: {
+        ...learningPathQuery.value,
+        lp_item_id: Number(item.id || 0) || undefined,
+        lpTool: "tests",
+      },
+    })
     return
   }
 
@@ -1048,9 +1019,9 @@ function goBack() {
               <div class="flex justify-end">
                 <BaseButton
                   :label="t('New test')"
-                  :to-url="newTestUrl"
                   icon="multiple-marked"
                   type="success"
+                  @click="openRoute('ExerciseCreate', {}, { lpTool: 'tests' })"
                 />
               </div>
               <LpBuilderResourceList

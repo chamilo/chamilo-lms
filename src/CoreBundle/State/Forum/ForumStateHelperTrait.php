@@ -48,6 +48,10 @@ trait ForumStateHelperTrait
 
     private function isStudentView(Request $request): bool
     {
+        if ($request->query->has('isStudentView')) {
+            return $request->query->getBoolean('isStudentView');
+        }
+
         return 'studentview' === $request->getSession()->get('studentview');
     }
 

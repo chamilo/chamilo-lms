@@ -34,6 +34,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
+                'includeLaunchUrls' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Include resolved launch URLs for course resources',
+                ),
+                'catalogOnly' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Return the course resource catalog without builder-side setup',
+                ),
             ],
             provider: LearningPathBuilderProvider::class,
         ),

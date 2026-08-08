@@ -359,7 +359,6 @@
           >
             {{ t("Profile field selection is available only for non-anonymous surveys.") }}
           </div>
-
         </div>
       </BaseAdvancedSettingsButton>
 
@@ -605,6 +604,24 @@ function requiredLabel(label) {
   return `${label} *`
 }
 
+function getApiErrorMessage(error, fallbackMessage) {
+  const data = error?.response?.data
+
+  if (typeof data?.error === "string" && data.error.trim()) {
+    return data.error
+  }
+
+  if (typeof data?.detail === "string" && data.detail.trim()) {
+    return data.detail
+  }
+
+  if (typeof data?.message === "string" && data.message.trim()) {
+    return data.message
+  }
+
+  return fallbackMessage
+}
+
 function toDate(value) {
   if (!value) {
     return null
@@ -673,11 +690,14 @@ async function loadConfiguration() {
   errorMessage.value = ""
 
   try {
-    const data = await surveyService.getSurveyConfiguration(getContextParams(), isEditMode.value ? surveyId.value : null)
+    const data = await surveyService.getSurveyConfiguration(
+      getContextParams(),
+      isEditMode.value ? surveyId.value : null,
+    )
     normalizeForm(data)
   } catch (error) {
     console.error("Error loading survey configuration", error)
-    errorMessage.value = error?.response?.data?.detail || t("Could not load survey configuration")
+    errorMessage.value = getApiErrorMessage(error, t("Could not load survey configuration"))
   } finally {
     isLoading.value = false
   }
@@ -820,7 +840,7 @@ async function submitForm() {
     await scrollToFeedback("success")
   } catch (error) {
     console.error("Error saving survey configuration", error)
-    errorMessage.value = error?.response?.data?.detail || t("Could not save survey configuration")
+    errorMessage.value = getApiErrorMessage(error, t("Could not save survey configuration"))
     await scrollToFeedback()
   } finally {
     isSaving.value = false

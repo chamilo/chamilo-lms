@@ -416,26 +416,18 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
     private function getLearnpathExerciseStatus(CQuiz $quiz, float $score, float $maxScore): string
     {
-        $status = self::STATUS_COMPLETED;
-        $passPercentage = $quiz->getPassPercentage();
-
-        if (
-            !\in_array(
-                (int) $quiz->getFeedbackType(),
-                [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP],
-                true,
-            )
-            && null !== $passPercentage
-            && $passPercentage > 0
-        ) {
-            $status = self::LP_STATUS_FAILED;
-            $percentage = $maxScore > 0.0 ? ($score / $maxScore) * 100 : 0.0;
-            if ($percentage >= (float) $passPercentage) {
-                $status = self::LP_STATUS_PASSED;
-            }
+        $passPercentage = (float) ($quiz->getPassPercentage() ?? 0);
+        if ($passPercentage <= 0.0) {
+            return self::LP_STATUS_PASSED;
         }
 
-        return $status;
+        if ($maxScore <= 0.0) {
+            return self::STATUS_COMPLETED;
+        }
+
+        $percentage = ($score / $maxScore) * 100;
+
+        return $percentage >= $passPercentage ? self::LP_STATUS_PASSED : self::LP_STATUS_FAILED;
     }
 
     /**

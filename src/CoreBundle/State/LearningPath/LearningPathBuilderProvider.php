@@ -46,6 +46,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use const ENT_HTML5;
 use const ENT_QUOTES;
 use const PATHINFO_EXTENSION;
+use const PHP_QUERY_RFC3986;
 
 /** @implements ProviderInterface<LearningPathBuilder> */
 final readonly class LearningPathBuilderProvider implements ProviderInterface
@@ -79,6 +80,17 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $course = $this->getContextCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
+        $filters = $context['filters'] ?? [];
+        $includeLaunchUrls = \in_array(
+            strtolower(trim((string) ($filters['includeLaunchUrls'] ?? ''))),
+            ['1', 'true', 'yes', 'on'],
+            true,
+        );
+        $catalogOnly = \in_array(
+            strtolower(trim((string) ($filters['catalogOnly'] ?? ''))),
+            ['1', 'true', 'yes', 'on'],
+            true,
+        );
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         $lp = $this->lpRepository->find($lpId);
@@ -97,6 +109,14 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
                 && !str_starts_with(strtolower($lp->getPath()), 'teachcs-'));
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
 
+        if ($catalogOnly) {
+            $documents = $this->findContextDocuments($course, $session, $group);
+            $result->resources = $this->buildResources($course, $session, $group, $documents, $includeLaunchUrls);
+            $result->courseLanguage = trim((string) $course->getCourseLanguage());
+
+            return $result;
+        }
+
         $documentsRoot = $this->documentRepository->ensureCourseDocumentsRootNode($course);
         $learningPathFolder = $this->documentRepository->ensureLearningPathDocumentFolder(
             $course,
@@ -104,15 +124,9 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $lp,
             $group,
         );
-
-        $documents = [];
-        foreach ($this->findContextResources(CDocument::class, $course, $session, $group) as $resource) {
-            if ($resource instanceof CDocument) {
-                $documents[] = $resource;
-            }
-        }
+        $documents = $this->findContextDocuments($course, $session, $group);
         $result->items = $this->buildTree($lpId, $course, $session, $group, $documents);
-        $result->resources = $this->buildResources($course, $session, $group, $documents);
+        $result->resources = $this->buildResources($course, $session, $group, $documents, $includeLaunchUrls);
         $result->documentsRootNodeId = (int) $documentsRoot->getId();
         $result->defaultDocumentParentNodeId = (int) $learningPathFolder->getId();
         $result->courseLanguage = trim((string) $course->getCourseLanguage());
@@ -705,6 +719,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         array $documents,
+        bool $includeLaunchUrls,
     ): array {
         $audioRows = [];
         $documentRows = [];
@@ -716,7 +731,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             }
 
             $fileType = strtolower(trim($resource->getFiletype()));
-            $row = $this->resourceRow($resource, 'document');
+            $row = $this->resourceRow($resource, 'document', $course, $session, $group, $includeLaunchUrls);
             $resourceNode = $resource->getResourceNode();
             $row['fileType'] = $fileType;
             $row['isFolder'] = 'folder' === $fileType;
@@ -766,7 +781,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
                 continue;
             }
 
-            $row = $this->resourceRow($resource, 'quiz');
+            $row = $this->resourceRow($resource, 'quiz', $course, $session, $group, $includeLaunchUrls);
             $row['visible'] = $visible;
             $tests[] = $row;
         }
@@ -791,7 +806,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
                 ];
             }
 
-            $row = $this->resourceRow($resource, 'link');
+            $row = $this->resourceRow($resource, 'link', $course, $session, $group, $includeLaunchUrls);
             $linkGroups[$categoryId]['children'][] = $row;
         }
 
@@ -800,7 +815,14 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             if (!$resource instanceof CStudentPublication || null !== $resource->getPublicationParent()) {
                 continue;
             }
-            $assignments[] = $this->resourceRow($resource, 'student_publication');
+            $assignments[] = $this->resourceRow(
+                $resource,
+                'student_publication',
+                $course,
+                $session,
+                $group,
+                $includeLaunchUrls,
+            );
         }
 
         $forumRows = [];
@@ -809,7 +831,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             if (!$resource instanceof CForum || !$resource->isVisible($course, $session)) {
                 continue;
             }
-            $row = $this->resourceRow($resource, 'forum');
+            $row = $this->resourceRow($resource, 'forum', $course, $session, $group, $includeLaunchUrls);
             $row['threads'] = [];
             $forumsById[(int) $resource->getIid()] = \count($forumRows);
             $forumRows[] = $row;
@@ -823,7 +845,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             if (!isset($forumsById[$forumId])) {
                 continue;
             }
-            $threadRow = $this->resourceRow($resource, 'thread');
+            $threadRow = $this->resourceRow($resource, 'thread', $course, $session, $group, $includeLaunchUrls);
             $threadRow['forumId'] = $forumId;
             $forumRows[$forumsById[$forumId]]['threads'][] = $threadRow;
         }
@@ -833,7 +855,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             if (!$resource instanceof CSurvey) {
                 continue;
             }
-            $row = $this->resourceRow($resource, 'survey');
+            $row = $this->resourceRow($resource, 'survey', $course, $session, $group, $includeLaunchUrls);
             $row['questionCount'] = $resource->getQuestions()->count();
             $row['canAdd'] = $row['questionCount'] > 0;
             $surveys[] = $row;
@@ -911,6 +933,21 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
     }
 
     /**
+     * @return CDocument[]
+     */
+    private function findContextDocuments(Course $course, ?Session $session, ?CGroup $group): array
+    {
+        $documents = [];
+        foreach ($this->findContextResources(CDocument::class, $course, $session, $group) as $resource) {
+            if ($resource instanceof CDocument) {
+                $documents[] = $resource;
+            }
+        }
+
+        return $documents;
+    }
+
+    /**
      * @param class-string<AbstractResource> $resourceClass
      *
      * @return AbstractResource[]
@@ -957,8 +994,14 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function resourceRow(AbstractResource $resource, string $resourceType): array
-    {
+    private function resourceRow(
+        AbstractResource $resource,
+        string $resourceType,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        bool $includeLaunchUrls,
+    ): array {
         $id = match (true) {
             $resource instanceof CDocument,
             $resource instanceof CQuiz,
@@ -980,12 +1023,117 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             default => '',
         };
 
-        return [
+        $row = [
             'id' => $id,
             'title' => $this->plainTitle($title),
             'resourceType' => $resourceType,
             'canAdd' => true,
         ];
+
+        if ($includeLaunchUrls) {
+            $row['launchUrl'] = $this->buildResourceLaunchUrl($resource, $resourceType, $course, $session, $group);
+        }
+
+        return $row;
+    }
+
+    private function buildResourceLaunchUrl(
+        AbstractResource $resource,
+        string $resourceType,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): string {
+        if ($resource instanceof CDocument && \in_array($resourceType, ['document', 'video'], true)) {
+            return $this->buildDocumentResourceUrl($resource, $course, $session, $group, true);
+        }
+
+        $resourceId = match (true) {
+            $resource instanceof CQuiz,
+            $resource instanceof CLink,
+            $resource instanceof CStudentPublication,
+            $resource instanceof CForum,
+            $resource instanceof CForumThread,
+            $resource instanceof CSurvey => (int) $resource->getIid(),
+            default => 0,
+        };
+        if ($resourceId <= 0) {
+            return '';
+        }
+
+        $params = [
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($group?->getIid() ?? 0),
+            'origin' => 'learnpath',
+            'lp_init' => 1,
+            'embedded' => 1,
+            'isStudentView' => 'true',
+        ];
+        $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+
+        if ($resource instanceof CQuiz && 'quiz' === $resourceType && $courseNodeId > 0) {
+            return $this->appendQuery(
+                '/resources/exercise/'.$courseNodeId.'/'.$resourceId.'/player',
+                $params,
+            );
+        }
+
+        if ($resource instanceof CLink && 'link' === $resourceType) {
+            $params['link_id'] = $resourceId;
+
+            return $this->appendQuery('/main/link/link_goto.php', $params);
+        }
+
+        if ($resource instanceof CStudentPublication && 'student_publication' === $resourceType) {
+            $assignmentNodeId = (int) ($resource->getResourceNode()?->getId() ?? 0);
+            if ($assignmentNodeId <= 0) {
+                return '';
+            }
+
+            return $this->appendQuery(
+                '/resources/assignment/'.$assignmentNodeId.'/submission/'.$resourceId,
+                $params,
+            );
+        }
+
+        if ($resource instanceof CForum && 'forum' === $resourceType && $courseNodeId > 0) {
+            return $this->appendQuery(
+                '/resources/forum/'.$courseNodeId.'/forum/'.$resourceId,
+                $params,
+            );
+        }
+
+        if ($resource instanceof CForumThread && 'thread' === $resourceType && $courseNodeId > 0) {
+            $forumId = (int) ($resource->getForum()?->getIid() ?? 0);
+            if ($forumId <= 0) {
+                return '';
+            }
+
+            return $this->appendQuery(
+                '/resources/forum/'.$courseNodeId.'/forum/'.$forumId.'/thread/'.$resourceId,
+                $params,
+            );
+        }
+
+        if ($resource instanceof CSurvey && 'survey' === $resourceType && $courseNodeId > 0) {
+            $params['invitationCode'] = 'auto';
+
+            return $this->appendQuery(
+                '/resources/survey/'.$courseNodeId.'/'.$resourceId.'/answer',
+                $params,
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * @param array<string, int|string> $params
+     */
+    private function appendQuery(string $path, array $params): string
+    {
+        return $path.'?'.http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     }
 
     /**
@@ -1052,18 +1200,24 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         ?CGroup $group,
+        bool $embedded = false,
     ): string {
         $resourceNode = $document->getResourceNode();
         if (null === $resourceNode || !$resourceNode->hasResourceFile()) {
             return '';
         }
 
+        $params = [
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($group?->getIid() ?? 0),
+        ];
+        if ($embedded) {
+            $params['embedded'] = 1;
+        }
+
         try {
-            return $this->resourceNodeRepository->getResourceFileUrl($resourceNode, [
-                'cid' => (int) $course->getId(),
-                'sid' => (int) ($session?->getId() ?? 0),
-                'gid' => (int) ($group?->getIid() ?? 0),
-            ]);
+            return $this->resourceNodeRepository->getResourceFileUrl($resourceNode, $params);
         } catch (FileNotFoundException) {
             return '';
         }

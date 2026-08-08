@@ -76,10 +76,35 @@ async function getLoginCaptchaStatus(username = "") {
 
 /**
  * Checks the status of the user's session.
+ *
+ * When called inside a course, include the current course/session/group context
+ * so the backend can republish the contextual ROLE_CURRENT_COURSE_* roles on
+ * the authenticated user returned by /check-session.
+ *
+ * @param {Object} [context]
+ * @param {number|string|null} [context.cid] - Current course id
+ * @param {number|string|null} [context.sid] - Current session id
+ * @param {number|string|null} [context.gid] - Current group id
  * @returns {Promise<Object>}
  */
-async function checkSession() {
-  return await baseService.get("/check-session")
+async function checkSession({ cid, sid, gid } = {}) {
+  const params = new URLSearchParams()
+
+  if (cid) {
+    params.set("cid", String(cid))
+  }
+
+  if (sid) {
+    params.set("sid", String(sid))
+  }
+
+  if (gid) {
+    params.set("gid", String(gid))
+  }
+
+  const query = params.toString()
+
+  return await baseService.get(query ? `/check-session?${query}` : "/check-session")
 }
 
 /**

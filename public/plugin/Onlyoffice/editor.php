@@ -188,6 +188,7 @@ if (!empty($resourceNodeId)) {
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
             'parent_id' => 0,
+            'legacy_parent_id' => 0,
             'parents' => [],
             'forceEdit' => $forceEdit,
             'exercise_id' => $exerciseId,
@@ -382,6 +383,7 @@ if (!empty($resourceNodeId)) {
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
             'parent_id' => $resolvedC2['parentId'],
+            'legacy_parent_id' => 0,
             'parents' => [],
             'forceEdit' => $forceEdit,
             'exercise_id' => $exerciseId,
@@ -448,6 +450,8 @@ if (!empty($resourceNodeId)) {
                 $versionToken
             );
 
+            $docInfo['legacy_parent_id'] = (int) ($docInfo['parent_id'] ?? 0);
+            $docInfo['parent_id'] = 0;
             $docInfo['direct_url'] = $fileUrl;
             $docInfo['document_url'] = $callbackUrl;
             $docInfo['version_token'] = $versionToken;
@@ -640,7 +644,11 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
 
 sendOnlyofficeEditorNoCacheHeaders();
 
-?>
+$hideChamiloLayout = $isLearnpathEmbedded
+    || (isset($_GET['nh']) && '1' === (string) $_GET['nh']);
+
+if ($hideChamiloLayout) {
+    ?>
     <!DOCTYPE html>
     <html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
     <head>
@@ -666,6 +674,21 @@ sendOnlyofficeEditorNoCacheHeaders();
         <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
     </head>
     <body>
+    <?php
+} else {
+    Display::display_header($plugin->get_lang('openByOnlyoffice'));
+    ?>
+    <style>
+        #<?php echo $editorContainerId; ?> {
+            width: 100%;
+            height: calc(100vh - 210px);
+            min-height: 640px;
+        }
+    </style>
+    <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <?php
+}
+?>
     <div id="<?php echo $editorContainerId; ?>"></div>
 
     <script type="text/javascript">
@@ -673,7 +696,8 @@ sendOnlyofficeEditorNoCacheHeaders();
             const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
             const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
             const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
-            const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
+            const folderId = <?php echo json_encode((int) ($docInfo['legacy_parent_id'] ?? 0)); ?>;
+            const parentResourceNodeId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
             const sessionId = <?php echo json_encode((int) $sessionId); ?>;
             const courseId = <?php echo json_encode((int) $courseId); ?>;
             const groupId = <?php echo json_encode((int) $groupId); ?>;
@@ -777,6 +801,7 @@ sendOnlyofficeEditorNoCacheHeaders();
                     title: event.data.title,
                     url: event.data.url,
                     folderId: folderId,
+                    parentResourceNodeId: parentResourceNodeId,
                     sessionId: sessionId,
                     courseId: courseId,
                     groupId: groupId
@@ -902,9 +927,15 @@ sendOnlyofficeEditorNoCacheHeaders();
             window.addEventListener("load", connectEditor);
         })();
     </script>
+<?php
+if ($hideChamiloLayout) {
+    ?>
     </body>
     </html>
-<?php
+    <?php
+} else {
+    Display::display_footer();
+}
 
 /**
  * Resolve a C2 document for editor usage.

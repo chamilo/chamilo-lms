@@ -3,8 +3,11 @@
     <div class="flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm w-fit">
       <BaseButton
         :label="backButtonLabel"
-        :route="learningPathContext ? null : { name: 'ExerciseList', params: route.params, query: getContextParams() }"
-        :to-url="learningPathContext ? learningPathBackUrl : null"
+        :route="
+          learningPathContext
+            ? learningPathBackRoute
+            : { name: 'ExerciseList', params: route.params, query: getContextParams() }
+        "
         icon="back"
         only-icon
         size="small"
@@ -747,8 +750,11 @@
       <div class="flex flex-col-reverse items-stretch gap-3 pt-4 md:flex-row md:items-center md:justify-end">
         <BaseButton
           :label="learningPathContext ? t('Cancel and return to learning path') : t('Cancel')"
-          :route="learningPathContext ? null : { name: 'ExerciseList', params: route.params, query: getContextParams() }"
-          :to-url="learningPathContext ? learningPathBackUrl : null"
+          :route="
+            learningPathContext
+              ? learningPathBackRoute
+              : { name: 'ExerciseList', params: route.params, query: getContextParams() }
+          "
           icon="close"
           type="black"
         />
@@ -946,7 +952,7 @@ const questionsRoute = computed(() => ({
   query: getContextParams(),
 }))
 const learningPathContext = computed(() => isLearningPathContext())
-const learningPathBackUrl = computed(() => buildLearningPathBackUrl())
+const learningPathBackRoute = computed(() => buildLearningPathBackRoute())
 const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Return to exercises list")))
 const typeOptions = computed(() => {
   const items = (options.value.typeOptions || []).map((option) => ({
@@ -1080,7 +1086,20 @@ function getContextParams() {
     gid: getQueryValue(route.query.gid),
   }
 
-  for (const key of ["origin", "lp_id", "learnpath_id", "node", "type", "returnToLp", "isStudentView", "gradebook"]) {
+  for (const key of [
+    "origin",
+    "lp_id",
+    "learnpath_id",
+    "node",
+    "parent",
+    "lp_parent_id",
+    "lp_item_id",
+    "type",
+    "returnToLp",
+    "isStudentView",
+    "gradebook",
+    "lpTool",
+  ]) {
     const value = getQueryValue(route.query[key])
     if (value !== undefined && value !== null && String(value) !== "") {
       params[key] = value
@@ -1098,20 +1117,35 @@ function isLearningPathContext() {
   return lpId > 0 && (origin === "learnpath" || ["1", "true", "yes"].includes(returnToLp))
 }
 
-function buildLearningPathBackUrl() {
-  const params = new URLSearchParams()
-  params.set("action", "build")
-  params.set("type", getQueryValue(route.query.type) || "step")
-  params.set("lp_id", getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || "0")
+function buildLearningPathBackRoute() {
+  const lpId = Number(getQueryValue(route.query.lp_id) || getQueryValue(route.query.learnpath_id) || 0)
+  const node = Number(getQueryValue(route.query.node) || route.params.node || 0)
+  const query = {}
 
-  for (const key of ["cid", "sid", "gid", "gradebook", "origin", "node", "isStudentView"]) {
+  for (const key of ["cid", "sid", "gid", "gradebook", "isStudentView"]) {
     const value = getQueryValue(route.query[key])
     if (value !== undefined && value !== null && String(value) !== "") {
-      params.set(key, String(value))
+      query[key] = value
     }
   }
 
-  return `/main/lp/lp_controller.php?${params.toString()}#resource_tab-2`
+  query.lpTool = String(getQueryValue(route.query.lpTool) || "tests")
+
+  const parentId = Number(getQueryValue(route.query.lp_parent_id) || getQueryValue(route.query.parent) || 0)
+  if (parentId > 0) {
+    query.parent = parentId
+  }
+
+  const lpItemId = Number(getQueryValue(route.query.lp_item_id) || 0)
+  if (lpItemId > 0) {
+    query.item_id = lpItemId
+  }
+
+  return {
+    name: "LpBuilder",
+    params: { node, lpId },
+    query,
+  }
 }
 
 function fillForm(data) {

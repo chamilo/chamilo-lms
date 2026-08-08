@@ -154,6 +154,8 @@ class CourseRestorer
         'learnpaths',
         'scorm_documents',
         'tool_intro',
+        'course_tools',
+        'course_illustration',
         'thematic',
         'wiki',
         'gradebook',
@@ -2645,6 +2647,218 @@ class CourseRestorer
         }
 
         $this->dlog('restore_tool_intro: end');
+    }
+
+    /**
+     * Restore base-course tool visibility from a Moodle-path sidecar bag.
+     *
+     * No-op when resources['course_tools'] is absent (native zip backups).
+     */
+    public function restore_course_tools(int $sessionId = 0): void
+    {
+        $resources = $this->course->resources ?? [];
+        $bag = $resources['course_tools'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            $this->dlog('restore_course_tools: no bag, skipping');
+
+            return;
+        }
+
+        // Base-course visibility only (export intentionally omits session tools).
+        $sessionId = 0;
+        $course = $this->destination_course_entity ?: api_get_course_entity($this->destination_course_id);
+        if (!$course instanceof CourseEntity) {
+            $this->dlog('restore_course_tools: destination course missing');
+
+            return;
+        }
+
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository(Tool::class);
+        $cToolRepo = $em->getRepository(CTool::class);
+
+        $applied = 0;
+        foreach ($bag as $rawId => $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $title = trim((string) ($wrap->title ?? $wrap->obj->title ?? $rawId));
+            if ('' === $title || '0' === $title) {
+                continue;
+            }
+
+            $visibility = true;
+            if (property_exists($wrap, 'visibility')) {
+                $visibility = (bool) $wrap->visibility;
+            } elseif (isset($wrap->obj) && \is_object($wrap->obj) && property_exists($wrap->obj, 'visibility')) {
+                $visibility = (bool) $wrap->obj->visibility;
+            }
+
+            $toolEntity = $toolRepo->findOneBy(['title' => $title])
+                ?: $toolRepo->findOneBy(['title' => strtolower($title)])
+                ?: $toolRepo->findOneBy(['title' => ucfirst(strtolower($title))]);
+
+            if (!$toolEntity) {
+                $this->dlog('restore_course_tools: unknown Tool entity', ['title' => $title]);
+                continue;
+            }
+
+            $cTool = $cToolRepo->findOneBy([
+                'course' => $course,
+                'session' => null,
+                'title' => $title,
+            ]);
+
+            if (!$cTool instanceof CTool) {
+                // Try alternate title casing used by some exports.
+                $cTool = $cToolRepo->findOneBy([
+                    'course' => $course,
+                    'session' => null,
+                    'tool' => $toolEntity,
+                ]);
+            }
+
+            if (!$cTool instanceof CTool) {
+                $position = 1;
+                if (isset($wrap->position)) {
+                    $position = (int) $wrap->position;
+                } elseif (isset($wrap->obj) && \is_object($wrap->obj) && isset($wrap->obj->position)) {
+                    $position = (int) $wrap->obj->position;
+                }
+
+                $cTool = (new CTool())
+                    ->setTool($toolEntity)
+                    ->setTitle($title)
+                    ->setCourse($course)
+                    ->setSession(null)
+                    ->setPosition($position)
+                    ->setParent($course)
+                    ->addCourseLink($course, null);
+                $em->persist($cTool);
+                $em->flush();
+            }
+
+            $cTool->setVisibility($visibility);
+            // Ensure a resource link exists so setVisibility can stick.
+            if (null === $cTool->getResourceNode() || $cTool->getResourceNode()->getResourceLinks()->isEmpty()) {
+                $cTool->setParent($course);
+                $cTool->addCourseLink($course, null);
+                $cTool->setVisibility($visibility);
+            }
+
+            $em->persist($cTool);
+            $applied++;
+        }
+
+        if ($applied > 0) {
+            $em->flush();
+        }
+
+        $this->dlog('restore_course_tools: end', ['applied' => $applied]);
+    }
+
+    /**
+     * Restore course illustration (cover image) from a Moodle-path bag.
+     *
+     * Expects resources['course_illustration'] with contenthash/filename pointing
+     * at backup_path/files/<hh>/<contenthash>. No-op when bag is empty.
+     */
+    public function restore_course_illustration(int $sessionId = 0): void
+    {
+        $resources = $this->course->resources ?? [];
+        $bag = $resources['course_illustration'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            $this->dlog('restore_course_illustration: no bag, skipping');
+
+            return;
+        }
+
+        $course = $this->destination_course_entity ?: api_get_course_entity($this->destination_course_id);
+        if (!$course instanceof CourseEntity) {
+            $this->dlog('restore_course_illustration: destination course missing');
+
+            return;
+        }
+
+        $wrap = null;
+        foreach ($bag as $item) {
+            if (\is_object($item)) {
+                $wrap = $item;
+                break;
+            }
+        }
+        if (null === $wrap) {
+            return;
+        }
+
+        $contentHash = trim((string) ($wrap->contenthash ?? $wrap->obj->contenthash ?? ''));
+        $filename = basename(str_replace('\\', '/', (string) ($wrap->filename ?? $wrap->obj->filename ?? 'course_image.jpg')));
+        $mimetype = trim((string) ($wrap->mimetype ?? $wrap->obj->mimetype ?? 'application/octet-stream'));
+
+        if ('' === $contentHash || !preg_match('/^[a-f0-9]{40}$/i', $contentHash)) {
+            $this->dlog('restore_course_illustration: invalid contenthash', ['hash' => $contentHash]);
+
+            return;
+        }
+        if ('' === $filename || '.' === $filename) {
+            $filename = 'course_image.jpg';
+        }
+
+        $backupPath = rtrim((string) ($this->course->backup_path ?? ''), '/');
+        if ('' === $backupPath) {
+            $this->dlog('restore_course_illustration: backup_path missing');
+
+            return;
+        }
+
+        $abs = $backupPath.'/files/'.strtolower(substr($contentHash, 0, 2)).'/'.strtolower($contentHash);
+        if (!is_file($abs) || !is_readable($abs)) {
+            // Some archives may store the hash file without the two-letter subdir.
+            $fallback = $backupPath.'/files/'.strtolower($contentHash);
+            if (is_file($fallback) && is_readable($fallback)) {
+                $abs = $fallback;
+            } else {
+                $this->dlog('restore_course_illustration: blob missing', ['path' => $abs]);
+
+                return;
+            }
+        }
+
+        $userId = (int) ($this->first_teacher_id ?: api_get_user_id());
+        $user = api_get_user_entity($userId);
+        if (null === $user) {
+            $this->dlog('restore_course_illustration: creator user missing', ['user_id' => $userId]);
+
+            return;
+        }
+
+        try {
+            $illRepo = Container::getIllustrationRepository();
+            if ($illRepo->hasIllustration($course)) {
+                if (\defined('FILE_SKIP') && FILE_SKIP === (int) $this->file_option) {
+                    $this->dlog('restore_course_illustration: existing illustration kept (SKIP)');
+
+                    return;
+                }
+                $illRepo->deleteIllustration($course);
+            }
+
+            $upload = new UploadedFile(
+                $abs,
+                $filename,
+                $mimetype ?: null,
+                null,
+                true
+            );
+            $illRepo->addIllustration($course, $user, $upload);
+            $this->dlog('restore_course_illustration: applied', [
+                'filename' => $filename,
+                'hash' => strtolower($contentHash),
+            ]);
+        } catch (Throwable $e) {
+            $this->dlog('restore_course_illustration: failed', ['error' => $e->getMessage()]);
+        }
     }
 
     /**

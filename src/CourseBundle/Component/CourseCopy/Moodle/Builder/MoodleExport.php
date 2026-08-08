@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AnnouncementsFor
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AssignExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AttendanceMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\CourseCalendarExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\CourseMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FeedbackExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ForumExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\GlossaryExport;
@@ -218,6 +219,7 @@ class MoodleExport
         $this->exportQuizMetaActivities($activities, $tempDir);
         $this->exportLearnpathMeta($tempDir);
         $this->exportDocumentIndex($tempDir);
+        $this->exportCourseMeta($tempDir);
 
         // Root XMLs.
         $this->exportRootXmlFiles($tempDir, $activities);
@@ -2035,6 +2037,19 @@ class MoodleExport
             is_dir($path) ? $this->recursiveDelete($path) : unlink($path);
         }
         rmdir($dir);
+    }
+
+    /**
+     * Export course-level Chamilo sidecars (illustration pointer + tool visibility).
+     */
+    private function exportCourseMeta(string $exportDir): void
+    {
+        try {
+            $meta = new CourseMetaExport($this->course);
+            $meta->export($exportDir);
+        } catch (\Throwable $e) {
+            @error_log('[MoodleExport::exportCourseMeta][ERROR] '.$e->getMessage());
+        }
     }
 
     /**

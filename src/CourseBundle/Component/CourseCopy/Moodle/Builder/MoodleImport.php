@@ -142,6 +142,8 @@ class MoodleImport
             'gradebook'           => [],
             'assets'              => [],
             'attendance'          => [],
+            'course_illustration' => [],
+            'course_tools'        => [],
         ];
 
         // 5) Ensure a default Forum Category (fallback)
@@ -731,6 +733,14 @@ class MoodleImport
         if ($this->debug) {
             $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
             error_log("MBZ[$rid] after.gradebookMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
+        }
+
+        // 8.6) Course illustration + base-course tool visibility (Moodle path only)
+        $this->tryImportCourseIllustrationMeta($workDir, $resources);
+        $this->tryImportCourseToolsMeta($workDir, $resources);
+        if ($this->debug) {
+            $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
+            error_log("MBZ[$rid] after.courseMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
         }
 
         // 9) Build learnpaths from sections (fallback only if no meta)
@@ -4626,6 +4636,200 @@ class MoodleImport
         }
 
         return $imported > 0;
+    }
+
+    /**
+     * Import course illustration from Chamilo sidecar or Moodle overviewfiles in files.xml.
+     *
+     * @return bool true when a usable illustration entry was added to resources
+     */
+    private function tryImportCourseIllustrationMeta(string $workDir, array &$resources): bool
+    {
+        $resources['course_illustration'] = $resources['course_illustration'] ?? [];
+
+        $meta = null;
+        $sidecar = rtrim($workDir, '/').'/chamilo/course/illustration.json';
+        if (is_file($sidecar)) {
+            $decoded = $this->readJsonFile($sidecar);
+            if (\is_array($decoded) && !empty($decoded['contenthash'])) {
+                $meta = $decoded;
+            }
+        }
+
+        if (null === $meta) {
+            $meta = $this->findOverviewFileFromFilesXml($workDir);
+        }
+
+        if (null === $meta || empty($meta['contenthash'])) {
+            return false;
+        }
+
+        $contentHash = trim((string) $meta['contenthash']);
+        if ('' === $contentHash || !preg_match('/^[a-f0-9]{40}$/i', $contentHash)) {
+            return false;
+        }
+
+        $sourceAbs = $this->contentHashPath($workDir, $contentHash);
+        if (!is_file($sourceAbs)) {
+            if ($this->debug) {
+                @error_log('MOODLE_IMPORT: course illustration blob missing for hash='.$contentHash);
+            }
+
+            return false;
+        }
+
+        $filename = basename(str_replace('\\', '/', (string) ($meta['filename'] ?? 'course_image.jpg')));
+        if ('' === $filename || '.' === $filename) {
+            $filename = 'course_image.jpg';
+        }
+
+        $mimetype = trim((string) ($meta['mimetype'] ?? ''));
+        if ('' === $mimetype) {
+            $mimetype = 'application/octet-stream';
+        }
+
+        $filesize = (int) ($meta['filesize'] ?? 0);
+        if ($filesize <= 0) {
+            $stat = @stat($sourceAbs);
+            $filesize = (int) ($stat['size'] ?? 0);
+        }
+
+        $resources['course_illustration'][1] = $this->mkLegacyItem('course_illustration', 1, [
+            'id' => 1,
+            'source_id' => 1,
+            'contenthash' => strtolower($contentHash),
+            'filename' => $filename,
+            'mimetype' => $mimetype,
+            'filesize' => $filesize,
+            'component' => 'course',
+            'filearea' => 'overviewfiles',
+            'itemid' => 0,
+        ]);
+
+        if ($this->debug) {
+            @error_log('MOODLE_IMPORT: course illustration imported hash='.$contentHash.' file='.$filename);
+        }
+
+        return true;
+    }
+
+    /**
+     * Import base-course tool visibility from chamilo/course/tools.json.
+     *
+     * @return bool true when at least one tool entry was imported
+     */
+    private function tryImportCourseToolsMeta(string $workDir, array &$resources): bool
+    {
+        $resources['course_tools'] = $resources['course_tools'] ?? [];
+
+        $sidecar = rtrim($workDir, '/').'/chamilo/course/tools.json';
+        if (!is_file($sidecar)) {
+            return false;
+        }
+
+        $decoded = $this->readJsonFile($sidecar);
+        $rows = (array) ($decoded['tools'] ?? []);
+        if (empty($rows)) {
+            return false;
+        }
+
+        $imported = 0;
+        foreach ($rows as $row) {
+            if (!\is_array($row)) {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ('' === $title) {
+                continue;
+            }
+
+            // Tool keys are platform-defined identifiers (e.g. document, course_homepage).
+            // Reject path-like or otherwise unexpected values.
+            if (1 !== preg_match('/^[A-Za-z][A-Za-z0-9_\-]{0,127}$/', $title)) {
+                continue;
+            }
+
+            $visibility = array_key_exists('visibility', $row)
+                ? (bool) $row['visibility']
+                : true;
+            $position = (int) ($row['position'] ?? 0);
+            $id = $imported + 1;
+
+            $resources['course_tools'][$id] = $this->mkLegacyItem('course_tools', $id, [
+                'id' => $id,
+                'source_id' => $id,
+                'title' => $title,
+                'visibility' => $visibility,
+                'position' => $position,
+            ]);
+            $imported++;
+        }
+
+        if ($this->debug) {
+            @error_log('MOODLE_IMPORT: course tools imported='.$imported);
+        }
+
+        return $imported > 0;
+    }
+
+    /**
+     * Locate Moodle course overview image entry in files.xml.
+     *
+     * @return array<string,mixed>|null
+     */
+    private function findOverviewFileFromFilesXml(string $workDir): ?array
+    {
+        $filesXml = rtrim($workDir, '/').'/files.xml';
+        if (!is_file($filesXml)) {
+            return null;
+        }
+
+        try {
+            $doc = $this->loadXml($filesXml);
+            $xp = new DOMXPath($doc);
+            $nodes = $xp->query('//file');
+            if (!$nodes) {
+                return null;
+            }
+
+            foreach ($nodes as $node) {
+                if (!$node instanceof DOMElement) {
+                    continue;
+                }
+                $component = trim((string) ($xp->evaluate('string(component)', $node) ?? ''));
+                $filearea = trim((string) ($xp->evaluate('string(filearea)', $node) ?? ''));
+                if ('course' !== $component || 'overviewfiles' !== $filearea) {
+                    continue;
+                }
+
+                $filename = trim((string) ($xp->evaluate('string(filename)', $node) ?? ''));
+                // Moodle directory placeholders use filename="." — skip them.
+                if ('' === $filename || '.' === $filename) {
+                    continue;
+                }
+
+                $contenthash = trim((string) ($xp->evaluate('string(contenthash)', $node) ?? ''));
+                if ('' === $contenthash || !preg_match('/^[a-f0-9]{40}$/i', $contenthash)) {
+                    continue;
+                }
+
+                return [
+                    'contenthash' => strtolower($contenthash),
+                    'filename' => basename(str_replace('\\', '/', $filename)),
+                    'mimetype' => trim((string) ($xp->evaluate('string(mimetype)', $node) ?? '')),
+                    'filesize' => (int) ($xp->evaluate('string(filesize)', $node) ?? 0),
+                    'component' => 'course',
+                    'filearea' => 'overviewfiles',
+                    'itemid' => 0,
+                ];
+            }
+        } catch (Throwable $e) {
+            if ($this->debug) {
+                @error_log('MOODLE_IMPORT: files.xml overviewfiles scan error: '.$e->getMessage());
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -1989,7 +1989,7 @@ class AiController extends AbstractController
     }
 
     #[Route('/generate_course_picture', name: 'chamilo_core_ai_generate_course_picture', methods: ['POST'])]
-    public function generateCoursePicture(Request $request, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    public function generateCoursePicture(Request $request): JsonResponse
     {
         try {
             try {
@@ -2011,21 +2011,12 @@ class AiController extends AbstractController
 
             $cid = (int) ($data['cid'] ?? 0);
             $userPrompt = trim((string) ($data['prompt'] ?? ''));
-            $submittedToken = (string) ($data['_token'] ?? '');
 
             if ($cid <= 0 || '' === $userPrompt) {
                 return new JsonResponse([
                     'success' => false,
                     'text' => 'Invalid request parameters. Ensure all fields are filled correctly.',
                 ], 400);
-            }
-
-            $csrfTokenId = 'ai_generate_course_picture_'.$cid;
-            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $submittedToken))) {
-                return new JsonResponse([
-                    'success' => false,
-                    'text' => 'Invalid security token. Please reload the page and try again.',
-                ], 403);
             }
 
             /** @var Course|null $course */

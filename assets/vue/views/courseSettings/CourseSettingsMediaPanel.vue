@@ -311,11 +311,7 @@ async function generatePicture() {
   }
 
   await runAction("generate-picture", async () => {
-    const response = await courseSettingsService.generatePicture(
-      aiPrompt.value.trim(),
-      props.integrations.ai.generatePictureCsrfToken,
-      props.courseId,
-    )
+    const response = await courseSettingsService.generatePicture(aiPrompt.value.trim(), props.courseId)
     const result = response?.result || {}
     const base64 = result.content || response?.text || ""
     if (!base64) {

@@ -40,7 +40,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const ENT_QUOTES;
@@ -296,7 +295,6 @@ final readonly class CourseSettingsManager
         private AiProviderFactory $aiProviderFactory,
         private UrlGeneratorInterface $router,
         private ParameterBagInterface $parameterBag,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private MailerInterface $mailer,
         private EventLoggerHelper $eventLoggerHelper,
         private LoggerInterface $logger,
@@ -569,9 +567,6 @@ final readonly class CourseSettingsManager
                 'enabled' => $aiEnabled,
                 'canGeneratePicture' => $canGeneratePicture,
                 'generatePictureUrl' => '/ai/generate_course_picture',
-                'generatePictureCsrfToken' => $canGeneratePicture
-                    ? $this->csrfTokenManager->getToken('ai_generate_course_picture_'.$courseId)->getValue()
-                    : '',
             ],
         ];
     }

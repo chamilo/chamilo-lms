@@ -38,11 +38,10 @@ export default {
     })
   },
 
-  async generatePicture(prompt, token, courseId) {
+  async generatePicture(prompt, courseId) {
     return await baseService.post("/ai/generate_course_picture", {
       cid: courseId,
       prompt,
-      _token: token,
     })
   },
 

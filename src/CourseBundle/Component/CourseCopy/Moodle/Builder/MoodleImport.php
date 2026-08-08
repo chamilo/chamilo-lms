@@ -2862,9 +2862,15 @@ class MoodleImport
         $intro = (string) ($xp->query($base.'/intro')->item(0)?->nodeValue ?? '');
         $thanks = (string) ($xp->query($base.'/page_after_submit')->item(0)?->nodeValue ?? '');
 
+        $sourceId = (int) $meta['source_id'];
+        $surveyCode = $sourceId > 0
+            ? $type.'_'.$sourceId
+            : $type.'_'.substr(sha1($name), 0, 16);
+
         $survey = [
             'title' => $name,
             'name' => $name,
+            'code' => $surveyCode,
             'subtitle' => '',
             'intro' => $intro,
             'surveythanks' => $thanks,

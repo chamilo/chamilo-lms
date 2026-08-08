@@ -20,7 +20,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -48,7 +47,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     private const FEEDBACK_TYPE_EXAM = 2;
     private const FEEDBACK_TYPE_POPUP = 3;
     private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
-    private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
@@ -142,7 +140,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->skillIds = $this->getSelectedSkillIds($quiz);
         $configuration->extraFieldValues = $this->getExerciseExtraFieldValues($quiz);
         $configuration->extraNotification = '';
-        $configuration->lockedFields = $this->getLockedFieldsForEdit($quiz);
+        $configuration->lockedFields = [];
         $configuration->startTime = $this->formatDateForInput($quiz->getStartTime());
         $configuration->endTime = $this->formatDateForInput($quiz->getEndTime());
         $configuration->duration = $quiz->getDuration();
@@ -494,50 +492,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         return true === $value || 1 === $value || '1' === (string) $value || 'on' === strtolower((string) $value);
     }
 
-    /**
-     * Legacy freezes these fields only when the exercise is linked to a learning path
-     * and the platform does not explicitly allow editing it there.
-     *
-     * @return array<int, string>
-     */
-    private function getLockedFieldsForEdit(CQuiz $quiz): array
-    {
-        if (
-            null === $quiz->getIid()
-            || $this->isSettingEnabled('lp.force_edit_exercise_in_lp')
-            || !$this->isExerciseLinkedToLearningPath((int) $quiz->getIid())
-        ) {
-            return [];
-        }
-
-        return [
-            'random',
-            'maxAttempt',
-            'propagateNeg',
-            'enableTimeControl',
-            'expiredTime',
-            'reviewAnswers',
-        ];
-    }
-
-    private function isExerciseLinkedToLearningPath(int $exerciseId): bool
-    {
-        return null !== $this->entityManager->createQueryBuilder()
-            ->select('lpItem.iid')
-            ->from(CLpItem::class, 'lpItem')
-            ->andWhere('lpItem.itemType = :itemType')
-            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
-            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
-            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
-    /**
-     * @return array<int, array<string, string>>
-     */
     private function getResourceLanguageOptions(): array
     {
         $languages = $this->entityManager->getRepository(Language::class)->findBy(

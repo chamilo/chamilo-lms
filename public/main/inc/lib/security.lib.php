@@ -442,11 +442,82 @@ class Security
             $purifier[$user_status] = new HTMLPurifier($config);
         }
 
+        $langPlaceholders = [];
+        $var = self::normalizeLangAttributesForPurifier($var, $langPlaceholders);
+
         if (is_array($var)) {
-            return $purifier[$user_status]->purifyArray($var);
+            $result = $purifier[$user_status]->purifyArray($var);
         } else {
-            return $purifier[$user_status]->purify($var);
+            $result = $purifier[$user_status]->purify($var);
         }
+
+        return self::restoreLangAttributesAfterPurifier($result, $langPlaceholders);
+    }
+
+    /**
+     * HTMLPurifier's lang attribute validator (HTMLPurifier_AttrDef_Lang)
+     * rejects any underscore-separated value (e.g. "fr_FR", the form used
+     * throughout translate_html content — see
+     * TranslateHtmlLanguageService::normalizeLanguageCode()) and silently
+     * drops the whole attribute, leaving the element itself untouched. It
+     * also lowercases whatever it does accept, so a plain hyphen conversion
+     * would still corrupt the region casing (e.g. "fr-FR" -> "fr-fr").
+     *
+     * So each underscore-separated lang value is swapped for a placeholder
+     * from the "qaa".."qtz" range before purifying — codes ISO 639-3
+     * reserves for local/private use and therefore never assigned to a real
+     * language — then swapped back verbatim afterwards.
+     */
+    private static function normalizeLangAttributesForPurifier(array|string $var, array &$langPlaceholders): array|string
+    {
+        if (is_array($var)) {
+            foreach ($var as $key => $item) {
+                $var[$key] = self::normalizeLangAttributesForPurifier($item, $langPlaceholders);
+            }
+
+            return $var;
+        }
+
+        return preg_replace_callback(
+            '/\blang="([a-zA-Z]{2,3}_[a-zA-Z]{2,3})"/',
+            function (array $matches) use (&$langPlaceholders): string {
+                $token = self::nextLangPlaceholderToken(count($langPlaceholders));
+                $langPlaceholders[$token] = $matches[1];
+
+                return 'lang="'.$token.'"';
+            },
+            $var
+        );
+    }
+
+    private static function restoreLangAttributesAfterPurifier(array|string $var, array $langPlaceholders): array|string
+    {
+        if (!$langPlaceholders) {
+            return $var;
+        }
+
+        if (is_array($var)) {
+            foreach ($var as $key => $item) {
+                $var[$key] = self::restoreLangAttributesAfterPurifier($item, $langPlaceholders);
+            }
+
+            return $var;
+        }
+
+        $searchReplace = [];
+        foreach ($langPlaceholders as $token => $original) {
+            $searchReplace['lang="'.$token.'"'] = 'lang="'.$original.'"';
+        }
+
+        return strtr($var, $searchReplace);
+    }
+
+    private static function nextLangPlaceholderToken(int $index): string
+    {
+        $first = intdiv($index, 26) % 20;
+        $second = $index % 26;
+
+        return 'q'.chr(97 + $first).chr(97 + $second);
     }
 
     /**

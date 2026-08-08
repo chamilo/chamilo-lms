@@ -2098,13 +2098,13 @@ class MoodleExport
     }
 
     /**
-     * Export course-level Chamilo sidecars (illustration pointer + tool visibility).
+     * Export course-level Chamilo sidecars. Course settings are full-export only.
      */
     private function exportCourseMeta(string $exportDir): void
     {
         try {
             $meta = new CourseMetaExport($this->course);
-            $meta->export($exportDir);
+            $meta->export($exportDir, !$this->selectionMode);
         } catch (\Throwable $e) {
             @error_log('[MoodleExport::exportCourseMeta][ERROR] '.$e->getMessage());
         }

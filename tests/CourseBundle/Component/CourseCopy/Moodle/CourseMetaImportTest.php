@@ -71,6 +71,40 @@ final class CourseMetaImportTest extends TestCase
         self::assertSame('image/png', $resources['course_illustration'][1]->mimetype);
     }
 
+    public function testImportCourseSettingsMetaKeepsSafeRowsAndDropsMalformedOnes(): void
+    {
+        file_put_contents($this->workDir.'/chamilo/course/settings.json', json_encode([
+            'settings' => [
+                [
+                    'variable' => 'show_course_in_user_language',
+                    'value' => '1',
+                    'category' => '',
+                    'title' => 'show_course_in_user_language',
+                ],
+                [
+                    'variable' => 'documents_default_visibility',
+                    'value' => '2',
+                    'category' => 'document',
+                    'title' => 'documents_default_visibility',
+                ],
+                ['variable' => '../unsafe', 'value' => '1'],
+                ['variable' => 'valid_but_bad_value', 'value' => ['not', 'scalar']],
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $resources = ['course_settings' => []];
+        $ok = $this->invokePrivate('tryImportCourseSettingsMeta', [$this->workDir, &$resources]);
+
+        self::assertTrue($ok);
+        self::assertCount(2, $resources['course_settings']);
+
+        $rows = array_values($resources['course_settings']);
+        self::assertSame('show_course_in_user_language', $rows[0]->variable);
+        self::assertSame('1', $rows[0]->value);
+        self::assertSame('documents_default_visibility', $rows[1]->variable);
+        self::assertSame('document', $rows[1]->category);
+    }
+
     public function testImportDocumentMetaPreservesVisibility(): void
     {
         $hash = str_repeat('ef', 20);

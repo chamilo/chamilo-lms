@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleExport;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CTool;
 use Database;
 use Throwable;
@@ -28,6 +29,7 @@ use const PATHINFO_EXTENSION;
  * Writes:
  * - chamilo/course/illustration.json (pointer to course overview image in files/)
  * - chamilo/course/tools.json (base-course tool visibility)
+ * - chamilo/course/settings.json (course settings, full exports only)
  *
  * Moodle ignores the chamilo/ tree. The illustration binary is also registered
  * in files.xml with component=course / filearea=overviewfiles so a real Moodle
@@ -46,9 +48,9 @@ class CourseMetaExport
     }
 
     /**
-     * Write course-level sidecars (illustration pointer + tools visibility).
+     * Write course-level sidecars. Course settings are included only for full exports.
      */
-    public function export(string $exportDir): void
+    public function export(string $exportDir, bool $includeCourseSettings = false): void
     {
         $base = rtrim($exportDir, '/').'/chamilo/course';
         if (!is_dir($base) && !@mkdir($base, api_get_permissions_for_new_directories(), true) && !is_dir($base)) {
@@ -83,6 +85,22 @@ class CourseMetaExport
                 'path' => 'chamilo/course/tools.json',
                 'count' => \count($tools['tools']),
             ]);
+        }
+
+        if ($includeCourseSettings) {
+            $settings = $this->buildCourseSettingsSidecar();
+            if (!empty($settings['settings'])) {
+                $path = $base.'/settings.json';
+                @file_put_contents(
+                    $path,
+                    json_encode($settings, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+                );
+                $this->appendToManifest($exportDir, [
+                    'kind' => 'course_settings',
+                    'path' => 'chamilo/course/settings.json',
+                    'count' => \count($settings['settings']),
+                ]);
+            }
         }
     }
 
@@ -202,6 +220,63 @@ class CourseMetaExport
         }
 
         return ['tools' => $tools];
+    }
+
+    /**
+     * @return array{settings: list<array{
+     *     variable: string,
+     *     value: string|null,
+     *     category: string|null,
+     *     subkey: string|null,
+     *     type: string|null,
+     *     title: string,
+     *     comment: string|null,
+     *     subkeytext: string|null
+     * }>}
+     */
+    private function buildCourseSettingsSidecar(): array
+    {
+        $settings = [];
+        $courseId = (int) ($this->course->info['real_id'] ?? 0);
+        if ($courseId <= 0) {
+            return ['settings' => $settings];
+        }
+
+        try {
+            $em = Database::getManager();
+
+            /** @var CCourseSetting[] $rows */
+            $rows = $em->getRepository(CCourseSetting::class)->findBy(
+                ['cId' => $courseId],
+                ['category' => 'ASC', 'variable' => 'ASC', 'iid' => 'ASC']
+            );
+
+            foreach ($rows as $setting) {
+                if (!$setting instanceof CCourseSetting) {
+                    continue;
+                }
+
+                $variable = trim($setting->getVariable());
+                if ('' === $variable) {
+                    continue;
+                }
+
+                $settings[] = [
+                    'variable' => $variable,
+                    'value' => $setting->getValue(),
+                    'category' => $setting->getCategory(),
+                    'subkey' => $setting->getSubkey(),
+                    'type' => $setting->getType(),
+                    'title' => (string) ($setting->getTitle() ?: $variable),
+                    'comment' => $setting->getComment(),
+                    'subkeytext' => $setting->getSubkeytext(),
+                ];
+            }
+        } catch (Throwable $e) {
+            @error_log('[CourseMetaExport] settings export error: '.$e->getMessage());
+        }
+
+        return ['settings' => $settings];
     }
 
     /**

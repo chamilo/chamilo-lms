@@ -16,8 +16,6 @@
  */
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-use ChamiloSession as Session;
-
 api_block_anonymous_users();
 
 $plugin = OnlyofficePlugin::create();
@@ -36,6 +34,8 @@ $sessionId = (int) api_get_session_id();
 $courseId = (int) api_get_course_int_id();
 $groupId = (int) api_get_group_id();
 $folderId = isset($_GET['folderId']) ? (int) $_GET['folderId'] : 0;
+$parentResourceNodeId = isset($_GET['parentResourceNodeId']) ? (int) $_GET['parentResourceNodeId'] : 0;
+$returnUrl = resolveOnlyofficeCreateReturnUrl((string) ($_GET['returnUrl'] ?? ''));
 
 $courseInfo = api_get_course_info();
 if (empty($courseInfo)) {
@@ -44,30 +44,26 @@ if (empty($courseInfo)) {
 
 $courseCode = $courseInfo['code'];
 
-$isMyDir = false;
-if (!empty($folderId)) {
-    $folderInfo = DocumentManager::get_document_data_by_id(
-        $folderId,
-        $courseCode,
-        true,
-        $sessionId
-    );
-    $isMyDir = DocumentManager::is_my_shared_folder(
-        $userId,
-        $folderInfo['absolute_path'],
-        $sessionId
-    );
-}
-$groupRights = Session::read('group_member_with_upload_rights');
-$isAllowToEdit = api_is_allowed_to_edit(true, true);
-if (!($isAllowToEdit || $isMyDir || $groupRights)) {
+if (!api_is_allowed_to_edit(true, true)) {
     api_not_allowed(true);
+}
+
+$formActionParams = [
+    'folderId' => $folderId,
+    'parentResourceNodeId' => $parentResourceNodeId,
+    'cid' => $courseId,
+    'sid' => $sessionId,
+    'gid' => $groupId,
+];
+
+if ('' !== $returnUrl) {
+    $formActionParams['returnUrl'] = $returnUrl;
 }
 
 $form = new FormValidator(
     'doc_create',
     'post',
-    api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php?folderId='.(int) $folderId
+    api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php?'.http_build_query($formActionParams)
 );
 
 $form->addText('fileName', $plugin->get_lang('title'), true);
@@ -87,7 +83,9 @@ if ($form->validate()) {
         $userId,
         $sessionId,
         $courseId,
-        $groupId
+        $groupId,
+        '',
+        $parentResourceNodeId
     );
 
     if (isset($result['error'])) {
@@ -98,15 +96,73 @@ if ($form->validate()) {
             )
         );
     } else {
-        header('Location: '.OnlyofficeDocumentManager::getUrlToLocation($courseCode, $sessionId, $groupId, $folderId));
+        $redirectUrl = '' !== $returnUrl
+            ? $returnUrl
+            : OnlyofficeDocumentManager::getUrlToLocation($courseCode, $sessionId, $groupId, $folderId);
+
+        header('Location: '.$redirectUrl);
         exit;
     }
 }
 
-$goBackUrl = OnlyofficeDocumentManager::getUrlToLocation($courseCode, $sessionId, $groupId, $folderId);
-$actionsLeft = '<a href="'.$goBackUrl.'">'.Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+$goBackUrl = '' !== $returnUrl
+    ? $returnUrl
+    : OnlyofficeDocumentManager::getUrlToLocation($courseCode, $sessionId, $groupId, $folderId);
+$actionsLeft = Display::url(
+    Display::return_icon(
+        'back.png',
+        get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),
+        [],
+        ICON_SIZE_MEDIUM
+    ),
+    $goBackUrl
+);
 
 Display::display_header($plugin->get_lang('createNewDocument'));
 echo Display::toolbarAction('actions-documents', [$actionsLeft]);
 echo $form->returnForm();
 Display::display_footer();
+
+/**
+ * Resolve an internal return URL for the modern Documents interface.
+ */
+function resolveOnlyofficeCreateReturnUrl(string $rawReturnUrl): string
+{
+    $rawReturnUrl = trim($rawReturnUrl);
+    if ('' === $rawReturnUrl) {
+        return '';
+    }
+
+    $baseUrl = rtrim((string) api_get_path(WEB_PATH), '/');
+    $baseParts = parse_url($baseUrl);
+    if (!is_array($baseParts) || empty($baseParts['scheme']) || empty($baseParts['host'])) {
+        return '';
+    }
+
+    if (str_starts_with($rawReturnUrl, '/') && !str_starts_with($rawReturnUrl, '//')) {
+        $port = isset($baseParts['port']) ? ':'.(int) $baseParts['port'] : '';
+        $rawReturnUrl = $baseParts['scheme'].'://'.$baseParts['host'].$port.$rawReturnUrl;
+    }
+
+    if (!filter_var($rawReturnUrl, FILTER_VALIDATE_URL)) {
+        return '';
+    }
+
+    $returnParts = parse_url($rawReturnUrl);
+    if (!is_array($returnParts) || empty($returnParts['scheme']) || empty($returnParts['host'])) {
+        return '';
+    }
+
+    $basePort = isset($baseParts['port']) ? (int) $baseParts['port'] : null;
+    $returnPort = isset($returnParts['port']) ? (int) $returnParts['port'] : null;
+
+    if (
+        strtolower((string) $baseParts['scheme']) !== strtolower((string) $returnParts['scheme'])
+        || strtolower((string) $baseParts['host']) !== strtolower((string) $returnParts['host'])
+        || $basePort !== $returnPort
+    ) {
+        return '';
+    }
+
+    return $rawReturnUrl;
+}

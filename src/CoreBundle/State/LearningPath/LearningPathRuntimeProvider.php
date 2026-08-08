@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
@@ -61,6 +62,21 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
 
     private const array AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
     private const array COMPLETED_STATUSES = ['completed', 'passed', 'succeeded', 'browsed', 'failed'];
+    private const array ONLYOFFICE_SUPPORTED_EXTENSIONS = [
+        'doc',
+        'docx',
+        'odt',
+        'rtf',
+        'txt',
+        'xls',
+        'xlsx',
+        'ods',
+        'csv',
+        'ppt',
+        'pptx',
+        'odp',
+        'pdf',
+    ];
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -69,6 +85,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private LpAdvancedAccessHelper $advancedAccessHelper,
+        private PluginHelper $pluginHelper,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ResourceNodeRepository $resourceNodeRepository,
         private LearningPathAccessChecker $accessChecker,
@@ -297,6 +314,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                     $session,
                     $group,
                     $request,
+                    $canManage,
                 )
                 : '';
         [$runtime->audioUrl, $runtime->audioTitle] = $currentItem instanceof CLpItem
@@ -726,6 +744,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         Request $request,
+        bool $canManage,
     ): string {
         $params = $this->buildContextParams($course, $session, $group, $request);
         $learningPathId = (int) $item->getLp()->getIid();
@@ -768,6 +787,21 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $document = $this->findContextResource(CDocument::class, $resourceId, $course, $session, $group);
             if (!$document instanceof CDocument) {
                 return '';
+            }
+
+            if ('document' === $type) {
+                $onlyofficeUrl = $this->buildOnlyofficeDocumentUrl(
+                    $document,
+                    $item,
+                    $course,
+                    $session,
+                    $group,
+                    $request,
+                    $canManage,
+                );
+                if ('' !== $onlyofficeUrl) {
+                    return $onlyofficeUrl;
+                }
             }
 
             $documentParams = $params;
@@ -1049,6 +1083,85 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params['legacy'] = 1;
 
         return $this->appendQuery('/main/lp/lp_controller.php', $params);
+    }
+
+    private function buildOnlyofficeDocumentUrl(
+        CDocument $document,
+        CLpItem $item,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        Request $request,
+        bool $canManage,
+    ): string {
+        if (!$this->pluginHelper->isPluginEnabled('Onlyoffice')) {
+            return '';
+        }
+
+        $resourceNode = $document->getResourceNode();
+        if (null === $resourceNode || !$resourceNode->hasResourceFile()) {
+            return '';
+        }
+
+        $resourceFile = $resourceNode->getResourceFiles()->first();
+        if (false === $resourceFile) {
+            return '';
+        }
+
+        $fileName = trim((string) ($resourceFile->getOriginalName() ?: $document->getTitle()));
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if ('' === $extension || !\in_array($extension, self::ONLYOFFICE_SUPPORTED_EXTENSIONS, true)) {
+            return '';
+        }
+
+        $params = [
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'docId' => (int) $document->getIid(),
+            'nh' => 1,
+            'origin' => 'learnpath',
+            'embedded' => 1,
+        ];
+
+        $groupId = (int) ($group?->getIid() ?? 0);
+        if ($groupId > 0) {
+            $params['groupId'] = $groupId;
+        }
+
+        if ('pdf' === $extension || !$canManage) {
+            $params['readOnly'] = 1;
+        }
+
+        $returnUrl = $this->buildRuntimeItemUrl($item, $course, $session, $group, $request);
+        if ('' !== $returnUrl) {
+            $params['returnUrl'] = $returnUrl;
+        }
+
+        return $this->appendQuery('/plugin/Onlyoffice/editor.php', $params);
+    }
+
+    private function buildRuntimeItemUrl(
+        CLpItem $item,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        Request $request,
+    ): string {
+        $learningPath = $item->getLp();
+        $resourceNodeId = (int) ($learningPath->getResourceNode()?->getId() ?? 0);
+        $learningPathId = (int) $learningPath->getIid();
+        $itemId = (int) $item->getIid();
+        if ($resourceNodeId <= 0 || $learningPathId <= 0 || $itemId <= 0) {
+            return '';
+        }
+
+        $params = $this->buildContextParams($course, $session, $group, $request);
+        $params['item_id'] = $itemId;
+
+        return $this->appendQuery(
+            '/resources/lp/'.$resourceNodeId.'/'.$learningPathId.'/runtime',
+            $params,
+        );
     }
 
     /**

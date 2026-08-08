@@ -37,6 +37,14 @@
       @click="goToNewDocument"
     />
     <BaseButton
+      v-if="showOnlyofficeCreateButton"
+      :label="`${t('New document')} (ONLYOFFICE)`"
+      icon="onlyoffice"
+      only-icon
+      type="success"
+      @click="goToNewOnlyofficeDocument"
+    />
+    <BaseButton
       v-if="showUploadButton"
       :label="t('Upload')"
       icon="file-upload"
@@ -877,6 +885,10 @@ const onlyofficeEditorPath = computed(() => {
   return String(platformConfigStore.plugins?.onlyoffice?.editorPath || "/plugin/Onlyoffice/editor.php")
 })
 
+const showOnlyofficeCreateButton = computed(() => {
+  return securityStore.isAuthenticated && onlyofficePluginEnabled.value && Boolean(unref(showNewDocumentButton))
+})
+
 const onlyofficeSupportedExtensions = new Set([
   "doc",
   "docx",
@@ -972,6 +984,22 @@ function buildOnlyofficeUrl(doc) {
 function openWithOnlyoffice(doc) {
   const url = buildOnlyofficeUrl(doc)
   window.open(url, "_blank", "noopener,noreferrer")
+}
+
+function goToNewOnlyofficeDocument() {
+  const sp = new URLSearchParams({
+    cid: String(unref(cid) || 0),
+    sid: String(unref(sid) || 0),
+    gid: String(unref(gid) || 0),
+    returnUrl: window.location.href,
+  })
+
+  const parentResourceNodeId = Number(route.params.node || route.query.node || 0)
+  if (Number.isInteger(parentResourceNodeId) && parentResourceNodeId > 0) {
+    sp.set("parentResourceNodeId", String(parentResourceNodeId))
+  }
+
+  window.location.href = `/plugin/Onlyoffice/create.php?${sp.toString()}`
 }
 
 /**

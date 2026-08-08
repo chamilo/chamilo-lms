@@ -121,6 +121,11 @@ if ($isCli) {
         exit;
     }
 
+    $container = $kernel->getContainer();
+    Container::setContainer($container);
+    Container::setRequest($request);
+    Container::setLegacyServices($container);
+
     // Start session for legacy code just in case not already started by Symfony.
     if (!$request->hasSession()) {
         $request->setSession(
@@ -128,7 +133,6 @@ if ($isCli) {
         );
     }
 
-    $container = $kernel->getContainer();
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);

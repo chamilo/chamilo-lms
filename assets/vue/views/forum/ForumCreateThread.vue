@@ -220,7 +220,6 @@ const notifications = useNotification()
 const courseSettingsStore = useCourseSettings()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
-const csrfToken = ref("")
 const forum = ref(null)
 const gradebookCategories = ref([])
 const showPostNotification = computed(() => !courseSettingsStore.isSettingEnabled("hide_forum_notifications"))
@@ -351,16 +350,10 @@ async function loadGradingOptions() {
 }
 
 async function loadInitialData() {
-  const [forumItem, tokenResponse] = await Promise.all([
-    forumService.getForum(forumId.value, baseQuery.value),
-    forumService.getActionToken(),
-  ])
-
-  forum.value = forumItem
+  forum.value = await forumService.getForum(forumId.value, baseQuery.value)
   if (!showPostNotification.value) {
     form.postNotification = false
   }
-  csrfToken.value = tokenResponse.token || ""
   await loadGradingOptions()
 }
 
@@ -386,7 +379,6 @@ async function submitThread() {
       text: form.text.trim(),
       threadSticky: isAllowedToEdit.value && form.threadSticky,
       postNotification: showPostNotification.value && form.postNotification,
-      csrfToken: csrfToken.value,
       attachments: allowAttachments.value ? form.attachments : [],
       gradebookEnabled: isAllowedToEdit.value && form.gradebookEnabled,
       gradebookCategoryId: form.gradebookEnabled ? Number(form.gradebookCategoryId || 0) : null,

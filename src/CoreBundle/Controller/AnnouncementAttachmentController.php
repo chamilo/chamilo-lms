@@ -28,15 +28,11 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 final readonly class AnnouncementAttachmentController
 {
     use AnnouncementAccessHelperTrait;
-
-    public const string CSRF_TOKEN_ID = 'announcement_attachment';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -44,7 +40,6 @@ final readonly class AnnouncementAttachmentController
         private CAnnouncementAttachmentRepository $attachmentRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private UploadFilenamePolicy $uploadFilenamePolicy,
     ) {}
 
@@ -106,7 +101,6 @@ final readonly class AnnouncementAttachmentController
     {
         [$course, $session, $group] = $this->resolveContext($request);
         $this->assertAttachmentsEnabled();
-        $this->validateCsrfToken((string) $request->request->get('csrfToken', ''));
         $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group, $request);
         $files = $this->getUploadedFiles($request);
         if ([] === $files) {
@@ -190,7 +184,6 @@ final readonly class AnnouncementAttachmentController
     {
         [$course, $session, $group] = $this->resolveContext($request);
         $this->assertAttachmentsEnabled();
-        $this->validateCsrfToken((string) $request->headers->get('X-CSRF-TOKEN', ''));
         $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group, $request);
         $attachment = $this->getAttachment($announcement, $attachmentId);
 
@@ -388,13 +381,6 @@ final readonly class AnnouncementAttachmentController
         }
 
         throw new AccessDeniedHttpException('Announcement attachments are disabled.');
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     /**

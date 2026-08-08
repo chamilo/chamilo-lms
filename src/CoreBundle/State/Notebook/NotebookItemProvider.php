@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -34,8 +33,6 @@ final readonly class NotebookItemProvider implements ProviderInterface
 {
     use NotebookAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'notebook_item';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -43,7 +40,6 @@ final readonly class NotebookItemProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -111,7 +107,6 @@ final readonly class NotebookItemProvider implements ProviderInterface
             $course,
             $session,
         );
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $item->languages = $this->getLanguages();
 
         return $item;

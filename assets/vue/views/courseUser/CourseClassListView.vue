@@ -254,7 +254,6 @@ const saving = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const informationMessage = ref("")
-const csrfToken = ref("")
 const groupsUrl = ref("")
 const page = ref(1)
 const itemsPerPage = ref(20)
@@ -296,7 +295,6 @@ async function loadClasses() {
     const response = await courseClassService.getList(requestParams())
     classes.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
-    csrfToken.value = response.csrfToken || ""
     groupsUrl.value = response.groupsUrl || ""
     informationMessage.value = response.information || ""
   } catch (error) {
@@ -376,7 +374,7 @@ async function runAction(action, usergroup) {
   successMessage.value = ""
 
   try {
-    const response = await action(usergroup.id, csrfToken.value, requestParams())
+    const response = await action(usergroup.id, requestParams())
     successMessage.value = response.message ? t(response.message) : t("Updated")
     await loadClasses()
   } catch (error) {

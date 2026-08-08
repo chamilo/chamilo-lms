@@ -55,9 +55,6 @@ final class ExerciseQuestionAction
     #[Groups(['exercise_question_action:read', 'exercise_question_action:write'])]
     public array $questionIds = [];
 
-    #[Groups(['exercise_question_action:write'])]
-    public string $submittedCsrfToken = '';
-
     #[Groups(['exercise_question_action:read'])]
     public bool $success = false;
 

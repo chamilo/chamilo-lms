@@ -57,9 +57,6 @@ final class LearningPathBuilderItemAudioInput
     #[Groups(['learning_path_builder_item_audio:read', 'learning_path_builder_item_audio:write'])]
     public ?int $documentId = null;
 
-    #[Groups(['learning_path_builder_item_audio:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_item_audio:read'])]
     public bool $saved = false;
 

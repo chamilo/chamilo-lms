@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<WikiPageForm>
@@ -31,8 +30,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class WikiPageFormProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
-
-    public const string CSRF_TOKEN_ID = 'wiki_page_form';
 
     private const int LOCK_TIMEOUT_SECONDS = 1200;
 
@@ -42,7 +39,6 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentService $assignmentService,
         private WikiCategoryService $categoryService,
@@ -196,7 +192,6 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         );
 
         $form = new WikiPageForm();
-        $form->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $form->isNew = !$exactPage instanceof CWiki;
         $form->isInheritedFromCourse = $isInheritedFromCourse;
         $form->canManage = $canManage;

@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathRuntimeRestartProcessor;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
@@ -44,9 +43,6 @@ final class LearningPathRuntimeRestartInput
 {
     #[ApiProperty(identifier: true)]
     public ?int $lpId = null;
-
-    #[Groups(['learning_path_runtime_restart:write'])]
-    public string $csrfToken = '';
 
     public function getLpId(): ?int
     {

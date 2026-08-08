@@ -163,9 +163,6 @@ final class SurveyConfiguration
     #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
     public float $gradebookWeight = 0.0;
 
-    #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<string, mixed>
      */

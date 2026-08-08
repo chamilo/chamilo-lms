@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const DATE_ATOM;
@@ -44,7 +43,6 @@ final readonly class NotebookListProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -91,9 +89,6 @@ final readonly class NotebookListProvider implements ProviderInterface
         $list->sessionId = null !== $session ? (int) $session->getId() : null;
         $list->canWrite = $canWrite;
         $list->studentView = $studentView;
-        $list->csrfToken = $canWrite
-            ? (string) $this->csrfTokenManager->getToken(NotebookItemProvider::CSRF_TOKEN_ID)
-            : '';
         $list->sort = $sort;
         $list->direction = $direction;
 

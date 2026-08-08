@@ -34,7 +34,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<LearningPathCategorySubscription, void> */
 final readonly class LearningPathCategorySubscriptionProcessor implements ProcessorInterface
@@ -51,7 +50,6 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         private RequestStack $requestStack,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -71,7 +69,6 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfTokenInput);
         $course = $this->getContextCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);

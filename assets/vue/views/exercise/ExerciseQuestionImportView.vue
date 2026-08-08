@@ -194,7 +194,6 @@ const { t } = useI18n()
 const route = useRoute()
 
 const title = ref("")
-const csrfToken = ref("")
 const sample = ref("")
 const actionUrls = ref({})
 const totalWeight = ref("20")
@@ -301,7 +300,6 @@ async function loadImportData() {
   try {
     const response = await exerciseService.getExerciseQuestionImport(props.importType, getContextParams())
     title.value = response.title || defaultTitle.value
-    csrfToken.value = response.csrfToken || ""
     sample.value = response.sample || ""
     actionUrls.value = response.actionUrls || {}
   } catch (error) {
@@ -324,7 +322,6 @@ async function submitImport() {
   rowErrors.value = []
 
   const formData = new FormData()
-  formData.append("submittedCsrfToken", csrfToken.value)
   formData.append("file", selectedFile.value)
 
   if (isAikenImport.value) {

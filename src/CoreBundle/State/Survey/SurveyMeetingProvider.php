@@ -29,22 +29,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<SurveyMeeting>
  */
 final readonly class SurveyMeetingProvider implements ProviderInterface
 {
-    public const string CSRF_TOKEN_ID = 'survey_meeting';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -92,7 +88,6 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $response->surveyLanguage = $this->getCourseLanguage($course);
         $response->availableFrom = $this->formatDate($now);
         $response->availableUntil = $this->formatDate($later);
-        $response->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->canEdit = true;
         $response->canSubmit = false;
         $response->slots = $this->getDefaultSlots();
@@ -138,7 +133,6 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $response->surveyLanguage = (string) $survey->getLang();
         $response->availableFrom = $this->formatDate($survey->getAvailFrom());
         $response->availableUntil = $this->formatDate($survey->getAvailTill());
-        $response->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->slots = $this->getSlots($survey);
         $response->selectedSlots = $selectedSlots;
         $response->participants = $this->getParticipants($survey, $course, $session);

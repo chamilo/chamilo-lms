@@ -23,22 +23,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<SurveyAnswer, SurveyAnswer>
  */
 final readonly class SurveyAnswerProcessor implements ProcessorInterface
 {
-    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SurveyAnswerProvider $surveyAnswerProvider,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
@@ -61,7 +57,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyAnswerProvider::CSRF_TOKEN_ID, $payload);
 
         $survey = $this->surveyAnswerProvider->getSurvey($surveyId);
         $course = $this->surveyAnswerProvider->getCourse($request, $survey);
@@ -145,7 +140,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 
         if ($data instanceof SurveyAnswer) {
             return [
-                'csrfToken' => $data->csrfToken,
                 'answers' => $data->submittedAnswers,
                 'otherAnswers' => $data->otherAnswers,
                 'profileValues' => $data->profileValues,
@@ -153,13 +147,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         return [];
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(SurveyAnswerProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     /**

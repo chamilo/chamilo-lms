@@ -35,70 +35,69 @@ export default {
     return await baseService.patch(`/api/announcement/${id}`, payload, { params: cleanParams(params) })
   },
 
-  async changeVisibility(id, visibility, csrfToken, params = {}) {
+  async changeVisibility(id, visibility, params = {}) {
     return await baseService.post(
       `/api/announcement/${id}/visibility`,
-      { visibility, csrfToken },
+      { visibility },
       {},
-      { params: cleanParams(params) },
+      {
+        params: cleanParams(params),
+      },
     )
   },
 
-  async move(id, direction, csrfToken, params = {}) {
+  async move(id, direction, params = {}) {
     return await baseService.post(
       `/api/announcement/${id}/move`,
-      { direction, csrfToken },
+      { direction },
       {},
-      { params: cleanParams(params) },
+      {
+        params: cleanParams(params),
+      },
     )
   },
 
-  async deleteOne(id, csrfToken, params = {}) {
-    return await baseService.post(
-      `/api/announcement/${id}/delete`,
-      { csrfToken },
-      {},
-      { params: cleanParams(params) },
-    )
+  async deleteOne(id, params = {}) {
+    return await baseService.post(`/api/announcement/${id}/delete`, {}, {}, { params: cleanParams(params) })
   },
 
-  async deleteSelected(ids, csrfToken, params = {}) {
+  async deleteSelected(ids, params = {}) {
     return await baseService.post(
       "/api/announcement/delete-selected",
-      { ids, csrfToken },
+      { ids },
       {},
-      { params: cleanParams(params) },
+      {
+        params: cleanParams(params),
+      },
     )
   },
 
-  async deleteAll(csrfToken, params = {}) {
-    return await baseService.post(
-      "/api/announcement/delete-all",
-      { csrfToken },
-      {},
-      { params: cleanParams(params) },
-    )
+  async deleteAll(params = {}) {
+    return await baseService.post("/api/announcement/delete-all", {}, {}, { params: cleanParams(params) })
   },
 
   async sendEmail(id, payload, params = {}) {
-    return await baseService.post(`/api/announcement/${id}/send-email`, payload, {}, {
-      params: cleanParams(params),
-    })
+    return await baseService.post(
+      `/api/announcement/${id}/send-email`,
+      payload,
+      {},
+      {
+        params: cleanParams(params),
+      },
+    )
   },
 
-  async uploadAttachments(id, files, comment, csrfToken, params = {}) {
+  async uploadAttachments(id, files, comment, params = {}) {
     const formData = new FormData()
     files.forEach((file) => formData.append("files[]", file))
     formData.append("comment", comment || "")
-    formData.append("csrfToken", csrfToken)
 
     return await baseService.post(`/api/announcement/${id}/attachments`, formData, {}, { params: cleanParams(params) })
   },
 
-  async deleteAttachment(announcementId, attachmentId, csrfToken, params = {}) {
+  async deleteAttachment(announcementId, attachmentId, params = {}) {
     return await baseService.delete(`/api/announcement/${announcementId}/attachment/${attachmentId}`, {
       params: cleanParams(params),
-      headers: { "X-CSRF-TOKEN": csrfToken },
     })
   },
 }

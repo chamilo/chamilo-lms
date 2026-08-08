@@ -102,9 +102,6 @@ final class LearningPathCategoryInput
     #[Groups(['lp_category_input:write'])]
     public string $action = '';
 
-    #[Groups(['lp_category_input:write'])]
-    public string $csrfToken = '';
-
     public function getId(): ?int
     {
         return $this->id;

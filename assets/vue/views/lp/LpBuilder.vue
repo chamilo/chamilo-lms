@@ -453,7 +453,6 @@ async function createSection() {
     const created = await lpService.createBuilderSection(lpId.value, context.value, {
       title: sectionForm.title,
       parentId: sectionForm.parentId,
-      csrfToken: builder.value.csrfToken,
     })
     sectionForm.title = ""
     selectedId.value = Number(created.id || 0)
@@ -476,9 +475,7 @@ function confirmDeleteItem(id) {
     message: t("Are you sure you want to delete this item?"),
     accept: async () => {
       try {
-        await lpService.deleteBuilderItem(lpId.value, id, context.value, {
-          csrfToken: builder.value.csrfToken,
-        })
+        await lpService.deleteBuilderItem(lpId.value, id, context.value)
         if (selectedId.value === id) {
           selectedId.value = 0
           panelMode.value = ""
@@ -505,7 +502,6 @@ async function addResource(resource, parentId = selectedSectionId.value, exportA
       resourceId: Number(resource.id),
       parentId: parentId || null,
       exportAllowed: Boolean(exportAllowed),
-      csrfToken: builder.value.csrfToken,
     })
     selectedId.value = Number(created.id || 0)
     showSuccessNotification(t("Added"))
@@ -535,7 +531,6 @@ async function addResources(resourceItems, parentId = selectedSectionId.value, e
         resourceId: Number(resource.id),
         parentId: parentId || null,
         exportAllowed: Boolean(exportAllowed),
-        csrfToken: builder.value.csrfToken,
       })
       lastCreatedId = Number(created.id || lastCreatedId)
       addedCount += 1
@@ -602,7 +597,6 @@ async function onStructureChanged() {
   try {
     await lpService.reorderBuilderItems(lpId.value, context.value, {
       order: flattenTree(tree.value),
-      csrfToken: builder.value.csrfToken,
     })
     showSuccessNotification(t("Updated"))
   } catch (error) {
@@ -641,7 +635,6 @@ async function applyPrerequisiteAction() {
   try {
     await lpService.updateBuilderPrerequisites(lpId.value, context.value, {
       action,
-      csrfToken: builder.value.csrfToken,
     })
     showSuccessNotification(t("Updated"))
     await loadBuilder()
@@ -902,7 +895,6 @@ function goBack() {
               v-if="panelMode === 'edit' && selectedItem?.isFinal"
               :certificate="builder?.certificate || {}"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :documents-root-node-id="
                 Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
               "
@@ -915,7 +907,6 @@ function goBack() {
               :ai-quick-test-enabled="Boolean(builder?.aiQuickTestEnabled)"
               :ai-quick-test-providers="builder?.aiQuickTestProviders || []"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :item="selectedItem"
               :lp-id="lpId"
               :parent-options="selectedParentOptions"
@@ -927,7 +918,6 @@ function goBack() {
             <LpBuilderPrerequisiteForm
               v-else-if="panelMode === 'prerequisite' && selectedItem"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :item="selectedItem"
               :items="tree"
               :lp-id="lpId"
@@ -938,7 +928,6 @@ function goBack() {
               v-else-if="panelMode === 'audio' && selectedItem"
               :audio-items="resources.audio?.items || []"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :documents-root-node-id="
                 Number(builder?.defaultDocumentParentNodeId || builder?.documentsRootNodeId || 0)
               "
@@ -951,7 +940,6 @@ function goBack() {
               v-else-if="panelMode === 'author-price' && builder?.bulkAuthorPrice?.enabled"
               :configuration="builder.bulkAuthorPrice"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :items="tree"
               :lp-id="lpId"
               @saved="handleBulkAuthorPriceSaved"
@@ -1182,7 +1170,6 @@ function goBack() {
               v-else-if="activeTool === 'certificate'"
               :certificate="builder?.certificate || {}"
               :context="context"
-              :csrf-token="builder?.csrfToken || ''"
               :documents-root-node-id="Number(builder?.documentsRootNodeId || 0)"
               :lp-id="lpId"
               @saved="handleCertificateSaved"

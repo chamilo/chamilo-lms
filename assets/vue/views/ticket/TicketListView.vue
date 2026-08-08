@@ -388,7 +388,6 @@ const isAdmin = ref(false)
 const canViewAll = ref(false)
 const canCreate = ref(false)
 const selectedProjectId = ref(0)
-const csrfToken = ref("")
 
 const emptyFilters = () => ({
   projectId: Number(route.query.project_id || 0) || null,
@@ -493,7 +492,6 @@ async function loadTickets() {
     canViewAll.value = Boolean(response.canViewAll)
     canCreate.value = Boolean(response.canCreate)
     selectedProjectId.value = Number(response.projectId || 0)
-    csrfToken.value = response.csrfToken || ""
 
     if (!filters.projectId && selectedProjectId.value) {
       filters.projectId = selectedProjectId.value
@@ -585,7 +583,7 @@ async function closeOldTickets() {
   if (isClosingOldTickets.value) return
   isClosingOldTickets.value = true
   try {
-    const response = await ticketService.closeOldTickets(csrfToken.value)
+    const response = await ticketService.closeOldTickets()
     showSuccessNotification(`${response.message || t("Update successful")} (${Number(response.count || 0)})`)
     await loadTickets()
   } catch (error) {

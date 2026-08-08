@@ -33,7 +33,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const ENT_HTML5;
@@ -46,7 +45,6 @@ use const SYS_PLUGIN_PATH;
  */
 final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_question_editor';
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -89,7 +87,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -360,7 +357,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $response->attachedQuestions = $this->getAttachedQuestions($quiz, $question);
         }
         $response->legacyUrls = $this->getLegacyUrls($quiz, $course, $session);
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
@@ -381,7 +377,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->mediaOptions = [];
         $response->attachedQuestions = [];
         $response->legacyUrls = [];
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = false;

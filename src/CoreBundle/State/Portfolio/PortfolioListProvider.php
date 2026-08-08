@@ -37,7 +37,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<PortfolioList>
@@ -56,7 +55,6 @@ final readonly class PortfolioListProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -202,7 +200,6 @@ final readonly class PortfolioListProvider implements ProviderInterface
         $result->tags = $this->loadAvailableTags($course, $session);
         $result->authors = $authors;
         $result->filters = $filters;
-        $result->csrfToken = $this->csrfTokenManager->getToken('portfolio_action')->getValue();
         $result->maxScore = $course instanceof Course ? (float) $this->getCourseSettingInt('portfolio_max_score', $course) : 0.0;
         $result->canQualifyItems = $canManageCourse
             && $course instanceof Course

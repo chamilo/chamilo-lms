@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 
@@ -42,7 +40,6 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -75,7 +72,6 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('You are not allowed to manage course descriptions in this context.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
         $descriptionType = $this->normalizeDescriptionType($data->descriptionType);
         $title = trim($data->title);
         $content = trim($data->content);
@@ -231,13 +227,6 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         return false;
     }
 
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(CourseDescriptionItemProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
-    }
-
     private function sanitizeTitle(string $title): string
     {
         if ($this->isSettingEnabled('editor.save_titles_as_html')) {
@@ -319,7 +308,6 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
         $item->enableSearch = true;
         $item->canEdit = true;
         $item->isNew = false;
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(CourseDescriptionItemProvider::CSRF_TOKEN_ID);
 
         return $item;
     }

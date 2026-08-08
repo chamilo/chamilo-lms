@@ -30,9 +30,6 @@ final class ForumActionToken
     #[Groups(['forum_action_token:read'])]
     public string $id = 'forum_action_token';
 
-    #[Groups(['forum_action_token:read'])]
-    public string $token = '';
-
     /**
      * @var array<string, mixed>
      */

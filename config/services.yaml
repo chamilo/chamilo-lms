@@ -15,6 +15,14 @@ parameters:
     packager: '%env(PACKAGER)%'
     default_template: '%env(DEFAULT_TEMPLATE)%'
     scim_token: '%env(SCIM_TOKEN)%'
+    # Whether CsrfProtectionListener rejects requests that fail CSRF validation.
+    # On by default, so an installation that never updates its .env is still
+    # protected. Set CHAMILO_CSRF_ENFORCE=false to drop back to log-only mode,
+    # where the listener records what it would have rejected instead of
+    # answering 403 -- useful to find clients that write with a session cookie
+    # but send no Origin before enforcing on them.
+    env(CHAMILO_CSRF_ENFORCE): '1'
+    chamilo.csrf.enforce: '%env(bool:CHAMILO_CSRF_ENFORCE)%'
     .container.dumper.inline_factories: true
     twig:
         form:

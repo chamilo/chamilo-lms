@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /** @implements ProcessorInterface<WikiCategoryInput, void> */
@@ -36,7 +34,6 @@ final readonly class WikiCategoryProcessor implements ProcessorInterface
         private CWikiCategoryRepository $categoryRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiCategoryService $categoryService,
     ) {}
 
@@ -87,7 +84,6 @@ final readonly class WikiCategoryProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('Wiki categories are disabled for this course.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
         $categoryId = isset($uriVariables['categoryId']) ? (int) $uriVariables['categoryId'] : 0;
         $operationName = (string) $operation->getName();
 
@@ -152,12 +148,5 @@ final readonly class WikiCategoryProcessor implements ProcessorInterface
         }
 
         return $category;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiCategoryProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

@@ -73,7 +73,6 @@
             :key="`${section.key}_${mode}`"
             class="mt-5"
             :course-id="configuration.courseId"
-            :csrf-token="configuration.csrfToken"
             :integrations="configuration.integrations"
             :media="configuration.media"
             :mode="mode"
@@ -167,7 +166,6 @@ const configuration = reactive({
   permissions: {},
   media: {},
   integrations: {},
-  csrfToken: "",
 })
 
 const contextParams = computed(() => ({
@@ -218,11 +216,7 @@ async function saveSettings() {
   successMessage.value = ""
 
   try {
-    const response = await courseSettingsService.save(
-      sanitizeValues(configuration.values),
-      configuration.csrfToken,
-      contextParams.value,
-    )
+    const response = await courseSettingsService.save(sanitizeValues(configuration.values), contextParams.value)
     applyConfiguration(response)
     await cidReqStore.refreshCourseById(configuration.courseId, configuration.sessionId || 0)
     successMessage.value = t(response.message || "Update successful")
@@ -244,7 +238,6 @@ function applyConfiguration(data) {
   configuration.permissions = data.permissions || {}
   configuration.media = data.media || {}
   configuration.integrations = data.integrations || {}
-  configuration.csrfToken = data.csrfToken || configuration.csrfToken
 }
 
 function mediaModes(sectionKey) {

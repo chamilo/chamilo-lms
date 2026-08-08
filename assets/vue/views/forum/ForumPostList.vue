@@ -512,7 +512,6 @@ const itemsPerPage = 25
 const loadMoreSentinel = ref(null)
 const supportsIntersectionObserver = typeof window !== "undefined" && "IntersectionObserver" in window
 let postObserver = null
-const csrfToken = ref("")
 const editDialogVisible = ref(false)
 const moveDialogVisible = ref(false)
 const editFormSubmitted = ref(false)
@@ -541,7 +540,6 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
-const actionPayload = computed(() => ({ csrfToken: csrfToken.value }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
 const viewType = ref(["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : "flat")
 const viewTypeOptions = computed(() => [
@@ -895,15 +893,6 @@ function goBackToLearningPath() {
   })
 }
 
-async function ensureToken() {
-  if (csrfToken.value) {
-    return
-  }
-
-  const tokenResponse = await forumService.getActionToken()
-  csrfToken.value = tokenResponse.token || ""
-}
-
 function disconnectPostObserver() {
   if (postObserver) {
     postObserver.disconnect()
@@ -960,14 +949,11 @@ async function loadPosts() {
   totalPages.value = 0
 
   try {
-    const [data, tokenResponse] = await Promise.all([
-      forumService.getThreadPosts(threadId.value, forumId.value, {
-        ...baseQuery.value,
-        page: 1,
-        itemsPerPage,
-      }),
-      forumService.getActionToken(),
-    ])
+    const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
+      ...baseQuery.value,
+      page: 1,
+      itemsPerPage,
+    })
 
     forum.value = data.forum
     thread.value = { ...(data.thread || {}), canReply: Boolean(data.canReply) }
@@ -976,7 +962,6 @@ async function loadPosts() {
     if (!route.query.view && forum.value?.defaultView) {
       viewType.value = ["flat", "threaded", "nested"].includes(forum.value.defaultView) ? forum.value.defaultView : "flat"
     }
-    csrfToken.value = tokenResponse.token || ""
   } catch (error) {
     loadError.value = true
     console.error("Error fetching forum posts:", error)
@@ -1024,8 +1009,7 @@ async function toggleThreadVisibility() {
   const wasVisible = isThreadVisible(thread.value)
 
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, { visible: !wasVisible })
     if (thread.value) {
       thread.value.threadVisible = response.visible
     }
@@ -1039,8 +1023,7 @@ async function toggleThreadVisibility() {
 
 async function toggleThreadLock() {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadLock(threadId.value, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadLock(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(Number(response.locked || 0) ? t("Thread closed") : t("Thread opened"))
     await loadPosts()
@@ -1052,8 +1035,7 @@ async function toggleThreadLock() {
 
 async function toggleThreadSticky() {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadSticky(threadId.value, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadSticky(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"))
     await loadPosts()
@@ -1070,9 +1052,7 @@ async function toggleThreadNotification() {
   }
 
   try {
-    await ensureToken()
     const response = await forumService.toggleThreadSubscription(threadId.value, baseQuery.value, {
-      ...actionPayload.value,
       subscribed: !thread.value.subscribed,
     })
 
@@ -1094,8 +1074,7 @@ function confirmDeleteThread() {
 
 async function deleteThread() {
   try {
-    await ensureToken()
-    await forumService.deleteThread(threadId.value, baseQuery.value, actionPayload.value)
+    await forumService.deleteThread(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Thread deleted"))
     await router.push({ name: "ForumThreadList", params: { node: parentId.value, forumId: forumId.value }, query: route.query })
@@ -1108,8 +1087,7 @@ async function deleteThread() {
 
 async function approvePost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.approvePost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.approvePost(post.iid, baseQuery.value, {})
     post.visible = response.visible
     post.status = response.status
     notifications.showSuccessNotification(t("Post approved"))
@@ -1129,8 +1107,7 @@ function confirmRejectPost(post) {
 
 async function rejectPost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.rejectPost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.rejectPost(post.iid, baseQuery.value, {})
     post.visible = response.visible
     post.status = response.status
     notifications.showSuccessNotification(t("Post rejected"))
@@ -1145,8 +1122,7 @@ async function togglePostVisibility(post) {
   const wasVisible = isPostVisible(post)
 
   try {
-    await ensureToken()
-    const response = await forumService.togglePostVisibility(post.iid, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.togglePostVisibility(post.iid, baseQuery.value, { visible: !wasVisible })
     post.visible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Post shown") : t("Post hidden"))
     await loadPosts()
@@ -1174,9 +1150,7 @@ async function savePostEdit() {
   isSavingEdit.value = true
 
   try {
-    await ensureToken()
     await forumService.updatePost(editPost.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       title: editForm.title.trim(),
       text: editForm.text.trim(),
     })
@@ -1201,8 +1175,7 @@ function confirmDeletePost(post) {
 
 async function deletePost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.deletePost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.deletePost(post.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadDeleted ? t("Thread deleted") : t("Post deleted"))
 
@@ -1255,9 +1228,7 @@ async function savePostMove() {
   isSavingMove.value = true
 
   try {
-    await ensureToken()
     const response = await forumService.movePost(movePost.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       targetThreadId: Number(moveTargetThreadId.value),
     })
 
@@ -1284,8 +1255,7 @@ async function savePostMove() {
 
 async function askRevision(post) {
   try {
-    await ensureToken()
-    const response = await forumService.askPostRevision(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.askPostRevision(post.iid, baseQuery.value, {})
     post.revisionRequested = response.revisionRequested
     notifications.showSuccessNotification(response.revisionRequested ? t("Revision requested") : t("Revision request removed"))
     await loadPosts()
@@ -1304,8 +1274,7 @@ function confirmReportPost(post) {
 
 async function reportPost(post) {
   try {
-    await ensureToken()
-    await forumService.reportPost(post.iid, baseQuery.value, actionPayload.value)
+    await forumService.reportPost(post.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Reported"))
   } catch (error) {
     console.error("Error reporting forum post:", error)
@@ -1322,8 +1291,7 @@ function confirmDeleteAttachment(attachment) {
 
 async function deleteAttachment(attachment) {
   try {
-    await ensureToken()
-    await forumService.deleteAttachment(attachment.iid || attachment.id, baseQuery.value, actionPayload.value)
+    await forumService.deleteAttachment(attachment.iid || attachment.id, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Attachment deleted"))
     await loadPosts()

@@ -574,7 +574,6 @@ const categoryFormSubmitted = ref(false)
 const forumFormSubmitted = ref(false)
 const isCategoryDialogVisible = ref(false)
 const isForumDialogVisible = ref(false)
-const csrfToken = ref("")
 const forumSettings = ref({
   defaultForumView: "flat",
   forumFoldCategories: false,
@@ -937,9 +936,8 @@ function openEditForumDialog(forum) {
   isForumDialogVisible.value = true
 }
 
-async function loadToken() {
+async function loadForumSettings() {
   const response = await forumService.getActionToken()
-  csrfToken.value = response.token || ""
   forumSettings.value = {
     ...forumSettings.value,
     ...(response.settings || {}),
@@ -980,7 +978,6 @@ async function saveCategory() {
     locked: categoryForm.locked,
     language: canEditCategoryLanguage.value ? categoryForm.language : "",
     parentResourceNodeId: parentId.value,
-    csrfToken: csrfToken.value,
   }
 
   try {
@@ -997,7 +994,6 @@ async function saveCategory() {
   } catch (error) {
     console.error("Error saving forum category:", error)
     notifications.showErrorNotification(t("Could not save forum category"))
-    await loadToken()
   } finally {
     isSavingCategory.value = false
   }
@@ -1036,7 +1032,6 @@ async function saveForum() {
     parentResourceNodeId: parentId.value,
     lpId: lpId.value || 0,
     lpParentId: Number(route.query.parent || 0) || 0,
-    csrfToken: csrfToken.value,
   }
 
   try {
@@ -1064,7 +1059,6 @@ async function saveForum() {
   } catch (error) {
     console.error("Error saving forum:", error)
     notifications.showErrorNotification(t("Could not save forum"))
-    await loadToken()
   } finally {
     isSavingForum.value = false
   }
@@ -1076,7 +1070,6 @@ async function saveForumImageIfNeeded(forumId) {
   }
 
   const response = await forumService.uploadForumImage(forumId, baseQuery.value, {
-    csrfToken: csrfToken.value,
     image: forumForm.imageFile,
     removeImage: forumForm.removeImage,
   })
@@ -1098,13 +1091,12 @@ function confirmDeleteCategory(category) {
 
 async function deleteCategory(category) {
   try {
-    await forumService.deleteCategory(category.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.deleteCategory(category.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Forum category deleted"))
     await loadForums()
   } catch (error) {
     console.error("Error deleting forum category:", error)
     notifications.showErrorNotification(t("Could not delete forum category"))
-    await loadToken()
   }
 }
 
@@ -1117,25 +1109,23 @@ function confirmDeleteForum(forum) {
 
 async function deleteForum(forum) {
   try {
-    await forumService.deleteForum(forum.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.deleteForum(forum.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Forum deleted"))
     await loadForums()
   } catch (error) {
     console.error("Error deleting forum:", error)
     notifications.showErrorNotification(t("Could not delete forum"))
-    await loadToken()
   }
 }
 
 async function toggleCategoryLock(category) {
   try {
-    await forumService.toggleCategoryLock(category.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.toggleCategoryLock(category.iid, baseQuery.value, {})
     notifications.showSuccessNotification(Number(category.locked || 0) ? t("Forum category unlocked") : t("Forum category locked"))
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum category lock:", error)
     notifications.showErrorNotification(t("Could not update forum category"))
-    await loadToken()
   }
 }
 
@@ -1145,7 +1135,6 @@ async function toggleCategoryVisibility(category) {
   try {
     const response = await forumService.toggleCategoryVisibility(category.iid, baseQuery.value, {
       visible: !wasVisible,
-      csrfToken: csrfToken.value,
     })
     category.forumCategoryVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Forum category shown") : t("Forum category hidden"))
@@ -1153,19 +1142,17 @@ async function toggleCategoryVisibility(category) {
   } catch (error) {
     console.error("Error toggling forum category visibility:", error)
     notifications.showErrorNotification(t("Could not update forum category"))
-    await loadToken()
   }
 }
 
 async function toggleForumLock(forum) {
   try {
-    await forumService.toggleForumLock(forum.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.toggleForumLock(forum.iid, baseQuery.value, {})
     notifications.showSuccessNotification(Number(forum.locked || 0) ? t("Forum unlocked") : t("Forum locked"))
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum lock:", error)
     notifications.showErrorNotification(t("Could not update forum"))
-    await loadToken()
   }
 }
 
@@ -1175,7 +1162,6 @@ async function toggleForumVisibility(forum) {
   try {
     const response = await forumService.toggleForumVisibility(forum.iid, baseQuery.value, {
       visible: !wasVisible,
-      csrfToken: csrfToken.value,
     })
     forum.forumVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Forum shown") : t("Forum hidden"))
@@ -1183,7 +1169,6 @@ async function toggleForumVisibility(forum) {
   } catch (error) {
     console.error("Error toggling forum visibility:", error)
     notifications.showErrorNotification(t("Could not update forum"))
-    await loadToken()
   }
 }
 
@@ -1191,7 +1176,6 @@ async function toggleForumVisibility(forum) {
 async function toggleForumNotification(forum) {
   try {
     const response = await forumService.toggleForumSubscription(forum.iid, baseQuery.value, {
-      csrfToken: csrfToken.value,
       subscribed: !forum.subscribed,
     })
 
@@ -1201,31 +1185,28 @@ async function toggleForumNotification(forum) {
   } catch (error) {
     console.error("Error toggling forum notification:", error)
     notifications.showErrorNotification(t("Could not update forum notification"))
-    await loadToken()
   }
 }
 
 async function moveCategory(category, direction) {
   try {
-    await forumService.moveCategory(category.iid, baseQuery.value, { direction, csrfToken: csrfToken.value })
+    await forumService.moveCategory(category.iid, baseQuery.value, { direction })
     notifications.showSuccessNotification(t("Forum category moved"))
     await loadForums()
   } catch (error) {
     console.error("Error moving forum category:", error)
     notifications.showErrorNotification(t("Could not move forum category"))
-    await loadToken()
   }
 }
 
 async function moveForum(forum, direction) {
   try {
-    await forumService.moveForum(forum.iid, baseQuery.value, { direction, csrfToken: csrfToken.value })
+    await forumService.moveForum(forum.iid, baseQuery.value, { direction })
     notifications.showSuccessNotification(t("Forum moved"))
     await loadForums()
   } catch (error) {
     console.error("Error moving forum:", error)
     notifications.showErrorNotification(t("Could not move forum"))
-    await loadToken()
   }
 }
 
@@ -1242,7 +1223,7 @@ watch(categoryLanguageFilter, async () => {
 })
 
 onMounted(async () => {
-  await Promise.all([loadToken(), loadForums()])
+  await Promise.all([loadForumSettings(), loadForums()])
 
   if (shouldOpenCreateForumDialogOnLoad.value) {
     openCreateForumDialog()

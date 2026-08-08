@@ -33,16 +33,6 @@ class CourseListActionController extends AbstractController
     public function handleAction(Request $request): Response
     {
         $action = (string) $request->request->get('action');
-        $token = (string) $request->request->get('_token');
-
-        if (!$this->isCsrfTokenValid('admin_course_list', $token)) {
-            if ('toggle_catalogue' === $action) {
-                return $this->json(['error' => 'Invalid CSRF token.'], 403);
-            }
-            $this->addFlash('error', 'Invalid CSRF token.');
-
-            return $this->redirect('/admin/course-list');
-        }
 
         return match ($action) {
             'delete_course' => $this->deleteSingle($request),

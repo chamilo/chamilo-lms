@@ -74,14 +74,12 @@ function buildLearningPathBuilderRoute() {
 async function addCreatedAssignmentToLearningPath(assignmentId) {
   const lpId = Number(route.query.lp_id || 0)
   const context = { cid, sid, gid }
-  const builder = await lpService.getBuilder(lpId, context)
 
   await lpService.addBuilderResource(lpId, context, {
     resourceType: "student_publication",
     resourceId: assignmentId,
     parentId: Number(route.query.parent || 0) || null,
     exportAllowed: false,
-    csrfToken: builder.csrfToken,
   })
 }
 

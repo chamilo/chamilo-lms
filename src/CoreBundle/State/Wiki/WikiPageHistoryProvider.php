@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 
@@ -31,15 +30,12 @@ final readonly class WikiPageHistoryProvider implements ProviderInterface
 {
     use WikiAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'wiki_page_restore';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiPageDiffService $diffService,
     ) {}
@@ -146,9 +142,6 @@ final readonly class WikiPageHistoryProvider implements ProviderInterface
         $history->currentIid = null !== $latest->getIid() ? (int) $latest->getIid() : null;
         $history->currentVersion = (int) $latest->getVersion();
         $history->canRestore = $canRestore;
-        $history->csrfToken = $canRestore
-            ? (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)
-            : '';
         $history->versions = array_map(
             fn (CWiki $version): array => $this->buildVersionSummary($version, $users, $latest),
             $versions,

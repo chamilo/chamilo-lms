@@ -42,7 +42,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
@@ -54,14 +53,12 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 {
     use LearningPathStateHelperTrait;
 
-    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
     private const array AUDIO_EXTENSIONS = ['aac', 'm4a', 'mp3', 'ogg', 'wav', 'webm'];
     private const string DEFAULT_FINAL_ITEM_CONTENT = '<div>Congratulations! You have finished this learning path</div>((certificate)) <br />((skill))';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
@@ -120,7 +117,6 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             return $result;
         }
 
-        $result->csrfToken = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
         $documentsRoot = $this->documentRepository->ensureCourseDocumentsRootNode($course);
         $learningPathFolder = $this->documentRepository->ensureLearningPathDocumentFolder(
             $course,

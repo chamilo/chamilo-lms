@@ -13,7 +13,6 @@
         <div class="space-y-4">
           <CoursePictureUploader
             :key="pictureUploaderKey"
-            :csrf-token="csrfToken"
             :endpoint="pictureEndpoint"
             @error="handleUploaderError"
             @uploaded="handlePictureUploaded"
@@ -250,7 +249,6 @@ const { t } = useI18n()
 const props = defineProps({
   courseId: { type: Number, required: true },
   mode: { type: String, required: true },
-  csrfToken: { type: String, required: true },
   integrations: { type: Object, required: true },
   media: { type: Object, required: true },
   params: { type: Object, required: true },
@@ -299,7 +297,7 @@ function handleUploaderError(error) {
 
 async function deletePicture() {
   await runAction("delete-picture", async () => {
-    await courseSettingsService.deletePicture(props.csrfToken, props.params)
+    await courseSettingsService.deletePicture(props.params)
     emit("message", t("Course picture deleted"))
     emit("refresh")
   })
@@ -313,18 +311,14 @@ async function generatePicture() {
   }
 
   await runAction("generate-picture", async () => {
-    const response = await courseSettingsService.generatePicture(
-      aiPrompt.value.trim(),
-      props.integrations.ai.generatePictureCsrfToken,
-      props.courseId,
-    )
+    const response = await courseSettingsService.generatePicture(aiPrompt.value.trim(), props.courseId)
     const result = response?.result || {}
     const base64 = result.content || response?.text || ""
     if (!base64) {
       throw new Error(response?.text || t("The image generator returned an empty response"))
     }
     const file = base64ToFile(base64, result.content_type || "image/png", "generated-course-picture.png")
-    await courseSettingsService.uploadPicture(file, props.csrfToken, props.params)
+    await courseSettingsService.uploadPicture(file, props.params)
     aiPrompt.value = ""
     emit("message", t("Course picture generated"))
     emit("refresh")
@@ -336,7 +330,7 @@ async function uploadWatermark(event) {
   if (!file) return
 
   await runAction("upload-watermark", async () => {
-    await courseSettingsService.uploadWatermark(file, props.csrfToken, props.params)
+    await courseSettingsService.uploadWatermark(file, props.params)
     event.target.value = ""
     emit("message", t("Watermark updated"))
     emit("refresh")
@@ -345,7 +339,7 @@ async function uploadWatermark(event) {
 
 async function deleteWatermark() {
   await runAction("delete-watermark", async () => {
-    await courseSettingsService.deleteWatermark(props.csrfToken, props.params)
+    await courseSettingsService.deleteWatermark(props.params)
     emit("message", t("Watermark deleted"))
     emit("refresh")
   })
@@ -356,7 +350,7 @@ async function uploadLegalFile(event) {
   if (!file) return
 
   await runAction("upload-legal-file", async () => {
-    await courseSettingsService.uploadCourseLegalFile(file, props.csrfToken, props.params)
+    await courseSettingsService.uploadCourseLegalFile(file, props.params)
     event.target.value = ""
     emit("message", t("Agreement file updated"))
     emit("refresh")
@@ -365,7 +359,7 @@ async function uploadLegalFile(event) {
 
 async function deleteLegalFile() {
   await runAction("delete-legal-file", async () => {
-    await courseSettingsService.deleteCourseLegalFile(props.csrfToken, props.params)
+    await courseSettingsService.deleteCourseLegalFile(props.params)
     emit("message", t("Agreement file deleted"))
     emit("refresh")
   })
@@ -382,7 +376,7 @@ async function uploadCertificateMedia(field, event) {
   if (!file) return
 
   await runAction(`upload-certificate-${field}`, async () => {
-    await courseSettingsService.uploadCertificateMedia(field, file, props.csrfToken, props.params)
+    await courseSettingsService.uploadCertificateMedia(field, file, props.params)
     event.target.value = ""
     emit("message", t("Certificate image updated"))
     emit("refresh")
@@ -391,7 +385,7 @@ async function uploadCertificateMedia(field, event) {
 
 async function deleteCertificateMedia(field) {
   await runAction(`delete-certificate-${field}`, async () => {
-    await courseSettingsService.deleteCertificateMedia(field, props.csrfToken, props.params)
+    await courseSettingsService.deleteCertificateMedia(field, props.params)
     emit("message", t("Certificate image deleted"))
     emit("refresh")
   })

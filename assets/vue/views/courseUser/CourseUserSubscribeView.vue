@@ -259,7 +259,6 @@ const savingUserId = ref(null)
 const errorMessage = ref("")
 const successMessage = ref("")
 const warningMessage = ref("")
-const csrfToken = ref("")
 const selectedUserIds = ref([])
 const searchDraft = ref("")
 const activeSearch = ref("")
@@ -316,7 +315,6 @@ async function loadUsers() {
     const response = await courseUserService.getAvailable(requestParams())
     users.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
-    csrfToken.value = response.csrfToken || ""
     profilingFields.value = response.extraFields || []
     canSubscribe.value = Boolean(response.canSubscribe)
     showSubscriptionTabs.value = Boolean(response.showSubscriptionTabs)
@@ -411,7 +409,7 @@ async function subscribeUsers(userIds) {
   successMessage.value = ""
 
   try {
-    const response = await courseUserService.subscribe(userIds, csrfToken.value, requestParams())
+    const response = await courseUserService.subscribe(userIds, requestParams())
     successMessage.value = response.message || t("The selected users have been subscribed to the course")
     selectedUserIds.value = []
     await loadUsers()

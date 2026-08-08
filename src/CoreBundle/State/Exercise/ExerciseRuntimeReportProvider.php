@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Read-only provider for the migrated exercise learner attempts report.
@@ -38,9 +37,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 {
-    public const BULK_ACTION_CSRF_TOKEN_ID = 'exercise_runtime_report_bulk_action';
-    public const EMAIL_ACTION_CSRF_TOKEN_ID = 'exercise_runtime_report_email_action';
-
     private const VISIBILITY_PUBLISHED = 2;
     private const LINK_TYPE_EXERCISE = 1;
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -53,7 +49,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -109,8 +104,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $response->showUsername = $showUsername;
         $response->showIp = $showIp;
         $response->extraFields = $this->getFilterableUserExtraFields();
-        $response->bulkActionToken = $this->csrfTokenManager->getToken(self::BULK_ACTION_CSRF_TOKEN_ID)->getValue();
-        $response->emailActionToken = $this->csrfTokenManager->getToken(self::EMAIL_ACTION_CSRF_TOKEN_ID)->getValue();
 
         return $response;
     }

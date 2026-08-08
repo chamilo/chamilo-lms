@@ -57,10 +57,10 @@ export default {
     );
   },
 
-  async deleteCategory(categoryId, params = {}, csrfToken = "") {
+  async deleteCategory(categoryId, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/categories/${categoryId}/delete`, params),
-      { csrfToken },
+      {},
     );
   },
 
@@ -96,99 +96,94 @@ export default {
     );
   },
 
-  async acquireLock(pageId, params = {}, csrfToken = "") {
+  async acquireLock(pageId, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/lock`, params),
-      { csrfToken },
+      {},
     );
   },
 
-  async releaseLock(pageId, params = {}, csrfToken = "") {
+  async releaseLock(pageId, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/unlock`, params),
-      { csrfToken },
+      {},
     );
   },
 
-  async restoreVersion(pageId, versionIid, params = {}, csrfToken = "") {
+  async restoreVersion(pageId, versionIid, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/restore`, params),
-      { csrfToken, versionIid },
+      { versionIid },
     );
   },
 
-  async setPageVisibility(pageId, enabled, params = {}, csrfToken = "") {
+  async setPageVisibility(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/visibility`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setPageProtection(pageId, enabled, params = {}, csrfToken = "") {
+  async setPageProtection(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/protection`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setPageSubscription(pageId, enabled, params = {}, csrfToken = "") {
+  async setPageSubscription(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/subscription`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async deletePage(pageId, params = {}, csrfToken = "") {
+  async deletePage(pageId, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/delete`, params),
-      { csrfToken },
+      {},
     );
   },
 
-  async setContextAddLock(enabled, params = {}, csrfToken = "") {
+  async setContextAddLock(enabled, params = {}) {
     return await baseService.post(
       buildUrl("/api/wiki/context/add-lock", params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setContextSubscription(enabled, params = {}, csrfToken = "") {
+  async setContextSubscription(enabled, params = {}) {
     return await baseService.post(
       buildUrl("/api/wiki/context/subscription", params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setDiscussionVisibility(pageId, enabled, params = {}, csrfToken = "") {
+  async setDiscussionVisibility(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/discussion/visibility`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setDiscussionCommenting(pageId, enabled, params = {}, csrfToken = "") {
+  async setDiscussionCommenting(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/discussion/commenting`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setDiscussionRating(pageId, enabled, params = {}, csrfToken = "") {
+  async setDiscussionRating(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/discussion/rating`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
-  async setDiscussionSubscription(
-    pageId,
-    enabled,
-    params = {},
-    csrfToken = "",
-  ) {
+  async setDiscussionSubscription(pageId, enabled, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/discussion/subscription`, params),
-      { csrfToken, enabled },
+      { enabled },
     );
   },
 
@@ -199,17 +194,17 @@ export default {
     );
   },
 
-  async exportPageToDocuments(pageId, params = {}, csrfToken = "") {
+  async exportPageToDocuments(pageId, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/export/document`, params),
-      { csrfToken },
+      {},
     );
   },
 
-  async deleteContext(params = {}, csrfToken = "") {
+  async deleteContext(params = {}) {
     return await baseService.post(
       buildUrl("/api/wiki/context/delete", params),
-      { csrfToken },
+      {},
     );
   },
 };

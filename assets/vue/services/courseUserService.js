@@ -21,28 +21,28 @@ export default {
     return await baseService.get("/api/course-users/available", cleanParams(params))
   },
 
-  async subscribe(userIds, csrfToken, params = {}) {
+  async subscribe(userIds, params = {}) {
     return await baseService.post(
       "/api/course-users/actions/subscribe",
-      { userIds, csrfToken },
+      { userIds },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async unsubscribe(userIds, csrfToken, params = {}) {
+  async unsubscribe(userIds, params = {}) {
     return await baseService.post(
       "/api/course-users/actions/unsubscribe",
-      { userIds, csrfToken },
+      { userIds },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async setTutor(userId, tutor, csrfToken, params = {}) {
+  async setTutor(userId, tutor, params = {}) {
     return await baseService.post(
       "/api/course-users/actions/tutor",
-      { userIds: [userId], tutor, csrfToken },
+      { userIds: [userId], tutor },
       {},
       { params: cleanParams(params) },
     )
@@ -52,11 +52,10 @@ export default {
     return await baseService.get("/api/course-users/import", cleanParams(params))
   },
 
-  async importCsv(file, replace, csrfToken, params = {}) {
+  async importCsv(file, replace, params = {}) {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("replace", replace ? "1" : "0")
-    formData.append("csrfToken", csrfToken)
 
     return await baseService.post("/api/course-users/import", formData, {}, { params: cleanParams(params) })
   },

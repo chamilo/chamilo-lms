@@ -159,7 +159,6 @@ const form = ref({
   progress: 0,
   language: "",
   enableSearch: true,
-  csrfToken: "",
   help: "",
   information: "",
   types: [],
@@ -263,7 +262,6 @@ async function loadForm() {
       progress: Number(response.progress || 0),
       language: response.language || "",
       enableSearch: Boolean(response.enableSearch ?? true),
-      csrfToken: response.csrfToken || "",
       help: response.help || "",
       information: response.information || "",
       types: Array.isArray(response.types) ? response.types : [],
@@ -300,7 +298,6 @@ async function saveDescription() {
     progress: form.value.progress,
     language: form.value.language,
     enableSearch: form.value.enableSearch,
-    csrfToken: form.value.csrfToken,
   }
 
   isSaving.value = true

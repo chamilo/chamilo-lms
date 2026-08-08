@@ -75,9 +75,6 @@ final class CourseGroupList
     public bool $showClasses = false;
 
     #[Groups(['course_group_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_group_list:read'])]
     public string $csvExportUrl = '';
 
     #[Groups(['course_group_list:read'])]

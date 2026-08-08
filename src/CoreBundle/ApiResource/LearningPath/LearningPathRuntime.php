@@ -178,9 +178,6 @@ final class LearningPathRuntime
     #[Groups(['learning_path_runtime:read'])]
     public string $legacyFallbackUrl = '';
 
-    #[Groups(['learning_path_runtime:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<string, mixed>
      */

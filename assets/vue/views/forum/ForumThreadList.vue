@@ -531,7 +531,6 @@ const isSavingMove = ref(false)
 const isLoadingMoveOptions = ref(false)
 const forum = ref(null)
 const threads = ref([])
-const csrfToken = ref("")
 const editDialogVisible = ref(false)
 const moveDialogVisible = ref(false)
 const editFormSubmitted = ref(false)
@@ -618,17 +617,6 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
-const actionPayload = computed(() => ({ csrfToken: csrfToken.value }))
-
-async function ensureToken() {
-  if (csrfToken.value) {
-    return
-  }
-
-  const tokenResponse = await forumService.getActionToken()
-  csrfToken.value = tokenResponse.token || ""
-}
-
 function goBackToLearningPath() {
   const query = { ...route.query }
   delete query.action
@@ -902,15 +890,13 @@ async function loadThreads() {
   isLoading.value = true
 
   try {
-    const [forumItem, threadItems, tokenResponse] = await Promise.all([
+    const [forumItem, threadItems] = await Promise.all([
       forumService.getForum(forumId.value, baseQuery.value),
       forumService.getThreads(forumId.value, baseQuery.value),
-      forumService.getActionToken(),
     ])
 
     forum.value = forumItem
     threads.value = threadItems
-    csrfToken.value = tokenResponse.token || ""
   } catch (error) {
     console.error("Error fetching forum threads:", error)
     notifications.showErrorNotification(t("Could not retrieve threads"))
@@ -953,7 +939,6 @@ async function loadThreadGrading(thread) {
   isLoadingGrading.value = true
 
   try {
-    await ensureToken()
     const data = await forumService.getThreadGrading(thread.iid, baseQuery.value)
     gradingData.value = {
       ...data,
@@ -995,9 +980,7 @@ async function saveThreadGradingSettings() {
   isSavingGrading.value = true
 
   try {
-    await ensureToken()
     await forumService.updateThreadGrading(gradingThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       enabled: gradingForm.enabled,
       categoryId: gradingForm.enabled ? Number(gradingForm.categoryId || 0) : null,
       title: gradingForm.title.trim(),
@@ -1032,9 +1015,7 @@ async function saveStudentScore(student) {
   student.isSaving = true
 
   try {
-    await ensureToken()
     const response = await forumService.saveThreadScore(gradingThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       userId: Number(student.userId),
       score,
     })
@@ -1076,9 +1057,7 @@ async function saveThreadMove() {
   isSavingMove.value = true
 
   try {
-    await ensureToken()
     await forumService.moveThread(moveThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       targetForumId: Number(moveTargetForumId.value),
     })
 
@@ -1103,9 +1082,7 @@ async function saveThreadEdit() {
   isSavingEdit.value = true
 
   try {
-    await ensureToken()
     await forumService.updateThread(editThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       title: editForm.title.trim(),
     })
 
@@ -1129,8 +1106,7 @@ async function saveThreadEdit() {
 
 async function toggleThreadLock(thread) {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadLock(thread.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadLock(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(Number(response.locked || 0) ? t("Thread closed") : t("Thread opened"))
     await loadThreads()
@@ -1142,8 +1118,7 @@ async function toggleThreadLock(thread) {
 
 async function toggleThreadSticky(thread) {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadSticky(thread.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadSticky(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"))
     await loadThreads()
@@ -1157,8 +1132,7 @@ async function toggleThreadVisibility(thread) {
   const wasVisible = isThreadVisible(thread)
 
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadVisibility(thread.iid, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.toggleThreadVisibility(thread.iid, baseQuery.value, { visible: !wasVisible })
     thread.threadVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Thread shown") : t("Thread hidden"))
     await loadThreads()
@@ -1170,9 +1144,7 @@ async function toggleThreadVisibility(thread) {
 
 async function toggleThreadNotification(thread) {
   try {
-    await ensureToken()
     const response = await forumService.toggleThreadSubscription(thread.iid, baseQuery.value, {
-      ...actionPayload.value,
       subscribed: !thread.subscribed,
     })
 
@@ -1194,8 +1166,7 @@ function confirmDeleteThread(thread) {
 
 async function deleteThread(thread) {
   try {
-    await ensureToken()
-    await forumService.deleteThread(thread.iid, baseQuery.value, actionPayload.value)
+    await forumService.deleteThread(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Thread deleted"))
     await loadThreads()

@@ -21,22 +21,22 @@ export default {
     return await baseService.post(`/api/ticket/${ticketId}/reply`, formData, {}, { skipCourseContext: true })
   },
 
-  async subscribe(ticketId, csrfToken) {
-    return await baseService.post(`/api/ticket/${ticketId}/subscribe`, { csrfToken }, {}, { skipCourseContext: true })
+  async subscribe(ticketId) {
+    return await baseService.post(`/api/ticket/${ticketId}/subscribe`, {}, {}, { skipCourseContext: true })
   },
 
-  async unsubscribe(ticketId, csrfToken) {
-    return await baseService.post(`/api/ticket/${ticketId}/unsubscribe`, { csrfToken }, {}, { skipCourseContext: true })
+  async unsubscribe(ticketId) {
+    return await baseService.post(`/api/ticket/${ticketId}/unsubscribe`, {}, {}, { skipCourseContext: true })
   },
 
-  async close(ticketId, csrfToken) {
-    return await baseService.post(`/api/ticket/${ticketId}/close`, { csrfToken }, {}, { skipCourseContext: true })
+  async close(ticketId) {
+    return await baseService.post(`/api/ticket/${ticketId}/close`, {}, {}, { skipCourseContext: true })
   },
 
-  async respondToConfirmation(ticketId, confirmed, csrfToken) {
+  async respondToConfirmation(ticketId, confirmed) {
     return await baseService.post(
       `/api/ticket/${ticketId}/confirmation`,
-      { confirmed, csrfToken },
+      { confirmed },
       {},
       { skipCourseContext: true },
     )
@@ -62,24 +62,21 @@ export default {
     return await baseService.put(endpoint, payload, { skipCourseContext: true })
   },
 
-  async deleteAdminItem(section, id, csrfToken) {
+  async deleteAdminItem(section, id) {
     const endpoint =
       section === "categories" ? `/api/ticket/admin/categories/${id}` : `/api/ticket/admin/${section}/${id}`
-    return await baseService.delete(endpoint, {
-      headers: { "X-CSRF-TOKEN": csrfToken },
-      skipCourseContext: true,
-    })
+    return await baseService.delete(endpoint, { skipCourseContext: true })
   },
 
-  async updateCategoryUsers(categoryId, userIds, csrfToken) {
+  async updateCategoryUsers(categoryId, userIds) {
     return await baseService.put(
       `/api/ticket/admin/categories/${categoryId}/users`,
-      { userIds, csrfToken },
+      { userIds },
       { skipCourseContext: true },
     )
   },
 
-  async closeOldTickets(csrfToken) {
-    return await baseService.post("/api/ticket/admin/close-old", { csrfToken }, {}, { skipCourseContext: true })
+  async closeOldTickets() {
+    return await baseService.post("/api/ticket/admin/close-old", {}, {}, { skipCourseContext: true })
   },
 }

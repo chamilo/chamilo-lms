@@ -454,7 +454,6 @@ function emptyData() {
     categories: [],
     tags: [],
     authors: [],
-    csrfToken: "",
     advancedSharingEnabled: false,
     totalItems: 0,
     canCreate: false,
@@ -572,7 +571,7 @@ function actionError(error) {
 
 async function runItemAction(item, action) {
   try {
-    await portfolioService.itemAction(item.id, { action, csrfToken: data.csrfToken }, contextParams())
+    await portfolioService.itemAction(item.id, { action }, contextParams())
     toast.add({ severity: "success", summary: t("Success"), detail: t("Updated"), life: 2500 })
     await loadPortfolio()
   } catch (error) {
@@ -585,7 +584,7 @@ function confirmDelete(item) {
     message: t("Please confirm your choice"),
     accept: async () => {
       try {
-        await portfolioService.itemAction(item.id, { action: "delete", csrfToken: data.csrfToken }, contextParams())
+        await portfolioService.itemAction(item.id, { action: "delete" }, contextParams())
         toast.add({ severity: "success", summary: t("Success"), detail: t("Deleted"), life: 3000 })
         await loadPortfolio()
       } catch (error) {

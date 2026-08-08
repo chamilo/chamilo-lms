@@ -207,7 +207,6 @@
                 size="small"
                 :tooltip="t('Attachments')"
               />
-
             </div>
           </template>
         </Column>
@@ -330,7 +329,6 @@ const authors = ref([])
 const selectedAnnouncements = ref([])
 const canManage = ref(false)
 const canDeleteAll = ref(false)
-const csrfToken = ref("")
 const isLoading = ref(false)
 const isManaging = ref(false)
 const actionLoadingIds = ref(new Set())
@@ -351,9 +349,11 @@ const filteredAnnouncements = computed(() => {
 
   return announcements.value.filter((announcement) => {
     const matchesTitle =
-      normalizedTitle === "" || String(announcement.title || "").toLocaleLowerCase().includes(normalizedTitle)
-    const matchesAuthor =
-      selectedAuthorId === 0 || Number(announcement.author?.id || 0) === selectedAuthorId
+      normalizedTitle === "" ||
+      String(announcement.title || "")
+        .toLocaleLowerCase()
+        .includes(normalizedTitle)
+    const matchesAuthor = selectedAuthorId === 0 || Number(announcement.author?.id || 0) === selectedAuthorId
 
     return matchesTitle && matchesAuthor
   })
@@ -388,7 +388,17 @@ function getContextParams(extraKeys = []) {
     params.gid = gid
   }
 
-  for (const key of ["origin", "page", "isStudentView", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded", ...extraKeys]) {
+  for (const key of [
+    "origin",
+    "page",
+    "isStudentView",
+    "lp_id",
+    "lp_item_id",
+    "lp_view_id",
+    "returnToLp",
+    "embedded",
+    ...extraKeys,
+  ]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -469,16 +479,13 @@ async function changeVisibility(announcement) {
   const visibility = Number(announcement.visibility) === 2 ? 0 : 2
   await runRowAction(
     announcement.id,
-    () => announcementService.changeVisibility(announcement.id, visibility, csrfToken.value, getContextParams()),
+    () => announcementService.changeVisibility(announcement.id, visibility, getContextParams()),
     t("The visibility has been changed."),
   )
 }
 
 async function moveAnnouncement(announcement, direction) {
-  await runRowAction(
-    announcement.id,
-    () => announcementService.move(announcement.id, direction, csrfToken.value, getContextParams()),
-  )
+  await runRowAction(announcement.id, () => announcementService.move(announcement.id, direction, getContextParams()))
 }
 
 function confirmDeleteOne(announcement) {
@@ -487,7 +494,7 @@ function confirmDeleteOne(announcement) {
     accept: () =>
       runRowAction(
         announcement.id,
-        () => announcementService.deleteOne(announcement.id, csrfToken.value, getContextParams()),
+        () => announcementService.deleteOne(announcement.id, getContextParams()),
         t("Announcement has been deleted"),
       ),
   })
@@ -506,7 +513,7 @@ async function deleteSelected() {
   successMessage.value = ""
 
   try {
-    await announcementService.deleteSelected(selectedEditableIds.value, csrfToken.value, getContextParams())
+    await announcementService.deleteSelected(selectedEditableIds.value, getContextParams())
     successMessage.value = t("Announcement has been deleted")
     await loadAnnouncements()
   } catch (error) {
@@ -530,7 +537,7 @@ async function deleteAll() {
   successMessage.value = ""
 
   try {
-    await announcementService.deleteAll(csrfToken.value, getContextParams())
+    await announcementService.deleteAll(getContextParams())
     successMessage.value = t("Announcement has been deleted")
     await loadAnnouncements()
   } catch (error) {
@@ -549,7 +556,6 @@ async function loadAnnouncements() {
   selectedAnnouncements.value = []
   canManage.value = false
   canDeleteAll.value = false
-  csrfToken.value = ""
 
   try {
     const response = await announcementService.getList(getContextParams())
@@ -557,7 +563,6 @@ async function loadAnnouncements() {
     authors.value = Array.isArray(response.authors) ? response.authors : []
     canManage.value = Boolean(response.canManage)
     canDeleteAll.value = Boolean(response.canDeleteAll)
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading announcements", error)
     errorMessage.value = getErrorMessage(error)
@@ -568,8 +573,5 @@ async function loadAnnouncements() {
 
 onMounted(loadAnnouncements)
 
-watch(
-  () => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView],
-  loadAnnouncements,
-)
+watch(() => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadAnnouncements)
 </script>

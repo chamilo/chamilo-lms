@@ -87,9 +87,6 @@ final class CourseProgressThematicAction
     #[Groups(['course_progress_thematic_action:read', 'course_progress_thematic_action:write'])]
     public string $direction = '';
 
-    #[Groups(['course_progress_thematic_action:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_progress_thematic_action:read'])]
     public ?int $copiedThematicId = null;
 

@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const ENT_HTML5;
@@ -49,7 +48,6 @@ final readonly class SurveyListProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -363,7 +361,6 @@ final readonly class SurveyListProvider implements ProviderInterface
             'canInvite' => $canEdit,
             'isUnsupportedPersonality' => $isUnsupportedPersonality,
             'unsupportedReason' => $isUnsupportedPersonality ? $this->getUnsupportedPersonalitySurveyMessage() : '',
-            'actionCsrfToken' => (string) $this->csrfTokenManager->getToken(SurveyActionProcessor::CSRF_TOKEN_ID),
             'canPreview' => 3 !== $surveyType,
             'canReport' => $canReport,
             'canAnswer' => false,
@@ -472,7 +469,6 @@ final readonly class SurveyListProvider implements ProviderInterface
             'canEmpty' => false,
             'canDelete' => false,
             'canInvite' => false,
-            'actionCsrfToken' => '',
             'canPreview' => false,
             'canReport' => false,
             'canAnswer' => !$isUnsupportedPersonality && (!$isAnswered || $isMeetingPoll),

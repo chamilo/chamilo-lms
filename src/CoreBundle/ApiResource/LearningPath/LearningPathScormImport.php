@@ -32,7 +32,6 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormImportProcessor;
                                         'type' => 'string',
                                         'format' => 'binary',
                                     ],
-                                    'csrfToken' => ['type' => 'string'],
                                     'useMaxScore' => ['type' => 'boolean', 'default' => true],
                                     'contentProximity' => [
                                         'type' => 'string',
@@ -42,7 +41,7 @@ use Chamilo\CoreBundle\State\LearningPath\LearningPathScormImportProcessor;
                                     'contentMaker' => ['type' => 'string', 'default' => 'Scorm'],
                                     'allowHtaccess' => ['type' => 'boolean', 'default' => false],
                                 ],
-                                'required' => ['package', 'csrfToken'],
+                                'required' => ['package'],
                             ],
                         ],
                     ]),

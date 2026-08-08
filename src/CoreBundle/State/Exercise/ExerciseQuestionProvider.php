@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -38,7 +37,6 @@ use Throwable;
  */
 final readonly class ExerciseQuestionProvider implements ProviderInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_question_action';
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
@@ -48,7 +46,6 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         private CQuizQuestionRepository $questionRepository,
         private CQuizRepository $quizRepository,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -92,7 +89,6 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $response->isLinkedToLearningPath = $isLinkedToLearningPath;
         $response->isReadOnlyFromLearningPath = $isReadOnlyFromLearningPath;
         $response->learningPathReadOnlyMessage = $isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
 
         return $response;
     }

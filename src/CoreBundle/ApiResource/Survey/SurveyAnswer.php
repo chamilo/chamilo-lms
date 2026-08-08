@@ -68,9 +68,6 @@ final class SurveyAnswer
     #[Groups(['survey_answer:read', 'survey_answer:write'])]
     public ?string $invitationCode = null;
 
-    #[Groups(['survey_answer:read', 'survey_answer:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['survey_answer:read'])]
     public bool $preview = false;
 

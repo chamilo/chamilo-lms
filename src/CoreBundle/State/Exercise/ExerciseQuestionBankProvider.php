@@ -27,22 +27,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseQuestionBank>
  */
 final readonly class ExerciseQuestionBankProvider implements ProviderInterface
 {
-    public const CSRF_TOKEN_ID = 'exercise_question_bank_action';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -88,7 +84,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $response->page = $page;
         $response->itemsPerPage = $itemsPerPage;
         $response->totalItems = $totalItems;
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
         $response->globalMode = !$quiz instanceof CQuiz;
         $response->canDelete = $this->canRunRestrictedAction();

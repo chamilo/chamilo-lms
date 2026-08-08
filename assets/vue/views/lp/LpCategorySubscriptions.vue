@@ -118,7 +118,7 @@ async function loadSubscriptions() {
 }
 
 async function saveSubscriptions() {
-  if (!currentSection.value || !subscriptionData.value?.csrfToken) {
+  if (!currentSection.value) {
     return
   }
 
@@ -128,7 +128,6 @@ async function saveSubscriptions() {
     await lpService.saveCategorySubscriptions(categoryId.value, contextParams.value, {
       section: currentSection.value.id,
       selectedIds: currentSelectedIds.value,
-      csrfTokenInput: subscriptionData.value.csrfToken,
     })
     showSuccessNotification(t("Update successful"))
     await loadSubscriptions()

@@ -57,9 +57,6 @@ final class LearningPathBuilderFinalItemInput
     #[Groups(['learning_path_builder_final_item:read', 'learning_path_builder_final_item:write'])]
     public ?int $gradebookCategoryId = null;
 
-    #[Groups(['learning_path_builder_final_item:write'])]
-    public string $csrfToken = '';
-
     #[ApiProperty(identifier: false)]
     #[Groups(['learning_path_builder_final_item:read'])]
     public ?int $itemId = null;

@@ -146,7 +146,6 @@ const saving = ref(false)
 const errorMessage = ref("")
 const resultMessage = ref("")
 const importResult = ref({})
-const csrfToken = ref("")
 const requestParams = computed(() => ({ cid: cid.value, sid: sid.value }))
 const listRoute = computed(() => ({
   name: "CourseUserGroups",
@@ -199,8 +198,7 @@ function normalizeResultItems(value) {
 
 async function load() {
   try {
-    const response = await courseGroupService.getImport(requestParams.value)
-    csrfToken.value = response.csrfToken || ""
+    await courseGroupService.getImport(requestParams.value)
   } catch (error) {
     console.error("[CourseGroup] Failed to load import form", error)
     errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
@@ -214,12 +212,7 @@ async function submit() {
   resultMessage.value = ""
   importResult.value = {}
   try {
-    const response = await courseGroupService.importGroups(
-      file.value,
-      deleteMissing.value,
-      csrfToken.value,
-      requestParams.value,
-    )
+    const response = await courseGroupService.importGroups(file.value, deleteMissing.value, requestParams.value)
     resultMessage.value = response.message ? t(response.message) : t("Import completed")
     importResult.value = response.result || {}
   } catch (error) {

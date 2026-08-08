@@ -105,9 +105,6 @@ final class WikiPageHistory
     #[Groups(['wiki_page_history:read'])]
     public bool $canRestore = false;
 
-    #[Groups(['wiki_page_history:read', 'wiki_page_history:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['wiki_page_history:write'])]
     public ?int $versionIid = null;
 

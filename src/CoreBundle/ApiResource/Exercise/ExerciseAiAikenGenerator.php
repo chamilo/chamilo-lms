@@ -55,9 +55,6 @@ final class ExerciseAiAikenGenerator
     #[Groups(['exercise_ai_aiken_generator:read'])]
     public string $language = 'en';
 
-    #[Groups(['exercise_ai_aiken_generator:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array{value: string, label: string}>
      */

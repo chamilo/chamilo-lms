@@ -62,9 +62,6 @@ final class AdminQuestionBank
     #[Groups(['admin_question_bank:write'])]
     public ?int $questionId = null;
 
-    #[Groups(['admin_question_bank:write'])]
-    public string $submittedCsrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */
@@ -112,9 +109,6 @@ final class AdminQuestionBank
 
     #[Groups(['admin_question_bank:read'])]
     public bool $searched = false;
-
-    #[Groups(['admin_question_bank:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['admin_question_bank:read'])]
     public bool $success = false;

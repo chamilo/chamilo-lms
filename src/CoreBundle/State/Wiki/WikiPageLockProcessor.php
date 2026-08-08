@@ -24,8 +24,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<WikiPageForm, WikiPageForm>
@@ -42,7 +40,6 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -71,8 +68,6 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         if ($this->isWikiStudentView($request)) {
             throw new AccessDeniedHttpException('Wiki pages cannot be edited in student view.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $user = $this->security->getUser();
         if (!$user instanceof User) {
@@ -151,13 +146,6 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         $this->wikiRepository->update($wiki);
 
         return $this->buildResponse($wiki, true);
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiPageFormProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function isLockExpired(CWiki $wiki): bool

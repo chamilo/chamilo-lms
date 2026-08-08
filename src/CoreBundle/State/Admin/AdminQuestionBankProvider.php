@@ -42,7 +42,6 @@ final readonly class AdminQuestionBankProvider implements ProviderInterface
         $response->itemsPerPage = $data['itemsPerPage'];
         $response->totalItems = $data['totalItems'];
         $response->searched = $data['searched'];
-        $response->csrfToken = $data['csrfToken'];
 
         return $response;
     }

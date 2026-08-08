@@ -11,28 +11,28 @@ export default {
     return await baseService.get("/api/course-classes/list", cleanParams(params))
   },
 
-  async add(usergroupId, csrfToken, params = {}) {
+  async add(usergroupId, params = {}) {
     return await baseService.post(
       "/api/course-classes/actions/add",
-      { usergroupId, csrfToken },
+      { usergroupId },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async remove(usergroupId, csrfToken, params = {}) {
+  async remove(usergroupId, params = {}) {
     return await baseService.post(
       "/api/course-classes/actions/remove",
-      { usergroupId, csrfToken },
+      { usergroupId },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async removeOnly(usergroupId, csrfToken, params = {}) {
+  async removeOnly(usergroupId, params = {}) {
     return await baseService.post(
       "/api/course-classes/actions/remove-only",
-      { usergroupId, csrfToken },
+      { usergroupId },
       {},
       { params: cleanParams(params) },
     )

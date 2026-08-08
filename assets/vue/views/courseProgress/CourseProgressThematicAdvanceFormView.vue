@@ -207,7 +207,6 @@ const form = ref({
   attendanceCalendarId: null,
   duration: 1,
   content: "",
-  csrfToken: "",
 })
 
 const contentEditorConfig = {
@@ -335,7 +334,6 @@ async function loadForm() {
       attendanceCalendarId: response.attendanceCalendarId ?? null,
       duration: Number(response.duration || 1),
       content: response.content || "",
-      csrfToken: response.csrfToken || "",
     }
   } catch (error) {
     console.error("Error loading thematic advance form", error)
@@ -381,7 +379,6 @@ async function saveAdvance() {
     attendanceCalendarId: form.value.dateSource === "attendance" ? Number(form.value.attendanceCalendarId) : null,
     duration: Number(form.value.duration),
     content: form.value.content,
-    csrfToken: form.value.csrfToken,
   }
 
   isSaving.value = true

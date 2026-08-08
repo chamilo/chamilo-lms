@@ -128,9 +128,6 @@ final class CourseProgressThematicAdvance
     #[Groups(['course_progress_thematic_advance:read', 'course_progress_thematic_advance:write'])]
     public string $content = '';
 
-    #[Groups(['course_progress_thematic_advance:read', 'course_progress_thematic_advance:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use const FILTER_NULL_ON_FAILURE;
@@ -29,7 +27,6 @@ final readonly class TicketWorkflowController
     public function __construct(
         private TicketWorkflowService $workflowService,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('/api/ticket/create', name: 'ticket_create', methods: ['POST'])]
@@ -37,7 +34,6 @@ final readonly class TicketWorkflowController
     public function create(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $ticket = $this->workflowService->createTicket(
             $this->getAuthenticatedUser(),
             $data,
@@ -61,7 +57,6 @@ final readonly class TicketWorkflowController
     public function reply(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $ticket = $this->workflowService->getTicketForCurrentAccessUrl($id);
         $message = $this->workflowService->replyToTicket(
             $ticket,
@@ -86,7 +81,6 @@ final readonly class TicketWorkflowController
     public function subscribe(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $ticket = $this->workflowService->getTicketForCurrentAccessUrl($id);
         $this->workflowService->subscribe($ticket, $this->getAuthenticatedUser());
 
@@ -106,7 +100,6 @@ final readonly class TicketWorkflowController
     public function unsubscribe(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $ticket = $this->workflowService->getTicketForCurrentAccessUrl($id);
         $this->workflowService->unsubscribe($ticket, $this->getAuthenticatedUser());
 
@@ -126,7 +119,6 @@ final readonly class TicketWorkflowController
     public function close(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $ticket = $this->workflowService->getTicketForCurrentAccessUrl($id);
         $this->workflowService->close($ticket, $this->getAuthenticatedUser());
 
@@ -146,7 +138,6 @@ final readonly class TicketWorkflowController
     public function respondToConfirmation(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
 
         if (!\array_key_exists('confirmed', $data)) {
             throw new BadRequestHttpException('The confirmation response is required.');
@@ -237,12 +228,5 @@ final readonly class TicketWorkflowController
         }
 
         return $user;
-    }
-
-    private function validateCsrfToken(string $value): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(TicketWorkflowService::CSRF_TOKEN_ID, $value))) {
-            throw new BadRequestHttpException('Invalid security token. Please reload the page and try again.');
-        }
     }
 }

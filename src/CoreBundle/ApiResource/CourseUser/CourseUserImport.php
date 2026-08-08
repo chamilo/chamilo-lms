@@ -54,7 +54,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                                 'properties' => [
                                     'file' => ['type' => 'string', 'format' => 'binary'],
                                     'replace' => ['type' => 'boolean'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
                             ],
                         ],
@@ -77,9 +76,6 @@ final class CourseUserImport
 
     #[Groups(['course_user_import:read'])]
     public bool $canImport = false;
-
-    #[Groups(['course_user_import:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['course_user_import:read'])]
     public string $sampleByUsername = "username\njdoe";

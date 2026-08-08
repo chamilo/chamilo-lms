@@ -141,7 +141,6 @@ const isLoading = ref(false);
 const isSaving = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
-const csrfToken = ref("");
 const form = reactive({
   enabled: "1",
   categoriesEnabled: "0",
@@ -217,7 +216,6 @@ async function loadSettings() {
     form.enabled = settings.enabled ? "1" : "0";
     form.categoriesEnabled = settings.categoriesEnabled ? "1" : "0";
     form.htmlStrictFiltering = settings.htmlStrictFiltering ? "1" : "0";
-    csrfToken.value = String(settings.csrfToken || "");
   } catch (error) {
     console.error("Error loading Wiki settings", error);
     errorMessage.value = extractError(error);
@@ -236,7 +234,6 @@ async function saveSettings() {
       enabled: form.enabled === "1",
       categoriesEnabled: form.categoriesEnabled === "1",
       htmlStrictFiltering: form.htmlStrictFiltering === "1",
-      csrfToken: csrfToken.value,
     });
     successMessage.value = t("Wiki settings updated");
     await loadSettings();

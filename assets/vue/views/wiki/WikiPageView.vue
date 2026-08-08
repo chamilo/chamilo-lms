@@ -525,7 +525,6 @@ function createEmptyPage() {
     canManageCategories: false,
     canManageSettings: false,
     categories: [],
-    managementCsrfToken: "",
   };
 }
 
@@ -713,26 +712,14 @@ async function executeManagementAction(action, successText) {
 
 function changeVisibility() {
   return executeManagementAction(
-    () =>
-      wikiService.setPageVisibility(
-        Number(wikiPage.pageId),
-        !wikiPage.visible,
-        getContextParams(),
-        wikiPage.managementCsrfToken,
-      ),
+    () => wikiService.setPageVisibility(Number(wikiPage.pageId), !wikiPage.visible, getContextParams()),
     wikiPage.visible ? "The page is now hidden" : "The page is now visible",
   );
 }
 
 function changeProtection() {
   return executeManagementAction(
-    () =>
-      wikiService.setPageProtection(
-        Number(wikiPage.pageId),
-        !wikiPage.editLocked,
-        getContextParams(),
-        wikiPage.managementCsrfToken,
-      ),
+    () => wikiService.setPageProtection(Number(wikiPage.pageId), !wikiPage.editLocked, getContextParams()),
     wikiPage.editLocked ? "The page is now unlocked" : "The page is now locked",
   );
 }
@@ -740,11 +727,7 @@ function changeProtection() {
 function changeAddLock() {
   return executeManagementAction(
     () =>
-      wikiService.setContextAddLock(
-        !wikiPage.addLocked,
-        getContextParams(),
-        wikiPage.managementCsrfToken,
-      ),
+      wikiService.setContextAddLock(!wikiPage.addLocked, getContextParams()),
     wikiPage.addLocked
       ? "New Wiki pages are now allowed"
       : "New Wiki pages are now blocked",
@@ -753,13 +736,7 @@ function changeAddLock() {
 
 function changeSubscription() {
   return executeManagementAction(
-    () =>
-      wikiService.setPageSubscription(
-        Number(wikiPage.pageId),
-        !wikiPage.subscribed,
-        getContextParams(),
-        wikiPage.managementCsrfToken,
-      ),
+    () => wikiService.setPageSubscription(Number(wikiPage.pageId), !wikiPage.subscribed, getContextParams()),
     wikiPage.subscribed
       ? "Wiki notifications disabled"
       : "Wiki notifications enabled",
@@ -785,11 +762,7 @@ async function deletePage() {
   errorMessage.value = "";
 
   try {
-    await wikiService.deletePage(
-      Number(wikiPage.pageId),
-      getContextParams(),
-      wikiPage.managementCsrfToken,
-    );
+    await wikiService.deletePage(Number(wikiPage.pageId), getContextParams());
     await router.push(getReportRoute("all"));
   } catch (error) {
     console.error("Error deleting Wiki page", error);
@@ -865,11 +838,7 @@ async function exportToDocuments() {
   successMessage.value = "";
 
   try {
-    await wikiService.exportPageToDocuments(
-      Number(wikiPage.pageId),
-      getContextParams(),
-      wikiPage.managementCsrfToken,
-    );
+    await wikiService.exportPageToDocuments(Number(wikiPage.pageId), getContextParams());
     successMessage.value = t("The page has been exported to the document tool");
   } catch (error) {
     console.error("Error exporting Wiki page to Documents", error);

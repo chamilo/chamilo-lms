@@ -46,9 +46,6 @@ final class CourseProgressCompletion
     #[Groups(['course_progress_completion:read', 'course_progress_completion:write'])]
     public int $advanceId = 0;
 
-    #[Groups(['course_progress_completion:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var int[]
      */

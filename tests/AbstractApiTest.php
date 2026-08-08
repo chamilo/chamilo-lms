@@ -24,7 +24,11 @@ abstract class AbstractApiTest extends ApiTestCase
             'password' => $password,
         ];
 
-        $client = static::createClient();
+        // This client authenticates through a session cookie, so every unsafe
+        // request it makes afterwards goes through CsrfProtectionListener. A
+        // real browser proves same-origin through this header; sending it keeps
+        // the helper from depending on whatever host the test client uses.
+        $client = static::createClient([], ['headers' => ['sec-fetch-site' => 'same-origin']]);
         $response = $client->request(
             'POST',
             '/login_json',

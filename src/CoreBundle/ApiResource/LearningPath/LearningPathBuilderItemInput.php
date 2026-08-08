@@ -58,9 +58,6 @@ final class LearningPathBuilderItemInput
     #[Groups(['learning_path_builder_item:read', 'learning_path_builder_item:write'])]
     public ?int $parentId = null;
 
-    #[Groups(['learning_path_builder_item:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): int
     {
         return $this->lpId;

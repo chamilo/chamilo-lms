@@ -267,7 +267,4 @@ final class LearningPathConfiguration
      */
     #[Groups(['lp_configuration:read'])]
     public array $skillIds = [];
-
-    #[Groups(['lp_configuration:read'])]
-    public string $csrfToken = '';
 }

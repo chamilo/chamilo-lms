@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupList;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseGroupList>
@@ -21,7 +20,6 @@ final readonly class CourseGroupListProvider implements ProviderInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseGroupList
@@ -43,7 +41,6 @@ final readonly class CourseGroupListProvider implements ProviderInterface
         $resource->defaultCategoryId = (int) ($data['defaultCategoryId'] ?? 0);
         $resource->showSubscriptionTabs = !empty($data['showSubscriptionTabs']);
         $resource->showClasses = !empty($data['showClasses']);
-        $resource->csrfToken = $this->csrfTokenManager->getToken($this->manager->getCsrfIntention())->getValue();
         $query = http_build_query(array_filter([
             'cid' => $resource->courseId,
             'sid' => $resource->sessionId,

@@ -77,9 +77,6 @@ final class LearningPathAiGenerator
     #[Groups(['learning_path_ai_generator:read'])]
     public array $providers = [];
 
-    #[Groups(['learning_path_ai_generator:read', 'learning_path_ai_generator:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<string, mixed>
      */

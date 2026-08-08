@@ -109,9 +109,6 @@ final class CourseProgressThematic
     #[Groups(['course_progress_thematic:read', 'course_progress_thematic:write'])]
     public string $language = '';
 
-    #[Groups(['course_progress_thematic:read', 'course_progress_thematic:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_progress_thematic:read'])]
     public bool $canEdit = false;
 

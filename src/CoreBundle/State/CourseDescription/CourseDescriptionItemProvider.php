@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseDescriptionItem>
@@ -31,8 +30,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class CourseDescriptionItemProvider implements ProviderInterface
 {
     use CourseDescriptionAccessHelperTrait;
-
-    public const string CSRF_TOKEN_ID = 'course_description_item';
 
     /**
      * @var array<int, string>
@@ -94,7 +91,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -141,7 +137,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
 
         $item = new CourseDescriptionItem();
         $item->descriptionType = $descriptionType;
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $item->canEdit = true;
         $item->isNew = !$description instanceof CCourseDescription;
         $item->defaultTitle = self::TYPE_LABELS[$descriptionType] ?? self::TYPE_LABELS[CCourseDescription::TYPE_CUSTOM];

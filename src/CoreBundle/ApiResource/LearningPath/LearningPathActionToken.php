@@ -25,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 final class LearningPathActionToken
 {
     #[Groups(['learning_path_action_token:read'])]
-    public string $token = '';
-
-    #[Groups(['learning_path_action_token:read'])]
     public bool $allowChamiloExport = false;
 
     #[Groups(['learning_path_action_token:read'])]

@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -38,7 +37,6 @@ class UsergroupAddUsersController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
     ) {}
 
@@ -165,7 +163,6 @@ class UsergroupAddUsersController extends AbstractController
             'orderByOfficialCode' => $orderByOfficialCode,
             'usersInGroup' => $usersInGroup,
             'usersNotInGroup' => $usersNotInGroup,
-            'csrfToken' => $this->csrfTokenManager->getToken('usergroup_add_users')->getValue(),
         ]);
     }
 
@@ -175,11 +172,6 @@ class UsergroupAddUsersController extends AbstractController
         $usergroup = $this->em->find(Usergroup::class, $id);
         if (null === $usergroup) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_add_users', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }
 
         $isSocialGroup = Usergroup::SOCIAL_CLASS === $usergroup->getGroupType();

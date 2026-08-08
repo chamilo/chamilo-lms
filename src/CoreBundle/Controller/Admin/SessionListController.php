@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
@@ -70,7 +69,6 @@ class SessionListController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
     ) {}
 
@@ -257,7 +255,6 @@ class SessionListController extends AbstractController
             'viewer' => [
                 'isPlatformAdmin' => $isPlatformAdmin,
             ],
-            'csrfToken' => $this->csrfTokenManager->getToken('session_list_action')->getValue(),
         ]);
     }
 
@@ -266,12 +263,6 @@ class SessionListController extends AbstractController
     {
         $action = (string) $request->request->get('action', '');
         $sessionIds = $request->request->all('sessionIds');
-        $token = (string) $request->request->get('_token', '');
-
-        if (!$this->isCsrfTokenValid('session_list_action', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], 403);
-        }
-
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
 
         // Reorder doesn't use sessionIds — handle it before the check

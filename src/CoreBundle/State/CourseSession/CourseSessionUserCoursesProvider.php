@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseSession\CourseSessionUserCourses;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseSessionUserCourses>
@@ -19,7 +18,6 @@ final readonly class CourseSessionUserCoursesProvider implements ProviderInterfa
 {
     public function __construct(
         private CourseSessionManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseSessionUserCourses
@@ -36,7 +34,6 @@ final readonly class CourseSessionUserCoursesProvider implements ProviderInterfa
         $resource->sessionTitle = (string) $data['sessionTitle'];
         $resource->user = (array) $data['user'];
         $resource->courses = (array) $data['courses'];
-        $resource->csrfToken = $this->csrfTokenManager->getToken('course_session_management')->getValue();
 
         return $resource;
     }

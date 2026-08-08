@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
@@ -45,7 +44,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     private const int VISIBLE_TUTOR_STUDENT = 1;
     private const int VISIBLE_PUBLIC = 2;
     private const int GRADEBOOK_LINK_TYPE_SURVEY = 8;
-    private const string CSRF_TOKEN_ID = 'survey_configuration';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -53,7 +51,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -96,7 +93,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         $configuration->displayQuestionNumber = true;
         $configuration->canCreate = true;
         $configuration->canEdit = true;
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $configuration->settings = $this->getSettings();
         $configuration->options = $this->getOptions($course, $session, null);
 
@@ -134,7 +130,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         $configuration->duration = $survey->getDuration();
         $configuration->canCreate = true;
         $configuration->canEdit = true;
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $configuration->settings = $this->getSettings();
         $configuration->options = $this->getOptions($course, $session, $survey);
         $configuration->questionUrl = $this->buildModernQuestionsUrl($survey, $course, $session);

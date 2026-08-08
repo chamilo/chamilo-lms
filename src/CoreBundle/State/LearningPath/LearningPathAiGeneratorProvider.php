@@ -19,7 +19,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProviderInterface<LearningPathAiGenerator> */
 final readonly class LearningPathAiGeneratorProvider implements ProviderInterface
@@ -30,7 +29,6 @@ final readonly class LearningPathAiGeneratorProvider implements ProviderInterfac
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private AiProviderFactory $aiProviderFactory,
@@ -60,10 +58,6 @@ final readonly class LearningPathAiGeneratorProvider implements ProviderInterfac
         $result = new LearningPathAiGenerator();
         $result->enabled = $this->isFeatureEnabled($course);
         $result->language = $course->getCourseLanguage();
-        $result->csrfToken = $this->csrfTokenManager
-            ->getToken(self::ACTION_TOKEN_INTENTION)
-            ->getValue()
-        ;
 
         if ($result->enabled) {
             $result->providers = $this->getProviderOptions();

@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /** @implements ProcessorInterface<LearningPathAiGenerator, LearningPathAiGenerator> */
@@ -38,7 +37,6 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private CLpRepository $lpRepository,
@@ -75,8 +73,6 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
             throw new AccessDeniedHttpException('AI learning path generation is disabled in this course.');
         }
 
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
-
         $lpData = $this->normalizeGeneratedData($data->lpData);
         $learningPath = $this->prepareLearningPath(
             $lpData['topic'],
@@ -111,10 +107,6 @@ final readonly class LearningPathAiGeneratorProcessor implements ProcessorInterf
         $response->language = $course->getCourseLanguage();
         $response->id = (int) $result['lp_id'];
         $response->title = $lpData['topic'];
-        $response->csrfToken = $this->csrfTokenManager
-            ->getToken(self::ACTION_TOKEN_INTENTION)
-            ->getValue()
-        ;
 
         return $response;
     }

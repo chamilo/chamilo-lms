@@ -57,9 +57,6 @@ final class AnnouncementEmailAction
     #[Groups(['announcement_email:write'])]
     public bool $sendCopyToSelf = false;
 
-    #[Groups(['announcement_email:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['announcement_email:read'])]
     public bool $success = false;
 

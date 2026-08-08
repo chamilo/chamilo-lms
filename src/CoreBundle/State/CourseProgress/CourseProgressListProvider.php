@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -45,7 +44,6 @@ final readonly class CourseProgressListProvider implements ProviderInterface
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -83,12 +81,6 @@ final readonly class CourseProgressListProvider implements ProviderInterface
         $list->canManage = $canManage;
         $list->studentView = $studentView;
         $list->totalAverage = $this->thematicRepository->calculateTotalAverageForCourse($course, $session);
-        $list->csrfToken = $canManage
-            ? (string) $this->csrfTokenManager->getToken(CourseProgressThematicProvider::CSRF_TOKEN_ID)
-            : '';
-        $list->completionCsrfToken = $canManage
-            ? (string) $this->csrfTokenManager->getToken(CourseProgressCompletionProcessor::CSRF_TOKEN_ID)
-            : '';
 
         $dateFormatter = $this->createDateFormatter($request);
         $thematics = $this->thematicRepository->getThematicListForCourse($course, $session);

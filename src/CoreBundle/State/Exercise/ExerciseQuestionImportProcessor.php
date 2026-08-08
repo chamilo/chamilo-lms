@@ -30,8 +30,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 use ZipArchive;
 
@@ -47,13 +45,11 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private const FREE_ANSWER = 5;
     private const GLOBAL_MULTIPLE_ANSWER = 14;
     private const DEFAULT_TOTAL_WEIGHT = 20.0;
-    private const CSRF_TOKEN_ID = ExerciseQuestionImportProvider::CSRF_TOKEN_ID;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CQuizQuestionCategoryRepository $questionCategoryRepository,
         private ExerciseQti2ImportService $qti2ImportService,
     ) {}
@@ -74,7 +70,6 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         }
 
         $importType = $this->normalizeImportType((string) ($uriVariables['importType'] ?? 'aiken'));
-        $this->validateCsrfToken((string) $request->request->get('submittedCsrfToken', ''));
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
@@ -98,13 +93,6 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function validateCsrfToken(string $submittedToken): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $submittedToken))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function getCourse(Request $request): Course

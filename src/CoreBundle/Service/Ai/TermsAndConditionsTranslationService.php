@@ -25,8 +25,6 @@ use const JSON_UNESCAPED_UNICODE;
 
 final readonly class TermsAndConditionsTranslationService
 {
-    public const string CSRF_TOKEN_ID = 'terms_and_conditions_translation';
-
     private const string TOOL_NAME = 'terms_and_conditions_translation';
     private const int MAX_SECTION_HTML_LENGTH = 100000;
     private const int MAX_TOTAL_HTML_LENGTH = 250000;

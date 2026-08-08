@@ -16,13 +16,12 @@ export default {
     })
   },
 
-  async deleteQuestion(questionId, submittedCsrfToken) {
+  async deleteQuestion(questionId) {
     return await baseService.post(
       `${ENDPOINT}/action`,
       {
         action: "delete",
         questionId,
-        submittedCsrfToken,
       },
       {},
       { skipCourseContext: true },

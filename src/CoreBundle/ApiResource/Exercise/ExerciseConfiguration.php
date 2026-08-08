@@ -256,9 +256,6 @@ final class ExerciseConfiguration
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public string $textWhenFinishedFailure = '';
 
-    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<string, mixed>
      */

@@ -10,13 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Ai\TermsAndConditionsTranslation;
 use Chamilo\CoreBundle\Service\Ai\TermsAndConditionsTranslationService;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProviderInterface<TermsAndConditionsTranslation> */
 final readonly class TermsAndConditionsTranslationProvider implements ProviderInterface
 {
     public function __construct(
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private TermsAndConditionsTranslationService $translationService,
     ) {}
 
@@ -32,9 +30,6 @@ final readonly class TermsAndConditionsTranslationProvider implements ProviderIn
         $result = new TermsAndConditionsTranslation();
         $result->enabled = $this->translationService->isEnabled();
         $result->languages = $this->translationService->getActiveLanguageOptions();
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(
-            TermsAndConditionsTranslationService::CSRF_TOKEN_ID
-        );
 
         if ($result->enabled) {
             $result->providers = $this->translationService->getProviderOptions();

@@ -49,9 +49,6 @@ final class TermsAndConditionsTranslation
     #[Groups(['terms_translation:read'])]
     public array $providers = [];
 
-    #[Groups(['terms_translation:read', 'terms_translation:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['terms_translation:write'])]
     public int $sourceLanguageId = 0;
 

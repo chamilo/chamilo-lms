@@ -271,14 +271,11 @@ function buildLearningPathBuilderRoute() {
 }
 
 async function addCreatedLinkToLearningPath(linkId) {
-  const builder = await lpService.getBuilder(learningPathId.value, courseContextParams.value)
-
   await lpService.addBuilderResource(learningPathId.value, courseContextParams.value, {
     resourceType: "link",
     resourceId: linkId,
     parentId: Number(route.query.parent || 0) || null,
     exportAllowed: false,
-    csrfToken: builder.csrfToken,
   })
 
   await router.push(buildLearningPathBuilderRoute())

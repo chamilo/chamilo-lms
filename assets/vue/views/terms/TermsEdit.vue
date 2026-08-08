@@ -403,7 +403,6 @@ const aiTranslationConfiguration = ref({
   enabled: false,
   languages: [],
   providers: [],
-  csrfToken: "",
 })
 
 const buildEmptySections = () => {
@@ -517,7 +516,6 @@ const loadAiTranslationConfiguration = async () => {
       enabled: Boolean(configuration?.enabled),
       languages: Array.isArray(configuration?.languages) ? configuration.languages : [],
       providers: Array.isArray(configuration?.providers) ? configuration.providers : [],
-      csrfToken: String(configuration?.csrfToken || ""),
     }
 
     translationProvider.value = String(aiTranslationConfiguration.value.providers[0]?.value || "")
@@ -527,7 +525,6 @@ const loadAiTranslationConfiguration = async () => {
       enabled: false,
       languages: [],
       providers: [],
-      csrfToken: "",
     }
   }
 }
@@ -561,7 +558,6 @@ const generateAiTranslation = async () => {
       targetLanguageId: Number(translationTargetLanguage.value),
       provider: translationProvider.value,
       sections: termData.value.sections ?? buildEmptySections(),
-      csrfToken: aiTranslationConfiguration.value.csrfToken,
     })
 
     const translatedSections = {

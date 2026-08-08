@@ -35,7 +35,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /** @implements ProcessorInterface<LearningPathManagementInput, void> */
@@ -58,7 +57,6 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         private CLpRepository $learningPathRepository,
         private CShortcutRepository $shortcutRepository,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private ResourceLinkRepository $resourceLinkRepository,
@@ -76,7 +74,6 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
 
         $course = $this->getContextCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();

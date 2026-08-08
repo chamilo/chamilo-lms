@@ -159,7 +159,6 @@ const actionErrorMessage = ref("")
 const successMessage = ref("")
 const canManage = ref(false)
 const types = ref([])
-const csrfToken = ref("")
 const deletingId = ref(null)
 
 const descriptionTypeLabels = {
@@ -303,11 +302,7 @@ async function deleteDescription(description) {
   successMessage.value = ""
 
   try {
-    await courseDescriptionService.remove(
-      description.iid,
-      { csrfToken: csrfToken.value },
-      getContextParams(),
-    )
+    await courseDescriptionService.remove(description.iid, getContextParams())
 
     descriptions.value = descriptions.value.filter((item) => item.iid !== description.iid)
     successMessage.value = t("Description has been deleted")
@@ -331,7 +326,6 @@ async function loadDescriptions() {
     descriptions.value = Array.isArray(response.items) ? response.items : []
     canManage.value = Boolean(response.canManage)
     types.value = Array.isArray(response.types) ? response.types : []
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading course descriptions", error)
     errorMessage.value =

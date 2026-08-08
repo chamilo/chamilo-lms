@@ -31,8 +31,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -53,7 +51,6 @@ final readonly class CourseProgressThematicAdvanceProcessor implements Processor
         private CAttendanceRepository $attendanceRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -80,7 +77,6 @@ final readonly class CourseProgressThematicAdvanceProcessor implements Processor
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
-        $this->validateCsrfToken($data->csrfToken);
 
         $thematicId = isset($uriVariables['thematicId'])
             ? (int) $uriVariables['thematicId']
@@ -335,15 +331,6 @@ final readonly class CourseProgressThematicAdvanceProcessor implements Processor
         }
     }
 
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseProgressThematicAdvanceProvider::CSRF_TOKEN_ID, $token),
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
-    }
-
     private function sanitizeContent(string $content): string
     {
         if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
@@ -385,9 +372,6 @@ final readonly class CourseProgressThematicAdvanceProcessor implements Processor
             : null;
         $result->duration = (int) $advance->getDuration();
         $result->content = (string) $advance->getContent();
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(
-            CourseProgressThematicAdvanceProvider::CSRF_TOKEN_ID,
-        );
         $result->canEdit = true;
         $result->isNew = false;
 

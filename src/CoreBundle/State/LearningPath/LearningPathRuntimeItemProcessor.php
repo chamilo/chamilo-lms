@@ -37,7 +37,6 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
         private LearningPathFinalItemManager $finalItemManager,
@@ -56,8 +55,6 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         if (!$request instanceof Request) {
             throw new BadRequestHttpException('Request is missing.');
         }
-
-        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         if ($lpId <= 0 || $data->itemId <= 0) {

@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseList>
@@ -37,7 +36,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class ExerciseListProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
-    private const CSRF_TOKEN_ID = 'exercise_list_action';
     private const LINK_TYPE_EXERCISE = 1;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
@@ -47,7 +45,6 @@ final readonly class ExerciseListProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -76,7 +73,6 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $response->items = $items;
         $response->categories = $this->getCategories($course);
         $response->settings = $this->getSettings($course);
-        $response->submittedCsrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $response->totalItems = \count($items);
         $response->canManage = $canManage;
         $response->canCreate = $canCreate;

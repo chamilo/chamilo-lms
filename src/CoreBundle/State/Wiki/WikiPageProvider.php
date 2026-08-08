@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\State\Wiki;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPage;
-use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const DATE_ATOM;
@@ -42,7 +40,6 @@ final readonly class WikiPageProvider implements ProviderInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentFeedbackResolver $feedbackResolver,
         private WikiCategoryService $categoryService,
@@ -135,9 +132,6 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->canCreate = $canCreateAnyPage;
         $page->addLocked = 0 === $addLock;
         $page->canChangeAddLock = $canManage && $contextHasPages;
-        $page->managementCsrfToken = $canManage
-            ? (string) $this->csrfTokenManager->getToken(WikiPageAction::CSRF_TOKEN_ID)
-            : '';
         $page->studentView = $studentView;
         $categoriesEnabled = $this->isWikiCourseSettingEnabled(
             $this->entityManager,

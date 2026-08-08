@@ -269,7 +269,6 @@ const projects = ref([])
 const categories = ref([])
 const statuses = ref([])
 const priorities = ref([])
-const csrfToken = ref("")
 const allowCategoryEdition = ref(false)
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -335,7 +334,6 @@ async function loadConfiguration() {
     statuses.value = response.statuses || []
     priorities.value = response.priorities || []
     selectedProjectId.value = Number(response.projectId || 0) || null
-    csrfToken.value = response.csrfToken || ""
     allowCategoryEdition.value = Boolean(response.allowCategoryEdition)
     syncRoute()
   } catch (error) {
@@ -380,29 +378,12 @@ function openEditDialog(item) {
   isEditDialogVisible.value = true
 }
 
-// The CSRF token loaded at mount (loadConfiguration()) can go stale by the
-// time a dialog is filled in and saved — same staleness window documented
-// and fixed for UsergroupList.vue's saveForm()/performDelete(). Re-fetching
-// immediately before each mutating request closes that window regardless of
-// how long the dialog was left open. Only csrfToken is copied across (not
-// the full response) so an in-progress dialog's own form/list state isn't
-// disturbed by the refresh.
-async function refreshCsrfToken() {
-  try {
-    const response = await ticketService.getAdminConfiguration({ projectId: selectedProjectId.value || undefined })
-    csrfToken.value = response.csrfToken || csrfToken.value
-  } catch {
-    // Keep the existing token; the mutating call itself will surface any real error.
-  }
-}
-
 async function saveItem() {
   formSubmitted.value = true
   if (!form.title.trim()) return
   isSaving.value = true
   try {
-    await refreshCsrfToken()
-    const payload = { title: form.title.trim(), description: form.description, csrfToken: csrfToken.value }
+    const payload = { title: form.title.trim(), description: form.description }
     const response = editingItem.value
       ? await ticketService.updateAdminItem(section.value, editingItem.value.id, payload)
       : await ticketService.createAdminItem(section.value, selectedProjectId.value, payload)
@@ -431,8 +412,7 @@ function confirmDelete(item) {
 
 async function deleteItem(item) {
   try {
-    await refreshCsrfToken()
-    const response = await ticketService.deleteAdminItem(section.value, item.id, csrfToken.value)
+    const response = await ticketService.deleteAdminItem(section.value, item.id)
     showSuccessNotification(response.message || t("Deleted"))
     await loadConfiguration()
   } catch (error) {
@@ -456,11 +436,9 @@ async function saveCategoryUsers() {
   if (!editingCategory.value) return
   isSaving.value = true
   try {
-    await refreshCsrfToken()
     const response = await ticketService.updateCategoryUsers(
       editingCategory.value.id,
       selectedUsers.value.map((user) => Number(user.id)),
-      csrfToken.value,
     )
     showSuccessNotification(response.message || t("Update successful"))
     isUsersDialogVisible.value = false

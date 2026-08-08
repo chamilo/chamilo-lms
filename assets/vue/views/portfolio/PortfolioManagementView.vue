@@ -195,7 +195,7 @@ const isSaving = ref(false)
 const errorMessage = ref("")
 const dialogVisible = ref(false)
 const editingId = ref(null)
-const data = reactive({ categories: [], tags: [], canManageCategories: false, canManageTags: false, csrfTokenValue: "" })
+const data = reactive({ categories: [], tags: [], canManageCategories: false, canManageTags: false })
 const editor = reactive({ title: "", description: "", parentId: null, visible: true })
 const descriptionEditorConfig = { toolbar: "undo redo | bold italic underline | bullist numlist | link unlink", menubar: false, height: 180 }
 
@@ -278,7 +278,6 @@ async function saveEntity() {
         title: editor.title,
         description: editor.description,
         visible: editor.visible,
-        csrfToken: data.csrfTokenValue,
       },
       contextParams(),
     )
@@ -294,10 +293,7 @@ async function saveEntity() {
 
 async function toggleCategory(row) {
   try {
-    await portfolioService.managementAction(
-      { action: "toggle_category", entityId: row.id, csrfToken: data.csrfTokenValue },
-      contextParams(),
-    )
+    await portfolioService.managementAction({ action: "toggle_category", entityId: row.id }, contextParams())
     await loadData()
   } catch (error) {
     toast.add({ severity: "error", summary: t("Error"), detail: errorText(error), life: 5000 })
@@ -313,7 +309,6 @@ function confirmDelete(row) {
           {
             action: isCategories.value ? "delete_category" : "delete_tag",
             entityId: row.id,
-            csrfToken: data.csrfTokenValue,
           },
           contextParams(),
         )

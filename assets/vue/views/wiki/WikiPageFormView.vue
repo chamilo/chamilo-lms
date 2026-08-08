@@ -458,7 +458,6 @@ function createEmptyForm() {
     comment: "",
     progress: 0,
     language: "",
-    csrfToken: "",
     baseVersion: 0,
     version: 0,
     assignment: 0,
@@ -638,7 +637,6 @@ async function acquireLock() {
   const response = await wikiService.acquireLock(
     form.value.pageId,
     getContextParams(),
-    form.value.csrfToken,
   );
   form.value.lockAcquired = Boolean(response.lockAcquired);
 }
@@ -647,18 +645,13 @@ async function releaseLock() {
   if (
     !form.value.requiresLock ||
     !form.value.lockAcquired ||
-    !form.value.pageId ||
-    !form.value.csrfToken
+    !form.value.pageId
   ) {
     return;
   }
 
   try {
-    await wikiService.releaseLock(
-      form.value.pageId,
-      getContextParams(),
-      form.value.csrfToken,
-    );
+    await wikiService.releaseLock(form.value.pageId, getContextParams());
   } catch (error) {
     console.error("Error releasing Wiki page lock", error);
   } finally {
@@ -787,7 +780,6 @@ async function savePage() {
     comment: form.value.comment,
     progress: Number(form.value.progress || 0),
     language: form.value.language,
-    csrfToken: form.value.csrfToken,
     baseVersion: Number(form.value.baseVersion || 0),
     createAssignment: Boolean(form.value.createAssignment),
     task: form.value.task || "",

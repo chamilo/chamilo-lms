@@ -119,9 +119,6 @@ final class CourseDescriptionItem
     #[Groups(['course_description_item:read', 'course_description_item:write'])]
     public bool $enableSearch = true;
 
-    #[Groups(['course_description_item:read', 'course_description_item:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_description_item:read'])]
     public bool $canEdit = false;
 

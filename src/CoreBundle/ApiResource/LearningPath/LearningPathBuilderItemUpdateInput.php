@@ -101,9 +101,6 @@ final class LearningPathBuilderItemUpdateInput
     #[Groups(['learning_path_builder_item_update:read', 'learning_path_builder_item_update:write'])]
     public array $extraFields = [];
 
-    #[Groups(['learning_path_builder_item_update:write'])]
-    public string $csrfToken = '';
-
     public function getItemId(): ?int
     {
         return $this->itemId;

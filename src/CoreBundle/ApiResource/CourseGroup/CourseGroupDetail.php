@@ -54,9 +54,6 @@ final class CourseGroupDetail
     #[Groups(['course_group_detail:read'])]
     public bool $canSelfUnregister = false;
 
-    #[Groups(['course_group_detail:read'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */

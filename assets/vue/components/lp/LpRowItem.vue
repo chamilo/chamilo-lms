@@ -31,7 +31,6 @@ const props = defineProps({
   canSeriousGame: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   legacyContext: { type: Object, required: true },
-  csrfToken: { type: String, default: "" },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
@@ -176,14 +175,13 @@ const managementParams = computed(() => ({
 }))
 
 const onManage = async (action, extra = {}) => {
-  if (!props.csrfToken || !manageableInContext.value) {
+  if (!props.canEdit || !manageableInContext.value) {
     return
   }
 
   try {
     await lpService.manageLearningPath(props.lp.iid, managementParams.value, {
       action,
-      csrfToken: props.csrfToken,
       ...extra,
     })
     emit("management-changed")
@@ -195,7 +193,7 @@ const onManage = async (action, extra = {}) => {
 const publishAction = computed(() => ({
   label: props.lp?.publishedOnCourseHome ? t("do not publish") : t("Publish on course homepage"),
   icon: props.lp?.publishedOnCourseHome ? "checkbox-multiple-blank" : "checkbox-multiple-blank-outline",
-  disabled: !props.csrfToken || !manageableInContext.value,
+  disabled: !props.canEdit || !manageableInContext.value,
   command: () => onManage("toggle_publish"),
 }))
 
@@ -207,7 +205,7 @@ const attemptModeAction = computed(() => {
   return {
     label: isMultiple ? t("Prevent multiple attempts") : t("Allow multiple attempts"),
     icon: seriousGame ? "sync-circle" : "sync",
-    disabled: !props.csrfToken || !manageableInContext.value,
+    disabled: !props.canEdit || !manageableInContext.value,
     command: () => onManage("switch_attempt_mode"),
   }
 })
@@ -232,14 +230,14 @@ const viewModeAction = computed(() => {
 const debugAction = computed(() => ({
   label: props.lp?.debug ? t("Hide debug") : t("Show debug"),
   icon: props.lp?.debug ? "bug-check" : "bug-outline",
-  disabled: !props.csrfToken || !manageableInContext.value,
+  disabled: !props.canEdit || !manageableInContext.value,
   command: () => onManage("switch_scorm_debug"),
 }))
 
 const seriousGameAction = computed(() => ({
   label: props.lp?.seriousgameMode ? t("Disable gamification mode") : t("Enable gamification mode"),
   icon: "trophy",
-  disabled: !props.csrfToken || !manageableInContext.value,
+  disabled: !props.canEdit || !manageableInContext.value,
   command: () => onManage("toggle_serious_game"),
 }))
 
@@ -247,7 +245,7 @@ const autoLaunchAction = computed(() => ({
   label:
     Number(props.lp?.autolaunch) === 1 ? t("Disable learning path auto-launch") : t("Enable learning path auto-launch"),
   icon: Number(props.lp?.autolaunch) === 1 ? "autolaunch" : "autolaunch-off",
-  disabled: !props.csrfToken || !manageableInContext.value,
+  disabled: !props.canEdit || !manageableInContext.value,
   command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
 }))
 
@@ -263,7 +261,7 @@ const advancedAccessUrl = computed(() => {
 })
 
 const onToggleVisibility = async () => {
-  if (!props.csrfToken || isLpSubscriptionMode.value) {
+  if (!props.canEdit || isLpSubscriptionMode.value) {
     return
   }
 
@@ -277,7 +275,6 @@ const onToggleVisibility = async () => {
       },
       {
         visible: !isLpVisible.value,
-        csrfToken: props.csrfToken,
       },
     )
     emit("visibility-changed")
@@ -299,7 +296,7 @@ const visibilityAction = computed(() => {
   return {
     label: isLpVisible.value ? t("Hide") : t("Show"),
     icon: isLpVisible.value ? "eye-on" : "eye-off",
-    disabled: !props.csrfToken,
+    disabled: !props.canEdit,
     command: onToggleVisibility,
   }
 })
@@ -375,7 +372,7 @@ const buttonActions = computed(() =>
       label: t("Copy"),
       icon: "copy",
       command: onCopy,
-      disabled: !manageableInContext.value || !props.csrfToken,
+      disabled: !manageableInContext.value || !props.canEdit,
       visible: canCopyLearningPath.value,
     },
     {
@@ -462,7 +459,7 @@ const itemActionsMobile = computed(() =>
     {
       label: t("Copy"),
       command: onCopy,
-      disabled: !manageableInContext.value || !props.csrfToken,
+      disabled: !manageableInContext.value || !props.canEdit,
       visible: canCopyLearningPath.value,
     },
     { label: t("Delete"), command: onDelete, disabled: !manageableInContext.value },

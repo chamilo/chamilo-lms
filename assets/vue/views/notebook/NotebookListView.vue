@@ -167,7 +167,6 @@ const notes = ref([])
 const isLoading = ref(false)
 const errorMessage = ref("")
 const canWrite = ref(false)
-const csrfToken = ref("")
 const deletingId = ref(null)
 const sortField = ref(normalizeSort(getQueryValue(route.query.sort)))
 const sortDirection = ref(normalizeDirection(getQueryValue(route.query.direction)))
@@ -293,7 +292,7 @@ async function deleteNote(note) {
   deletingId.value = note.iid
 
   try {
-    await notebookService.remove(note.iid, { csrfToken: csrfToken.value }, getContextParams())
+    await notebookService.remove(note.iid, getContextParams())
     notes.value = notes.value.filter((item) => item.iid !== note.iid)
     showSuccessMessage("Deleted")
   } catch (error) {
@@ -360,7 +359,6 @@ async function loadNotes() {
     const response = await notebookService.getList(getListParams())
     notes.value = Array.isArray(response.items) ? response.items : []
     canWrite.value = Boolean(response.canWrite)
-    csrfToken.value = response.csrfToken || ""
     sortField.value = normalizeSort(response.sort)
     sortDirection.value = normalizeDirection(response.direction)
   } catch (error) {

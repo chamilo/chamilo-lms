@@ -72,9 +72,6 @@ final class LearningPathScormCommitInput
     #[Groups(['learning_path_scorm_commit:write'])]
     public string $reason = 'commit';
 
-    #[Groups(['learning_path_scorm_commit:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): ?int
     {
         return $this->lpId;

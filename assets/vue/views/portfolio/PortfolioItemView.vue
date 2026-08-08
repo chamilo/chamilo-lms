@@ -532,7 +532,6 @@ function emptyResult() {
     mode: route.meta.portfolioMode || "personal",
     item: {},
     comments: [],
-    csrfToken: "",
     maxScore: 0,
     canQualifyItems: false,
     canQualifyComments: false,
@@ -641,7 +640,6 @@ async function saveComment() {
       recipientIds: Number(commentForm.visibility) === 0 ? [] : commentForm.recipientIds,
       attachments: commentForm.attachments,
       attachmentDescriptions: commentForm.attachmentDescriptions,
-      csrfToken: result.csrfToken,
     }
     if (commentForm.id) {
       await portfolioService.updateComment(commentForm.id, payload, contextParams())
@@ -663,11 +661,7 @@ async function saveComment() {
 async function performItemAction(action, payload = {}) {
   isSavingAction.value = true
   try {
-    const response = await portfolioService.itemAction(
-      result.item.id,
-      { action, csrfToken: result.csrfToken, ...payload },
-      contextParams(),
-    )
+    const response = await portfolioService.itemAction(result.item.id, { action, ...payload }, contextParams())
     showSuccessNotification(t("Updated"))
     if (action === "copy_to_own" && response?.affectedIds?.[0]) {
       await router.push({
@@ -691,11 +685,7 @@ async function performItemAction(action, payload = {}) {
 async function performCommentAction(comment, action, payload = {}) {
   isSavingAction.value = true
   try {
-    const response = await portfolioService.commentAction(
-      comment.id,
-      { action, csrfToken: result.csrfToken, ...payload },
-      contextParams(),
-    )
+    const response = await portfolioService.commentAction(comment.id, { action, ...payload }, contextParams())
     showSuccessNotification(t("Updated"))
     if (action === "copy_to_own" && response?.affectedIds?.[0]) {
       await router.push({
@@ -727,11 +717,7 @@ function confirmDeleteItem() {
     accept: async () => {
       isSavingAction.value = true
       try {
-        await portfolioService.itemAction(
-          result.item.id,
-          { action: "delete", csrfToken: result.csrfToken },
-          contextParams(),
-        )
+        await portfolioService.itemAction(result.item.id, { action: "delete" }, contextParams())
         showSuccessNotification(t("Deleted"))
         await router.push(backRoute.value)
       } catch (error) {

@@ -32,8 +32,6 @@ use const PHP_INT_MAX;
 
 final readonly class CourseGroupManager
 {
-    private const string CSRF_INTENTION = 'course_group_management';
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -42,11 +40,6 @@ final readonly class CourseGroupManager
         private CGroupCategoryRepository $categoryRepository,
         private UrlGeneratorInterface $router,
     ) {}
-
-    public function getCsrfIntention(): string
-    {
-        return self::CSRF_INTENTION;
-    }
 
     /**
      * @return array{0: Course, 1: Session|null}

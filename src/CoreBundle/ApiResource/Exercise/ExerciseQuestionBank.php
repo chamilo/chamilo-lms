@@ -115,9 +115,6 @@ final class ExerciseQuestionBank
     #[Groups(['exercise_question_bank:read', 'exercise_question_bank:write'])]
     public array $questionIds = [];
 
-    #[Groups(['exercise_question_bank:write'])]
-    public string $submittedCsrfToken = '';
-
     #[Groups(['exercise_question_bank:read'])]
     public string $title = '';
 
@@ -171,9 +168,6 @@ final class ExerciseQuestionBank
 
     #[Groups(['exercise_question_bank:read'])]
     public int $totalItems = 0;
-
-    #[Groups(['exercise_question_bank:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['exercise_question_bank:read'])]
     public bool $canManage = false;

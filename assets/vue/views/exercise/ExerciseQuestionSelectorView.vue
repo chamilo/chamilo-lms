@@ -659,7 +659,6 @@ const questionCount = ref(0)
 const totalScore = ref(0)
 const questionTypes = ref([])
 const questions = ref([])
-const csrfToken = ref("")
 const canRecycleQuestions = ref(true)
 const isReadOnlyFromLearningPath = ref(false)
 const learningPathReadOnlyMessage = ref(
@@ -1107,7 +1106,6 @@ async function runQuestionAction(payload) {
     await exerciseService.saveExerciseQuestionAction(
       {
         exerciseId,
-        submittedCsrfToken: csrfToken.value,
         ...payload,
       },
       getContextParams(),
@@ -1141,7 +1139,6 @@ async function finishLearningPathCreation() {
     await exerciseService.attachExerciseToLearningPath(
       {
         exerciseId,
-        submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
       exerciseId,
@@ -1174,7 +1171,6 @@ async function loadQuestionSelector() {
     questionTypes.value = Array.isArray(response.questionTypes) ? response.questionTypes : []
     questions.value = Array.isArray(response.questions) ? response.questions : []
     canRecycleQuestions.value = response.canRecycleQuestions !== false
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading exercise questions", error)
     errorMessage.value = t("Could not load exercise questions")

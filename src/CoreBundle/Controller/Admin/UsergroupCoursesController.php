@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -26,7 +25,6 @@ class UsergroupCoursesController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
@@ -94,18 +92,12 @@ class UsergroupCoursesController extends AbstractController
             'groupTitle' => $usergroup->getTitle(),
             'coursesInGroup' => $inGroup,
             'coursesNotInGroup' => $notInGroup,
-            'csrfToken' => $this->csrfTokenManager->getToken('usergroup_courses')->getValue(),
         ]);
     }
 
     #[Route('/{id}', name: 'admin_usergroup_courses_save', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function save(Request $request, int $id): JsonResponse
     {
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_courses', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $usergroup = $this->em->find(Usergroup::class, $id);
         if (null === $usergroup) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);

@@ -130,9 +130,6 @@ final class AnnouncementAction
     #[Groups(['announcement_action:write'])]
     public ?int $visibility = null;
 
-    #[Groups(['announcement_action:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['announcement_action:read'])]
     public bool $success = false;
 

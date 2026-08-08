@@ -76,9 +76,6 @@ final class CourseProgressThematicPlan
     #[Groups(['course_progress_thematic_plan:read', 'course_progress_thematic_plan:write'])]
     public array $items = [];
 
-    #[Groups(['course_progress_thematic_plan:read', 'course_progress_thematic_plan:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_progress_thematic_plan:write'])]
     public bool $addNewItem = false;
 

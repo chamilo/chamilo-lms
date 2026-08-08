@@ -10,7 +10,6 @@ import lpService from "../../services/lpService"
 const props = defineProps({
   configuration: { type: Object, required: true },
   context: { type: Object, required: true },
-  csrfToken: { type: String, required: true },
   items: { type: Array, required: true },
   lpId: { type: Number, required: true },
 })
@@ -99,7 +98,6 @@ async function save() {
       authorIds: removeAuthors.value ? [] : selectedAuthorIds.value,
       removeAuthors: removeAuthors.value,
       price: Number(price.value || 0) > 0 ? Number(price.value) : null,
-      csrfToken: props.csrfToken,
     })
     showSuccessNotification(t("Updated"))
     emit("saved")

@@ -15,7 +15,6 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const items = ref([])
 const totalItems = ref(0)
-const csrfToken = ref("")
 const search = ref("")
 const currentPage = ref(1)
 const pageSize = ref(20)
@@ -49,7 +48,6 @@ async function loadData() {
     })
     items.value = data.items
     totalItems.value = data.totalItems
-    csrfToken.value = data.csrfToken
   } catch {
     errorMessage.value = t("An error occurred")
   } finally {
@@ -104,17 +102,6 @@ function openEditDialog(item) {
   showDialog.value = true
 }
 
-// Re-fetches the CSRF token immediately before a mutating request, instead
-// of trusting whatever csrfToken.value still holds from the list's last
-// load. That value can be arbitrarily stale by the time a dialog is
-// actually submitted (the user may take a while filling it in), and a stale
-// token is rejected by the controller's isCsrfTokenValid() check with a 403
-// — cheap (limit: 1) since only the token is needed, not the page of items.
-async function refreshCsrfToken() {
-  const data = await usergroupAdminService.list({ page: 1, limit: 1 })
-  csrfToken.value = data.csrfToken
-}
-
 async function saveForm() {
   if (!form.value.title.trim()) {
     errorMessage.value = t("Title is required")
@@ -125,9 +112,7 @@ async function saveForm() {
   errorMessage.value = ""
 
   try {
-    await refreshCsrfToken()
     const payload = new FormData()
-    payload.append("_token", csrfToken.value)
     payload.append("title", form.value.title.trim())
     payload.append("description", form.value.description)
     payload.append("groupType", String(form.value.groupType))
@@ -174,8 +159,7 @@ function confirmDelete(item) {
 
 async function performDelete(item) {
   try {
-    await refreshCsrfToken()
-    await usergroupAdminService.remove(item.id, csrfToken.value)
+    await usergroupAdminService.remove(item.id)
     successMessage.value = t("Deleted")
     await loadData()
     setTimeout(() => {

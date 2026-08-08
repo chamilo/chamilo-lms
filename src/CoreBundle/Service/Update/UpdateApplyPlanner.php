@@ -37,6 +37,7 @@ final readonly class UpdateApplyPlanner
     ];
 
     public function __construct(
+        private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -458,14 +459,14 @@ final readonly class UpdateApplyPlanner
 
         $unsupportedMigrationFiles = $filePlan['unsupported_migration_files_new'] ?? [];
         if (\is_array($unsupportedMigrationFiles) && [] !== $unsupportedMigrationFiles) {
-            $this->addCheck($checks, 'unsupported_migration_paths', 'failed', 'New update migration files must be placed under src/CoreBundle/Migrations/Schema/V210.', [
+            $this->addCheck($checks, 'unsupported_migration_paths', 'failed', 'New update migration files must be placed under '.rtrim($this->migrationPolicy->getMigrationPathPrefix(), '/').'.', [
                 'unsupported_migration_files_new' => $unsupportedMigrationFiles,
             ]);
         }
 
         $migrationFilesNew = $filePlan['migration_files_new'] ?? [];
         if (\is_array($migrationFilesNew) && [] !== $migrationFilesNew) {
-            $warnings[] = 'New V210 Doctrine migration files were detected. They will require a database migration safety review after applying files.';
+            $warnings[] = 'New '.$this->migrationPolicy->getMigrationSeries().' Doctrine migration files were detected. They will require a database migration safety review after applying files.';
         }
 
         if (true === ($filePlan['lists_truncated'] ?? false)) {
@@ -490,12 +491,12 @@ final readonly class UpdateApplyPlanner
 
     private function isSupportedMigrationPath(string $relativePath): bool
     {
-        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V210\/Version[0-9]+\.php$/', $relativePath);
+        return $this->migrationPolicy->isSupportedMigrationPath($relativePath);
     }
 
     private function isUnsupportedMigrationPath(string $relativePath): bool
     {
-        return 1 === preg_match('/^src\/CoreBundle\/Migrations\/Schema\/V[0-9]+\/Version[0-9]+\.php$/', $relativePath)
+        return $this->migrationPolicy->isMigrationPath($relativePath)
             && !$this->isSupportedMigrationPath($relativePath);
     }
 

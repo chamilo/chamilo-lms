@@ -20,7 +20,6 @@ use const LOCK_EX;
 
 final readonly class UpdatePostApplyCommandRunner
 {
-    private const string SUPPORTED_MIGRATION_CLASS_PREFIX = 'Chamilo\CoreBundle\Migrations\Schema\V210\\';
     private const string METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
 
     private const array ADVANCED_ACTION_KEYS = [
@@ -33,6 +32,7 @@ final readonly class UpdatePostApplyCommandRunner
     public function __construct(
         private UpdateOperationLogger $operationLogger,
         private UpdateConfiguration $updateConfiguration,
+        private UpdateMigrationPolicy $migrationPolicy,
         #[Autowire(param: 'kernel.project_dir')]
         private string $projectDir,
     ) {}
@@ -601,8 +601,8 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             $migrationClass = trim($migration['class']);
-            if (!str_starts_with($migrationClass, self::SUPPORTED_MIGRATION_CLASS_PREFIX)) {
-                throw new RuntimeException('Only staged V210 migrations can be executed by the update runner.');
+            if (!$this->migrationPolicy->isSupportedMigrationClass($migrationClass)) {
+                throw new RuntimeException('Only staged '.$this->migrationPolicy->getMigrationSeries().' migrations can be executed by the update runner.');
             }
 
             $migrationClasses[] = $migrationClass;
@@ -616,7 +616,7 @@ final readonly class UpdatePostApplyCommandRunner
             }
 
             if (true !== ($baseline['clean'] ?? false)) {
-                $warnings[] = 'Doctrine reports migration baseline warnings. Only staged V210 migration classes will be executed explicitly.';
+                $warnings[] = 'Doctrine reports migration baseline warnings. Only staged '.$this->migrationPolicy->getMigrationSeries().' migration classes will be executed explicitly.';
             }
         }
 

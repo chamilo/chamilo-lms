@@ -2936,33 +2936,30 @@ class MoodleImport
                     }
 
                     if ('c' === $mode) {
-                        $questionType = 'multiple_multiple';
+                        $questionType = 'multipleresponse';
                     } elseif ('d' === $mode) {
-                        $questionType = 'multiple_dropdown';
+                        $questionType = 'dropdown';
                     } else {
                         if (count($options) === 2) {
                             $lower = array_map(static fn ($v) => mb_strtolower($v), $options);
                             if (in_array('yes', $lower, true) && in_array('no', $lower, true)) {
-                                $questionType = 'yes_no';
+                                $questionType = 'yesno';
                             } else {
-                                $questionType = 'multiple_single';
+                                $questionType = 'multiplechoice';
                             }
                         } else {
-                            $questionType = 'multiple_single';
+                            $questionType = 'multiplechoice';
                         }
                     }
                     break;
 
                 case 'textfield':
-                    $questionType = 'open_short';
-                    break;
-
                 case 'textarea':
                     $questionType = 'open';
                     break;
 
                 case 'numeric':
-                    $questionType = 'numeric';
+                    $questionType = 'score';
                     break;
 
                 default:

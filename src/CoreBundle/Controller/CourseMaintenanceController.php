@@ -792,7 +792,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $exporter = new MoodleExport($course, $selectionMode);
             $exporter->setAdminUserData($adminId, $adminLogin, $adminEmail);
 
-            $exportDir = 'moodle_export_'.date('Ymd_His');
+            $courseCode = api_replace_dangerous_char((string) ($course->code ?? ''));
+            $exportPrefix = '' !== $courseCode ? $courseCode : 'course_export';
+            $exportDir = $exportPrefix.'_'.date('Ymd_His');
             $versionNum = ('3' === $moodleVersion) ? 3 : 4;
 
             $this->logDebug('[moodleExportExecute] starting exporter', [

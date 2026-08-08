@@ -65,6 +65,7 @@
     <p>Grand Canyon Village is the popular entry point to an awe-inspiring natural monument. We believe version 3.0 will popularize the benefits of Chamilo 2 (in comparison with Chamilo 1.11) as it reintroduces all plugins and settings that were on hold, completing the implementation of Chamilo 2 as a follower of 1.11, and making it more accessible (through more complete upgrades from 1.11) and more fun to work with thanks to jaw-dropping (optional and customizable) AI features.</p>
     <h3>Security fixes</h3>
     <ul aria-live="off">
+        <li>[2026-08-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/3afab5618601158f9de41c5161bef228b129bcdf">3afab561</a>) Security: harden PENS remote transport against SSRF</li>
         <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/8d41b2c471ddea028b08d75b3b8d49c66cdcd3a0">8d41b2c4</a>) Security: Restrict all ContactCategory CRUD routes to administrators</li>
         <li>[2026-08-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bc845f0814c65f5a228c5e9ff14d30993ac6a98">5bc845f0</a>) Security: Force download of HTML social post attachments instead of inline rendering</li>
         <li>[2026-07-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/222464914bb02565dac58ea3bd8068195af71f15">22246491</a>) Security: Reflected XSS via access_url_id/add_type attribute breakout in access_url edit admin pages</li>
@@ -221,6 +222,7 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/031effad53a4fb6cec444f69f2512eb7d8e36142">031effad</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8843">GH#8843</a>) Internal: Restore MCP allowed roles value template (#8843)</li>
         <li>[2026-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/2aa8bd43ec8612c0d818df2abdae8ad2ac30b1c0">2aa8bd43</a>) CI: Fix bad merge in previous test</li>
         <li>[2026-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/f1d5b446b4df423bb641db901cee39da871123df">f1d5b446</a>) Course description: Fix display of translate_html content (avoid aggressive HTMLPurifier filtering of non-hyphen language codes)</li>
         <li>[2026-08-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/8ce45e7ad2aa1785c82399c5e935a3442949897c">8ce45e7a</a>) Maintenance: Improve recovery of learning path elements on import</li>

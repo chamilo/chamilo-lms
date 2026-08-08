@@ -246,7 +246,7 @@ const seriousGameAction = computed(() => ({
 const autoLaunchAction = computed(() => ({
   label:
     Number(props.lp?.autolaunch) === 1 ? t("Disable learning path auto-launch") : t("Enable learning path auto-launch"),
-  icon: Number(props.lp?.autolaunch) === 1 ? "autolunch" : "autolunch-off",
+  icon: Number(props.lp?.autolaunch) === 1 ? "autolaunch" : "autolaunch-off",
   disabled: !props.csrfToken || !manageableInContext.value,
   command: () => onManage("toggle_auto_launch", { enabled: Number(props.lp?.autolaunch) !== 1 }),
 }))

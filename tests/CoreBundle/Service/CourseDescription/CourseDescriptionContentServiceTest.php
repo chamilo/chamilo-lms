@@ -204,6 +204,7 @@ final class CourseDescriptionContentServiceTest extends KernelTestCase
         $all = $this->service->read($this->course);
         self::assertGreaterThanOrEqual(1, $all['total']);
         self::assertSame($this->course->getId(), $all['course_id']);
+        self::assertSame('full', $all['mode']);
 
         $found = null;
         foreach ($all['items'] as $item) {
@@ -224,5 +225,92 @@ final class CourseDescriptionContentServiceTest extends KernelTestCase
         $byId = $this->service->read($this->course, (int) $created['description_id'], null);
         self::assertSame(1, $byId['total']);
         self::assertSame($created['description_id'], $byId['items'][0]['description_id']);
+    }
+
+    public function testReadInventoryAndSourceModesOmitFullMultiLangBody(): void
+    {
+        $title = 'Methodology '.bin2hex(random_bytes(6));
+        $this->service->createOrUpdate(
+            $this->course,
+            CCourseDescription::TYPE_METHODOLOGY,
+            $title,
+            '<p>Source methodology content for translation.</p>',
+            null,
+        );
+
+        $inventory = $this->service->read(
+            $this->course,
+            null,
+            CCourseDescription::TYPE_METHODOLOGY,
+            'inventory',
+        );
+        self::assertSame('inventory', $inventory['mode']);
+        self::assertSame(1, $inventory['total']);
+        self::assertArrayNotHasKey('content', $inventory['items'][0]);
+        self::assertArrayHasKey('content_sha256', $inventory['items'][0]);
+        self::assertArrayHasKey('present_languages', $inventory['items'][0]);
+
+        $source = $this->service->read(
+            $this->course,
+            null,
+            CCourseDescription::TYPE_METHODOLOGY,
+            'source',
+        );
+        self::assertSame('source', $source['mode']);
+        self::assertArrayNotHasKey('content', $source['items'][0]);
+        self::assertArrayHasKey('source_html', $source['items'][0]);
+        self::assertStringContainsString(
+            'Source methodology content for translation.',
+            $source['items'][0]['source_html'],
+        );
+    }
+
+    public function testUpsertLanguageAppendsVariantWithoutFullRewrite(): void
+    {
+        $title = 'Topics '.bin2hex(random_bytes(6));
+        $created = $this->service->createOrUpdate(
+            $this->course,
+            CCourseDescription::TYPE_TOPICS,
+            $title,
+            '<p>English topics body.</p>',
+            null,
+        );
+
+        $source = $this->service->read(
+            $this->course,
+            (int) $created['description_id'],
+            null,
+            'source',
+            'en',
+        );
+        $sha = $source['items'][0]['content_sha256'];
+
+        $upserted = $this->service->upsertLanguage(
+            $this->course,
+            (int) $created['description_id'],
+            null,
+            'es',
+            '<p>Temas en español.</p>',
+            'upsert',
+            'en',
+            $sha,
+        );
+
+        self::assertTrue($upserted['updated']);
+        self::assertSame('created', $upserted['action']);
+        self::assertSame('es', $upserted['language']);
+        self::assertArrayNotHasKey('content', $upserted);
+        self::assertNotEmpty($upserted['present_languages']);
+
+        $full = $this->service->read(
+            $this->course,
+            (int) $created['description_id'],
+            null,
+            'full',
+        );
+        $content = $full['items'][0]['content'];
+        self::assertStringContainsString('English topics body.', $content);
+        self::assertStringContainsString('Temas en español.', $content);
+        self::assertStringContainsString('mce-translatehtml', $content);
     }
 }

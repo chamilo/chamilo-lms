@@ -11,14 +11,13 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 
-use const ENT_HTML5;
-use const ENT_QUOTES;
-use const PREG_SPLIT_NO_EMPTY;
+
 
 /**
  * Shared lookup + create/edit/delete mechanics for the MCP course description
@@ -82,6 +81,7 @@ final readonly class CourseDescriptionContentService
         private EntityManagerInterface $entityManager,
         private LanguageRepository $languageRepository,
         private CourseDocumentContentService $documentContentService,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
     ) {}
 
     /**
@@ -141,30 +141,51 @@ final readonly class CourseDescriptionContentService
     }
 
     /**
-     * Returns the full HTML content of course description items. When neither
-     * descriptionId nor descriptionType is given, every base-course item is
-     * returned (standard sections ordered 1-7, then custom "Other" items).
-     * With a filter, returns the single matching item (custom/"Other" items
-     * require descriptionId — a course can have several of type 8).
+     * Returns course description items. When neither descriptionId nor
+     * descriptionType is given, every base-course item is returned (standard
+     * sections ordered 1-7, then custom "Other" items). With a filter, returns
+     * the single matching item (custom/"Other" items require descriptionId).
+     *
+     * Modes:
+     * - full (default): full HTML body (legacy behaviour)
+     * - inventory: language inventory only (no HTML body) — cheap for translation planning
+     * - source: source-language HTML only + inventory — enough to translate without the multi-lang blob
      *
      * @return array{
      *     course_id: int,
      *     total: int,
+     *     mode: string,
      *     items: list<array<string, mixed>>
      * }
      */
-    public function read(Course $course, ?int $descriptionId = null, ?int $descriptionType = null): array
-    {
+    public function read(
+        Course $course,
+        ?int $descriptionId = null,
+        ?int $descriptionType = null,
+        string $mode = TranslateHtmlLanguageService::READ_MODE_FULL,
+        ?string $sourceLanguage = null,
+    ): array {
+        $mode = strtolower(trim($mode));
+        if (!\in_array($mode, $this->translateHtmlLanguageService->supportedReadModes(), true)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid read mode "%s". Use one of: %s.',
+                $mode,
+                implode(', ', $this->translateHtmlLanguageService->supportedReadModes()),
+            ));
+        }
+
+        $sourceLanguage = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
         $descriptionId = (null !== $descriptionId && $descriptionId > 0) ? $descriptionId : null;
         $descriptionType = (null !== $descriptionType && $descriptionType > 0) ? $descriptionType : null;
 
         if (null !== $descriptionId || null !== $descriptionType) {
             $description = $this->resolveByIdOrType($course, $descriptionId, $descriptionType);
-            $items = [$this->normalize($description)];
+            $items = [$this->normalizeForRead($description, $mode, $sourceLanguage)];
 
             return [
                 'course_id' => (int) $course->getId(),
                 'total' => 1,
+                'mode' => $mode,
                 'items' => $items,
             ];
         }
@@ -195,18 +216,91 @@ final readonly class CourseDescriptionContentService
 
             $existing = $standardByType[$type] ?? null;
             if ($existing instanceof CCourseDescription) {
-                $items[] = $this->normalize($existing);
+                $items[] = $this->normalizeForRead($existing, $mode, $sourceLanguage);
             }
         }
 
         foreach ($customItems as $custom) {
-            $items[] = $this->normalize($custom);
+            $items[] = $this->normalizeForRead($custom, $mode, $sourceLanguage);
         }
 
         return [
             'course_id' => (int) $course->getId(),
             'total' => \count($items),
+            'mode' => $mode,
             'items' => $items,
+        ];
+    }
+
+    /**
+     * Upsert a single translatehtml language variant on a course description
+     * without requiring the client to resend the full multi-language HTML.
+     *
+     * @return array{
+     *     updated: true,
+     *     action: 'created'|'replaced',
+     *     language: string,
+     *     present_languages: list<string>,
+     *     content_sha256: string,
+     *     chars: int,
+     *     words: int
+     * }&array<string, mixed>
+     */
+    public function upsertLanguage(
+        Course $course,
+        ?int $descriptionId,
+        ?int $descriptionType,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $description = $this->resolveByIdOrType($course, $descriptionId, $descriptionType);
+        $languageIso = $this->resolveOptionalLanguageIsoCode($language);
+        if (null === $languageIso) {
+            throw new InvalidArgumentException('The language is required.');
+        }
+
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage);
+        $currentHtml = (string) $description->getContent();
+
+        $result = $this->translateHtmlLanguageService->upsertLanguage(
+            $currentHtml,
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+        );
+
+        // Sanitize the merged document with the same profile as create/edit.
+        $merged = $this->assertValidContent($result['html']);
+        // Re-inspect after sanitization (tags may shift slightly).
+        $after = $this->translateHtmlLanguageService->inspect($merged, $sourceLanguageIso);
+
+        $description->setContent($merged);
+        $this->courseDescriptionRepository->update($description);
+
+        $normalized = $this->normalize($description);
+        // Keep response light: inventory metadata, not the full multi-lang body.
+        unset($normalized['content']);
+        // Resource-node "language" is a single ISO on the node — keep it under a distinct key
+        // so it does not overwrite the upserted translatehtml language code.
+        $normalized['resource_language'] = $normalized['language'] ?? null;
+        unset($normalized['language']);
+
+        return [
+            ...$normalized,
+            'updated' => true,
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $after['presentLanguages'],
+            'content_sha256' => $after['contentSha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $after['hasMarkers'],
+            'per_language' => $after['perLanguage'],
         ];
     }
 
@@ -459,6 +553,33 @@ final readonly class CourseDescriptionContentService
         return $resolved->getIsocode();
     }
 
+    /**
+     * Prefer explicit argument, then resource language, then course language, then platform default.
+     */
+    private function resolveSourceLanguageIsoCode(Course $course, ?string $sourceLanguage): string
+    {
+        if (null !== $sourceLanguage && '' !== trim($sourceLanguage)) {
+            $resolved = $this->resolveOptionalLanguageIsoCode($sourceLanguage);
+            if (null !== $resolved) {
+                return $this->translateHtmlLanguageService->normalizeLanguageCode($resolved);
+            }
+        }
+
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' !== $courseLanguage) {
+            $fromCourse = $this->languageRepository->findOneAvailableByTitleOrCode($courseLanguage);
+            if ($fromCourse instanceof Language) {
+                return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $fromCourse->getIsocode());
+            }
+
+            return $this->translateHtmlLanguageService->normalizeLanguageCode($courseLanguage);
+        }
+
+        $platformDefault = $this->languageRepository->getPlatformDefaultIso();
+
+        return $this->translateHtmlLanguageService->normalizeLanguageCode($platformDefault ?: 'en');
+    }
+
     private function resourceLanguageIsoCode(CCourseDescription $description): ?string
     {
         $language = $description->getResourceNode()?->getLanguage();
@@ -487,17 +608,50 @@ final readonly class CourseDescriptionContentService
         ];
     }
 
-    private function countWords(string $html): int
+    /**
+     * @return array<string, mixed>
+     */
+    private function normalizeForRead(CCourseDescription $description, string $mode, string $sourceLanguage): array
     {
-        $plainText = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        $plainText = trim((string) preg_replace('/\s+/u', ' ', $plainText));
+        $base = [
+            'description_id' => (int) $description->getIid(),
+            'description_type' => (int) $description->getDescriptionType(),
+            'type_label' => $this->typeLabel((int) $description->getDescriptionType()),
+            'title' => (string) $description->getTitle(),
+            'language' => $this->resourceLanguageIsoCode($description),
+        ];
 
-        if ('' === $plainText) {
-            return 0;
+        $content = (string) $description->getContent();
+        $inspection = $this->translateHtmlLanguageService->inspect($content, $sourceLanguage);
+
+        $base['has_markers'] = $inspection['hasMarkers'];
+        $base['present_languages'] = $inspection['presentLanguages'];
+        $base['per_language'] = $inspection['perLanguage'];
+        $base['content_sha256'] = $inspection['contentSha256'];
+        $base['source_language'] = $sourceLanguage;
+
+        if (TranslateHtmlLanguageService::READ_MODE_INVENTORY === $mode) {
+            $base['word_count'] = $this->countWords($content);
+
+            return $base;
         }
 
-        $words = preg_split('/\s+/u', $plainText, -1, PREG_SPLIT_NO_EMPTY);
+        if (TranslateHtmlLanguageService::READ_MODE_SOURCE === $mode) {
+            $base['source_html'] = $inspection['sourceHtml'];
+            $base['word_count'] = $this->countWords($inspection['sourceHtml']);
 
-        return \is_array($words) ? \count($words) : 0;
+            return $base;
+        }
+
+        // full
+        $base['content'] = $content;
+        $base['word_count'] = $this->countWords($content);
+
+        return $base;
+    }
+
+    private function countWords(string $html): int
+    {
+        return $this->translateHtmlLanguageService->countWords($html);
     }
 }

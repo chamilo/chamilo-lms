@@ -13,22 +13,12 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeImmutable;
-use DOMDocument;
-use DOMElement;
-use DOMNode;
-use DOMXPath;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Throwable;
-
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
-use const LIBXML_HTML_NODEFDTD;
-use const LIBXML_HTML_NOIMPLIED;
-use const LIBXML_NOERROR;
-use const LIBXML_NOWARNING;
 
 final readonly class WysiwygTranslationService
 {
@@ -46,6 +36,7 @@ final readonly class WysiwygTranslationService
         private AiRequestsRepository $aiRequestsRepository,
         private Security $security,
         private AiDisclosureHelper $aiDisclosureHelper,
+        private TranslateHtmlLanguageService $translateHtmlLanguageService,
     ) {}
 
     public function isEnabled(): bool
@@ -66,7 +57,7 @@ final readonly class WysiwygTranslationService
     {
         $sourceLanguage = $course?->getCourseLanguage() ?: $this->languageRepository->getPlatformDefaultIso();
 
-        return $this->normalizeLanguageCode($sourceLanguage ?: 'en_US');
+        return $this->translateHtmlLanguageService->normalizeLanguageCode($sourceLanguage ?: 'en_US');
     }
 
     /**
@@ -78,7 +69,7 @@ final readonly class WysiwygTranslationService
         $normalized = [];
 
         foreach ($languages as $isocode => $label) {
-            $code = $this->normalizeLanguageCode((string) $isocode);
+            $code = $this->translateHtmlLanguageService->normalizeLanguageCode((string) $isocode);
             if ('' === $code) {
                 continue;
             }
@@ -152,7 +143,7 @@ final readonly class WysiwygTranslationService
             throw new RuntimeException('The editor content is too large to translate in one request.');
         }
 
-        $sourceLanguage = $this->normalizeLanguageCode($sourceLanguage);
+        $sourceLanguage = $this->translateHtmlLanguageService->normalizeLanguageCode($sourceLanguage);
         if ('' === $sourceLanguage) {
             throw new RuntimeException('The source language is invalid.');
         }
@@ -165,7 +156,7 @@ final readonly class WysiwygTranslationService
             throw new RuntimeException('The selected AI text provider is not available.');
         }
 
-        $markerInfo = $this->inspectTranslationMarkers($html, $sourceLanguage);
+        $markerInfo = $this->translateHtmlLanguageService->inspect($html, $sourceLanguage);
         $presentLanguages = $markerInfo['presentLanguages'];
         $sourceHtml = $markerInfo['sourceHtml'];
 
@@ -180,16 +171,16 @@ final readonly class WysiwygTranslationService
         $targets = [];
         $skipped = [];
         foreach ($requestedLanguages as $requestedLanguage) {
-            $targetLanguage = $this->normalizeLanguageCode((string) $requestedLanguage);
+            $targetLanguage = $this->translateHtmlLanguageService->normalizeLanguageCode((string) $requestedLanguage);
             if ('' === $targetLanguage || !isset($activeLanguages[$targetLanguage])) {
                 throw new RuntimeException('One or more requested languages are not active on this platform.');
             }
-            if ($this->languageCodesMatch($targetLanguage, $sourceLanguage)) {
+            if ($this->translateHtmlLanguageService->languageCodesMatch($targetLanguage, $sourceLanguage)) {
                 $skipped[] = $targetLanguage;
 
                 continue;
             }
-            if ($this->containsMatchingLanguage($presentLanguages, $targetLanguage)) {
+            if ($this->translateHtmlLanguageService->containsMatchingLanguage($presentLanguages, $targetLanguage)) {
                 $skipped[] = $targetLanguage;
 
                 continue;
@@ -221,7 +212,7 @@ final readonly class WysiwygTranslationService
             );
         }
 
-        $resultHtml = $this->mergeTranslations(
+        $resultHtml = $this->translateHtmlLanguageService->mergeTranslations(
             $html,
             $sourceLanguage,
             $sourceHtml,
@@ -354,118 +345,6 @@ final readonly class WysiwygTranslationService
         }
     }
 
-    /**
-     * @return array{
-     *     hasMarkers: bool,
-     *     isFullDocument: bool,
-     *     sourceHtml: string,
-     *     presentLanguages: list<string>
-     * }
-     */
-    private function inspectTranslationMarkers(string $html, string $sourceLanguage): array
-    {
-        $isFullDocument = 1 === preg_match('/<!doctype\s+html|<html\b/i', $html);
-        $document = $this->loadHtmlDocument($html, $isFullDocument);
-        $xpath = new DOMXPath($document);
-        $nodes = $xpath->query(
-            '//*[@lang and (contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ") or self::span)]'
-        );
-
-        $presentLanguages = [];
-        $sourceParts = [];
-        if (false !== $nodes) {
-            foreach ($nodes as $node) {
-                if (!$node instanceof DOMElement) {
-                    continue;
-                }
-
-                $language = $this->normalizeLanguageCode($node->getAttribute('lang'));
-                if ('' === $language) {
-                    continue;
-                }
-
-                $presentLanguages[] = $language;
-                if ($this->languageCodesMatch($language, $sourceLanguage)) {
-                    $sourceParts[] = $this->innerHtml($node);
-                }
-            }
-        }
-
-        $hasMarkers = [] !== $presentLanguages;
-        if ($hasMarkers) {
-            $sourceHtml = implode("\n", array_filter($sourceParts, static fn (string $part): bool => '' !== trim($part)));
-        } elseif ($isFullDocument) {
-            $body = $document->getElementsByTagName('body')->item(0);
-            $sourceHtml = $body instanceof DOMElement ? $this->innerHtml($body) : $html;
-        } else {
-            $sourceHtml = $html;
-        }
-
-        return [
-            'hasMarkers' => $hasMarkers,
-            'isFullDocument' => $isFullDocument,
-            'sourceHtml' => trim($sourceHtml),
-            'presentLanguages' => array_values(array_unique($presentLanguages)),
-        ];
-    }
-
-    /**
-     * @param array<string, string> $translations
-     */
-    private function mergeTranslations(
-        string $originalHtml,
-        string $sourceLanguage,
-        string $sourceHtml,
-        bool $hasMarkers,
-        bool $isFullDocument,
-        array $translations,
-    ): string {
-        $blocks = '';
-        foreach ($translations as $language => $translatedHtml) {
-            $blocks .= $this->buildLanguageBlock($language, $translatedHtml);
-        }
-
-        if ($hasMarkers) {
-            return $this->appendBeforeBodyEnd($originalHtml, $blocks, $isFullDocument);
-        }
-
-        $sourceBlock = $this->buildLanguageBlock($sourceLanguage, $sourceHtml);
-        $replacement = $sourceBlock.$blocks;
-
-        if (!$isFullDocument) {
-            return $replacement;
-        }
-
-        $count = 0;
-        $updated = preg_replace_callback(
-            '/(<body\b[^>]*>)(.*?)(<\/body>)/is',
-            static fn (array $matches): string => $matches[1].$replacement.$matches[3],
-            $originalHtml,
-            1,
-            $count,
-        );
-
-        return 1 === $count && \is_string($updated) ? $updated : $originalHtml.$replacement;
-    }
-
-    private function appendBeforeBodyEnd(string $html, string $blocks, bool $isFullDocument): string
-    {
-        if ($isFullDocument && false !== stripos($html, '</body>')) {
-            return preg_replace('/<\/body>/i', $blocks.'</body>', $html, 1) ?? $html.$blocks;
-        }
-
-        return $html.$blocks;
-    }
-
-    private function buildLanguageBlock(string $language, string $html): string
-    {
-        return \sprintf(
-            '<div class="mce-translatehtml" lang="%s">%s</div>',
-            htmlspecialchars($language, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-            $html,
-        );
-    }
-
     private function normalizeAiHtml(string $html): string
     {
         $html = trim($html);
@@ -487,78 +366,6 @@ final readonly class WysiwygTranslationService
         }
 
         return $html;
-    }
-
-    private function loadHtmlDocument(string $html, bool $isFullDocument): DOMDocument
-    {
-        $document = new DOMDocument('1.0', 'UTF-8');
-        $previous = libxml_use_internal_errors(true);
-
-        if ($isFullDocument) {
-            $document->loadHTML($html, LIBXML_NOERROR | LIBXML_NOWARNING);
-        } else {
-            $document->loadHTML(
-                '<div id="__chamilo_translate_root">'.$html.'</div>',
-                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING,
-            );
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($previous);
-
-        return $document;
-    }
-
-    private function innerHtml(DOMNode $node): string
-    {
-        $html = '';
-        foreach ($node->childNodes as $childNode) {
-            $html .= $node->ownerDocument?->saveHTML($childNode) ?: '';
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param list<string> $languages
-     */
-    private function containsMatchingLanguage(array $languages, string $targetLanguage): bool
-    {
-        foreach ($languages as $language) {
-            if ($this->languageCodesMatch($language, $targetLanguage)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function languageCodesMatch(string $left, string $right): bool
-    {
-        $left = $this->normalizeLanguageCode($left);
-        $right = $this->normalizeLanguageCode($right);
-
-        if ($left === $right) {
-            return true;
-        }
-
-        return explode('_', $left)[0] === explode('_', $right)[0];
-    }
-
-    private function normalizeLanguageCode(string $language): string
-    {
-        $language = str_replace('-', '_', trim($language));
-        if ('' === $language) {
-            return '';
-        }
-
-        $parts = explode('_', $language, 2);
-        $base = strtolower($parts[0]);
-        if (1 === \count($parts) || '' === trim($parts[1])) {
-            return $base;
-        }
-
-        return $base.'_'.strtoupper($parts[1]);
     }
 
     private function isTruthy(mixed $value): bool

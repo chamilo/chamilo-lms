@@ -244,7 +244,10 @@ class UserListController extends AbstractController
                 'isSessionAdmin' => $isSessionAdmin,
             ],
             'roleLabels' => array_map(fn (string $label): string => $this->translator->trans($label), self::ROLE_LABELS),
-            'csrfToken' => $this->csrfTokenManager->getToken('user_list_action')->getValue(),
+            // "Login as" is a GET route, which the central CSRF listener never
+            // inspects (it skips safe methods), so this token stays: it is the
+            // only thing standing between an admin session and an attacker-chosen
+            // impersonation triggered by a plain <img> tag.
             'loginAsToken' => $this->csrfTokenManager->getToken('login_as')->getValue(),
         ]);
     }

@@ -333,6 +333,7 @@ class SessionAdminController extends BaseController
             'description' => '',
             'descriptions' => $descriptions,
             'illustrationUrl' => $this->normalizePath($illustrationUrl),
+            'courseLanguage' => $course->getCourseLanguage(),
         ]);
     }
 

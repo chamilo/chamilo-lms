@@ -36,7 +36,10 @@
       </template>
 
       <template #content>
-        <div v-if="course.descriptions?.length" class="space-y-4">
+        <div
+          v-if="course.descriptions?.length"
+          class="space-y-4"
+        >
           <div
             v-for="(item, idx) in course.descriptions"
             :key="idx"
@@ -240,7 +243,7 @@ import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
@@ -253,21 +256,6 @@ const extraFieldKey = platformConfigStore.getSetting(
   "workflows.session_admin_user_subscription_search_extra_field_to_search",
 )
 
-/**
- * Apply translatehtml language filtering when editor.translate_html is on.
- */
-function displayTranslatedHtml(html) {
-  if (!html) {
-    return ""
-  }
-
-  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
-    return filterTranslatedHtml(html, window.user?.locale)
-  }
-
-  return html
-}
-
 const isFetching = ref(true)
 const course = ref({
   title: "Loading...",
@@ -275,7 +263,10 @@ const course = ref({
   description: "",
   descriptions: [],
   illustrationUrl: null,
+  courseLanguage: "",
 })
+
+const { displayTranslatedHtml } = useTranslatedHtml(() => course.value?.courseLanguage)
 
 function normalizeUrl(u) {
   if (!u || typeof u !== "string") return null
@@ -317,6 +308,7 @@ async function loadCourse() {
       description: data.description,
       descriptions: data.descriptions || [],
       illustrationUrl: normalizeUrl(data.illustrationUrl),
+      courseLanguage: data.courseLanguage,
     }
     rawBanner.value = normalizeUrl(data.illustrationUrl)
     if (rawBanner.value) {

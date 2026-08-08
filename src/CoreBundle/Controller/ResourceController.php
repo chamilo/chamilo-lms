@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -73,7 +74,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly ResourceFileRepository $resourceFileRepository,
-        private readonly CourseToolAccessTracker $courseToolAccessTracker
+        private readonly CourseToolAccessTracker $courseToolAccessTracker,
+        private readonly TranslateHtmlLanguageService $translateHtmlLanguageService
     ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
@@ -819,12 +821,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // Translate HTML: show only spans matching the user language.
+                    // Translate HTML: show only spans matching the viewer's language, falling
+                    // back to the course language, then the platform default language, then
+                    // whichever language is present, so the document is never rendered blank.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
-                        $user = $this->userHelper->getCurrent();
+                        $locale = $this->resolveTranslateHtmlLocale($content);
 
-                        if (null !== $user) {
-                            $locale = (string) $user->getLocale();
+                        if (null !== $locale) {
                             $localeJson = json_encode(
                                 $locale,
                                 JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
@@ -967,6 +970,41 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         return $response;
+    }
+
+    /**
+     * Resolves which language translate_html should show for this document:
+     * the viewer's own locale, else the course language, else the platform
+     * default language, else whichever language is actually present in the
+     * document — so the caller can always inject a locale that matches at
+     * least one block, and the document is never rendered blank.
+     */
+    private function resolveTranslateHtmlLocale(string $content): ?string
+    {
+        $presentLanguages = $this->translateHtmlLanguageService->inspect($content)['presentLanguages'];
+
+        if ([] === $presentLanguages) {
+            return null;
+        }
+
+        $user = $this->userHelper->getCurrent();
+        $course = $this->getCourse();
+
+        $candidates = [
+            $user?->getLocale(),
+            $course?->getCourseLanguage(),
+            (string) $this->getSettingsManager()->getSetting('language.platform_language'),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (null !== $candidate && '' !== $candidate
+                && $this->translateHtmlLanguageService->containsMatchingLanguage($presentLanguages, $candidate)
+            ) {
+                return $candidate;
+            }
+        }
+
+        return $presentLanguages[0];
     }
 
     private function injectGlossaryJs(

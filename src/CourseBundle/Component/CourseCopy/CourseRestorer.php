@@ -31,6 +31,7 @@ use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -406,7 +407,7 @@ class CourseRestorer
     }
 
     /**
-     * Restore only harmless course settings (Chamilo 2 entity-safe).
+     * Restore course-level metadata and per-course settings when explicitly requested.
      */
     public function restore_course_settings(string $destination_course_code = ''): void
     {
@@ -463,9 +464,112 @@ class CourseRestorer
 
         $em = Database::getManager();
         $em->persist($courseEntity);
+        $restoredRows = $this->restoreCourseSettingRows($courseEntity, $em);
         $em->flush();
 
-        $this->dlog('Course settings restored');
+        $this->dlog('Course settings restored', ['course_setting_rows' => $restoredRows]);
+    }
+
+    private function restoreCourseSettingRows(CourseEntity $courseEntity, EntityManagerInterface $em): int
+    {
+        $bag = $this->course->resources['course_settings'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            return 0;
+        }
+
+        $repo = $em->getRepository(CCourseSetting::class);
+        $restored = 0;
+
+        foreach ($bag as $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $raw = isset($wrap->obj) && \is_object($wrap->obj) ? $wrap->obj : $wrap;
+            $variable = trim((string) ($raw->variable ?? ''));
+            if ('' === $variable || !preg_match('/^[A-Za-z0-9_.:-]{1,255}$/D', $variable)) {
+                continue;
+            }
+
+            $value = $raw->value ?? null;
+            if (null !== $value && !\is_scalar($value)) {
+                continue;
+            }
+            $value = null === $value ? '' : $this->truncateCourseSettingValue((string) $value);
+
+            /** @var CCourseSetting[] $existing */
+            $existing = $repo->findBy([
+                'cId' => (int) $courseEntity->getId(),
+                'variable' => $variable,
+            ], ['iid' => 'ASC']);
+
+            $category = $this->courseSettingMetaValue($raw, 'category');
+            if ([] !== $existing) {
+                foreach ($existing as $setting) {
+                    if (!$setting instanceof CCourseSetting) {
+                        continue;
+                    }
+                    $setting->setValue($value);
+                    if ('' !== $category && (null === $setting->getCategory() || '' === $setting->getCategory())) {
+                        $setting->setCategory($category);
+                    }
+                    $em->persist($setting);
+                }
+                $restored++;
+
+                continue;
+            }
+
+            $setting = (new CCourseSetting())
+                ->setCId((int) $courseEntity->getId())
+                ->setVariable($variable)
+                ->setTitle($this->courseSettingMetaValue($raw, 'title') ?: $variable)
+                ->setValue($value)
+            ;
+
+            if ('' !== $category) {
+                $setting->setCategory($category);
+            }
+
+            $subkey = $this->courseSettingMetaValue($raw, 'subkey');
+            if ('' !== $subkey) {
+                $setting->setSubkey($subkey);
+            }
+            $type = $this->courseSettingMetaValue($raw, 'type');
+            if ('' !== $type) {
+                $setting->setType($type);
+            }
+            $comment = $this->courseSettingMetaValue($raw, 'comment');
+            if ('' !== $comment) {
+                $setting->setComment($comment);
+            }
+            $subkeytext = $this->courseSettingMetaValue($raw, 'subkeytext');
+            if ('' !== $subkeytext) {
+                $setting->setSubkeytext($subkeytext);
+            }
+
+            $em->persist($setting);
+            $restored++;
+        }
+
+        return $restored;
+    }
+
+    private function courseSettingMetaValue(object $raw, string $property): string
+    {
+        $value = $raw->{$property} ?? null;
+        if (null === $value || !\is_scalar($value)) {
+            return '';
+        }
+
+        $value = trim((string) $value);
+
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 255) : substr($value, 0, 255);
+    }
+
+    private function truncateCourseSettingValue(string $value): string
+    {
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 65535) : substr($value, 0, 65535);
     }
 
     /**

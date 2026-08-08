@@ -313,11 +313,15 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 )
             );
 
+            $restoreCourseSettings = $isMoodle
+                && 'full_backup' === $importOption
+                && !empty($course->resources['course_settings']);
+
             $restorer = new CourseRestorer($course);
             $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
             $restorer->setResourcesAllSnapshot($resourcesAll);
             $restorer->setDebug($this->debug);
-            $restorer->restore();
+            $restorer->restore('', 0, $restoreCourseSettings);
 
             CourseArchiver::cleanBackupDir();
 

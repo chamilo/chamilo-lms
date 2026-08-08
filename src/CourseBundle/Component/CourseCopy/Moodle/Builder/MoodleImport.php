@@ -145,6 +145,7 @@ class MoodleImport
             'attendance'          => [],
             'course_illustration' => [],
             'course_tools'        => [],
+            'course_settings'     => [],
         ];
 
         // 5) Ensure a default Forum Category (fallback)
@@ -736,9 +737,10 @@ class MoodleImport
             error_log("MBZ[$rid] after.gradebookMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
         }
 
-        // 8.6) Course illustration + base-course tool visibility (Moodle path only)
+        // 8.6) Course-level Chamilo metadata (Moodle path only)
         $this->tryImportCourseIllustrationMeta($workDir, $resources);
         $this->tryImportCourseToolsMeta($workDir, $resources);
+        $this->tryImportCourseSettingsMeta($workDir, $resources);
         if ($this->debug) {
             $counts = array_map(static fn ($b) => \is_array($b) ? \count($b) : 0, $resources);
             error_log("MBZ[$rid] after.courseMeta counts ".json_encode($counts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
@@ -5267,6 +5269,84 @@ class MoodleImport
         }
 
         return $imported > 0;
+    }
+
+    /**
+     * Import course settings from chamilo/course/settings.json.
+     *
+     * The controller decides whether this bag is applied. Selective imports never
+     * restore it; keeping it in the snapshot lets the full restore path stay explicit.
+     */
+    private function tryImportCourseSettingsMeta(string $workDir, array &$resources): bool
+    {
+        $resources['course_settings'] = $resources['course_settings'] ?? [];
+
+        $sidecar = rtrim($workDir, '/').'/chamilo/course/settings.json';
+        if (!is_file($sidecar)) {
+            return false;
+        }
+
+        $decoded = $this->readJsonFile($sidecar);
+        $items = \is_array($decoded) ? ($decoded['settings'] ?? null) : null;
+        if (!\is_array($items)) {
+            return false;
+        }
+
+        $imported = 0;
+        foreach (array_slice($items, 0, 1000) as $raw) {
+            if (!\is_array($raw)) {
+                continue;
+            }
+
+            $variable = trim((string) ($raw['variable'] ?? ''));
+            if ('' === $variable || !preg_match('/^[A-Za-z0-9_.:-]{1,255}$/D', $variable)) {
+                continue;
+            }
+
+            $value = $raw['value'] ?? null;
+            if (null !== $value && !\is_scalar($value)) {
+                continue;
+            }
+
+            $id = $this->nextId($resources['course_settings']);
+            $resources['course_settings'][$id] = $this->mkLegacyItem('course_settings', $id, [
+                'id' => $id,
+                'variable' => $variable,
+                'value' => null === $value ? null : $this->truncateCourseSettingValue((string) $value),
+                'category' => $this->normalizeCourseSettingMetaString($raw['category'] ?? null),
+                'subkey' => $this->normalizeCourseSettingMetaString($raw['subkey'] ?? null),
+                'type' => $this->normalizeCourseSettingMetaString($raw['type'] ?? null),
+                'title' => $this->normalizeCourseSettingMetaString($raw['title'] ?? null) ?: $variable,
+                'comment' => $this->normalizeCourseSettingMetaString($raw['comment'] ?? null),
+                'subkeytext' => $this->normalizeCourseSettingMetaString($raw['subkeytext'] ?? null),
+            ]);
+            $imported++;
+        }
+
+        if ($this->debug) {
+            @error_log('MOODLE_IMPORT: Course settings meta imported='.$imported);
+        }
+
+        return $imported > 0;
+    }
+
+    private function normalizeCourseSettingMetaString(mixed $value): ?string
+    {
+        if (null === $value || !\is_scalar($value)) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+        if ('' === $value) {
+            return '';
+        }
+
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 255) : substr($value, 0, 255);
+    }
+
+    private function truncateCourseSettingValue(string $value): string
+    {
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 65535) : substr($value, 0, 65535);
     }
 
     /**

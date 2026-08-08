@@ -667,7 +667,11 @@ router.beforeEach(async (to, from, next) => {
     !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
-    await securityStore.checkSession()
+    await securityStore.checkSession({
+      cid,
+      sid: parseInt(to.query?.sid ?? 0) || 0,
+      gid: parseInt(to.query?.gid ?? 0) || 0,
+    })
   }
 
   // If user must be logged but is not, send to login

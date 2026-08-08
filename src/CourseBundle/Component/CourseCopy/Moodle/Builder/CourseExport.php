@@ -183,9 +183,17 @@ class CourseExport
             if (($activity['modulename'] ?? '') === 'quiz') {
                 $quizExport = new QuizExport($this->course);
                 $quizData = $quizExport->getData((int) $activity['id'], (int) $activity['sectionid']);
+                $questions = $quizData['questions'] ?? [];
+                if (!\is_array($questions)) {
+                    continue;
+                }
 
-                foreach ($quizData['questions'] as $question) {
-                    $categoryId = (int) $question['questioncategoryid'];
+                foreach ($questions as $question) {
+                    $categoryId = (int) ($question['questioncategoryid'] ?? 0);
+                    if ($categoryId <= 0) {
+                        continue;
+                    }
+
                     if (!\in_array($categoryId, $questionCategories, true)) {
                         $questionCategories[] = $categoryId;
                     }

@@ -374,10 +374,22 @@ class OnlyofficeDocumentManager extends DocumentManager
             return null;
         }
 
+        $courseRoot = $course->getResourceNode();
+
         if ($parentResourceNodeId > 0) {
             $entityManager = Database::getManager();
             $parentNode = $entityManager->getRepository(ResourceNode::class)->find($parentResourceNodeId);
-            if (!$parentNode instanceof ResourceNode || !self::resourceNodeBelongsToCourse($parentNode, $courseId)) {
+            if (!$parentNode instanceof ResourceNode) {
+                return null;
+            }
+
+            // The modern Documents Vue root is the course ResourceNode itself.
+            // Course root nodes do not need their own ResourceLink back to the course.
+            if ($courseRoot instanceof ResourceNode && $courseRoot->getId() === $parentNode->getId()) {
+                return $parentNode;
+            }
+
+            if (!self::resourceNodeBelongsToCourse($parentNode, $courseId)) {
                 return null;
             }
 
@@ -406,6 +418,10 @@ class OnlyofficeDocumentManager extends DocumentManager
             }
 
             return $parentNode;
+        }
+
+        if ($courseRoot instanceof ResourceNode) {
+            return $courseRoot;
         }
 
         return $documentRepository->getCourseDocumentsRootNode($course)

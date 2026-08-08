@@ -1002,6 +1002,11 @@ function resetTableStateForFolderChange() {
     page: 1,
   }
 
+  store.commit("documents/updateField", {
+    path: "resetList",
+    value: true,
+  })
+
   unselectAll()
 }
 
@@ -1074,7 +1079,7 @@ onMounted(async () => {
     nodeId = route.query.node
   }
 
-  await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
+  await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid })
 
   options.value.itemsPerPage = resolveDefaultRows(0)
   options.value.page = 1
@@ -1114,7 +1119,7 @@ watch(totalItems, (n) => {
 
 watch(
   () => [route.name, route.params.node, route.query.node, unref(cid), unref(sid), unref(gid)],
-  ([routeName]) => {
+  async ([routeName]) => {
     let nodeId = route.params.node
     if (isEmpty(nodeId)) {
       nodeId = route.query.node
@@ -1127,8 +1132,7 @@ watch(
     resetTableStateForFolderChange()
 
     const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
-    store.dispatch("resourcenode/findResourceNode", finderParams)
-
+    await store.dispatch("resourcenode/findResourceNode", finderParams)
     if ("DocumentsList" === routeName) {
       triggerTableLoad()
     }
@@ -2213,7 +2217,9 @@ const usageQuotaSummary = computed(() => {
       return `${rounded} MB`
     }
 
-    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
+    return `${String(rounded)
+      .replace(/\.0+$/, "")
+      .replace(/(\.\d*?)0+$/, "$1")} MB`
   }
 
   function formatPercent(value) {
@@ -2229,7 +2235,9 @@ const usageQuotaSummary = computed(() => {
       return `${rounded}%`
     }
 
-    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")}%`
+    return `${String(rounded)
+      .replace(/\.0+$/, "")
+      .replace(/(\.\d*?)0+$/, "$1")}%`
   }
 
   const usedBytes = Number(q.usedBytes ?? 0)
@@ -2242,7 +2250,6 @@ const usageQuotaSummary = computed(() => {
     availablePercentLabel: formatPercent(q.availablePercent),
   }
 })
-
 
 function consumeAiSavedToast() {
   if (String(route.query.ai_saved || "") !== "1") {

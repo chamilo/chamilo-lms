@@ -238,7 +238,7 @@
             <div
               v-if="description"
               class="exercise-report-html text-sm text-gray-700"
-              v-html="description"
+              v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
@@ -487,6 +487,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -499,6 +500,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const isLoading = ref(false)
 const isBulkActionLoading = ref(false)

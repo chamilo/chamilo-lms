@@ -295,7 +295,7 @@
                           </h3>
                           <div
                             class="prose prose-sm max-w-none text-gray-90"
-                            v-html="question.title"
+                            v-html="displayTranslatedHtml(question.title)"
                           />
                         </div>
                         <div class="text-sm font-semibold text-gray-70">
@@ -306,7 +306,7 @@
                       <div
                         v-if="hasHtmlContent(question.description)"
                         class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
-                        v-html="question.description"
+                        v-html="displayTranslatedHtml(question.description)"
                       />
 
                       <div
@@ -370,7 +370,7 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
-                                    v-html="item.answer"
+                                    v-html="displayTranslatedHtml(item.answer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 align-top">{{ t(item.hotspotTypeLabel || item.hotspotType) }}</td>
@@ -393,7 +393,7 @@
                       >
                         <div
                           class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
-                          v-html="question.fillBlanks.text"
+                          v-html="displayTranslatedHtml(question.fillBlanks.text)"
                         />
                         <div class="flex flex-wrap gap-2 text-xs font-semibold">
                           <span class="rounded-full bg-gray-15 px-2 py-1 text-gray-80">
@@ -447,7 +447,7 @@
                         <div
                           v-if="hasHtmlContent(question.fillBlanks.comment)"
                           class="prose prose-sm max-w-none rounded bg-white p-3 text-gray-80"
-                          v-html="question.fillBlanks.comment"
+                          v-html="displayTranslatedHtml(question.fillBlanks.comment)"
                         />
                       </div>
 
@@ -496,20 +496,20 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
-                                    v-html="pair.answer"
+                                    v-html="displayTranslatedHtml(pair.answer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <span class="font-semibold text-gray-90">{{ pair.optionLabel }}</span>
                                   <div
                                     class="prose prose-sm max-w-none"
-                                    v-html="pair.optionAnswer"
+                                    v-html="displayTranslatedHtml(pair.optionAnswer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
-                                    v-html="pair.comment"
+                                    v-html="displayTranslatedHtml(pair.comment)"
                                   />
                                 </td>
                                 <td
@@ -556,7 +556,7 @@
                                 <td class="border border-gray-20 px-2 py-2 align-top">
                                   <div
                                     class="prose prose-sm max-w-none"
-                                    v-html="item.answer"
+                                    v-html="displayTranslatedHtml(item.answer)"
                                   />
                                 </td>
                                 <td class="border border-gray-20 px-2 py-2 text-center align-top">
@@ -608,13 +608,13 @@
                               <td class="border border-gray-20 px-2 py-2 align-top">
                                 <div
                                   class="prose prose-sm max-w-none"
-                                  v-html="answer.answer"
+                                  v-html="displayTranslatedHtml(answer.answer)"
                                 />
                               </td>
                               <td class="border border-gray-20 px-2 py-2 align-top">
                                 <div
                                   class="prose prose-sm max-w-none"
-                                  v-html="answer.comment"
+                                  v-html="displayTranslatedHtml(answer.comment)"
                                 />
                               </td>
                               <td class="border border-gray-20 px-2 py-2 text-right align-top">
@@ -644,10 +644,12 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import exerciseService from "../../services/exerciseService"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)

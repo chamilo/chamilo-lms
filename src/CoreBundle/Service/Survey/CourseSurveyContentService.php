@@ -171,7 +171,6 @@ final readonly class CourseSurveyContentService
             'survey_id' => (int) $survey->getIid(),
             'title' => $survey->getTitle(),
             'code' => $survey->getCode(),
-            'thanks' => (string) $survey->getSurveythanks(),
             'language' => $survey->getLang(),
             'anonymous' => '1' === (string) $survey->getAnonymous(),
             'question_count' => \count($this->listQuestions($survey)),
@@ -186,6 +185,20 @@ final readonly class CourseSurveyContentService
                 $mode,
                 $sourceLanguage,
                 'description',
+            ),
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $survey->getSubtitle(),
+                $mode,
+                $sourceLanguage,
+                'subtitle',
+                'subtitle_',
+            ),
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $survey->getSurveythanks(),
+                $mode,
+                $sourceLanguage,
+                'thanks',
+                'thanks_',
             ),
         ];
     }
@@ -366,6 +379,80 @@ final readonly class CourseSurveyContentService
     }
 
     /**
+     * Upsert one language variant of a survey's subtitle or thanks-message text.
+     * Title is intentionally excluded: it doubles as the exact-match lookup key
+     * used by resolveSurvey($course, $surveyId, $surveyTitle), so it stays
+     * English-facing like the survey/question/option titles-as-identifiers.
+     *
+     * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
+     */
+    public function upsertSurveyTextLanguage(
+        Course $course,
+        CSurvey $survey,
+        string $field,
+        string $language,
+        string $content,
+        string $mode = TranslateHtmlLanguageService::MODE_UPSERT,
+        ?string $sourceLanguage = null,
+        ?string $ifMatchSha256 = null,
+    ): array {
+        $accessor = $this->resolveSurveyTextFieldAccessor($field);
+        $languageIso = $this->resolveRequiredLanguageIsoCode($language);
+        $sourceLanguageIso = $this->resolveSourceLanguageIsoCode($course, $sourceLanguage, $survey->getLang());
+
+        $result = $this->translateHtmlLanguageService->upsertLanguageSanitized(
+            $accessor['get']($survey),
+            $languageIso,
+            $content,
+            $mode,
+            $sourceLanguageIso,
+            $ifMatchSha256,
+            fn (string $html): string => $this->sanitizeHtmlDescription($html, allowEmpty: true),
+        );
+
+        $accessor['set']($survey, $result['html']);
+        $this->entityManager->persist($survey);
+        $this->entityManager->flush();
+
+        return [
+            'updated' => true,
+            'survey_id' => (int) $survey->getIid(),
+            'title' => $survey->getTitle(),
+            'field' => $field,
+            'action' => $result['action'],
+            'language' => $result['language'],
+            'present_languages' => $result['present_languages'],
+            'content_sha256' => $result['content_sha256'],
+            'chars' => $result['chars'],
+            'words' => $result['words'],
+            'has_markers' => $result['has_markers'],
+            'per_language' => $result['per_language'],
+        ];
+    }
+
+    /**
+     * @return array{get: callable(CSurvey): string, set: callable(CSurvey, string): void}
+     */
+    private function resolveSurveyTextFieldAccessor(string $field): array
+    {
+        return match ($field) {
+            'subtitle' => [
+                'get' => static fn (CSurvey $survey): string => (string) $survey->getSubtitle(),
+                'set' => static function (CSurvey $survey, string $html): void {
+                    $survey->setSubtitle($html);
+                },
+            ],
+            'thanks' => [
+                'get' => static fn (CSurvey $survey): string => (string) $survey->getSurveythanks(),
+                'set' => static function (CSurvey $survey, string $html): void {
+                    $survey->setSurveythanks($html);
+                },
+            ],
+            default => throw new InvalidArgumentException(\sprintf('Unsupported survey text field "%s". Use "subtitle" or "thanks" (title is not translatable — it is used as a lookup key).', $field)),
+        };
+    }
+
+    /**
      * @return array{updated: true, action: 'created'|'replaced'}&array<string, mixed>
      */
     public function upsertQuestionDescriptionLanguage(
@@ -472,10 +559,7 @@ final readonly class CourseSurveyContentService
 
         $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
         if (!$resolved instanceof Language) {
-            throw new InvalidArgumentException(\sprintf(
-                'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
-                $language,
-            ));
+            throw new InvalidArgumentException(\sprintf('Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").', $language));
         }
 
         return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());

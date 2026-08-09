@@ -1,19 +1,18 @@
-export default function installHttpErrors({ store, on401, on403, on500, t } = {}) {
-  const getDefault403 = () => t("You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.")
+import { notifySessionIssue } from "../composables/sessionNotice"
 
-  const resolve403Text = (msg) => (msg && typeof msg === "string" ? msg : getDefault403())
-
-  const setForbidden = (msg) => {
-    const text = resolve403Text(msg)
-    try {
-      console.log("[httpErrors] 403 captured ->", text)
-      store?.dispatch?.("ux/showForbidden", text)
-    } catch (e) {
-      console.warn("[httpErrors] cannot dispatch ux/showForbidden:", e)
-    }
-    try {
-      on403?.(text)
-    } catch {}
+export default function installHttpErrors({ store, on401, on403, on500 } = {}) {
+  const setForbidden = () => {
+    notifySessionIssue((text) => {
+      try {
+        console.log("[httpErrors] 403 captured ->", text)
+        store?.dispatch?.("ux/showForbidden", text)
+      } catch (e) {
+        console.warn("[httpErrors] cannot dispatch ux/showForbidden:", e)
+      }
+      try {
+        on403?.(text)
+      } catch {}
+    })
   }
 
   const isHtmlResponse = (res) => {
@@ -41,8 +40,6 @@ export default function installHttpErrors({ store, on401, on403, on500, t } = {}
     document.close()
   }
 
-  const extractMsgFromJson = (json) => json?.error || json?.message || json?.detail || null
-
   // ---- 1) Axios (default + any instances created later) ----
   try {
     const axios = require("axios").default || require("axios")
@@ -62,8 +59,7 @@ export default function installHttpErrors({ store, on401, on403, on500, t } = {}
           return Promise.reject(err)
         }
 
-        // Fallback to JSON -> show Vue banner
-        setForbidden(extractMsgFromJson(body))
+        setForbidden()
         return Promise.reject(err)
       }
 
@@ -111,16 +107,7 @@ export default function installHttpErrors({ store, on401, on403, on500, t } = {}
               .catch(() => "")
             if (html) replaceWholeDocument(html)
           } else {
-            const ct = res.headers.get("content-type") || ""
-            if (ct.includes("json")) {
-              const data = await res
-                .clone()
-                .json()
-                .catch(() => ({}))
-              setForbidden(extractMsgFromJson(data))
-            } else {
-              setForbidden(null) // translated default
-            }
+            setForbidden()
           }
         }
         if (res?.status === 401) {
@@ -167,14 +154,7 @@ export default function installHttpErrors({ store, on401, on403, on500, t } = {}
                 return
               }
 
-              let msg = null
-              if (ct.includes("json")) {
-                try {
-                  const parsed = JSON.parse(this.responseText || "{}")
-                  msg = extractMsgFromJson(parsed) // may be null -> we’ll translate later
-                } catch {}
-              }
-              setForbidden(msg) // translated default if null
+              setForbidden()
             } else if (s === 401) {
               try {
                 on401?.(this)

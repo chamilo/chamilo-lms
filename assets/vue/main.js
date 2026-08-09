@@ -255,7 +255,6 @@ try {
 
 installHttpErrors({
   store,
-  t: (key, params) => i18n.global.t(key, params),
   on401: (err) => console.warn("Unauthorized", err?.response?.data?.error || "Unauthorized"),
   on403: (msg) => console.info("Forbidden shown:", msg),
   on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),

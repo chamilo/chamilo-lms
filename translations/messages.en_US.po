@@ -37699,6 +37699,12 @@ msgstr "Your session is about to expire"
 msgid "Do you want to continue your session?"
 msgstr "Do you want to continue your session?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Your session details have been lost, please login again."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+
 msgid "Stay connected"
 msgstr "Stay connected"
 

@@ -42,16 +42,10 @@ function normalizeMessage(message, fallback = "An unexpected error occurred.") {
     return message.trim()
   }
 
-  if (message === null || message === undefined) {
-    return fallback
-  }
-
-  try {
-    const serialized = String(message).trim()
-    return serialized || fallback
-  } catch {
-    return fallback
-  }
+  // Non-string values (booleans, numbers, objects from a malformed backend
+  // payload) must never be stringified into the toast — e.g. a boolean
+  // `error: true` field would otherwise render the literal text "true".
+  return fallback
 }
 
 function shouldSkipDuplicateToast(severity, message) {

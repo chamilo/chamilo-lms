@@ -1,19 +1,18 @@
-export default function installHttpErrors({ store, on401, on403, on500, t } = {}) {
-  const getDefault403 = () => t("You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.")
+import { notifySessionIssue } from "../composables/sessionNotice"
 
-  const resolve403Text = (msg) => (msg && typeof msg === "string" ? msg : getDefault403())
-
-  const setForbidden = (msg) => {
-    const text = resolve403Text(msg)
-    try {
-      console.log("[httpErrors] 403 captured ->", text)
-      store?.dispatch?.("ux/showForbidden", text)
-    } catch (e) {
-      console.warn("[httpErrors] cannot dispatch ux/showForbidden:", e)
-    }
-    try {
-      on403?.(text)
-    } catch {}
+export default function installHttpErrors({ store, on401, on403, on500 } = {}) {
+  const setForbidden = () => {
+    notifySessionIssue((text) => {
+      try {
+        console.log("[httpErrors] 403 captured ->", text)
+        store?.dispatch?.("ux/showForbidden", text)
+      } catch (e) {
+        console.warn("[httpErrors] cannot dispatch ux/showForbidden:", e)
+      }
+      try {
+        on403?.(text)
+      } catch {}
+    })
   }
 
   const isHtmlResponse = (res) => {

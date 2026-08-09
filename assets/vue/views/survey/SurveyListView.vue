@@ -472,11 +472,13 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const surveys = ref([])
@@ -930,7 +932,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()

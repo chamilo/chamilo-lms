@@ -121,8 +121,10 @@ import surveyService from "../../services/surveyService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const pendingSurveys = ref([])
 const isLoading = ref(false)
@@ -162,7 +164,7 @@ function displayText(value, fallback = "") {
   }
 
   const textarea = document.createElement("textarea")
-  textarea.innerHTML = String(value).replace(/<[^>]*>/g, " ")
+  textarea.innerHTML = displayTranslatedHtml(String(value)).replace(/<[^>]*>/g, " ")
 
   return textarea.value.replace(/\s+/g, " ").trim() || fallback
 }

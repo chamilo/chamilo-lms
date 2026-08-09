@@ -449,12 +449,14 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import lpService from "../../services/lpService"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const survey = ref({})
@@ -877,7 +879,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()

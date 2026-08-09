@@ -7,7 +7,7 @@
           v-if="report.survey?.title"
           class="mt-1 text-sm text-gray-600"
         >
-          {{ report.survey.title }}
+          {{ displayText(report.survey.title) }}
         </p>
       </div>
 
@@ -169,7 +169,11 @@
         <Column
           :header="t('Question')"
           field="question"
-        />
+        >
+          <template #body="{ data }">
+            <span>{{ displayText(data.question) }}</span>
+          </template>
+        </Column>
         <Column :header="t('Answer')">
           <template #body="{ data }">
             <span>{{ data.answer || '-' }}</span>
@@ -199,7 +203,7 @@
                 v-for="question in report.questionReports || []"
                 :key="question.id"
               >
-                <span class="font-semibold">{{ question.title }}:</span>
+                <span class="font-semibold">{{ displayText(question.title) }}:</span>
                 <span>{{ data.answers?.[question.id] || '-' }}</span>
               </div>
             </div>
@@ -217,11 +221,24 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
+
+function displayText(value, fallback = "") {
+  if (!value) {
+    return fallback
+  }
+
+  const textarea = document.createElement("textarea")
+  textarea.innerHTML = displayTranslatedHtml(String(value)).replace(/<[^>]*>/g, " ")
+
+  return textarea.value.replace(/\s+/g, " ").trim() || fallback
+}
 
 const report = ref({})
 const activeReport = ref("overview")
@@ -259,8 +276,8 @@ const QuestionReportList = defineComponent({
             h("div", { class: "mb-3 flex items-start gap-3" }, [
               h(BaseIcon, { icon: "chart-bar", size: "small" }),
               h("div", null, [
-                h("h3", { class: "text-lg font-semibold text-gray-90" }, question.title),
-                question.comment ? h("p", { class: "text-sm text-gray-500" }, question.comment) : null,
+                h("h3", { class: "text-lg font-semibold text-gray-90" }, displayText(question.title)),
+                question.comment ? h("p", { class: "text-sm text-gray-500" }, displayText(question.comment)) : null,
                 h("p", { class: "text-xs text-gray-500" }, `${question.typeLabel} · ${question.totalAnswers} ${t("answers")}`),
               ]),
             ]),
@@ -278,7 +295,7 @@ function renderQuestionBody(question) {
       { class: "space-y-3" },
       question.scoreRows.map((row) =>
         h("div", { class: "rounded-lg border border-gray-20 p-3" }, [
-          h("div", { class: "mb-2 font-semibold" }, row.optionLabel),
+          h("div", { class: "mb-2 font-semibold" }, displayText(row.optionLabel)),
           h(
             "div",
             { class: "grid gap-2 md:grid-cols-5" },
@@ -306,7 +323,7 @@ function renderQuestionBody(question) {
       question.options.map((option) =>
         h("div", { class: "rounded-lg border border-gray-20 p-3" }, [
           h("div", { class: "flex items-center justify-between gap-4" }, [
-            h("span", { class: "font-medium" }, option.label),
+            h("span", { class: "font-medium" }, displayText(option.label)),
             h("span", { class: "text-sm text-gray-600" }, `${option.count} · ${option.percentage}%`),
           ]),
           h("div", { class: "mt-2 h-2 rounded bg-gray-15" }, [

@@ -4964,11 +4964,31 @@ class CourseRestorer
                     ':survey.title'
                 );
 
+                // Flattens to plain text, but keeps mce-translatehtml language blocks
+                // intact (protected via placeholder) so multilingual markers survive
+                // restore/copy instead of being destroyed by the bare strip_tags() below.
                 $normalizeSurveyText = static function (?string $value): string {
-                    $text = html_entity_decode(strip_tags((string) $value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+                    $value = (string) $value;
 
-                    return trim($text);
+                    $protectedBlocks = [];
+                    $value = preg_replace_callback(
+                        '#<(div|span)\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\2[^>]*>.*?</\1>#is',
+                        static function (array $matches) use (&$protectedBlocks): string {
+                            // U+E000 (Private Use Area) survives strip_tags()/html_entity_decode()/\s+
+                            // collapsing untouched, unlike NUL bytes which strip_tags() silently drops.
+                            $token = "\u{E000}MCE_TRANSLATEHTML_".\count($protectedBlocks)."\u{E000}";
+                            $protectedBlocks[$token] = $matches[0];
+
+                            return $token;
+                        },
+                        $value
+                    ) ?? $value;
+
+                    $text = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+                    $text = trim($text);
+
+                    return [] === $protectedBlocks ? $text : strtr($text, $protectedBlocks);
                 };
 
                 $title = $normalizeSurveyText($rawTitleHtml);

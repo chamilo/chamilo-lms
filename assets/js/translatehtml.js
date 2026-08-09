@@ -63,6 +63,20 @@ function hideMatches(matches) {
   })
 }
 
+/**
+ * Removes non-matching language elements from the DOM entirely, instead of
+ * merely CSS-hiding them. Plain-text extraction (textContent, innerText, or
+ * regex tag-stripping, as done when previewing translated HTML in table
+ * cells) ignores `display: none` and would otherwise concatenate every
+ * language's text. Visually this is equivalent to hiding, since neither
+ * approach renders the element.
+ */
+function removeMatches(matches) {
+  matches.forEach(function (el) {
+    el.parentNode && el.parentNode.removeChild(el)
+  })
+}
+
 function showMatches(matches) {
   matches.forEach(function (el) {
     el.classList.remove("hidden")
@@ -102,7 +116,7 @@ function groupByParent(elements) {
  * actually present in the group rather than leaving it blank — mirrors the
  * legacy api_get_filtered_multilingual_HTML_string() behavior.
  */
-function applyGroup(root, allSelector, candidates) {
+function applyGroup(root, allSelector, candidates, removeNonMatching) {
   var all = Array.prototype.slice.call(root.querySelectorAll(allSelector))
 
   if (all.length === 0) {
@@ -110,12 +124,16 @@ function applyGroup(root, allSelector, candidates) {
   }
 
   groupByParent(all).forEach(function (group) {
-    hideMatches(group)
-
     var matches = findByLang(group, candidates)
 
     if (matches.length === 0) {
       matches = findByLang(group, buildLocaleCandidates(group[0].getAttribute("lang")))
+    }
+
+    if (removeNonMatching) {
+      removeMatches(group.filter(function (el) { return matches.indexOf(el) === -1 }))
+    } else {
+      hideMatches(group)
     }
 
     showMatches(matches)
@@ -175,10 +193,10 @@ export function filterTranslatedHtml(html, locale, fallbackLocales = []) {
   container.innerHTML = html
 
   // Editor-created content (.mce-translatehtml)
-  applyGroup(container, ".mce-translatehtml", candidates)
+  applyGroup(container, ".mce-translatehtml", candidates, true)
 
   // Legacy content (span[lang])
-  applyGroup(container, "span[lang]:not(.mce-translatehtml)", candidates)
+  applyGroup(container, "span[lang]:not(.mce-translatehtml)", candidates, true)
 
   return container.innerHTML
 }

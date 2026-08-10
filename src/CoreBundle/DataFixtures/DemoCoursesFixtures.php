@@ -44,6 +44,9 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
         ],
     ];
 
+    /**
+     * @psalm-suppress ContainerDependency
+     */
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CourseRepository $courseRepository,

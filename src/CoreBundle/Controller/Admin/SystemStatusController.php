@@ -420,17 +420,13 @@ final class SystemStatusController extends AbstractController
                     $variables['version'] = $version;
                 }
             } catch (Throwable) {
-                try {
-                    if (method_exists($connection, 'getServerVersion')) {
-                        $versionCandidate = (string) $connection->getServerVersion();
-                        if ('' !== $versionCandidate) {
-                            $version = $versionCandidate;
-                            $variables['version'] = $version;
-                        }
-                    }
-                } catch (Throwable) {
-                    $version = null;
-                }
+                // Connection::getServerVersion() used to be the fallback here,
+                // but it is private in DBAL 3 (method_exists() reports true for
+                // private methods, so the call only ever raised an Error that
+                // the catch turned back into null). There is no public API left
+                // to ask the driver, and SELECT VERSION() only fails when the
+                // connection itself is down.
+                $version = null;
             }
         }
 

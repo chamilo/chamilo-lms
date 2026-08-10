@@ -147,6 +147,8 @@ class ResourceControllerTest extends WebTestCase
         $documentRepo->create($document);
         $resourceFile = $documentRepo->addFile($document, $this->getUploadedFile());
         $resourceFile->setCrop('100,100,100,100');
+        // Simulate a restored image whose persisted MIME metadata was too generic.
+        $resourceFile->setMimeType('text/plain');
         $em->persist($resourceFile);
         $em->flush();
 
@@ -158,11 +160,68 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url);
         $this->assertResponseIsSuccessful();
+        self::assertStringStartsWith(
+            'image/',
+            (string) $client->getResponse()->headers->get('content-type')
+        );
 
         // View image with params.
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url, ['filter' => 'resource_show_preview']);
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testViewHtmlPropagatesLearningPathContextToEmbeddedDocumentFiles(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('LP embedded file context');
+
+        $embedded = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('embedded-image.jpg')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($embedded);
+        $documentRepo->addFile($embedded, $this->getUploadedFile());
+        $embeddedUuid = $embedded->getResourceNode()->getUuid()->toRfc4122();
+
+        $htmlDocument = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('lp-page.html')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($htmlDocument);
+        $documentRepo->addFileFromString(
+            $htmlDocument,
+            '<html><body><img src="/r/document/files/'.$embeddedUuid.'/view" alt="embedded"></body></html>',
+            'text/html',
+            'lp-page.html',
+            true
+        );
+
+        $htmlUuid = $htmlDocument->getResourceNode()->getUuid()->toRfc4122();
+        $client->request(
+            'GET',
+            '/r/document/files/'.$htmlUuid.'/view?cid='.$course->getId().'&lp_id=42&item_id=84'
+        );
+
+        $this->assertResponseIsSuccessful();
+        $content = (string) $client->getResponse()->getContent();
+        self::assertStringContainsString(
+            '/r/document/files/'.$embeddedUuid.'/view?origin=learnpath&amp;cid='.$course->getId().'&amp;lp_id=42&amp;lp_item_id=84',
+            $content
+        );
     }
 
     public function testViewActionWithJwtAuthentication(): void

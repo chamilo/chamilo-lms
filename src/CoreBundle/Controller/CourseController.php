@@ -217,6 +217,13 @@ class CourseController extends ToolBaseController
                     );
                 }
 
+                // Reordering the course home is a teacher action: the drag &
+                // drop handle is only rendered when api_is_allowed_to_edit()
+                // grants it. Without this check the POST branch returns before
+                // reaching the GET flow's access check below, so any
+                // authenticated user could reorder any course's tools.
+                $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
                 $sessionId = $this->getSessionId();
                 $toolId = (int) $requestData['toolId'];
                 $newIndex = (int) $requestData['index'];

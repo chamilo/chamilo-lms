@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -38931,4 +38931,238 @@ msgstr "Nincsenek tutorok"
 
 msgid "No users"
 msgstr "Nincsenek felhasználók"
+
+msgid "Calculation mode"
+msgstr "Számítási mód"
+
+msgid "Weighted average"
+msgstr "Súlyozott átlag"
+
+msgid "Points sum"
+msgstr "Pontösszeg"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "A súlyozott átlag normalizálja a súlyok összegével; a pontösszeg minden súlyt maximális pontszámként kezel és összeadja azokat normalizálás nélkül."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Minden elem súlya a maximális pontszámként kezelendő; az osztályzat a pontok összege, nem normalizált."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Az osztályzat az elemek súlyozott átlaga, a súlyok összegével normalizálva."
+
+msgid "Forum participation"
+msgstr "Fórum részvétel"
+
+msgid "Forum thread"
+msgstr "Fórum szál"
+
+msgid "Points for one message"
+msgstr "Pont egy üzenetért"
+
+msgid "Points for two or more messages"
+msgstr "Pont két vagy több üzenetért"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Pontszám, ha a hallgató pontosan egy üzenetet írt a szálban."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Pontszám, ha a hallgató két vagy több üzenetet írt a szálban."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opcionális. Ha üresen hagyja, egy vagy több üzenet az egy üzenetért járó pontot adja."
+
+msgid "Current password is required to change your password."
+msgstr "A jelenlegi jelszó megadása szükséges a jelszó megváltoztatásához."
+
+msgid "The 2FA code is required."
+msgstr "A 2FA kód megadása szükséges."
+
+msgid "Invalid 2FA configuration."
+msgstr "Érvénytelen 2FA konfiguráció."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "A 2FA kód érvénytelen vagy lejárt."
+
+msgid "Database load"
+msgstr "Adatbázis terhelés"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Élő MySQL és MariaDB szerver terhelési metrikák"
+
+msgid "Click to show database server load metrics"
+msgstr "Kattintson az adatbázis-szerver terhelési metrikák megjelenítéséhez"
+
+msgid "Threads connected"
+msgstr "Csatlakoztatott szálak"
+
+msgid "Temporary tables on disk"
+msgstr "Ideiglenes táblák lemezen"
+
+msgid "Privilege scope"
+msgstr "Jogosultsági kör"
+
+msgid "Not measurable with the current database user"
+msgstr "Nem mérhető a jelenlegi adatbázis-felhasználóval"
+
+msgid "Uptime"
+msgstr "Üzemidő"
+
+msgid "Queries per second"
+msgstr "Lekérdezések másodpercenként"
+
+msgid "Slow queries"
+msgstr "Lassú lekérdezések"
+
+msgid "Slow query time limit"
+msgstr "Lassú lekérdezés időkorlátja"
+
+msgid "Slow query log"
+msgstr "Lassú lekérdezés napló"
+
+msgid "Slow queries per second"
+msgstr "Lassú lekérdezések száma másodpercenként"
+
+msgid "Threads running"
+msgstr "Futó szálak"
+
+msgid "Threads cached"
+msgstr "Gyorsítótárazott szálak"
+
+msgid "Table lock waits"
+msgstr "Táblazár várakozások"
+
+msgid "Row lock waits"
+msgstr "Sorzár várakozások"
+
+msgid "Aborted connections"
+msgstr "Megszakított kapcsolatok"
+
+msgid "Opened tables"
+msgstr "Megnyitott táblák"
+
+msgid "Query cache"
+msgstr "Lekérdezés-gyorsítótár"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Az adatbázis-terhelési mérőszámok csak MySQL és MariaDB esetén érhetők el."
+
+msgid "Inserts"
+msgstr "Beszúrások"
+
+msgid "Hit rate"
+msgstr "Találati arány"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatikus frissítés 5 másodpercenként"
+
+msgid "Web server load"
+msgstr "Webszerver terhelése"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Élő Apache- vagy Nginx-státusz mérőszámok"
+
+msgid "Click to show web server load metrics"
+msgstr "Kattintson a webszerver-terhelési mérőszámok megjelenítéséhez"
+
+msgid "Requires a local web server status module"
+msgstr "Helyi webszerver-státusz modul szükséges"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "A webszerver-terhelés csak a localhost Apache mod_status vagy Nginx stub_status oldaláról olvasható. A státuszoldalnak engedélyeznie kell a 127.0.0.1 (vagy ::1) felől érkező kéréseket."
+
+msgid "Paths scanned"
+msgstr "Beolvasott útvonalak"
+
+msgid "Detected"
+msgstr "Észlelt"
+
+msgid "Status path"
+msgstr "Státusz útvonal"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "A webszerver-terhelési mérőszámok csak Apache és Nginx esetén érhetők el."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "A beolvasott státuszútvonalak egyike sem válaszolt a localhoston."
+
+msgid "Busy workers"
+msgstr "Foglalt munkavállalók"
+
+msgid "Idle workers"
+msgstr "Tétlen munkavállalók"
+
+msgid "Graceful workers"
+msgstr "Kíméletes munkavállalók"
+
+msgid "Server MPM"
+msgstr "Szerver MPM"
+
+msgid "Requests per second (live)"
+msgstr "Kérések száma másodpercenként (élő)"
+
+msgid "Requests per second (since start)"
+msgstr "Kérések száma másodpercenként (indítás óta)"
+
+msgid "Bytes per second (live)"
+msgstr "Bájtok száma másodpercenként (élő)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bájtok száma másodpercenként (indítás óta)"
+
+msgid "Bytes per request"
+msgstr "Bájtok kérésenként"
+
+msgid "Total accesses"
+msgstr "Összes hozzáférés"
+
+msgid "Total traffic"
+msgstr "Összes forgalom"
+
+msgid "CPU load"
+msgstr "CPU-terhelés"
+
+msgid "Load average (1 min)"
+msgstr "Terhelés átlaga (1 perc)"
+
+msgid "Load average (5 min)"
+msgstr "Terhelés átlaga (5 perc)"
+
+msgid "Load average (15 min)"
+msgstr "Terhelés átlaga (15 perc)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard küldés"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard olvasás"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard várakozás"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard szabad helyek"
+
+msgid "Active connections"
+msgstr "Aktív kapcsolatok"
+
+msgid "Reading"
+msgstr "Olvasás"
+
+msgid "Writing"
+msgstr "Írás"
+
+msgid "Total requests"
+msgstr "Összes kérés"
+
+msgid "Accepts"
+msgstr "Elfogadások"
+
+msgid "Handled"
+msgstr "Kezelések"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: engedélyezze a mod_status modult (ExtendedStatus On) és engedélyezze a localhost számára a /server-status elérést. Nginx: engedélyezze a stub_status modult egy localhost-only helyszínen, például /nginx_status vagy /stub_status."
 

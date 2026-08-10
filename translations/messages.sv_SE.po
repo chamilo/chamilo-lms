@@ -35497,7 +35497,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsformulär: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -38933,4 +38933,238 @@ msgstr "Inga handledare"
 
 msgid "No users"
 msgstr "Inga användare"
+
+msgid "Calculation mode"
+msgstr "Beräkningsläge"
+
+msgid "Weighted average"
+msgstr "Viktat medelvärde"
+
+msgid "Points sum"
+msgstr "Poängsumma"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Viktat medelvärde normaliserar efter summan av vikter; poängsumma behandlar varje vikt som maximala poäng och summerar dem utan normalisering."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Varje objekts vikt behandlas som dess maximala poäng; betyget är summan av poäng, inte normaliserat."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Betyget är det viktade medelvärdet av objekt, normaliserat efter summan av vikter."
+
+msgid "Forum participation"
+msgstr "Forumdeltagande"
+
+msgid "Forum thread"
+msgstr "Forumtråd"
+
+msgid "Points for one message"
+msgstr "Poäng för ett meddelande"
+
+msgid "Points for two or more messages"
+msgstr "Poäng för två eller fler meddelanden"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Poäng som tilldelas när studenten publicerat exakt ett meddelande i tråden."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Poäng som tilldelas när studenten publicerat två eller fler meddelanden i tråden."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Valfritt. Om fältet lämnas tomt ger ett eller flera meddelanden poäng för ett meddelande."
+
+msgid "Current password is required to change your password."
+msgstr "Nuvarande lösenord krävs för att ändra ditt lösenord."
+
+msgid "The 2FA code is required."
+msgstr "2FA-koden krävs."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ogiltig 2FA-konfiguration."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA-koden är ogiltig eller har gått ut."
+
+msgid "Database load"
+msgstr "Databasbelastning"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live-mått för MySQL- och MariaDB-serverbelastning"
+
+msgid "Click to show database server load metrics"
+msgstr "Klicka för att visa databas-serverbelastningsmått"
+
+msgid "Threads connected"
+msgstr "Anslutna trådar"
+
+msgid "Temporary tables on disk"
+msgstr "Tillfälliga tabeller på disk"
+
+msgid "Privilege scope"
+msgstr "Privilegiernas omfattning"
+
+msgid "Not measurable with the current database user"
+msgstr "Kan inte mätas med aktuell databasanvändare"
+
+msgid "Uptime"
+msgstr "Drifttid"
+
+msgid "Queries per second"
+msgstr "Frågor per sekund"
+
+msgid "Slow queries"
+msgstr "Långsamma frågor"
+
+msgid "Slow query time limit"
+msgstr "Tidsgräns för långsam fråga"
+
+msgid "Slow query log"
+msgstr "Logg för långsamma frågor"
+
+msgid "Slow queries per second"
+msgstr "Långsamma frågor per sekund"
+
+msgid "Threads running"
+msgstr "Körande trådar"
+
+msgid "Threads cached"
+msgstr "Cachelagrade trådar"
+
+msgid "Table lock waits"
+msgstr "Tabellås-väntan"
+
+msgid "Row lock waits"
+msgstr "Radlås-väntan"
+
+msgid "Aborted connections"
+msgstr "Avbrutna anslutningar"
+
+msgid "Opened tables"
+msgstr "Öppnade tabeller"
+
+msgid "Query cache"
+msgstr "Frågecache"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Databaslastmått är endast tillgängliga för MySQL och MariaDB."
+
+msgid "Inserts"
+msgstr "Infogningar"
+
+msgid "Hit rate"
+msgstr "Träffgrad"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Uppdatera automatiskt var 5:e sekund"
+
+msgid "Web server load"
+msgstr "Webbserverlast"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live-mått för Apache- eller Nginx-status"
+
+msgid "Click to show web server load metrics"
+msgstr "Klicka för att visa webbserverlastmått"
+
+msgid "Requires a local web server status module"
+msgstr "Kräver en lokal webbserverstatusmodul"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Webbserverlast läses från Apache mod_status eller Nginx stub_status endast på localhost. Statussidan måste tillåta begäran från 127.0.0.1 (eller ::1)."
+
+msgid "Paths scanned"
+msgstr "Skannade sökvägar"
+
+msgid "Detected"
+msgstr "Upptäckta"
+
+msgid "Status path"
+msgstr "Statussökväg"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Webbserverlastmått är endast tillgängliga för Apache och Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ingen av de skannade statussökvägarna svarade på localhost."
+
+msgid "Busy workers"
+msgstr "Upptagna arbetare"
+
+msgid "Idle workers"
+msgstr "Overksamma arbetare"
+
+msgid "Graceful workers"
+msgstr "Avslutande arbetare"
+
+msgid "Server MPM"
+msgstr "Server-MPM"
+
+msgid "Requests per second (live)"
+msgstr "Begäran per sekund (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Begäran per sekund (sedan start)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte per sekund (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte per sekund (sedan start)"
+
+msgid "Bytes per request"
+msgstr "Byte per begäran"
+
+msgid "Total accesses"
+msgstr "Totalt antal åtkomster"
+
+msgid "Total traffic"
+msgstr "Total trafik"
+
+msgid "CPU load"
+msgstr "CPU-last"
+
+msgid "Load average (1 min)"
+msgstr "Lastgenomsnitt (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Lastgenomsnitt (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Lastgenomsnitt (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard skickar"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard läser"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard väntar"
+
+msgid "Scoreboard open slots"
+msgstr "Poängtavla lediga platser"
+
+msgid "Active connections"
+msgstr "Aktiva anslutningar"
+
+msgid "Reading"
+msgstr "Läser"
+
+msgid "Writing"
+msgstr "Skriver"
+
+msgid "Total requests"
+msgstr "Totalt antal förfrågningar"
+
+msgid "Accepts"
+msgstr "Accepterade"
+
+msgid "Handled"
+msgstr "Hanterade"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: aktivera mod_status (ExtendedStatus On) och tillåt localhost till /server-status. Nginx: aktivera stub_status på en plats som endast är tillgänglig från localhost, t.ex. /nginx_status eller /stub_status."
 

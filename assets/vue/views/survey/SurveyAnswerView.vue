@@ -392,11 +392,13 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const survey = ref({})
 const questions = ref([])
@@ -598,7 +600,7 @@ function displayText(value, fallback = "") {
   }
 
   const textarea = document.createElement("textarea")
-  textarea.innerHTML = String(value).replace(/<[^>]*>/g, " ")
+  textarea.innerHTML = displayTranslatedHtml(String(value)).replace(/<[^>]*>/g, " ")
 
   return textarea.value.replace(/\s+/g, " ").trim() || fallback
 }

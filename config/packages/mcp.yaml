@@ -62,17 +62,23 @@ mcp:
 
         get_course_tests, get_course_test_questions and get_course_test_question_answers support
         modes full/inventory/source on HTML fields (test description, question description,
-        answer text). Use them to review structure, then translate with
-        upsert_course_test_description_language, upsert_course_test_question_description_language
-        and upsert_course_test_answer_description_language (one language INNER HTML per call).
-        Locate a test by testId or exact testTitle, and a question by questionId from
-        get_course_test_questions. Unlike the other course tools, these three read tools are also
+        answer text, and the answer's feedback comment shown after answering — a separate field
+        from the answer text, prefixed feedback_* in inventory/source modes). Use them to review
+        structure, then translate with upsert_course_test_description_language,
+        upsert_course_test_question_description_language,
+        upsert_course_test_answer_description_language (answer text) and
+        upsert_course_test_answer_feedback_language (feedback comment) — one language INNER HTML
+        per call. Locate a test by testId or exact testTitle, and a question by questionId from
+        get_course_test_questions. Unlike the other course tools, the three read tools are also
         available platform-wide (not only for the test's own course) to users with a question
         manager or administrator role; the upsert_* write tools require the course teacher.
 
         Full-document rewrites without renaming titles remain available via
-        edit_course_test_question_description and edit_course_test_answer_description, but prefer
-        the upsert_*_language tools for multi-language translation.
+        edit_course_test_question_description, edit_course_test_answer_description and
+        edit_course_test_answer_feedback, but prefer the upsert_*_language tools for
+        multi-language translation. edit_course_test_answer_description requires non-empty
+        content; the question description and answer feedback may be cleared with an empty
+        string.
 
         For surveys, get_course_surveys and get_course_survey_questions support the same
         full/inventory/source modes. Prefer upsert_course_survey_description_language,

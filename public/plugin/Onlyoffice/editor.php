@@ -24,6 +24,8 @@ use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 
 const ONLYOFFICE_EDITOR_LOG_ENABLED = false;
@@ -75,6 +77,12 @@ $isReadOnly = isset($_GET['readOnly']) ? (int) $_GET['readOnly'] : null;
 $forceEdit = isset($_GET['forceEdit']) && in_array(strtolower((string) $_GET['forceEdit']), ['1', 'true', 'yes', 'on'], true);
 $origin = isset($_GET['origin']) ? strtolower(trim((string) $_GET['origin'])) : '';
 $isEmbedded = isset($_GET['embedded']) && in_array(strtolower((string) $_GET['embedded']), ['1', 'true', 'yes', 'on'], true);
+$isExercisePreview = isset($_GET['exercisePreview'])
+    && in_array(strtolower((string) $_GET['exercisePreview']), ['1', 'true', 'yes', 'on'], true);
+if ($isExercisePreview) {
+    $isReadOnly = 1;
+    $forceEdit = false;
+}
 $isLearnpathEmbedded = $isEmbedded || 'learnpath' === $origin;
 $rawReturnUrl = isset($_GET['returnUrl']) ? urldecode((string) $_GET['returnUrl']) : '';
 $returnUrl = resolveOnlyofficeEditorReturnUrl(
@@ -109,17 +117,33 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'returnUrl' => $returnUrl,
     'origin' => $origin,
     'embedded' => $isEmbedded,
+    'exercisePreview' => $isExercisePreview,
     'learnpathEmbedded' => $isLearnpathEmbedded,
 ]);
 
 if (!empty($resourceNodeId)) {
-    if (!userCanOpenExerciseResourceNodeForOnlyofficeEditor($resourceNodeId, (int) $exerciseId, (int) $exeId, (int) $questionId, $userId)) {
-        onlyofficeEditorLog('ERROR', 'Resource node is not linked to the current exercise attempt', [
+    $canOpenResourceNode = $isExercisePreview
+        ? userCanPreviewExerciseQuestionResourceNodeForOnlyofficeEditor(
+            $resourceNodeId,
+            (int) $exerciseId,
+            (int) $questionId
+        )
+        : userCanOpenExerciseResourceNodeForOnlyofficeEditor(
+            $resourceNodeId,
+            (int) $exerciseId,
+            (int) $exeId,
+            (int) $questionId,
+            $userId
+        );
+
+    if (!$canOpenResourceNode) {
+        onlyofficeEditorLog('ERROR', 'Resource node access was rejected for the exercise editor', [
             'resourceNodeId' => $resourceNodeId,
             'exerciseId' => $exerciseId,
             'exeId' => $exeId,
             'questionId' => $questionId,
             'userId' => $userId,
+            'exercisePreview' => $isExercisePreview,
         ]);
         api_not_allowed(true);
     }
@@ -148,6 +172,10 @@ if (!empty($resourceNodeId)) {
         if (!empty($groupId)) {
             $downloadPayload['groupId'] = $groupId;
             $trackPayload['groupId'] = $groupId;
+        }
+
+        if ($isExercisePreview) {
+            $trackPayload['exercisePreview'] = 1;
         }
 
         $downloadHash = $jwtManager->getHash($downloadPayload);
@@ -183,11 +211,13 @@ if (!empty($resourceNodeId)) {
                 .($forceEdit ? '&forceEdit=true' : '')
                 .($origin ? '&origin='.rawurlencode($origin) : '')
                 .($isEmbedded ? '&embedded=1' : '')
+                .($isExercisePreview ? '&exercisePreview=1' : '')
                 .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
             'document_url' => $callbackUrl,
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
             'parent_id' => 0,
+            'legacy_parent_id' => 0,
             'parents' => [],
             'forceEdit' => $forceEdit,
             'exercise_id' => $exerciseId,
@@ -377,11 +407,13 @@ if (!empty($resourceNodeId)) {
                 .($forceEdit ? '&forceEdit=true' : '')
                 .($origin ? '&origin='.rawurlencode($origin) : '')
                 .($isEmbedded ? '&embedded=1' : '')
+                .($isExercisePreview ? '&exercisePreview=1' : '')
                 .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
             'document_url' => $callbackUrl,
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
             'parent_id' => $resolvedC2['parentId'],
+            'legacy_parent_id' => 0,
             'parents' => [],
             'forceEdit' => $forceEdit,
             'exercise_id' => $exerciseId,
@@ -448,6 +480,8 @@ if (!empty($resourceNodeId)) {
                 $versionToken
             );
 
+            $docInfo['legacy_parent_id'] = (int) ($docInfo['parent_id'] ?? 0);
+            $docInfo['parent_id'] = 0;
             $docInfo['direct_url'] = $fileUrl;
             $docInfo['document_url'] = $callbackUrl;
             $docInfo['version_token'] = $versionToken;
@@ -512,7 +546,8 @@ $metaUrl = buildOnlyofficeMetaUrl(
     $forceEdit,
     $returnUrl,
     $origin,
-    $isEmbedded
+    $isEmbedded,
+    $isExercisePreview
 );
 
 $fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
@@ -592,6 +627,8 @@ $config['document']['permissions']['copy'] = true;
 
 $config['editorConfig']['customization']['autosave'] = true;
 $config['editorConfig']['customization']['forcesave'] = true;
+$config['width'] = '100%';
+$config['height'] = '100%';
 
 if ($isLearnpathEmbedded) {
     if (isset($config['editorConfig']['customization']['goback'])) {
@@ -621,6 +658,7 @@ $config = refreshOnlyofficeEditorToken($config, $jwtManager, $appSettings);
 $isMobileAgent = $configService->isMobileAgent($userAgent);
 $langCode = $configService->getLang();
 $editorContainerId = 'iframeEditor';
+$editorShellId = 'onlyofficeEditorShell';
 
 onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'docId' => (string) ($docId ?? 0),
@@ -635,12 +673,17 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'returnUrl' => $returnUrl,
     'origin' => $origin,
     'embedded' => $isEmbedded,
+    'exercisePreview' => $isExercisePreview,
     'learnpathEmbedded' => $isLearnpathEmbedded,
 ]);
 
 sendOnlyofficeEditorNoCacheHeaders();
 
-?>
+$hideChamiloLayout = $isLearnpathEmbedded
+    || (isset($_GET['nh']) && '1' === (string) $_GET['nh']);
+
+if ($hideChamiloLayout) {
+    ?>
     <!DOCTYPE html>
     <html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
     <head>
@@ -649,12 +692,29 @@ sendOnlyofficeEditorNoCacheHeaders();
         <title>ONLYOFFICE</title>
         <style>
             html,
-            body,
-            #<?php echo $editorContainerId; ?> {
+            body {
                 width: 100%;
                 height: 100%;
                 margin: 0;
                 padding: 0;
+            }
+
+            #<?php echo $editorShellId; ?> {
+                position: relative;
+                width: 100%;
+                height: 100vh;
+                min-height: 100%;
+                overflow: hidden;
+            }
+
+            #<?php echo $editorShellId; ?> #<?php echo $editorContainerId; ?>,
+            #<?php echo $editorShellId; ?> iframe {
+                display: block !important;
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 100% !important;
+                max-height: none !important;
+                border: 0 !important;
             }
 
             body {
@@ -666,18 +726,48 @@ sendOnlyofficeEditorNoCacheHeaders();
         <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
     </head>
     <body>
-    <div id="<?php echo $editorContainerId; ?>"></div>
+    <?php
+} else {
+    Display::display_header($plugin->get_lang('openByOnlyoffice'));
+    ?>
+    <style>
+        #<?php echo $editorShellId; ?> {
+            position: relative;
+            width: 100%;
+            min-height: 760px;
+            overflow: hidden;
+        }
+
+        #<?php echo $editorShellId; ?> #<?php echo $editorContainerId; ?>,
+        #<?php echo $editorShellId; ?> iframe {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 760px !important;
+            max-height: none !important;
+            border: 0 !important;
+        }
+    </style>
+    <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <?php
+}
+?>
+    <div id="<?php echo $editorShellId; ?>">
+        <div id="<?php echo $editorContainerId; ?>"></div>
+    </div>
 
     <script type="text/javascript">
         (function () {
             const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
             const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
             const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
-            const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
+            const folderId = <?php echo json_encode((int) ($docInfo['legacy_parent_id'] ?? 0)); ?>;
+            const parentResourceNodeId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
             const sessionId = <?php echo json_encode((int) $sessionId); ?>;
             const courseId = <?php echo json_encode((int) $courseId); ?>;
             const groupId = <?php echo json_encode((int) $groupId); ?>;
             const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
+            const editorShellId = <?php echo json_encode($editorShellId); ?>;
             const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
             const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
             const saveAsCsrfToken = <?php echo json_encode($saveAsCsrfToken); ?>;
@@ -698,6 +788,60 @@ sendOnlyofficeEditorNoCacheHeaders();
 
                 const args = Array.prototype.slice.call(arguments);
                 console.log.apply(console, args);
+            }
+
+            function getEditorHeight() {
+                const shell = document.getElementById(editorShellId);
+                if (!shell) {
+                    return 760;
+                }
+
+                if (isEmbeddedEditor) {
+                    return Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+                }
+
+                const top = Math.max(0, shell.getBoundingClientRect().top);
+                const remainingViewportHeight = window.innerHeight - top - 8;
+                const preferredViewportHeight = Math.round(window.innerHeight * 0.86);
+
+                return Math.max(760, remainingViewportHeight, preferredViewportHeight);
+            }
+
+            function forceEditorDimensions() {
+                const shell = document.getElementById(editorShellId);
+                if (!shell) {
+                    return;
+                }
+
+                const editorHeight = getEditorHeight();
+                const heightValue = isEmbeddedEditor ? "100%" : editorHeight + "px";
+
+                if (isEmbeddedEditor) {
+                    shell.style.setProperty("height", "100vh", "important");
+                    shell.style.setProperty("min-height", "100%", "important");
+                } else {
+                    shell.style.setProperty("height", editorHeight + "px", "important");
+                    shell.style.setProperty("min-height", "760px", "important");
+                }
+
+                shell.style.setProperty("width", "100%", "important");
+                shell.style.setProperty("max-height", "none", "important");
+
+                const elements = shell.querySelectorAll("#" + editorContainerId + ", iframe");
+                elements.forEach(function (element) {
+                    element.style.setProperty("display", "block", "important");
+                    element.style.setProperty("width", "100%", "important");
+                    element.style.setProperty("height", heightValue, "important");
+                    element.style.setProperty("min-height", isEmbeddedEditor ? "100%" : "760px", "important");
+                    element.style.setProperty("max-height", "none", "important");
+                    element.style.setProperty("border", "0", "important");
+                });
+            }
+
+            function scheduleEditorDimensionSync() {
+                [0, 50, 150, 300, 750, 1500].forEach(function (delay) {
+                    window.setTimeout(forceEditorDimensions, delay);
+                });
             }
 
             function getNavigationType() {
@@ -757,6 +901,7 @@ sendOnlyofficeEditorNoCacheHeaders();
             }
 
             function onAppReady() {
+                forceEditorDimensions();
                 debugLog("ONLYOFFICE editor ready");
             }
 
@@ -777,6 +922,7 @@ sendOnlyofficeEditorNoCacheHeaders();
                     title: event.data.title,
                     url: event.data.url,
                     folderId: folderId,
+                    parentResourceNodeId: parentResourceNodeId,
                     sessionId: sessionId,
                     courseId: courseId,
                     groupId: groupId
@@ -860,14 +1006,20 @@ sendOnlyofficeEditorNoCacheHeaders();
                     onRequestClose: onRequestClose
                 };
 
+                forceEditorDimensions();
                 window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
+                scheduleEditorDimensionSync();
+
+                const shell = document.getElementById(editorShellId);
+                if (shell && typeof MutationObserver !== "undefined") {
+                    const observer = new MutationObserver(function () {
+                        forceEditorDimensions();
+                    });
+                    observer.observe(shell, { childList: true, subtree: true });
+                }
 
                 if (isMobileAgent) {
-                    const iframe = document.querySelector("#" + editorContainerId + " iframe");
-                    if (iframe) {
-                        iframe.style.height = "100%";
-                        iframe.style.top = "0";
-                    }
+                    scheduleEditorDimensionSync();
                 }
             }
 
@@ -899,12 +1051,22 @@ sendOnlyofficeEditorNoCacheHeaders();
                 return "";
             });
 
-            window.addEventListener("load", connectEditor);
+            window.addEventListener("resize", forceEditorDimensions);
+            window.addEventListener("load", function () {
+                forceEditorDimensions();
+                connectEditor();
+            });
         })();
     </script>
+<?php
+if ($hideChamiloLayout) {
+    ?>
     </body>
     </html>
-<?php
+    <?php
+} else {
+    Display::display_footer();
+}
 
 /**
  * Resolve a C2 document for editor usage.
@@ -1100,6 +1262,74 @@ function userCanOpenExerciseResourceNodeForOnlyofficeEditor(int $resourceNodeId,
 
         return false;
     }
+}
+
+/**
+ * Validate a read-only teacher preview of the template attached to an OnlyOffice question.
+ */
+function userCanPreviewExerciseQuestionResourceNodeForOnlyofficeEditor(
+    int $resourceNodeId,
+    int $exerciseId,
+    int $questionId
+): bool {
+    if ($resourceNodeId <= 0 || $exerciseId <= 0 || $questionId <= 0 || !api_is_allowed_to_edit(true, true)) {
+        return false;
+    }
+
+    $courseId = (int) api_get_course_int_id();
+    if ($courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $question = $entityManager->getRepository(CQuizQuestion::class)->find($questionId);
+        if (!$question instanceof CQuizQuestion) {
+            return false;
+        }
+
+        $questionResourceNode = $question->getResourceNode();
+        if (!$questionResourceNode instanceof ResourceNode || (int) $questionResourceNode->getId() !== $resourceNodeId) {
+            return false;
+        }
+
+        foreach ($question->getRelQuizzes() as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $quiz = $relation->getQuiz();
+            if ((int) ($quiz->getIid() ?? 0) !== $exerciseId) {
+                continue;
+            }
+
+            $quizResourceNode = $quiz->getResourceNode();
+            if (!$quizResourceNode instanceof ResourceNode) {
+                return false;
+            }
+
+            foreach ($quizResourceNode->getResourceLinks() as $resourceLink) {
+                $linkedCourse = $resourceLink->getCourse();
+                if (null !== $linkedCourse && (int) $linkedCourse->getId() === $courseId) {
+                    return true;
+                }
+            }
+        }
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise template preview', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'questionId' => $questionId,
+            'courseId' => $courseId,
+        ]);
+    }
+
+    return false;
 }
 
 /**
@@ -1306,7 +1536,8 @@ function buildOnlyofficeMetaUrl(
     bool $forceEdit,
     string $returnUrl = '',
     string $origin = '',
-    bool $isEmbedded = false
+    bool $isEmbedded = false,
+    bool $isExercisePreview = false
 ): string {
     $params = [
         'meta' => '1',
@@ -1358,6 +1589,10 @@ function buildOnlyofficeMetaUrl(
 
     if ($isEmbedded) {
         $params['embedded'] = '1';
+    }
+
+    if ($isExercisePreview) {
+        $params['exercisePreview'] = '1';
     }
 
     return api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?'.http_build_query($params);

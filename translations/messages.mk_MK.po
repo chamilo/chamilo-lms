@@ -38932,3 +38932,237 @@ msgstr "Нема тутори"
 msgid "No users"
 msgstr "Нема корисници"
 
+msgid "Calculation mode"
+msgstr "Режим на пресметување"
+
+msgid "Weighted average"
+msgstr "Тежинска просечна вредност"
+
+msgid "Points sum"
+msgstr "Збир на поени"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Тежинската просечна вредност се нормализира според збирот на тежините; збирот на поени ги третира секоја тежина како максимални поени и ги собира без нормализирање."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Секоја тежина на елемент се третира како нејзини максимални поени; оценката е збир на поени, без нормализирање."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Оценката е тежинска просечна вредност на елементите, нормализирана според збирот на тежините."
+
+msgid "Forum participation"
+msgstr "Учество на форум"
+
+msgid "Forum thread"
+msgstr "Тема на форум"
+
+msgid "Points for one message"
+msgstr "Поени за една порака"
+
+msgid "Points for two or more messages"
+msgstr "Поени за две или повеќе пораки"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Поени доделени кога студентот објавил точно една порака во темата."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Поени доделени кога студентот објавил две или повеќе пораки во темата."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Опционално. Ако е празно, една или повеќе пораки носат поени за една порака."
+
+msgid "Current password is required to change your password."
+msgstr "Сегашната лозинка е потребна за да ја промените лозинката."
+
+msgid "The 2FA code is required."
+msgstr "Потребен е 2FA код."
+
+msgid "Invalid 2FA configuration."
+msgstr "Невалидна 2FA конфигурација."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA кодот е невалиден или истечен."
+
+msgid "Database load"
+msgstr "Оптоварување на базата"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Метрики за оптоварување на MySQL и MariaDB сервер во живо"
+
+msgid "Click to show database server load metrics"
+msgstr "Кликнете за да ги прикажете метриките за оптоварување на серверот на базата"
+
+msgid "Threads connected"
+msgstr "Поврзани нишки"
+
+msgid "Temporary tables on disk"
+msgstr "Привремени табели на диск"
+
+msgid "Privilege scope"
+msgstr "Опсег на привилегии"
+
+msgid "Not measurable with the current database user"
+msgstr "Не може да се измери со тековниот корисник на базата"
+
+msgid "Uptime"
+msgstr "Време на работа"
+
+msgid "Queries per second"
+msgstr "Барања во секунда"
+
+msgid "Slow queries"
+msgstr "Бавни барања"
+
+msgid "Slow query time limit"
+msgstr "Ограничување на времето за бавни барања"
+
+msgid "Slow query log"
+msgstr "Дневник на бавни барања"
+
+msgid "Slow queries per second"
+msgstr "Бавни барања во секунда"
+
+msgid "Threads running"
+msgstr "Активни нишки"
+
+msgid "Threads cached"
+msgstr "Кеширани нишки"
+
+msgid "Table lock waits"
+msgstr "Чекања за заклучување на табела"
+
+msgid "Row lock waits"
+msgstr "Чекања за заклучување на ред"
+
+msgid "Aborted connections"
+msgstr "Прекинати врски"
+
+msgid "Opened tables"
+msgstr "Отворени табели"
+
+msgid "Query cache"
+msgstr "Кеш на барања"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Метриките за оптоварување на базата се достапни само за MySQL и MariaDB."
+
+msgid "Inserts"
+msgstr "Внесувања"
+
+msgid "Hit rate"
+msgstr "Стапка на погодувања"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Автоматско освежување на секои 5 секунди"
+
+msgid "Web server load"
+msgstr "Оптоварување на веб-серверот"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Метрики за статус на Apache или Nginx во живо"
+
+msgid "Click to show web server load metrics"
+msgstr "Кликнете за да ги прикажете метриките за оптоварување на веб-серверот"
+
+msgid "Requires a local web server status module"
+msgstr "Потребен е локален модул за статус на веб-сервер"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Оптоварувањето на веб-серверот се чита од Apache mod_status или Nginx stub_status само на localhost. Страницата за статус мора да дозволува барања од 127.0.0.1 (или ::1)."
+
+msgid "Paths scanned"
+msgstr "Сканирани патеки"
+
+msgid "Detected"
+msgstr "Откриено"
+
+msgid "Status path"
+msgstr "Патека за статус"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Метриките за оптоварување на веб-серверот се достапни само за Apache и Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ниедна од скенираните патеки за статус не одговори на localhost."
+
+msgid "Busy workers"
+msgstr "Зафатени работници"
+
+msgid "Idle workers"
+msgstr "Неактивни работници"
+
+msgid "Graceful workers"
+msgstr "Работници во грациозен режим"
+
+msgid "Server MPM"
+msgstr "Серверски MPM"
+
+msgid "Requests per second (live)"
+msgstr "Барања во секунда (во живо)"
+
+msgid "Requests per second (since start)"
+msgstr "Барања во секунда (од старт)"
+
+msgid "Bytes per second (live)"
+msgstr "Бајти во секунда (во живо)"
+
+msgid "Bytes per second (since start)"
+msgstr "Бајти во секунда (од старт)"
+
+msgid "Bytes per request"
+msgstr "Бајти по барање"
+
+msgid "Total accesses"
+msgstr "Вкупно пристапи"
+
+msgid "Total traffic"
+msgstr "Вкупен сообраќај"
+
+msgid "CPU load"
+msgstr "Оптоварување на процесорот"
+
+msgid "Load average (1 min)"
+msgstr "Просечно оптоварување (1 мин)"
+
+msgid "Load average (5 min)"
+msgstr "Просечно оптоварување (5 мин)"
+
+msgid "Load average (15 min)"
+msgstr "Просечно оптоварување (15 мин)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard испраќање"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard читање"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard чекање"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard отворени слотови"
+
+msgid "Active connections"
+msgstr "Активни врски"
+
+msgid "Reading"
+msgstr "Читање"
+
+msgid "Writing"
+msgstr "Запишување"
+
+msgid "Total requests"
+msgstr "Вкупно барања"
+
+msgid "Accepts"
+msgstr "Прифатени"
+
+msgid "Handled"
+msgstr "Обработени"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: овозможете mod_status (ExtendedStatus On) и дозволете localhost да пристапува до /server-status. Nginx: овозможете stub_status на локација достапна само од localhost, како /nginx_status или /stub_status."
+

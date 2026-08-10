@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\CourseMetaExport;
 use Chamilo\CourseBundle\Entity\CDocument;
 use DocumentManager;
 
@@ -228,6 +229,17 @@ class FileExport
                     'abs_path'     => $absPath,
                 ]);
             }
+        }
+
+        // Course cover image (Moodle overviewfiles) — optional, additive.
+        try {
+            $courseMeta = new CourseMetaExport($this->course);
+            $illustration = $courseMeta->getIllustrationFileEntry();
+            if (\is_array($illustration) && !empty($illustration['contenthash'])) {
+                $filesData['files'][] = $this->normalizeFileEntry($illustration);
+            }
+        } catch (\Throwable $e) {
+            @error_log('[FileExport::getFilesData] course illustration error: '.$e->getMessage());
         }
 
         return $filesData;

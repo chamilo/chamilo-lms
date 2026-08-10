@@ -38977,3 +38977,237 @@ msgstr "ບໍ່ມີຜູ້ສອນ"
 msgid "No users"
 msgstr "ບໍ່ມີຜູ້ໃຊ້"
 
+msgid "Calculation mode"
+msgstr ""
+
+msgid "Weighted average"
+msgstr ""
+
+msgid "Points sum"
+msgstr ""
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr ""
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr ""
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr ""
+
+msgid "Forum participation"
+msgstr ""
+
+msgid "Forum thread"
+msgstr ""
+
+msgid "Points for one message"
+msgstr ""
+
+msgid "Points for two or more messages"
+msgstr ""
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr ""
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr ""
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr ""
+
+msgid "Current password is required to change your password."
+msgstr ""
+
+msgid "The 2FA code is required."
+msgstr ""
+
+msgid "Invalid 2FA configuration."
+msgstr ""
+
+msgid "The 2FA code is invalid or expired."
+msgstr ""
+
+msgid "Database load"
+msgstr ""
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr ""
+
+msgid "Click to show database server load metrics"
+msgstr ""
+
+msgid "Threads connected"
+msgstr ""
+
+msgid "Temporary tables on disk"
+msgstr ""
+
+msgid "Privilege scope"
+msgstr ""
+
+msgid "Not measurable with the current database user"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "Queries per second"
+msgstr ""
+
+msgid "Slow queries"
+msgstr ""
+
+msgid "Slow query time limit"
+msgstr ""
+
+msgid "Slow query log"
+msgstr ""
+
+msgid "Slow queries per second"
+msgstr "ການສອບຖາມຊ້າຕໍ່ວິນາທີ"
+
+msgid "Threads running"
+msgstr "ກະທູ້ກຳລັງເຮັດວຽກ"
+
+msgid "Threads cached"
+msgstr "ກະທູ້ທີ່ເກັບໄວ້"
+
+msgid "Table lock waits"
+msgstr "ການລໍຖ້າລັອກຕາຕະລາງ"
+
+msgid "Row lock waits"
+msgstr "ການລໍຖ້າລັອກແຖວ"
+
+msgid "Aborted connections"
+msgstr "ການເຊື່ອມຕໍ່ທີ່ຖືກຍົກເລີກ"
+
+msgid "Opened tables"
+msgstr "ຕາຕະລາງທີ່ເປີດແລ້ວ"
+
+msgid "Query cache"
+msgstr "ແຄຊສອບຖາມ"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "ຕົວຊີ້ວັດການໂຫຼດຖານຂໍ້ມູນມີໃຫ້ສະເພາະ MySQL ແລະ MariaDB ເທົ່ານັ້ນ."
+
+msgid "Inserts"
+msgstr "ການໃສ່ຂໍ້ມູນ"
+
+msgid "Hit rate"
+msgstr "ອັດຕາການຕີ"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "ໂຫຼດອັດຕະໂນມັດທຸກ 5 ວິນາທີ"
+
+msgid "Web server load"
+msgstr "ການໂຫຼດເວັບເຊີບເວີ"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "ຕົວຊີ້ວັດສະຖານະ Apache ຫຼື Nginx ສົດ"
+
+msgid "Click to show web server load metrics"
+msgstr "ຄລິກເພື່ອສະແດງຕົວຊີ້ວັດການໂຫຼດເວັບເຊີບເວີ"
+
+msgid "Requires a local web server status module"
+msgstr "ຕ້ອງການໂມດູນສະຖານະເວັບເຊີບເວີທ້ອງຖິ່ນ"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ການໂຫຼດເວັບເຊີບເວີອ່ານຈາກ Apache mod_status ຫຼື Nginx stub_status ສະເພາະ localhost ເທົ່ານັ້ນ. ໜ້າສະຖານະຕ້ອງອະນຸຍາດການຮ້ອງຂໍຈາກ 127.0.0.1 (ຫຼື ::1)."
+
+msgid "Paths scanned"
+msgstr "ເສັ້ນທາງທີ່ສະແກນແລ້ວ"
+
+msgid "Detected"
+msgstr "ກວດພົບແລ້ວ"
+
+msgid "Status path"
+msgstr "ເສັ້ນທາງສະຖານະ"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "ຕົວຊີ້ວັດການໂຫຼດເວັບເຊີບເວີມີໃຫ້ສະເພາະ Apache ແລະ Nginx ເທົ່ານັ້ນ."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "ບໍ່ມີເສັ້ນທາງສະຖານະທີ່ສະແກນແລ້ວຕອບສະໜອງຢູ່ localhost."
+
+msgid "Busy workers"
+msgstr "ພະນັກງານທີ່ບໍ່ວ່າງ"
+
+msgid "Idle workers"
+msgstr "ພະນັກງານທີ່ວ່າງ"
+
+msgid "Graceful workers"
+msgstr "ພະນັກງານທີ່ສະຫງ່າງາມ"
+
+msgid "Server MPM"
+msgstr "ເຊີບເວີ MPM"
+
+msgid "Requests per second (live)"
+msgstr "ການຮ້ອງຂໍຕໍ່ວິນາທີ (ສົດ)"
+
+msgid "Requests per second (since start)"
+msgstr "ການຮ້ອງຂໍຕໍ່ວິນາທີ (ນັບຕັ້ງແຕ່ເລີ່ມ)"
+
+msgid "Bytes per second (live)"
+msgstr "ໄບຕ໌ຕໍ່ວິນາທີ (ສົດ)"
+
+msgid "Bytes per second (since start)"
+msgstr "ໄບຕ໌ຕໍ່ວິນາທີ (ນັບຕັ້ງແຕ່ເລີ່ມ)"
+
+msgid "Bytes per request"
+msgstr "ໄບຕ໌ຕໍ່ການຮ້ອງຂໍ"
+
+msgid "Total accesses"
+msgstr "ການເຂົ້າເຖິງທັງໝົດ"
+
+msgid "Total traffic"
+msgstr "ການສັນຈອນທັງໝົດ"
+
+msgid "CPU load"
+msgstr "ການໂຫຼດ CPU"
+
+msgid "Load average (1 min)"
+msgstr "ຄ່າສະເລ່ຍການໂຫຼດ (1 ນາທີ)"
+
+msgid "Load average (5 min)"
+msgstr "ຄ່າສະເລ່ຍການໂຫຼດ (5 ນາທີ)"
+
+msgid "Load average (15 min)"
+msgstr "ຄ່າສະເລ່ຍການໂຫຼດ (15 ນາທີ)"
+
+msgid "Scoreboard sending"
+msgstr "ກະດານຄະແນນກຳລັງສົ່ງ"
+
+msgid "Scoreboard reading"
+msgstr "ກະດານຄະແນນກຳລັງອ່ານ"
+
+msgid "Scoreboard keepalive"
+msgstr "ກະດານຄະແນນ keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "ກະດານຄະແນນກຳລັງລໍຖ້າ"
+
+msgid "Scoreboard open slots"
+msgstr "ຊ່ອງເປີດກະດານຄະແນນ"
+
+msgid "Active connections"
+msgstr "ການເຊື່ອມຕໍ່ທີ່ເຄື່ອນໄຫວ"
+
+msgid "Reading"
+msgstr "ກຳລັງອ່ານ"
+
+msgid "Writing"
+msgstr "ກຳລັງຂຽນ"
+
+msgid "Total requests"
+msgstr "ການຮ້ອງຂໍທັງໝົດ"
+
+msgid "Accepts"
+msgstr "ຍອມຮັບ"
+
+msgid "Handled"
+msgstr "ຈັດການແລ້ວ"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ເປີດໃຊ້ mod_status (ExtendedStatus On) ແລະອະນຸຍາດ localhost ເຂົ້າ /server-status. Nginx: ເປີດໃຊ້ stub_status ຢູ່ຕຳແໜ່ງສະເພາະ localhost ເຊັ່ນ /nginx_status ຫຼື /stub_status."
+

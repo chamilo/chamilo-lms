@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qillqaypi qhawariy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Qillqay qhawariy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpet,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Q'utu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -38933,4 +38933,238 @@ msgstr "Mana yachachiqkuna"
 
 msgid "No users"
 msgstr "Mana ruraqkuna"
+
+msgid "Calculation mode"
+msgstr "Yupay ruway"
+
+msgid "Weighted average"
+msgstr "Qasqasqa qaylla"
+
+msgid "Points sum"
+msgstr "Puntokuna huñuy"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Qasqasqa qaylla qasqasqa yupaykunawan yupaychan; puntokuna huñuy sapa qasqasqa yupayta aswan yupaykunata huñun mana yupaychan."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Sapa imaymana qasqasqa yupayta aswan yupaykunata huñun; nota yupaykunap huñuy, mana yupaychan."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Nota qasqasqa yupaykunap qasqasqa qaylla, yupaykunap huñuywan yupaychan."
+
+msgid "Forum participation"
+msgstr "Foro participacion"
+
+msgid "Forum thread"
+msgstr "Foro qillqay"
+
+msgid "Points for one message"
+msgstr "Huk qillqaypaq puntokuna"
+
+msgid "Points for two or more messages"
+msgstr "Iskay utaq aswan qillqaypaq puntokuna"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Puntokuna qillqaypi huk qillqayta qillqasqa."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Puntokuna qillqaypi iskay utaq aswan qillqayta qillqasqa."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Munasqa. Ch'usaq qhipaqta saqisqa, huk utaq aswan qillqay huk qillqaypaq puntokunata qun."
+
+msgid "Current password is required to change your password."
+msgstr "Kunan yaykuy qaylla yaykuyta tikrayta."
+
+msgid "The 2FA code is required."
+msgstr "2FA codigo qaylla."
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA ruway mana allin."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA codigo mana allin utaq p'unchay tukusqa."
+
+msgid "Database load"
+msgstr "Yupay q'aylla"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL y MariaDB sirwiq q'aylla yupaykuna"
+
+msgid "Click to show database server load metrics"
+msgstr "Q'aylla yupaykuna qhawayta q'aylla"
+
+msgid "Threads connected"
+msgstr "Qillqaykuna huñusqa"
+
+msgid "Temporary tables on disk"
+msgstr "Q'aylla q'utu q'ayllapi"
+
+msgid "Privilege scope"
+msgstr "Qaylla q'aylla"
+
+msgid "Not measurable with the current database user"
+msgstr "Mana yupaychan kunan yupay sirwiqwan"
+
+msgid "Uptime"
+msgstr "Qhipaq p'unchay"
+
+msgid "Queries per second"
+msgstr "Tapukuna sapa segundo"
+
+msgid "Slow queries"
+msgstr ""
+
+msgid "Slow query time limit"
+msgstr ""
+
+msgid "Slow query log"
+msgstr ""
+
+msgid "Slow queries per second"
+msgstr ""
+
+msgid "Threads running"
+msgstr ""
+
+msgid "Threads cached"
+msgstr ""
+
+msgid "Table lock waits"
+msgstr ""
+
+msgid "Row lock waits"
+msgstr ""
+
+msgid "Aborted connections"
+msgstr ""
+
+msgid "Opened tables"
+msgstr ""
+
+msgid "Query cache"
+msgstr ""
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr ""
+
+msgid "Inserts"
+msgstr ""
+
+msgid "Hit rate"
+msgstr ""
+
+msgid "Auto-refresh every 5 seconds"
+msgstr ""
+
+msgid "Web server load"
+msgstr ""
+
+msgid "Live Apache or Nginx status metrics"
+msgstr ""
+
+msgid "Click to show web server load metrics"
+msgstr ""
+
+msgid "Requires a local web server status module"
+msgstr ""
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr ""
+
+msgid "Paths scanned"
+msgstr ""
+
+msgid "Detected"
+msgstr ""
+
+msgid "Status path"
+msgstr ""
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr ""
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr ""
+
+msgid "Busy workers"
+msgstr ""
+
+msgid "Idle workers"
+msgstr ""
+
+msgid "Graceful workers"
+msgstr ""
+
+msgid "Server MPM"
+msgstr ""
+
+msgid "Requests per second (live)"
+msgstr ""
+
+msgid "Requests per second (since start)"
+msgstr ""
+
+msgid "Bytes per second (live)"
+msgstr ""
+
+msgid "Bytes per second (since start)"
+msgstr ""
+
+msgid "Bytes per request"
+msgstr ""
+
+msgid "Total accesses"
+msgstr ""
+
+msgid "Total traffic"
+msgstr ""
+
+msgid "CPU load"
+msgstr ""
+
+msgid "Load average (1 min)"
+msgstr ""
+
+msgid "Load average (5 min)"
+msgstr ""
+
+msgid "Load average (15 min)"
+msgstr ""
+
+msgid "Scoreboard sending"
+msgstr ""
+
+msgid "Scoreboard reading"
+msgstr ""
+
+msgid "Scoreboard keepalive"
+msgstr ""
+
+msgid "Scoreboard waiting"
+msgstr ""
+
+msgid "Scoreboard open slots"
+msgstr ""
+
+msgid "Active connections"
+msgstr ""
+
+msgid "Reading"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Total requests"
+msgstr ""
+
+msgid "Accepts"
+msgstr ""
+
+msgid "Handled"
+msgstr "Manejado"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: activar mod_status (ExtendedStatus On) y permitir localhost en /server-status. Nginx: activar stub_status en una ubicación solo localhost como /nginx_status o /stub_status."
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -38933,4 +38933,238 @@ msgstr "Không có trợ giảng"
 
 msgid "No users"
 msgstr "Không có người dùng"
+
+msgid "Calculation mode"
+msgstr "Chế độ tính điểm"
+
+msgid "Weighted average"
+msgstr "Trung bình trọng số"
+
+msgid "Points sum"
+msgstr "Tổng điểm"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Trung bình trọng số chuẩn hóa theo tổng trọng số; tổng điểm coi mỗi trọng số là điểm tối đa và cộng chúng lại mà không chuẩn hóa."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Mỗi trọng số của mục được coi là điểm tối đa của nó; điểm số là tổng điểm, không chuẩn hóa."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Điểm số là trung bình trọng số của các mục, chuẩn hóa theo tổng trọng số."
+
+msgid "Forum participation"
+msgstr "Tham gia diễn đàn"
+
+msgid "Forum thread"
+msgstr "Chủ đề diễn đàn"
+
+msgid "Points for one message"
+msgstr "Điểm cho một tin nhắn"
+
+msgid "Points for two or more messages"
+msgstr "Điểm cho hai tin nhắn trở lên"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Điểm được trao khi sinh viên đăng đúng một tin nhắn trong chủ đề."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Điểm được trao khi sinh viên đăng hai tin nhắn trở lên trong chủ đề."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Tùy chọn. Nếu để trống, một hoặc nhiều tin nhắn sẽ được tính điểm như một tin nhắn."
+
+msgid "Current password is required to change your password."
+msgstr "Mật khẩu hiện tại là bắt buộc để thay đổi mật khẩu."
+
+msgid "The 2FA code is required."
+msgstr "Mã 2FA là bắt buộc."
+
+msgid "Invalid 2FA configuration."
+msgstr "Cấu hình 2FA không hợp lệ."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Mã 2FA không hợp lệ hoặc đã hết hạn."
+
+msgid "Database load"
+msgstr "Tải cơ sở dữ liệu"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Số liệu tải máy chủ MySQL và MariaDB theo thời gian thực"
+
+msgid "Click to show database server load metrics"
+msgstr "Nhấp để hiển thị số liệu tải máy chủ cơ sở dữ liệu"
+
+msgid "Threads connected"
+msgstr "Luồng đã kết nối"
+
+msgid "Temporary tables on disk"
+msgstr "Bảng tạm trên ổ đĩa"
+
+msgid "Privilege scope"
+msgstr "Phạm vi quyền"
+
+msgid "Not measurable with the current database user"
+msgstr "Không thể đo lường với người dùng cơ sở dữ liệu hiện tại"
+
+msgid "Uptime"
+msgstr "Thời gian hoạt động"
+
+msgid "Queries per second"
+msgstr "Truy vấn mỗi giây"
+
+msgid "Slow queries"
+msgstr "Truy vấn chậm"
+
+msgid "Slow query time limit"
+msgstr "Giới hạn thời gian truy vấn chậm"
+
+msgid "Slow query log"
+msgstr "Nhật ký truy vấn chậm"
+
+msgid "Slow queries per second"
+msgstr "Truy vấn chậm mỗi giây"
+
+msgid "Threads running"
+msgstr "Luồng đang chạy"
+
+msgid "Threads cached"
+msgstr "Luồng được lưu trữ"
+
+msgid "Table lock waits"
+msgstr "Chờ khóa bảng"
+
+msgid "Row lock waits"
+msgstr "Chờ khóa dòng"
+
+msgid "Aborted connections"
+msgstr "Kết nối bị hủy"
+
+msgid "Opened tables"
+msgstr "Bảng đã mở"
+
+msgid "Query cache"
+msgstr "Bộ nhớ đệm truy vấn"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Chỉ số tải cơ sở dữ liệu chỉ khả dụng cho MySQL và MariaDB."
+
+msgid "Inserts"
+msgstr "Chèn"
+
+msgid "Hit rate"
+msgstr "Tỷ lệ trúng"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Tự động làm mới mỗi 5 giây"
+
+msgid "Web server load"
+msgstr "Tải máy chủ web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Số liệu trạng thái Apache hoặc Nginx trực tiếp"
+
+msgid "Click to show web server load metrics"
+msgstr "Nhấp để hiển thị số liệu tải máy chủ web"
+
+msgid "Requires a local web server status module"
+msgstr "Yêu cầu mô-đun trạng thái máy chủ web cục bộ"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Tải máy chủ web được đọc từ Apache mod_status hoặc Nginx stub_status chỉ trên localhost. Trang trạng thái phải cho phép yêu cầu từ 127.0.0.1 (hoặc ::1)."
+
+msgid "Paths scanned"
+msgstr "Đường dẫn đã quét"
+
+msgid "Detected"
+msgstr "Đã phát hiện"
+
+msgid "Status path"
+msgstr "Đường dẫn trạng thái"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Chỉ số tải máy chủ web chỉ khả dụng cho Apache và Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Không có đường dẫn trạng thái nào được quét phản hồi trên localhost."
+
+msgid "Busy workers"
+msgstr "Worker đang bận"
+
+msgid "Idle workers"
+msgstr "Worker nhàn rỗi"
+
+msgid "Graceful workers"
+msgstr "Worker graceful"
+
+msgid "Server MPM"
+msgstr "MPM máy chủ"
+
+msgid "Requests per second (live)"
+msgstr "Yêu cầu mỗi giây (trực tiếp)"
+
+msgid "Requests per second (since start)"
+msgstr "Yêu cầu mỗi giây (từ khi bắt đầu)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte mỗi giây (trực tiếp)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte mỗi giây (từ khi bắt đầu)"
+
+msgid "Bytes per request"
+msgstr "Byte mỗi yêu cầu"
+
+msgid "Total accesses"
+msgstr "Tổng số truy cập"
+
+msgid "Total traffic"
+msgstr "Tổng lưu lượng"
+
+msgid "CPU load"
+msgstr "Tải CPU"
+
+msgid "Load average (1 min)"
+msgstr "Trung bình tải (1 phút)"
+
+msgid "Load average (5 min)"
+msgstr "Trung bình tải (5 phút)"
+
+msgid "Load average (15 min)"
+msgstr "Trung bình tải (15 phút)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard đang gửi"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard đang đọc"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard đang chờ"
+
+msgid "Scoreboard open slots"
+msgstr "Khe trống scoreboard"
+
+msgid "Active connections"
+msgstr "Kết nối đang hoạt động"
+
+msgid "Reading"
+msgstr "Đang đọc"
+
+msgid "Writing"
+msgstr "Đang ghi"
+
+msgid "Total requests"
+msgstr "Tổng số yêu cầu"
+
+msgid "Accepts"
+msgstr "Chấp nhận"
+
+msgid "Handled"
+msgstr "Đã xử lý"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: bật mod_status (ExtendedStatus On) và cho phép localhost truy cập /server-status. Nginx: bật stub_status trên vị trí chỉ localhost như /nginx_status hoặc /stub_status."
 

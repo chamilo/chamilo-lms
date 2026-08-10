@@ -38932,3 +38932,237 @@ msgstr "பயிற்றுநர்கள் இல்லை"
 msgid "No users"
 msgstr "பயனர்கள் இல்லை"
 
+msgid "Calculation mode"
+msgstr ""
+
+msgid "Weighted average"
+msgstr ""
+
+msgid "Points sum"
+msgstr ""
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr ""
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr ""
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr ""
+
+msgid "Forum participation"
+msgstr ""
+
+msgid "Forum thread"
+msgstr ""
+
+msgid "Points for one message"
+msgstr ""
+
+msgid "Points for two or more messages"
+msgstr ""
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr ""
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr ""
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr ""
+
+msgid "Current password is required to change your password."
+msgstr ""
+
+msgid "The 2FA code is required."
+msgstr ""
+
+msgid "Invalid 2FA configuration."
+msgstr ""
+
+msgid "The 2FA code is invalid or expired."
+msgstr ""
+
+msgid "Database load"
+msgstr ""
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr ""
+
+msgid "Click to show database server load metrics"
+msgstr ""
+
+msgid "Threads connected"
+msgstr ""
+
+msgid "Temporary tables on disk"
+msgstr ""
+
+msgid "Privilege scope"
+msgstr ""
+
+msgid "Not measurable with the current database user"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "Queries per second"
+msgstr ""
+
+msgid "Slow queries"
+msgstr ""
+
+msgid "Slow query time limit"
+msgstr ""
+
+msgid "Slow query log"
+msgstr ""
+
+msgid "Slow queries per second"
+msgstr ""
+
+msgid "Threads running"
+msgstr "இயங்கும் தொடர்கள்"
+
+msgid "Threads cached"
+msgstr "தற்காலிகமாக சேமிக்கப்பட்ட தொடர்கள்"
+
+msgid "Table lock waits"
+msgstr "அட்டவணை பூட்டு காத்திருப்புகள்"
+
+msgid "Row lock waits"
+msgstr "வரிசை பூட்டு காத்திருப்புகள்"
+
+msgid "Aborted connections"
+msgstr "கைவிடப்பட்ட இணைப்புகள்"
+
+msgid "Opened tables"
+msgstr "திறக்கப்பட்ட அட்டவணைகள்"
+
+msgid "Query cache"
+msgstr "வினவல் தற்காலிக சேமிப்பு"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "தரவுத்தள சுமை அளவீடுகள் MySQL மற்றும் MariaDB க்கு மட்டுமே கிடைக்கும்."
+
+msgid "Inserts"
+msgstr "சேர்த்தல்கள்"
+
+msgid "Hit rate"
+msgstr "வெற்றி விகிதம்"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "ஒவ்வொரு 5 வினாடிகளுக்கும் தானியங்கி புதுப்பிப்பு"
+
+msgid "Web server load"
+msgstr "வலை சேவையக சுமை"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "நேரடி Apache அல்லது Nginx நிலை அளவீடுகள்"
+
+msgid "Click to show web server load metrics"
+msgstr "வலை சேவையக சுமை அளவீடுகளைக் காட்ட கிளிக் செய்யவும்"
+
+msgid "Requires a local web server status module"
+msgstr "உள்ளூர் வலை சேவையக நிலை தொகுதி தேவை"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "வலை சேவையக சுமை Apache mod_status அல்லது Nginx stub_status இலிருந்து உள்ளூர் மட்டுமே படிக்கப்படுகிறது. நிலைப் பக்கம் 127.0.0.1 (அல்லது ::1) இலிருந்து கோரிக்கைகளை அனுமதிக்க வேண்டும்."
+
+msgid "Paths scanned"
+msgstr "ஸ்கேன் செய்யப்பட்ட பாதைகள்"
+
+msgid "Detected"
+msgstr "கண்டறியப்பட்டது"
+
+msgid "Status path"
+msgstr "நிலைப் பாதை"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "வலை சேவையக சுமை அளவீடுகள் Apache மற்றும் Nginx க்கு மட்டுமே கிடைக்கும்."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "ஸ்கேன் செய்யப்பட்ட நிலைப் பாதைகள் எதுவும் உள்ளூரில் பதிலளிக்கவில்லை."
+
+msgid "Busy workers"
+msgstr "பணிபுரியும் பணியாளர்கள்"
+
+msgid "Idle workers"
+msgstr "செயலற்ற பணியாளர்கள்"
+
+msgid "Graceful workers"
+msgstr "மென்மையான பணியாளர்கள்"
+
+msgid "Server MPM"
+msgstr "சேவையக MPM"
+
+msgid "Requests per second (live)"
+msgstr "வினாடிக்கு கோரிக்கைகள் (நேரடி)"
+
+msgid "Requests per second (since start)"
+msgstr "வினாடிக்கு கோரிக்கைகள் (தொடக்கத்திலிருந்து)"
+
+msgid "Bytes per second (live)"
+msgstr "வினாடிக்கு பைட்டுகள் (நேரடி)"
+
+msgid "Bytes per second (since start)"
+msgstr "வினாடிக்கு பைட்டுகள் (தொடக்கத்திலிருந்து)"
+
+msgid "Bytes per request"
+msgstr "கோரிக்கைக்கு பைட்டுகள்"
+
+msgid "Total accesses"
+msgstr "மொத்த அணுகல்கள்"
+
+msgid "Total traffic"
+msgstr "மொத்த போக்குவரத்து"
+
+msgid "CPU load"
+msgstr "CPU சுமை"
+
+msgid "Load average (1 min)"
+msgstr "சராசரி சுமை (1 நிமிடம்)"
+
+msgid "Load average (5 min)"
+msgstr "சராசரி சுமை (5 நிமிடம்)"
+
+msgid "Load average (15 min)"
+msgstr "சராசரி சுமை (15 நிமிடம்)"
+
+msgid "Scoreboard sending"
+msgstr "ஸ்கோர்போர்டு அனுப்புதல்"
+
+msgid "Scoreboard reading"
+msgstr "ஸ்கோர்போர்டு படித்தல்"
+
+msgid "Scoreboard keepalive"
+msgstr "ஸ்கோர்போர்டு keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "ஸ்கோர்போர்டு காத்திருத்தல்"
+
+msgid "Scoreboard open slots"
+msgstr "ஸ்கோர்போர்டு திறந்த இடங்கள்"
+
+msgid "Active connections"
+msgstr "செயலில் உள்ள இணைப்புகள்"
+
+msgid "Reading"
+msgstr "படித்தல்"
+
+msgid "Writing"
+msgstr "எழுதுதல்"
+
+msgid "Total requests"
+msgstr "மொத்த கோரிக்கைகள்"
+
+msgid "Accepts"
+msgstr "ஏற்றுக்கொள்ளப்பட்டவை"
+
+msgid "Handled"
+msgstr "கையாளப்பட்டவை"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status ஐ இயக்கவும் (ExtendedStatus On) மற்றும் உள்ளூரிலிருந்து /server-status ஐ அனுமதிக்கவும். Nginx: /nginx_status அல்லது /stub_status போன்ற உள்ளூர் மட்டுமே உள்ள இடத்தில் stub_status ஐ இயக்கவும்."
+

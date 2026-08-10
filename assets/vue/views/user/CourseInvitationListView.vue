@@ -1,5 +1,19 @@
 <template>
   <section class="space-y-6">
+    <BaseToolbar v-if="backRoute">
+      <template #end>
+        <BaseButton
+          :label="t('Back')"
+          :route="backRoute"
+          icon="back"
+          only-icon
+          size="normal"
+          :tooltip="t('Back')"
+          type="plain"
+        />
+      </template>
+    </BaseToolbar>
+
     <div
       v-if="isSessionContext"
       class="rounded-xl border border-blue-200 bg-blue-100 p-4 text-sm text-blue-700"
@@ -147,13 +161,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import courseInvitationService from "../../services/courseInvitationService"
@@ -190,6 +205,31 @@ function getContextParams() {
 
   return params
 }
+
+const backRoute = computed(() => {
+  const fromNode = getQueryValue(route.query.fromNode)
+  if (!fromNode) {
+    return null
+  }
+
+  const query = {
+    cid: getQueryValue(route.query.cid),
+  }
+  const sid = Number(getQueryValue(route.query.sid) || 0)
+  if (sid > 0) {
+    query.sid = sid
+  }
+  const type = getQueryValue(route.query.type)
+  if (type !== undefined && type !== null && type !== "") {
+    query.type = type
+  }
+
+  return {
+    name: "CourseUserList",
+    params: { node: String(fromNode) },
+    query,
+  }
+})
 
 async function loadForm() {
   const form = await courseInvitationService.getForm(getContextParams())

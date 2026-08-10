@@ -67,6 +67,7 @@ $docId = (int) getHashValue($hashData, 'docId', 0);
 $resourceNodeId = (int) getHashValue($hashData, 'resourceNodeId', 0);
 $groupId = (int) getHashValue($hashData, 'groupId', 0);
 $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
+$isExercisePreview = 1 === (int) getHashValue($hashData, 'exercisePreview', 0);
 
 $docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
 $docPath = '' !== $docPathFromQuery
@@ -90,6 +91,7 @@ onlyofficeLog('DEBUG', 'Callback entry', [
     'resourceNodeId' => $resourceNodeId,
     'groupId' => $groupId,
     'sessionId' => $sessionId,
+    'exercisePreview' => $isExercisePreview,
     'docPath' => $docPath,
 ]);
 
@@ -166,6 +168,15 @@ function track(): array
     global $resourceNodeId;
     global $docPath;
     global $sessionId;
+    global $isExercisePreview;
+
+    if ($isExercisePreview) {
+        onlyofficeLog('INFO', 'Ignored write callback for read-only exercise preview', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return ['error' => 0];
+    }
 
     $bodyStream = file_get_contents('php://input');
     if (false === $bodyStream || '' === $bodyStream) {

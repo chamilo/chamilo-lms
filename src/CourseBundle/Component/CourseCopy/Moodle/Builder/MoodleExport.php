@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AnnouncementsForumExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AssignExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AttendanceMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\CourseCalendarExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\CourseMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FeedbackExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ForumExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\GlossaryExport;
@@ -23,6 +25,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\PageExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ResourceExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\SurveyMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ThematicMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\UrlExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\WikiExport;
@@ -216,8 +219,10 @@ class MoodleExport
         $this->exportWikiActivities($activities, $tempDir);
         $this->exportGradebookActivities($activities, $tempDir);
         $this->exportQuizMetaActivities($activities, $tempDir);
+        $this->exportSurveyMetaActivities($activities, $tempDir);
         $this->exportLearnpathMeta($tempDir);
         $this->exportDocumentIndex($tempDir);
+        $this->exportCourseMeta($tempDir);
 
         // Root XMLs.
         $this->exportRootXmlFiles($tempDir, $activities);
@@ -957,7 +962,7 @@ class MoodleExport
 
                 if ('quiz' === $itemType) {
                     $moduleName = 'quiz';
-                    $instanceId = is_numeric($path) ? (int) $path : null;
+                    $instanceId = $this->resolveLpCurrentResourceId('quiz', $path, $title);
                 } elseif ('link' === $itemType) {
                     $moduleName = 'url';
                     $instanceId = is_numeric($path) ? (int) $path : null;
@@ -966,7 +971,7 @@ class MoodleExport
                     $instanceId = is_numeric($path) ? (int) $path : null;
                 } elseif ('survey' === $itemType) {
                     $moduleName = 'feedback';
-                    $instanceId = is_numeric($path) ? (int) $path : null;
+                    $instanceId = $this->resolveLpCurrentResourceId('survey', $path, $title);
                 } elseif ('forum' === $itemType) {
                     $moduleName = 'forum';
                     $instanceId = is_numeric($path) ? (int) $path : null;
@@ -1556,6 +1561,106 @@ class MoodleExport
     }
 
     /**
+     * Resolve stale LP quiz/survey references against the current course resources.
+     *
+     * Imported LPs can keep source ids in path/identifierref while the restored
+     * quiz/survey receives a new iid. Keep valid current ids unchanged and only
+     * fall back to an exact, unique title match when the numeric id is stale.
+     * Ambiguous or missing matches are left unresolved instead of exporting a
+     * different activity under the stale id.
+     *
+     * @param mixed $path
+     */
+    private function resolveLpCurrentResourceId(
+        string $itemType,
+        $path,
+        string $title,
+        bool $logFailure = true
+    ): ?int {
+        $normalizedType = $this->normalizeItemTypeForLpComparison($itemType);
+        $candidateId = is_numeric($path) ? (int) $path : 0;
+
+        if (!\in_array($normalizedType, ['quiz', 'survey'], true)) {
+            return $candidateId > 0 ? $candidateId : null;
+        }
+
+        $normalizedTitle = mb_strtolower(trim($title));
+        $titleMatches = [];
+
+        foreach ((array) ($this->course->resources ?? []) as $resourceType => $resources) {
+            if (!\is_array($resources) || empty($resources)) {
+                continue;
+            }
+
+            $matchesType = 'quiz' === $normalizedType
+                ? $this->isType($resourceType, 'RESOURCE_QUIZ', ['quiz', 'quizzes'])
+                : $this->isType($resourceType, 'RESOURCE_SURVEY', ['survey', 'surveys', 'feedback']);
+
+            if (!$matchesType) {
+                continue;
+            }
+
+            foreach ($resources as $resourceKey => $resource) {
+                if (!\is_object($resource)) {
+                    continue;
+                }
+
+                $obj = isset($resource->obj) && \is_object($resource->obj) ? $resource->obj : null;
+                $params = isset($resource->params) && \is_array($resource->params) ? $resource->params : [];
+
+                if ('quiz' === $normalizedType) {
+                    $currentId = (int) ($obj->iid ?? $obj->id ?? $resource->source_id ?? $resourceKey);
+                    $currentTitle = (string) ($obj->title ?? $resource->title ?? '');
+                } else {
+                    $currentId = (int) ($resource->source_id ?? $params['iid'] ?? $obj->iid ?? $resourceKey);
+                    $currentTitle = (string) ($params['title'] ?? $obj->title ?? $resource->title ?? '');
+                }
+
+                if ($currentId <= 0) {
+                    continue;
+                }
+
+                if ($candidateId > 0 && $currentId === $candidateId) {
+                    return $currentId;
+                }
+
+                if (
+                    '' !== $normalizedTitle
+                    && $normalizedTitle === mb_strtolower(trim($currentTitle))
+                ) {
+                    $titleMatches[$currentId] = true;
+                }
+            }
+        }
+
+        $matchedIds = array_map('intval', array_keys($titleMatches));
+        if (1 === count($matchedIds)) {
+            return $matchedIds[0];
+        }
+
+        if ($logFailure) {
+            if (count($matchedIds) > 1) {
+                @error_log(sprintf(
+                    '[MoodleExport] Ambiguous LP %s reference: path=%s title=%s matches=%s',
+                    $normalizedType,
+                    (string) $path,
+                    $title,
+                    implode(',', $matchedIds)
+                ));
+            } elseif ($candidateId > 0 || '' !== $normalizedTitle) {
+                @error_log(sprintf(
+                    '[MoodleExport] Unresolved LP %s reference: path=%s title=%s',
+                    $normalizedType,
+                    (string) $path,
+                    $title
+                ));
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Determine whether a legacy activity is already linked inside a learnpath.
      */
     private function isActivityInLearnpath(string $itemType, int $resourceId, ?string $documentPath = null): bool
@@ -1581,6 +1686,21 @@ class MoodleExport
                 }
 
                 $lpPath = (string) ($item['path'] ?? '');
+
+                if (\in_array($needleType, ['quiz', 'survey'], true)) {
+                    $resolvedId = $this->resolveLpCurrentResourceId(
+                        $needleType,
+                        $lpPath,
+                        (string) ($item['title'] ?? ''),
+                        false
+                    );
+                    if ($resolvedId === $resourceId) {
+                        return true;
+                    }
+
+                    continue;
+                }
+
                 if ('' !== $lpPath && ctype_digit($lpPath) && (int) $lpPath === $resourceId) {
                     return true;
                 }
@@ -1730,6 +1850,24 @@ class MoodleExport
                 'parent_path' => $parentPath,
             ];
 
+            // Chamilo-only: ResourceLink visibility (0=draft, 1=pending, 2=published).
+            // Moodle ignores chamilo/document/index.json entirely.
+            $visibility = $this->resolveDocumentVisibility($doc, $wrap);
+            if (null !== $visibility) {
+                $entry['visibility'] = $visibility;
+            }
+
+            // ResourceNode UUID for rewriting /r/document/files/{uuid}/view in HTML docs.
+            $uuid = trim((string) (
+                $doc->resource_node_uuid
+                ?? $wrap->resource_node_uuid
+                ?? ((isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->resource_node_uuid ?? '') : '')
+                ?? ''
+            ));
+            if ('' !== $uuid) {
+                $entry['resource_node_uuid'] = $uuid;
+            }
+
             if (!$isFolder) {
                 $lookupId = (int) ($wrap->source_id ?? $doc->iid ?? $id);
                 $contentHash = (string) ($hashById[$lookupId] ?? '');
@@ -1767,6 +1905,45 @@ class MoodleExport
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
             )
         );
+    }
+
+    /**
+     * Resolve ResourceLink visibility from a document bag entry.
+     *
+     * @return int|null 0=draft, 1=pending, 2=published
+     */
+    private function resolveDocumentVisibility(object $doc, object $wrap): ?int
+    {
+        $candidates = [
+            $doc->visibility ?? null,
+            $wrap->visibility ?? null,
+            (isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->visibility ?? null) : null,
+        ];
+
+        foreach ($candidates as $raw) {
+            if (null === $raw || '' === $raw) {
+                continue;
+            }
+            if (\is_bool($raw)) {
+                return $raw
+                    ? ResourceLink::VISIBILITY_PUBLISHED
+                    : ResourceLink::VISIBILITY_DRAFT;
+            }
+            $value = (int) $raw;
+            if (\in_array(
+                $value,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            )) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     private function buildExportedDocumentHashMap(string $exportDir): array
@@ -2038,6 +2215,19 @@ class MoodleExport
     }
 
     /**
+     * Export course-level Chamilo sidecars. Course settings are full-export only.
+     */
+    private function exportCourseMeta(string $exportDir): void
+    {
+        try {
+            $meta = new CourseMetaExport($this->course);
+            $meta->export($exportDir, !$this->selectionMode);
+        } catch (\Throwable $e) {
+            @error_log('[MoodleExport::exportCourseMeta][ERROR] '.$e->getMessage());
+        }
+    }
+
+    /**
      * Export Gradebook metadata into chamilo/gradebook/*.json.
      */
     private function exportGradebookActivities(array $activities, string $exportDir): void
@@ -2102,6 +2292,33 @@ class MoodleExport
                 $count++;
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportQuizMetaActivities][ERROR] '.$e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Export raw Chamilo survey JSON sidecars without changing Moodle feedback.xml.
+     */
+    private function exportSurveyMetaActivities(array $activities, string $exportDir): void
+    {
+        foreach ($activities as $activity) {
+            if (!\in_array(($activity['modulename'] ?? ''), ['feedback', 'survey'], true)) {
+                continue;
+            }
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
+            if ($activityId <= 0 || $moduleId <= 0) {
+                continue;
+            }
+
+            try {
+                $meta = new SurveyMetaExport($this->course);
+                $meta->export($activityId, $exportDir, $moduleId, $sectionId);
+            } catch (\Throwable $e) {
+                @error_log('[MoodleExport::exportSurveyMetaActivities][ERROR] '.$e->getMessage());
             }
         }
     }

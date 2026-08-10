@@ -9,9 +9,7 @@ namespace Chamilo\CoreBundle\Service\CourseInvitation;
 use Chamilo\CoreBundle\Entity\CourseInvitation;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
-use CourseManager;
 use RuntimeException;
-use SessionManager;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -27,6 +25,7 @@ final readonly class CourseInvitationRegistrationGate
 {
     public function __construct(
         private CourseInvitationTokenService $tokenService,
+        private CourseInvitationSubscriptionService $subscriptionService,
     ) {}
 
     /**
@@ -49,7 +48,13 @@ final readonly class CourseInvitationRegistrationGate
             return null;
         }
 
-        return $this->tokenService->resolve($hash);
+        $resolved = $this->tokenService->resolve($hash);
+        // Existing-user invitations redeem via /course-invitation/accept only.
+        if (null === $resolved || $resolved['invitation']->isForExistingUser()) {
+            return null;
+        }
+
+        return $resolved;
     }
 
     /**
@@ -74,24 +79,14 @@ final readonly class CourseInvitationRegistrationGate
     public function subscribeAndRedirect(User $registeredUser, array $resolved, callable $buildRedirectUrl): string
     {
         $invitation = $resolved['invitation'];
-        $userId = (int) $registeredUser->getId();
-
-        $session = $invitation->getSession();
         $course = $invitation->getCourse();
 
-        if (null !== $session) {
-            SessionManager::subscribeUsersToSession(
-                (int) $session->getId(),
-                [$userId],
-                SESSION_VISIBLE_READ_ONLY,
-                false
-            );
-        } elseif (null !== $course) {
-            CourseManager::subscribeUser($userId, (int) $course->getId());
-        } else {
-            throw new RuntimeException('The invitation has neither a course nor a session.');
+        // Existing-user invitations must not be redeemed via registration.
+        if ($invitation->isForExistingUser()) {
+            throw new RuntimeException('This invitation is for an existing account and cannot be used to register.');
         }
 
+        $this->subscriptionService->subscribe($registeredUser, $invitation);
         $this->tokenService->confirm($resolved, $registeredUser);
 
         $redirectCourseId = null !== $course ? (int) $course->getId() : 0;

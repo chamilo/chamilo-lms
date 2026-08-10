@@ -38933,3 +38933,237 @@ msgstr "Nėra dėstytojų"
 msgid "No users"
 msgstr "Nėra vartotojų"
 
+msgid "Calculation mode"
+msgstr "Skaičiavimo režimas"
+
+msgid "Weighted average"
+msgstr "Svertinis vidurkis"
+
+msgid "Points sum"
+msgstr "Taškų suma"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Svertinis vidurkis normalizuoja pagal svorių sumą; taškų suma traktuoja kiekvieną svorį kaip maksimalius taškus ir juos sudeda be normalizavimo."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Kiekvieno elemento svoris laikomas jo maksimaliais taškais; įvertinimas yra taškų suma, o ne normalizuotas."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Įvertinimas yra elementų svertinis vidurkis, normalizuotas pagal svorių sumą."
+
+msgid "Forum participation"
+msgstr "Forumo dalyvavimas"
+
+msgid "Forum thread"
+msgstr "Forumo tema"
+
+msgid "Points for one message"
+msgstr "Taškai už vieną pranešimą"
+
+msgid "Points for two or more messages"
+msgstr "Taškai už du ar daugiau pranešimų"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Taškai skiriami, kai studentas paskelbė tiksliai vieną pranešimą temoje."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Taškai skiriami, kai studentas paskelbė du ar daugiau pranešimų temoje."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Neprivaloma. Jei palikta tuščia, vienas ar daugiau pranešimų suteikia taškus už vieną pranešimą."
+
+msgid "Current password is required to change your password."
+msgstr "Norint pakeisti slaptažodį, būtina įvesti dabartinį slaptažodį."
+
+msgid "The 2FA code is required."
+msgstr "Reikalingas 2FA kodas."
+
+msgid "Invalid 2FA configuration."
+msgstr "Neteisinga 2FA konfigūracija."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kodas neteisingas arba pasibaigęs."
+
+msgid "Database load"
+msgstr "Duomenų bazės apkrova"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL ir MariaDB serverio apkrovos metrika realiuoju laiku"
+
+msgid "Click to show database server load metrics"
+msgstr "Spustelėkite, kad pamatytumėte duomenų bazės serverio apkrovos metriką"
+
+msgid "Threads connected"
+msgstr "Prijungti siūlai"
+
+msgid "Temporary tables on disk"
+msgstr "Laikinosios lentelės diske"
+
+msgid "Privilege scope"
+msgstr "Privilegijų apimtis"
+
+msgid "Not measurable with the current database user"
+msgstr "Negalima išmatuoti esamu duomenų bazės naudotoju"
+
+msgid "Uptime"
+msgstr "Veikimo laikas"
+
+msgid "Queries per second"
+msgstr "Užklausos per sekundę"
+
+msgid "Slow queries"
+msgstr "Lėtos užklausos"
+
+msgid "Slow query time limit"
+msgstr "Lėtos užklausos laiko limitas"
+
+msgid "Slow query log"
+msgstr "Lėtos užklausos žurnalas"
+
+msgid "Slow queries per second"
+msgstr "Lėtos užklausos per sekundę"
+
+msgid "Threads running"
+msgstr "Veikiančios gijos"
+
+msgid "Threads cached"
+msgstr "Podėlyje esančios gijos"
+
+msgid "Table lock waits"
+msgstr "Lentelės užrakinimo laukimai"
+
+msgid "Row lock waits"
+msgstr "Eilutės užrakinimo laukimai"
+
+msgid "Aborted connections"
+msgstr "Nutraukti ryšiai"
+
+msgid "Opened tables"
+msgstr "Atidarytos lentelės"
+
+msgid "Query cache"
+msgstr "Užklausų podėlis"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Duomenų bazės apkrovos metrika pasiekiama tik MySQL ir MariaDB."
+
+msgid "Inserts"
+msgstr "Įterpimai"
+
+msgid "Hit rate"
+msgstr "Pataikymų dažnis"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatinis atnaujinimas kas 5 sekundes"
+
+msgid "Web server load"
+msgstr "Žiniatinklio serverio apkrova"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Tiesioginė Apache arba Nginx būsenos metrika"
+
+msgid "Click to show web server load metrics"
+msgstr "Spustelėkite, kad parodytumėte žiniatinklio serverio apkrovos metriką"
+
+msgid "Requires a local web server status module"
+msgstr "Reikalingas vietinis žiniatinklio serverio būsenos modulis"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Žiniatinklio serverio apkrova skaitoma tik iš Apache mod_status arba Nginx stub_status vietiniame kompiuteryje. Būsenos puslapis turi leisti užklausas iš 127.0.0.1 (arba ::1)."
+
+msgid "Paths scanned"
+msgstr "Nuskaityti keliai"
+
+msgid "Detected"
+msgstr "Aptikta"
+
+msgid "Status path"
+msgstr "Būsenos kelias"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Žiniatinklio serverio apkrovos metrika pasiekiama tik Apache ir Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Nė vienas iš nuskaitytų būsenos kelių neatsakė vietiniame kompiuteryje."
+
+msgid "Busy workers"
+msgstr "Užimti darbuotojai"
+
+msgid "Idle workers"
+msgstr "Tuščiosios eigos darbuotojai"
+
+msgid "Graceful workers"
+msgstr "Maloniai užbaigiami darbuotojai"
+
+msgid "Server MPM"
+msgstr "Serverio MPM"
+
+msgid "Requests per second (live)"
+msgstr "Užklausos per sekundę (tiesiogiai)"
+
+msgid "Requests per second (since start)"
+msgstr "Užklausos per sekundę (nuo paleidimo)"
+
+msgid "Bytes per second (live)"
+msgstr "Baitai per sekundę (tiesiogiai)"
+
+msgid "Bytes per second (since start)"
+msgstr "Baitai per sekundę (nuo paleidimo)"
+
+msgid "Bytes per request"
+msgstr "Baitai už užklausą"
+
+msgid "Total accesses"
+msgstr "Iš viso prieigų"
+
+msgid "Total traffic"
+msgstr "Iš viso srauto"
+
+msgid "CPU load"
+msgstr "CPU apkrova"
+
+msgid "Load average (1 min)"
+msgstr "Vidutinė apkrova (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Vidutinė apkrova (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Vidutinė apkrova (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Skydelis siunčiamas"
+
+msgid "Scoreboard reading"
+msgstr "Skydelis skaitomas"
+
+msgid "Scoreboard keepalive"
+msgstr "Skydelis keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Skydelis laukia"
+
+msgid "Scoreboard open slots"
+msgstr "Skydelio atviri lizdai"
+
+msgid "Active connections"
+msgstr "Aktyvūs ryšiai"
+
+msgid "Reading"
+msgstr "Skaitoma"
+
+msgid "Writing"
+msgstr "Rašoma"
+
+msgid "Total requests"
+msgstr "Iš viso užklausų"
+
+msgid "Accepts"
+msgstr "Priimta"
+
+msgid "Handled"
+msgstr "Apdorota"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: įgalinkite mod_status (ExtendedStatus On) ir leiskite localhost pasiekti /server-status. Nginx: įgalinkite stub_status tik localhost vietoje, pvz., /nginx_status arba /stub_status."
+

@@ -55,7 +55,7 @@
             <div
               v-if="description"
               class="exercise-report-by-question-html text-sm text-gray-700"
-              v-html="description"
+              v-html="displayTranslatedHtml(description)"
             />
           </div>
           <div class="flex flex-wrap gap-2">
@@ -180,6 +180,7 @@
 import { onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
@@ -187,6 +188,7 @@ import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const isLoading = ref(false)
 const errorMessage = ref("")

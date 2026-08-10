@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Srdačno"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primjer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primjer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Raspon varijabli"
@@ -38927,4 +38927,238 @@ msgstr "Nema tutora"
 
 msgid "No users"
 msgstr "Nema korisnika"
+
+msgid "Calculation mode"
+msgstr "Način izračuna"
+
+msgid "Weighted average"
+msgstr "Ponderisani prosjek"
+
+msgid "Points sum"
+msgstr "Zbir bodova"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Ponderisani prosjek normalizuje se zbirom pondera; zbir bodova tretira svaki ponder kao maksimalan broj bodova i sabira ih bez normalizacije."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Težina svake stavke tretira se kao njen maksimalan broj bodova; ocjena je zbir bodova, bez normalizacije."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Ocjena je ponderisani prosjek stavki, normalizovan zbirom pondera."
+
+msgid "Forum participation"
+msgstr "Učešće na forumu"
+
+msgid "Forum thread"
+msgstr "Tema na forumu"
+
+msgid "Points for one message"
+msgstr "Bodovi za jednu poruku"
+
+msgid "Points for two or more messages"
+msgstr "Bodovi za dvije ili više poruka"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Bodovi dodijeljeni kada je student objavio tačno jednu poruku u temi."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Bodovi dodijeljeni kada je student objavio dvije ili više poruka u temi."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opcionalno. Ako se ostavi prazno, jedna ili više poruka donose bodove za jednu poruku."
+
+msgid "Current password is required to change your password."
+msgstr "Trenutna lozinka je obavezna za promjenu lozinke."
+
+msgid "The 2FA code is required."
+msgstr "Potreban je 2FA kod."
+
+msgid "Invalid 2FA configuration."
+msgstr "Nevažeća 2FA konfiguracija."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA kod je nevažeći ili je istekao."
+
+msgid "Database load"
+msgstr "Opterećenje baze podataka"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metrike opterećenja MySQL i MariaDB servera u realnom vremenu"
+
+msgid "Click to show database server load metrics"
+msgstr "Kliknite da prikažete metrike opterećenja servera baze podataka"
+
+msgid "Threads connected"
+msgstr "Povezane niti"
+
+msgid "Temporary tables on disk"
+msgstr "Privremene tabele na disku"
+
+msgid "Privilege scope"
+msgstr "Opseg privilegija"
+
+msgid "Not measurable with the current database user"
+msgstr "Nije mjerljivo sa trenutnim korisnikom baze podataka"
+
+msgid "Uptime"
+msgstr "Vrijeme rada"
+
+msgid "Queries per second"
+msgstr "Upiti u sekundi"
+
+msgid "Slow queries"
+msgstr "Spori upiti"
+
+msgid "Slow query time limit"
+msgstr "Vremensko ograničenje sporih upita"
+
+msgid "Slow query log"
+msgstr "Dnevnik sporih upita"
+
+msgid "Slow queries per second"
+msgstr "Spori upiti u sekundi"
+
+msgid "Threads running"
+msgstr "Pokrenute niti"
+
+msgid "Threads cached"
+msgstr "Keširane niti"
+
+msgid "Table lock waits"
+msgstr "Čekanja na zaključavanje tabela"
+
+msgid "Row lock waits"
+msgstr "Čekanja na zaključavanje redova"
+
+msgid "Aborted connections"
+msgstr "Prekinute konekcije"
+
+msgid "Opened tables"
+msgstr "Otvorene tabele"
+
+msgid "Query cache"
+msgstr "Keš upita"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Metrike opterećenja baze podataka dostupne su samo za MySQL i MariaDB."
+
+msgid "Inserts"
+msgstr "Unosi"
+
+msgid "Hit rate"
+msgstr "Stopa pogodaka"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatsko osvježavanje svakih 5 sekundi"
+
+msgid "Web server load"
+msgstr "Opterećenje web servera"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metrike statusa Apache ili Nginx servera u realnom vremenu"
+
+msgid "Click to show web server load metrics"
+msgstr "Kliknite da prikažete metrike opterećenja web servera"
+
+msgid "Requires a local web server status module"
+msgstr "Zahtijeva lokalni modul statusa web servera"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Opterećenje web servera se čita sa Apache mod_status ili Nginx stub_status samo na localhost-u. Stranica statusa mora dozvoliti zahtjeve sa 127.0.0.1 (ili ::1)."
+
+msgid "Paths scanned"
+msgstr "Skenirane putanje"
+
+msgid "Detected"
+msgstr "Detektovano"
+
+msgid "Status path"
+msgstr "Putanja statusa"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Metrike opterećenja web servera dostupne su samo za Apache i Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Nijedan od skeniranih statusnih puteva nije odgovorio na localhost."
+
+msgid "Busy workers"
+msgstr "Zauzeti radnici"
+
+msgid "Idle workers"
+msgstr "Neaktivni radnici"
+
+msgid "Graceful workers"
+msgstr "Radnici u mirnom režimu"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Zahtjevi u sekundi (uživo)"
+
+msgid "Requests per second (since start)"
+msgstr "Zahtjevi u sekundi (od pokretanja)"
+
+msgid "Bytes per second (live)"
+msgstr "Bajtovi u sekundi (uživo)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bajtovi u sekundi (od pokretanja)"
+
+msgid "Bytes per request"
+msgstr "Bajtovi po zahtjevu"
+
+msgid "Total accesses"
+msgstr "Ukupni pristupi"
+
+msgid "Total traffic"
+msgstr "Ukupni promet"
+
+msgid "CPU load"
+msgstr "Opterećenje CPU-a"
+
+msgid "Load average (1 min)"
+msgstr "Prosječno opterećenje (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Prosječno opterećenje (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Prosječno opterećenje (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard slanje"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard čitanje"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard čekanje"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard otvoreni slotovi"
+
+msgid "Active connections"
+msgstr "Aktivne veze"
+
+msgid "Reading"
+msgstr "Čitanje"
+
+msgid "Writing"
+msgstr "Pisanje"
+
+msgid "Total requests"
+msgstr "Ukupni zahtjevi"
+
+msgid "Accepts"
+msgstr "Prihvati"
+
+msgid "Handled"
+msgstr "Obradi"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: omogućite mod_status (ExtendedStatus On) i dozvolite localhost na /server-status. Nginx: omogućite stub_status na lokaciji samo za localhost, npr. /nginx_status ili /stub_status."
 

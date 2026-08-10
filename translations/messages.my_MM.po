@@ -38363,130 +38363,130 @@ msgid "Could not load categories"
 msgstr "အမျိုးအစားများကို တင်မရပါ"
 
 msgid "Imported categories: %s. Skipped rows: %s."
-msgstr ""
+msgstr "Imported categories: %s. Skipped rows: %s."
 
 msgid "Imported categories: %s."
-msgstr ""
+msgstr "Imported categories: %s."
 
 msgid "Could not import categories"
-msgstr ""
+msgstr "Could not import categories"
 
 msgid "Could not save category"
-msgstr ""
+msgstr "Could not save category"
 
 msgid "Answer distribution"
-msgstr ""
+msgstr "Answer distribution"
 
 msgid "Configured answers"
-msgstr ""
+msgstr "Configured answers"
 
 msgid "Detailed answer counting for some question types is not available in the migrated report yet."
-msgstr ""
+msgstr "Detailed answer counting for some question types is not available in the migrated report yet."
 
 msgid "No report by question data found"
-msgstr ""
+msgstr "No report by question data found"
 
 msgid "Detailed answer counting for this question type is not available in the migrated report yet."
-msgstr ""
+msgstr "Detailed answer counting for this question type is not available in the migrated report yet."
 
 msgid "No answer distribution found"
-msgstr ""
+msgstr "No answer distribution found"
 
 msgid "Could not load report by question"
-msgstr ""
+msgstr "Could not load report by question"
 
 msgid "Question settings"
-msgstr ""
+msgstr "Question settings"
 
 msgid "Leave empty or 0 for no time limit."
-msgstr ""
+msgstr "Leave empty or 0 for no time limit."
 
 msgid "Time limit in seconds"
-msgstr ""
+msgstr "Time limit in seconds"
 
 msgid "Attached questions"
-msgstr ""
+msgstr "Attached questions"
 
 msgid "Only questions attached to this media question inside the current exercise are listed here."
-msgstr ""
+msgstr "Only questions attached to this media question inside the current exercise are listed here."
 
 msgid "No questions are attached to this media question in the current exercise."
-msgstr ""
+msgstr "No questions are attached to this media question in the current exercise."
 
 msgid "Upload the Office document template that learners will edit with OnlyOffice."
-msgstr ""
+msgstr "Upload the Office document template that learners will edit with OnlyOffice."
 
 msgid "Replace Office document"
-msgstr ""
+msgstr "Replace Office document"
 
 msgid "Current Office document"
-msgstr ""
+msgstr "Current Office document"
 
 msgid "This question is corrected manually after the learner submits the edited document."
-msgstr ""
+msgstr "This question is corrected manually after the learner submits the edited document."
 
 msgid "Total score is calculated as the sum of hotspot scores."
-msgstr ""
+msgstr "Total score is calculated as the sum of hotspot scores."
 
 msgid "Global score"
-msgstr ""
+msgstr "Global score"
 
 msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
-msgstr ""
+msgstr "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
 
 msgid "Finish polygon"
-msgstr ""
+msgstr "Finish polygon"
 
 msgid "Calculated answer"
-msgstr ""
+msgstr "Calculated answer"
 
 msgid "Please type your text below and use square brackets [...] to define one or more blanks."
-msgstr ""
+msgstr "Please type your text below and use square brackets [...] to define one or more blanks."
 
 msgid "Lowest value"
-msgstr ""
+msgstr "Lowest value"
 
 msgid "Highest value"
-msgstr ""
+msgstr "Highest value"
 
 msgid "Fill in blanks"
-msgstr ""
+msgstr "Fill in blanks"
 
 msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
-msgstr ""
+msgstr "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
 
 msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
-msgstr ""
+msgstr "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
 
 msgid "Refresh answers"
-msgstr ""
+msgstr "Refresh answers"
 
 msgid "This dropdown combination question uses one global score, like legacy."
-msgstr ""
+msgstr "This dropdown combination question uses one global score, like legacy."
 
 msgid "Please enter at least two dropdown options."
-msgstr ""
+msgstr "Please enter at least two dropdown options."
 
 msgid "Create destination options first, then link each item to the correct option."
-msgstr ""
+msgstr "Create destination options first, then link each item to the correct option."
 
 msgid "This matching combination question uses one global score, like legacy."
-msgstr ""
+msgstr "This matching combination question uses one global score, like legacy."
 
 msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
-msgstr ""
+msgstr "Create the steps and choose the expected position for each one, like legacy Draggable."
 
 msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
-msgstr ""
+msgstr "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
 
 msgid "Hotspot combination"
-msgstr ""
+msgstr "Hotspot combination"
 
 msgid "Add delineation"
-msgstr ""
+msgstr "Add delineation"
 
 msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
-msgstr ""
+msgstr "This Office document question has no answer options. Its score is assigned during correction/results review."
 
 msgid "This upload question has no answer options. Its score is assigned during correction/results review."
 msgstr ""
@@ -38786,31 +38786,31 @@ msgid "Teachers will be added as tutors in all course sessions."
 msgstr ""
 
 msgid "Delete failed: invalid question id."
-msgstr ""
+msgstr "ဖျက်ရန် မအောင်မြင်ပါ။ မေးခွန်း ID မမှန်ပါ။"
 
 msgid "Average number of sessions per general session tutor"
-msgstr ""
+msgstr "အထွေထွေ သင်တန်းဆရာတစ်ဦးလျှင် ပျမ်းမျှ အစည်းအဝေး အရေအတွက်"
 
 msgid "No room"
-msgstr ""
+msgstr "အခန်း မရှိပါ"
 
 msgid "Import course teachers as course tutors in the session"
-msgstr ""
+msgstr "သင်တန်း ဆရာများကို အစည်းအဝေးတွင် သင်တန်း ကြီးကြပ်သူများအဖြစ် တင်သွင်းပါ"
 
 msgid "Clean and update course tutors"
-msgstr ""
+msgstr "သင်တန်း ကြီးကြပ်သူများကို ရှင်းလင်းပြီး အပ်ဒိတ်လုပ်ပါ"
 
 msgid "Add me as tutor"
-msgstr ""
+msgstr "ကျွန်ုပ်ကို ကြီးကြပ်သူအဖြစ် ထည့်ပါ"
 
 msgid "Unable to add the survey to the learning path"
-msgstr ""
+msgstr "စစ်တမ်းကို သင်ယူမှုလမ်းကြောင်းသို့ ထည့်ရန် မဖြစ်နိုင်ပါ"
 
 msgid "Access dates for tutors"
-msgstr ""
+msgstr "ကြီးကြပ်သူများအတွက် ဝင်ရောက်ခွင့် ရက်စွဲများ"
 
 msgid "Tutor and group member"
-msgstr ""
+msgstr "ကြီးကြပ်သူနှင့် အဖွဲ့ဝင်"
 
 msgid "Your daily AI token limit has been reached. Please try again tomorrow."
 msgstr "သင်၏နေ့စဉ် AI တိုကင်ကန့်သတ်ချက်ကို ရောက်ရှိပြီးဖြစ်ပါသည်။ မနက်ဖြန်တွင် ထပ်မံကြိုးစားပါ။"
@@ -38931,4 +38931,238 @@ msgstr "ဆရာများ မရှိပါ"
 
 msgid "No users"
 msgstr "အသုံးပြုသူများ မရှိပါ"
+
+msgid "Calculation mode"
+msgstr "တွက်ချက်မှုပုံစံ"
+
+msgid "Weighted average"
+msgstr "အလေးချိန်ပေးထားသော ပျမ်းမျှ"
+
+msgid "Points sum"
+msgstr "အမှတ်များ ပေါင်းစုခြင်း"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "အလေးချိန်ပေးထားသော ပျမ်းမျှသည် အလေးချိန်များ ပေါင်းစုဖြင့် ပုံမှန်ပြုလုပ်သည်။ အမှတ်ပေါင်းစုသည် အလေးချိန်တစ်ခုစီကို အမှတ်အများဆုံးအဖြစ် သတ်မှတ်ပြီး ပုံမှန်ပြုလုပ်ခြင်းမရှိဘဲ ပေါင်းစုသည်။"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "အရာတစ်ခုစီ၏ အလေးချိန်ကို ၎င်း၏ အမှတ်အများဆုံးအဖြစ် သတ်မှတ်သည်။ အဆင့်သည် အမှတ်များ၏ ပေါင်းစုဖြစ်ပြီး ပုံမှန်ပြုလုပ်ခြင်းမရှိပါ။"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "အဆင့်သည် အရာများ၏ အလေးချိန်ပေးထားသော ပျမ်းမျှဖြစ်ပြီး အလေးချိန်များ ပေါင်းစုဖြင့် ပုံမှန်ပြုလုပ်ထားသည်။"
+
+msgid "Forum participation"
+msgstr "ဖိုရမ် ပါဝင်မှု"
+
+msgid "Forum thread"
+msgstr "ဖိုရမ် ခေါင်းစဉ်"
+
+msgid "Points for one message"
+msgstr "မက်ဆေ့ချ်တစ်ခုအတွက် အမှတ်များ"
+
+msgid "Points for two or more messages"
+msgstr "မက်ဆေ့ချ် နှစ်ခု သို့မဟုတ် ထက်ပိုအတွက် အမှတ်များ"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "ကျောင်းသားက ခေါင်းစဉ်တွင် မက်ဆေ့ချ်တစ်ခုသာ တင်ခဲ့သည့်အခါ ပေးအပ်သော အမှတ်များ။"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "ကျောင်းသားက ခေါင်းစဉ်တွင် မက်ဆေ့ချ် နှစ်ခု သို့မဟုတ် ထက်ပိုတင်ခဲ့သည့်အခါ ပေးအပ်သော အမှတ်များ။"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "ရွေးချယ်နိုင်သည်။ ဗလာချန်ထားပါက မက်ဆေ့ချ်တစ်ခု သို့မဟုတ် ထက်ပိုသည် မက်ဆေ့ချ်တစ်ခုအတွက် အမှတ်များကို ရရှိမည်။"
+
+msgid "Current password is required to change your password."
+msgstr "သင့်စကားဝှက်ကို ပြောင်းလဲရန် လက်ရှိ စကားဝှက် လိုအပ်ပါသည်။"
+
+msgid "The 2FA code is required."
+msgstr "2FA ကုဒ် လိုအပ်ပါသည်။"
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA ပြင်ဆင်မှု မမှန်ပါ။"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA ကုဒ် မမှန်ပါ သို့မဟုတ် သက်တမ်းကုန်ပါပြီ။"
+
+msgid "Database load"
+msgstr "ဒေတာဘေ့စ် ဝန်ဆောင်မှု"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL နှင့် MariaDB ဆာဗာ ဝန်ဆောင်မှု မက်ထရစ်များ တိုက်ရိုက်ကြည့်ရှုခြင်း"
+
+msgid "Click to show database server load metrics"
+msgstr "ဒေတာဘေ့စ် ဆာဗာ ဝန်ဆောင်မှု မက်ထရစ်များ ပြသရန် နှိပ်ပါ"
+
+msgid "Threads connected"
+msgstr "ချိတ်ဆက်ထားသော ချည်မျှင်များ"
+
+msgid "Temporary tables on disk"
+msgstr "ဒစ်ခ်ပေါ်ရှိ ယာယီ ဇယားများ"
+
+msgid "Privilege scope"
+msgstr "အခွင့်အရေး နယ်ပယ်"
+
+msgid "Not measurable with the current database user"
+msgstr "လက်ရှိ ဒေတာဘေ့စ် အသုံးပြုသူဖြင့် တိုင်းတာ၍ မရပါ"
+
+msgid "Uptime"
+msgstr "အလုပ်လုပ်ချိန်"
+
+msgid "Queries per second"
+msgstr "တစ်စက္ကန့်လျှင် မေးမြန်းချက်များ"
+
+msgid "Slow queries"
+msgstr "နှေးကွေးသော မေးမြန်းချက်များ"
+
+msgid "Slow query time limit"
+msgstr "နှေးကွေးသော မေးမြန်းချက် အချိန်ကန့်သတ်ချက်"
+
+msgid "Slow query log"
+msgstr "နှေးကွေးသော မေးမြန်းချက် မှတ်တမ်း"
+
+msgid "Slow queries per second"
+msgstr "တစ်စက္ကန့်လျှင် နှေးကွေးသော မေးမြန်းချက်များ"
+
+msgid "Threads running"
+msgstr "လုပ်ဆောင်နေသော ချည်မျှင်များ"
+
+msgid "Threads cached"
+msgstr "ကက်ရှ်လုပ်ထားသော ချည်မျှင်များ"
+
+msgid "Table lock waits"
+msgstr "ဇယား သော့ခတ်မှု စောင့်ဆိုင်းမှုများ"
+
+msgid "Row lock waits"
+msgstr "အတန်း သော့ခတ်မှု စောင့်ဆိုင်းမှုများ"
+
+msgid "Aborted connections"
+msgstr "ပယ်ဖျက်ခံရသော ချိတ်ဆက်မှုများ"
+
+msgid "Opened tables"
+msgstr "ဖွင့်ထားသော ဇယားများ"
+
+msgid "Query cache"
+msgstr "မေးမြန်းချက် ကက်ရှ်"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "ဒေတာဘေ့စ် ဝန်ဆောင်မှု မက်ထရစ်များကို MySQL နှင့် MariaDB အတွက်သာ ရရှိနိုင်ပါသည်။"
+
+msgid "Inserts"
+msgstr "ထည့်သွင်းမှုများ"
+
+msgid "Hit rate"
+msgstr "ထိမှန်နှုန်း"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "၅ စက္ကန့်တိုင်း အလိုအလျောက် ပြန်လည်စတင်ပါ"
+
+msgid "Web server load"
+msgstr "ဝဘ်ဆာဗာ ဝန်အား"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Apache သို့မဟုတ် Nginx အခြေအနေ မက်ထရစ်များ တိုက်ရိုက်ကြည့်ရှုရန်"
+
+msgid "Click to show web server load metrics"
+msgstr "ဝဘ်ဆာဗာ ဝန်အား မက်ထရစ်များ ပြရန် နှိပ်ပါ"
+
+msgid "Requires a local web server status module"
+msgstr "ဒေသတွင်း ဝဘ်ဆာဗာ အခြေအနေ မော်ဂျူး လိုအပ်သည်"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ဝဘ်ဆာဗာ ဝန်အားကို Apache mod_status သို့မဟုတ် Nginx stub_status မှ localhost တွင်သာ ဖတ်ယူနိုင်သည်။ အခြေအနေ စာမျက်နှာသည် 127.0.0.1 (သို့မဟုတ် ::1) မှ တောင်းဆိုမှုများကို ခွင့်ပြုရမည်။"
+
+msgid "Paths scanned"
+msgstr "စကင်ဖတ်ထားသော လမ်းကြောင်းများ"
+
+msgid "Detected"
+msgstr "တွေ့ရှိခဲ့သည်"
+
+msgid "Status path"
+msgstr "အခြေအနေ လမ်းကြောင်း"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "ဝဘ်ဆာဗာ ဝန်အား မက်ထရစ်များကို Apache နှင့် Nginx အတွက်သာ ရရှိနိုင်သည်။"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "စကင်ဖတ်ထားသော အခြေအနေ လမ်းကြောင်းများထဲမှ တစ်ခုမှ localhost တွင် တုံ့ပြန်ခြင်းမရှိပါ။"
+
+msgid "Busy workers"
+msgstr "အလုပ်လုပ်နေသော အလုပ်သမားများ"
+
+msgid "Idle workers"
+msgstr "အလုပ်မလုပ်သော အလုပ်သမားများ"
+
+msgid "Graceful workers"
+msgstr "ချောမွေ့စွာ အလုပ်လုပ်နေသော အလုပ်သမားများ"
+
+msgid "Server MPM"
+msgstr "ဆာဗာ MPM"
+
+msgid "Requests per second (live)"
+msgstr "တစ်စက္ကန့်လျှင် တောင်းဆိုမှုများ (တိုက်ရိုက်)"
+
+msgid "Requests per second (since start)"
+msgstr "တစ်စက္ကန့်လျှင် တောင်းဆိုမှုများ (စတင်ချိန်မှ)"
+
+msgid "Bytes per second (live)"
+msgstr "တစ်စက္ကန့်လျှင် ဘိုက်များ (တိုက်ရိုက်)"
+
+msgid "Bytes per second (since start)"
+msgstr "တစ်စက္ကန့်လျှင် ဘိုက်များ (စတင်ချိန်မှ)"
+
+msgid "Bytes per request"
+msgstr "တစ်တောင်းဆိုမှုလျှင် ဘိုက်များ"
+
+msgid "Total accesses"
+msgstr "စုစုပေါင်း ဝင်ရောက်မှုများ"
+
+msgid "Total traffic"
+msgstr "စုစုပေါင်း အသွားအလာ"
+
+msgid "CPU load"
+msgstr "CPU ဝန်အား"
+
+msgid "Load average (1 min)"
+msgstr "ပျမ်းမျှ ဝန်အား (၁ မိနစ်)"
+
+msgid "Load average (5 min)"
+msgstr "ပျမ်းမျှ ဝန်အား (၅ မိနစ်)"
+
+msgid "Load average (15 min)"
+msgstr "ပျမ်းမျှ ဝန်အား (၁၅ မိနစ်)"
+
+msgid "Scoreboard sending"
+msgstr "စကိုးဘုတ် ပေးပို့နေသည်"
+
+msgid "Scoreboard reading"
+msgstr "စကိုးဘုတ် ဖတ်နေသည်"
+
+msgid "Scoreboard keepalive"
+msgstr "စကိုးဘုတ် ဆက်လက်ရှင်သန်နေသည်"
+
+msgid "Scoreboard waiting"
+msgstr "စကိုးဘုတ် စောင့်ဆိုင်းနေသည်"
+
+msgid "Scoreboard open slots"
+msgstr "စကိုးဘုတ် ဖွင့်ထားသော နေရာများ"
+
+msgid "Active connections"
+msgstr "တက်ကြွသော ချိတ်ဆက်မှုများ"
+
+msgid "Reading"
+msgstr "ဖတ်နေသည်"
+
+msgid "Writing"
+msgstr "ရေးနေသည်"
+
+msgid "Total requests"
+msgstr "စုစုပေါင်း တောင်းဆိုမှုများ"
+
+msgid "Accepts"
+msgstr "လက်ခံမှုများ"
+
+msgid "Handled"
+msgstr "ကိုင်တွယ်မှုများ"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status ကို ဖွင့်ပါ (ExtendedStatus On) နှင့် localhost ကို /server-status သို့ ခွင့်ပြုပါ။ Nginx: stub_status ကို localhost တွင်သာ တည်နေရာတစ်ခုဖြစ်သော /nginx_status သို့မဟုတ် /stub_status တွင် ဖွင့်ပါ။"
 

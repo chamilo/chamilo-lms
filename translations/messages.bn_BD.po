@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলা নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -38927,4 +38927,238 @@ msgstr "কোনো টিউটর নেই"
 
 msgid "No users"
 msgstr "কোনো ব্যবহারকারী নেই"
+
+msgid "Calculation mode"
+msgstr "গণনার মোড"
+
+msgid "Weighted average"
+msgstr "ওজনযুক্ত গড়"
+
+msgid "Points sum"
+msgstr "পয়েন্টের যোগফল"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "ওজনযুক্ত গড় ওজনের যোগফল দিয়ে স্বাভাবিকীকরণ করে; পয়েন্টের যোগফল প্রতিটি ওজনকে সর্বোচ্চ পয়েন্ট হিসেবে বিবেচনা করে এবং স্বাভাবিকীকরণ ছাড়াই যোগ করে।"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "প্রতিটি আইটেমের ওজনকে তার সর্বোচ্চ পয়েন্ট হিসেবে বিবেচনা করা হয়; গ্রেড হলো পয়েন্টের যোগফল, স্বাভাবিকীকরণ করা হয় না।"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "গ্রেড হলো আইটেমগুলোর ওজনযুক্ত গড়, ওজনের যোগফল দিয়ে স্বাভাবিকীকরণ করা হয়।"
+
+msgid "Forum participation"
+msgstr "ফোরাম অংশগ্রহণ"
+
+msgid "Forum thread"
+msgstr "ফোরাম থ্রেড"
+
+msgid "Points for one message"
+msgstr "একটি বার্তার জন্য পয়েন্ট"
+
+msgid "Points for two or more messages"
+msgstr "দুই বা ততোধিক বার্তার জন্য পয়েন্ট"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "যখন শিক্ষার্থী থ্রেডে ঠিক একটি বার্তা পোস্ট করে তখন পয়েন্ট প্রদান করা হয়।"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "যখন শিক্ষার্থী থ্রেডে দুই বা ততোধিক বার্তা পোস্ট করে তখন পয়েন্ট প্রদান করা হয়।"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "ঐচ্ছিক। যদি খালি রাখা হয়, তাহলে এক বা ততোধিক বার্তার জন্য একটি বার্তার পয়েন্ট প্রদান করা হয়।"
+
+msgid "Current password is required to change your password."
+msgstr "আপনার পাসওয়ার্ড পরিবর্তন করতে বর্তমান পাসওয়ার্ড প্রয়োজন।"
+
+msgid "The 2FA code is required."
+msgstr "2FA কোড প্রয়োজন।"
+
+msgid "Invalid 2FA configuration."
+msgstr "অবৈধ 2FA কনফিগারেশন।"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA কোড অবৈধ বা মেয়াদোত্তীর্ণ।"
+
+msgid "Database load"
+msgstr "ডাটাবেস লোড"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "লাইভ MySQL এবং MariaDB সার্ভার লোড মেট্রিক্স"
+
+msgid "Click to show database server load metrics"
+msgstr "ডাটাবেস সার্ভার লোড মেট্রিক্স দেখতে ক্লিক করুন"
+
+msgid "Threads connected"
+msgstr "সংযুক্ত থ্রেড"
+
+msgid "Temporary tables on disk"
+msgstr "ডিস্কে অস্থায়ী টেবিল"
+
+msgid "Privilege scope"
+msgstr "অধিকারের সুযোগ"
+
+msgid "Not measurable with the current database user"
+msgstr "বর্তমান ডাটাবেস ব্যবহারকারীর সাথে পরিমাপযোগ্য নয়"
+
+msgid "Uptime"
+msgstr "আপটাইম"
+
+msgid "Queries per second"
+msgstr "প্রতি সেকেন্ডে কোয়েরি"
+
+msgid "Slow queries"
+msgstr "ধীর কোয়ারি"
+
+msgid "Slow query time limit"
+msgstr "ধীর কোয়ারির সময়সীমা"
+
+msgid "Slow query log"
+msgstr "ধীর কোয়ারি লগ"
+
+msgid "Slow queries per second"
+msgstr "প্রতি সেকেন্ডে ধীর কোয়ারি"
+
+msgid "Threads running"
+msgstr "চলমান থ্রেড"
+
+msgid "Threads cached"
+msgstr "ক্যাশ করা থ্রেড"
+
+msgid "Table lock waits"
+msgstr "টেবিল লক অপেক্ষা"
+
+msgid "Row lock waits"
+msgstr "সারি লক অপেক্ষা"
+
+msgid "Aborted connections"
+msgstr "বাতিলকৃত সংযোগ"
+
+msgid "Opened tables"
+msgstr "খোলা টেবিল"
+
+msgid "Query cache"
+msgstr "ক্যোয়ারি ক্যাশে"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "ডাটাবেস লোড মেট্রিক্স শুধুমাত্র MySQL এবং MariaDB-এর জন্য উপলব্ধ।"
+
+msgid "Inserts"
+msgstr "সন্নিবেশ"
+
+msgid "Hit rate"
+msgstr "হিট রেট"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "প্রতি ৫ সেকেন্ডে স্বয়ংক্রিয় রিফ্রেশ"
+
+msgid "Web server load"
+msgstr "ওয়েব সার্ভার লোড"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "লাইভ Apache বা Nginx স্ট্যাটাস মেট্রিক্স"
+
+msgid "Click to show web server load metrics"
+msgstr "ওয়েব সার্ভার লোড মেট্রিক্স দেখতে ক্লিক করুন"
+
+msgid "Requires a local web server status module"
+msgstr "একটি স্থানীয় ওয়েব সার্ভার স্ট্যাটাস মডিউল প্রয়োজন"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "ওয়েব সার্ভার লোড শুধুমাত্র localhost-এ Apache mod_status বা Nginx stub_status থেকে পড়া হয়। স্ট্যাটাস পেজ অবশ্যই 127.0.0.1 (বা ::1) থেকে অনুরোধ অনুমোদন করবে।"
+
+msgid "Paths scanned"
+msgstr "স্ক্যান করা পাথ"
+
+msgid "Detected"
+msgstr "সনাক্তকৃত"
+
+msgid "Status path"
+msgstr "স্ট্যাটাস পাথ"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "ওয়েব সার্ভার লোড মেট্রিক্স শুধুমাত্র Apache এবং Nginx-এর জন্য উপলব্ধ।"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "স্ক্যান করা কোনো স্ট্যাটাস পাথ localhost-এ সাড়া দেয়নি।"
+
+msgid "Busy workers"
+msgstr "ব্যস্ত কর্মী"
+
+msgid "Idle workers"
+msgstr "নিষ্ক্রিয় কর্মী"
+
+msgid "Graceful workers"
+msgstr "গ্রেসফুল কর্মী"
+
+msgid "Server MPM"
+msgstr "সার্ভার MPM"
+
+msgid "Requests per second (live)"
+msgstr "প্রতি সেকেন্ডে অনুরোধ (লাইভ)"
+
+msgid "Requests per second (since start)"
+msgstr "প্রতি সেকেন্ডে অনুরোধ (শুরু থেকে)"
+
+msgid "Bytes per second (live)"
+msgstr "প্রতি সেকেন্ডে বাইট (লাইভ)"
+
+msgid "Bytes per second (since start)"
+msgstr "প্রতি সেকেন্ডে বাইট (শুরু থেকে)"
+
+msgid "Bytes per request"
+msgstr "প্রতি অনুরোধে বাইট"
+
+msgid "Total accesses"
+msgstr "মোট অ্যাক্সেস"
+
+msgid "Total traffic"
+msgstr "মোট ট্রাফিক"
+
+msgid "CPU load"
+msgstr "CPU লোড"
+
+msgid "Load average (1 min)"
+msgstr "লোড গড় (১ মিনিট)"
+
+msgid "Load average (5 min)"
+msgstr "লোড গড় (৫ মিনিট)"
+
+msgid "Load average (15 min)"
+msgstr "লোড গড় (১৫ মিনিট)"
+
+msgid "Scoreboard sending"
+msgstr "স্কোরবোর্ড প্রেরণ"
+
+msgid "Scoreboard reading"
+msgstr "স্কোরবোর্ড পাঠ"
+
+msgid "Scoreboard keepalive"
+msgstr "স্কোরবোর্ড কিপঅ্যালাইভ"
+
+msgid "Scoreboard waiting"
+msgstr "স্কোরবোর্ড অপেক্ষমাণ"
+
+msgid "Scoreboard open slots"
+msgstr "স্কোরবোর্ড খোলা স্লট"
+
+msgid "Active connections"
+msgstr "সক্রিয় সংযোগ"
+
+msgid "Reading"
+msgstr "পড়া হচ্ছে"
+
+msgid "Writing"
+msgstr "লেখা হচ্ছে"
+
+msgid "Total requests"
+msgstr "মোট অনুরোধ"
+
+msgid "Accepts"
+msgstr "গৃহীত"
+
+msgid "Handled"
+msgstr "হ্যান্ডেলকৃত"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status সক্রিয় করুন (ExtendedStatus On) এবং localhost-কে /server-status অনুমোদন করুন। Nginx: localhost-এর জন্য শুধুমাত্র একটি লোকেশনে যেমন /nginx_status বা /stub_status-এ stub_status সক্রিয় করুন।"
 

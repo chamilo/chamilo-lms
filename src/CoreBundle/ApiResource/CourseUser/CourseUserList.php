@@ -123,6 +123,9 @@ final class CourseUserList
     public bool $showSubscriptionTabs = false;
 
     #[Groups(['course_user_list:read'])]
+    public bool $canInviteByEmail = false;
+
+    #[Groups(['course_user_list:read'])]
     public string $groupsUrl = '';
 
     public function getId(): string

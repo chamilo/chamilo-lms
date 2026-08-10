@@ -10,15 +10,18 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseInvitation\CourseInvitationItem;
 use Chamilo\CoreBundle\ApiResource\CourseInvitation\CourseInvitationWriteInput;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationMailer;
+use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationSubscriptionService;
 use Chamilo\CoreBundle\Service\CourseInvitation\CourseInvitationTokenService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @implements ProcessorInterface<CourseInvitationWriteInput, CourseInvitationItem>
@@ -32,7 +35,9 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
         private UserRepository $userRepository,
         private CourseInvitationTokenService $tokenService,
         private CourseInvitationMailer $mailer,
+        private CourseInvitationSubscriptionService $subscriptionService,
         private CidReqHelper $cidReqHelper,
+        private TranslatorInterface $translator,
     ) {}
 
     /**
@@ -63,8 +68,25 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
             throw new BadRequestHttpException('A valid email address is required.');
         }
 
-        if ($this->userRepository->findByEmailCaseInsensitive($email) instanceof User) {
-            throw new ConflictHttpException('This email address already has an account on this platform. Subscribe the existing user directly instead of sending an invitation.');
+        $existingUser = $this->userRepository->findByEmailCaseInsensitive($email);
+        $invitedUser = null;
+
+        if ($existingUser instanceof User) {
+            if (User::SOFT_DELETED === $existingUser->getActive()) {
+                throw new BadRequestHttpException(
+                    $this->translator->trans('This email address cannot be invited.')
+                );
+            }
+
+            if ($this->subscriptionService->isAlreadySubscribed($existingUser, $course, $session)) {
+                throw new ConflictHttpException(
+                    $session instanceof Session
+                        ? $this->translator->trans('This user is already subscribed to the session.')
+                        : $this->translator->trans('This user is already subscribed to the course.')
+                );
+            }
+
+            $invitedUser = $existingUser;
         }
 
         $created = $this->tokenService->create(
@@ -73,6 +95,7 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
             null,
             $email,
             $currentUser,
+            $invitedUser,
         );
 
         $this->mailer->send($created['invitation'], $created['url']);

@@ -38934,3 +38934,237 @@ msgstr "無導師"
 msgid "No users"
 msgstr "無使用者"
 
+msgid "Calculation mode"
+msgstr "計算模式"
+
+msgid "Weighted average"
+msgstr "加權平均"
+
+msgid "Points sum"
+msgstr "分數總和"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "加權平均會依權重總和進行正規化；分數總和則將每個權重視為最高分數並直接加總，不進行正規化。"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "每個項目的權重視為其最高分數；成績為分數總和，不進行正規化。"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "成績為各項目的加權平均，並依權重總和進行正規化。"
+
+msgid "Forum participation"
+msgstr "討論區參與度"
+
+msgid "Forum thread"
+msgstr "討論串"
+
+msgid "Points for one message"
+msgstr "單一訊息得分"
+
+msgid "Points for two or more messages"
+msgstr "兩則或以上訊息得分"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "學生在討論串中僅發佈一則訊息時給予的分數。"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "學生在討論串中發佈兩則或以上訊息時給予的分數。"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "選填。若留空，則一則或多則訊息皆給予單一訊息的分數。"
+
+msgid "Current password is required to change your password."
+msgstr "變更密碼時必須輸入目前密碼。"
+
+msgid "The 2FA code is required."
+msgstr "必須輸入雙重驗證碼。"
+
+msgid "Invalid 2FA configuration."
+msgstr "雙重驗證設定無效。"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "雙重驗證碼無效或已過期。"
+
+msgid "Database load"
+msgstr "資料庫負載"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "即時 MySQL 與 MariaDB 伺服器負載指標"
+
+msgid "Click to show database server load metrics"
+msgstr "點擊以顯示資料庫伺服器負載指標"
+
+msgid "Threads connected"
+msgstr "已連線執行緒"
+
+msgid "Temporary tables on disk"
+msgstr "磁碟上的暫存表"
+
+msgid "Privilege scope"
+msgstr "權限範圍"
+
+msgid "Not measurable with the current database user"
+msgstr "無法以目前資料庫使用者進行測量"
+
+msgid "Uptime"
+msgstr "運作時間"
+
+msgid "Queries per second"
+msgstr "每秒查詢數"
+
+msgid "Slow queries"
+msgstr "慢查詢"
+
+msgid "Slow query time limit"
+msgstr "慢查詢時間限制"
+
+msgid "Slow query log"
+msgstr "慢查詢記錄"
+
+msgid "Slow queries per second"
+msgstr "每秒慢查詢數"
+
+msgid "Threads running"
+msgstr "執行中的執行緒"
+
+msgid "Threads cached"
+msgstr "快取中的執行緒"
+
+msgid "Table lock waits"
+msgstr "資料表鎖定等待"
+
+msgid "Row lock waits"
+msgstr "資料列鎖定等待"
+
+msgid "Aborted connections"
+msgstr "中斷的連線"
+
+msgid "Opened tables"
+msgstr "已開啟的資料表"
+
+msgid "Query cache"
+msgstr "查詢快取"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "資料庫負載指標僅適用於 MySQL 與 MariaDB。"
+
+msgid "Inserts"
+msgstr "插入"
+
+msgid "Hit rate"
+msgstr "命中率"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "每 5 秒自動重新整理"
+
+msgid "Web server load"
+msgstr "網頁伺服器負載"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "即時 Apache 或 Nginx 狀態指標"
+
+msgid "Click to show web server load metrics"
+msgstr "點擊以顯示網頁伺服器負載指標"
+
+msgid "Requires a local web server status module"
+msgstr "需要本機網頁伺服器狀態模組"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "網頁伺服器負載僅能從本機的 Apache mod_status 或 Nginx stub_status 讀取。狀態頁面必須允許來自 127.0.0.1（或 ::1）的請求。"
+
+msgid "Paths scanned"
+msgstr "已掃描的路徑"
+
+msgid "Detected"
+msgstr "已偵測"
+
+msgid "Status path"
+msgstr "狀態路徑"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "網頁伺服器負載指標僅適用於 Apache 與 Nginx。"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "本機上沒有任何已掃描的狀態路徑回應。"
+
+msgid "Busy workers"
+msgstr "忙碌的工作者"
+
+msgid "Idle workers"
+msgstr "閒置的工作者"
+
+msgid "Graceful workers"
+msgstr "優雅的工作者"
+
+msgid "Server MPM"
+msgstr "伺服器 MPM"
+
+msgid "Requests per second (live)"
+msgstr "每秒請求數（即時）"
+
+msgid "Requests per second (since start)"
+msgstr "每秒請求數（自啟動以來）"
+
+msgid "Bytes per second (live)"
+msgstr "每秒位元組數（即時）"
+
+msgid "Bytes per second (since start)"
+msgstr "每秒位元組數（自啟動以來）"
+
+msgid "Bytes per request"
+msgstr "每次請求位元組數"
+
+msgid "Total accesses"
+msgstr "總存取次數"
+
+msgid "Total traffic"
+msgstr "總流量"
+
+msgid "CPU load"
+msgstr "CPU 負載"
+
+msgid "Load average (1 min)"
+msgstr "負載平均值（1 分鐘）"
+
+msgid "Load average (5 min)"
+msgstr "負載平均值（5 分鐘）"
+
+msgid "Load average (15 min)"
+msgstr "負載平均值（15 分鐘）"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard 傳送中"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard 讀取中"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard 等待中"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard 開放槽位"
+
+msgid "Active connections"
+msgstr "作用中連線"
+
+msgid "Reading"
+msgstr "讀取中"
+
+msgid "Writing"
+msgstr "寫入中"
+
+msgid "Total requests"
+msgstr "總請求數"
+
+msgid "Accepts"
+msgstr "接受"
+
+msgid "Handled"
+msgstr "已處理"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache：啟用 mod_status（ExtendedStatus On）並允許本機存取 /server-status。Nginx：啟用 stub_status 於僅限本機的位置，例如 /nginx_status 或 /stub_status。"
+

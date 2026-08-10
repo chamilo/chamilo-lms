@@ -38948,3 +38948,237 @@ msgstr "Niciun tutore"
 msgid "No users"
 msgstr "Niciun utilizator"
 
+msgid "Calculation mode"
+msgstr "Mod de calcul"
+
+msgid "Weighted average"
+msgstr "Medie ponderată"
+
+msgid "Points sum"
+msgstr "Sumă de puncte"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Medie ponderată normalizează după suma ponderilor; suma de puncte tratează fiecare pondere ca punctaj maxim și le adună fără normalizare."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Fiecare pondere a elementului este tratată ca punctaj maxim; nota este suma punctelor, fără normalizare."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Nota este media ponderată a elementelor, normalizată după suma ponderilor."
+
+msgid "Forum participation"
+msgstr "Participare la forum"
+
+msgid "Forum thread"
+msgstr "Subiect forum"
+
+msgid "Points for one message"
+msgstr "Puncte pentru un mesaj"
+
+msgid "Points for two or more messages"
+msgstr "Puncte pentru două sau mai multe mesaje"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Puncte acordate când studentul a postat exact un mesaj în subiect."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Puncte acordate când studentul a postat două sau mai multe mesaje în subiect."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opțional. Dacă este lăsat gol, unul sau mai multe mesaje acordă punctele pentru un mesaj."
+
+msgid "Current password is required to change your password."
+msgstr "Parola actuală este necesară pentru a schimba parola."
+
+msgid "The 2FA code is required."
+msgstr "Codul 2FA este necesar."
+
+msgid "Invalid 2FA configuration."
+msgstr "Configurație 2FA invalidă."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Codul 2FA este invalid sau expirat."
+
+msgid "Database load"
+msgstr "Încărcare bază de date"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metrici de încărcare server MySQL și MariaDB live"
+
+msgid "Click to show database server load metrics"
+msgstr "Clic pentru a afișa metricile de încărcare ale serverului de baze de date"
+
+msgid "Threads connected"
+msgstr "Fire conectate"
+
+msgid "Temporary tables on disk"
+msgstr "Tabele temporare pe disc"
+
+msgid "Privilege scope"
+msgstr "Domeniu de privilegii"
+
+msgid "Not measurable with the current database user"
+msgstr "Nu se poate măsura cu utilizatorul curent al bazei de date"
+
+msgid "Uptime"
+msgstr "Timp de funcționare"
+
+msgid "Queries per second"
+msgstr "Interogări pe secundă"
+
+msgid "Slow queries"
+msgstr "Interogări lente"
+
+msgid "Slow query time limit"
+msgstr "Limită de timp pentru interogări lente"
+
+msgid "Slow query log"
+msgstr "Jurnal interogări lente"
+
+msgid "Slow queries per second"
+msgstr "Interogări lente pe secundă"
+
+msgid "Threads running"
+msgstr "Fire de execuție active"
+
+msgid "Threads cached"
+msgstr "Fire de execuție în cache"
+
+msgid "Table lock waits"
+msgstr "Așteptări blocare tabel"
+
+msgid "Row lock waits"
+msgstr "Așteptări blocare rând"
+
+msgid "Aborted connections"
+msgstr "Conexiuni întrerupte"
+
+msgid "Opened tables"
+msgstr "Tabele deschise"
+
+msgid "Query cache"
+msgstr "Cache interogări"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Măsurătorile de încărcare a bazei de date sunt disponibile doar pentru MySQL și MariaDB."
+
+msgid "Inserts"
+msgstr "Inserări"
+
+msgid "Hit rate"
+msgstr "Rata de succes"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Reîmprospătare automată la fiecare 5 secunde"
+
+msgid "Web server load"
+msgstr "Încărcare server web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Măsurători de stare live Apache sau Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Faceți clic pentru a afișa măsurătorile de încărcare ale serverului web"
+
+msgid "Requires a local web server status module"
+msgstr "Necesită un modul de stare local al serverului web"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Încărcarea serverului web este citită de la Apache mod_status sau Nginx stub_status doar pe localhost. Pagina de stare trebuie să permită cereri de la 127.0.0.1 (sau ::1)."
+
+msgid "Paths scanned"
+msgstr "Căi scanate"
+
+msgid "Detected"
+msgstr "Detectat"
+
+msgid "Status path"
+msgstr "Cale stare"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Măsurătorile de încărcare ale serverului web sunt disponibile doar pentru Apache și Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Niciuna dintre căile de stare scanate nu a răspuns pe localhost."
+
+msgid "Busy workers"
+msgstr "Lucrători ocupați"
+
+msgid "Idle workers"
+msgstr "Lucrători inactivi"
+
+msgid "Graceful workers"
+msgstr "Lucrători grațioși"
+
+msgid "Server MPM"
+msgstr "MPM server"
+
+msgid "Requests per second (live)"
+msgstr "Cereri pe secundă (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Cereri pe secundă (de la pornire)"
+
+msgid "Bytes per second (live)"
+msgstr "Octeți pe secundă (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Octeți pe secundă (de la pornire)"
+
+msgid "Bytes per request"
+msgstr "Octeți pe cerere"
+
+msgid "Total accesses"
+msgstr "Accesări totale"
+
+msgid "Total traffic"
+msgstr "Trafic total"
+
+msgid "CPU load"
+msgstr "Încărcare CPU"
+
+msgid "Load average (1 min)"
+msgstr "Media de încărcare (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Media de încărcare (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Media de încărcare (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard trimitere"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard citire"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard așteptare"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard sloturi deschise"
+
+msgid "Active connections"
+msgstr "Conexiuni active"
+
+msgid "Reading"
+msgstr "Citire"
+
+msgid "Writing"
+msgstr "Scriere"
+
+msgid "Total requests"
+msgstr "Total cereri"
+
+msgid "Accepts"
+msgstr "Acceptate"
+
+msgid "Handled"
+msgstr "Gestionate"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: activați mod_status (ExtendedStatus On) și permiteți localhost la /server-status. Nginx: activați stub_status pe o locație doar localhost, cum ar fi /nginx_status sau /stub_status."
+

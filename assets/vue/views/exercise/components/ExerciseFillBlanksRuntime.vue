@@ -8,6 +8,9 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { useTranslatedHtml } from "../../../composables/useTranslatedHtml"
+
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const props = defineProps({
   modelValue: {
@@ -32,7 +35,7 @@ const renderedHtml = computed(() =>
   props.segments
     .map((segment) => {
       if (segment?.type === "text") {
-        return String(segment.text || "")
+        return displayTranslatedHtml(String(segment.text || ""))
       }
 
       const position = Math.max(1, Number(segment?.position || 1))

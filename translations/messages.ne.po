@@ -38932,3 +38932,237 @@ msgstr "कुनै ट्यूटरहरू छैनन्"
 msgid "No users"
 msgstr "कुनै प्रयोगकर्ताहरू छैनन्"
 
+msgid "Calculation mode"
+msgstr "गणना मोड"
+
+msgid "Weighted average"
+msgstr "भारित औसत"
+
+msgid "Points sum"
+msgstr "अंक योग"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "भारित औसतले तौलहरूको योगले सामान्यीकरण गर्छ; अंक योगले प्रत्येक तौललाई अधिकतम अंकको रूपमा लिन्छ र सामान्यीकरण नगरी जोड्छ।"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "प्रत्येक वस्तुको तौललाई यसको अधिकतम अंकको रूपमा लिइन्छ; ग्रेड अंकहरूको योग हो, सामान्यीकरण गरिएको हुँदैन।"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "ग्रेड वस्तुहरूको भारित औसत हो, तौलहरूको योगले सामान्यीकरण गरिएको।"
+
+msgid "Forum participation"
+msgstr "फोरम सहभागिता"
+
+msgid "Forum thread"
+msgstr "फोरम थ्रेड"
+
+msgid "Points for one message"
+msgstr "एउटा सन्देशको लागि अंक"
+
+msgid "Points for two or more messages"
+msgstr "दुई वा बढी सन्देशहरूको लागि अंक"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "विद्यार्थीले थ्रेडमा ठ्याक्कै एउटा सन्देश पोष्ट गर्दा प्रदान गरिने अंक।"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "विद्यार्थीले थ्रेडमा दुई वा बढी सन्देशहरू पोष्ट गर्दा प्रदान गरिने अंक।"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "वैकल्पिक। यदि खाली छोडियो भने, एउटा वा बढी सन्देशहरूले एउटा सन्देशको लागि अंक प्रदान गर्छन्।"
+
+msgid "Current password is required to change your password."
+msgstr "तपाईंको पासवर्ड परिवर्तन गर्न हालको पासवर्ड आवश्यक छ।"
+
+msgid "The 2FA code is required."
+msgstr "2FA कोड आवश्यक छ।"
+
+msgid "Invalid 2FA configuration."
+msgstr "अवैध 2FA कन्फिगरेसन।"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA कोड अवैध वा म्याद सकिएको छ।"
+
+msgid "Database load"
+msgstr "डाटाबेस लोड"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "लाइभ MySQL र MariaDB सर्भर लोड मेट्रिक्स"
+
+msgid "Click to show database server load metrics"
+msgstr "डाटाबेस सर्भर लोड मेट्रिक्स देखाउन क्लिक गर्नुहोस्"
+
+msgid "Threads connected"
+msgstr "थ्रेडहरू जडान गरिएको"
+
+msgid "Temporary tables on disk"
+msgstr "डिस्कमा अस्थायी तालिकाहरू"
+
+msgid "Privilege scope"
+msgstr "अधिकार क्षेत्र"
+
+msgid "Not measurable with the current database user"
+msgstr "हालको डाटाबेस प्रयोगकर्तासँग मापन गर्न सकिँदैन"
+
+msgid "Uptime"
+msgstr "अपटाइम"
+
+msgid "Queries per second"
+msgstr "प्रति सेकेन्ड क्वेरीहरू"
+
+msgid "Slow queries"
+msgstr "ढिलो क्वेरीहरू"
+
+msgid "Slow query time limit"
+msgstr "ढिलो क्वेरी समय सीमा"
+
+msgid "Slow query log"
+msgstr "ढिलो क्वेरी लग"
+
+msgid "Slow queries per second"
+msgstr "ढिलो क्वेरी प्रति सेकेन्ड"
+
+msgid "Threads running"
+msgstr "चलिरहेका थ्रेडहरू"
+
+msgid "Threads cached"
+msgstr "क्यास गरिएका थ्रेडहरू"
+
+msgid "Table lock waits"
+msgstr "तालिका लक प्रतीक्षा"
+
+msgid "Row lock waits"
+msgstr "पङ्क्ति लक प्रतीक्षा"
+
+msgid "Aborted connections"
+msgstr "रद्द गरिएका जडानहरू"
+
+msgid "Opened tables"
+msgstr "खोलिएका तालिकाहरू"
+
+msgid "Query cache"
+msgstr "क्वेरी क्यास"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "डाटाबेस लोड मेट्रिक्स केवल MySQL र MariaDB का लागि उपलब्ध छन्।"
+
+msgid "Inserts"
+msgstr "इन्सर्टहरू"
+
+msgid "Hit rate"
+msgstr "हिट दर"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "हरेक ५ सेकेन्डमा स्वतः रिफ्रेस"
+
+msgid "Web server load"
+msgstr "वेब सर्भर लोड"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "लाइभ Apache वा Nginx स्थिति मेट्रिक्स"
+
+msgid "Click to show web server load metrics"
+msgstr "वेब सर्भर लोड मेट्रिक्स देखाउन क्लिक गर्नुहोस्"
+
+msgid "Requires a local web server status module"
+msgstr "स्थानीय वेब सर्भर स्थिति मोड्युल आवश्यक छ"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "वेब सर्भर लोड Apache mod_status वा Nginx stub_status बाट localhost बाट मात्र पढिन्छ। स्थिति पृष्ठले 127.0.0.1 (वा ::1) बाट अनुरोध अनुमति दिनुपर्छ।"
+
+msgid "Paths scanned"
+msgstr "स्क्यान गरिएका पथहरू"
+
+msgid "Detected"
+msgstr "पत्ता लगाइयो"
+
+msgid "Status path"
+msgstr "स्थिति पथ"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "वेब सर्भर लोड मेट्रिक्स केवल Apache र Nginx का लागि उपलब्ध छन्।"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "स्क्यान गरिएका कुनै पनि स्थिति पथहरू localhost मा प्रतिक्रिया दिएनन्।"
+
+msgid "Busy workers"
+msgstr "व्यस्त कार्यकर्ताहरू"
+
+msgid "Idle workers"
+msgstr "निष्क्रिय कार्यकर्ताहरू"
+
+msgid "Graceful workers"
+msgstr "शान्त कार्यकर्ताहरू"
+
+msgid "Server MPM"
+msgstr "सर्भर MPM"
+
+msgid "Requests per second (live)"
+msgstr "अनुरोध प्रति सेकेन्ड (लाइभ)"
+
+msgid "Requests per second (since start)"
+msgstr "अनुरोध प्रति सेकेन्ड (सुरु भएदेखि)"
+
+msgid "Bytes per second (live)"
+msgstr "बाइट प्रति सेकेन्ड (लाइभ)"
+
+msgid "Bytes per second (since start)"
+msgstr "बाइट प्रति सेकेन्ड (सुरु भएदेखि)"
+
+msgid "Bytes per request"
+msgstr "अनुरोध प्रति बाइट"
+
+msgid "Total accesses"
+msgstr "कुल पहुँचहरू"
+
+msgid "Total traffic"
+msgstr "कुल ट्राफिक"
+
+msgid "CPU load"
+msgstr "CPU लोड"
+
+msgid "Load average (1 min)"
+msgstr "लोड औसत (१ मिनेट)"
+
+msgid "Load average (5 min)"
+msgstr "लोड औसत (५ मिनेट)"
+
+msgid "Load average (15 min)"
+msgstr "लोड औसत (१५ मिनेट)"
+
+msgid "Scoreboard sending"
+msgstr "स्कोरबोर्ड पठाउँदै"
+
+msgid "Scoreboard reading"
+msgstr "स्कोरबोर्ड पढ्दै"
+
+msgid "Scoreboard keepalive"
+msgstr "स्कोरबोर्ड किपअलाइभ"
+
+msgid "Scoreboard waiting"
+msgstr "स्कोरबोर्ड प्रतिक्षा गर्दै"
+
+msgid "Scoreboard open slots"
+msgstr "स्कोरबोर्ड खुला स्लटहरू"
+
+msgid "Active connections"
+msgstr "सक्रिय जडानहरू"
+
+msgid "Reading"
+msgstr "पढ्दै"
+
+msgid "Writing"
+msgstr "लेख्दै"
+
+msgid "Total requests"
+msgstr "कुल अनुरोधहरू"
+
+msgid "Accepts"
+msgstr "स्वीकारहरू"
+
+msgid "Handled"
+msgstr "ह्यान्डल गरिएका"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status सक्षम गर्नुहोस् (ExtendedStatus On) र localhost लाई /server-status मा अनुमति दिनुहोस्। Nginx: localhost-मात्र स्थान जस्तै /nginx_status वा /stub_status मा stub_status सक्षम गर्नुहोस्।"
+

@@ -47,6 +47,16 @@
             type="success"
           />
           <BaseButton
+            v-if="permissions.canInviteByEmail"
+            :label="t('Invite by email')"
+            :route="buildInvitationRoute()"
+            icon="email-outline"
+            only-icon
+            size="normal"
+            :tooltip="t('Invite by email')"
+            type="success"
+          />
+          <BaseButton
             v-if="permissions.canImport"
             :label="t('Import users list')"
             :route="buildImportRoute()"
@@ -420,6 +430,7 @@ const permissions = ref({
   canUnsubscribe: false,
   canImport: false,
   canSetTutor: false,
+  canInviteByEmail: false,
   showEmail: false,
   westernNameOrder: true,
   showSessionManagement: false,
@@ -474,6 +485,7 @@ async function loadUsers() {
       canUnsubscribe: Boolean(response.canUnsubscribe),
       canImport: Boolean(response.canImport),
       canSetTutor: Boolean(response.canSetTutor),
+      canInviteByEmail: Boolean(response.canInviteByEmail),
       showEmail: Boolean(response.showEmail),
       westernNameOrder: response.westernNameOrder !== false,
       showSessionManagement: Boolean(response.showSessionManagement),
@@ -499,6 +511,17 @@ function changeType(type) {
 
 function buildSubscribeRoute() {
   return { name: "CourseUserSubscribe", params: route.params, query: { ...contextQuery.value, type: userType.value } }
+}
+
+function buildInvitationRoute() {
+  return {
+    name: "CourseInvitationList",
+    query: {
+      ...contextQuery.value,
+      fromNode: route.params.node || undefined,
+      type: userType.value,
+    },
+  }
 }
 
 function buildImportRoute() {

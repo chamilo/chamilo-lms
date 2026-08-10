@@ -9,7 +9,7 @@ import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
 import { usePlatformConfig } from "../../store/platformConfig"
 import cToolIntroService from "../../services/cToolIntroService"
-import { filterTranslatedHtml } from "../../../js/translatehtml.js"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 
 const props = defineProps({
@@ -37,6 +37,7 @@ const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const intro = ref(null)
 const isLoading = ref(false)
@@ -78,11 +79,7 @@ const displayedIntroText = computed(() => {
     return null
   }
 
-  if ([true, "true", 1, "1"].includes(platformConfigStore.getSetting("editor.translate_html"))) {
-    return filterTranslatedHtml(text, window.user?.locale)
-  }
-
-  return text
+  return displayTranslatedHtml(text)
 })
 
 async function loadIntro() {

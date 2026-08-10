@@ -493,7 +493,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         return [
             'iid' => (int) $quiz->getIid(),
             'title' => $quiz->getTitle(),
-            'description' => (string) $quiz->getDescription(),
+            'description' => api_get_filtered_multilingual_HTML_string((string) $quiz->getDescription()),
             'categoryId' => null !== $category && null !== $category->getId() ? (int) $category->getId() : 0,
             'categoryTitle' => null !== $category ? $category->getTitle() : '',
             'visible' => $visible,

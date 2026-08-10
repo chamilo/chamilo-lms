@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -38931,4 +38931,238 @@ msgstr "Ուսուցիչներ չկան"
 
 msgid "No users"
 msgstr "Օգտատերեր չկան"
+
+msgid "Calculation mode"
+msgstr "Հաշվարկման ռեժիմ"
+
+msgid "Weighted average"
+msgstr "Կշռված միջին"
+
+msgid "Points sum"
+msgstr "Միավորների գումար"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Կշռված միջինը նորմալացվում է կշիռների գումարով; միավորների գումարը յուրաքանչյուր կշիռը դիտարկում է որպես առավելագույն միավոր և գումարում առանց նորմալացման։"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Յուրաքանչյուր տարրի կշիռը դիտարկվում է որպես իր առավելագույն միավոր; գնահատականը միավորների գումարն է, ոչ թե նորմալացված։"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Գնահատականը տարրերի կշռված միջինն է՝ նորմալացված կշիռների գումարով։"
+
+msgid "Forum participation"
+msgstr "Ֆորումի մասնակցություն"
+
+msgid "Forum thread"
+msgstr "Ֆորումի թեմա"
+
+msgid "Points for one message"
+msgstr "Միավոր մեկ հաղորդագրության համար"
+
+msgid "Points for two or more messages"
+msgstr "Միավոր երկու կամ ավելի հաղորդագրությունների համար"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Միավորներ, որոնք տրվում են, երբ ուսանողը թեմայում տեղադրել է ճիշտ մեկ հաղորդագրություն։"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Միավորներ, որոնք տրվում են, երբ ուսանողը թեմայում տեղադրել է երկու կամ ավելի հաղորդագրություն։"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Ընտրովի։ Եթե դատարկ թողնվի, մեկ կամ ավելի հաղորդագրությունները կստանան մեկ հաղորդագրության միավորները։"
+
+msgid "Current password is required to change your password."
+msgstr "Գաղտնաբառը փոխելու համար պահանջվում է ընթացիկ գաղտնաբառը։"
+
+msgid "The 2FA code is required."
+msgstr "Պահանջվում է 2FA կոդը։"
+
+msgid "Invalid 2FA configuration."
+msgstr "Անվավեր 2FA կոնֆիգուրացիա։"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA կոդը անվավեր է կամ ժամկետանց։"
+
+msgid "Database load"
+msgstr "Տվյալների բազայի բեռնվածություն"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL և MariaDB սերվերի բեռնվածության ցուցանիշներ"
+
+msgid "Click to show database server load metrics"
+msgstr "Սեղմեք տվյալների բազայի սերվերի բեռնվածության ցուցանիշները ցուցադրելու համար"
+
+msgid "Threads connected"
+msgstr "Միացված թրեդներ"
+
+msgid "Temporary tables on disk"
+msgstr "Ժամանակավոր աղյուսակներ սկավառակի վրա"
+
+msgid "Privilege scope"
+msgstr "Արտոնությունների շրջանակ"
+
+msgid "Not measurable with the current database user"
+msgstr "Չի կարող չափվել ընթացիկ տվյալների բազայի օգտատիրոջ միջոցով"
+
+msgid "Uptime"
+msgstr "Աշխատանքի տևողություն"
+
+msgid "Queries per second"
+msgstr "Հարցումներ վայրկյանում"
+
+msgid "Slow queries"
+msgstr "Դանդաղ հարցումներ"
+
+msgid "Slow query time limit"
+msgstr "Դանդաղ հարցման ժամանակի սահմանաչափ"
+
+msgid "Slow query log"
+msgstr "Դանդաղ հարցումների գրանցամատյան"
+
+msgid "Slow queries per second"
+msgstr "Դանդաղ հարցումներ վայրկյանում"
+
+msgid "Threads running"
+msgstr "Գործարկվող թելեր"
+
+msgid "Threads cached"
+msgstr "Քեշավորված թելեր"
+
+msgid "Table lock waits"
+msgstr "Աղյուսակի կողպման սպասումներ"
+
+msgid "Row lock waits"
+msgstr "Տողի կողպման սպասումներ"
+
+msgid "Aborted connections"
+msgstr "Ընդհատված կապեր"
+
+msgid "Opened tables"
+msgstr "Բացված աղյուսակներ"
+
+msgid "Query cache"
+msgstr "Հարցումների քեշ"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Տվյալների բազայի բեռնվածության ցուցանիշները հասանելի են միայն MySQL և MariaDB-ի համար։"
+
+msgid "Inserts"
+msgstr "Տեղադրումներ"
+
+msgid "Hit rate"
+msgstr "Հարվածի արագություն"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Ինքնաթարմացում յուրաքանչյուր 5 վայրկյանը մեկ"
+
+msgid "Web server load"
+msgstr "Վեբ սերվերի բեռնվածություն"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Apache կամ Nginx-ի կենդանի կարգավիճակի ցուցանիշներ"
+
+msgid "Click to show web server load metrics"
+msgstr "Սեղմեք՝ վեբ սերվերի բեռնվածության ցուցանիշները ցուցադրելու համար"
+
+msgid "Requires a local web server status module"
+msgstr "Պահանջում է տեղային վեբ սերվերի կարգավիճակի մոդուլ"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Վեբ սերվերի բեռնվածությունը կարդացվում է միայն localhost-ից Apache mod_status կամ Nginx stub_status-ից։ Կարգավիճակի էջը պետք է թույլատրի հարցումներ 127.0.0.1 (կամ ::1) հասցեից։"
+
+msgid "Paths scanned"
+msgstr "Սկանավորված ուղիներ"
+
+msgid "Detected"
+msgstr "Հայտնաբերված"
+
+msgid "Status path"
+msgstr "Կարգավիճակի ուղի"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Վեբ սերվերի բեռնվածության ցուցանիշները հասանելի են միայն Apache և Nginx-ի համար։"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Սկանավորված կարգավիճակի ուղիներից ոչ մեկը չի պատասխանել localhost-ում։"
+
+msgid "Busy workers"
+msgstr "Զբաղված աշխատողներ"
+
+msgid "Idle workers"
+msgstr "Անգործ աշխատողներ"
+
+msgid "Graceful workers"
+msgstr "Նրբագեղ աշխատողներ"
+
+msgid "Server MPM"
+msgstr "Սերվերի MPM"
+
+msgid "Requests per second (live)"
+msgstr "Հարցումներ վայրկյանում (կենդանի)"
+
+msgid "Requests per second (since start)"
+msgstr "Հարցումներ վայրկյանում (սկսելուց ի վեր)"
+
+msgid "Bytes per second (live)"
+msgstr "Բայթեր վայրկյանում (կենդանի)"
+
+msgid "Bytes per second (since start)"
+msgstr "Բայթեր վայրկյանում (սկսելուց ի վեր)"
+
+msgid "Bytes per request"
+msgstr "Բայթեր հարցումում"
+
+msgid "Total accesses"
+msgstr "Ընդհանուր մուտքեր"
+
+msgid "Total traffic"
+msgstr "Ընդհանուր տրաֆիկ"
+
+msgid "CPU load"
+msgstr "CPU բեռնվածություն"
+
+msgid "Load average (1 min)"
+msgstr "Բեռնվածության միջին արժեք (1 րոպե)"
+
+msgid "Load average (5 min)"
+msgstr "Բեռնվածության միջին արժեք (5 րոպե)"
+
+msgid "Load average (15 min)"
+msgstr "Բեռնվածության միջին արժեք (15 րոպե)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard ուղարկում"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard ընթերցում"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard սպասում"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard բաց սլոտներ"
+
+msgid "Active connections"
+msgstr "Ակտիվ կապեր"
+
+msgid "Reading"
+msgstr "Ընթերցում"
+
+msgid "Writing"
+msgstr "Գրություն"
+
+msgid "Total requests"
+msgstr "Ընդհանուր հարցումներ"
+
+msgid "Accepts"
+msgstr "Ընդունվածներ"
+
+msgid "Handled"
+msgstr "Մշակվածներ"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: միացրեք mod_status (ExtendedStatus On) և թույլատրեք localhost-ին /server-status: Nginx: միացրեք stub_status-ը միայն localhost-ի համար նախատեսված տեղում, օրինակ՝ /nginx_status կամ /stub_status:"
 

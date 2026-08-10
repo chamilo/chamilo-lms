@@ -38932,3 +38932,237 @@ msgstr "Ingen rettleiarar"
 msgid "No users"
 msgstr "Ingen brukarar"
 
+msgid "Calculation mode"
+msgstr "Utrekningsmodus"
+
+msgid "Weighted average"
+msgstr "Vekta gjennomsnitt"
+
+msgid "Points sum"
+msgstr "Poengsum"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Vekta gjennomsnitt normaliserer etter summen av vektene; poengsum behandlar kvar vekt som maksimalt poeng og summerer dei utan normalisering."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Kvart element si vekt blir behandla som maksimalt poeng; karakteren er summen av poeng, ikkje normalisert."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Karakteren er det vekta gjennomsnittet av elementa, normalisert etter summen av vektene."
+
+msgid "Forum participation"
+msgstr "Forumdeltaking"
+
+msgid "Forum thread"
+msgstr "Forumtråd"
+
+msgid "Points for one message"
+msgstr "Poeng for éin melding"
+
+msgid "Points for two or more messages"
+msgstr "Poeng for to eller fleire meldingar"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Poeng som blir gjeve når studenten la ut nøyaktig éin melding i tråden."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Poeng som blir gjeve når studenten la ut to eller fleire meldingar i tråden."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Valfritt. Dersom det blir late tomt, gjev éin eller fleire meldingar poeng for éin melding."
+
+msgid "Current password is required to change your password."
+msgstr "Gjeldande passord er påkravd for å endre passordet ditt."
+
+msgid "The 2FA code is required."
+msgstr "2FA-koden er påkravd."
+
+msgid "Invalid 2FA configuration."
+msgstr "Ugyldig 2FA-konfigurasjon."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA-koden er ugyldig eller utløpt."
+
+msgid "Database load"
+msgstr "Databasebelastning"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Live MySQL- og MariaDB-serverbelastningsmålingar"
+
+msgid "Click to show database server load metrics"
+msgstr "Klikk for å vise database-serverbelastningsmålingar"
+
+msgid "Threads connected"
+msgstr "Tilkopla trådar"
+
+msgid "Temporary tables on disk"
+msgstr "Mellombelse tabellar på disk"
+
+msgid "Privilege scope"
+msgstr "Rettaromfang"
+
+msgid "Not measurable with the current database user"
+msgstr "Ikkje målbart med gjeldande databasebrukar"
+
+msgid "Uptime"
+msgstr "Oppetid"
+
+msgid "Queries per second"
+msgstr "Førespurnader per sekund"
+
+msgid "Slow queries"
+msgstr "Trege førespurnader"
+
+msgid "Slow query time limit"
+msgstr "Grense for trege førespurnader"
+
+msgid "Slow query log"
+msgstr "Logg over trege førespurnader"
+
+msgid "Slow queries per second"
+msgstr "Trege førespurnader per sekund"
+
+msgid "Threads running"
+msgstr "Køyrande trådar"
+
+msgid "Threads cached"
+msgstr "Mellomlagra trådar"
+
+msgid "Table lock waits"
+msgstr "Tabellås-ventingar"
+
+msgid "Row lock waits"
+msgstr "Radlås-ventingar"
+
+msgid "Aborted connections"
+msgstr "Avbrotne tilkoplingar"
+
+msgid "Opened tables"
+msgstr "Opna tabellar"
+
+msgid "Query cache"
+msgstr "Førespurnadsmellomlager"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Databasebelastningsmålingar er berre tilgjengelege for MySQL og MariaDB."
+
+msgid "Inserts"
+msgstr "Innsingar"
+
+msgid "Hit rate"
+msgstr "Treffrate"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatisk oppdatering kvart 5. sekund"
+
+msgid "Web server load"
+msgstr "Vevtenarbelastning"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Live Apache- eller Nginx-statusmålingar"
+
+msgid "Click to show web server load metrics"
+msgstr "Klikk for å vise vevtenarbelastningsmålingar"
+
+msgid "Requires a local web server status module"
+msgstr "Krev ein lokal vevtenarstatusmodul"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Vevtenarbelastning blir lese frå Apache mod_status eller Nginx stub_status berre på localhost. Statussida må tillate førespurnader frå 127.0.0.1 (eller ::1)."
+
+msgid "Paths scanned"
+msgstr "Stiar skanna"
+
+msgid "Detected"
+msgstr "Oppdaga"
+
+msgid "Status path"
+msgstr "Statussti"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Vevtenarbelastningsmålingar er berre tilgjengelege for Apache og Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ingen av dei skanna statusstiane svara på localhost."
+
+msgid "Busy workers"
+msgstr "Opptekne arbeidarar"
+
+msgid "Idle workers"
+msgstr "Ledige arbeidarar"
+
+msgid "Graceful workers"
+msgstr "Avsluttande arbeidarar"
+
+msgid "Server MPM"
+msgstr "Tenar-MPM"
+
+msgid "Requests per second (live)"
+msgstr "Førespurnader per sekund (live)"
+
+msgid "Requests per second (since start)"
+msgstr "Førespurnader per sekund (sidan start)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte per sekund (live)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte per sekund (sidan start)"
+
+msgid "Bytes per request"
+msgstr "Byte per førespurnad"
+
+msgid "Total accesses"
+msgstr "Totalt tal på tilgjenge"
+
+msgid "Total traffic"
+msgstr "Total trafikk"
+
+msgid "CPU load"
+msgstr "CPU-belastning"
+
+msgid "Load average (1 min)"
+msgstr "Gjennomsnittleg belastning (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Gjennomsnittleg belastning (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Gjennomsnittleg belastning (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard sender"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard les"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard ventar"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard opne plassar"
+
+msgid "Active connections"
+msgstr "Aktive tilkoplingar"
+
+msgid "Reading"
+msgstr "Les"
+
+msgid "Writing"
+msgstr "Skriv"
+
+msgid "Total requests"
+msgstr "Totalt tal på førespurnader"
+
+msgid "Accepts"
+msgstr "Godtekne"
+
+msgid "Handled"
+msgstr "Handterte"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: aktiver mod_status (ExtendedStatus On) og tillat localhost til /server-status. Nginx: aktiver stub_status på ei berre-localhost-lokasjon som /nginx_status eller /stub_status."
+

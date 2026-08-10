@@ -11,8 +11,11 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+
+use const JSON_THROW_ON_ERROR;
 
 class CourseControllerTest extends WebTestCase
 {
@@ -102,6 +105,44 @@ class CourseControllerTest extends WebTestCase
             'GET',
             '/course/'.$course->getId().'/home.json'
         );
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testReorderToolsIsDeniedForStudent(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('course to reorder');
+
+        $student = $this->createUser('student');
+        $course->addUserAsStudent($student);
+
+        $em = $this->getEntityManager();
+        $em->persist($course);
+        $em->flush();
+
+        $client->loginUser($student);
+        $this->postToolOrder($client, $course, $this->getFirstToolId($course), 0);
+
+        // A student can read the course home, so the GET flow would let them
+        // through: reordering must be gated on its own, not on VIEW.
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testReorderToolsIsAllowedForTeacher(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('course to reorder by teacher');
+
+        $teacher = $this->createUser('teacher');
+        $course->addUserAsTeacher($teacher);
+
+        $em = $this->getEntityManager();
+        $em->persist($course);
+        $em->flush();
+
+        $client->loginUser($teacher);
+        $this->postToolOrder($client, $course, $this->getFirstToolId($course), 0);
+
         $this->assertResponseIsSuccessful();
     }
 
@@ -219,5 +260,26 @@ class CourseControllerTest extends WebTestCase
         $client->request('GET', '/course/'.$course->getId().'/about');
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('new course', $client->getResponse()->getContent());
+    }
+
+    private function getFirstToolId(Course $course): int
+    {
+        $tool = $course->getTools()->first();
+
+        $this->assertNotFalse($tool, 'The course was created without tools.');
+
+        return (int) $tool->getIid();
+    }
+
+    private function postToolOrder(KernelBrowser $client, Course $course, int $toolId, int $index): void
+    {
+        $client->request(
+            'POST',
+            '/course/'.$course->getId().'/home.json',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            json_encode(['toolId' => $toolId, 'index' => $index], JSON_THROW_ON_ERROR)
+        );
     }
 }

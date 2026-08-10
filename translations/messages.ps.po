@@ -38928,3 +38928,237 @@ msgstr "هیڅ ټیوټران نشته"
 msgid "No users"
 msgstr "هیڅ کارنان نشته"
 
+msgid "Calculation mode"
+msgstr "د محاسبې حالت"
+
+msgid "Weighted average"
+msgstr "وزني اوسط"
+
+msgid "Points sum"
+msgstr "د ټکو مجموعه"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "وزني اوسط د وزنونو د مجموعې له مخې نورمالايز کوي؛ د ټکو مجموعه هر وزن د اعظمي ټکو په توګه ګڼي او بې له نورمالايز کولو يې جمع کوي."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "د هر توکي وزن د هغه د اعظمي ټکو په توګه ګڼل کېږي؛ درجه د ټکو مجموعه ده، نه نورمالايز شوې."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "درجه د توکو وزني اوسط دی چې د وزنونو د مجموعې له مخې نورمالايز شوی دی."
+
+msgid "Forum participation"
+msgstr "د فورم غونډال"
+
+msgid "Forum thread"
+msgstr "د فورم تار"
+
+msgid "Points for one message"
+msgstr "د يو پيغام ټکي"
+
+msgid "Points for two or more messages"
+msgstr "د دوو يا زياتو پيغامونو ټکي"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "ټکي هغه وخت ورکول کېږي چې زده کوونکي په تار کې يوازې يو پيغام خپور کړی وي."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "ټکي هغه وخت ورکول کېږي چې زده کوونکي په تار کې دوه يا زيات پيغامونه خپور کړي وي."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "اختياري. که تش پرېښودل شي، يو يا زيات پيغامونه د يو پيغام ټکي ورکوي."
+
+msgid "Current password is required to change your password."
+msgstr "د خپل پټنوم بدلولو لپاره اوسني پټنوم اړين دی."
+
+msgid "The 2FA code is required."
+msgstr "د 2FA کوډ اړين دی."
+
+msgid "Invalid 2FA configuration."
+msgstr "ناسم 2FA ترتيب."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "د 2FA کوډ ناسم يا ختم شوی دی."
+
+msgid "Database load"
+msgstr "د ډېټابېس بار"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "ژوندي MySQL او MariaDB سرور بار ميټريکس"
+
+msgid "Click to show database server load metrics"
+msgstr "د ډېټابېس سرور بار ميټريکس ښودلو لپاره کليک وکړئ"
+
+msgid "Threads connected"
+msgstr "نښلېدلي تارونه"
+
+msgid "Temporary tables on disk"
+msgstr "لنډمهالي جدولونه په ډسک کې"
+
+msgid "Privilege scope"
+msgstr "د امتياز ساحه"
+
+msgid "Not measurable with the current database user"
+msgstr "د اوسني ډېټابېس کاروونکي سره نه اندازه کېدونکي"
+
+msgid "Uptime"
+msgstr "فعال وخت"
+
+msgid "Queries per second"
+msgstr "پوښتنې په ثانيه کې"
+
+msgid "Slow queries"
+msgstr "ورو پوښتنې"
+
+msgid "Slow query time limit"
+msgstr "د ورو پوښتنې وخت حد"
+
+msgid "Slow query log"
+msgstr "د ورو پوښتنې لاګ"
+
+msgid "Slow queries per second"
+msgstr "ورو پوښتنې په ثانيه کې"
+
+msgid "Threads running"
+msgstr "چلېدونکي تارونه"
+
+msgid "Threads cached"
+msgstr "زېرمه شوي تارونه"
+
+msgid "Table lock waits"
+msgstr "د جدول قفل انتظارونه"
+
+msgid "Row lock waits"
+msgstr "د قطار قفل انتظارونه"
+
+msgid "Aborted connections"
+msgstr "پرېښودل شوي نښلونې"
+
+msgid "Opened tables"
+msgstr "پرانيستل شوي جدولونه"
+
+msgid "Query cache"
+msgstr "د پوښتنې زېرمه"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "د ډیټابیس بار میټریکونه یوازې د MySQL او MariaDB لپاره شتون لري."
+
+msgid "Inserts"
+msgstr "داخلونه"
+
+msgid "Hit rate"
+msgstr "د برید کچه"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "هر ۵ ثانیو کې اتومات تازه کول"
+
+msgid "Web server load"
+msgstr "د ویب سرور بار"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "د Apache یا Nginx ژوندي حالت میټریکونه"
+
+msgid "Click to show web server load metrics"
+msgstr "د ویب سرور بار میټریکونو ښودلو لپاره کلیک وکړئ"
+
+msgid "Requires a local web server status module"
+msgstr "د ځایی ویب سرور حالت ماډل ته اړتیا لري"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "د ویب سرور بار یوازې د Apache mod_status یا Nginx stub_status څخه په localhost کې لوستل کیږي. د حالت پاڼه باید د 127.0.0.1 (یا ::1) څخه غوښتنې اجازه ورکړي."
+
+msgid "Paths scanned"
+msgstr "سکین شوي لارې"
+
+msgid "Detected"
+msgstr "کشف شوي"
+
+msgid "Status path"
+msgstr "د حالت لاره"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "د ویب سرور بار میټریکونه یوازې د Apache او Nginx لپاره شتون لري."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "د سکین شوي حالت لارو څخه هیڅ یوه په localhost کې ځواب نه دی ورکړی."
+
+msgid "Busy workers"
+msgstr "مصروف کارګران"
+
+msgid "Idle workers"
+msgstr "بې کاره کارګران"
+
+msgid "Graceful workers"
+msgstr "د ښه والي کارګران"
+
+msgid "Server MPM"
+msgstr "سرور MPM"
+
+msgid "Requests per second (live)"
+msgstr "غوښتنې په ثانیه کې (ژوندي)"
+
+msgid "Requests per second (since start)"
+msgstr "غوښتنې په ثانیه کې (له پیل څخه)"
+
+msgid "Bytes per second (live)"
+msgstr "بایټونه په ثانیه کې (ژوندي)"
+
+msgid "Bytes per second (since start)"
+msgstr "بایټونه په ثانیه کې (له پیل څخه)"
+
+msgid "Bytes per request"
+msgstr "بایټونه په هره غوښتنه کې"
+
+msgid "Total accesses"
+msgstr "ټول لاسرسي"
+
+msgid "Total traffic"
+msgstr "ټول ترافیک"
+
+msgid "CPU load"
+msgstr "د CPU بار"
+
+msgid "Load average (1 min)"
+msgstr "د بار اوسط (۱ دقیقه)"
+
+msgid "Load average (5 min)"
+msgstr "د بار اوسط (۵ دقیقې)"
+
+msgid "Load average (15 min)"
+msgstr "د بار اوسط (۱۵ دقیقې)"
+
+msgid "Scoreboard sending"
+msgstr "سکوربورډ لیږل"
+
+msgid "Scoreboard reading"
+msgstr "سکوربورډ لوستل"
+
+msgid "Scoreboard keepalive"
+msgstr "سکوربورډ ساتل"
+
+msgid "Scoreboard waiting"
+msgstr "سکوربورډ انتظار"
+
+msgid "Scoreboard open slots"
+msgstr "سکوربورډ خلاصې ځایونه"
+
+msgid "Active connections"
+msgstr "فعال اړیکې"
+
+msgid "Reading"
+msgstr "لوستل"
+
+msgid "Writing"
+msgstr "لیکل"
+
+msgid "Total requests"
+msgstr "ټولې غوښتنې"
+
+msgid "Accepts"
+msgstr "منل"
+
+msgid "Handled"
+msgstr "سمبال شوي"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: stub_status په localhost-only ځای کې فعال کړئ لکه /nginx_status یا /stub_status."
+

@@ -3610,6 +3610,29 @@ This folder contains all sessions that have been opened in the chat. Although th
         // Ensure contextual hierarchy (course/session/group) uses ResourceLink.parent.
         self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
 
+        // Optional ResourceLink visibility (draft/pending/published). When null, keep
+        // addCourseLink()'s default (published). Critical for course backup restore so
+        // hidden documents do not become learner-visible.
+        if (null !== $visibility && '' !== $visibility) {
+            $visibility = (int) $visibility;
+            if (\in_array(
+                $visibility,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            )) {
+                $link = self::findResourceLinkForContext($em, $document->getResourceNode(), $courseEntity, $session, $group);
+                if (null !== $link && (int) $link->getVisibility() !== $visibility) {
+                    $link->setVisibility($visibility);
+                    $em->persist($link);
+                    $em->flush();
+                }
+            }
+        }
+
         $repo = Container::getDocumentRepository();
         $isHtmlDocument = in_array(strtolower((string) $fileType), ['html', 'htm'], true);
 

@@ -160,6 +160,31 @@ final readonly class CourseUserManager
         return $this->canSubscribe($course, $session);
     }
 
+    /**
+     * Whether the current user may open the "Invite by email" course-invitation UI.
+     * Same rules as CourseInvitationAccessHelperTrait::canManageCourseInvitations:
+     * course teachers outside sessions; only platform/session admins or general coaches
+     * inside a session (because an invitation there joins the whole session).
+     */
+    public function canInviteByEmail(Course $course, ?Session $session): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if (!$session instanceof Session) {
+            return $course->hasUserAsTeacher($user)
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        }
+
+        return $user->isSessionAdmin() || $session->hasUserAsGeneralCoach($user);
+    }
+
     public function canUnsubscribe(Course $course, ?Session $session): bool
     {
         return $this->canSubscribe($course, $session);
@@ -293,6 +318,7 @@ final readonly class CourseUserManager
             ),
             'showClasses' => $this->canManageClasses($course, $session),
             'showSubscriptionTabs' => $this->canShowSubscriptionTabs($course, $session),
+            'canInviteByEmail' => $this->canInviteByEmail($course, $session),
             'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
                 'gid' => $request->query->getInt('gid'),
             ]),
@@ -379,6 +405,7 @@ final readonly class CourseUserManager
             'canManage' => true,
             'showSubscriptionTabs' => $this->canShowSubscriptionTabs($course, $session),
             'showClasses' => $this->canManageClasses($course, $session),
+            'canInviteByEmail' => $this->canInviteByEmail($course, $session),
             'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
                 'gid' => $request->query->getInt('gid'),
             ]),

@@ -33,15 +33,27 @@
       </template>
 
       <template #end>
-        <BaseButton
-          :label="t('Back')"
-          :route="buildListRoute()"
-          icon="back"
-          only-icon
-          size="normal"
-          :tooltip="t('Back')"
-          type="plain"
-        />
+        <div class="flex flex-wrap items-center gap-2">
+          <BaseButton
+            v-if="canInviteByEmail"
+            :label="t('Invite by email')"
+            :route="buildInvitationRoute()"
+            icon="email-outline"
+            only-icon
+            size="normal"
+            :tooltip="t('Invite by email')"
+            type="success"
+          />
+          <BaseButton
+            :label="t('Back')"
+            :route="buildListRoute()"
+            icon="back"
+            only-icon
+            size="normal"
+            :tooltip="t('Back')"
+            type="plain"
+          />
+        </div>
       </template>
     </BaseToolbar>
 
@@ -272,6 +284,7 @@ const itemsPerPage = ref(20)
 const sortField = ref("lastname")
 const sortOrder = ref("asc")
 const canSubscribe = ref(false)
+const canInviteByEmail = ref(false)
 const showSubscriptionTabs = ref(false)
 const showClasses = ref(false)
 const groupsUrl = ref("")
@@ -317,6 +330,7 @@ async function loadUsers() {
     totalItems.value = Number(response.totalItems || 0)
     profilingFields.value = response.extraFields || []
     canSubscribe.value = Boolean(response.canSubscribe)
+    canInviteByEmail.value = Boolean(response.canInviteByEmail)
     showSubscriptionTabs.value = Boolean(response.showSubscriptionTabs)
     showClasses.value = Boolean(response.showClasses)
     groupsUrl.value = response.groupsUrl || ""
@@ -340,6 +354,17 @@ function changeType(type) {
 
 function buildListRoute() {
   return { name: "CourseUserList", params: route.params, query: { ...contextQuery.value, type: userType.value } }
+}
+
+function buildInvitationRoute() {
+  return {
+    name: "CourseInvitationList",
+    query: {
+      ...contextQuery.value,
+      fromNode: route.params.node || undefined,
+      type: userType.value,
+    },
+  }
 }
 
 function buildGroupsRoute() {

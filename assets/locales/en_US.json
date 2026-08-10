@@ -3239,6 +3239,8 @@
     "Authorized applications": "Authorized applications",
     "Your session is about to expire": "Your session is about to expire",
     "Do you want to continue your session?": "Do you want to continue your session?",
+    "Your session details have been lost, please login again.": "Your session details have been lost, please login again.",
+    "Access to this resource has been denied. You don't seem to have the necessary permissions to access it.": "Access to this resource has been denied. You don't seem to have the necessary permissions to access it.",
     "Stay connected": "Stay connected",
     "You will be signed out in {0} seconds.": "You will be signed out in {0} seconds.",
     "{0} users selected": "{0} users selected",

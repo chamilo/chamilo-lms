@@ -937,6 +937,20 @@ Then("I select {string} from {string}", async ({ page }, optionLabel: string, fi
   await (await resolveField(page, field)).selectOption({ label: optionLabel })
 })
 
+// Not ported — new, for translateHtmlFallback.feature's YesNoType toggle
+// (form_translate_html). Unlike a language field's option labels (e.g.
+// course_language's "Deutsch"/"Español" — a language's own native name,
+// invariant regardless of UI locale), YesNoType's "Yes"/"No" choice labels
+// (src/CoreBundle/Form/Type/YesNoType.php) are real translatable UI chrome:
+// confirmed live on this shared box, currently rendering as "Sí"/"No" (its
+// current admin/session locale is Spanish), which made the label-based step
+// above hang forever looking for a literal "Yes" option that doesn't exist
+// under that locale. The underlying <option value="true"|"false"> values are
+// never translated, so selecting by value sidesteps the whole problem.
+Then("I select the value {string} from {string}", async ({ page }, optionValue: string, field: string) => {
+  await (await resolveField(page, field)).selectOption({ value: optionValue })
+})
+
 // Mink's "I additionally select X from Y" adds one more option to a
 // <select multiple> without clearing whatever's already selected.
 // Playwright's selectOption() always sets the *entire* selection to
@@ -1070,6 +1084,26 @@ registerSettingsGuard("@settings-toolLp", [
 // same leaked-setting pattern already fixed for toolLp/sessionManagement.
 registerSettingsGuard("@settings-toolGlossary", [
   { path: "/admin/settings/glossary", field: "form_show_glossary_in_extra_tools" },
+])
+
+// translateHtmlFallback.feature turns editor.translate_html on for all of
+// its scenarios, and its "platform default" scenario additionally repoints
+// language.platform_language at a language neither the viewer nor the test
+// course uses, so that fallback tier is exercised deterministically instead
+// of depending on whatever this instance's actual default happens to be.
+//
+// Uses the category pages (like @settings-toolLp/@settings-toolGlossary
+// below), not search_settings?keyword=... (like @settings/@settings-createUser/
+// @settings-sessionManagement above): confirmed live that keyword=... no
+// longer pre-fills the "Palabra clave" search box on this Vue-rendered
+// settings page — the URL param is silently ignored on load, leaving
+// whatever field happened to be shown last (a real screenshot showed the
+// Language category's own field still selected after navigating to
+// keyword=translate_html) instead of a translate_html field ever
+// appearing. The direct category page has no such dependency.
+registerSettingsGuard("@settings-translateHtml", [
+  { path: "/admin/settings/editor", field: "form_translate_html" },
+  { path: "/admin/settings/language", field: "form_platform_language" },
 ])
 
 // Same snapshot-before/restore-after intent as registerSettingsGuard() above,
@@ -1376,6 +1410,22 @@ async function pressButton(page: Page, label: string) {
   const byTitle = page.getByTitle(label, { exact: true })
   if (await isSoonVisible(byTitle)) {
     await byTitle.first().click()
+    return
+  }
+  // Last-resort, locale-independent fallback for legacy Admin/Settings
+  // pages' "Save settings" button (src/CoreBundle/Resources/views/Admin/
+  // Settings/actions.html.twig): a plain <button type="submit"> with no
+  // id/name, whose translated {{ 'Save settings'|trans }} label every tier
+  // above (and the final blind text fallback below) depends on — needed by
+  // registerSettingsGuard()'s own restore step, confirmed live to hang
+  // forever here whenever the admin session's interface language isn't
+  // English (every text-based tier necessarily also fails in that case, so
+  // this can only recover an otherwise-hung click, never mask a genuinely
+  // wrong/missing button). The icon markup itself (mdi-content-save) is not
+  // translated.
+  const bySaveIcon = page.locator("button:has(.mdi-content-save)")
+  if ("Save settings" === label && (await isSoonVisible(bySaveIcon))) {
+    await bySaveIcon.first().click()
     return
   }
   await page

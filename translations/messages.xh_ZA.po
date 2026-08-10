@@ -38928,3 +38928,237 @@ msgstr "Akukho bahlohli"
 msgid "No users"
 msgstr "Akukho basebenzisi"
 
+msgid "Calculation mode"
+msgstr "Indlela yokubala"
+
+msgid "Weighted average"
+msgstr "Umyinge olinganisiweyo"
+
+msgid "Points sum"
+msgstr "Isixa samanqaku"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Umyinge olinganisiweyo ulinganisa ngokudibanisa ubunzima; isixa samanqaku lithatha ubunzima ngamnye njengamanqaku aphezulu aze adibanise ngaphandle kokulinganisa."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Ubunzima bento nganye buthathwa njengamanqaku aphezulu; ibakala lisixa samanqaku, alilinganiswa."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Ibakala ngumyinge olinganisiweyo wezinto, ulinganiswe ngokudibanisa ubunzima."
+
+msgid "Forum participation"
+msgstr "Ukuthatha inxaxheba kwiforum"
+
+msgid "Forum thread"
+msgstr "Intambo yeforum"
+
+msgid "Points for one message"
+msgstr "Amanqaku omyalezo omnye"
+
+msgid "Points for two or more messages"
+msgstr "Amanqaku emiyalezo emibini okanye ngaphezulu"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Amanqaku anikwa xa umfundi ethumele umyalezo omnye kanye kwintambo."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Amanqaku anikwa xa umfundi ethumele imiyalezo emibini okanye ngaphezulu kwintambo."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Ukuzithandela. Ukuba kushiywe kungenanto, umyalezo omnye okanye ngaphezulu unikezela ngamanqaku omyalezo omnye."
+
+msgid "Current password is required to change your password."
+msgstr "Igama lokugqitha langoku liyafuneka ukuze utshintshe igama lokugqitha lakho."
+
+msgid "The 2FA code is required."
+msgstr "Ikhowudi ye-2FA iyafuneka."
+
+msgid "Invalid 2FA configuration."
+msgstr "Uqwalaselo lwe-2FA alusebenzi."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Ikhowudi ye-2FA ayisebenzi okanye iphelelwe lixesha."
+
+msgid "Database load"
+msgstr "Umxholo wedatha"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Iinkcukacha zomthwalo weseva ye-MySQL ne-MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "Cofa ukubonisa iinkcukacha zomthwalo weseva yedatha"
+
+msgid "Threads connected"
+msgstr "Imisonto edityanisiweyo"
+
+msgid "Temporary tables on disk"
+msgstr "Iitafile zethutyana kwidiski"
+
+msgid "Privilege scope"
+msgstr "Umda wamalungelo"
+
+msgid "Not measurable with the current database user"
+msgstr "Ayinakulinganiswa ngomsebenzisi wedatha wangoku"
+
+msgid "Uptime"
+msgstr "Ixesha lokusebenza"
+
+msgid "Queries per second"
+msgstr "Imibuzo ngesekhondi"
+
+msgid "Slow queries"
+msgstr "Imibuzo ecothayo"
+
+msgid "Slow query time limit"
+msgstr "Umda wexesha lemibuzo ecothayo"
+
+msgid "Slow query log"
+msgstr "Ingxelo yemibuzo ecothayo"
+
+msgid "Slow queries per second"
+msgstr "Imibuzo ecothayo ngesekhondi"
+
+msgid "Threads running"
+msgstr "Imisonto esebenzayo"
+
+msgid "Threads cached"
+msgstr "Imisonto egciniweyo"
+
+msgid "Table lock waits"
+msgstr "Ukulinda kokutshixwa kwetafile"
+
+msgid "Row lock waits"
+msgstr "Ukulinda kokutshixwa komqolo"
+
+msgid "Aborted connections"
+msgstr "Uqhagamshelwano oluyekisiweyo"
+
+msgid "Opened tables"
+msgstr "Iitafile ezivuliweyo"
+
+msgid "Query cache"
+msgstr "Indawo yokugcina imibuzo"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Iinkcukacha zomthwalo wedatha zifumaneka kuphela kwi-MySQL ne-MariaDB."
+
+msgid "Inserts"
+msgstr "Izingeniso"
+
+msgid "Hit rate"
+msgstr "Izinga lokufumana"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Hlaziya ngokuzenzekelayo qho ngemizuzwana emi-5"
+
+msgid "Web server load"
+msgstr "Umxholo weseva yewebhu"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Iinkcukacha zomthwalo we-Apache okanye we-Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Cofa ukubonisa iinkcukacha zomthwalo weseva yewebhu"
+
+msgid "Requires a local web server status module"
+msgstr "Ifuna imodyuli yemo yeseva yewebhu yendawo"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Umxholo weseva yewebhu ufumanwa kwi-Apache mod_status okanye kwi-Nginx stub_status kwindawo yasekhaya kuphela. Iphepha lemo kufuneka livumele izicelo ezivela ku-127.0.0.1 (okanye ::1)."
+
+msgid "Paths scanned"
+msgstr "Iindlela eziskeniweyo"
+
+msgid "Detected"
+msgstr "Kufunyenwe"
+
+msgid "Status path"
+msgstr "Indlela yemo"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Iinkcukacha zomthwalo weseva yewebhu zifumaneka kuphela kwi-Apache ne-Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Akukho ndlela yokuhlola imeko ephendule kwi-localhost."
+
+msgid "Busy workers"
+msgstr "Abasebenzi abaxakekileyo"
+
+msgid "Idle workers"
+msgstr "Abasebenzi abangasebenziyo"
+
+msgid "Graceful workers"
+msgstr "Abasebenzi abanobubele"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Izicelo ngesekhondi (ngoku)"
+
+msgid "Requests per second (since start)"
+msgstr "Izicelo ngesekhondi (ukususela ekuqaleni)"
+
+msgid "Bytes per second (live)"
+msgstr "I-bytes ngesekhondi (ngoku)"
+
+msgid "Bytes per second (since start)"
+msgstr "I-bytes ngesekhondi (ukususela ekuqaleni)"
+
+msgid "Bytes per request"
+msgstr "I-bytes ngesicelo"
+
+msgid "Total accesses"
+msgstr "Ukuvunyelwa ngokupheleleyo"
+
+msgid "Total traffic"
+msgstr "Ukuhamba ngokupheleleyo"
+
+msgid "CPU load"
+msgstr "Umthwalo we-CPU"
+
+msgid "Load average (1 min)"
+msgstr "Umyalelo womthwalo (imizuzu 1)"
+
+msgid "Load average (5 min)"
+msgstr "Umyalelo womthwalo (imizuzu 5)"
+
+msgid "Load average (15 min)"
+msgstr "Umyalelo womthwalo (imizuzu 15)"
+
+msgid "Scoreboard sending"
+msgstr "I-scoreboard iyathumela"
+
+msgid "Scoreboard reading"
+msgstr "I-scoreboard iyafunda"
+
+msgid "Scoreboard keepalive"
+msgstr "I-scoreboard igcina ubudlelwane"
+
+msgid "Scoreboard waiting"
+msgstr "I-scoreboard ilindile"
+
+msgid "Scoreboard open slots"
+msgstr "I-scoreboard iindawo ezivulekileyo"
+
+msgid "Active connections"
+msgstr "Uqhagamshelwano olusebenzayo"
+
+msgid "Reading"
+msgstr "Iyafunda"
+
+msgid "Writing"
+msgstr "Ibhala"
+
+msgid "Total requests"
+msgstr "Izicelo ngokupheleleyo"
+
+msgid "Accepts"
+msgstr "Ukuvunyelwa"
+
+msgid "Handled"
+msgstr "Kuphathwe"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status."
+

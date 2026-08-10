@@ -1,6 +1,7 @@
 <?php
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
@@ -38,6 +39,9 @@ $changQuizzColor = '';
 $localFolder = '';
 $cstudioAiCsrfToken = '';
 $cstudioLegacyCsrfToken = '';
+$chamiloThemeColorCss = '';
+$cstudioMdiCssFiles = [];
+$cstudioChamiloCssVersion = (string) (@filemtime(__DIR__.'/jscss/cstudio-chamilo.css') ?: '1');
 
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
@@ -136,6 +140,56 @@ if (isset($_GET['id'])) {
         ->getToken('cstudio_ai_'.$idPage)
         ->getValue()
     ;
+
+    // Read only the active Chamilo theme color variables. The theme file is
+    // generated as :root custom properties; do not load the full app stylesheet
+    // because CStudio/GrapesJS owns this standalone editor layout.
+    try {
+        /** @var ThemeHelper $themeHelper */
+        $themeHelper = Container::$container->get(ThemeHelper::class);
+        $themeCss = $themeHelper->getAssetContents('colors.css');
+        $themeVariables = [];
+
+        if (preg_match_all('/(--color-[a-z0-9-]+)\s*:\s*(-?\d+(?:\.\d+)?(?:\s+-?\d+(?:\.\d+)?){2})\s*;/i', $themeCss, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $themeVariables[$match[1]] = trim($match[2]);
+            }
+        }
+
+        if (!empty($themeVariables)) {
+            $declarations = [];
+            foreach ($themeVariables as $name => $value) {
+                $declarations[] = '  '.$name.': '.$value.';';
+            }
+            $chamiloThemeColorCss = ":root {\n".implode("\n", $declarations)."\n}";
+        }
+    } catch (\Throwable) {
+        $chamiloThemeColorCss = '';
+    }
+
+    // CStudio is a standalone legacy editor, so it does not mount the Vue app.
+    // Reuse only the CSS files emitted for Chamilo's Vue entry in order to make
+    // the same Material Design Icons font available without loading Vue JS.
+    $publicDir = dirname(__DIR__, 3);
+    $entrypointsFile = $publicDir.'/build/entrypoints.json';
+    if (is_readable($entrypointsFile)) {
+        $entrypoints = json_decode((string) file_get_contents($entrypointsFile), true);
+        $vueCssFiles = $entrypoints['entrypoints']['vue']['css'] ?? [];
+
+        if (is_array($vueCssFiles)) {
+            foreach ($vueCssFiles as $cssFile) {
+                if (!is_string($cssFile) || !preg_match('#^/build/[A-Za-z0-9._/-]+\.css(?:\?.*)?$#', $cssFile)) {
+                    continue;
+                }
+
+                $cssPath = $publicDir.strtok($cssFile, '?');
+                if (is_readable($cssPath)) {
+                    $cstudioMdiCssFiles[] = $cssFile;
+                }
+            }
+            $cstudioMdiCssFiles = array_values(array_unique($cstudioMdiCssFiles));
+        }
+    }
 
     if ('' != $idPage && 0 != $idPage) {
         $pluginFileSystem = Container::getPluginsFileSystem();
@@ -341,6 +395,18 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="jscss/cstudio-ai.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
+<?php foreach ($cstudioMdiCssFiles as $cstudioMdiCssFile) { ?>
+    <link href="<?php echo htmlspecialchars($cstudioMdiCssFile, ENT_QUOTES, 'UTF-8'); ?>" rel="stylesheet" />
+<?php } ?>
+<?php if (!empty($cstudioMdiCssFiles)) { ?>
+    <script>document.documentElement.classList.add('cstudio-mdi-ready');</script>
+<?php } ?>
+<?php if ('' !== $chamiloThemeColorCss) { ?>
+    <style id="cstudio-chamilo-theme-colors">
+<?php echo $chamiloThemeColorCss; ?>
+    </style>
+<?php } ?>
+    <link href="jscss/cstudio-chamilo.css?v=<?php echo rawurlencode($cstudioChamiloCssVersion); ?>" rel="stylesheet" />
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
     <script src="dist/js/grapes.js?v=<?php echo $version; ?>"></script>

@@ -243,7 +243,6 @@ final readonly class CourseTestReaderService
             'position' => $answer->getPosition(),
             'correct' => $correct,
             'is_correct' => null !== $correct && $correct > 0,
-            'feedback' => (string) $answer->getComment(),
             'score' => $answer->getPonderation(),
             'mode' => $mode,
             // Answer body is the translatehtml field (historically exposed as "text").
@@ -252,6 +251,15 @@ final readonly class CourseTestReaderService
                 $mode,
                 $sourceLanguage,
                 'text',
+            ),
+            // Feedback is a second, independent translatehtml field on the same
+            // answer; prefixed so its metadata never overwrites the "text" one above.
+            ...$this->translateHtmlLanguageService->projectHtmlField(
+                (string) $answer->getComment(),
+                $mode,
+                $sourceLanguage,
+                'feedback',
+                'feedback_',
             ),
         ];
     }

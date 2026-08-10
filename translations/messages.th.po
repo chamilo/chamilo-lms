@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:สตรีมออคเต็ต,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:แบบฝึกหัด,, simulation:การจำลอง,, questionnaire:แบบสอบถาม,, diagram:ไดอะแกรม,, figure:รูปภาพ,, graph:กราฟ,, index:ดัชนี,, slide:สไลด์,, table:ตาราง,, narrative text:ข้อความบรรยาย,, exam:ข้อสอบ,, experiment:การทดลอง,, problem statement:ประโยคปัญหา,, self assessment:การประเมินตนเอง,, lecture:การบรรยาย"
@@ -38933,4 +38933,238 @@ msgstr "ไม่มีผู้สอน"
 
 msgid "No users"
 msgstr "ไม่มีผู้ใช้"
+
+msgid "Calculation mode"
+msgstr "โหมดการคำนวณ"
+
+msgid "Weighted average"
+msgstr "ค่าเฉลี่ยถ่วงน้ำหนัก"
+
+msgid "Points sum"
+msgstr "ผลรวมคะแนน"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "ค่าเฉลี่ยถ่วงน้ำหนักจะปรับตามผลรวมของน้ำหนัก; ผลรวมคะแนนถือว่าน้ำหนักแต่ละตัวเป็นคะแนนสูงสุดและนำมารวมกันโดยไม่ปรับค่า"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "น้ำหนักของแต่ละรายการถือเป็นคะแนนสูงสุด; เกรดคือผลรวมของคะแนน ไม่ได้ปรับค่า"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "เกรดคือค่าเฉลี่ยถ่วงน้ำหนักของรายการ ปรับตามผลรวมของน้ำหนัก"
+
+msgid "Forum participation"
+msgstr "การมีส่วนร่วมในฟอรัม"
+
+msgid "Forum thread"
+msgstr "กระทู้ฟอรัม"
+
+msgid "Points for one message"
+msgstr "คะแนนต่อข้อความหนึ่งข้อความ"
+
+msgid "Points for two or more messages"
+msgstr "คะแนนต่อข้อความตั้งแต่สองข้อความขึ้นไป"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "คะแนนที่มอบให้เมื่อนักเรียนโพสต์ข้อความเพียงข้อความเดียวในกระทู้"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "คะแนนที่มอบให้เมื่อนักเรียนโพสต์ข้อความตั้งแต่สองข้อความขึ้นไปในกระทู้"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "ไม่บังคับ หากเว้นว่างไว้ ข้อความหนึ่งข้อความหรือมากกว่าจะได้รับคะแนนสำหรับข้อความหนึ่งข้อความ"
+
+msgid "Current password is required to change your password."
+msgstr "ต้องใช้รหัสผ่านปัจจุบันเพื่อเปลี่ยนรหัสผ่านของคุณ"
+
+msgid "The 2FA code is required."
+msgstr "ต้องใช้รหัส 2FA"
+
+msgid "Invalid 2FA configuration."
+msgstr "การกำหนดค่า 2FA ไม่ถูกต้อง"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "รหัส 2FA ไม่ถูกต้องหรือหมดอายุ"
+
+msgid "Database load"
+msgstr "โหลดฐานข้อมูล"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "เมตริกโหลดเซิร์ฟเวอร์ MySQL และ MariaDB แบบเรียลไทม์"
+
+msgid "Click to show database server load metrics"
+msgstr "คลิกเพื่อแสดงเมตริกโหลดเซิร์ฟเวอร์ฐานข้อมูล"
+
+msgid "Threads connected"
+msgstr "เธรดที่เชื่อมต่อ"
+
+msgid "Temporary tables on disk"
+msgstr "ตารางชั่วคราวบนดิสก์"
+
+msgid "Privilege scope"
+msgstr "ขอบเขตสิทธิ์"
+
+msgid "Not measurable with the current database user"
+msgstr "ไม่สามารถวัดได้ด้วยผู้ใช้ฐานข้อมูลปัจจุบัน"
+
+msgid "Uptime"
+msgstr "เวลาทำงาน"
+
+msgid "Queries per second"
+msgstr "คำค้นหาต่อวินาที"
+
+msgid "Slow queries"
+msgstr "คำค้นหาช้า"
+
+msgid "Slow query time limit"
+msgstr "ขีดจำกัดเวลาคำค้นหาช้า"
+
+msgid "Slow query log"
+msgstr "บันทึกคำค้นหาช้า"
+
+msgid "Slow queries per second"
+msgstr "คำค้นหาช้าต่อวินาที"
+
+msgid "Threads running"
+msgstr "เธรดที่กำลังทำงาน"
+
+msgid "Threads cached"
+msgstr "เธรดที่แคชไว้"
+
+msgid "Table lock waits"
+msgstr "การรอการล็อกตาราง"
+
+msgid "Row lock waits"
+msgstr "การรอการล็อกแถว"
+
+msgid "Aborted connections"
+msgstr "การเชื่อมต่อที่ถูกยกเลิก"
+
+msgid "Opened tables"
+msgstr "ตารางที่เปิดแล้ว"
+
+msgid "Query cache"
+msgstr "แคชคำค้นหา"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "เมตริกโหลดฐานข้อมูลใช้ได้เฉพาะ MySQL และ MariaDB เท่านั้น"
+
+msgid "Inserts"
+msgstr "การแทรกข้อมูล"
+
+msgid "Hit rate"
+msgstr "อัตราสำเร็จ"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "รีเฟรชอัตโนมัติทุก 5 วินาที"
+
+msgid "Web server load"
+msgstr "โหลดเว็บเซิร์ฟเวอร์"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "เมตริกสถานะ Apache หรือ Nginx แบบเรียลไทม์"
+
+msgid "Click to show web server load metrics"
+msgstr "คลิกเพื่อแสดงเมตริกโหลดเว็บเซิร์ฟเวอร์"
+
+msgid "Requires a local web server status module"
+msgstr "ต้องใช้โมดูลสถานะเว็บเซิร์ฟเวอร์ภายในเครื่อง"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "โหลดเว็บเซิร์ฟเวอร์อ่านจาก Apache mod_status หรือ Nginx stub_status บน localhost เท่านั้น หน้าสถานะต้องอนุญาตคำขอจาก 127.0.0.1 (หรือ ::1)"
+
+msgid "Paths scanned"
+msgstr "เส้นทางที่สแกน"
+
+msgid "Detected"
+msgstr "ตรวจพบ"
+
+msgid "Status path"
+msgstr "เส้นทางสถานะ"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "เมตริกโหลดเว็บเซิร์ฟเวอร์ใช้ได้เฉพาะ Apache และ Nginx เท่านั้น"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "ไม่มีเส้นทางสถานะที่สแกนตอบสนองบน localhost"
+
+msgid "Busy workers"
+msgstr "เวิร์กเกอร์ที่ยุ่ง"
+
+msgid "Idle workers"
+msgstr "เวิร์กเกอร์ที่ว่าง"
+
+msgid "Graceful workers"
+msgstr "เวิร์กเกอร์ที่ทำงานอย่างนุ่มนวล"
+
+msgid "Server MPM"
+msgstr "เซิร์ฟเวอร์ MPM"
+
+msgid "Requests per second (live)"
+msgstr "คำขอต่อวินาที (เรียลไทม์)"
+
+msgid "Requests per second (since start)"
+msgstr "คำขอต่อวินาที (ตั้งแต่เริ่ม)"
+
+msgid "Bytes per second (live)"
+msgstr "ไบต์ต่อวินาที (เรียลไทม์)"
+
+msgid "Bytes per second (since start)"
+msgstr "ไบต์ต่อวินาที (ตั้งแต่เริ่ม)"
+
+msgid "Bytes per request"
+msgstr "ไบต์ต่อคำขอ"
+
+msgid "Total accesses"
+msgstr "การเข้าถึงทั้งหมด"
+
+msgid "Total traffic"
+msgstr "การรับส่งข้อมูลทั้งหมด"
+
+msgid "CPU load"
+msgstr "โหลด CPU"
+
+msgid "Load average (1 min)"
+msgstr "ค่าเฉลี่ยโหลด (1 นาที)"
+
+msgid "Load average (5 min)"
+msgstr "ค่าเฉลี่ยโหลด (5 นาที)"
+
+msgid "Load average (15 min)"
+msgstr "ค่าเฉลี่ยโหลด (15 นาที)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard กำลังส่ง"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard กำลังอ่าน"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard กำลังรอ"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard ช่องว่าง"
+
+msgid "Active connections"
+msgstr "การเชื่อมต่อที่ใช้งานอยู่"
+
+msgid "Reading"
+msgstr "กำลังอ่าน"
+
+msgid "Writing"
+msgstr "กำลังเขียน"
+
+msgid "Total requests"
+msgstr "คำขอทั้งหมด"
+
+msgid "Accepts"
+msgstr "ยอมรับ"
+
+msgid "Handled"
+msgstr "จัดการแล้ว"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: เปิดใช้งาน mod_status (ExtendedStatus On) และอนุญาต localhost เข้าถึง /server-status. Nginx: เปิดใช้งาน stub_status บนตำแหน่งที่จำกัดเฉพาะ localhost เช่น /nginx_status หรือ /stub_status."
 

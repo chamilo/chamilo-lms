@@ -38947,3 +38947,237 @@ msgstr "Χωρίς εκπαιδευτές"
 msgid "No users"
 msgstr "Χωρίς χρήστες"
 
+msgid "Calculation mode"
+msgstr "Λειτουργία υπολογισμού"
+
+msgid "Weighted average"
+msgstr "Σταθμισμένος μέσος όρος"
+
+msgid "Points sum"
+msgstr "Άθροισμα βαθμών"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Ο σταθμισμένος μέσος όρος κανονικοποιείται με το άθροισμα των βαρών· το άθροισμα βαθμών θεωρεί κάθε βάρος ως μέγιστους βαθμούς και τα προσθέτει χωρίς κανονικοποίηση."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Κάθε βάρος στοιχείου θεωρείται ως μέγιστοι βαθμοί του· ο βαθμός είναι το άθροισμα των βαθμών, χωρίς κανονικοποίηση."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Ο βαθμός είναι ο σταθμισμένος μέσος όρος των στοιχείων, κανονικοποιημένος με το άθροισμα των βαρών."
+
+msgid "Forum participation"
+msgstr "Συμμετοχή σε φόρουμ"
+
+msgid "Forum thread"
+msgstr "Νήμα φόρουμ"
+
+msgid "Points for one message"
+msgstr "Βαθμοί για ένα μήνυμα"
+
+msgid "Points for two or more messages"
+msgstr "Βαθμοί για δύο ή περισσότερα μηνύματα"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Βαθμοί που απονέμονται όταν ο φοιτητής δημοσίευσε ακριβώς ένα μήνυμα στο νήμα."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Βαθμοί που απονέμονται όταν ο φοιτητής δημοσίευσε δύο ή περισσότερα μηνύματα στο νήμα."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Προαιρετικό. Αν μείνει κενό, ένα ή περισσότερα μηνύματα απονέμουν τους βαθμούς για ένα μήνυμα."
+
+msgid "Current password is required to change your password."
+msgstr "Απαιτείται ο τρέχων κωδικός πρόσβασης για να αλλάξετε τον κωδικό σας."
+
+msgid "The 2FA code is required."
+msgstr "Απαιτείται ο κωδικός 2FA."
+
+msgid "Invalid 2FA configuration."
+msgstr "Μη έγκυρη διαμόρφωση 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Ο κωδικός 2FA δεν είναι έγκυρος ή έχει λήξει."
+
+msgid "Database load"
+msgstr "Φόρτος βάσης δεδομένων"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Μετρικές φόρτου διακομιστή MySQL και MariaDB σε πραγματικό χρόνο"
+
+msgid "Click to show database server load metrics"
+msgstr "Κάντε κλικ για να εμφανίσετε τις μετρικές φόρτου διακομιστή βάσης δεδομένων"
+
+msgid "Threads connected"
+msgstr "Συνδεδεμένα νήματα"
+
+msgid "Temporary tables on disk"
+msgstr "Προσωρινές πίνακες στο δίσκο"
+
+msgid "Privilege scope"
+msgstr "Εύρος προνομίων"
+
+msgid "Not measurable with the current database user"
+msgstr "Μη μετρήσιμο με τον τρέχοντα χρήστη της βάσης δεδομένων"
+
+msgid "Uptime"
+msgstr "Χρόνος λειτουργίας"
+
+msgid "Queries per second"
+msgstr "Ερωτήματα ανά δευτερόλεπτο"
+
+msgid "Slow queries"
+msgstr "Αργά ερωτήματα"
+
+msgid "Slow query time limit"
+msgstr "Όριο χρόνου αργών ερωτημάτων"
+
+msgid "Slow query log"
+msgstr "Καταγραφή αργών ερωτημάτων"
+
+msgid "Slow queries per second"
+msgstr "Αργά ερωτήματα ανά δευτερόλεπτο"
+
+msgid "Threads running"
+msgstr "Νήματα σε εκτέλεση"
+
+msgid "Threads cached"
+msgstr "Νήματα στην κρυφή μνήμη"
+
+msgid "Table lock waits"
+msgstr "Αναμονές κλειδώματος πίνακα"
+
+msgid "Row lock waits"
+msgstr "Αναμονές κλειδώματος γραμμής"
+
+msgid "Aborted connections"
+msgstr "Ματαιωμένες συνδέσεις"
+
+msgid "Opened tables"
+msgstr "Ανοιγμένοι πίνακες"
+
+msgid "Query cache"
+msgstr "Κρυφή μνήμη ερωτημάτων"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Οι μετρικές φόρτου βάσης δεδομένων είναι διαθέσιμες μόνο για MySQL και MariaDB."
+
+msgid "Inserts"
+msgstr "Εισαγωγές"
+
+msgid "Hit rate"
+msgstr "Ποσοστό επιτυχίας"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Αυτόματη ανανέωση κάθε 5 δευτερόλεπτα"
+
+msgid "Web server load"
+msgstr "Φόρτος διακομιστή ιστού"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Ζωντανές μετρικές κατάστασης Apache ή Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Κάντε κλικ για εμφάνιση μετρικών φόρτου διακομιστή ιστού"
+
+msgid "Requires a local web server status module"
+msgstr "Απαιτείται τοπική μονάδα κατάστασης διακομιστή ιστού"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Ο φόρτος διακομιστή ιστού διαβάζεται μόνο από το Apache mod_status ή το Nginx stub_status στον localhost. Η σελίδα κατάστασης πρέπει να επιτρέπει αιτήματα από 127.0.0.1 (ή ::1)."
+
+msgid "Paths scanned"
+msgstr "Σαρωμένες διαδρομές"
+
+msgid "Detected"
+msgstr "Εντοπίστηκαν"
+
+msgid "Status path"
+msgstr "Διαδρομή κατάστασης"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Οι μετρικές φόρτου διακομιστή ιστού είναι διαθέσιμες μόνο για Apache και Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Καμία από τις σαρωμένες διαδρομές κατάστασης δεν απάντησε στον localhost."
+
+msgid "Busy workers"
+msgstr "Απασχολημένοι εργάτες"
+
+msgid "Idle workers"
+msgstr "Αδρανείς εργάτες"
+
+msgid "Graceful workers"
+msgstr "Εργάτες σε ομαλή λειτουργία"
+
+msgid "Server MPM"
+msgstr "MPM διακομιστή"
+
+msgid "Requests per second (live)"
+msgstr "Αιτήματα ανά δευτερόλεπτο (ζωντανά)"
+
+msgid "Requests per second (since start)"
+msgstr "Αιτήματα ανά δευτερόλεπτο (από την εκκίνηση)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes ανά δευτερόλεπτο (ζωντανά)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes ανά δευτερόλεπτο (από την εκκίνηση)"
+
+msgid "Bytes per request"
+msgstr "Bytes ανά αίτημα"
+
+msgid "Total accesses"
+msgstr "Συνολικές προσβάσεις"
+
+msgid "Total traffic"
+msgstr "Συνολική κίνηση"
+
+msgid "CPU load"
+msgstr "Φόρτος CPU"
+
+msgid "Load average (1 min)"
+msgstr "Μέσος φόρτος (1 λεπτό)"
+
+msgid "Load average (5 min)"
+msgstr "Μέσος φόρτος (5 λεπτά)"
+
+msgid "Load average (15 min)"
+msgstr "Μέσος φόρτος (15 λεπτά)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard αποστολή"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard ανάγνωση"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard αναμονή"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard ανοιχτές θέσεις"
+
+msgid "Active connections"
+msgstr "Ενεργές συνδέσεις"
+
+msgid "Reading"
+msgstr "Ανάγνωση"
+
+msgid "Writing"
+msgstr "Εγγραφή"
+
+msgid "Total requests"
+msgstr "Συνολικά αιτήματα"
+
+msgid "Accepts"
+msgstr "Αποδοχές"
+
+msgid "Handled"
+msgstr "Διαχειρίστηκαν"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: ενεργοποιήστε το mod_status (ExtendedStatus On) και επιτρέψτε localhost στο /server-status. Nginx: ενεργοποιήστε το stub_status σε τοποθεσία μόνο για localhost όπως /nginx_status ή /stub_status."
+

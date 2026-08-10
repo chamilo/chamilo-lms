@@ -26617,7 +26617,7 @@ msgid "LDAP connection configuration"
 msgstr "Konfigurace připojení LDAP"
 
 msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
-msgstr "Pole definující hostitele a port pro LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
+msgstr "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 
 msgid "Set expiration date on first login"
 msgstr "Nastavit datum expirace při prvním přihlášení"
@@ -38927,4 +38927,238 @@ msgstr "Žádní lektoři"
 
 msgid "No users"
 msgstr "Žádní uživatelé"
+
+msgid "Calculation mode"
+msgstr "Calculation mode"
+
+msgid "Weighted average"
+msgstr "Weighted average"
+
+msgid "Points sum"
+msgstr "Points sum"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "The grade is the weighted average of items, normalized by the sum of weights."
+
+msgid "Forum participation"
+msgstr "Forum participation"
+
+msgid "Forum thread"
+msgstr "Forum thread"
+
+msgid "Points for one message"
+msgstr "Points for one message"
+
+msgid "Points for two or more messages"
+msgstr "Points for two or more messages"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Points awarded when the student posted exactly one message in the thread."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Points awarded when the student posted two or more messages in the thread."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Optional. If left empty, one or more messages award the points for one message."
+
+msgid "Current password is required to change your password."
+msgstr "Current password is required to change your password."
+
+msgid "The 2FA code is required."
+msgstr "The 2FA code is required."
+
+msgid "Invalid 2FA configuration."
+msgstr "Invalid 2FA configuration."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "The 2FA code is invalid or expired."
+
+msgid "Database load"
+msgstr "Zátěž databáze"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Metriky zátěže serveru MySQL a MariaDB v reálném čase"
+
+msgid "Click to show database server load metrics"
+msgstr "Kliknutím zobrazíte metriky zátěže databázového serveru"
+
+msgid "Threads connected"
+msgstr "Připojená vlákna"
+
+msgid "Temporary tables on disk"
+msgstr "Dočasné tabulky na disku"
+
+msgid "Privilege scope"
+msgstr "Rozsah oprávnění"
+
+msgid "Not measurable with the current database user"
+msgstr "Nelze měřit s aktuálním uživatelem databáze"
+
+msgid "Uptime"
+msgstr "Doba provozu"
+
+msgid "Queries per second"
+msgstr "Dotazy za sekundu"
+
+msgid "Slow queries"
+msgstr "Pomalé dotazy"
+
+msgid "Slow query time limit"
+msgstr "Limit času pomalého dotazu"
+
+msgid "Slow query log"
+msgstr "Protokol pomalých dotazů"
+
+msgid "Slow queries per second"
+msgstr "Pomalé dotazy za sekundu"
+
+msgid "Threads running"
+msgstr "Běžící vlákna"
+
+msgid "Threads cached"
+msgstr "Uložená vlákna"
+
+msgid "Table lock waits"
+msgstr "Čekání na zámek tabulky"
+
+msgid "Row lock waits"
+msgstr "Čekání na zámek řádku"
+
+msgid "Aborted connections"
+msgstr "Přerušená připojení"
+
+msgid "Opened tables"
+msgstr "Otevřené tabulky"
+
+msgid "Query cache"
+msgstr "Mezipaměť dotazů"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Metriky zátěže databáze jsou dostupné pouze pro MySQL a MariaDB."
+
+msgid "Inserts"
+msgstr "Vložení"
+
+msgid "Hit rate"
+msgstr "Úspěšnost"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Automatické obnovení každých 5 sekund"
+
+msgid "Web server load"
+msgstr "Zátěž webového serveru"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Metriky stavu Apache nebo Nginx v reálném čase"
+
+msgid "Click to show web server load metrics"
+msgstr "Kliknutím zobrazíte metriky zátěže webového serveru"
+
+msgid "Requires a local web server status module"
+msgstr "Vyžaduje lokální modul stavu webového serveru"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Zátěž webového serveru se čte pouze z Apache mod_status nebo Nginx stub_status na localhost. Stránka stavu musí povolit požadavky z 127.0.0.1 (nebo ::1)."
+
+msgid "Paths scanned"
+msgstr "Prohledané cesty"
+
+msgid "Detected"
+msgstr "Zjištěno"
+
+msgid "Status path"
+msgstr "Cesta stavu"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Metriky zátěže webového serveru jsou dostupné pouze pro Apache a Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Žádná z prohledaných cest stavu neodpověděla na localhost."
+
+msgid "Busy workers"
+msgstr "Obsazení pracovníci"
+
+msgid "Idle workers"
+msgstr "Nečinní pracovníci"
+
+msgid "Graceful workers"
+msgstr "Pracovníci v režimu graceful"
+
+msgid "Server MPM"
+msgstr "Server MPM"
+
+msgid "Requests per second (live)"
+msgstr "Požadavky za sekundu (živé)"
+
+msgid "Requests per second (since start)"
+msgstr "Požadavky za sekundu (od spuštění)"
+
+msgid "Bytes per second (live)"
+msgstr "Bajty za sekundu (živé)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bajty za sekundu (od spuštění)"
+
+msgid "Bytes per request"
+msgstr "Bajty na požadavek"
+
+msgid "Total accesses"
+msgstr "Celkový počet přístupů"
+
+msgid "Total traffic"
+msgstr "Celkový provoz"
+
+msgid "CPU load"
+msgstr "Zátěž CPU"
+
+msgid "Load average (1 min)"
+msgstr "Průměrné zatížení (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Průměrné zatížení (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Průměrné zatížení (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard odesílání"
+
+msgid "Scoreboard reading"
+msgstr "Čtení scoreboardu"
+
+msgid "Scoreboard keepalive"
+msgstr "Udržování scoreboardu"
+
+msgid "Scoreboard waiting"
+msgstr "Čekání scoreboardu"
+
+msgid "Scoreboard open slots"
+msgstr "Volná místa scoreboardu"
+
+msgid "Active connections"
+msgstr "Aktivní připojení"
+
+msgid "Reading"
+msgstr "Čtení"
+
+msgid "Writing"
+msgstr "Zápis"
+
+msgid "Total requests"
+msgstr "Celkový počet požadavků"
+
+msgid "Accepts"
+msgstr "Přijato"
+
+msgid "Handled"
+msgstr "Zpracováno"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: povolte mod_status (ExtendedStatus On) a umožněte localhost přístup k /server-status. Nginx: povolte stub_status na lokaci pouze pro localhost, např. /nginx_status nebo /stub_status."
 

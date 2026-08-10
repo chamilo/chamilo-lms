@@ -376,10 +376,11 @@ while ($row = Database::fetch_assoc($result)) {
     echo '	<td>';
 
     if (3 != $survey_data['survey_type']) {
-        if (api_strlen($row['survey_question']) > 100) {
-            echo api_substr(strip_tags($row['survey_question']), 0, 100).' ... ';
+        $surveyQuestionText = api_get_filtered_multilingual_HTML_string((string) $row['survey_question']);
+        if (api_strlen($surveyQuestionText) > 100) {
+            echo api_substr(strip_tags($surveyQuestionText), 0, 100).' ... ';
         } else {
-            echo $row['survey_question'];
+            echo $surveyQuestionText;
         }
     } else {
         $parts = explode('@@', $row['survey_question']);

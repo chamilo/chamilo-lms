@@ -101,6 +101,7 @@ import { useSecurityStore } from "./store/securityStore"
 import { usePlatformConfig } from "./store/platformConfig"
 import Toast from "primevue/toast"
 import { useNotification } from "./composables/notification"
+import { notifySessionIssue } from "./composables/sessionNotice"
 import { useLocale } from "./composables/locale"
 import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
@@ -393,7 +394,7 @@ api.interceptors.response.use(
   (r) => r,
   (error) => {
     const s = error?.response?.status
-    if (s === 401) notification.showWarningNotification(error.response?.data?.error || "Unauthorized")
+    if (s === 401) notifySessionIssue((msg) => notification.showWarningNotification(msg))
     else if (s === 500) notification.showWarningNotification(error.response?.data?.detail || "Server error")
     return Promise.reject(error)
   },

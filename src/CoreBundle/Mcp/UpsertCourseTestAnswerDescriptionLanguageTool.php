@@ -30,7 +30,7 @@ final readonly class UpsertCourseTestAnswerDescriptionLanguageTool
      */
     #[McpTool(
         name: 'upsert_course_test_answer_description_language',
-        description: 'Add or replace ONE language variant of an exercise answer HTML body without rewriting the full multi-language body. Locate the test by testId or testTitle, the question by questionId, and the answer by answerId. Call get_course_test_question_answers with mode=source first. Pass language + INNER HTML only. Correctness, score and feedback are never modified. mode is upsert (default), create_only or replace_only. Prefer over edit_course_test_answer_description for translation.',
+        description: 'Add or replace ONE language variant of an exercise answer HTML body without rewriting the full multi-language body. Locate the test by testId or testTitle, the question by questionId, and the answer by answerId. Call get_course_test_question_answers with mode=source first. Pass language + INNER HTML only. Correctness and score are never modified; use upsert_course_test_answer_feedback_language for the feedback comment. mode is upsert (default), create_only or replace_only. Prefer over edit_course_test_answer_description for translation.',
     )]
     public function upsertCourseTestAnswerDescriptionLanguage(
         int $courseId,

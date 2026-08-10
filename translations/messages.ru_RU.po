@@ -38935,3 +38935,237 @@ msgstr "Нет тьюторов"
 msgid "No users"
 msgstr "Нет пользователей"
 
+msgid "Calculation mode"
+msgstr "Режим расчёта"
+
+msgid "Weighted average"
+msgstr "Средневзвешенное значение"
+
+msgid "Points sum"
+msgstr "Сумма баллов"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Средневзвешенное значение нормализуется по сумме весов; сумма баллов трактует каждый вес как максимум баллов и складывает их без нормализации."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Вес каждого элемента считается его максимумом баллов; оценка — сумма баллов, без нормализации."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Оценка — средневзвешенное значение элементов, нормализованное по сумме весов."
+
+msgid "Forum participation"
+msgstr "Участие в форуме"
+
+msgid "Forum thread"
+msgstr "Тема форума"
+
+msgid "Points for one message"
+msgstr "Баллы за одно сообщение"
+
+msgid "Points for two or more messages"
+msgstr "Баллы за два и более сообщений"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Баллы, начисляемые, если студент опубликовал ровно одно сообщение в теме."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Баллы, начисляемые, если студент опубликовал два или более сообщений в теме."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Необязательно. Если оставить пустым, одно или несколько сообщений дают баллы за одно сообщение."
+
+msgid "Current password is required to change your password."
+msgstr "Для смены пароля требуется текущий пароль."
+
+msgid "The 2FA code is required."
+msgstr "Требуется код 2FA."
+
+msgid "Invalid 2FA configuration."
+msgstr "Неверная конфигурация 2FA."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Код 2FA недействителен или истёк."
+
+msgid "Database load"
+msgstr "Нагрузка базы данных"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Метрики нагрузки серверов MySQL и MariaDB в реальном времени"
+
+msgid "Click to show database server load metrics"
+msgstr "Нажмите, чтобы показать метрики нагрузки сервера базы данных"
+
+msgid "Threads connected"
+msgstr "Подключённые потоки"
+
+msgid "Temporary tables on disk"
+msgstr "Временные таблицы на диске"
+
+msgid "Privilege scope"
+msgstr "Область привилегий"
+
+msgid "Not measurable with the current database user"
+msgstr "Невозможно измерить с текущим пользователем базы данных"
+
+msgid "Uptime"
+msgstr "Время работы"
+
+msgid "Queries per second"
+msgstr "Запросов в секунду"
+
+msgid "Slow queries"
+msgstr "Медленные запросы"
+
+msgid "Slow query time limit"
+msgstr "Лимит времени медленного запроса"
+
+msgid "Slow query log"
+msgstr "Журнал медленных запросов"
+
+msgid "Slow queries per second"
+msgstr "Медленных запросов в секунду"
+
+msgid "Threads running"
+msgstr "Запущенные потоки"
+
+msgid "Threads cached"
+msgstr "Кэшированные потоки"
+
+msgid "Table lock waits"
+msgstr "Ожидания блокировки таблиц"
+
+msgid "Row lock waits"
+msgstr "Ожидания блокировки строк"
+
+msgid "Aborted connections"
+msgstr "Прерванные подключения"
+
+msgid "Opened tables"
+msgstr "Открытые таблицы"
+
+msgid "Query cache"
+msgstr "Кэш запросов"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Метрики нагрузки базы данных доступны только для MySQL и MariaDB."
+
+msgid "Inserts"
+msgstr "Вставки"
+
+msgid "Hit rate"
+msgstr "Частота попаданий"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Автообновление каждые 5 секунд"
+
+msgid "Web server load"
+msgstr "Нагрузка веб-сервера"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Метрики состояния Apache или Nginx в реальном времени"
+
+msgid "Click to show web server load metrics"
+msgstr "Нажмите, чтобы показать метрики нагрузки веб-сервера"
+
+msgid "Requires a local web server status module"
+msgstr "Требуется модуль состояния локального веб-сервера"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Нагрузка веб-сервера считывается из Apache mod_status или Nginx stub_status только на localhost. Страница состояния должна разрешать запросы с 127.0.0.1 (или ::1)."
+
+msgid "Paths scanned"
+msgstr "Просканированные пути"
+
+msgid "Detected"
+msgstr "Обнаружено"
+
+msgid "Status path"
+msgstr "Путь состояния"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "Метрики нагрузки веб-сервера доступны только для Apache и Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ни один из просканированных путей состояния не ответил на localhost."
+
+msgid "Busy workers"
+msgstr "Занятые рабочие процессы"
+
+msgid "Idle workers"
+msgstr "Свободные рабочие процессы"
+
+msgid "Graceful workers"
+msgstr "Рабочие процессы в режиме graceful"
+
+msgid "Server MPM"
+msgstr "MPM сервера"
+
+msgid "Requests per second (live)"
+msgstr "Запросов в секунду (в реальном времени)"
+
+msgid "Requests per second (since start)"
+msgstr "Запросов в секунду (с момента запуска)"
+
+msgid "Bytes per second (live)"
+msgstr "Байт в секунду (в реальном времени)"
+
+msgid "Bytes per second (since start)"
+msgstr "Байт в секунду (с момента запуска)"
+
+msgid "Bytes per request"
+msgstr "Байт на запрос"
+
+msgid "Total accesses"
+msgstr "Всего обращений"
+
+msgid "Total traffic"
+msgstr "Общий трафик"
+
+msgid "CPU load"
+msgstr "Нагрузка ЦП"
+
+msgid "Load average (1 min)"
+msgstr "Средняя нагрузка (1 мин)"
+
+msgid "Load average (5 min)"
+msgstr "Средняя нагрузка (5 мин)"
+
+msgid "Load average (15 min)"
+msgstr "Средняя нагрузка (15 мин)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard: отправка"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard: чтение"
+
+msgid "Scoreboard keepalive"
+msgstr "Scoreboard: keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard: ожидание"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard: свободные слоты"
+
+msgid "Active connections"
+msgstr "Активные соединения"
+
+msgid "Reading"
+msgstr "Чтение"
+
+msgid "Writing"
+msgstr "Запись"
+
+msgid "Total requests"
+msgstr "Всего запросов"
+
+msgid "Accepts"
+msgstr "Принято"
+
+msgid "Handled"
+msgstr "Обработано"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: включите mod_status (ExtendedStatus On) и разрешите localhost доступ к /server-status. Nginx: включите stub_status в location, доступном только с localhost, например /nginx_status или /stub_status."
+

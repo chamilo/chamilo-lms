@@ -35,7 +35,7 @@ final readonly class EditCourseTestAnswerDescriptionTool
      */
     #[McpTool(
         name: 'edit_course_test_answer_description',
-        description: 'Replace the HTML text of one proposed answer in a test question, in a base course managed by the authenticated teacher. Locate the test by testId or exact testTitle, the question by questionId, and the answer by answerId (from get_course_test_question_answers). Only the answer body HTML is changed — correctness, score and feedback comment stay as they are. Pass clean semantic HTML; it is sanitized like course documents. Call get_course_test_question_answers first to inspect the current text.',
+        description: 'Replace the HTML text of one proposed answer in a test question, in a base course managed by the authenticated teacher. Locate the test by testId or exact testTitle, the question by questionId, and the answer by answerId (from get_course_test_question_answers). Only the answer body HTML is changed — correctness, score and feedback comment stay as they are (use edit_course_test_answer_feedback to change the feedback). Pass clean semantic HTML; it is sanitized like course documents. Call get_course_test_question_answers first to inspect the current text.',
     )]
     public function editCourseTestAnswerDescription(
         int $courseId,

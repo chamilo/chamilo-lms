@@ -4,6 +4,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import securityService from "../../services/securityService"
 import { useNotification } from "../notification"
+import { resetSessionNotice } from "../sessionNotice"
 import i18n, { setLocale } from "../../i18n"
 
 function isValidHttpUrl(string) {
@@ -199,6 +200,7 @@ export function useLogin() {
 
       // Save user info
       securityStore.setUser(responseData)
+      resetSessionNotice()
 
       // Apply locale NOW so the UI switches before we route
       applyUserLocale(responseData)

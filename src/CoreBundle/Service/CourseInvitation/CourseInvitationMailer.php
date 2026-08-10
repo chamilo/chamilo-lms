@@ -43,6 +43,7 @@ final readonly class CourseInvitationMailer
 
         $body = $this->twig->render('@ChamiloCore/Mailer/CourseInvitation/invitation_body.html.twig', [
             'is_session' => $isSession,
+            'is_existing_user' => $invitation->isForExistingUser(),
             'target_title' => $targetTitle,
             'url' => $url,
             'inviter_name' => $invitation->getCreatedBy()->getFullName(),

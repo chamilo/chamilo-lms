@@ -38947,3 +38947,237 @@ msgstr "Sen titores"
 msgid "No users"
 msgstr "Sen usuarios"
 
+msgid "Calculation mode"
+msgstr "Modo de cálculo"
+
+msgid "Weighted average"
+msgstr "Media ponderada"
+
+msgid "Points sum"
+msgstr "Suma de puntos"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "A media ponderada normaliza pola suma dos pesos; a suma de puntos trata cada peso como puntos máximos e súmaos sen normalizar."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Trátase o peso de cada elemento como os seus puntos máximos; a cualificación é a suma de puntos, sen normalizar."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "A cualificación é a media ponderada dos elementos, normalizada pola suma dos pesos."
+
+msgid "Forum participation"
+msgstr "Participación no foro"
+
+msgid "Forum thread"
+msgstr "Fío do foro"
+
+msgid "Points for one message"
+msgstr "Puntos por unha mensaxe"
+
+msgid "Points for two or more messages"
+msgstr "Puntos por dúas ou máis mensaxes"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Puntos outorgados cando o estudante publicou exactamente unha mensaxe no fío."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Puntos outorgados cando o estudante publicou dúas ou máis mensaxes no fío."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Opcional. Se se deixa baleiro, unha ou máis mensaxes outorgan os puntos por unha mensaxe."
+
+msgid "Current password is required to change your password."
+msgstr "Requírese o contrasinal actual para cambiar o contrasinal."
+
+msgid "The 2FA code is required."
+msgstr "Requírese o código 2FA."
+
+msgid "Invalid 2FA configuration."
+msgstr "Configuración 2FA non válida."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "O código 2FA non é válido ou caducou."
+
+msgid "Database load"
+msgstr "Carga da base de datos"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Métricas de carga do servidor MySQL e MariaDB en tempo real"
+
+msgid "Click to show database server load metrics"
+msgstr "Prema para mostrar as métricas de carga do servidor de base de datos"
+
+msgid "Threads connected"
+msgstr "Fíos conectados"
+
+msgid "Temporary tables on disk"
+msgstr "Táboas temporais no disco"
+
+msgid "Privilege scope"
+msgstr "Ámbito de privilexios"
+
+msgid "Not measurable with the current database user"
+msgstr "Non se pode medir co usuario actual da base de datos"
+
+msgid "Uptime"
+msgstr "Tempo de actividade"
+
+msgid "Queries per second"
+msgstr "Consultas por segundo"
+
+msgid "Slow queries"
+msgstr "Consultas lentas"
+
+msgid "Slow query time limit"
+msgstr "Límite de tempo de consulta lenta"
+
+msgid "Slow query log"
+msgstr "Rexistro de consultas lentas"
+
+msgid "Slow queries per second"
+msgstr "Consultas lentas por segundo"
+
+msgid "Threads running"
+msgstr "Fíos en execución"
+
+msgid "Threads cached"
+msgstr "Fíos na caché"
+
+msgid "Table lock waits"
+msgstr "Esperas por bloqueo de táboa"
+
+msgid "Row lock waits"
+msgstr "Esperas de bloqueo de fila"
+
+msgid "Aborted connections"
+msgstr "Conexións abortadas"
+
+msgid "Opened tables"
+msgstr "Táboas abertas"
+
+msgid "Query cache"
+msgstr "Caché de consultas"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "As métricas de carga da base de datos só están dispoñibles para MySQL e MariaDB."
+
+msgid "Inserts"
+msgstr "Insercións"
+
+msgid "Hit rate"
+msgstr "Taxa de acertos"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Actualización automática cada 5 segundos"
+
+msgid "Web server load"
+msgstr "Carga do servidor web"
+
+msgid "Live Apache or Nginx status metrics"
+msgstr "Métricas de estado en tempo real de Apache ou Nginx"
+
+msgid "Click to show web server load metrics"
+msgstr "Prema para mostrar as métricas de carga do servidor web"
+
+msgid "Requires a local web server status module"
+msgstr "Require un módulo de estado do servidor web local"
+
+msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "A carga do servidor web léese desde Apache mod_status ou Nginx stub_status só en localhost. A páxina de estado debe permitir solicitudes desde 127.0.0.1 (ou ::1)."
+
+msgid "Paths scanned"
+msgstr "Rutas analizadas"
+
+msgid "Detected"
+msgstr "Detectado"
+
+msgid "Status path"
+msgstr "Ruta de estado"
+
+msgid "Web server load metrics are only available for Apache and Nginx."
+msgstr "As métricas de carga do servidor web só están dispoñibles para Apache e Nginx."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Ningunha das rutas de estado analizadas respondeu en localhost."
+
+msgid "Busy workers"
+msgstr "Traballadores ocupados"
+
+msgid "Idle workers"
+msgstr "Traballadores inactivos"
+
+msgid "Graceful workers"
+msgstr "Traballadores en modo graceful"
+
+msgid "Server MPM"
+msgstr "MPM do servidor"
+
+msgid "Requests per second (live)"
+msgstr "Solicitudes por segundo (en tempo real)"
+
+msgid "Requests per second (since start)"
+msgstr "Solicitudes por segundo (desde o inicio)"
+
+msgid "Bytes per second (live)"
+msgstr "Bytes por segundo (en tempo real)"
+
+msgid "Bytes per second (since start)"
+msgstr "Bytes por segundo (desde o inicio)"
+
+msgid "Bytes per request"
+msgstr "Bytes por solicitude"
+
+msgid "Total accesses"
+msgstr "Accesos totais"
+
+msgid "Total traffic"
+msgstr "Tráfico total"
+
+msgid "CPU load"
+msgstr "Carga da CPU"
+
+msgid "Load average (1 min)"
+msgstr "Carga media (1 min)"
+
+msgid "Load average (5 min)"
+msgstr "Carga media (5 min)"
+
+msgid "Load average (15 min)"
+msgstr "Carga media (15 min)"
+
+msgid "Scoreboard sending"
+msgstr "Panel de envío"
+
+msgid "Scoreboard reading"
+msgstr "Panel de lectura"
+
+msgid "Scoreboard keepalive"
+msgstr "Panel de keepalive"
+
+msgid "Scoreboard waiting"
+msgstr "Panel de espera"
+
+msgid "Scoreboard open slots"
+msgstr "Slots abertos do panel"
+
+msgid "Active connections"
+msgstr "Conexións activas"
+
+msgid "Reading"
+msgstr "Lendo"
+
+msgid "Writing"
+msgstr "Escribindo"
+
+msgid "Total requests"
+msgstr "Solicitudes totais"
+
+msgid "Accepts"
+msgstr "Aceptacións"
+
+msgid "Handled"
+msgstr "Xestionadas"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+msgstr "Apache: active mod_status (ExtendedStatus On) e permita localhost en /server-status. Nginx: active stub_status nunha localización só para localhost como /nginx_status ou /stub_status."
+

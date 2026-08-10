@@ -37613,6 +37613,12 @@ msgstr ""
 msgid "Do you want to continue your session?"
 msgstr ""
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr ""
 

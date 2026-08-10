@@ -1,0 +1,1253 @@
+/*
+ * CStudio visual integration layer for Chamilo.
+ *
+ * Keep this file limited to visual overrides. CStudio still owns its GrapesJS
+ * layout, dimensions and editor behavior; this layer only aligns surfaces,
+ * borders, controls and interaction states with the cleaner Chamilo UI.
+ */
+
+:root {
+    /*
+     * Reuse the same dynamic variables consumed by tailwind.config.js.
+     * Numeric fallbacks match the current Chamilo 3 palette and are only used
+     * if the active theme colors.css cannot be resolved.
+     */
+    --cstudio-ui-primary: rgb(var(--color-primary-base, 32 62 97));
+    --cstudio-ui-primary-text: rgb(var(--color-primary-button-alternative-text, 255 255 255));
+    --cstudio-ui-primary-outline-text: rgb(var(--color-primary-button-text, 32 62 97));
+    --cstudio-ui-secondary: rgb(var(--color-secondary-base, 242 103 34));
+    --cstudio-ui-secondary-text: rgb(var(--color-secondary-button-text, 255 255 255));
+    --cstudio-ui-tertiary: rgb(var(--color-tertiary-base, 68 68 68));
+    --cstudio-ui-danger: rgb(var(--color-danger-base, 224 27 36));
+    --cstudio-ui-danger-text: rgb(var(--color-danger-button-text, 255 255 255));
+    --cstudio-ui-focus: rgb(var(--color-form-base, 32 62 97));
+
+    --cstudio-ui-background: #f7f8f9;
+    --cstudio-ui-surface: #ffffff;
+    --cstudio-ui-surface-muted: #edf0f2;
+    --cstudio-ui-border: #d1d5db;
+    --cstudio-ui-border-soft: #e4e9ed;
+    --cstudio-ui-text: #333333;
+    --cstudio-ui-text-muted: #6b7280;
+    --cstudio-ui-primary-soft: rgb(var(--color-primary-base, 32 62 97) / 0.08);
+    --cstudio-ui-danger-soft: rgb(var(--color-danger-base, 224 27 36) / 0.08);
+    --cstudio-ui-radius: 6px;
+    --cstudio-ui-shadow: 0 1px 3px rgb(0 0 0 / 12%);
+    --cstudio-ui-shadow-dialog: 0 18px 48px rgb(0 0 0 / 24%);
+}
+
+html,
+body {
+    background: var(--cstudio-ui-background) !important;
+    color: var(--cstudio-ui-text);
+}
+
+/* GrapesJS shell: keep the existing layout, but use lighter Chamilo-like chrome. */
+.gjs-one-bg,
+.gjs-pn-panels,
+.gjs-pn-panel,
+.gjs-pn-views,
+.gjs-pn-views-container {
+    background-color: var(--cstudio-ui-surface) !important;
+}
+
+.gjs-two-color {
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-three-color,
+.gjs-four-color {
+    color: var(--cstudio-ui-primary) !important;
+}
+
+.gjs-three-color-h:hover,
+.gjs-four-color-h:hover {
+    color: var(--cstudio-ui-primary) !important;
+}
+
+.gjs-pn-panel {
+    border-color: var(--cstudio-ui-border-soft) !important;
+    box-shadow: none !important;
+}
+
+.gjs-pn-btn {
+    border-radius: 6px !important;
+    color: var(--cstudio-ui-text-muted) !important;
+    transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.gjs-pn-btn:hover,
+.gjs-pn-btn:focus-visible {
+    background: var(--cstudio-ui-surface-muted) !important;
+    color: var(--cstudio-ui-primary) !important;
+    outline: none;
+}
+
+.gjs-pn-btn.gjs-pn-active,
+.gjs-pn-views .gjs-pn-btn.gjs-pn-active {
+    background: var(--cstudio-ui-primary-soft) !important;
+    color: var(--cstudio-ui-primary) !important;
+    box-shadow: inset 0 0 0 1px rgb(var(--color-primary-base, 32 62 97) / 0.18);
+}
+
+/* Blocks in the right panel behave visually like compact Chamilo cards. */
+.gjs-block {
+    background-color: var(--cstudio-ui-surface) !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: var(--cstudio-ui-radius) !important;
+    box-shadow: none !important;
+    color: var(--cstudio-ui-text) !important;
+    transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.gjs-block:hover,
+.gjs-block:focus-visible {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    border-color: var(--cstudio-ui-border) !important;
+    box-shadow: var(--cstudio-ui-shadow) !important;
+    outline: none;
+}
+
+.gjs-block-label {
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-block-category .gjs-title,
+.gjs-sm-sector .gjs-sm-sector-title,
+.gjs-category-title,
+.gjs-layer-title {
+    background: var(--cstudio-ui-surface-muted) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+/* Inputs and inspector controls. */
+.gjs-field,
+.gjs-sm-field,
+.gjs-clm-field,
+.gjs-trt-trait {
+    border-color: var(--cstudio-ui-border) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-field,
+.gjs-field input,
+.gjs-field select,
+.gjs-field textarea,
+.gjs-sm-field input,
+.gjs-sm-field select,
+.gjs-sm-field textarea {
+    background-color: var(--cstudio-ui-surface) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-field:focus-within,
+.gjs-sm-field:focus-within {
+    border-color: var(--cstudio-ui-primary) !important;
+    box-shadow: 0 0 0 2px rgb(var(--color-form-base, 32 62 97) / 0.14) !important;
+}
+
+/* GrapesJS dialogs and asset manager. Dimensions intentionally stay untouched. */
+.gjs-mdl-dialog,
+.gjs-mdl-dialog-v2,
+.gjs-mdl-dialog-v3 {
+    background-color: var(--cstudio-ui-surface) !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: var(--cstudio-ui-radius) !important;
+    box-shadow: var(--cstudio-ui-shadow-dialog) !important;
+    color: var(--cstudio-ui-text) !important;
+    text-shadow: none !important;
+}
+
+.gjs-mdl-header {
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-mdl-btn-close {
+    color: var(--cstudio-ui-text-muted) !important;
+}
+
+.gjs-mdl-btn-close:hover,
+.gjs-mdl-btn-close:focus-visible {
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-am-assets-cont,
+.gjs-am-file-uploader,
+.gjs-am-asset {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.gjs-am-asset {
+    border-radius: 6px !important;
+}
+
+/* CStudio-native side panels and small utility cards. */
+.ludimenu,
+.ludiSpeedTools,
+.WinEditColorsTeach,
+.WinEditParamsTeach,
+.ludiEditMenuContext,
+.workingProcessSave {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.ludimenu,
+.ludiEditMenuContext,
+.workingProcessSave {
+    box-shadow: var(--cstudio-ui-shadow) !important;
+}
+
+.ludiEditMenuContext,
+.workingProcessSave {
+    border-radius: var(--cstudio-ui-radius) !important;
+}
+
+.ludimenuteachdoc {
+    border-top-color: var(--cstudio-ui-border-soft) !important;
+}
+
+.ludimenuteachdoc::-webkit-scrollbar-track,
+.innerEditColorsTeach::-webkit-scrollbar-track-piece,
+.innerEditQuizzTeach::-webkit-scrollbar-track-piece {
+    background: var(--cstudio-ui-surface-muted) !important;
+}
+
+.ludimenuteachdoc::-webkit-scrollbar-thumb,
+.innerEditColorsTeach::-webkit-scrollbar-thumb,
+.innerEditQuizzTeach::-webkit-scrollbar-thumb {
+    background-color: #9ca3af !important;
+    border-color: var(--cstudio-ui-surface-muted) !important;
+    outline: none !important;
+}
+
+.tool-base {
+    background-color: var(--cstudio-ui-surface) !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: var(--cstudio-ui-radius) !important;
+    box-shadow: none !important;
+    color: var(--cstudio-ui-text) !important;
+    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.tool-base:hover,
+.tool-base:focus-visible {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    border-color: var(--cstudio-ui-border) !important;
+    box-shadow: var(--cstudio-ui-shadow) !important;
+    outline: none;
+}
+
+.tool-base div {
+    border-top-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.innerEditTitleTeach,
+.oel-btn-title {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+    text-shadow: none !important;
+}
+
+.innerEditColorsTeach,
+.innerEditQuizzTeach {
+    border-color: var(--cstudio-ui-border) !important;
+    box-shadow: none !important;
+}
+
+.oel-btn-block,
+.oel-btn-block-color,
+.fxtoolscube,
+.fxtoolsdescription,
+.tabfx-title {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    border-radius: 6px !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.oel-btn-block:hover,
+.oel-btn-block-color:hover,
+.fxtoolscube:hover,
+.tabfx-title:hover {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    border-color: var(--cstudio-ui-border) !important;
+}
+
+/*
+ * CStudio cannot render Vue BaseButton inside its legacy GrapesJS shell.
+ * Existing controls therefore mirror BaseButton semantic variants using the
+ * same active Chamilo/Tailwind color variables.
+ */
+
+/* BaseButton type="primary" equivalent. */
+.ludiButtonSave,
+.ludiButtonSaveMenu,
+.buttonAddElementEditor,
+.ludiEditIco,
+.cstudio-ai-submit {
+    background-color: var(--cstudio-ui-primary) !important;
+    border: 1px solid var(--cstudio-ui-primary) !important;
+    color: var(--cstudio-ui-primary-text) !important;
+    box-shadow: none !important;
+}
+
+.ludiButtonSave:hover,
+.ludiButtonSave:focus-visible,
+.ludiButtonSaveMenu:hover,
+.ludiButtonSaveMenu:focus-visible,
+.buttonAddElementEditor:hover,
+.buttonAddElementEditor:focus-visible,
+.ludiEditIco:hover,
+.ludiEditIco:focus-visible,
+.cstudio-ai-submit:hover,
+.cstudio-ai-submit:focus-visible {
+    filter: brightness(0.94);
+    outline: none;
+}
+
+/* BaseButton type="primary-alternative" equivalent. */
+.ludiButtonCancel,
+.tool-base,
+.cstudio-preview-back-button,
+.cstudio-ai-speed-tool {
+    background-color: var(--cstudio-ui-surface) !important;
+    border: 1px solid var(--cstudio-ui-primary) !important;
+    color: var(--cstudio-ui-primary-outline-text) !important;
+    box-shadow: none !important;
+}
+
+.ludiButtonCancel:hover,
+.ludiButtonCancel:focus-visible,
+.tool-base:hover,
+.tool-base:focus-visible,
+.cstudio-preview-back-button:hover,
+.cstudio-preview-back-button:focus,
+.cstudio-ai-speed-tool:hover,
+.cstudio-ai-speed-tool:focus {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: var(--cstudio-ui-primary) !important;
+    color: var(--cstudio-ui-primary-outline-text) !important;
+    outline: none;
+}
+
+/* BaseButton type="danger-text" equivalent. */
+.ludiButtonDelete {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: var(--cstudio-ui-danger) !important;
+}
+
+.ludiButtonDelete:hover,
+.ludiButtonDelete:focus-visible {
+    background-color: var(--cstudio-ui-danger-soft) !important;
+    color: var(--cstudio-ui-danger) !important;
+    text-decoration: none;
+    outline: none;
+}
+
+/*
+ * Keep CStudio's existing raster/SVG tool icons. Never use the `background`
+ * shorthand on these controls: the legacy icon classes provide background-image.
+ */
+.tool-base,
+.ludiEditIco {
+    background-repeat: no-repeat !important;
+}
+
+.tool-base {
+    background-position: center 5px !important;
+}
+
+.ludiEditIco {
+    background-position: center center !important;
+}
+
+/* Make the active Chamilo palette visible without changing the tool layout. */
+.tool-base {
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.65) !important;
+}
+
+.tool-base div {
+    color: var(--cstudio-ui-primary-outline-text) !important;
+}
+
+.tool-play {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: var(--cstudio-ui-primary) !important;
+}
+
+.tool-play:hover,
+.tool-play:focus-visible {
+    background-color: rgb(var(--color-primary-base, 32 62 97) / 0.14) !important;
+}
+
+.tool-quit {
+    border-color: rgb(var(--color-danger-base, 224 27 36) / 0.5) !important;
+}
+
+.tool-quit div {
+    color: var(--cstudio-ui-danger) !important;
+}
+
+.tool-quit:hover,
+.tool-quit:focus-visible {
+    background-color: var(--cstudio-ui-danger-soft) !important;
+    border-color: var(--cstudio-ui-danger) !important;
+}
+
+/* Preserve the edit pencil image while using the active primary color behind it. */
+.ludiEditIco {
+    background-image: url("edit.png") !important;
+}
+
+/* Preserve the five bottom-left tool images supplied by CStudio. */
+.tool-clean-data {
+    background-image: url("../img/bross.png") !important;
+}
+
+.tool-play {
+    background-image: url("../icon/play.svg") !important;
+}
+
+.tool-colors-editor {
+    background-image: url("../img/colors.png") !important;
+}
+
+.tool-colors-params {
+    background-image: url("../img/params.png") !important;
+}
+
+.tool-quit {
+    background-image: url("../img/exit-icon.png") !important;
+}
+
+/* Preserve the existing CStudio AI dialog chrome with Chamilo surfaces. */
+.cstudio-ai-dialog {
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: var(--cstudio-ui-radius) !important;
+    box-shadow: var(--cstudio-ui-shadow-dialog) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.cstudio-ai-header {
+    border-bottom-color: var(--cstudio-ui-border-soft) !important;
+}
+
+.cstudio-ai-body textarea,
+.cstudio-ai-body input,
+.cstudio-ai-body select,
+.cstudio-ai-formats {
+    border-color: var(--cstudio-ui-border) !important;
+}
+
+/* Inputs use the same dynamic form/focus color as current Chamilo. */
+.cstudio-ai-body textarea:focus,
+.cstudio-ai-body input:focus,
+.cstudio-ai-body select:focus {
+    border-color: var(--cstudio-ui-focus) !important;
+    box-shadow: 0 0 0 3px rgb(var(--color-form-base, 32 62 97) / 0.16) !important;
+}
+
+/*
+ * Visible shell alignment.
+ *
+ * These overrides intentionally keep CStudio/GrapesJS dimensions and editor
+ * behavior unchanged. They only replace the legacy gray chrome with the same
+ * light surface/border language used by the current Chamilo interface.
+ */
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+/* Main workspace: remove the old lavender/gray editor background. */
+.gjs-editor,
+.gjs-editor-cont,
+.gjs-cv-canvas,
+.gjs-frame-wrapper {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+}
+
+/* Top editor bar. Keep its existing height/position, change only its chrome. */
+.gjs-pn-commands,
+.gjs-pn-options,
+.gjs-pn-devices-c,
+.gjs-pn-views {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    box-shadow: 0 1px 0 rgb(0 0 0 / 6%) !important;
+}
+
+.gjs-pn-commands .gjs-pn-btn,
+.gjs-pn-options .gjs-pn-btn,
+.gjs-pn-devices-c .gjs-pn-btn,
+.gjs-pn-views .gjs-pn-btn {
+    color: var(--cstudio-ui-text-muted) !important;
+}
+
+.gjs-pn-commands .gjs-pn-btn:hover,
+.gjs-pn-options .gjs-pn-btn:hover,
+.gjs-pn-devices-c .gjs-pn-btn:hover,
+.gjs-pn-views .gjs-pn-btn:hover {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    color: var(--cstudio-ui-primary) !important;
+}
+
+/* Left page navigation. Preserve its fixed width and page-management logic. */
+.ludimenu {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-right: 1px solid var(--cstudio-ui-border-soft) !important;
+    box-shadow: 1px 0 2px rgb(0 0 0 / 5%) !important;
+}
+
+.luditopheader {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+}
+
+.ludimenuteachdoc {
+    background-color: var(--cstudio-ui-background) !important;
+    border-top: 0 !important;
+}
+
+.list-teachdoc {
+    background-color: var(--cstudio-ui-background) !important;
+    padding-top: 4px !important;
+}
+
+.list-teachdoc li {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-top: 0 !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.list-teachdoc li:hover {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+}
+
+.list-teachdoc .activeli {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    box-shadow: inset 3px 0 0 var(--cstudio-ui-primary) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.list-teachdoc .badge {
+    color: var(--cstudio-ui-primary) !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+}
+
+/* Bottom-left Tools area: remove the old dark gray title strip. */
+.innerEditTitleTeach {
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+}
+
+.WinEditColorsTeach,
+.WinEditParamsTeach {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    box-shadow: none !important;
+}
+
+/* Right blocks palette: visibly separate it from the canvas without dark chrome. */
+.gjs-pn-views-container,
+.gjs-blocks-cs {
+    background-color: var(--cstudio-ui-surface) !important;
+}
+
+.gjs-pn-views-container {
+    border-left: 1px solid var(--cstudio-ui-border-soft) !important;
+    box-shadow: -1px 0 2px rgb(0 0 0 / 4%) !important;
+}
+
+.gjs-blocks-cs {
+    padding-top: 4px !important;
+}
+
+.gjs-block {
+    border-color: var(--cstudio-ui-border-soft) !important;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%) !important;
+}
+
+.gjs-block:hover {
+    border-color: var(--cstudio-ui-primary) !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 10%) !important;
+}
+
+/* Context/page dialogs use the same soft shell instead of the legacy heavy shadow. */
+.ludiEditMenuContext {
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: var(--cstudio-ui-radius) !important;
+    box-shadow: var(--cstudio-ui-shadow-dialog) !important;
+}
+
+/* Keyboard focus remains visible without changing click/drag behavior. */
+.gjs-pn-btn:focus-visible,
+.tool-base:focus-visible,
+.list-teachdoc .miniMenuLudi:focus-visible {
+    outline: 2px solid rgb(var(--color-form-base, 32 62 97) / 0.35) !important;
+    outline-offset: 1px !important;
+}
+
+/*
+ * Chamilo-native table of contents header.
+ *
+ * The previous visual layer kept the standalone CStudio logo in this area.
+ * The editor now uses a compact Chamilo-style navigation header instead, while
+ * preserving the exact left-panel dimensions and page-management behavior.
+ */
+.luditopheader {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 70px !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-primary) !important;
+    box-shadow: none !important;
+}
+
+.luditopheader .mdi,
+.luditopheader .fa {
+    font-size: 25px;
+    line-height: 1;
+}
+
+/* Use MDI in modernized controls only when Chamilo's Vue CSS is available. */
+.cstudio-tool-mdi,
+.cstudio-mdi-icon {
+    display: none;
+}
+
+.cstudio-mdi-ready .cstudio-tool-mdi,
+.cstudio-mdi-ready .cstudio-mdi-icon {
+    display: inline-block;
+}
+
+.cstudio-mdi-ready .cstudio-legacy-icon {
+    display: none !important;
+}
+
+.cstudio-mdi-ready .tool-base {
+    background-image: none !important;
+    background-position: initial !important;
+}
+
+.cstudio-mdi-ready .tool-base .cstudio-tool-mdi {
+    position: absolute;
+    top: 9px;
+    right: 0;
+    left: 0;
+    color: var(--cstudio-ui-primary);
+    font-size: 27px;
+    line-height: 1;
+    text-align: center;
+}
+
+.cstudio-mdi-ready .tool-quit .cstudio-tool-mdi {
+    color: var(--cstudio-ui-danger);
+}
+
+.cstudio-delete-page-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    color: var(--cstudio-ui-danger);
+}
+
+.cstudio-delete-page-action:hover,
+.cstudio-delete-page-action:focus-visible {
+    background-color: var(--cstudio-ui-danger-soft);
+    outline: none;
+}
+
+.cstudio-delete-page-action .cstudio-mdi-icon {
+    font-size: 22px;
+}
+
+/* Table of contents rows follow Chamilo's white navigation/card language. */
+.ludimenuteachdoc,
+.list-teachdoc {
+    background-color: var(--cstudio-ui-surface) !important;
+}
+
+.list-teachdoc {
+    padding: 8px !important;
+}
+
+.list-teachdoc li {
+    min-height: 38px;
+    margin-bottom: 4px;
+    padding: 0 8px !important;
+    border: 1px solid transparent !important;
+    border-radius: 6px;
+    background-color: var(--cstudio-ui-surface) !important;
+    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.list-teachdoc li:hover {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.14) !important;
+}
+
+.list-teachdoc .activeli {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.22) !important;
+    box-shadow: inset 3px 0 0 var(--cstudio-ui-primary) !important;
+}
+
+.list-teachdoc li[typenode="3"] {
+    margin-top: 8px;
+    background-color: var(--cstudio-ui-surface-muted) !important;
+    color: var(--cstudio-ui-text-muted) !important;
+    font-weight: 600;
+}
+
+.list-teachdoc .miniMenuLudi {
+    overflow: hidden;
+    padding: 8px 4px !important;
+    color: inherit;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-teachdoc .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    min-width: 28px !important;
+    height: 28px;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 6px !important;
+    background-color: transparent !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-size: 17px !important;
+}
+
+.list-teachdoc .badge:hover,
+.list-teachdoc .badge:focus-visible {
+    background-color: rgb(var(--color-primary-base, 32 62 97) / 0.10) !important;
+    outline: none;
+}
+
+.dotSubLudi {
+    width: 7px !important;
+    height: 7px !important;
+    margin-right: 7px !important;
+    border-radius: 999px !important;
+    flex: 0 0 7px;
+}
+
+.list-teachdoc .addli {
+    display: flex !important;
+    align-items: center;
+    justify-content: center !important;
+    min-height: 40px !important;
+    border: 1px dashed rgb(var(--color-primary-base, 32 62 97) / 0.35) !important;
+    color: var(--cstudio-ui-primary) !important;
+}
+
+.list-teachdoc .addli:hover {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: var(--cstudio-ui-primary) !important;
+}
+
+.cstudio-add-page-icon {
+    font-size: 22px;
+    line-height: 1;
+}
+
+/* Right palette: Chamilo uses white surfaces; remove the remaining gray well. */
+.gjs-pn-views-container,
+.gjs-blocks-cs,
+.gjs-blocks-c {
+    background-color: var(--cstudio-ui-surface) !important;
+}
+
+.gjs-pn-views-container {
+    border-left: 1px solid var(--cstudio-ui-border-soft) !important;
+    box-shadow: -1px 0 2px rgb(0 0 0 / 4%) !important;
+}
+
+.gjs-blocks-c,
+.gjs-blocks-cs {
+    padding: 7px !important;
+}
+
+.gjs-block {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+}
+
+/* GrapesJS block MDI icons retain the existing bitmap/FA icon as fallback. */
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi {
+    background-image: none !important;
+    background-position: initial !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-size: 30px !important;
+}
+
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi::before {
+    font-family: "Material Design Icons" !important;
+    font-size: 30px !important;
+    line-height: 1.2;
+}
+
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi .gjs-block-label {
+    margin-top: 6px;
+    color: var(--cstudio-ui-text) !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+}
+
+/*
+ * Final editor chrome polish.
+ *
+ * The Tools panel header is generated at runtime with a legacy inline gray
+ * background. Override only its visual chrome here; keep the generated markup,
+ * click handlers and panel geometry unchanged.
+ */
+.WinEditParamsTeach > .gjs-mdl-header {
+    position: relative;
+    overflow: hidden;
+    min-height: 30px;
+    box-sizing: border-box;
+    padding: 6px 10px !important;
+    background-color: rgb(var(--color-primary-base, 32 62 97) / 0.08) !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgb(var(--color-primary-base, 32 62 97) / 0.22) !important;
+    color: var(--cstudio-ui-primary) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.WinEditParamsTeach > .gjs-mdl-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 3px;
+    background: var(--cstudio-ui-primary);
+    pointer-events: none;
+}
+
+.WinEditParamsTeach > .gjs-mdl-header .gjs-mdl-title {
+    padding-top: 2px;
+    color: var(--cstudio-ui-primary) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+}
+
+.WinEditParamsTeach > .gjs-mdl-header .gjs-mdl-btn-close {
+    color: var(--cstudio-ui-primary) !important;
+}
+
+/* Give the bottom-left tool tray the same light surface used by Chamilo cards. */
+.WinEditParamsTeach {
+    background-color: var(--cstudio-ui-surface) !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-left: 0 !important;
+    border-bottom: 0 !important;
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 5%) !important;
+}
+
+.WinEditParamsTeach .tool-base {
+    border-color: var(--cstudio-ui-border-soft) !important;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%) !important;
+}
+
+.WinEditParamsTeach .tool-base:hover,
+.WinEditParamsTeach .tool-base:focus-visible {
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.7) !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 8%) !important;
+}
+
+.WinEditParamsTeach .tool-play {
+    background-color: rgb(var(--color-primary-base, 32 62 97) / 0.09) !important;
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.55) !important;
+}
+
+.WinEditParamsTeach .tool-quit {
+    background-color: rgb(var(--color-danger-base, 224 27 36) / 0.04) !important;
+    border-color: rgb(var(--color-danger-base, 224 27 36) / 0.35) !important;
+}
+
+/* Polish the legacy File/Edit menu without changing its DOM or behavior. */
+.topmenuteachdoc {
+    border-right-color: var(--cstudio-ui-border-soft) !important;
+}
+
+.topmenublock {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: transparent !important;
+    border-radius: 4px !important;
+    color: var(--cstudio-ui-text) !important;
+    font-weight: 500 !important;
+}
+
+.topmenublock:hover,
+.topmenublock:focus-visible {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.16) !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-weight: 600 !important;
+    outline: none;
+}
+
+.topmenufile,
+.topmenuexport,
+.topmenuimport,
+.topmenuedit,
+.topmenuabout {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-color: var(--cstudio-ui-border-soft) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 8px 22px rgb(0 0 0 / 12%) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.topsubmenublock {
+    background-color: var(--cstudio-ui-surface) !important;
+    border-left-color: transparent !important;
+    border-bottom-color: var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+}
+
+.topsubmenublock:hover,
+.topsubmenublock:focus-visible {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    border-left-color: var(--cstudio-ui-primary) !important;
+    color: var(--cstudio-ui-primary) !important;
+    outline: none;
+}
+
+/* Slightly reinforce the active Chamilo theme color in the right palette. */
+.gjs-block:hover,
+.gjs-block:focus-visible {
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.72) !important;
+    box-shadow: 0 2px 8px rgb(var(--color-primary-base, 32 62 97) / 0.10) !important;
+    outline: none;
+}
+
+/*
+ * Learning-path player alignment.
+ *
+ * The modern LP runtime uses a white navigation sidebar, compact menu rows,
+ * primary-colored active states and a neutral page background. Keep CStudio's
+ * editor mechanics unchanged while applying the same visual language.
+ */
+
+/* Neutral player-like workspace around the editable page. */
+.gjs-editor-cont .gjs-cv-canvas,
+.gjs-editor-cont .gjs-frame-wrapper,
+.gjs-editor-cont .gjs-frame-wrapper__top,
+.gjs-editor-cont .gjs-frame-wrapper__bottom {
+    background-color: #f8fafc !important;
+}
+
+/* Top File/Edit menu: compact white player-style actions and popovers. */
+.topmenuteachdoc {
+    display: flex !important;
+    width: auto !important;
+    min-width: 202px;
+    height: 38px !important;
+    align-items: center;
+    gap: 2px;
+    margin-right: 8px !important;
+    padding: 0 4px;
+    border-right: 1px solid var(--cstudio-ui-border-soft) !important;
+    box-sizing: border-box;
+}
+
+.topmenublock {
+    display: inline-flex !important;
+    float: none !important;
+    width: auto !important;
+    min-width: 48px;
+    height: 30px !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    border: 0 !important;
+    border-radius: 8px;
+    background-color: var(--cstudio-ui-surface) !important;
+    color: var(--cstudio-ui-text) !important;
+    line-height: 30px !important;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.topmenublock:hover,
+.topmenublock:focus-visible {
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-weight: 600 !important;
+    outline: none;
+}
+
+.topmenufile,
+.topmenuexport,
+.topmenuimport,
+.topmenuedit,
+.topmenuabout {
+    overflow: hidden;
+    padding: 4px 0 !important;
+    border: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-radius: 10px !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    box-shadow: 0 10px 24px rgb(15 23 42 / 14%) !important;
+}
+
+.topsubmenublock,
+.topsubmenublockEdit {
+    display: flex !important;
+    float: none !important;
+    width: 100% !important;
+    min-height: 36px;
+    height: auto !important;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 8px 12px !important;
+    border: 0 !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    color: var(--cstudio-ui-text) !important;
+    line-height: 1.25 !important;
+}
+
+.topsubmenublock:hover,
+.topsubmenublock:focus-visible {
+    border: 0 !important;
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-weight: 500 !important;
+    outline: none;
+}
+
+.topsubmenublock a {
+    width: 100%;
+    color: inherit !important;
+}
+
+/*
+ * Right content palette.
+ *
+ * GrapesJS defaults to two small square tiles and truncates .gjs-block-label.
+ * Use player-like navigation rows instead: icon on the left, readable label on
+ * the right. This keeps the same draggable .gjs-block nodes and handlers.
+ */
+.gjs-pn-views-container .gjs-blocks-c,
+.gjs-pn-views-container .gjs-blocks-cs,
+.gjs-blocks-c,
+.gjs-blocks-cs {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    padding: 8px 8px 72px !important;
+    gap: 4px;
+}
+
+.gjs-pn-views-container .gjs-block,
+.gjs-block {
+    position: relative;
+    display: flex !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 58px !important;
+    height: auto !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    border-left: 4px solid transparent !important;
+    border-radius: 8px !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    background-position: 15px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 28px 28px !important;
+    box-shadow: none !important;
+    text-align: left !important;
+}
+
+.gjs-pn-views-container .gjs-block:hover,
+.gjs-pn-views-container .gjs-block:focus-visible,
+.gjs-block:hover,
+.gjs-block:focus-visible {
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.16) !important;
+    border-left-color: var(--cstudio-ui-primary) !important;
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    box-shadow: none !important;
+}
+
+/* Remove old absolute-label rules used by the square icon tiles. */
+.gjs-block .gjs-block-label,
+.icon-audio .gjs-block-label,
+.icon-cmq .gjs-block-label,
+.icon-h1 .gjs-block-label,
+.icon-h2 .gjs-block-label,
+.icon-txtteach .gjs-block-label,
+.icon-btnTeach .gjs-block-label,
+.icon-plugTeach .gjs-block-label,
+.cstudio-quiz-block .gjs-block-label {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    min-width: 0;
+    flex: 1 1 auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    color: var(--cstudio-ui-text) !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+    overflow-wrap: anywhere;
+    text-align: left !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+}
+
+/* MDI blocks use the same icon + label arrangement as LP runtime TOC rows. */
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi {
+    color: var(--cstudio-ui-primary) !important;
+    font-size: inherit !important;
+}
+
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi::before {
+    display: inline-flex;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    align-items: center;
+    justify-content: center;
+    color: var(--cstudio-ui-primary);
+    font-family: "Material Design Icons" !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+}
+
+.cstudio-mdi-ready .gjs-block.cstudio-block-mdi .gjs-block-label {
+    margin-top: 0 !important;
+}
+
+/* Legacy-image blocks keep their known icon but reserve readable label space. */
+.cstudio-mdi-ready .gjs-block:not(.cstudio-block-mdi) .gjs-block-label,
+.gjs-block:not(.cstudio-block-mdi) .gjs-block-label {
+    padding-left: 38px !important;
+}
+
+/* Category headers align with the title row used by the modern LP TOC. */
+.gjs-block-category .gjs-title,
+.gjs-category-title {
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 11px 14px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    color: var(--cstudio-ui-text) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+/* Left TOC: closer to the current lesson player item rows. */
+.list-teachdoc {
+    padding: 0 !important;
+}
+
+.list-teachdoc li {
+    min-height: 44px;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    border-left: 4px solid transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.list-teachdoc li:hover {
+    border-left-color: rgb(var(--color-primary-base, 32 62 97) / 0.35) !important;
+    background-color: var(--cstudio-ui-primary-soft) !important;
+}
+
+.list-teachdoc .activeli {
+    border-left-color: var(--cstudio-ui-primary) !important;
+    background-color: var(--cstudio-ui-primary-soft) !important;
+    box-shadow: none !important;
+    color: var(--cstudio-ui-primary) !important;
+    font-weight: 600;
+}
+
+.list-teachdoc .miniMenuLudi {
+    padding: 11px 4px !important;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.list-teachdoc .addli {
+    min-height: 42px !important;
+    margin: 8px !important;
+    border: 1px dashed rgb(var(--color-primary-base, 32 62 97) / 0.30) !important;
+    border-radius: 8px !important;
+}
+
+/* Tools footer: same white surface and border rhythm as the TOC. */
+.WinEditParamsTeach {
+    border: 0 !important;
+    border-top: 1px solid var(--cstudio-ui-border-soft) !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    box-shadow: 0 -3px 12px rgb(15 23 42 / 4%) !important;
+}
+
+.WinEditParamsTeach > .gjs-mdl-header {
+    min-height: 38px !important;
+    padding: 10px 12px !important;
+    background-color: var(--cstudio-ui-surface) !important;
+    border-bottom: 1px solid var(--cstudio-ui-border-soft) !important;
+    color: var(--cstudio-ui-text) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+/* Keep compact two-column tool actions, but give them player-style hover states. */
+.WinEditParamsTeach .tool-base {
+    border-color: transparent !important;
+    background-color: var(--cstudio-ui-surface) !important;
+}
+
+.WinEditParamsTeach .tool-base:hover,
+.WinEditParamsTeach .tool-base:focus-visible {
+    border-color: rgb(var(--color-primary-base, 32 62 97) / 0.16) !important;
+    background-color: var(--cstudio-ui-primary-soft) !important;
+}

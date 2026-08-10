@@ -94,6 +94,11 @@ final class TranslateHtmlLanguageService
      * Project an HTML field for MCP read modes (full / inventory / source).
      * Inventory and source omit the multi-language body under $bodyKey.
      *
+     * $metaPrefix namespaces the metadata keys (has_markers, present_languages, …)
+     * so a normalize method can project more than one HTML field on the same
+     * entity without the two calls' metadata colliding. Leave it null for the
+     * entity's primary field to keep the unprefixed keys other callers expect.
+     *
      * @return array<string, mixed>
      */
     public function projectHtmlField(
@@ -101,34 +106,36 @@ final class TranslateHtmlLanguageService
         string $mode,
         string $sourceLanguage,
         string $bodyKey = 'content',
+        ?string $metaPrefix = null,
     ): array {
         $mode = $this->assertReadMode($mode);
         $sourceLanguage = $this->normalizeLanguageCode($sourceLanguage);
         $inspection = $this->inspect($html, $sourceLanguage);
+        $prefix = $metaPrefix ?? '';
 
         $base = [
-            'has_markers' => $inspection['hasMarkers'],
-            'present_languages' => $inspection['presentLanguages'],
-            'per_language' => $inspection['perLanguage'],
-            'content_sha256' => $inspection['contentSha256'],
-            'source_language' => $sourceLanguage,
+            $prefix.'has_markers' => $inspection['hasMarkers'],
+            $prefix.'present_languages' => $inspection['presentLanguages'],
+            $prefix.'per_language' => $inspection['perLanguage'],
+            $prefix.'content_sha256' => $inspection['contentSha256'],
+            $prefix.'source_language' => $sourceLanguage,
         ];
 
         if (self::READ_MODE_INVENTORY === $mode) {
-            $base['word_count'] = $this->countWords($html);
+            $base[$prefix.'word_count'] = $this->countWords($html);
 
             return $base;
         }
 
         if (self::READ_MODE_SOURCE === $mode) {
-            $base['source_html'] = $inspection['sourceHtml'];
-            $base['word_count'] = $this->countWords($inspection['sourceHtml']);
+            $base[$prefix.'source_html'] = $inspection['sourceHtml'];
+            $base[$prefix.'word_count'] = $this->countWords($inspection['sourceHtml']);
 
             return $base;
         }
 
         $base[$bodyKey] = $html;
-        $base['word_count'] = $this->countWords($html);
+        $base[$prefix.'word_count'] = $this->countWords($html);
 
         return $base;
     }
@@ -618,7 +625,44 @@ final class TranslateHtmlLanguageService
 
         $block = $this->buildLanguageBlock($language, $innerHtml);
 
+        // Insert the new block as a sibling of the existing language marker(s),
+        // inside whichever element already wraps them (e.g. a "tiny-content"
+        // editor wrapper around a single-language field). Appending after the
+        // raw HTML string instead (as appendBeforeBodyEnd does) would place the
+        // new block outside that wrapper, splitting the languages across two
+        // different DOM parents and breaking the language filter on display.
+        $lastMarked = false !== $nodes && $nodes->length > 0 ? $nodes->item($nodes->length - 1) : null;
+        $anchorParent = $lastMarked?->parentNode;
+
+        if ($anchorParent instanceof DOMElement) {
+            $this->appendFragmentTo($document, $anchorParent, $block);
+
+            return $this->saveHtmlDocument($document, $isFullDocument);
+        }
+
         return $this->appendBeforeBodyEnd($currentHtml, $block, $isFullDocument);
+    }
+
+    private function appendFragmentTo(DOMDocument $document, DOMElement $parent, string $html): void
+    {
+        $fragmentHtml = '<div id="__chamilo_fragment_root">'.$html.'</div>';
+        $fragmentDocument = new DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+        $fragmentDocument->loadHTML(
+            '<?xml encoding="UTF-8">'.$fragmentHtml,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING,
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+
+        $root = $fragmentDocument->getElementById('__chamilo_fragment_root');
+        if (!$root instanceof DOMElement) {
+            return;
+        }
+
+        foreach (iterator_to_array($root->childNodes) as $child) {
+            $parent->appendChild($document->importNode($child, true));
+        }
     }
 
     private function maybeWrapFullDocument(string $bodyHtml, string $originalHtml, bool $isFullDocument): string

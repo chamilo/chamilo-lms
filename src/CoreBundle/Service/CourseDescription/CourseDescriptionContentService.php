@@ -17,8 +17,6 @@ use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 
-
-
 /**
  * Shared lookup + create/edit/delete mechanics for the MCP course description
  * tools. Mirrors the base-course-only scoping already used by every other

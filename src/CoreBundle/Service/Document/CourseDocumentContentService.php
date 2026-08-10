@@ -333,10 +333,7 @@ final readonly class CourseDocumentContentService
 
         $resolved = $this->languageRepository->findOneAvailableByTitleOrCode($language);
         if (!$resolved instanceof Language) {
-            throw new InvalidArgumentException(\sprintf(
-                'Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").',
-                $language,
-            ));
+            throw new InvalidArgumentException(\sprintf('Unknown language "%s". Provide a language name (e.g. "Spanish") or an existing Chamilo language code (e.g. "es").', $language));
         }
 
         return $this->translateHtmlLanguageService->normalizeLanguageCode((string) $resolved->getIsocode());

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Two modes:
  * - registration invite (invited_user_id NULL): unknown email opens registration.php
  * - existing-user invite (invited_user_id set): bound to that account, redeem via
- *   /course-invitation/accept after login
+ *   /course-invitation/accept after login.
  *
  * Referenced by a ValidationToken (type COURSE_INVITATION) via that token's
  * resourceId, which carries the one-time secret hash; this entity carries

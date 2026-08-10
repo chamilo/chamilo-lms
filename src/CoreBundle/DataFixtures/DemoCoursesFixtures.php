@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\Course;
-use ChamiloSession;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container as LegacyContainer;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
@@ -16,6 +15,7 @@ use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
+use ChamiloSession;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -148,11 +148,8 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
         }
 
         $courseInfo = api_get_course_info($course->getCode());
-        if (!is_array($courseInfo) || empty($courseInfo['real_id'])) {
-            throw new RuntimeException(sprintf(
-                'Could not resolve course context for demo course "%s".',
-                $course->getCode()
-            ));
+        if (!\is_array($courseInfo) || empty($courseInfo['real_id'])) {
+            throw new RuntimeException(\sprintf('Could not resolve course context for demo course "%s".', $course->getCode()));
         }
 
         $courseId = (int) $course->getId();
@@ -260,23 +257,16 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
 
             $managedCourse = $this->courseRepository->findOneByCode($definition['code']);
             if (!$managedCourse instanceof Course) {
-                throw new RuntimeException(\sprintf(
-                    'Could not reload demo course "%s" after restore.',
-                    $definition['code']
-                ));
+                throw new RuntimeException(\sprintf('Could not reload demo course "%s" after restore.', $definition['code']));
             }
 
             $this->enableUserLanguageContent($managedCourse);
             $this->keepOnlyToolVisible($managedCourse, $definition['visible_tool']);
             $this->entityManager->flush();
         } catch (Throwable $e) {
-            throw new RuntimeException(
-                \sprintf('Could not import demo course "%s": %s', $definition['code'], $e->getMessage()),
-                0,
-                $e
-            );
+            throw new RuntimeException(\sprintf('Could not import demo course "%s": %s', $definition['code'], $e->getMessage()), 0, $e);
         } finally {
-            $workDir = is_object($legacyCourse) ? (string) ($legacyCourse->backup_path ?? '') : '';
+            $workDir = \is_object($legacyCourse) ? (string) ($legacyCourse->backup_path ?? '') : '';
             if ('' !== $workDir && is_dir($workDir)) {
                 (new Filesystem())->remove($workDir);
             }

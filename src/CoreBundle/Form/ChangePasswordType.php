@@ -35,7 +35,9 @@ class ChangePasswordType extends AbstractType
      */
     private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
-    public function __construct(private readonly TranslatorInterface $translator) {}
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

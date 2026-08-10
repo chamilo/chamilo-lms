@@ -322,8 +322,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                                 'rl.parent IS NULL'
                             )
                         )
-                        : $qb->expr()->eq('IDENTITY(rn.parent)', ':parentNodeId')
-                    ;
+                        : $qb->expr()->eq('IDENTITY(rn.parent)', ':parentNodeId');
 
                     $rootHierarchyCondition = $primaryHierarchyCondition;
                     $courseRoot = $course?->getResourceNode();

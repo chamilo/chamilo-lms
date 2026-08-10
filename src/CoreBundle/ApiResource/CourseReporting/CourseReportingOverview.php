@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-reporting/overview',
             name: 'get_course_reporting_overview',
             parameters: [
-
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Course identifier',
@@ -33,7 +32,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
-
             ],
             provider: CourseReportingOverviewProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -59,15 +57,21 @@ final class CourseReportingOverview
     #[Groups(['course_reporting_overview:read'])]
     public int $certificateCount = 0;
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['course_reporting_overview:read'])]
     public array $scoreDistribution = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_overview:read'])]
     public array $topStudents = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_overview:read'])]
     public array $timeStudents = [];
 }

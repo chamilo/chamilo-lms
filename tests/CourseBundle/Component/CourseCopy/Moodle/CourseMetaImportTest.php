@@ -10,6 +10,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+use const JSON_THROW_ON_ERROR;
+
 final class CourseMetaImportTest extends TestCase
 {
     private string $workDir = '';

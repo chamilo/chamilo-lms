@@ -18,7 +18,9 @@ final class CourseReportingSectionQueryService
     private const int STUDENT_STATUS = 5;
     private const int MAX_ITEMS_PER_PAGE = 200;
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string>
+     */
     private const array RESOURCE_TYPE_LABELS = [
         'files' => 'Documents',
         'lps' => 'Learning paths',
@@ -32,10 +34,14 @@ final class CourseReportingSectionQueryService
         'thematic_plan' => 'Thematic plan',
     ];
 
-    /** @var array<string, bool> */
+    /**
+     * @var array<string, bool>
+     */
     private array $tableCache = [];
 
-    /** @var array<string, array<string, bool>> */
+    /**
+     * @var array<string, array<string, bool>>
+     */
     private array $columnCache = [];
 
     public function __construct(
@@ -95,7 +101,7 @@ final class CourseReportingSectionQueryService
                 'key' => $period['key'],
                 'label' => $period['label'],
                 'value' => $count,
-                'secondary' => 0 < \count($learnerIds)
+                'secondary' => \count($learnerIds) > 0
                     ? round($count * 100 / \count($learnerIds), 1).'%'
                     : '0%',
             ];
@@ -233,14 +239,14 @@ final class CourseReportingSectionQueryService
         ];
         $params = ['courseId' => $context->courseId()];
 
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $where[] = '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)';
             $params['sessionId'] = $context->sessionId();
         } else {
             $where[] = '(rl.session_id IS NULL OR rl.session_id = 0)';
         }
 
-        if (0 < $context->groupId) {
+        if ($context->groupId > 0) {
             $where[] = 'group_info.iid = :groupId';
             $params['groupId'] = $context->groupId;
         }
@@ -366,7 +372,7 @@ final class CourseReportingSectionQueryService
             'resourceTypes' => ArrayParameterType::STRING,
         ];
 
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $where[] = 'rl.session_id = :sessionId';
             $params['sessionId'] = $context->sessionId();
         } else {
@@ -529,11 +535,11 @@ final class CourseReportingSectionQueryService
                    INNER JOIN resource_link rl ON rl.resource_node_id = lp.resource_node_id
                   WHERE rl.c_id = :courseId
                     AND rl.deleted_at IS NULL
-                    AND '.(0 < $context->sessionId()
+                    AND '.($context->sessionId() > 0
                         ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
                         : '(rl.session_id IS NULL OR rl.session_id = 0)').'
                ORDER BY lp.title ASC',
-                0 < $context->sessionId()
+                $context->sessionId() > 0
                     ? ['courseId' => $context->courseId(), 'sessionId' => $context->sessionId()]
                     : ['courseId' => $context->courseId()]
             );
@@ -563,11 +569,11 @@ final class CourseReportingSectionQueryService
                    INNER JOIN resource_link rl ON rl.resource_node_id = quiz.resource_node_id
                   WHERE rl.c_id = :courseId
                     AND rl.deleted_at IS NULL
-                    AND '.(0 < $context->sessionId()
+                    AND '.($context->sessionId() > 0
                         ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
                         : '(rl.session_id IS NULL OR rl.session_id = 0)').'
                ORDER BY quiz.title ASC',
-                0 < $context->sessionId()
+                $context->sessionId() > 0
                     ? ['courseId' => $context->courseId(), 'sessionId' => $context->sessionId()]
                     : ['courseId' => $context->courseId()]
             );
@@ -644,13 +650,13 @@ final class CourseReportingSectionQueryService
                    LEFT JOIN resource_node resource_node ON resource_node.id = rl.resource_node_id
                   WHERE rl.c_id = :courseId
                     AND rl.deleted_at IS NULL
-                    AND '.(0 < $context->sessionId()
+                    AND '.($context->sessionId() > 0
                         ? 'rl.session_id = :sessionId'
                         : 'rl.session_id IS NULL').'
                GROUP BY COALESCE(NULLIF(resource_node.title, \'\'), download.down_doc_path)
                ORDER BY downloads DESC, title ASC
                   LIMIT 10',
-                0 < $context->sessionId()
+                $context->sessionId() > 0
                     ? ['courseId' => $context->courseId(), 'sessionId' => $context->sessionId()]
                     : ['courseId' => $context->courseId()]
             );
@@ -749,7 +755,7 @@ final class CourseReportingSectionQueryService
             'rl.deleted_at IS NULL',
         ];
         $quizParams = ['courseId' => $context->courseId()];
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $quizWhere[] = '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)';
             $quizParams['sessionId'] = $context->sessionId();
         } else {
@@ -757,7 +763,7 @@ final class CourseReportingSectionQueryService
         }
 
         $exerciseId = max(0, (int) ($filters['exerciseId'] ?? 0));
-        if (0 < $exerciseId) {
+        if ($exerciseId > 0) {
             $quizWhere[] = 'quiz.iid = :exerciseId';
             $quizParams['exerciseId'] = $exerciseId;
         }
@@ -777,11 +783,11 @@ final class CourseReportingSectionQueryService
                INNER JOIN resource_link rl ON rl.resource_node_id = quiz.resource_node_id
               WHERE rl.c_id = :courseId
                 AND rl.deleted_at IS NULL
-                AND '.(0 < $context->sessionId()
+                AND '.($context->sessionId() > 0
                     ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
                     : '(rl.session_id IS NULL OR rl.session_id = 0)').'
            ORDER BY quiz.title ASC',
-            0 < $context->sessionId()
+            $context->sessionId() > 0
                 ? ['courseId' => $context->courseId(), 'sessionId' => $context->sessionId()]
                 : ['courseId' => $context->courseId()]
         );
@@ -855,7 +861,7 @@ final class CourseReportingSectionQueryService
                 }
 
                 $status = 'No attempts';
-                if (0 < $stats['attempts']) {
+                if ($stats['attempts'] > 0) {
                     $status = $stats['percentage'] >= $threshold ? 'Pass' : 'Fail';
                 }
 
@@ -873,7 +879,7 @@ final class CourseReportingSectionQueryService
         }
 
         $total = \count($items);
-        $pageItems = array_slice($items, $pagination['offset'], $pagination['itemsPerPage']);
+        $pageItems = \array_slice($items, $pagination['offset'], $pagination['itemsPerPage']);
 
         return $this->result(
             'exams',
@@ -1074,10 +1080,10 @@ final class CourseReportingSectionQueryService
 
         $where = ['rl.c_id = :courseId', 'rl.deleted_at IS NULL'];
         $params = ['courseId' => $context->courseId()];
-        $where[] = 0 < $context->sessionId()
+        $where[] = $context->sessionId() > 0
             ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
             : '(rl.session_id IS NULL OR rl.session_id = 0)';
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $params['sessionId'] = $context->sessionId();
         }
         $keyword = trim((string) ($filters['keyword'] ?? ''));
@@ -1142,7 +1148,7 @@ final class CourseReportingSectionQueryService
     }
 
     /**
-     * @param array<string, mixed> $filters
+     * @param array<string, mixed>                             $filters
      * @param array{page: int, itemsPerPage: int, offset: int} $pagination
      *
      * @return array<string, mixed>
@@ -1171,7 +1177,7 @@ final class CourseReportingSectionQueryService
             'sessionId' => $context->sessionId(),
         ];
 
-        if (0 < $context->groupId && $this->tableExists('c_group_rel_user')) {
+        if ($context->groupId > 0 && $this->tableExists('c_group_rel_user')) {
             $latestWhere[] = 'EXISTS (
                 SELECT 1
                   FROM c_group_rel_user group_user
@@ -1299,7 +1305,7 @@ final class CourseReportingSectionQueryService
     }
 
     /**
-     * @param array<string, mixed> $filters
+     * @param array<string, mixed>                             $filters
      * @param array{page: int, itemsPerPage: int, offset: int} $pagination
      *
      * @return array<string, mixed>
@@ -1413,7 +1419,7 @@ final class CourseReportingSectionQueryService
         $learnerIds = array_map(static fn (array $learner): int => (int) $learner['id'], $learners);
         $totalCourseTime = $this->getCourseTimeForLearners($context, $learnerIds);
 
-        $pageRows = array_slice($learners, $pagination['offset'], $pagination['itemsPerPage']);
+        $pageRows = \array_slice($learners, $pagination['offset'], $pagination['itemsPerPage']);
         foreach ($pageRows as &$row) {
             $userId = (int) $row['id'];
             $row['courseTime'] = $this->getLearnerCourseTime($context, $userId);
@@ -1466,7 +1472,7 @@ final class CourseReportingSectionQueryService
 
         $learners = $this->filterLearners($this->getLearners($context), $filters);
         $total = \count($learners);
-        $pageRows = array_slice($learners, $pagination['offset'], $pagination['itemsPerPage']);
+        $pageRows = \array_slice($learners, $pagination['offset'], $pagination['itemsPerPage']);
         foreach ($pageRows as &$row) {
             $userId = (int) $row['id'];
             $row['courseAccesses'] = $this->getLearnerAccessCount($context, $userId);
@@ -1604,7 +1610,9 @@ final class CourseReportingSectionQueryService
         );
     }
 
-    /** @return array<int, array<string, mixed>> */
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     private function getLearners(CourseReportingContext $context): array
     {
         $params = [
@@ -1638,7 +1646,7 @@ final class CourseReportingSectionQueryService
                            '.$firstAccessExpression.' AS firstAccess,
                            '.$lastAccessExpression.' AS lastAccess';
 
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $sql = $select.'
                       FROM session_rel_course_rel_user relation
                       INNER JOIN user ON user.id = relation.user_id
@@ -1654,7 +1662,7 @@ final class CourseReportingSectionQueryService
                        AND relation.status = :studentStatus';
         }
 
-        if (0 < $context->groupId && $this->tableExists('c_group_rel_user')) {
+        if ($context->groupId > 0 && $this->tableExists('c_group_rel_user')) {
             $sql .= ' AND EXISTS (
                 SELECT 1
                   FROM c_group_rel_user group_user
@@ -1682,7 +1690,7 @@ final class CourseReportingSectionQueryService
 
     /**
      * @param array<int, array<string, mixed>> $learners
-     * @param array<string, mixed> $filters
+     * @param array<string, mixed>             $filters
      *
      * @return array<int, array<string, mixed>>
      */
@@ -1763,7 +1771,9 @@ final class CourseReportingSectionQueryService
         return $rows;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function toolMetric(string $title, string $table, CourseReportingContext $context): array
     {
         if (!$this->tableExists($table)) {
@@ -1772,11 +1782,11 @@ final class CourseReportingSectionQueryService
 
         $total = 0;
         if ($this->columnExists($table, 'resource_node_id') && $this->tableExists('resource_link')) {
-            $sessionSql = 0 < $context->sessionId()
+            $sessionSql = $context->sessionId() > 0
                 ? 'AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
                 : 'AND (rl.session_id IS NULL OR rl.session_id = 0)';
             $params = ['courseId' => $context->courseId()];
-            if (0 < $context->sessionId()) {
+            if ($context->sessionId() > 0) {
                 $params['sessionId'] = $context->sessionId();
             }
             $total = (int) $this->connection->fetchOne(
@@ -1797,7 +1807,9 @@ final class CourseReportingSectionQueryService
         return ['id' => $table, 'title' => $title, 'total' => $total, 'available' => true];
     }
 
-    /** @return array<string, int|float> */
+    /**
+     * @return array<string, int|float>
+     */
     private function exerciseStats(CourseReportingContext $context, int $exerciseId): array
     {
         if (!$this->tableExists('track_e_exercises')) {
@@ -1828,7 +1840,9 @@ final class CourseReportingSectionQueryService
         ];
     }
 
-    /** @return array<string, int|float|string|null> */
+    /**
+     * @return array<string, int|float|string|null>
+     */
     private function learningPathStats(CourseReportingContext $context, int $learningPathId): array
     {
         if (!$this->tableExists('c_lp_view')) {
@@ -2053,7 +2067,9 @@ final class CourseReportingSectionQueryService
         return $userScores ? array_sum($userScores) / \count($userScores) : 0.0;
     }
 
-    /** @return int[] */
+    /**
+     * @return int[]
+     */
     private function getGroupUserIds(CourseReportingContext $context, int $groupId): array
     {
         if (!$this->tableExists('c_group_rel_user')) {
@@ -2075,18 +2091,20 @@ final class CourseReportingSectionQueryService
         return array_values(array_unique(array_map('intval', $ids)));
     }
 
-    /** @return int[] */
+    /**
+     * @return int[]
+     */
     private function getCourseLearningPathIds(CourseReportingContext $context): array
     {
         if (!$this->tableExists('c_lp') || !$this->tableExists('resource_link')) {
             return [];
         }
 
-        $sessionSql = 0 < $context->sessionId()
+        $sessionSql = $context->sessionId() > 0
             ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
             : '(rl.session_id IS NULL OR rl.session_id = 0)';
         $params = ['courseId' => $context->courseId()];
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $params['sessionId'] = $context->sessionId();
         }
 
@@ -2141,14 +2159,14 @@ final class CourseReportingSectionQueryService
             return 0;
         }
 
-        $sessionCondition = 0 < $context->sessionId()
+        $sessionCondition = $context->sessionId() > 0
             ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
             : '(rl.session_id IS NULL OR rl.session_id = 0)';
         $params = [
             'groupId' => $groupId,
             'courseId' => $context->courseId(),
         ];
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $params['sessionId'] = $context->sessionId();
         }
 
@@ -2182,14 +2200,14 @@ final class CourseReportingSectionQueryService
             return 0;
         }
 
-        $sessionCondition = 0 < $context->sessionId()
+        $sessionCondition = $context->sessionId() > 0
             ? '(rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sessionId)'
             : '(rl.session_id IS NULL OR rl.session_id = 0)';
         $params = [
             'groupId' => $groupId,
             'courseId' => $context->courseId(),
         ];
-        if (0 < $context->sessionId()) {
+        if ($context->sessionId() > 0) {
             $params['sessionId'] = $context->sessionId();
         }
 
@@ -2211,7 +2229,7 @@ final class CourseReportingSectionQueryService
     private function normalizeAuditValue(string $value): string
     {
         $normalized = trim(strip_tags($value));
-        if (2000 < mb_strlen($normalized)) {
+        if (mb_strlen($normalized) > 2000) {
             return mb_substr($normalized, 0, 1997).'...';
         }
 
@@ -2392,7 +2410,9 @@ final class CourseReportingSectionQueryService
         );
     }
 
-    /** @return array{page: int, itemsPerPage: int, offset: int} */
+    /**
+     * @return array{page: int, itemsPerPage: int, offset: int}
+     */
     private function pagination(array $filters): array
     {
         $page = max(1, (int) ($filters['page'] ?? 1));
@@ -2443,7 +2463,7 @@ final class CourseReportingSectionQueryService
 
     /**
      * @param array{page: int, itemsPerPage: int, offset: int} $pagination
-     * @param array<string, mixed> $meta
+     * @param array<string, mixed>                             $meta
      *
      * @return array<string, mixed>
      */
@@ -2475,7 +2495,7 @@ final class CourseReportingSectionQueryService
      * @param array<int, array<string, mixed>> $columns
      * @param array<int, array<string, mixed>> $items
      * @param array<int, array<string, mixed>> $sections
-     * @param array<string, mixed> $meta
+     * @param array<string, mixed>             $meta
      *
      * @return array<string, mixed>
      */

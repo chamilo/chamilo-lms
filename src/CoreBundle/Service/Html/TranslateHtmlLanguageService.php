@@ -66,11 +66,7 @@ final class TranslateHtmlLanguageService
     {
         $mode = strtolower(trim($mode));
         if (!\in_array($mode, $this->supportedReadModes(), true)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid read mode "%s". Use one of: %s.',
-                $mode,
-                implode(', ', $this->supportedReadModes()),
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid read mode "%s". Use one of: %s.', $mode, implode(', ', $this->supportedReadModes())));
         }
 
         return $mode;
@@ -80,11 +76,7 @@ final class TranslateHtmlLanguageService
     {
         $mode = strtolower(trim($mode));
         if (!\in_array($mode, $this->supportedWriteModes(), true)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid mode "%s". Use one of: %s.',
-                $mode,
-                implode(', ', $this->supportedWriteModes()),
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid mode "%s". Use one of: %s.', $mode, implode(', ', $this->supportedWriteModes())));
         }
 
         return $mode;
@@ -392,11 +384,7 @@ final class TranslateHtmlLanguageService
     ): array {
         $mode = strtolower(trim($mode));
         if (!\in_array($mode, $this->supportedWriteModes(), true)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid mode "%s". Use one of: %s.',
-                $mode,
-                implode(', ', $this->supportedWriteModes()),
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid mode "%s". Use one of: %s.', $mode, implode(', ', $this->supportedWriteModes())));
         }
 
         $language = $this->normalizeLanguageCode($language);
@@ -406,9 +394,7 @@ final class TranslateHtmlLanguageService
 
         $currentHtml = (string) $currentHtml;
         if (null !== $ifMatchSha256 && '' !== $ifMatchSha256 && $ifMatchSha256 !== $this->contentSha256($currentHtml)) {
-            throw new InvalidArgumentException(
-                'The content has changed since it was last read (ifMatchSha256 mismatch). Re-read and try again.'
-            );
+            throw new InvalidArgumentException('The content has changed since it was last read (ifMatchSha256 mismatch). Re-read and try again.');
         }
 
         $innerHtml = $this->normalizeInnerHtml($innerHtml, $language);
@@ -533,10 +519,7 @@ final class TranslateHtmlLanguageService
         // Empty field → create sole language block.
         if ('' === $trimmed) {
             if (self::MODE_REPLACE_ONLY === $mode) {
-                throw new InvalidArgumentException(\sprintf(
-                    'No existing "%s" language block to replace (content is empty).',
-                    $language,
-                ));
+                throw new InvalidArgumentException(\sprintf('No existing "%s" language block to replace (content is empty).', $language));
             }
 
             return $this->maybeWrapFullDocument($this->buildLanguageBlock($language, $innerHtml), $currentHtml, $isFullDocument);
@@ -546,10 +529,7 @@ final class TranslateHtmlLanguageService
         // (or did not specify one), replace the whole field with a single block.
         if ('' === $sourceLanguageForWrap || $this->languageCodesMatch($language, $sourceLanguageForWrap)) {
             if (self::MODE_CREATE_ONLY === $mode) {
-                throw new InvalidArgumentException(\sprintf(
-                    'Language "%s" already exists as the unmarked content. Use mode=upsert or mode=replace_only.',
-                    $language,
-                ));
+                throw new InvalidArgumentException(\sprintf('Language "%s" already exists as the unmarked content. Use mode=upsert or mode=replace_only.', $language));
             }
 
             return $this->maybeWrapFullDocument($this->buildLanguageBlock($language, $innerHtml), $currentHtml, $isFullDocument);
@@ -557,11 +537,7 @@ final class TranslateHtmlLanguageService
 
         // Adding a different language: wrap existing as source, append target.
         if (self::MODE_REPLACE_ONLY === $mode) {
-            throw new InvalidArgumentException(\sprintf(
-                'No existing "%s" language block to replace. Unmarked content will be wrapped as "%s" when you upsert.',
-                $language,
-                $sourceLanguageForWrap,
-            ));
+            throw new InvalidArgumentException(\sprintf('No existing "%s" language block to replace. Unmarked content will be wrapped as "%s" when you upsert.', $language, $sourceLanguageForWrap));
         }
 
         $merged = $this->buildLanguageBlock($sourceLanguageForWrap, $trimmed)
@@ -599,10 +575,7 @@ final class TranslateHtmlLanguageService
 
         if ($found instanceof DOMElement) {
             if (self::MODE_CREATE_ONLY === $mode) {
-                throw new InvalidArgumentException(\sprintf(
-                    'Language "%s" already exists. Use mode=upsert or mode=replace_only to overwrite it.',
-                    $language,
-                ));
+                throw new InvalidArgumentException(\sprintf('Language "%s" already exists. Use mode=upsert or mode=replace_only to overwrite it.', $language));
             }
 
             $this->replaceElementInnerHtml($found, $innerHtml);
@@ -617,10 +590,7 @@ final class TranslateHtmlLanguageService
         }
 
         if (self::MODE_REPLACE_ONLY === $mode) {
-            throw new InvalidArgumentException(\sprintf(
-                'No existing "%s" language block to replace.',
-                $language,
-            ));
+            throw new InvalidArgumentException(\sprintf('No existing "%s" language block to replace.', $language));
         }
 
         $block = $this->buildLanguageBlock($language, $innerHtml);
@@ -718,20 +688,14 @@ final class TranslateHtmlLanguageService
         )) {
             $wrappedLang = $this->normalizeLanguageCode((string) ($wrap['lang'] ?? ''));
             if ('' !== $wrappedLang && !$this->languageCodesMatch($wrappedLang, $expectedLanguage)) {
-                throw new InvalidArgumentException(\sprintf(
-                    'The provided content is wrapped for language "%s" but the upsert language is "%s".',
-                    $wrappedLang,
-                    $expectedLanguage,
-                ));
+                throw new InvalidArgumentException(\sprintf('The provided content is wrapped for language "%s" but the upsert language is "%s".', $wrappedLang, $expectedLanguage));
             }
             $html = trim((string) ($wrap['content'] ?? ''));
         }
 
         // Nested translatehtml markers are not allowed inside a single-language payload.
         if (false !== stripos($html, 'mce-translatehtml')) {
-            throw new InvalidArgumentException(
-                'The language content must not contain nested translatehtml markers. Send only the inner HTML for this language.'
-            );
+            throw new InvalidArgumentException('The language content must not contain nested translatehtml markers. Send only the inner HTML for this language.');
         }
 
         return $html;
@@ -802,10 +766,9 @@ final class TranslateHtmlLanguageService
     {
         if ($isFullDocument) {
             $html = $document->saveHTML() ?: '';
-            // Drop the XML encoding preamble if present.
-            $html = preg_replace('/^<\?xml[^>]*>\s*/i', '', $html) ?? $html;
 
-            return $html;
+            // Drop the XML encoding preamble if present.
+            return preg_replace('/^<\?xml[^>]*>\s*/i', '', $html) ?? $html;
         }
 
         $root = $document->getElementById('__chamilo_translate_root');

@@ -241,23 +241,33 @@ final class CourseReportingSection
     #[Groups(['course_reporting_section:read'])]
     public int $itemsPerPage = 20;
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_section:read'])]
     public array $summary = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_section:read'])]
     public array $columns = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_section:read'])]
     public array $items = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_section:read'])]
     public array $sections = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['course_reporting_section:read'])]
     public array $meta = [];
 }

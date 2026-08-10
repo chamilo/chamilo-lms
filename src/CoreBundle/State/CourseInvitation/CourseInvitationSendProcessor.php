@@ -73,17 +73,11 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
 
         if ($existingUser instanceof User) {
             if (User::SOFT_DELETED === $existingUser->getActive()) {
-                throw new BadRequestHttpException(
-                    $this->translator->trans('This email address cannot be invited.')
-                );
+                throw new BadRequestHttpException($this->translator->trans('This email address cannot be invited.'));
             }
 
             if ($this->subscriptionService->isAlreadySubscribed($existingUser, $course, $session)) {
-                throw new ConflictHttpException(
-                    $session instanceof Session
-                        ? $this->translator->trans('This user is already subscribed to the session.')
-                        : $this->translator->trans('This user is already subscribed to the course.')
-                );
+                throw new ConflictHttpException($session instanceof Session ? $this->translator->trans('This user is already subscribed to the session.') : $this->translator->trans('This user is already subscribed to the course.'));
             }
 
             $invitedUser = $existingUser;

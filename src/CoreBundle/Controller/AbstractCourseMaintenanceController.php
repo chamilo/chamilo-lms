@@ -1730,6 +1730,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
                 $candidate = $this->findBucketKey($orig, $childType);
                 if (null !== $candidate && !empty($orig[$candidate]) && \is_array($orig[$candidate])) {
                     $childKey = $candidate;
+
                     break;
                 }
             }

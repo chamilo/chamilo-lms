@@ -213,6 +213,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
@@ -221,6 +222,7 @@ import exerciseService from "../../services/exerciseService"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const isLoading = ref(false)
 const isStartingAttempt = ref(false)
@@ -572,7 +574,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()

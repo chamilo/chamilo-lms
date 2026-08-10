@@ -397,7 +397,7 @@
                   type="radio"
                   :value="choice.id"
                 />
-                <span class="exercise-runtime-html flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
               </label>
             </div>
 
@@ -414,7 +414,7 @@
                   type="checkbox"
                   :value="choice.id"
                 />
-                <span class="exercise-runtime-html flex-1" v-html="displayTranslatedHtml(choice.answer)" />
+                <div class="exercise-runtime-html min-w-0 flex-1" v-html="displayTranslatedHtml(choice.answer)" />
               </label>
             </div>
 
@@ -4740,6 +4740,7 @@ watch(
 }
 
 .exercise-runtime-html :deep(p) {
+  margin-top: 0;
   margin-bottom: 0.5rem;
 }
 

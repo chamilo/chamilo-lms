@@ -47,6 +47,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -727,6 +728,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         }
 
+        // Restored legacy/MBZ resources can carry a generic text/plain or octet-stream
+        // MIME even when the original filename clearly identifies an image. Normalize only
+        // image extensions here so /view can use the image pipeline without changing stored data.
+        $mimeType = $this->normalizeImageMimeType($mimeType, (string) $fileName);
+
         // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
         // This covers files uploaded before the MIME-type allowlist was introduced.
         $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
@@ -812,6 +818,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     }
 
                     $content = $this->injectGlossaryJs($request, $content, $resourceNode);
+                    $content = $this->appendLearningPathContextToEmbeddedDocumentUrls($content, $request);
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
@@ -970,6 +977,112 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         return $response;
+    }
+
+    /**
+     * Recover a usable image MIME from the original filename when persisted metadata is generic.
+     *
+     * This is intentionally restricted to image/* candidates. It fixes restored images that were
+     * persisted as text/plain/application/octet-stream without changing how arbitrary files render.
+     */
+    private function normalizeImageMimeType(string $mimeType, string $fileName): string
+    {
+        $baseMimeType = strtolower(trim((string) strtok($mimeType, ';')));
+        if (!\in_array($baseMimeType, ['', 'text/plain', 'application/octet-stream'], true)) {
+            return $mimeType;
+        }
+
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if ('' === $extension) {
+            return $mimeType;
+        }
+
+        foreach (MimeTypes::getDefault()->getMimeTypes($extension) as $candidate) {
+            if (str_starts_with($candidate, 'image/')) {
+                return $candidate;
+            }
+        }
+
+        return $mimeType;
+    }
+
+    /**
+     * Propagate LP context to embedded document-file URLs while rendering an LP HTML document.
+     *
+     * The LP runtime already opens the main document with cid/lp_id/item_id query parameters.
+     * Embedded images use their own /r/document/files/{uuid}/view requests, so they do not inherit
+     * that query string. Hidden documents used only inside a learning path therefore fail the
+     * ResourceNodeVoter check for real students. Rewriting only the response HTML keeps the stored
+     * document untouched while giving embedded resources the same verified course/LP context.
+     */
+    private function appendLearningPathContextToEmbeddedDocumentUrls(string $html, Request $request): string
+    {
+        if ('' === $html) {
+            return $html;
+        }
+
+        $lpId = $request->query->getInt('lp_id');
+        $lpItemId = $request->query->getInt('lp_item_id');
+        if ($lpItemId <= 0) {
+            $lpItemId = $request->query->getInt('item_id');
+        }
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+
+        if ($lpId <= 0 && $lpItemId <= 0 && 'learnpath' !== $origin) {
+            return $html;
+        }
+
+        $context = ['origin' => 'learnpath'];
+        foreach (['cid', 'sid', 'gid'] as $key) {
+            $value = $request->query->getInt($key);
+            if ($value > 0) {
+                $context[$key] = $value;
+            }
+        }
+        if ($lpId > 0) {
+            $context['lp_id'] = $lpId;
+        }
+        if ($lpItemId > 0) {
+            $context['lp_item_id'] = $lpItemId;
+        }
+
+        $pattern = '#(?P<prefix>(?:src|href)\\s*=\\s*["\\\'])(?P<url>(?:(?:https?:)?//[^"\\\']+)?/r/document/files/[0-9a-fA-F-]{36}/view(?:\\?[^"\\\']*)?)(?P<suffix>["\\\'])#i';
+
+        return preg_replace_callback(
+            $pattern,
+            static function (array $matches) use ($context): string {
+                $url = html_entity_decode((string) ($matches['url'] ?? ''), ENT_QUOTES | ENT_HTML5);
+                if ('' === $url) {
+                    return $matches[0];
+                }
+
+                $fragment = '';
+                $fragmentPos = strpos($url, '#');
+                if (false !== $fragmentPos) {
+                    $fragment = substr($url, $fragmentPos);
+                    $url = substr($url, 0, $fragmentPos);
+                }
+
+                $query = (string) (parse_url($url, PHP_URL_QUERY) ?? '');
+                $existing = [];
+                if ('' !== $query) {
+                    parse_str($query, $existing);
+                }
+
+                $missing = array_diff_key($context, $existing);
+                if ([] === $missing) {
+                    return $matches[0];
+                }
+
+                $separator = str_contains($url, '?') ? '&' : '?';
+                $url .= $separator.http_build_query($missing, '', '&', PHP_QUERY_RFC3986).$fragment;
+
+                return (string) ($matches['prefix'] ?? '')
+                    .htmlspecialchars($url, ENT_QUOTES | ENT_HTML5)
+                    .(string) ($matches['suffix'] ?? '');
+            },
+            $html
+        ) ?? $html;
     }
 
     /**

@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\PageExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ResourceExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\SurveyMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ThematicMetaExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\UrlExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\WikiExport;
@@ -218,6 +219,7 @@ class MoodleExport
         $this->exportWikiActivities($activities, $tempDir);
         $this->exportGradebookActivities($activities, $tempDir);
         $this->exportQuizMetaActivities($activities, $tempDir);
+        $this->exportSurveyMetaActivities($activities, $tempDir);
         $this->exportLearnpathMeta($tempDir);
         $this->exportDocumentIndex($tempDir);
         $this->exportCourseMeta($tempDir);
@@ -2290,6 +2292,33 @@ class MoodleExport
                 $count++;
             } catch (\Throwable $e) {
                 @error_log('[MoodleExport::exportQuizMetaActivities][ERROR] '.$e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Export raw Chamilo survey JSON sidecars without changing Moodle feedback.xml.
+     */
+    private function exportSurveyMetaActivities(array $activities, string $exportDir): void
+    {
+        foreach ($activities as $activity) {
+            if (!\in_array(($activity['modulename'] ?? ''), ['feedback', 'survey'], true)) {
+                continue;
+            }
+
+            $activityId = (int) ($activity['id'] ?? 0);
+            $moduleId = (int) ($activity['moduleid'] ?? 0);
+            $sectionId = (int) ($activity['sectionid'] ?? 0);
+
+            if ($activityId <= 0 || $moduleId <= 0) {
+                continue;
+            }
+
+            try {
+                $meta = new SurveyMetaExport($this->course);
+                $meta->export($activityId, $exportDir, $moduleId, $sectionId);
+            } catch (\Throwable $e) {
+                @error_log('[MoodleExport::exportSurveyMetaActivities][ERROR] '.$e->getMessage());
             }
         }
     }

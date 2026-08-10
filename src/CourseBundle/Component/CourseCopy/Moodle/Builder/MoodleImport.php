@@ -528,7 +528,12 @@ class MoodleImport
                 case 'feedback': {
                     if (!$moduleXml || !is_file($moduleXml)) { break; }
 
-                    $parsed = $this->readSurveyModule($moduleXml, $modName);
+                    $parsed = $this->readSurveyMetaActivity($workDir, $dir);
+                    $fromChamiloMeta = !empty($parsed);
+                    if (!$fromChamiloMeta) {
+                        $parsed = $this->readSurveyModule($moduleXml, $modName);
+                    }
+
                     $surveyData = (array) ($parsed['survey'] ?? []);
                     $surveyQuestions = (array) ($parsed['questions'] ?? []);
 
@@ -540,23 +545,36 @@ class MoodleImport
                             $legacyQid = $this->nextId($resources['survey_question']);
                             $q['survey_id'] = $sid;
 
-                            $resources['survey_question'][$legacyQid] = $this->mkLegacyItem('survey_question', $legacyQid, $q);
+                            $resources['survey_question'][$legacyQid] = $this->mkLegacyItem(
+                                'survey_question',
+                                $legacyQid,
+                                $q,
+                                ['answers']
+                            );
                             $questionIds[] = $legacyQid;
                         }
 
                         $surveyData['question_ids'] = $questionIds;
 
-                        $resources['surveys'][$sid] = $this->mkLegacyItem('surveys', $sid, $surveyData);
+                        $resources['surveys'][$sid] = $this->mkLegacyItem(
+                            'surveys',
+                            $sid,
+                            $surveyData,
+                            ['question_ids']
+                        );
 
                         if ($this->debug) {
-                            error_log("MBZ[$rid] {$modName} -> surveys id={$sid} questions=".count($questionIds));
+                            error_log(
+                                "MBZ[$rid] {$modName} -> surveys id={$sid} questions=".count($questionIds)
+                                .' source='.($fromChamiloMeta ? 'chamilo-meta' : 'moodle-xml')
+                            );
                         }
 
                         if ($sectionId > 0 && isset($lpMap[$sectionId])) {
                             $lpMap[$sectionId]['items'][] = [
                                 'item_type' => 'survey',
                                 'ref'       => $sid,
-                                'title'     => $surveyData['name'] ?? ucfirst($modName),
+                                'title'     => $surveyData['title'] ?? $surveyData['name'] ?? ucfirst($modName),
                             ];
                             if ($this->debug) {
                                 error_log("MBZ[$rid] {$modName} -> LP section={$sectionId} add survey ref={$sid}");
@@ -3036,6 +3054,73 @@ class MoodleImport
             'source_activity_id' => (int) $meta['activity_id'],
             'source_moduleid' => (int) $meta['module_id'],
             'source_sectionid' => (int) $meta['section_id'],
+        ];
+    }
+
+    /**
+     * Read a Chamilo survey sidecar for one Moodle activity directory.
+     *
+     * Returning an empty array intentionally falls back to Moodle feedback.xml,
+     * which keeps third-party Moodle backups fully supported.
+     */
+    private function readSurveyMetaActivity(string $workDir, string $activityDir): array
+    {
+        if (!preg_match('#(?:^|/)feedback_(\d+)$#', trim($activityDir, '/'), $matches)
+            && !preg_match('#(?:^|/)survey_(\d+)$#', trim($activityDir, '/'), $matches)) {
+            return [];
+        }
+
+        $moduleId = (int) ($matches[1] ?? 0);
+        if ($moduleId <= 0) {
+            return [];
+        }
+
+        $baseDir = rtrim($workDir, '/').'/chamilo/survey/survey_'.$moduleId;
+        $surveyFile = $baseDir.'/survey.json';
+        $questionsFile = $baseDir.'/questions.json';
+
+        if (!is_file($surveyFile) || !is_file($questionsFile)) {
+            return [];
+        }
+
+        $surveyJson = $this->readJsonFile($surveyFile);
+        $questionsJson = $this->readJsonFile($questionsFile);
+
+        $survey = (array) ($surveyJson['survey'] ?? []);
+        $questions = (array) ($questionsJson['questions'] ?? []);
+        if (empty($survey)) {
+            return [];
+        }
+
+        $survey['source_moduleid'] = (int) ($survey['_context']['module_id'] ?? $moduleId);
+        $survey['source_sectionid'] = (int) ($survey['_context']['section_id'] ?? 0);
+        $survey['source_id'] = (int) (
+            $survey['source_id']
+            ?? $survey['survey_id']
+            ?? $survey['id']
+            ?? 0
+        );
+        $survey['name'] = (string) ($survey['name'] ?? $survey['title'] ?? 'Survey');
+
+        $normalizedQuestions = [];
+        foreach ($questions as $question) {
+            if (!\is_array($question)) {
+                continue;
+            }
+
+            $question['survey_question_type'] = (string) (
+                $question['survey_question_type']
+                ?? $question['type']
+                ?? 'open'
+            );
+            $question['type'] = (string) ($question['type'] ?? $question['survey_question_type']);
+            $question['answers'] = \is_array($question['answers'] ?? null) ? $question['answers'] : [];
+            $normalizedQuestions[] = $question;
+        }
+
+        return [
+            'survey' => $survey,
+            'questions' => $normalizedQuestions,
         ];
     }
 

@@ -40,6 +40,7 @@ $localFolder = '';
 $cstudioAiCsrfToken = '';
 $cstudioLegacyCsrfToken = '';
 $chamiloThemeColorCss = '';
+$cstudioMdiCssFiles = [];
 $cstudioChamiloCssVersion = (string) (@filemtime(__DIR__.'/jscss/cstudio-chamilo.css') ?: '1');
 
 if (isset($_GET['id'])) {
@@ -164,6 +165,30 @@ if (isset($_GET['id'])) {
         }
     } catch (\Throwable) {
         $chamiloThemeColorCss = '';
+    }
+
+    // CStudio is a standalone legacy editor, so it does not mount the Vue app.
+    // Reuse only the CSS files emitted for Chamilo's Vue entry in order to make
+    // the same Material Design Icons font available without loading Vue JS.
+    $publicDir = dirname(__DIR__, 3);
+    $entrypointsFile = $publicDir.'/build/entrypoints.json';
+    if (is_readable($entrypointsFile)) {
+        $entrypoints = json_decode((string) file_get_contents($entrypointsFile), true);
+        $vueCssFiles = $entrypoints['entrypoints']['vue']['css'] ?? [];
+
+        if (is_array($vueCssFiles)) {
+            foreach ($vueCssFiles as $cssFile) {
+                if (!is_string($cssFile) || !preg_match('#^/build/[A-Za-z0-9._/-]+\.css(?:\?.*)?$#', $cssFile)) {
+                    continue;
+                }
+
+                $cssPath = $publicDir.strtok($cssFile, '?');
+                if (is_readable($cssPath)) {
+                    $cstudioMdiCssFiles[] = $cssFile;
+                }
+            }
+            $cstudioMdiCssFiles = array_values(array_unique($cstudioMdiCssFiles));
+        }
     }
 
     if ('' != $idPage && 0 != $idPage) {
@@ -370,6 +395,12 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="jscss/cstudio-ai.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
+<?php foreach ($cstudioMdiCssFiles as $cstudioMdiCssFile) { ?>
+    <link href="<?php echo htmlspecialchars($cstudioMdiCssFile, ENT_QUOTES, 'UTF-8'); ?>" rel="stylesheet" />
+<?php } ?>
+<?php if (!empty($cstudioMdiCssFiles)) { ?>
+    <script>document.documentElement.classList.add('cstudio-mdi-ready');</script>
+<?php } ?>
 <?php if ('' !== $chamiloThemeColorCss) { ?>
     <style id="cstudio-chamilo-theme-colors">
 <?php echo $chamiloThemeColorCss; ?>

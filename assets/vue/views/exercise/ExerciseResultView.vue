@@ -2645,6 +2645,7 @@ watch(
 }
 
 .exercise-result-html :deep(p) {
+  margin-top: 0;
   margin-bottom: 0.25rem;
 }
 

@@ -126,6 +126,13 @@ class CourseControllerTest extends WebTestCase
         // A student can read the course home, so the GET flow would let them
         // through: reordering must be gated on its own, not on VIEW.
         $this->assertResponseStatusCodeSame(403);
+
+        // ...and denied by the voter, not by the central CSRF gate, which also
+        // answers 403 and would keep this test green if the check were removed.
+        $this->assertStringNotContainsString(
+            'The security token is invalid.',
+            (string) $client->getResponse()->getContent()
+        );
     }
 
     public function testReorderToolsIsAllowedForTeacher(): void
@@ -271,6 +278,12 @@ class CourseControllerTest extends WebTestCase
         return (int) $tool->getIid();
     }
 
+    /**
+     * Sec-Fetch-Site is what a browser sends on a same-origin write, and what
+     * CsrfProtectionListener checks. Without it the central gate answers 403
+     * before the controller runs, which would both break the teacher case and
+     * make the student case pass for the wrong reason.
+     */
     private function postToolOrder(KernelBrowser $client, Course $course, int $toolId, int $index): void
     {
         $client->request(
@@ -278,7 +291,10 @@ class CourseControllerTest extends WebTestCase
             '/course/'.$course->getId().'/home.json',
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json'],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_SEC_FETCH_SITE' => 'same-origin',
+            ],
             json_encode(['toolId' => $toolId, 'index' => $index], JSON_THROW_ON_ERROR)
         );
     }

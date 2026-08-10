@@ -561,10 +561,13 @@ function cstudioTranslateBlockLabels() {
         }
 
         var rawTitle = block.attr('title');
+        var translatedTitle = translatedLabel;
         if (rawTitle) {
-            var translatedTitle = cstudioTranslateTerm($.trim(rawTitle).replace(/\s+/g, ' '));
-            block.attr('title', translatedTitle);
+            translatedTitle = cstudioTranslateTerm($.trim(rawTitle).replace(/\s+/g, ' '));
         }
+
+        block.attr('title', translatedTitle);
+        block.attr('aria-label', translatedTitle);
     });
 }
 
@@ -1887,7 +1890,7 @@ function deleteAllTopMenu(){
 function getMenuR(){
 	
 	var h = '<div class="ludimenu" onMouseMove="if(windowEditorIsOpen==false){$(this).css(\'z-index\',\'1000\');displayToolsCarre();}" >';
-	h += '<div class="luditopheader" ></div>';
+	h += '<div class="luditopheader" ><i class="mdi mdi-table-of-contents cstudio-mdi-icon" aria-hidden="true"></i><i class="fa fa-list cstudio-legacy-icon" aria-hidden="true"></i></div>';
 	
 	h += '<div class="ludimenuteachdoc" >';
 	
@@ -1949,7 +1952,8 @@ function getMenuR(){
 
 	h += '<a class="cstudio-delete-page-action" title="Delete this page" aria-label="Delete this page" onClick="deleteContextMenuSub();" ';
 	h += ' style="position:absolute;bottom:10px;left:5px;"  >';
-	h += '<img src="icon/delete-icon-24.png" /></a>';
+	h += '<i class="mdi mdi-delete cstudio-mdi-icon" aria-hidden="true"></i>';
+	h += '<img class="cstudio-legacy-icon" src="icon/delete-icon-24.png" /></a>';
 
 	h += '<a onClick="closeAllEditWindows();" ';
 	h += ' style="position:absolute;bottom:10px;right:120px;" ';
@@ -2005,7 +2009,7 @@ function refreshMenu(refEditNode){
 			success: function(data,textStatus,jqXHR){
 				if(data.indexOf("ul")!=-1){
 					$('.ludimenuteachdoc').html(data);
-					$('.addli').html(getISVG('addbutton',0));
+					$('.addli').html('<span class="mdi mdi-plus cstudio-mdi-icon cstudio-add-page-icon" aria-hidden="true"></span><span class="fa fa-plus cstudio-legacy-icon cstudio-add-page-icon" aria-hidden="true"></span>');
 					if (refEditNode!=-1) {
 						$('#labelMenuLudi'+refEditNode).css('background','#F3E2A9');
 					}
@@ -5684,9 +5688,17 @@ baseButton += ' type="video/mp4" ></video>';
 //baseButton += '</div>';
 //baseButton += '</div>';
 
+function cstudioBlockIconClasses(legacyClasses, mdiClass) {
+	if (document.documentElement.classList.contains('cstudio-mdi-ready')) {
+		return 'mdi ' + mdiClass + ' cstudio-block-mdi';
+	}
+
+	return legacyClasses;
+}
+
 editor.BlockManager.add('VideoTeach',{
 	label: 'Video',
-	attributes: {class: 'fa fa-text icon-action', title: 'Video'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-action', 'mdi-file-video'), title: 'Video'},
 	category: 'Basic',
 	content: {
 		content: baseButton,
@@ -5720,7 +5732,7 @@ baseButtonAudio += ' controls controlsList="nodownload" ></audio>';
   
 editor.BlockManager.add('AudioTeach',{
 	label: 'Audio',
-	attributes: {class: 'fa fa-text icon-audio', title: 'Audio'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-audio', 'mdi-file-music'), title: 'Audio'},
 	category: 'Basic',
 	content: {
 		content: baseButtonAudio,
@@ -5838,7 +5850,7 @@ editor.BlockManager.add('spaceteach',{
 editor.BlockManager.add('sectionSeparator',{
 	label: 'Separator',
 	attributes: {
-		class: 'fa fa-text icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-minus'),
         style: "background-image: url('icon/separator.png');background-repeat:no-repeat;background-position:center center;"
 	},
     category: 'Basic',
@@ -5886,7 +5898,7 @@ bTxt +='</table>';
 
 editor.BlockManager.add('TxtTeach',{
 	label: 'Text Block',
-	attributes: {class: 'fa fa-text icon-txtteach'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-txtteach', 'mdi-file-document')},
 	category: 'Basic',
 	content: {
 		content: bTxt,
@@ -5980,7 +5992,7 @@ editor.BlockManager.add('buttonbar',{
 	label : 'Button Bar',
 	attributes : {
 		title : 'Button Bar',
-		class : 'fa fa-text icon-plugTeach',
+		class : cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-table'),
         style : "background-image: url('icon/buttonbar.png');background-repeat:no-repeat;background-position:center center;"
 	},
     category : 'Basic',
@@ -7491,7 +7503,7 @@ var firstSrcT = GplugSrcT.replace("{content}",renderplugincard('',''));
 editor.BlockManager.add('plugTeachCard',{
 	label: 'Card',
 	attributes: {
-		class: 'fa fa-text icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-view-gallery'),
 		style: "background-image: url('icon/plug-card.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -7526,7 +7538,7 @@ bCMQ = baseRenderLUDIQcm;
 
 editor.BlockManager.add('CmqTeach',{
 	label: 'Quiz',
-	attributes: {class: 'fa fa-text qlab icon-cmq'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text qlab icon-cmq', 'mdi-check-circle')},
 	category: 'Basic',
 	content: {
 		content: bCMQ,
@@ -7543,7 +7555,7 @@ firstSrcT = GplugSrcT.replace("{content}",renderpluginblank('',''));
 editor.BlockManager.add('plugTeachBlank',{
 	label: 'Drag Drop',
 	attributes: {
-		class: 'fa fa-text qlab icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text qlab icon-plugTeach', 'mdi-cursor-move'),
 		style: "background-image: url('icon/plug-blank.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -7562,7 +7574,7 @@ firstSrcT = GplugSrcT.replace("{content}",renderpluginfilltext('',''));
 editor.BlockManager.add('plugTeachFillText',{
 	label: 'Fill text',
 	attributes: {
-		class: 'fa fa-text qlab icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text qlab icon-plugTeach', 'mdi-form-textarea'),
 		style: "background-image: url('icon/plug-filltext.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -7636,7 +7648,7 @@ function cstudioEscapeHtml(value){
 		.replace(/'/g, '&#039;');
 }
 
-function cstudioAddChamiloResourceBlock(id, label, resourceTool, iconClass){
+function cstudioAddChamiloResourceBlock(id, label, resourceTool, iconClass, mdiClass){
 	if (!cstudioChamiloContentEnabled()) {
 		return;
 	}
@@ -7651,7 +7663,7 @@ function cstudioAddChamiloResourceBlock(id, label, resourceTool, iconClass){
 
 	editor.BlockManager.add(id,{
 		label: label,
-		attributes: {class: 'fa ' + iconClass, title: label},
+		attributes: {class: cstudioBlockIconClasses('fa ' + iconClass, mdiClass), title: label},
 		category: 'Basic',
 		content: {
 			content: chamiloTop + chamiloContent + GplugSrcBottom,
@@ -7664,12 +7676,12 @@ function cstudioAddChamiloResourceBlock(id, label, resourceTool, iconClass){
 	});
 }
 
-cstudioAddChamiloResourceBlock('chamiloDocuments', 'Chamilo documents', 'documents', 'fa-folder-open');
-cstudioAddChamiloResourceBlock('chamiloTests', 'Chamilo tests', 'tests', 'fa-check-square-o');
-cstudioAddChamiloResourceBlock('chamiloLinks', 'Chamilo links', 'links', 'fa-link');
-cstudioAddChamiloResourceBlock('chamiloAssignments', 'Chamilo assignments', 'assignments', 'fa-inbox');
-cstudioAddChamiloResourceBlock('chamiloForums', 'Chamilo forums', 'forums', 'fa-comments');
-cstudioAddChamiloResourceBlock('chamiloSurveys', 'Chamilo surveys', 'surveys', 'fa-list-alt');
+cstudioAddChamiloResourceBlock('chamiloDocuments', 'Chamilo documents', 'documents', 'fa-folder-open', 'mdi-folder-open');
+cstudioAddChamiloResourceBlock('chamiloTests', 'Chamilo tests', 'tests', 'fa-check-square-o', 'mdi-check-circle');
+cstudioAddChamiloResourceBlock('chamiloLinks', 'Chamilo links', 'links', 'fa-link', 'mdi-link');
+cstudioAddChamiloResourceBlock('chamiloAssignments', 'Chamilo assignments', 'assignments', 'fa-inbox', 'mdi-inbox');
+cstudioAddChamiloResourceBlock('chamiloForums', 'Chamilo forums', 'forums', 'fa-comments', 'mdi-forum-outline');
+cstudioAddChamiloResourceBlock('chamiloSurveys', 'Chamilo surveys', 'surveys', 'fa-list-alt', 'mdi-format-list-bulleted');
 
 
 firstSrcT = GplugSrcT.replace("{content}",renderplugminidia('',''));
@@ -10609,30 +10621,36 @@ function displayParamsTeachEdit() {
         h += '</div>';
         
         h += '<a class="tool-clean-data tool-base" onClick="displaySubProgressClean();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-broom cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Clean data</div>';
         h += '</a>';
         
         // reloadEditorAll();
         
         h += '<a class="tool-play tool-base" onClick="playAllinCore();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-play-box-outline cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Preview</div>';
         h += '</a>';
         
         h += '<a class="tool-colors-editor tool-base" onClick="displayEditThemeParamsProject();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-format-paint cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Colors</div>';
         h += '</a>';
 
         h += '<a class="tool-colors-params tool-base" onClick="displayGlobalParams();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-cog cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Options</div>';
         h += '</a>';
         
         if (cstudioShowExperimentalTabs) {
             h += '<a id="tool-colors-paste" name="tool-colors-paste" class="tool-colors-paste tool-base" onClick="pasteWindowsShow(false);" style="cursor:pointer;" >';
+            h += '<i class="mdi mdi-puzzle cstudio-tool-mdi" aria-hidden="true"></i>';
             h += '<div class="trd" >Integration</div>';
             h += '</a>';
         }
         
         h += '<a id="tool-quit" name="tool-quit" class="tool-quit tool-base" onClick="quitEditorAll();"style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-arrow-left-bold-box cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Quit</div>';
         h += '</a>';
         

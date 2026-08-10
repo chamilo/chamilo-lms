@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-reporting/learner-detail',
             name: 'get_course_reporting_learner_detail',
             parameters: [
-
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Course identifier',
@@ -53,27 +52,39 @@ final class CourseReportingLearnerDetail
     #[Groups(['course_reporting_learner_detail:read'])]
     public string $id = 'course_reporting_learner_detail';
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $user = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $downloads = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $forumThreads = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $forumPosts = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $courseAccess = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learner_detail:read'])]
     public array $resourceAccess = [];
 }

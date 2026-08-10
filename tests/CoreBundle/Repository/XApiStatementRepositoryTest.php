@@ -110,7 +110,7 @@ class XApiStatementRepositoryTest extends AbstractApiTest
 
         for ($i = 1; $i <= 5; $i++) {
             $em->persist(
-                $mapper->toEntity($this->statementData(), sprintf('bbbbbbbb-0000-0000-0000-00000000000%d', $i))
+                $mapper->toEntity($this->statementData(), \sprintf('bbbbbbbb-0000-0000-0000-00000000000%d', $i))
             );
         }
         $em->flush();

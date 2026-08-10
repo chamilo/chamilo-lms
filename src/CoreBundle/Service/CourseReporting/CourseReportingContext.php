@@ -27,11 +27,17 @@ final readonly class CourseReportingContext
         public bool $useMaximumLearningPathProgress,
         public bool $hideSessionList,
         public bool $allowMessageTracking,
-        /** @var int[] */
+        /**
+         * @var int[]
+         */
         public array $configuredExerciseIds,
-        /** @var int[] */
+        /**
+         * @var int[]
+         */
         public array $hiddenColumnIndexes,
-        /** @var string[] */
+        /**
+         * @var string[]
+         */
         public array $defaultExtraFieldVariables,
     ) {}
 

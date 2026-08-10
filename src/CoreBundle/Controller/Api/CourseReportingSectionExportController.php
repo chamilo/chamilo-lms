@@ -35,7 +35,7 @@ final readonly class CourseReportingSectionExportController
         private CourseReportingSectionQueryService $queryService,
     ) {}
 
-    public function __invoke(Request $request, string $section, string $format): StreamedResponse|BinaryFileResponse
+    public function __invoke(Request $request, string $section, string $format): BinaryFileResponse|StreamedResponse
     {
         $mode = (string) $request->query->get('mode', 'paths');
         if (!$this->isExportAllowed($section, $format, $mode)) {
@@ -165,7 +165,7 @@ final readonly class CourseReportingSectionExportController
 
     /**
      * @param array<int, array<string, mixed>> $columns
-     * @param array<string, mixed> $item
+     * @param array<string, mixed>             $item
      *
      * @return array<int, int|float|string>
      */
@@ -185,7 +185,7 @@ final readonly class CourseReportingSectionExportController
         return $row;
     }
 
-    private function formatExportValue(mixed $value, string $type): int|float|string
+    private function formatExportValue(mixed $value, string $type): float|int|string
     {
         if (\is_array($value)) {
             return implode(', ', array_map('strval', $value));
@@ -202,7 +202,7 @@ final readonly class CourseReportingSectionExportController
             $minutes = (int) floor(($seconds % 3600) / 60);
             $remainingSeconds = $seconds % 60;
 
-            return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+            return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
         }
         if ('percent' === $type) {
             return round((float) $value, 2).'%';

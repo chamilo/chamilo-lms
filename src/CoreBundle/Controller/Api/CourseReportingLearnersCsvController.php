@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
+use const PREG_SPLIT_NO_EMPTY;
+
 #[Route(
     '/api/course-reporting/learners.csv',
     name: 'course_reporting_learners_csv',
@@ -36,7 +38,7 @@ final readonly class CourseReportingLearnersCsvController
         $configuredExercises = $configuration['configuredExercises'];
         $selectedExtraFields = array_values(array_filter(
             $configuration['extraFields'],
-            static fn (array $field): bool => in_array((int) $field['id'], $selectedExtraFieldIds, true)
+            static fn (array $field): bool => \in_array((int) $field['id'], $selectedExtraFieldIds, true)
         ));
 
         $rows = $this->queryService->getLearnersForExport(
@@ -90,7 +92,8 @@ final readonly class CourseReportingLearnersCsvController
                 $headers[] = 'Test: '.(string) $exercise['title'];
             }
 
-            array_push($headers,
+            array_push(
+                $headers,
                 'Assignments',
                 'Messages',
                 'Classes',
@@ -131,7 +134,8 @@ final readonly class CourseReportingLearnersCsvController
                     $line[] = null === $exerciseResult ? '' : $exerciseResult.'%';
                 }
 
-                array_push($line,
+                array_push(
+                    $line,
                     $row['assignments'],
                     $row['messages'],
                     implode(', ', $row['classes']),

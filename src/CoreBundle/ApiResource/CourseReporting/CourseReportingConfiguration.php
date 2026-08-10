@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-reporting/configuration',
             name: 'get_course_reporting_configuration',
             parameters: [
-
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Course identifier',
@@ -33,7 +32,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
-
             ],
             provider: CourseReportingConfigurationProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -80,43 +78,63 @@ final class CourseReportingConfiguration
     #[Groups(['course_reporting_configuration:read'])]
     public bool $showCharts = true;
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $groups = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $classes = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $teachers = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $sessions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $extraFields = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $configuredExercises = [];
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $hiddenColumnIndexes = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $defaultExtraFieldVariables = [];
 
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $inactiveDayOptions = [];
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_configuration:read'])]
     public array $tabs = [];
 }

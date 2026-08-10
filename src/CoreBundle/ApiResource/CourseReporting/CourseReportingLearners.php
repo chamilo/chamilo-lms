@@ -19,7 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-reporting/learners',
             name: 'get_course_reporting_learners',
             parameters: [
-
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Course identifier',
@@ -66,11 +65,15 @@ final class CourseReportingLearners
     #[Groups(['course_reporting_learners:read'])]
     public int $itemsPerPage = 20;
 
-    /** @var array<int, array<string, mixed>> */
+    /**
+     * @var array<int, array<string, mixed>>
+     */
     #[Groups(['course_reporting_learners:read'])]
     public array $items = [];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['course_reporting_learners:read'])]
     public array $groupSummary = [];
 }

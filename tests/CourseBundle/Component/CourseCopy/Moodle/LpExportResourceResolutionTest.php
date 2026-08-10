@@ -48,7 +48,6 @@ final class LpExportResourceResolutionTest extends TestCase
         self::assertNull($resolve->invoke($export, 'quiz', '31', 'Duplicated title', false));
     }
 
-
     public function testActivitiesUseResolvedLpIdsWithoutDuplicatingStandaloneResources(): void
     {
         $quizTitle = 'Mini-test 1: Module 1';
@@ -84,6 +83,7 @@ final class LpExportResourceResolutionTest extends TestCase
 
         $getActivities = (new ReflectionClass($export))->getMethod('getActivities');
         $getActivities->setAccessible(true);
+
         /** @var array<int,array<string,mixed>> $activities */
         $activities = $getActivities->invoke($export);
 
@@ -153,6 +153,7 @@ final class LpExportResourceResolutionTest extends TestCase
     private function createExport(array $resources): MoodleExport
     {
         $ref = new ReflectionClass(MoodleExport::class);
+
         /** @var MoodleExport $export */
         $export = $ref->newInstanceWithoutConstructor();
 

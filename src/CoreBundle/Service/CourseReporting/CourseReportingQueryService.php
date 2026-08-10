@@ -22,7 +22,9 @@ final class CourseReportingQueryService
     private const int SESSION_COURSE_COACH_STATUS = 2;
     private const int HUMAN_RESOURCES_RELATION_TYPE = 1;
 
-    /** @var null|array<int, string> */
+    /**
+     * @var null|array<int, string>
+     */
     private ?array $tableNames = null;
 
     public function __construct(
@@ -212,7 +214,7 @@ final class CourseReportingQueryService
                 : 0.0,
             'certificateCount' => $certificateCount,
             'scoreDistribution' => array_values($scoreDistribution),
-            'topStudents' => array_slice($topStudents, 0, 5),
+            'topStudents' => \array_slice($topStudents, 0, 5),
             'timeStudents' => $timeStudents,
         ];
     }
@@ -321,14 +323,14 @@ final class CourseReportingQueryService
             [] !== $participantIds
             && $this->hasTables(['c_group_info', 'c_group_rel_user', 'resource_link'])
         ) {
-            $sessionCondition = 0 < $context->sessionId()
+            $sessionCondition = $context->sessionId() > 0
                 ? 'AND (resource_link.session_id IS NULL OR resource_link.session_id = 0 OR resource_link.session_id = :sessionId)'
                 : 'AND (resource_link.session_id IS NULL OR resource_link.session_id = 0)';
             $parameters = [
                 'courseId' => $context->courseId(),
                 'participantIds' => $participantIds,
             ];
-            if (0 < $context->sessionId()) {
+            if ($context->sessionId() > 0) {
                 $parameters['sessionId'] = $context->sessionId();
             }
 
@@ -410,11 +412,11 @@ final class CourseReportingQueryService
                 'title' => 'Total',
                 'learners' => $totalLearners,
                 'timeSeconds' => $totalTime,
-                'averageTimeSeconds' => 0 < $totalLearners ? (int) round($totalTime / $totalLearners) : 0,
-                'learningPathProgress' => 0 < $totalLearners
+                'averageTimeSeconds' => $totalLearners > 0 ? (int) round($totalTime / $totalLearners) : 0,
+                'learningPathProgress' => $totalLearners > 0
                     ? round($weightedProgress / $totalLearners, 2)
                     : 0.0,
-                'exerciseAverage' => 0 < $totalLearners
+                'exerciseAverage' => $totalLearners > 0
                     ? round($weightedExerciseAverage / $totalLearners, 2)
                     : 0.0,
             ];
@@ -441,7 +443,7 @@ final class CourseReportingQueryService
     }
 
     /**
-     * @param int[] $userIds
+     * @param int[]                            $userIds
      * @param array<int, array<string, mixed>> $metrics
      *
      * @return array<string, mixed>
@@ -474,9 +476,9 @@ final class CourseReportingQueryService
             'title' => $title,
             'learners' => $count,
             'timeSeconds' => $totalTime,
-            'averageTimeSeconds' => 0 < $count ? (int) round($totalTime / $count) : 0,
-            'learningPathProgress' => 0 < $count ? round($progressTotal / $count, 2) : 0.0,
-            'exerciseAverage' => 0 < $count ? round($exerciseTotal / $count, 2) : 0.0,
+            'averageTimeSeconds' => $count > 0 ? (int) round($totalTime / $count) : 0,
+            'learningPathProgress' => $count > 0 ? round($progressTotal / $count, 2) : 0.0,
+            'exerciseAverage' => $count > 0 ? round($exerciseTotal / $count, 2) : 0.0,
         ];
     }
 
@@ -801,7 +803,7 @@ final class CourseReportingQueryService
 
         if ($sessionId > 0) {
             $parameters['sessionId'] = $sessionId;
-            $enrolledSql = "SELECT DISTINCT
+            $enrolledSql = 'SELECT DISTINCT
                     user.id,
                     user.official_code,
                     user.firstname,
@@ -810,7 +812,7 @@ final class CourseReportingQueryService
                     user.email,
                     user.picture_uri,
                     CASE
-                        WHEN subscription.status = ".self::SESSION_COURSE_COACH_STATUS." THEN 'teacher'
+                        WHEN subscription.status = '.self::SESSION_COURSE_COACH_STATUS." THEN 'teacher'
                         ELSE 'student'
                     END AS report_role
                 FROM session_rel_course_rel_user subscription
@@ -820,10 +822,10 @@ final class CourseReportingQueryService
                     AND subscription.session_id = :sessionId
                     AND subscription.status IN (".
                         self::SESSION_STUDENT_STATUS.', '.self::SESSION_COURSE_COACH_STATUS.
-                    ")
-                    AND user.active = 1";
+                    ')
+                    AND user.active = 1';
         } else {
-            $enrolledSql = "SELECT DISTINCT
+            $enrolledSql = 'SELECT DISTINCT
                     user.id,
                     user.official_code,
                     user.firstname,
@@ -832,7 +834,7 @@ final class CourseReportingQueryService
                     user.email,
                     user.picture_uri,
                     CASE
-                        WHEN subscription.status = ".self::COURSE_TEACHER_STATUS." THEN 'teacher'
+                        WHEN subscription.status = '.self::COURSE_TEACHER_STATUS." THEN 'teacher'
                         ELSE 'student'
                     END AS report_role
                 FROM course_rel_user subscription
@@ -841,9 +843,9 @@ final class CourseReportingQueryService
                 WHERE subscription.c_id = :courseId
                     AND subscription.status IN (".
                         self::COURSE_STUDENT_STATUS.', '.self::COURSE_TEACHER_STATUS.
-                    ")
-                    AND subscription.relation_type <> ".self::HUMAN_RESOURCES_RELATION_TYPE."
-                    AND user.active = 1";
+                    ')
+                    AND subscription.relation_type <> '.self::HUMAN_RESOURCES_RELATION_TYPE.'
+                    AND user.active = 1';
         }
 
         $enrolledSql = "SELECT enrolled.*
@@ -1120,8 +1122,8 @@ final class CourseReportingQueryService
 
     /**
      * @param array<int, array<string, mixed>> $metrics
-     * @param int[]                           $userIds
-     * @param int[]                           $lpIds
+     * @param int[]                            $userIds
+     * @param int[]                            $lpIds
      */
     private function loadLearningPathScores(
         array &$metrics,

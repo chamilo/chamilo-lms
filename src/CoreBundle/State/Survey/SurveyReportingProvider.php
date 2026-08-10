@@ -1292,7 +1292,8 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     private function cleanText(string $value): string
     {
-        $decoded = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $filtered = api_get_filtered_multilingual_HTML_string($value);
+        $decoded = html_entity_decode($filtered, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $withoutTags = strip_tags($decoded);
 
         return trim((string) preg_replace('/\s+/', ' ', html_entity_decode($withoutTags, ENT_QUOTES | ENT_HTML5, 'UTF-8')));

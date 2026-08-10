@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<CourseProgressCompletion, CourseProgressCompletion>
@@ -33,8 +31,6 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
 {
     use CourseProgressAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'course_progress_completion';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -42,7 +38,6 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         private CThematicAdvanceRepository $thematicAdvanceRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -69,7 +64,6 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
-        $this->validateCsrfToken($data->csrfToken);
 
         $advance = $this->getTargetAdvance($data->advanceId, $course, $session);
         $orderedAdvances = $this->getWritableOrderedAdvances($course, $session);
@@ -195,12 +189,5 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         }
 
         return $doneAdvanceIds;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

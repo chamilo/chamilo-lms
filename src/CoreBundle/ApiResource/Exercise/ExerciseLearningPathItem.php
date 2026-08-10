@@ -46,9 +46,6 @@ final class ExerciseLearningPathItem
     #[Groups(['exercise_learning_path_item:read', 'exercise_learning_path_item:write'])]
     public ?int $exerciseId = null;
 
-    #[Groups(['exercise_learning_path_item:write'])]
-    public string $submittedCsrfToken = '';
-
     #[Groups(['exercise_learning_path_item:read'])]
     public ?int $lpItemId = null;
 

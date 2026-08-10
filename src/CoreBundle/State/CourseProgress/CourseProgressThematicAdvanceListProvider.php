@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -47,7 +46,6 @@ final readonly class CourseProgressThematicAdvanceListProvider implements Provid
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -76,9 +74,6 @@ final readonly class CourseProgressThematicAdvanceListProvider implements Provid
         $result->thematicId = (int) $thematic->getIid();
         $result->thematicTitle = $this->sanitizeHtml($thematic->getTitle());
         $result->thematicContent = $this->sanitizeHtml((string) $thematic->getContent());
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(
-            CourseProgressThematicAdvanceProvider::CSRF_TOKEN_ID,
-        );
         $result->canEdit = true;
 
         foreach ($thematic->getAdvances() as $advance) {

@@ -27,8 +27,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -36,7 +34,6 @@ use Throwable;
  */
 final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 {
-    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
     use SurveyProfileFieldsTrait;
 
@@ -44,7 +41,6 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
     private const int VISIBLE_TUTOR_STUDENT = 1;
     private const int VISIBLE_PUBLIC = 2;
     private const int GRADEBOOK_LINK_TYPE_SURVEY = 8;
-    private const string CSRF_TOKEN_ID = 'survey_configuration';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -52,7 +48,6 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -69,8 +64,6 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
         }
-
-        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, self::CSRF_TOKEN_ID, $data, $data->csrfToken);
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
@@ -489,13 +482,6 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
-    }
-
     private function isSurveyEditionGloballyHidden(): bool
     {
         $value = $this->settingsManager->getSetting('survey.hide_survey_edition', true);
@@ -549,7 +535,6 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         $configuration->code = (string) $survey->getCode();
         $configuration->title = $survey->getTitle();
         $configuration->questionUrl = $this->buildModernQuestionsUrl($survey, $course, $session);
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
 
         return $configuration;
     }

@@ -217,7 +217,6 @@ const data = reactive({
   canManage: false,
   canSelfRegister: false,
   canSelfUnregister: false,
-  csrfToken: "",
   tools: [],
   tutors: [],
   members: [],
@@ -276,7 +275,7 @@ async function runSelfAction(action) {
   saving.value = true
   errorMessage.value = ""
   try {
-    await courseGroupService.action(action, { groupId: groupId.value, csrfToken: data.csrfToken }, requestParams.value)
+    await courseGroupService.action(action, { groupId: groupId.value }, requestParams.value)
     await load()
   } catch (error) {
     console.error("[CourseGroup] Self-registration action failed", error)

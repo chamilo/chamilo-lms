@@ -81,9 +81,6 @@ final class NotebookList
     public bool $studentView = false;
 
     #[Groups(['notebook_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['notebook_list:read'])]
     public string $sort = 'creation_date';
 
     #[Groups(['notebook_list:read'])]

@@ -19,6 +19,4 @@ final class ForumThreadGradingInput
     public ?string $title = null;
 
     public ?bool $peerQualify = null;
-
-    public ?string $csrfToken = null;
 }

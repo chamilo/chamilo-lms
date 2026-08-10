@@ -39,8 +39,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -53,7 +51,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     private const FEEDBACK_TYPE_POPUP = 3;
     private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
     private const QUESTION_SELECTION_RANDOM = 2;
-    private const CSRF_TOKEN_ID = 'exercise_configuration';
     private const MEDIA_QUESTION = 15;
     private const PAGE_BREAK = 31;
     private const SKILL_ITEM_TYPE_EXERCISE = 1;
@@ -64,7 +61,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -81,8 +77,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
@@ -503,13 +497,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
-    }
-
     private function buildResponse(CQuiz $quiz, Course $course, ?Session $session): ExerciseConfiguration
     {
         $configuration = new ExerciseConfiguration();
@@ -561,7 +548,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $configuration->textWhenFinished = (string) $quiz->getTextWhenFinished();
         $configuration->textWhenFinishedFailure = (string) $quiz->getTextWhenFinishedFailure();
         $configuration->questionsUrl = $this->buildLegacyQuestionsUrl($quiz, $course, $session);
-        $configuration->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $configuration->settings = $this->getSettings();
         $configuration->options = $this->getOptions($course, $quiz);
         $configuration->canCreate = true;

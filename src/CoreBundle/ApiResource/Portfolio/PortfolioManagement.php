@@ -68,9 +68,6 @@ final class PortfolioManagement
     public string $action = '';
 
     #[Groups(['portfolio_management:write'])]
-    public string $csrfToken = '';
-
-    #[Groups(['portfolio_management:write'])]
     public ?int $entityId = null;
 
     #[Groups(['portfolio_management:write'])]
@@ -102,9 +99,6 @@ final class PortfolioManagement
 
     #[Groups(['portfolio_management:read'])]
     public bool $canManageTags = false;
-
-    #[Groups(['portfolio_management:read'])]
-    public string $csrfTokenValue = '';
 
     #[Groups(['portfolio_management:read'])]
     public ?int $affectedId = null;

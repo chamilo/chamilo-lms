@@ -84,9 +84,6 @@ final class CourseUserAction
     #[Groups(['course_user_action:write'])]
     public bool $tutor = false;
 
-    #[Groups(['course_user_action:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_user_action:read'])]
     public bool $success = false;
 

@@ -33,8 +33,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 use Webit\Util\EvalMath\EvalMath;
 
@@ -49,7 +47,6 @@ use const SYS_PLUGIN_PATH;
  */
 final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterface
 {
-    private const CSRF_TOKEN_ID = 'exercise_question_editor';
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -91,7 +88,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         private CQuizQuestionRepository $questionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -108,8 +104,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
         }
-
-        $this->validateCsrfToken($data->submittedCsrfToken);
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
@@ -1321,13 +1315,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         return $value;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('Invalid CSRF token.');
-        }
     }
 
     private function isVueSupportedQuestionType(int $type): bool
@@ -2980,7 +2967,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $response->categoryOptions = $this->getCategoryOptions($course, $session);
         $response->mediaOptions = [];
         $response->legacyUrls = [];
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->imageZoomEnabled = $this->isImageZoomEnabled();
         $response->allowMandatoryQuestion = false;
@@ -3027,7 +3013,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
                 'sid' => (int) ($session?->getId() ?? 0),
             ]),
         ];
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->allowQuestionFeedback = $this->isQuestionFeedbackEnabled();
         $response->allowMandatoryQuestion = $this->isMandatoryQuestionInCategoryEnabled($quiz);
 

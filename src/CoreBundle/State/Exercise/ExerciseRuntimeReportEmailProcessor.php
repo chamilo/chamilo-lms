@@ -12,8 +12,6 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeReportEmail;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseRuntimeResultEmailService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * Sends reviewed exercise result emails from the migrated report.
@@ -25,7 +23,6 @@ final readonly class ExerciseRuntimeReportEmailProcessor implements ProcessorInt
     public function __construct(
         private RequestStack $requestStack,
         private ExerciseRuntimeResultEmailService $emailService,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -41,13 +38,6 @@ final readonly class ExerciseRuntimeReportEmailProcessor implements ProcessorInt
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(
-            ExerciseRuntimeReportProvider::EMAIL_ACTION_CSRF_TOKEN_ID,
-            $data->submittedCsrfToken
-        ))) {
-            throw new BadRequestHttpException('Invalid security token.');
         }
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);

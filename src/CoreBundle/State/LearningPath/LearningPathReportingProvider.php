@@ -44,7 +44,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProviderInterface<LearningPathReporting> */
 final readonly class LearningPathReportingProvider implements ProviderInterface
@@ -56,7 +55,6 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         private RequestStack $requestStack,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CGroupRepository $groupRepository,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private CidReqHelper $cidReqHelper,
@@ -117,7 +115,6 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         $result->showTeachers = $showTeachers;
         $result->groupFilter = $groupFilter;
         $result->groupOptions = $this->getGroupOptions($course, $session, $result->allowUserGroups);
-        $result->csrfToken = $this->csrfTokenManager->getToken('learning_path_action')->getValue();
 
         foreach ($users as $userId => $entry) {
             $user = $entry['user'];

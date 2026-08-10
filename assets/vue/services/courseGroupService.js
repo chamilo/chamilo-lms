@@ -43,8 +43,8 @@ export default {
     return baseService.get(`/api/course-groups/${groupId}/${mode}`, cleanParams(params))
   },
 
-  saveMembers(groupId, mode, selectedIds, csrfToken, params = {}) {
-    return baseService.post(`/api/course-groups/${groupId}/${mode}`, { selectedIds, csrfToken }, {}, config(params))
+  saveMembers(groupId, mode, selectedIds, params = {}) {
+    return baseService.post(`/api/course-groups/${groupId}/${mode}`, { selectedIds }, {}, config(params))
   },
 
   getDetail(groupId, params = {}) {
@@ -55,11 +55,10 @@ export default {
     return baseService.get("/api/course-groups/import", cleanParams(params))
   },
 
-  importGroups(file, deleteMissing, csrfToken, params = {}) {
+  importGroups(file, deleteMissing, params = {}) {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("deleteMissing", deleteMissing ? "1" : "0")
-    formData.append("csrfToken", csrfToken)
     return baseService.post("/api/course-groups/import", formData, {}, config(params))
   },
 

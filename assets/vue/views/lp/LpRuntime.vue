@@ -851,7 +851,6 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
 
   clearScormRuntime()
 
-  const csrfToken = String(data.csrfToken || "")
   scormRuntimeContext = createScormRuntimeApi({
     version,
     initialValues: config.values || {},
@@ -872,7 +871,6 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
         itemId,
         itemViewId,
         version,
-        csrfToken,
       })
     },
     beacon: (payload) =>
@@ -881,7 +879,6 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
         itemId,
         itemViewId,
         version,
-        csrfToken,
       }),
     onCommitted: scheduleRuntimeRefresh,
     onNavigate: (navRequest) => handleScormNavigate(navRequest, data),
@@ -951,7 +948,7 @@ async function fetchRuntime(itemId = 0) {
 
 async function syncRuntimeState() {
   if (
-    !runtime.value?.csrfToken ||
+    !runtime.value ||
     isReportingMode.value ||
     isChangingItem.value ||
     isSyncingRuntime.value ||
@@ -966,7 +963,6 @@ async function syncRuntimeState() {
   try {
     await lpService.syncRuntime(lpId.value, contextParams.value, {
       itemId: Number(runtime.value.currentItemId),
-      csrfToken: runtime.value.csrfToken,
     })
   } catch (error) {
     console.error("[LearningPathRuntime] Unable to synchronize runtime progress.", error)
@@ -1011,11 +1007,10 @@ async function loadRuntime({ recordCurrent = true } = {}) {
       return
     }
 
-    if (recordCurrent && data.runtimeSupported && data.currentItemId > 0 && data.csrfToken) {
+    if (recordCurrent && data.runtimeSupported && data.currentItemId > 0) {
       await lpService.openRuntimeItem(lpId.value, contextParams.value, {
         itemId: data.currentItemId,
         allowNewAttempt: false,
-        csrfToken: data.csrfToken,
       })
       const refreshedData = await fetchRuntime(data.currentItemId)
       const contentChanged =
@@ -1034,7 +1029,7 @@ async function loadRuntime({ recordCurrent = true } = {}) {
 
 async function openItem(itemId) {
   const id = Number(itemId || 0)
-  if (!id || isChangingItem.value || !runtime.value?.csrfToken) {
+  if (!id || isChangingItem.value || !runtime.value) {
     return
   }
 
@@ -1047,7 +1042,6 @@ async function openItem(itemId) {
     await lpService.openRuntimeItem(lpId.value, contextParams.value, {
       itemId: id,
       allowNewAttempt: true,
-      csrfToken: runtime.value.csrfToken,
     })
     const query = { ...route.query, item_id: id }
     for (const key of ["reporting", "self", "returnItemId", "studentId", "groupFilter", "showTeachers"]) {
@@ -1111,19 +1105,13 @@ function handleVisibilityChange() {
 function handlePageHide() {
   const now = Date.now()
   scormRuntimeContext?.flushBeacon("pagehide")
-  if (
-    isSyncingRuntime.value ||
-    now - lastBeaconAt < 1000 ||
-    !runtime.value?.csrfToken ||
-    !runtime.value.currentItemId
-  ) {
+  if (isSyncingRuntime.value || now - lastBeaconAt < 1000 || !runtime.value || !runtime.value.currentItemId) {
     return
   }
 
   lastBeaconAt = now
   lpService.syncRuntimeBeacon(lpId.value, contextParams.value, {
     itemId: Number(runtime.value.currentItemId),
-    csrfToken: runtime.value.csrfToken,
   })
 }
 

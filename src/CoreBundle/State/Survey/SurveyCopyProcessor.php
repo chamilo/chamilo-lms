@@ -26,15 +26,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<SurveyCopy, SurveyCopy>
  */
 final readonly class SurveyCopyProcessor implements ProcessorInterface
 {
-    use SurveyCsrfTokenValidationTrait;
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
@@ -43,7 +40,6 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -66,7 +62,6 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
         }
 
         $payload = $this->getPayload($request, $data);
-        $this->validateSubmittedCsrfToken($request, $this->csrfTokenManager, SurveyActionProcessor::CSRF_TOKEN_ID, $payload);
 
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
@@ -265,20 +260,12 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
         if ($data instanceof SurveyCopy) {
             return [
-                'csrfToken' => $data->csrfToken,
                 'targetCourseId' => $data->targetCourseId,
                 'targetSessionId' => $data->targetSessionId,
             ];
         }
 
         return [];
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(SurveyActionProcessor::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function canCopyToTarget(User $user, Course $targetCourse, ?Session $targetSession): bool

@@ -98,7 +98,6 @@ final class AnnouncementList
     public bool $canDeleteAll = false;
 
     #[Groups(['announcement_list:read'])]
-    public string $csrfToken = '';
 
     public function getId(): string
     {

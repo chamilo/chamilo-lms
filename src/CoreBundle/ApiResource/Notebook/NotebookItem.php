@@ -109,9 +109,6 @@ final class NotebookItem
     #[Groups(['notebook_item:read', 'notebook_item:write'])]
     public string $language = '';
 
-    #[Groups(['notebook_item:read', 'notebook_item:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['notebook_item:read'])]
     public bool $canWrite = false;
 

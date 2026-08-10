@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Service\Ticket\TicketAdminService;
-use Chamilo\CoreBundle\Service\Ticket\TicketWorkflowService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[AsController]
@@ -31,14 +28,12 @@ final readonly class TicketAdminController
     public function __construct(
         private TicketAdminService $adminService,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('/configuration', name: 'ticket_admin_configuration', methods: ['GET'])]
     public function configuration(Request $request): JsonResponse
     {
         $data = $this->adminService->getConfiguration($request->query->getInt('projectId'));
-        $data['csrfToken'] = $this->csrfTokenManager->getToken(TicketWorkflowService::CSRF_TOKEN_ID)->getValue();
 
         return new JsonResponse($data);
     }
@@ -47,7 +42,6 @@ final readonly class TicketAdminController
     public function createProject(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $project = $this->adminService->createProject($this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(
@@ -60,7 +54,6 @@ final readonly class TicketAdminController
     public function updateProject(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $project = $this->adminService->updateProject($id, $this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(['id' => (int) $project->getId(), 'message' => get_lang('Update successful')]);
@@ -69,7 +62,6 @@ final readonly class TicketAdminController
     #[Route('/projects/{id}', name: 'ticket_admin_project_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function deleteProject(int $id, Request $request): JsonResponse
     {
-        $this->validateCsrfToken((string) $request->headers->get('X-CSRF-TOKEN', ''));
         $this->adminService->deleteProject($id);
 
         return new JsonResponse(['message' => get_lang('Deleted')]);
@@ -84,7 +76,6 @@ final readonly class TicketAdminController
     public function createCategory(int $projectId, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $category = $this->adminService->createCategory($projectId, $this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(
@@ -97,7 +88,6 @@ final readonly class TicketAdminController
     public function updateCategory(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $category = $this->adminService->updateCategory($id, $this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(['id' => (int) $category->getId(), 'message' => get_lang('Update successful')]);
@@ -111,7 +101,6 @@ final readonly class TicketAdminController
     )]
     public function deleteCategory(int $id, Request $request): JsonResponse
     {
-        $this->validateCsrfToken((string) $request->headers->get('X-CSRF-TOKEN', ''));
         $this->adminService->deleteCategory($id);
 
         return new JsonResponse(['message' => get_lang('Deleted')]);
@@ -126,7 +115,6 @@ final readonly class TicketAdminController
     public function updateCategoryUsers(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $rawUserIds = $data['userIds'] ?? [];
         if (!\is_array($rawUserIds)) {
             throw new BadRequestHttpException('The selected users are invalid.');
@@ -140,7 +128,6 @@ final readonly class TicketAdminController
     public function createStatus(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $status = $this->adminService->createStatus($data);
 
         return new JsonResponse(
@@ -153,7 +140,6 @@ final readonly class TicketAdminController
     public function updateStatus(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $status = $this->adminService->updateStatus($id, $data);
 
         return new JsonResponse(['id' => (int) $status->getId(), 'message' => get_lang('Update successful')]);
@@ -162,7 +148,6 @@ final readonly class TicketAdminController
     #[Route('/statuses/{id}', name: 'ticket_admin_status_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function deleteStatus(int $id, Request $request): JsonResponse
     {
-        $this->validateCsrfToken((string) $request->headers->get('X-CSRF-TOKEN', ''));
         $this->adminService->deleteStatus($id);
 
         return new JsonResponse(['message' => get_lang('Deleted')]);
@@ -172,7 +157,6 @@ final readonly class TicketAdminController
     public function createPriority(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $priority = $this->adminService->createPriority($this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(
@@ -185,7 +169,6 @@ final readonly class TicketAdminController
     public function updatePriority(int $id, Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $priority = $this->adminService->updatePriority($id, $this->getAuthenticatedUser(), $data);
 
         return new JsonResponse(['id' => (int) $priority->getId(), 'message' => get_lang('Update successful')]);
@@ -199,7 +182,6 @@ final readonly class TicketAdminController
     )]
     public function deletePriority(int $id, Request $request): JsonResponse
     {
-        $this->validateCsrfToken((string) $request->headers->get('X-CSRF-TOKEN', ''));
         $this->adminService->deletePriority($id);
 
         return new JsonResponse(['message' => get_lang('Deleted')]);
@@ -209,7 +191,6 @@ final readonly class TicketAdminController
     public function closeOld(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken((string) ($data['csrfToken'] ?? ''));
         $count = $this->adminService->closeOldTickets($this->getAuthenticatedUser());
 
         return new JsonResponse(['count' => $count, 'message' => get_lang('Update successful')]);
@@ -258,12 +239,5 @@ final readonly class TicketAdminController
         }
 
         return $user;
-    }
-
-    private function validateCsrfToken(string $value): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(TicketWorkflowService::CSRF_TOKEN_ID, $value))) {
-            throw new BadRequestHttpException('Invalid security token. Please reload the page and try again.');
-        }
     }
 }

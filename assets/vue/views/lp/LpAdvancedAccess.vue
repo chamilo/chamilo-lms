@@ -24,7 +24,6 @@ const groups = ref([])
 const allowUserGroups = ref(false)
 const userGroups = ref([])
 const selectedUserGroupIds = ref([])
-const csrfToken = ref("")
 const selectedUserId = ref(null)
 const selectedGroupId = ref(null)
 const form = ref({
@@ -227,7 +226,6 @@ async function loadData() {
     selectedUserGroupIds.value = userGroups.value
       .filter((userGroup) => userGroup.selected)
       .map((userGroup) => userGroup.id)
-    csrfToken.value = data.csrfToken || ""
   } catch (error) {
     errorMessage.value = error?.response?.data?.error || t("An error occurred")
   } finally {
@@ -306,7 +304,6 @@ async function saveUserGroups() {
   try {
     await lpService.saveUserGroupAdvancedAccess(lpId.value, contextQuery.value, {
       selectedUserGroupIds: selectedUserGroupIds.value,
-      csrfToken: csrfToken.value,
     })
     successMessage.value = t("Updated")
     await loadData()

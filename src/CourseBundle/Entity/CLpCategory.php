@@ -91,7 +91,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 summary: 'Reorder learning path categories in the current course context',
                 description: 'Persists the complete category order for the current course, session and group context.',
                 requestBody: new RequestBody(
-                    description: 'Ordered category IDs and CSRF token',
+                    description: 'Ordered category IDs',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -101,9 +101,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'type' => 'array',
                                         'items' => ['type' => 'integer'],
                                     ],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['order', 'csrfToken'],
+                                'required' => ['order'],
                             ],
                         ],
                     ]),

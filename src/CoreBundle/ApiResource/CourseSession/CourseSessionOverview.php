@@ -62,9 +62,6 @@ final class CourseSessionOverview
     #[Groups(['course_session_overview:read'])]
     public bool $canManageUserCourses = false;
 
-    #[Groups(['course_session_overview:read'])]
-    public string $csrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

@@ -41,7 +41,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -67,7 +66,6 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly SettingsManager $settingsManager,
         private readonly MessageHelper $messageHelper,
@@ -95,7 +93,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function createThread(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $data['csrfToken'] ?? null);
 
         $forum = $this->forumRepository->find($this->getRequiredInt($data, 'forumId'));
         if (!$forum instanceof CForum) {
@@ -209,7 +206,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function updateThread(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -248,7 +244,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function deleteThread(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -299,7 +294,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function toggleThreadLock(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -332,7 +326,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function toggleThreadSticky(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -365,7 +358,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function toggleThreadVisibility(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -399,7 +391,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function moveThread(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumThread) {
@@ -456,7 +447,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     private function toggleThreadSubscription(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         $course = $this->getCourse($this->cidReqHelper);
         if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {

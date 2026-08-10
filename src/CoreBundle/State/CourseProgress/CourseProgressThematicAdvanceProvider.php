@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -45,8 +44,6 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
 {
     use CourseProgressAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'course_progress_thematic_advance';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
@@ -55,7 +52,6 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
         private CAttendanceRepository $attendanceRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -165,7 +161,6 @@ final readonly class CourseProgressThematicAdvanceProvider implements ProviderIn
         $item = new CourseProgressThematicAdvance();
         $item->thematicId = (int) $thematic->getIid();
         $item->thematicTitle = $this->sanitizeHtml($thematic->getTitle());
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $item->attendances = $attendances;
         $item->canEdit = true;
         $item->isNew = !$advance instanceof CThematicAdvance;

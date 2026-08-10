@@ -230,7 +230,6 @@ const route = useRoute()
 const { requireConfirmation } = useConfirmation()
 
 const categories = ref([])
-const csrfToken = ref("")
 const isLoading = ref(false)
 const isSaving = ref(false)
 const isImporting = ref(false)
@@ -274,7 +273,6 @@ async function loadCategories() {
   try {
     const response = await exerciseService.getExerciseCategories(props.categoryType, getContextParams())
     categories.value = Array.isArray(response.items) ? response.items : []
-    csrfToken.value = response.csrfToken || ""
   } catch (error) {
     console.error("Error loading exercise categories", error)
     errorMessage.value = t("Could not load categories")
@@ -379,7 +377,6 @@ async function importCategories() {
       {
         action: "import_csv",
         csvContent,
-        submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
     )
@@ -412,15 +409,6 @@ async function saveCategory() {
   infoMessage.value = ""
 
   try {
-    // The CSRF token comes from loadCategories()'s own response, fetched once
-    // on mount — "Add category" is reachable immediately, before that GET
-    // necessarily resolves, so a submit landing in that window would send an
-    // empty token and get rejected. Refetching here if it's still empty
-    // closes that window without gating the whole form on the initial load.
-    if (!csrfToken.value) {
-      await loadCategories()
-    }
-
     await exerciseService.saveExerciseCategoryAction(
       props.categoryType,
       {
@@ -428,7 +416,6 @@ async function saveCategory() {
         categoryId: editingCategoryId.value,
         categoryTitle: title,
         description: form.description,
-        submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
     )
@@ -461,7 +448,6 @@ async function deleteCategory(category) {
       {
         action: "delete",
         categoryId: Number(category.id || 0),
-        submittedCsrfToken: csrfToken.value,
       },
       getContextParams(),
     )

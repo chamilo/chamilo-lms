@@ -94,9 +94,6 @@ final class WikiCategoryInput
     #[Groups(['wiki_category:write'])]
     public ?int $parentId = null;
 
-    #[Groups(['wiki_category:write'])]
-    public string $csrfToken = '';
-
     public function getCategoryId(): ?int
     {
         return $this->categoryId;

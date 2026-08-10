@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupMembers;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseGroupMembers>
@@ -21,7 +20,6 @@ final readonly class CourseGroupMembersProvider implements ProviderInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseGroupMembers
@@ -37,7 +35,6 @@ final readonly class CourseGroupMembersProvider implements ProviderInterface
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;
         }
-        $resource->csrfToken = $this->csrfTokenManager->getToken($this->manager->getCsrfIntention())->getValue();
 
         return $resource;
     }

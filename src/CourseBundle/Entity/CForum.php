@@ -66,9 +66,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'endTime' => ['type' => 'string', 'format' => 'date-time'],
                                     'locked' => ['type' => 'boolean'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['title', 'parentResourceNodeId', 'csrfToken'],
+                                'required' => ['title', 'parentResourceNodeId'],
                             ],
                         ],
                     ]),
@@ -217,9 +216,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'properties' => [
                                     'image' => ['type' => 'string', 'format' => 'binary'],
                                     'removeImage' => ['type' => 'boolean'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['csrfToken'],
                             ],
                         ],
                         'application/json' => [
@@ -227,9 +224,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'type' => 'object',
                                 'properties' => [
                                     'removeImage' => ['type' => 'boolean'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['csrfToken'],
                             ],
                         ],
                     ]),

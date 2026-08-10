@@ -22,8 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const COURSEMANAGERLOWSECURITY;
@@ -68,7 +66,6 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -95,7 +92,6 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         $session = $this->getCourseProgressSession($request, $this->entityManager);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
-        $this->validateCsrfToken($data->csrfToken);
 
         $thematicId = isset($uriVariables['thematicId']) ? (int) $uriVariables['thematicId'] : 0;
         $thematic = $this->getEditableThematic($thematicId, $course, $session);
@@ -161,15 +157,6 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         }
 
         return $thematic;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseProgressThematicPlanProvider::CSRF_TOKEN_ID, $token),
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     /**
@@ -308,9 +295,6 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         $result->thematicTitle = $this->sanitizeContent($thematic->getTitle());
         $result->thematicContent = $this->sanitizeContent((string) $thematic->getContent());
         $result->items = $this->buildItems($thematic);
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(
-            CourseProgressThematicPlanProvider::CSRF_TOKEN_ID,
-        );
         $result->canEdit = true;
 
         return $result;

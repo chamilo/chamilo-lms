@@ -16,15 +16,12 @@ use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<TermsAndConditionsTranslation, TermsAndConditionsTranslation> */
 final readonly class TermsAndConditionsTranslationProcessor implements ProcessorInterface
 {
     public function __construct(
         private LanguageRepository $languageRepository,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private TermsAndConditionsTranslationService $translationService,
     ) {}
 
@@ -44,12 +41,6 @@ final readonly class TermsAndConditionsTranslationProcessor implements Processor
         if (!$this->translationService->isEnabled()) {
             throw new AccessDeniedHttpException('AI translation of terms and conditions is disabled.');
         }
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(TermsAndConditionsTranslationService::CSRF_TOKEN_ID, $data->csrfToken)
-        )) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
-
         $sourceLanguage = $this->languageRepository->find($data->sourceLanguageId);
         if (!$sourceLanguage instanceof Language) {
             throw new BadRequestHttpException('The source language was not found.');

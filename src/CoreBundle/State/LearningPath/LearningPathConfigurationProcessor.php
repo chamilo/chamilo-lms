@@ -46,7 +46,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const FILTER_VALIDATE_BOOLEAN;
@@ -72,7 +71,6 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CLpRepository $lpRepository,
         private LanguageRepository $languageRepository,
         private ExtraFieldRepository $extraFieldRepository,
@@ -95,7 +93,6 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         }
 
         $payload = $this->getPayload($request);
-        $this->validateActionToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);
@@ -159,7 +156,6 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         $result->id = $lpId;
         $result->isEdit = $isEdit;
         $result->title = $lp->getTitle();
-        $result->csrfToken = $this->csrfTokenManager->getToken('learning_path_action')->getValue();
 
         return $result;
     }

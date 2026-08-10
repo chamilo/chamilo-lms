@@ -17,7 +17,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<LearningPathLayoutInput, JsonResponse>
@@ -29,7 +28,6 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
     public function __construct(
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -39,7 +37,6 @@ final readonly class LearningPathLayoutProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The learning path layout payload is invalid.');
         }
 
-        $this->validateActionToken($this->csrfTokenManager, $data->csrfToken);
         $this->assertLearningPathTeacher($this->security);
 
         $course = $this->getContextCourse($this->cidReqHelper);

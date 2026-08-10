@@ -20,12 +20,9 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<PortfolioManagement, PortfolioManagement>
@@ -35,13 +32,11 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
     use PortfolioWriteHelperTrait;
 
     public function __construct(
-        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private UserHelper $userHelper,
         private ExtraFieldRepository $extraFieldRepository,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -58,12 +53,6 @@ final readonly class PortfolioManagementProcessor implements ProcessorInterface
         if (!$data instanceof PortfolioManagement) {
             throw new BadRequestHttpException('Portfolio management data is required.');
         }
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-        $this->validatePortfolioCsrfToken($this->csrfTokenManager, ['csrfToken' => $data->csrfToken]);
-
         $currentUser = $this->getPortfolioCurrentUser($this->userHelper);
         $course = $this->cidReqHelper->getDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();

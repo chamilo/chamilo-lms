@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseSettings\CourseSettingsConfiguration;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseSettingsConfiguration>
@@ -21,7 +20,6 @@ final readonly class CourseSettingsConfigurationProvider implements ProviderInte
     public function __construct(
         private RequestStack $requestStack,
         private CourseSettingsManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseSettingsConfiguration
@@ -41,7 +39,6 @@ final readonly class CourseSettingsConfigurationProvider implements ProviderInte
         $resource->permissions = (array) $data['permissions'];
         $resource->media = (array) $data['media'];
         $resource->integrations = (array) $data['integrations'];
-        $resource->csrfToken = $this->csrfTokenManager->getToken($this->manager->getCsrfIntention())->getValue();
 
         return $resource;
     }

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State\Wiki;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageAction;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageExportAction;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -42,7 +39,6 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageExportService $exportService,
         #[Autowire('%kernel.cache_dir%')]
         private string $cacheDir,
@@ -80,13 +76,6 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
             $group,
         )) {
             throw new AccessDeniedHttpException('You are not allowed to export this Wiki page to Documents.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(
-            WikiPageAction::CSRF_TOKEN_ID,
-            $data->csrfToken,
-        ))) {
-            throw new AccessDeniedHttpException('The CSRF token is invalid.');
         }
 
         $pageId = (int) ($uriVariables['pageId'] ?? 0);

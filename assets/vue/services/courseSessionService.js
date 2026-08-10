@@ -19,27 +19,24 @@ export default {
     return await baseService.get(`/api/course-sessions/${sessionId}/users`, cleanParams(params))
   },
 
-  async subscribeUsers(sessionId, userIds, csrfToken) {
+  async subscribeUsers(sessionId, userIds) {
     return await baseService.post("/api/course-sessions/actions/subscribe-users", {
       sessionId,
       userIds,
-      csrfToken,
     })
   },
 
-  async unsubscribeUsers(sessionId, userIds, csrfToken) {
+  async unsubscribeUsers(sessionId, userIds) {
     return await baseService.post("/api/course-sessions/actions/unsubscribe-users", {
       sessionId,
       userIds,
-      csrfToken,
     })
   },
 
-  async addUserToUrl(sessionId, userId, csrfToken) {
+  async addUserToUrl(sessionId, userId) {
     return await baseService.post("/api/course-sessions/actions/add-user-to-url", {
       sessionId,
       userId,
-      csrfToken,
     })
   },
 
@@ -47,12 +44,11 @@ export default {
     return await baseService.get(`/api/course-sessions/${sessionId}/users/${userId}/courses`)
   },
 
-  async updateUserCourses(sessionId, userId, avoidedCourseIds, csrfToken) {
+  async updateUserCourses(sessionId, userId, avoidedCourseIds) {
     return await baseService.post("/api/course-sessions/actions/update-user-courses", {
       sessionId,
       userId,
       avoidedCourseIds,
-      csrfToken,
     })
   },
 }

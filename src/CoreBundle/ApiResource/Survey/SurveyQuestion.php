@@ -166,9 +166,6 @@ final class SurveyQuestion
     #[Groups(['survey_question:read', 'survey_question:write'])]
     public string $direction = '';
 
-    #[Groups(['survey_question:read', 'survey_question:write'])]
-    public string $csrfToken = '';
-
     /**
      * @var array<int, array<string, mixed>>
      */

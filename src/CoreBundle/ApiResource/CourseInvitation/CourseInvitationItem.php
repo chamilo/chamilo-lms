@@ -23,8 +23,8 @@ use const DATE_ATOM;
 
 /**
  * Doubles as: a collection item (list of invitations already sent for the
- * current cid/sid context) and the "form" response (csrfToken + context
- * info for the send form) — same combined-shape convention already used by
+ * current cid/sid context) and the "form" response (context info for the
+ * send form) — same combined-shape convention already used by
  * CourseDescriptionItem for its read/write/meta fields.
  */
 #[ApiResource(
@@ -141,9 +141,6 @@ final class CourseInvitationItem
     /**
      * Only populated by the "form" (Get) operation.
      */
-    #[Groups(['course_invitation:read'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_invitation:read'])]
     public bool $isSessionContext = false;
 

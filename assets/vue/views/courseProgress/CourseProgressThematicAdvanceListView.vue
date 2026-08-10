@@ -181,7 +181,6 @@ const { requireConfirmation } = useConfirmation()
 const advances = ref([])
 const thematicTitle = ref("")
 const thematicContent = ref("")
-const csrfToken = ref("")
 const canEdit = ref(false)
 const isLoading = ref(false)
 const deletingId = ref(null)
@@ -261,12 +260,7 @@ async function deleteAdvance(advance) {
   successMessage.value = ""
 
   try {
-    await courseProgressService.removeThematicAdvance(
-      thematicId.value,
-      advance.iid,
-      { csrfToken: csrfToken.value },
-      getContextParams(),
-    )
+    await courseProgressService.removeThematicAdvance(thematicId.value, advance.iid, getContextParams())
 
     await loadAdvances()
     successMessage.value = t("Deleted")
@@ -305,7 +299,6 @@ async function loadAdvances() {
     advances.value = Array.isArray(response.items) ? response.items : []
     thematicTitle.value = response.thematicTitle || ""
     thematicContent.value = response.thematicContent || ""
-    csrfToken.value = response.csrfToken || ""
     canEdit.value = Boolean(response.canEdit)
   } catch (error) {
     console.error("Error loading thematic advances", error)

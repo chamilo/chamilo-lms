@@ -99,9 +99,6 @@ final class CourseUserAvailable
     #[Groups(['course_user_available:read'])]
     public string $warning = '';
 
-    #[Groups(['course_user_available:read'])]
-    public string $csrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

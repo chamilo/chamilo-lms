@@ -113,9 +113,6 @@ final class ExerciseList
     #[Groups(['exercise_list:read'])]
     public int $skippedCount = 0;
 
-    #[Groups(['exercise_list:read', 'exercise_list:write'])]
-    public string $submittedCsrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

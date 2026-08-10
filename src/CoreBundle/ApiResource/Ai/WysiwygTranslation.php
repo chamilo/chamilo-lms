@@ -77,9 +77,6 @@ final class WysiwygTranslation
     public bool $allowAllLanguages = false;
 
     #[Groups(['wysiwyg_translation:read', 'wysiwyg_translation:write'])]
-    public string $csrfToken = '';
-
-    #[Groups(['wysiwyg_translation:read', 'wysiwyg_translation:write'])]
     public string $html = '';
 
     /**

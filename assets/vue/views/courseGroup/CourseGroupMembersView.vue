@@ -90,7 +90,6 @@ const data = reactive({
   maxStudent: 0,
   linkedToClass: false,
   linkedClassTitle: "",
-  csrfToken: "",
 })
 
 const groupId = computed(() => Number(route.params.groupId))
@@ -148,7 +147,6 @@ async function save() {
       groupId.value,
       mode.value,
       normalizeSelectedIds(data.selectedIds),
-      data.csrfToken,
       requestParams.value,
     )
     await router.push(detailRoute.value)

@@ -151,7 +151,4 @@ final class LearningPathReporting
      */
     #[Groups(['learning_path_reporting:read'])]
     public array $detail = [];
-
-    #[Groups(['learning_path_reporting:read'])]
-    public string $csrfToken = '';
 }

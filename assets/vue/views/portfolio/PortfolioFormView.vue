@@ -372,7 +372,6 @@ function emptyForm() {
     canEdit: false,
     advancedSharingEnabled: false,
     titleAsHtml: false,
-    csrfToken: "",
   }
 }
 
@@ -466,7 +465,7 @@ async function deleteAttachment(attachment) {
   try {
     await portfolioService.itemAction(
       form.id,
-      { action: "delete_attachment", attachmentId: attachment.id, csrfToken: form.csrfToken },
+      { action: "delete_attachment", attachmentId: attachment.id },
       contextParams(),
     )
     form.attachments = form.attachments.filter((item) => Number(item.id) !== Number(attachment.id))
@@ -498,7 +497,6 @@ async function saveItem() {
     extraFiles: form.extraFiles,
     attachments: form.newAttachments,
     attachmentDescriptions: form.attachmentDescriptions,
-    csrfToken: form.csrfToken,
   }
 
   isSaving.value = true

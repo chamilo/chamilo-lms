@@ -48,9 +48,6 @@ final class LearningPathRuntimeSyncInput
     #[Groups(['learning_path_runtime_sync:write'])]
     public int $itemId = 0;
 
-    #[Groups(['learning_path_runtime_sync:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): ?int
     {
         return $this->lpId;

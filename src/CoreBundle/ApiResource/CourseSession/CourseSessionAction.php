@@ -76,9 +76,6 @@ final class CourseSessionAction
     #[Groups(['course_session_action:write'])]
     public array $avoidedCourseIds = [];
 
-    #[Groups(['course_session_action:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_session_action:read'])]
     public bool $success = false;
 

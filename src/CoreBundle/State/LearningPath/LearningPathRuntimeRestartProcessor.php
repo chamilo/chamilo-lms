@@ -33,7 +33,6 @@ final readonly class LearningPathRuntimeRestartProcessor implements ProcessorInt
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
-        private LearningPathRuntimeWriteProtection $writeProtection,
         private LearningPathRuntimeProvider $runtimeProvider,
         private LearningPathRuntimeProgressManager $progressManager,
         private CLpRepository $lpRepository,
@@ -50,8 +49,6 @@ final readonly class LearningPathRuntimeRestartProcessor implements ProcessorInt
         if (!$request instanceof Request) {
             throw new BadRequestHttpException('Request is missing.');
         }
-
-        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $lpId = (int) ($uriVariables['lpId'] ?? 0);
         if ($lpId <= 0) {

@@ -412,7 +412,6 @@ const loading = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const warningMessage = ref("")
-const csrfToken = ref("")
 const selectedUserIds = ref([])
 const searchVisible = ref(false)
 const searchDraft = ref("")
@@ -477,7 +476,6 @@ async function loadUsers() {
     const response = await courseUserService.getList(requestParams())
     users.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
-    csrfToken.value = response.csrfToken || ""
     warningMessage.value = response.warning || ""
     extraFields.value = response.extraFields || []
     hiddenFields.value = response.hiddenFields || []
@@ -612,7 +610,7 @@ async function unsubscribeUsers(userIds) {
   successMessage.value = ""
 
   try {
-    const response = await courseUserService.unsubscribe(userIds, csrfToken.value, requestParams())
+    const response = await courseUserService.unsubscribe(userIds, requestParams())
     successMessage.value = response.message || t("The selected users have been unsubscribed from the course")
     selectedUserIds.value = []
     await loadUsers()
@@ -637,7 +635,7 @@ async function setTutor(user) {
   successMessage.value = ""
 
   try {
-    const response = await courseUserService.setTutor(user.id, !user.isTutor, csrfToken.value, requestParams())
+    const response = await courseUserService.setTutor(user.id, !user.isTutor, requestParams())
     successMessage.value = response.message || t("Update successful")
     await loadUsers()
   } catch (error) {

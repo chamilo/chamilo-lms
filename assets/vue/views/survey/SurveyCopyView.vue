@@ -149,7 +149,6 @@ const { requireConfirmation } = useConfirmation()
 const survey = ref({})
 const targets = ref([])
 const selectedTargetKey = ref("")
-const csrfToken = ref("")
 const searchQuery = ref("")
 const errorMessage = ref("")
 const successMessage = ref("")
@@ -194,7 +193,6 @@ async function loadCopyForm() {
 
     survey.value = response.survey || {}
     targets.value = Array.isArray(response.targets) ? response.targets : []
-    csrfToken.value = response.csrfToken || ""
 
     if (selectedTargetKey.value && !targets.value.some((target) => String(target.id) === String(selectedTargetKey.value))) {
       selectedTargetKey.value = ""
@@ -245,7 +243,6 @@ async function copySurvey() {
       {
         targetCourseId: selectedTarget.value.targetCourseId,
         targetSessionId: selectedTarget.value.targetSessionId || 0,
-        csrfToken: csrfToken.value,
       },
       getContextParams(),
       surveyId.value,

@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<WikiDiscussion, WikiDiscussion>
@@ -40,7 +38,6 @@ final readonly class WikiDiscussionProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiDiscussionScoreCalculator $scoreCalculator,
         private WikiNotificationService $notificationService,
     ) {}
@@ -119,8 +116,6 @@ final readonly class WikiDiscussionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('New comments are blocked in this Wiki discussion.');
         }
 
-        $this->validateCsrfToken($data->writeCsrfToken);
-
         $commentText = trim($data->comment);
         if ('' === $commentText) {
             throw new BadRequestHttpException('A Wiki discussion comment is required.');
@@ -174,12 +169,5 @@ final readonly class WikiDiscussionProcessor implements ProcessorInterface
         $this->notificationService->notifyDiscussionComment($latest, $course, $session, $group, $user);
 
         return $data;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiDiscussion::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The Wiki discussion CSRF token is invalid.');
-        }
     }
 }

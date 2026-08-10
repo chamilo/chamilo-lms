@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -26,18 +25,12 @@ class UsergroupImportController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     #[Route('/usergroup-import-data', name: 'admin_usergroup_import', methods: ['POST'])]
     public function import(Request $request): JsonResponse
     {
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_import', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $file = $request->files->get('import_file');
         if (null === $file) {
             return $this->json(['error' => 'No file uploaded'], Response::HTTP_BAD_REQUEST);
@@ -116,11 +109,6 @@ class UsergroupImportController extends AbstractController
     #[Route('/usergroup-user-import-data', name: 'admin_usergroup_user_import', methods: ['POST'])]
     public function userImport(Request $request): JsonResponse
     {
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_import', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $file = $request->files->get('import_file');
         if (null === $file) {
             return $this->json(['error' => 'No file uploaded'], Response::HTTP_BAD_REQUEST);

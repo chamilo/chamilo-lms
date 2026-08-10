@@ -113,9 +113,6 @@ final class WikiDiscussionAction
     public ?int $pageId = null;
 
     #[Groups(['wiki_discussion_action:write'])]
-    public string $csrfToken = '';
-
-    #[Groups(['wiki_discussion_action:write'])]
     public bool $enabled = false;
 
     public function getPageId(): ?int

@@ -115,9 +115,6 @@ final class AnnouncementForm
     #[Groups(['announcement_form:read', 'announcement_form:write'])]
     public array $recipients = [];
 
-    #[Groups(['announcement_form:read', 'announcement_form:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['announcement_form:read'])]
     public bool $canEdit = false;
 
@@ -182,9 +179,6 @@ final class AnnouncementForm
     public bool $sendToHrmAvailable = false;
 
     #[Groups(['announcement_form:read'])]
-    public string $emailCsrfToken = '';
-
-    #[Groups(['announcement_form:read'])]
     public bool $scheduleAvailable = false;
 
     #[Groups(['announcement_form:read', 'announcement_form:write'])]
@@ -219,9 +213,6 @@ final class AnnouncementForm
 
     #[Groups(['announcement_form:read'])]
     public bool $attachmentsEnabled = false;
-
-    #[Groups(['announcement_form:read'])]
-    public string $attachmentCsrfToken = '';
 
     /**
      * @var array<int, array<string, mixed>>

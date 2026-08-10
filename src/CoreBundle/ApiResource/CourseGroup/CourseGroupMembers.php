@@ -101,9 +101,6 @@ final class CourseGroupMembers
     #[Groups(['course_group_members:read'])]
     public string $linkedClassTitle = '';
 
-    #[Groups(['course_group_members:read', 'course_group_members:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_group_members:read'])]
     public bool $success = false;
 

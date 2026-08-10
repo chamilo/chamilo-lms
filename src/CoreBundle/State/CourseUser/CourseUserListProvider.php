@@ -11,19 +11,15 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseUser\CourseUserList;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<CourseUserList>
  */
 final readonly class CourseUserListProvider implements ProviderInterface
 {
-    public const string CSRF_TOKEN_ID = 'course_user_actions';
-
     public function __construct(
         private RequestStack $requestStack,
         private CourseUserManager $courseUserManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -45,8 +41,6 @@ final readonly class CourseUserListProvider implements ProviderInterface
                 $response->{$property} = $value;
             }
         }
-
-        $response->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
 
         return $response;
     }

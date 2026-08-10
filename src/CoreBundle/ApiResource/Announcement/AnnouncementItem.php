@@ -100,10 +100,6 @@ final class AnnouncementItem
     public bool $attachmentsEnabled = false;
 
     #[Groups(['announcement_item:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['announcement_item:read'])]
-    public string $attachmentCsrfToken = '';
 
     public function getId(): int
     {

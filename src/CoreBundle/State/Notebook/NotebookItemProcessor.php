@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -42,8 +41,6 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private NotebookWriteProtection $writeProtection,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -87,8 +84,6 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         )) {
             throw new AccessDeniedHttpException('Notebook is read-only in this context.');
         }
-
-        $this->writeProtection->assertWriteAllowed($data->csrfToken);
 
         $title = trim(strip_tags($data->title));
         if ('' === $title) {
@@ -191,7 +186,6 @@ final readonly class NotebookItemProcessor implements ProcessorInterface
         $item->title = (string) $note->getTitle();
         $item->content = (string) $note->getDescription();
         $item->language = null !== $language ? (string) $language->getIsocode() : '';
-        $item->csrfToken = (string) $this->csrfTokenManager->getToken(NotebookItemProvider::CSRF_TOKEN_ID);
         $item->canWrite = true;
         $item->isNew = false;
 

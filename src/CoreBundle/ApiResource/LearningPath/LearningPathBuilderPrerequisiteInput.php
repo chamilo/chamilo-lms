@@ -54,9 +54,6 @@ final class LearningPathBuilderPrerequisiteInput
     #[Groups(['learning_path_builder_prerequisite:write'])]
     public string $action = '';
 
-    #[Groups(['learning_path_builder_prerequisite:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['learning_path_builder_prerequisite:read'])]
     public bool $saved = false;
 

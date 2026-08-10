@@ -801,7 +801,6 @@ const showAdvancedSettings = ref(false)
 const showMetadata = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
-const csrfToken = ref("")
 const questionsUrl = ref("")
 const settings = ref({})
 const options = ref({})
@@ -1198,7 +1197,6 @@ function fillForm(data) {
   form.pageResultConfiguration = buildPageResultConfiguration(data.pageResultConfiguration || {})
   form.textWhenFinished = data.textWhenFinished || ""
   form.textWhenFinishedFailure = data.textWhenFinishedFailure || ""
-  csrfToken.value = data.csrfToken || ""
   questionsUrl.value = data.questionsUrl || ""
   settings.value = data.settings || {}
   options.value = data.options || {}
@@ -1498,7 +1496,6 @@ function buildPayload() {
     pageResultConfiguration: buildPageResultConfiguration(form.pageResultConfiguration),
     textWhenFinished: form.textWhenFinished,
     textWhenFinishedFailure: form.textWhenFinishedFailure,
-    csrfToken: csrfToken.value,
   }
 }
 

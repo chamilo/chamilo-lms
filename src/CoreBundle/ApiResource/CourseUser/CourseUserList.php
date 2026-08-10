@@ -111,9 +111,6 @@ final class CourseUserList
     public string $warning = '';
 
     #[Groups(['course_user_list:read'])]
-    public string $csrfToken = '';
-
-    #[Groups(['course_user_list:read'])]
     public string $sessionManagementUrl = '';
 
     #[Groups(['course_user_list:read'])]

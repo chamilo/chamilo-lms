@@ -335,7 +335,6 @@ function createEmptyDiscussion() {
     canComment: false,
     canRate: false,
     canSubscribe: false,
-    csrfToken: "",
     commentCount: 0,
     scoredCommentCount: 0,
     averageRating: 0,
@@ -442,15 +441,10 @@ async function submitComment() {
   successMessage.value = "";
 
   try {
-    await wikiService.addDiscussionComment(
-      Number(route.params.pageId),
-      getContextParams(),
-      {
-        comment: form.comment,
-        rating: "" === form.rating ? null : Number(form.rating),
-        writeCsrfToken: discussion.csrfToken,
-      },
-    );
+    await wikiService.addDiscussionComment(Number(route.params.pageId), getContextParams(), {
+      comment: form.comment,
+      rating: "" === form.rating ? null : Number(form.rating),
+    });
     form.comment = "";
     form.rating = "";
     successMessage.value = t("Comment added");
@@ -482,13 +476,7 @@ async function executeAction(action, message) {
 
 function changeVisibility() {
   return executeAction(
-    () =>
-      wikiService.setDiscussionVisibility(
-        Number(route.params.pageId),
-        !discussion.visible,
-        getContextParams(),
-        discussion.csrfToken,
-      ),
+    () => wikiService.setDiscussionVisibility(Number(route.params.pageId), !discussion.visible, getContextParams()),
     discussion.visible ? "Discussion hidden" : "Discussion shown",
   );
 }
@@ -496,12 +484,7 @@ function changeVisibility() {
 function changeCommenting() {
   return executeAction(
     () =>
-      wikiService.setDiscussionCommenting(
-        Number(route.params.pageId),
-        !discussion.commentsOpen,
-        getContextParams(),
-        discussion.csrfToken,
-      ),
+      wikiService.setDiscussionCommenting(Number(route.params.pageId), !discussion.commentsOpen, getContextParams()),
     discussion.commentsOpen
       ? "Discussion comments blocked"
       : "Discussion comments allowed",
@@ -510,13 +493,7 @@ function changeCommenting() {
 
 function changeRating() {
   return executeAction(
-    () =>
-      wikiService.setDiscussionRating(
-        Number(route.params.pageId),
-        !discussion.ratingsOpen,
-        getContextParams(),
-        discussion.csrfToken,
-      ),
+    () => wikiService.setDiscussionRating(Number(route.params.pageId), !discussion.ratingsOpen, getContextParams()),
     discussion.ratingsOpen
       ? "Discussion ratings blocked"
       : "Discussion ratings allowed",
@@ -526,12 +503,7 @@ function changeRating() {
 function changeSubscription() {
   return executeAction(
     () =>
-      wikiService.setDiscussionSubscription(
-        Number(route.params.pageId),
-        !discussion.subscribed,
-        getContextParams(),
-        discussion.csrfToken,
-      ),
+      wikiService.setDiscussionSubscription(Number(route.params.pageId), !discussion.subscribed, getContextParams()),
     discussion.subscribed
       ? "Discussion notifications disabled"
       : "Discussion notifications enabled",

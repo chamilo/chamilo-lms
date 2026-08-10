@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProviderInterface<LearningPathCategorySubscription> */
 final readonly class LearningPathCategorySubscriptionProvider implements ProviderInterface
@@ -44,7 +43,6 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         private RequestStack $requestStack,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -71,7 +69,6 @@ final readonly class LearningPathCategorySubscriptionProvider implements Provide
         $result->categoryId = $category->getIid();
         $result->categoryTitle = $category->getTitle();
         $result->allowUserGroups = $this->settingEnabled('lp.allow_lp_subscription_to_usergroups');
-        $result->csrfToken = $this->csrfTokenManager->getToken('learning_path_action')->getValue();
         $result->users = $this->getUserOptions($course, $session);
         $result->selectedUserIds = array_values(array_intersect(
             $this->getSelectedUserIds($category),

@@ -9,3 +9,9 @@ framework:
             - submit
             - authenticate
             - logout
+            # Single token id used by CsrfProtectionListener to guard every
+            # state-changing API Platform operation and legacy AJAX endpoint.
+            # Being stateless, it validates through the Origin/Sec-Fetch-Site
+            # headers alone, so it never touches the session and no caller has
+            # to send anything.
+            - chamilo_request

@@ -18,7 +18,4 @@ final class LearningPathReportingResetInput
 
     #[Groups(['learning_path_reporting_reset:write'])]
     public bool $deleteExerciseAttempts = false;
-
-    #[Groups(['learning_path_reporting_reset:write'])]
-    public string $csrfToken = '';
 }

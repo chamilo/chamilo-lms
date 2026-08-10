@@ -21,8 +21,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -32,11 +30,8 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
 {
     use CourseInvitationAccessHelperTrait;
 
-    public const string CSRF_TOKEN_ID = 'course_invitation';
-
     public function __construct(
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private UserRepository $userRepository,
         private CourseInvitationTokenService $tokenService,
         private CourseInvitationMailer $mailer,
@@ -62,8 +57,6 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
         if (!$this->canManageCourseInvitations($this->security, $course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to send course invitations in this context.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $currentUser = $this->security->getUser();
         if (!$currentUser instanceof User || null === $currentUser->getId()) {
@@ -108,12 +101,5 @@ final readonly class CourseInvitationSendProcessor implements ProcessorInterface
         $this->mailer->send($created['invitation'], $created['url']);
 
         return CourseInvitationItem::fromInvitation($created['invitation']);
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 }

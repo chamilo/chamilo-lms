@@ -121,7 +121,6 @@ const form = ref({
   title: "",
   content: "",
   language: "",
-  csrfToken: "",
   canWrite: false,
   isNew: true,
   fullEditor: false,
@@ -213,7 +212,6 @@ async function loadForm() {
       title: response.title || "",
       content: response.content || "",
       language: response.language || "",
-      csrfToken: response.csrfToken || "",
       canWrite: Boolean(response.canWrite),
       isNew: Boolean(response.isNew ?? true),
       fullEditor: Boolean(response.fullEditor),
@@ -242,7 +240,6 @@ async function saveNote() {
     title: form.value.title,
     content: form.value.content,
     language: form.value.language,
-    csrfToken: form.value.csrfToken,
   }
 
   isSaving.value = true

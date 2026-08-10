@@ -31,8 +31,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const COURSEMANAGERLOWSECURITY;
@@ -52,7 +50,6 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
         private WikiAssignmentService $assignmentService,
@@ -89,8 +86,6 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
             throw new AccessDeniedHttpException('You are not allowed to edit Wiki pages in this context.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $user = $this->security->getUser();
         if (!$user instanceof User) {
@@ -527,13 +522,6 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
 
         if ($wiki->getIsEditing() !== $user->getId()) {
             throw new ConflictHttpException('The Wiki page edition lock is not owned by the current user.');
-        }
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiPageFormProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
         }
     }
 

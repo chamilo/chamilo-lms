@@ -25,8 +25,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 /**
@@ -44,7 +42,6 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
     ) {}
@@ -75,8 +72,6 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         if ($this->isWikiStudentView($request)) {
             throw new AccessDeniedHttpException('Wiki versions cannot be restored in student view.');
         }
-
-        $this->validateCsrfToken($data->csrfToken);
 
         $user = $this->security->getUser();
         if (!$user instanceof User) {
@@ -233,13 +228,6 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         $response->canRestore = true;
 
         return $response;
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiPageHistoryProvider::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
-        }
     }
 
     private function assertLockAvailable(CWiki $wiki, User $user, bool $canManage): void

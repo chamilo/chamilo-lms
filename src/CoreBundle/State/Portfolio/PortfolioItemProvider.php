@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -54,7 +53,6 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private EventDispatcherInterface $eventDispatcher,
         private CidReqHelper $cidReqHelper,
     ) {}
@@ -165,7 +163,6 @@ final readonly class PortfolioItemProvider implements ProviderInterface
         $result->courseId = $course instanceof Course ? (int) $course->getId() : null;
         $result->sessionId = $session instanceof Session ? (int) $session->getId() : null;
         $result->advancedSharingEnabled = $advancedSharingEnabled;
-        $result->csrfToken = $this->csrfTokenManager->getToken('portfolio_action')->getValue();
         $result->maxScore = $course instanceof Course ? (float) $this->getCourseSettingInt('portfolio_max_score', $course) : 0.0;
         $result->canQualifyItems = $canManageCourse
             && $course instanceof Course

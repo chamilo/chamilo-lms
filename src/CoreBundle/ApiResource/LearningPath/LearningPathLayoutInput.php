@@ -21,7 +21,4 @@ final class LearningPathLayoutInput
      */
     #[Groups(['lp:layout'])]
     public array $uncategorized = [];
-
-    #[Groups(['lp:layout'])]
-    public ?string $csrfToken = null;
 }

@@ -32,11 +32,6 @@ class UserListActionController extends AbstractController
     public function handleAction(Request $request): JsonResponse
     {
         $action = (string) $request->request->get('action');
-        $token = (string) $request->request->get('_token');
-
-        if (!$this->isCsrfTokenValid('user_list_action', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
-        }
 
         $bulkActions = ['delete_users', 'disable_users', 'enable_users', 'restore_users', 'destroy_users'];
         if (\in_array($action, $bulkActions, true)) {

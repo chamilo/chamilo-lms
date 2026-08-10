@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<PortfolioManagement>
@@ -36,7 +35,6 @@ final readonly class PortfolioManagementProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -70,7 +68,6 @@ final readonly class PortfolioManagementProvider implements ProviderInterface
         if (!$result->canManageCategories && !$result->canManageTags) {
             throw new AccessDeniedHttpException('You are not allowed to manage Portfolio categories or tags.');
         }
-        $result->csrfTokenValue = $this->csrfTokenManager->getToken('portfolio_action')->getValue();
 
         /** @var array<int, PortfolioCategory> $categories */
         $categories = $this->entityManager->getRepository(PortfolioCategory::class)->findBy([], ['title' => 'ASC']);

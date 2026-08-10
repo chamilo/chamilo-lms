@@ -475,7 +475,6 @@ const form = ref({
   content: "",
   language: "",
   recipients: [],
-  csrfToken: "",
   recipientOptions: [],
   classes: [],
   classLabel: "",
@@ -488,7 +487,6 @@ const form = ref({
   emailAlreadySent: false,
   sendToSessionsAvailable: false,
   sendToHrmAvailable: false,
-  emailCsrfToken: "",
   scheduleAvailable: false,
   scheduleByDate: false,
   scheduleDate: "",
@@ -500,7 +498,6 @@ const form = ref({
   eventEndDate: null,
   reminders: [],
   attachmentsEnabled: false,
-  attachmentCsrfToken: "",
   attachments: [],
 })
 
@@ -546,7 +543,16 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of ["origin", "page", "isStudentView", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded"]) {
+  for (const key of [
+    "origin",
+    "page",
+    "isStudentView",
+    "lp_id",
+    "lp_item_id",
+    "lp_view_id",
+    "returnToLp",
+    "embedded",
+  ]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -619,7 +625,6 @@ async function loadForm() {
       content: response.content || "",
       language: response.language || "",
       recipients: Array.isArray(response.recipients) ? response.recipients : ["everyone"],
-      csrfToken: response.csrfToken || "",
       recipientOptions: Array.isArray(response.recipientOptions) ? response.recipientOptions : [],
       classes: Array.isArray(response.classes) ? response.classes : [],
       classLabel: response.classLabel || "",
@@ -632,7 +637,6 @@ async function loadForm() {
       emailAlreadySent: Boolean(response.emailAlreadySent),
       sendToSessionsAvailable: Boolean(response.sendToSessionsAvailable),
       sendToHrmAvailable: Boolean(response.sendToHrmAvailable),
-      emailCsrfToken: response.emailCsrfToken || "",
       scheduleAvailable: Boolean(response.scheduleAvailable),
       scheduleByDate: Boolean(response.scheduleByDate),
       scheduleDate: response.scheduleDate || "",
@@ -649,20 +653,19 @@ async function loadForm() {
           }))
         : [],
       attachmentsEnabled: Boolean(response.attachmentsEnabled),
-      attachmentCsrfToken: response.attachmentCsrfToken || "",
       attachments: Array.isArray(response.attachments) ? response.attachments : [],
     }
     attachmentFiles.value = []
     fileComment.value = ""
     showAdvancedSettings.value = Boolean(
       (resourceLanguageEnabled.value && form.value.language) ||
-        form.value.attachments.length ||
-        form.value.sendByEmail ||
-        form.value.sendCopyToSelf ||
-        form.value.sendToUsersInSessions ||
-        form.value.sendToHrmUsers ||
-        form.value.scheduleByDate ||
-        form.value.addToCalendar,
+      form.value.attachments.length ||
+      form.value.sendByEmail ||
+      form.value.sendCopyToSelf ||
+      form.value.sendToUsersInSessions ||
+      form.value.sendToHrmUsers ||
+      form.value.scheduleByDate ||
+      form.value.addToCalendar,
     )
     resetPreview()
   } catch (error) {
@@ -724,26 +727,24 @@ function buildPayload() {
     addToCalendar: form.value.calendarAvailable && form.value.addToCalendar,
     eventStartDate: form.value.addToCalendar ? serializeDateTime(form.value.eventStartDate) : null,
     eventEndDate: form.value.addToCalendar ? serializeDateTime(form.value.eventEndDate) : null,
-    reminders: form.value.addToCalendar && form.value.remindersAvailable
-      ? form.value.reminders.map((reminder) => ({
-          count: Number(reminder.count || 0),
-          period: reminder.period || "i",
-        }))
-      : [],
-    csrfToken: form.value.csrfToken,
+    reminders:
+      form.value.addToCalendar && form.value.remindersAvailable
+        ? form.value.reminders.map((reminder) => ({
+            count: Number(reminder.count || 0),
+            period: reminder.period || "i",
+          }))
+        : [],
   }
 }
 
 function buildEmailPayload() {
-  const sendPrimaryNow =
-    form.value.sendByEmail && !form.value.emailAlreadySent && !form.value.scheduleByDate
+  const sendPrimaryNow = form.value.sendByEmail && !form.value.emailAlreadySent && !form.value.scheduleByDate
 
   return {
     sendByEmail: sendPrimaryNow,
     sendToUsersInSessions: sendPrimaryNow && form.value.sendToUsersInSessions,
     sendToHrmUsers: sendPrimaryNow && form.value.sendToHrmUsers,
     sendCopyToSelf: form.value.sendCopyToSelf,
-    csrfToken: form.value.emailCsrfToken,
   }
 }
 
@@ -830,15 +831,8 @@ async function previewAnnouncement() {
     previewRecipients.value = Array.isArray(response.previewRecipients) ? response.previewRecipients : []
     previewReady.value = previewRecipients.value.length > 0
 
-    if (response.csrfToken) {
-      form.value.csrfToken = response.csrfToken
-    }
-
     if (previewReady.value) {
-      previewPayload.value = {
-        ...payload,
-        csrfToken: response.csrfToken || payload.csrfToken,
-      }
+      previewPayload.value = { ...payload }
     }
   } catch (error) {
     console.error("Error previewing announcement recipients", error)
@@ -856,7 +850,12 @@ async function saveAnnouncement() {
   formErrorMessage.value = ""
   formWarningMessage.value = ""
 
-  if (!form.value.title.trim() || !String(form.value.content || "").replace(/<[^>]*>/g, "").trim()) {
+  if (
+    !form.value.title.trim() ||
+    !String(form.value.content || "")
+      .replace(/<[^>]*>/g, "")
+      .trim()
+  ) {
     await showFormError(t("Please fill all required fields"))
 
     return
@@ -906,7 +905,6 @@ async function saveAnnouncement() {
           announcementId,
           attachmentFiles.value,
           fileComment.value,
-          form.value.attachmentCsrfToken,
           getContextParams(),
         )
         const uploadedAttachments = Array.isArray(uploadResponse?.attachments) ? uploadResponse.attachments : []
@@ -996,12 +994,7 @@ async function deleteAttachment(attachment) {
   formErrorMessage.value = ""
 
   try {
-    await announcementService.deleteAttachment(
-      form.value.id,
-      attachment.id,
-      form.value.attachmentCsrfToken,
-      getContextParams(),
-    )
+    await announcementService.deleteAttachment(form.value.id, attachment.id, getContextParams())
     form.value.attachments = form.value.attachments.filter((item) => Number(item.id) !== Number(attachment.id))
   } catch (error) {
     console.error("Error deleting announcement attachment", error)
@@ -1054,10 +1047,7 @@ watch(
   },
 )
 
-watch(
-  () => [route.params.id, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView],
-  loadForm,
-)
+watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadForm)
 
 onMounted(loadForm)
 </script>

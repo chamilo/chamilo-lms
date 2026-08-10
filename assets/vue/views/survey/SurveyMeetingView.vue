@@ -587,7 +587,6 @@ async function saveMeeting() {
         start: normalizeDateForPayload(slot.start),
         end: normalizeDateForPayload(slot.end),
       })),
-      csrfToken: meeting.value.csrfToken,
     }
 
     const surveyId = isCreateMode.value ? null : Number(route.params.surveyId)
@@ -625,7 +624,6 @@ async function submitAvailability() {
     const response = await surveyService.submitSurveyMeetingAnswer(
       {
         selectedSlots: selectedSlots.value,
-        csrfToken: meeting.value.csrfToken,
       },
       getContextParams({ invitationCode: getQueryValue(route.query.invitationCode) }),
       Number(route.params.surveyId),

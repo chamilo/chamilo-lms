@@ -25,8 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use const UPLOAD_ERR_OK;
@@ -49,7 +47,6 @@ final class CourseSettingsMediaController extends AbstractController
     public function __construct(
         private readonly CourseSettingsManager $manager,
         private readonly IllustrationRepository $illustrationRepository,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly Connection $connection,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly PluginHelper $pluginHelper,
@@ -63,7 +60,6 @@ final class CourseSettingsMediaController extends AbstractController
     {
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
             throw new BadRequestHttpException('A valid image file is required.');
@@ -95,7 +91,6 @@ final class CourseSettingsMediaController extends AbstractController
     {
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         if ($this->illustrationRepository->hasIllustration($course)) {
             $this->illustrationRepository->deleteIllustration($course);
             $this->manager->logMediaUpdate($course, $session, 'course_picture', 'deleted');
@@ -110,7 +105,6 @@ final class CourseSettingsMediaController extends AbstractController
         $this->assertWatermarkAvailable();
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
             throw new BadRequestHttpException('A valid watermark image is required.');
@@ -137,7 +131,6 @@ final class CourseSettingsMediaController extends AbstractController
         $this->assertWatermarkAvailable();
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $target = $this->getWatermarkPath($course);
         if (is_file($target)) {
             unlink($target);
@@ -179,7 +172,6 @@ final class CourseSettingsMediaController extends AbstractController
         $this->assertCourseLegalAvailable();
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
             throw new BadRequestHttpException('A valid agreement file is required.');
@@ -241,7 +233,6 @@ final class CourseSettingsMediaController extends AbstractController
         $this->assertCourseLegalAvailable();
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
         $row = $this->connection->fetchAssociative(
@@ -324,7 +315,6 @@ final class CourseSettingsMediaController extends AbstractController
         }
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
             throw new BadRequestHttpException('A valid certificate image is required.');
@@ -371,7 +361,6 @@ final class CourseSettingsMediaController extends AbstractController
         }
         [$course, $session] = $this->manager->resolveContext($request);
         $this->manager->assertCanEdit($course);
-        $this->assertCsrf($request);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
         $accessUrlId = (int) ($this->accessUrlHelper->getCurrent()?->getId() ?? 0);
@@ -448,14 +437,6 @@ final class CourseSettingsMediaController extends AbstractController
         if (!$this->pluginHelper->isPluginEnabled('CustomCertificate')
             || !$this->connection->createSchemaManager()->tablesExist(['plugin_customcertificate'])) {
             throw $this->createNotFoundException('Custom certificate integration is not available.');
-        }
-    }
-
-    private function assertCsrf(Request $request): void
-    {
-        $token = (string) ($request->request->get('csrfToken') ?: $request->headers->get('X-CSRF-TOKEN', ''));
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken($this->manager->getCsrfIntention(), $token))) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
     }
 

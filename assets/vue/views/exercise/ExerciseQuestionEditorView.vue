@@ -1786,7 +1786,6 @@ const UNKNOWN_ANSWER_POSITION = 666
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
-const csrfToken = ref("")
 const typeLabel = ref("")
 const questionCount = ref(0)
 const totalScore = ref(0)
@@ -2579,7 +2578,6 @@ function fillForm(data) {
   categoryOptions.value = Array.isArray(data.categoryOptions) ? data.categoryOptions.map(normalizeOption) : []
   mediaOptions.value = Array.isArray(data.mediaOptions) ? data.mediaOptions.map(normalizeOption) : []
   attachedQuestions.value = Array.isArray(data.attachedQuestions) ? data.attachedQuestions : []
-  csrfToken.value = data.csrfToken || ""
   allowQuestionFeedback.value = true === data.allowQuestionFeedback
   imageZoomEnabled.value = true === data.imageZoomEnabled
   allowMandatoryQuestion.value = true === data.allowMandatoryQuestion
@@ -3564,7 +3562,6 @@ function buildPayload() {
           isUnknown: true === answer.isUnknown,
         }))
       : [],
-    submittedCsrfToken: csrfToken.value,
   }
 }
 

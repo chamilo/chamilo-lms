@@ -57,9 +57,6 @@ final class CourseSessionUserCourses
     #[Groups(['course_session_user_courses:read'])]
     public array $courses = [];
 
-    #[Groups(['course_session_user_courses:read'])]
-    public string $csrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

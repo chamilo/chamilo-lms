@@ -69,9 +69,6 @@ final class LearningPathBuilderBulkAuthorPriceInput
     #[Groups(['learning_path_builder_author_price:write'])]
     public ?float $price = null;
 
-    #[Groups(['learning_path_builder_author_price:write'])]
-    public string $csrfToken = '';
-
     public function getLpId(): ?int
     {
         return $this->lpId;

@@ -164,9 +164,6 @@ final class SurveyAction
     #[Groups(['survey_action:write'])]
     public array $surveyIds = [];
 
-    #[Groups(['survey_action:write'])]
-    public string $csrfToken = '';
-
     public function getSurveyId(): ?int
     {
         return $this->surveyId;

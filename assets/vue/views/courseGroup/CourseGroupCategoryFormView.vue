@@ -160,7 +160,6 @@ const form = reactive({
   documentAccess: 0,
   allowDocumentAccess: false,
   allowCategories: true,
-  csrfToken: "",
 })
 
 const categoryId = computed(() => Number(route.params.categoryId || 0))
@@ -247,7 +246,6 @@ async function saveCategory() {
       wikiState: Number(form.wikiState),
       chatState: Number(form.chatState),
       documentAccess: Number(form.documentAccess),
-      csrfToken: form.csrfToken,
     }
     if (memberLimitMode.value === "limited" && payload.maxStudent <= 0) {
       errorMessage.value = t("Please enter a valid number for the maximum number of members.")

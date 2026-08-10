@@ -17,20 +17,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<ExerciseQuestionImport>
  */
 final readonly class ExerciseQuestionImportProvider implements ProviderInterface
 {
-    public const CSRF_TOKEN_ID = 'exercise_question_import';
-
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -55,7 +51,6 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
         $response = new ExerciseQuestionImport();
         $response->importType = $importType;
         $response->title = $this->getImportTitle($importType);
-        $response->csrfToken = $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue();
         $response->canManage = true;
         $response->actionUrls = $this->getActionUrls($course, $session, $request);
         $response->sample = $this->getImportSample($importType);

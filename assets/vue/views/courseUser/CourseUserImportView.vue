@@ -114,7 +114,6 @@ const selectedFile = ref(null)
 const replaceUsers = ref(false)
 const saving = ref(false)
 const canImport = ref(false)
-const csrfToken = ref("")
 const sampleByUsername = ref("username\njdoe")
 const sampleById = ref("id\n23")
 const errorMessage = ref("")
@@ -141,7 +140,6 @@ async function loadImportConfiguration() {
   try {
     const response = await courseUserService.getImport(requestParams())
     canImport.value = Boolean(response.canImport)
-    csrfToken.value = response.csrfToken || ""
     sampleByUsername.value = response.sampleByUsername || sampleByUsername.value
     sampleById.value = response.sampleById || sampleById.value
   } catch (error) {
@@ -162,12 +160,7 @@ async function runImport() {
   failedRows.value = []
 
   try {
-    const response = await courseUserService.importCsv(
-      selectedFile.value,
-      replaceUsers.value,
-      csrfToken.value,
-      requestParams(),
-    )
+    const response = await courseUserService.importCsv(selectedFile.value, replaceUsers.value, requestParams())
     invalidRows.value = response.invalidRows || []
     failedRows.value = response.failed || []
 

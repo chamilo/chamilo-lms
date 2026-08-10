@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const PATHINFO_EXTENSION;
 
@@ -53,7 +52,6 @@ final class ForumProcessor implements ProcessorInterface
         private readonly CForumCategoryRepository $categoryRepository,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly SettingsManager $settingsManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly CidReqHelper $cidReqHelper,
@@ -67,7 +65,6 @@ final class ForumProcessor implements ProcessorInterface
         }
 
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $operationName = (string) $operation->getName();
         if ('toggle_forum_subscription' !== $operationName) {
             $this->assertTeacher($this->security);

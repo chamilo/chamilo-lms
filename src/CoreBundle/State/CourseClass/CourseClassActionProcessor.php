@@ -12,8 +12,6 @@ use Chamilo\CoreBundle\ApiResource\CourseClass\CourseClassAction;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<CourseClassAction, CourseClassAction>
@@ -23,7 +21,6 @@ final readonly class CourseClassActionProcessor implements ProcessorInterface
     public function __construct(
         private RequestStack $requestStack,
         private CourseClassManager $manager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     public function process(
@@ -34,12 +31,6 @@ final readonly class CourseClassActionProcessor implements ProcessorInterface
     ): CourseClassAction {
         if (!$data instanceof CourseClassAction) {
             throw new BadRequestHttpException('Invalid class action payload.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken('course_class_management', $data->csrfToken),
-        )) {
-            throw new BadRequestHttpException('Invalid CSRF token.');
         }
 
         $request = $this->requestStack->getCurrentRequest();

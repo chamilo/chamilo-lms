@@ -39,7 +39,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                                 'properties' => [
                                     'file' => ['type' => 'string', 'format' => 'binary'],
                                     'deleteMissing' => ['type' => 'boolean'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
                             ],
                         ],
@@ -62,9 +61,6 @@ final class CourseGroupImport
 
     #[Groups(['course_group_import:read'])]
     public bool $canImport = false;
-
-    #[Groups(['course_group_import:read'])]
-    public string $csrfToken = '';
 
     #[Groups(['course_group_import:read'])]
     public bool $success = false;

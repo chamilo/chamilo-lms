@@ -12,17 +12,13 @@ use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathActionToken;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<LearningPathActionToken>
  */
 final readonly class LearningPathActionTokenProvider implements ProviderInterface
 {
-    private const string ACTION_TOKEN_INTENTION = 'learning_path_action';
-
     public function __construct(
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private CidReqHelper $cidReqHelper,
@@ -35,7 +31,6 @@ final readonly class LearningPathActionTokenProvider implements ProviderInterfac
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): LearningPathActionToken
     {
         $result = new LearningPathActionToken();
-        $result->token = $this->csrfTokenManager->getToken(self::ACTION_TOKEN_INTENTION)->getValue();
         $result->allowChamiloExport = $this->isTruthy(
             $this->settingsManager->getSetting('lp.allow_lp_chamilo_export', true),
         );

@@ -32,6 +32,4 @@ final class ForumPostWriteInput
      * @var array<int, mixed>|null
      */
     public ?array $attachments = null;
-
-    public ?string $csrfToken = null;
 }

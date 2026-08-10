@@ -122,10 +122,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  csrfToken: {
-    type: String,
-    required: true,
-  },
   lpId: {
     type: Number,
     required: true,
@@ -180,7 +176,6 @@ async function saveAudioDocument(documentId) {
   try {
     await lpService.updateBuilderItemAudio(props.lpId, Number(props.item.id), props.context, {
       documentId: documentId > 0 ? documentId : null,
-      csrfToken: props.csrfToken,
     })
     showSuccessNotification(t("Saved"))
     emit("saved", Number(props.item.id))

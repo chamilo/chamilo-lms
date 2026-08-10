@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use UserManager;
 
 use const CASE_LOWER;
@@ -29,7 +27,6 @@ final readonly class CourseUserImportProcessor implements ProcessorInterface
         private RequestStack $requestStack,
         private CourseUserManager $courseUserManager,
         private CourseUserWriteManager $writeManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -41,13 +38,6 @@ final readonly class CourseUserImportProcessor implements ProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');
-        }
-
-        $csrfToken = (string) $request->request->get('csrfToken', '');
-        if (!$this->csrfTokenManager->isTokenValid(
-            new CsrfToken(CourseUserListProvider::CSRF_TOKEN_ID, $csrfToken),
-        )) {
-            throw new AccessDeniedHttpException('The CSRF token is invalid.');
         }
 
         [$course, $session] = $this->courseUserManager->resolveContext($request);

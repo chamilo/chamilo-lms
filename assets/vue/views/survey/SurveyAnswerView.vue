@@ -407,7 +407,6 @@ const answers = ref({})
 const otherAnswers = ref({})
 const profileFields = ref([])
 const profileValues = ref({})
-const csrfToken = ref("")
 const settings = ref({})
 const canSubmit = ref(false)
 const isAnswered = ref(false)
@@ -506,7 +505,6 @@ function normalizeResponse(data) {
   survey.value = data.survey || {}
   questions.value = Array.isArray(data.questions) ? data.questions : []
   pages.value = Array.isArray(data.pages) && data.pages.length ? data.pages : [[]]
-  csrfToken.value = data.csrfToken || csrfToken.value
   settings.value = data.settings || {}
   canSubmit.value = true === data.canSubmit
   isAnswered.value = true === data.isAnswered
@@ -804,7 +802,6 @@ async function submitSurvey() {
         answers: answers.value,
         otherAnswers: otherAnswers.value,
         profileValues: profileValues.value,
-        csrfToken: csrfToken.value,
       },
       getContextParams(),
       surveyId.value,

@@ -31,8 +31,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Throwable;
 
 use const JSON_THROW_ON_ERROR;
@@ -72,19 +70,6 @@ trait PortfolioWriteHelperTrait
         }
 
         return $request->request->all();
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     */
-    private function validatePortfolioCsrfToken(
-        CsrfTokenManagerInterface $csrfTokenManager,
-        array $payload,
-    ): void {
-        $token = (string) ($payload['csrfToken'] ?? '');
-        if ('' === $token || !$csrfTokenManager->isTokenValid(new CsrfToken('portfolio_action', $token))) {
-            throw new AccessDeniedHttpException('The portfolio security token is invalid.');
-        }
     }
 
     private function findPortfolioItem(EntityManagerInterface $entityManager, int $id): Portfolio

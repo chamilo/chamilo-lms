@@ -478,7 +478,6 @@ const extraFields = ref([])
 const totalItems = ref(0)
 const page = ref(1)
 const itemsPerPage = ref(20)
-const csrfToken = ref("")
 const multipleExtraValues = reactive({})
 const doubleExtraValues = reactive({})
 const expandedQuestionIds = reactive(new Set())
@@ -619,7 +618,6 @@ async function loadData({ updateUrl = false } = {}) {
     page.value = Number(data.page ?? page.value)
     itemsPerPage.value = Number(data.itemsPerPage ?? itemsPerPage.value)
     searched.value = Boolean(data.searched)
-    csrfToken.value = String(data.csrfToken ?? "")
     hydrateMultipleExtraValues()
   } catch (error) {
     if (error?.name === "CanceledError" || error?.name === "AbortError") {
@@ -702,7 +700,7 @@ function confirmDelete(question) {
     accept: async () => {
       deletingQuestionId.value = question.id
       try {
-        await adminQuestionBankService.deleteQuestion(question.id, csrfToken.value)
+        await adminQuestionBankService.deleteQuestion(question.id)
         showSuccessNotification(`${t("Deleted")} #${question.id}`)
 
         if (questions.value.length === 1 && page.value > 1) {

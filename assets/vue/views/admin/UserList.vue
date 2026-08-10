@@ -569,7 +569,6 @@ const advancedFilters = reactive({
 
 const viewer = reactive({ id: 0, isPlatformAdmin: false, isSessionAdmin: false })
 const roleLabelsMap = ref({})
-const csrfToken = ref("")
 const loginAsToken = ref("")
 
 const roleOptions = {
@@ -641,7 +640,6 @@ function confirmAction(action, data, title) {
         const formData = new URLSearchParams()
         formData.set("action", action)
         formData.set("user_id", String(data.id))
-        formData.set("_token", csrfToken.value)
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
         await baseService.post("/admin/user-list-action", formData)
@@ -662,7 +660,6 @@ function confirmBulkAction(action) {
       try {
         const formData = new URLSearchParams()
         formData.set("action", action)
-        formData.set("_token", csrfToken.value)
         selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
@@ -721,9 +718,6 @@ async function load() {
     }
     if (data.roleLabels) {
       roleLabelsMap.value = data.roleLabels
-    }
-    if (data.csrfToken) {
-      csrfToken.value = data.csrfToken
     }
     if (data.loginAsToken) {
       loginAsToken.value = data.loginAsToken

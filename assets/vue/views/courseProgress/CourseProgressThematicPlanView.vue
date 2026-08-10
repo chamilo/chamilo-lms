@@ -174,7 +174,6 @@ const formErrorMessage = ref("")
 const successMessage = ref("")
 const thematicTitle = ref("")
 const thematicContent = ref("")
-const csrfToken = ref("")
 const items = ref([])
 
 const editorConfig = {
@@ -232,7 +231,6 @@ function normalizeItems(responseItems) {
 function applyResponse(response) {
   thematicTitle.value = response.thematicTitle || ""
   thematicContent.value = response.thematicContent || ""
-  csrfToken.value = response.csrfToken || ""
   items.value = normalizeItems(response.items)
 }
 
@@ -286,7 +284,6 @@ async function savePlans(addNewItem) {
         title: item.title,
         description: item.description,
       })),
-      csrfToken: csrfToken.value,
       addNewItem,
     }
 

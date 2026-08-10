@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const PATHINFO_EXTENSION;
 
@@ -34,7 +33,6 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -64,7 +62,6 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
         $response->aiHelpersEnabled = $aiHelpersEnabled;
         $response->enabled = $courseGeneratorEnabled && $aiHelpersEnabled && [] !== $textProviders;
         $response->language = $this->getCourseLanguage($course);
-        $response->csrfToken = $this->csrfTokenManager->getToken(ExerciseQuestionImportProvider::CSRF_TOKEN_ID)->getValue();
         $response->textProviders = $this->toOptionList($textProviders);
         $response->documentProviders = $this->toOptionList($documentProviders);
         $response->questionTypes = [

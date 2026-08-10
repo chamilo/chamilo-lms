@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
-use Chamilo\CoreBundle\Service\Ticket\TicketWorkflowService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -30,7 +29,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const DATE_ATOM;
 
@@ -49,7 +47,6 @@ final readonly class TicketListProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private AccessUrlHelper $accessUrlHelper,
         private TicketProjectHelper $ticketProjectHelper,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -81,7 +78,6 @@ final readonly class TicketListProvider implements ProviderInterface
         $result->isAdmin = $isAdmin;
         $result->canCreate = $isAdmin
             || 'true' === $this->settingsManager->getSetting('ticket.ticket_allow_student_add');
-        $result->csrfToken = $this->csrfTokenManager->getToken(TicketWorkflowService::CSRF_TOKEN_ID)->getValue();
         $result->projects = array_map(
             static fn (TicketProject $item): array => [
                 'id' => (int) $item->getId(),

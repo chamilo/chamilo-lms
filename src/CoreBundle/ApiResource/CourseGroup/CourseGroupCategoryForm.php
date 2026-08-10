@@ -116,9 +116,6 @@ final class CourseGroupCategoryForm
     #[Groups(['course_group_category_form:read'])]
     public bool $allowCategories = true;
 
-    #[Groups(['course_group_category_form:read', 'course_group_category_form:write'])]
-    public string $csrfToken = '';
-
     #[Groups(['course_group_category_form:read'])]
     public bool $success = false;
 

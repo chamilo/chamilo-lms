@@ -52,7 +52,6 @@ const { course, session } = storeToRefs(useCidReqStore())
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const title = ref("")
 const saving = ref(false)
-const actionToken = ref("")
 const categoryId = computed(() => Number(route.params.categoryId || 0))
 const isEdit = computed(() => categoryId.value > 0)
 const context = computed(() => ({
@@ -63,7 +62,6 @@ const context = computed(() => ({
 
 onMounted(async () => {
   try {
-    actionToken.value = (await lpService.getActionToken(context.value)).token
     if (isEdit.value) {
       const categories = await lpService.getLpCategories({ ...context.value, "resourceNode.parent": route.params.node })
       title.value = categories.find((item) => Number(item.iid) === categoryId.value)?.title || ""
@@ -80,7 +78,7 @@ async function save() {
   }
   saving.value = true
   try {
-    const payload = { title: title.value, csrfToken: actionToken.value }
+    const payload = { title: title.value }
     if (isEdit.value) {
       await lpService.updateCategory(categoryId.value, context.value, payload)
     } else {

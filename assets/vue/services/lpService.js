@@ -133,7 +133,7 @@ const generateAiLearningPath = async (params, payload) =>
 const saveAiLearningPath = async (params, payload) =>
   await baseService.post("/api/learning_paths/ai-generator", payload, {}, { params: cleanParams(params) })
 
-/** Fetches the CSRF token used by modern LP write actions. */
+/** Fetches the LP action settings for the current context. */
 const getActionToken = async (params = {}) => {
   return await baseService.get("/api/learning_paths/action-token", cleanParams(params))
 }
@@ -245,8 +245,8 @@ const updateBuilderItem = async (lpId, itemId, params, payload, extraFiles = {})
   })
 }
 
-const deleteBuilderItem = async (lpId, itemId, params, payload) =>
-  await baseService.post(`/api/learning_path_builder_items/${itemId}/delete`, { ...payload, lpId }, {}, {
+const deleteBuilderItem = async (lpId, itemId, params) =>
+  await baseService.post(`/api/learning_path_builder_items/${itemId}/delete`, { lpId }, {}, {
     params: cleanParams(params),
   })
 
@@ -295,10 +295,10 @@ const updateCategory = async (categoryId, params, payload) =>
     params: cleanParams(params),
   })
 
-const deleteCategory = async (categoryId, params, csrfToken) =>
+const deleteCategory = async (categoryId, params) =>
   await baseService.post(
     `/api/learning_path_categories/${categoryId}/manage-action`,
-    { action: "delete", csrfToken },
+    { action: "delete" },
     {},
     { params: cleanParams(params) },
   )

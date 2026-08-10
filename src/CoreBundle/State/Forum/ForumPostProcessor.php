@@ -41,7 +41,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const FILTER_VALIDATE_BOOLEAN;
 use const JSON_THROW_ON_ERROR;
@@ -68,7 +67,6 @@ final class ForumPostProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly RequestStack $requestStack,
         private readonly Security $security,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly SettingsManager $settingsManager,
         private readonly MessageHelper $messageHelper,
@@ -99,7 +97,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function createReply(Request $request): JsonResponse
     {
         $data = $this->getRequestData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $data['csrfToken'] ?? null);
 
         $forum = $this->forumRepository->find($this->getRequiredInt($data, 'forumId'));
         if (!$forum instanceof CForum) {
@@ -211,7 +208,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function updatePost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         if (!$data instanceof CForumPost) {
             throw new NotFoundHttpException('Forum post not found.');
@@ -261,7 +257,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function deletePost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         if (!$data instanceof CForumPost) {
             throw new NotFoundHttpException('Forum post not found.');
@@ -342,7 +337,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function togglePostVisibility(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumPost) {
@@ -375,7 +369,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function approvePost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumPost) {
@@ -431,7 +424,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function rejectPost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumPost) {
@@ -481,7 +473,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function askPostRevision(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         if (!$data instanceof CForumPost) {
             throw new NotFoundHttpException('Forum post not found.');
@@ -516,7 +507,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function reportPost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
 
         if (!$data instanceof CForumPost) {
             throw new NotFoundHttpException('Forum post not found.');
@@ -560,7 +550,6 @@ final class ForumPostProcessor implements ProcessorInterface
     private function movePost(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);
-        $this->validateCsrfToken($this->csrfTokenManager, $payload['csrfToken'] ?? null);
         $this->assertTeacher($this->security);
 
         if (!$data instanceof CForumPost) {

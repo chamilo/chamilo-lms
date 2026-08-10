@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 use const COURSEMANAGERLOWSECURITY;
 use const ENT_QUOTES;
@@ -34,8 +33,6 @@ use const ENT_SUBSTITUTE;
 final readonly class CourseProgressThematicPlanProvider implements ProviderInterface
 {
     use CourseProgressAccessHelperTrait;
-
-    public const string CSRF_TOKEN_ID = 'course_progress_thematic_plan';
 
     /**
      * @var array<int, string>
@@ -66,7 +63,6 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -139,7 +135,6 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
         $result->thematicTitle = $this->sanitizeHtml($thematic->getTitle());
         $result->thematicContent = $this->sanitizeHtml((string) $thematic->getContent());
         $result->items = $this->buildItems($thematic);
-        $result->csrfToken = (string) $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID);
         $result->canEdit = true;
 
         return $result;

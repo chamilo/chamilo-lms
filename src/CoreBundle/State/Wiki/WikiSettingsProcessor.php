@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /** @implements ProcessorInterface<WikiSettings, void> */
 final readonly class WikiSettingsProcessor implements ProcessorInterface
@@ -28,7 +26,6 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private SettingsCourseManager $settingsCourseManager,
     ) {}
 
@@ -56,10 +53,6 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
 
         if ($this->isWikiStudentView($request) || !$this->canManageWikiCourseSettings($this->security, $course)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Wiki settings.');
-        }
-
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiSettings::CSRF_TOKEN_ID, $data->csrfToken))) {
-            throw new AccessDeniedHttpException('The security token is invalid.');
         }
 
         $this->settingsCourseManager->setCourse($course);

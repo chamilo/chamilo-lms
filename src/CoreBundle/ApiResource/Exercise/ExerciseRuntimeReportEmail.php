@@ -49,9 +49,6 @@ final class ExerciseRuntimeReportEmail
     #[Groups(['exercise_runtime_report_email:write'])]
     public string $node = '';
 
-    #[Groups(['exercise_runtime_report_email:write'])]
-    public string $submittedCsrfToken = '';
-
     #[Groups(['exercise_runtime_report_email:read'])]
     public bool $success = false;
 

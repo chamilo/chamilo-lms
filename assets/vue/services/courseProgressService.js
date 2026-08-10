@@ -56,44 +56,38 @@ export default {
     })
   },
 
-  async removeThematicAdvance(thematicId, iid, payload, params = {}) {
+  async removeThematicAdvance(thematicId, iid, params = {}) {
     return await baseService.delete(`/api/course-progress/thematic-advance/${iid}`, {
       params: cleanParams({ ...params, thematicId }),
-      data: payload,
     })
   },
 
-  async updateCompletion(advanceId, csrfToken, params = {}) {
-    return await baseService.post(
-      "/api/course-progress/completion",
-      { advanceId, csrfToken },
-      {},
-      { params: cleanParams(params) },
-    )
+  async updateCompletion(advanceId, params = {}) {
+    return await baseService.post("/api/course-progress/completion", { advanceId }, {}, { params: cleanParams(params) })
   },
 
-  async copyThematic(thematicId, csrfToken, params = {}) {
+  async copyThematic(thematicId, params = {}) {
     return await baseService.post(
       "/api/course-progress/thematic/actions/copy",
-      { thematicId, csrfToken },
+      { thematicId },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async moveThematic(thematicId, direction, csrfToken, params = {}) {
+  async moveThematic(thematicId, direction, params = {}) {
     return await baseService.post(
       "/api/course-progress/thematic/actions/move",
-      { thematicId, direction, csrfToken },
+      { thematicId, direction },
       {},
       { params: cleanParams(params) },
     )
   },
 
-  async removeThematics(thematicIds, csrfToken, params = {}) {
+  async removeThematics(thematicIds, params = {}) {
     return await baseService.post(
       "/api/course-progress/thematic/actions/bulk-delete",
-      { thematicIds, csrfToken },
+      { thematicIds },
       {},
       { params: cleanParams(params) },
     )
@@ -120,11 +114,10 @@ export default {
     })
   },
 
-  async importCsv(file, replace, csrfToken, params = {}) {
+  async importCsv(file, replace, params = {}) {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("replace", replace ? "1" : "0")
-    formData.append("csrfToken", csrfToken)
 
     return await baseService.post(
       "/api/course-progress/import.csv",
@@ -136,10 +129,9 @@ export default {
     )
   },
 
-  async removeThematic(iid, payload, params = {}) {
+  async removeThematic(iid, params = {}) {
     return await baseService.delete(`/api/course-progress/thematic/${iid}`, {
       params: cleanParams(params),
-      data: payload,
     })
   },
 }

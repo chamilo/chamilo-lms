@@ -15,7 +15,6 @@ const groupId = computed(() => Number(route.params.id))
 const groupTitle = ref("")
 const isSocialGroup = ref(false)
 const relationType = ref(2)
-const csrfToken = ref("")
 const orderByOfficialCode = ref(false)
 
 // Full platform user list — loaded once on mount and on relation change only
@@ -109,7 +108,6 @@ async function loadData() {
     const data = await usergroupAdminService.getAddUsersData(groupId.value, relationType.value)
     groupTitle.value = data.groupTitle
     isSocialGroup.value = data.isSocialGroup
-    csrfToken.value = data.csrfToken
     orderByOfficialCode.value = true === data.orderByOfficialCode
     // Merge both sides into a single list so transfers preserve the configured ordering.
     allUsers.value = [...data.usersInGroup, ...data.usersNotInGroup].sort(compareUsers)
@@ -155,7 +153,6 @@ async function save() {
   successMessage.value = ""
   try {
     const formData = new FormData()
-    formData.append("_token", csrfToken.value)
     formData.append("relationType", String(relationType.value))
     selectedIds.value.forEach((id) => formData.append("userIds[]", String(id)))
     await usergroupAdminService.saveUsers(groupId.value, formData)

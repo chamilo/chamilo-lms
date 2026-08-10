@@ -33,7 +33,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProviderInterface<PortfolioForm>
@@ -51,7 +50,6 @@ final readonly class PortfolioFormProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
         private CidReqHelper $cidReqHelper,
     ) {}
 
@@ -123,7 +121,6 @@ final readonly class PortfolioFormProvider implements ProviderInterface
         $result->titleAsHtml = $this->portfolioBoolean(
             $this->settingsManager->getSetting('editor.save_titles_as_html', true),
         );
-        $result->csrfToken = $this->csrfTokenManager->getToken('portfolio_action')->getValue();
         $result->categories = $this->loadCategories();
         $result->templates = $this->loadTemplates($currentUser, $course, $session);
         $result->tags = $course instanceof Course ? $this->loadTags($course, $session) : [];

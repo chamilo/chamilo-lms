@@ -128,9 +128,6 @@ final class TicketForm
     #[Groups(['ticket_form:read'])]
     public bool $canCreate = false;
 
-    #[Groups(['ticket_form:read'])]
-    public string $csrfToken = '';
-
     public function getId(): string
     {
         return $this->id;

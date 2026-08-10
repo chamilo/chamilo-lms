@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State\Wiki;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussion;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussionAction;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -23,8 +22,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @implements ProcessorInterface<WikiDiscussionAction, WikiDiscussionAction>
@@ -39,7 +36,6 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
         private CWikiRepository $wikiRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     /**
@@ -112,7 +108,6 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('This Wiki discussion is not visible in the current context.');
         }
 
-        $this->validateCsrfToken($data->csrfToken);
         $operationName = (string) $operation->getName();
 
         if (WikiDiscussionAction::OPERATION_SUBSCRIPTION === $operationName) {
@@ -182,12 +177,5 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
         }
 
         $this->entityManager->flush();
-    }
-
-    private function validateCsrfToken(string $token): void
-    {
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken(WikiDiscussion::CSRF_TOKEN_ID, $token))) {
-            throw new AccessDeniedHttpException('The Wiki discussion CSRF token is invalid.');
-        }
     }
 }

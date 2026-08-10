@@ -520,8 +520,6 @@ const lockedByGradebook = ref(false)
 const canBulkDelete = ref(false)
 const canCleanResults = ref(false)
 const canBulkRecalculate = ref(false)
-const bulkActionToken = ref("")
-const emailActionToken = ref("")
 const isCleanFormVisible = ref(false)
 const isExportFormVisible = ref(false)
 const cleanBeforeDateValue = ref("")
@@ -683,8 +681,6 @@ async function loadReport() {
     canBulkDelete.value = true === response.canBulkDelete
     canCleanResults.value = true === response.canCleanResults
     canBulkRecalculate.value = true === response.canBulkRecalculate
-    bulkActionToken.value = response.bulkActionToken || ""
-    emailActionToken.value = response.emailActionToken || ""
   } catch (error) {
     console.error("Error loading exercise report", error)
     errorMessage.value = t("Could not load exercise report")
@@ -830,7 +826,6 @@ async function emailAllAttempts() {
     const response = await exerciseService.emailExerciseRuntimeReportAttempts(
       {
         node: String(route.params.node || ""),
-        submittedCsrfToken: emailActionToken.value,
       },
       getReportParams(),
       exerciseId,
@@ -871,7 +866,6 @@ async function runBulkAction(action, extraPayload = {}) {
     const response = await exerciseService.runExerciseRuntimeReportBulkAction(
       {
         action,
-        submittedCsrfToken: bulkActionToken.value,
         ...extraPayload,
       },
       getContextParams(),

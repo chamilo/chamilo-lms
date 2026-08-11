@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
@@ -200,13 +201,12 @@ class ResourceNodeVoter extends Voter
                 return true;
             }
 
-            if ($this->hasContextRole('ROLE_CURRENT_COURSE_STUDENT')
-                || $this->hasContextRole('ROLE_CURRENT_COURSE_TEACHER')
-                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-                || $this->hasContextRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            ) {
-                return true;
-            }
+            // The context roles are handed out on open courses to any authenticated
+            // visitor, and they describe the course of the request rather than the one
+            // the submission belongs to. Neither is good enough to hand over somebody
+            // else's work, so membership of the submission's own course is required.
+            return $user instanceof User
+                && $this->belongsToResourceCourse($resourceNode, $user);
         }
 
         if ('files' === $resourceNode->getResourceType()->getTitle()) {
@@ -689,6 +689,44 @@ class ResourceNodeVoter extends Voter
 
             $headerHost = $scheme.'://'.$host.(null !== $port ? ':'.$port : '');
             if ($headerHost !== $currentHost) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Whether the user takes part in one of the courses the resource is linked to,
+     * as a real subscription rather than as a visitor of an open course.
+     */
+    private function belongsToResourceCourse(ResourceNode $resourceNode, User $user): bool
+    {
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            // Corrections and feedback are linked to the student they were sent to.
+            $linkUser = $link->getUser();
+            if ($linkUser instanceof User && $linkUser->getId() === $user->getId()) {
+                return true;
+            }
+
+            $linkCourse = $link->getCourse();
+            if (!$linkCourse instanceof Course) {
+                continue;
+            }
+
+            $linkSession = $link->getSession();
+            if ($linkSession instanceof Session) {
+                if ($linkSession->hasUserAsGeneralCoach($user)
+                    || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
+                    || $linkSession->hasUserInCourse($user, $linkCourse, Session::STUDENT)
+                ) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if ($linkCourse->hasUserAsTeacher($user) || $linkCourse->hasSubscriptionByUser($user)) {
                 return true;
             }
         }

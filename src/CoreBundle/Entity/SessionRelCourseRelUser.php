@@ -10,6 +10,11 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +26,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User subscriptions to a session course.
  */
 #[ApiResource(
+    operations: [
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
+        // The collection is narrowed down to the caller's own subscriptions and to the
+        // sessions they coach by SessionRelCourseRelUserExtension.
+        new GetCollection(),
+        // Self-subscription from the session catalogue is the only non-admin creation;
+        // SessionRelCourseRelUserVoter also re-checks the setting that gates it.
+        new Post(
+            securityPostDenormalize: "is_granted('CREATE', object)"
+        ),
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
     normalizationContext: [
         'groups' => [
             'user:read',

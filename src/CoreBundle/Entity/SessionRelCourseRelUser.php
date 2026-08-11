@@ -34,10 +34,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         // The collection is narrowed down to the caller's own subscriptions and to the
         // sessions they coach by SessionRelCourseRelUserExtension.
         new GetCollection(),
-        // Self-subscription from the session catalogue is the only non-admin creation:
-        // enrolling somebody else, or granting oneself the coach status, is refused.
+        // Self-subscription from the session catalogue is the only non-admin creation;
+        // SessionRelCourseRelUserVoter also re-checks the setting that gates it.
         new Post(
-            securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.getUser().getId() == user.getId() and object.getStatus() == constant('Chamilo\\\\CoreBundle\\\\Entity\\\\Session::STUDENT'))"
+            securityPostDenormalize: "is_granted('CREATE', object)"
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),

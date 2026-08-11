@@ -3733,6 +3733,12 @@ class MoodleImport
                     'next_item_id' => isset($it['next_item_id']) ? (int) $it['next_item_id'] : null,
                     'display_order' => (int) ($it['display_order'] ?? 0),
                     'prerequisite' => (string) ($it['prerequisite'] ?? ''),
+                    'prerequisite_min_score' => isset($it['prerequisite_min_score'])
+                        ? (float) $it['prerequisite_min_score']
+                        : null,
+                    'prerequisite_max_score' => isset($it['prerequisite_max_score'])
+                        ? (float) $it['prerequisite_max_score']
+                        : null,
                     'parameters' => (string) ($it['parameters'] ?? ''),
                     'launch_data' => (string) ($it['launch_data'] ?? ''),
                     'audio' => (string) ($it['audio'] ?? ''),

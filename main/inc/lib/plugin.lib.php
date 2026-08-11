@@ -54,6 +54,26 @@ class AppPlugin
     }
 
     /**
+     * Checks that a plugin name matches an existing directory inside the plugin
+     * directory, so it can never be used to escape from it when building a file
+     * path. The directory list is read only once per request.
+     *
+     * @param string $pluginName
+     *
+     * @return bool
+     */
+    public static function isValidPluginName($pluginName)
+    {
+        static $availablePlugins = null;
+
+        if (null === $availablePlugins) {
+            $availablePlugins = self::getInstance()->read_plugins_from_path();
+        }
+
+        return is_string($pluginName) && in_array($pluginName, $availablePlugins, true);
+    }
+
+    /**
      * Read plugin from path.
      *
      * @return array
@@ -552,6 +572,10 @@ class AppPlugin
      */
     public function getPluginInfo($plugin_name, $forced = false)
     {
+        if (!self::isValidPluginName($plugin_name)) {
+            return [];
+        }
+
         $pluginData = Session::read('plugin_data');
         if (isset($pluginData[$plugin_name]) && $forced == false) {
             return $pluginData[$plugin_name];

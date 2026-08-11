@@ -11,12 +11,18 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$pluginName = $_GET['name'];
+$pluginName = $_GET['name'] ?? '';
 $appPlugin = new AppPlugin();
 $installedPlugins = $appPlugin->getInstalledPlugins();
+
+// The plugin name must be validated before it is used to build any file path.
+if (!AppPlugin::isValidPluginName($pluginName) || !in_array($pluginName, $installedPlugins, true)) {
+    api_not_allowed(true);
+}
+
 $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
 
-if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
+if (empty($pluginInfo)) {
     api_not_allowed(true);
 }
 

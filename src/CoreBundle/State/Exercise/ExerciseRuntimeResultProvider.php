@@ -2397,7 +2397,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     private function requiresManualCorrection(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [5, 13, 20, 23], true);
+        return \in_array((int) $question->getType(), [5, 13, 20, 23, self::ANSWER_IN_OFFICE_DOC], true);
     }
 
     private function getQuestionTypeLabel(int $type): string
@@ -2427,6 +2427,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             27 => 'Fill in blanks combination',
             28 => 'Multiple answer dropdown combination',
             29 => 'Multiple answer dropdown',
+            self::ANSWER_IN_OFFICE_DOC => 'Answer in Office document',
             31 => 'Page break',
             default => 'Question',
         };

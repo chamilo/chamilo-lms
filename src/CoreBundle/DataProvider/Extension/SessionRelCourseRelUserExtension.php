@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
@@ -19,7 +20,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Keeps the session course subscriptions collection to what the caller may see:
- * their own subscriptions, plus the ones of the sessions they coach.
+ * their own subscriptions, plus the ones of the courses they teach — as a coach
+ * of that session course, as a general coach of the session, or as a teacher of
+ * the base course.
  */
 final readonly class SessionRelCourseRelUserExtension implements QueryCollectionExtensionInterface
 {
@@ -74,12 +77,25 @@ final readonly class SessionRelCourseRelUserExtension implements QueryCollection
                         )',
                         SessionRelUser::class,
                         $alias
+                    ),
+                    // A teacher of the base course keeps managing it inside a session
+                    // even when nobody registered them as a coach of that session.
+                    \sprintf(
+                        'EXISTS (
+                            SELECT 1 FROM %s course_teacher
+                            WHERE course_teacher.user = :current_user
+                                AND course_teacher.course = %s.course
+                                AND course_teacher.status = :course_teacher_status
+                        )',
+                        CourseRelUser::class,
+                        $alias
                     )
                 )
             )
             ->setParameter('current_user', (int) $user->getId())
             ->setParameter('course_coach_status', Session::COURSE_COACH)
             ->setParameter('general_coach_status', Session::GENERAL_COACH)
+            ->setParameter('course_teacher_status', CourseRelUser::TEACHER)
         ;
     }
 }

@@ -32,10 +32,6 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        if ('get' !== $operation->getName()) {
-            return;
-        }
-
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }

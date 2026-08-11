@@ -70,10 +70,9 @@ $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
 $isExercisePreview = 1 === (int) getHashValue($hashData, 'exercisePreview', 0);
 $isReadOnly = 1 === (int) getHashValue($hashData, 'readOnly', 0);
 
-$docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
-$docPath = '' !== $docPathFromQuery
-    ? $docPathFromQuery
-    : (string) getHashValue($hashData, 'docPath', '');
+// Only the signed value is trusted: a query parameter would let the caller
+// replace the document the hash was issued for.
+$docPath = (string) getHashValue($hashData, 'docPath', '');
 
 $courseInfo = [];
 $courseCode = '';
@@ -384,14 +383,42 @@ function emptyFile(): void
 }
 
 /**
+ * Resolve a course-relative document path to an existing file inside the course
+ * directory. Returns null when the file is missing or the path escapes that root.
+ */
+function resolveContainedCoursePath(string $docPath): ?string
+{
+    // SYS_COURSE_PATH is not declared by the 2.x core, so treat it as unresolvable
+    // rather than raising an undefined-constant error.
+    if (!\defined('SYS_COURSE_PATH')) {
+        return null;
+    }
+
+    $root = realpath(api_get_path(SYS_COURSE_PATH));
+
+    if (false === $root) {
+        return null;
+    }
+
+    $root = rtrim($root, '/').'/';
+    $realPath = realpath($root.ltrim(str_replace('\\', '/', $docPath), '/'));
+
+    if (false === $realPath || !str_starts_with($realPath, $root)) {
+        return null;
+    }
+
+    return $realPath;
+}
+
+/**
  * Resolve a document source in C2 first, then legacy.
  */
 function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCode, int $sessionId, string $docPath): ?array
 {
     if ('' !== $docPath) {
-        $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
+        $filePath = resolveContainedCoursePath($docPath);
 
-        if (file_exists($filePath)) {
+        if (null !== $filePath) {
             onlyofficeLog('DEBUG', 'Resolved direct docPath', [
                 'docPath' => $docPath,
                 'filePath' => $filePath,
@@ -412,9 +439,8 @@ function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCo
             ];
         }
 
-        onlyofficeLog('WARNING', 'Direct docPath not found', [
+        onlyofficeLog('WARNING', 'Direct docPath not found inside the course directory', [
             'docPath' => $docPath,
-            'filePath' => $filePath,
         ]);
     }
 

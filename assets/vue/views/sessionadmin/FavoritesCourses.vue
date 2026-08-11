@@ -24,6 +24,7 @@
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import courseService from "../../services/courseService"
+import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 import AdminCourseCard from "../../components/course/AdminCourseCard.vue"
 import { useSecurityStore } from "../../store/securityStore"
 
@@ -65,7 +66,7 @@ async function loadFavorites() {
   const userId = securityStore.user.id
   const isSessionAdmin = securityStore.isSessionAdmin
 
-  const favoritesRaw = await courseService.listFavoriteCourses(userId)
+  const favoritesRaw = await userRelCourseVoteService.listFavoriteCourses(userId)
   const courseIds = favoritesRaw
     .map((iri) => parseInt(iri.split("/").pop()))
     .filter((id) => !isNaN(id))

@@ -60,20 +60,22 @@ export async function updateVote({ iri, vote, sessionId = null, urlId }) {
  */
 export async function getUserVote({ userId, courseId, sessionId = null, urlId }) {
   try {
-    let query = `/api/user_rel_course_votes?user.id=${userId}`
+    const searchParams = { "user.id": userId }
 
-    if (urlId) query += `&url.id=${urlId}`
+    if (urlId) searchParams["url.id"] = urlId
 
     if (courseId && courseId !== 0) {
-      query += `&course.id=${courseId}`
+      searchParams["course.id"] = courseId
     } else if (sessionId) {
-      query += `&session.id=${sessionId}&course=null`
+      searchParams["session.id"] = sessionId
+      // Kept as a string: axios drops null values, and the API expects the literal.
+      searchParams.course = "null"
     }
 
-    const response = await baseService.get(query)
+    const { items } = await baseService.getCollection("/api/user_rel_course_votes", searchParams)
 
-    if (response?.["hydra:member"]?.length > 0) {
-      return response["hydra:member"][0]
+    if (items?.length > 0) {
+      return items[0]
     }
 
     return null
@@ -81,6 +83,54 @@ export async function getUserVote({ userId, courseId, sessionId = null, urlId })
   } catch (error) {
     return null
   }
+}
+
+/**
+ * Adds a course to the user's favourites, or removes it when already there.
+ *
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @returns {Promise<boolean>} - Whether the course is a favourite after the call
+ */
+export async function toggleFavorite(courseId, userId) {
+  // Check if the vote already exists
+  const { totalItems, items } = await baseService.getCollection("/api/user_rel_course_votes", {
+    "user.id": userId,
+    "course.id": courseId,
+  })
+
+  if (totalItems > 0) {
+    // Already favorite → remove
+    await baseService.delete(items[0]["@id"])
+
+    return false
+  }
+
+  // Not favorite → create
+  await baseService.post("/api/user_rel_course_votes", {
+    user: `/api/users/${userId}`,
+    course: `/api/courses/${courseId}`,
+    vote: 1,
+    url: `/api/access_urls/${window.access_url_id ?? 1}`,
+  })
+
+  return true
+}
+
+/**
+ * Lists the courses the user marked as favourite.
+ *
+ * @param {number} userId - ID of the user
+ * @returns {Promise<Array>} - List of courses
+ */
+export async function listFavoriteCourses(userId) {
+  const { items } = await baseService.getCollection("/api/user_rel_course_votes", {
+    "user.id": userId,
+    vote: 1,
+    pagination: false,
+  })
+
+  return items.map((vote) => vote.course)
 }
 
 /**

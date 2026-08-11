@@ -15,7 +15,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\EventListener\UserRelCourseVoteListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,11 +25,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
  */
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
+        // The collection is narrowed down to the caller's own votes by UserRelCourseVoteExtension.
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new Put(security: "is_granted('ROLE_USER')"),
-        new Patch(security: "is_granted('ROLE_USER')"), new Delete(security: "is_granted('ROLE_ADMIN')"),
+        // A vote always belongs to the user casting it: the posted user cannot be somebody else.
+        new Post(
+            securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()",
+            securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
+        // Removing a course from the favourites deletes the vote behind it.
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
     ],
     normalizationContext: ['groups' => ['userRelCourseVote:read']],
     denormalizationContext: ['groups' => ['userRelCourseVote:write']]

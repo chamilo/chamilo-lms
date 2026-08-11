@@ -9,15 +9,14 @@ namespace Chamilo\CoreBundle\State\Forum;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -56,8 +55,6 @@ final class ForumThreadProcessor implements ProcessorInterface
     use ForumNotificationHelperTrait;
     use ForumStateHelperTrait;
     use ForumWriteHelperTrait;
-    private const int LINK_FORUM_THREAD = 5;
-
     public function __construct(
         private readonly CForumRepository $forumRepository,
         private readonly CForumThreadRepository $threadRepository,
@@ -67,7 +64,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
-        private readonly SettingsManager $settingsManager,
+        private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly MessageHelper $messageHelper,
         private readonly CidReqHelper $cidReqHelper,
     ) {}
@@ -148,12 +145,12 @@ final class ForumThreadProcessor implements ProcessorInterface
         ;
 
         if ($isTeacher) {
-            $this->applyThreadGradingSettings($thread, $course, $data);
+            $this->applyThreadGradingSettings($thread, $course, $session, $data);
         }
 
         $this->threadRepository->create($thread);
         if ($isTeacher) {
-            $this->syncThreadGradebookLink($thread, $course, $data);
+            $this->syncThreadGradebookLink($thread, $course, $session, $data);
         }
 
         $post = (new CForumPost())
@@ -221,12 +218,14 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($forum->getResourceNode(), 'edit');
 
         $course = $this->getCourse($this->cidReqHelper);
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
 
         $data->setTitle($this->getRequiredText($payload, 'title', 250));
         if (\array_key_exists('gradebookEnabled', $payload)) {
-            $this->applyThreadGradingSettings($data, $course, $payload);
-            $this->syncThreadGradebookLink($data, $course, $payload);
+            $this->applyThreadGradingSettings($data, $course, $session, $payload);
+            $this->syncThreadGradebookLink($data, $course, $session, $payload);
         }
 
         $this->entityManager->persist($data);
@@ -259,7 +258,9 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableResource($forum->getResourceNode(), 'delete');
 
         $course = $this->getCourse($this->cidReqHelper);
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
 
         $threadId = (int) $data->getIid();
         $postCount = $data->getPosts()->count();
@@ -270,10 +271,15 @@ final class ForumThreadProcessor implements ProcessorInterface
             $forum->setForumLastPost(null);
         }
 
-        $gradebookLink = $this->findThreadGradebookLink($data, $course);
-        if ($gradebookLink instanceof GradebookLink) {
-            $this->entityManager->remove($gradebookLink);
-        }
+        $this->gradebookLinkManager->removeLinksForTypes(
+            $course,
+            $session,
+            [
+                GradebookLinkResourceResolver::LINK_FORUM_THREAD,
+                GradebookLinkResourceResolver::LINK_FORUM_PARTICIPATION,
+            ],
+            $threadId,
+        );
 
         $this->threadRepository->delete($data);
         $this->entityManager->persist($forum);
@@ -308,7 +314,9 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
         $course = $this->getCourse($this->cidReqHelper);
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
 
         $data->setLocked(0 === $data->getLocked() ? 1 : 0);
         $this->entityManager->persist($data);
@@ -340,7 +348,9 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($data->getResourceNode(), $this->security);
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
         $course = $this->getCourse($this->cidReqHelper);
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
 
         $data->setThreadSticky(!$data->getThreadSticky());
         $this->entityManager->persist($data);
@@ -374,7 +384,8 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
         $targetVisible = $this->getTargetVisibility($payload, $data, $course, $session);
         $visible = $this->setForumResourceVisibility($data, $this->threadRepository, $course, $session, $targetVisible);
         $this->entityManager->flush();
@@ -419,7 +430,8 @@ final class ForumThreadProcessor implements ProcessorInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
-        $this->assertForumThreadNotLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $data);
+        $this->assertSessionBelongsToCourse($session, $course);
+        $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
 
         $postCount = $this->moveThreadPosts($data, $targetForum);
         $data->setForum($targetForum);
@@ -495,8 +507,12 @@ final class ForumThreadProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $data
      */
-    private function applyThreadGradingSettings(CForumThread $thread, Course $course, array $data): void
-    {
+    private function applyThreadGradingSettings(
+        CForumThread $thread,
+        Course $course,
+        ?Session $session,
+        array $data,
+    ): void {
         if (!$this->getBoolean($data, 'gradebookEnabled')) {
             $thread
                 ->setThreadTitleQualify('')
@@ -509,10 +525,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         }
 
         $categoryId = $this->getRequiredInt($data, 'gradebookCategoryId');
-        $category = $this->entityManager->getRepository(GradebookCategory::class)->find($categoryId);
-        if (!$category instanceof GradebookCategory || $category->getCourse()->getId() !== $course->getId()) {
-            throw new BadRequestHttpException('Invalid gradebook category.');
-        }
+        $this->gradebookLinkManager->requireCategory($course, $session, $categoryId, true);
 
         $maxScore = $this->getPositiveFloat($data, 'threadQualifyMax');
         $weight = $this->getPositiveFloat($data, 'threadWeight');
@@ -532,48 +545,36 @@ final class ForumThreadProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $data
      */
-    private function syncThreadGradebookLink(CForumThread $thread, Course $course, array $data): void
-    {
-        $existingLink = $this->findThreadGradebookLink($thread, $course);
+    private function syncThreadGradebookLink(
+        CForumThread $thread,
+        Course $course,
+        ?Session $session,
+        array $data,
+    ): void {
+        $threadId = (int) $thread->getIid();
+        if ($threadId <= 0) {
+            throw new BadRequestHttpException('The forum thread must be saved before it can be linked to the Gradebook.');
+        }
+
         if (!$this->getBoolean($data, 'gradebookEnabled')) {
-            if ($existingLink instanceof GradebookLink) {
-                $this->entityManager->remove($existingLink);
-            }
+            $this->gradebookLinkManager->removeLinks(
+                $course,
+                $session,
+                GradebookLinkResourceResolver::LINK_FORUM_THREAD,
+                $threadId,
+            );
 
             return;
         }
 
-        $categoryId = $this->getRequiredInt($data, 'gradebookCategoryId');
-        $category = $this->entityManager->getRepository(GradebookCategory::class)->find($categoryId);
-        if (!$category instanceof GradebookCategory || $category->getCourse()->getId() !== $course->getId()) {
-            throw new BadRequestHttpException('Invalid gradebook category.');
-        }
-
-        $link = $existingLink ?? new GradebookLink();
-        $link
-            ->setType(self::LINK_FORUM_THREAD)
-            ->setRefId((int) $thread->getIid())
-            ->setCourse($course)
-            ->setCategory($category)
-            ->setWeight($thread->getThreadWeight())
-            ->setVisible(1)
-            ->setLocked(0)
-        ;
-
-        $this->entityManager->persist($link);
-    }
-
-    private function findThreadGradebookLink(CForumThread $thread, Course $course): ?GradebookLink
-    {
-        if (null === $thread->getIid()) {
-            return null;
-        }
-
-        return $this->entityManager->getRepository(GradebookLink::class)->findOneBy([
-            'course' => $course,
-            'type' => self::LINK_FORUM_THREAD,
-            'refId' => (int) $thread->getIid(),
-        ]);
+        $this->gradebookLinkManager->upsertLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_FORUM_THREAD,
+            $threadId,
+            $this->getRequiredInt($data, 'gradebookCategoryId'),
+            (float) $thread->getThreadWeight(),
+        );
     }
 
     /**

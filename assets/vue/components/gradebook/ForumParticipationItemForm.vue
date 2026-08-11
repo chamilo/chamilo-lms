@@ -50,11 +50,13 @@
 
 <script setup>
 import { computed, reactive } from "vue"
+import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import gradebookService from "../../services/gradebookService"
+import { getCourseContext } from "../../utils/courseContext"
 
 const props = defineProps({
   courseId: {
@@ -79,6 +81,8 @@ const props = defineProps({
 const emit = defineEmits(["saved", "cancel"])
 
 const { t } = useI18n()
+const route = useRoute()
+const { cid, sid, gid } = getCourseContext()
 
 const isEdit = computed(() => null !== props.link)
 
@@ -96,31 +100,42 @@ const hasMany = computed(() => form.pointsMany !== null && form.pointsMany !== "
 const isValid = computed(() => null !== form.threadId && form.pointsOne >= 0)
 
 /**
- * Creates or updates the forum participation gradebook item via the API.
+ * Creates or updates the forum participation item through the Gradebook action processor.
  */
 async function submit() {
   if (!isValid.value) {
     return
   }
 
-  // Weight is the highest award: pointsMany when set, otherwise pointsOne.
-  const weight = Math.max(Number(form.pointsOne) || 0, hasMany.value ? Number(form.pointsMany) : 0)
-
-  if (isEdit.value) {
-    await gradebookService.updateForumParticipationLink(props.link.id, {
-      pointsOne: String(form.pointsOne),
-      pointsMany: hasMany.value ? String(form.pointsMany) : null,
-      weight,
-    })
-  } else {
-    await gradebookService.createForumParticipationLink({
-      threadId: form.threadId,
-      courseId: props.courseId,
-      categoryId: props.categoryId,
-      pointsOne: form.pointsOne,
-      pointsMany: form.pointsMany,
-    })
+  const contextParams = {
+    cid: Number(props.courseId || cid),
+    sid: Number(sid || 0),
+    gid: Number(gid || 0),
+    node: Number(route.params.node || 0),
   }
+  const options = await gradebookService.getLinkOptions({
+    ...contextParams,
+    categoryId: Number(props.categoryId),
+    ...(isEdit.value
+      ? { linkId: Number(props.link.id) }
+      : { type: 11, refId: Number(form.threadId) }),
+  })
+
+  await gradebookService.runLinkAction(
+    {
+      action: isEdit.value ? "update" : "create",
+      linkId: isEdit.value ? Number(props.link.id) : null,
+      categoryId: Number(props.categoryId),
+      type: isEdit.value ? null : 11,
+      refId: isEdit.value ? null : Number(form.threadId),
+      weight: null,
+      minScore: Number(props.link?.minScore || 0),
+      pointsOne: Number(form.pointsOne || 0),
+      pointsMany: hasMany.value ? Number(form.pointsMany) : null,
+      submittedCsrfToken: options?.csrfToken || "",
+    },
+    contextParams,
+  )
 
   emit("saved")
 }

@@ -145,7 +145,7 @@ class FrmEdit extends FormValidator
                     ]
                 );
             } else {
-                $gradebookUrl = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq();
+                $gradebookUrl = api_get_path(WEB_PATH).'gradebook/redirect?view=overview&'.api_get_cidreq();
 
                 $this->addLabel(
                     $plugin->get_lang('AssigmentAndGradesService'),

@@ -88,6 +88,7 @@
               >
                 <div class="grid gap-4 md:grid-cols-2">
                   <BaseSelect
+                    v-if="gradebookCategoryOptions.length > 1"
                     id="forum-thread-gradebook-category"
                     v-model="form.gradebookCategoryId"
                     :is-invalid="formSubmitted && form.gradebookEnabled && !form.gradebookCategoryId"

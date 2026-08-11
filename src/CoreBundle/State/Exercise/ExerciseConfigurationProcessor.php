@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -61,6 +61,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -98,7 +99,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->saveCategoryMatrix($quiz, $data);
         $this->saveExerciseSkills($quiz, $data, $course, $session);
         $this->saveExerciseExtraFields($quiz, $data);
-        $this->saveExerciseGradebookLink($quiz, $data, $course);
+        $this->saveExerciseGradebookLink($quiz, $data, $course, $session);
         $this->entityManager->flush();
 
         return $this->buildResponse($quiz, $course, $session);
@@ -588,82 +589,42 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         return $language;
     }
 
-    private function saveExerciseGradebookLink(CQuiz $quiz, ExerciseConfiguration $data, Course $course): void
-    {
+    private function saveExerciseGradebookLink(
+        CQuiz $quiz,
+        ExerciseConfiguration $data,
+        Course $course,
+        ?Session $session,
+    ): void {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
         if ($exerciseId <= 0) {
             return;
         }
 
-        $link = $this->getExerciseGradebookLink($exerciseId, $course);
         if (!$data->addToGradebook) {
-            if ($link instanceof GradebookLink && 1 !== (int) $link->getLocked()) {
-                $this->entityManager->remove($link);
-            }
+            $this->gradebookLinkManager->removeLinks(
+                $course,
+                $session,
+                GradebookLinkResourceResolver::LINK_EXERCISE,
+                $exerciseId,
+            );
 
             return;
         }
 
         if (null === $data->gradebookCategoryId || $data->gradebookCategoryId <= 0) {
-            return;
+            throw new BadRequestHttpException('A Gradebook category is required.');
         }
 
-        $category = $this->entityManager->createQueryBuilder()
-            ->select('category')
-            ->from(GradebookCategory::class, 'category')
-            ->andWhere('category.id = :categoryId')
-            ->andWhere('IDENTITY(category.course) = :courseId')
-            ->setParameter('categoryId', (int) $data->gradebookCategoryId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        if (!$category instanceof GradebookCategory) {
-            return;
-        }
-
-        if (!$link instanceof GradebookLink) {
-            $link = new GradebookLink();
-            $link->setType(1);
-            $link->setRefId($exerciseId);
-            $link->setUserScoreList([]);
-            $link->setCourse($course);
-            $link->setCreatedAt(new DateTime());
-            $link->setLocked(0);
-        }
-
-        if (1 === (int) $link->getLocked()) {
-            return;
-        }
-
-        $link
-            ->setCategory($category)
-            ->setWeight((float) max(0, $data->gradebookWeight))
-            ->setVisible($data->gradebookVisible ? 1 : 0)
-        ;
-
-        $this->entityManager->persist($link);
-    }
-
-    private function getExerciseGradebookLink(int $exerciseId, Course $course): ?GradebookLink
-    {
-        $link = $this->entityManager->createQueryBuilder()
-            ->select('link')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('type', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return $link instanceof GradebookLink ? $link : null;
+        $this->gradebookLinkManager->upsertLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+            (int) $data->gradebookCategoryId,
+            max(0.0, (float) $data->gradebookWeight),
+            $data->gradebookVisible,
+            0.0,
+        );
     }
 
     private function updateLearningPathTitles(CQuiz $quiz, ExerciseConfiguration $data): void

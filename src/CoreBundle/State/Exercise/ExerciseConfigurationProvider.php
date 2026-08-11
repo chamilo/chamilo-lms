@@ -13,8 +13,9 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -55,6 +56,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -91,7 +93,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->canCreate = true;
         $configuration->canEdit = false;
         $configuration->settings = $this->getSettings();
-        $configuration->options = $this->getOptions($course, null);
+        $configuration->options = $this->getOptions($course, $session, null);
         $configuration->listUrl = '';
         $configuration->questionsUrl = '';
         $configuration->maxAttempt = 0;
@@ -150,7 +152,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->preventBackwards = 1 === $quiz->getPreventBackwards();
         $configuration->hideAttemptsTable = $quiz->isHideAttemptsTable();
         $configuration->autoLaunch = $quiz->isAutoLaunch();
-        $gradebookLink = $this->getExerciseGradebookLink($quiz, $course);
+        $gradebookLink = $this->getExerciseGradebookLink($quiz, $course, $session);
         $configuration->addToGradebook = $gradebookLink instanceof GradebookLink;
         $configuration->gradebookCategoryId = $gradebookLink instanceof GradebookLink ? (int) $gradebookLink->getCategory()->getId() : null;
         $configuration->gradebookWeight = $gradebookLink instanceof GradebookLink ? (int) round($gradebookLink->getWeight()) : 100;
@@ -179,7 +181,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->canCreate = true;
         $configuration->canEdit = true;
         $configuration->settings = $this->getSettings();
-        $configuration->options = $this->getOptions($course, $quiz);
+        $configuration->options = $this->getOptions($course, $session, $quiz);
         $configuration->listUrl = '';
         $configuration->questionsUrl = $this->buildLegacyQuestionsUrl($quiz, $course, $session);
 
@@ -250,7 +252,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    private function getOptions(Course $course, ?CQuiz $quiz): array
+    private function getOptions(Course $course, ?Session $session, ?CQuiz $quiz): array
     {
         return [
             'typeOptions' => [
@@ -258,7 +260,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
                 ['value' => CQuiz::ONE_PER_PAGE, 'label' => 'One question per page'],
             ],
             'categoryOptions' => $this->getCategoryOptions($course),
-            'gradebookCategoryOptions' => $this->getGradebookCategoryOptions($course),
+            'gradebookCategoryOptions' => $this->getGradebookCategoryOptions($course, $session),
             'languageOptions' => $this->getResourceLanguageOptions(),
             'skillOptions' => $this->getSkillOptions(),
             'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
@@ -870,59 +872,27 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         return $items;
     }
 
-    private function getExerciseGradebookLink(CQuiz $quiz, Course $course): ?GradebookLink
+    private function getExerciseGradebookLink(CQuiz $quiz, Course $course, ?Session $session): ?GradebookLink
     {
         $exerciseId = (int) ($quiz->getIid() ?? 0);
         if ($exerciseId <= 0) {
             return null;
         }
 
-        $link = $this->entityManager->createQueryBuilder()
-            ->select('link', 'category')
-            ->from(GradebookLink::class, 'link')
-            ->innerJoin('link.category', 'category')
-            ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('type', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return $link instanceof GradebookLink ? $link : null;
+        return $this->gradebookLinkManager->findLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getGradebookCategoryOptions(Course $course): array
+    private function getGradebookCategoryOptions(Course $course, ?Session $session): array
     {
-        $categories = $this->entityManager->createQueryBuilder()
-            ->select('category')
-            ->from(GradebookCategory::class, 'category')
-            ->andWhere('IDENTITY(category.course) = :courseId')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->orderBy('category.title', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-
-        $items = [];
-        foreach ($categories as $category) {
-            if (!$category instanceof GradebookCategory || null === $category->getId()) {
-                continue;
-            }
-
-            $items[] = [
-                'value' => (int) $category->getId(),
-                'label' => $category->getTitle(),
-            ];
-        }
-
-        return $items;
+        return $this->gradebookLinkManager->getCategoryOptions($course, $session);
     }
 
     /**

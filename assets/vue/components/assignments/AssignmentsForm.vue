@@ -35,6 +35,7 @@
 
       <div v-if="chkAddToGradebook">
         <BaseSelect
+          v-if="gradebookCategories.length > 1"
           v-model="assignment.gradebookId"
           :error-text="v$.gradebookId.$errors.map((e) => e.$message).join('<br>')"
           :is-invalid="v$.gradebookId.$error"
@@ -156,11 +157,13 @@ import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import useVuelidate from "@vuelidate/core"
-import { computed, reactive, ref, watchEffect } from "vue"
+import { computed, onMounted, reactive, ref, watchEffect } from "vue"
 import { helpers, required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
+import { getCourseContext } from "../../utils/courseContext"
+import gradebookService from "../../services/gradebookService"
 
 const props = defineProps({
   defaultAssignment: {
@@ -177,13 +180,14 @@ const emit = defineEmits(["submit"])
 
 const { t } = useI18n()
 const route = useRoute()
+const { cid, sid, gid } = getCourseContext()
 
 const showAdvancedSettings = ref(false)
 const chkAddToGradebook = ref(false)
 const chkExpiresOn = ref(false)
 const chkEndsOn = ref(false)
 
-const gradebookCategories = ref([{ name: "Default", id: 1 }])
+const gradebookCategories = ref([])
 const documentTypes = ref([
   { label: t("Allow files or online text"), value: 0 },
   { label: t("Allow only text"), value: 1 },
@@ -205,7 +209,7 @@ const assignment = reactive({
   title: "",
   description: "",
   qualification: 0,
-  gradebookId: Number(gradebookCategories.value?.[0]?.id ?? 1),
+  gradebookId: null,
   weight: 0,
   expiresOn: new Date(),
   endsOn: new Date(),
@@ -220,20 +224,6 @@ function extractResourceLanguage(resource) {
   return String(resource?.resourceNode?.language?.isocode || resource?.language || "").trim()
 }
 
-function extractGradebookCategoryId(def) {
-  // Support multiple possible backend shapes.
-  // We return a number or null.
-  const direct = def?.gradebookCategoryId
-  if (direct !== undefined && direct !== null && direct !== "") return Number(direct)
-
-  const nested = def?.gradebookCategory?.id
-  if (nested !== undefined && nested !== null && nested !== "") return Number(nested)
-
-  const legacy = def?.gradebookId?.id
-  if (legacy !== undefined && legacy !== null && legacy !== "") return Number(legacy)
-
-  return null
-}
 
 watchEffect(() => {
   const def = props.defaultAssignment
@@ -244,14 +234,6 @@ watchEffect(() => {
   assignment.qualification = def.qualification
   assignment.addToCalendar = def.assignment.eventCalendarId > 0
 
-  if (def.weight > 0) {
-    chkAddToGradebook.value = true
-    assignment.weight = def.weight
-    const gbId = extractGradebookCategoryId(def)
-    assignment.gradebookId = gbId ?? Number(gradebookCategories.value?.[0]?.id ?? 1)
-  } else {
-    assignment.gradebookId = Number(gradebookCategories.value?.[0]?.id ?? 1)
-  }
   if (def.assignment.expiresOn) {
     chkExpiresOn.value = true
     assignment.expiresOn = new Date(def.assignment.expiresOn)
@@ -291,7 +273,6 @@ watchEffect(() => {
   if (
     def.qualification ||
     def.assignment.eventCalendarId ||
-    def.weight ||
     def.assignment.expiresOn ||
     def.assignment.endsOn ||
     def.allowTextAssignment !== undefined ||
@@ -300,6 +281,54 @@ watchEffect(() => {
     showAdvancedSettings.value = true
   }
 })
+
+
+function extractNumericId(raw) {
+  if (raw === null || raw === undefined || raw === "") return 0
+
+  const normalized = String(raw)
+  const last = normalized.split("/").filter(Boolean).pop()
+  const value = Number(last)
+
+  return Number.isFinite(value) && value > 0 ? value : 0
+}
+
+async function loadGradebookConfiguration() {
+  try {
+    const response = await gradebookService.getLinkOptions({
+      cid,
+      ...(sid ? { sid } : {}),
+      ...(gid ? { gid } : {}),
+      node: Number(route.params.node),
+      type: 3,
+      refId: extractNumericId(route.params.id),
+    })
+
+    gradebookCategories.value = (response?.categories || []).map((category) => ({
+      id: Number(category.value),
+      name: category.label,
+    }))
+
+    const rootCategoryId = Number(gradebookCategories.value?.[0]?.id || 0)
+    const link = response?.link || null
+
+    if (link) {
+      chkAddToGradebook.value = true
+      assignment.gradebookId = Number(link.categoryId || rootCategoryId) || null
+      assignment.weight = Number(link.weight || 0)
+      showAdvancedSettings.value = true
+    } else {
+      chkAddToGradebook.value = false
+      assignment.gradebookId = rootCategoryId || null
+    }
+  } catch (error) {
+    console.error("Error loading assignment Gradebook configuration:", error)
+    gradebookCategories.value = []
+    assignment.gradebookId = null
+  }
+}
+
+onMounted(loadGradebookConfiguration)
 
 function truncateToMinute(date) {
   const d = new Date(date)
@@ -359,10 +388,9 @@ async function onSubmit() {
     language: assignment.language || "",
   }
 
-  if (chkAddToGradebook.value) {
-    payload.gradebookCategoryId = Number(assignment.gradebookId)
-    payload.weight = assignment.weight
-  }
+  payload.addToGradebook = chkAddToGradebook.value
+  payload.gradebookCategoryId = chkAddToGradebook.value ? Number(assignment.gradebookId) : 0
+  payload.weight = chkAddToGradebook.value ? Number(assignment.weight) : 0
   if (chkExpiresOn.value) {
     payload.expiresOn = assignment.expiresOn.toISOString()
   }

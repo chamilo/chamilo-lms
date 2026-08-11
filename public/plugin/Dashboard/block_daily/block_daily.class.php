@@ -227,7 +227,14 @@ class BlockDaily extends Block
                 if (count($eval) > 0) {
                     $i = 0;
                     foreach ($eval as $item) {
-                        $score .= '<a href="'.api_get_path(WEB_PATH).'main/gradebook/gradebook_view_result.php?export=pdf&cat_code='.$cat[0]->get_id().'&official_code='.$cat[0]->get_course_code().'&selecteval='.$item->get_id().'">'.$item->get_name().'</a>';
+                        $score .= '<a href="'.api_get_path(WEB_PATH).'gradebook/redirect?'.http_build_query([
+                            'view' => 'evaluation-results',
+                            'cid' => (int) $course_info['real_id'],
+                            'sid' => 0,
+                            'gid' => 0,
+                            'categoryId' => (int) $cat[0]->get_id(),
+                            'evaluationId' => (int) $item->get_id(),
+                        ]).'">'.$item->get_name().'</a>';
                         if (count($eval) - 1 != $i) {
                             $score .= ', ';
                         }

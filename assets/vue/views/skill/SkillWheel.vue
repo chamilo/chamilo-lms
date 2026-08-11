@@ -68,11 +68,14 @@ function addSkillToSearch(skillId, skillName) {
 }
 
 function gradebookUrl(link) {
-  let url = `/main/gradebook/index.php?cid=${link.courseId}`
-  if (link.sessionId) {
-    url += `&sid=${link.sessionId}`
-  }
-  return url
+  const query = new URLSearchParams({
+    view: "overview",
+    cid: String(link.courseId),
+    sid: String(link.sessionId || 0),
+    gid: "0",
+  })
+
+  return `/gradebook/redirect?${query.toString()}`
 }
 
 // Kept for compatibility (origin might still be used elsewhere, e.g. breadcrumb logic)

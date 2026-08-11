@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CAttendanceDeleteProcessor;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
 use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -57,7 +58,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Delete(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: CAttendanceDeleteProcessor::class,
         ),
         new Post(
             uriTemplate: '/attendances/{iid}/calendars',
@@ -116,6 +118,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CAttendanceRepository::class)]
 class CAttendance extends AbstractResource implements ResourceInterface, Stringable
 {
+    #[Groups(['attendance:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['attendance:write'])]
+    public int $gradebookCategoryId = 0;
+
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]

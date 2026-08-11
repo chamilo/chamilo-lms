@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -22,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -65,6 +65,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         private CDocumentRepository $documentRepository,
         private ExtraFieldRepository $extraFieldRepository,
         private ResourceNodeRepository $resourceNodeRepository,
+        private GradebookLinkManager $gradebookLinkManager,
         private AiFeatureAccessHelper $aiFeatureAccessHelper,
         private AiProviderFactory $aiProviderFactory,
         private CidReqHelper $cidReqHelper,
@@ -682,20 +683,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             }
         }
 
-        $categories = [];
-        foreach ($this->entityManager->getRepository(GradebookCategory::class)->findBy(
-            [
-                'course' => $course,
-                'session' => $session,
-                'gradeModel' => null,
-            ],
-            ['id' => 'ASC'],
-        ) as $category) {
-            $categories[] = [
-                'value' => (int) $category->getId(),
-                'label' => $category->getTitle(),
-            ];
-        }
+        $categories = $this->gradebookLinkManager->getCategoryOptions($course, $session);
 
         return [
             'exists' => $finalItem instanceof CLpItem,

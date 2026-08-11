@@ -10,11 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeAttemptRecalculate;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
@@ -33,14 +33,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeAttemptRecalculateProcessor implements ProcessorInterface
 {
-    private const LINK_TYPE_EXERCISE = 1;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
         private ExerciseAttemptScoringService $scoringService,
     ) {}
 
@@ -72,7 +71,7 @@ final readonly class ExerciseRuntimeAttemptRecalculateProcessor implements Proce
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        if ($this->isGradebookLocked((int) $quiz->getIid(), $course)) {
+        if ($this->isGradebookLocked((int) $quiz->getIid(), $course, $session)) {
             throw new BadRequestHttpException('This exercise is locked by gradebook.');
         }
 
@@ -195,37 +194,15 @@ final readonly class ExerciseRuntimeAttemptRecalculateProcessor implements Proce
         return $attempt;
     }
 
-    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return false;
-        }
-
-        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
-            return false;
-        }
-
-        $lockedLink = $this->entityManager->createQueryBuilder()
-            ->select('link.id')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.locked = :locked')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('link.type = :linkType')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('locked', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $lockedLink;
+        return $this->gradebookLinkManager->isResourceLocked(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
-    private function isSettingEnabled(string $name): bool
-    {
-        return 'true' === $this->settingsManager->getSetting($name, true);
-    }
+
 }

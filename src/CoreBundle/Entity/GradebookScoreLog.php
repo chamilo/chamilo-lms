@@ -40,6 +40,18 @@ class GradebookScoreLog
     #[ORM\Column(name: 'registered_at', type: 'datetime', nullable: false)]
     protected DateTime $registeredAt;
 
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     /**
      * Get the achieved score.
      *

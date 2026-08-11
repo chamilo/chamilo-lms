@@ -10,7 +10,8 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseList;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
@@ -36,7 +37,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class ExerciseListProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
-    private const LINK_TYPE_EXERCISE = 1;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
@@ -45,6 +45,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -232,6 +233,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
                 $attemptCounts[$quizId] ?? 0,
                 $canManage,
                 $course,
+                $session,
                 $latestAttempts[$quizId] ?? null,
                 $isLinkedToLearningPath,
                 $forceEditLearningPathExercises,
@@ -475,6 +477,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         int $attemptCount,
         bool $canManage,
         Course $course,
+        ?Session $session,
         ?TrackEExercise $latestAttempt = null,
         bool $isLinkedToLearningPath = false,
         bool $forceEditLearningPathExercises = false,
@@ -486,7 +489,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $availabilityStatus = $this->getAvailabilityStatus($startTime, $endTime);
         $canRunRestrictedActions = $this->canRunRestrictedActions();
         $canCleanResults = $this->canCleanResults();
-        $isGradebookLocked = $this->isGradebookLocked((int) $quiz->getIid(), $course);
+        $isGradebookLocked = $this->isGradebookLocked((int) $quiz->getIid(), $course, $session);
         $isLimitTeacherAccess = $this->isSettingEnabled('exercise.limit_exercise_teacher_access');
         $isReadOnlyFromLearningPath = $isLinkedToLearningPath && !$forceEditLearningPathExercises;
 
@@ -590,33 +593,14 @@ final readonly class ExerciseListProvider implements ProviderInterface
             && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
     }
 
-    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return false;
-        }
-
-        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
-            return false;
-        }
-
-        $lockedLink = $this->entityManager->createQueryBuilder()
-            ->select('link.id')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.locked = :locked')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('link.type = :linkType')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('locked', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $lockedLink;
+        return $this->gradebookLinkManager->isResourceLocked(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
     private function formatDate(?DateTimeInterface $date): ?string

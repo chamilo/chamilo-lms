@@ -24,7 +24,7 @@ class Gradebook extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/gradebook/index.php';
+        return '/resources/gradebook/:nodeId/';
     }
 
     public function getIcon(): string

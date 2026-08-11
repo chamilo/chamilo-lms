@@ -1,0 +1,98 @@
+export default {
+  path: "/resources/gradebook/:node/",
+  meta: {
+    requiresAuth: true,
+    showBreadcrumb: true,
+    tool: "gradebook",
+    breadcrumb: "Assessments",
+  },
+  name: "gradebook",
+  component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
+  redirect: { name: "GradebookList" },
+  children: [
+    {
+      name: "GradebookList",
+      path: "",
+      meta: { breadcrumb: "Assessments" },
+      component: () => import("../views/gradebook/GradebookListView.vue"),
+    },
+    {
+      name: "GradebookFlatView",
+      path: "reports/list",
+      meta: { breadcrumb: "List view" },
+      component: () => import("../views/gradebook/GradebookFlatView.vue"),
+    },
+    {
+      name: "GradebookStudentsReport",
+      path: "reports/students",
+      meta: { breadcrumb: "Students list report" },
+      component: () => import("../views/gradebook/GradebookStudentsReportView.vue"),
+    },
+    {
+      name: "GradebookGraph",
+      path: "reports/graph",
+      meta: { breadcrumb: "Graphical view" },
+      component: () => import("../views/gradebook/GradebookGraphView.vue"),
+    },
+    {
+      name: "GradebookHistory",
+      path: "history/:kind/:itemId",
+      meta: { breadcrumb: "Assessment history" },
+      component: () => import("../views/gradebook/GradebookHistoryView.vue"),
+    },
+    {
+      name: "GradebookLearnerSkills",
+      path: "learners/:userId/skills",
+      meta: { breadcrumb: "Skills and users list" },
+      component: () => import("../views/gradebook/GradebookLearnerSkillsView.vue"),
+    },
+    {
+      name: "GradebookBadges",
+      path: "learners/:userId?/badges",
+      meta: { breadcrumb: "Badges" },
+      component: () => import("../views/gradebook/GradebookBadgesView.vue"),
+    },
+    {
+      name: "GradebookLearnerReport",
+      path: "learners/:userId?",
+      meta: { breadcrumb: "Results and feedback per user" },
+      component: () => import("../views/gradebook/GradebookLearnerReportView.vue"),
+    },
+    {
+      name: "GradebookWeights",
+      path: "weights",
+      meta: { breadcrumb: "Weight in Report" },
+      component: () => import("../views/gradebook/GradebookWeightsView.vue"),
+    },
+    {
+      name: "GradebookScoring",
+      path: "scoring",
+      meta: { breadcrumb: "Skills ranking" },
+      component: () => import("../views/gradebook/GradebookScoringView.vue"),
+    },
+    {
+      name: "GradebookEvaluationResults",
+      path: "evaluations/:evaluationId/results",
+      meta: { breadcrumb: "Assessment details" },
+      component: () => import("../views/gradebook/GradebookEvaluationResultsView.vue"),
+    },
+    {
+      name: "GradebookEvaluationStatistics",
+      path: "evaluations/:evaluationId/statistics",
+      meta: { breadcrumb: "Evaluation statistics" },
+      component: () => import("../views/gradebook/GradebookEvaluationStatisticsView.vue"),
+    },
+    {
+      name: "GradebookCertificates",
+      path: "certificates",
+      meta: { breadcrumb: "Certificate" },
+      component: () => import("../views/gradebook/GradebookCertificatesView.vue"),
+    },
+    {
+      name: "GradebookPrint",
+      path: "print/:scope/:id?",
+      meta: { breadcrumb: "Print" },
+      component: () => import("../views/gradebook/GradebookPrintView.vue"),
+    },
+  ],
+}

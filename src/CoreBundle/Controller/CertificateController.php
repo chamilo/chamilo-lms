@@ -7,13 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
+use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
@@ -40,6 +44,7 @@ class CertificateController extends AbstractController
         private readonly SettingsManager $settingsManager,
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly EntityManagerInterface $entityManager,
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {}
@@ -212,19 +217,24 @@ class CertificateController extends AbstractController
     }
 
     /**
-     * Owner/admin OR (public+published) OR (session admin if allowed).
+     * Allow the certificate owner, platform administrators and managers of the
+     * certificate course/session to access private certificates. Anonymous or
+     * unrelated users may only access certificates explicitly published by a
+     * course that allows public certificates.
      *
      * @throws AccessDeniedHttpException
      */
     private function assertCertificateAccess(GradebookCertificate $certificate): void
     {
-        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
-        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
+        $allowPublic = $this->isSettingEnabled('certificate.allow_public_certificates');
+        $allowSessionAdmin = $this->isSettingEnabled(
+            'certificate.session_admin_can_download_all_certificates',
+        );
 
         $currentUser = $this->userHelper->getCurrent(); // ?User (can be null for anonymous)
         $securityUser = $this->getUser();               // ?UserInterface
 
-        // Owner (must match certificate->getUser())
+        // Owner (must match certificate->getUser()).
         $ownerId = (int) $certificate->getUser()->getId();
         $securityUserId = ($securityUser instanceof User) ? (int) $securityUser->getId() : 0;
 
@@ -232,22 +242,83 @@ class CertificateController extends AbstractController
             return;
         }
 
-        // Platform admin
+        // Platform admin.
         if ($currentUser && $currentUser->isAdmin()) {
             return;
         }
 
-        // Session admin (if allowed by setting)
+        // Session admin (existing platform-wide certificate setting).
         if ($allowSessionAdmin && $currentUser && $currentUser->isSessionAdmin()) {
             return;
         }
 
-        // Public + published (anonymous allowed)
-        if ($allowPublic && $certificate->getPublish()) {
+        $category = $certificate->getCategory();
+        if ($currentUser instanceof User && $category instanceof GradebookCategory) {
+            $course = $category->getCourse();
+            $session = $category->getSession();
+
+            // A teacher managing the exact certificate course may inspect its
+            // private learner certificates from the Gradebook certificate list.
+            if ($course->hasUserAsTeacher($currentUser)) {
+                return;
+            }
+
+            // Session coaches follow the same edit setting used by the modern
+            // course/session management flows.
+            if ($session instanceof Session
+                && $this->isSettingEnabled('session.allow_coach_to_edit_course_session')
+                && ($session->hasUserAsGeneralCoach($currentUser)
+                    || $session->hasCourseCoachInCourse($currentUser, $course))
+            ) {
+                return;
+            }
+        }
+
+        // Public + published (anonymous allowed), but only when both the
+        // platform and the certificate course permit public certificates.
+        if ($allowPublic
+            && $certificate->getPublish()
+            && $category instanceof GradebookCategory
+            && $this->isCoursePublicCertificateEnabled($category)
+        ) {
             return;
         }
 
-        throw new AccessDeniedHttpException('The requested certificate is not public.');
+        throw new AccessDeniedHttpException('The requested certificate is not accessible.');
+    }
+
+    private function isCoursePublicCertificateEnabled(GradebookCategory $category): bool
+    {
+        $settings = $this->entityManager->getRepository(CCourseSetting::class)->findBy(
+            [
+                'cId' => (int) $category->getCourse()->getId(),
+                'variable' => 'allow_public_certificates',
+            ],
+            ['iid' => 'ASC'],
+        );
+
+        foreach ($settings as $setting) {
+            if (!$setting instanceof CCourseSetting || null === $setting->getValue()) {
+                continue;
+            }
+
+            $value = strtolower(trim((string) $setting->getValue()));
+            if ('-1' === $value) {
+                continue;
+            }
+
+            return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
+        }
+
+        // Legacy api_get_course_setting() returns -1 when no course override exists.
+        return true;
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        $value = $this->settingsManager->getSetting($name, true);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     /**

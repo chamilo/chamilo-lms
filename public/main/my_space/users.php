@@ -262,7 +262,7 @@ if (api_is_drh()) {
     );
     $actionsLeft .= Display::url(
         Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
-        $webCodePath.'gradebook/certificate_report.php'
+        api_get_path(WEB_PATH).'reporting/certificates'
     );
 }
 

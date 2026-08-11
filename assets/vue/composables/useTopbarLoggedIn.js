@@ -523,14 +523,14 @@ export function useTopbarLoggedIn(props) {
     if (isTopbarEnabled("topbar_my_certificates")) {
       items[0].items.push({
         label: t("My certificates"),
-        url: "/main/gradebook/my_certificates.php",
+        url: "/my-certificates",
       })
     }
 
     if (certificatesSearchAllowed.value) {
       items[0].items.push({
         label: t("Search certificates"),
-        url: "/main/gradebook/search.php",
+        url: "/certificates/search",
       })
     }
 

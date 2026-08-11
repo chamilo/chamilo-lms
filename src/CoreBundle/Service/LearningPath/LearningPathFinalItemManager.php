@@ -6,27 +6,33 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\LearningPath;
 
-use Category;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookScoreLog;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookSkillAwarder;
+use Chamilo\CoreBundle\Service\Gradebook\LegacyGradebookCertificateBridge;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use SkillModel;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const DATE_ATOM;
@@ -35,7 +41,7 @@ use const PREG_SPLIT_DELIM_CAPTURE;
 
 final readonly class LearningPathFinalItemManager
 {
-    private const string DEFAULT_CONTENT = <<<'HTML'
+    private const DEFAULT_CONTENT = <<<'HTML'
 <div>
     Congratulations! You have finished this learning path
 </div>
@@ -47,7 +53,12 @@ HTML;
         private EntityManagerInterface $entityManager,
         private SettingsManager $settingsManager,
         private GradebookCertificateRepository $gradebookCertificateRepository,
+        private GradebookCertificateGenerator $gradebookCertificateGenerator,
+        private GradebookSkillAwarder $gradebookSkillAwarder,
+        private LegacyGradebookCertificateBridge $legacyGradebookCertificateBridge,
         private CDocumentRepository $documentRepository,
+        private AssetRepository $assetRepository,
+        private TranslatorInterface $translator,
         private LoggerInterface $logger,
     ) {}
 
@@ -103,12 +114,12 @@ HTML;
         User $user,
         bool $canEdit,
     ): void {
-        if ($canEdit || $this->isExcludedUserType()) {
+        if ($canEdit || $this->isExcludedUserType($user)) {
             return;
         }
 
         $category = $this->resolveGradebookCategory($finalItem, $course, $session);
-        if (!$category instanceof GradebookCategory || !class_exists(Category::class)) {
+        if (!$category instanceof GradebookCategory) {
             return;
         }
 
@@ -117,30 +128,37 @@ HTML;
                 (int) $category->getId(),
                 (int) $user->getId(),
             );
-            Category::generateUserCertificate($category, (int) $user->getId());
-            $currentScore = (float) Category::getCurrentScore(
-                (int) $user->getId(),
+            $eligibility = $this->gradebookCertificateGenerator->getAcademicEligibility(
                 $category,
-                true,
-                (int) $course->getId(),
-                (int) ($session?->getId() ?? 0),
-            );
-            $registeredScore = (float) Category::getCurrentScore(
-                (int) $user->getId(),
-                $category,
-                false,
-                (int) $course->getId(),
-                (int) ($session?->getId() ?? 0),
+                $user,
+                $course,
+                $session,
             );
 
-            if (abs($currentScore - $registeredScore) > 0.0001
+            if ($eligibility['eligible']) {
+                if ($this->gradebookCertificateGenerator->usesCustomCertificate($course)) {
+                    $this->legacyGradebookCertificateBridge->generate($category, $user);
+                } elseif ($category->getGenerateCertificates()) {
+                    $this->gradebookCertificateGenerator->generate($category, $user, $course, $session);
+                } else {
+                    $this->gradebookSkillAwarder->award($category, $user, $course, $session);
+                }
+            }
+
+            $currentScore = (float) $eligibility['score'];
+            $registeredScore = $this->getLatestRegisteredScore($category, $user);
+            if (null === $registeredScore
+                || abs($currentScore - $registeredScore) > 0.0001
                 || !($certificateBefore instanceof GradebookCertificate)
             ) {
-                Category::registerCurrentScore(
-                    $currentScore,
-                    (int) $user->getId(),
-                    (int) $category->getId(),
-                );
+                $scoreLog = (new GradebookScoreLog())
+                    ->setCategory($category)
+                    ->setUser($user)
+                    ->setScore($currentScore)
+                    ->setRegisteredAt(new DateTime('now', new DateTimeZone('UTC')))
+                ;
+                $this->entityManager->persist($scoreLog);
+                $this->entityManager->flush();
             }
         } catch (Throwable $exception) {
             $this->logger->error('Unable to complete the learning path final item.', [
@@ -149,6 +167,19 @@ HTML;
                 'exception' => $exception,
             ]);
         }
+    }
+
+    private function getLatestRegisteredScore(GradebookCategory $category, User $user): ?float
+    {
+        $scoreLog = $this->entityManager->getRepository(GradebookScoreLog::class)->findOneBy(
+            [
+                'category' => $category,
+                'user' => $user,
+            ],
+            ['registeredAt' => 'DESC'],
+        );
+
+        return $scoreLog instanceof GradebookScoreLog ? (float) $scoreLog->getScore() : null;
     }
 
     private function resolveGradebookCategory(
@@ -480,7 +511,7 @@ HTML;
         $hideDownload = $this->isTruthySetting(
             $this->settingsManager->getSetting('certificate.hide_certificate_export_link', true),
         ) || $this->isTruthySetting(
-            $this->settingsManager->getSetting('gradebook.hide_certificate_export_link_students', true),
+            $this->settingsManager->getSetting('certificate.hide_certificate_export_link_students', true),
         );
 
         return [
@@ -526,18 +557,26 @@ HTML;
         $skillId = (int) $skill->getId();
         $sharePath = $acquired ? '/badge/'.$skillId.'/user/'.(int) $user->getId() : '';
         $shareUrl = '' !== $sharePath ? rtrim($baseUrl, '/').$sharePath : '';
-        $siteName = \function_exists('api_get_setting') ? (string) api_get_setting('siteName') : 'Chamilo';
-        $tweetText = \function_exists('get_lang')
-            ? \sprintf(get_lang('I have achieved skill %s on %s'), $skill->getTitle(), $siteName)
-            : \sprintf('I have achieved skill %s on %s', $skill->getTitle(), $siteName);
+        $siteName = trim((string) $this->settingsManager->getSetting('platform.site_name', true));
+        if ('' === $siteName) {
+            $siteName = 'Chamilo';
+        }
+        $tweetText = sprintf(
+            $this->translator->trans('I have achieved skill %s on %s'),
+            $skill->getTitle(),
+            $siteName,
+        );
+        $asset = $skill->getAsset();
+        $iconUrl = null !== $asset ? trim((string) $this->assetRepository->getAssetUrl($asset)) : '';
+        if ('' === $iconUrl) {
+            $iconUrl = '/img/icons/32/badges-default.png';
+        }
 
         return [
             'id' => $skillId,
             'title' => trim($skill->getTitle()),
             'description' => trim($skill->getDescription()),
-            'iconUrl' => class_exists(SkillModel::class)
-                ? (string) SkillModel::getWebIconPath($skill)
-                : '/img/icons/32/badges-default.png',
+            'iconUrl' => $iconUrl,
             'acquired' => $acquired,
             'shareUrl' => $sharePath,
             'facebookUrl' => '' !== $shareUrl
@@ -569,9 +608,9 @@ HTML;
         return $resourceLink instanceof ResourceLink ? $resourceLink : null;
     }
 
-    private function isExcludedUserType(): bool
+    private function isExcludedUserType(User $user): bool
     {
-        return \function_exists('api_is_excluded_user_type') && api_is_excluded_user_type();
+        return $user->isInvitee() || User::ANONYMOUS === $user->getStatus();
     }
 
     private function isTruthySetting(mixed $value): bool

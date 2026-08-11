@@ -10,13 +10,13 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeCorrection;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CLpView;
@@ -49,7 +49,6 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
     private const ANNOTATION = 20;
-    private const LINK_TYPE_EXERCISE = 1;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_ITEM_TYPE_DIR = 'dir';
     private const LP_STATUS_FAILED = 'failed';
@@ -61,7 +60,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -98,7 +97,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        if ($this->isGradebookLocked((int) $quiz->getIid(), $course)) {
+        if ($this->isGradebookLocked((int) $quiz->getIid(), $course, $session)) {
             throw new BadRequestHttpException('This exercise is locked by gradebook.');
         }
 
@@ -341,39 +340,17 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         return $row;
     }
 
-    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return false;
-        }
-
-        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
-            return false;
-        }
-
-        $lockedLink = $this->entityManager->createQueryBuilder()
-            ->select('link.id')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.locked = :locked')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('link.type = :linkType')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('locked', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $lockedLink;
+        return $this->gradebookLinkManager->isResourceLocked(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
-    private function isSettingEnabled(string $name): bool
-    {
-        return 'true' === $this->settingsManager->getSetting($name, true);
-    }
+
 
     private function recordCorrectionHistory(TrackEExercise $attempt, int $questionId, float $marks, string $teacherComment, int $sessionId): void
     {

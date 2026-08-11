@@ -2514,7 +2514,7 @@ switch ($action) {
 
             $item['title'] = Display::url(
                 $item['title'],
-                api_get_path(WEB_CODE_PATH).'gradebook/index.php?sid=0&cid='.$courseInfo['real_id']
+                api_get_path(WEB_PATH).'gradebook/redirect?view=overview&sid=0&gid=0&cid='.$courseInfo['real_id']
             );
 
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {

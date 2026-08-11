@@ -289,6 +289,7 @@
               />
 
               <BaseSelect
+                v-if="gradebookCategoryOptions.length > 1"
                 id="category_id"
                 v-model="form.gradebookCategoryId"
                 :disabled="!form.gradebookEnabled"
@@ -682,6 +683,9 @@ function normalizeForm(data) {
 
   settings.value = data.settings || {}
   options.value = data.options || {}
+  if (!form.value.gradebookCategoryId && gradebookCategoryOptions.value.length) {
+    form.value.gradebookCategoryId = gradebookCategoryOptions.value[0].value
+  }
   questionUrl.value = data.questionUrl || ""
 }
 

@@ -182,14 +182,14 @@ class IndexManager
         ) {
             $items[] = [
                 'icon' => Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My certificates')),
-                'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
+                'link' => api_get_path(WEB_PATH).'my-certificates',
                 'title' => get_lang('My certificates'),
             ];
         }
         if ('true' === api_get_setting('certificate.allow_certificates_search')) {
             $items[] = [
                 'icon' => Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search certificates')),
-                'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
+                'link' => api_get_path(WEB_PATH).'certificates/search',
                 'title' => get_lang('Search certificates'),
             ];
         }

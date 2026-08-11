@@ -1366,7 +1366,44 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             $course,
             $session
         );
+        $response->onlyofficeEditorUrl = $this->getOnlyofficeTemplateEditorUrl(
+            $quiz,
+            $question,
+            $resourceNode,
+            $course,
+            $session
+        );
         $response->answers = [];
+    }
+
+    private function getOnlyofficeTemplateEditorUrl(
+        CQuiz $quiz,
+        CQuizQuestion $question,
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session,
+    ): string {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        $questionId = (int) ($question->getIid() ?? 0);
+        $resourceNodeId = (int) ($resourceNode->getId() ?? 0);
+        if ($exerciseId <= 0 || $questionId <= 0 || $resourceNodeId <= 0) {
+            return '';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $query = [
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'questionId' => $questionId,
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'origin' => 'exercise',
+            'embedded' => 1,
+            'forceEdit' => 'true',
+        ];
+
+        return '/plugin/Onlyoffice/editor.php?'.http_build_query($query);
     }
 
     private function isOnlyofficePluginEnabled(): bool

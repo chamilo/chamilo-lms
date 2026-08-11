@@ -1994,10 +1994,55 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return [
             'kind' => 'onlyoffice',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
+            'editorUrl' => $showStudentAnswers ? $this->getOnlyofficeReviewEditorUrl($row) : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
+    }
+
+    private function getOnlyofficeReviewEditorUrl(TrackEAttempt $row): string
+    {
+        $attempt = $row->getTrackEExercise();
+        $quiz = $attempt->getQuiz();
+        $course = $attempt->getCourse();
+        if (null === $quiz || null === $quiz->getIid() || null === $course || null === $course->getId()) {
+            return '';
+        }
+
+        $resourceNode = null;
+        foreach ($row->getAttemptFiles() as $attemptFile) {
+            if (!$attemptFile instanceof AttemptFile) {
+                continue;
+            }
+
+            $candidate = $attemptFile->getResourceNode();
+            if ($candidate instanceof ResourceNode) {
+                $resourceNode = $candidate;
+
+                break;
+            }
+        }
+
+        if (!$resourceNode instanceof ResourceNode || null === $resourceNode->getId()) {
+            return '';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $query = [
+            'resourceNodeId' => (int) $resourceNode->getId(),
+            'exerciseId' => (int) $quiz->getIid(),
+            'exeId' => (int) $attempt->getExeId(),
+            'questionId' => (int) $row->getQuestionId(),
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($attempt->getSession()?->getId() ?? 0),
+            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'origin' => 'exercise',
+            'embedded' => 1,
+            'readOnly' => 1,
+        ];
+
+        return '/plugin/Onlyoffice/editor.php?'.http_build_query($query);
     }
 
     /**

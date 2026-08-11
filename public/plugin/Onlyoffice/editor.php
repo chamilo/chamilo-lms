@@ -122,19 +122,30 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
 ]);
 
 if (!empty($resourceNodeId)) {
-    $canOpenResourceNode = $isExercisePreview
-        ? userCanPreviewExerciseQuestionResourceNodeForOnlyofficeEditor(
+    if ($isExercisePreview || empty($exeId)) {
+        $canOpenResourceNode = userCanManageExerciseQuestionResourceNodeForOnlyofficeEditor(
             $resourceNodeId,
             (int) $exerciseId,
             (int) $questionId
-        )
-        : userCanOpenExerciseResourceNodeForOnlyofficeEditor(
+        );
+    } else {
+        $canOpenResourceNode = userCanOpenExerciseResourceNodeForOnlyofficeEditor(
             $resourceNodeId,
             (int) $exerciseId,
             (int) $exeId,
             (int) $questionId,
             $userId
         );
+
+        if (!$canOpenResourceNode && !empty($isReadOnly)) {
+            $canOpenResourceNode = userCanReviewExerciseResourceNodeForOnlyofficeEditor(
+                $resourceNodeId,
+                (int) $exerciseId,
+                (int) $exeId,
+                (int) $questionId
+            );
+        }
+    }
 
     if (!$canOpenResourceNode) {
         onlyofficeEditorLog('ERROR', 'Resource node access was rejected for the exercise editor', [
@@ -176,6 +187,9 @@ if (!empty($resourceNodeId)) {
 
         if ($isExercisePreview) {
             $trackPayload['exercisePreview'] = 1;
+        }
+        if (!empty($isReadOnly)) {
+            $trackPayload['readOnly'] = 1;
         }
 
         $downloadHash = $jwtManager->getHash($downloadPayload);
@@ -1265,9 +1279,82 @@ function userCanOpenExerciseResourceNodeForOnlyofficeEditor(int $resourceNodeId,
 }
 
 /**
- * Validate a read-only teacher preview of the template attached to an OnlyOffice question.
+ * Validate teacher review access to an OnlyOffice file attached to a completed exercise attempt.
  */
-function userCanPreviewExerciseQuestionResourceNodeForOnlyofficeEditor(
+function userCanReviewExerciseResourceNodeForOnlyofficeEditor(
+    int $resourceNodeId,
+    int $exerciseId,
+    int $exeId,
+    int $questionId
+): bool {
+    if (
+        $resourceNodeId <= 0
+        || $exerciseId <= 0
+        || $exeId <= 0
+        || $questionId <= 0
+        || !api_is_allowed_to_edit(true, true)
+    ) {
+        return false;
+    }
+
+    $courseId = (int) api_get_course_int_id();
+    if ($courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $queryBuilder = $entityManager->createQueryBuilder()
+            ->select('saved.id')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.trackExercise', 'exerciseAttempt')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->andWhere('saved.questionId = :questionId')
+            ->andWhere('IDENTITY(saved.trackExercise) = :exeId')
+            ->andWhere('IDENTITY(exerciseAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(exerciseAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setMaxResults(1)
+        ;
+
+        $sessionId = (int) api_get_session_id();
+        if ($sessionId > 0) {
+            $queryBuilder
+                ->andWhere('IDENTITY(exerciseAttempt.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $queryBuilder->andWhere('exerciseAttempt.session IS NULL');
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise review access', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'courseId' => $courseId,
+        ]);
+
+        return false;
+    }
+}
+
+/**
+ * Validate teacher access to the template attached to an OnlyOffice question.
+ */
+function userCanManageExerciseQuestionResourceNodeForOnlyofficeEditor(
     int $resourceNodeId,
     int $exerciseId,
     int $questionId
@@ -1320,7 +1407,7 @@ function userCanPreviewExerciseQuestionResourceNodeForOnlyofficeEditor(
             }
         }
     } catch (\Throwable $exception) {
-        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise template preview', [
+        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise template access', [
             'message' => $exception->getMessage(),
             'resourceNodeId' => $resourceNodeId,
             'exerciseId' => $exerciseId,

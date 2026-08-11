@@ -68,6 +68,7 @@ $resourceNodeId = (int) getHashValue($hashData, 'resourceNodeId', 0);
 $groupId = (int) getHashValue($hashData, 'groupId', 0);
 $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
 $isExercisePreview = 1 === (int) getHashValue($hashData, 'exercisePreview', 0);
+$isReadOnly = 1 === (int) getHashValue($hashData, 'readOnly', 0);
 
 $docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
 $docPath = '' !== $docPathFromQuery
@@ -92,6 +93,7 @@ onlyofficeLog('DEBUG', 'Callback entry', [
     'groupId' => $groupId,
     'sessionId' => $sessionId,
     'exercisePreview' => $isExercisePreview,
+    'readOnly' => $isReadOnly,
     'docPath' => $docPath,
 ]);
 
@@ -169,10 +171,13 @@ function track(): array
     global $docPath;
     global $sessionId;
     global $isExercisePreview;
+    global $isReadOnly;
 
-    if ($isExercisePreview) {
-        onlyofficeLog('INFO', 'Ignored write callback for read-only exercise preview', [
+    if ($isExercisePreview || $isReadOnly) {
+        onlyofficeLog('INFO', 'Ignored write callback for read-only OnlyOffice editor', [
             'resourceNodeId' => $resourceNodeId,
+            'exercisePreview' => $isExercisePreview,
+            'readOnly' => $isReadOnly,
         ]);
 
         return ['error' => 0];

@@ -903,21 +903,21 @@ class CourseController extends ToolBaseController
         SettingsCourseManager $manager,
         SettingsFormFactory $formFactory
     ): Response {
-        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        // Course settings are teacher material: VIEW would let any enrolled student in.
+        $user = $this->userHelper->getCurrent();
+        $canManageSettings = $this->isGranted('ROLE_ADMIN')
+            || ($user instanceof User && (
+                $course->hasUserAsTeacher($user)
+                || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            ));
+
+        if (!$canManageSettings) {
+            throw $this->createAccessDeniedException('You are not allowed to manage the course settings.');
+        }
+
         $manager->setCourse($course);
 
         if ('wiki' === $namespace) {
-            $user = $this->userHelper->getCurrent();
-            $canManageWikiSettings = $this->isGranted('ROLE_ADMIN')
-                || ($user instanceof User && (
-                    $course->hasUserAsTeacher($user)
-                    || $this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-                ));
-
-            if (!$canManageWikiSettings) {
-                throw $this->createAccessDeniedException('You are not allowed to manage Wiki settings.');
-            }
-
             if ($request->isMethod(Request::METHOD_GET)) {
                 $nodeId = $course->getResourceNode()?->getId();
                 if (null !== $nodeId) {

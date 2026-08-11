@@ -33,8 +33,11 @@ $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionLi
 set_time_limit(0);
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
-    $file_type = $_POST['file_type'] ?? 'csv';
-    $session_id = $_POST['session_id'];
+    // Both values end up in a SQL query and in the export file name: never trust them as-is.
+    $file_type = isset($_POST['file_type']) && in_array($_POST['file_type'], ['csv', 'xls', 'xml'], true)
+        ? $_POST['file_type']
+        : 'csv';
+    $session_id = isset($_POST['session_id']) ? (int) $_POST['session_id'] : 0;
     $includeUsers = !isset($_POST['no_include_users']);
     $includeCourseExtraFields = isset($_POST['include_course_fields']);
 
@@ -71,7 +74,7 @@ if (isset($_POST['formSent'])) {
                 FROM $tbl_session s
                 INNER JOIN $tbl_user
                     ON $tbl_user.user_id = s.id_coach
-                WHERE s.id='$session_id'";
+                WHERE s.id = $session_id";
     }
 
     $result = Database::query($sql);
@@ -116,9 +119,10 @@ if (isset($_POST['formSent'])) {
                 fclose($fp);
             }
 
-            $archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time().'.'.$file_type;
+            // basename() keeps the write inside the archive directory even if the name changes later on.
+            $archiveFile = basename('export_sessions_'.$session_id.'_'.api_get_local_time().'.'.$file_type);
             while (file_exists($archivePath.$archiveFile)) {
-                $archiveFile = 'export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type;
+                $archiveFile = basename('export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type);
             }
 
             $cvs = false;

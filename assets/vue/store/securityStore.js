@@ -76,7 +76,14 @@ function getReachableRoles(roles) {
 
 export const useSecurityStore = defineStore("security", () => {
   const user = ref(null)
-  const isLoading = ref(true)
+  // Must default to false: it means "a checkSession() call is currently in
+  // flight", consumed by the router guard as "skip calling checkSession()
+  // again, one is already running". Defaulting it to true made the guard
+  // believe a check was already in progress on the very first navigation
+  // (nothing was), so it never called checkSession() at all and treated a
+  // freshly-booted, not-yet-hydrated store as "definitely not logged in" -
+  // bouncing valid, already-authenticated deep links through /login.
+  const isLoading = ref(false)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
   const platformConfigStore = usePlatformConfig()
@@ -186,9 +193,15 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
 
-  async function checkSession(context = {}) {
-    // Only check user session when user info is stored
-    if (!isAuthenticated.value) {
+  async function checkSession(context = {}, { force = false } = {}) {
+    // Skip the network call for visitors the client already knows are
+    // anonymous (avoids pinging /check-session on every public page view).
+    // The router guard passes force:true because it calls this precisely to
+    // find out whether a not-yet-hydrated store actually has a valid server
+    // session (e.g. a fresh full-page load / deep link) - in that case
+    // isAuthenticated.value can't be trusted yet and must not short-circuit
+    // the check.
+    if (!force && !isAuthenticated.value) {
       isLoading.value = false
       return
     }

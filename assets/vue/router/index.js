@@ -667,11 +667,16 @@ router.beforeEach(async (to, from, next) => {
     !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
-    await securityStore.checkSession({
-      cid,
-      sid: parseInt(to.query?.sid ?? 0) || 0,
-      gid: parseInt(to.query?.gid ?? 0) || 0,
-    })
+    // force:true - a protected route needs a real answer from the server,
+    // not the client's not-yet-hydrated guess (see securityStore.checkSession).
+    await securityStore.checkSession(
+      {
+        cid,
+        sid: parseInt(to.query?.sid ?? 0) || 0,
+        gid: parseInt(to.query?.gid ?? 0) || 0,
+      },
+      { force: true },
+    )
   }
 
   // If user must be logged but is not, send to login

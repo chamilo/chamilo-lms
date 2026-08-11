@@ -283,7 +283,7 @@ final readonly class ExerciseRuntimeAttemptPdfService
             'draggable' => $this->renderDraggableAnswer($answer),
             'calculated' => $this->renderCalculatedAnswer($answer),
             'hotspot' => $this->renderHotspotAnswer($answer),
-            'free_answer', 'annotation', 'upload_answer', 'oral_expression' => $this->renderManualAnswer($answer),
+            'free_answer', 'annotation', 'upload_answer', 'oral_expression', 'onlyoffice' => $this->renderManualAnswer($answer),
             default => $this->renderGenericAnswer($answer),
         };
     }

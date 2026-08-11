@@ -48,6 +48,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const FREE_ANSWER = 5;
     private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const ANNOTATION = 20;
     private const LINK_TYPE_EXERCISE = 1;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
@@ -168,7 +169,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 
     private function isManualCorrectionQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANNOTATION], true);
+        return \in_array((int) $question->getType(), [self::FREE_ANSWER, self::ORAL_EXPRESSION, self::UPLOAD_ANSWER, self::ANSWER_IN_OFFICE_DOC, self::ANNOTATION], true);
     }
 
     private function canCorrectAttempts(): bool

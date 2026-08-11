@@ -1204,6 +1204,17 @@
                     {{ question.answer.kind === 'onlyoffice' ? t("Learner Office document") : t("Learner file") }}
                   </div>
                   <div
+                    v-if="question.answer.kind === 'onlyoffice' && question.answer.editorUrl"
+                    class="mb-3 overflow-hidden rounded-lg border border-gray-20 bg-white shadow-sm"
+                  >
+                    <iframe
+                      :key="question.answer.editorUrl"
+                      :src="question.answer.editorUrl"
+                      class="h-[78vh] min-h-[680px] w-full border-0"
+                      :title="t('Learner Office document')"
+                    />
+                  </div>
+                  <div
                     v-if="question.answer.files?.length"
                     class="space-y-2"
                   >

@@ -285,6 +285,18 @@
           <span v-else>{{ form.onlyofficeTemplateName }}</span>
         </div>
 
+        <div
+          v-if="form.onlyofficeEditorUrl"
+          class="overflow-hidden rounded-lg border border-gray-20 bg-white shadow-sm"
+        >
+          <iframe
+            :key="form.onlyofficeEditorUrl"
+            :src="form.onlyofficeEditorUrl"
+            class="h-[78vh] min-h-[680px] w-full border-0"
+            :title="form.onlyofficeTemplateName || t('Office document')"
+          />
+        </div>
+
         <div class="rounded-lg border border-yellow-100 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
           {{ t("This question is corrected manually after the learner submits the edited document.") }}
         </div>
@@ -1942,6 +1954,7 @@ const form = reactive({
   hotspotScenarioFailureType: "",
   hotspotScenarioFailureUrl: "",
   onlyofficeTemplateUrl: "",
+  onlyofficeEditorUrl: "",
   onlyofficeTemplateName: "",
   onlyofficeTemplateData: "",
   onlyofficeTemplateMimeType: "",
@@ -2551,6 +2564,7 @@ function fillForm(data) {
   form.hotspotImageName = data.hotspotImageName || ""
   form.hotspotImageMimeType = ""
   form.onlyofficeTemplateUrl = data.onlyofficeTemplateUrl || ""
+  form.onlyofficeEditorUrl = data.onlyofficeEditorUrl || ""
   form.onlyofficeTemplateName = data.onlyofficeTemplateName || ""
   form.onlyofficeTemplateData = ""
   form.onlyofficeTemplateMimeType = ""
@@ -3140,6 +3154,7 @@ function selectOnlyofficeTemplate(file) {
     form.onlyofficeTemplateName = ""
     form.onlyofficeTemplateMimeType = ""
     form.onlyofficeTemplateUrl = ""
+    form.onlyofficeEditorUrl = ""
     return
   }
 
@@ -3148,6 +3163,7 @@ function selectOnlyofficeTemplate(file) {
     form.onlyofficeTemplateData = String(reader.result || "")
     form.onlyofficeTemplateName = file.name || "office_document"
     form.onlyofficeTemplateUrl = ""
+    form.onlyofficeEditorUrl = ""
     form.onlyofficeTemplateMimeType = file.type || getOnlyofficeMimeTypeFromExtension(file.name)
     errorMessage.value = ""
   }

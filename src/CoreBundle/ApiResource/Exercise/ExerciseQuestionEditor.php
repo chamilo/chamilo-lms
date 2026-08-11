@@ -244,6 +244,9 @@ final class ExerciseQuestionEditor
     #[Groups(['exercise_question_editor:read'])]
     public string $onlyofficeTemplateUrl = '';
 
+    #[Groups(['exercise_question_editor:read'])]
+    public string $onlyofficeEditorUrl = '';
+
     #[Groups(['exercise_question_editor:read', 'exercise_question_editor:write'])]
     public string $onlyofficeTemplateName = '';
 

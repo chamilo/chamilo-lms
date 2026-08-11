@@ -282,10 +282,17 @@ try {
         exit;
     }
 
-    $pluginTitle = $_POST['plugin'] ?? '';
+    $pluginTitle = is_string($_POST['plugin'] ?? null) ? $_POST['plugin'] : '';
     if ($pluginTitle === '') {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'Missing plugin parameter']);
+        exit;
+    }
+
+    // The plugin name must be validated before it is used to build any file path.
+    if (!AppPlugin::isValidPluginName($pluginTitle)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid plugin parameter']);
         exit;
     }
 

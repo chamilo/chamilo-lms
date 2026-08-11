@@ -70,10 +70,9 @@ $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
 $isExercisePreview = 1 === (int) getHashValue($hashData, 'exercisePreview', 0);
 $isReadOnly = 1 === (int) getHashValue($hashData, 'readOnly', 0);
 
-$docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
-$docPath = '' !== $docPathFromQuery
-    ? $docPathFromQuery
-    : (string) getHashValue($hashData, 'docPath', '');
+// Only the signed value is trusted: a query parameter would let the caller
+// replace the document the hash was issued for.
+$docPath = (string) getHashValue($hashData, 'docPath', '');
 
 $courseInfo = [];
 $courseCode = '';
@@ -384,14 +383,42 @@ function emptyFile(): void
 }
 
 /**
+ * Resolve a course-relative document path to an existing file inside the course
+ * directory. Returns null when the file is missing or the path escapes that root.
+ */
+function resolveContainedCoursePath(string $docPath): ?string
+{
+    // SYS_COURSE_PATH is not declared by the 2.x core, so treat it as unresolvable
+    // rather than raising an undefined-constant error.
+    if (!\defined('SYS_COURSE_PATH')) {
+        return null;
+    }
+
+    $root = realpath(api_get_path(SYS_COURSE_PATH));
+
+    if (false === $root) {
+        return null;
+    }
+
+    $root = rtrim($root, '/').'/';
+    $realPath = realpath($root.ltrim(str_replace('\\', '/', $docPath), '/'));
+
+    if (false === $realPath || !str_starts_with($realPath, $root)) {
+        return null;
+    }
+
+    return $realPath;
+}
+
+/**
  * Resolve a document source in C2 first, then legacy.
  */
 function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCode, int $sessionId, string $docPath): ?array
 {
     if ('' !== $docPath) {
-        $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
+        $filePath = resolveContainedCoursePath($docPath);
 
-        if (file_exists($filePath)) {
+        if (null !== $filePath) {
             onlyofficeLog('DEBUG', 'Resolved direct docPath', [
                 'docPath' => $docPath,
                 'filePath' => $filePath,
@@ -412,9 +439,8 @@ function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCo
             ];
         }
 
-        onlyofficeLog('WARNING', 'Direct docPath not found', [
+        onlyofficeLog('WARNING', 'Direct docPath not found inside the course directory', [
             'docPath' => $docPath,
-            'filePath' => $filePath,
         ]);
     }
 
@@ -843,16 +869,81 @@ function extractCallbackDownloadUrl(array $data, mixed $payload): string
 }
 
 /**
+ * Reduce a URL to scheme://host[:port], or '' when it is not an http(s) URL.
+ */
+function extractUrlOrigin(string $url): string
+{
+    $parts = parse_url($url);
+
+    if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+        return '';
+    }
+
+    $scheme = strtolower((string) $parts['scheme']);
+
+    if (!\in_array($scheme, ['http', 'https'], true)) {
+        return '';
+    }
+
+    $origin = $scheme.'://'.strtolower((string) $parts['host']);
+
+    if (!empty($parts['port'])) {
+        $origin .= ':'.(int) $parts['port'];
+    }
+
+    return $origin;
+}
+
+/**
+ * Origins the callback is allowed to download from: the configured document server.
+ *
+ * The document server legitimately lives on a private network in most
+ * installations, so the control is an origin allowlist rather than a
+ * private-range block.
+ */
+function isAllowedDownloadUrl(string $url, $appSettings): bool
+{
+    $origin = extractUrlOrigin($url);
+
+    if ('' === $origin) {
+        return false;
+    }
+
+    $allowed = [];
+
+    foreach ([$appSettings->getDocumentServerUrl(), $appSettings->getDocumentServerInternalUrl()] as $serverUrl) {
+        $serverOrigin = extractUrlOrigin((string) $serverUrl);
+
+        if ('' !== $serverOrigin) {
+            $allowed[] = $serverOrigin;
+        }
+    }
+
+    return \in_array($origin, $allowed, true);
+}
+
+/**
  * Fetch remote binary data.
  */
 function fetchRemoteBinary(string $url): ?string
 {
+    global $appSettings;
+
+    // The URL comes from the callback body, so it must point at the document server.
+    if (!isAllowedDownloadUrl($url, $appSettings)) {
+        onlyofficeLog('ERROR', 'Rejected download URL outside the document server origin', [
+            'origin' => extractUrlOrigin($url),
+        ]);
+
+        return null;
+    }
+
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
 
         if (false !== $ch) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
             curl_setopt($ch, CURLOPT_TIMEOUT, 120);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -876,7 +967,14 @@ function fetchRemoteBinary(string $url): ?string
         }
     }
 
-    $content = @file_get_contents($url);
+    $context = stream_context_create([
+        'http' => [
+            'follow_location' => 0,
+            'timeout' => 120,
+        ],
+    ]);
+
+    $content = @file_get_contents($url, false, $context);
 
     if (false === $content) {
         return null;

@@ -316,12 +316,12 @@ if (!empty($resourceNodeId)) {
     $trackHash = $jwtManager->getHash($trackPayload);
 
     $fileUrl = appendVersionTokenToUrl(
-        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash.'&docPath='.urlencode($newDocPath),
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
         $versionToken
     );
 
     $callbackUrl = appendVersionTokenToUrl(
-        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash.'&docPath='.urlencode($newDocPath),
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
         $versionToken
     );
 

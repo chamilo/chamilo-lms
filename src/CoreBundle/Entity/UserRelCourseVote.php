@@ -15,7 +15,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\EventListener\UserRelCourseVoteListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,15 +34,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
         ),
-        new Put(
-            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()",
-            securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
-        ),
         new Patch(
             security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()",
             securityPostDenormalize: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
         ),
-        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        // Removing a course from the favourites deletes the vote behind it.
+        new Delete(
+            security: "is_granted('ROLE_ADMIN') or object.getUser().getId() == user.getId()"
+        ),
     ],
     normalizationContext: ['groups' => ['userRelCourseVote:read']],
     denormalizationContext: ['groups' => ['userRelCourseVote:write']]

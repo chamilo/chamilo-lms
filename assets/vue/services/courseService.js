@@ -247,38 +247,6 @@ export default {
     return data
   },
 
-  toggleFavorite: async (courseId, userId) => {
-    // Check if the vote already exists
-    const { data } = await api.get("/api/user_rel_course_votes", {
-      params: { "user.id": userId, "course.id": courseId },
-    })
-
-    if (data["hydra:totalItems"] > 0) {
-      // Already favorite → remove
-      await api.delete(data["hydra:member"][0]["@id"])
-
-      return false
-    }
-
-    // Not favorite → create
-    await api.post("/api/user_rel_course_votes", {
-      user: `/api/users/${userId}`,
-      course: `/api/courses/${courseId}`,
-      vote: 1,
-      url: `/api/access_urls/${window.access_url_id ?? 1}`,
-    })
-
-    return true
-  },
-
-  listFavoriteCourses: async (userId) => {
-    const { data } = await api.get("/api/user_rel_course_votes", {
-      params: { "user.id": userId, vote: 1, pagination: false },
-    })
-
-    return data["hydra:member"].map((vote) => vote.course)
-  },
-
   getCompletedCourses: async (offset = 0, limit = 10) => {
     const res = await api.get("/admin/sessionadmin/courses/completed", {
       params: { offset, limit },

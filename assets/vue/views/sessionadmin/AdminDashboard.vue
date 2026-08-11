@@ -29,6 +29,7 @@ import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import AdminCourseCard from "../../components/course/AdminCourseCard.vue"
 import courseService from "../../services/courseService"
+import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
@@ -42,7 +43,7 @@ onMounted(async () => {
 
     const [coursesRes, favRes] = await Promise.allSettled([
       courseService.fetchDashboardCourses(),
-      courseService.listFavoriteCourses(securityStore.user.id),
+      userRelCourseVoteService.listFavoriteCourses(securityStore.user.id),
     ])
     if (coursesRes.status === "fulfilled") {
       const allCourses = coursesRes.value

@@ -915,7 +915,8 @@ function getEncoreAssetFromManifest(string $assetName): ?string
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $installationLanguage ?>" class="no-js h-100">
+<?php $escapedInstallationLanguage = htmlspecialchars($installationLanguage, ENT_QUOTES, 'UTF-8'); ?>
+<html lang="<?php echo $escapedInstallationLanguage ?>" data-lang="<?php echo $escapedInstallationLanguage ?>" class="no-js h-100">
 <head>
     <title>
         &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>
@@ -962,7 +963,7 @@ function getEncoreAssetFromManifest(string $assetName): ?string
 <body class="flex min-h-screen p-2 md:px-16 md:py-8 xl:px-32 xl:py-16 bg-gradient-to-br from-primary to-primary-gradient">
 <div id="app" class="m-auto"></div>
 <script>
-  var installerData = <?php echo json_encode($installerData) ?>;
+  var installerData = <?php echo json_encode($installerData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 </script>
 <script type="text/javascript" src="<?php echo getEncoreAssetFromManifest('public/build/runtime.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo getEncoreAssetFromManifest('public/build/vue_installer.js'); ?>"></script>

@@ -250,8 +250,9 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
-import { onMounted, provide, ref, watch } from "vue"
+import { computed, onMounted, provide, ref, watch } from "vue"
 
+import { setLocale } from "./i18n"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 import BaseButton from "./components/basecomponents/BaseButton.vue"
 import Step1 from "./components/installer/Step1"
@@ -262,7 +263,7 @@ import Step5 from "./components/installer/Step5"
 import Step6 from "./components/installer/Step6"
 import Step7 from "./components/installer/Step7"
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const installerData = ref(window.installerData || {})
 
 if (!installerData.value.stepData) {
@@ -275,7 +276,9 @@ if (!installerData.value.stepData) {
 
 provide("installerData", installerData)
 
-const steps = ref([
+// Computed so the sidebar re-renders itself once a lazily loaded locale bundle
+// lands and the active locale switches.
+const steps = computed(() => [
   {
     step: 1,
     stepTitle: t("Installation language"),
@@ -306,18 +309,6 @@ const steps = ref([
   },
 ])
 
-function refreshStepTitles() {
-  steps.value = [
-    { step: 1, stepTitle: t("Installation language") },
-    { step: 2, stepTitle: t("Requirements") },
-    { step: 3, stepTitle: t("License") },
-    { step: 4, stepTitle: t("Database settings") },
-    { step: 5, stepTitle: t("Config settings") },
-    { step: 6, stepTitle: t("Show Overview") },
-    { step: 7, stepTitle: t("Install") },
-  ]
-}
-
 function normalizeLocale(iso) {
   if (!iso) return "en_US"
   const low = String(iso).toLowerCase()
@@ -333,9 +324,8 @@ onMounted(() => {
 
   installerData.value.langIso = initial
 
-  if (initial && locale.value !== initial) {
-    locale.value = initial
-    refreshStepTitles()
+  if (initial) {
+    setLocale(initial)
   }
 
   const txtIsExecutable = document.getElementById("is_executable")
@@ -351,6 +341,9 @@ onMounted(() => {
   }
 })
 
+// Locale bundles are downloaded on demand (see i18n.js), so the switch must go
+// through setLocale(): assigning i18n's locale directly leaves vue-i18n without
+// messages for the target language and the UI stays in English.
 watch(
   () => installerData.value?.langIso,
   (iso) => {
@@ -359,10 +352,9 @@ watch(
       installerData.value.langIso = next
       return
     }
-    if (next && locale.value !== next) {
-      locale.value = next
-      refreshStepTitles()
+    if (next) {
+      setLocale(next)
     }
-  }
+  },
 )
 </script>

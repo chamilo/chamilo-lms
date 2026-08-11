@@ -72,6 +72,7 @@ use UserManager;
             uriTemplate: '/users/{id}/skills',
             controller: UserSkillsController::class,
             normalizationContext: ['groups' => ['user_skills:read']],
+            security: "is_granted('ROLE_ADMIN') or user.getId() == request.attributes.get('id')",
             name: 'get_user_skills'
         ),
     ],

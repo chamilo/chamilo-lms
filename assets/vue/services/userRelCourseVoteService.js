@@ -60,20 +60,22 @@ export async function updateVote({ iri, vote, sessionId = null, urlId }) {
  */
 export async function getUserVote({ userId, courseId, sessionId = null, urlId }) {
   try {
-    let query = `/api/user_rel_course_votes?user.id=${userId}`
+    const searchParams = { "user.id": userId }
 
-    if (urlId) query += `&url.id=${urlId}`
+    if (urlId) searchParams["url.id"] = urlId
 
     if (courseId && courseId !== 0) {
-      query += `&course.id=${courseId}`
+      searchParams["course.id"] = courseId
     } else if (sessionId) {
-      query += `&session.id=${sessionId}&course=null`
+      searchParams["session.id"] = sessionId
+      // Kept as a string: axios drops null values, and the API expects the literal.
+      searchParams.course = "null"
     }
 
-    const response = await baseService.get(query)
+    const { items } = await baseService.getCollection("/api/user_rel_course_votes", searchParams)
 
-    if (response?.["hydra:member"]?.length > 0) {
-      return response["hydra:member"][0]
+    if (items?.length > 0) {
+      return items[0]
     }
 
     return null

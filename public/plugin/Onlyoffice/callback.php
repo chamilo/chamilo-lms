@@ -869,16 +869,81 @@ function extractCallbackDownloadUrl(array $data, mixed $payload): string
 }
 
 /**
+ * Reduce a URL to scheme://host[:port], or '' when it is not an http(s) URL.
+ */
+function extractUrlOrigin(string $url): string
+{
+    $parts = parse_url($url);
+
+    if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+        return '';
+    }
+
+    $scheme = strtolower((string) $parts['scheme']);
+
+    if (!\in_array($scheme, ['http', 'https'], true)) {
+        return '';
+    }
+
+    $origin = $scheme.'://'.strtolower((string) $parts['host']);
+
+    if (!empty($parts['port'])) {
+        $origin .= ':'.(int) $parts['port'];
+    }
+
+    return $origin;
+}
+
+/**
+ * Origins the callback is allowed to download from: the configured document server.
+ *
+ * The document server legitimately lives on a private network in most
+ * installations, so the control is an origin allowlist rather than a
+ * private-range block.
+ */
+function isAllowedDownloadUrl(string $url, $appSettings): bool
+{
+    $origin = extractUrlOrigin($url);
+
+    if ('' === $origin) {
+        return false;
+    }
+
+    $allowed = [];
+
+    foreach ([$appSettings->getDocumentServerUrl(), $appSettings->getDocumentServerInternalUrl()] as $serverUrl) {
+        $serverOrigin = extractUrlOrigin((string) $serverUrl);
+
+        if ('' !== $serverOrigin) {
+            $allowed[] = $serverOrigin;
+        }
+    }
+
+    return \in_array($origin, $allowed, true);
+}
+
+/**
  * Fetch remote binary data.
  */
 function fetchRemoteBinary(string $url): ?string
 {
+    global $appSettings;
+
+    // The URL comes from the callback body, so it must point at the document server.
+    if (!isAllowedDownloadUrl($url, $appSettings)) {
+        onlyofficeLog('ERROR', 'Rejected download URL outside the document server origin', [
+            'origin' => extractUrlOrigin($url),
+        ]);
+
+        return null;
+    }
+
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
 
         if (false !== $ch) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
             curl_setopt($ch, CURLOPT_TIMEOUT, 120);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -902,7 +967,14 @@ function fetchRemoteBinary(string $url): ?string
         }
     }
 
-    $content = @file_get_contents($url);
+    $context = stream_context_create([
+        'http' => [
+            'follow_location' => 0,
+            'timeout' => 120,
+        ],
+    ]);
+
+    $content = @file_get_contents($url, false, $context);
 
     if (false === $content) {
         return null;

@@ -57,7 +57,9 @@ $docPath = isset($_GET['doc']) ? urldecode((string) $_GET['doc']) : null;
 
 $groupId = isset($_GET['groupId']) && !empty($_GET['groupId'])
     ? (int) $_GET['groupId']
-    : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : 0);
+    : (!empty($_GET['gid'])
+        ? (int) $_GET['gid']
+        : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : 0));
 
 $userId = (int) api_get_user_id();
 $userInfo = api_get_user_info($userId);
@@ -1704,6 +1706,10 @@ function appendVersionTokenToUrl(string $url, string $versionToken): string
  */
 function shouldOpenOnlyofficeInReadOnlyMode(string $extension, ?int $isReadOnly, bool $forceEdit, ?int $exeId): bool
 {
+    if (!empty($isReadOnly)) {
+        return true;
+    }
+
     if ($forceEdit) {
         return false;
     }
@@ -1714,10 +1720,6 @@ function shouldOpenOnlyofficeInReadOnlyMode(string $extension, ?int $isReadOnly,
 
     if ($exeId) {
         return false;
-    }
-
-    if (!empty($isReadOnly)) {
-        return true;
     }
 
     if (api_is_allowed_to_edit(false, true, true, false)) {

@@ -1,4 +1,6 @@
 <template>
+  <Loading :visible="platformConfigurationStore.isLoading" />
+
   <component
     :is="layout"
     v-if="!platformConfigurationStore.isLoading"
@@ -111,6 +113,7 @@ import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 import SessionExpirationWarning from "./components/security/SessionExpirationWarning.vue"
+import Loading from "./components/Loading.vue"
 
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
@@ -359,6 +362,13 @@ if (!isEmpty(window.user)) {
 // the app. Consume + clear the dataset in one place so either lifecycle hook
 // is safe to call.
 function consumeFlashesFromAppDataset() {
+  // The main layout is intentionally hidden while the platform configuration is loading.
+  // Keep server-side flash messages queued until the layout is visible so a toast never
+  // appears by itself over the temporary blank application shell.
+  if (platformConfigurationStore.isLoading) {
+    return
+  }
+
   const app = document.getElementById("app")
 
   if (!(app && app.dataset.flashes)) {

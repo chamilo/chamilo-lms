@@ -42,7 +42,7 @@ use Vich\UploaderBundle\VichUploaderBundle;
 return [
     FrameworkBundle::class => ['all' => true],
     DoctrineBundle::class => ['all' => true],
-    DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+    DoctrineFixturesBundle::class => ['all' => true],
     DoctrineMigrationsBundle::class => ['all' => true],
     MonologBundle::class => ['all' => true],
     TwigBundle::class => ['all' => true],

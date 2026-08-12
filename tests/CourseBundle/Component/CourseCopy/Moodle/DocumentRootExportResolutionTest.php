@@ -159,8 +159,6 @@ final class DocumentRootExportResolutionTest extends TestCase
         $method->setAccessible(true);
 
         /** @var ResourceNode|null $base */
-        $base = $method->invoke($builder, $document, $documentsRoot, $courseRoot);
-
-        return $base;
+        return $method->invoke($builder, $document, $documentsRoot, $courseRoot);
     }
 }

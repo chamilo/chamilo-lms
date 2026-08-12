@@ -11,6 +11,8 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
+use const JSON_THROW_ON_ERROR;
+
 /**
  * Learning-path items store source resource iids in path/identifierref.
  * After Moodle import, bags are often keyed by sequential local ids with source_id

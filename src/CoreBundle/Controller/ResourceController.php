@@ -54,11 +54,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const JSON_HEX_AMP;
 use const JSON_HEX_APOS;
 use const JSON_HEX_QUOT;
 use const JSON_HEX_TAG;
+use const PATHINFO_EXTENSION;
 use const PHP_EOL;
+use const PHP_QUERY_RFC3986;
+use const PHP_URL_QUERY;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -1046,7 +1051,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $context['lp_item_id'] = $lpItemId;
         }
 
-        $pattern = '#(?P<prefix>(?:src|href)\\s*=\\s*["\\\'])(?P<url>(?:(?:https?:)?//[^"\\\']+)?/r/document/files/[0-9a-fA-F-]{36}/view(?:\\?[^"\\\']*)?)(?P<suffix>["\\\'])#i';
+        $pattern = '#(?P<prefix>(?:src|href)\s*=\s*["\\\'])(?P<url>(?:(?:https?:)?//[^"\\\']+)?/r/document/files/[0-9a-fA-F-]{36}/view(?:\?[^"\\\']*)?)(?P<suffix>["\\\'])#i';
 
         return preg_replace_callback(
             $pattern,

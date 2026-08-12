@@ -270,7 +270,7 @@ final class WeakPasswordCheckerHelper
             || ('bcrypt' === $algorithm && $bcryptCost >= 12);
 
         if ($isExpensiveHash) {
-            return array_slice(self::COMMON_PASSWORD_CANDIDATES, 0, self::EXPENSIVE_HASH_CANDIDATE_LIMIT);
+            return \array_slice(self::COMMON_PASSWORD_CANDIDATES, 0, self::EXPENSIVE_HASH_CANDIDATE_LIMIT);
         }
 
         return self::COMMON_PASSWORD_CANDIDATES;

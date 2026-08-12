@@ -54,8 +54,6 @@ final class DocumentIndexPathResolutionTest extends TestCase
         $reflection = new ReflectionClass(MoodleExport::class);
 
         /** @var MoodleExport $export */
-        $export = $reflection->newInstanceWithoutConstructor();
-
-        return $export;
+        return $reflection->newInstanceWithoutConstructor();
     }
 }

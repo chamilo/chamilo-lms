@@ -159,6 +159,71 @@ final class CourseMetaImportTest extends TestCase
         self::assertSame(2, (int) $byPath['/document/public.txt']->visibility);
     }
 
+    public function testImportDocumentMetaResolvesFileFolderPathCollisionFromFilesXml(): void
+    {
+        $hash = str_repeat('aa', 20);
+        $title = 'Module 1: Finding Your Way Around Chamilo 3.0';
+        $filename = $title.'.html';
+
+        mkdir($this->workDir.'/chamilo/document', 0775, true);
+        file_put_contents($this->workDir.'/files/aa/'.$hash, '<html><body>Module 1</body></html>');
+        file_put_contents($this->workDir.'/files.xml', <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+  <file id="1900000122">
+    <contenthash>{$hash}</contenthash>
+    <component>mod_resource</component>
+    <filearea>content</filearea>
+    <filepath>/</filepath>
+    <filename>{$filename}</filename>
+    <filesize>34</filesize>
+    <mimetype>text/html</mimetype>
+  </file>
+</files>
+XML);
+        file_put_contents($this->workDir.'/chamilo/document/index.json', json_encode([
+            'documents' => [
+                [
+                    'id' => 449,
+                    'source_id' => 449,
+                    'file_type' => 'folder',
+                    'path' => $title.'/Learning paths',
+                    'title' => 'Learning paths',
+                    'visibility' => 0,
+                ],
+                [
+                    'id' => 322,
+                    'source_id' => 322,
+                    'file_type' => 'file',
+                    'path' => $title,
+                    'title' => $title,
+                    'contenthash' => $hash,
+                    'visibility' => 0,
+                    'size' => 34,
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $resources = ['document' => []];
+        $ok = $this->invokePrivate('tryImportDocumentMeta', [$this->workDir, &$resources]);
+
+        self::assertTrue($ok);
+
+        $bySourceId = [];
+        foreach ($resources['document'] as $item) {
+            $sourceId = (int) ($item->source_id ?? 0);
+            if ($sourceId > 0) {
+                $bySourceId[$sourceId] = $item;
+            }
+        }
+
+        self::assertArrayHasKey(322, $bySourceId);
+        self::assertSame('/document/'.$filename, (string) $bySourceId[322]->path);
+        self::assertSame('file', (string) $bySourceId[322]->file_type);
+        self::assertFileExists($this->workDir.'/document/'.$filename);
+        self::assertDirectoryExists($this->workDir.'/document/'.$title.'/Learning paths');
+    }
+
     public function testImportIllustrationFallsBackToFilesXml(): void
     {
         $hash = str_repeat('cd', 20);

@@ -4494,6 +4494,8 @@ class MoodleImport
             return false;
         }
 
+        $rows = $this->normalizeDocumentMetaFileFolderCollisions($workDir, $rows);
+
         $resources['document'] ??= [];
         $this->ensureDir($workDir.'/document');
 
@@ -4667,6 +4669,146 @@ class MoodleImport
         }
 
         return $fileRows > 0 && $materialized === $fileRows;
+    }
+
+    /**
+     * Resolve impossible file/folder path collisions in Chamilo document sidecars.
+     *
+     * Older C2 exports can contain a file path without its physical extension while
+     * also using that same path as the parent of a folder. The filesystem cannot
+     * materialize both entries. When files.xml contains the authoritative
+     * mod_resource filename for the same content hash, keep the sidecar hierarchy
+     * and restore the file with that physical filename instead.
+     *
+     * @param array<int,mixed> $rows
+     *
+     * @return array<int,mixed>
+     */
+    private function normalizeDocumentMetaFileFolderCollisions(string $workDir, array $rows): array
+    {
+        $folderPaths = [];
+
+        foreach ($rows as $row) {
+            if (!\is_array($row)) {
+                continue;
+            }
+
+            if ('folder' !== strtolower((string) ($row['file_type'] ?? 'file'))) {
+                continue;
+            }
+
+            $path = $this->normalizeImportedDocumentRelativePath((string) ($row['path'] ?? ''));
+            if ('' !== $path) {
+                $folderPaths[$path] = true;
+            }
+        }
+
+        if (empty($folderPaths)) {
+            return $rows;
+        }
+
+        $filenameByHash = $this->readModResourceFilenameByContentHash($workDir);
+
+        foreach ($rows as $index => $row) {
+            if (!\is_array($row) || 'folder' === strtolower((string) ($row['file_type'] ?? 'file'))) {
+                continue;
+            }
+
+            $relative = $this->normalizeImportedDocumentRelativePath((string) ($row['path'] ?? ''));
+            if ('' === $relative) {
+                continue;
+            }
+
+            $conflicts = isset($folderPaths[$relative]);
+            if (!$conflicts) {
+                foreach ($folderPaths as $folderPath => $_) {
+                    if (str_starts_with($folderPath, $relative.'/')) {
+                        $conflicts = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$conflicts) {
+                continue;
+            }
+
+            $contentHash = strtolower(trim((string) ($row['contenthash'] ?? '')));
+            $physicalName = $filenameByHash[$contentHash] ?? '';
+            $physicalName = basename(str_replace('\\', '/', $physicalName));
+
+            if ('' === $physicalName || '.' === $physicalName || '..' === $physicalName) {
+                continue;
+            }
+
+            $parent = trim((string) dirname($relative), '.');
+            if ('.' === $parent) {
+                $parent = '';
+            }
+
+            $corrected = '' === $parent ? $physicalName : $parent.'/'.$physicalName;
+            $corrected = $this->normalizeImportedDocumentRelativePath($corrected);
+
+            if ('' === $corrected || isset($folderPaths[$corrected])) {
+                continue;
+            }
+
+            if ($this->debug) {
+                error_log(sprintf(
+                    'MOODLE_IMPORT: corrected document meta path collision "%s" -> "%s"',
+                    $relative,
+                    $corrected
+                ));
+            }
+
+            $row['path'] = $corrected;
+            $row['parent_path'] = '' === $parent ? '' : $parent;
+            $rows[$index] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @return array<string,string> contenthash => filename
+     */
+    private function readModResourceFilenameByContentHash(string $workDir): array
+    {
+        $filesXml = rtrim($workDir, '/').'/files.xml';
+        if (!is_file($filesXml)) {
+            return [];
+        }
+
+        try {
+            $doc = $this->loadXml($filesXml);
+            $xp = new DOMXPath($doc);
+        } catch (\Throwable) {
+            return [];
+        }
+
+        $out = [];
+
+        foreach ($xp->query('//file') as $file) {
+            if (!$file instanceof DOMElement) {
+                continue;
+            }
+
+            $component = (string) ($file->getElementsByTagName('component')->item(0)?->nodeValue ?? '');
+            if ('mod_resource' !== $component) {
+                continue;
+            }
+
+            $hash = strtolower(trim((string) ($file->getElementsByTagName('contenthash')->item(0)?->nodeValue ?? '')));
+            $filename = trim((string) ($file->getElementsByTagName('filename')->item(0)?->nodeValue ?? ''));
+
+            if ('' === $hash || '' === $filename || '.' === $filename) {
+                continue;
+            }
+
+            $out[$hash] = $filename;
+        }
+
+        return $out;
     }
 
     /** Cheap reader: obtain <quiz><name> from module xml without building resources. */

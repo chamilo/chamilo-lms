@@ -7,7 +7,6 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import { useNotification } from "../../composables/notification"
 import lpService from "../../services/lpService"
-
 const props = defineProps({
   context: { type: Object, required: true },
   item: { type: Object, required: true },
@@ -25,7 +24,6 @@ const scoreValues = reactive({})
 
 const candidates = computed(() => {
   const result = []
-
   function append(items, depth = 0) {
     ;(items || []).forEach((candidate) => {
       if (Number(candidate.id) !== Number(props.item.id)
@@ -42,24 +40,60 @@ const candidates = computed(() => {
   return result
 })
 
+const configuredScoresByPrerequisite = computed(() => {
+  const grouped = new Map()
+
+  function append(items) {
+    ;(items || []).forEach((dependentItem) => {
+      const configuredPrerequisiteId = Number(dependentItem?.prerequisiteId || 0)
+      if (configuredPrerequisiteId > 0
+        && Number(dependentItem?.displayOrder || 0) <= Number(props.item?.displayOrder || 0)
+      ) {
+        const configuredScores = {
+          min: Number(dependentItem?.prerequisiteMinScore ?? 0),
+          max: Number(dependentItem?.prerequisiteMaxScore ?? 100),
+        }
+        const values = grouped.get(configuredPrerequisiteId) || []
+        values.push(configuredScores)
+        grouped.set(configuredPrerequisiteId, values)
+      }
+
+      append(dependentItem.children || [])
+    })
+  }
+
+  append(props.items)
+
+  const result = {}
+  grouped.forEach((values, candidateId) => {
+    const first = values[0]
+    if (first && values.every((value) => value.min === first.min && value.max === first.max)) {
+      result[candidateId] = first
+    }
+  })
+
+  return result
+})
+
 watch(
-  () => [props.item, candidates.value],
+  () => [props.item, candidates.value, configuredScoresByPrerequisite.value],
   () => {
     prerequisiteId.value = Number(props.item?.prerequisiteId || 0)
-
     candidates.value.forEach((candidate) => {
       const selected = Number(candidate.id) === prerequisiteId.value
+      const configuredScores = configuredScoresByPrerequisite.value[Number(candidate.id)]
       scoreValues[candidate.id] = {
-        min: selected ? Number(props.item?.prerequisiteMinScore || 0) : Number(candidate.masteryScore || 0),
+        min: selected
+          ? Number(props.item?.prerequisiteMinScore ?? 0)
+          : Number(configuredScores?.min ?? candidate.masteryScore ?? 0),
         max: selected
-          ? Number(props.item?.prerequisiteMaxScore || candidate.maxScore || 100)
-          : Number(candidate.maxScore || 100),
+          ? Number(props.item?.prerequisiteMaxScore ?? candidate.maxScore ?? 100)
+          : Number(configuredScores?.max ?? candidate.maxScore ?? 100),
       }
     })
   },
   { immediate: true, deep: true },
 )
-
 function isScored(candidate) {
   return ["quiz", "hotpotatoes"].includes(String(candidate?.itemType || ""))
 }
@@ -69,7 +103,6 @@ async function savePrerequisite() {
   const scores = selected && isScored(selected)
     ? scoreValues[selected.id] || { min: 0, max: Number(selected.maxScore || 100) }
     : { min: 0, max: 100 }
-
   saving.value = true
   try {
     await lpService.updateBuilderItemPrerequisite(props.lpId, Number(props.item.id), props.context, {
@@ -86,13 +119,11 @@ async function savePrerequisite() {
   }
 }
 </script>
-
 <template>
   <div class="space-y-4">
     <div class="text-h4 font-semibold text-gray-90">
       {{ t("Add/edit prerequisites") }} {{ item.displayTitle || item.title }}
     </div>
-
     <div class="overflow-hidden rounded-lg border border-gray-25 bg-white">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-20">
@@ -126,7 +157,6 @@ async function savePrerequisite() {
                 </label>
               </td>
             </tr>
-
             <tr
               v-for="candidate in candidates"
               :key="candidate.id"
@@ -155,7 +185,6 @@ async function savePrerequisite() {
                   <span>{{ candidate.displayTitle || candidate.title }}</span>
                 </label>
               </td>
-
               <template v-if="isScored(candidate)">
                 <td class="px-4 py-3">
                   <BaseInputNumber
@@ -184,7 +213,6 @@ async function savePrerequisite() {
           </tbody>
         </table>
       </div>
-
       <div class="flex justify-end border-t border-gray-20 bg-gray-10 px-4 py-3">
         <BaseButton
           :is-loading="saving"

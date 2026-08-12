@@ -112,6 +112,97 @@ final class LpItemRefMappingTest extends TestCase
         self::assertSame(31, (int) $out['quiz'][3]->source_id);
     }
 
+    public function testLearnpathMetaKeepsPrerequisiteScoreRange(): void
+    {
+        $workDir = sys_get_temp_dir().'/chamilo-lp-prerequisite-'.bin2hex(random_bytes(6));
+        $baseDir = $workDir.'/chamilo/learnpath';
+        $lpDir = $baseDir.'/lp_30';
+        self::assertTrue(mkdir($lpDir, 0777, true));
+
+        try {
+            file_put_contents($baseDir.'/index.json', json_encode([
+                'learnpaths' => [[
+                    'id' => 30,
+                    'title' => 'AI Act',
+                    'lp_type' => 1,
+                    'category_id' => 0,
+                    'dir' => 'lp_30',
+                ]],
+            ], JSON_THROW_ON_ERROR));
+            file_put_contents($baseDir.'/categories.json', json_encode(['categories' => []], JSON_THROW_ON_ERROR));
+            file_put_contents($lpDir.'/learnpath.json', json_encode([
+                'learnpath' => [
+                    'id' => 30,
+                    'lp_type' => 1,
+                    'title' => 'AI Act',
+                ],
+            ], JSON_THROW_ON_ERROR));
+            file_put_contents($lpDir.'/items.json', json_encode([
+                'items' => [
+                    [
+                        'id' => 105,
+                        'item_type' => 'quiz',
+                        'path' => '31',
+                        'title' => 'Mini-test 1',
+                        'display_order' => 1,
+                        'prerequisite' => '',
+                    ],
+                    [
+                        'id' => 106,
+                        'item_type' => 'document',
+                        'path' => '306',
+                        'title' => 'Module 2',
+                        'display_order' => 2,
+                        'prerequisite' => '105',
+                        'prerequisite_min_score' => 10,
+                        'prerequisite_max_score' => 20,
+                    ],
+                ],
+            ], JSON_THROW_ON_ERROR));
+
+            $resources = [];
+            $import = new MoodleImport(false);
+            $method = (new ReflectionClass($import))->getMethod('tryImportLearnpathMeta');
+            $method->setAccessible(true);
+            $args = [$workDir, &$resources];
+
+            self::assertTrue($method->invokeArgs($import, $args));
+            self::assertArrayHasKey('learnpath', $resources);
+            self::assertCount(1, $resources['learnpath']);
+
+            $learnpath = reset($resources['learnpath']);
+            self::assertIsObject($learnpath);
+            self::assertCount(2, $learnpath->items);
+            self::assertSame('105', $learnpath->items[1]['prerequisite']);
+            self::assertSame(10.0, $learnpath->items[1]['prerequisite_min_score']);
+            self::assertSame(20.0, $learnpath->items[1]['prerequisite_max_score']);
+        } finally {
+            $this->removeDirectory($workDir);
+        }
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        foreach (scandir($directory) ?: [] as $entry) {
+            if ('.' === $entry || '..' === $entry) {
+                continue;
+            }
+
+            $path = $directory.'/'.$entry;
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+
+        rmdir($directory);
+    }
+
     /**
      * @param array<string,mixed> $payload
      */

@@ -42,6 +42,13 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
             'illustration' => 'ai-act.png',
             'visible_tool' => 'learnpath',
         ],
+        [
+            'title' => 'Using Chamilo',
+            'code' => 'USINGCHAMILO',
+            'archive' => 'usingchamilo.mbz',
+            'illustration' => 'usingchamilo.png',
+            'visible_tool' => 'learnpath',
+        ],
     ];
 
     /**
@@ -78,21 +85,31 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
 
         /** @var User $admin */
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE, User::class);
+        $adminId = (int) $admin->getId();
         $previousToken = $this->tokenStorage->getToken();
-
-        $this->primeLegacyUserContext($admin);
-
-        $this->tokenStorage->setToken(new UsernamePasswordToken(
-            $admin,
-            'public',
-            $admin->getRoles()
-        ));
 
         try {
             foreach (self::DEMO_COURSES as $definition) {
-                $this->loadDemoCourse($definition, $admin);
+                // loadDemoCourse() clears Doctrine while restoring a course. Reload the
+                // administrator and reset the legacy course context before each import so
+                // consecutive demo courses never reuse detached entities or the previous CID.
+                $managedAdmin = $this->entityManager->find(User::class, $adminId);
+                if (!$managedAdmin instanceof User) {
+                    throw new RuntimeException('Could not reload the administrator for demo course import.');
+                }
+
+                $this->clearLegacyCourseContext();
+                $this->primeLegacyUserContext($managedAdmin);
+                $this->tokenStorage->setToken(new UsernamePasswordToken(
+                    $managedAdmin,
+                    'public',
+                    $managedAdmin->getRoles()
+                ));
+
+                $this->loadDemoCourse($definition, $managedAdmin);
             }
         } finally {
+            $this->clearLegacyCourseContext();
             $this->tokenStorage->setToken($previousToken);
         }
     }
@@ -113,6 +130,20 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
      * Legacy document creation still resolves the current user from the legacy session
      * instead of Symfony's security token. Keep both contexts aligned during fixtures.
      */
+    private function clearLegacyCourseContext(): void
+    {
+        $session = LegacyContainer::getSession();
+        if ($session instanceof Session) {
+            foreach (['cid', '_real_cid', '_cid', '_course', 'sid', 'gid'] as $key) {
+                $session->remove($key);
+            }
+        }
+
+        foreach (['cid', '_real_cid', '_cid', '_course', 'sid', 'gid'] as $key) {
+            ChamiloSession::erase($key);
+        }
+    }
+
     private function primeLegacyUserContext(User $admin): void
     {
         $session = LegacyContainer::getSession();

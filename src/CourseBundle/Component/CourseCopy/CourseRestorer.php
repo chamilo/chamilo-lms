@@ -6312,6 +6312,12 @@ class CourseRestorer
                     if (isset($it['prerequisite'])) {
                         $item->setPrerequisite((string) $it['prerequisite']);
                     }
+                    if (array_key_exists('prerequisite_min_score', $it) && null !== $it['prerequisite_min_score']) {
+                        $item->setPrerequisiteMinScore((float) $it['prerequisite_min_score']);
+                    }
+                    if (array_key_exists('prerequisite_max_score', $it) && null !== $it['prerequisite_max_score']) {
+                        $item->setPrerequisiteMaxScore((float) $it['prerequisite_max_score']);
+                    }
                     if (isset($it['launch_data'])) {
                         $item->setLaunchData((string) $it['launch_data']);
                     }
@@ -6412,6 +6418,12 @@ class CourseRestorer
                         }
                         if (isset($it['prerequisite'])) {
                             $item->setPrerequisite((string) $it['prerequisite']);
+                        }
+                        if (array_key_exists('prerequisite_min_score', $it) && null !== $it['prerequisite_min_score']) {
+                            $item->setPrerequisiteMinScore((float) $it['prerequisite_min_score']);
+                        }
+                        if (array_key_exists('prerequisite_max_score', $it) && null !== $it['prerequisite_max_score']) {
+                            $item->setPrerequisiteMaxScore((float) $it['prerequisite_max_score']);
                         }
                         if (isset($it['launch_data'])) {
                             $item->setLaunchData((string) $it['launch_data']);

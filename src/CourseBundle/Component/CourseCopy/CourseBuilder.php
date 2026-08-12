@@ -835,6 +835,12 @@ class CourseBuilder
                     'next_item_id' => null !== $it->getNextItemId() ? (int) $it->getNextItemId() : null,
                     'display_order' => (int) $it->getDisplayOrder(),
                     'prerequisite' => (string) ($it->getPrerequisite() ?? ''),
+                    'prerequisite_min_score' => null !== $it->getPrerequisiteMinScore()
+                        ? (float) $it->getPrerequisiteMinScore()
+                        : null,
+                    'prerequisite_max_score' => null !== $it->getPrerequisiteMaxScore()
+                        ? (float) $it->getPrerequisiteMaxScore()
+                        : null,
                     'parameters' => (string) ($it->getParameters() ?? ''),
                     'launch_data' => (string) $it->getLaunchData(),
                     'audio' => (string) ($it->getAudio() ?? ''),

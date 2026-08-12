@@ -613,12 +613,24 @@ function formatDate(value) {
     return "-"
   }
 
-  const intlLocale = String(locale.value || "en-US").replace(/_/g, "-")
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_FR"). Some accounts carry a corrupted locale value (e.g.
+  // legacy "fr_69" instead of "fr_FR"), and passing that whole string to
+  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  const intlLocale = String(locale.value || "en-US").split(/[_-]/)[0] || "en"
 
-  return new Intl.DateTimeFormat(intlLocale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
+  try {
+    return new Intl.DateTimeFormat(intlLocale, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date)
+  } catch {
+    return new Intl.DateTimeFormat("en", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date)
+  }
 }
 
 function statusClass(code) {

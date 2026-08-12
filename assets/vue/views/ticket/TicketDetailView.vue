@@ -256,7 +256,7 @@
             :label="t('Yes')"
             size="small"
             type="success-text"
-            @click="confirmReporterResponse(true)"
+            @click="respondToConfirmation(true)"
           />
           <BaseButton
             icon="close"
@@ -265,7 +265,7 @@
             :label="t('No')"
             size="small"
             type="danger-text"
-            @click="confirmReporterResponse(false)"
+            @click="respondToConfirmation(false)"
           />
         </div>
       </section>
@@ -584,17 +584,6 @@ async function closeTicket() {
   } finally {
     isActionLoading.value = false
   }
-}
-
-function confirmReporterResponse(confirmed) {
-  const message = confirmed
-    ? `${t("Are you sure")}: ${t("Yes")}. ${t("If you are certain, the ticket will be closed.")}`
-    : `${t("Are you sure")}: ${t("No")}`
-
-  requireConfirmation({
-    message,
-    accept: () => respondToConfirmation(confirmed),
-  })
 }
 
 async function respondToConfirmation(confirmed) {

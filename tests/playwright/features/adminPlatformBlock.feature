@@ -142,3 +142,30 @@ Feature: Admin Platform management block
     And I follow "System templates"
     And I wait for the page to be loaded
     Then I should not see an error
+
+  Scenario: Open a course report without course context
+    Given I am on "/main/admin/report.php?id=course_learners_tracking"
+    And I wait for the page to be loaded
+    Then I should see "Report on learners"
+    And I should see "Course"
+    And I should not see an error
+
+  Scenario: Periodic export is not listed in the reports catalog
+    Given I am on "/main/admin/reports_catalog.php"
+    And I wait for the page to be loaded
+    Then I should not see "Periodic export"
+    And I should not see an error
+
+  Scenario: Course reporting canonical URL uses the course selector
+    Given I am on "/main/admin/report.php?id=course_activity_statistics"
+    And I wait for the page to be loaded
+    Then I should see "Course activity statistics"
+    And I should see "Course"
+    And I should not see an error
+
+  Scenario: Exercises global report keeps its own modern course selector
+    Given I am on "/main/admin/report.php?id=course_exercise_global_report"
+    And I wait for the page to be loaded
+    Then I should see "Exercises global report"
+    And I should not see an error
+

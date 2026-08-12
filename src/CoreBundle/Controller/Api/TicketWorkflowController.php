@@ -177,16 +177,7 @@ final readonly class TicketWorkflowController
      */
     private function getRequestData(Request $request): array
     {
-        if (str_contains((string) $request->headers->get('Content-Type'), 'application/json')) {
-            $decoded = json_decode($request->getContent(), true);
-            if (!\is_array($decoded)) {
-                throw new BadRequestHttpException('The request body must contain valid JSON.');
-            }
-
-            return $decoded;
-        }
-
-        return $request->request->all();
+        return $request->getPayload()->all();
     }
 
     /**

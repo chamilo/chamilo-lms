@@ -57,13 +57,11 @@ $query = CoursesAndSessionsCatalog::browseSessions(
 
 $sessions = new Paginator($query, $fetchJoinCollection = true);
 
+$sessionBuyData = [];
+
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-    $session->buyCourseData = [];
-
-    if ($item) {
-        $session->buyCourseData = $item;
-    }
+    $sessionBuyData[$session->getId()] = $item ?: [];
 }
 
 $totalItems = count($sessions);
@@ -90,6 +88,9 @@ $tpl->assign('tax_enable', $taxEnable);
 $tpl->assign('courses', []);
 $tpl->assign('sessions', $sessions);
 $tpl->assign('services', []);
+
+$tpl->assign('course_buy_data', []);
+$tpl->assign('session_buy_data', $sessionBuyData);
 
 $tpl->assign('course_pagination', '');
 $tpl->assign('session_pagination', '');

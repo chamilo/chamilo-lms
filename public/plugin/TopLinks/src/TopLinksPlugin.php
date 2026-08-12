@@ -29,8 +29,6 @@ class TopLinksPlugin extends Plugin
         $this->isAdminPlugin = true;
         $this->isCoursePlugin = false;
         $this->addCourseTool = false;
-        $this->source = 'official';
-        $this->type = 'free';
     }
 
     public static function create(): TopLinksPlugin

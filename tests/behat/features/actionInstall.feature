@@ -36,4 +36,5 @@ Feature: Install portal
     And I press "button_step6"
     And I wait one minute for the page to be loaded
     Then I should see "Step 7"
+    And I should see "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
     And I should see "Go to your newly created portal"

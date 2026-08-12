@@ -31,7 +31,14 @@ The range is **"commits not yet listed in the changelog for this version"**. How
 find it depends on whether the section already exists:
 
 **If the section already exists (progressive update):**
-- Extract every commit SHA already present in that version's `<li>` entries.
+- Extract every commit SHA already present in that version's `<li>` entries
+  **across every category in the section**, not just the first one. Category
+  `<h3>` blocks are each sorted newest-first independently, so the top entry of
+  whichever section happens to appear first in the file (usually "Security
+  fixes") is **not necessarily** the most-recently-added commit overall — a
+  later section (e.g. "Changed") can easily have a newer top entry. Picking
+  the wrong "most recent" boundary silently re-processes commits that are
+  already listed elsewhere in the section.
 - Run `git log --pretty=format:'%H' HEAD` and skip every SHA that appears (by
   its 8-char or 12-char prefix) in the existing section.
 - The range to process is everything since the newest already-listed commit.
@@ -39,6 +46,22 @@ find it depends on whether the section already exists:
   `git log --pretty=... <that-SHA>..HEAD` as the range.
 - If the section exists but has no `<li>` entries yet, fall back to the
   previous-release tag as the start point (see below).
+- **Don't trust a single computed "boundary commit" blindly.** Before writing
+  anything, take the final candidate list of commits you intend to add and
+  grep each one's SHA directly against the *entire* existing version section
+  (all categories, not just the one you think is the boundary). Any hit means
+  that commit is already listed and must be dropped from the new batch — this
+  simple per-commit membership check is cheap and catches boundary-detection
+  mistakes before they turn into duplicate `<li>` entries.
+- **If the user hands you a pre-curated commit list directly** (e.g. a file
+  with already-formatted `<li>` lines they generated themselves), treat it as
+  the authoritative "what to add" source, but still: (a) run the per-commit
+  membership check above — a curated list can still overlap with what's
+  already in the file; (b) de-duplicate exact-repeated messages inside the
+  list itself (different SHAs with identical text happen after rebases or
+  duplicate merges — keep only the first occurrence); (c) still apply the
+  full Step 3 / Step 5 cleanup below, since a pre-generated list is normally
+  raw `gitlog.php` output and needs the same trimming.
 
 **If the section does not yet exist:**
 - Identify the most recent existing release tag on this branch via
@@ -47,12 +70,53 @@ find it depends on whether the section already exists:
 - If the tag name is ambiguous (e.g. `v2.0.2` vs `2.0.2`), ask the user to
   confirm before running the log command.
 
+### ⚠️ RTK / token-proxy hooks can silently corrupt `git log` output
+
+If this environment has an `rtk` (or similar token-savings) hook rewriting
+`git` commands transparently, **do not trust its output for changelog work**.
+It has been observed to both truncate long lines (e.g. cutting a subject at
+~80 chars and appending `...`, even when output is redirected to a file, not
+just displayed) **and** to silently drop commits from the result set — in one
+session, `git log <sha>..HEAD | wc -l` returned `50` through the hook and `168`
+through an unfiltered call for the exact same range. A truncated message is
+merely annoying (it gets caught during cleanup); a silently dropped commit
+means a real change never makes it into the changelog at all, with nothing to
+signal the omission.
+
+**Mitigation:** for every `git log` call used to build the commit range or
+inspect messages, use `rtk proxy git log ...` (or whatever the local
+token-proxy's raw/debug passthrough is — check the tool's own docs, e.g. a
+`CLAUDE.md`/`RTK.md` reference) instead of the plain `git log ...` the hook
+would intercept. If you're unsure whether such a hook is active, run the same
+`git log` count both ways once at the start of the session and compare —
+mismatched counts confirm the hook is interfering.
+
 ---
 
 ## Step 3: Apply the gitlog.php filtering rules
 
 Read `tests/scripts/packaging/gitlog.php` to confirm the rules are unchanged
 before processing. Then apply them in this order to each commit's subject line:
+
+> **Prefer running the real script over hand-simulating it.** `gitlog.php`
+> requires a `php-git/src/Git.php` dependency in the same directory
+> (`tests/scripts/packaging/php-git/`) — it may be present in the working tree
+> even if untracked by git (check with `ls`). When it's available, run it
+> directly instead of manually replaying steps 3a-3e in your head across dozens
+> of commits — that manual replay is error-prone (mis-tracking which known
+> mistake applies, mis-computing issue-reference stripping, etc.):
+> ```
+> cd tests/scripts/packaging && php gitlog.php <boundary-commit-sha>
+> ```
+> This stops at `<boundary-commit-sha>` (printing it too — drop that last line
+> since it's already in the changelog) and echoes real `<li>` HTML using the
+> exact same logic this skill documents, eliminating transcription errors.
+>
+> **Caveat:** the script's output can still include full commit-body text
+> appended after the subject (e.g. `See advisory GHSA-xxxx-xxxx-xxxx`, trailing
+> `Author: ... <email>` trailers, or multi-sentence rationale paragraphs). This
+> is not part of the clean subject line — strip it during Step 5 cleanup the
+> same as a typo.
 
 ### 3a. Hard-skip entire commits whose subject starts with any of:
 - `Update language terms`
@@ -132,6 +196,23 @@ replace prefix only, keep the rest of the message):
 | Course import | Maintenance |
 | Student publication / Student publications | Assignment |
 
+> **Known false positive: `REST` / `CI` and other short prefixes.**
+> `sanitizeCategory()` matches these terms as a plain string prefix
+> (`strncasecmp`), with no word-boundary check. `REST` (4 chars) matches the
+> first 4 letters of any word starting "Rest…", so a commit titled `Restore
+> the language switch...` gets mangled into `Webservice: RESTore the language
+> switch...`. This has already happened repeatedly and gone uncorrected in the
+> existing changelog (search for `RESTore` — multiple pre-existing entries).
+> When you hit this on a **new** commit you're adding, fix it for that entry
+> (strip the bogus `Webservice: REST` prefix, restore the plain subject) and
+> note the correction in the Step 8 report — but don't retroactively edit old,
+> already-published entries with the same bug (surgical changes only; flag it
+> to the user instead as a possible upstream fix to `sanitizeCategory()`, e.g.
+> requiring a word boundary or capitalization check after the matched term).
+> The same risk applies to any other short 2-4 letter term in the table above
+> (e.g. `CI`, `Cas`, `LP`) — double check any prefix match shorter than ~5
+> characters against what it actually matched before trusting it.
+
 ### 3d. Strip issue references from the message text:
 If the subject matches `((BT)?#\d{2,5})`, remove the first match and anything
 after these patterns: ` see ISSUE`, ` - ref`, ` -refs `, ` - refs `, ` ISSUE`.
@@ -200,6 +281,21 @@ Where `SHA12` = first 12 chars of the full SHA, `SHA8` = first 8 chars.
 Correct any obvious typos in commit messages when formatting for publication
 (the HTML is user-facing; the git history is not changed). Note corrections in
 the final report.
+
+**Additional cleanup learned in practice:**
+- If the raw message ends with body-only content that leaked into the subject
+  (advisory IDs like `See advisory GHSA-xxxx-xxxx-xxxx`, `Author: Name
+  <email>` trailers, or multi-sentence rationale paragraphs), strip all of it
+  — keep only the clean subject clause. This is common when running the real
+  `gitlog.php` script (see Step 3 note) against squash-merged commits whose
+  body carries PR metadata.
+- If an issue number appears in the message text in parentheses (e.g.
+  `...reorder course tools (#8868)`) **and** a separate BT#/GH# link is also
+  being added per this step, drop the redundant `(#NNNN)` from the visible
+  text — showing the same issue number twice (once inline, once as a link) is
+  noise. `gitlog.php`'s own ref-stripping regexes don't catch this case (they
+  only strip text following specific separator patterns like ` - refs `, not
+  a bare parenthetical), so this needs a manual pass.
 
 ---
 

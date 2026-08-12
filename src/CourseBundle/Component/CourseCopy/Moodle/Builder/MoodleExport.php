@@ -1805,7 +1805,7 @@ class MoodleExport
 
             $doc = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
 
-            $rawPath = (string) ($doc->path ?? $wrap->path ?? '');
+            $rawPath = $this->resolveDocumentIndexRawPath($doc, $wrap);
             if ('' === $rawPath) {
                 continue;
             }
@@ -1972,6 +1972,24 @@ class MoodleExport
         }
 
         return $map;
+    }
+
+    /**
+     * Use the normalized CourseCopy document path when available.
+     *
+     * The wrapped object can still expose the original ResourceNode path, which may
+     * omit the physical filename extension. CourseBuilder already normalizes the
+     * wrapper path using ResourceFile::getOriginalName(), so the sidecar must use
+     * that same path as the Moodle resource export.
+     */
+    private function resolveDocumentIndexRawPath(object $doc, object $wrap): string
+    {
+        $wrappedPath = trim((string) ($wrap->path ?? ''));
+        if ('' !== $wrappedPath) {
+            return $wrappedPath;
+        }
+
+        return trim((string) ($doc->path ?? ''));
     }
 
     private function normalizeDocumentIndexRelativePath(string $rawPath): string

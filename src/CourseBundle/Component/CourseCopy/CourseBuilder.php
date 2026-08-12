@@ -431,16 +431,20 @@ class CourseBuilder
         $docs = $qb->getQuery()->getResult();
 
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
+        $courseRoot = $course->getResourceNode();
 
         $iids = [];
 
         foreach ($docs as $doc) {
-            $rel = $this->getLogicalDocumentRelativePath(
+            $documentBase = $this->resolveDocumentExportBaseNode(
                 $doc,
-                $documentsRoot instanceof ResourceNode ? $documentsRoot : null
+                $documentsRoot instanceof ResourceNode ? $documentsRoot : null,
+                $courseRoot instanceof ResourceNode ? $courseRoot : null
             );
 
+            $rel = $this->getLogicalDocumentRelativePath($doc, $documentBase);
             $rel = $this->normalizeDocumentRelPath($rel);
+            $rel = $this->applyDocumentOriginalFilename($doc, $rel);
 
             if ('' === $rel) {
                 continue;
@@ -3186,6 +3190,7 @@ class CourseBuilder
         $docs = $qb->getQuery()->getResult();
 
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
+        $courseRoot = $course->getResourceNode();
 
         foreach ($docs as $doc) {
             $node = $doc->getResourceNode();
@@ -3211,12 +3216,15 @@ class CourseBuilder
                 }
             }
 
+            $documentBase = $this->resolveDocumentExportBaseNode(
+                $doc,
+                $documentsRoot instanceof ResourceNode ? $documentsRoot : null,
+                $courseRoot instanceof ResourceNode ? $courseRoot : null
+            );
+
             $logicalRel = '';
             try {
-                $logicalRel = $this->getLogicalDocumentRelativePath(
-                    $doc,
-                    $documentsRoot instanceof ResourceNode ? $documentsRoot : null
-                );
+                $logicalRel = $this->getLogicalDocumentRelativePath($doc, $documentBase);
             } catch (Throwable $e) {
                 error_log(sprintf(
                     '[MOODLE EXPORT] Failed to resolve logical document path. doc_iid=%d node_id=%d title="%s" error="%s"',
@@ -3234,7 +3242,7 @@ class CourseBuilder
                     $rel = $this->normalizeDocumentRelativePathForMoodleExport(
                         (string) ($node->getPath() ?? ''),
                         $course,
-                        $documentsRoot instanceof ResourceNode ? (string) ($documentsRoot->getPath() ?? '') : '',
+                        $documentBase instanceof ResourceNode ? (string) ($documentBase->getPath() ?? '') : '',
                         $title,
                         'folder' === $filetype
                     );
@@ -3253,6 +3261,8 @@ class CourseBuilder
             if ('' === $rel && 'folder' === $filetype && '' !== $title) {
                 $rel = trim($title, '/');
             }
+
+            $rel = $this->applyDocumentOriginalFilename($doc, $rel);
 
             if ('' === $rel) {
                 continue;
@@ -3621,6 +3631,99 @@ class CourseBuilder
         }
 
         error_log($message);
+    }
+
+    /**
+     * Resolve the structural base node used to build a document export path.
+     *
+     * Modern course documents can live directly under the course ResourceNode,
+     * while system/legacy documents can live below a dedicated Documents root.
+     * Never use the document node itself as its own base.
+     */
+    private function resolveDocumentExportBaseNode(
+        CDocument $doc,
+        ?ResourceNode $documentsRoot,
+        ?ResourceNode $courseRoot
+    ): ?ResourceNode {
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return null;
+        }
+
+        if (
+            $documentsRoot instanceof ResourceNode
+            && $node !== $documentsRoot
+            && $this->isResourceNodeDescendantOf($node, $documentsRoot)
+        ) {
+            return $documentsRoot;
+        }
+
+        if (
+            $courseRoot instanceof ResourceNode
+            && $node !== $courseRoot
+            && $this->isResourceNodeDescendantOf($node, $courseRoot)
+        ) {
+            return $courseRoot;
+        }
+
+        return null;
+    }
+
+    private function isResourceNodeDescendantOf(ResourceNode $node, ResourceNode $ancestor): bool
+    {
+        $parent = $node->getParent();
+
+        while ($parent instanceof ResourceNode) {
+            if ($parent === $ancestor) {
+                return true;
+            }
+
+            $parent = $parent->getParent();
+        }
+
+        return false;
+    }
+
+    /**
+     * Keep the logical folder hierarchy but use the stored ResourceFile name for files.
+     *
+     * ResourceNode titles are display labels and may omit the real extension (for
+     * example an HTML document titled "Module 1" whose ResourceFile is "Module 1.html").
+     */
+    private function applyDocumentOriginalFilename(CDocument $doc, string $relativePath): string
+    {
+        $relativePath = trim(str_replace('\\', '/', $relativePath), '/');
+
+        if ('' === $relativePath || 'folder' === (string) $doc->getFiletype()) {
+            return $relativePath;
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return $relativePath;
+        }
+
+        $files = $node->getResourceFiles();
+        if (0 === $files->count()) {
+            return $relativePath;
+        }
+
+        $first = $files->first();
+        if (!$first instanceof ResourceFile) {
+            return $relativePath;
+        }
+
+        $originalName = trim(str_replace('\\', '/', (string) ($first->getOriginalName() ?? '')));
+        $originalName = basename($originalName);
+
+        if ('' === $originalName || '.' === $originalName || '..' === $originalName) {
+            return $relativePath;
+        }
+
+        $segments = explode('/', $relativePath);
+        $segments[array_key_last($segments)] = $originalName;
+
+        return implode('/', $segments);
     }
 
     /**

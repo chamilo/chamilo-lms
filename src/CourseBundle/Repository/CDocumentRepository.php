@@ -273,6 +273,7 @@ final class CDocumentRepository extends ResourceRepository
     /**
      * Find the course Documents root node.
      *
+     * The Documents root is a structural ResourceNode, not a CDocument row.
      * Primary: parent = course.resourceNode
      * Fallback (legacy): parent IS NULL
      */
@@ -288,9 +289,11 @@ final class CDocumentRepository extends ResourceRepository
                    FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                    JOIN rn.resourceType rt
                    JOIN rn.resourceLinks rl
+              LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument WITH rootDocument.resourceNode = rn
                   WHERE rn.parent = :parent
                     AND rt = :rtype
                     AND rl.course = :course
+                    AND rootDocument.iid IS NULL
                ORDER BY rn.id ASC'
             )
                 ->setParameters([
@@ -313,9 +316,11 @@ final class CDocumentRepository extends ResourceRepository
                FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                JOIN rn.resourceType rt
                JOIN rn.resourceLinks rl
+          LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument WITH rootDocument.resourceNode = rn
               WHERE rn.parent IS NULL
                 AND rt = :rtype
                 AND rl.course = :course
+                AND rootDocument.iid IS NULL
            ORDER BY rn.id ASC'
         )
             ->setParameters(['rtype' => $rt, 'course' => $course])

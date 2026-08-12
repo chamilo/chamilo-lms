@@ -752,12 +752,12 @@ if ($page < $nro_pages) {
 
 echo $navigation;
 $user_list = UserManager::get_user_list([], [], $begin, $default);
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 $options = '';
 $options .= '<option value="0">--'.get_lang('Select a session').'--</option>';
 foreach ($session_list as $session_data) {
-    $my_session_list[$session_data['id']] = $session_data['name'];
-    $options .= '<option value="'.$session_data['id'].'">'.$session_data['name'].'</option>';
+    $my_session_list[$session_data['id']] = $session_data['title'];
+    $options .= '<option value="'.$session_data['id'].'">'.$session_data['title'].'</option>';
 }
 
 $combinations = [];
@@ -791,6 +791,7 @@ if (!empty($user_list)) {
             foreach ($course_list as $my_course) {
                 $courseInfo = api_get_course_info_by_id($my_course['c_id']);
                 $my_course['real_id'] = $my_course['c_id'];
+                $my_course['code'] = $courseInfo['code'];
                 $key = $courseInfo['code'].'_'.$my_course['session_id'];
 
                 if (!in_array($key, $new_course_list)) {
@@ -870,3 +871,4 @@ if (!empty($user_list)) {
 }
 echo $navigation;
 $_SESSION['combination'] = $combinations;
+Display::display_footer();

@@ -147,18 +147,18 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import notebookService from "../../services/notebookService"
 
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showWarningNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
@@ -271,17 +271,8 @@ function confirmDelete(note) {
   })
 }
 
-function showToast(severity, summaryKey, detail, life = 3500) {
-  toast.add({
-    severity,
-    summary: t(summaryKey),
-    detail,
-    life,
-  })
-}
-
 function showSuccessMessage(messageKey) {
-  showToast("success", "Success", t(messageKey))
+  showSuccessNotification(t(messageKey))
 }
 
 async function deleteNote(note) {
@@ -297,9 +288,7 @@ async function deleteNote(note) {
     showSuccessMessage("Deleted")
   } catch (error) {
     console.error("Error deleting notebook entry", error)
-    const message =
-      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
-    showToast("error", "Error", message, 5000)
+    showErrorNotification(error)
   } finally {
     deletingId.value = null
   }
@@ -343,7 +332,7 @@ function loadResultMessage() {
   }
 
   if (legacyAction === "deletenote") {
-    showToast("warn", "Warning", t("NotAllowed"), 5000)
+    showWarningNotification(t("NotAllowed"))
   }
 
   if (result || legacyAction) {

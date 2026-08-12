@@ -280,7 +280,6 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
@@ -292,10 +291,11 @@ import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useNotification } from "../../composables/notification"
 import portfolioService from "../../services/portfolioService"
 
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showWarningNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 
@@ -469,20 +469,20 @@ async function deleteAttachment(attachment) {
       contextParams(),
     )
     form.attachments = form.attachments.filter((item) => Number(item.id) !== Number(attachment.id))
-    toast.add({ severity: "success", summary: t("Success"), detail: t("Deleted"), life: 3000 })
+    showSuccessNotification(t("Deleted"))
   } catch (error) {
-    toast.add({ severity: "error", summary: t("Error"), detail: toastError(error), life: 5000 })
+    showErrorNotification(error)
   }
 }
 
 async function saveItem() {
   formSubmitted.value = true
   if (!plainText(form.title) || !plainText(form.content)) {
-    toast.add({ severity: "warn", summary: t("Warning"), detail: t("Please complete all required fields."), life: 5000 })
+    showWarningNotification(t("Please complete all required fields."))
     return
   }
   if (Number(form.visibility) === 3 && form.recipientIds.length === 0) {
-    toast.add({ severity: "warn", summary: t("Warning"), detail: t("Choose recipients"), life: 5000 })
+    showWarningNotification(t("Choose recipients"))
     return
   }
 
@@ -504,7 +504,7 @@ async function saveItem() {
     const response = form.id
       ? await portfolioService.update(form.id, payload, contextParams())
       : await portfolioService.create(payload, contextParams())
-    toast.add({ severity: "success", summary: t("Success"), detail: t(form.id ? "Updated" : "Created"), life: 3000 })
+    showSuccessNotification(t(form.id ? "Updated" : "Created"))
     await router.push({
       name: `${prefix.value}Item`,
       params: form.mode === "course" ? { node: route.params.node, id: response.id } : { id: response.id },
@@ -512,7 +512,7 @@ async function saveItem() {
     })
   } catch (error) {
     console.error("Error saving Portfolio item", error)
-    toast.add({ severity: "error", summary: t("Error"), detail: toastError(error), life: 6000 })
+    showErrorNotification(error)
   } finally {
     isSaving.value = false
   }

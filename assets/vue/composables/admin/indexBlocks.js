@@ -1,14 +1,14 @@
 import { onMounted, ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import adminService from "../../services/adminService"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../notification"
 import { useSecurityStore } from "../../store/securityStore"
 import { useI18n } from "vue-i18n"
 
 export function useIndexBlocks() {
   const { t } = useI18n()
 
-  const toast = useToast()
+  const { showSuccessNotification } = useNotification()
 
   const platformConfigStore = usePlatformConfig()
   const securityStore = useSecurityStore()
@@ -44,10 +44,7 @@ export function useIndexBlocks() {
     adminService.registerCampus(doNotListCampus).then(() => {
       loadVersion().then(() => {})
 
-      toast.add({
-        severity: "success",
-        detail: t("Version check enabled"),
-      })
+      showSuccessNotification(t("Version check enabled"))
     })
   }
 

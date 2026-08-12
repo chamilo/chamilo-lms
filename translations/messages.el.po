@@ -37714,6 +37714,12 @@ msgstr "Η συνεδρία σας πρόκειται να λήξει"
 msgid "Do you want to continue your session?"
 msgstr "Θέλετε να συνεχίσετε τη συνεδρία σας;"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Τα στοιχεία της συνεδρίας σας χάθηκαν, παρακαλώ συνδεθείτε ξανά."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Η πρόσβαση σε αυτόν τον πόρο απορρίφθηκε. Φαίνεται ότι δεν έχετε τα απαραίτητα δικαιώματα για πρόσβαση."
+
 msgid "Stay connected"
 msgstr "Παραμείνετε συνδεδεμένος/η"
 
@@ -39152,7 +39158,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard ανάγνωση"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Διατήρηση πίνακα βαθμολογίας"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard αναμονή"
@@ -39180,4 +39186,316 @@ msgstr "Διαχειρίστηκαν"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ενεργοποιήστε το mod_status (ExtendedStatus On) και επιτρέψτε localhost στο /server-status. Nginx: ενεργοποιήστε το stub_status σε τοποθεσία μόνο για localhost όπως /nginx_status ή /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Κατανομή ποσοστών βαθμολογίας"
+
+msgid "Top learners"
+msgstr "Κορυφαίοι εκπαιδευόμενοι"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Αυτή η πρόοδος συνδυάζει την πρόοδο της διαδρομής μάθησης και τον μέσο όρο αποτελεσμάτων ασκήσεων του εκπαιδευόμενου"
+
+msgid "Additional profile fields"
+msgstr "Πρόσθετα πεδία προφίλ"
+
+msgid "Visible columns"
+msgstr "Ορατές στήλες"
+
+msgid "Learning path completion"
+msgstr "Ολοκλήρωση διαδρομής μάθησης"
+
+msgid "Number of certificates"
+msgstr "Αριθμός πιστοποιητικών"
+
+msgid "Could not export the report"
+msgstr "Αδυναμία εξαγωγής της αναφοράς"
+
+msgid "Second learner"
+msgstr "Δεύτερος εκπαιδευόμενος"
+
+msgid "Results by learner"
+msgstr "Αποτελέσματα ανά εκπαιδευόμενο"
+
+msgid "Use filters to narrow down questions."
+msgstr "Χρησιμοποιήστε φίλτρα για να περιορίσετε τις ερωτήσεις."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Δοκιμάστε να προσαρμόσετε τα φίλτρα και να αναζητήσετε ξανά."
+
+msgid "Results per page"
+msgstr "Αποτελέσματα ανά σελίδα"
+
+msgid "No answers"
+msgstr "Καμία απάντηση"
+
+msgid "Tests using this question"
+msgstr "Δοκιμές που χρησιμοποιούν αυτή την ερώτηση"
+
+msgid "Delete failed"
+msgstr "Η διαγραφή απέτυχε"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Διαγνωστικά Live OPcache και APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Κάντε κλικ για να εμφανίσετε τα διαγνωστικά OPcache και APCu"
+
+msgid "Memory used"
+msgstr "Χρησιμοποιούμενη μνήμη"
+
+msgid "OPcache is installed but not enabled."
+msgstr "Το OPcache είναι εγκατεστημένο αλλά δεν είναι ενεργοποιημένο."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Η επέκταση OPcache δεν είναι διαθέσιμη σε αυτόν τον διακομιστή."
+
+msgid "APCu is installed but not enabled."
+msgstr "Το APCu είναι εγκατεστημένο αλλά δεν είναι ενεργοποιημένο."
+
+msgid "APCu extension is not available on this server."
+msgstr "Η επέκταση APCu δεν είναι διαθέσιμη σε αυτόν τον διακομιστή."
+
+msgid "Constant"
+msgstr "Σταθερά"
+
+msgid "Space used on disk (MB)"
+msgstr "Χώρος που χρησιμοποιείται στο δίσκο (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Ορισμός μέγιστου χώρου μαθήματος (MB)"
+
+msgid "Memory free"
+msgstr "Ελεύθερη μνήμη"
+
+msgid "Memory wasted"
+msgstr "Μνήμη που σπαταλήθηκε"
+
+msgid "Memory used %"
+msgstr "Μνήμη που χρησιμοποιήθηκε %"
+
+msgid "Cached scripts"
+msgstr "Αποθηκευμένα σενάρια"
+
+msgid "Cached keys"
+msgstr "Αποθηκευμένα κλειδιά"
+
+msgid "Misses"
+msgstr "Αστοχίες"
+
+msgid "Cache full"
+msgstr "Πλήρης κρυφή μνήμη"
+
+msgid "OOM restarts"
+msgstr "Επανεκκινήσεις OOM"
+
+msgid "Hash restarts"
+msgstr "Επανεκκινήσεις κατακερματισμού"
+
+msgid "Manual restarts"
+msgstr "Χειροκίνητες επανεκκινήσεις"
+
+msgid "Interned strings used"
+msgstr "Χρησιμοποιούμενες εσωτερικές συμβολοσειρές"
+
+msgid "Interned strings free"
+msgstr "Ελεύθερες εσωτερικές συμβολοσειρές"
+
+msgid "Interned strings count"
+msgstr "Πλήθος εσωτερικών συμβολοσειρών"
+
+msgid "Memory available"
+msgstr "Διαθέσιμη μνήμη"
+
+msgid "Memory size"
+msgstr "Μέγεθος μνήμης"
+
+msgid "Entries"
+msgstr "Καταχωρήσεις"
+
+msgid "Slots"
+msgstr "Υποδοχές"
+
+msgid "Expunges"
+msgstr "Εκκαθαρίσεις"
+
+msgid "Cache start time"
+msgstr "Ώρα έναρξης κρυφής μνήμης"
+
+msgid "Time zone"
+msgstr "Ζώνη ώρας"
+
+msgid "Not registered"
+msgstr "Μη εγγεγραμμένος"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Φιλτράρετε και εμφανίστε πιστοποιητικά εκπαιδευομένων ανά συνεδρία, μάθημα, ημερομηνία ή εκπαιδευόμενο και εξάγετέ τα όταν χρειάζεται."
+
+msgid "Filter by session and course"
+msgstr "Φιλτράρισμα ανά συνεδρία και μάθημα"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Επιλέξτε συνεδρία, μάθημα και προαιρετική ημερομηνία για να εμφανίσετε τα παραγόμενα πιστοποιητικά."
+
+msgid "Filter by learner"
+msgstr "Φιλτράρισμα ανά εκπαιδευόμενο"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Βρείτε πιστοποιητικά για συγκεκριμένο εκπαιδευόμενο σε όλες τις συνεδρίες και τα μαθήματα."
+
+msgid "Certificates found"
+msgstr "Βρέθηκαν πιστοποιητικά"
+
+msgid "Open certificate"
+msgstr "Άνοιγμα πιστοποιητικού"
+
+msgid "Certificate file not available"
+msgstr "Το αρχείο πιστοποιητικού δεν είναι διαθέσιμο"
+
+msgid "Export to CSV"
+msgstr "Εξαγωγή σε CSV"
+
+msgid "Acquired skills"
+msgstr "Αποκτηθείσες δεξιότητες"
+
+msgid "No acquired skill"
+msgstr "Καμία αποκτηθείσα δεξιότητα"
+
+msgid "Absences"
+msgstr "Απουσίες"
+
+msgid "No courses"
+msgstr "Κανένα μάθημα"
+
+msgid "No session matched"
+msgstr "Δεν βρέθηκε συνεδρία"
+
+msgid "Unable to load the report"
+msgstr "Αδυναμία φόρτωσης της αναφοράς"
+
+msgid "Please select a profile"
+msgstr "Επιλέξτε προφίλ"
+
+msgid "Please select a session"
+msgstr "Επιλέξτε συνεδρία"
+
+msgid "Please select a user"
+msgstr "Επιλέξτε χρήστη"
+
+msgid "Unable to export the report"
+msgstr "Αδυναμία εξαγωγής της αναφοράς"
+
+msgid "Accepted on web"
+msgstr "Αποδεκτό στον ιστό"
+
+msgid "Accepted by e-mail"
+msgstr "Αποδεκτό μέσω ηλεκτρονικού ταχυδρομείου"
+
+msgid "The course title is required"
+msgstr "Ο τίτλος του μαθήματος είναι υποχρεωτικός"
+
+msgid "Unexpected error"
+msgstr "Μη αναμενόμενο σφάλμα"
+
+msgid "Separate tags with commas"
+msgstr "Διαχωρίστε τις ετικέτες με κόμματα"
+
+msgid "Open link"
+msgstr "Άνοιγμα συνδέσμου"
+
+msgid "Describe the course picture to generate"
+msgstr "Περιγράψτε την εικόνα του μαθήματος προς δημιουργία"
+
+msgid "Generate picture"
+msgstr "Δημιουργία εικόνας"
+
+msgid "PDF watermark"
+msgstr "Υδατογράφημα PDF"
+
+msgid "No watermark image"
+msgstr "Καμία εικόνα υδατογραφήματος"
+
+msgid "Upload watermark"
+msgstr "Μεταφόρτωση υδατογραφήματος"
+
+msgid "Delete watermark"
+msgstr "Διαγραφή υδατογραφήματος"
+
+msgid "Course legal agreement file"
+msgstr "Αρχείο νομικής συμφωνίας μαθήματος"
+
+msgid "Upload agreement file"
+msgstr "Μεταφόρτωση αρχείου συμφωνίας"
+
+msgid "Download agreement file"
+msgstr "Λήψη αρχείου συμφωνίας"
+
+msgid "Delete agreement file"
+msgstr "Διαγραφή αρχείου συμφωνίας"
+
+msgid "Custom certificate images"
+msgstr "Προσαρμοσμένες εικόνες πιστοποιητικού"
+
+msgid "Course picture updated"
+msgstr "Η εικόνα μαθήματος ενημερώθηκε"
+
+msgid "The course picture could not be uploaded"
+msgstr "Δεν ήταν δυνατή η μεταφόρτωση της εικόνας μαθήματος"
+
+msgid "Course picture deleted"
+msgstr "Η εικόνα μαθήματος διαγράφηκε"
+
+msgid "Enter a description for the image"
+msgstr "Εισαγάγετε περιγραφή για την εικόνα"
+
+msgid "The image generator returned an empty response"
+msgstr "Ο δημιουργός εικόνας επέστρεψε κενή απάντηση"
+
+msgid "Course picture generated"
+msgstr "Η εικόνα μαθήματος δημιουργήθηκε"
+
+msgid "Watermark updated"
+msgstr "Το υδατογράφημα ενημερώθηκε"
+
+msgid "Watermark deleted"
+msgstr "Το υδατογράφημα διαγράφηκε"
+
+msgid "Agreement file updated"
+msgstr "Το αρχείο συμφωνίας ενημερώθηκε"
+
+msgid "Agreement file deleted"
+msgstr "Το αρχείο συμφωνίας διαγράφηκε"
+
+msgid "Certificate image updated"
+msgstr "Η εικόνα πιστοποιητικού ενημερώθηκε"
+
+msgid "Certificate image deleted"
+msgstr "Η εικόνα πιστοποιητικού διαγράφηκε"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Χρησιμοποιήστε τον επεξεργαστή εικόνας πριν τη μεταφόρτωση για περικοπή, περιστροφή ή αλλαγή μεγέθους της εικόνας μαθήματος."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Αυτός ο σύνδεσμος πρόσκλησης δεν είναι έγκυρος ή έχει λήξει."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Αυτή η πρόσκληση εστάλη σε διαφορετικό χρήστη. Συνδεθείτε με τον λογαριασμό που προσκλήθηκε."
+
+msgid "The invitation could not be accepted."
+msgstr "Δεν ήταν δυνατή η αποδοχή της πρόσκλησης."
+
+msgid "You have been subscribed successfully."
+msgstr "Η εγγραφή σας ολοκληρώθηκε με επιτυχία."
+
+msgid "This email address cannot be invited."
+msgstr "Αυτή η διεύθυνση email δεν μπορεί να προσκληθεί."
+
+msgid "This user is already subscribed to the session."
+msgstr "Αυτός ο χρήστης είναι ήδη εγγεγραμμένος στη συνεδρία."
+
+msgid "This user is already subscribed to the course."
+msgstr "Αυτός ο χρήστης είναι ήδη εγγεγραμμένος στο μάθημα."
 

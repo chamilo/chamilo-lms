@@ -37699,6 +37699,12 @@ msgstr "Tá do sheisiún ar tí dul in éag"
 msgid "Do you want to continue your session?"
 msgstr "An bhfuil fonn ort leanúint le do sheisiún?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Tá sonraí do sheisiúin caillte, logáil isteach arís le do thoil."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Diúltaíodh rochtain ar an acmhainn seo. Ní cosúil go bhfuil na ceadanna riachtanacha agat chun rochtain a fháil air."
+
 msgid "Stay connected"
 msgstr "Fan ceangailte"
 
@@ -39165,4 +39171,316 @@ msgstr "Láimhseáilte"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shuíomh localhost amháin mar /nginx_status nó /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Dáileadh céatadáin grád"
+
+msgid "Top learners"
+msgstr "Foghlaimeoirí barr"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Comhcheanglaíonn an dul chun cinn seo dul chun cinn an chosáin foghlama agus meánthoradh cleachtaidh an fhoghlaimeora"
+
+msgid "Additional profile fields"
+msgstr "Réimsí próifíle breise"
+
+msgid "Visible columns"
+msgstr "Colúin infheicthe"
+
+msgid "Learning path completion"
+msgstr "Críochnú an chosáin foghlama"
+
+msgid "Number of certificates"
+msgstr "Líon na dteastas"
+
+msgid "Could not export the report"
+msgstr "Níorbh fhéidir an tuarascáil a onnmhairiú"
+
+msgid "Second learner"
+msgstr "An dara foghlaimeoir"
+
+msgid "Results by learner"
+msgstr "Torthaí de réir foghlaimeora"
+
+msgid "Use filters to narrow down questions."
+msgstr "Úsáid scagairí chun ceisteanna a chaolú."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Bain triail as do scagairí a choigeartú agus déan cuardach arís."
+
+msgid "Results per page"
+msgstr "Torthaí in aghaidh an leathanaigh"
+
+msgid "No answers"
+msgstr "Gan freagraí"
+
+msgid "Tests using this question"
+msgstr "Trialacha ag úsáid an cheist seo"
+
+msgid "Delete failed"
+msgstr "Theip ar an scriosadh"
+
+msgid "PHP cache"
+msgstr "Taisce PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnóisic bheo OPcache agus APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Cliceáil chun diagnóisic OPcache agus APCu a thaispeáint"
+
+msgid "Memory used"
+msgstr "Cuimhne in úsáid"
+
+msgid "OPcache is installed but not enabled."
+msgstr "Tá OPcache suiteáilte ach níl sé cumasaithe."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Níl an eisínteacht OPcache ar fáil ar an bhfreastalaí seo."
+
+msgid "APCu is installed but not enabled."
+msgstr "Tá APCu suiteáilte ach níl sé cumasaithe."
+
+msgid "APCu extension is not available on this server."
+msgstr "Níl an eisínteacht APCu ar fáil ar an bhfreastalaí seo."
+
+msgid "Constant"
+msgstr "Tairiseach"
+
+msgid "Space used on disk (MB)"
+msgstr "Spás in úsáid ar an diosca (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Socraigh spás uasta an chúrsa (MB)"
+
+msgid "Memory free"
+msgstr "Cuimhne saor"
+
+msgid "Memory wasted"
+msgstr "Cuimhne curtha amú"
+
+msgid "Memory used %"
+msgstr "Cuimhne in úsáid %"
+
+msgid "Cached scripts"
+msgstr "Scripteanna taiscthe"
+
+msgid "Cached keys"
+msgstr "Eochracha taiscthe"
+
+msgid "Misses"
+msgstr "Míleáistí"
+
+msgid "Cache full"
+msgstr "Cuasán lán"
+
+msgid "OOM restarts"
+msgstr "Atosaigh OOM"
+
+msgid "Hash restarts"
+msgstr "Atosaigh hash"
+
+msgid "Manual restarts"
+msgstr "Atosaigh láimhe"
+
+msgid "Interned strings used"
+msgstr "Teaghráin inmheánaithe in úsáid"
+
+msgid "Interned strings free"
+msgstr "Teaghráin inmheánaithe saor"
+
+msgid "Interned strings count"
+msgstr "Líon teaghrán inmheánaithe"
+
+msgid "Memory available"
+msgstr "Cuimhne ar fáil"
+
+msgid "Memory size"
+msgstr "Méid cuimhne"
+
+msgid "Entries"
+msgstr "Iontrálacha"
+
+msgid "Slots"
+msgstr "Sliotáin"
+
+msgid "Expunges"
+msgstr "Díbirt"
+
+msgid "Cache start time"
+msgstr "Am tosaithe an chuasáin"
+
+msgid "Time zone"
+msgstr "Crios ama"
+
+msgid "Not registered"
+msgstr "Gan chlárú"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Scag agus liostaigh teastais foghlaimeoirí de réir seisiúin, cúrsa, dáta nó foghlaimeora, agus easpórtáil iad nuair is gá."
+
+msgid "Filter by session and course"
+msgstr "Scag de réir seisiúin agus cúrsa"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Roghnaigh seisiún, cúrsa agus dáta roghnach chun na teastais ghinte a liostú."
+
+msgid "Filter by learner"
+msgstr "Scag de réir foghlaimeora"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Aimsigh teastais d’fhoghlaimeoir ar leith thar sheisiúin agus chúrsaí."
+
+msgid "Certificates found"
+msgstr "Teastais aimsithe"
+
+msgid "Open certificate"
+msgstr "Oscail teastas"
+
+msgid "Certificate file not available"
+msgstr "Níl comhad an teastais ar fáil"
+
+msgid "Export to CSV"
+msgstr "Easpórtáil go CSV"
+
+msgid "Acquired skills"
+msgstr "Scileanna faighte"
+
+msgid "No acquired skill"
+msgstr "Gan scil faighte"
+
+msgid "Absences"
+msgstr "Neamhláithreachtaí"
+
+msgid "No courses"
+msgstr "Gan chúrsaí"
+
+msgid "No session matched"
+msgstr "Níor mheaitseáil aon seisiún"
+
+msgid "Unable to load the report"
+msgstr "Ní féidir an tuarascáil a luchtú"
+
+msgid "Please select a profile"
+msgstr "Roghnaigh próifíl le do thoil"
+
+msgid "Please select a session"
+msgstr "Roghnaigh seisiún le do thoil"
+
+msgid "Please select a user"
+msgstr "Roghnaigh úsáideoir le do thoil"
+
+msgid "Unable to export the report"
+msgstr "Ní féidir an tuarascáil a easpórtáil"
+
+msgid "Accepted on web"
+msgstr "Glactha ar an ngréasán"
+
+msgid "Accepted by e-mail"
+msgstr "Glactha trí ríomhphost"
+
+msgid "The course title is required"
+msgstr "Tá teideal an chúrsa riachtanach"
+
+msgid "Unexpected error"
+msgstr "Earráid gan choinne"
+
+msgid "Separate tags with commas"
+msgstr "Scar clibeanna le camóga"
+
+msgid "Open link"
+msgstr "Oscail nasc"
+
+msgid "Describe the course picture to generate"
+msgstr "Déan cur síos ar phictiúr an chúrsa atá le giniúint"
+
+msgid "Generate picture"
+msgstr "Gineáil pictiúr"
+
+msgid "PDF watermark"
+msgstr "Uiscedhath PDF"
+
+msgid "No watermark image"
+msgstr "Gan íomhá uiscedhatha"
+
+msgid "Upload watermark"
+msgstr "Uaslódáil uiscedhath"
+
+msgid "Delete watermark"
+msgstr "Scrios uiscedhath"
+
+msgid "Course legal agreement file"
+msgstr "Comhad comhaontaithe dlíthiúil an chúrsa"
+
+msgid "Upload agreement file"
+msgstr "Uaslódáil comhad comhaontaithe"
+
+msgid "Download agreement file"
+msgstr "Íoslódáil comhad comhaontaithe"
+
+msgid "Delete agreement file"
+msgstr "Scrios comhad comhaontaithe"
+
+msgid "Custom certificate images"
+msgstr "Íomhánna teastais saincheaptha"
+
+msgid "Course picture updated"
+msgstr "Íomhá an chúrsa nuashonraithe"
+
+msgid "The course picture could not be uploaded"
+msgstr "Níorbh fhéidir íomhá an chúrsa a uaslódáil"
+
+msgid "Course picture deleted"
+msgstr "Íomhá an chúrsa scriosta"
+
+msgid "Enter a description for the image"
+msgstr "Iontráil cur síos don íomhá"
+
+msgid "The image generator returned an empty response"
+msgstr "D'fhill an gineadóir íomhánna freagra folamh"
+
+msgid "Course picture generated"
+msgstr "Íomhá an chúrsa ginte"
+
+msgid "Watermark updated"
+msgstr "Uiscedhath nuashonraithe"
+
+msgid "Watermark deleted"
+msgstr "Uiscedhath scriosta"
+
+msgid "Agreement file updated"
+msgstr "Comhad comhaontaithe nuashonraithe"
+
+msgid "Agreement file deleted"
+msgstr "Comhad comhaontaithe scriosta"
+
+msgid "Certificate image updated"
+msgstr "Íomhá teastais nuashonraithe"
+
+msgid "Certificate image deleted"
+msgstr "Íomhá teastais scriosta"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Úsáid an t-eagarthóir íomhánna sula ndéantar uaslódáil chun íomhá an chúrsa a bhearradh, a rothlú nó a athrú."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Tá an nasc cuireadh seo neamhbhailí nó tá sé as feidhm."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Seoladh an cuireadh seo chuig úsáideoir eile. Logáil isteach leis an gcuntas ar cuireadh chuig."
+
+msgid "The invitation could not be accepted."
+msgstr "Níorbh fhéidir an cuireadh a ghlacadh."
+
+msgid "You have been subscribed successfully."
+msgstr "Tá tú cláraithe go rathúil."
+
+msgid "This email address cannot be invited."
+msgstr "Ní féidir an seoladh ríomhphoist seo a chur ar chuireadh."
+
+msgid "This user is already subscribed to the session."
+msgstr "Tá an t-úsáideoir seo cláraithe cheana féin sa seisiún."
+
+msgid "This user is already subscribed to the course."
+msgstr "Tá an t-úsáideoir seo cláraithe cheana féin sa chúrsa."
 

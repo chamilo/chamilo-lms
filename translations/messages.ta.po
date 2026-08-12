@@ -37699,6 +37699,12 @@ msgstr "உங்கள் அமர்வு காலாவதியாகவ�
 msgid "Do you want to continue your session?"
 msgstr "உங்கள் அமர்வைத் தொடர விரும்புகிறீர்களா?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "உங்கள் அமர்வு விவரங்கள் இழக்கப்பட்டன, தயவுசெய்து மீண்டும் உள்நுழையவும்."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "இந்த வளத்திற்கான அணுகல் மறுக்கப்பட்டது. அதை அணுக உங்களுக்கு தேவையான அனுமதிகள் இல்லை எனத் தெரிகிறது."
+
 msgid "Stay connected"
 msgstr "இணைந்திரு"
 
@@ -38933,94 +38939,94 @@ msgid "No users"
 msgstr "பயனர்கள் இல்லை"
 
 msgid "Calculation mode"
-msgstr ""
+msgstr "கணக்கீட்டு முறை"
 
 msgid "Weighted average"
-msgstr ""
+msgstr "நிறையிடப்பட்ட சராசரி"
 
 msgid "Points sum"
-msgstr ""
+msgstr "புள்ளிகள் கூட்டல்"
 
 msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
-msgstr ""
+msgstr "நிறையிடப்பட்ட சராசரி நிறைகளின் கூட்டுத்தொகையால் இயல்பாக்கப்படுகிறது; புள்ளிகள் கூட்டல் ஒவ்வொரு நிறையையும் அதிகபட்ச புள்ளிகளாகக் கருதி இயல்பாக்காமல் அவற்றைச் சேர்க்கிறது."
 
 msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
-msgstr ""
+msgstr "ஒவ்வொரு உருப்படி நிறையும் அதன் அதிகபட்ச புள்ளிகளாகக் கருதப்படுகிறது; தரம் புள்ளிகளின் கூட்டுத்தொகையாகும், இயல்பாக்கப்படவில்லை."
 
 msgid "The grade is the weighted average of items, normalized by the sum of weights."
-msgstr ""
+msgstr "தரம் உருப்படிகளின் நிறையிடப்பட்ட சராசரியாகும், நிறைகளின் கூட்டுத்தொகையால் இயல்பாக்கப்படுகிறது."
 
 msgid "Forum participation"
-msgstr ""
+msgstr "கருத்துக்களம் பங்கேற்பு"
 
 msgid "Forum thread"
-msgstr ""
+msgstr "கருத்துக்களம் தொடர்பு"
 
 msgid "Points for one message"
-msgstr ""
+msgstr "ஒரு செய்திக்கான புள்ளிகள்"
 
 msgid "Points for two or more messages"
-msgstr ""
+msgstr "இரண்டு அல்லது அதற்கு மேற்பட்ட செய்திகளுக்கான புள்ளிகள்"
 
 msgid "Points awarded when the student posted exactly one message in the thread."
-msgstr ""
+msgstr "மாணவர் தொடர்பில் சரியாக ஒரு செய்தியை இட்டபோது வழங்கப்படும் புள்ளிகள்."
 
 msgid "Points awarded when the student posted two or more messages in the thread."
-msgstr ""
+msgstr "மாணவர் தொடர்பில் இரண்டு அல்லது அதற்கு மேற்பட்ட செய்திகளை இட்டபோது வழங்கப்படும் புள்ளிகள்."
 
 msgid "Optional. If left empty, one or more messages award the points for one message."
-msgstr ""
+msgstr "விருப்பத்தேர்வு. காலியாக விடப்பட்டால், ஒன்று அல்லது அதற்கு மேற்பட்ட செய்திகள் ஒரு செய்திக்கான புள்ளிகளை வழங்கும்."
 
 msgid "Current password is required to change your password."
-msgstr ""
+msgstr "உங்கள் கடவுச்சொல்லை மாற்ற உங்கள் தற்போதைய கடவுச்சொல் தேவை."
 
 msgid "The 2FA code is required."
-msgstr ""
+msgstr "2FA குறியீடு தேவை."
 
 msgid "Invalid 2FA configuration."
-msgstr ""
+msgstr "தவறான 2FA உள்ளமைவு."
 
 msgid "The 2FA code is invalid or expired."
-msgstr ""
+msgstr "2FA குறியீடு தவறானது அல்லது காலாவதியானது."
 
 msgid "Database load"
-msgstr ""
+msgstr "தரவுத்தள சுமை"
 
 msgid "Live MySQL and MariaDB server load metrics"
-msgstr ""
+msgstr "நேரடி MySQL மற்றும் MariaDB சேவையக சுமை அளவீடுகள்"
 
 msgid "Click to show database server load metrics"
-msgstr ""
+msgstr "தரவுத்தள சேவையக சுமை அளவீடுகளைக் காட்ட சொடுக்கவும்"
 
 msgid "Threads connected"
-msgstr ""
+msgstr "இணைக்கப்பட்ட தொடர்கள்"
 
 msgid "Temporary tables on disk"
-msgstr ""
+msgstr "வட்டில் தற்காலிக அட்டவணைகள்"
 
 msgid "Privilege scope"
-msgstr ""
+msgstr "சலுகை வரம்பு"
 
 msgid "Not measurable with the current database user"
-msgstr ""
+msgstr "தற்போதைய தரவுத்தள பயனருடன் அளவிட முடியவில்லை"
 
 msgid "Uptime"
-msgstr ""
+msgstr "இயக்க நேரம்"
 
 msgid "Queries per second"
-msgstr ""
+msgstr "வினாடிக்கு வினவல்கள்"
 
 msgid "Slow queries"
-msgstr ""
+msgstr "மெதுவான வினவல்கள்"
 
 msgid "Slow query time limit"
-msgstr ""
+msgstr "மெதுவான வினவல் நேர வரம்பு"
 
 msgid "Slow query log"
-msgstr ""
+msgstr "மெதுவான வினவல் பதிவு"
 
 msgid "Slow queries per second"
-msgstr ""
+msgstr "நொடிக்கு மெதுவான வினவல்கள்"
 
 msgid "Threads running"
 msgstr "இயங்கும் தொடர்கள்"
@@ -39165,4 +39171,316 @@ msgstr "கையாளப்பட்டவை"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status ஐ இயக்கவும் (ExtendedStatus On) மற்றும் உள்ளூரிலிருந்து /server-status ஐ அனுமதிக்கவும். Nginx: /nginx_status அல்லது /stub_status போன்ற உள்ளூர் மட்டுமே உள்ள இடத்தில் stub_status ஐ இயக்கவும்."
+
+msgid "Grade percentage distribution"
+msgstr "தர சதவீதப் பரவல்"
+
+msgid "Top learners"
+msgstr "சிறந்த கற்போர்"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "இந்த முன்னேற்றம் கற்றல் பாதை முன்னேற்றம் மற்றும் கற்போரின் சராசரி பயிற்சி முடிவை இணைக்கிறது"
+
+msgid "Additional profile fields"
+msgstr "கூடுதல் சுயவிவரப் புலங்கள்"
+
+msgid "Visible columns"
+msgstr "தெரியும் நெடுவரிசைகள்"
+
+msgid "Learning path completion"
+msgstr "கற்றல் பாதை முடிவு"
+
+msgid "Number of certificates"
+msgstr "சான்றிதழ்களின் எண்ணிக்கை"
+
+msgid "Could not export the report"
+msgstr "அறிக்கையை ஏற்றுமதி செய்ய முடியவில்லை"
+
+msgid "Second learner"
+msgstr "இரண்டாவது கற்போர்"
+
+msgid "Results by learner"
+msgstr "கற்போர் அடிப்படையில் முடிவுகள்"
+
+msgid "Use filters to narrow down questions."
+msgstr "வினாக்களைச் சுருக்க வடிகட்டிகளைப் பயன்படுத்தவும்."
+
+msgid "Try adjusting your filters and search again."
+msgstr "வடிகட்டிகளைச் சரிசெய்து மீண்டும் தேட முயற்சிக்கவும்."
+
+msgid "Results per page"
+msgstr "பக்கத்திற்கான முடிவுகள்"
+
+msgid "No answers"
+msgstr "பதில்கள் இல்லை"
+
+msgid "Tests using this question"
+msgstr "இந்த வினாவைப் பயன்படுத்தும் சோதனைகள்"
+
+msgid "Delete failed"
+msgstr "நீக்கம் தோல்வியடைந்தது"
+
+msgid "PHP cache"
+msgstr "PHP தற்காலிகச் சேமிப்பு"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "நேரடி OPcache மற்றும் APCu கண்டறிதல்கள்"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache மற்றும் APCu கண்டறிதல்களைக் காட்ட கிளிக் செய்யவும்"
+
+msgid "Memory used"
+msgstr "பயன்படுத்தப்பட்ட நினைவகம்"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache நிறுவப்பட்டுள்ளது ஆனால் இயக்கப்படவில்லை."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache நீட்டிப்பு இந்த சேவையகத்தில் கிடைக்கவில்லை."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu நிறுவப்பட்டுள்ளது ஆனால் இயக்கப்படவில்லை."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu நீட்டிப்பு இந்த சேவையகத்தில் கிடைக்கவில்லை."
+
+msgid "Constant"
+msgstr "மாறிலி"
+
+msgid "Space used on disk (MB)"
+msgstr "வட்டில் பயன்படுத்தப்பட்ட இடம் (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "அதிகபட்ச பாடநெறி இடத்தை அமைக்கவும் (MB)"
+
+msgid "Memory free"
+msgstr "கிடைக்கும் நினைவகம்"
+
+msgid "Memory wasted"
+msgstr "வீணாக்கப்பட்ட நினைவகம்"
+
+msgid "Memory used %"
+msgstr "நினைவகப் பயன்பாடு %"
+
+msgid "Cached scripts"
+msgstr "தற்காலிகமாகச் சேமிக்கப்பட்ட ஸ்கிரிப்ட்கள்"
+
+msgid "Cached keys"
+msgstr "தற்காலிகமாகச் சேமிக்கப்பட்ட விசைகள்"
+
+msgid "Misses"
+msgstr "தவறுகள்"
+
+msgid "Cache full"
+msgstr "தற்காலிகச் சேமிப்பு நிரம்பியது"
+
+msgid "OOM restarts"
+msgstr "OOM மறுதொடக்கங்கள்"
+
+msgid "Hash restarts"
+msgstr "ஹாஷ் மறுதொடக்கங்கள்"
+
+msgid "Manual restarts"
+msgstr "கைமுறை மறுதொடக்கங்கள்"
+
+msgid "Interned strings used"
+msgstr "உள் சரங்கள் பயன்படுத்தப்பட்டன"
+
+msgid "Interned strings free"
+msgstr "உள் சரங்கள் கிடைக்கின்றன"
+
+msgid "Interned strings count"
+msgstr "உள் சரங்களின் எண்ணிக்கை"
+
+msgid "Memory available"
+msgstr "கிடைக்கும் நினைவகம்"
+
+msgid "Memory size"
+msgstr "நினைவக அளவு"
+
+msgid "Entries"
+msgstr "உள்ளீடுகள்"
+
+msgid "Slots"
+msgstr "இடங்கள்"
+
+msgid "Expunges"
+msgstr "வெளியேற்றங்கள்"
+
+msgid "Cache start time"
+msgstr "தற்காலிகச் சேமிப்பு தொடக்க நேரம்"
+
+msgid "Time zone"
+msgstr "நேர மண்டலம்"
+
+msgid "Not registered"
+msgstr "பதிவு செய்யப்படவில்லை"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "அமர்வு, பாடநெறி, தேதி அல்லது கற்பவர் மூலம் கற்பவர் சான்றிதழ்களை வடிகட்டி பட்டியலிடவும், பின்னர் தேவைப்படும்போது அவற்றை ஏற்றுமதி செய்யவும்."
+
+msgid "Filter by session and course"
+msgstr "அமர்வு மற்றும் பாடநெறி மூலம் வடிகட்டவும்"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "உருவாக்கப்பட்ட சான்றிதழ்களைப் பட்டியலிட ஒரு அமர்வு, பாடநெறி மற்றும் விருப்ப தேதியைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Filter by learner"
+msgstr "கற்பவர் மூலம் வடிகட்டவும்"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "அமர்வுகள் மற்றும் பாடநெறிகள் முழுவதும் ஒரு குறிப்பிட்ட கற்பவருக்கான சான்றிதழ்களைக் கண்டறியவும்."
+
+msgid "Certificates found"
+msgstr "சான்றிதழ்கள் கண்டறியப்பட்டன"
+
+msgid "Open certificate"
+msgstr "சான்றிதழைத் திறக்கவும்"
+
+msgid "Certificate file not available"
+msgstr "சான்றிதழ் கோப்பு கிடைக்கவில்லை"
+
+msgid "Export to CSV"
+msgstr "CSV ஆக ஏற்றுமதி செய்யவும்"
+
+msgid "Acquired skills"
+msgstr "பெறப்பட்ட திறன்கள்"
+
+msgid "No acquired skill"
+msgstr "பெறப்பட்ட திறன் இல்லை"
+
+msgid "Absences"
+msgstr "வருகைப் பதிவு இல்லை"
+
+msgid "No courses"
+msgstr "பாடநெறிகள் இல்லை"
+
+msgid "No session matched"
+msgstr "பொருந்தும் அமர்வு இல்லை"
+
+msgid "Unable to load the report"
+msgstr "அறிக்கையை ஏற்ற முடியவில்லை"
+
+msgid "Please select a profile"
+msgstr "தயவுசெய்து ஒரு சுயவிவரத்தைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Please select a session"
+msgstr "தயவுசெய்து ஒரு அமர்வைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Please select a user"
+msgstr "தயவுசெய்து ஒரு பயனரைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Unable to export the report"
+msgstr "அறிக்கையை ஏற்றுமதி செய்ய முடியவில்லை"
+
+msgid "Accepted on web"
+msgstr "வலை மூலம் ஏற்றுக்கொள்ளப்பட்டது"
+
+msgid "Accepted by e-mail"
+msgstr "மின்னஞ்சல் மூலம் ஏற்றுக்கொள்ளப்பட்டது"
+
+msgid "The course title is required"
+msgstr "பாடநெறி தலைப்பு தேவை"
+
+msgid "Unexpected error"
+msgstr "எதிர்பாராத பிழை"
+
+msgid "Separate tags with commas"
+msgstr "குறிச்சொற்களை காற்புள்ளிகளால் பிரிக்கவும்"
+
+msgid "Open link"
+msgstr "இணைப்பைத் திறக்கவும்"
+
+msgid "Describe the course picture to generate"
+msgstr "உருவாக்க வேண்டிய பாடநெறி படத்தை விவரிக்கவும்"
+
+msgid "Generate picture"
+msgstr "படத்தை உருவாக்கவும்"
+
+msgid "PDF watermark"
+msgstr "PDF நீர்க்குறி"
+
+msgid "No watermark image"
+msgstr "நீர்க்குறி படம் இல்லை"
+
+msgid "Upload watermark"
+msgstr "நீர்க்குறியைப் பதிவேற்றவும்"
+
+msgid "Delete watermark"
+msgstr "நீர்க்குறியை நீக்கவும்"
+
+msgid "Course legal agreement file"
+msgstr "பாடநெறி சட்ட ஒப்பந்தக் கோப்பு"
+
+msgid "Upload agreement file"
+msgstr "ஒப்பந்தக் கோப்பைப் பதிவேற்றவும்"
+
+msgid "Download agreement file"
+msgstr "ஒப்பந்தக் கோப்பைப் பதிவிறக்கவும்"
+
+msgid "Delete agreement file"
+msgstr "ஒப்பந்தக் கோப்பை நீக்கவும்"
+
+msgid "Custom certificate images"
+msgstr "தனிப்பயன் சான்றிதழ் படங்கள்"
+
+msgid "Course picture updated"
+msgstr "பாடநெறி படம் புதுப்பிக்கப்பட்டது"
+
+msgid "The course picture could not be uploaded"
+msgstr "பாடநெறி படத்தைப் பதிவேற்ற முடியவில்லை"
+
+msgid "Course picture deleted"
+msgstr "பாடநெறி படம் நீக்கப்பட்டது"
+
+msgid "Enter a description for the image"
+msgstr "படத்திற்கான விளக்கத்தை உள்ளிடவும்"
+
+msgid "The image generator returned an empty response"
+msgstr "பட உருவாக்கி வெற்று பதிலைத் திருப்பியது"
+
+msgid "Course picture generated"
+msgstr "பாடநெறி படம் உருவாக்கப்பட்டது"
+
+msgid "Watermark updated"
+msgstr "நீர்க்குறி புதுப்பிக்கப்பட்டது"
+
+msgid "Watermark deleted"
+msgstr "நீர்க்குறி நீக்கப்பட்டது"
+
+msgid "Agreement file updated"
+msgstr "ஒப்பந்தக் கோப்பு புதுப்பிக்கப்பட்டது"
+
+msgid "Agreement file deleted"
+msgstr "ஒப்பந்தக் கோப்பு நீக்கப்பட்டது"
+
+msgid "Certificate image updated"
+msgstr "சான்றிதழ் படம் புதுப்பிக்கப்பட்டது"
+
+msgid "Certificate image deleted"
+msgstr "சான்றிதழ் படம் நீக்கப்பட்டது"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "பாடநெறி படத்தை வெட்ட, சுழற்ற அல்லது மறுஅளவிட பதிவேற்றுவதற்கு முன் படத் தொகுப்பியைப் பயன்படுத்தவும்."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "இந்த அழைப்பு இணைப்பு தவறானது அல்லது காலாவதியானது."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "இந்த அழைப்பு வேறொரு பயனருக்கு அனுப்பப்பட்டது. அழைக்கப்பட்ட கணக்கில் உள்நுழையவும்."
+
+msgid "The invitation could not be accepted."
+msgstr "அழைப்பை ஏற்க முடியவில்லை."
+
+msgid "You have been subscribed successfully."
+msgstr "நீங்கள் வெற்றிகரமாக பதிவு செய்யப்பட்டுள்ளீர்கள்."
+
+msgid "This email address cannot be invited."
+msgstr "இந்த மின்னஞ்சல் முகவரியை அழைக்க முடியாது."
+
+msgid "This user is already subscribed to the session."
+msgstr "இந்த பயனர் ஏற்கனவே அமர்வில் பதிவு செய்யப்பட்டுள்ளார்."
+
+msgid "This user is already subscribed to the course."
+msgstr "இந்த பயனர் ஏற்கனவே பாடத்தில் பதிவு செய்யப்பட்டுள்ளார்."
 

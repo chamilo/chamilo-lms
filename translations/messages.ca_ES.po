@@ -37714,6 +37714,12 @@ msgstr "La vostra sessió està a punt d'expirar"
 msgid "Do you want to continue your session?"
 msgstr "Voleu continuar la sessió?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "S'han perdut els detalls de la vostra sessió, torneu a iniciar la sessió."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "S'ha denegat l'accés a aquest recurs. Sembla que no teniu els permisos necessaris per accedir-hi."
+
 msgid "Stay connected"
 msgstr "Mantenir la connexió"
 
@@ -39180,4 +39186,316 @@ msgstr "Gestionades"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: activeu mod_status (ExtendedStatus On) i permeteu localhost a /server-status. Nginx: activeu stub_status en una ubicació només per a localhost com ara /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribució percentual de notes"
+
+msgid "Top learners"
+msgstr "Millors estudiants"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Aquest progrés combina el progrés del camí d'aprenentatge i la mitjana de resultats d'exercicis de l'estudiant"
+
+msgid "Additional profile fields"
+msgstr "Camps de perfil addicionals"
+
+msgid "Visible columns"
+msgstr "Columnes visibles"
+
+msgid "Learning path completion"
+msgstr "Compleció del camí d'aprenentatge"
+
+msgid "Number of certificates"
+msgstr "Nombre de certificats"
+
+msgid "Could not export the report"
+msgstr "No s'ha pogut exportar l'informe"
+
+msgid "Second learner"
+msgstr "Segon estudiant"
+
+msgid "Results by learner"
+msgstr "Resultats per estudiant"
+
+msgid "Use filters to narrow down questions."
+msgstr "Utilitzeu filtres per restringir les preguntes."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Proveu d'ajustar els filtres i torneu a cercar."
+
+msgid "Results per page"
+msgstr "Resultats per pàgina"
+
+msgid "No answers"
+msgstr "Sense respostes"
+
+msgid "Tests using this question"
+msgstr "Tests que utilitzen aquesta pregunta"
+
+msgid "Delete failed"
+msgstr "Ha fallat la supressió"
+
+msgid "PHP cache"
+msgstr "Memòria cau PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnòstics en temps real d'OPcache i APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Feu clic per mostrar els diagnòstics d'OPcache i APCu"
+
+msgid "Memory used"
+msgstr "Memòria utilitzada"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache està instal·lat però no està activat."
+
+msgid "OPcache extension is not available on this server."
+msgstr "L'extensió OPcache no està disponible en aquest servidor."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu està instal·lat però no està activat."
+
+msgid "APCu extension is not available on this server."
+msgstr "L'extensió APCu no està disponible en aquest servidor."
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Space used on disk (MB)"
+msgstr "Espai utilitzat al disc (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Estableix l'espai màxim del curs (MB)"
+
+msgid "Memory free"
+msgstr "Memòria lliure"
+
+msgid "Memory wasted"
+msgstr "Memòria malgastada"
+
+msgid "Memory used %"
+msgstr "Memòria utilitzada %"
+
+msgid "Cached scripts"
+msgstr "Scripts en memòria cau"
+
+msgid "Cached keys"
+msgstr "Claus en memòria cau"
+
+msgid "Misses"
+msgstr "Fallades"
+
+msgid "Cache full"
+msgstr "Memòria cau plena"
+
+msgid "OOM restarts"
+msgstr "Reinicialitzacions OOM"
+
+msgid "Hash restarts"
+msgstr "Reinicialitzacions de hash"
+
+msgid "Manual restarts"
+msgstr "Reinicialitzacions manuals"
+
+msgid "Interned strings used"
+msgstr "Cadenes internades utilitzades"
+
+msgid "Interned strings free"
+msgstr "Cadenes internades lliures"
+
+msgid "Interned strings count"
+msgstr "Nombre de cadenes internades"
+
+msgid "Memory available"
+msgstr "Memòria disponible"
+
+msgid "Memory size"
+msgstr "Mida de la memòria"
+
+msgid "Entries"
+msgstr "Entrades"
+
+msgid "Slots"
+msgstr "Espais"
+
+msgid "Expunges"
+msgstr "Expulsions"
+
+msgid "Cache start time"
+msgstr "Hora d'inici de la memòria cau"
+
+msgid "Time zone"
+msgstr "Zona horària"
+
+msgid "Not registered"
+msgstr "No registrat"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtra i llista els certificats dels estudiants per sessió, curs, data o estudiant i exporta'ls quan calgui."
+
+msgid "Filter by session and course"
+msgstr "Filtra per sessió i curs"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Trieu una sessió, un curs i una data opcional per llistar els certificats generats."
+
+msgid "Filter by learner"
+msgstr "Filtra per estudiant"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Cerca certificats d'un estudiant concret a través de sessions i cursos."
+
+msgid "Certificates found"
+msgstr "Certificats trobats"
+
+msgid "Open certificate"
+msgstr "Obre el certificat"
+
+msgid "Certificate file not available"
+msgstr "Fitxer de certificat no disponible"
+
+msgid "Export to CSV"
+msgstr "Exporta a CSV"
+
+msgid "Acquired skills"
+msgstr "Competències adquirides"
+
+msgid "No acquired skill"
+msgstr "Cap competència adquirida"
+
+msgid "Absences"
+msgstr "Absències"
+
+msgid "No courses"
+msgstr "Cap curs"
+
+msgid "No session matched"
+msgstr "Cap sessió coincident"
+
+msgid "Unable to load the report"
+msgstr "No es pot carregar l'informe"
+
+msgid "Please select a profile"
+msgstr "Seleccioneu un perfil"
+
+msgid "Please select a session"
+msgstr "Seleccioneu una sessió"
+
+msgid "Please select a user"
+msgstr "Seleccioneu un usuari"
+
+msgid "Unable to export the report"
+msgstr "No es pot exportar l'informe"
+
+msgid "Accepted on web"
+msgstr "Acceptat al web"
+
+msgid "Accepted by e-mail"
+msgstr "Acceptat per correu electrònic"
+
+msgid "The course title is required"
+msgstr "El títol del curs és obligatori"
+
+msgid "Unexpected error"
+msgstr "Error inesperat"
+
+msgid "Separate tags with commas"
+msgstr "Separa les etiquetes amb comes"
+
+msgid "Open link"
+msgstr "Obre l'enllaç"
+
+msgid "Describe the course picture to generate"
+msgstr "Descriu la imatge del curs a generar"
+
+msgid "Generate picture"
+msgstr "Genera la imatge"
+
+msgid "PDF watermark"
+msgstr "Marca d'aigua PDF"
+
+msgid "No watermark image"
+msgstr "Cap imatge de marca d'aigua"
+
+msgid "Upload watermark"
+msgstr "Pujar marca d'aigua"
+
+msgid "Delete watermark"
+msgstr "Suprimir marca d'aigua"
+
+msgid "Course legal agreement file"
+msgstr "Fitxer d'acord legal del curs"
+
+msgid "Upload agreement file"
+msgstr "Pujar fitxer d'acord"
+
+msgid "Download agreement file"
+msgstr "Descarregar fitxer d'acord"
+
+msgid "Delete agreement file"
+msgstr "Suprimir fitxer d'acord"
+
+msgid "Custom certificate images"
+msgstr "Imatges de certificat personalitzades"
+
+msgid "Course picture updated"
+msgstr "Imatge del curs actualitzada"
+
+msgid "The course picture could not be uploaded"
+msgstr "No s'ha pogut pujar la imatge del curs"
+
+msgid "Course picture deleted"
+msgstr "Imatge del curs suprimida"
+
+msgid "Enter a description for the image"
+msgstr "Introduïu una descripció per a la imatge"
+
+msgid "The image generator returned an empty response"
+msgstr "El generador d'imatges ha retornat una resposta buida"
+
+msgid "Course picture generated"
+msgstr "Imatge del curs generada"
+
+msgid "Watermark updated"
+msgstr "Marca d'aigua actualitzada"
+
+msgid "Watermark deleted"
+msgstr "Marca d'aigua suprimida"
+
+msgid "Agreement file updated"
+msgstr "Fitxer d'acord actualitzat"
+
+msgid "Agreement file deleted"
+msgstr "Fitxer d'acord suprimit"
+
+msgid "Certificate image updated"
+msgstr "Imatge de certificat actualitzada"
+
+msgid "Certificate image deleted"
+msgstr "Imatge de certificat suprimida"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Utilitzeu l'editor d'imatges abans de pujar per retallar, girar o redimensionar la imatge del curs."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Aquest enllaç d'invitació no és vàlid o ha caducat."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Aquesta invitació s'ha enviat a un usuari diferent. Inicieu sessió amb el compte convidat."
+
+msgid "The invitation could not be accepted."
+msgstr "No s'ha pogut acceptar la invitació."
+
+msgid "You have been subscribed successfully."
+msgstr "Us heu subscrit correctament."
+
+msgid "This email address cannot be invited."
+msgstr "Aquesta adreça electrònica no es pot convidar."
+
+msgid "This user is already subscribed to the session."
+msgstr "Aquest usuari ja està subscrit a la sessió."
+
+msgid "This user is already subscribed to the course."
+msgstr "Aquest usuari ja està subscrit al curs."
 

@@ -37695,6 +37695,12 @@ msgstr "Kalfadhigaaga wuxuu ku dhow yahay inuu dhammaado"
 msgid "Do you want to continue your session?"
 msgstr "Ma doonaysaa inaad sii waddo kalfadhigaaga?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Faahfaahinta kalfadhigaaga waa la waayay, fadlan mar kale soo gal."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Helitaanka agabkan waa la diiday. Uma muuqato inaad haysato oggolaanshaha lagama maarmaanka ah si aad u gasho."
+
 msgid "Stay connected"
 msgstr "Sii wad xiriirka"
 
@@ -39161,4 +39167,316 @@ msgstr "Maamulid"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: karti mod_status (ExtendedStatus On) oo u oggol localhost inuu /server-status galo. Nginx: karti stub_status meel localhost-keliya ah sida /nginx_status ama /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Qaybinta boqolleyda darajada"
+
+msgid "Top learners"
+msgstr "Ardayda ugu sareysa"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Horumarintan waxay isku daraysaa horumarka dariiqa barashada iyo celceliska natiijada jimicsiga ardayga"
+
+msgid "Additional profile fields"
+msgstr "Goobaha astaanta dheeraadka ah"
+
+msgid "Visible columns"
+msgstr "Tiirarka muuqda"
+
+msgid "Learning path completion"
+msgstr "Dhammaystirka dariiqa barashada"
+
+msgid "Number of certificates"
+msgstr "Tirada shahaadooyinka"
+
+msgid "Could not export the report"
+msgstr "Waa lagu guulaysan waayay in la dhoofiyo warbixinta"
+
+msgid "Second learner"
+msgstr "Ardayga labaad"
+
+msgid "Results by learner"
+msgstr "Natiijooyinka arday kasta"
+
+msgid "Use filters to narrow down questions."
+msgstr "Isticmaal filtarrada si aad u yareysid su'aalaha."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Isku day inaad hagaajiso filtarradaada oo mar kale raadi."
+
+msgid "Results per page"
+msgstr "Natiijooyinka bog kasta"
+
+msgid "No answers"
+msgstr "Jawaabo ma jiraan"
+
+msgid "Tests using this question"
+msgstr "Imtixaannada isticmaalaya su'aashan"
+
+msgid "Delete failed"
+msgstr "Tirtiridda waa lagu guulaysan waayay"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Baaritaanka tooska ah ee OPcache iyo APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Guji si aad u muujiso baaritaanka OPcache iyo APCu"
+
+msgid "Memory used"
+msgstr "Xusuusta la isticmaalay"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache waa la rakibay laakiin lama hawlgelin."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Kordhinta OPcache lagama heli karo server-kan."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu waa la rakibay laakiin lama hawlgelin."
+
+msgid "APCu extension is not available on this server."
+msgstr "Kordhinta APCu lagama heli karo server-kan."
+
+msgid "Constant"
+msgstr "Joogto"
+
+msgid "Space used on disk (MB)"
+msgstr "Meesha la isticmaalay ee diskiga (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Deji meesha ugu badan ee koorsada (MB)"
+
+msgid "Memory free"
+msgstr "Xusuusta bilaashka ah"
+
+msgid "Memory wasted"
+msgstr "Xusuusta la khasaaray"
+
+msgid "Memory used %"
+msgstr "Xusuusta la isticmaalay %"
+
+msgid "Cached scripts"
+msgstr "Qoraallada kaydsan"
+
+msgid "Cached keys"
+msgstr "Furayaasha kaydsan"
+
+msgid "Misses"
+msgstr "Khasaarayaal"
+
+msgid "Cache full"
+msgstr "Cache buuxa"
+
+msgid "OOM restarts"
+msgstr "Dib u bilaabid OOM"
+
+msgid "Hash restarts"
+msgstr "Dib u bilaabid Hash"
+
+msgid "Manual restarts"
+msgstr "Dib u bilaabid gacanta"
+
+msgid "Interned strings used"
+msgstr "Xadhkaha gudaha la isticmaalay"
+
+msgid "Interned strings free"
+msgstr "Xadhkaha gudaha bilaashka ah"
+
+msgid "Interned strings count"
+msgstr "Tirada xadhkaha gudaha"
+
+msgid "Memory available"
+msgstr "Xusuusta la heli karo"
+
+msgid "Memory size"
+msgstr "Cabbirka xusuusta"
+
+msgid "Entries"
+msgstr "Gelitaanno"
+
+msgid "Slots"
+msgstr "Meelo"
+
+msgid "Expunges"
+msgstr "Bixinta"
+
+msgid "Cache start time"
+msgstr "Waqtiga bilowga cache"
+
+msgid "Time zone"
+msgstr "Aagga waqtiga"
+
+msgid "Not registered"
+msgstr "Aan diiwaangashanayn"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Shaandhee oo liis garaw shahaadooyinka ardayda marka la eego kalfadhiga, koorsada, taariikhda ama ardayga, ka dibna dhoofso marka loo baahdo."
+
+msgid "Filter by session and course"
+msgstr "Ku shaandhee kalfadhiga iyo koorsada"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Dooro kalfadhiga, koorsada iyo taariikh ikhtiyaari ah si loo liis garo shahaadooyinka la soo saaray."
+
+msgid "Filter by learner"
+msgstr "Ku shaandhee ardayga"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Raadi shahaadooyinka arday gaar ah oo ku saabsan kalfadhiyada iyo koorsooyinka."
+
+msgid "Certificates found"
+msgstr "Shahaadooyinka la helay"
+
+msgid "Open certificate"
+msgstr "Furan shahaadada"
+
+msgid "Certificate file not available"
+msgstr "Faylka shahaadada lama heli karo"
+
+msgid "Export to CSV"
+msgstr "U dhoofi CSV"
+
+msgid "Acquired skills"
+msgstr "Xirfado la helay"
+
+msgid "No acquired skill"
+msgstr "Xirfad lama helin"
+
+msgid "Absences"
+msgstr "Maqnaansho"
+
+msgid "No courses"
+msgstr "Koorso ma jiraan"
+
+msgid "No session matched"
+msgstr "Kalfadhigii kuma eka"
+
+msgid "Unable to load the report"
+msgstr "Warbixinta lama soo dejin karo"
+
+msgid "Please select a profile"
+msgstr "Fadlan dooro astaanta"
+
+msgid "Please select a session"
+msgstr "Fadlan dooro kalfadhiga"
+
+msgid "Please select a user"
+msgstr "Fadlan dooro isticmaale"
+
+msgid "Unable to export the report"
+msgstr "Warbixinta lama dhoofin karo"
+
+msgid "Accepted on web"
+msgstr "La aqbalay webka"
+
+msgid "Accepted by e-mail"
+msgstr "E-mail ayaa la aqbalay"
+
+msgid "The course title is required"
+msgstr "Cinwaanka koorsada waa loo baahan yahay"
+
+msgid "Unexpected error"
+msgstr "Khalad lama filaan ah"
+
+msgid "Separate tags with commas"
+msgstr "Ku kala saar calaamadaha koomayaasha"
+
+msgid "Open link"
+msgstr "Furan xiriirka"
+
+msgid "Describe the course picture to generate"
+msgstr "Sharax sawirka koorsada ee la soo saarayo"
+
+msgid "Generate picture"
+msgstr "Abuur sawir"
+
+msgid "PDF watermark"
+msgstr "Biyaha PDF"
+
+msgid "No watermark image"
+msgstr "Sawir biyo ah ma jiro"
+
+msgid "Upload watermark"
+msgstr "Soo gel biyo"
+
+msgid "Delete watermark"
+msgstr "Tirtir biyo"
+
+msgid "Course legal agreement file"
+msgstr "Faylka heshiiska sharciga koorsada"
+
+msgid "Upload agreement file"
+msgstr "Soo gel faylka heshiiska"
+
+msgid "Download agreement file"
+msgstr "Soo dejiso faylka heshiiska"
+
+msgid "Delete agreement file"
+msgstr "Tirtir faylka heshiiska"
+
+msgid "Custom certificate images"
+msgstr "Sawirada shahaadada gaarka ah"
+
+msgid "Course picture updated"
+msgstr "Sawirka koorsada waa la cusboonaysiiyay"
+
+msgid "The course picture could not be uploaded"
+msgstr "Sawirka koorsada lama soo gelin karo"
+
+msgid "Course picture deleted"
+msgstr "Sawirka koorsada waa la tirtiray"
+
+msgid "Enter a description for the image"
+msgstr "Geli sharraxaad sawirka"
+
+msgid "The image generator returned an empty response"
+msgstr "Abuuraha sawirka wuxuu soo celiyay jawaab madhan"
+
+msgid "Course picture generated"
+msgstr "Sawirka koorsada waa la abuuray"
+
+msgid "Watermark updated"
+msgstr "Biyaha waa la cusboonaysiiyay"
+
+msgid "Watermark deleted"
+msgstr "Biyaha waa la tirtiray"
+
+msgid "Agreement file updated"
+msgstr "Faylka heshiiska waa la cusboonaysiiyay"
+
+msgid "Agreement file deleted"
+msgstr "Faylka heshiiska waa la tirtiray"
+
+msgid "Certificate image updated"
+msgstr "Sawirka shahaadada waa la cusboonaysiiyay"
+
+msgid "Certificate image deleted"
+msgstr "Sawirka shahaadada waa la tirtiray"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Isticmaal tifaftiraha sawirka ka hor intaadan soo gelin si aad u gooyo, u rogo ama u beddesho cabbirka sawirka koorsada."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Xiriirkan marti-qaadka ah waa mid aan sax ahayn ama wuu dhacay."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Marti-qaadkan waxaa loo diray isticmaale kale. Fadlan ku gal akoontka la marti-qaaday."
+
+msgid "The invitation could not be accepted."
+msgstr "Marti-qaadka lama aqbalin karo."
+
+msgid "You have been subscribed successfully."
+msgstr "Si guul leh ayaad u diiwaan gashatay."
+
+msgid "This email address cannot be invited."
+msgstr "Cinwaanka iimaylkan lama marti-qaadi karo."
+
+msgid "This user is already subscribed to the session."
+msgstr "Isticmaalahan hore ayuu uga diiwaan gashan yahay kalfadhiga."
+
+msgid "This user is already subscribed to the course."
+msgstr "Isticmaalahan hore ayuu uga diiwaan gashan yahay koorsada."
 

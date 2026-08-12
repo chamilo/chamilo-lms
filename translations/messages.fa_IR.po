@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -37699,6 +37699,12 @@ msgstr "جلسه شما در حال انقضا است"
 msgid "Do you want to continue your session?"
 msgstr "آیا می‌خواهید جلسه خود را ادامه دهید؟"
 
+msgid "Your session details have been lost, please login again."
+msgstr "جزئیات نشست شما از دست رفته است، لطفاً دوباره وارد شوید."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "دسترسی به این منبع رد شده است. به نظر می‌رسد مجوزهای لازم برای دسترسی به آن را ندارید."
+
 msgid "Stay connected"
 msgstr "اتصال بمانید"
 
@@ -39165,4 +39171,316 @@ msgstr "مدیریت‌شده"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status را فعال کنید (ExtendedStatus On) و localhost را برای /server-status مجاز کنید. Nginx: stub_status را در یک مکان فقط localhost مانند /nginx_status یا /stub_status فعال کنید."
+
+msgid "Grade percentage distribution"
+msgstr "توزیع درصد نمرات"
+
+msgid "Top learners"
+msgstr "یادگیرندگان برتر"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "این پیشرفت، پیشرفت مسیر یادگیری و میانگین نتیجه تمرین یادگیرنده را ترکیب می‌کند"
+
+msgid "Additional profile fields"
+msgstr "فیلدهای اضافی پروفایل"
+
+msgid "Visible columns"
+msgstr "ستون‌های قابل مشاهده"
+
+msgid "Learning path completion"
+msgstr "تکمیل مسیر یادگیری"
+
+msgid "Number of certificates"
+msgstr "تعداد گواهینامه‌ها"
+
+msgid "Could not export the report"
+msgstr "خروجی گزارش ممکن نشد"
+
+msgid "Second learner"
+msgstr "یادگیرنده دوم"
+
+msgid "Results by learner"
+msgstr "نتایج بر اساس یادگیرنده"
+
+msgid "Use filters to narrow down questions."
+msgstr "از فیلترها برای محدود کردن سؤالات استفاده کنید."
+
+msgid "Try adjusting your filters and search again."
+msgstr "فیلترهای خود را تنظیم کرده و دوباره جستجو کنید."
+
+msgid "Results per page"
+msgstr "نتایج در هر صفحه"
+
+msgid "No answers"
+msgstr "بدون پاسخ"
+
+msgid "Tests using this question"
+msgstr "آزمون‌های استفاده‌کننده از این سؤال"
+
+msgid "Delete failed"
+msgstr "حذف ناموفق بود"
+
+msgid "PHP cache"
+msgstr "حافظه نهان PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "تشخیص زنده OPcache و APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "برای نمایش تشخیص OPcache و APCu کلیک کنید"
+
+msgid "Memory used"
+msgstr "حافظه استفاده‌شده"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache نصب شده اما فعال نیست."
+
+msgid "OPcache extension is not available on this server."
+msgstr "افزونه OPcache در این سرور در دسترس نیست."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu نصب شده اما فعال نیست."
+
+msgid "APCu extension is not available on this server."
+msgstr "افزونه APCu در این سرور در دسترس نیست."
+
+msgid "Constant"
+msgstr "ثابت"
+
+msgid "Space used on disk (MB)"
+msgstr "فضای استفاده‌شده روی دیسک (مگابایت)"
+
+msgid "Set max course space (MB)"
+msgstr "تنظیم حداکثر فضای دوره (مگابایت)"
+
+msgid "Memory free"
+msgstr "حافظه آزاد"
+
+msgid "Memory wasted"
+msgstr "حافظه هدررفته"
+
+msgid "Memory used %"
+msgstr "درصد حافظه استفاده‌شده"
+
+msgid "Cached scripts"
+msgstr "اسکریپت‌های کش‌شده"
+
+msgid "Cached keys"
+msgstr "کلیدهای کش‌شده"
+
+msgid "Misses"
+msgstr "از دست رفته‌ها"
+
+msgid "Cache full"
+msgstr "حافظه نهان پر"
+
+msgid "OOM restarts"
+msgstr "راه‌اندازی مجدد OOM"
+
+msgid "Hash restarts"
+msgstr "راه‌اندازی مجدد هش"
+
+msgid "Manual restarts"
+msgstr "راه‌اندازی مجدد دستی"
+
+msgid "Interned strings used"
+msgstr "رشته‌های داخلی استفاده‌شده"
+
+msgid "Interned strings free"
+msgstr "رشته‌های داخلی آزاد"
+
+msgid "Interned strings count"
+msgstr "تعداد رشته‌های داخلی"
+
+msgid "Memory available"
+msgstr "حافظه در دسترس"
+
+msgid "Memory size"
+msgstr "اندازه حافظه"
+
+msgid "Entries"
+msgstr "ورودی‌ها"
+
+msgid "Slots"
+msgstr "اسلات‌ها"
+
+msgid "Expunges"
+msgstr "پاکسازی"
+
+msgid "Cache start time"
+msgstr "زمان شروع کش"
+
+msgid "Time zone"
+msgstr "منطقه زمانی"
+
+msgid "Not registered"
+msgstr "ثبت‌نام نشده"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "گواهی‌های فراگیران را بر اساس جلسه، دوره، تاریخ یا فراگیر فیلتر و فهرست کنید، سپس در صورت نیاز آن‌ها را صادر کنید."
+
+msgid "Filter by session and course"
+msgstr "فیلتر بر اساس جلسه و دوره"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "یک جلسه، دوره و تاریخ اختیاری انتخاب کنید تا گواهی‌های تولیدشده فهرست شوند."
+
+msgid "Filter by learner"
+msgstr "فیلتر بر اساس فراگیر"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "گواهی‌های یک فراگیر خاص را در جلسات و دوره‌های مختلف پیدا کنید."
+
+msgid "Certificates found"
+msgstr "گواهی‌های یافت‌شده"
+
+msgid "Open certificate"
+msgstr "باز کردن گواهی"
+
+msgid "Certificate file not available"
+msgstr "فایل گواهی در دسترس نیست"
+
+msgid "Export to CSV"
+msgstr "صادر کردن به CSV"
+
+msgid "Acquired skills"
+msgstr "مهارت‌های کسب‌شده"
+
+msgid "No acquired skill"
+msgstr "مهارت کسب‌شده‌ای وجود ندارد"
+
+msgid "Absences"
+msgstr "غیبت‌ها"
+
+msgid "No courses"
+msgstr "دوره‌ای وجود ندارد"
+
+msgid "No session matched"
+msgstr "جلسه‌ای مطابقت ندارد"
+
+msgid "Unable to load the report"
+msgstr "بارگذاری گزارش ممکن نیست"
+
+msgid "Please select a profile"
+msgstr "لطفاً یک نمایه انتخاب کنید"
+
+msgid "Please select a session"
+msgstr "لطفاً یک جلسه انتخاب کنید"
+
+msgid "Please select a user"
+msgstr "لطفاً یک کاربر انتخاب کنید"
+
+msgid "Unable to export the report"
+msgstr "صادر کردن گزارش ممکن نیست"
+
+msgid "Accepted on web"
+msgstr "پذیرفته‌شده در وب"
+
+msgid "Accepted by e-mail"
+msgstr "پذیرفته‌شده از طریق ایمیل"
+
+msgid "The course title is required"
+msgstr "عنوان دوره الزامی است"
+
+msgid "Unexpected error"
+msgstr "خطای غیرمنتظره"
+
+msgid "Separate tags with commas"
+msgstr "برچسب‌ها را با کاما جدا کنید"
+
+msgid "Open link"
+msgstr "باز کردن پیوند"
+
+msgid "Describe the course picture to generate"
+msgstr "تصویر دوره را برای تولید توصیف کنید"
+
+msgid "Generate picture"
+msgstr "تولید تصویر"
+
+msgid "PDF watermark"
+msgstr "واترمارک PDF"
+
+msgid "No watermark image"
+msgstr "تصویر واترمارک وجود ندارد"
+
+msgid "Upload watermark"
+msgstr "بارگذاری واترمارک"
+
+msgid "Delete watermark"
+msgstr "حذف واترمارک"
+
+msgid "Course legal agreement file"
+msgstr "فایل توافق‌نامه حقوقی دوره"
+
+msgid "Upload agreement file"
+msgstr "بارگذاری فایل توافق‌نامه"
+
+msgid "Download agreement file"
+msgstr "دانلود فایل توافق‌نامه"
+
+msgid "Delete agreement file"
+msgstr "حذف فایل توافق‌نامه"
+
+msgid "Custom certificate images"
+msgstr "تصاویر گواهی سفارشی"
+
+msgid "Course picture updated"
+msgstr "تصویر دوره به‌روزرسانی شد"
+
+msgid "The course picture could not be uploaded"
+msgstr "تصویر دوره بارگذاری نشد"
+
+msgid "Course picture deleted"
+msgstr "تصویر دوره حذف شد"
+
+msgid "Enter a description for the image"
+msgstr "توضیحی برای تصویر وارد کنید"
+
+msgid "The image generator returned an empty response"
+msgstr "مولد تصویر پاسخ خالی برگرداند"
+
+msgid "Course picture generated"
+msgstr "تصویر دوره تولید شد"
+
+msgid "Watermark updated"
+msgstr "واترمارک به‌روزرسانی شد"
+
+msgid "Watermark deleted"
+msgstr "واترمارک حذف شد"
+
+msgid "Agreement file updated"
+msgstr "فایل توافق‌نامه به‌روزرسانی شد"
+
+msgid "Agreement file deleted"
+msgstr "فایل توافق‌نامه حذف شد"
+
+msgid "Certificate image updated"
+msgstr "تصویر گواهی‌نامه به‌روزرسانی شد"
+
+msgid "Certificate image deleted"
+msgstr "تصویر گواهی‌نامه حذف شد"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "پیش از بارگذاری، از ویرایشگر تصویر برای برش، چرخش یا تغییر اندازه تصویر دوره استفاده کنید."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "این پیوند دعوت معتبر نیست یا منقضی شده است."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "این دعوت برای کاربر دیگری ارسال شده است. لطفاً با حساب دعوت‌شده وارد شوید."
+
+msgid "The invitation could not be accepted."
+msgstr "دعوت پذیرفته نشد."
+
+msgid "You have been subscribed successfully."
+msgstr "با موفقیت مشترک شدید."
+
+msgid "This email address cannot be invited."
+msgstr "این آدرس ایمیل را نمی‌توان دعوت کرد."
+
+msgid "This user is already subscribed to the session."
+msgstr "این کاربر پیش‌تر در جلسه مشترک شده است."
+
+msgid "This user is already subscribed to the course."
+msgstr "این کاربر پیش‌تر در دوره مشترک شده است."
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Úprimne"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Vzorka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ukážka vzorca: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy premennej"
@@ -37714,6 +37714,12 @@ msgstr "Vaša relácia čoskoro vyprší"
 msgid "Do you want to continue your session?"
 msgstr "Chcete pokračovať v relácii?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Podrobnosti vašej relácie boli stratené, prihláste sa znova."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Prístup k tomuto zdroju bol zamietnutý. Zdá sa, že nemáte potrebné oprávnenia na prístup k nemu."
+
 msgid "Stay connected"
 msgstr "Zostať pripojený"
 
@@ -39152,7 +39158,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard čítanie"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Udržiavanie scoreboardu"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard čakanie"
@@ -39180,4 +39186,316 @@ msgstr "Obslúžené"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: povoliť mod_status (ExtendedStatus On) a umožniť localhost prístup k /server-status. Nginx: povoliť stub_status na lokalite len pre localhost, napr. /nginx_status alebo /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Rozloženie percentuálnych známok"
+
+msgid "Top learners"
+msgstr "Najlepší študenti"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Tento pokrok kombinuje pokrok v učebnej ceste a priemerný výsledok cvičení študenta"
+
+msgid "Additional profile fields"
+msgstr "Ďalšie polia profilu"
+
+msgid "Visible columns"
+msgstr "Viditeľné stĺpce"
+
+msgid "Learning path completion"
+msgstr "Dokončenie učebnej cesty"
+
+msgid "Number of certificates"
+msgstr "Počet certifikátov"
+
+msgid "Could not export the report"
+msgstr "Správu sa nepodarilo exportovať"
+
+msgid "Second learner"
+msgstr "Druhý študent"
+
+msgid "Results by learner"
+msgstr "Výsledky podľa študenta"
+
+msgid "Use filters to narrow down questions."
+msgstr "Použite filtre na zúženie otázok."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Skúste upraviť filtre a hľadať znova."
+
+msgid "Results per page"
+msgstr "Výsledkov na stránku"
+
+msgid "No answers"
+msgstr "Žiadne odpovede"
+
+msgid "Tests using this question"
+msgstr "Testy používajúce túto otázku"
+
+msgid "Delete failed"
+msgstr "Odstránenie zlyhalo"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostika OPcache a APCu v reálnom čase"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Kliknutím zobrazíte diagnostiku OPcache a APCu"
+
+msgid "Memory used"
+msgstr "Použitá pamäť"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache je nainštalovaný, ale nie je povolený."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Rozšírenie OPcache nie je na tomto serveri dostupné."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu je nainštalovaný, ale nie je povolený."
+
+msgid "APCu extension is not available on this server."
+msgstr "Rozšírenie APCu nie je na tomto serveri dostupné."
+
+msgid "Constant"
+msgstr "Konštanta"
+
+msgid "Space used on disk (MB)"
+msgstr "Využité miesto na disku (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Nastaviť maximálny priestor kurzu (MB)"
+
+msgid "Memory free"
+msgstr "Voľná pamäť"
+
+msgid "Memory wasted"
+msgstr "Premárnená pamäť"
+
+msgid "Memory used %"
+msgstr "Použitá pamäť %"
+
+msgid "Cached scripts"
+msgstr "Uložené skripty"
+
+msgid "Cached keys"
+msgstr "Uložené kľúče"
+
+msgid "Misses"
+msgstr "Zásahy mimo cache"
+
+msgid "Cache full"
+msgstr "Cache plná"
+
+msgid "OOM restarts"
+msgstr "OOM reštarty"
+
+msgid "Hash restarts"
+msgstr "Hash reštarty"
+
+msgid "Manual restarts"
+msgstr "Manuálne reštarty"
+
+msgid "Interned strings used"
+msgstr "Použité interné reťazce"
+
+msgid "Interned strings free"
+msgstr "Voľné interné reťazce"
+
+msgid "Interned strings count"
+msgstr "Počet interných reťazcov"
+
+msgid "Memory available"
+msgstr "Dostupná pamäť"
+
+msgid "Memory size"
+msgstr "Veľkosť pamäte"
+
+msgid "Entries"
+msgstr "Položky"
+
+msgid "Slots"
+msgstr "Sloty"
+
+msgid "Expunges"
+msgstr "Vymazania"
+
+msgid "Cache start time"
+msgstr "Čas spustenia cache"
+
+msgid "Time zone"
+msgstr "Časové pásmo"
+
+msgid "Not registered"
+msgstr "Neregistrovaný"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrujte a zobrazujte certifikáty študentov podľa relácie, kurzu, dátumu alebo študenta a podľa potreby ich exportujte."
+
+msgid "Filter by session and course"
+msgstr "Filtrovať podľa relácie a kurzu"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Vyberte reláciu, kurz a voliteľný dátum na zobrazenie vygenerovaných certifikátov."
+
+msgid "Filter by learner"
+msgstr "Filtrovať podľa študenta"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Nájsť certifikáty konkrétneho študenta naprieč reláciami a kurzami."
+
+msgid "Certificates found"
+msgstr "Nájdené certifikáty"
+
+msgid "Open certificate"
+msgstr "Otvoriť certifikát"
+
+msgid "Certificate file not available"
+msgstr "Súbor certifikátu nie je dostupný"
+
+msgid "Export to CSV"
+msgstr "Exportovať do CSV"
+
+msgid "Acquired skills"
+msgstr "Získané zručnosti"
+
+msgid "No acquired skill"
+msgstr "Žiadna získaná zručnosť"
+
+msgid "Absences"
+msgstr "Absencie"
+
+msgid "No courses"
+msgstr "Žiadne kurzy"
+
+msgid "No session matched"
+msgstr "Nenašla sa žiadna relácia"
+
+msgid "Unable to load the report"
+msgstr "Správu nie je možné načítať"
+
+msgid "Please select a profile"
+msgstr "Vyberte profil"
+
+msgid "Please select a session"
+msgstr "Vyberte reláciu"
+
+msgid "Please select a user"
+msgstr "Vyberte používateľa"
+
+msgid "Unable to export the report"
+msgstr "Správu nie je možné exportovať"
+
+msgid "Accepted on web"
+msgstr "Prijaté na webe"
+
+msgid "Accepted by e-mail"
+msgstr "Prijaté e-mailom"
+
+msgid "The course title is required"
+msgstr "Názov kurzu je povinný"
+
+msgid "Unexpected error"
+msgstr "Neočakávaná chyba"
+
+msgid "Separate tags with commas"
+msgstr "Oddeľujte značky čiarkami"
+
+msgid "Open link"
+msgstr "Otvoriť odkaz"
+
+msgid "Describe the course picture to generate"
+msgstr "Popíšte obrázok kurzu, ktorý sa má vygenerovať"
+
+msgid "Generate picture"
+msgstr "Vygenerovať obrázok"
+
+msgid "PDF watermark"
+msgstr "Vodoznak PDF"
+
+msgid "No watermark image"
+msgstr "Žiadny obrázok vodoznaku"
+
+msgid "Upload watermark"
+msgstr "Nahrať vodoznak"
+
+msgid "Delete watermark"
+msgstr "Odstrániť vodoznak"
+
+msgid "Course legal agreement file"
+msgstr "Súbor právneho súhlasu kurzu"
+
+msgid "Upload agreement file"
+msgstr "Nahrať súbor súhlasu"
+
+msgid "Download agreement file"
+msgstr "Stiahnuť súbor súhlasu"
+
+msgid "Delete agreement file"
+msgstr "Odstrániť súbor súhlasu"
+
+msgid "Custom certificate images"
+msgstr "Vlastné obrázky certifikátov"
+
+msgid "Course picture updated"
+msgstr "Obrázok kurzu bol aktualizovaný"
+
+msgid "The course picture could not be uploaded"
+msgstr "Obrázok kurzu sa nepodarilo nahrať"
+
+msgid "Course picture deleted"
+msgstr "Obrázok kurzu bol odstránený"
+
+msgid "Enter a description for the image"
+msgstr "Zadajte popis obrázka"
+
+msgid "The image generator returned an empty response"
+msgstr "Generátor obrázkov vrátil prázdnu odpoveď"
+
+msgid "Course picture generated"
+msgstr "Obrázok kurzu bol vygenerovaný"
+
+msgid "Watermark updated"
+msgstr "Vodoznak bol aktualizovaný"
+
+msgid "Watermark deleted"
+msgstr "Vodoznak bol odstránený"
+
+msgid "Agreement file updated"
+msgstr "Súbor súhlasu bol aktualizovaný"
+
+msgid "Agreement file deleted"
+msgstr "Súbor súhlasu bol odstránený"
+
+msgid "Certificate image updated"
+msgstr "Obrázok certifikátu bol aktualizovaný"
+
+msgid "Certificate image deleted"
+msgstr "Obrázok certifikátu bol odstránený"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Pred nahrávaním použite editor obrázkov na orezanie, otočenie alebo zmenu veľkosti obrázka kurzu."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Tento odkaz na pozvánku je neplatný alebo vypršal."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Táto pozvánka bola odoslaná inému používateľovi. Prihláste sa prosím pomocou pozvaného účtu."
+
+msgid "The invitation could not be accepted."
+msgstr "Pozvánku nebolo možné prijať."
+
+msgid "You have been subscribed successfully."
+msgstr "Boli ste úspešne prihlásení."
+
+msgid "This email address cannot be invited."
+msgstr "Túto e-mailovú adresu nie je možné pozvať."
+
+msgid "This user is already subscribed to the session."
+msgstr "Tento používateľ je už prihlásený do relácie."
+
+msgid "This user is already subscribed to the course."
+msgstr "Tento používateľ je už prihlásený do kurzu."
 

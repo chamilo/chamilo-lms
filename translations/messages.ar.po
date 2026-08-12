@@ -37713,6 +37713,12 @@ msgstr "ستنتهي صلاحية جلستك قريبًا"
 msgid "Do you want to continue your session?"
 msgstr "هل تريد متابعة جلستك؟"
 
+msgid "Your session details have been lost, please login again."
+msgstr "تم فقدان تفاصيل جلستك، يرجى تسجيل الدخول مرة أخرى."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "تم رفض الوصول إلى هذا المورد. يبدو أنك لا تملك الأذونات اللازمة للوصول إليه."
+
 msgid "Stay connected"
 msgstr "البقاء متصلاً"
 
@@ -39179,4 +39185,316 @@ msgstr "معالجة"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: فعّل mod_status (ExtendedStatus On) وسمح للمضيف المحلي بالوصول إلى /server-status. Nginx: فعّل stub_status في موقع يقتصر على المضيف المحلي مثل /nginx_status أو /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "توزيع النسب المئوية للدرجات"
+
+msgid "Top learners"
+msgstr "أفضل المتعلمين"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "يجمع هذا التقدم بين تقدم مسار التعلم ومتوسط نتيجة التمرين للمتعلم"
+
+msgid "Additional profile fields"
+msgstr "حقول الملف الشخصي الإضافية"
+
+msgid "Visible columns"
+msgstr "الأعمدة المرئية"
+
+msgid "Learning path completion"
+msgstr "إكمال مسار التعلم"
+
+msgid "Number of certificates"
+msgstr "عدد الشهادات"
+
+msgid "Could not export the report"
+msgstr "تعذر تصدير التقرير"
+
+msgid "Second learner"
+msgstr "المتعلم الثاني"
+
+msgid "Results by learner"
+msgstr "النتائج حسب المتعلم"
+
+msgid "Use filters to narrow down questions."
+msgstr "استخدم المرشحات لتضييق نطاق الأسئلة."
+
+msgid "Try adjusting your filters and search again."
+msgstr "حاول تعديل المرشحات والبحث مرة أخرى."
+
+msgid "Results per page"
+msgstr "النتائج لكل صفحة"
+
+msgid "No answers"
+msgstr "لا توجد إجابات"
+
+msgid "Tests using this question"
+msgstr "الاختبارات التي تستخدم هذا السؤال"
+
+msgid "Delete failed"
+msgstr "فشل الحذف"
+
+msgid "PHP cache"
+msgstr "ذاكرة التخزين المؤقت PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "تشخيصات OPcache وAPCu المباشرة"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "انقر لعرض تشخيصات OPcache وAPCu"
+
+msgid "Memory used"
+msgstr "الذاكرة المستخدمة"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache مثبت لكنه غير مفعّل."
+
+msgid "OPcache extension is not available on this server."
+msgstr "ملحق OPcache غير متوفر على هذا الخادم."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu مثبت لكنه غير مفعّل."
+
+msgid "APCu extension is not available on this server."
+msgstr "ملحق APCu غير متوفر على هذا الخادم."
+
+msgid "Constant"
+msgstr "ثابت"
+
+msgid "Space used on disk (MB)"
+msgstr "المساحة المستخدمة على القرص (ميغابايت)"
+
+msgid "Set max course space (MB)"
+msgstr "تعيين الحد الأقصى لمساحة الدورة (ميغابايت)"
+
+msgid "Memory free"
+msgstr "الذاكرة المتاحة"
+
+msgid "Memory wasted"
+msgstr "الذاكرة المهدرة"
+
+msgid "Memory used %"
+msgstr "نسبة الذاكرة المستخدمة %"
+
+msgid "Cached scripts"
+msgstr "النصوص المخزنة مؤقتًا"
+
+msgid "Cached keys"
+msgstr "المفاتيح المخزنة مؤقتًا"
+
+msgid "Misses"
+msgstr "الإخفاقات"
+
+msgid "Cache full"
+msgstr "ذاكرة التخزين المؤقت ممتلئة"
+
+msgid "OOM restarts"
+msgstr "إعادة تشغيل OOM"
+
+msgid "Hash restarts"
+msgstr "إعادة تشغيل التجزئة"
+
+msgid "Manual restarts"
+msgstr "إعادة تشغيل يدوية"
+
+msgid "Interned strings used"
+msgstr "السلاسل المُخزّنة المستخدمة"
+
+msgid "Interned strings free"
+msgstr "السلاسل المُخزّنة المتاحة"
+
+msgid "Interned strings count"
+msgstr "عدد السلاسل المُخزّنة"
+
+msgid "Memory available"
+msgstr "الذاكرة المتاحة"
+
+msgid "Memory size"
+msgstr "حجم الذاكرة"
+
+msgid "Entries"
+msgstr "الإدخالات"
+
+msgid "Slots"
+msgstr "الفتحات"
+
+msgid "Expunges"
+msgstr "عمليات الإزالة"
+
+msgid "Cache start time"
+msgstr "وقت بدء ذاكرة التخزين المؤقت"
+
+msgid "Time zone"
+msgstr "المنطقة الزمنية"
+
+msgid "Not registered"
+msgstr "غير مسجّل"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "تصفية وإدراج شهادات المتعلمين حسب الجلسة أو المقرر أو التاريخ أو المتعلم، ثم تصديرها عند الحاجة."
+
+msgid "Filter by session and course"
+msgstr "تصفية حسب الجلسة والمقرر"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "اختر جلسة ومقرراً وتاريخاً اختيارياً لإدراج الشهادات المُنشأة."
+
+msgid "Filter by learner"
+msgstr "تصفية حسب المتعلم"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "البحث عن شهادات متعلم محدد عبر الجلسات والمقررات."
+
+msgid "Certificates found"
+msgstr "الشهادات الموجودة"
+
+msgid "Open certificate"
+msgstr "فتح الشهادة"
+
+msgid "Certificate file not available"
+msgstr "ملف الشهادة غير متوفر"
+
+msgid "Export to CSV"
+msgstr "تصدير إلى CSV"
+
+msgid "Acquired skills"
+msgstr "المهارات المكتسبة"
+
+msgid "No acquired skill"
+msgstr "لا توجد مهارة مكتسبة"
+
+msgid "Absences"
+msgstr "الغيابات"
+
+msgid "No courses"
+msgstr "لا توجد مقررات"
+
+msgid "No session matched"
+msgstr "لا توجد جلسة مطابقة"
+
+msgid "Unable to load the report"
+msgstr "تعذر تحميل التقرير"
+
+msgid "Please select a profile"
+msgstr "يرجى اختيار ملف تعريف"
+
+msgid "Please select a session"
+msgstr "يرجى اختيار جلسة"
+
+msgid "Please select a user"
+msgstr "يرجى اختيار مستخدم"
+
+msgid "Unable to export the report"
+msgstr "تعذر تصدير التقرير"
+
+msgid "Accepted on web"
+msgstr "مقبول عبر الويب"
+
+msgid "Accepted by e-mail"
+msgstr "مقبول عبر البريد الإلكتروني"
+
+msgid "The course title is required"
+msgstr "عنوان المقرر مطلوب"
+
+msgid "Unexpected error"
+msgstr "خطأ غير متوقع"
+
+msgid "Separate tags with commas"
+msgstr "افصل بين الوسوم بفواصل"
+
+msgid "Open link"
+msgstr "فتح الرابط"
+
+msgid "Describe the course picture to generate"
+msgstr "وصف صورة المقرر المراد إنشاؤها"
+
+msgid "Generate picture"
+msgstr "إنشاء صورة"
+
+msgid "PDF watermark"
+msgstr "علامة مائية لملف PDF"
+
+msgid "No watermark image"
+msgstr "لا توجد صورة علامة مائية"
+
+msgid "Upload watermark"
+msgstr "رفع علامة مائية"
+
+msgid "Delete watermark"
+msgstr "حذف العلامة المائية"
+
+msgid "Course legal agreement file"
+msgstr "ملف اتفاقية المقرر القانونية"
+
+msgid "Upload agreement file"
+msgstr "رفع ملف الاتفاقية"
+
+msgid "Download agreement file"
+msgstr "تنزيل ملف الاتفاقية"
+
+msgid "Delete agreement file"
+msgstr "حذف ملف الاتفاقية"
+
+msgid "Custom certificate images"
+msgstr "صور شهادات مخصصة"
+
+msgid "Course picture updated"
+msgstr "تم تحديث صورة المقرر"
+
+msgid "The course picture could not be uploaded"
+msgstr "تعذر رفع صورة المقرر"
+
+msgid "Course picture deleted"
+msgstr "تم حذف صورة المقرر"
+
+msgid "Enter a description for the image"
+msgstr "أدخل وصفًا للصورة"
+
+msgid "The image generator returned an empty response"
+msgstr "أرجع مولد الصور استجابة فارغة"
+
+msgid "Course picture generated"
+msgstr "تم إنشاء صورة المقرر"
+
+msgid "Watermark updated"
+msgstr "تم تحديث العلامة المائية"
+
+msgid "Watermark deleted"
+msgstr "تم حذف العلامة المائية"
+
+msgid "Agreement file updated"
+msgstr "تم تحديث ملف الاتفاقية"
+
+msgid "Agreement file deleted"
+msgstr "تم حذف ملف الاتفاقية"
+
+msgid "Certificate image updated"
+msgstr "تم تحديث صورة الشهادة"
+
+msgid "Certificate image deleted"
+msgstr "تم حذف صورة الشهادة"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "استخدم محرر الصور قبل الرفع لقص أو تدوير أو تغيير حجم صورة المقرر."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "رابط الدعوة هذا غير صالح أو منتهي الصلاحية."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "تم إرسال هذه الدعوة إلى مستخدم آخر. يرجى تسجيل الدخول بحساب المدعو."
+
+msgid "The invitation could not be accepted."
+msgstr "تعذر قبول الدعوة."
+
+msgid "You have been subscribed successfully."
+msgstr "تم تسجيلك بنجاح."
+
+msgid "This email address cannot be invited."
+msgstr "لا يمكن دعوة عنوان البريد الإلكتروني هذا."
+
+msgid "This user is already subscribed to the session."
+msgstr "هذا المستخدم مشترك بالفعل في الجلسة."
+
+msgid "This user is already subscribed to the course."
+msgstr "هذا المستخدم مشترك بالفعل في المقرر."
 

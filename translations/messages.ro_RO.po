@@ -37715,6 +37715,12 @@ msgstr "Sesiunea dvs. este pe cale să expire"
 msgid "Do you want to continue your session?"
 msgstr "Doriți să continuați sesiunea?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Detaliile sesiunii dvs. s-au pierdut, vă rugăm să vă autentificați din nou."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Accesul la această resursă a fost refuzat. Se pare că nu aveți permisiunile necesare pentru a o accesa."
+
 msgid "Stay connected"
 msgstr "Rămâneți conectat"
 
@@ -39181,4 +39187,316 @@ msgstr "Gestionate"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: activați mod_status (ExtendedStatus On) și permiteți localhost la /server-status. Nginx: activați stub_status pe o locație doar localhost, cum ar fi /nginx_status sau /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribuția procentuală a notelor"
+
+msgid "Top learners"
+msgstr "Cei mai buni cursanți"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Acest progres combină progresul traseului de învățare și media rezultatelor la exerciții ale cursantului"
+
+msgid "Additional profile fields"
+msgstr "Câmpuri suplimentare de profil"
+
+msgid "Visible columns"
+msgstr "Coloane vizibile"
+
+msgid "Learning path completion"
+msgstr "Finalizarea traseului de învățare"
+
+msgid "Number of certificates"
+msgstr "Număr de certificate"
+
+msgid "Could not export the report"
+msgstr "Nu s-a putut exporta raportul"
+
+msgid "Second learner"
+msgstr "Al doilea cursant"
+
+msgid "Results by learner"
+msgstr "Rezultate pe cursant"
+
+msgid "Use filters to narrow down questions."
+msgstr "Utilizați filtrele pentru a restrânge întrebările."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Încercați să ajustați filtrele și căutați din nou."
+
+msgid "Results per page"
+msgstr "Rezultate pe pagină"
+
+msgid "No answers"
+msgstr "Fără răspunsuri"
+
+msgid "Tests using this question"
+msgstr "Teste care folosesc această întrebare"
+
+msgid "Delete failed"
+msgstr "Ștergerea a eșuat"
+
+msgid "PHP cache"
+msgstr "Cache PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnosticare live OPcache și APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Faceți clic pentru a afișa diagnosticul OPcache și APCu"
+
+msgid "Memory used"
+msgstr "Memorie utilizată"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache este instalat, dar nu este activat."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Extensia OPcache nu este disponibilă pe acest server."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu este instalat, dar nu este activat."
+
+msgid "APCu extension is not available on this server."
+msgstr "Extensia APCu nu este disponibilă pe acest server."
+
+msgid "Constant"
+msgstr "Constantă"
+
+msgid "Space used on disk (MB)"
+msgstr "Spațiu utilizat pe disc (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Setează spațiul maxim pentru curs (MB)"
+
+msgid "Memory free"
+msgstr "Memorie liberă"
+
+msgid "Memory wasted"
+msgstr "Memorie irosită"
+
+msgid "Memory used %"
+msgstr "Memorie utilizată %"
+
+msgid "Cached scripts"
+msgstr "Scripturi în cache"
+
+msgid "Cached keys"
+msgstr "Chei în cache"
+
+msgid "Misses"
+msgstr "Ratări"
+
+msgid "Cache full"
+msgstr "Cache plin"
+
+msgid "OOM restarts"
+msgstr "Reporniri OOM"
+
+msgid "Hash restarts"
+msgstr "Reporniri hash"
+
+msgid "Manual restarts"
+msgstr "Reporniri manuale"
+
+msgid "Interned strings used"
+msgstr "Șiruri internate utilizate"
+
+msgid "Interned strings free"
+msgstr "Șiruri internate libere"
+
+msgid "Interned strings count"
+msgstr "Număr șiruri internate"
+
+msgid "Memory available"
+msgstr "Memorie disponibilă"
+
+msgid "Memory size"
+msgstr "Dimensiune memorie"
+
+msgid "Entries"
+msgstr "Intrări"
+
+msgid "Slots"
+msgstr "Sloturi"
+
+msgid "Expunges"
+msgstr "Eliminări"
+
+msgid "Cache start time"
+msgstr "Ora de pornire a cache-ului"
+
+msgid "Time zone"
+msgstr "Fus orar"
+
+msgid "Not registered"
+msgstr "Neînregistrat"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrează și listează certificatele cursanților după sesiune, curs, dată sau cursant, apoi exportă-le când este necesar."
+
+msgid "Filter by session and course"
+msgstr "Filtrează după sesiune și curs"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Alege o sesiune, un curs și o dată opțională pentru a lista certificatele generate."
+
+msgid "Filter by learner"
+msgstr "Filtrează după cursant"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Găsește certificatele unui cursant specific în toate sesiunile și cursurile."
+
+msgid "Certificates found"
+msgstr "Certificate găsite"
+
+msgid "Open certificate"
+msgstr "Deschide certificatul"
+
+msgid "Certificate file not available"
+msgstr "Fișierul certificatului nu este disponibil"
+
+msgid "Export to CSV"
+msgstr "Exportă în CSV"
+
+msgid "Acquired skills"
+msgstr "Competențe dobândite"
+
+msgid "No acquired skill"
+msgstr "Nicio competență dobândită"
+
+msgid "Absences"
+msgstr "Absențe"
+
+msgid "No courses"
+msgstr "Niciun curs"
+
+msgid "No session matched"
+msgstr "Nicio sesiune corespunzătoare"
+
+msgid "Unable to load the report"
+msgstr "Imposibil de încărcat raportul"
+
+msgid "Please select a profile"
+msgstr "Selectează un profil"
+
+msgid "Please select a session"
+msgstr "Selectează o sesiune"
+
+msgid "Please select a user"
+msgstr "Selectează un utilizator"
+
+msgid "Unable to export the report"
+msgstr "Imposibil de exportat raportul"
+
+msgid "Accepted on web"
+msgstr "Acceptat pe web"
+
+msgid "Accepted by e-mail"
+msgstr "Acceptat prin e-mail"
+
+msgid "The course title is required"
+msgstr "Titlul cursului este obligatoriu"
+
+msgid "Unexpected error"
+msgstr "Eroare neașteptată"
+
+msgid "Separate tags with commas"
+msgstr "Separați etichetele prin virgulă"
+
+msgid "Open link"
+msgstr "Deschide linkul"
+
+msgid "Describe the course picture to generate"
+msgstr "Descrieți imaginea cursului de generat"
+
+msgid "Generate picture"
+msgstr "Generează imagine"
+
+msgid "PDF watermark"
+msgstr "Filigran PDF"
+
+msgid "No watermark image"
+msgstr "Nicio imagine de filigran"
+
+msgid "Upload watermark"
+msgstr "Încarcă filigran"
+
+msgid "Delete watermark"
+msgstr "Șterge filigran"
+
+msgid "Course legal agreement file"
+msgstr "Fișier acord legal curs"
+
+msgid "Upload agreement file"
+msgstr "Încarcă fișier acord"
+
+msgid "Download agreement file"
+msgstr "Descarcă fișier acord"
+
+msgid "Delete agreement file"
+msgstr "Șterge fișier acord"
+
+msgid "Custom certificate images"
+msgstr "Imagini certificat personalizat"
+
+msgid "Course picture updated"
+msgstr "Imaginea cursului a fost actualizată"
+
+msgid "The course picture could not be uploaded"
+msgstr "Imaginea cursului nu a putut fi încărcată"
+
+msgid "Course picture deleted"
+msgstr "Imaginea cursului a fost ștearsă"
+
+msgid "Enter a description for the image"
+msgstr "Introduceți o descriere pentru imagine"
+
+msgid "The image generator returned an empty response"
+msgstr "Generatorul de imagini a returnat un răspuns gol"
+
+msgid "Course picture generated"
+msgstr "Imaginea cursului a fost generată"
+
+msgid "Watermark updated"
+msgstr "Filigranul a fost actualizat"
+
+msgid "Watermark deleted"
+msgstr "Filigranul a fost șters"
+
+msgid "Agreement file updated"
+msgstr "Fișierul acord a fost actualizat"
+
+msgid "Agreement file deleted"
+msgstr "Fișierul acord a fost șters"
+
+msgid "Certificate image updated"
+msgstr "Imaginea certificatului a fost actualizată"
+
+msgid "Certificate image deleted"
+msgstr "Imaginea certificatului a fost ștearsă"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Utilizați editorul de imagini înainte de încărcare pentru a decupa, roti sau redimensiona imaginea cursului."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Acest link de invitație este invalid sau a expirat."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Această invitație a fost trimisă unui alt utilizator. Vă rugăm să vă conectați cu contul invitat."
+
+msgid "The invitation could not be accepted."
+msgstr "Invitația nu a putut fi acceptată."
+
+msgid "You have been subscribed successfully."
+msgstr "Ați fost înscris cu succes."
+
+msgid "This email address cannot be invited."
+msgstr "Această adresă de e-mail nu poate fi invitată."
+
+msgid "This user is already subscribed to the session."
+msgstr "Acest utilizator este deja înscris la sesiune."
+
+msgid "This user is already subscribed to the course."
+msgstr "Acest utilizator este deja înscris la curs."
 

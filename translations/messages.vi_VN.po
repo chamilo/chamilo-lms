@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -37701,6 +37701,12 @@ msgstr "Phiên của bạn sắp hết hạn"
 msgid "Do you want to continue your session?"
 msgstr "Bạn có muốn tiếp tục phiên không?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Chi tiết phiên làm việc của bạn đã bị mất, vui lòng đăng nhập lại."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Truy cập tài nguyên này đã bị từ chối. Có vẻ bạn không có quyền truy cập cần thiết."
+
 msgid "Stay connected"
 msgstr "Giữ kết nối"
 
@@ -39139,7 +39145,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard đang đọc"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Giữ kết nối bảng điểm"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard đang chờ"
@@ -39167,4 +39173,316 @@ msgstr "Đã xử lý"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: bật mod_status (ExtendedStatus On) và cho phép localhost truy cập /server-status. Nginx: bật stub_status trên vị trí chỉ localhost như /nginx_status hoặc /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Phân bố phần trăm điểm số"
+
+msgid "Top learners"
+msgstr "Học viên xuất sắc"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Tiến độ này kết hợp tiến độ lộ trình học tập và kết quả trung bình bài tập của học viên"
+
+msgid "Additional profile fields"
+msgstr "Trường hồ sơ bổ sung"
+
+msgid "Visible columns"
+msgstr "Cột hiển thị"
+
+msgid "Learning path completion"
+msgstr "Hoàn thành lộ trình học tập"
+
+msgid "Number of certificates"
+msgstr "Số lượng chứng chỉ"
+
+msgid "Could not export the report"
+msgstr "Không thể xuất báo cáo"
+
+msgid "Second learner"
+msgstr "Học viên thứ hai"
+
+msgid "Results by learner"
+msgstr "Kết quả theo học viên"
+
+msgid "Use filters to narrow down questions."
+msgstr "Sử dụng bộ lọc để thu hẹp câu hỏi."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Hãy điều chỉnh bộ lọc và tìm kiếm lại."
+
+msgid "Results per page"
+msgstr "Kết quả mỗi trang"
+
+msgid "No answers"
+msgstr "Không có câu trả lời"
+
+msgid "Tests using this question"
+msgstr "Bài kiểm tra sử dụng câu hỏi này"
+
+msgid "Delete failed"
+msgstr "Xóa thất bại"
+
+msgid "PHP cache"
+msgstr "Bộ nhớ đệm PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Chẩn đoán OPcache và APCu trực tiếp"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Nhấp để hiển thị chẩn đoán OPcache và APCu"
+
+msgid "Memory used"
+msgstr "Bộ nhớ đã sử dụng"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache đã cài đặt nhưng chưa được kích hoạt."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Phần mở rộng OPcache không khả dụng trên máy chủ này."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu đã cài đặt nhưng chưa được kích hoạt."
+
+msgid "APCu extension is not available on this server."
+msgstr "Phần mở rộng APCu không khả dụng trên máy chủ này."
+
+msgid "Constant"
+msgstr "Hằng số"
+
+msgid "Space used on disk (MB)"
+msgstr "Dung lượng sử dụng trên ổ đĩa (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Đặt dung lượng khóa học tối đa (MB)"
+
+msgid "Memory free"
+msgstr "Bộ nhớ trống"
+
+msgid "Memory wasted"
+msgstr "Bộ nhớ lãng phí"
+
+msgid "Memory used %"
+msgstr "Bộ nhớ đã dùng %"
+
+msgid "Cached scripts"
+msgstr "Script đã lưu"
+
+msgid "Cached keys"
+msgstr "Khóa đã lưu"
+
+msgid "Misses"
+msgstr "Lỗi truy cập"
+
+msgid "Cache full"
+msgstr "Bộ nhớ đầy"
+
+msgid "OOM restarts"
+msgstr "Khởi động lại OOM"
+
+msgid "Hash restarts"
+msgstr "Khởi động lại Hash"
+
+msgid "Manual restarts"
+msgstr "Khởi động lại thủ công"
+
+msgid "Interned strings used"
+msgstr "Chuỗi nội trú đã dùng"
+
+msgid "Interned strings free"
+msgstr "Chuỗi nội trú còn trống"
+
+msgid "Interned strings count"
+msgstr "Số chuỗi nội trú"
+
+msgid "Memory available"
+msgstr "Bộ nhớ khả dụng"
+
+msgid "Memory size"
+msgstr "Kích thước bộ nhớ"
+
+msgid "Entries"
+msgstr "Mục"
+
+msgid "Slots"
+msgstr "Khe"
+
+msgid "Expunges"
+msgstr "Xóa"
+
+msgid "Cache start time"
+msgstr "Thời gian bắt đầu bộ nhớ đệm"
+
+msgid "Time zone"
+msgstr "Múi giờ"
+
+msgid "Not registered"
+msgstr "Chưa đăng ký"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Lọc và liệt kê chứng chỉ người học theo phiên, khóa học, ngày hoặc người học, sau đó xuất khi cần."
+
+msgid "Filter by session and course"
+msgstr "Lọc theo phiên và khóa học"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Chọn phiên, khóa học và ngày tùy chọn để liệt kê các chứng chỉ đã tạo."
+
+msgid "Filter by learner"
+msgstr "Lọc theo người học"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Tìm chứng chỉ của một người học cụ thể trên các phiên và khóa học."
+
+msgid "Certificates found"
+msgstr "Chứng chỉ đã tìm thấy"
+
+msgid "Open certificate"
+msgstr "Mở chứng chỉ"
+
+msgid "Certificate file not available"
+msgstr "Tệp chứng chỉ không khả dụng"
+
+msgid "Export to CSV"
+msgstr "Xuất CSV"
+
+msgid "Acquired skills"
+msgstr "Kỹ năng đạt được"
+
+msgid "No acquired skill"
+msgstr "Chưa có kỹ năng đạt được"
+
+msgid "Absences"
+msgstr "Vắng mặt"
+
+msgid "No courses"
+msgstr "Không có khóa học"
+
+msgid "No session matched"
+msgstr "Không có phiên phù hợp"
+
+msgid "Unable to load the report"
+msgstr "Không thể tải báo cáo"
+
+msgid "Please select a profile"
+msgstr "Vui lòng chọn hồ sơ"
+
+msgid "Please select a session"
+msgstr "Vui lòng chọn phiên"
+
+msgid "Please select a user"
+msgstr "Vui lòng chọn người dùng"
+
+msgid "Unable to export the report"
+msgstr "Không thể xuất báo cáo"
+
+msgid "Accepted on web"
+msgstr "Đã chấp nhận trên web"
+
+msgid "Accepted by e-mail"
+msgstr "Đã chấp nhận qua email"
+
+msgid "The course title is required"
+msgstr "Tiêu đề khóa học là bắt buộc"
+
+msgid "Unexpected error"
+msgstr "Lỗi không mong muốn"
+
+msgid "Separate tags with commas"
+msgstr "Phân tách thẻ bằng dấu phẩy"
+
+msgid "Open link"
+msgstr "Mở liên kết"
+
+msgid "Describe the course picture to generate"
+msgstr "Mô tả hình ảnh khóa học cần tạo"
+
+msgid "Generate picture"
+msgstr "Tạo hình ảnh"
+
+msgid "PDF watermark"
+msgstr "Hình mờ PDF"
+
+msgid "No watermark image"
+msgstr "Không có hình mờ"
+
+msgid "Upload watermark"
+msgstr "Tải lên hình mờ"
+
+msgid "Delete watermark"
+msgstr "Xóa hình mờ"
+
+msgid "Course legal agreement file"
+msgstr "Tệp thỏa thuận pháp lý khóa học"
+
+msgid "Upload agreement file"
+msgstr "Tải lên tệp thỏa thuận"
+
+msgid "Download agreement file"
+msgstr "Tải xuống tệp thỏa thuận"
+
+msgid "Delete agreement file"
+msgstr "Xóa tệp thỏa thuận"
+
+msgid "Custom certificate images"
+msgstr "Hình ảnh chứng chỉ tùy chỉnh"
+
+msgid "Course picture updated"
+msgstr "Đã cập nhật hình ảnh khóa học"
+
+msgid "The course picture could not be uploaded"
+msgstr "Không thể tải lên hình ảnh khóa học"
+
+msgid "Course picture deleted"
+msgstr "Đã xóa hình ảnh khóa học"
+
+msgid "Enter a description for the image"
+msgstr "Nhập mô tả cho hình ảnh"
+
+msgid "The image generator returned an empty response"
+msgstr "Trình tạo hình ảnh trả về phản hồi trống"
+
+msgid "Course picture generated"
+msgstr "Đã tạo hình ảnh khóa học"
+
+msgid "Watermark updated"
+msgstr "Đã cập nhật hình mờ"
+
+msgid "Watermark deleted"
+msgstr "Đã xóa hình mờ"
+
+msgid "Agreement file updated"
+msgstr "Đã cập nhật tệp thỏa thuận"
+
+msgid "Agreement file deleted"
+msgstr "Đã xóa tệp thỏa thuận"
+
+msgid "Certificate image updated"
+msgstr "Đã cập nhật hình ảnh chứng chỉ"
+
+msgid "Certificate image deleted"
+msgstr "Đã xóa hình ảnh chứng chỉ"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Sử dụng trình chỉnh sửa hình ảnh trước khi tải lên để cắt, xoay hoặc thay đổi kích thước hình ảnh khóa học."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Liên kết mời này không hợp lệ hoặc đã hết hạn."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Lời mời này đã được gửi đến người dùng khác. Vui lòng đăng nhập bằng tài khoản được mời."
+
+msgid "The invitation could not be accepted."
+msgstr "Không thể chấp nhận lời mời."
+
+msgid "You have been subscribed successfully."
+msgstr "Bạn đã đăng ký thành công."
+
+msgid "This email address cannot be invited."
+msgstr "Không thể mời địa chỉ email này."
+
+msgid "This user is already subscribed to the session."
+msgstr "Người dùng này đã đăng ký vào phiên học."
+
+msgid "This user is already subscribed to the course."
+msgstr "Người dùng này đã đăng ký vào khóa học."
 

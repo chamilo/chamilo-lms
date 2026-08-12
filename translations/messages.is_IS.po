@@ -37700,6 +37700,12 @@ msgstr ""
 msgid "Do you want to continue your session?"
 msgstr ""
 
+msgid "Your session details have been lost, please login again."
+msgstr "Upplýsingar um setuna þína hafa glatast, vinsamlegast skráðu þig inn aftur."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Aðgangur að þessu efni hefur verið hafnað. Þú virðist ekki hafa nauðsynleg réttindi til að fá aðgang að því."
+
 msgid "Stay connected"
 msgstr "Vertu tengdur"
 
@@ -39132,13 +39138,13 @@ msgid "Load average (15 min)"
 msgstr "Meðaltal hleðslu (15 mín)"
 
 msgid "Scoreboard sending"
-msgstr "Scoreboard sending"
+msgstr "Sending stigataflu"
 
 msgid "Scoreboard reading"
 msgstr "Scoreboard lestur"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Stigatafla halda áfram"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard bið"
@@ -39166,4 +39172,316 @@ msgstr "Meðhöndlaðir"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: virkjaðu mod_status (ExtendedStatus On) og leyfðu localhost aðgang að /server-status. Nginx: virkjaðu stub_status á staðsetningu sem er aðeins fyrir localhost eins og /nginx_status eða /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Dreifing einkunna í prósentum"
+
+msgid "Top learners"
+msgstr "Topp nemendur"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Þessi framvinda sameinar framvindu námsleiðar og meðaltal niðurstaðna nemandans í æfingum"
+
+msgid "Additional profile fields"
+msgstr "Viðbótarprófílsreitir"
+
+msgid "Visible columns"
+msgstr "Sýnilegir dálkar"
+
+msgid "Learning path completion"
+msgstr "Frágangur námsleiðar"
+
+msgid "Number of certificates"
+msgstr "Fjöldi skírteina"
+
+msgid "Could not export the report"
+msgstr "Ekki tókst að flytja út skýrsluna"
+
+msgid "Second learner"
+msgstr "Annar nemandi"
+
+msgid "Results by learner"
+msgstr "Niðurstöður eftir nemanda"
+
+msgid "Use filters to narrow down questions."
+msgstr "Notaðu síur til að þrengja spurningar."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Reyndu að breyta síunum þínum og leita aftur."
+
+msgid "Results per page"
+msgstr "Niðurstöður á síðu"
+
+msgid "No answers"
+msgstr "Engin svör"
+
+msgid "Tests using this question"
+msgstr "Próf sem nota þessa spurningu"
+
+msgid "Delete failed"
+msgstr "Eyðing mistókst"
+
+msgid "PHP cache"
+msgstr "PHP skyndiminni"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache og APCu greining"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Smelltu til að sýna OPcache og APCu greiningu"
+
+msgid "Memory used"
+msgstr "Minni notað"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache er uppsett en ekki virkt."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache viðbót er ekki tiltæk á þessum þjóni."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu er uppsett en ekki virkt."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu viðbót er ekki tiltæk á þessum þjóni."
+
+msgid "Constant"
+msgstr "Fasti"
+
+msgid "Space used on disk (MB)"
+msgstr "Diskpláss notað (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Setja hámarks pláss námskeiðs (MB)"
+
+msgid "Memory free"
+msgstr "Laust minni"
+
+msgid "Memory wasted"
+msgstr "Minni sóað"
+
+msgid "Memory used %"
+msgstr "Minni notað %"
+
+msgid "Cached scripts"
+msgstr "Skyndiminnaðar skriftur"
+
+msgid "Cached keys"
+msgstr "Skyndiminnaðar lyklar"
+
+msgid "Misses"
+msgstr "Misheppnanir"
+
+msgid "Cache full"
+msgstr "Skyndiminni fullt"
+
+msgid "OOM restarts"
+msgstr "OOM endurræsingar"
+
+msgid "Hash restarts"
+msgstr "Hash endurræsingar"
+
+msgid "Manual restarts"
+msgstr "Handvirkar endurræsingar"
+
+msgid "Interned strings used"
+msgstr "Innri strengir notaðir"
+
+msgid "Interned strings free"
+msgstr "Innri strengir lausir"
+
+msgid "Interned strings count"
+msgstr "Fjöldi innri strengja"
+
+msgid "Memory available"
+msgstr "Minni tiltækt"
+
+msgid "Memory size"
+msgstr "Minni stærð"
+
+msgid "Entries"
+msgstr "Færslur"
+
+msgid "Slots"
+msgstr "Raufar"
+
+msgid "Expunges"
+msgstr "Úthreinsanir"
+
+msgid "Cache start time"
+msgstr "Skyndiminni byrjað"
+
+msgid "Time zone"
+msgstr "Tímabelti"
+
+msgid "Not registered"
+msgstr "Ekki skráður"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Sía og lista nemendaskírteini eftir lotu, námskeiði, dagsetningu eða nemanda og flytja þau út þegar þörf krefur."
+
+msgid "Filter by session and course"
+msgstr "Sía eftir lotu og námskeiði"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Veldu lotu, námskeið og valfrjálsa dagsetningu til að lista útgefin skírteini."
+
+msgid "Filter by learner"
+msgstr "Sía eftir nemanda"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Finna skírteini fyrir tiltekinn nemanda yfir lotur og námskeið."
+
+msgid "Certificates found"
+msgstr "Skírteini fundin"
+
+msgid "Open certificate"
+msgstr "Opna skírteini"
+
+msgid "Certificate file not available"
+msgstr "Skírteinisskrá ekki tiltæk"
+
+msgid "Export to CSV"
+msgstr "Flytja út í CSV"
+
+msgid "Acquired skills"
+msgstr "Öðlast færni"
+
+msgid "No acquired skill"
+msgstr "Engin færni öðlast"
+
+msgid "Absences"
+msgstr "Fjarvistir"
+
+msgid "No courses"
+msgstr "Engin námskeið"
+
+msgid "No session matched"
+msgstr "Engin lota fannst"
+
+msgid "Unable to load the report"
+msgstr "Ekki tókst að hlaða skýrslu"
+
+msgid "Please select a profile"
+msgstr "Veldu prófíl"
+
+msgid "Please select a session"
+msgstr "Veldu lotu"
+
+msgid "Please select a user"
+msgstr "Veldu notanda"
+
+msgid "Unable to export the report"
+msgstr "Ekki tókst að flytja skýrslu út"
+
+msgid "Accepted on web"
+msgstr "Samþykkt á vef"
+
+msgid "Accepted by e-mail"
+msgstr "Samþykkt með tölvupósti"
+
+msgid "The course title is required"
+msgstr "Námskeiðsheiti er áskilið"
+
+msgid "Unexpected error"
+msgstr "Óvænt villa"
+
+msgid "Separate tags with commas"
+msgstr "Aðskilja merki með kommum"
+
+msgid "Open link"
+msgstr "Opna tengil"
+
+msgid "Describe the course picture to generate"
+msgstr "Lýstu mynd námskeiðs sem á að búa til"
+
+msgid "Generate picture"
+msgstr "Búa til mynd"
+
+msgid "PDF watermark"
+msgstr "Vatnsmerki PDF"
+
+msgid "No watermark image"
+msgstr "Ekkert vatnsmerki"
+
+msgid "Upload watermark"
+msgstr "Hlaða upp vatnsmerki"
+
+msgid "Delete watermark"
+msgstr "Eyða vatnsmerki"
+
+msgid "Course legal agreement file"
+msgstr "Löglegt samkomulagsskrá námskeiðs"
+
+msgid "Upload agreement file"
+msgstr "Hlaða upp samkomulagsskrá"
+
+msgid "Download agreement file"
+msgstr "Sækja samkomulagsskrá"
+
+msgid "Delete agreement file"
+msgstr "Eyða samkomulagsskrá"
+
+msgid "Custom certificate images"
+msgstr "Sérsniðnar skírteinismyndir"
+
+msgid "Course picture updated"
+msgstr "Mynd námskeiðs uppfærð"
+
+msgid "The course picture could not be uploaded"
+msgstr "Ekki tókst að hlaða upp mynd námskeiðs"
+
+msgid "Course picture deleted"
+msgstr "Mynd námskeiðs eytt"
+
+msgid "Enter a description for the image"
+msgstr "Sláðu inn lýsingu á myndinni"
+
+msgid "The image generator returned an empty response"
+msgstr "Myndavélin skilaði tómum svörum"
+
+msgid "Course picture generated"
+msgstr "Mynd námskeiðs búin til"
+
+msgid "Watermark updated"
+msgstr "Vatnsmerki uppfært"
+
+msgid "Watermark deleted"
+msgstr "Vatnsmerki eytt"
+
+msgid "Agreement file updated"
+msgstr "Samkomulagsskrá uppfærð"
+
+msgid "Agreement file deleted"
+msgstr "Samkomulagsskrá eytt"
+
+msgid "Certificate image updated"
+msgstr "Skírteinismynd uppfærð"
+
+msgid "Certificate image deleted"
+msgstr "Vottorðsmynd eytt"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Notaðu myndvinnslu áður en þú hleður upp til að skera, snúa eða breyta stærð námsmyndar."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Þessi boðstengill er ógildur eða útrunninn."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Þetta boð var sent á annan notanda. Vinsamlegast skráðu þig inn með boðnu reikningnum."
+
+msgid "The invitation could not be accepted."
+msgstr "Ekki tókst að samþykkja boðið."
+
+msgid "You have been subscribed successfully."
+msgstr "Þú hefur verið skráður með góðum árangri."
+
+msgid "This email address cannot be invited."
+msgstr "Ekki er hægt að bjóða þessu netfangi."
+
+msgid "This user is already subscribed to the session."
+msgstr "Þessi notandi er þegar skráður í lotuna."
+
+msgid "This user is already subscribed to the course."
+msgstr "Þessi notandi er þegar skráður í námskeiðið."
 

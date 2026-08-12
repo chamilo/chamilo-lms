@@ -37695,6 +37695,12 @@ msgstr "თქვენი სესია ამოიწურება"
 msgid "Do you want to continue your session?"
 msgstr "გსურთ სესიის გაგრძელება?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "თქვენი სესიის დეტალები დაიკარგა, გთხოვთ ხელახლა შეხვიდეთ სისტემაში."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "ამ რესურსზე წვდომა აკრძალულია. როგორც ჩანს, არ გაქვთ საჭირო უფლებები მასზე წვდომისთვის."
+
 msgid "Stay connected"
 msgstr "დაკავშირებული დარჩენა"
 
@@ -39161,4 +39167,316 @@ msgstr "დამუშავებული"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ჩართეთ mod_status (ExtendedStatus On) და დაუშვით localhost-ს წვდომა /server-status-ზე. Nginx: ჩართეთ stub_status მხოლოდ localhost-ისთვის განკუთვნილ მდებარეობაზე, მაგალითად /nginx_status ან /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "შეფასების პროცენტული განაწილება"
+
+msgid "Top learners"
+msgstr "საუკეთესო მოსწავლეები"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "ეს პროგრესი აერთიანებს სასწავლო გზის პროგრესს და მოსწავლის საშუალო შედეგს სავარჯიშოებში"
+
+msgid "Additional profile fields"
+msgstr "დამატებითი პროფილის ველები"
+
+msgid "Visible columns"
+msgstr "ხილული სვეტები"
+
+msgid "Learning path completion"
+msgstr "სასწავლო გზის დასრულება"
+
+msgid "Number of certificates"
+msgstr "სერტიფიკატების რაოდენობა"
+
+msgid "Could not export the report"
+msgstr "ანგარიშის ექსპორტი ვერ მოხერხდა"
+
+msgid "Second learner"
+msgstr "მეორე მოსწავლე"
+
+msgid "Results by learner"
+msgstr "შედეგები მოსწავლის მიხედვით"
+
+msgid "Use filters to narrow down questions."
+msgstr "გამოიყენეთ ფილტრები კითხვების შესამცირებლად."
+
+msgid "Try adjusting your filters and search again."
+msgstr "სცადეთ ფილტრების შეცვლა და ხელახლა მოძებნეთ."
+
+msgid "Results per page"
+msgstr "შედეგები გვერდზე"
+
+msgid "No answers"
+msgstr "პასუხები არ არის"
+
+msgid "Tests using this question"
+msgstr "ტესტები, რომლებიც იყენებენ ამ კითხვას"
+
+msgid "Delete failed"
+msgstr "წაშლა ვერ მოხერხდა"
+
+msgid "PHP cache"
+msgstr "PHP ქეში"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache და APCu დიაგნოსტიკა"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "დააჭირეთ OPcache და APCu დიაგნოსტიკის საჩვენებლად"
+
+msgid "Memory used"
+msgstr "გამოყენებული მეხსიერება"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache დაყენებულია, მაგრამ არ არის ჩართული."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache გაფართოება მიუწვდომელია ამ სერვერზე."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu დაყენებულია, მაგრამ არ არის ჩართული."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu გაფართოება ამ სერვერზე მიუწვდომელია."
+
+msgid "Constant"
+msgstr "მუდმივი"
+
+msgid "Space used on disk (MB)"
+msgstr "დისკზე გამოყენებული ადგილი (მბ)"
+
+msgid "Set max course space (MB)"
+msgstr "კურსის მაქსიმალური სივრცის დაყენება (მბ)"
+
+msgid "Memory free"
+msgstr "თავისუფალი მეხსიერება"
+
+msgid "Memory wasted"
+msgstr "დაკარგული მეხსიერება"
+
+msgid "Memory used %"
+msgstr "მეხსიერების გამოყენება %"
+
+msgid "Cached scripts"
+msgstr "ქეშირებული სკრიპტები"
+
+msgid "Cached keys"
+msgstr "ქეშირებული გასაღებები"
+
+msgid "Misses"
+msgstr "გაცდენები"
+
+msgid "Cache full"
+msgstr "ქეში სავსეა"
+
+msgid "OOM restarts"
+msgstr "OOM გადატვირთვები"
+
+msgid "Hash restarts"
+msgstr "ჰეშის გადატვირთვები"
+
+msgid "Manual restarts"
+msgstr "ხელით გადატვირთვები"
+
+msgid "Interned strings used"
+msgstr "გამოყენებული ინტერნირებული სტრიქონები"
+
+msgid "Interned strings free"
+msgstr "თავისუფალი ინტერნირებული სტრიქონები"
+
+msgid "Interned strings count"
+msgstr "ინტერნირებული სტრიქონების რაოდენობა"
+
+msgid "Memory available"
+msgstr "მეხსიერება ხელმისაწვდომია"
+
+msgid "Memory size"
+msgstr "მეხსიერების ზომა"
+
+msgid "Entries"
+msgstr "ჩანაწერები"
+
+msgid "Slots"
+msgstr "სლოტები"
+
+msgid "Expunges"
+msgstr "გაუქმებები"
+
+msgid "Cache start time"
+msgstr "ქეშის დაწყების დრო"
+
+msgid "Time zone"
+msgstr "დროის ზონა"
+
+msgid "Not registered"
+msgstr "არ არის რეგისტრირებული"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "ფილტრეთ და ჩამოთვალეთ მსმენელთა სერტიფიკატები სესიის, კურსის, თარიღის ან მსმენელის მიხედვით, შემდეგ საჭიროებისამებრ ექსპორტირება."
+
+msgid "Filter by session and course"
+msgstr "ფილტრი სესიისა და კურსის მიხედვით"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "აირჩიეთ სესია, კურსი და არასავალდებულო თარიღი გენერირებული სერტიფიკატების სიისთვის."
+
+msgid "Filter by learner"
+msgstr "ფილტრი მსმენელის მიხედვით"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "იპოვეთ სერტიფიკატები კონკრეტული მსმენელისთვის სესიებსა და კურსებში."
+
+msgid "Certificates found"
+msgstr "ნაპოვნი სერტიფიკატები"
+
+msgid "Open certificate"
+msgstr "სერტიფიკატის გახსნა"
+
+msgid "Certificate file not available"
+msgstr "სერტიფიკატის ფაილი მიუწვდომელია"
+
+msgid "Export to CSV"
+msgstr "CSV-ში ექსპორტი"
+
+msgid "Acquired skills"
+msgstr "შეძენილი უნარები"
+
+msgid "No acquired skill"
+msgstr "შეძენილი უნარი არ არის"
+
+msgid "Absences"
+msgstr "გაცდენები"
+
+msgid "No courses"
+msgstr "კურსები არ არის"
+
+msgid "No session matched"
+msgstr "სესია არ შეესაბამება"
+
+msgid "Unable to load the report"
+msgstr "ანგარიშის ჩატვირთვა შეუძლებელია"
+
+msgid "Please select a profile"
+msgstr "გთხოვთ აირჩიოთ პროფილი"
+
+msgid "Please select a session"
+msgstr "გთხოვთ აირჩიოთ სესია"
+
+msgid "Please select a user"
+msgstr "გთხოვთ აირჩიოთ მომხმარებელი"
+
+msgid "Unable to export the report"
+msgstr "ანგარიშის ექსპორტი შეუძლებელია"
+
+msgid "Accepted on web"
+msgstr "მიღებული ვებზე"
+
+msgid "Accepted by e-mail"
+msgstr "მიღებული ელ.ფოსტით"
+
+msgid "The course title is required"
+msgstr "კურსის სათაური აუცილებელია"
+
+msgid "Unexpected error"
+msgstr "მოულოდნელი შეცდომა"
+
+msgid "Separate tags with commas"
+msgstr "ტეგების გამოყოფა მძიმეებით"
+
+msgid "Open link"
+msgstr "ბმულის გახსნა"
+
+msgid "Describe the course picture to generate"
+msgstr "აღწერეთ კურსის სურათი გენერირებისთვის"
+
+msgid "Generate picture"
+msgstr "სურათის გენერირება"
+
+msgid "PDF watermark"
+msgstr "PDF-ის წყლის ნიშანი"
+
+msgid "No watermark image"
+msgstr "წყლის ნიშნის სურათი არ არის"
+
+msgid "Upload watermark"
+msgstr "წყლის ნიშნის ატვირთვა"
+
+msgid "Delete watermark"
+msgstr "წყლის ნიშნის წაშლა"
+
+msgid "Course legal agreement file"
+msgstr "კურსის სამართლებრივი შეთანხმების ფაილი"
+
+msgid "Upload agreement file"
+msgstr "შეთანხმების ფაილის ატვირთვა"
+
+msgid "Download agreement file"
+msgstr "შეთანხმების ფაილის ჩამოტვირთვა"
+
+msgid "Delete agreement file"
+msgstr "შეთანხმების ფაილის წაშლა"
+
+msgid "Custom certificate images"
+msgstr "სერტიფიკატის მორგებული სურათები"
+
+msgid "Course picture updated"
+msgstr "კურსის სურათი განახლდა"
+
+msgid "The course picture could not be uploaded"
+msgstr "კურსის სურათის ატვირთვა ვერ მოხერხდა"
+
+msgid "Course picture deleted"
+msgstr "კურსის სურათი წაიშალა"
+
+msgid "Enter a description for the image"
+msgstr "შეიყვანეთ სურათის აღწერა"
+
+msgid "The image generator returned an empty response"
+msgstr "სურათის გენერატორმა ცარიელი პასუხი დააბრუნა"
+
+msgid "Course picture generated"
+msgstr "კურსის სურათი გენერირებულია"
+
+msgid "Watermark updated"
+msgstr "წყლის ნიშანი განახლდა"
+
+msgid "Watermark deleted"
+msgstr "წყლის ნიშანი წაიშალა"
+
+msgid "Agreement file updated"
+msgstr "შეთანხმების ფაილი განახლდა"
+
+msgid "Agreement file deleted"
+msgstr "შეთანხმების ფაილი წაიშალა"
+
+msgid "Certificate image updated"
+msgstr "სერტიფიკატის სურათი განახლდა"
+
+msgid "Certificate image deleted"
+msgstr "სერტიფიკატის სურათი წაიშალა"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "კურსის სურათის მოსაჭრელად, მოსაბრუნებლად ან ზომის შესაცვლელად გამოიყენეთ სურათის რედაქტორი ატვირთვამდე."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "მოწვევის ბმული არასწორია ან ვადა გაუვიდა."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "ეს მოწვევა სხვა მომხმარებელს გაეგზავნა. გთხოვთ, შედით მოწვეული ანგარიშით."
+
+msgid "The invitation could not be accepted."
+msgstr "მოწვევის მიღება ვერ მოხერხდა."
+
+msgid "You have been subscribed successfully."
+msgstr "თქვენ წარმატებით დარეგისტრირდით."
+
+msgid "This email address cannot be invited."
+msgstr "ამ ელფოსტის მისამართის მოწვევა შეუძლებელია."
+
+msgid "This user is already subscribed to the session."
+msgstr "ეს მომხმარებელი უკვე რეგისტრირებულია სესიაზე."
+
+msgid "This user is already subscribed to the course."
+msgstr "ეს მომხმარებელი უკვე რეგისტრირებულია კურსზე."
 

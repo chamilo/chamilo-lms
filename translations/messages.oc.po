@@ -37695,6 +37695,12 @@ msgstr "Vòstra session s'acaba lèu"
 msgid "Do you want to continue your session?"
 msgstr "Volètz contunhar vòstra session ?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Los detalhs de vòstra session son perduts, mercé de vos connectar tornamai."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "L’accès a aquesta ressorsa es estat refusat. Sembla que avètz pas las permissions necessàrias per i accedir."
+
 msgid "Stay connected"
 msgstr "Demorar connectat"
 
@@ -39161,4 +39167,316 @@ msgstr "Tractadas"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: activar mod_status (ExtendedStatus On) e autorizar localhost a /server-status. Nginx: activar stub_status sus una localizacion solament localhost coma /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribucion dels percentatges de nòtas"
+
+msgid "Top learners"
+msgstr "Melhors estudiants"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Aqueste progrès combina lo progrès dins lo camin d’aprendissatge e la mejana dels resultats dels exercicis de l’estudiant"
+
+msgid "Additional profile fields"
+msgstr "Camps de perfil suplementaris"
+
+msgid "Visible columns"
+msgstr "Colomnas visiblas"
+
+msgid "Learning path completion"
+msgstr "Acabament del camin d’aprendissatge"
+
+msgid "Number of certificates"
+msgstr "Nombre de certificats"
+
+msgid "Could not export the report"
+msgstr "Impossible d’exportar lo rapòrt"
+
+msgid "Second learner"
+msgstr "Segond estudiant"
+
+msgid "Results by learner"
+msgstr "Resultats per estudiant"
+
+msgid "Use filters to narrow down questions."
+msgstr "Utilizatz los filtres per restrénher las questions."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Ensajatz d’ajustar vòstres filtres e cercatz tornamai."
+
+msgid "Results per page"
+msgstr "Resultats per pagina"
+
+msgid "No answers"
+msgstr "Pas de responsas"
+
+msgid "Tests using this question"
+msgstr "Tèsts qu'utilizan aquesta question"
+
+msgid "Delete failed"
+msgstr "Supression fracassada"
+
+msgid "PHP cache"
+msgstr "Cache PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostics en dirècte OPcache e APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Clicatz per afichar los diagnostics OPcache e APCu"
+
+msgid "Memory used"
+msgstr "Memòria utilizada"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache es installat mas pas activat."
+
+msgid "OPcache extension is not available on this server."
+msgstr "L'extension OPcache es pas disponibla sus aqueste servidor."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu es installat mas pas activat."
+
+msgid "APCu extension is not available on this server."
+msgstr "L'extension APCu es pas disponibla sus aqueste servidor."
+
+msgid "Constant"
+msgstr "Constanta"
+
+msgid "Space used on disk (MB)"
+msgstr "Espaci utilizat sul disc (Mo)"
+
+msgid "Set max course space (MB)"
+msgstr "Definir l'espaci max de cors (Mo)"
+
+msgid "Memory free"
+msgstr "Memòria liura"
+
+msgid "Memory wasted"
+msgstr "Memòria perduda"
+
+msgid "Memory used %"
+msgstr "Memòria utilizada %"
+
+msgid "Cached scripts"
+msgstr "Scripts en cache"
+
+msgid "Cached keys"
+msgstr "Claus en cache"
+
+msgid "Misses"
+msgstr "Ratas"
+
+msgid "Cache full"
+msgstr "Cache plen"
+
+msgid "OOM restarts"
+msgstr "Reaviadas OOM"
+
+msgid "Hash restarts"
+msgstr "Reaviadas de hach"
+
+msgid "Manual restarts"
+msgstr "Reaviadas manualas"
+
+msgid "Interned strings used"
+msgstr "Cadenas internadas utilizadas"
+
+msgid "Interned strings free"
+msgstr "Cadenas internadas liuras"
+
+msgid "Interned strings count"
+msgstr "Nombre de cadenas internadas"
+
+msgid "Memory available"
+msgstr "Memòria disponibla"
+
+msgid "Memory size"
+msgstr "Talha de la memòria"
+
+msgid "Entries"
+msgstr "Entradas"
+
+msgid "Slots"
+msgstr "Emplasaments"
+
+msgid "Expunges"
+msgstr "Expulsions"
+
+msgid "Cache start time"
+msgstr "Ora de començament del cache"
+
+msgid "Time zone"
+msgstr "Zòna orària"
+
+msgid "Not registered"
+msgstr "Pas enregistrat"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrar e listar los certificats dels aprendents per session, cors, data o aprendent, puèi exportar-los quand fa besonh."
+
+msgid "Filter by session and course"
+msgstr "Filtrar per session e cors"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Causir una session, un cors e una data facultativa per listar los certificats generats."
+
+msgid "Filter by learner"
+msgstr "Filtrar per aprendent"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Trobar los certificats d'un aprendent especific a travèrs de las sessions e dels cors."
+
+msgid "Certificates found"
+msgstr "Certificats trobats"
+
+msgid "Open certificate"
+msgstr "Dobrir lo certificat"
+
+msgid "Certificate file not available"
+msgstr "Fichièr de certificat pas disponible"
+
+msgid "Export to CSV"
+msgstr "Exportar en CSV"
+
+msgid "Acquired skills"
+msgstr "Competenças acquesidas"
+
+msgid "No acquired skill"
+msgstr "Cap de competéncia acquesida"
+
+msgid "Absences"
+msgstr "Abséncias"
+
+msgid "No courses"
+msgstr "Pas de cors"
+
+msgid "No session matched"
+msgstr "Cap de session correspondenta"
+
+msgid "Unable to load the report"
+msgstr "Impossible de cargar lo rapòrt"
+
+msgid "Please select a profile"
+msgstr "Seleccionatz un perfil"
+
+msgid "Please select a session"
+msgstr "Seleccionatz una session"
+
+msgid "Please select a user"
+msgstr "Seleccionatz un utilizaire"
+
+msgid "Unable to export the report"
+msgstr "Impossible d'exportar lo rapòrt"
+
+msgid "Accepted on web"
+msgstr "Acceptat sul web"
+
+msgid "Accepted by e-mail"
+msgstr "Acceptat per e-mail"
+
+msgid "The course title is required"
+msgstr "Lo títol del cors es obligatòri"
+
+msgid "Unexpected error"
+msgstr "Error inesperada"
+
+msgid "Separate tags with commas"
+msgstr "Separatz los tags amb de virgulas"
+
+msgid "Open link"
+msgstr "Dobrir lo ligam"
+
+msgid "Describe the course picture to generate"
+msgstr "Descriure l'imatge del cors de generar"
+
+msgid "Generate picture"
+msgstr "Generar l'imatge"
+
+msgid "PDF watermark"
+msgstr "Filigrana PDF"
+
+msgid "No watermark image"
+msgstr "Pas cap d'imatge de filigrana"
+
+msgid "Upload watermark"
+msgstr "Mandar una filigrana"
+
+msgid "Delete watermark"
+msgstr "Suprimir la filigrana"
+
+msgid "Course legal agreement file"
+msgstr "Fichièr d'acòrd legal del cors"
+
+msgid "Upload agreement file"
+msgstr "Mandar lo fichièr d'acòrd"
+
+msgid "Download agreement file"
+msgstr "Telecargar lo fichièr d'acòrd"
+
+msgid "Delete agreement file"
+msgstr "Suprimir lo fichièr d'acòrd"
+
+msgid "Custom certificate images"
+msgstr "Imatges de certificat personalizats"
+
+msgid "Course picture updated"
+msgstr "Imatge del cors mes a jorn"
+
+msgid "The course picture could not be uploaded"
+msgstr "L'imatge del cors a pas pogut èsser mandat"
+
+msgid "Course picture deleted"
+msgstr "Imatge del cors suprimit"
+
+msgid "Enter a description for the image"
+msgstr "Entrar una descripcion per l'imatge"
+
+msgid "The image generator returned an empty response"
+msgstr "Lo generador d'imatge a renviat una responsa voida"
+
+msgid "Course picture generated"
+msgstr "Imatge del cors generat"
+
+msgid "Watermark updated"
+msgstr "Filigrana mesa a jorn"
+
+msgid "Watermark deleted"
+msgstr "Filigrana suprimida"
+
+msgid "Agreement file updated"
+msgstr "Fichièr d'acòrd mes a jorn"
+
+msgid "Agreement file deleted"
+msgstr "Fichièr d'acòrd suprimit"
+
+msgid "Certificate image updated"
+msgstr "Imatge de certificat mes a jorn"
+
+msgid "Certificate image deleted"
+msgstr "Imatge de certificat suprimit"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Utilizatz l'editor d'imatge abans de mandar per retalhar, virar o redimensionar l'imatge del cors."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Aqueste ligam d'invitacion es invalid o a expirat."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Aquesta invitacion es estada mandada a un autre utilizaire. Connectatz-vos amb lo compte convidat."
+
+msgid "The invitation could not be accepted."
+msgstr "L'invitacion a pas pogut èsser acceptada."
+
+msgid "You have been subscribed successfully."
+msgstr "Sètz estats inscrichs amb succès."
+
+msgid "This email address cannot be invited."
+msgstr "Aquesta adreça electronica pòt pas èsser convidada."
+
+msgid "This user is already subscribed to the session."
+msgstr "Aqueste utilizaire es ja inscrich a la session."
+
+msgid "This user is already subscribed to the course."
+msgstr "Aqueste utilizaire es ja inscrich al cors."
 

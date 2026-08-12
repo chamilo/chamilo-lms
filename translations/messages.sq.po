@@ -37699,6 +37699,12 @@ msgstr "Sesioni juaj po skadon"
 msgid "Do you want to continue your session?"
 msgstr "Dëshironi të vazhdoni sesionin tuaj?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Detajet e sesionit tuaj janë humbur, ju lutemi hyni përsëri."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Qasja në këtë burim është refuzuar. Duket se nuk keni lejet e nevojshme për ta aksesuar."
+
 msgid "Stay connected"
 msgstr "Qëndro i lidhur"
 
@@ -39165,4 +39171,316 @@ msgstr "Trajtuar"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: aktivizo mod_status (ExtendedStatus On) dhe lejo localhost në /server-status. Nginx: aktivizo stub_status në një vendndodhje vetëm për localhost si /nginx_status ose /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Shpërndarja e përqindjes së notave"
+
+msgid "Top learners"
+msgstr "Nxënësit më të mirë"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Ky progres kombinon progresin e rrugës së të mësuarit dhe rezultatin mesatar të ushtrimeve të nxënësit"
+
+msgid "Additional profile fields"
+msgstr "Fusha shtesë të profilit"
+
+msgid "Visible columns"
+msgstr "Kolonat e dukshme"
+
+msgid "Learning path completion"
+msgstr "Përfundimi i rrugës së të mësuarit"
+
+msgid "Number of certificates"
+msgstr "Numri i certifikatave"
+
+msgid "Could not export the report"
+msgstr "Nuk mund të eksportohet raporti"
+
+msgid "Second learner"
+msgstr "Nxënësi i dytë"
+
+msgid "Results by learner"
+msgstr "Rezultatet sipas nxënësit"
+
+msgid "Use filters to narrow down questions."
+msgstr "Përdorni filtrat për të ngushtuar pyetjet."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Provoni të rregulloni filtrat tuaj dhe kërkoni përsëri."
+
+msgid "Results per page"
+msgstr "Rezultatet për faqe"
+
+msgid "No answers"
+msgstr "Nuk ka përgjigje"
+
+msgid "Tests using this question"
+msgstr "Testet që përdorin këtë pyetje"
+
+msgid "Delete failed"
+msgstr "Fshirja dështoi"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostikimi i OPcache dhe APCu live"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klikoni për të shfaqur diagnostikimin e OPcache dhe APCu"
+
+msgid "Memory used"
+msgstr "Memorja e përdorur"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache është instaluar por nuk është aktivizuar."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Zgjerimi OPcache nuk është i disponueshëm në këtë server."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu është instaluar por nuk është aktivizuar."
+
+msgid "APCu extension is not available on this server."
+msgstr "Zgjerimi APCu nuk është i disponueshëm në këtë server."
+
+msgid "Constant"
+msgstr "Konstant"
+
+msgid "Space used on disk (MB)"
+msgstr "Hapësira e përdorur në disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Cakto hapësirën maksimale të kursit (MB)"
+
+msgid "Memory free"
+msgstr "Memoria e lirë"
+
+msgid "Memory wasted"
+msgstr "Memoria e humbur"
+
+msgid "Memory used %"
+msgstr "Memoria e përdorur %"
+
+msgid "Cached scripts"
+msgstr "Skriptet e ruajtura në cache"
+
+msgid "Cached keys"
+msgstr "Çelësat e ruajtur në cache"
+
+msgid "Misses"
+msgstr "Mungesa"
+
+msgid "Cache full"
+msgstr "Cache plotë"
+
+msgid "OOM restarts"
+msgstr "Rifillime OOM"
+
+msgid "Hash restarts"
+msgstr "Rifillime hash"
+
+msgid "Manual restarts"
+msgstr "Rifillime manuale"
+
+msgid "Interned strings used"
+msgstr "Vargjet e brendshme të përdorura"
+
+msgid "Interned strings free"
+msgstr "Vargjet e brendshme të lira"
+
+msgid "Interned strings count"
+msgstr "Numri i vargjeve të brendshme"
+
+msgid "Memory available"
+msgstr "Memoria e disponueshme"
+
+msgid "Memory size"
+msgstr "Madhësia e memories"
+
+msgid "Entries"
+msgstr "Hyrjet"
+
+msgid "Slots"
+msgstr "Vendndodhjet"
+
+msgid "Expunges"
+msgstr "Pastrime"
+
+msgid "Cache start time"
+msgstr "Koha e fillimit të cache"
+
+msgid "Time zone"
+msgstr "Zona kohore"
+
+msgid "Not registered"
+msgstr "Nuk është regjistruar"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtro dhe listë certifikatat e nxënësve sipas sesionit, kursit, datës ose nxënësit, pastaj eksportojini ato kur është e nevojshme."
+
+msgid "Filter by session and course"
+msgstr "Filtro sipas sesionit dhe kursit"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Zgjidhni një sesion, kurs dhe datë opsionale për të listuar certifikatat e gjeneruara."
+
+msgid "Filter by learner"
+msgstr "Filtro sipas nxënësit"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Gjeni certifikatat për një nxënës të caktuar në të gjitha sesionet dhe kurset."
+
+msgid "Certificates found"
+msgstr "Certifikatat e gjetura"
+
+msgid "Open certificate"
+msgstr "Hap certifikatën"
+
+msgid "Certificate file not available"
+msgstr "Skedari i certifikatës nuk është i disponueshëm"
+
+msgid "Export to CSV"
+msgstr "Eksporto në CSV"
+
+msgid "Acquired skills"
+msgstr "Aftësitë e fituara"
+
+msgid "No acquired skill"
+msgstr "Asnjë aftësi e fituar"
+
+msgid "Absences"
+msgstr "Mungesat"
+
+msgid "No courses"
+msgstr "Asnjë kurs"
+
+msgid "No session matched"
+msgstr "Asnjë sesion nuk u përputh"
+
+msgid "Unable to load the report"
+msgstr "Nuk mund të ngarkohet raporti"
+
+msgid "Please select a profile"
+msgstr "Ju lutemi zgjidhni një profil"
+
+msgid "Please select a session"
+msgstr "Ju lutemi zgjidhni një sesion"
+
+msgid "Please select a user"
+msgstr "Ju lutemi zgjidhni një përdorues"
+
+msgid "Unable to export the report"
+msgstr "Nuk mund të eksportohet raporti"
+
+msgid "Accepted on web"
+msgstr "Pranuar në web"
+
+msgid "Accepted by e-mail"
+msgstr "Pranuar me e-mail"
+
+msgid "The course title is required"
+msgstr "Titulli i kursit është i detyrueshëm"
+
+msgid "Unexpected error"
+msgstr ""
+
+msgid "Separate tags with commas"
+msgstr ""
+
+msgid "Open link"
+msgstr ""
+
+msgid "Describe the course picture to generate"
+msgstr ""
+
+msgid "Generate picture"
+msgstr ""
+
+msgid "PDF watermark"
+msgstr ""
+
+msgid "No watermark image"
+msgstr ""
+
+msgid "Upload watermark"
+msgstr ""
+
+msgid "Delete watermark"
+msgstr ""
+
+msgid "Course legal agreement file"
+msgstr ""
+
+msgid "Upload agreement file"
+msgstr ""
+
+msgid "Download agreement file"
+msgstr ""
+
+msgid "Delete agreement file"
+msgstr ""
+
+msgid "Custom certificate images"
+msgstr ""
+
+msgid "Course picture updated"
+msgstr ""
+
+msgid "The course picture could not be uploaded"
+msgstr ""
+
+msgid "Course picture deleted"
+msgstr ""
+
+msgid "Enter a description for the image"
+msgstr ""
+
+msgid "The image generator returned an empty response"
+msgstr ""
+
+msgid "Course picture generated"
+msgstr ""
+
+msgid "Watermark updated"
+msgstr ""
+
+msgid "Watermark deleted"
+msgstr ""
+
+msgid "Agreement file updated"
+msgstr ""
+
+msgid "Agreement file deleted"
+msgstr ""
+
+msgid "Certificate image updated"
+msgstr ""
+
+msgid "Certificate image deleted"
+msgstr ""
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr ""
+
+msgid "This invitation link is invalid or has expired."
+msgstr ""
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr ""
+
+msgid "The invitation could not be accepted."
+msgstr ""
+
+msgid "You have been subscribed successfully."
+msgstr ""
+
+msgid "This email address cannot be invited."
+msgstr ""
+
+msgid "This user is already subscribed to the session."
+msgstr ""
+
+msgid "This user is already subscribed to the course."
+msgstr ""
 

@@ -37701,6 +37701,12 @@ msgstr "Oturumunuz sona ermek üzere"
 msgid "Do you want to continue your session?"
 msgstr "Oturumunuza devam etmek istiyor musunuz?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Oturum bilgileriniz kayboldu, lütfen tekrar giriş yapın."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Bu kaynağa erişim reddedildi. Erişim için gerekli izinlere sahip değilsiniz."
+
 msgid "Stay connected"
 msgstr "Bağlı kal"
 
@@ -39167,4 +39173,316 @@ msgstr "İşlendi"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status'u etkinleştirin (ExtendedStatus On) ve localhost'un /server-status'a erişimine izin verin. Nginx: localhost'a özel bir konumda (örneğin /nginx_status veya /stub_status) stub_status'u etkinleştirin."
+
+msgid "Grade percentage distribution"
+msgstr "Not yüzdesi dağılımı"
+
+msgid "Top learners"
+msgstr "En iyi öğrenciler"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Bu ilerleme, öğrenme yolu ilerlemesi ile öğrencinin ortalama alıştırma sonucunu birleştirir"
+
+msgid "Additional profile fields"
+msgstr "Ek profil alanları"
+
+msgid "Visible columns"
+msgstr "Görünür sütunlar"
+
+msgid "Learning path completion"
+msgstr "Öğrenme yolu tamamlama"
+
+msgid "Number of certificates"
+msgstr "Sertifika sayısı"
+
+msgid "Could not export the report"
+msgstr "Rapor dışa aktarılamadı"
+
+msgid "Second learner"
+msgstr "İkinci öğrenci"
+
+msgid "Results by learner"
+msgstr "Öğrenciye göre sonuçlar"
+
+msgid "Use filters to narrow down questions."
+msgstr "Soruları daraltmak için filtreleri kullanın."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Filtrelerinizi ayarlayıp tekrar arayın."
+
+msgid "Results per page"
+msgstr "Sayfa başına sonuç"
+
+msgid "No answers"
+msgstr "Cevap yok"
+
+msgid "Tests using this question"
+msgstr "Bu soruyu kullanan testler"
+
+msgid "Delete failed"
+msgstr "Silme başarısız"
+
+msgid "PHP cache"
+msgstr "PHP önbelleği"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Canlı OPcache ve APCu tanılama"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache ve APCu tanılama için tıklayın"
+
+msgid "Memory used"
+msgstr "Kullanılan bellek"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache yüklü ancak etkin değil."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache uzantısı bu sunucuda mevcut değil."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu yüklü ancak etkin değil."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu uzantısı bu sunucuda mevcut değil."
+
+msgid "Constant"
+msgstr "Sabit"
+
+msgid "Space used on disk (MB)"
+msgstr "Diskte kullanılan alan (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Maksimum ders alanı ayarla (MB)"
+
+msgid "Memory free"
+msgstr "Boş bellek"
+
+msgid "Memory wasted"
+msgstr "Boşa giden bellek"
+
+msgid "Memory used %"
+msgstr "Kullanılan bellek %"
+
+msgid "Cached scripts"
+msgstr "Önbelleğe alınmış betikler"
+
+msgid "Cached keys"
+msgstr "Önbelleğe alınmış anahtarlar"
+
+msgid "Misses"
+msgstr "Kaçırılanlar"
+
+msgid "Cache full"
+msgstr "Önbellek dolu"
+
+msgid "OOM restarts"
+msgstr "OOM yeniden başlatmaları"
+
+msgid "Hash restarts"
+msgstr "Hash yeniden başlatmaları"
+
+msgid "Manual restarts"
+msgstr "Manuel yeniden başlatmalar"
+
+msgid "Interned strings used"
+msgstr "Kullanılan interned dizeleri"
+
+msgid "Interned strings free"
+msgstr "Boş interned dizeleri"
+
+msgid "Interned strings count"
+msgstr "Interned dize sayısı"
+
+msgid "Memory available"
+msgstr "Kullanılabilir bellek"
+
+msgid "Memory size"
+msgstr "Bellek boyutu"
+
+msgid "Entries"
+msgstr "Kayıtlar"
+
+msgid "Slots"
+msgstr "Slotlar"
+
+msgid "Expunges"
+msgstr "Silinenler"
+
+msgid "Cache start time"
+msgstr "Önbellek başlangıç zamanı"
+
+msgid "Time zone"
+msgstr "Saat dilimi"
+
+msgid "Not registered"
+msgstr "Kayıtlı değil"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Öğrenci sertifikalarını oturum, ders, tarih veya öğrenci bazında filtreleyin ve listeleyin, ardından gerektiğinde dışa aktarın."
+
+msgid "Filter by session and course"
+msgstr "Oturum ve derse göre filtrele"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Oluşturulan sertifikaları listelemek için bir oturum, ders ve isteğe bağlı tarih seçin."
+
+msgid "Filter by learner"
+msgstr "Öğrenciye göre filtrele"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Belirli bir öğrenci için oturumlar ve dersler arasında sertifikaları bulun."
+
+msgid "Certificates found"
+msgstr "Bulunan sertifikalar"
+
+msgid "Open certificate"
+msgstr "Sertifikayı aç"
+
+msgid "Certificate file not available"
+msgstr "Sertifika dosyası mevcut değil"
+
+msgid "Export to CSV"
+msgstr "CSV'ye aktar"
+
+msgid "Acquired skills"
+msgstr "Edinilen beceriler"
+
+msgid "No acquired skill"
+msgstr "Edinilen beceri yok"
+
+msgid "Absences"
+msgstr "Devamsızlıklar"
+
+msgid "No courses"
+msgstr "Ders yok"
+
+msgid "No session matched"
+msgstr "Eşleşen oturum yok"
+
+msgid "Unable to load the report"
+msgstr "Rapor yüklenemiyor"
+
+msgid "Please select a profile"
+msgstr "Lütfen bir profil seçin"
+
+msgid "Please select a session"
+msgstr "Lütfen bir oturum seçin"
+
+msgid "Please select a user"
+msgstr "Lütfen bir kullanıcı seçin"
+
+msgid "Unable to export the report"
+msgstr "Rapor dışa aktarılamıyor"
+
+msgid "Accepted on web"
+msgstr "Web üzerinden kabul edildi"
+
+msgid "Accepted by e-mail"
+msgstr "E-posta ile kabul edildi"
+
+msgid "The course title is required"
+msgstr "Ders başlığı gerekli"
+
+msgid "Unexpected error"
+msgstr "Beklenmeyen hata"
+
+msgid "Separate tags with commas"
+msgstr "Etiketleri virgülle ayırın"
+
+msgid "Open link"
+msgstr "Bağlantıyı aç"
+
+msgid "Describe the course picture to generate"
+msgstr "Oluşturulacak ders resmini tanımlayın"
+
+msgid "Generate picture"
+msgstr "Resim oluştur"
+
+msgid "PDF watermark"
+msgstr "PDF filigranı"
+
+msgid "No watermark image"
+msgstr "Filigran resmi yok"
+
+msgid "Upload watermark"
+msgstr "Filigran yükle"
+
+msgid "Delete watermark"
+msgstr "Filigranı sil"
+
+msgid "Course legal agreement file"
+msgstr "Ders yasal sözleşme dosyası"
+
+msgid "Upload agreement file"
+msgstr "Sözleşme dosyası yükle"
+
+msgid "Download agreement file"
+msgstr "Sözleşme dosyasını indir"
+
+msgid "Delete agreement file"
+msgstr "Sözleşme dosyasını sil"
+
+msgid "Custom certificate images"
+msgstr "Özel sertifika resimleri"
+
+msgid "Course picture updated"
+msgstr ""
+
+msgid "The course picture could not be uploaded"
+msgstr ""
+
+msgid "Course picture deleted"
+msgstr ""
+
+msgid "Enter a description for the image"
+msgstr ""
+
+msgid "The image generator returned an empty response"
+msgstr ""
+
+msgid "Course picture generated"
+msgstr ""
+
+msgid "Watermark updated"
+msgstr ""
+
+msgid "Watermark deleted"
+msgstr ""
+
+msgid "Agreement file updated"
+msgstr ""
+
+msgid "Agreement file deleted"
+msgstr ""
+
+msgid "Certificate image updated"
+msgstr ""
+
+msgid "Certificate image deleted"
+msgstr ""
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr ""
+
+msgid "This invitation link is invalid or has expired."
+msgstr ""
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr ""
+
+msgid "The invitation could not be accepted."
+msgstr ""
+
+msgid "You have been subscribed successfully."
+msgstr ""
+
+msgid "This email address cannot be invited."
+msgstr ""
+
+msgid "This user is already subscribed to the session."
+msgstr ""
+
+msgid "This user is already subscribed to the course."
+msgstr ""
 

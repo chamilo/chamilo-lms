@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képletminta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -37699,6 +37699,12 @@ msgstr "A munkamenet hamarosan lejár"
 msgid "Do you want to continue your session?"
 msgstr "Szeretné folytatni a munkamenetet?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "A munkamenet adatai elvesztek, kérjük, jelentkezzen be újra."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "A hozzáférés megtagadva. Úgy tűnik, nincs megfelelő jogosultsága az erőforrás eléréséhez."
+
 msgid "Stay connected"
 msgstr "Maradjon csatlakozva"
 
@@ -39165,4 +39171,316 @@ msgstr "Kezelések"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: engedélyezze a mod_status modult (ExtendedStatus On) és engedélyezze a localhost számára a /server-status elérést. Nginx: engedélyezze a stub_status modult egy localhost-only helyszínen, például /nginx_status vagy /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Osztályzat százalékos eloszlása"
+
+msgid "Top learners"
+msgstr "Legjobb tanulók"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Ez a haladás a tanulási útvonal előrehaladását és a tanuló átlagos gyakorlati eredményét kombinálja"
+
+msgid "Additional profile fields"
+msgstr "További profilmezők"
+
+msgid "Visible columns"
+msgstr "Látható oszlopok"
+
+msgid "Learning path completion"
+msgstr "Tanulási útvonal teljesítése"
+
+msgid "Number of certificates"
+msgstr "Tanúsítványok száma"
+
+msgid "Could not export the report"
+msgstr "Nem sikerült exportálni a jelentést"
+
+msgid "Second learner"
+msgstr "Második tanuló"
+
+msgid "Results by learner"
+msgstr "Eredmények tanulónként"
+
+msgid "Use filters to narrow down questions."
+msgstr "Használjon szűrőket a kérdések szűkítéséhez."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Próbálja meg módosítani a szűrőket, és keresse újra."
+
+msgid "Results per page"
+msgstr "Eredmények oldalanként"
+
+msgid "No answers"
+msgstr "Nincs válasz"
+
+msgid "Tests using this question"
+msgstr "Ezt a kérdést használó tesztek"
+
+msgid "Delete failed"
+msgstr "Törlés sikertelen"
+
+msgid "PHP cache"
+msgstr "PHP gyorsítótár"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Élő OPcache és APCu diagnosztika"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Kattintson az OPcache és APCu diagnosztika megjelenítéséhez"
+
+msgid "Memory used"
+msgstr "Felhasznált memória"
+
+msgid "OPcache is installed but not enabled."
+msgstr "Az OPcache telepítve van, de nincs engedélyezve."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Az OPcache kiterjesztés nem érhető el ezen a szerveren."
+
+msgid "APCu is installed but not enabled."
+msgstr "Az APCu telepítve van, de nincs engedélyezve."
+
+msgid "APCu extension is not available on this server."
+msgstr "Az APCu kiterjesztés nem érhető el ezen a szerveren."
+
+msgid "Constant"
+msgstr "Állandó"
+
+msgid "Space used on disk (MB)"
+msgstr "Felhasznált lemezterület (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Maximális kurzushely beállítása (MB)"
+
+msgid "Memory free"
+msgstr "Szabad memória"
+
+msgid "Memory wasted"
+msgstr "Pazarolt memória"
+
+msgid "Memory used %"
+msgstr "Felhasznált memória %"
+
+msgid "Cached scripts"
+msgstr "Gyorsítótárazott szkriptek"
+
+msgid "Cached keys"
+msgstr "Gyorsítótárazott kulcsok"
+
+msgid "Misses"
+msgstr "Hiányzások"
+
+msgid "Cache full"
+msgstr "Gyorsítótár tele"
+
+msgid "OOM restarts"
+msgstr "OOM újraindítások"
+
+msgid "Hash restarts"
+msgstr "Hash újraindítások"
+
+msgid "Manual restarts"
+msgstr "Kézi újraindítások"
+
+msgid "Interned strings used"
+msgstr "Internált karakterláncok használt"
+
+msgid "Interned strings free"
+msgstr "Internált karakterláncok szabad"
+
+msgid "Interned strings count"
+msgstr "Internált karakterláncok száma"
+
+msgid "Memory available"
+msgstr "Elérhető memória"
+
+msgid "Memory size"
+msgstr "Memória mérete"
+
+msgid "Entries"
+msgstr "Bejegyzések"
+
+msgid "Slots"
+msgstr "Helyek"
+
+msgid "Expunges"
+msgstr "Törlések"
+
+msgid "Cache start time"
+msgstr "Gyorsítótár indítási ideje"
+
+msgid "Time zone"
+msgstr "Időzóna"
+
+msgid "Not registered"
+msgstr "Nem regisztrált"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Szűrje és listázza a tanulói tanúsítványokat munkamenet, kurzus, dátum vagy tanuló szerint, majd exportálja őket szükség esetén."
+
+msgid "Filter by session and course"
+msgstr "Szűrés munkamenet és kurzus szerint"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Válasszon munkamenetet, kurzust és opcionális dátumot a generált tanúsítványok listázásához."
+
+msgid "Filter by learner"
+msgstr "Szűrés tanuló szerint"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Keresse meg egy adott tanuló tanúsítványait munkamenetek és kurzusok között."
+
+msgid "Certificates found"
+msgstr "Talált tanúsítványok"
+
+msgid "Open certificate"
+msgstr "Tanúsítvány megnyitása"
+
+msgid "Certificate file not available"
+msgstr "Tanúsítványfájl nem elérhető"
+
+msgid "Export to CSV"
+msgstr "Exportálás CSV-be"
+
+msgid "Acquired skills"
+msgstr "Megszerzett készségek"
+
+msgid "No acquired skill"
+msgstr "Nincs megszerzett készség"
+
+msgid "Absences"
+msgstr "Hiányzások"
+
+msgid "No courses"
+msgstr "Nincsenek kurzusok"
+
+msgid "No session matched"
+msgstr "Nem található megfelelő munkamenet"
+
+msgid "Unable to load the report"
+msgstr "Nem sikerült betölteni a jelentést"
+
+msgid "Please select a profile"
+msgstr "Kérjük, válasszon profilt"
+
+msgid "Please select a session"
+msgstr "Kérjük, válasszon munkamenetet"
+
+msgid "Please select a user"
+msgstr "Kérjük, válasszon felhasználót"
+
+msgid "Unable to export the report"
+msgstr "Nem sikerült exportálni a jelentést"
+
+msgid "Accepted on web"
+msgstr "Elfogadva weben"
+
+msgid "Accepted by e-mail"
+msgstr "Elfogadva e-mailben"
+
+msgid "The course title is required"
+msgstr "A kurzus címe kötelező"
+
+msgid "Unexpected error"
+msgstr "Váratlan hiba"
+
+msgid "Separate tags with commas"
+msgstr "Címkék vesszővel elválasztva"
+
+msgid "Open link"
+msgstr "Hivatkozás megnyitása"
+
+msgid "Describe the course picture to generate"
+msgstr "Írja le a generálandó kurzusképet"
+
+msgid "Generate picture"
+msgstr "Kép generálása"
+
+msgid "PDF watermark"
+msgstr "PDF vízjel"
+
+msgid "No watermark image"
+msgstr "Nincs vízjel kép"
+
+msgid "Upload watermark"
+msgstr "Vízjel feltöltése"
+
+msgid "Delete watermark"
+msgstr "Vízjel törlése"
+
+msgid "Course legal agreement file"
+msgstr "Kurzus jogi megállapodás fájl"
+
+msgid "Upload agreement file"
+msgstr "Megállapodás fájl feltöltése"
+
+msgid "Download agreement file"
+msgstr "Megállapodás fájl letöltése"
+
+msgid "Delete agreement file"
+msgstr "Megállapodás fájl törlése"
+
+msgid "Custom certificate images"
+msgstr "Egyéni tanúsítvány képek"
+
+msgid "Course picture updated"
+msgstr "Kurzus kép frissítve"
+
+msgid "The course picture could not be uploaded"
+msgstr "A kurzus képet nem sikerült feltölteni"
+
+msgid "Course picture deleted"
+msgstr "Kurzus kép törölve"
+
+msgid "Enter a description for the image"
+msgstr "Adjon meg leírást a képhez"
+
+msgid "The image generator returned an empty response"
+msgstr "A kép generátor üres választ adott vissza"
+
+msgid "Course picture generated"
+msgstr "Kurzus kép generálva"
+
+msgid "Watermark updated"
+msgstr "Vízjel frissítve"
+
+msgid "Watermark deleted"
+msgstr "Vízjel törölve"
+
+msgid "Agreement file updated"
+msgstr "Megállapodás fájl frissítve"
+
+msgid "Agreement file deleted"
+msgstr "Megállapodás fájl törölve"
+
+msgid "Certificate image updated"
+msgstr "Tanúsítvány kép frissítve"
+
+msgid "Certificate image deleted"
+msgstr "Tanúsítvány kép törölve"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Használja a képszerkesztőt feltöltés előtt a kurzus kép vágásához, elforgatásához vagy átméretezéséhez."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Ez a meghívó link érvénytelen vagy lejárt."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Ez a meghívó egy másik felhasználónak lett küldve. Kérjük, a meghívott fiókkal jelentkezzen be."
+
+msgid "The invitation could not be accepted."
+msgstr "A meghívót nem sikerült elfogadni."
+
+msgid "You have been subscribed successfully."
+msgstr "Sikeresen feliratkozott."
+
+msgid "This email address cannot be invited."
+msgstr "Ezt az e-mail címet nem lehet meghívni."
+
+msgid "This user is already subscribed to the session."
+msgstr "Ez a felhasználó már fel van iratkozva a munkamenetre."
+
+msgid "This user is already subscribed to the course."
+msgstr "Ez a felhasználó már fel van iratkozva a kurzushoz."
 

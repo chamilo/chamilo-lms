@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -37699,6 +37699,12 @@ msgstr "Ձեր սեսիան շուտով կավարտվի"
 msgid "Do you want to continue your session?"
 msgstr "Ցանկանո՞ւմ եք շարունակել ձեր սեսիան։"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Ձեր սեսիայի տվյալները կորել են, խնդրում ենք կրկին մուտք գործել։"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Այս ռեսուրսի հասանելիությունը մերժվել է։ Դուք չունեք անհրաժեշտ իրավունքներ այն մուտք գործելու համար։"
+
 msgid "Stay connected"
 msgstr "Մնալ կապված"
 
@@ -39165,4 +39171,316 @@ msgstr "Մշակվածներ"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: միացրեք mod_status (ExtendedStatus On) և թույլատրեք localhost-ին /server-status: Nginx: միացրեք stub_status-ը միայն localhost-ի համար նախատեսված տեղում, օրինակ՝ /nginx_status կամ /stub_status:"
+
+msgid "Grade percentage distribution"
+msgstr "Գնահատականների տոկոսային բաշխում"
+
+msgid "Top learners"
+msgstr "Լավագույն սովորողներ"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Այս առաջընթացը համատեղում է ուսումնական ուղու առաջընթացը և սովորողի միջին վարժության արդյունքը"
+
+msgid "Additional profile fields"
+msgstr "Լրացուցիչ պրոֆիլային դաշտեր"
+
+msgid "Visible columns"
+msgstr "Տեսանելի սյունակներ"
+
+msgid "Learning path completion"
+msgstr "Ուսումնական ուղու ավարտում"
+
+msgid "Number of certificates"
+msgstr "Վկայականների քանակ"
+
+msgid "Could not export the report"
+msgstr "Հաշվետվությունը չհաջողվեց արտահանել"
+
+msgid "Second learner"
+msgstr "Երկրորդ սովորող"
+
+msgid "Results by learner"
+msgstr "Արդյունքներ ըստ սովորողի"
+
+msgid "Use filters to narrow down questions."
+msgstr "Օգտագործեք զտիչներ հարցերը նեղացնելու համար։"
+
+msgid "Try adjusting your filters and search again."
+msgstr "Փորձեք ճշգրտել զտիչները և կրկին որոնել։"
+
+msgid "Results per page"
+msgstr "Արդյունքներ մեկ էջում"
+
+msgid "No answers"
+msgstr "Պատասխաններ չկան"
+
+msgid "Tests using this question"
+msgstr "Թեստեր, որոնք օգտագործում են այս հարցը"
+
+msgid "Delete failed"
+msgstr "Ջնջումը ձախողվեց"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache և APCu ախտորոշում"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Սեղմեք OPcache և APCu ախտորոշումը ցուցադրելու համար"
+
+msgid "Memory used"
+msgstr "Օգտագործված հիշողություն"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache-ը տեղադրված է, բայց միացված չէ։"
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache ընդլայնումը հասանելի չէ այս սերվերում։"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu-ն տեղադրված է, բայց միացված չէ։"
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu ընդլայնումը հասանելի չէ այս սերվերում։"
+
+msgid "Constant"
+msgstr "Հաստատուն"
+
+msgid "Space used on disk (MB)"
+msgstr "Սկավառակի վրա օգտագործված տարածք (ՄԲ)"
+
+msgid "Set max course space (MB)"
+msgstr "Սահմանել դասընթացի առավելագույն տարածք (ՄԲ)"
+
+msgid "Memory free"
+msgstr "Ազատ հիշողություն"
+
+msgid "Memory wasted"
+msgstr "Կորած հիշողություն"
+
+msgid "Memory used %"
+msgstr "Օգտագործված հիշողություն %"
+
+msgid "Cached scripts"
+msgstr "Քեշավորված սկրիպտներ"
+
+msgid "Cached keys"
+msgstr "Քեշավորված բանալիներ"
+
+msgid "Misses"
+msgstr "Բացթողումներ"
+
+msgid "Cache full"
+msgstr "Քեշը լցված է"
+
+msgid "OOM restarts"
+msgstr "OOM վերագործարկումներ"
+
+msgid "Hash restarts"
+msgstr "Հեշ վերագործարկումներ"
+
+msgid "Manual restarts"
+msgstr "Ձեռքով վերագործարկումներ"
+
+msgid "Interned strings used"
+msgstr "Օգտագործված ներքին տողեր"
+
+msgid "Interned strings free"
+msgstr "Ազատ ներքին տողեր"
+
+msgid "Interned strings count"
+msgstr "Ներքին տողերի քանակ"
+
+msgid "Memory available"
+msgstr "Հասանելի հիշողություն"
+
+msgid "Memory size"
+msgstr "Հիշողության չափ"
+
+msgid "Entries"
+msgstr "Գրառումներ"
+
+msgid "Slots"
+msgstr "Տեղեր"
+
+msgid "Expunges"
+msgstr "Ջնջումներ"
+
+msgid "Cache start time"
+msgstr "Քեշի սկզբի ժամանակ"
+
+msgid "Time zone"
+msgstr "Ժամային գոտի"
+
+msgid "Not registered"
+msgstr "Գրանցված չէ"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Զտել և ցուցադրել սովորողների վկայականները ըստ սեսիայի, դասընթացի, ամսաթվի կամ սովորողի, ապա անհրաժեշտության դեպքում արտահանել դրանք։"
+
+msgid "Filter by session and course"
+msgstr "Զտել ըստ սեսիայի և դասընթացի"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Ընտրեք սեսիա, դասընթաց և կամընտիր ամսաթիվ՝ ստեղծված վկայականները ցուցադրելու համար։"
+
+msgid "Filter by learner"
+msgstr "Զտել ըստ սովորողի"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Գտնել վկայականներ որոշակի սովորողի համար՝ բոլոր սեսիաների և դասընթացների միջով։"
+
+msgid "Certificates found"
+msgstr "Հայտնաբերված վկայականներ"
+
+msgid "Open certificate"
+msgstr "Բացել վկայականը"
+
+msgid "Certificate file not available"
+msgstr "Վկայականի ֆայլը հասանելի չէ"
+
+msgid "Export to CSV"
+msgstr "Արտահանել CSV-ով"
+
+msgid "Acquired skills"
+msgstr "Ձեռք բերված հմտություններ"
+
+msgid "No acquired skill"
+msgstr "Չկա ձեռք բերված հմտություն"
+
+msgid "Absences"
+msgstr "Բացակայություններ"
+
+msgid "No courses"
+msgstr "Դասընթացներ չկան"
+
+msgid "No session matched"
+msgstr "Ոչ մի սեսիա չի համընկնում"
+
+msgid "Unable to load the report"
+msgstr "Հնարավոր չէ բեռնել զեկույցը"
+
+msgid "Please select a profile"
+msgstr "Խնդրում ենք ընտրել պրոֆիլ"
+
+msgid "Please select a session"
+msgstr "Խնդրում ենք ընտրել սեսիա"
+
+msgid "Please select a user"
+msgstr "Խնդրում ենք ընտրել օգտատեր"
+
+msgid "Unable to export the report"
+msgstr "Հնարավոր չէ արտահանել զեկույցը"
+
+msgid "Accepted on web"
+msgstr "Ընդունված վեբով"
+
+msgid "Accepted by e-mail"
+msgstr "Ընդունված էլ․ փոստով"
+
+msgid "The course title is required"
+msgstr "Դասընթացի անվանումը պարտադիր է"
+
+msgid "Unexpected error"
+msgstr "Անսպասելի սխալ"
+
+msgid "Separate tags with commas"
+msgstr "Պիտակները բաժանեք ստորակետներով"
+
+msgid "Open link"
+msgstr "Բացել հղումը"
+
+msgid "Describe the course picture to generate"
+msgstr "Նկարագրեք դասընթացի նկարը, որը պետք է ստեղծվի"
+
+msgid "Generate picture"
+msgstr "Ստեղծել նկար"
+
+msgid "PDF watermark"
+msgstr "PDF ջրանիշ"
+
+msgid "No watermark image"
+msgstr "Ջրանիշի պատկեր չկա"
+
+msgid "Upload watermark"
+msgstr "Վերբեռնել ջրանիշը"
+
+msgid "Delete watermark"
+msgstr "Ջնջել ջրանիշը"
+
+msgid "Course legal agreement file"
+msgstr "Դասընթացի իրավական համաձայնագրի ֆայլ"
+
+msgid "Upload agreement file"
+msgstr "Վերբեռնել համաձայնագրի ֆայլը"
+
+msgid "Download agreement file"
+msgstr "Ներբեռնել համաձայնագրի ֆայլը"
+
+msgid "Delete agreement file"
+msgstr "Ջնջել համաձայնագրի ֆայլը"
+
+msgid "Custom certificate images"
+msgstr "Վկայականի անհատականացված պատկերներ"
+
+msgid "Course picture updated"
+msgstr "Դասընթացի նկարը թարմացվեց"
+
+msgid "The course picture could not be uploaded"
+msgstr "Դասընթացի նկարը չհաջողվեց վերբեռնել"
+
+msgid "Course picture deleted"
+msgstr "Դասընթացի նկարը ջնջվեց"
+
+msgid "Enter a description for the image"
+msgstr "Մուտքագրեք նկարի նկարագրությունը"
+
+msgid "The image generator returned an empty response"
+msgstr "Պատկերների գեներատորը վերադարձրեց դատարկ պատասխան"
+
+msgid "Course picture generated"
+msgstr "Դասընթացի նկարը ստեղծվեց"
+
+msgid "Watermark updated"
+msgstr "Ջրանիշը թարմացվեց"
+
+msgid "Watermark deleted"
+msgstr "Ջրանիշը ջնջվեց"
+
+msgid "Agreement file updated"
+msgstr "Համաձայնագրի ֆայլը թարմացվեց"
+
+msgid "Agreement file deleted"
+msgstr "Համաձայնագրի ֆայլը ջնջվեց"
+
+msgid "Certificate image updated"
+msgstr "Վկայականի պատկերը թարմացվեց"
+
+msgid "Certificate image deleted"
+msgstr "Վկայականի պատկերը ջնջվեց"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Նկարը վերբեռնելուց առաջ օգտագործեք պատկերների խմբագրիչը՝ դասընթացի նկարը կտրելու, պտտելու կամ չափափոխելու համար:"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Հրավերի հղումը անվավեր է կամ ժամկետանց է:"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Այս հրավերը ուղարկվել է այլ օգտատիրոջ: Խնդրում ենք մուտք գործել հրավիրված հաշվով:"
+
+msgid "The invitation could not be accepted."
+msgstr "Հրավերը չհաջողվեց ընդունել:"
+
+msgid "You have been subscribed successfully."
+msgstr "Դուք հաջողությամբ գրանցվել եք:"
+
+msgid "This email address cannot be invited."
+msgstr "Այս էլ․ հասցեն չի կարող հրավիրվել:"
+
+msgid "This user is already subscribed to the session."
+msgstr "Այս օգտատերը արդեն գրանցված է սեսիայում:"
+
+msgid "This user is already subscribed to the course."
+msgstr "Այս օգտատերը արդեն գրանցված է դասընթացում:"
 

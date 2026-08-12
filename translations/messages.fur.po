@@ -37695,6 +37695,12 @@ msgstr "La tô session e sta par scjadê"
 msgid "Do you want to continue your session?"
 msgstr "Desideristu continuâ la tô session?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "I detais de session a son stâts pierdûts, par plasê torne a jentrâ."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "L'acès a cheste risorse al è stât dineât. Al somee che no tu vedis i permès necessari par jentrâ."
+
 msgid "Stay connected"
 msgstr "Resta colegât"
 
@@ -39161,4 +39167,316 @@ msgstr "Gjestîts"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: abilitâ mod_status (ExtendedStatus On) e permeti al localhost di /server-status. Nginx: abilitâ stub_status suntun percors riservât al localhost come /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribuzion des percentuâls dai vôt"
+
+msgid "Top learners"
+msgstr "Miglôrs students"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Chest avanzament al cumbine l'avanzament dal percors di aprendiment e la medie dai risultâts dal student tai esercizis"
+
+msgid "Additional profile fields"
+msgstr "Camps adizionâls dal profîl"
+
+msgid "Visible columns"
+msgstr "Colonis visibilis"
+
+msgid "Learning path completion"
+msgstr "Completament dal percors di aprendiment"
+
+msgid "Number of certificates"
+msgstr "Numar di certificâts"
+
+msgid "Could not export the report"
+msgstr "No si è rivâts a espuartâ il rapuart"
+
+msgid "Second learner"
+msgstr "Secont student"
+
+msgid "Results by learner"
+msgstr "Risultâts par student"
+
+msgid "Use filters to narrow down questions."
+msgstr "Dopre i filtris par strenzi lis domandis."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Prove a justâ i filtris e cîr di gnûf."
+
+msgid "Results per page"
+msgstr "Risultâts par pagjine"
+
+msgid "No answers"
+msgstr "Nissune rispueste"
+
+msgid "Tests using this question"
+msgstr "Tests che a doprin cheste domande"
+
+msgid "Delete failed"
+msgstr "Eliminazion falide"
+
+msgid "PHP cache"
+msgstr "Cache PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostiche Live OPcache e APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Clic pai detais OPcache e APCu"
+
+msgid "Memory used"
+msgstr "Memorie doprade"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache instalât ma no abilitât."
+
+msgid "OPcache extension is not available on this server."
+msgstr "L'estension OPcache no je disponibile su chest servidôr."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu instalât ma no abilitât."
+
+msgid "APCu extension is not available on this server."
+msgstr "L'estension APCu no je disponibile su chest servidôr."
+
+msgid "Constant"
+msgstr "Costante"
+
+msgid "Space used on disk (MB)"
+msgstr "Spazi doprât sul disc (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Met spazi massim pal cors (MB)"
+
+msgid "Memory free"
+msgstr "Memorie libare"
+
+msgid "Memory wasted"
+msgstr "Memorie pierdude"
+
+msgid "Memory used %"
+msgstr "Memorie doprade %"
+
+msgid "Cached scripts"
+msgstr "Scripts in cache"
+
+msgid "Cached keys"
+msgstr "Clâfs in cache"
+
+msgid "Misses"
+msgstr "Mancjâts"
+
+msgid "Cache full"
+msgstr "Cache plene"
+
+msgid "OOM restarts"
+msgstr "Riaviaments OOM"
+
+msgid "Hash restarts"
+msgstr "Riaviaments hash"
+
+msgid "Manual restarts"
+msgstr "Riaviaments manuâls"
+
+msgid "Interned strings used"
+msgstr "Strings internis dopradis"
+
+msgid "Interned strings free"
+msgstr "Strings internis liberis"
+
+msgid "Interned strings count"
+msgstr "Cont strings internis"
+
+msgid "Memory available"
+msgstr "Memorie disponibile"
+
+msgid "Memory size"
+msgstr "Dimension memorie"
+
+msgid "Entries"
+msgstr "Vôs"
+
+msgid "Slots"
+msgstr "Slots"
+
+msgid "Expunges"
+msgstr "Espulsions"
+
+msgid "Cache start time"
+msgstr "Inizi cache"
+
+msgid "Time zone"
+msgstr "Fûs orari"
+
+msgid "Not registered"
+msgstr "No regjistrât"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtre e liste i certificâts dai students par session, cors, date o student, po dopo espuarteju cuant che al covente."
+
+msgid "Filter by session and course"
+msgstr "Filtre par session e cors"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Sielç une session, un cors e une date opzionâl par viodi i certificâts gjenerâts."
+
+msgid "Filter by learner"
+msgstr "Filtre par student"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Cjate i certificâts di un student specific in dute lis sessions e i cors."
+
+msgid "Certificates found"
+msgstr "Certificâts cjatâts"
+
+msgid "Open certificate"
+msgstr "Vierç certificât"
+
+msgid "Certificate file not available"
+msgstr "File dal certificât no disponibile"
+
+msgid "Export to CSV"
+msgstr "Espuarte in CSV"
+
+msgid "Acquired skills"
+msgstr "Competencis otignudis"
+
+msgid "No acquired skill"
+msgstr "Nissune competence otignude"
+
+msgid "Absences"
+msgstr "Assencis"
+
+msgid "No courses"
+msgstr "Nissun cors"
+
+msgid "No session matched"
+msgstr "Nissune session corispondente"
+
+msgid "Unable to load the report"
+msgstr "Impussibil cjariâ il rapuart"
+
+msgid "Please select a profile"
+msgstr "Sielç un profîl"
+
+msgid "Please select a session"
+msgstr "Sielç une session"
+
+msgid "Please select a user"
+msgstr "Sielç un utent"
+
+msgid "Unable to export the report"
+msgstr "Impussibil espuartâ il rapuart"
+
+msgid "Accepted on web"
+msgstr "Acetât sul web"
+
+msgid "Accepted by e-mail"
+msgstr "Acetât par e-mail"
+
+msgid "The course title is required"
+msgstr "Il titul dal cors al è obligatori"
+
+msgid "Unexpected error"
+msgstr "Erôr inspietât"
+
+msgid "Separate tags with commas"
+msgstr "Separe lis etichetis cun virgulis"
+
+msgid "Open link"
+msgstr "Vierç colegament"
+
+msgid "Describe the course picture to generate"
+msgstr "Descrive la imagjin dal cors di gjenerâ"
+
+msgid "Generate picture"
+msgstr "Gjenerâ imagjin"
+
+msgid "PDF watermark"
+msgstr "Filigrane PDF"
+
+msgid "No watermark image"
+msgstr "Nissune imagjin di filigrane"
+
+msgid "Upload watermark"
+msgstr "Cjame sù filigrane"
+
+msgid "Delete watermark"
+msgstr "Elimine filigrane"
+
+msgid "Course legal agreement file"
+msgstr "File dal acuardi legâl dal cors"
+
+msgid "Upload agreement file"
+msgstr "Cjame sù file dal acuardi"
+
+msgid "Download agreement file"
+msgstr "Discjame file dal acuardi"
+
+msgid "Delete agreement file"
+msgstr "Elimine file dal acuardi"
+
+msgid "Custom certificate images"
+msgstr "Imagjins personalizadis dal certificât"
+
+msgid "Course picture updated"
+msgstr "Imagjin dal cors inzornade"
+
+msgid "The course picture could not be uploaded"
+msgstr "La imagjin dal cors no si à podût cjariâ sù"
+
+msgid "Course picture deleted"
+msgstr "Imagjin dal cors eliminade"
+
+msgid "Enter a description for the image"
+msgstr "Inserìs une descrizion pe imagjin"
+
+msgid "The image generator returned an empty response"
+msgstr "Il gjeneradôr di imagjins al à tornât une rispueste vueide"
+
+msgid "Course picture generated"
+msgstr "Imagjin dal cors gjenerade"
+
+msgid "Watermark updated"
+msgstr "Filigrane inzornade"
+
+msgid "Watermark deleted"
+msgstr "Filigrane eliminade"
+
+msgid "Agreement file updated"
+msgstr "File dal acuardi inzornât"
+
+msgid "Agreement file deleted"
+msgstr "File dal acuardi eliminât"
+
+msgid "Certificate image updated"
+msgstr "Imagjin dal certificât inzornade"
+
+msgid "Certificate image deleted"
+msgstr "Imagjin dal certificât eliminade"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Dopre l'editôr di imagjins prime di cjariâ sù par taiâ, voltâ o ridimensionâ la imagjin dal cors."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Chest colegament di invît al è invalid o al è scjadût."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Chest invît al è stât mandât a un utent diferent. Par plasê fâs l'acès cul account invidât."
+
+msgid "The invitation could not be accepted."
+msgstr "L'invît no si à podût acetâ."
+
+msgid "You have been subscribed successfully."
+msgstr "Tu sês stât iscrit cun sucès."
+
+msgid "This email address cannot be invited."
+msgstr "Cheste direzion e-mail no si pues invidâ."
+
+msgid "This user is already subscribed to the session."
+msgstr "Chest utent al è za iscrit ae session."
+
+msgid "This user is already subscribed to the course."
+msgstr "Chest utent al è za iscrit al cors."
 

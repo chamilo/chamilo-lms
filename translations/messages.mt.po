@@ -37700,6 +37700,12 @@ msgstr "Is-sessjoni tiegħek waslet biex tiskadi"
 msgid "Do you want to continue your session?"
 msgstr "Trid tkompli s-sessjoni tiegħek?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Your session details have been lost, please login again."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "L-aċċess għal din ir-riżorsa ġie miċħud. Jidher li m'għandekx il-permessi meħtieġa biex taċċessaha."
+
 msgid "Stay connected"
 msgstr "Ibqa' konness"
 
@@ -38934,7 +38940,7 @@ msgid "No users"
 msgstr "L-ebda utenti"
 
 msgid "Calculation mode"
-msgstr "Calculation mode"
+msgstr "Mod ta' kalkolu"
 
 msgid "Weighted average"
 msgstr "Medja peżata"
@@ -39166,4 +39172,316 @@ msgstr "Immaniġġjati"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: attiva mod_status (ExtendedStatus On) u ħalli localhost għal /server-status. Nginx: attiva stub_status f'post riservat għal localhost biss bħal /nginx_status jew /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribuzzjoni tal-perċentwali tal-gradi"
+
+msgid "Top learners"
+msgstr "L-aqwa studenti"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Dan il-progress jgħaqqad il-progress tal-mogħdija tat-tagħlim u r-riżultat medju tal-eżerċizzji tal-istudent"
+
+msgid "Additional profile fields"
+msgstr "Oqsma addizzjonali tal-profil"
+
+msgid "Visible columns"
+msgstr "Kolumni viżibbli"
+
+msgid "Learning path completion"
+msgstr "Tlestija tal-mogħdija tat-tagħlim"
+
+msgid "Number of certificates"
+msgstr "Numru ta' ċertifikati"
+
+msgid "Could not export the report"
+msgstr "Ma setax jesporta r-rapport"
+
+msgid "Second learner"
+msgstr "It-tieni student"
+
+msgid "Results by learner"
+msgstr "Riżultati skont l-istudent"
+
+msgid "Use filters to narrow down questions."
+msgstr "Uża filtri biex tnaqqas il-mistoqsijiet."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Ipprova aġġusta l-filtri tiegħek u erġa' fittex."
+
+msgid "Results per page"
+msgstr "Riżultati għal kull paġna"
+
+msgid "No answers"
+msgstr "L-ebda tweġibiet"
+
+msgid "Tests using this question"
+msgstr "Testijiet li jużaw din il-mistoqsija"
+
+msgid "Delete failed"
+msgstr "It-tħassir falliet"
+
+msgid "PHP cache"
+msgstr "Cache PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Dijanjostika live OPcache u APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Ikklikkja biex turi d-dijanjostika OPcache u APCu"
+
+msgid "Memory used"
+msgstr "Memorja użata"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache huwa installat iżda mhux attivat."
+
+msgid "OPcache extension is not available on this server."
+msgstr "L-estensjoni OPcache mhix disponibbli fuq dan is-server."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu huwa installat iżda mhux attivat."
+
+msgid "APCu extension is not available on this server."
+msgstr "L-estensjoni APCu mhix disponibbli fuq dan is-server."
+
+msgid "Constant"
+msgstr "Kostanti"
+
+msgid "Space used on disk (MB)"
+msgstr "Spazju użat fuq id-diska (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Issettja l-ispazju massimu tal-kors (MB)"
+
+msgid "Memory free"
+msgstr "Memorja ħielsa"
+
+msgid "Memory wasted"
+msgstr "Memorja maħluqa"
+
+msgid "Memory used %"
+msgstr "Memorja użata %"
+
+msgid "Cached scripts"
+msgstr "Skripts fil-cache"
+
+msgid "Cached keys"
+msgstr "Ċwievet fil-cache"
+
+msgid "Misses"
+msgstr "Misses"
+
+msgid "Cache full"
+msgstr "Cache mimli"
+
+msgid "OOM restarts"
+msgstr "Restarts OOM"
+
+msgid "Hash restarts"
+msgstr "Restarts tal-hash"
+
+msgid "Manual restarts"
+msgstr "Restarts manwali"
+
+msgid "Interned strings used"
+msgstr "Stringi interned użati"
+
+msgid "Interned strings free"
+msgstr "Stringi interned ħielsa"
+
+msgid "Interned strings count"
+msgstr "Għadd ta' stringi interned"
+
+msgid "Memory available"
+msgstr "Memorja disponibbli"
+
+msgid "Memory size"
+msgstr "Daqs tal-memorja"
+
+msgid "Entries"
+msgstr "Entrati"
+
+msgid "Slots"
+msgstr "Slots"
+
+msgid "Expunges"
+msgstr "Expunges"
+
+msgid "Cache start time"
+msgstr "Ħin tal-bidu tal-cache"
+
+msgid "Time zone"
+msgstr "Żona tal-ħin"
+
+msgid "Not registered"
+msgstr "Mhux irreġistrat"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Iffiltra u elenka ċ-ċertifikati tal-istudenti skont is-sessjoni, il-kors, id-data jew l-istudent, imbagħad esportahom meta jkun meħtieġ."
+
+msgid "Filter by session and course"
+msgstr "Iffiltra skont is-sessjoni u l-kors"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Agħżel sessjoni, kors u data opzjonali biex telenca ċ-ċertifikati ġġenerati."
+
+msgid "Filter by learner"
+msgstr "Iffiltra skont l-istudent"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Sib ċertifikati għal student speċifiku f’sessjonijiet u korsijiet differenti."
+
+msgid "Certificates found"
+msgstr "Ċertifikati misjuba"
+
+msgid "Open certificate"
+msgstr "Iftaħ iċ-ċertifikat"
+
+msgid "Certificate file not available"
+msgstr "Il-fajl taċ-ċertifikat mhux disponibbli"
+
+msgid "Export to CSV"
+msgstr "Esporta f’CSV"
+
+msgid "Acquired skills"
+msgstr "Ħiliet miksuba"
+
+msgid "No acquired skill"
+msgstr "L-ebda ħila miksuba"
+
+msgid "Absences"
+msgstr "Assenzi"
+
+msgid "No courses"
+msgstr "L-ebda kors"
+
+msgid "No session matched"
+msgstr "L-ebda sessjoni maqbla"
+
+msgid "Unable to load the report"
+msgstr "Ma setax jitgħabba r-rapport"
+
+msgid "Please select a profile"
+msgstr "Jekk jogħġbok agħżel profil"
+
+msgid "Please select a session"
+msgstr "Jekk jogħġbok agħżel sessjoni"
+
+msgid "Please select a user"
+msgstr "Jekk jogħġbok agħżel utent"
+
+msgid "Unable to export the report"
+msgstr "Ma setax jesporta r-rapport"
+
+msgid "Accepted on web"
+msgstr "Aċċettat fuq il-web"
+
+msgid "Accepted by e-mail"
+msgstr "Aċċettat bl-email"
+
+msgid "The course title is required"
+msgstr "It-titlu tal-kors huwa obbligatorju"
+
+msgid "Unexpected error"
+msgstr "Żball mhux mistenni"
+
+msgid "Separate tags with commas"
+msgstr "Separa t-tags b’virgoli"
+
+msgid "Open link"
+msgstr "Iftaħ il-link"
+
+msgid "Describe the course picture to generate"
+msgstr "Iddeskrivi r-ritratt tal-kors li trid tiġġenera"
+
+msgid "Generate picture"
+msgstr "Iġġenera ritratt"
+
+msgid "PDF watermark"
+msgstr "Watermark tal-PDF"
+
+msgid "No watermark image"
+msgstr "L-ebda immaġni ta’ watermark"
+
+msgid "Upload watermark"
+msgstr "Tella’ watermark"
+
+msgid "Delete watermark"
+msgstr "Ħassar il-watermark"
+
+msgid "Course legal agreement file"
+msgstr "Fajl tal-ftehim legali tal-kors"
+
+msgid "Upload agreement file"
+msgstr "Tella’ l-fajl tal-ftehim"
+
+msgid "Download agreement file"
+msgstr "Niżżel il-fajl tal-ftehim"
+
+msgid "Delete agreement file"
+msgstr "Ħassar il-fajl tal-ftehim"
+
+msgid "Custom certificate images"
+msgstr "Stampi personalizzati taċ-ċertifikat"
+
+msgid "Course picture updated"
+msgstr "Ir-ritratt tal-kors ġie aġġornat"
+
+msgid "The course picture could not be uploaded"
+msgstr "Ir-ritratt tal-kors ma setax jitgħabba"
+
+msgid "Course picture deleted"
+msgstr "Ir-ritratt tal-kors ġie mħassar"
+
+msgid "Enter a description for the image"
+msgstr "Daħħal deskrizzjoni għall-immaġni"
+
+msgid "The image generator returned an empty response"
+msgstr "Il-ġeneratur tal-immaġni rritorna tweġiba vojta"
+
+msgid "Course picture generated"
+msgstr "Ir-ritratt tal-kors ġie ġġenerat"
+
+msgid "Watermark updated"
+msgstr "Il-watermark ġie aġġornat"
+
+msgid "Watermark deleted"
+msgstr "Il-watermark ġie mħassar"
+
+msgid "Agreement file updated"
+msgstr "Il-fajl tal-ftehim ġie aġġornat"
+
+msgid "Agreement file deleted"
+msgstr "Il-fajl tal-ftehim ġie mħassar"
+
+msgid "Certificate image updated"
+msgstr "L-immaġni taċ-ċertifikat ġiet aġġornata"
+
+msgid "Certificate image deleted"
+msgstr "L-immaġni taċ-ċertifikat ġiet imħassra"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Uża l-editur tal-immaġni qabel ittella' biex taqta', iddawwar jew tibdel id-daqs tal-istampa tal-kors."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Din il-link tal-istedina mhix valida jew skadiet."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Din l-istedina ntbagħtet lil utent differenti. Jekk jogħġbok illoggja bl-account mistieden."
+
+msgid "The invitation could not be accepted."
+msgstr "L-istedina ma setgħetx tiġi aċċettata."
+
+msgid "You have been subscribed successfully."
+msgstr "Inti ġejt abbonat b'suċċess."
+
+msgid "This email address cannot be invited."
+msgstr "Dan l-indirizz tal-email ma jistax jiġi mistieden."
+
+msgid "This user is already subscribed to the session."
+msgstr "Dan l-utent diġà huwa abbonat għas-sessjoni."
+
+msgid "This user is already subscribed to the course."
+msgstr "Dan l-utent diġà huwa abbonat għall-kors."
 

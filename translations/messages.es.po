@@ -38839,6 +38839,12 @@ msgstr "Su sesión está a punto de expirar"
 msgid "Do you want to continue your session?"
 msgstr "¿Desea continuar su sesión?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Se han perdido los detalles de su sesión, por favor inicie sesión de nuevo."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Se ha denegado el acceso a este recurso. Parece que no tiene los permisos necesarios para acceder."
+
 msgid "Stay connected"
 msgstr "Permanecer conectado"
 
@@ -40277,7 +40283,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard leyendo"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Mantener activo el cuadro de resultados"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard esperando"
@@ -40305,4 +40311,316 @@ msgstr "Gestionadas"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: habilite mod_status (ExtendedStatus On) y permita localhost en /server-status. Nginx: habilite stub_status en una ubicación solo localhost como /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribución porcentual de calificaciones"
+
+msgid "Top learners"
+msgstr "Mejores estudiantes"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Este progreso combina el avance en la ruta de aprendizaje y el promedio de resultados de ejercicios del estudiante"
+
+msgid "Additional profile fields"
+msgstr "Campos de perfil adicionales"
+
+msgid "Visible columns"
+msgstr "Columnas visibles"
+
+msgid "Learning path completion"
+msgstr "Finalización de la ruta de aprendizaje"
+
+msgid "Number of certificates"
+msgstr "Número de certificados"
+
+msgid "Could not export the report"
+msgstr "No se pudo exportar el informe"
+
+msgid "Second learner"
+msgstr "Segundo estudiante"
+
+msgid "Results by learner"
+msgstr "Resultados por estudiante"
+
+msgid "Use filters to narrow down questions."
+msgstr "Use filtros para reducir las preguntas."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Intente ajustar sus filtros y busque de nuevo."
+
+msgid "Results per page"
+msgstr "Resultados por página"
+
+msgid "No answers"
+msgstr "Sin respuestas"
+
+msgid "Tests using this question"
+msgstr "Pruebas que usan esta pregunta"
+
+msgid "Delete failed"
+msgstr "Error al eliminar"
+
+msgid "PHP cache"
+msgstr "Caché PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnóstico en vivo de OPcache y APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Haga clic para mostrar el diagnóstico de OPcache y APCu"
+
+msgid "Memory used"
+msgstr "Memoria utilizada"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache está instalado pero no habilitado."
+
+msgid "OPcache extension is not available on this server."
+msgstr "La extensión OPcache no está disponible en este servidor."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu está instalado pero no habilitado."
+
+msgid "APCu extension is not available on this server."
+msgstr "La extensión APCu no está disponible en este servidor."
+
+msgid "Constant"
+msgstr "Constante"
+
+msgid "Space used on disk (MB)"
+msgstr "Espacio utilizado en disco (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Establecer espacio máximo del curso (MB)"
+
+msgid "Memory free"
+msgstr "Memoria libre"
+
+msgid "Memory wasted"
+msgstr "Memoria desperdiciada"
+
+msgid "Memory used %"
+msgstr "Memoria utilizada %"
+
+msgid "Cached scripts"
+msgstr "Scripts en caché"
+
+msgid "Cached keys"
+msgstr "Claves en caché"
+
+msgid "Misses"
+msgstr "Fallos"
+
+msgid "Cache full"
+msgstr "Caché llena"
+
+msgid "OOM restarts"
+msgstr "Reinicios por falta de memoria"
+
+msgid "Hash restarts"
+msgstr "Reinicios de hash"
+
+msgid "Manual restarts"
+msgstr "Reinicios manuales"
+
+msgid "Interned strings used"
+msgstr "Cadenas internas usadas"
+
+msgid "Interned strings free"
+msgstr "Cadenas internas libres"
+
+msgid "Interned strings count"
+msgstr "Cantidad de cadenas internas"
+
+msgid "Memory available"
+msgstr "Memoria disponible"
+
+msgid "Memory size"
+msgstr "Tamaño de memoria"
+
+msgid "Entries"
+msgstr "Entradas"
+
+msgid "Slots"
+msgstr "Espacios"
+
+msgid "Expunges"
+msgstr "Expulsiones"
+
+msgid "Cache start time"
+msgstr "Hora de inicio de caché"
+
+msgid "Time zone"
+msgstr "Zona horaria"
+
+msgid "Not registered"
+msgstr "No registrado"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrar y listar certificados de alumnos por sesión, curso, fecha o alumno, y exportarlos cuando sea necesario."
+
+msgid "Filter by session and course"
+msgstr "Filtrar por sesión y curso"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Seleccione una sesión, curso y fecha opcional para listar los certificados generados."
+
+msgid "Filter by learner"
+msgstr "Filtrar por alumno"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Buscar certificados de un alumno específico en todas las sesiones y cursos."
+
+msgid "Certificates found"
+msgstr "Certificados encontrados"
+
+msgid "Open certificate"
+msgstr "Abrir certificado"
+
+msgid "Certificate file not available"
+msgstr "Archivo de certificado no disponible"
+
+msgid "Export to CSV"
+msgstr "Exportar a CSV"
+
+msgid "Acquired skills"
+msgstr "Competencias adquiridas"
+
+msgid "No acquired skill"
+msgstr "Sin competencia adquirida"
+
+msgid "Absences"
+msgstr "Ausencias"
+
+msgid "No courses"
+msgstr "Sin cursos"
+
+msgid "No session matched"
+msgstr "Ninguna sesión coincide"
+
+msgid "Unable to load the report"
+msgstr "No se puede cargar el informe"
+
+msgid "Please select a profile"
+msgstr "Seleccione un perfil"
+
+msgid "Please select a session"
+msgstr "Seleccione una sesión"
+
+msgid "Please select a user"
+msgstr "Seleccione un usuario"
+
+msgid "Unable to export the report"
+msgstr "No se puede exportar el informe"
+
+msgid "Accepted on web"
+msgstr "Aceptado en la web"
+
+msgid "Accepted by e-mail"
+msgstr "Aceptado por correo electrónico"
+
+msgid "The course title is required"
+msgstr "El título del curso es obligatorio"
+
+msgid "Unexpected error"
+msgstr "Error inesperado"
+
+msgid "Separate tags with commas"
+msgstr "Separar etiquetas con comas"
+
+msgid "Open link"
+msgstr "Abrir enlace"
+
+msgid "Describe the course picture to generate"
+msgstr "Describa la imagen del curso que desea generar"
+
+msgid "Generate picture"
+msgstr "Generar imagen"
+
+msgid "PDF watermark"
+msgstr "Marca de agua en PDF"
+
+msgid "No watermark image"
+msgstr "Sin imagen de marca de agua"
+
+msgid "Upload watermark"
+msgstr "Subir marca de agua"
+
+msgid "Delete watermark"
+msgstr "Eliminar marca de agua"
+
+msgid "Course legal agreement file"
+msgstr "Archivo de acuerdo legal del curso"
+
+msgid "Upload agreement file"
+msgstr "Subir archivo de acuerdo"
+
+msgid "Download agreement file"
+msgstr "Descargar archivo de acuerdo"
+
+msgid "Delete agreement file"
+msgstr "Eliminar archivo de acuerdo"
+
+msgid "Custom certificate images"
+msgstr "Imágenes personalizadas del certificado"
+
+msgid "Course picture updated"
+msgstr "Imagen del curso actualizada"
+
+msgid "The course picture could not be uploaded"
+msgstr "No se pudo cargar la imagen del curso"
+
+msgid "Course picture deleted"
+msgstr "Imagen del curso eliminada"
+
+msgid "Enter a description for the image"
+msgstr "Introduzca una descripción para la imagen"
+
+msgid "The image generator returned an empty response"
+msgstr "El generador de imágenes devolvió una respuesta vacía"
+
+msgid "Course picture generated"
+msgstr "Imagen del curso generada"
+
+msgid "Watermark updated"
+msgstr "Marca de agua actualizada"
+
+msgid "Watermark deleted"
+msgstr "Marca de agua eliminada"
+
+msgid "Agreement file updated"
+msgstr "Archivo de acuerdo actualizado"
+
+msgid "Agreement file deleted"
+msgstr "Archivo de acuerdo eliminado"
+
+msgid "Certificate image updated"
+msgstr "Imagen del certificado actualizada"
+
+msgid "Certificate image deleted"
+msgstr "Imagen del certificado eliminada"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Utilice el editor de imágenes antes de cargar para recortar, rotar o redimensionar la imagen del curso."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Este enlace de invitación no es válido o ha caducado."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Esta invitación se envió a un usuario diferente. Inicie sesión con la cuenta invitada."
+
+msgid "The invitation could not be accepted."
+msgstr "No se pudo aceptar la invitación."
+
+msgid "You have been subscribed successfully."
+msgstr "Se ha suscrito correctamente."
+
+msgid "This email address cannot be invited."
+msgstr "Esta dirección de correo electrónico no puede ser invitada."
+
+msgid "This user is already subscribed to the session."
+msgstr "Este usuario ya está suscrito a la sesión."
+
+msgid "This user is already subscribed to the course."
+msgstr "Este usuario ya está suscrito al curso."
 

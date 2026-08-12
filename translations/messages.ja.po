@@ -37765,6 +37765,12 @@ msgstr "セッションの有効期限が近づいています"
 msgid "Do you want to continue your session?"
 msgstr "セッションを継続しますか？"
 
+msgid "Your session details have been lost, please login again."
+msgstr "セッションの詳細が失われました。再度ログインしてください。"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "このリソースへのアクセスは拒否されました。アクセスに必要な権限がないようです。"
+
 msgid "Stay connected"
 msgstr "接続を維持"
 
@@ -39231,4 +39237,316 @@ msgstr "処理済み"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_statusを有効にし（ExtendedStatus On）、localhostに/server-statusを許可してください。Nginx: localhost限定のロケーション（例: /nginx_status または /stub_status）でstub_statusを有効にしてください。"
+
+msgid "Grade percentage distribution"
+msgstr "成績の割合分布"
+
+msgid "Top learners"
+msgstr "上位学習者"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "この進捗は学習パスの進捗と学習者の平均演習結果を組み合わせたものです"
+
+msgid "Additional profile fields"
+msgstr "追加のプロフィール項目"
+
+msgid "Visible columns"
+msgstr "表示列"
+
+msgid "Learning path completion"
+msgstr "学習パスの完了"
+
+msgid "Number of certificates"
+msgstr "証明書の数"
+
+msgid "Could not export the report"
+msgstr "レポートをエクスポートできませんでした"
+
+msgid "Second learner"
+msgstr "2番目の学習者"
+
+msgid "Results by learner"
+msgstr "学習者ごとの結果"
+
+msgid "Use filters to narrow down questions."
+msgstr "フィルタを使用して質問を絞り込んでください。"
+
+msgid "Try adjusting your filters and search again."
+msgstr "フィルタを調整して再度検索してください。"
+
+msgid "Results per page"
+msgstr "ページあたりの結果"
+
+msgid "No answers"
+msgstr "回答なし"
+
+msgid "Tests using this question"
+msgstr "この質問を使用しているテスト"
+
+msgid "Delete failed"
+msgstr "削除に失敗しました"
+
+msgid "PHP cache"
+msgstr "PHP キャッシュ"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "OPcache と APCu のライブ診断"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "クリックして OPcache と APCu の診断を表示"
+
+msgid "Memory used"
+msgstr "使用メモリ"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache はインストールされていますが、有効化されていません。"
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache 拡張モジュールはこのサーバーで利用できません。"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu はインストールされていますが、有効化されていません。"
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu 拡張モジュールはこのサーバーで利用できません。"
+
+msgid "Constant"
+msgstr "定数"
+
+msgid "Space used on disk (MB)"
+msgstr "ディスク使用量 (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "コース最大容量を設定 (MB)"
+
+msgid "Memory free"
+msgstr "空きメモリ"
+
+msgid "Memory wasted"
+msgstr "無駄なメモリ"
+
+msgid "Memory used %"
+msgstr "使用メモリ %"
+
+msgid "Cached scripts"
+msgstr "キャッシュ済みスクリプト"
+
+msgid "Cached keys"
+msgstr "キャッシュ済みキー"
+
+msgid "Misses"
+msgstr "ミス"
+
+msgid "Cache full"
+msgstr "キャッシュ満杯"
+
+msgid "OOM restarts"
+msgstr "OOM 再起動"
+
+msgid "Hash restarts"
+msgstr "ハッシュ再起動"
+
+msgid "Manual restarts"
+msgstr "手動再起動"
+
+msgid "Interned strings used"
+msgstr "インターン文字列使用"
+
+msgid "Interned strings free"
+msgstr "インターン文字列空き"
+
+msgid "Interned strings count"
+msgstr "インターン文字列数"
+
+msgid "Memory available"
+msgstr "利用可能メモリ"
+
+msgid "Memory size"
+msgstr "メモリサイズ"
+
+msgid "Entries"
+msgstr "エントリ"
+
+msgid "Slots"
+msgstr "スロット"
+
+msgid "Expunges"
+msgstr "削除"
+
+msgid "Cache start time"
+msgstr "キャッシュ開始時刻"
+
+msgid "Time zone"
+msgstr "タイムゾーン"
+
+msgid "Not registered"
+msgstr "未登録"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "セッション、コース、日付、学習者で修了証書を絞り込み、必要に応じてエクスポートします。"
+
+msgid "Filter by session and course"
+msgstr "セッションとコースで絞り込み"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "セッション、コース、日付（任意）を選択して生成済みの修了証書を表示します。"
+
+msgid "Filter by learner"
+msgstr "学習者で絞り込み"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "セッションとコースを横断して特定の学習者の修了証書を検索します。"
+
+msgid "Certificates found"
+msgstr "修了証書が見つかりました"
+
+msgid "Open certificate"
+msgstr "修了証書を開く"
+
+msgid "Certificate file not available"
+msgstr "修了証書ファイルがありません"
+
+msgid "Export to CSV"
+msgstr "CSV にエクスポート"
+
+msgid "Acquired skills"
+msgstr "取得したスキル"
+
+msgid "No acquired skill"
+msgstr "取得したスキルはありません"
+
+msgid "Absences"
+msgstr "欠席"
+
+msgid "No courses"
+msgstr "コースはありません"
+
+msgid "No session matched"
+msgstr "一致するセッションはありません"
+
+msgid "Unable to load the report"
+msgstr "レポートを読み込めません"
+
+msgid "Please select a profile"
+msgstr "プロフィールを選択してください"
+
+msgid "Please select a session"
+msgstr "セッションを選択してください"
+
+msgid "Please select a user"
+msgstr "ユーザーを選択してください"
+
+msgid "Unable to export the report"
+msgstr "レポートをエクスポートできません"
+
+msgid "Accepted on web"
+msgstr "Web で承認"
+
+msgid "Accepted by e-mail"
+msgstr "メールで承認"
+
+msgid "The course title is required"
+msgstr "コースタイトルは必須です"
+
+msgid "Unexpected error"
+msgstr "予期しないエラー"
+
+msgid "Separate tags with commas"
+msgstr "タグはカンマで区切ってください"
+
+msgid "Open link"
+msgstr "リンクを開く"
+
+msgid "Describe the course picture to generate"
+msgstr "生成するコース画像の説明"
+
+msgid "Generate picture"
+msgstr "画像を生成"
+
+msgid "PDF watermark"
+msgstr "PDF 透かし"
+
+msgid "No watermark image"
+msgstr "透かし画像なし"
+
+msgid "Upload watermark"
+msgstr "透かしをアップロード"
+
+msgid "Delete watermark"
+msgstr "透かしを削除"
+
+msgid "Course legal agreement file"
+msgstr "コース利用規約ファイル"
+
+msgid "Upload agreement file"
+msgstr "規約ファイルをアップロード"
+
+msgid "Download agreement file"
+msgstr "規約ファイルをダウンロード"
+
+msgid "Delete agreement file"
+msgstr "規約ファイルを削除"
+
+msgid "Custom certificate images"
+msgstr "カスタム修了証画像"
+
+msgid "Course picture updated"
+msgstr "コース画像を更新しました"
+
+msgid "The course picture could not be uploaded"
+msgstr "コース画像をアップロードできませんでした"
+
+msgid "Course picture deleted"
+msgstr "コース画像を削除しました"
+
+msgid "Enter a description for the image"
+msgstr "画像の説明を入力してください"
+
+msgid "The image generator returned an empty response"
+msgstr "画像生成ツールから空の応答が返されました"
+
+msgid "Course picture generated"
+msgstr "コース画像を生成しました"
+
+msgid "Watermark updated"
+msgstr "透かしを更新しました"
+
+msgid "Watermark deleted"
+msgstr "透かしを削除しました"
+
+msgid "Agreement file updated"
+msgstr "規約ファイルを更新しました"
+
+msgid "Agreement file deleted"
+msgstr "規約ファイルを削除しました"
+
+msgid "Certificate image updated"
+msgstr "修了証画像を更新しました"
+
+msgid "Certificate image deleted"
+msgstr "修了証画像を削除しました"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "コース画像をアップロードする前に画像エディタでトリミング、回転、またはサイズ変更を行ってください。"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "この招待リンクは無効または期限切れです。"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "この招待は別のユーザーに送信されました。招待されたアカウントでログインしてください。"
+
+msgid "The invitation could not be accepted."
+msgstr "招待を受け入れることができませんでした。"
+
+msgid "You have been subscribed successfully."
+msgstr "正常に登録されました。"
+
+msgid "This email address cannot be invited."
+msgstr "このメールアドレスは招待できません。"
+
+msgid "This user is already subscribed to the session."
+msgstr "このユーザーは既にセッションに登録されています。"
+
+msgid "This user is already subscribed to the course."
+msgstr "このユーザーは既にコースに登録されています。"
 

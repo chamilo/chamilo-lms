@@ -37699,6 +37699,12 @@ msgstr "세션이 곧 만료됩니다"
 msgid "Do you want to continue your session?"
 msgstr "세션을 계속하시겠습니까?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "세션 정보가 손실되었습니다. 다시 로그인해 주세요."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "이 리소스에 대한 접근이 거부되었습니다. 접근에 필요한 권한이 없는 것 같습니다."
+
 msgid "Stay connected"
 msgstr "연결 유지"
 
@@ -39165,4 +39171,316 @@ msgstr "처리됨"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status(ExtendedStatus On)를 활성화하고 localhost가 /server-status에 접근할 수 있도록 허용하세요. Nginx: /nginx_status 또는 /stub_status와 같은 localhost 전용 위치에서 stub_status를 활성화하세요."
+
+msgid "Grade percentage distribution"
+msgstr "성적 백분율 분포"
+
+msgid "Top learners"
+msgstr "상위 학습자"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "이 진행률은 학습 경로 진행률과 학습자의 평균 시험 결과를 결합한 것입니다"
+
+msgid "Additional profile fields"
+msgstr "추가 프로필 필드"
+
+msgid "Visible columns"
+msgstr "표시할 열"
+
+msgid "Learning path completion"
+msgstr "학습 경로 완료"
+
+msgid "Number of certificates"
+msgstr "인증서 수"
+
+msgid "Could not export the report"
+msgstr "보고서를 내보낼 수 없습니다"
+
+msgid "Second learner"
+msgstr "두 번째 학습자"
+
+msgid "Results by learner"
+msgstr "학습자별 결과"
+
+msgid "Use filters to narrow down questions."
+msgstr "필터를 사용하여 질문을 좁혀보세요."
+
+msgid "Try adjusting your filters and search again."
+msgstr "필터를 조정하고 다시 검색해 보세요."
+
+msgid "Results per page"
+msgstr "페이지당 결과"
+
+msgid "No answers"
+msgstr "답변 없음"
+
+msgid "Tests using this question"
+msgstr "이 질문을 사용하는 시험"
+
+msgid "Delete failed"
+msgstr "삭제 실패"
+
+msgid "PHP cache"
+msgstr "PHP 캐시"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "실시간 OPcache 및 APCu 진단"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache 및 APCu 진단을 보려면 클릭하세요"
+
+msgid "Memory used"
+msgstr "사용된 메모리"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache가 설치되었으나 활성화되지 않았습니다."
+
+msgid "OPcache extension is not available on this server."
+msgstr "이 서버에서 OPcache 확장을 사용할 수 없습니다."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu가 설치되었으나 활성화되지 않았습니다."
+
+msgid "APCu extension is not available on this server."
+msgstr "이 서버에서 APCu 확장을 사용할 수 없습니다."
+
+msgid "Constant"
+msgstr "상수"
+
+msgid "Space used on disk (MB)"
+msgstr "디스크 사용 공간 (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "최대 강의 공간 설정 (MB)"
+
+msgid "Memory free"
+msgstr "사용 가능한 메모리"
+
+msgid "Memory wasted"
+msgstr "낭비된 메모리"
+
+msgid "Memory used %"
+msgstr "사용된 메모리 %"
+
+msgid "Cached scripts"
+msgstr "캐시된 스크립트"
+
+msgid "Cached keys"
+msgstr "캐시된 키"
+
+msgid "Misses"
+msgstr "미스"
+
+msgid "Cache full"
+msgstr "캐시 가득 참"
+
+msgid "OOM restarts"
+msgstr "OOM 재시작"
+
+msgid "Hash restarts"
+msgstr "해시 재시작"
+
+msgid "Manual restarts"
+msgstr "수동 재시작"
+
+msgid "Interned strings used"
+msgstr "인터닝된 문자열 사용"
+
+msgid "Interned strings free"
+msgstr "인터닝된 문자열 사용 가능"
+
+msgid "Interned strings count"
+msgstr "인터닝된 문자열 수"
+
+msgid "Memory available"
+msgstr "사용 가능한 메모리"
+
+msgid "Memory size"
+msgstr "메모리 크기"
+
+msgid "Entries"
+msgstr "항목"
+
+msgid "Slots"
+msgstr "슬롯"
+
+msgid "Expunges"
+msgstr "삭제"
+
+msgid "Cache start time"
+msgstr "캐시 시작 시간"
+
+msgid "Time zone"
+msgstr "시간대"
+
+msgid "Not registered"
+msgstr "등록되지 않음"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "세션, 강좌, 날짜 또는 학습자로 수강증을 필터링하고 목록을 확인한 후 필요 시 내보내세요."
+
+msgid "Filter by session and course"
+msgstr "세션 및 강좌로 필터링"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "생성된 수강증 목록을 확인할 세션, 강좌 및 선택적 날짜를 선택하세요."
+
+msgid "Filter by learner"
+msgstr "학습자로 필터링"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "세션과 강좌 전반에서 특정 학습자의 수강증을 찾습니다."
+
+msgid "Certificates found"
+msgstr "발견된 수강증"
+
+msgid "Open certificate"
+msgstr "수강증 열기"
+
+msgid "Certificate file not available"
+msgstr "수강증 파일을 사용할 수 없음"
+
+msgid "Export to CSV"
+msgstr "CSV로 내보내기"
+
+msgid "Acquired skills"
+msgstr "취득한 역량"
+
+msgid "No acquired skill"
+msgstr "취득한 역량 없음"
+
+msgid "Absences"
+msgstr "결석"
+
+msgid "No courses"
+msgstr "강좌 없음"
+
+msgid "No session matched"
+msgstr "일치하는 세션 없음"
+
+msgid "Unable to load the report"
+msgstr "보고서를 로드할 수 없음"
+
+msgid "Please select a profile"
+msgstr "프로필을 선택하세요"
+
+msgid "Please select a session"
+msgstr "세션을 선택하세요"
+
+msgid "Please select a user"
+msgstr "사용자를 선택하세요"
+
+msgid "Unable to export the report"
+msgstr "보고서를 내보낼 수 없음"
+
+msgid "Accepted on web"
+msgstr "웹에서 수락됨"
+
+msgid "Accepted by e-mail"
+msgstr "이메일로 수락됨"
+
+msgid "The course title is required"
+msgstr "강좌 제목이 필요합니다"
+
+msgid "Unexpected error"
+msgstr "예기치 않은 오류"
+
+msgid "Separate tags with commas"
+msgstr "태그는 쉼표로 구분하세요"
+
+msgid "Open link"
+msgstr "링크 열기"
+
+msgid "Describe the course picture to generate"
+msgstr "생성할 강좌 사진 설명"
+
+msgid "Generate picture"
+msgstr "사진 생성"
+
+msgid "PDF watermark"
+msgstr "PDF 워터마크"
+
+msgid "No watermark image"
+msgstr "워터마크 이미지 없음"
+
+msgid "Upload watermark"
+msgstr "워터마크 업로드"
+
+msgid "Delete watermark"
+msgstr "워터마크 삭제"
+
+msgid "Course legal agreement file"
+msgstr "강의 법적 동의서 파일"
+
+msgid "Upload agreement file"
+msgstr "동의서 파일 업로드"
+
+msgid "Download agreement file"
+msgstr "동의서 파일 다운로드"
+
+msgid "Delete agreement file"
+msgstr "동의서 파일 삭제"
+
+msgid "Custom certificate images"
+msgstr "사용자 지정 수료증 이미지"
+
+msgid "Course picture updated"
+msgstr "강의 이미지가 업데이트되었습니다"
+
+msgid "The course picture could not be uploaded"
+msgstr "강의 이미지를 업로드할 수 없습니다"
+
+msgid "Course picture deleted"
+msgstr "강의 이미지가 삭제되었습니다"
+
+msgid "Enter a description for the image"
+msgstr "이미지에 대한 설명을 입력하세요"
+
+msgid "The image generator returned an empty response"
+msgstr "이미지 생성기가 빈 응답을 반환했습니다"
+
+msgid "Course picture generated"
+msgstr "강의 이미지가 생성되었습니다"
+
+msgid "Watermark updated"
+msgstr "워터마크가 업데이트되었습니다"
+
+msgid "Watermark deleted"
+msgstr "워터마크가 삭제되었습니다"
+
+msgid "Agreement file updated"
+msgstr "동의서 파일이 업데이트되었습니다"
+
+msgid "Agreement file deleted"
+msgstr "동의서 파일이 삭제되었습니다"
+
+msgid "Certificate image updated"
+msgstr "수료증 이미지가 업데이트되었습니다"
+
+msgid "Certificate image deleted"
+msgstr "수료증 이미지가 삭제되었습니다"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "강의 이미지를 업로드하기 전에 이미지 편집기를 사용하여 자르기, 회전 또는 크기 조정을 수행하세요."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "이 초대 링크는 유효하지 않거나 만료되었습니다."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "이 초대는 다른 사용자에게 전송되었습니다. 초대된 계정으로 로그인하세요."
+
+msgid "The invitation could not be accepted."
+msgstr "초대를 수락할 수 없습니다."
+
+msgid "You have been subscribed successfully."
+msgstr "성공적으로 구독되었습니다."
+
+msgid "This email address cannot be invited."
+msgstr "이 이메일 주소는 초대할 수 없습니다."
+
+msgid "This user is already subscribed to the session."
+msgstr "이 사용자는 이미 세션에 구독되어 있습니다."
+
+msgid "This user is already subscribed to the course."
+msgstr "이 사용자는 이미 강의에 구독되어 있습니다."
 

@@ -37702,6 +37702,12 @@ msgstr "Ваша сессия скоро завершится"
 msgid "Do you want to continue your session?"
 msgstr "Хотите продолжить сессию?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Данные вашей сессии утеряны, пожалуйста, войдите снова."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Доступ к этому ресурсу запрещён. Похоже, у вас нет необходимых прав для доступа."
+
 msgid "Stay connected"
 msgstr "Остаться подключённым"
 
@@ -39168,4 +39174,316 @@ msgstr "Обработано"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: включите mod_status (ExtendedStatus On) и разрешите localhost доступ к /server-status. Nginx: включите stub_status в location, доступном только с localhost, например /nginx_status или /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Распределение оценок в процентах"
+
+msgid "Top learners"
+msgstr "Лучшие учащиеся"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Этот прогресс объединяет прогресс по учебному пути и средний результат упражнений учащегося"
+
+msgid "Additional profile fields"
+msgstr "Дополнительные поля профиля"
+
+msgid "Visible columns"
+msgstr "Видимые столбцы"
+
+msgid "Learning path completion"
+msgstr "Завершение учебного пути"
+
+msgid "Number of certificates"
+msgstr "Количество сертификатов"
+
+msgid "Could not export the report"
+msgstr "Не удалось экспортировать отчёт"
+
+msgid "Second learner"
+msgstr "Второй учащийся"
+
+msgid "Results by learner"
+msgstr "Результаты по учащимся"
+
+msgid "Use filters to narrow down questions."
+msgstr "Используйте фильтры для сужения списка вопросов."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Попробуйте изменить фильтры и повторите поиск."
+
+msgid "Results per page"
+msgstr "Результатов на страницу"
+
+msgid "No answers"
+msgstr "Нет ответов"
+
+msgid "Tests using this question"
+msgstr "Тесты, использующие этот вопрос"
+
+msgid "Delete failed"
+msgstr "Удаление не удалось"
+
+msgid "PHP cache"
+msgstr "PHP-кэш"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Диагностика OPcache и APCu в реальном времени"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Нажмите, чтобы показать диагностику OPcache и APCu"
+
+msgid "Memory used"
+msgstr "Использовано памяти"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache установлен, но не включён."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Расширение OPcache недоступно на этом сервере."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu установлен, но не включён."
+
+msgid "APCu extension is not available on this server."
+msgstr "Расширение APCu недоступно на этом сервере."
+
+msgid "Constant"
+msgstr "Константа"
+
+msgid "Space used on disk (MB)"
+msgstr "Занятое место на диске (МБ)"
+
+msgid "Set max course space (MB)"
+msgstr "Установить максимальное пространство курса (МБ)"
+
+msgid "Memory free"
+msgstr "Свободная память"
+
+msgid "Memory wasted"
+msgstr "Потерянная память"
+
+msgid "Memory used %"
+msgstr "Использовано памяти %"
+
+msgid "Cached scripts"
+msgstr "Кэшированные скрипты"
+
+msgid "Cached keys"
+msgstr "Кэшированные ключи"
+
+msgid "Misses"
+msgstr "Промахи"
+
+msgid "Cache full"
+msgstr "Кэш заполнен"
+
+msgid "OOM restarts"
+msgstr "Перезапуски OOM"
+
+msgid "Hash restarts"
+msgstr "Перезапуски хэша"
+
+msgid "Manual restarts"
+msgstr "Ручные перезапуски"
+
+msgid "Interned strings used"
+msgstr "Использованные интернированные строки"
+
+msgid "Interned strings free"
+msgstr "Свободные интернированные строки"
+
+msgid "Interned strings count"
+msgstr "Количество интернированных строк"
+
+msgid "Memory available"
+msgstr "Доступная память"
+
+msgid "Memory size"
+msgstr "Размер памяти"
+
+msgid "Entries"
+msgstr "Записи"
+
+msgid "Slots"
+msgstr "Слоты"
+
+msgid "Expunges"
+msgstr "Очистки"
+
+msgid "Cache start time"
+msgstr "Время запуска кэша"
+
+msgid "Time zone"
+msgstr "Часовой пояс"
+
+msgid "Not registered"
+msgstr "Не зарегистрирован"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Фильтровать и выводить сертификаты слушателей по сессии, курсу, дате или слушателю, затем экспортировать их при необходимости."
+
+msgid "Filter by session and course"
+msgstr "Фильтровать по сессии и курсу"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Выберите сессию, курс и при необходимости дату для вывода сгенерированных сертификатов."
+
+msgid "Filter by learner"
+msgstr "Фильтровать по слушателю"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Найти сертификаты конкретного слушателя по всем сессиям и курсам."
+
+msgid "Certificates found"
+msgstr "Найденные сертификаты"
+
+msgid "Open certificate"
+msgstr "Открыть сертификат"
+
+msgid "Certificate file not available"
+msgstr "Файл сертификата недоступен"
+
+msgid "Export to CSV"
+msgstr "Экспорт в CSV"
+
+msgid "Acquired skills"
+msgstr "Приобретённые навыки"
+
+msgid "No acquired skill"
+msgstr "Нет приобретённых навыков"
+
+msgid "Absences"
+msgstr "Пропуски"
+
+msgid "No courses"
+msgstr "Нет курсов"
+
+msgid "No session matched"
+msgstr "Не найдено подходящих сессий"
+
+msgid "Unable to load the report"
+msgstr "Не удалось загрузить отчёт"
+
+msgid "Please select a profile"
+msgstr "Выберите профиль"
+
+msgid "Please select a session"
+msgstr "Выберите сессию"
+
+msgid "Please select a user"
+msgstr "Выберите пользователя"
+
+msgid "Unable to export the report"
+msgstr "Не удалось экспортировать отчёт"
+
+msgid "Accepted on web"
+msgstr "Принято на сайте"
+
+msgid "Accepted by e-mail"
+msgstr "Принято по e-mail"
+
+msgid "The course title is required"
+msgstr "Требуется название курса"
+
+msgid "Unexpected error"
+msgstr "Непредвиденная ошибка"
+
+msgid "Separate tags with commas"
+msgstr "Разделяйте теги запятыми"
+
+msgid "Open link"
+msgstr "Открыть ссылку"
+
+msgid "Describe the course picture to generate"
+msgstr "Опишите изображение курса для генерации"
+
+msgid "Generate picture"
+msgstr "Сгенерировать изображение"
+
+msgid "PDF watermark"
+msgstr "Водяной знак PDF"
+
+msgid "No watermark image"
+msgstr "Нет изображения водяного знака"
+
+msgid "Upload watermark"
+msgstr "Загрузить водяной знак"
+
+msgid "Delete watermark"
+msgstr "Удалить водяной знак"
+
+msgid "Course legal agreement file"
+msgstr "Файл юридического соглашения курса"
+
+msgid "Upload agreement file"
+msgstr "Загрузить файл соглашения"
+
+msgid "Download agreement file"
+msgstr "Скачать файл соглашения"
+
+msgid "Delete agreement file"
+msgstr "Удалить файл соглашения"
+
+msgid "Custom certificate images"
+msgstr "Пользовательские изображения сертификатов"
+
+msgid "Course picture updated"
+msgstr "Изображение курса обновлено"
+
+msgid "The course picture could not be uploaded"
+msgstr "Не удалось загрузить изображение курса"
+
+msgid "Course picture deleted"
+msgstr "Изображение курса удалено"
+
+msgid "Enter a description for the image"
+msgstr "Введите описание изображения"
+
+msgid "The image generator returned an empty response"
+msgstr "Генератор изображений вернул пустой ответ"
+
+msgid "Course picture generated"
+msgstr "Изображение курса создано"
+
+msgid "Watermark updated"
+msgstr "Водяной знак обновлён"
+
+msgid "Watermark deleted"
+msgstr "Водяной знак удалён"
+
+msgid "Agreement file updated"
+msgstr "Файл соглашения обновлён"
+
+msgid "Agreement file deleted"
+msgstr "Файл соглашения удалён"
+
+msgid "Certificate image updated"
+msgstr "Изображение сертификата обновлено"
+
+msgid "Certificate image deleted"
+msgstr "Изображение сертификата удалено"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Используйте редактор изображений перед загрузкой, чтобы обрезать, повернуть или изменить размер изображения курса."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Эта ссылка-приглашение недействительна или срок её действия истёк."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Это приглашение было отправлено другому пользователю. Войдите под приглашённой учётной записью."
+
+msgid "The invitation could not be accepted."
+msgstr "Не удалось принять приглашение."
+
+msgid "You have been subscribed successfully."
+msgstr "Вы успешно подписаны."
+
+msgid "This email address cannot be invited."
+msgstr "Это адрес электронной почты нельзя пригласить."
+
+msgid "This user is already subscribed to the session."
+msgstr "Этот пользователь уже подписан на сессию."
+
+msgid "This user is already subscribed to the course."
+msgstr "Этот пользователь уже подписан на курс."
 

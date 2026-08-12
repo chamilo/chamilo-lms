@@ -37701,6 +37701,12 @@ msgstr "您的工作階段即將到期"
 msgid "Do you want to continue your session?"
 msgstr "是否要繼續工作階段？"
 
+msgid "Your session details have been lost, please login again."
+msgstr "您的工作階段詳細資料已遺失，請重新登入。"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "存取此資源已被拒絕。您似乎沒有必要的權限來存取它。"
+
 msgid "Stay connected"
 msgstr "保持連線"
 
@@ -39139,7 +39145,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard 讀取中"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "成績看板保持連線"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard 等待中"
@@ -39167,4 +39173,316 @@ msgstr "已處理"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache：啟用 mod_status（ExtendedStatus On）並允許本機存取 /server-status。Nginx：啟用 stub_status 於僅限本機的位置，例如 /nginx_status 或 /stub_status。"
+
+msgid "Grade percentage distribution"
+msgstr "成績百分比分佈"
+
+msgid "Top learners"
+msgstr "頂尖學習者"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "此進度結合學習路徑進度與學習者的平均測驗結果"
+
+msgid "Additional profile fields"
+msgstr "額外個人資料欄位"
+
+msgid "Visible columns"
+msgstr "可見欄位"
+
+msgid "Learning path completion"
+msgstr "學習路徑完成度"
+
+msgid "Number of certificates"
+msgstr "證書數量"
+
+msgid "Could not export the report"
+msgstr "無法匯出報告"
+
+msgid "Second learner"
+msgstr "第二位學習者"
+
+msgid "Results by learner"
+msgstr "依學習者顯示結果"
+
+msgid "Use filters to narrow down questions."
+msgstr "使用篩選器縮小問題範圍。"
+
+msgid "Try adjusting your filters and search again."
+msgstr "請調整篩選器後再試一次。"
+
+msgid "Results per page"
+msgstr "每頁結果數"
+
+msgid "No answers"
+msgstr "無答案"
+
+msgid "Tests using this question"
+msgstr "使用此問題的測驗"
+
+msgid "Delete failed"
+msgstr "刪除失敗"
+
+msgid "PHP cache"
+msgstr "PHP 快取"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "即時 OPcache 與 APCu 診斷"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "點擊以顯示 OPcache 與 APCu 診斷"
+
+msgid "Memory used"
+msgstr "已使用記憶體"
+
+msgid "OPcache is installed but not enabled."
+msgstr "已安裝 OPcache 但未啟用。"
+
+msgid "OPcache extension is not available on this server."
+msgstr "此伺服器上無法使用 OPcache 擴充功能。"
+
+msgid "APCu is installed but not enabled."
+msgstr "已安裝 APCu 但未啟用。"
+
+msgid "APCu extension is not available on this server."
+msgstr "此伺服器上無法使用 APCu 擴充功能。"
+
+msgid "Constant"
+msgstr "常數"
+
+msgid "Space used on disk (MB)"
+msgstr "磁碟使用空間 (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "設定課程最大空間 (MB)"
+
+msgid "Memory free"
+msgstr "可用記憶體"
+
+msgid "Memory wasted"
+msgstr "浪費的記憶體"
+
+msgid "Memory used %"
+msgstr "記憶體使用率 %"
+
+msgid "Cached scripts"
+msgstr "快取的腳本"
+
+msgid "Cached keys"
+msgstr "快取的金鑰"
+
+msgid "Misses"
+msgstr "未命中"
+
+msgid "Cache full"
+msgstr "快取已滿"
+
+msgid "OOM restarts"
+msgstr "OOM 重啟次數"
+
+msgid "Hash restarts"
+msgstr "雜湊重啟次數"
+
+msgid "Manual restarts"
+msgstr "手動重啟次數"
+
+msgid "Interned strings used"
+msgstr "已使用的內部字串"
+
+msgid "Interned strings free"
+msgstr "可用的內部字串"
+
+msgid "Interned strings count"
+msgstr "內部字串數量"
+
+msgid "Memory available"
+msgstr "可用記憶體"
+
+msgid "Memory size"
+msgstr "記憶體大小"
+
+msgid "Entries"
+msgstr "項目"
+
+msgid "Slots"
+msgstr "槽位"
+
+msgid "Expunges"
+msgstr "清除次數"
+
+msgid "Cache start time"
+msgstr "快取啟動時間"
+
+msgid "Time zone"
+msgstr "時區"
+
+msgid "Not registered"
+msgstr "未註冊"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "依據場次、課程、日期或學員篩選並列出學員證書，必要時可匯出。"
+
+msgid "Filter by session and course"
+msgstr "依場次與課程篩選"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "選擇場次、課程及選填日期，以列出已產生的證書。"
+
+msgid "Filter by learner"
+msgstr "依學員篩選"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "跨場次與課程搜尋特定學員的證書。"
+
+msgid "Certificates found"
+msgstr "找到的證書"
+
+msgid "Open certificate"
+msgstr "開啟證書"
+
+msgid "Certificate file not available"
+msgstr "證書檔案無法使用"
+
+msgid "Export to CSV"
+msgstr "匯出為 CSV"
+
+msgid "Acquired skills"
+msgstr "已獲得的技能"
+
+msgid "No acquired skill"
+msgstr "尚未獲得技能"
+
+msgid "Absences"
+msgstr "缺席"
+
+msgid "No courses"
+msgstr "沒有課程"
+
+msgid "No session matched"
+msgstr "沒有符合的場次"
+
+msgid "Unable to load the report"
+msgstr "無法載入報告"
+
+msgid "Please select a profile"
+msgstr "請選擇一個設定檔"
+
+msgid "Please select a session"
+msgstr "請選擇一個場次"
+
+msgid "Please select a user"
+msgstr "請選擇一個使用者"
+
+msgid "Unable to export the report"
+msgstr "無法匯出報告"
+
+msgid "Accepted on web"
+msgstr "已在網頁接受"
+
+msgid "Accepted by e-mail"
+msgstr "已透過電子郵件接受"
+
+msgid "The course title is required"
+msgstr "課程名稱為必填"
+
+msgid "Unexpected error"
+msgstr "未預期的錯誤"
+
+msgid "Separate tags with commas"
+msgstr "以逗號分隔標籤"
+
+msgid "Open link"
+msgstr "開啟連結"
+
+msgid "Describe the course picture to generate"
+msgstr "描述要產生的課程圖片"
+
+msgid "Generate picture"
+msgstr "產生圖片"
+
+msgid "PDF watermark"
+msgstr "PDF 浮水印"
+
+msgid "No watermark image"
+msgstr "沒有浮水印圖片"
+
+msgid "Upload watermark"
+msgstr "上傳浮水印"
+
+msgid "Delete watermark"
+msgstr "刪除浮水印"
+
+msgid "Course legal agreement file"
+msgstr "課程法律協議檔案"
+
+msgid "Upload agreement file"
+msgstr "上傳協議檔案"
+
+msgid "Download agreement file"
+msgstr "下載協議檔案"
+
+msgid "Delete agreement file"
+msgstr "刪除協議檔案"
+
+msgid "Custom certificate images"
+msgstr "自訂證書圖片"
+
+msgid "Course picture updated"
+msgstr "課程圖片已更新"
+
+msgid "The course picture could not be uploaded"
+msgstr "無法上傳課程圖片"
+
+msgid "Course picture deleted"
+msgstr "課程圖片已刪除"
+
+msgid "Enter a description for the image"
+msgstr "請輸入圖片說明"
+
+msgid "The image generator returned an empty response"
+msgstr "圖片產生器傳回空白回應"
+
+msgid "Course picture generated"
+msgstr "課程圖片已產生"
+
+msgid "Watermark updated"
+msgstr "浮水印已更新"
+
+msgid "Watermark deleted"
+msgstr "浮水印已刪除"
+
+msgid "Agreement file updated"
+msgstr "協議檔案已更新"
+
+msgid "Agreement file deleted"
+msgstr "協議檔案已刪除"
+
+msgid "Certificate image updated"
+msgstr "證書圖片已更新"
+
+msgid "Certificate image deleted"
+msgstr "證書圖片已刪除"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "上傳前請使用圖片編輯器裁剪、旋轉或調整課程圖片大小。"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "此邀請連結無效或已過期。"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "此邀請已傳送給其他使用者。請使用受邀帳號登入。"
+
+msgid "The invitation could not be accepted."
+msgstr "無法接受邀請。"
+
+msgid "You have been subscribed successfully."
+msgstr "您已成功註冊。"
+
+msgid "This email address cannot be invited."
+msgstr "無法邀請此電子郵件地址。"
+
+msgid "This user is already subscribed to the session."
+msgstr "此使用者已註冊此場次。"
+
+msgid "This user is already subscribed to the course."
+msgstr "此使用者已註冊此課程。"
 

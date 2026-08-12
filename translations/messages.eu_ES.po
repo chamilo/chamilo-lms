@@ -37706,6 +37706,12 @@ msgstr "Zure saioa iraungitzear dago"
 msgid "Do you want to continue your session?"
 msgstr "Zure saioarekin jarraitu nahi duzu?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Zure saioaren xehetasunak galdu dira, saiatu berriro saioa hasteko."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Baliabide honetara sarbidea ukatu da. Ez duzu baliabide horretara sartzeko beharrezko baimenik."
+
 msgid "Stay connected"
 msgstr "Jarraitu konektatuta"
 
@@ -39172,4 +39178,316 @@ msgstr "Kudeatuak"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status-era. Nginx: gaitu stub_status localhost soilik den kokapen batean, adibidez /nginx_status edo /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Kalifikazioen ehuneko banaketa"
+
+msgid "Top learners"
+msgstr "Ikasle onenak"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Aurrerapen hau ikaskuntza-bidearen aurrerapena eta ikaslearen batez besteko ariketaren emaitza konbinatzen ditu"
+
+msgid "Additional profile fields"
+msgstr "Profil-eremu gehigarriak"
+
+msgid "Visible columns"
+msgstr "Zutabe ikusgaiak"
+
+msgid "Learning path completion"
+msgstr "Ikaskuntza-bidearen osaketa"
+
+msgid "Number of certificates"
+msgstr "Ziurtagirien kopurua"
+
+msgid "Could not export the report"
+msgstr "Ezin izan da txostena esportatu"
+
+msgid "Second learner"
+msgstr "Bigarren ikaslea"
+
+msgid "Results by learner"
+msgstr "Ikaslearen emaitzak"
+
+msgid "Use filters to narrow down questions."
+msgstr "Erabili iragazkiak galderak murrizteko."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Saiatu zure iragazkiak doitzen eta bilatu berriro."
+
+msgid "Results per page"
+msgstr "Emaitzak orriko"
+
+msgid "No answers"
+msgstr "Ez dago erantzunik"
+
+msgid "Tests using this question"
+msgstr "Galdera hau erabiltzen duten probak"
+
+msgid "Delete failed"
+msgstr "Ezabaketa huts egin du"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "OPcache eta APCu diagnostikoak zuzenean"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Egin klik OPcache eta APCu diagnostikoak erakusteko"
+
+msgid "Memory used"
+msgstr "Erabilitako memoria"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache instalatuta dago baina ez dago gaituta."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache luzapena ez dago eskuragarri zerbitzari honetan."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu instalatuta dago baina ez dago gaituta."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu luzapena ez dago eskuragarri zerbitzari honetan."
+
+msgid "Constant"
+msgstr "Konstantea"
+
+msgid "Space used on disk (MB)"
+msgstr "Diskoko erabilitako espazioa (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Ezarri ikastaroaren gehienezko espazioa (MB)"
+
+msgid "Memory free"
+msgstr "Memoria librea"
+
+msgid "Memory wasted"
+msgstr "Xahututako memoria"
+
+msgid "Memory used %"
+msgstr "Erabilitako memoria %"
+
+msgid "Cached scripts"
+msgstr "Gordetako script-ak"
+
+msgid "Cached keys"
+msgstr "Gordetako gakoak"
+
+msgid "Misses"
+msgstr "Hutsegiteak"
+
+msgid "Cache full"
+msgstr "Cache-a beteta"
+
+msgid "OOM restarts"
+msgstr "OOM berrabiarazteak"
+
+msgid "Hash restarts"
+msgstr "Hash berrabiarazteak"
+
+msgid "Manual restarts"
+msgstr "Eskuzko berrabiarazteak"
+
+msgid "Interned strings used"
+msgstr "Barneratutako kate erabiliak"
+
+msgid "Interned strings free"
+msgstr "Barneratutako kate libreak"
+
+msgid "Interned strings count"
+msgstr "Barneratutako kate kopurua"
+
+msgid "Memory available"
+msgstr "Memoria eskuragarria"
+
+msgid "Memory size"
+msgstr "Memoria tamaina"
+
+msgid "Entries"
+msgstr "Sarrerak"
+
+msgid "Slots"
+msgstr "Slot-ak"
+
+msgid "Expunges"
+msgstr "Ezabatzeak"
+
+msgid "Cache start time"
+msgstr "Cache hasiera-ordua"
+
+msgid "Time zone"
+msgstr "Ordu-zona"
+
+msgid "Not registered"
+msgstr "Ez erregistratuta"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Iragazi eta zerrendatu ikasleen ziurtagiriak saio, ikastaro, data edo ikaslearen arabera, eta esportatu behar denean."
+
+msgid "Filter by session and course"
+msgstr "Iragazi saio eta ikastaroaren arabera"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Aukeratu saio bat, ikastaro bat eta aukerako data ziurtagiri sortuak zerrendatzeko."
+
+msgid "Filter by learner"
+msgstr "Iragazi ikaslearen arabera"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Bilatu ziurtagiriak ikasle jakin baterako saio eta ikastaroetan zehar."
+
+msgid "Certificates found"
+msgstr "Aurkitutako ziurtagiriak"
+
+msgid "Open certificate"
+msgstr "Ireki ziurtagiria"
+
+msgid "Certificate file not available"
+msgstr "Ziurtagiri-fitxategia ez dago eskuragarri"
+
+msgid "Export to CSV"
+msgstr "Esportatu CSVra"
+
+msgid "Acquired skills"
+msgstr "Eskatutako trebetasunak"
+
+msgid "No acquired skill"
+msgstr "Ez dago trebetasunik eskuratuta"
+
+msgid "Absences"
+msgstr "Absentziak"
+
+msgid "No courses"
+msgstr "Ez dago ikastarorik"
+
+msgid "No session matched"
+msgstr "Ez da saiorik aurkitu"
+
+msgid "Unable to load the report"
+msgstr "Ezin da txostena kargatu"
+
+msgid "Please select a profile"
+msgstr "Hautatu profila"
+
+msgid "Please select a session"
+msgstr "Hautatu saio bat"
+
+msgid "Please select a user"
+msgstr "Hautatu erabiltzaile bat"
+
+msgid "Unable to export the report"
+msgstr "Ezin da txostena esportatu"
+
+msgid "Accepted on web"
+msgstr "Onartua web bidez"
+
+msgid "Accepted by e-mail"
+msgstr "Onartua posta elektronikoz"
+
+msgid "The course title is required"
+msgstr "Ikastaroaren izenburua beharrezkoa da"
+
+msgid "Unexpected error"
+msgstr "Ustekabeko errorea"
+
+msgid "Separate tags with commas"
+msgstr "Bereizi etiketak komaz"
+
+msgid "Open link"
+msgstr "Ireki esteka"
+
+msgid "Describe the course picture to generate"
+msgstr "Deskribatu sortu beharreko ikastaroaren irudia"
+
+msgid "Generate picture"
+msgstr "Sortu irudia"
+
+msgid "PDF watermark"
+msgstr "PDF ur-marka"
+
+msgid "No watermark image"
+msgstr "Ez dago ur-markarik"
+
+msgid "Upload watermark"
+msgstr "Kargatu ur-marka"
+
+msgid "Delete watermark"
+msgstr "Ezabatu ur-marka"
+
+msgid "Course legal agreement file"
+msgstr "Ikastaroaren lege-akordioaren fitxategia"
+
+msgid "Upload agreement file"
+msgstr "Kargatu akordio-fitxategia"
+
+msgid "Download agreement file"
+msgstr "Deskargatu akordio-fitxategia"
+
+msgid "Delete agreement file"
+msgstr "Ezabatu akordio-fitxategia"
+
+msgid "Custom certificate images"
+msgstr "Ziurtagiri-irudi pertsonalizatuak"
+
+msgid "Course picture updated"
+msgstr "Ikastaroaren irudia eguneratu da"
+
+msgid "The course picture could not be uploaded"
+msgstr "Ezin izan da ikastaroaren irudia kargatu"
+
+msgid "Course picture deleted"
+msgstr "Ikastaroaren irudia ezabatu da"
+
+msgid "Enter a description for the image"
+msgstr "Sartu irudiaren deskribapena"
+
+msgid "The image generator returned an empty response"
+msgstr "Irudi-sortzaileak erantzun huts bat itzuli du"
+
+msgid "Course picture generated"
+msgstr "Ikastaroaren irudia sortu da"
+
+msgid "Watermark updated"
+msgstr "Ur-marka eguneratu da"
+
+msgid "Watermark deleted"
+msgstr "Ur-marka ezabatu da"
+
+msgid "Agreement file updated"
+msgstr "Akordio-fitxategia eguneratu da"
+
+msgid "Agreement file deleted"
+msgstr "Akordio-fitxategia ezabatu da"
+
+msgid "Certificate image updated"
+msgstr "Ziurtagiri-irudia eguneratu da"
+
+msgid "Certificate image deleted"
+msgstr "Ziurtagiri-irudia ezabatu da"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Erabili irudi-editorea kargatu aurretik ikastaroaren irudia moztu, biratu edo tamainaz aldatzeko."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Gonbidapen-esteka hau baliogabea da edo iraungi da."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Gonbidapen hau beste erabiltzaile bati bidali zaio. Hasi saioa gonbidatutako kontuarekin."
+
+msgid "The invitation could not be accepted."
+msgstr "Ezin izan da gonbidapena onartu."
+
+msgid "You have been subscribed successfully."
+msgstr "Arrakastaz harpidetu zara."
+
+msgid "This email address cannot be invited."
+msgstr "Ezin da helbide elektroniko hau gonbidatu."
+
+msgid "This user is already subscribed to the session."
+msgstr "Erabiltzaile hau dagoeneko saioan harpidetuta dago."
+
+msgid "This user is already subscribed to the course."
+msgstr "Erabiltzaile hau dagoeneko ikastaroan harpidetuta dago."
 

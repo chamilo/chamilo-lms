@@ -37700,6 +37700,12 @@ msgstr "Vaša sesija uskoro ističe"
 msgid "Do you want to continue your session?"
 msgstr "Želite li nastaviti sesiju?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Vaši podaci o sesiji su izgubljeni, molimo prijavite se ponovno."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Pristup ovom resursu je odbijen. Čini se da nemate potrebna dopuštenja za pristup."
+
 msgid "Stay connected"
 msgstr "Ostani povezan"
 
@@ -39166,4 +39172,316 @@ msgstr "Obrađeno"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: omogućite mod_status (ExtendedStatus On) i dopustite localhost na /server-status. Nginx: omogućite stub_status na lokaciji samo za localhost poput /nginx_status ili /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribucija postotaka ocjena"
+
+msgid "Top learners"
+msgstr "Najbolji polaznici"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Ovaj napredak kombinira napredak u putu učenja i prosječan rezultat vježbe polaznika"
+
+msgid "Additional profile fields"
+msgstr "Dodatna polja profila"
+
+msgid "Visible columns"
+msgstr "Vidljivi stupci"
+
+msgid "Learning path completion"
+msgstr "Završetak puta učenja"
+
+msgid "Number of certificates"
+msgstr "Broj certifikata"
+
+msgid "Could not export the report"
+msgstr "Izvoz izvješća nije uspio"
+
+msgid "Second learner"
+msgstr "Drugi polaznik"
+
+msgid "Results by learner"
+msgstr "Rezultati po polazniku"
+
+msgid "Use filters to narrow down questions."
+msgstr "Koristite filtre za sužavanje pitanja."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Pokušajte prilagoditi filtre i ponovno potražiti."
+
+msgid "Results per page"
+msgstr "Rezultata po stranici"
+
+msgid "No answers"
+msgstr "Nema odgovora"
+
+msgid "Tests using this question"
+msgstr "Testovi koji koriste ovo pitanje"
+
+msgid "Delete failed"
+msgstr "Brisanje nije uspjelo"
+
+msgid "PHP cache"
+msgstr "PHP predmemorija"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Dijagnostika OPcache i APCu u stvarnom vremenu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Kliknite za prikaz dijagnostike OPcache i APCu"
+
+msgid "Memory used"
+msgstr "Iskorištena memorija"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache je instaliran, ali nije omogućen."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Proširenje OPcache nije dostupno na ovom poslužitelju."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu je instaliran, ali nije omogućen."
+
+msgid "APCu extension is not available on this server."
+msgstr "Proširenje APCu nije dostupno na ovom poslužitelju."
+
+msgid "Constant"
+msgstr "Konstanta"
+
+msgid "Space used on disk (MB)"
+msgstr "Iskorišteni prostor na disku (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Postavi maksimalni prostor tečaja (MB)"
+
+msgid "Memory free"
+msgstr "Slobodna memorija"
+
+msgid "Memory wasted"
+msgstr "Izgubljena memorija"
+
+msgid "Memory used %"
+msgstr "Iskorištena memorija %"
+
+msgid "Cached scripts"
+msgstr "Spremljene skripte"
+
+msgid "Cached keys"
+msgstr "Spremljeni ključevi"
+
+msgid "Misses"
+msgstr "Promašaji"
+
+msgid "Cache full"
+msgstr "Predmemorija puna"
+
+msgid "OOM restarts"
+msgstr "OOM ponovna pokretanja"
+
+msgid "Hash restarts"
+msgstr "Hash ponovna pokretanja"
+
+msgid "Manual restarts"
+msgstr "Ručna ponovna pokretanja"
+
+msgid "Interned strings used"
+msgstr "Iskorišteni interni nizovi"
+
+msgid "Interned strings free"
+msgstr "Slobodni interni nizovi"
+
+msgid "Interned strings count"
+msgstr "Broj internih nizova"
+
+msgid "Memory available"
+msgstr "Dostupna memorija"
+
+msgid "Memory size"
+msgstr "Veličina memorije"
+
+msgid "Entries"
+msgstr "Unosi"
+
+msgid "Slots"
+msgstr "Mjesta"
+
+msgid "Expunges"
+msgstr "Izbacivanja"
+
+msgid "Cache start time"
+msgstr "Vrijeme pokretanja predmemorije"
+
+msgid "Time zone"
+msgstr "Vremenska zona"
+
+msgid "Not registered"
+msgstr "Nije registriran"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtriraj i prikaži certifikate polaznika prema sesiji, tečaju, datumu ili polazniku, zatim ih izvezi po potrebi."
+
+msgid "Filter by session and course"
+msgstr "Filtriraj prema sesiji i tečaju"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Odaberite sesiju, tečaj i neobavezni datum za prikaz generiranih certifikata."
+
+msgid "Filter by learner"
+msgstr "Filtriraj prema polazniku"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Pronađite certifikate za određenog polaznika u svim sesijama i tečajevima."
+
+msgid "Certificates found"
+msgstr "Pronađeni certifikati"
+
+msgid "Open certificate"
+msgstr "Otvori certifikat"
+
+msgid "Certificate file not available"
+msgstr "Datoteka certifikata nije dostupna"
+
+msgid "Export to CSV"
+msgstr "Izvezi u CSV"
+
+msgid "Acquired skills"
+msgstr "Stečene vještine"
+
+msgid "No acquired skill"
+msgstr "Nema stečenih vještina"
+
+msgid "Absences"
+msgstr "Izostanci"
+
+msgid "No courses"
+msgstr "Nema tečajeva"
+
+msgid "No session matched"
+msgstr "Nema podudarnih sesija"
+
+msgid "Unable to load the report"
+msgstr "Izvješće se ne može učitati"
+
+msgid "Please select a profile"
+msgstr "Odaberite profil"
+
+msgid "Please select a session"
+msgstr "Odaberite sesiju"
+
+msgid "Please select a user"
+msgstr "Odaberite korisnika"
+
+msgid "Unable to export the report"
+msgstr "Izvješće se ne može izvesti"
+
+msgid "Accepted on web"
+msgstr "Prihvaćeno na webu"
+
+msgid "Accepted by e-mail"
+msgstr "Prihvaćeno e-poštom"
+
+msgid "The course title is required"
+msgstr "Naslov tečaja je obavezan"
+
+msgid "Unexpected error"
+msgstr "Neočekivana pogreška"
+
+msgid "Separate tags with commas"
+msgstr "Odvojite oznake zarezima"
+
+msgid "Open link"
+msgstr "Otvori poveznicu"
+
+msgid "Describe the course picture to generate"
+msgstr "Opišite sliku tečaja koju treba generirati"
+
+msgid "Generate picture"
+msgstr "Generiraj sliku"
+
+msgid "PDF watermark"
+msgstr "Vodeni žig PDF-a"
+
+msgid "No watermark image"
+msgstr "Nema slike vodenog žiga"
+
+msgid "Upload watermark"
+msgstr "Učitaj vodeni žig"
+
+msgid "Delete watermark"
+msgstr "Izbriši vodeni žig"
+
+msgid "Course legal agreement file"
+msgstr "Datoteka pravnog sporazuma tečaja"
+
+msgid "Upload agreement file"
+msgstr "Učitaj datoteku sporazuma"
+
+msgid "Download agreement file"
+msgstr "Preuzmi datoteku sporazuma"
+
+msgid "Delete agreement file"
+msgstr "Izbriši datoteku sporazuma"
+
+msgid "Custom certificate images"
+msgstr "Prilagođene slike certifikata"
+
+msgid "Course picture updated"
+msgstr "Slika tečaja ažurirana"
+
+msgid "The course picture could not be uploaded"
+msgstr "Slika tečaja nije se mogla učitati"
+
+msgid "Course picture deleted"
+msgstr "Slika tečaja izbrisana"
+
+msgid "Enter a description for the image"
+msgstr "Unesite opis slike"
+
+msgid "The image generator returned an empty response"
+msgstr "Generator slika vratio je prazan odgovor"
+
+msgid "Course picture generated"
+msgstr "Slika tečaja generirana"
+
+msgid "Watermark updated"
+msgstr "Vodeni žig ažuriran"
+
+msgid "Watermark deleted"
+msgstr "Vodeni žig izbrisan"
+
+msgid "Agreement file updated"
+msgstr "Datoteka sporazuma ažurirana"
+
+msgid "Agreement file deleted"
+msgstr "Datoteka sporazuma izbrisana"
+
+msgid "Certificate image updated"
+msgstr "Slika certifikata ažurirana"
+
+msgid "Certificate image deleted"
+msgstr "Slika certifikata izbrisana"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Koristite uređivač slika prije prijenosa kako biste izrezali, rotirali ili promijenili veličinu slike tečaja."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Ova poveznica za poziv nije važeća ili je istekla."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Ovaj poziv poslan je drugom korisniku. Prijavite se s pozvanim računom."
+
+msgid "The invitation could not be accepted."
+msgstr "Poziv nije moguće prihvatiti."
+
+msgid "You have been subscribed successfully."
+msgstr "Uspješno ste se pretplatili."
+
+msgid "This email address cannot be invited."
+msgstr "Ovu adresu e-pošte nije moguće pozvati."
+
+msgid "This user is already subscribed to the session."
+msgstr "Ovaj korisnik već je pretplaćen na sesiju."
+
+msgid "This user is already subscribed to the course."
+msgstr "Ovaj korisnik već je pretplaćen na tečaj."
 

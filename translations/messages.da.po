@@ -37701,6 +37701,12 @@ msgstr "Din session udløber snart"
 msgid "Do you want to continue your session?"
 msgstr "Vil du fortsætte din session?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Dine sessionsoplysninger er gået tabt, log venligst ind igen."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Adgang til denne ressource er nægtet. Det ser ikke ud til, at du har de nødvendige tilladelser til at tilgå den."
+
 msgid "Stay connected"
 msgstr "Forbliv tilsluttet"
 
@@ -39167,4 +39173,316 @@ msgstr "Håndteret"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: aktiver mod_status (ExtendedStatus On) og tillad localhost til /server-status. Nginx: aktiver stub_status på en kun-localhost-placering som /nginx_status eller /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Fordeling af karakterprocenter"
+
+msgid "Top learners"
+msgstr "Topstuderende"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Denne fremgang kombinerer læringsstiens fremgang og den studerendes gennemsnitlige øvelsesresultat"
+
+msgid "Additional profile fields"
+msgstr "Yderligere profilfelter"
+
+msgid "Visible columns"
+msgstr "Synlige kolonner"
+
+msgid "Learning path completion"
+msgstr "Fuldførelse af læringssti"
+
+msgid "Number of certificates"
+msgstr "Antal certifikater"
+
+msgid "Could not export the report"
+msgstr "Kunne ikke eksportere rapporten"
+
+msgid "Second learner"
+msgstr "Anden studerende"
+
+msgid "Results by learner"
+msgstr "Resultater pr. studerende"
+
+msgid "Use filters to narrow down questions."
+msgstr "Brug filtre til at indsnævre spørgsmål."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Prøv at justere dine filtre og søg igen."
+
+msgid "Results per page"
+msgstr "Resultater pr. side"
+
+msgid "No answers"
+msgstr "Ingen svar"
+
+msgid "Tests using this question"
+msgstr "Test der bruger dette spørgsmål"
+
+msgid "Delete failed"
+msgstr "Sletning mislykkedes"
+
+msgid "PHP cache"
+msgstr "PHP-cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache- og APCu-diagnostik"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klik for at vise OPcache- og APCu-diagnostik"
+
+msgid "Memory used"
+msgstr "Brugt hukommelse"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache er installeret, men ikke aktiveret."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache-udvidelsen er ikke tilgængelig på denne server."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu er installeret, men ikke aktiveret."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu-udvidelsen er ikke tilgængelig på denne server."
+
+msgid "Constant"
+msgstr "Konstant"
+
+msgid "Space used on disk (MB)"
+msgstr "Plads brugt på disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Sæt maks. kursusplads (MB)"
+
+msgid "Memory free"
+msgstr "Ledig hukommelse"
+
+msgid "Memory wasted"
+msgstr "Spildt hukommelse"
+
+msgid "Memory used %"
+msgstr "Brugt hukommelse %"
+
+msgid "Cached scripts"
+msgstr "Cachede scripts"
+
+msgid "Cached keys"
+msgstr "Cachede nøgler"
+
+msgid "Misses"
+msgstr "Misses"
+
+msgid "Cache full"
+msgstr "Cache fuld"
+
+msgid "OOM restarts"
+msgstr "OOM-genstarter"
+
+msgid "Hash restarts"
+msgstr "Hash-genstarter"
+
+msgid "Manual restarts"
+msgstr "Manuelle genstarter"
+
+msgid "Interned strings used"
+msgstr "Brugte interned strings"
+
+msgid "Interned strings free"
+msgstr "Frie interned strings"
+
+msgid "Interned strings count"
+msgstr "Antal interned strings"
+
+msgid "Memory available"
+msgstr "Tilgængelig hukommelse"
+
+msgid "Memory size"
+msgstr "Hukommelsesstørrelse"
+
+msgid "Entries"
+msgstr "Indgange"
+
+msgid "Slots"
+msgstr "Slots"
+
+msgid "Expunges"
+msgstr "Sletter"
+
+msgid "Cache start time"
+msgstr "Cache starttid"
+
+msgid "Time zone"
+msgstr "Tidszone"
+
+msgid "Not registered"
+msgstr "Ikke registreret"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrer og vis elevcertifikater efter session, kursus, dato eller elev, og eksporter dem efter behov."
+
+msgid "Filter by session and course"
+msgstr "Filtrer efter session og kursus"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Vælg en session, et kursus og eventuelt en dato for at vise de genererede certifikater."
+
+msgid "Filter by learner"
+msgstr "Filtrer efter elev"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Find certifikater for en bestemt elev på tværs af sessioner og kurser."
+
+msgid "Certificates found"
+msgstr "Certifikater fundet"
+
+msgid "Open certificate"
+msgstr "Åbn certifikat"
+
+msgid "Certificate file not available"
+msgstr "Certifikatfil ikke tilgængelig"
+
+msgid "Export to CSV"
+msgstr "Eksporter til CSV"
+
+msgid "Acquired skills"
+msgstr "Erhvervede kompetencer"
+
+msgid "No acquired skill"
+msgstr "Ingen erhvervet kompetence"
+
+msgid "Absences"
+msgstr "Fravær"
+
+msgid "No courses"
+msgstr "Ingen kurser"
+
+msgid "No session matched"
+msgstr "Ingen session matchede"
+
+msgid "Unable to load the report"
+msgstr "Kan ikke indlæse rapporten"
+
+msgid "Please select a profile"
+msgstr "Vælg venligst en profil"
+
+msgid "Please select a session"
+msgstr "Vælg venligst en session"
+
+msgid "Please select a user"
+msgstr "Vælg venligst en bruger"
+
+msgid "Unable to export the report"
+msgstr "Kan ikke eksportere rapporten"
+
+msgid "Accepted on web"
+msgstr "Accepteret på web"
+
+msgid "Accepted by e-mail"
+msgstr "Accepteret via e-mail"
+
+msgid "The course title is required"
+msgstr "Kursets titel er påkrævet"
+
+msgid "Unexpected error"
+msgstr "Uventet fejl"
+
+msgid "Separate tags with commas"
+msgstr "Adskil tags med kommaer"
+
+msgid "Open link"
+msgstr "Åbn link"
+
+msgid "Describe the course picture to generate"
+msgstr "Beskriv kursusbilledet, der skal genereres"
+
+msgid "Generate picture"
+msgstr "Generér billede"
+
+msgid "PDF watermark"
+msgstr "PDF-vandmærke"
+
+msgid "No watermark image"
+msgstr "Intet vandmærkebillede"
+
+msgid "Upload watermark"
+msgstr "Upload vandmærke"
+
+msgid "Delete watermark"
+msgstr "Slet vandmærke"
+
+msgid "Course legal agreement file"
+msgstr "Kursus juridisk aftalefil"
+
+msgid "Upload agreement file"
+msgstr "Upload aftalefil"
+
+msgid "Download agreement file"
+msgstr "Download aftalefil"
+
+msgid "Delete agreement file"
+msgstr "Slet aftalefil"
+
+msgid "Custom certificate images"
+msgstr "Brugerdefinerede certifikatbilleder"
+
+msgid "Course picture updated"
+msgstr "Kursusbillede opdateret"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kursusbilledet kunne ikke uploades"
+
+msgid "Course picture deleted"
+msgstr "Kursusbillede slettet"
+
+msgid "Enter a description for the image"
+msgstr "Indtast en beskrivelse af billedet"
+
+msgid "The image generator returned an empty response"
+msgstr "Billedgeneratoren returnerede et tomt svar"
+
+msgid "Course picture generated"
+msgstr "Kursusbillede genereret"
+
+msgid "Watermark updated"
+msgstr "Vandmærke opdateret"
+
+msgid "Watermark deleted"
+msgstr "Vandmærke slettet"
+
+msgid "Agreement file updated"
+msgstr "Aftalefil opdateret"
+
+msgid "Agreement file deleted"
+msgstr "Aftalefil slettet"
+
+msgid "Certificate image updated"
+msgstr "Certifikatbillede opdateret"
+
+msgid "Certificate image deleted"
+msgstr "Certifikatbillede slettet"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Brug billededitoren før upload for at beskære, rotere eller ændre størrelse på kursusbilledet."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Dette invitationslink er ugyldigt eller udløbet."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Denne invitation blev sendt til en anden bruger. Log venligst ind med den inviterede konto."
+
+msgid "The invitation could not be accepted."
+msgstr "Invitationen kunne ikke accepteres."
+
+msgid "You have been subscribed successfully."
+msgstr "Du er blevet tilmeldt."
+
+msgid "This email address cannot be invited."
+msgstr "Denne e-mailadresse kan ikke inviteres."
+
+msgid "This user is already subscribed to the session."
+msgstr "Denne bruger er allerede tilmeldt sessionen."
+
+msgid "This user is already subscribed to the course."
+msgstr "Denne bruger er allerede tilmeldt kurset."
 

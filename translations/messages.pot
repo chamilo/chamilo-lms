@@ -39094,3 +39094,315 @@ msgstr ""
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr ""
+
+msgid "Grade percentage distribution"
+msgstr ""
+
+msgid "Top learners"
+msgstr ""
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr ""
+
+msgid "Additional profile fields"
+msgstr ""
+
+msgid "Visible columns"
+msgstr ""
+
+msgid "Learning path completion"
+msgstr ""
+
+msgid "Number of certificates"
+msgstr ""
+
+msgid "Could not export the report"
+msgstr ""
+
+msgid "Second learner"
+msgstr ""
+
+msgid "Results by learner"
+msgstr ""
+
+msgid "Use filters to narrow down questions."
+msgstr ""
+
+msgid "Try adjusting your filters and search again."
+msgstr ""
+
+msgid "Results per page"
+msgstr ""
+
+msgid "No answers"
+msgstr ""
+
+msgid "Tests using this question"
+msgstr ""
+
+msgid "Delete failed"
+msgstr ""
+
+msgid "PHP cache"
+msgstr ""
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Memory used"
+msgstr ""
+
+msgid "OPcache is installed but not enabled."
+msgstr ""
+
+msgid "OPcache extension is not available on this server."
+msgstr ""
+
+msgid "APCu is installed but not enabled."
+msgstr ""
+
+msgid "APCu extension is not available on this server."
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Space used on disk (MB)"
+msgstr ""
+
+msgid "Set max course space (MB)"
+msgstr ""
+
+msgid "Memory free"
+msgstr ""
+
+msgid "Memory wasted"
+msgstr ""
+
+msgid "Memory used %"
+msgstr ""
+
+msgid "Cached scripts"
+msgstr ""
+
+msgid "Cached keys"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Cache full"
+msgstr ""
+
+msgid "OOM restarts"
+msgstr ""
+
+msgid "Hash restarts"
+msgstr ""
+
+msgid "Manual restarts"
+msgstr ""
+
+msgid "Interned strings used"
+msgstr ""
+
+msgid "Interned strings free"
+msgstr ""
+
+msgid "Interned strings count"
+msgstr ""
+
+msgid "Memory available"
+msgstr ""
+
+msgid "Memory size"
+msgstr ""
+
+msgid "Entries"
+msgstr ""
+
+msgid "Slots"
+msgstr ""
+
+msgid "Expunges"
+msgstr ""
+
+msgid "Cache start time"
+msgstr ""
+
+msgid "Time zone"
+msgstr ""
+
+msgid "Not registered"
+msgstr ""
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr ""
+
+msgid "Filter by session and course"
+msgstr ""
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr ""
+
+msgid "Filter by learner"
+msgstr ""
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr ""
+
+msgid "Certificates found"
+msgstr ""
+
+msgid "Open certificate"
+msgstr ""
+
+msgid "Certificate file not available"
+msgstr ""
+
+msgid "Export to CSV"
+msgstr ""
+
+msgid "Acquired skills"
+msgstr ""
+
+msgid "No acquired skill"
+msgstr ""
+
+msgid "Absences"
+msgstr ""
+
+msgid "No courses"
+msgstr ""
+
+msgid "No session matched"
+msgstr ""
+
+msgid "Unable to load the report"
+msgstr ""
+
+msgid "Please select a profile"
+msgstr ""
+
+msgid "Please select a session"
+msgstr ""
+
+msgid "Please select a user"
+msgstr ""
+
+msgid "Unable to export the report"
+msgstr ""
+
+msgid "Accepted on web"
+msgstr ""
+
+msgid "Accepted by e-mail"
+msgstr ""
+
+msgid "The course title is required"
+msgstr ""
+
+msgid "Unexpected error"
+msgstr ""
+
+msgid "Separate tags with commas"
+msgstr ""
+
+msgid "Open link"
+msgstr ""
+
+msgid "Describe the course picture to generate"
+msgstr ""
+
+msgid "Generate picture"
+msgstr ""
+
+msgid "PDF watermark"
+msgstr ""
+
+msgid "No watermark image"
+msgstr ""
+
+msgid "Upload watermark"
+msgstr ""
+
+msgid "Delete watermark"
+msgstr ""
+
+msgid "Course legal agreement file"
+msgstr ""
+
+msgid "Upload agreement file"
+msgstr ""
+
+msgid "Download agreement file"
+msgstr ""
+
+msgid "Delete agreement file"
+msgstr ""
+
+msgid "Custom certificate images"
+msgstr ""
+
+msgid "Course picture updated"
+msgstr ""
+
+msgid "The course picture could not be uploaded"
+msgstr ""
+
+msgid "Course picture deleted"
+msgstr ""
+
+msgid "Enter a description for the image"
+msgstr ""
+
+msgid "The image generator returned an empty response"
+msgstr ""
+
+msgid "Course picture generated"
+msgstr ""
+
+msgid "Watermark updated"
+msgstr ""
+
+msgid "Watermark deleted"
+msgstr ""
+
+msgid "Agreement file updated"
+msgstr ""
+
+msgid "Agreement file deleted"
+msgstr ""
+
+msgid "Certificate image updated"
+msgstr ""
+
+msgid "Certificate image deleted"
+msgstr ""
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr ""
+
+msgid "This invitation link is invalid or has expired."
+msgstr ""
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr ""
+
+msgid "The invitation could not be accepted."
+msgstr ""
+
+msgid "You have been subscribed successfully."
+msgstr ""
+
+msgid "This email address cannot be invited."
+msgstr ""
+
+msgid "This user is already subscribed to the session."
+msgstr ""
+
+msgid "This user is already subscribed to the course."
+msgstr ""

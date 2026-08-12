@@ -37695,6 +37695,12 @@ msgstr "Kipindi chako kinakaribia kumalizika"
 msgid "Do you want to continue your session?"
 msgstr "Je, ungependa kuendelea na kipindi chako?"
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr "Endelea kuunganishwa"
 
@@ -38944,10 +38950,10 @@ msgid "Each item weight is treated as its maximum points; the grade is the sum o
 msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
 
 msgid "The grade is the weighted average of items, normalized by the sum of weights."
-msgstr "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Alama ni wastani wa uzito wa vipengee, uliorekebishwa kulingana na jumla ya uzito."
 
 msgid "Forum participation"
-msgstr "Forum participation"
+msgstr "Ushiriki wa jukwaa"
 
 msgid "Forum thread"
 msgstr "Uzi wa jukwaa"
@@ -39161,4 +39167,316 @@ msgstr "Imeshughulikiwa"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: wezesha mod_status (ExtendedStatus On) na ruhusu localhost kufikia /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Mgawanyo wa asilimia za alama"
+
+msgid "Top learners"
+msgstr "Wanafunzi bora"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Maendeleo haya yanachanganya maendeleo ya njia ya kujifunza na wastani wa matokeo ya mazoezi ya mwanafunzi"
+
+msgid "Additional profile fields"
+msgstr "Viwanja vya wasifu vya ziada"
+
+msgid "Visible columns"
+msgstr "Safu zinazoonekana"
+
+msgid "Learning path completion"
+msgstr "Kukamilisha njia ya kujifunza"
+
+msgid "Number of certificates"
+msgstr "Idadi ya vyeti"
+
+msgid "Could not export the report"
+msgstr "Haikuweza kusafirisha ripoti"
+
+msgid "Second learner"
+msgstr "Mwanafunzi wa pili"
+
+msgid "Results by learner"
+msgstr "Matokeo kwa mwanafunzi"
+
+msgid "Use filters to narrow down questions."
+msgstr "Tumia vichujio kupunguza maswali."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Jaribu kurekebisha vichujio vyako na utafute tena."
+
+msgid "Results per page"
+msgstr "Matokeo kwa ukurasa"
+
+msgid "No answers"
+msgstr "Hakuna majibu"
+
+msgid "Tests using this question"
+msgstr "Majaribio yanayotumia swali hili"
+
+msgid "Delete failed"
+msgstr "Kufuta kumeshindwa"
+
+msgid "PHP cache"
+msgstr "Akiba ya PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Uchunguzi wa moja kwa moja wa OPcache na APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Bofya ili kuonyesha uchunguzi wa OPcache na APCu"
+
+msgid "Memory used"
+msgstr "Kumbukumbu iliyotumika"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache imesakinishwa lakini haijawashwa."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Kiendelezi cha OPcache hakipatikani kwenye seva hii."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu imesakinishwa lakini haijawashwa."
+
+msgid "APCu extension is not available on this server."
+msgstr "Kiendelezi cha APCu hakipatikani kwenye seva hii."
+
+msgid "Constant"
+msgstr "Thabiti"
+
+msgid "Space used on disk (MB)"
+msgstr "Nafasi iliyotumika kwenye diski (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Weka nafasi ya juu zaidi ya kozi (MB)"
+
+msgid "Memory free"
+msgstr "Kumbukumbu iliyobaki"
+
+msgid "Memory wasted"
+msgstr "Kumbukumbu iliyopotea"
+
+msgid "Memory used %"
+msgstr "Kumbukumbu iliyotumika %"
+
+msgid "Cached scripts"
+msgstr "Hati zilizohifadhiwa kwenye akiba"
+
+msgid "Cached keys"
+msgstr "Funguo zilizohifadhiwa kwenye akiba"
+
+msgid "Misses"
+msgstr "Kukosa"
+
+msgid "Cache full"
+msgstr "Akiba imejaa"
+
+msgid "OOM restarts"
+msgstr "Kuanza upya kwa OOM"
+
+msgid "Hash restarts"
+msgstr "Kuanza upya kwa Hash"
+
+msgid "Manual restarts"
+msgstr "Kuanza upya kwa mikono"
+
+msgid "Interned strings used"
+msgstr "Neno za ndani zilizotumika"
+
+msgid "Interned strings free"
+msgstr "Neno za ndani zilizobaki"
+
+msgid "Interned strings count"
+msgstr "Idadi ya neno za ndani"
+
+msgid "Memory available"
+msgstr "Kumbukumbu inayopatikana"
+
+msgid "Memory size"
+msgstr "Ukubwa wa kumbukumbu"
+
+msgid "Entries"
+msgstr "Viingizo"
+
+msgid "Slots"
+msgstr "Nafasi"
+
+msgid "Expunges"
+msgstr "Kufutwa"
+
+msgid "Cache start time"
+msgstr "Muda wa kuanza akiba"
+
+msgid "Time zone"
+msgstr "Ukanda wa saa"
+
+msgid "Not registered"
+msgstr "Hajasajiliwa"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Chuja na uorodhesha vyeti vya wanafunzi kwa kipindi, kozi, tarehe au mwanafunzi, kisha uzivihifadhi unapohitaji."
+
+msgid "Filter by session and course"
+msgstr "Chuja kwa kipindi na kozi"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Chagua kipindi, kozi na tarehe ya hiari ili kuorodhesha vyeti vilivyotolewa."
+
+msgid "Filter by learner"
+msgstr "Chuja kwa mwanafunzi"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Tafuta vyeti vya mwanafunzi maalum katika vipindi na kozi mbalimbali."
+
+msgid "Certificates found"
+msgstr "Vyeti vilivyopatikana"
+
+msgid "Open certificate"
+msgstr "Fungua cheti"
+
+msgid "Certificate file not available"
+msgstr "Faili la cheti halipatikani"
+
+msgid "Export to CSV"
+msgstr "Hamisha kwa CSV"
+
+msgid "Acquired skills"
+msgstr "Ujuzi uliopatikana"
+
+msgid "No acquired skill"
+msgstr "Hakuna ujuzi uliopatikana"
+
+msgid "Absences"
+msgstr "Kutokuwepo"
+
+msgid "No courses"
+msgstr "Hakuna kozi"
+
+msgid "No session matched"
+msgstr "Hakuna kipindi kilicholingana"
+
+msgid "Unable to load the report"
+msgstr "Haijaweza kupakia ripoti"
+
+msgid "Please select a profile"
+msgstr "Tafadhali chagua wasifu"
+
+msgid "Please select a session"
+msgstr "Tafadhali chagua kipindi"
+
+msgid "Please select a user"
+msgstr "Tafadhali chagua mtumiaji"
+
+msgid "Unable to export the report"
+msgstr "Haijaweza kuhifadhi ripoti"
+
+msgid "Accepted on web"
+msgstr "Imekubaliwa kwenye wavuti"
+
+msgid "Accepted by e-mail"
+msgstr "Imekubaliwa kwa barua pepe"
+
+msgid "The course title is required"
+msgstr "Kichwa cha kozi kinahitajika"
+
+msgid "Unexpected error"
+msgstr "Hitilafu isiyotarajiwa"
+
+msgid "Separate tags with commas"
+msgstr "Tenganisha lebo kwa koma"
+
+msgid "Open link"
+msgstr "Fungua kiungo"
+
+msgid "Describe the course picture to generate"
+msgstr "Eleza picha ya kozi itakayotolewa"
+
+msgid "Generate picture"
+msgstr "Tengeneza picha"
+
+msgid "PDF watermark"
+msgstr "Alama ya maji ya PDF"
+
+msgid "No watermark image"
+msgstr "Hakuna picha ya alama ya maji"
+
+msgid "Upload watermark"
+msgstr "Pakia alama ya maji"
+
+msgid "Delete watermark"
+msgstr "Futa alama ya maji"
+
+msgid "Course legal agreement file"
+msgstr "Faili la makubaliano ya kisheria ya kozi"
+
+msgid "Upload agreement file"
+msgstr "Pakia faili la makubaliano"
+
+msgid "Download agreement file"
+msgstr "Pakua faili la makubaliano"
+
+msgid "Delete agreement file"
+msgstr "Futa faili la makubaliano"
+
+msgid "Custom certificate images"
+msgstr "Picha za cheti maalum"
+
+msgid "Course picture updated"
+msgstr "Picha ya kozi imesasishwa"
+
+msgid "The course picture could not be uploaded"
+msgstr "Picha ya kozi haikuweza kupakiwa"
+
+msgid "Course picture deleted"
+msgstr "Picha ya kozi imefutwa"
+
+msgid "Enter a description for the image"
+msgstr "Weka maelezo ya picha"
+
+msgid "The image generator returned an empty response"
+msgstr "Kitoa picha kilirudisha jibu tupu"
+
+msgid "Course picture generated"
+msgstr "Picha ya kozi imetolewa"
+
+msgid "Watermark updated"
+msgstr "Alama ya maji imesasishwa"
+
+msgid "Watermark deleted"
+msgstr "Alama ya maji imefutwa"
+
+msgid "Agreement file updated"
+msgstr "Faili la makubaliano limesasishwa"
+
+msgid "Agreement file deleted"
+msgstr "Faili la makubaliano limefutwa"
+
+msgid "Certificate image updated"
+msgstr "Picha ya cheti imesasishwa"
+
+msgid "Certificate image deleted"
+msgstr "Picha ya cheti imefutwa"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Tumia kihariri cha picha kabla ya kupakia ili kupunguza, kuzungusha au kubadilisha ukubwa wa picha ya kozi."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Kiungo hiki cha mwaliko si halali au kimekwisha muda wake."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr ""
+
+msgid "The invitation could not be accepted."
+msgstr ""
+
+msgid "You have been subscribed successfully."
+msgstr ""
+
+msgid "This email address cannot be invited."
+msgstr ""
+
+msgid "This user is already subscribed to the session."
+msgstr ""
+
+msgid "This user is already subscribed to the course."
+msgstr ""
 

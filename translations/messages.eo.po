@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:kopirajto,, no:ne kopirajto"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:dosiero,, application/msword:MsWord,, application/octet-stream:okteta fluo,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ekzerco,, simulation:simulado,, questionnaire:enketo,, diagram:diagramo,, figure:figuro,, graph:grafiko,, index:indekso,, slide:diapozitivo,, table:tabelo,, narrative text:rakonta teksto,, exam:ekzameno,, experiment:eksperimento,, problem statement:problemstarigo,, self assessment:memtesto,, lecture:prelego"
@@ -37701,6 +37701,12 @@ msgstr "Via seanco baldaŭ eksvalidiĝos"
 msgid "Do you want to continue your session?"
 msgstr "Ĉu vi volas daŭrigi vian seancon?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Viaj seancaj detaloj perdiĝis, bonvolu ensaluti denove."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Aliro al ĉi tiu rimedo estas malpermesita. Ŝajnas, ke vi ne havas la necesajn permesojn por aliri ĝin."
+
 msgid "Stay connected"
 msgstr "Resti konektita"
 
@@ -39167,4 +39173,316 @@ msgstr "Traktitaj"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ebligu mod_status (ExtendedStatus On) kaj permesu localhost al /server-status. Nginx: ebligu stub_status en loka nur-loko kiel /nginx_status aŭ /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Distribuo de notprocentoj"
+
+msgid "Top learners"
+msgstr "Plej bonaj lernantoj"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Ĉi tiu progreso kombinas la progreson de la lernpado kaj la averaĝan ekzercan rezulton de la lernanto"
+
+msgid "Additional profile fields"
+msgstr "Pliaj profilaj kampoj"
+
+msgid "Visible columns"
+msgstr "Videblaj kolumnoj"
+
+msgid "Learning path completion"
+msgstr "Kompletigo de lernpado"
+
+msgid "Number of certificates"
+msgstr "Nombro de atestiloj"
+
+msgid "Could not export the report"
+msgstr "Ne eblis eksporti la raporton"
+
+msgid "Second learner"
+msgstr "Dua lernanto"
+
+msgid "Results by learner"
+msgstr "Rezultoj laŭ lernanto"
+
+msgid "Use filters to narrow down questions."
+msgstr "Uzu filtrilojn por limigi demandojn."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Provu ĝustigi viajn filtrilojn kaj serĉi denove."
+
+msgid "Results per page"
+msgstr "Rezultoj po paĝo"
+
+msgid "No answers"
+msgstr "Neniuj respondoj"
+
+msgid "Tests using this question"
+msgstr "Testoj uzantaj ĉi tiun demandon"
+
+msgid "Delete failed"
+msgstr "Forigo malsukcesis"
+
+msgid "PHP cache"
+msgstr "PHP kaŝmemoro"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Viva OPcache kaj APCu diagnozoj"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klaku por montri OPcache kaj APCu diagnozojn"
+
+msgid "Memory used"
+msgstr "Uzita memoro"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache estas instalita sed ne ebligita."
+
+msgid "OPcache extension is not available on this server."
+msgstr "La etendaĵo OPcache ne disponeblas sur ĉi tiu servilo."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu estas instalita sed ne ebligita."
+
+msgid "APCu extension is not available on this server."
+msgstr "La etendaĵo APCu ne disponeblas sur ĉi tiu servilo."
+
+msgid "Constant"
+msgstr "Konstanto"
+
+msgid "Space used on disk (MB)"
+msgstr "Spaco uzita sur disko (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Agordi maksimuman kurso-spacon (MB)"
+
+msgid "Memory free"
+msgstr "Libera memoro"
+
+msgid "Memory wasted"
+msgstr "Malŝparita memoro"
+
+msgid "Memory used %"
+msgstr "Uzita memoro %"
+
+msgid "Cached scripts"
+msgstr "Kaŝitaj skriptoj"
+
+msgid "Cached keys"
+msgstr "Kaŝitaj ŝlosiloj"
+
+msgid "Misses"
+msgstr "Maltrafitaĵoj"
+
+msgid "Cache full"
+msgstr "Kaŝmemoro plena"
+
+msgid "OOM restarts"
+msgstr "OOM-restartoj"
+
+msgid "Hash restarts"
+msgstr "Hash-restartoj"
+
+msgid "Manual restarts"
+msgstr "Manaj restartoj"
+
+msgid "Interned strings used"
+msgstr "Internigitaj ĉenoj uzitaj"
+
+msgid "Interned strings free"
+msgstr "Internigitaj ĉenoj liberaj"
+
+msgid "Interned strings count"
+msgstr "Nombro de internigitaj ĉenoj"
+
+msgid "Memory available"
+msgstr "Disponebla memoro"
+
+msgid "Memory size"
+msgstr "Memorgrandeco"
+
+msgid "Entries"
+msgstr "Enigoj"
+
+msgid "Slots"
+msgstr "Fendetoj"
+
+msgid "Expunges"
+msgstr "Forigoj"
+
+msgid "Cache start time"
+msgstr "Komenco de kaŝmemoro"
+
+msgid "Time zone"
+msgstr "Horzono"
+
+msgid "Not registered"
+msgstr "Ne registrita"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtru kaj listigu atestilojn de lernantoj laŭ sesio, kurso, dato aŭ lernanto, poste eksportu ilin kiam necese."
+
+msgid "Filter by session and course"
+msgstr "Filtri laŭ sesio kaj kurso"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Elektu sesion, kurson kaj laŭvolan daton por listigi la generitajn atestilojn."
+
+msgid "Filter by learner"
+msgstr "Filtri laŭ lernanto"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Trovi atestilojn por specifa lernanto tra sesioj kaj kursoj."
+
+msgid "Certificates found"
+msgstr "Trovitaj atestiloj"
+
+msgid "Open certificate"
+msgstr "Malfermi atestilon"
+
+msgid "Certificate file not available"
+msgstr "Atestila dosiero ne disponeblas"
+
+msgid "Export to CSV"
+msgstr "Eksporti al CSV"
+
+msgid "Acquired skills"
+msgstr "Akiritaj kapabloj"
+
+msgid "No acquired skill"
+msgstr "Neniu akirita kapablo"
+
+msgid "Absences"
+msgstr "Foresto"
+
+msgid "No courses"
+msgstr "Neniuj kursoj"
+
+msgid "No session matched"
+msgstr "Neniu kongrua sesio"
+
+msgid "Unable to load the report"
+msgstr "Ne eblas ŝargi la raporton"
+
+msgid "Please select a profile"
+msgstr "Bonvolu elekti profilon"
+
+msgid "Please select a session"
+msgstr "Bonvolu elekti sesion"
+
+msgid "Please select a user"
+msgstr "Bonvolu elekti uzanton"
+
+msgid "Unable to export the report"
+msgstr "Ne eblas eksporti la raporton"
+
+msgid "Accepted on web"
+msgstr "Akceptita rete"
+
+msgid "Accepted by e-mail"
+msgstr "Akceptita per retpoŝto"
+
+msgid "The course title is required"
+msgstr "La kurstítulo estas deviga"
+
+msgid "Unexpected error"
+msgstr "Neatendita eraro"
+
+msgid "Separate tags with commas"
+msgstr "Apartigu etikedojn per komoj"
+
+msgid "Open link"
+msgstr "Malfermi ligilon"
+
+msgid "Describe the course picture to generate"
+msgstr "Priskribu la kursbildon por generi"
+
+msgid "Generate picture"
+msgstr "Generi bildon"
+
+msgid "PDF watermark"
+msgstr "PDF-akvomarko"
+
+msgid "No watermark image"
+msgstr "Neniu akvomarka bildo"
+
+msgid "Upload watermark"
+msgstr "Alŝuti akvomarkon"
+
+msgid "Delete watermark"
+msgstr "Forigi akvomarkon"
+
+msgid "Course legal agreement file"
+msgstr "Leĝa interkonsento-dosiero de la kurso"
+
+msgid "Upload agreement file"
+msgstr "Alŝuti interkonsento-dosieron"
+
+msgid "Download agreement file"
+msgstr "Elŝuti interkonsento-dosieron"
+
+msgid "Delete agreement file"
+msgstr "Forigi interkonsento-dosieron"
+
+msgid "Custom certificate images"
+msgstr "Propraj atestilbildoj"
+
+msgid "Course picture updated"
+msgstr "Kursbildo ĝisdatigita"
+
+msgid "The course picture could not be uploaded"
+msgstr "La kursbildo ne povis esti alŝutita"
+
+msgid "Course picture deleted"
+msgstr "Kursbildo forigita"
+
+msgid "Enter a description for the image"
+msgstr "Enigu priskribon por la bildo"
+
+msgid "The image generator returned an empty response"
+msgstr "La bildgenerilo redonis malplenan respondon"
+
+msgid "Course picture generated"
+msgstr "Kursbildo generita"
+
+msgid "Watermark updated"
+msgstr "Akvomarko ĝisdatigita"
+
+msgid "Watermark deleted"
+msgstr "Akvomarko forigita"
+
+msgid "Agreement file updated"
+msgstr "Interkonsento-dosiero ĝisdatigita"
+
+msgid "Agreement file deleted"
+msgstr "Interkonsento-dosiero forigita"
+
+msgid "Certificate image updated"
+msgstr "Atestilbildo ĝisdatigita"
+
+msgid "Certificate image deleted"
+msgstr "Atestilbildo forigita"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Uzu la bildredaktilon antaŭ alŝuto por stuci, rotacii aŭ regrandigi la kursbildon."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Ĉi tiu invitligilo estas nevalida aŭ eksvalidiĝis."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Ĉi tiu invito estis sendita al alia uzanto. Bonvolu ensaluti per la invitita konto."
+
+msgid "The invitation could not be accepted."
+msgstr "La invito ne povis esti akceptita."
+
+msgid "You have been subscribed successfully."
+msgstr "Vi estis sukcese abonita."
+
+msgid "This email address cannot be invited."
+msgstr "Ĉi tiu retadreso ne povas esti invitita."
+
+msgid "This user is already subscribed to the session."
+msgstr "Ĉi tiu uzanto jam estas abonita al la sesio."
+
+msgid "This user is already subscribed to the course."
+msgstr "Ĉi tiu uzanto jam estas abonita al la kurso."
 

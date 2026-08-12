@@ -37701,6 +37701,12 @@ msgstr "Istuntosi on päättymässä"
 msgid "Do you want to continue your session?"
 msgstr "Haluatko jatkaa istuntoasi?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Istuntotietosi ovat kadonneet, kirjaudu sisään uudelleen."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Pääsy tähän resurssiin on estetty. Sinulla ei näytä olevan tarvittavia käyttöoikeuksia."
+
 msgid "Stay connected"
 msgstr "Pysy yhteydessä"
 
@@ -39167,4 +39173,316 @@ msgstr "Käsitellyt"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ota käyttöön mod_status (ExtendedStatus On) ja salli localhost osoitteeseen /server-status. Nginx: ota käyttöön stub_status localhost-osoitteessa, kuten /nginx_status tai /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Arvosanojen prosentuaalinen jakauma"
+
+msgid "Top learners"
+msgstr "Parhaat oppijat"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Tämä edistyminen yhdistää oppimispolun edistymisen ja oppijan keskimääräisen harjoitustuloksen"
+
+msgid "Additional profile fields"
+msgstr "Lisäprofiilikentät"
+
+msgid "Visible columns"
+msgstr "Näkyvät sarakkeet"
+
+msgid "Learning path completion"
+msgstr "Oppimispolun suorittaminen"
+
+msgid "Number of certificates"
+msgstr "Todistusten määrä"
+
+msgid "Could not export the report"
+msgstr "Raporttia ei voitu viedä"
+
+msgid "Second learner"
+msgstr "Toinen oppija"
+
+msgid "Results by learner"
+msgstr "Tulokset oppijakohtaisesti"
+
+msgid "Use filters to narrow down questions."
+msgstr "Käytä suodattimia kysymysten rajaamiseen."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Säädä suodattimia ja yritä hakua uudelleen."
+
+msgid "Results per page"
+msgstr "Tuloksia sivulla"
+
+msgid "No answers"
+msgstr "Ei vastauksia"
+
+msgid "Tests using this question"
+msgstr "Tätä kysymystä käyttävät testit"
+
+msgid "Delete failed"
+msgstr "Poisto epäonnistui"
+
+msgid "PHP cache"
+msgstr "PHP-välimuisti"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache- ja APCu-diagnostiikka"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klikkaa näyttääksesi OPcache- ja APCu-diagnostiikan"
+
+msgid "Memory used"
+msgstr "Käytetty muisti"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache on asennettu, mutta ei käytössä."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache-laajennus ei ole saatavilla tällä palvelimella."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu on asennettu, mutta ei käytössä."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu-laajennus ei ole saatavilla tällä palvelimella."
+
+msgid "Constant"
+msgstr "Vakio"
+
+msgid "Space used on disk (MB)"
+msgstr "Levytilan käyttö (Mt)"
+
+msgid "Set max course space (MB)"
+msgstr "Aseta kurssin maksimitila (Mt)"
+
+msgid "Memory free"
+msgstr "Vapaa muisti"
+
+msgid "Memory wasted"
+msgstr "Hukattu muisti"
+
+msgid "Memory used %"
+msgstr "Käytetty muisti %"
+
+msgid "Cached scripts"
+msgstr "Välimuistissa olevat skriptit"
+
+msgid "Cached keys"
+msgstr "Välimuistitetut avaimet"
+
+msgid "Misses"
+msgstr "Ohiot"
+
+msgid "Cache full"
+msgstr "Välimuisti täynnä"
+
+msgid "OOM restarts"
+msgstr "OOM-uudelleenkäynnistykset"
+
+msgid "Hash restarts"
+msgstr "Hash-uudelleenkäynnistykset"
+
+msgid "Manual restarts"
+msgstr "Manuaaliset uudelleenkäynnistykset"
+
+msgid "Interned strings used"
+msgstr "Käytetyt sisäiset merkkijonot"
+
+msgid "Interned strings free"
+msgstr "Vapaat sisäiset merkkijonot"
+
+msgid "Interned strings count"
+msgstr "Sisäisten merkkijonojen määrä"
+
+msgid "Memory available"
+msgstr "Käytettävissä oleva muisti"
+
+msgid "Memory size"
+msgstr "Muistin koko"
+
+msgid "Entries"
+msgstr "Merkinnät"
+
+msgid "Slots"
+msgstr "Paikat"
+
+msgid "Expunges"
+msgstr "Poistot"
+
+msgid "Cache start time"
+msgstr "Välimuistin aloitusaika"
+
+msgid "Time zone"
+msgstr "Aikavyöhyke"
+
+msgid "Not registered"
+msgstr "Ei rekisteröity"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Suodata ja listaa oppijoiden todistukset istunnon, kurssin, päivämäärän tai oppijan mukaan ja vie ne tarvittaessa."
+
+msgid "Filter by session and course"
+msgstr "Suodata istunnon ja kurssin mukaan"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Valitse istunto, kurssi ja valinnainen päivämäärä luodaksesi luettelon luoduista todistuksista."
+
+msgid "Filter by learner"
+msgstr "Suodata oppijan mukaan"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Etsi tietyn oppijan todistukset istunnoista ja kursseista."
+
+msgid "Certificates found"
+msgstr "Löydetyt todistukset"
+
+msgid "Open certificate"
+msgstr "Avaa todistus"
+
+msgid "Certificate file not available"
+msgstr "Todistustiedostoa ei ole saatavilla"
+
+msgid "Export to CSV"
+msgstr "Vie CSV-tiedostoon"
+
+msgid "Acquired skills"
+msgstr "Hankitut taidot"
+
+msgid "No acquired skill"
+msgstr "Ei hankittuja taitoja"
+
+msgid "Absences"
+msgstr "Poissaolot"
+
+msgid "No courses"
+msgstr "Ei kursseja"
+
+msgid "No session matched"
+msgstr "Ei vastaavia istuntoja"
+
+msgid "Unable to load the report"
+msgstr "Raportin lataaminen epäonnistui"
+
+msgid "Please select a profile"
+msgstr "Valitse profiili"
+
+msgid "Please select a session"
+msgstr "Valitse istunto"
+
+msgid "Please select a user"
+msgstr "Valitse käyttäjä"
+
+msgid "Unable to export the report"
+msgstr "Raportin vienti epäonnistui"
+
+msgid "Accepted on web"
+msgstr "Hyväksytty verkossa"
+
+msgid "Accepted by e-mail"
+msgstr "Hyväksytty sähköpostitse"
+
+msgid "The course title is required"
+msgstr "Kurssin nimi on pakollinen"
+
+msgid "Unexpected error"
+msgstr "Odottamaton virhe"
+
+msgid "Separate tags with commas"
+msgstr "Erota tunnisteet pilkuilla"
+
+msgid "Open link"
+msgstr "Avaa linkki"
+
+msgid "Describe the course picture to generate"
+msgstr "Kuvaile luotava kurssikuva"
+
+msgid "Generate picture"
+msgstr "Luo kuva"
+
+msgid "PDF watermark"
+msgstr "PDF-vesileima"
+
+msgid "No watermark image"
+msgstr "Ei vesileimakuvaa"
+
+msgid "Upload watermark"
+msgstr "Lataa vesileima"
+
+msgid "Delete watermark"
+msgstr "Poista vesileima"
+
+msgid "Course legal agreement file"
+msgstr "Kurssin lakisopimustiedosto"
+
+msgid "Upload agreement file"
+msgstr "Lataa sopimustiedosto"
+
+msgid "Download agreement file"
+msgstr "Lataa sopimustiedosto"
+
+msgid "Delete agreement file"
+msgstr "Poista sopimustiedosto"
+
+msgid "Custom certificate images"
+msgstr "Mukautetut todistuksen kuvat"
+
+msgid "Course picture updated"
+msgstr "Kurssin kuva päivitetty"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kurssin kuvaa ei voitu ladata"
+
+msgid "Course picture deleted"
+msgstr "Kurssin kuva poistettu"
+
+msgid "Enter a description for the image"
+msgstr "Anna kuvaus kuvalle"
+
+msgid "The image generator returned an empty response"
+msgstr "Kuvageneraattori palautti tyhjän vastauksen"
+
+msgid "Course picture generated"
+msgstr "Kurssin kuva luotu"
+
+msgid "Watermark updated"
+msgstr "Vesileima päivitetty"
+
+msgid "Watermark deleted"
+msgstr "Vesileima poistettu"
+
+msgid "Agreement file updated"
+msgstr "Sopimustiedosto päivitetty"
+
+msgid "Agreement file deleted"
+msgstr "Sopimustiedosto poistettu"
+
+msgid "Certificate image updated"
+msgstr "Todistuksen kuva päivitetty"
+
+msgid "Certificate image deleted"
+msgstr "Todistuksen kuva poistettu"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Käytä kuvankäsittelyä ennen lataamista rajataksesi, kääntääksesi tai muuttaaksesi kurssin kuvan kokoa."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Tämä kutsulinkki on virheellinen tai vanhentunut."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Tämä kutsu lähetettiin eri käyttäjälle. Kirjaudu sisään kutsutulla tilillä."
+
+msgid "The invitation could not be accepted."
+msgstr "Kutsua ei voitu hyväksyä."
+
+msgid "You have been subscribed successfully."
+msgstr "Sinut on tilattu onnistuneesti."
+
+msgid "This email address cannot be invited."
+msgstr "Tätä sähköpostiosoitetta ei voi kutsua."
+
+msgid "This user is already subscribed to the session."
+msgstr "Tämä käyttäjä on jo tilattu istuntoon."
+
+msgid "This user is already subscribed to the course."
+msgstr "Tämä käyttäjä on jo tilattu kurssille."
 

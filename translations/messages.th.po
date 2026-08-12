@@ -37701,6 +37701,12 @@ msgstr "เซสชันของคุณใกล้จะหมดอาย
 msgid "Do you want to continue your session?"
 msgstr "คุณต้องการดำเนินเซสชันต่อหรือไม่?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "รายละเอียดเซสชันของคุณหายไป โปรดเข้าสู่ระบบอีกครั้ง"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "การเข้าถึงทรัพยากรนี้ถูกปฏิเสธ ดูเหมือนว่าคุณไม่มีสิทธิ์ที่จำเป็นในการเข้าถึง"
+
 msgid "Stay connected"
 msgstr "เชื่อมต่อต่อ"
 
@@ -39167,4 +39173,316 @@ msgstr "จัดการแล้ว"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: เปิดใช้งาน mod_status (ExtendedStatus On) และอนุญาต localhost เข้าถึง /server-status. Nginx: เปิดใช้งาน stub_status บนตำแหน่งที่จำกัดเฉพาะ localhost เช่น /nginx_status หรือ /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "การกระจายเปอร์เซ็นต์เกรด"
+
+msgid "Top learners"
+msgstr "ผู้เรียนยอดเยี่ยม"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "ความคืบหน้านี้รวมความคืบหน้าของเส้นทางการเรียนรู้และผลเฉลี่ยแบบฝึกหัดของผู้เรียน"
+
+msgid "Additional profile fields"
+msgstr "ช่องโปรไฟล์เพิ่มเติม"
+
+msgid "Visible columns"
+msgstr "คอลัมน์ที่แสดง"
+
+msgid "Learning path completion"
+msgstr "การเสร็จสิ้นเส้นทางการเรียนรู้"
+
+msgid "Number of certificates"
+msgstr "จำนวนใบรับรอง"
+
+msgid "Could not export the report"
+msgstr "ไม่สามารถส่งออกรายงานได้"
+
+msgid "Second learner"
+msgstr "ผู้เรียนคนที่สอง"
+
+msgid "Results by learner"
+msgstr "ผลลัพธ์ตามผู้เรียน"
+
+msgid "Use filters to narrow down questions."
+msgstr "ใช้ตัวกรองเพื่อจำกัดคำถาม"
+
+msgid "Try adjusting your filters and search again."
+msgstr "ลองปรับตัวกรองและค้นหาอีกครั้ง"
+
+msgid "Results per page"
+msgstr "ผลลัพธ์ต่อหน้า"
+
+msgid "No answers"
+msgstr "ไม่มีคำตอบ"
+
+msgid "Tests using this question"
+msgstr "แบบทดสอบที่ใช้คำถามนี้"
+
+msgid "Delete failed"
+msgstr "การลบล้มเหลว"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "การวินิจฉัย OPcache และ APCu แบบเรียลไทม์"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "คลิกเพื่อแสดงการวินิจฉัย OPcache และ APCu"
+
+msgid "Memory used"
+msgstr "หน่วยความจำที่ใช้"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache ติดตั้งแล้วแต่ไม่ได้เปิดใช้งาน"
+
+msgid "OPcache extension is not available on this server."
+msgstr ""
+
+msgid "APCu is installed but not enabled."
+msgstr ""
+
+msgid "APCu extension is not available on this server."
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Space used on disk (MB)"
+msgstr ""
+
+msgid "Set max course space (MB)"
+msgstr ""
+
+msgid "Memory free"
+msgstr ""
+
+msgid "Memory wasted"
+msgstr ""
+
+msgid "Memory used %"
+msgstr ""
+
+msgid "Cached scripts"
+msgstr ""
+
+msgid "Cached keys"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Cache full"
+msgstr ""
+
+msgid "OOM restarts"
+msgstr ""
+
+msgid "Hash restarts"
+msgstr ""
+
+msgid "Manual restarts"
+msgstr ""
+
+msgid "Interned strings used"
+msgstr ""
+
+msgid "Interned strings free"
+msgstr ""
+
+msgid "Interned strings count"
+msgstr ""
+
+msgid "Memory available"
+msgstr ""
+
+msgid "Memory size"
+msgstr ""
+
+msgid "Entries"
+msgstr ""
+
+msgid "Slots"
+msgstr ""
+
+msgid "Expunges"
+msgstr ""
+
+msgid "Cache start time"
+msgstr ""
+
+msgid "Time zone"
+msgstr ""
+
+msgid "Not registered"
+msgstr ""
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr ""
+
+msgid "Filter by session and course"
+msgstr ""
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr ""
+
+msgid "Filter by learner"
+msgstr ""
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr ""
+
+msgid "Certificates found"
+msgstr ""
+
+msgid "Open certificate"
+msgstr ""
+
+msgid "Certificate file not available"
+msgstr ""
+
+msgid "Export to CSV"
+msgstr ""
+
+msgid "Acquired skills"
+msgstr ""
+
+msgid "No acquired skill"
+msgstr ""
+
+msgid "Absences"
+msgstr ""
+
+msgid "No courses"
+msgstr ""
+
+msgid "No session matched"
+msgstr ""
+
+msgid "Unable to load the report"
+msgstr ""
+
+msgid "Please select a profile"
+msgstr ""
+
+msgid "Please select a session"
+msgstr ""
+
+msgid "Please select a user"
+msgstr ""
+
+msgid "Unable to export the report"
+msgstr ""
+
+msgid "Accepted on web"
+msgstr ""
+
+msgid "Accepted by e-mail"
+msgstr ""
+
+msgid "The course title is required"
+msgstr ""
+
+msgid "Unexpected error"
+msgstr ""
+
+msgid "Separate tags with commas"
+msgstr "คั่นแท็กด้วยเครื่องหมายจุลภาค"
+
+msgid "Open link"
+msgstr "เปิดลิงก์"
+
+msgid "Describe the course picture to generate"
+msgstr "อธิบายภาพหลักสูตรที่จะสร้าง"
+
+msgid "Generate picture"
+msgstr "สร้างภาพ"
+
+msgid "PDF watermark"
+msgstr "ลายน้ำ PDF"
+
+msgid "No watermark image"
+msgstr "ไม่มีภาพลายน้ำ"
+
+msgid "Upload watermark"
+msgstr "อัปโหลดลายน้ำ"
+
+msgid "Delete watermark"
+msgstr "ลบลายน้ำ"
+
+msgid "Course legal agreement file"
+msgstr "ไฟล์ข้อตกลงทางกฎหมายของหลักสูตร"
+
+msgid "Upload agreement file"
+msgstr "อัปโหลดไฟล์ข้อตกลง"
+
+msgid "Download agreement file"
+msgstr "ดาวน์โหลดไฟล์ข้อตกลง"
+
+msgid "Delete agreement file"
+msgstr "ลบไฟล์ข้อตกลง"
+
+msgid "Custom certificate images"
+msgstr "ภาพใบรับรองแบบกำหนดเอง"
+
+msgid "Course picture updated"
+msgstr "อัปเดตภาพหลักสูตรแล้ว"
+
+msgid "The course picture could not be uploaded"
+msgstr "ไม่สามารถอัปโหลดภาพหลักสูตรได้"
+
+msgid "Course picture deleted"
+msgstr "ลบภาพหลักสูตรแล้ว"
+
+msgid "Enter a description for the image"
+msgstr "ป้อนคำอธิบายสำหรับภาพ"
+
+msgid "The image generator returned an empty response"
+msgstr "ตัวสร้างภาพส่งการตอบกลับว่างเปล่า"
+
+msgid "Course picture generated"
+msgstr "สร้างภาพหลักสูตรแล้ว"
+
+msgid "Watermark updated"
+msgstr "อัปเดตลายน้ำแล้ว"
+
+msgid "Watermark deleted"
+msgstr "ลบลายน้ำแล้ว"
+
+msgid "Agreement file updated"
+msgstr "อัปเดตไฟล์ข้อตกลงแล้ว"
+
+msgid "Agreement file deleted"
+msgstr "ลบไฟล์ข้อตกลงแล้ว"
+
+msgid "Certificate image updated"
+msgstr "อัปเดตภาพใบรับรองแล้ว"
+
+msgid "Certificate image deleted"
+msgstr "ลบภาพใบรับรองแล้ว"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "ใช้ตัวแก้ไขภาพก่อนอัปโหลดเพื่อครอบตัด หมุน หรือปรับขนาดภาพหลักสูตร"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "ลิงก์คำเชิญนี้ไม่ถูกต้องหรือหมดอายุแล้ว"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "คำเชิญนี้ถูกส่งไปยังผู้ใช้รายอื่น โปรดเข้าสู่ระบบด้วยบัญชีที่ได้รับเชิญ"
+
+msgid "The invitation could not be accepted."
+msgstr "ไม่สามารถยอมรับคำเชิญได้"
+
+msgid "You have been subscribed successfully."
+msgstr "คุณสมัครสมาชิกสำเร็จแล้ว"
+
+msgid "This email address cannot be invited."
+msgstr "ไม่สามารถเชิญที่อยู่อีเมลนี้ได้"
+
+msgid "This user is already subscribed to the session."
+msgstr "ผู้ใช้นี้สมัครสมาชิกเซสชันแล้ว"
+
+msgid "This user is already subscribed to the course."
+msgstr "ผู้ใช้นี้สมัครสมาชิกหลักสูตรแล้ว"
 

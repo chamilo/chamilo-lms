@@ -37695,6 +37695,12 @@ msgstr "Iseshoni yakho iza kuphelelwa"
 msgid "Do you want to continue your session?"
 msgstr "Ufuna ukuqhubeka neseshoni yakho?"
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr "Hlala uqhagamshelene"
 
@@ -39161,4 +39167,316 @@ msgstr "Kuphathwe"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status."
+
+msgid "Grade percentage distribution"
+msgstr ""
+
+msgid "Top learners"
+msgstr ""
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr ""
+
+msgid "Additional profile fields"
+msgstr ""
+
+msgid "Visible columns"
+msgstr ""
+
+msgid "Learning path completion"
+msgstr ""
+
+msgid "Number of certificates"
+msgstr ""
+
+msgid "Could not export the report"
+msgstr ""
+
+msgid "Second learner"
+msgstr ""
+
+msgid "Results by learner"
+msgstr ""
+
+msgid "Use filters to narrow down questions."
+msgstr ""
+
+msgid "Try adjusting your filters and search again."
+msgstr ""
+
+msgid "Results per page"
+msgstr ""
+
+msgid "No answers"
+msgstr ""
+
+msgid "Tests using this question"
+msgstr ""
+
+msgid "Delete failed"
+msgstr ""
+
+msgid "PHP cache"
+msgstr ""
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Memory used"
+msgstr ""
+
+msgid "OPcache is installed but not enabled."
+msgstr ""
+
+msgid "OPcache extension is not available on this server."
+msgstr ""
+
+msgid "APCu is installed but not enabled."
+msgstr ""
+
+msgid "APCu extension is not available on this server."
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Space used on disk (MB)"
+msgstr ""
+
+msgid "Set max course space (MB)"
+msgstr ""
+
+msgid "Memory free"
+msgstr ""
+
+msgid "Memory wasted"
+msgstr ""
+
+msgid "Memory used %"
+msgstr ""
+
+msgid "Cached scripts"
+msgstr ""
+
+msgid "Cached keys"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Cache full"
+msgstr ""
+
+msgid "OOM restarts"
+msgstr ""
+
+msgid "Hash restarts"
+msgstr ""
+
+msgid "Manual restarts"
+msgstr ""
+
+msgid "Interned strings used"
+msgstr ""
+
+msgid "Interned strings free"
+msgstr ""
+
+msgid "Interned strings count"
+msgstr ""
+
+msgid "Memory available"
+msgstr ""
+
+msgid "Memory size"
+msgstr ""
+
+msgid "Entries"
+msgstr ""
+
+msgid "Slots"
+msgstr ""
+
+msgid "Expunges"
+msgstr ""
+
+msgid "Cache start time"
+msgstr ""
+
+msgid "Time zone"
+msgstr ""
+
+msgid "Not registered"
+msgstr "Ayibhaliswanga"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Hluza kwaye udwelise izatifikethi zabafundi ngokweseshoni, ikhosi, umhla okanye umfundi, emva koko uzikhuphele xa kufuneka."
+
+msgid "Filter by session and course"
+msgstr "Hluza ngokweseshoni nekosi"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Khetha iseshoni, ikhosi nomhla onganyanzelekanga ukudwelisa izatifikethi ezivelisiweyo."
+
+msgid "Filter by learner"
+msgstr "Hluza ngokomfundi"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Fumana izatifikethi zomfundi othile kuzo zonke iiseshoni nezifundo."
+
+msgid "Certificates found"
+msgstr "Iizatifikethi ezifunyenweyo"
+
+msgid "Open certificate"
+msgstr "Vula isatifikethi"
+
+msgid "Certificate file not available"
+msgstr "Ifayile yesatifikethi ayifumaneki"
+
+msgid "Export to CSV"
+msgstr "Thumela kwi-CSV"
+
+msgid "Acquired skills"
+msgstr "Izakhono ezifunyenweyo"
+
+msgid "No acquired skill"
+msgstr "Akukho sakhono sifunyenweyo"
+
+msgid "Absences"
+msgstr "Ukungabikho"
+
+msgid "No courses"
+msgstr "Akukho zifundo"
+
+msgid "No session matched"
+msgstr "Akukho seshoni ifanayo"
+
+msgid "Unable to load the report"
+msgstr "Ayikwazanga ukulayisha ingxelo"
+
+msgid "Please select a profile"
+msgstr "Nceda ukhethe iprofayili"
+
+msgid "Please select a session"
+msgstr "Nceda ukhethe iseshoni"
+
+msgid "Please select a user"
+msgstr "Nceda ukhethe umsebenzisi"
+
+msgid "Unable to export the report"
+msgstr "Ayikwazanga ukukhuphela ingxelo"
+
+msgid "Accepted on web"
+msgstr "Yamkelwe kwiwebhu"
+
+msgid "Accepted by e-mail"
+msgstr "Yamkelwe nge-imeyile"
+
+msgid "The course title is required"
+msgstr "Isihloko sekhosi siyafuneka"
+
+msgid "Unexpected error"
+msgstr "Impazamo engalindelekanga"
+
+msgid "Separate tags with commas"
+msgstr "Hlulani iithegi ngeekoma"
+
+msgid "Open link"
+msgstr "Vula ikhonkco"
+
+msgid "Describe the course picture to generate"
+msgstr "Chaza umfanekiso wekhosi oza kuveliswa"
+
+msgid "Generate picture"
+msgstr "Yenza umfanekiso"
+
+msgid "PDF watermark"
+msgstr "Amanzi e-PDF"
+
+msgid "No watermark image"
+msgstr "Akukho mfanekiso wamanzi"
+
+msgid "Upload watermark"
+msgstr "Layisha umfanekiso wamanzi"
+
+msgid "Delete watermark"
+msgstr "Cima umfanekiso wamanzi"
+
+msgid "Course legal agreement file"
+msgstr "Ifayile yesivumelwano somthetho wekhosi"
+
+msgid "Upload agreement file"
+msgstr "Layisha ifayile yesivumelwano"
+
+msgid "Download agreement file"
+msgstr "Khuphela ifayile yesivumelwano"
+
+msgid "Delete agreement file"
+msgstr "Cima ifayile yesivumelwano"
+
+msgid "Custom certificate images"
+msgstr "Imifanekiso yesatifikethi eyenziwe ngokwezifiso"
+
+msgid "Course picture updated"
+msgstr "Umfanekiso wekhosi uhlaziyiwe"
+
+msgid "The course picture could not be uploaded"
+msgstr "Umfanekiso wekhosi awukwazanga ukulayishwa"
+
+msgid "Course picture deleted"
+msgstr "Umfanekiso wekhosi ucinyiwe"
+
+msgid "Enter a description for the image"
+msgstr "Ngenisa inkcazo yomfanekiso"
+
+msgid "The image generator returned an empty response"
+msgstr "Umenzi womfanekiso ubuyise impendulo engenanto"
+
+msgid "Course picture generated"
+msgstr "Umfanekiso wekhosi uvelisiwe"
+
+msgid "Watermark updated"
+msgstr "Amanzi ahlaziyiwe"
+
+msgid "Watermark deleted"
+msgstr "Amanzi acinyiwe"
+
+msgid "Agreement file updated"
+msgstr "Ifayile yesivumelwano ihlaziyiwe"
+
+msgid "Agreement file deleted"
+msgstr "Ifayile yesivumelwano icinyiwe"
+
+msgid "Certificate image updated"
+msgstr "Umfanekiso wesatifikethi uhlaziyiwe"
+
+msgid "Certificate image deleted"
+msgstr "Umfanekiso wesatifikethi ucinyiwe"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Sebenzisa umhleli womfanekiso ngaphambi kokulayisha ukusika, ukujikeleza okanye ukutshintsha ubungakanani bomfanekiso wekhosi."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Eli link lesimemo alisebenzi okanye liphelelwe lixesha."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Esi simemo sithunyelwe komnye umsebenzisi. Nceda ungene nge-akhawunti emenyiweyo."
+
+msgid "The invitation could not be accepted."
+msgstr "Isimemo asikwazanga kwamkelwa."
+
+msgid "You have been subscribed successfully."
+msgstr "Ubhaliswe ngempumelelo."
+
+msgid "This email address cannot be invited."
+msgstr "Le dilesi ye-imeyile ayinakumenywa."
+
+msgid "This user is already subscribed to the session."
+msgstr "Lo msebenzisi sele ebhalisile kwiseshoni."
+
+msgid "This user is already subscribed to the course."
+msgstr "Lo msebenzisi sele ebhalisile kwikhosi."
 

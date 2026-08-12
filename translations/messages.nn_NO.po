@@ -37699,6 +37699,12 @@ msgstr "Økta di er i ferd med å gå ut"
 msgid "Do you want to continue your session?"
 msgstr "Vil du halda fram økta di?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Øktdetaljane dine har gått tapt, logg inn igjen."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Tilgang til denne ressursen er nekta. Du ser ikkje ut til å ha dei nødvendige løyva for å få tilgang."
+
 msgid "Stay connected"
 msgstr "Hald fram"
 
@@ -39137,7 +39143,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard les"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Resultattavle heldigjen"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard ventar"
@@ -39165,4 +39171,316 @@ msgstr "Handterte"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: aktiver mod_status (ExtendedStatus On) og tillat localhost til /server-status. Nginx: aktiver stub_status på ei berre-localhost-lokasjon som /nginx_status eller /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Fordeling av karakterprosentar"
+
+msgid "Top learners"
+msgstr "Topp studentar"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Denne framgangen kombinerer læringssti-framgang og gjennomsnittleg øvingsresultat for studenten"
+
+msgid "Additional profile fields"
+msgstr "Ytterlegare profilfelt"
+
+msgid "Visible columns"
+msgstr "Synlege kolonnar"
+
+msgid "Learning path completion"
+msgstr "Fullføring av læringssti"
+
+msgid "Number of certificates"
+msgstr "Tal på sertifikat"
+
+msgid "Could not export the report"
+msgstr "Kunne ikkje eksportere rapporten"
+
+msgid "Second learner"
+msgstr "Andre student"
+
+msgid "Results by learner"
+msgstr "Resultat etter student"
+
+msgid "Use filters to narrow down questions."
+msgstr "Bruk filter for å avgrense spørsmål."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Prøv å justere filtra og søk igjen."
+
+msgid "Results per page"
+msgstr "Resultat per side"
+
+msgid "No answers"
+msgstr "Ingen svar"
+
+msgid "Tests using this question"
+msgstr "Testar som brukar dette spørsmålet"
+
+msgid "Delete failed"
+msgstr "Sletting mislukkast"
+
+msgid "PHP cache"
+msgstr "PHP-mellomlager"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache- og APCu-diagnostikk"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klikk for å vise OPcache- og APCu-diagnostikk"
+
+msgid "Memory used"
+msgstr "Minne brukt"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache er installert, men ikkje aktivert."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache-utvidinga er ikkje tilgjengeleg på denne tenaren."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu er installert, men ikkje aktivert."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu-utvidinga er ikkje tilgjengeleg på denne tenaren."
+
+msgid "Constant"
+msgstr "Konstant"
+
+msgid "Space used on disk (MB)"
+msgstr "Plass brukt på disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Set maks kursplass (MB)"
+
+msgid "Memory free"
+msgstr "Ledig minne"
+
+msgid "Memory wasted"
+msgstr "Kasta minne"
+
+msgid "Memory used %"
+msgstr "Minne brukt %"
+
+msgid "Cached scripts"
+msgstr "Mellomlagra skript"
+
+msgid "Cached keys"
+msgstr "Mellomlagra nøklar"
+
+msgid "Misses"
+msgstr "Bom"
+
+msgid "Cache full"
+msgstr "Mellomlager fullt"
+
+msgid "OOM restarts"
+msgstr "OOM-omstartar"
+
+msgid "Hash restarts"
+msgstr "Hash-omstartar"
+
+msgid "Manual restarts"
+msgstr "Manuelle omstartar"
+
+msgid "Interned strings used"
+msgstr "Internerte strengar brukt"
+
+msgid "Interned strings free"
+msgstr "Internerte strengar ledige"
+
+msgid "Interned strings count"
+msgstr "Tal på internerte strengar"
+
+msgid "Memory available"
+msgstr "Tilgjengeleg minne"
+
+msgid "Memory size"
+msgstr "Minne-storleik"
+
+msgid "Entries"
+msgstr "Oppføringar"
+
+msgid "Slots"
+msgstr "Plassar"
+
+msgid "Expunges"
+msgstr "Utrenskningar"
+
+msgid "Cache start time"
+msgstr "Mellomlager starttid"
+
+msgid "Time zone"
+msgstr "Tidssone"
+
+msgid "Not registered"
+msgstr "Ikkje registrert"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrer og list opp deltakarsertifikat etter økt, kurs, dato eller deltakar, og eksporter dei når det trengst."
+
+msgid "Filter by session and course"
+msgstr "Filtrer etter økt og kurs"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Vel ein økt, kurs og valfri dato for å liste opp genererte sertifikat."
+
+msgid "Filter by learner"
+msgstr "Filtrer etter deltakar"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Finn sertifikat for ein bestemt deltakar på tvers av økter og kurs."
+
+msgid "Certificates found"
+msgstr "Sertifikat funne"
+
+msgid "Open certificate"
+msgstr "Opna sertifikat"
+
+msgid "Certificate file not available"
+msgstr "Sertifikatfil ikkje tilgjengeleg"
+
+msgid "Export to CSV"
+msgstr "Eksporter til CSV"
+
+msgid "Acquired skills"
+msgstr "Tileigna ferdigheiter"
+
+msgid "No acquired skill"
+msgstr "Ingen tileigna ferdigheiter"
+
+msgid "Absences"
+msgstr "Fråvær"
+
+msgid "No courses"
+msgstr "Ingen kurs"
+
+msgid "No session matched"
+msgstr "Ingen økt samsvarte"
+
+msgid "Unable to load the report"
+msgstr "Kunne ikkje laste rapporten"
+
+msgid "Please select a profile"
+msgstr "Vel ein profil"
+
+msgid "Please select a session"
+msgstr "Vel ein økt"
+
+msgid "Please select a user"
+msgstr "Vel ein brukar"
+
+msgid "Unable to export the report"
+msgstr "Kunne ikkje eksportere rapporten"
+
+msgid "Accepted on web"
+msgstr "Godteken på nett"
+
+msgid "Accepted by e-mail"
+msgstr "Godteken via e-post"
+
+msgid "The course title is required"
+msgstr "Kursnamnet er påkravd"
+
+msgid "Unexpected error"
+msgstr "Uventa feil"
+
+msgid "Separate tags with commas"
+msgstr "Skill merkelappar med komma"
+
+msgid "Open link"
+msgstr "Opna lenke"
+
+msgid "Describe the course picture to generate"
+msgstr "Beskriv kursbiletet som skal genererast"
+
+msgid "Generate picture"
+msgstr "Generer bilete"
+
+msgid "PDF watermark"
+msgstr "PDF-vassmerke"
+
+msgid "No watermark image"
+msgstr "Ingen vassmerkebilete"
+
+msgid "Upload watermark"
+msgstr "Last opp vassmerke"
+
+msgid "Delete watermark"
+msgstr "Slett vassmerke"
+
+msgid "Course legal agreement file"
+msgstr "Kursavtaledokument"
+
+msgid "Upload agreement file"
+msgstr "Last opp avtaledokument"
+
+msgid "Download agreement file"
+msgstr "Last ned avtaledokument"
+
+msgid "Delete agreement file"
+msgstr "Slett avtaledokument"
+
+msgid "Custom certificate images"
+msgstr "Tilpassa sertifikatbilete"
+
+msgid "Course picture updated"
+msgstr "Kursbiletet er oppdatert"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kursbiletet kunne ikkje lastast opp"
+
+msgid "Course picture deleted"
+msgstr "Kursbiletet er sletta"
+
+msgid "Enter a description for the image"
+msgstr "Skriv inn ei skildring av biletet"
+
+msgid "The image generator returned an empty response"
+msgstr "Biletgeneratoren returnerte eit tomt svar"
+
+msgid "Course picture generated"
+msgstr "Kursbiletet er generert"
+
+msgid "Watermark updated"
+msgstr "Vassmerke oppdatert"
+
+msgid "Watermark deleted"
+msgstr "Vassmerke sletta"
+
+msgid "Agreement file updated"
+msgstr "Avtaledokument oppdatert"
+
+msgid "Agreement file deleted"
+msgstr "Avtaledokument sletta"
+
+msgid "Certificate image updated"
+msgstr "Sertifikatbilete oppdatert"
+
+msgid "Certificate image deleted"
+msgstr "Sertifikatbilete sletta"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Bruk biletredigeringa før opplasting for å beskjere, rotere eller endre storleik på kursbiletet."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Denne invitasjonslenka er ugyldig eller har gått ut."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Denne invitasjonen vart sendt til ein annan brukar. Logg inn med den inviterte kontoen."
+
+msgid "The invitation could not be accepted."
+msgstr "Invitasjonen kunne ikkje godtakast."
+
+msgid "You have been subscribed successfully."
+msgstr "Du har vorte meld på med suksess."
+
+msgid "This email address cannot be invited."
+msgstr "Denne e-postadressa kan ikkje inviterast."
+
+msgid "This user is already subscribed to the session."
+msgstr "Denne brukaren er allereie meld på økta."
+
+msgid "This user is already subscribed to the course."
+msgstr "Denne brukaren er allereie meld på kurset."
 

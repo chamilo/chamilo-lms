@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Allin kuyaywan"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Qillqay qhawariy: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Qillqaypi ruwana: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Sutikuna umu"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ari:copyright nisqawan,, mana:mana copyright nisqawan"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Q'utu,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Carpet,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación"
@@ -37701,6 +37701,12 @@ msgstr "Sesión nisqayqa puchukayta munan"
 msgid "Do you want to continue your session?"
 msgstr "¿Sesión nisqayta qatiyta munankichu?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Qayna ruwanayki chinkasqa, ama hina kaspa musuqta yaykuy."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Kay qallpaman yaykuyqa qarqosqa. Manam yaykunapaq atiykuna kanchu."
+
 msgid "Stay connected"
 msgstr "Conectado qhipay"
 
@@ -39013,158 +39019,470 @@ msgid "Queries per second"
 msgstr "Tapukuna sapa segundo"
 
 msgid "Slow queries"
-msgstr ""
+msgstr "Lentas consultas"
 
 msgid "Slow query time limit"
-msgstr ""
+msgstr "Lentas consultasqapaq pacha churan"
 
 msgid "Slow query log"
-msgstr ""
+msgstr "Lentas consultasqapaq qillqa"
 
 msgid "Slow queries per second"
-msgstr ""
+msgstr "Lentas consultasqapaq sapa segundo"
 
 msgid "Threads running"
-msgstr ""
+msgstr "Threads purichkasqa"
 
 msgid "Threads cached"
-msgstr ""
+msgstr "Threads cache nisqapi"
 
 msgid "Table lock waits"
-msgstr ""
+msgstr "Tabla qarkusqa suyaykuna"
 
 msgid "Row lock waits"
-msgstr ""
+msgstr "Row qarkusqa suyaykuna"
 
 msgid "Aborted connections"
-msgstr ""
+msgstr "Qarqosqa t'inkikuna"
 
 msgid "Opened tables"
-msgstr ""
+msgstr "Tablakuna kichasqa"
 
 msgid "Query cache"
-msgstr ""
+msgstr "Consulta cache"
 
 msgid "Database load metrics are only available for MySQL and MariaDB."
-msgstr ""
+msgstr "Base de datosqapaq carga métricasqa MySQL y MariaDBpaqlla kachkan."
 
 msgid "Inserts"
-msgstr ""
+msgstr "Inserciones"
 
 msgid "Hit rate"
-msgstr ""
+msgstr "Hit rate"
 
 msgid "Auto-refresh every 5 seconds"
-msgstr ""
+msgstr "Auto-refresh sapa 5 segundos"
 
 msgid "Web server load"
-msgstr ""
+msgstr "Web server carga"
 
 msgid "Live Apache or Nginx status metrics"
-msgstr ""
+msgstr "Apache o Nginx estado métricas"
 
 msgid "Click to show web server load metrics"
-msgstr ""
+msgstr "Clic nisqa web server carga métricas qawachinapaq"
 
 msgid "Requires a local web server status module"
-msgstr ""
+msgstr "Local web server estado módulowan necesitakun"
 
 msgid "Web server load is read from Apache mod_status or Nginx stub_status on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
-msgstr ""
+msgstr "Web server cargaqa Apache mod_status o Nginx stub_statusmanta localhostpi qawachikun. Estado páginaqa 127.0.0.1 (o ::1)manta mañaykuna permitekunan."
 
 msgid "Paths scanned"
-msgstr ""
+msgstr "Ñankuna qawasqa"
 
 msgid "Detected"
-msgstr ""
+msgstr "Taripasqa"
 
 msgid "Status path"
-msgstr ""
+msgstr "Estado ñan"
 
 msgid "Web server load metrics are only available for Apache and Nginx."
-msgstr ""
+msgstr "Web server carga métricasqa Apache y Nginxpaqlla kachkan."
 
 msgid "None of the scanned status paths responded on localhost."
-msgstr ""
+msgstr "Manam localhostpi qhawasqa ñan kutiq kanchu."
 
 msgid "Busy workers"
-msgstr ""
+msgstr "Llamkaq ruwaqkuna"
 
 msgid "Idle workers"
-msgstr ""
+msgstr "Samasqa ruwaqkuna"
 
 msgid "Graceful workers"
-msgstr ""
+msgstr "Allin ruwaqkuna"
 
 msgid "Server MPM"
-msgstr ""
+msgstr "Server MPM"
 
 msgid "Requests per second (live)"
-msgstr ""
+msgstr "Segundopi mañakuykuna (kawsay)"
 
 msgid "Requests per second (since start)"
-msgstr ""
+msgstr "Segundopi mañakuykuna (qallariymanta)"
 
 msgid "Bytes per second (live)"
-msgstr ""
+msgstr "Segundopi bytes (kawsay)"
 
 msgid "Bytes per second (since start)"
-msgstr ""
+msgstr "Segundopi bytes (qallariymanta)"
 
 msgid "Bytes per request"
-msgstr ""
+msgstr "Mañakuypi bytes"
 
 msgid "Total accesses"
-msgstr ""
+msgstr "Llapan yaykuykuna"
 
 msgid "Total traffic"
-msgstr ""
+msgstr "Llapan trafiku"
 
 msgid "CPU load"
-msgstr ""
+msgstr "CPU carga"
 
 msgid "Load average (1 min)"
-msgstr ""
+msgstr "Carga promedio (1 min)"
 
 msgid "Load average (5 min)"
-msgstr ""
+msgstr "Carga promedio (5 min)"
 
 msgid "Load average (15 min)"
-msgstr ""
+msgstr "Carga promedio (15 min)"
 
 msgid "Scoreboard sending"
-msgstr ""
+msgstr "Scoreboard qollqay"
 
 msgid "Scoreboard reading"
-msgstr ""
+msgstr "Scoreboard ñawiray"
 
 msgid "Scoreboard keepalive"
-msgstr ""
+msgstr "Scoreboard keepalive"
 
 msgid "Scoreboard waiting"
-msgstr ""
+msgstr "Scoreboard suyay"
 
 msgid "Scoreboard open slots"
-msgstr ""
+msgstr "Scoreboard kichaq ranphakuna"
 
 msgid "Active connections"
-msgstr ""
+msgstr "Kawsay t'inkiykuna"
 
 msgid "Reading"
-msgstr ""
+msgstr "Ñawiray"
 
 msgid "Writing"
-msgstr ""
+msgstr "Qillqay"
 
 msgid "Total requests"
-msgstr ""
+msgstr "Llapan mañakuykuna"
 
 msgid "Accepts"
-msgstr ""
+msgstr "Chaskiykuna"
 
 msgid "Handled"
 msgstr "Manejado"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: activar mod_status (ExtendedStatus On) y permitir localhost en /server-status. Nginx: activar stub_status en una ubicación solo localhost como /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Nota porcentaje rakiq"
+
+msgid "Top learners"
+msgstr "Aswan yachaqkuna"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Kay ñawpaq yachay ñan ñawpaqwan yachaqpa promedio ruwayninwan tinkun"
+
+msgid "Additional profile fields"
+msgstr "Yapay perfil kamachiykuna"
+
+msgid "Visible columns"
+msgstr "Rikuna qallariykuna"
+
+msgid "Learning path completion"
+msgstr "Yachay ñan tukuy"
+
+msgid "Number of certificates"
+msgstr "Certificado yupay"
+
+msgid "Could not export the report"
+msgstr "Manam willayta apachiyta atinchu"
+
+msgid "Second learner"
+msgstr "Iskay ñiqin yachaq"
+
+msgid "Results by learner"
+msgstr "Yachaqpa ruwanankuna"
+
+msgid "Use filters to narrow down questions."
+msgstr "Tapukuykunata chinkachiykuna."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Chinkachiykuna allichayta qhaway."
+
+msgid "Results per page"
+msgstr "Qallariykuna ruwanapi"
+
+msgid "No answers"
+msgstr "Manam kutichiykuna"
+
+msgid "Tests using this question"
+msgstr "Kay tapukuyta llamk'achisqa yuyaychaykuna"
+
+msgid "Delete failed"
+msgstr "Pichay manam atinchu"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Kawsay OPcache hinaspa APCu qhawariykuna"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache hinaspa APCu qhawariykunata qhaway"
+
+msgid "Memory used"
+msgstr "Memoria llamk'achisqa"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache instalado kachkan ichaqa manam qallarisqachu."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache qallariy kay servidorpi manam kanchu."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu instalado kachkan ichaqa manam qallarisqachu."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu qallariy kay servidorpi manam kanchu."
+
+msgid "Constant"
+msgstr "Constante"
+
+msgid "Space used on disk (MB)"
+msgstr "Espacio usado en disco (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Establecer espacio máximo del curso (MB)"
+
+msgid "Memory free"
+msgstr "Memoria libre"
+
+msgid "Memory wasted"
+msgstr "Memoria desperdiciada"
+
+msgid "Memory used %"
+msgstr "Memoria usada %"
+
+msgid "Cached scripts"
+msgstr "Scripts en caché"
+
+msgid "Cached keys"
+msgstr "Claves en caché"
+
+msgid "Misses"
+msgstr "Fallos"
+
+msgid "Cache full"
+msgstr "Caché lleno"
+
+msgid "OOM restarts"
+msgstr "Reinicios OOM"
+
+msgid "Hash restarts"
+msgstr "Reinicios hash"
+
+msgid "Manual restarts"
+msgstr "Reinicios manuales"
+
+msgid "Interned strings used"
+msgstr "Cadenas internas usadas"
+
+msgid "Interned strings free"
+msgstr "Cadenas internas libres"
+
+msgid "Interned strings count"
+msgstr "Conteo de cadenas internas"
+
+msgid "Memory available"
+msgstr "Memoria disponible"
+
+msgid "Memory size"
+msgstr "Tamaño de memoria"
+
+msgid "Entries"
+msgstr "Entradas"
+
+msgid "Slots"
+msgstr "Espacios"
+
+msgid "Expunges"
+msgstr "Expulsiones"
+
+msgid "Cache start time"
+msgstr "Hora de inicio del caché"
+
+msgid "Time zone"
+msgstr "Zona horaria"
+
+msgid "Not registered"
+msgstr "No registrado"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrar y listar certificados de estudiantes por sesión, curso, fecha o estudiante, luego exportarlos cuando sea necesario."
+
+msgid "Filter by session and course"
+msgstr "Filtrar por sesión y curso"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Elegir una sesión, curso y fecha opcional para listar los certificados generados."
+
+msgid "Filter by learner"
+msgstr "Filtrar por estudiante"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Encontrar certificados para un estudiante específico en todas las sesiones y cursos."
+
+msgid "Certificates found"
+msgstr "Certificados encontrados"
+
+msgid "Open certificate"
+msgstr "Abrir certificado"
+
+msgid "Certificate file not available"
+msgstr "Archivo de certificado no disponible"
+
+msgid "Export to CSV"
+msgstr "Exportar a CSV"
+
+msgid "Acquired skills"
+msgstr "Habilidades adquiridas"
+
+msgid "No acquired skill"
+msgstr "Ninguna habilidad adquirida"
+
+msgid "Absences"
+msgstr "Ausencias"
+
+msgid "No courses"
+msgstr "Sin cursos"
+
+msgid "No session matched"
+msgstr "Ninguna sesión coincide"
+
+msgid "Unable to load the report"
+msgstr "No se puede cargar el informe"
+
+msgid "Please select a profile"
+msgstr "Por favor seleccione un perfil"
+
+msgid "Please select a session"
+msgstr "Por favor seleccione una sesión"
+
+msgid "Please select a user"
+msgstr "Por favor seleccione un usuario"
+
+msgid "Unable to export the report"
+msgstr "No se puede exportar el informe"
+
+msgid "Accepted on web"
+msgstr "Aceptado en la web"
+
+msgid "Accepted by e-mail"
+msgstr "Aceptado por correo electrónico"
+
+msgid "The course title is required"
+msgstr "El título del curso es requerido"
+
+msgid "Unexpected error"
+msgstr "Error inesperado"
+
+msgid "Separate tags with commas"
+msgstr "Separar etiquetas con comas"
+
+msgid "Open link"
+msgstr "Abrir enlace"
+
+msgid "Describe the course picture to generate"
+msgstr "Describir la imagen del curso a generar"
+
+msgid "Generate picture"
+msgstr "Rikch'ata ruway"
+
+msgid "PDF watermark"
+msgstr "PDF yaku unancha"
+
+msgid "No watermark image"
+msgstr "Mana yaku unancha rikch'a"
+
+msgid "Upload watermark"
+msgstr "Yaku unancha churay"
+
+msgid "Delete watermark"
+msgstr "Yaku unancha qulluy"
+
+msgid "Course legal agreement file"
+msgstr "Yachachina kamachi qillqa"
+
+msgid "Upload agreement file"
+msgstr "Kamachi qillqa churay"
+
+msgid "Download agreement file"
+msgstr "Kamachi qillqa uraykachay"
+
+msgid "Delete agreement file"
+msgstr "Kamachi qillqa qulluy"
+
+msgid "Custom certificate images"
+msgstr "Sapaq sutinchana rikch'akuna"
+
+msgid "Course picture updated"
+msgstr "Yachachina rikch'a musuqchasqa"
+
+msgid "The course picture could not be uploaded"
+msgstr "Yachachina rikch'a mana churakuyta atinchu"
+
+msgid "Course picture deleted"
+msgstr "Yachachina rikch'a qullusqa"
+
+msgid "Enter a description for the image"
+msgstr "Rikch'apaq t'ijrayta qillqay"
+
+msgid "The image generator returned an empty response"
+msgstr "Rikch'a ruwaq ch'usaq kutichiyta qurqa"
+
+msgid "Course picture generated"
+msgstr "Yachachina rikch'a ruwasqa"
+
+msgid "Watermark updated"
+msgstr "Yaku unancha musuqchasqa"
+
+msgid "Watermark deleted"
+msgstr "Yaku unancha qullusqa"
+
+msgid "Agreement file updated"
+msgstr "Kamachi qillqa musuqchasqa"
+
+msgid "Agreement file deleted"
+msgstr "Kamachi qillqa qullusqa"
+
+msgid "Certificate image updated"
+msgstr "Sutinchana rikch'a musuqchasqa"
+
+msgid "Certificate image deleted"
+msgstr "Sutinchana rikch'a qullusqa"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Yachachina rikch'ata churaymanta ñawpaqta rikch'a ruwaqta llamk'achiy, kuchuy, muyuchiy icha sayachiy."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Kay qayllay waskhana mana allinchu icha p'uchukasqa."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Kay qayllay hukkunamanmi kachasqa. Qayllay ruraqtawan yaykuy."
+
+msgid "The invitation could not be accepted."
+msgstr "Qayllay mana chaskikuyta atinchu."
+
+msgid "You have been subscribed successfully."
+msgstr "Allinta qillqasqa kanki."
+
+msgid "This email address cannot be invited."
+msgstr "Kay correo electrónico mana qayllayta atinchu."
+
+msgid "This user is already subscribed to the session."
+msgstr "Kay ruraqqa sesiónmanña qillqasqa kachkan."
+
+msgid "This user is already subscribed to the course."
+msgstr "Kay ruraqqa yachachinamanña qillqasqa kachkan."
 

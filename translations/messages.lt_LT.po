@@ -37700,6 +37700,12 @@ msgstr "Jūsų sesija netrukus baigsis"
 msgid "Do you want to continue your session?"
 msgstr "Ar norite tęsti sesiją?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Jūsų seanso duomenys prarasti, prašome prisijungti dar kartą."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Prieiga prie šio išteklio uždrausta. Atrodo, kad neturite reikiamų teisių jam pasiekti."
+
 msgid "Stay connected"
 msgstr "Likti prisijungusiam"
 
@@ -39166,4 +39172,316 @@ msgstr "Apdorota"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: įgalinkite mod_status (ExtendedStatus On) ir leiskite localhost pasiekti /server-status. Nginx: įgalinkite stub_status tik localhost vietoje, pvz., /nginx_status arba /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Įvertinimų procentinis pasiskirstymas"
+
+msgid "Top learners"
+msgstr "Geriausi besimokantieji"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Ši pažanga apjungia mokymosi kelio pažangą ir besimokančiojo vidutinį pratimų rezultatą"
+
+msgid "Additional profile fields"
+msgstr "Papildomi profilio laukai"
+
+msgid "Visible columns"
+msgstr "Matomi stulpeliai"
+
+msgid "Learning path completion"
+msgstr "Mokymosi kelio užbaigimas"
+
+msgid "Number of certificates"
+msgstr "Sertifikatų skaičius"
+
+msgid "Could not export the report"
+msgstr "Nepavyko eksportuoti ataskaitos"
+
+msgid "Second learner"
+msgstr "Antras besimokantysis"
+
+msgid "Results by learner"
+msgstr "Rezultatai pagal besimokantįjį"
+
+msgid "Use filters to narrow down questions."
+msgstr "Naudokite filtrus klausimams susiaurinti."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Pabandykite pakoreguoti filtrus ir ieškoti dar kartą."
+
+msgid "Results per page"
+msgstr "Rezultatų puslapyje"
+
+msgid "No answers"
+msgstr "Atsakymų nėra"
+
+msgid "Tests using this question"
+msgstr "Testai naudojantys šį klausimą"
+
+msgid "Delete failed"
+msgstr "Ištrinti nepavyko"
+
+msgid "PHP cache"
+msgstr "PHP talpykla"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "OPcache ir APCu diagnostika realiu laiku"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Spustelėkite, kad parodytumėte OPcache ir APCu diagnostiką"
+
+msgid "Memory used"
+msgstr "Naudojama atmintis"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache įdiegta, bet neįjungta."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache plėtinys šiame serveryje neprieinamas."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu įdiegta, bet neįjungta."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu plėtinys šiame serveryje neprieinamas."
+
+msgid "Constant"
+msgstr "Konstanta"
+
+msgid "Space used on disk (MB)"
+msgstr "Disko vietos naudojimas (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Nustatyti maksimalią kurso vietą (MB)"
+
+msgid "Memory free"
+msgstr "Laisva atmintis"
+
+msgid "Memory wasted"
+msgstr "Švaistoma atmintis"
+
+msgid "Memory used %"
+msgstr "Naudojama atmintis %"
+
+msgid "Cached scripts"
+msgstr "Talpykloje esantys skriptai"
+
+msgid "Cached keys"
+msgstr "Talpykloje esantys raktai"
+
+msgid "Misses"
+msgstr "Nepataikymai"
+
+msgid "Cache full"
+msgstr "Talpykla pilna"
+
+msgid "OOM restarts"
+msgstr "OOM paleidimai iš naujo"
+
+msgid "Hash restarts"
+msgstr "Maišos paleidimai iš naujo"
+
+msgid "Manual restarts"
+msgstr "Rankiniai paleidimai iš naujo"
+
+msgid "Interned strings used"
+msgstr "Naudojamos internuotos eilutės"
+
+msgid "Interned strings free"
+msgstr "Laisvos internuotos eilutės"
+
+msgid "Interned strings count"
+msgstr "Internuotų eilučių skaičius"
+
+msgid "Memory available"
+msgstr "Prieinama atmintis"
+
+msgid "Memory size"
+msgstr "Atminties dydis"
+
+msgid "Entries"
+msgstr "Įrašai"
+
+msgid "Slots"
+msgstr "Lizdai"
+
+msgid "Expunges"
+msgstr "Išmetimai"
+
+msgid "Cache start time"
+msgstr "Talpyklos pradžios laikas"
+
+msgid "Time zone"
+msgstr "Laiko juosta"
+
+msgid "Not registered"
+msgstr "Neregistruotas"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtruoti ir rodyti besimokančiųjų pažymėjimus pagal sesiją, kursą, datą ar besimokantįjį, tada prireikus eksportuoti."
+
+msgid "Filter by session and course"
+msgstr "Filtruoti pagal sesiją ir kursą"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Pasirinkite sesiją, kursą ir pasirinktinę datą, kad būtų rodomi sugeneruoti pažymėjimai."
+
+msgid "Filter by learner"
+msgstr "Filtruoti pagal besimokantįjį"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Rasti konkretaus besimokančiojo pažymėjimus visose sesijose ir kursuose."
+
+msgid "Certificates found"
+msgstr "Rasti pažymėjimai"
+
+msgid "Open certificate"
+msgstr "Atidaryti pažymėjimą"
+
+msgid "Certificate file not available"
+msgstr "Pažymėjimo failas nepasiekiamas"
+
+msgid "Export to CSV"
+msgstr "Eksportuoti į CSV"
+
+msgid "Acquired skills"
+msgstr "Įgytos kompetencijos"
+
+msgid "No acquired skill"
+msgstr "Nėra įgytos kompetencijos"
+
+msgid "Absences"
+msgstr "Nebuvimai"
+
+msgid "No courses"
+msgstr "Nėra kursų"
+
+msgid "No session matched"
+msgstr "Nerasta atitinkančios sesijos"
+
+msgid "Unable to load the report"
+msgstr "Nepavyko įkelti ataskaitos"
+
+msgid "Please select a profile"
+msgstr "Pasirinkite profilį"
+
+msgid "Please select a session"
+msgstr "Pasirinkite sesiją"
+
+msgid "Please select a user"
+msgstr "Pasirinkite naudotoją"
+
+msgid "Unable to export the report"
+msgstr "Nepavyko eksportuoti ataskaitos"
+
+msgid "Accepted on web"
+msgstr "Priimta internetu"
+
+msgid "Accepted by e-mail"
+msgstr "Priimta el. paštu"
+
+msgid "The course title is required"
+msgstr "Būtinas kurso pavadinimas"
+
+msgid "Unexpected error"
+msgstr "Netikėta klaida"
+
+msgid "Separate tags with commas"
+msgstr "Atskirkite žymas kableliais"
+
+msgid "Open link"
+msgstr "Atidaryti nuorodą"
+
+msgid "Describe the course picture to generate"
+msgstr "Aprašykite kurso paveikslėlį, kurį reikia sugeneruoti"
+
+msgid "Generate picture"
+msgstr "Generuoti paveikslėlį"
+
+msgid "PDF watermark"
+msgstr "PDF vandens ženklas"
+
+msgid "No watermark image"
+msgstr "Nėra vandens ženklo paveikslėlio"
+
+msgid "Upload watermark"
+msgstr "Įkelti vandens ženklą"
+
+msgid "Delete watermark"
+msgstr "Ištrinti vandens ženklą"
+
+msgid "Course legal agreement file"
+msgstr "Kurso teisinis susitarimo failas"
+
+msgid "Upload agreement file"
+msgstr "Įkelti susitarimo failą"
+
+msgid "Download agreement file"
+msgstr "Atsisiųsti susitarimo failą"
+
+msgid "Delete agreement file"
+msgstr "Ištrinti susitarimo failą"
+
+msgid "Custom certificate images"
+msgstr "Pasirinktiniai sertifikato paveikslėliai"
+
+msgid "Course picture updated"
+msgstr "Kurso paveikslėlis atnaujintas"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kurso paveikslėlio įkelti nepavyko"
+
+msgid "Course picture deleted"
+msgstr "Kurso paveikslėlis ištrintas"
+
+msgid "Enter a description for the image"
+msgstr "Įveskite paveikslėlio aprašymą"
+
+msgid "The image generator returned an empty response"
+msgstr "Paveikslėlių generatorius grąžino tuščią atsakymą"
+
+msgid "Course picture generated"
+msgstr "Kurso paveikslėlis sukurtas"
+
+msgid "Watermark updated"
+msgstr "Vandens ženklas atnaujintas"
+
+msgid "Watermark deleted"
+msgstr "Vandens ženklas ištrintas"
+
+msgid "Agreement file updated"
+msgstr "Susitarimo failas atnaujintas"
+
+msgid "Agreement file deleted"
+msgstr "Susitarimo failas ištrintas"
+
+msgid "Certificate image updated"
+msgstr "Sertifikato paveikslėlis atnaujintas"
+
+msgid "Certificate image deleted"
+msgstr "Sertifikato paveikslėlis ištrintas"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Prieš įkeldami naudokite paveikslėlių redaktorių, kad apkarptumėte, pasuktumėte ar pakeistumėte kurso paveikslėlio dydį."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Ši kvietimo nuoroda negalioja arba jos galiojimas baigėsi."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Šis kvietimas buvo išsiųstas kitam naudotojui. Prisijunkite naudodami pakviestą paskyrą."
+
+msgid "The invitation could not be accepted."
+msgstr "Kvietimo priimti nepavyko."
+
+msgid "You have been subscribed successfully."
+msgstr "Jūs sėkmingai užsiregistravote."
+
+msgid "This email address cannot be invited."
+msgstr "Šio el. pašto adreso pakviesti negalima."
+
+msgid "This user is already subscribed to the session."
+msgstr "Šis naudotojas jau užsiregistravęs į sesiją."
+
+msgid "This user is already subscribed to the course."
+msgstr "Šis naudotojas jau užsiregistravęs į kursą."
 

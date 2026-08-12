@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázkový vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Vzorec: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -37695,6 +37695,12 @@ msgstr "Vaše relace brzy vyprší"
 msgid "Do you want to continue your session?"
 msgstr "Chcete pokračovat v relaci?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Vaše údaje o relaci byly ztraceny, přihlaste se znovu."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Přístup k tomuto zdroji byl odepřen. Zdá se, že nemáte potřebná oprávnění pro přístup."
+
 msgid "Stay connected"
 msgstr "Zůstat připojen"
 
@@ -38929,55 +38935,55 @@ msgid "No users"
 msgstr "Žádní uživatelé"
 
 msgid "Calculation mode"
-msgstr "Calculation mode"
+msgstr "Režim výpočtu"
 
 msgid "Weighted average"
-msgstr "Weighted average"
+msgstr "Vážený průměr"
 
 msgid "Points sum"
-msgstr "Points sum"
+msgstr "Součet bodů"
 
 msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
-msgstr "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Vážený průměr normalizuje podle součtu vah; součet bodů považuje každou váhu za maximální počet bodů a sčítá je bez normalizace."
 
 msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
-msgstr "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Každá položka váhy je považována za její maximální počet bodů; známka je součet bodů, nikoli normalizovaný."
 
 msgid "The grade is the weighted average of items, normalized by the sum of weights."
-msgstr "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Známka je váženým průměrem položek, normalizovaným podle součtu vah."
 
 msgid "Forum participation"
-msgstr "Forum participation"
+msgstr "Účast ve fóru"
 
 msgid "Forum thread"
-msgstr "Forum thread"
+msgstr "Vlákno fóra"
 
 msgid "Points for one message"
-msgstr "Points for one message"
+msgstr "Body za jednu zprávu"
 
 msgid "Points for two or more messages"
-msgstr "Points for two or more messages"
+msgstr "Body za dvě nebo více zpráv"
 
 msgid "Points awarded when the student posted exactly one message in the thread."
-msgstr "Points awarded when the student posted exactly one message in the thread."
+msgstr "Body udělené, když student zveřejnil přesně jednu zprávu ve vlákně."
 
 msgid "Points awarded when the student posted two or more messages in the thread."
-msgstr "Points awarded when the student posted two or more messages in the thread."
+msgstr "Body udělené, když student zveřejnil dvě nebo více zpráv ve vlákně."
 
 msgid "Optional. If left empty, one or more messages award the points for one message."
-msgstr "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Volitelné. Pokud je ponecháno prázdné, jedna nebo více zpráv udělí body za jednu zprávu."
 
 msgid "Current password is required to change your password."
-msgstr "Current password is required to change your password."
+msgstr "Aktuální heslo je vyžadováno pro změnu hesla."
 
 msgid "The 2FA code is required."
-msgstr "The 2FA code is required."
+msgstr "Kód 2FA je vyžadován."
 
 msgid "Invalid 2FA configuration."
-msgstr "Invalid 2FA configuration."
+msgstr "Neplatná konfigurace 2FA."
 
 msgid "The 2FA code is invalid or expired."
-msgstr "The 2FA code is invalid or expired."
+msgstr "Kód 2FA je neplatný nebo vypršel."
 
 msgid "Database load"
 msgstr "Zátěž databáze"
@@ -39161,4 +39167,316 @@ msgstr "Zpracováno"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: povolte mod_status (ExtendedStatus On) a umožněte localhost přístup k /server-status. Nginx: povolte stub_status na lokaci pouze pro localhost, např. /nginx_status nebo /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Rozložení procentuálního hodnocení"
+
+msgid "Top learners"
+msgstr "Nejlepší účastníci"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Tento pokrok kombinuje postup ve vzdělávací cestě a průměrný výsledek cvičení účastníka"
+
+msgid "Additional profile fields"
+msgstr "Další pole profilu"
+
+msgid "Visible columns"
+msgstr "Viditelné sloupce"
+
+msgid "Learning path completion"
+msgstr "Dokončení vzdělávací cesty"
+
+msgid "Number of certificates"
+msgstr "Počet certifikátů"
+
+msgid "Could not export the report"
+msgstr "Nelze exportovat sestavu"
+
+msgid "Second learner"
+msgstr "Druhý účastník"
+
+msgid "Results by learner"
+msgstr "Výsledky podle účastníka"
+
+msgid "Use filters to narrow down questions."
+msgstr "Použijte filtry k omezení otázek."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Zkuste upravit filtry a hledat znovu."
+
+msgid "Results per page"
+msgstr "Výsledků na stránku"
+
+msgid "No answers"
+msgstr "Žádné odpovědi"
+
+msgid "Tests using this question"
+msgstr "Testy používající tuto otázku"
+
+msgid "Delete failed"
+msgstr "Smazání se nezdařilo"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostika OPcache a APCu v reálném čase"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klikněte pro zobrazení diagnostiky OPcache a APCu"
+
+msgid "Memory used"
+msgstr "Použitá paměť"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache je nainstalován, ale není povolen."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Rozšíření OPcache není na tomto serveru dostupné."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu je nainstalován, ale není povolen."
+
+msgid "APCu extension is not available on this server."
+msgstr "Rozšíření APCu není na tomto serveru dostupné."
+
+msgid "Constant"
+msgstr "Konstanta"
+
+msgid "Space used on disk (MB)"
+msgstr "Využitý prostor na disku (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Nastavit maximální prostor kurzu (MB)"
+
+msgid "Memory free"
+msgstr "Volná paměť"
+
+msgid "Memory wasted"
+msgstr "Plýtvaná paměť"
+
+msgid "Memory used %"
+msgstr "Využitá paměť %"
+
+msgid "Cached scripts"
+msgstr "Uložené skripty"
+
+msgid "Cached keys"
+msgstr "Uložené klíče"
+
+msgid "Misses"
+msgstr "Minutí"
+
+msgid "Cache full"
+msgstr "Cache plná"
+
+msgid "OOM restarts"
+msgstr "Restarty OOM"
+
+msgid "Hash restarts"
+msgstr "Restarty hash"
+
+msgid "Manual restarts"
+msgstr "Ruční restarty"
+
+msgid "Interned strings used"
+msgstr "Použité internované řetězce"
+
+msgid "Interned strings free"
+msgstr "Volné internované řetězce"
+
+msgid "Interned strings count"
+msgstr "Počet internovaných řetězců"
+
+msgid "Memory available"
+msgstr "Dostupná paměť"
+
+msgid "Memory size"
+msgstr "Velikost paměti"
+
+msgid "Entries"
+msgstr "Položky"
+
+msgid "Slots"
+msgstr "Sloty"
+
+msgid "Expunges"
+msgstr "Vymazání"
+
+msgid "Cache start time"
+msgstr "Čas spuštění cache"
+
+msgid "Time zone"
+msgstr "Časové pásmo"
+
+msgid "Not registered"
+msgstr "Neregistrováno"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrovat a zobrazit certifikáty účastníků podle sezení, kurzu, data nebo účastníka a v případě potřeby je exportovat."
+
+msgid "Filter by session and course"
+msgstr "Filtrovat podle sezení a kurzu"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Vyberte sezení, kurz a volitelné datum pro zobrazení vygenerovaných certifikátů."
+
+msgid "Filter by learner"
+msgstr "Filtrovat podle účastníka"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Najít certifikáty konkrétního účastníka napříč sezeními a kurzy."
+
+msgid "Certificates found"
+msgstr "Nalezené certifikáty"
+
+msgid "Open certificate"
+msgstr "Otevřít certifikát"
+
+msgid "Certificate file not available"
+msgstr "Soubor certifikátu není dostupný"
+
+msgid "Export to CSV"
+msgstr "Exportovat do CSV"
+
+msgid "Acquired skills"
+msgstr "Získané dovednosti"
+
+msgid "No acquired skill"
+msgstr "Žádná získaná dovednost"
+
+msgid "Absences"
+msgstr "Absence"
+
+msgid "No courses"
+msgstr "Žádné kurzy"
+
+msgid "No session matched"
+msgstr "Žádné odpovídající sezení"
+
+msgid "Unable to load the report"
+msgstr "Nelze načíst sestavu"
+
+msgid "Please select a profile"
+msgstr "Vyberte prosím profil"
+
+msgid "Please select a session"
+msgstr "Vyberte prosím sezení"
+
+msgid "Please select a user"
+msgstr "Vyberte prosím uživatele"
+
+msgid "Unable to export the report"
+msgstr "Nelze exportovat sestavu"
+
+msgid "Accepted on web"
+msgstr "Přijato na webu"
+
+msgid "Accepted by e-mail"
+msgstr "Přijato e-mailem"
+
+msgid "The course title is required"
+msgstr "Název kurzu je povinný"
+
+msgid "Unexpected error"
+msgstr "Neočekávaná chyba"
+
+msgid "Separate tags with commas"
+msgstr "Oddělte štítky čárkami"
+
+msgid "Open link"
+msgstr "Otevřít odkaz"
+
+msgid "Describe the course picture to generate"
+msgstr "Popište obrázek kurzu, který se má vygenerovat"
+
+msgid "Generate picture"
+msgstr "Vygenerovat obrázek"
+
+msgid "PDF watermark"
+msgstr "Vodotisk PDF"
+
+msgid "No watermark image"
+msgstr "Žádný obrázek vodotisku"
+
+msgid "Upload watermark"
+msgstr "Nahrát vodotisk"
+
+msgid "Delete watermark"
+msgstr "Odstranit vodotisk"
+
+msgid "Course legal agreement file"
+msgstr "Soubor právní dohody kurzu"
+
+msgid "Upload agreement file"
+msgstr "Nahrát soubor dohody"
+
+msgid "Download agreement file"
+msgstr "Stáhnout soubor dohody"
+
+msgid "Delete agreement file"
+msgstr "Odstranit soubor dohody"
+
+msgid "Custom certificate images"
+msgstr "Vlastní obrázky certifikátů"
+
+msgid "Course picture updated"
+msgstr "Obrázek kurzu byl aktualizován"
+
+msgid "The course picture could not be uploaded"
+msgstr "Obrázek kurzu se nepodařilo nahrát"
+
+msgid "Course picture deleted"
+msgstr "Obrázek kurzu byl odstraněn"
+
+msgid "Enter a description for the image"
+msgstr "Zadejte popis obrázku"
+
+msgid "The image generator returned an empty response"
+msgstr "Generátor obrázků vrátil prázdnou odpověď"
+
+msgid "Course picture generated"
+msgstr "Obrázek kurzu byl vygenerován"
+
+msgid "Watermark updated"
+msgstr "Vodotisk byl aktualizován"
+
+msgid "Watermark deleted"
+msgstr "Vodotisk byl odstraněn"
+
+msgid "Agreement file updated"
+msgstr "Soubor dohody byl aktualizován"
+
+msgid "Agreement file deleted"
+msgstr "Soubor dohody byl odstraněn"
+
+msgid "Certificate image updated"
+msgstr "Obrázek certifikátu byl aktualizován"
+
+msgid "Certificate image deleted"
+msgstr "Obrázek certifikátu byl odstraněn"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Před nahráním použijte editor obrázků k oříznutí, otočení nebo změně velikosti obrázku kurzu."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Tento odkaz na pozvánku je neplatný nebo vypršel."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Toto pozvání bylo zasláno jinému uživateli. Přihlaste se prosím pomocí pozvaného účtu."
+
+msgid "The invitation could not be accepted."
+msgstr "Pozvánku nelze přijmout."
+
+msgid "You have been subscribed successfully."
+msgstr "Byli jste úspěšně přihlášeni."
+
+msgid "This email address cannot be invited."
+msgstr "Tuto e-mailovou adresu nelze pozvat."
+
+msgid "This user is already subscribed to the session."
+msgstr "Tento uživatel je již přihlášen do relace."
+
+msgid "This user is already subscribed to the course."
+msgstr "Tento uživatel je již přihlášen do kurzu."
 

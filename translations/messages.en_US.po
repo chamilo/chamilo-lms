@@ -39177,3 +39177,315 @@ msgstr "Handled"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Grade percentage distribution"
+
+msgid "Top learners"
+msgstr "Top learners"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "This progress combines learning path progress and the learner's average exercise result"
+
+msgid "Additional profile fields"
+msgstr "Additional profile fields"
+
+msgid "Visible columns"
+msgstr "Visible columns"
+
+msgid "Learning path completion"
+msgstr "Learning path completion"
+
+msgid "Number of certificates"
+msgstr "Number of certificates"
+
+msgid "Could not export the report"
+msgstr "Could not export the report"
+
+msgid "Second learner"
+msgstr "Second learner"
+
+msgid "Results by learner"
+msgstr "Results by learner"
+
+msgid "Use filters to narrow down questions."
+msgstr "Use filters to narrow down questions."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Try adjusting your filters and search again."
+
+msgid "Results per page"
+msgstr "Results per page"
+
+msgid "No answers"
+msgstr "No answers"
+
+msgid "Tests using this question"
+msgstr "Tests using this question"
+
+msgid "Delete failed"
+msgstr "Delete failed"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache and APCu diagnostics"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Click to show OPcache and APCu diagnostics"
+
+msgid "Memory used"
+msgstr "Memory used"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache is installed but not enabled."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache extension is not available on this server."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu is installed but not enabled."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu extension is not available on this server."
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Space used on disk (MB)"
+msgstr "Space used on disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Set max course space (MB)"
+
+msgid "Memory free"
+msgstr "Memory free"
+
+msgid "Memory wasted"
+msgstr "Memory wasted"
+
+msgid "Memory used %"
+msgstr "Memory used %"
+
+msgid "Cached scripts"
+msgstr "Cached scripts"
+
+msgid "Cached keys"
+msgstr "Cached keys"
+
+msgid "Misses"
+msgstr "Misses"
+
+msgid "Cache full"
+msgstr "Cache full"
+
+msgid "OOM restarts"
+msgstr "OOM restarts"
+
+msgid "Hash restarts"
+msgstr "Hash restarts"
+
+msgid "Manual restarts"
+msgstr "Manual restarts"
+
+msgid "Interned strings used"
+msgstr "Interned strings used"
+
+msgid "Interned strings free"
+msgstr "Interned strings free"
+
+msgid "Interned strings count"
+msgstr "Interned strings count"
+
+msgid "Memory available"
+msgstr "Memory available"
+
+msgid "Memory size"
+msgstr "Memory size"
+
+msgid "Entries"
+msgstr "Entries"
+
+msgid "Slots"
+msgstr "Slots"
+
+msgid "Expunges"
+msgstr "Expunges"
+
+msgid "Cache start time"
+msgstr "Cache start time"
+
+msgid "Time zone"
+msgstr "Time zone"
+
+msgid "Not registered"
+msgstr "Not registered"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+
+msgid "Filter by session and course"
+msgstr "Filter by session and course"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Choose a session, course and optional date to list the generated certificates."
+
+msgid "Filter by learner"
+msgstr "Filter by learner"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Find certificates for a specific learner across sessions and courses."
+
+msgid "Certificates found"
+msgstr "Certificates found"
+
+msgid "Open certificate"
+msgstr "Open certificate"
+
+msgid "Certificate file not available"
+msgstr "Certificate file not available"
+
+msgid "Export to CSV"
+msgstr "Export to CSV"
+
+msgid "Acquired skills"
+msgstr "Acquired skills"
+
+msgid "No acquired skill"
+msgstr "No acquired skill"
+
+msgid "Absences"
+msgstr "Absences"
+
+msgid "No courses"
+msgstr "No courses"
+
+msgid "No session matched"
+msgstr "No session matched"
+
+msgid "Unable to load the report"
+msgstr "Unable to load the report"
+
+msgid "Please select a profile"
+msgstr "Please select a profile"
+
+msgid "Please select a session"
+msgstr "Please select a session"
+
+msgid "Please select a user"
+msgstr "Please select a user"
+
+msgid "Unable to export the report"
+msgstr "Unable to export the report"
+
+msgid "Accepted on web"
+msgstr "Accepted on web"
+
+msgid "Accepted by e-mail"
+msgstr "Accepted by e-mail"
+
+msgid "The course title is required"
+msgstr "The course title is required"
+
+msgid "Unexpected error"
+msgstr "Unexpected error"
+
+msgid "Separate tags with commas"
+msgstr "Separate tags with commas"
+
+msgid "Open link"
+msgstr "Open link"
+
+msgid "Describe the course picture to generate"
+msgstr "Describe the course picture to generate"
+
+msgid "Generate picture"
+msgstr "Generate picture"
+
+msgid "PDF watermark"
+msgstr "PDF watermark"
+
+msgid "No watermark image"
+msgstr "No watermark image"
+
+msgid "Upload watermark"
+msgstr "Upload watermark"
+
+msgid "Delete watermark"
+msgstr "Delete watermark"
+
+msgid "Course legal agreement file"
+msgstr "Course legal agreement file"
+
+msgid "Upload agreement file"
+msgstr "Upload agreement file"
+
+msgid "Download agreement file"
+msgstr "Download agreement file"
+
+msgid "Delete agreement file"
+msgstr "Delete agreement file"
+
+msgid "Custom certificate images"
+msgstr "Custom certificate images"
+
+msgid "Course picture updated"
+msgstr "Course picture updated"
+
+msgid "The course picture could not be uploaded"
+msgstr "The course picture could not be uploaded"
+
+msgid "Course picture deleted"
+msgstr "Course picture deleted"
+
+msgid "Enter a description for the image"
+msgstr "Enter a description for the image"
+
+msgid "The image generator returned an empty response"
+msgstr "The image generator returned an empty response"
+
+msgid "Course picture generated"
+msgstr "Course picture generated"
+
+msgid "Watermark updated"
+msgstr "Watermark updated"
+
+msgid "Watermark deleted"
+msgstr "Watermark deleted"
+
+msgid "Agreement file updated"
+msgstr "Agreement file updated"
+
+msgid "Agreement file deleted"
+msgstr "Agreement file deleted"
+
+msgid "Certificate image updated"
+msgstr "Certificate image updated"
+
+msgid "Certificate image deleted"
+msgstr "Certificate image deleted"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Use the image editor before uploading to crop, rotate or resize the course picture."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "This invitation link is invalid or has expired."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "This invitation was sent to a different user. Please log in with the invited account."
+
+msgid "The invitation could not be accepted."
+msgstr "The invitation could not be accepted."
+
+msgid "You have been subscribed successfully."
+msgstr "You have been subscribed successfully."
+
+msgid "This email address cannot be invited."
+msgstr "This email address cannot be invited."
+
+msgid "This user is already subscribed to the session."
+msgstr "This user is already subscribed to the session."
+
+msgid "This user is already subscribed to the course."
+msgstr "This user is already subscribed to the course."

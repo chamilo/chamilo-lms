@@ -37712,6 +37712,12 @@ msgstr "הסשן שלך עומד לפוג"
 msgid "Do you want to continue your session?"
 msgstr "האם ברצונך להמשיך את הסשן?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "פרטי ההפעלה שלך אבדו, אנא התחבר שוב."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "הגישה למשאב זה נדחתה. נראה שאין לך את ההרשאות הנדרשות לגשת אליו."
+
 msgid "Stay connected"
 msgstr "הישאר מחובר"
 
@@ -39178,4 +39184,316 @@ msgstr "מטופל"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: הפעל mod_status (ExtendedStatus On) ואפשר ל-localhost לגשת ל-/server-status. Nginx: הפעל stub_status במיקום localhost בלבד כגון /nginx_status או /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "התפלגות אחוזי הציונים"
+
+msgid "Top learners"
+msgstr "לומדים מובילים"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "התקדמות זו משלבת את התקדמות נתיב הלמידה והממוצע של תוצאות התרגול של הלומד"
+
+msgid "Additional profile fields"
+msgstr "שדות פרופיל נוספים"
+
+msgid "Visible columns"
+msgstr "עמודות גלויות"
+
+msgid "Learning path completion"
+msgstr "השלמת נתיב למידה"
+
+msgid "Number of certificates"
+msgstr "מספר תעודות"
+
+msgid "Could not export the report"
+msgstr "לא ניתן לייצא את הדוח"
+
+msgid "Second learner"
+msgstr "לומד שני"
+
+msgid "Results by learner"
+msgstr "תוצאות לפי לומד"
+
+msgid "Use filters to narrow down questions."
+msgstr "השתמש במסננים כדי לצמצם את השאלות."
+
+msgid "Try adjusting your filters and search again."
+msgstr "נסה להתאים את המסננים ולחפש שוב."
+
+msgid "Results per page"
+msgstr "תוצאות בעמוד"
+
+msgid "No answers"
+msgstr "אין תשובות"
+
+msgid "Tests using this question"
+msgstr "מבחנים המשתמשים בשאלה זו"
+
+msgid "Delete failed"
+msgstr "המחיקה נכשלה"
+
+msgid "PHP cache"
+msgstr "מטמון PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "אבחון OPcache ו-APCu בזמן אמת"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "לחץ להצגת אבחון OPcache ו-APCu"
+
+msgid "Memory used"
+msgstr "זיכרון בשימוש"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache מותקן אך לא מופעל."
+
+msgid "OPcache extension is not available on this server."
+msgstr "הרחבת OPcache אינה זמינה בשרת זה."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu מותקן אך לא מופעל."
+
+msgid "APCu extension is not available on this server."
+msgstr "הרחבת APCu אינה זמינה בשרת זה."
+
+msgid "Constant"
+msgstr "קבוע"
+
+msgid "Space used on disk (MB)"
+msgstr "שטח בשימוש בדיסק (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "הגדר מקסימום שטח לקורס (MB)"
+
+msgid "Memory free"
+msgstr "זיכרון פנוי"
+
+msgid "Memory wasted"
+msgstr "זיכרון מבוזבז"
+
+msgid "Memory used %"
+msgstr "זיכרון בשימוש %"
+
+msgid "Cached scripts"
+msgstr "סקריפטים במטמון"
+
+msgid "Cached keys"
+msgstr "מפתחות במטמון"
+
+msgid "Misses"
+msgstr "החמצות"
+
+msgid "Cache full"
+msgstr "מטמון מלא"
+
+msgid "OOM restarts"
+msgstr "אתחולים עקב חוסר זיכרון"
+
+msgid "Hash restarts"
+msgstr "אתחולי גיבוב"
+
+msgid "Manual restarts"
+msgstr "אתחולים ידניים"
+
+msgid "Interned strings used"
+msgstr "מחרוזות פנימיות בשימוש"
+
+msgid "Interned strings free"
+msgstr "מחרוזות פנימיות פנויות"
+
+msgid "Interned strings count"
+msgstr "מספר מחרוזות פנימיות"
+
+msgid "Memory available"
+msgstr "זיכרון זמין"
+
+msgid "Memory size"
+msgstr "גודל זיכרון"
+
+msgid "Entries"
+msgstr "רשומות"
+
+msgid "Slots"
+msgstr "חריצים"
+
+msgid "Expunges"
+msgstr "פינויים"
+
+msgid "Cache start time"
+msgstr "זמן התחלת המטמון"
+
+msgid "Time zone"
+msgstr "אזור זמן"
+
+msgid "Not registered"
+msgstr "לא רשום"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "סנן והצג תעודות לומדים לפי מפגש, קורס, תאריך או לומד, ולאחר מכן ייצא אותן בעת הצורך."
+
+msgid "Filter by session and course"
+msgstr "סנן לפי מפגש וקורס"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "בחר מפגש, קורס ותאריך אופציונלי להצגת התעודות שנוצרו."
+
+msgid "Filter by learner"
+msgstr "סנן לפי לומד"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "מצא תעודות של לומד מסוים בכל המפגשים והקורסים."
+
+msgid "Certificates found"
+msgstr "תעודות שנמצאו"
+
+msgid "Open certificate"
+msgstr "פתח תעודה"
+
+msgid "Certificate file not available"
+msgstr "קובץ התעודה אינו זמין"
+
+msgid "Export to CSV"
+msgstr "ייצא ל-CSV"
+
+msgid "Acquired skills"
+msgstr "מיומנויות שנרכשו"
+
+msgid "No acquired skill"
+msgstr "אין מיומנות שנרכשה"
+
+msgid "Absences"
+msgstr "היעדרויות"
+
+msgid "No courses"
+msgstr "אין קורסים"
+
+msgid "No session matched"
+msgstr "לא נמצא מפגש תואם"
+
+msgid "Unable to load the report"
+msgstr "לא ניתן לטעון את הדוח"
+
+msgid "Please select a profile"
+msgstr "אנא בחר פרופיל"
+
+msgid "Please select a session"
+msgstr "אנא בחר מפגש"
+
+msgid "Please select a user"
+msgstr "אנא בחר משתמש"
+
+msgid "Unable to export the report"
+msgstr "לא ניתן לייצא את הדוח"
+
+msgid "Accepted on web"
+msgstr "התקבל באינטרנט"
+
+msgid "Accepted by e-mail"
+msgstr "התקבל בדוא\"ל"
+
+msgid "The course title is required"
+msgstr "כותרת הקורס נדרשת"
+
+msgid "Unexpected error"
+msgstr "שגיאה לא צפויה"
+
+msgid "Separate tags with commas"
+msgstr "הפרד תגיות בפסיקים"
+
+msgid "Open link"
+msgstr "פתח קישור"
+
+msgid "Describe the course picture to generate"
+msgstr "תאר את תמונת הקורס ליצירה"
+
+msgid "Generate picture"
+msgstr "צור תמונה"
+
+msgid "PDF watermark"
+msgstr "סימן מים ב-PDF"
+
+msgid "No watermark image"
+msgstr "אין תמונת סימן מים"
+
+msgid "Upload watermark"
+msgstr "העלה סימן מים"
+
+msgid "Delete watermark"
+msgstr "מחק סימן מים"
+
+msgid "Course legal agreement file"
+msgstr "קובץ הסכם משפטי של הקורס"
+
+msgid "Upload agreement file"
+msgstr "העלה קובץ הסכם"
+
+msgid "Download agreement file"
+msgstr "הורד קובץ הסכם"
+
+msgid "Delete agreement file"
+msgstr "מחק קובץ הסכם"
+
+msgid "Custom certificate images"
+msgstr "תמונות תעודה מותאמות אישית"
+
+msgid "Course picture updated"
+msgstr "תמונת הקורס עודכנה"
+
+msgid "The course picture could not be uploaded"
+msgstr "לא ניתן להעלות את תמונת הקורס"
+
+msgid "Course picture deleted"
+msgstr "תמונת הקורס נמחקה"
+
+msgid "Enter a description for the image"
+msgstr "הזן תיאור לתמונה"
+
+msgid "The image generator returned an empty response"
+msgstr "מחולל התמונות החזיר תגובה ריקה"
+
+msgid "Course picture generated"
+msgstr "תמונת הקורס נוצרה"
+
+msgid "Watermark updated"
+msgstr "סימן מים עודכן"
+
+msgid "Watermark deleted"
+msgstr "סימן מים נמחק"
+
+msgid "Agreement file updated"
+msgstr "קובץ ההסכם עודכן"
+
+msgid "Agreement file deleted"
+msgstr "קובץ ההסכם נמחק"
+
+msgid "Certificate image updated"
+msgstr "תמונת התעודה עודכנה"
+
+msgid "Certificate image deleted"
+msgstr "תמונת התעודה נמחקה"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "השתמש בעורך התמונות לפני ההעלאה כדי לחתוך, לסובב או לשנות את גודל תמונת הקורס."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "קישור ההזמנה הזה אינו תקף או שפג תוקפו."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "ההזמנה נשלחה למשתמש אחר. אנא התחבר עם החשבון המוזמן."
+
+msgid "The invitation could not be accepted."
+msgstr "לא ניתן לקבל את ההזמנה."
+
+msgid "You have been subscribed successfully."
+msgstr "נרשמת בהצלחה."
+
+msgid "This email address cannot be invited."
+msgstr "לא ניתן להזמין כתובת דוא\"ל זו."
+
+msgid "This user is already subscribed to the session."
+msgstr "משתמש זה כבר רשום לסשן."
+
+msgid "This user is already subscribed to the course."
+msgstr "משתמש זה כבר רשום לקורס."
 

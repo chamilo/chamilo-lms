@@ -37695,6 +37695,12 @@ msgstr "ستاسې سیشن نږدې پای ته رسېږي"
 msgid "Do you want to continue your session?"
 msgstr "آیا غواړئ خپل سیشن ته دوام ورکړئ؟"
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr "نښلېدل پاتې شئ"
 
@@ -39161,4 +39167,316 @@ msgstr "سمبال شوي"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: stub_status په localhost-only ځای کې فعال کړئ لکه /nginx_status یا /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr ""
+
+msgid "Top learners"
+msgstr ""
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr ""
+
+msgid "Additional profile fields"
+msgstr ""
+
+msgid "Visible columns"
+msgstr ""
+
+msgid "Learning path completion"
+msgstr ""
+
+msgid "Number of certificates"
+msgstr ""
+
+msgid "Could not export the report"
+msgstr ""
+
+msgid "Second learner"
+msgstr ""
+
+msgid "Results by learner"
+msgstr ""
+
+msgid "Use filters to narrow down questions."
+msgstr ""
+
+msgid "Try adjusting your filters and search again."
+msgstr ""
+
+msgid "Results per page"
+msgstr ""
+
+msgid "No answers"
+msgstr ""
+
+msgid "Tests using this question"
+msgstr ""
+
+msgid "Delete failed"
+msgstr ""
+
+msgid "PHP cache"
+msgstr ""
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Memory used"
+msgstr ""
+
+msgid "OPcache is installed but not enabled."
+msgstr ""
+
+msgid "OPcache extension is not available on this server."
+msgstr ""
+
+msgid "APCu is installed but not enabled."
+msgstr ""
+
+msgid "APCu extension is not available on this server."
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Space used on disk (MB)"
+msgstr ""
+
+msgid "Set max course space (MB)"
+msgstr ""
+
+msgid "Memory free"
+msgstr ""
+
+msgid "Memory wasted"
+msgstr ""
+
+msgid "Memory used %"
+msgstr ""
+
+msgid "Cached scripts"
+msgstr ""
+
+msgid "Cached keys"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Cache full"
+msgstr ""
+
+msgid "OOM restarts"
+msgstr ""
+
+msgid "Hash restarts"
+msgstr "هش بیا پیلونه"
+
+msgid "Manual restarts"
+msgstr "لاسي بیا پیلونه"
+
+msgid "Interned strings used"
+msgstr "استعمال شوي داخلي تارونه"
+
+msgid "Interned strings free"
+msgstr "آزاد داخلي تارونه"
+
+msgid "Interned strings count"
+msgstr "د داخلي تارونو شمېر"
+
+msgid "Memory available"
+msgstr "شته حافظه"
+
+msgid "Memory size"
+msgstr "د حافظې اندازه"
+
+msgid "Entries"
+msgstr "ننوتنې"
+
+msgid "Slots"
+msgstr "خانې"
+
+msgid "Expunges"
+msgstr "لرې کول"
+
+msgid "Cache start time"
+msgstr "د کیش پیل وخت"
+
+msgid "Time zone"
+msgstr "وخت زون"
+
+msgid "Not registered"
+msgstr "ثبت شوی نه دی"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "د سیشن، کورس، نیټې یا زده‌کوونکي له مخې د زده‌کوونکو سندونه فلټر او لیست کړئ، بیا یې کله اړتیا وي صادر کړئ."
+
+msgid "Filter by session and course"
+msgstr "د سیشن او کورس له مخې فلټر کول"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "د جوړ شوي سندونو د لیست کولو لپاره یو سیشن، کورس او اختیاري نیټه وټاکئ."
+
+msgid "Filter by learner"
+msgstr "د زده‌کوونکي له مخې فلټر کول"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "په ټولو سیشنونو او کورسونو کې د یوه ځانګړي زده‌کوونکي سندونه ومومئ."
+
+msgid "Certificates found"
+msgstr "موندل شوي سندونه"
+
+msgid "Open certificate"
+msgstr "سند پرانيستل"
+
+msgid "Certificate file not available"
+msgstr "د سند دوتنه شتون نلري"
+
+msgid "Export to CSV"
+msgstr "CSV ته صادرول"
+
+msgid "Acquired skills"
+msgstr "ترلاسه شوي مهارتونه"
+
+msgid "No acquired skill"
+msgstr "هیڅ مهارت نه دی ترلاسه شوی"
+
+msgid "Absences"
+msgstr "غیرحاضرۍ"
+
+msgid "No courses"
+msgstr "هیڅ کورس نشته"
+
+msgid "No session matched"
+msgstr "هیڅ سیشن سمون نه لري"
+
+msgid "Unable to load the report"
+msgstr "راپور نه شي پورته کولای"
+
+msgid "Please select a profile"
+msgstr "مهرباني وکړئ یو پروفایل وټاکئ"
+
+msgid "Please select a session"
+msgstr "مهرباني وکړئ یو سیشن وټاکئ"
+
+msgid "Please select a user"
+msgstr "مهرباني وکړئ یو کارن وټاکئ"
+
+msgid "Unable to export the report"
+msgstr "راپور صادرول نه شي"
+
+msgid "Accepted on web"
+msgstr "په ویب کې منل شوی"
+
+msgid "Accepted by e-mail"
+msgstr "د برېښنالیک له لارې منل شوی"
+
+msgid "The course title is required"
+msgstr "د کورس سرلیک اړین دی"
+
+msgid "Unexpected error"
+msgstr "ناڅاپي تېروتنه"
+
+msgid "Separate tags with commas"
+msgstr "ټاګونه د کامو په واسطه جلا کړئ"
+
+msgid "Open link"
+msgstr "لینک پرانيستل"
+
+msgid "Describe the course picture to generate"
+msgstr "د جوړولو لپاره د کورس انځور تشریح کړئ"
+
+msgid "Generate picture"
+msgstr "انځور جوړول"
+
+msgid "PDF watermark"
+msgstr "د PDF واټرمارک"
+
+msgid "No watermark image"
+msgstr "هیڅ واټرمارک انځور نشته"
+
+msgid "Upload watermark"
+msgstr "واټرمارک اپلوډ کول"
+
+msgid "Delete watermark"
+msgstr "واټرمارک ړنګول"
+
+msgid "Course legal agreement file"
+msgstr "د کورس قانوني تړون دوتنه"
+
+msgid "Upload agreement file"
+msgstr "د تړون دوتنه اپلوډ کول"
+
+msgid "Download agreement file"
+msgstr "د تړون دوتنه ډاونلوډ کول"
+
+msgid "Delete agreement file"
+msgstr "د تړون دوتنه ړنګول"
+
+msgid "Custom certificate images"
+msgstr "دودیز سند انځورونه"
+
+msgid "Course picture updated"
+msgstr "د کورس انځور تازه شو"
+
+msgid "The course picture could not be uploaded"
+msgstr "د کورس انځور پورته نه شو"
+
+msgid "Course picture deleted"
+msgstr "د کورس انځور ړنګ شو"
+
+msgid "Enter a description for the image"
+msgstr "د انځور لپاره تشریح ولیکئ"
+
+msgid "The image generator returned an empty response"
+msgstr "د انځور جنراتور تش ځواب واستاوه"
+
+msgid "Course picture generated"
+msgstr "د کورس انځور جوړ شو"
+
+msgid "Watermark updated"
+msgstr "واټرمارک تازه شو"
+
+msgid "Watermark deleted"
+msgstr "واټرمارک ړنګ شو"
+
+msgid "Agreement file updated"
+msgstr "د موافقې دوتنه تازه شوه"
+
+msgid "Agreement file deleted"
+msgstr "د موافقې دوتنه ړنګ شوه"
+
+msgid "Certificate image updated"
+msgstr "د سند انځور تازه شو"
+
+msgid "Certificate image deleted"
+msgstr "د سند انځور ړنګ شو"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "د کورس انځور پورته کولو دمخه د انځور ایډیټر وکاروئ ترڅو پرې کړئ، وګرځوئ یا اندازه بدله کړئ."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "دا بلنه لینک ناسم دی یا ختم شوی دی."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "دا بلنه یو بل کاروونکي ته استول شوې وه. مهرباني وکړئ د بلنې شوي حساب سره لاګ ان شئ."
+
+msgid "The invitation could not be accepted."
+msgstr "بلنه ونه منل شوه."
+
+msgid "You have been subscribed successfully."
+msgstr "تاسو په بریالیتوب سره ثبت شوئ."
+
+msgid "This email address cannot be invited."
+msgstr "دا برېښنالیک پته نه شي بلل کېدای."
+
+msgid "This user is already subscribed to the session."
+msgstr "دا کاروونکی دمخکې له سیشن سره ثبت شوی دی."
+
+msgid "This user is already subscribed to the course."
+msgstr "دا کاروونکی دمخکې له کورس سره ثبت شوی دی."
 

@@ -37699,6 +37699,12 @@ msgstr "Sesi anda akan tamat tempoh"
 msgid "Do you want to continue your session?"
 msgstr "Adakah anda mahu meneruskan sesi anda?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Butiran sesi anda telah hilang, sila log masuk semula."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Akses kepada sumber ini telah dinafikan. Anda nampaknya tidak mempunyai kebenaran yang diperlukan untuk mengaksesnya."
+
 msgid "Stay connected"
 msgstr "Kekal disambungkan"
 
@@ -39165,4 +39171,316 @@ msgstr "Dikendalikan"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: aktifkan mod_status (ExtendedStatus On) dan benarkan localhost ke /server-status. Nginx: aktifkan stub_status pada lokasi localhost sahaja seperti /nginx_status atau /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Taburan peratusan gred"
+
+msgid "Top learners"
+msgstr "Pelajar terbaik"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Kemajuan ini menggabungkan kemajuan laluan pembelajaran dan purata keputusan latihan pelajar"
+
+msgid "Additional profile fields"
+msgstr "Medan profil tambahan"
+
+msgid "Visible columns"
+msgstr "Lajur yang kelihatan"
+
+msgid "Learning path completion"
+msgstr "Penyelesaian laluan pembelajaran"
+
+msgid "Number of certificates"
+msgstr "Bilangan sijil"
+
+msgid "Could not export the report"
+msgstr "Tidak dapat mengeksport laporan"
+
+msgid "Second learner"
+msgstr "Pelajar kedua"
+
+msgid "Results by learner"
+msgstr "Keputusan mengikut pelajar"
+
+msgid "Use filters to narrow down questions."
+msgstr "Gunakan penapis untuk mengecilkan soalan."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Cuba laraskan penapis anda dan cari semula."
+
+msgid "Results per page"
+msgstr "Keputusan setiap halaman"
+
+msgid "No answers"
+msgstr "Tiada jawapan"
+
+msgid "Tests using this question"
+msgstr "Ujian yang menggunakan soalan ini"
+
+msgid "Delete failed"
+msgstr "Padam gagal"
+
+msgid "PHP cache"
+msgstr "Cache PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Diagnostik OPcache dan APCu langsung"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klik untuk menunjukkan diagnostik OPcache dan APCu"
+
+msgid "Memory used"
+msgstr "Memori digunakan"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache dipasang tetapi tidak diaktifkan."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Sambungan OPcache tidak tersedia pada pelayan ini."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu dipasang tetapi tidak diaktifkan."
+
+msgid "APCu extension is not available on this server."
+msgstr "Sambungan APCu tidak tersedia pada pelayan ini."
+
+msgid "Constant"
+msgstr "Pemalar"
+
+msgid "Space used on disk (MB)"
+msgstr "Ruang digunakan pada cakera (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Tetapkan ruang kursus maksimum (MB)"
+
+msgid "Memory free"
+msgstr "Memori bebas"
+
+msgid "Memory wasted"
+msgstr "Memori terbuang"
+
+msgid "Memory used %"
+msgstr "Memori digunakan %"
+
+msgid "Cached scripts"
+msgstr "Skrip yang dicache"
+
+msgid "Cached keys"
+msgstr "Kunci yang dicache"
+
+msgid "Misses"
+msgstr "Kelewatan"
+
+msgid "Cache full"
+msgstr "Cache penuh"
+
+msgid "OOM restarts"
+msgstr "Mula semula OOM"
+
+msgid "Hash restarts"
+msgstr "Mula semula hash"
+
+msgid "Manual restarts"
+msgstr "Mula semula manual"
+
+msgid "Interned strings used"
+msgstr "Rentetan dalaman digunakan"
+
+msgid "Interned strings free"
+msgstr "Rentetan dalaman bebas"
+
+msgid "Interned strings count"
+msgstr "Bilangan rentetan dalaman"
+
+msgid "Memory available"
+msgstr "Memori tersedia"
+
+msgid "Memory size"
+msgstr "Saiz memori"
+
+msgid "Entries"
+msgstr "Entri"
+
+msgid "Slots"
+msgstr "Slot"
+
+msgid "Expunges"
+msgstr "Pengusiran"
+
+msgid "Cache start time"
+msgstr "Masa mula cache"
+
+msgid "Time zone"
+msgstr "Zon masa"
+
+msgid "Not registered"
+msgstr "Tidak berdaftar"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Tapis dan senaraikan sijil pelajar mengikut sesi, kursus, tarikh atau pelajar, kemudian eksport apabila diperlukan."
+
+msgid "Filter by session and course"
+msgstr "Tapis mengikut sesi dan kursus"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Pilih sesi, kursus dan tarikh pilihan untuk menyenaraikan sijil yang dijana."
+
+msgid "Filter by learner"
+msgstr "Tapis mengikut pelajar"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Cari sijil untuk pelajar tertentu merentas sesi dan kursus."
+
+msgid "Certificates found"
+msgstr "Sijil dijumpai"
+
+msgid "Open certificate"
+msgstr "Buka sijil"
+
+msgid "Certificate file not available"
+msgstr "Fail sijil tidak tersedia"
+
+msgid "Export to CSV"
+msgstr "Eksport ke CSV"
+
+msgid "Acquired skills"
+msgstr "Kemahiran yang diperoleh"
+
+msgid "No acquired skill"
+msgstr "Tiada kemahiran diperoleh"
+
+msgid "Absences"
+msgstr "Ketidakhadiran"
+
+msgid "No courses"
+msgstr "Tiada kursus"
+
+msgid "No session matched"
+msgstr "Tiada sesi sepadan"
+
+msgid "Unable to load the report"
+msgstr "Tidak dapat memuatkan laporan"
+
+msgid "Please select a profile"
+msgstr "Sila pilih profil"
+
+msgid "Please select a session"
+msgstr "Sila pilih sesi"
+
+msgid "Please select a user"
+msgstr "Sila pilih pengguna"
+
+msgid "Unable to export the report"
+msgstr "Tidak dapat mengeksport laporan"
+
+msgid "Accepted on web"
+msgstr "Diterima di web"
+
+msgid "Accepted by e-mail"
+msgstr "Diterima melalui e-mel"
+
+msgid "The course title is required"
+msgstr "Tajuk kursus diperlukan"
+
+msgid "Unexpected error"
+msgstr "Ralat tidak dijangka"
+
+msgid "Separate tags with commas"
+msgstr "Asingkan tag dengan koma"
+
+msgid "Open link"
+msgstr "Buka pautan"
+
+msgid "Describe the course picture to generate"
+msgstr "Huraikan gambar kursus yang akan dijana"
+
+msgid "Generate picture"
+msgstr "Jana gambar"
+
+msgid "PDF watermark"
+msgstr "Tera air PDF"
+
+msgid "No watermark image"
+msgstr "Tiada imej tera air"
+
+msgid "Upload watermark"
+msgstr "Muat naik tera air"
+
+msgid "Delete watermark"
+msgstr "Padam tera air"
+
+msgid "Course legal agreement file"
+msgstr "Fail perjanjian undang-undang kursus"
+
+msgid "Upload agreement file"
+msgstr "Muat naik fail perjanjian"
+
+msgid "Download agreement file"
+msgstr "Muat turun fail perjanjian"
+
+msgid "Delete agreement file"
+msgstr "Padam fail perjanjian"
+
+msgid "Custom certificate images"
+msgstr "Imej sijil tersuai"
+
+msgid "Course picture updated"
+msgstr "Gambar kursus dikemas kini"
+
+msgid "The course picture could not be uploaded"
+msgstr "Gambar kursus tidak dapat dimuat naik"
+
+msgid "Course picture deleted"
+msgstr "Gambar kursus dipadam"
+
+msgid "Enter a description for the image"
+msgstr "Masukkan huraian untuk imej"
+
+msgid "The image generator returned an empty response"
+msgstr "Penjana imej mengembalikan respons kosong"
+
+msgid "Course picture generated"
+msgstr "Gambar kursus dijana"
+
+msgid "Watermark updated"
+msgstr "Tera air dikemas kini"
+
+msgid "Watermark deleted"
+msgstr "Tera air dipadam"
+
+msgid "Agreement file updated"
+msgstr "Fail perjanjian dikemas kini"
+
+msgid "Agreement file deleted"
+msgstr "Fail perjanjian dipadam"
+
+msgid "Certificate image updated"
+msgstr "Imej sijil dikemas kini"
+
+msgid "Certificate image deleted"
+msgstr "Imej sijil dipadam"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Gunakan editor imej sebelum memuat naik untuk memangkas, memutar atau mengubah saiz gambar kursus."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Pautan jemputan ini tidak sah atau telah tamat tempoh."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Jemputan ini telah dihantar kepada pengguna lain. Sila log masuk dengan akaun yang dijemput."
+
+msgid "The invitation could not be accepted."
+msgstr "Jemputan tidak dapat diterima."
+
+msgid "You have been subscribed successfully."
+msgstr "Anda telah berjaya melanggan."
+
+msgid "This email address cannot be invited."
+msgstr "Alamat e-mel ini tidak boleh dijemput."
+
+msgid "This user is already subscribed to the session."
+msgstr "Pengguna ini telah melanggan sesi tersebut."
+
+msgid "This user is already subscribed to the course."
+msgstr "Pengguna ini telah melanggan kursus tersebut."
 

@@ -37695,6 +37695,12 @@ msgstr "Malapit nang mag-expire ang iyong sesyon"
 msgid "Do you want to continue your session?"
 msgstr "Gusto mo bang ipagpatuloy ang iyong sesyon?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Nawala ang mga detalye ng iyong sesyon, mangyaring mag-log in muli."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Tinanggihan ang pag-access sa mapagkukunang ito. Mukhang wala kang kinakailangang pahintulot upang ma-access ito."
+
 msgid "Stay connected"
 msgstr "Manatiling nakakonekta"
 
@@ -38209,7 +38215,7 @@ msgid "Enable auto refresh"
 msgstr "Paganahin ang auto refresh"
 
 msgid "Live window"
-msgstr "Live window"
+msgstr "Live na window"
 
 msgid "Ongoing attempts"
 msgstr "Mga patuloy na pagsubok"
@@ -38458,7 +38464,7 @@ msgid "Refresh answers"
 msgstr "I-refresh ang mga sagot"
 
 msgid "This dropdown combination question uses one global score, like legacy."
-msgstr "Ang dropdown combination question na ito ay gumagamit ng isang global score, katulad ng legacy."
+msgstr "Ang tanong na ito sa kombinasyon ng dropdown ay gumagamit ng isang pandaigdigang iskor, tulad ng legacy."
 
 msgid "Please enter at least two dropdown options."
 msgstr "Mangyaring maglagay ng hindi bababa sa dalawang opsyon sa dropdown."
@@ -38467,7 +38473,7 @@ msgid "Create destination options first, then link each item to the correct opti
 msgstr "Gumawa muna ng mga opsyon sa destinasyon, pagkatapos ay i-link ang bawat item sa tamang opsyon."
 
 msgid "This matching combination question uses one global score, like legacy."
-msgstr "Ang matching combination question na ito ay gumagamit ng isang global score, katulad ng legacy."
+msgstr "Ang tanong na ito sa kombinasyon ng pagtutugma ay gumagamit ng isang pandaigdigang iskor, tulad ng legacy."
 
 msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
 msgstr "Gumawa ng mga hakbang at piliin ang inaasahang posisyon para sa bawat isa, tulad ng legacy Draggable."
@@ -38476,7 +38482,7 @@ msgid "Learners will choose True or False and then select their degree of certai
 msgstr "Pipiliin ng mga mag-aaral ang Tama o Mali at pagkatapos ay pipiliin ang kanilang antas ng katiyakan sa panahon ng pagsubok. Iniimbak ng editor ang parehong mga iskor na Tama/Mali at antas ng katiyakan tulad ng legacy."
 
 msgid "Hotspot combination"
-msgstr "Hotspot combination"
+msgstr "Kombinasyon ng hotspot"
 
 msgid "Add delineation"
 msgstr "Magdagdag ng delineation"
@@ -38689,7 +38695,7 @@ msgid "Translate with AI"
 msgstr "Isalin gamit ang AI"
 
 msgid "Target language"
-msgstr "Target language"
+msgstr "Target na wika"
 
 msgid "Please select a provider"
 msgstr "Mangyaring pumili ng provider"
@@ -38929,13 +38935,13 @@ msgid "No users"
 msgstr "Walang mga gumagamit"
 
 msgid "Calculation mode"
-msgstr "Calculation mode"
+msgstr "Paraan ng pagkalkula"
 
 msgid "Weighted average"
 msgstr "Weighted average"
 
 msgid "Points sum"
-msgstr "Points sum"
+msgstr "Kabuuang puntos"
 
 msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
 msgstr "Ang weighted average ay nag-normalize ayon sa kabuuan ng weights; ang points sum ay itinuturing ang bawat weight bilang maximum points at idinadagdag nang hindi nag-normalize."
@@ -38980,7 +38986,7 @@ msgid "The 2FA code is invalid or expired."
 msgstr "Di-wasto o nag-expire na ang 2FA code."
 
 msgid "Database load"
-msgstr "Database load"
+msgstr "Load ng database"
 
 msgid "Live MySQL and MariaDB server load metrics"
 msgstr "Live MySQL at MariaDB server load metrics"
@@ -38989,13 +38995,13 @@ msgid "Click to show database server load metrics"
 msgstr "I-click upang ipakita ang database server load metrics"
 
 msgid "Threads connected"
-msgstr "Threads connected"
+msgstr "Threads na konektado"
 
 msgid "Temporary tables on disk"
-msgstr "Temporary tables on disk"
+msgstr "Temporary tables sa disk"
 
 msgid "Privilege scope"
-msgstr "Privilege scope"
+msgstr "Saklaw ng pribilehiyo"
 
 msgid "Not measurable with the current database user"
 msgstr "Hindi masusukat gamit ang kasalukuyang database user"
@@ -39004,25 +39010,25 @@ msgid "Uptime"
 msgstr "Uptime"
 
 msgid "Queries per second"
-msgstr "Queries per second"
+msgstr "Queries bawat segundo"
 
 msgid "Slow queries"
-msgstr "Slow queries"
+msgstr "Mabagal na queries"
 
 msgid "Slow query time limit"
-msgstr "Slow query time limit"
+msgstr "Limitasyon sa oras ng mabagal na query"
 
 msgid "Slow query log"
-msgstr "Slow query log"
+msgstr "Log ng mabagal na query"
 
 msgid "Slow queries per second"
-msgstr "Slow queries per second"
+msgstr "Mabagal na queries bawat segundo"
 
 msgid "Threads running"
-msgstr "Threads running"
+msgstr "Threads na tumatakbo"
 
 msgid "Threads cached"
-msgstr "Threads cached"
+msgstr "Threads na naka-cache"
 
 msgid "Table lock waits"
 msgstr "Table lock waits"
@@ -39040,7 +39046,7 @@ msgid "Query cache"
 msgstr "Query cache"
 
 msgid "Database load metrics are only available for MySQL and MariaDB."
-msgstr "Available lamang ang database load metrics para sa MySQL at MariaDB."
+msgstr "Ang mga sukatan ng load ng database ay magagamit lamang para sa MySQL at MariaDB."
 
 msgid "Inserts"
 msgstr "Inserts"
@@ -39161,4 +39167,316 @@ msgstr "Hinahawakan"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang lokasyon na localhost lamang tulad ng /nginx_status o /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Pamamahagi ng porsyento ng grado"
+
+msgid "Top learners"
+msgstr "Nangungunang mga mag-aaral"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Pinagsasama ng pag-unlad na ito ang pag-unlad sa learning path at ang average na resulta ng ehersisyo ng mag-aaral"
+
+msgid "Additional profile fields"
+msgstr "Karagdagang mga field ng profile"
+
+msgid "Visible columns"
+msgstr "Mga nakikitang column"
+
+msgid "Learning path completion"
+msgstr "Pagkumpleto ng learning path"
+
+msgid "Number of certificates"
+msgstr "Bilang ng mga sertipiko"
+
+msgid "Could not export the report"
+msgstr "Hindi ma-export ang ulat"
+
+msgid "Second learner"
+msgstr "Pangalawang mag-aaral"
+
+msgid "Results by learner"
+msgstr "Mga resulta ayon sa mag-aaral"
+
+msgid "Use filters to narrow down questions."
+msgstr "Gamitin ang mga filter upang paliitin ang mga tanong."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Subukang ayusin ang iyong mga filter at maghanap muli."
+
+msgid "Results per page"
+msgstr "Mga resulta bawat pahina"
+
+msgid "No answers"
+msgstr "Walang sagot"
+
+msgid "Tests using this question"
+msgstr "Mga pagsusulit na gumagamit ng tanong na ito"
+
+msgid "Delete failed"
+msgstr "Nabigo ang pagtanggal"
+
+msgid "PHP cache"
+msgstr "PHP cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache at APCu diagnostics"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "I-click para ipakita ang OPcache at APCu diagnostics"
+
+msgid "Memory used"
+msgstr "Ginagamit na memorya"
+
+msgid "OPcache is installed but not enabled."
+msgstr "Naka-install ang OPcache ngunit hindi naka-enable."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Hindi available ang OPcache extension sa server na ito."
+
+msgid "APCu is installed but not enabled."
+msgstr "Naka-install ang APCu ngunit hindi naka-enable."
+
+msgid "APCu extension is not available on this server."
+msgstr "Hindi available ang APCu extension sa server na ito."
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Space used on disk (MB)"
+msgstr "Ginagamit na espasyo sa disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Itakda ang max na espasyo ng kurso (MB)"
+
+msgid "Memory free"
+msgstr "Libreng memorya"
+
+msgid "Memory wasted"
+msgstr "Sayang na memorya"
+
+msgid "Memory used %"
+msgstr "Ginagamit na memorya %"
+
+msgid "Cached scripts"
+msgstr "Naka-cache na mga script"
+
+msgid "Cached keys"
+msgstr "Naka-cache na mga key"
+
+msgid "Misses"
+msgstr "Mga miss"
+
+msgid "Cache full"
+msgstr "Puno ang cache"
+
+msgid "OOM restarts"
+msgstr "OOM restarts"
+
+msgid "Hash restarts"
+msgstr "Hash restarts"
+
+msgid "Manual restarts"
+msgstr "Manual restarts"
+
+msgid "Interned strings used"
+msgstr "Ginagamit na interned strings"
+
+msgid "Interned strings free"
+msgstr "Libreng interned strings"
+
+msgid "Interned strings count"
+msgstr "Bilang ng interned strings"
+
+msgid "Memory available"
+msgstr "Available na memorya"
+
+msgid "Memory size"
+msgstr "Laki ng memorya"
+
+msgid "Entries"
+msgstr "Mga entry"
+
+msgid "Slots"
+msgstr "Mga slot"
+
+msgid "Expunges"
+msgstr "Mga expunge"
+
+msgid "Cache start time"
+msgstr "Oras ng simula ng cache"
+
+msgid "Time zone"
+msgstr "Time zone"
+
+msgid "Not registered"
+msgstr "Hindi nakarehistro"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "I-filter at ilista ang mga sertipiko ng mag-aaral ayon sa session, kurso, petsa o mag-aaral, pagkatapos i-export kapag kinakailangan."
+
+msgid "Filter by session and course"
+msgstr "I-filter ayon sa session at kurso"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Pumili ng session, kurso at opsyonal na petsa para ilista ang mga nabuong sertipiko."
+
+msgid "Filter by learner"
+msgstr "I-filter ayon sa mag-aaral"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Hanapin ang mga sertipiko para sa isang partikular na mag-aaral sa lahat ng session at kurso."
+
+msgid "Certificates found"
+msgstr "Mga sertipiko na natagpuan"
+
+msgid "Open certificate"
+msgstr "Buksan ang sertipiko"
+
+msgid "Certificate file not available"
+msgstr "Hindi available ang file ng sertipiko"
+
+msgid "Export to CSV"
+msgstr "I-export sa CSV"
+
+msgid "Acquired skills"
+msgstr "Mga nakuhang kasanayan"
+
+msgid "No acquired skill"
+msgstr "Walang nakuhang kasanayan"
+
+msgid "Absences"
+msgstr "Mga pagliban"
+
+msgid "No courses"
+msgstr "Walang kurso"
+
+msgid "No session matched"
+msgstr "Walang session na tumugma"
+
+msgid "Unable to load the report"
+msgstr "Hindi ma-load ang ulat"
+
+msgid "Please select a profile"
+msgstr "Mangyaring pumili ng profile"
+
+msgid "Please select a session"
+msgstr "Mangyaring pumili ng session"
+
+msgid "Please select a user"
+msgstr "Mangyaring pumili ng user"
+
+msgid "Unable to export the report"
+msgstr "Hindi ma-export ang ulat"
+
+msgid "Accepted on web"
+msgstr "Tinanggap sa web"
+
+msgid "Accepted by e-mail"
+msgstr "Tinanggap sa pamamagitan ng e-mail"
+
+msgid "The course title is required"
+msgstr "Kinakailangan ang pamagat ng kurso"
+
+msgid "Unexpected error"
+msgstr "Hindi inaasahang error"
+
+msgid "Separate tags with commas"
+msgstr "Ihiwalay ang mga tag gamit ang kuwit"
+
+msgid "Open link"
+msgstr "Buksan ang link"
+
+msgid "Describe the course picture to generate"
+msgstr "Ilarawan ang larawan ng kurso na gagawin"
+
+msgid "Generate picture"
+msgstr "Gumawa ng larawan"
+
+msgid "PDF watermark"
+msgstr "Watermark ng PDF"
+
+msgid "No watermark image"
+msgstr "Walang watermark na larawan"
+
+msgid "Upload watermark"
+msgstr "Mag-upload ng watermark"
+
+msgid "Delete watermark"
+msgstr "Tanggalin ang watermark"
+
+msgid "Course legal agreement file"
+msgstr "File ng legal na kasunduan ng kurso"
+
+msgid "Upload agreement file"
+msgstr "Mag-upload ng file ng kasunduan"
+
+msgid "Download agreement file"
+msgstr "I-download ang file ng kasunduan"
+
+msgid "Delete agreement file"
+msgstr "Tanggalin ang file ng kasunduan"
+
+msgid "Custom certificate images"
+msgstr "Mga custom na larawan ng sertipiko"
+
+msgid "Course picture updated"
+msgstr "Na-update ang larawan ng kurso"
+
+msgid "The course picture could not be uploaded"
+msgstr "Hindi ma-upload ang larawan ng kurso"
+
+msgid "Course picture deleted"
+msgstr "Natanggal ang larawan ng kurso"
+
+msgid "Enter a description for the image"
+msgstr "Maglagay ng paglalarawan para sa larawan"
+
+msgid "The image generator returned an empty response"
+msgstr "Walang laman na tugon ang image generator"
+
+msgid "Course picture generated"
+msgstr "Nalikha ang larawan ng kurso"
+
+msgid "Watermark updated"
+msgstr "Na-update ang watermark"
+
+msgid "Watermark deleted"
+msgstr "Natanggal ang watermark"
+
+msgid "Agreement file updated"
+msgstr "Na-update ang file ng kasunduan"
+
+msgid "Agreement file deleted"
+msgstr "Natanggal ang file ng kasunduan"
+
+msgid "Certificate image updated"
+msgstr "Na-update ang larawan ng sertipiko"
+
+msgid "Certificate image deleted"
+msgstr "Natanggal ang larawan ng sertipiko"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Gamitin ang image editor bago mag-upload para i-crop, i-rotate o baguhin ang laki ng larawan ng kurso."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Hindi wasto o nag-expire na ang link ng imbitasyon."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Ipinadala ang imbitasyong ito sa ibang user. Mangyaring mag-log in gamit ang inimbita na account."
+
+msgid "The invitation could not be accepted."
+msgstr "Hindi matanggap ang imbitasyon."
+
+msgid "You have been subscribed successfully."
+msgstr "Matagumpay kang na-subscribe."
+
+msgid "This email address cannot be invited."
+msgstr "Hindi maaaring imbitahan ang email address na ito."
+
+msgid "This user is already subscribed to the session."
+msgstr "Nakatala na ang user na ito sa session."
+
+msgid "This user is already subscribed to the course."
+msgstr "Nakatala na ang user na ito sa kurso."
 

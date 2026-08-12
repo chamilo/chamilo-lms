@@ -37695,6 +37695,12 @@ msgstr "Abala rẹ ti fẹ́ dópin"
 msgid "Do you want to continue your session?"
 msgstr "Ṣé o fẹ́ tẹ̀síwájú ní abala rẹ?"
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr "Dúró ní ìsopọ̀"
 
@@ -39161,4 +39167,316 @@ msgstr "Àwọn tí a ti ṣètò"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ṣe ìdàgbàsókè mod_status (ExtendedStatus On) kí o sì gba localhost láàyè sí /server-status. Nginx: ṣe ìdàgbàsókè stub_status ní ààyè localhost nìkan bíi /nginx_status tàbí /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr ""
+
+msgid "Top learners"
+msgstr ""
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr ""
+
+msgid "Additional profile fields"
+msgstr ""
+
+msgid "Visible columns"
+msgstr ""
+
+msgid "Learning path completion"
+msgstr ""
+
+msgid "Number of certificates"
+msgstr ""
+
+msgid "Could not export the report"
+msgstr ""
+
+msgid "Second learner"
+msgstr ""
+
+msgid "Results by learner"
+msgstr ""
+
+msgid "Use filters to narrow down questions."
+msgstr ""
+
+msgid "Try adjusting your filters and search again."
+msgstr ""
+
+msgid "Results per page"
+msgstr ""
+
+msgid "No answers"
+msgstr ""
+
+msgid "Tests using this question"
+msgstr ""
+
+msgid "Delete failed"
+msgstr ""
+
+msgid "PHP cache"
+msgstr ""
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr ""
+
+msgid "Memory used"
+msgstr ""
+
+msgid "OPcache is installed but not enabled."
+msgstr ""
+
+msgid "OPcache extension is not available on this server."
+msgstr ""
+
+msgid "APCu is installed but not enabled."
+msgstr ""
+
+msgid "APCu extension is not available on this server."
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Space used on disk (MB)"
+msgstr ""
+
+msgid "Set max course space (MB)"
+msgstr ""
+
+msgid "Memory free"
+msgstr ""
+
+msgid "Memory wasted"
+msgstr ""
+
+msgid "Memory used %"
+msgstr ""
+
+msgid "Cached scripts"
+msgstr ""
+
+msgid "Cached keys"
+msgstr ""
+
+msgid "Misses"
+msgstr ""
+
+msgid "Cache full"
+msgstr ""
+
+msgid "OOM restarts"
+msgstr ""
+
+msgid "Hash restarts"
+msgstr ""
+
+msgid "Manual restarts"
+msgstr ""
+
+msgid "Interned strings used"
+msgstr ""
+
+msgid "Interned strings free"
+msgstr ""
+
+msgid "Interned strings count"
+msgstr ""
+
+msgid "Memory available"
+msgstr ""
+
+msgid "Memory size"
+msgstr ""
+
+msgid "Entries"
+msgstr ""
+
+msgid "Slots"
+msgstr ""
+
+msgid "Expunges"
+msgstr ""
+
+msgid "Cache start time"
+msgstr ""
+
+msgid "Time zone"
+msgstr ""
+
+msgid "Not registered"
+msgstr "Kò forúkọsílẹ̀"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Ṣe àlẹ̀mọ́ àti àtòjọ àwọn ìwé-ẹ̀rí akẹ́kọ̀ọ́ nípa ìpàdé, ẹ̀kọ́, ọjọ́ tàbí akẹ́kọ̀ọ́, lẹ́yìn náà gbé wọn jáde nígbà tí ó bá yẹ."
+
+msgid "Filter by session and course"
+msgstr "Ṣe àlẹ̀mọ́ nípa ìpàdé àti ẹ̀kọ́"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Yan ìpàdé kan, ẹ̀kọ́ kan àti ọjọ́ tí kò pọndandan láti ṣe àtòjọ àwọn ìwé-ẹ̀rí tí a ti ṣẹ̀dá."
+
+msgid "Filter by learner"
+msgstr "Ṣe àlẹ̀mọ́ nípa akẹ́kọ̀ọ́"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Wá àwọn ìwé-ẹ̀rí fún akẹ́kọ̀ọ́ kan pàtó ní gbogbo àwọn ìpàdé àti ẹ̀kọ́."
+
+msgid "Certificates found"
+msgstr "Àwọn ìwé-ẹ̀rí tí a rí"
+
+msgid "Open certificate"
+msgstr "Ṣí ìwé-ẹ̀rí"
+
+msgid "Certificate file not available"
+msgstr "Fáìlì ìwé-ẹ̀rí kò sí"
+
+msgid "Export to CSV"
+msgstr "Gbé jáde sí CSV"
+
+msgid "Acquired skills"
+msgstr "Àwọn òye tí a ní"
+
+msgid "No acquired skill"
+msgstr "Kò sí òye tí a ní"
+
+msgid "Absences"
+msgstr "Àìsí"
+
+msgid "No courses"
+msgstr "Kò sí àwọn ẹ̀kọ́"
+
+msgid "No session matched"
+msgstr "Kò sí ìpàdé tí ó báamu"
+
+msgid "Unable to load the report"
+msgstr "Kò le ṣe ìrànlọ́wọ́ láti gbé ìròyìn wọlé"
+
+msgid "Please select a profile"
+msgstr "Jọ̀wọ́ yan ìsọfúnni kan"
+
+msgid "Please select a session"
+msgstr "Jọ̀wọ́ yan ìpàdé kan"
+
+msgid "Please select a user"
+msgstr "Jọ̀wọ́ yan olùlò kan"
+
+msgid "Unable to export the report"
+msgstr "Kò le gbé ìròyìn náà jáde"
+
+msgid "Accepted on web"
+msgstr "Ti gba ní ayélujára"
+
+msgid "Accepted by e-mail"
+msgstr "Ti gba nípasẹ̀ í-meèlì"
+
+msgid "The course title is required"
+msgstr "Àkọ́lé ẹ̀kọ́ ni a nílò"
+
+msgid "Unexpected error"
+msgstr "Àṣìṣe àìròtẹ́lẹ̀"
+
+msgid "Separate tags with commas"
+msgstr "Pín àwọn àmì pẹ̀lú àwọn ààmì-ìdàsí"
+
+msgid "Open link"
+msgstr "Ṣí ìjápọ̀"
+
+msgid "Describe the course picture to generate"
+msgstr "Ṣàpèjúwe àwòrán ẹ̀kọ́ tí a óò ṣẹ̀dá"
+
+msgid "Generate picture"
+msgstr "Ṣẹ̀dá àwòrán"
+
+msgid "PDF watermark"
+msgstr "Àmì-omi PDF"
+
+msgid "No watermark image"
+msgstr "Kò sí àwòrán àmì-omi"
+
+msgid "Upload watermark"
+msgstr "Gbé àmì-omi wọlé"
+
+msgid "Delete watermark"
+msgstr "Parẹ́ àmì-omi"
+
+msgid "Course legal agreement file"
+msgstr "Fáìlì àdéhùn ẹ̀kọ́"
+
+msgid "Upload agreement file"
+msgstr "Gbé fáìlì àdéhùn wọlé"
+
+msgid "Download agreement file"
+msgstr "Gba fáìlì àdéhùn sílẹ̀"
+
+msgid "Delete agreement file"
+msgstr "Parẹ́ fáìlì àdéhùn"
+
+msgid "Custom certificate images"
+msgstr "Àwọn àwòrán ìwé-ẹ̀rí àkànṣe"
+
+msgid "Course picture updated"
+msgstr "Àwòrán ẹ̀kọ́ ti ṣe ìtúnṣe"
+
+msgid "The course picture could not be uploaded"
+msgstr "Àwòrán ẹ̀kọ́ kò le gbé wọlé"
+
+msgid "Course picture deleted"
+msgstr "Àwòrán ẹ̀kọ́ ti parẹ́"
+
+msgid "Enter a description for the image"
+msgstr "Tẹ ìtúpalẹ̀ kan fún àwòrán náà"
+
+msgid "The image generator returned an empty response"
+msgstr "Ẹ̀rọ ìṣẹ̀dá àwòrán dá ìdáhùn òfo padà"
+
+msgid "Course picture generated"
+msgstr "Àwòrán ẹ̀kọ́ ti ṣẹ̀dá"
+
+msgid "Watermark updated"
+msgstr "Àmì-omi ti ṣe ìtúnṣe"
+
+msgid "Watermark deleted"
+msgstr "Àmì-omi ti parẹ́"
+
+msgid "Agreement file updated"
+msgstr "Fáìlì àdéhùn ti ṣe ìtúnṣe"
+
+msgid "Agreement file deleted"
+msgstr "Fáìlì àdéhùn ti parẹ́"
+
+msgid "Certificate image updated"
+msgstr "Àwòrán ìwé-ẹ̀rí ti ṣe ìtúnṣe"
+
+msgid "Certificate image deleted"
+msgstr "Àwòrán ìwé-ẹ̀rí ti parẹ́"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Lo olùṣàtúnṣe àwòrán ṣáájú gbigbé wọlé láti gé, yí tàbí tún ìwọn àwòrán ẹ̀kọ́ ṣe."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Ọna ìpè yìí kò tọ́ tàbí ti dópin."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Ìpè yìí ti fi ránṣẹ́ sí olùlò míràn. Jọ̀wọ́ wọlé pẹ̀lú àkọọ́lẹ̀ tí a pè."
+
+msgid "The invitation could not be accepted."
+msgstr "A kò lè gba ìpè náà."
+
+msgid "You have been subscribed successfully."
+msgstr "O ti forúkọsílẹ̀ ní àṣeyọrí."
+
+msgid "This email address cannot be invited."
+msgstr "A kò lè pè àdírẹ́sì í-meèlì yìí."
+
+msgid "This user is already subscribed to the session."
+msgstr "Olùlò yìí ti forúkọsílẹ̀ sínú ìpàdé náà tẹ́lẹ̀."
+
+msgid "This user is already subscribed to the course."
+msgstr "Olùlò yìí ti forúkọsílẹ̀ sínú ẹ̀kọ́ náà tẹ́lẹ̀."
 

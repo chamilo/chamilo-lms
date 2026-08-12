@@ -37744,6 +37744,12 @@ msgstr "ພາກການສຶກສາຂອງທ່ານກຳລັງຈ
 msgid "Do you want to continue your session?"
 msgstr "ທ່ານຕ້ອງການສືບຕໍ່ພາກການສຶກສາຂອງທ່ານບໍ?"
 
+msgid "Your session details have been lost, please login again."
+msgstr ""
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr ""
+
 msgid "Stay connected"
 msgstr "ຢູ່ເຊື່ອມຕໍ່"
 
@@ -39059,10 +39065,10 @@ msgid "Slow queries"
 msgstr ""
 
 msgid "Slow query time limit"
-msgstr ""
+msgstr "ຂີດຈຳກັດເວລາຄຳສອບຖາມຊ້າ"
 
 msgid "Slow query log"
-msgstr ""
+msgstr "ບັນທຶກຄຳສອບຖາມຊ້າ"
 
 msgid "Slow queries per second"
 msgstr "ການສອບຖາມຊ້າຕໍ່ວິນາທີ"
@@ -39210,4 +39216,316 @@ msgstr "ຈັດການແລ້ວ"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: ເປີດໃຊ້ mod_status (ExtendedStatus On) ແລະອະນຸຍາດ localhost ເຂົ້າ /server-status. Nginx: ເປີດໃຊ້ stub_status ຢູ່ຕຳແໜ່ງສະເພາະ localhost ເຊັ່ນ /nginx_status ຫຼື /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "ການແຈກຢາຍເປີເຊັນເກຣດ"
+
+msgid "Top learners"
+msgstr "ຜູ້ຮຽນດີເດັ່ນ"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "ຄວາມຄືບໜ້ານີ້ປະສົມປະສານການຄືບໜ້າຂອງເສັ້ນທາງການຮຽນ ແລະ ຜົນການສອບເສັງສະເລ່ຍຂອງຜູ້ຮຽນ"
+
+msgid "Additional profile fields"
+msgstr "ຊ່ອງຂໍ້ມູນໂປຣໄຟລ໌ເພີ່ມເຕີມ"
+
+msgid "Visible columns"
+msgstr "ຖັນທີ່ສະແດງ"
+
+msgid "Learning path completion"
+msgstr "ການສຳເລັດເສັ້ນທາງການຮຽນ"
+
+msgid "Number of certificates"
+msgstr "ຈຳນວນໃບຢັ້ງຢືນ"
+
+msgid "Could not export the report"
+msgstr "ບໍ່ສາມາດສົ່ງອອກບົດລາຍງານໄດ້"
+
+msgid "Second learner"
+msgstr "ຜູ້ຮຽນອັນດັບສອງ"
+
+msgid "Results by learner"
+msgstr "ຜົນການສອບເສັງຕາມຜູ້ຮຽນ"
+
+msgid "Use filters to narrow down questions."
+msgstr "ໃຊ້ຕົວກອງເພື່ອຈຳກັດຄຳຖາມ."
+
+msgid "Try adjusting your filters and search again."
+msgstr "ລອງປັບຕົວກອງ ແລະ ຄົ້ນຫາອີກຄັ້ງ."
+
+msgid "Results per page"
+msgstr "ຜົນການສອບເສັງຕໍ່ໜ້າ"
+
+msgid "No answers"
+msgstr "ບໍ່ມີຄຳຕອບ"
+
+msgid "Tests using this question"
+msgstr "ການສອບເສັງທີ່ໃຊ້ຄຳຖາມນີ້"
+
+msgid "Delete failed"
+msgstr "ລົບບໍ່ສຳເລັດ"
+
+msgid "PHP cache"
+msgstr "ແຄຊ PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "ການວິນິດໄສ OPcache ແລະ APCu ແບບສົດ"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "ຄລິກເພື່ອສະແດງການວິນິດໄສ OPcache ແລະ APCu"
+
+msgid "Memory used"
+msgstr "ໜ່ວຍຄວາມຈຳທີ່ໃຊ້"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache ຖືກຕິດຕັ້ງແລ້ວ ແຕ່ຍັງບໍ່ໄດ້ເປີດໃຊ້ງານ."
+
+msgid "OPcache extension is not available on this server."
+msgstr "ສ່ວນຂະຫຍາຍ OPcache ບໍ່ມີຢູ່ໃນເຊີເວີນີ້."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu ຖືກຕິດຕັ້ງແລ້ວ ແຕ່ຍັງບໍ່ໄດ້ເປີດໃຊ້ງານ."
+
+msgid "APCu extension is not available on this server."
+msgstr "ສ່ວນຂະຫຍາຍ APCu ບໍ່ມີຢູ່ໃນເຊີເວີນີ້."
+
+msgid "Constant"
+msgstr "ຄ່າຄົງທີ່"
+
+msgid "Space used on disk (MB)"
+msgstr "ພື້ນທີ່ທີ່ໃຊ້ໃນດິສກ໌ (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "ກຳນົດພື້ນທີ່ຫຼັກສູດສູງສຸດ (MB)"
+
+msgid "Memory free"
+msgstr "ໜ່ວຍຄວາມຈຳທີ່ຫວ່າງ"
+
+msgid "Memory wasted"
+msgstr "ໜ່ວຍຄວາມຈຳທີ່ສູນເສຍ"
+
+msgid "Memory used %"
+msgstr "ໜ່ວຍຄວາມຈຳທີ່ໃຊ້ %"
+
+msgid "Cached scripts"
+msgstr "ສະຄຣິບທີ່ແຄຊໄວ້"
+
+msgid "Cached keys"
+msgstr "ກະແຈທີ່ແຄຊໄວ້"
+
+msgid "Misses"
+msgstr "ພາດ"
+
+msgid "Cache full"
+msgstr "ແຄຊເຕັມ"
+
+msgid "OOM restarts"
+msgstr "ເລີ່ມໃໝ່ OOM"
+
+msgid "Hash restarts"
+msgstr "ເລີ່ມໃໝ່ແຮຊ"
+
+msgid "Manual restarts"
+msgstr "ເລີ່ມໃໝ່ດ້ວຍມື"
+
+msgid "Interned strings used"
+msgstr "ສະຕຣິງພາຍໃນທີ່ໃຊ້"
+
+msgid "Interned strings free"
+msgstr "ສະຕຣິງພາຍໃນທີ່ຫວ່າງ"
+
+msgid "Interned strings count"
+msgstr "ຈຳນວນສະຕຣິງພາຍໃນ"
+
+msgid "Memory available"
+msgstr "ໜ່ວຍຄວາມຈຳທີ່ມີໃຫ້ໃຊ້"
+
+msgid "Memory size"
+msgstr "ຂະໜາດໜ່ວຍຄວາມຈຳ"
+
+msgid "Entries"
+msgstr "ລາຍການ"
+
+msgid "Slots"
+msgstr "ຊ່ອງ"
+
+msgid "Expunges"
+msgstr "ການລຶບຂໍ້ມູນ"
+
+msgid "Cache start time"
+msgstr "ເວລາເລີ່ມແຄຊ"
+
+msgid "Time zone"
+msgstr "ເຂດເວລາ"
+
+msgid "Not registered"
+msgstr "ຍັງບໍ່ໄດ້ລົງທະບຽນ"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "ກັ່ນຕອງ ແລະ ສະແດງໃບຢັ້ງຢືນຂອງນັກຮຽນ ຕາມພາກສ່ວນ, ຫຼັກສູດ, ວັນທີ ຫຼື ນັກຮຽນ, ຫຼັງຈາກນັ້ນສົ່ງອອກເມື່ອຕ້ອງການ."
+
+msgid "Filter by session and course"
+msgstr "ກັ່ນຕອງຕາມພາກສ່ວນ ແລະ ຫຼັກສູດ"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "ເລືອກພາກສ່ວນ, ຫຼັກສູດ ແລະ ວັນທີທາງເລືອກ ເພື່ອສະແດງໃບຢັ້ງຢືນທີ່ສ້າງແລ້ວ."
+
+msgid "Filter by learner"
+msgstr "ກັ່ນຕອງຕາມນັກຮຽນ"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "ຊອກຫາໃບຢັ້ງຢືນສຳລັບນັກຮຽນສະເພາະ ທົ່ວພາກສ່ວນ ແລະ ຫຼັກສູດ."
+
+msgid "Certificates found"
+msgstr "ພົບໃບຢັ້ງຢືນ"
+
+msgid "Open certificate"
+msgstr "ເປີດໃບຢັ້ງຢືນ"
+
+msgid "Certificate file not available"
+msgstr "ບໍ່ມີໄຟລ໌ໃບຢັ້ງຢືນ"
+
+msgid "Export to CSV"
+msgstr "ສົ່ງອອກເປັນ CSV"
+
+msgid "Acquired skills"
+msgstr "ທັກສະທີ່ໄດ້ຮັບ"
+
+msgid "No acquired skill"
+msgstr "ບໍ່ມີທັກສະທີ່ໄດ້ຮັບ"
+
+msgid "Absences"
+msgstr "ການຂາດຮຽນ"
+
+msgid "No courses"
+msgstr "ບໍ່ມີຫຼັກສູດ"
+
+msgid "No session matched"
+msgstr "ບໍ່ພົບພາກສ່ວນທີ່ກົງກັນ"
+
+msgid "Unable to load the report"
+msgstr "ບໍ່ສາມາດໂຫຼດບົດລາຍງານໄດ້"
+
+msgid "Please select a profile"
+msgstr "ກາລຸນາເລືອກໂປຣໄຟລ໌"
+
+msgid "Please select a session"
+msgstr "ກາລຸນາເລືອກພາກສ່ວນ"
+
+msgid "Please select a user"
+msgstr "ກາລຸນາເລືອກຜູ້ໃຊ້"
+
+msgid "Unable to export the report"
+msgstr "ບໍ່ສາມາດສົ່ງອອກບົດລາຍງານໄດ້"
+
+msgid "Accepted on web"
+msgstr "ຍອມຮັບຜ່ານເວັບ"
+
+msgid "Accepted by e-mail"
+msgstr "ຍອມຮັບຜ່ານອີເມລ"
+
+msgid "The course title is required"
+msgstr "ຕ້ອງການຊື່ຫຼັກສູດ"
+
+msgid "Unexpected error"
+msgstr "ເກີດຂໍ້ຜິດພາດທີ່ບໍ່ຄາດຄິດ"
+
+msgid "Separate tags with commas"
+msgstr "ແຍກແທັກດ້ວຍເຄື່ອງໝາຍຈຸດ"
+
+msgid "Open link"
+msgstr "ເປີດລິ້ງ"
+
+msgid "Describe the course picture to generate"
+msgstr "ອະທິບາຍຮູບພາບຫຼັກສູດທີ່ຈະສ້າງ"
+
+msgid "Generate picture"
+msgstr "ສ້າງຮູບພາບ"
+
+msgid "PDF watermark"
+msgstr "ລາຍນ້ຳຂອງ PDF"
+
+msgid "No watermark image"
+msgstr "ບໍ່ມີຮູບລາຍນ້ຳ"
+
+msgid "Upload watermark"
+msgstr "ອັບໂຫຼດລາຍນ້ຳ"
+
+msgid "Delete watermark"
+msgstr "ລຶບລາຍນ້ຳ"
+
+msgid "Course legal agreement file"
+msgstr "ໄຟລ໌ຂໍ້ຕົກລົງຫຼັກສູດ"
+
+msgid "Upload agreement file"
+msgstr "ອັບໂຫຼດໄຟລ໌ຂໍ້ຕົກລົງ"
+
+msgid "Download agreement file"
+msgstr "ດາວໂຫຼດໄຟລ໌ຂໍ້ຕົກລົງ"
+
+msgid "Delete agreement file"
+msgstr "ລຶບໄຟລ໌ຂໍ້ຕົກລົງ"
+
+msgid "Custom certificate images"
+msgstr "ຮູບພາບໃບຢັ້ງຢືນແບບກຳນົດເອງ"
+
+msgid "Course picture updated"
+msgstr "ອັບເດດຮູບພາບຫຼັກສູດແລ້ວ"
+
+msgid "The course picture could not be uploaded"
+msgstr "ບໍ່ສາມາດອັບໂຫຼດຮູບພາບຫຼັກສູດໄດ້"
+
+msgid "Course picture deleted"
+msgstr "ລຶບຮູບພາບຫຼັກສູດແລ້ວ"
+
+msgid "Enter a description for the image"
+msgstr "ປ້ອນຄຳອະທິບາຍສຳລັບຮູບພາບ"
+
+msgid "The image generator returned an empty response"
+msgstr "ເຄື່ອງສ້າງຮູບພາບສົ່ງຄຳຕອບວ່າງເປົ່າ"
+
+msgid "Course picture generated"
+msgstr "ສ້າງຮູບພາບຫຼັກສູດແລ້ວ"
+
+msgid "Watermark updated"
+msgstr "ອັບເດດລາຍນ້ຳແລ້ວ"
+
+msgid "Watermark deleted"
+msgstr "ລຶບລາຍນ້ຳແລ້ວ"
+
+msgid "Agreement file updated"
+msgstr "ອັບເດດໄຟລ໌ຂໍ້ຕົກລົງແລ້ວ"
+
+msgid "Agreement file deleted"
+msgstr "ລຶບໄຟລ໌ຂໍ້ຕົກລົງແລ້ວ"
+
+msgid "Certificate image updated"
+msgstr "ອັບເດດຮູບພາບໃບຢັ້ງຢືນແລ້ວ"
+
+msgid "Certificate image deleted"
+msgstr "ລຶບຮູບພາບໃບຢັ້ງຢືນແລ້ວ"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "ໃຊ້ຕົວແກ້ໄຂຮູບພາບກ່ອນອັບໂຫຼດ ເພື່ອຕັດ, ໝູນ ຫຼື ປັບຂະໜາດຮູບພາບຫຼັກສູດ."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "ລິ້ງເຊີນຊວນນີ້ບໍ່ຖືກຕ້ອງ ຫຼື ໝົດອາຍຸແລ້ວ."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "ການເຊີນນີ້ຖືກສົ່ງໄປຫາຜູ້ໃຊ້ອື່ນ. ກາລຸນາເຂົ້າສູ່ລະບົບດ້ວຍບັນຊີທີ່ຖືກເຊີນ."
+
+msgid "The invitation could not be accepted."
+msgstr "ບໍ່ສາມາດຍອມຮັບການເຊີນໄດ້."
+
+msgid "You have been subscribed successfully."
+msgstr "ທ່ານໄດ້ສະໝັກສະມາຊິກສຳເລັດແລ້ວ."
+
+msgid "This email address cannot be invited."
+msgstr "ບໍ່ສາມາດເຊີນທີ່ຢູ່ອີເມວນີ້ໄດ້."
+
+msgid "This user is already subscribed to the session."
+msgstr "ຜູ້ໃຊ້ນີ້ໄດ້ສະໝັກສະມາຊິກໃນຊຸດການສຶກສາແລ້ວ."
+
+msgid "This user is already subscribed to the course."
+msgstr "ຜູ້ໃຊ້ນີ້ໄດ້ສະໝັກສະມາຊິກໃນຫຼັກສູດແລ້ວ."
 

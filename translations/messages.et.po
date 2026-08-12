@@ -37700,6 +37700,12 @@ msgstr "Teie sessioon aegub peagi"
 msgid "Do you want to continue your session?"
 msgstr "Kas soovite jätkata sessiooni?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Teie sessiooni andmed on kadunud, palun logige uuesti sisse."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Juurdepääs sellele ressursile on keelatud. Teil ei näi olevat vajalikke õigusi sellele juurdepääsuks."
+
 msgid "Stay connected"
 msgstr "Jää ühendusse"
 
@@ -39138,7 +39144,7 @@ msgid "Scoreboard reading"
 msgstr "Scoreboard lugemine"
 
 msgid "Scoreboard keepalive"
-msgstr "Scoreboard keepalive"
+msgstr "Tulemustabeli elushoidmine"
 
 msgid "Scoreboard waiting"
 msgstr "Scoreboard ootel"
@@ -39166,4 +39172,316 @@ msgstr "Käideldud"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: luba mod_status (ExtendedStatus On) ja luba localhostile /server-status. Nginx: luba stub_status ainult localhosti asukohas nagu /nginx_status või /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Hinnete protsentuaalne jaotus"
+
+msgid "Top learners"
+msgstr "Parimad õppijad"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "See edenemine ühendab õpitee edenemise ja õppija keskmise harjutustulemuse"
+
+msgid "Additional profile fields"
+msgstr "Lisaprofiiliväljad"
+
+msgid "Visible columns"
+msgstr "Nähtavad veerud"
+
+msgid "Learning path completion"
+msgstr "Õpitee lõpetamine"
+
+msgid "Number of certificates"
+msgstr "Sertifikaatide arv"
+
+msgid "Could not export the report"
+msgstr "Aruannet ei õnnestunud eksportida"
+
+msgid "Second learner"
+msgstr "Teine õppija"
+
+msgid "Results by learner"
+msgstr "Tulemused õppija kaupa"
+
+msgid "Use filters to narrow down questions."
+msgstr "Kasutage filtreid küsimuste kitsendamiseks."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Proovige filtreid kohandada ja otsige uuesti."
+
+msgid "Results per page"
+msgstr "Tulemusi lehel"
+
+msgid "No answers"
+msgstr "Vastuseid pole"
+
+msgid "Tests using this question"
+msgstr "Seda küsimust kasutavad testid"
+
+msgid "Delete failed"
+msgstr "Kustutamine ebaõnnestus"
+
+msgid "PHP cache"
+msgstr "PHP vahemälu"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "OPcache ja APCu diagnostika reaalajas"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klõpsake OPcache ja APCu diagnostika kuvamiseks"
+
+msgid "Memory used"
+msgstr "Kasutatud mälu"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache on installitud, kuid pole lubatud."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache laiendus pole sellel serveril saadaval."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu on installitud, kuid pole lubatud."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu laiendus pole sellel serveril saadaval."
+
+msgid "Constant"
+msgstr "Konstant"
+
+msgid "Space used on disk (MB)"
+msgstr "Kettal kasutatud ruum (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Määra maksimaalne kursuseruum (MB)"
+
+msgid "Memory free"
+msgstr "Vaba mälu"
+
+msgid "Memory wasted"
+msgstr "Raisatud mälu"
+
+msgid "Memory used %"
+msgstr "Kasutatud mälu %"
+
+msgid "Cached scripts"
+msgstr "Vahemällu salvestatud skriptid"
+
+msgid "Cached keys"
+msgstr "Vahemällu salvestatud võtmed"
+
+msgid "Misses"
+msgstr "Möödapanekud"
+
+msgid "Cache full"
+msgstr "Vahemälu täis"
+
+msgid "OOM restarts"
+msgstr "OOM taaskäivitused"
+
+msgid "Hash restarts"
+msgstr "Räsi taaskäivitused"
+
+msgid "Manual restarts"
+msgstr "Käsitsi taaskäivitused"
+
+msgid "Interned strings used"
+msgstr "Kasutatud sisemised stringid"
+
+msgid "Interned strings free"
+msgstr "Vabad sisemised stringid"
+
+msgid "Interned strings count"
+msgstr "Sisemiste stringide arv"
+
+msgid "Memory available"
+msgstr "Saadaolev mälu"
+
+msgid "Memory size"
+msgstr "Mälu maht"
+
+msgid "Entries"
+msgstr "Kirjed"
+
+msgid "Slots"
+msgstr "Pesad"
+
+msgid "Expunges"
+msgstr "Eemaldamised"
+
+msgid "Cache start time"
+msgstr "Vahemälu käivitusaeg"
+
+msgid "Time zone"
+msgstr "Ajavöönd"
+
+msgid "Not registered"
+msgstr "Registreerimata"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtreeri ja loetle õppijate tunnistused seansi, kursuse, kuupäeva või õppija järgi ning ekspordi need vajadusel."
+
+msgid "Filter by session and course"
+msgstr "Filtreeri seansi ja kursuse järgi"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Vali seanss, kursus ja valikuline kuupäev, et loetleda genereeritud tunnistused."
+
+msgid "Filter by learner"
+msgstr "Filtreeri õppija järgi"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Leia konkreetse õppija tunnistused kõikidest seanssidest ja kursustest."
+
+msgid "Certificates found"
+msgstr "Leitud tunnistused"
+
+msgid "Open certificate"
+msgstr "Ava tunnistus"
+
+msgid "Certificate file not available"
+msgstr "Tunnistuse fail pole saadaval"
+
+msgid "Export to CSV"
+msgstr "Ekspordi CSV-faili"
+
+msgid "Acquired skills"
+msgstr "Omandatud oskused"
+
+msgid "No acquired skill"
+msgstr "Omandatud oskusi pole"
+
+msgid "Absences"
+msgstr "Puudumised"
+
+msgid "No courses"
+msgstr "Kursusi pole"
+
+msgid "No session matched"
+msgstr "Sobivat seanssi ei leitud"
+
+msgid "Unable to load the report"
+msgstr "Aruannet ei õnnestu laadida"
+
+msgid "Please select a profile"
+msgstr "Palun vali profiil"
+
+msgid "Please select a session"
+msgstr "Palun vali seanss"
+
+msgid "Please select a user"
+msgstr "Palun vali kasutaja"
+
+msgid "Unable to export the report"
+msgstr "Aruannet ei õnnestu eksportida"
+
+msgid "Accepted on web"
+msgstr "Vastu võetud veebis"
+
+msgid "Accepted by e-mail"
+msgstr "Vastu võetud e-posti teel"
+
+msgid "The course title is required"
+msgstr "Kursuse pealkiri on nõutav"
+
+msgid "Unexpected error"
+msgstr "Ootamatu viga"
+
+msgid "Separate tags with commas"
+msgstr "Eralda sildid komadega"
+
+msgid "Open link"
+msgstr "Ava link"
+
+msgid "Describe the course picture to generate"
+msgstr "Kirjelda genereeritavat kursusepilti"
+
+msgid "Generate picture"
+msgstr "Genereeri pilt"
+
+msgid "PDF watermark"
+msgstr "PDF-vesimärk"
+
+msgid "No watermark image"
+msgstr "Vesimärgi pilti pole"
+
+msgid "Upload watermark"
+msgstr "Laadi vesimärk üles"
+
+msgid "Delete watermark"
+msgstr "Kustuta vesimärk"
+
+msgid "Course legal agreement file"
+msgstr "Kursuse õigusliku kokkuleppe fail"
+
+msgid "Upload agreement file"
+msgstr "Laadi kokkuleppe fail üles"
+
+msgid "Download agreement file"
+msgstr "Laadi kokkuleppe fail alla"
+
+msgid "Delete agreement file"
+msgstr "Kustuta kokkuleppe fail"
+
+msgid "Custom certificate images"
+msgstr "Kohandatud tunnistuse pildid"
+
+msgid "Course picture updated"
+msgstr "Kursusepilt uuendatud"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kursuse pilti ei saanud üles laadida"
+
+msgid "Course picture deleted"
+msgstr "Kursuse pilt kustutatud"
+
+msgid "Enter a description for the image"
+msgstr "Sisesta pildi kirjeldus"
+
+msgid "The image generator returned an empty response"
+msgstr "Pildigeneraator tagastas tühja vastuse"
+
+msgid "Course picture generated"
+msgstr "Kursuse pilt genereeritud"
+
+msgid "Watermark updated"
+msgstr "Vesimärk uuendatud"
+
+msgid "Watermark deleted"
+msgstr "Vesimärk kustutatud"
+
+msgid "Agreement file updated"
+msgstr "Lepingu fail uuendatud"
+
+msgid "Agreement file deleted"
+msgstr "Lepingu fail kustutatud"
+
+msgid "Certificate image updated"
+msgstr "Sertifikaadi pilt uuendatud"
+
+msgid "Certificate image deleted"
+msgstr "Sertifikaadi pilt kustutatud"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Kasuta pildiredaktorit enne üleslaadimist kursuse pildi kärpimiseks, pööramiseks või suuruse muutmiseks."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "See kutse link on kehtetu või aegunud."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "See kutse saadeti teisele kasutajale. Palun logi sisse kutsutud kontoga."
+
+msgid "The invitation could not be accepted."
+msgstr "Kutset ei saanud vastu võtta."
+
+msgid "You have been subscribed successfully."
+msgstr "Oled edukalt registreeritud."
+
+msgid "This email address cannot be invited."
+msgstr "Seda e-posti aadressi ei saa kutsuda."
+
+msgid "This user is already subscribed to the session."
+msgstr "See kasutaja on juba sessiooniga liitunud."
+
+msgid "This user is already subscribed to the course."
+msgstr "See kasutaja on juba kursusega liitunud."
 

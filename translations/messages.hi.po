@@ -37695,6 +37695,12 @@ msgstr "आपका सत्र समाप्त होने वाला �
 msgid "Do you want to continue your session?"
 msgstr "क्या आप अपना सत्र जारी रखना चाहते हैं?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "आपका सत्र विवरण खो गया है, कृपया पुनः लॉगिन करें।"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "इस संसाधन तक पहुँच अस्वीकृत कर दी गई है। ऐसा लगता है कि आपके पास इस तक पहुँचने की आवश्यक अनुमतियाँ नहीं हैं।"
+
 msgid "Stay connected"
 msgstr "जुड़े रहें"
 
@@ -39161,4 +39167,316 @@ msgstr "हैंडल किया गया"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status सक्षम करें (ExtendedStatus On) और localhost को /server-status की अनुमति दें। Nginx: localhost-only स्थान जैसे /nginx_status या /stub_status पर stub_status सक्षम करें।"
+
+msgid "Grade percentage distribution"
+msgstr "ग्रेड प्रतिशत वितरण"
+
+msgid "Top learners"
+msgstr "शीर्ष शिक्षार्थी"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "यह प्रगति शिक्षण पथ प्रगति और शिक्षार्थी के औसत अभ्यास परिणाम को जोड़ती है"
+
+msgid "Additional profile fields"
+msgstr "अतिरिक्त प्रोफ़ाइल फ़ील्ड"
+
+msgid "Visible columns"
+msgstr "दृश्यमान स्तंभ"
+
+msgid "Learning path completion"
+msgstr "शिक्षण पथ पूर्णता"
+
+msgid "Number of certificates"
+msgstr "प्रमाणपत्रों की संख्या"
+
+msgid "Could not export the report"
+msgstr "रिपोर्ट निर्यात नहीं की जा सकी"
+
+msgid "Second learner"
+msgstr "दूसरा शिक्षार्थी"
+
+msgid "Results by learner"
+msgstr "शिक्षार्थी के अनुसार परिणाम"
+
+msgid "Use filters to narrow down questions."
+msgstr "प्रश्नों को सीमित करने के लिए फ़िल्टर का उपयोग करें।"
+
+msgid "Try adjusting your filters and search again."
+msgstr "अपने फ़िल्टर समायोजित करके पुनः खोजें।"
+
+msgid "Results per page"
+msgstr "प्रति पृष्ठ परिणाम"
+
+msgid "No answers"
+msgstr "कोई उत्तर नहीं"
+
+msgid "Tests using this question"
+msgstr "इस प्रश्न का उपयोग करने वाले परीक्षण"
+
+msgid "Delete failed"
+msgstr "हटाना विफल"
+
+msgid "PHP cache"
+msgstr "PHP कैश"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "लाइव OPcache और APCu निदान"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache और APCu निदान दिखाने के लिए क्लिक करें"
+
+msgid "Memory used"
+msgstr "उपयोग की गई मेमोरी"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache स्थापित है लेकिन सक्षम नहीं है।"
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache एक्सटेंशन इस सर्वर पर उपलब्ध नहीं है।"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu स्थापित है लेकिन सक्षम नहीं है।"
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu एक्सटेंशन इस सर्वर पर उपलब्ध नहीं है।"
+
+msgid "Constant"
+msgstr "स्थिरांक"
+
+msgid "Space used on disk (MB)"
+msgstr "डिस्क पर प्रयुक्त स्थान (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "अधिकतम कोर्स स्थान निर्धारित करें (MB)"
+
+msgid "Memory free"
+msgstr "उपलब्ध मेमोरी"
+
+msgid "Memory wasted"
+msgstr "व्यर्थ मेमोरी"
+
+msgid "Memory used %"
+msgstr "प्रयुक्त मेमोरी %"
+
+msgid "Cached scripts"
+msgstr "कैश्ड स्क्रिप्ट्स"
+
+msgid "Cached keys"
+msgstr "कैश्ड कुंजियाँ"
+
+msgid "Misses"
+msgstr "मिसेज"
+
+msgid "Cache full"
+msgstr "कैश पूर्ण"
+
+msgid "OOM restarts"
+msgstr "OOM पुनः आरंभ"
+
+msgid "Hash restarts"
+msgstr "हैश पुनः आरंभ"
+
+msgid "Manual restarts"
+msgstr "मैनुअल पुनः आरंभ"
+
+msgid "Interned strings used"
+msgstr "इंटरनेड स्ट्रिंग्स प्रयुक्त"
+
+msgid "Interned strings free"
+msgstr "इंटरनेड स्ट्रिंग्स मुक्त"
+
+msgid "Interned strings count"
+msgstr "इंटरनेड स्ट्रिंग्स संख्या"
+
+msgid "Memory available"
+msgstr "उपलब्ध मेमोरी"
+
+msgid "Memory size"
+msgstr "मेमोरी आकार"
+
+msgid "Entries"
+msgstr "प्रविष्टियाँ"
+
+msgid "Slots"
+msgstr "स्लॉट्स"
+
+msgid "Expunges"
+msgstr "एक्सपंजेस"
+
+msgid "Cache start time"
+msgstr "कैश आरंभ समय"
+
+msgid "Time zone"
+msgstr "समय क्षेत्र"
+
+msgid "Not registered"
+msgstr "पंजीकृत नहीं"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "सत्र, कोर्स, तिथि या शिक्षार्थी द्वारा शिक्षार्थी प्रमाणपत्रों को फ़िल्टर करें और सूचीबद्ध करें, फिर आवश्यकतानुसार निर्यात करें।"
+
+msgid "Filter by session and course"
+msgstr "सत्र और कोर्स द्वारा फ़िल्टर करें"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "उत्पन्न प्रमाणपत्रों की सूची के लिए सत्र, कोर्स और वैकल्पिक तिथि चुनें।"
+
+msgid "Filter by learner"
+msgstr "शिक्षार्थी द्वारा फ़िल्टर करें"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "सत्रों और कोर्सों में किसी विशिष्ट शिक्षार्थी के प्रमाणपत्र खोजें।"
+
+msgid "Certificates found"
+msgstr "प्रमाणपत्र मिले"
+
+msgid "Open certificate"
+msgstr "प्रमाणपत्र खोलें"
+
+msgid "Certificate file not available"
+msgstr "प्रमाणपत्र फ़ाइल उपलब्ध नहीं"
+
+msgid "Export to CSV"
+msgstr "CSV में निर्यात करें"
+
+msgid "Acquired skills"
+msgstr "अर्जित कौशल"
+
+msgid "No acquired skill"
+msgstr "कोई अर्जित कौशल नहीं"
+
+msgid "Absences"
+msgstr "अनुपस्थितियाँ"
+
+msgid "No courses"
+msgstr "कोई कोर्स नहीं"
+
+msgid "No session matched"
+msgstr "कोई सत्र मेल नहीं खाता"
+
+msgid "Unable to load the report"
+msgstr "रिपोर्ट लोड करने में असमर्थ"
+
+msgid "Please select a profile"
+msgstr "कृपया एक प्रोफ़ाइल चुनें"
+
+msgid "Please select a session"
+msgstr "कृपया एक सत्र चुनें"
+
+msgid "Please select a user"
+msgstr "कृपया एक उपयोगकर्ता चुनें"
+
+msgid "Unable to export the report"
+msgstr "रिपोर्ट निर्यात करने में असमर्थ"
+
+msgid "Accepted on web"
+msgstr "वेब पर स्वीकृत"
+
+msgid "Accepted by e-mail"
+msgstr "ई-मेल द्वारा स्वीकृत"
+
+msgid "The course title is required"
+msgstr "कोर्स शीर्षक आवश्यक है"
+
+msgid "Unexpected error"
+msgstr "अनपेक्षित त्रुटि"
+
+msgid "Separate tags with commas"
+msgstr "टैग्स को अल्पविराम से अलग करें"
+
+msgid "Open link"
+msgstr "लिंक खोलें"
+
+msgid "Describe the course picture to generate"
+msgstr "उत्पन्न करने के लिए कोर्स चित्र का वर्णन करें"
+
+msgid "Generate picture"
+msgstr "चित्र उत्पन्न करें"
+
+msgid "PDF watermark"
+msgstr "PDF वॉटरमार्क"
+
+msgid "No watermark image"
+msgstr "कोई वॉटरमार्क छवि नहीं"
+
+msgid "Upload watermark"
+msgstr "वॉटरमार्क अपलोड करें"
+
+msgid "Delete watermark"
+msgstr "वॉटरमार्क हटाएं"
+
+msgid "Course legal agreement file"
+msgstr "पाठ्यक्रम कानूनी समझौता फ़ाइल"
+
+msgid "Upload agreement file"
+msgstr "समझौता फ़ाइल अपलोड करें"
+
+msgid "Download agreement file"
+msgstr "समझौता फ़ाइल डाउनलोड करें"
+
+msgid "Delete agreement file"
+msgstr "समझौता फ़ाइल हटाएं"
+
+msgid "Custom certificate images"
+msgstr "कस्टम प्रमाणपत्र छवियाँ"
+
+msgid "Course picture updated"
+msgstr "पाठ्यक्रम चित्र अपडेट किया गया"
+
+msgid "The course picture could not be uploaded"
+msgstr "पाठ्यक्रम चित्र अपलोड नहीं किया जा सका"
+
+msgid "Course picture deleted"
+msgstr "पाठ्यक्रम चित्र हटाया गया"
+
+msgid "Enter a description for the image"
+msgstr "छवि के लिए विवरण दर्ज करें"
+
+msgid "The image generator returned an empty response"
+msgstr "छवि जनरेटर ने खाली प्रतिक्रिया दी"
+
+msgid "Course picture generated"
+msgstr "पाठ्यक्रम चित्र उत्पन्न किया गया"
+
+msgid "Watermark updated"
+msgstr "वॉटरमार्क अपडेट किया गया"
+
+msgid "Watermark deleted"
+msgstr "वॉटरमार्क हटाया गया"
+
+msgid "Agreement file updated"
+msgstr "समझौता फ़ाइल अपडेट की गई"
+
+msgid "Agreement file deleted"
+msgstr "समझौता फ़ाइल हटाई गई"
+
+msgid "Certificate image updated"
+msgstr "प्रमाणपत्र छवि अपडेट की गई"
+
+msgid "Certificate image deleted"
+msgstr "प्रमाणपत्र छवि हटाई गई"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "पाठ्यक्रम चित्र को काटने, घुमाने या आकार बदलने के लिए अपलोड करने से पहले छवि संपादक का उपयोग करें।"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "यह आमंत्रण लिंक अमान्य है या समाप्त हो चुका है।"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "यह आमंत्रण किसी अन्य उपयोगकर्ता को भेजा गया था। कृपया आमंत्रित खाते से लॉग इन करें।"
+
+msgid "The invitation could not be accepted."
+msgstr "आमंत्रण स्वीकार नहीं किया जा सका।"
+
+msgid "You have been subscribed successfully."
+msgstr "आप सफलतापूर्वक सदस्यता ले चुके हैं।"
+
+msgid "This email address cannot be invited."
+msgstr "इस ईमेल पते को आमंत्रित नहीं किया जा सकता।"
+
+msgid "This user is already subscribed to the session."
+msgstr "यह उपयोगकर्ता पहले से ही सत्र में सदस्य है।"
+
+msgid "This user is already subscribed to the course."
+msgstr "यह उपयोगकर्ता पहले से ही पाठ्यक्रम में सदस्य है।"
 

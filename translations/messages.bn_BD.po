@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ফর্মুলার উদাহরণ: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ফর্মুলা নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -37695,6 +37695,12 @@ msgstr "আপনার সেশন শীঘ্রই শেষ হবে"
 msgid "Do you want to continue your session?"
 msgstr "আপনি কি আপনার সেশন চালিয়ে যেতে চান?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "আপনার সেশনের বিবরণ হারিয়ে গেছে, অনুগ্রহ করে আবার লগইন করুন।"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "এই সম্পদে প্রবেশাধিকার অস্বীকৃত হয়েছে। আপনার কাছে এটি অ্যাক্সেস করার প্রয়োজনীয় অনুমতি নেই বলে মনে হচ্ছে।"
+
 msgid "Stay connected"
 msgstr "সংযুক্ত থাকুন"
 
@@ -39161,4 +39167,316 @@ msgstr "হ্যান্ডেলকৃত"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: mod_status সক্রিয় করুন (ExtendedStatus On) এবং localhost-কে /server-status অনুমোদন করুন। Nginx: localhost-এর জন্য শুধুমাত্র একটি লোকেশনে যেমন /nginx_status বা /stub_status-এ stub_status সক্রিয় করুন।"
+
+msgid "Grade percentage distribution"
+msgstr "গ্রেড শতাংশ বিতরণ"
+
+msgid "Top learners"
+msgstr "শীর্ষ শিক্ষার্থী"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "এই অগ্রগতি শিক্ষণ পথের অগ্রগতি এবং শিক্ষার্থীর গড় অনুশীলন ফলাফল একত্রিত করে"
+
+msgid "Additional profile fields"
+msgstr "অতিরিক্ত প্রোফাইল ক্ষেত্র"
+
+msgid "Visible columns"
+msgstr "দৃশ্যমান কলাম"
+
+msgid "Learning path completion"
+msgstr "শিক্ষণ পথ সমাপ্তি"
+
+msgid "Number of certificates"
+msgstr "সার্টিফিকেটের সংখ্যা"
+
+msgid "Could not export the report"
+msgstr "প্রতিবেদন রপ্তানি করা যায়নি"
+
+msgid "Second learner"
+msgstr "দ্বিতীয় শিক্ষার্থী"
+
+msgid "Results by learner"
+msgstr "শিক্ষার্থী অনুসারে ফলাফল"
+
+msgid "Use filters to narrow down questions."
+msgstr "প্রশ্ন সংকুচিত করতে ফিল্টার ব্যবহার করুন।"
+
+msgid "Try adjusting your filters and search again."
+msgstr "আপনার ফিল্টার সমন্বয় করে আবার অনুসন্ধান করুন।"
+
+msgid "Results per page"
+msgstr "প্রতি পৃষ্ঠায় ফলাফল"
+
+msgid "No answers"
+msgstr "কোনো উত্তর নেই"
+
+msgid "Tests using this question"
+msgstr "এই প্রশ্ন ব্যবহারকারী পরীক্ষা"
+
+msgid "Delete failed"
+msgstr "মুছে ফেলা ব্যর্থ হয়েছে"
+
+msgid "PHP cache"
+msgstr "PHP ক্যাশে"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "লাইভ OPcache এবং APCu ডায়াগনস্টিকস"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache এবং APCu ডায়াগনস্টিকস দেখতে ক্লিক করুন"
+
+msgid "Memory used"
+msgstr "ব্যবহৃত মেমরি"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache ইনস্টল করা আছে কিন্তু সক্রিয় নয়।"
+
+msgid "OPcache extension is not available on this server."
+msgstr "এই সার্ভারে OPcache এক্সটেনশন উপলব্ধ নয়।"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu ইনস্টল করা আছে কিন্তু সক্রিয় নয়।"
+
+msgid "APCu extension is not available on this server."
+msgstr "এই সার্ভারে APCu এক্সটেনশন উপলব্ধ নয়।"
+
+msgid "Constant"
+msgstr "ধ্রুবক"
+
+msgid "Space used on disk (MB)"
+msgstr "ডিস্কে ব্যবহৃত স্থান (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "সর্বোচ্চ কোর্স স্থান নির্ধারণ করুন (MB)"
+
+msgid "Memory free"
+msgstr "মেমরি মুক্ত"
+
+msgid "Memory wasted"
+msgstr "মেমরি অপচয়িত"
+
+msgid "Memory used %"
+msgstr "ব্যবহৃত মেমরি %"
+
+msgid "Cached scripts"
+msgstr "ক্যাশ করা স্ক্রিপ্ট"
+
+msgid "Cached keys"
+msgstr "ক্যাশ করা কী"
+
+msgid "Misses"
+msgstr "মিস"
+
+msgid "Cache full"
+msgstr "ক্যাশ পূর্ণ"
+
+msgid "OOM restarts"
+msgstr "OOM পুনরায় শুরু"
+
+msgid "Hash restarts"
+msgstr "হ্যাশ পুনরায় শুরু"
+
+msgid "Manual restarts"
+msgstr "ম্যানুয়াল পুনরায় শুরু"
+
+msgid "Interned strings used"
+msgstr "ইন্টার্নড স্ট্রিং ব্যবহৃত"
+
+msgid "Interned strings free"
+msgstr "ইন্টার্নড স্ট্রিং ফ্রি"
+
+msgid "Interned strings count"
+msgstr "ইন্টার্নড স্ট্রিং সংখ্যা"
+
+msgid "Memory available"
+msgstr "উপলব্ধ মেমরি"
+
+msgid "Memory size"
+msgstr "মেমরির আকার"
+
+msgid "Entries"
+msgstr "এন্ট্রি"
+
+msgid "Slots"
+msgstr "স্লট"
+
+msgid "Expunges"
+msgstr "এক্সপাঞ্জ"
+
+msgid "Cache start time"
+msgstr "ক্যাশ শুরুর সময়"
+
+msgid "Time zone"
+msgstr "সময় অঞ্চল"
+
+msgid "Not registered"
+msgstr "নিবন্ধিত নয়"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "সেশন, কোর্স, তারিখ বা শিক্ষার্থী অনুসারে শিক্ষার্থীর সার্টিফিকেট ফিল্টার ও তালিকাভুক্ত করুন, তারপর প্রয়োজনে রপ্তানি করুন।"
+
+msgid "Filter by session and course"
+msgstr "সেশন ও কোর্স অনুসারে ফিল্টার করুন"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "উৎপন্ন সার্টিফিকেটের তালিকা দেখতে একটি সেশন, কোর্স এবং ঐচ্ছিক তারিখ নির্বাচন করুন।"
+
+msgid "Filter by learner"
+msgstr "শিক্ষার্থী অনুসারে ফিল্টার করুন"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "সেশন ও কোর্স জুড়ে নির্দিষ্ট শিক্ষার্থীর সার্টিফিকেট খুঁজুন।"
+
+msgid "Certificates found"
+msgstr "সার্টিফিকেট পাওয়া গেছে"
+
+msgid "Open certificate"
+msgstr "সার্টিফিকেট খুলুন"
+
+msgid "Certificate file not available"
+msgstr "সার্টিফিকেট ফাইল উপলব্ধ নয়"
+
+msgid "Export to CSV"
+msgstr "CSV-এ রপ্তানি করুন"
+
+msgid "Acquired skills"
+msgstr "অর্জিত দক্ষতা"
+
+msgid "No acquired skill"
+msgstr "কোনো অর্জিত দক্ষতা নেই"
+
+msgid "Absences"
+msgstr "অনুপস্থিতি"
+
+msgid "No courses"
+msgstr "কোনো কোর্স নেই"
+
+msgid "No session matched"
+msgstr "কোনো সেশন মিলেনি"
+
+msgid "Unable to load the report"
+msgstr "রিপোর্ট লোড করা যায়নি"
+
+msgid "Please select a profile"
+msgstr "অনুগ্রহ করে একটি প্রোফাইল নির্বাচন করুন"
+
+msgid "Please select a session"
+msgstr "অনুগ্রহ করে একটি সেশন নির্বাচন করুন"
+
+msgid "Please select a user"
+msgstr "অনুগ্রহ করে একজন ব্যবহারকারী নির্বাচন করুন"
+
+msgid "Unable to export the report"
+msgstr "রিপোর্ট রপ্তানি করা যায়নি"
+
+msgid "Accepted on web"
+msgstr "ওয়েবে গৃহীত"
+
+msgid "Accepted by e-mail"
+msgstr "ই-মেইলে গৃহীত"
+
+msgid "The course title is required"
+msgstr "কোর্সের শিরোনাম আবশ্যক"
+
+msgid "Unexpected error"
+msgstr "অপ্রত্যাশিত ত্রুটি"
+
+msgid "Separate tags with commas"
+msgstr "কমা দিয়ে ট্যাগ আলাদা করুন"
+
+msgid "Open link"
+msgstr "লিংক খুলুন"
+
+msgid "Describe the course picture to generate"
+msgstr "উৎপন্ন করার জন্য কোর্সের ছবি বর্ণনা করুন"
+
+msgid "Generate picture"
+msgstr "ছবি উৎপন্ন করুন"
+
+msgid "PDF watermark"
+msgstr "PDF ওয়াটারমার্ক"
+
+msgid "No watermark image"
+msgstr "কোনো ওয়াটারমার্ক ছবি নেই"
+
+msgid "Upload watermark"
+msgstr "ওয়াটারমার্ক আপলোড করুন"
+
+msgid "Delete watermark"
+msgstr "ওয়াটারমার্ক মুছুন"
+
+msgid "Course legal agreement file"
+msgstr "কোর্সের আইনি চুক্তি ফাইল"
+
+msgid "Upload agreement file"
+msgstr "চুক্তি ফাইল আপলোড করুন"
+
+msgid "Download agreement file"
+msgstr "চুক্তি ফাইল ডাউনলোড করুন"
+
+msgid "Delete agreement file"
+msgstr "চুক্তি ফাইল মুছুন"
+
+msgid "Custom certificate images"
+msgstr "কাস্টম সনদপত্রের ছবি"
+
+msgid "Course picture updated"
+msgstr "কোর্সের ছবি আপডেট করা হয়েছে"
+
+msgid "The course picture could not be uploaded"
+msgstr "কোর্সের ছবি আপলোড করা যায়নি"
+
+msgid "Course picture deleted"
+msgstr "কোর্সের ছবি মুছে ফেলা হয়েছে"
+
+msgid "Enter a description for the image"
+msgstr "ছবির জন্য একটি বিবরণ লিখুন"
+
+msgid "The image generator returned an empty response"
+msgstr "ছবি জেনারেটর একটি খালি উত্তর দিয়েছে"
+
+msgid "Course picture generated"
+msgstr "কোর্সের ছবি তৈরি করা হয়েছে"
+
+msgid "Watermark updated"
+msgstr "ওয়াটারমার্ক আপডেট করা হয়েছে"
+
+msgid "Watermark deleted"
+msgstr "ওয়াটারমার্ক মুছে ফেলা হয়েছে"
+
+msgid "Agreement file updated"
+msgstr "চুক্তি ফাইল আপডেট করা হয়েছে"
+
+msgid "Agreement file deleted"
+msgstr "চুক্তি ফাইল মুছে ফেলা হয়েছে"
+
+msgid "Certificate image updated"
+msgstr "সনদপত্রের ছবি আপডেট করা হয়েছে"
+
+msgid "Certificate image deleted"
+msgstr "সনদপত্রের ছবি মুছে ফেলা হয়েছে"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "কোর্সের ছবি ক্রপ, ঘোরাতে বা আকার পরিবর্তন করতে আপলোড করার আগে ছবি সম্পাদক ব্যবহার করুন।"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "এই আমন্ত্রণ লিঙ্কটি অবৈধ বা মেয়াদ উত্তীর্ণ হয়ে গেছে।"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "এই আমন্ত্রণটি একটি ভিন্ন ব্যবহারকারীর কাছে পাঠানো হয়েছিল। অনুগ্রহ করে আমন্ত্রিত অ্যাকাউন্ট দিয়ে লগ ইন করুন।"
+
+msgid "The invitation could not be accepted."
+msgstr "আমন্ত্রণটি গ্রহণ করা যায়নি।"
+
+msgid "You have been subscribed successfully."
+msgstr "আপনাকে সফলভাবে সাবস্ক্রাইব করা হয়েছে।"
+
+msgid "This email address cannot be invited."
+msgstr "এই ইমেইল ঠিকানাটি আমন্ত্রণ করা যাবে না।"
+
+msgid "This user is already subscribed to the session."
+msgstr "এই ব্যবহারকারী ইতিমধ্যে সেশনে সাবস্ক্রাইব করেছেন।"
+
+msgid "This user is already subscribed to the course."
+msgstr "এই ব্যবহারকারী ইতিমধ্যে কোর্সে সাবস্ক্রাইব করেছেন।"
 

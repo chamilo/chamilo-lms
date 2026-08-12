@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formula paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -37700,6 +37700,12 @@ msgstr "Jūsu sesija drīz beigsies"
 msgid "Do you want to continue your session?"
 msgstr "Vai vēlaties turpināt sesiju?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Jūsu sesijas dati ir zaudēti, lūdzu, piesakieties vēlreiz."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Piekļuve šim resursam ir liegta. Jums, šķiet, nav nepieciešamo tiesību, lai tam piekļūtu."
+
 msgid "Stay connected"
 msgstr "Palikt pieslēgtam"
 
@@ -39166,4 +39172,316 @@ msgstr "Apstrādātie"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Vērtējumu procentuālais sadalījums"
+
+msgid "Top learners"
+msgstr "Labākie izglītojamie"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Šis progress apvieno mācību ceļa progresu un izglītojamā vidējo uzdevumu rezultātu"
+
+msgid "Additional profile fields"
+msgstr "Papildu profila lauki"
+
+msgid "Visible columns"
+msgstr "Redzamās kolonnas"
+
+msgid "Learning path completion"
+msgstr "Mācību ceļa pabeigšana"
+
+msgid "Number of certificates"
+msgstr "Sertifikātu skaits"
+
+msgid "Could not export the report"
+msgstr "Neizdevās eksportēt atskaiti"
+
+msgid "Second learner"
+msgstr "Otrais izglītojamais"
+
+msgid "Results by learner"
+msgstr "Rezultāti pēc izglītojamā"
+
+msgid "Use filters to narrow down questions."
+msgstr "Izmantojiet filtrus, lai sašaurinātu jautājumus."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Mēģiniet pielāgot filtrus un meklējiet vēlreiz."
+
+msgid "Results per page"
+msgstr "Rezultāti lapā"
+
+msgid "No answers"
+msgstr "Nav atbilžu"
+
+msgid "Tests using this question"
+msgstr "Testi, kuros tiek izmantots šis jautājums"
+
+msgid "Delete failed"
+msgstr "Dzēšana neizdevās"
+
+msgid "PHP cache"
+msgstr "PHP kešatmiņa"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live OPcache and APCu diagnostics"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klikšķiniet, lai parādītu OPcache un APCu diagnostiku"
+
+msgid "Memory used"
+msgstr "Izmantotā atmiņa"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache ir instalēts, bet nav iespējots."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache paplašinājums nav pieejams šajā serverī."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu ir instalēts, bet nav iespējots."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu paplašinājums nav pieejams šajā serverī."
+
+msgid "Constant"
+msgstr "Konstante"
+
+msgid "Space used on disk (MB)"
+msgstr "Izmantotā vieta diskā (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Iestatīt maksimālo kursa vietu (MB)"
+
+msgid "Memory free"
+msgstr "Brīvā atmiņa"
+
+msgid "Memory wasted"
+msgstr "Izmantotā atmiņa"
+
+msgid "Memory used %"
+msgstr "Izmantotā atmiņa %"
+
+msgid "Cached scripts"
+msgstr "Kešatmiņā saglabātie skripti"
+
+msgid "Cached keys"
+msgstr "Kešatmiņā saglabātās atslēgas"
+
+msgid "Misses"
+msgstr "Kļūdas"
+
+msgid "Cache full"
+msgstr "Kešatmiņa pilna"
+
+msgid "OOM restarts"
+msgstr "OOM restartēšanas"
+
+msgid "Hash restarts"
+msgstr "Hash restartēšanas"
+
+msgid "Manual restarts"
+msgstr "Manuālas restartēšanas"
+
+msgid "Interned strings used"
+msgstr "Izmantotās internētās virknes"
+
+msgid "Interned strings free"
+msgstr "Brīvās internētās virknes"
+
+msgid "Interned strings count"
+msgstr "Internēto virkņu skaits"
+
+msgid "Memory available"
+msgstr "Pieejamā atmiņa"
+
+msgid "Memory size"
+msgstr "Atmiņas izmērs"
+
+msgid "Entries"
+msgstr "Ieraksti"
+
+msgid "Slots"
+msgstr "Vietas"
+
+msgid "Expunges"
+msgstr "Izdzēšanas"
+
+msgid "Cache start time"
+msgstr "Kešatmiņas sākuma laiks"
+
+msgid "Time zone"
+msgstr "Laika josla"
+
+msgid "Not registered"
+msgstr "Nav reģistrēts"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrējiet un uzskaitiet apmācāmo sertifikātus pēc sesijas, kursa, datuma vai apmācāmā, pēc tam eksportējiet tos, kad nepieciešams."
+
+msgid "Filter by session and course"
+msgstr "Filtrēt pēc sesijas un kursa"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Izvēlieties sesiju, kursu un neobligātu datumu, lai uzskaitītu ģenerētos sertifikātus."
+
+msgid "Filter by learner"
+msgstr "Filtrēt pēc apmācāmā"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Atrast sertifikātus konkrētam apmācāmajam visās sesijās un kursos."
+
+msgid "Certificates found"
+msgstr "Atrastie sertifikāti"
+
+msgid "Open certificate"
+msgstr "Atvērt sertifikātu"
+
+msgid "Certificate file not available"
+msgstr "Sertifikāta fails nav pieejams"
+
+msgid "Export to CSV"
+msgstr "Eksportēt uz CSV"
+
+msgid "Acquired skills"
+msgstr "Iegūtās prasmes"
+
+msgid "No acquired skill"
+msgstr "Nav iegūtas prasmes"
+
+msgid "Absences"
+msgstr "Kavējumi"
+
+msgid "No courses"
+msgstr "Nav kursu"
+
+msgid "No session matched"
+msgstr "Nav atrasta neviena sesija"
+
+msgid "Unable to load the report"
+msgstr "Nevar ielādēt atskaiti"
+
+msgid "Please select a profile"
+msgstr "Lūdzu, atlasiet profilu"
+
+msgid "Please select a session"
+msgstr "Lūdzu, atlasiet sesiju"
+
+msgid "Please select a user"
+msgstr "Lūdzu, atlasiet lietotāju"
+
+msgid "Unable to export the report"
+msgstr "Nevar eksportēt atskaiti"
+
+msgid "Accepted on web"
+msgstr "Pieņemts tīmeklī"
+
+msgid "Accepted by e-mail"
+msgstr "Apstiprināts ar e-pastu"
+
+msgid "The course title is required"
+msgstr "Kursa nosaukums ir obligāts"
+
+msgid "Unexpected error"
+msgstr "Negaidīta kļūda"
+
+msgid "Separate tags with commas"
+msgstr "Atdaliet tagus ar komatiem"
+
+msgid "Open link"
+msgstr "Atvērt saiti"
+
+msgid "Describe the course picture to generate"
+msgstr "Aprakstiet ģenerējamo kursa attēlu"
+
+msgid "Generate picture"
+msgstr "Ģenerēt attēlu"
+
+msgid "PDF watermark"
+msgstr "PDF ūdenszīme"
+
+msgid "No watermark image"
+msgstr "Nav ūdenszīmes attēla"
+
+msgid "Upload watermark"
+msgstr "Augšupielādēt ūdenszīmi"
+
+msgid "Delete watermark"
+msgstr "Dzēst ūdenszīmi"
+
+msgid "Course legal agreement file"
+msgstr "Kursa juridiskās vienošanās fails"
+
+msgid "Upload agreement file"
+msgstr "Augšupielādēt vienošanās failu"
+
+msgid "Download agreement file"
+msgstr "Lejupielādēt vienošanās failu"
+
+msgid "Delete agreement file"
+msgstr "Dzēst vienošanās failu"
+
+msgid "Custom certificate images"
+msgstr "Pielāgoti sertifikāta attēli"
+
+msgid "Course picture updated"
+msgstr "Kursa attēls atjaunināts"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kursa attēlu nevarēja augšupielādēt"
+
+msgid "Course picture deleted"
+msgstr "Kursa attēls dzēsts"
+
+msgid "Enter a description for the image"
+msgstr "Ievadiet attēla aprakstu"
+
+msgid "The image generator returned an empty response"
+msgstr "Attēlu ģenerators atgrieza tukšu atbildi"
+
+msgid "Course picture generated"
+msgstr "Kursa attēls ģenerēts"
+
+msgid "Watermark updated"
+msgstr "Ūdenszīme atjaunināta"
+
+msgid "Watermark deleted"
+msgstr "Ūdenszīme dzēsta"
+
+msgid "Agreement file updated"
+msgstr "Vienošanās fails atjaunināts"
+
+msgid "Agreement file deleted"
+msgstr "Vienošanās fails dzēsts"
+
+msgid "Certificate image updated"
+msgstr "Sertifikāta attēls atjaunināts"
+
+msgid "Certificate image deleted"
+msgstr "Sertifikāta attēls dzēsts"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Pirms augšupielādes izmantojiet attēlu redaktoru, lai apgrieztu, pagrieztu vai mainītu kursa attēla izmēru."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Šī uzaicinājuma saite nav derīga vai ir beigusies."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Šis uzaicinājums tika nosūtīts citam lietotājam. Lūdzu, piesakieties ar uzaicināto kontu."
+
+msgid "The invitation could not be accepted."
+msgstr "Uzaicinājumu nevarēja pieņemt."
+
+msgid "You have been subscribed successfully."
+msgstr "Jūs esat veiksmīgi pierakstīts."
+
+msgid "This email address cannot be invited."
+msgstr "Šo e-pasta adresi nevar uzaicināt."
+
+msgid "This user is already subscribed to the session."
+msgstr "Šis lietotājs jau ir pierakstīts sesijai."
+
+msgid "This user is already subscribed to the course."
+msgstr "Šis lietotājs jau ir pierakstīts kursam."
 

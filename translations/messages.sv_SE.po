@@ -35497,7 +35497,7 @@ msgid "%s results"
 msgstr "%s resultat"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet : beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel på ifyllnadsaktivitet: beräkna Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller K)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Vikt/Längd<sup>2</sup> (Se <a href=\"http://sv.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Borttagen"
@@ -37701,6 +37701,12 @@ msgstr "Din session håller på att löpa ut"
 msgid "Do you want to continue your session?"
 msgstr "Vill du fortsätta din session?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Din session har gått förlorad, vänligen logga in igen."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Åtkomst till denna resurs nekades. Du verkar inte ha nödvändiga behörigheter för att komma åt den."
+
 msgid "Stay connected"
 msgstr "Fortsätt ansluten"
 
@@ -39167,4 +39173,316 @@ msgstr "Hanterade"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: aktivera mod_status (ExtendedStatus On) och tillåt localhost till /server-status. Nginx: aktivera stub_status på en plats som endast är tillgänglig från localhost, t.ex. /nginx_status eller /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Betygsfördelning i procent"
+
+msgid "Top learners"
+msgstr "Toppelever"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Detta framsteg kombinerar inlärningsvägsframsteg och elevens genomsnittliga övningsresultat"
+
+msgid "Additional profile fields"
+msgstr "Ytterligare profilfält"
+
+msgid "Visible columns"
+msgstr "Synliga kolumner"
+
+msgid "Learning path completion"
+msgstr "Inlärningsvägsavslutning"
+
+msgid "Number of certificates"
+msgstr "Antal certifikat"
+
+msgid "Could not export the report"
+msgstr "Kunde inte exportera rapporten"
+
+msgid "Second learner"
+msgstr "Andra eleven"
+
+msgid "Results by learner"
+msgstr "Resultat per elev"
+
+msgid "Use filters to narrow down questions."
+msgstr "Använd filter för att begränsa frågorna."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Försök justera dina filter och sök igen."
+
+msgid "Results per page"
+msgstr "Resultat per sida"
+
+msgid "No answers"
+msgstr "Inga svar"
+
+msgid "Tests using this question"
+msgstr "Tester som använder denna fråga"
+
+msgid "Delete failed"
+msgstr "Borttagning misslyckades"
+
+msgid "PHP cache"
+msgstr "PHP-cache"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Live-diagnostik för OPcache och APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Klicka för att visa OPcache- och APCu-diagnostik"
+
+msgid "Memory used"
+msgstr "Använt minne"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache är installerat men inte aktiverat."
+
+msgid "OPcache extension is not available on this server."
+msgstr "OPcache-tillägget är inte tillgängligt på den här servern."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu är installerat men inte aktiverat."
+
+msgid "APCu extension is not available on this server."
+msgstr "APCu-tillägget är inte tillgängligt på den här servern."
+
+msgid "Constant"
+msgstr "Konstant"
+
+msgid "Space used on disk (MB)"
+msgstr "Använt utrymme på disk (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Ange maximalt kursutrymme (MB)"
+
+msgid "Memory free"
+msgstr "Ledigt minne"
+
+msgid "Memory wasted"
+msgstr "Slösat minne"
+
+msgid "Memory used %"
+msgstr "Använt minne %"
+
+msgid "Cached scripts"
+msgstr "Cachelagrade skript"
+
+msgid "Cached keys"
+msgstr "Cachelagrade nycklar"
+
+msgid "Misses"
+msgstr "Missar"
+
+msgid "Cache full"
+msgstr "Cache full"
+
+msgid "OOM restarts"
+msgstr "OOM-omstarter"
+
+msgid "Hash restarts"
+msgstr "Hash-omstarter"
+
+msgid "Manual restarts"
+msgstr "Manuella omstarter"
+
+msgid "Interned strings used"
+msgstr "Använda interna strängar"
+
+msgid "Interned strings free"
+msgstr "Lediga interna strängar"
+
+msgid "Interned strings count"
+msgstr "Antal interna strängar"
+
+msgid "Memory available"
+msgstr "Tillgängligt minne"
+
+msgid "Memory size"
+msgstr "Minnestorlek"
+
+msgid "Entries"
+msgstr "Poster"
+
+msgid "Slots"
+msgstr "Platser"
+
+msgid "Expunges"
+msgstr "Rensningar"
+
+msgid "Cache start time"
+msgstr "Cache starttid"
+
+msgid "Time zone"
+msgstr "Tidszon"
+
+msgid "Not registered"
+msgstr "Inte registrerad"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Filtrera och lista elevcertifikat efter session, kurs, datum eller elev, och exportera dem vid behov."
+
+msgid "Filter by session and course"
+msgstr "Filtrera efter session och kurs"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Välj en session, kurs och valfritt datum för att lista de genererade certifikaten."
+
+msgid "Filter by learner"
+msgstr "Filtrera efter elev"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Hitta certifikat för en specifik elev över sessioner och kurser."
+
+msgid "Certificates found"
+msgstr "Hittade certifikat"
+
+msgid "Open certificate"
+msgstr "Öppna certifikat"
+
+msgid "Certificate file not available"
+msgstr "Certifikatfil inte tillgänglig"
+
+msgid "Export to CSV"
+msgstr "Exportera till CSV"
+
+msgid "Acquired skills"
+msgstr "Förvärvade färdigheter"
+
+msgid "No acquired skill"
+msgstr "Ingen förvärvad färdighet"
+
+msgid "Absences"
+msgstr "Frånvaro"
+
+msgid "No courses"
+msgstr "Inga kurser"
+
+msgid "No session matched"
+msgstr "Ingen session matchade"
+
+msgid "Unable to load the report"
+msgstr "Kan inte ladda rapporten"
+
+msgid "Please select a profile"
+msgstr "Välj en profil"
+
+msgid "Please select a session"
+msgstr "Välj en session"
+
+msgid "Please select a user"
+msgstr "Välj en användare"
+
+msgid "Unable to export the report"
+msgstr "Kan inte exportera rapporten"
+
+msgid "Accepted on web"
+msgstr "Godkänd på webben"
+
+msgid "Accepted by e-mail"
+msgstr "Godkänd via e-post"
+
+msgid "The course title is required"
+msgstr "Kursens titel krävs"
+
+msgid "Unexpected error"
+msgstr "Oväntat fel"
+
+msgid "Separate tags with commas"
+msgstr "Separera taggar med kommatecken"
+
+msgid "Open link"
+msgstr "Öppna länk"
+
+msgid "Describe the course picture to generate"
+msgstr "Beskriv kursbilden som ska genereras"
+
+msgid "Generate picture"
+msgstr "Generera bild"
+
+msgid "PDF watermark"
+msgstr "PDF-vattenstämpel"
+
+msgid "No watermark image"
+msgstr "Ingen vattenstämpelbild"
+
+msgid "Upload watermark"
+msgstr "Ladda upp vattenstämpel"
+
+msgid "Delete watermark"
+msgstr "Ta bort vattenstämpel"
+
+msgid "Course legal agreement file"
+msgstr "Kursens juridiska avtal fil"
+
+msgid "Upload agreement file"
+msgstr "Ladda upp avtalsfil"
+
+msgid "Download agreement file"
+msgstr "Ladda ner avtalsfil"
+
+msgid "Delete agreement file"
+msgstr "Ta bort avtalsfil"
+
+msgid "Custom certificate images"
+msgstr "Anpassade certifikatbilder"
+
+msgid "Course picture updated"
+msgstr "Kursbilden har uppdaterats"
+
+msgid "The course picture could not be uploaded"
+msgstr "Kursbilden kunde inte laddas upp"
+
+msgid "Course picture deleted"
+msgstr "Kursbilden har tagits bort"
+
+msgid "Enter a description for the image"
+msgstr "Ange en beskrivning för bilden"
+
+msgid "The image generator returned an empty response"
+msgstr "Bildgeneratorn returnerade ett tomt svar"
+
+msgid "Course picture generated"
+msgstr "Kursbilden har genererats"
+
+msgid "Watermark updated"
+msgstr "Vattenstämpeln har uppdaterats"
+
+msgid "Watermark deleted"
+msgstr "Vattenstämpeln har tagits bort"
+
+msgid "Agreement file updated"
+msgstr "Avtalsfilen har uppdaterats"
+
+msgid "Agreement file deleted"
+msgstr "Avtalsfilen har tagits bort"
+
+msgid "Certificate image updated"
+msgstr "Certifikatbilden har uppdaterats"
+
+msgid "Certificate image deleted"
+msgstr "Certifikatbilden har tagits bort"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Använd bildredigeraren innan uppladdning för att beskära, rotera eller ändra storlek på kursbilden."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Denna inbjudningslänk är ogiltig eller har upphört att gälla."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Denna inbjudan skickades till en annan användare. Logga in med det inbjudna kontot."
+
+msgid "The invitation could not be accepted."
+msgstr "Inbjudan kunde inte accepteras."
+
+msgid "You have been subscribed successfully."
+msgstr "Du har registrerats framgångsrikt."
+
+msgid "This email address cannot be invited."
+msgstr "Denna e-postadress kan inte bjudas in."
+
+msgid "This user is already subscribed to the session."
+msgstr "Denna användare är redan registrerad på sessionen."
+
+msgid "This user is already subscribed to the course."
+msgstr "Denna användare är redan registrerad på kursen."
 

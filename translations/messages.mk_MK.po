@@ -37699,6 +37699,12 @@ msgstr "Вашата сесија ќе истече наскоро"
 msgid "Do you want to continue your session?"
 msgstr "Дали сакате да ја продолжите вашата сесија?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Деталите за вашата сесија се изгубени, ве молиме најавете се повторно."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Пристапот до овој ресурс е одбиен. Изгледа дека немате потребни дозволи за пристап."
+
 msgid "Stay connected"
 msgstr "Остани поврзан"
 
@@ -39165,4 +39171,316 @@ msgstr "Обработени"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: овозможете mod_status (ExtendedStatus On) и дозволете localhost да пристапува до /server-status. Nginx: овозможете stub_status на локација достапна само од localhost, како /nginx_status или /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Распределба на проценти на оценки"
+
+msgid "Top learners"
+msgstr "Најдобри ученици"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Овој напредок комбинира напредок во патеката на учење и просечниот резултат од вежбите на ученикот"
+
+msgid "Additional profile fields"
+msgstr "Дополнителни полиња за профил"
+
+msgid "Visible columns"
+msgstr "Видливи колони"
+
+msgid "Learning path completion"
+msgstr "Завршување на патеката на учење"
+
+msgid "Number of certificates"
+msgstr "Број на сертификати"
+
+msgid "Could not export the report"
+msgstr "Не можеше да се извезе извештајот"
+
+msgid "Second learner"
+msgstr "Втор ученик"
+
+msgid "Results by learner"
+msgstr "Резултати по ученик"
+
+msgid "Use filters to narrow down questions."
+msgstr "Користете филтри за да ги стесните прашањата."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Обидете се да ги прилагодите филтрите и пребарувајте повторно."
+
+msgid "Results per page"
+msgstr "Резултати по страница"
+
+msgid "No answers"
+msgstr "Нема одговори"
+
+msgid "Tests using this question"
+msgstr "Тестови што ја користат оваа прашање"
+
+msgid "Delete failed"
+msgstr "Бришењето не успеа"
+
+msgid "PHP cache"
+msgstr "PHP кеш"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Дијагностика на OPcache и APCu во живо"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Кликнете за да ги прикажете дијагностиките на OPcache и APCu"
+
+msgid "Memory used"
+msgstr "Искористена меморија"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache е инсталиран, но не е овозможен."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Проширувањето OPcache не е достапно на овој сервер."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu е инсталиран, но не е овозможен."
+
+msgid "APCu extension is not available on this server."
+msgstr "Проширувањето APCu не е достапно на овој сервер."
+
+msgid "Constant"
+msgstr "Константа"
+
+msgid "Space used on disk (MB)"
+msgstr "Искористен простор на дискот (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Постави максимален простор за курсот (MB)"
+
+msgid "Memory free"
+msgstr "Слободна меморија"
+
+msgid "Memory wasted"
+msgstr "Потрошена меморија"
+
+msgid "Memory used %"
+msgstr "Искористена меморија %"
+
+msgid "Cached scripts"
+msgstr "Кеширани скрипти"
+
+msgid "Cached keys"
+msgstr "Кеширани клучеви"
+
+msgid "Misses"
+msgstr "Промашувања"
+
+msgid "Cache full"
+msgstr "Кешот е полн"
+
+msgid "OOM restarts"
+msgstr "OOM рестартирања"
+
+msgid "Hash restarts"
+msgstr "Хеш рестартирања"
+
+msgid "Manual restarts"
+msgstr "Рачно рестартирања"
+
+msgid "Interned strings used"
+msgstr "Искористени интернирани низи"
+
+msgid "Interned strings free"
+msgstr "Слободни интернирани низи"
+
+msgid "Interned strings count"
+msgstr "Број на интернирани низи"
+
+msgid "Memory available"
+msgstr "Достапна меморија"
+
+msgid "Memory size"
+msgstr "Големина на меморијата"
+
+msgid "Entries"
+msgstr "Записи"
+
+msgid "Slots"
+msgstr "Слотови"
+
+msgid "Expunges"
+msgstr "Исфрлања"
+
+msgid "Cache start time"
+msgstr "Време на старт на кешот"
+
+msgid "Time zone"
+msgstr "Временска зона"
+
+msgid "Not registered"
+msgstr "Не е регистриран"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Филтрирај и прикажи сертификати на учесници по сесија, курс, датум или учесник, па извези ги кога е потребно."
+
+msgid "Filter by session and course"
+msgstr "Филтрирај по сесија и курс"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Изберете сесија, курс и опционален датум за да ги прикажете генерираните сертификати."
+
+msgid "Filter by learner"
+msgstr "Филтрирај по учесник"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Пронајди сертификати за одреден учесник низ сите сесии и курсеви."
+
+msgid "Certificates found"
+msgstr "Пронајдени сертификати"
+
+msgid "Open certificate"
+msgstr "Отвори сертификат"
+
+msgid "Certificate file not available"
+msgstr "Датотеката со сертификатот не е достапна"
+
+msgid "Export to CSV"
+msgstr "Извези во CSV"
+
+msgid "Acquired skills"
+msgstr "Стекнати вештини"
+
+msgid "No acquired skill"
+msgstr "Нема стекната вештина"
+
+msgid "Absences"
+msgstr "Отсуства"
+
+msgid "No courses"
+msgstr "Нема курсеви"
+
+msgid "No session matched"
+msgstr "Не е пронајдена соодветна сесија"
+
+msgid "Unable to load the report"
+msgstr "Не може да се вчита извештајот"
+
+msgid "Please select a profile"
+msgstr "Ве молиме изберете профил"
+
+msgid "Please select a session"
+msgstr "Ве молиме изберете сесија"
+
+msgid "Please select a user"
+msgstr "Ве молиме изберете корисник"
+
+msgid "Unable to export the report"
+msgstr "Не може да се извезе извештајот"
+
+msgid "Accepted on web"
+msgstr "Прифатено на веб"
+
+msgid "Accepted by e-mail"
+msgstr "Прифатено по е-пошта"
+
+msgid "The course title is required"
+msgstr "Насловот на курсот е задолжителен"
+
+msgid "Unexpected error"
+msgstr "Неочекувана грешка"
+
+msgid "Separate tags with commas"
+msgstr "Одвојте ознаки со запирки"
+
+msgid "Open link"
+msgstr "Отвори врска"
+
+msgid "Describe the course picture to generate"
+msgstr "Опишете ја сликата на курсот што треба да се генерира"
+
+msgid "Generate picture"
+msgstr "Генерирај слика"
+
+msgid "PDF watermark"
+msgstr "Воден печат на PDF"
+
+msgid "No watermark image"
+msgstr "Нема слика за воден печат"
+
+msgid "Upload watermark"
+msgstr "Постави воден печат"
+
+msgid "Delete watermark"
+msgstr "Избриши воден печат"
+
+msgid "Course legal agreement file"
+msgstr "Датотека со правен договор за курсот"
+
+msgid "Upload agreement file"
+msgstr "Постави датотека со договор"
+
+msgid "Download agreement file"
+msgstr "Преземи датотека со договор"
+
+msgid "Delete agreement file"
+msgstr "Избриши датотека со договор"
+
+msgid "Custom certificate images"
+msgstr "Прилагодени слики за сертификат"
+
+msgid "Course picture updated"
+msgstr "Сликата на курсот е ажурирана"
+
+msgid "The course picture could not be uploaded"
+msgstr "Сликата на курсот не можеше да се постави"
+
+msgid "Course picture deleted"
+msgstr "Сликата на курсот е избришана"
+
+msgid "Enter a description for the image"
+msgstr "Внесете опис за сликата"
+
+msgid "The image generator returned an empty response"
+msgstr "Генераторот на слики врати празен одговор"
+
+msgid "Course picture generated"
+msgstr "Сликата на курсот е генерирана"
+
+msgid "Watermark updated"
+msgstr "Водниот печат е ажуриран"
+
+msgid "Watermark deleted"
+msgstr "Водниот печат е избришан"
+
+msgid "Agreement file updated"
+msgstr "Датотеката со договорот е ажурирана"
+
+msgid "Agreement file deleted"
+msgstr "Датотеката со договорот е избришана"
+
+msgid "Certificate image updated"
+msgstr "Сликата за сертификат е ажурирана"
+
+msgid "Certificate image deleted"
+msgstr "Сликата за сертификат е избришана"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Користете го уредникот на слики пред да поставите за да ја исечете, ротирате или промените големината на сликата на курсот."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Оваа врска за покана е невалидна или е истечена."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Оваа покана е испратена до друг корисник. Ве молиме најавете се со поканетиот профил."
+
+msgid "The invitation could not be accepted."
+msgstr "Поканата не можеше да се прифати."
+
+msgid "You have been subscribed successfully."
+msgstr "Успешно се пријавивте."
+
+msgid "This email address cannot be invited."
+msgstr "Оваа адреса на е-пошта не може да се покани."
+
+msgid "This user is already subscribed to the session."
+msgstr "Овој корисник е веќе пријавен на сесијата."
+
+msgid "This user is already subscribed to the course."
+msgstr "Овој корисник е веќе пријавен на курсот."
 

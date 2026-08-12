@@ -37695,6 +37695,12 @@ msgstr "Ваша сесія скоро завершиться"
 msgid "Do you want to continue your session?"
 msgstr "Бажаєте продовжити сесію?"
 
+msgid "Your session details have been lost, please login again."
+msgstr "Ваші дані сеансу втрачено, будь ласка, увійдіть знову."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Доступ до цього ресурсу заборонено. Схоже, у вас немає необхідних прав для доступу."
+
 msgid "Stay connected"
 msgstr "Залишитися підключеним"
 
@@ -39161,4 +39167,316 @@ msgstr "Оброблено"
 
 msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
 msgstr "Apache: увімкніть mod_status (ExtendedStatus On) і дозвольте localhost доступ до /server-status. Nginx: увімкніть stub_status у локальній локації, наприклад /nginx_status або /stub_status."
+
+msgid "Grade percentage distribution"
+msgstr "Розподіл відсотків оцінок"
+
+msgid "Top learners"
+msgstr "Найкращі учні"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Цей прогрес поєднує прогрес навчального шляху та середній результат вправ учня"
+
+msgid "Additional profile fields"
+msgstr "Додаткові поля профілю"
+
+msgid "Visible columns"
+msgstr "Видимі стовпці"
+
+msgid "Learning path completion"
+msgstr "Завершення навчального шляху"
+
+msgid "Number of certificates"
+msgstr "Кількість сертифікатів"
+
+msgid "Could not export the report"
+msgstr "Не вдалося експортувати звіт"
+
+msgid "Second learner"
+msgstr "Другий учень"
+
+msgid "Results by learner"
+msgstr "Результати за учнем"
+
+msgid "Use filters to narrow down questions."
+msgstr "Використовуйте фільтри, щоб звузити пошук питань."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Спробуйте змінити фільтри та повторити пошук."
+
+msgid "Results per page"
+msgstr "Результатів на сторінку"
+
+msgid "No answers"
+msgstr "Немає відповідей"
+
+msgid "Tests using this question"
+msgstr "Тести, що використовують це питання"
+
+msgid "Delete failed"
+msgstr "Не вдалося видалити"
+
+msgid "PHP cache"
+msgstr "Кеш PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Діагностика OPcache та APCu у реальному часі"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Натисніть, щоб показати діагностику OPcache та APCu"
+
+msgid "Memory used"
+msgstr "Використана пам’ять"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache встановлено, але не увімкнено."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Розширення OPcache недоступне на цьому сервері."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu встановлено, але не увімкнено."
+
+msgid "APCu extension is not available on this server."
+msgstr "Розширення APCu недоступне на цьому сервері."
+
+msgid "Constant"
+msgstr "Константа"
+
+msgid "Space used on disk (MB)"
+msgstr "Використаний простір на диску (МБ)"
+
+msgid "Set max course space (MB)"
+msgstr "Встановити максимальний простір курсу (МБ)"
+
+msgid "Memory free"
+msgstr "Вільна пам’ять"
+
+msgid "Memory wasted"
+msgstr "Втрачено пам'яті"
+
+msgid "Memory used %"
+msgstr "Використано пам'яті %"
+
+msgid "Cached scripts"
+msgstr "Кешовані скрипти"
+
+msgid "Cached keys"
+msgstr "Кешовані ключі"
+
+msgid "Misses"
+msgstr "Промахи"
+
+msgid "Cache full"
+msgstr "Кеш заповнено"
+
+msgid "OOM restarts"
+msgstr "Перезапуски через нестачу пам'яті"
+
+msgid "Hash restarts"
+msgstr "Перезапуски хешу"
+
+msgid "Manual restarts"
+msgstr "Ручні перезапуски"
+
+msgid "Interned strings used"
+msgstr "Використано інтернованих рядків"
+
+msgid "Interned strings free"
+msgstr "Вільно інтернованих рядків"
+
+msgid "Interned strings count"
+msgstr "Кількість інтернованих рядків"
+
+msgid "Memory available"
+msgstr "Доступно пам'яті"
+
+msgid "Memory size"
+msgstr "Розмір пам'яті"
+
+msgid "Entries"
+msgstr "Записи"
+
+msgid "Slots"
+msgstr "Слоти"
+
+msgid "Expunges"
+msgstr "Вилучення"
+
+msgid "Cache start time"
+msgstr "Час запуску кешу"
+
+msgid "Time zone"
+msgstr "Часовий пояс"
+
+msgid "Not registered"
+msgstr "Не зареєстровано"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Фільтруйте та переглядайте сертифікати слухачів за сесією, курсом, датою чи слухачем, а потім експортуйте їх за потреби."
+
+msgid "Filter by session and course"
+msgstr "Фільтрувати за сесією та курсом"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Виберіть сесію, курс і за потреби дату, щоб переглянути згенеровані сертифікати."
+
+msgid "Filter by learner"
+msgstr "Фільтрувати за слухачем"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Знайти сертифікати конкретного слухача за всіма сесіями та курсами."
+
+msgid "Certificates found"
+msgstr "Знайдено сертифікатів"
+
+msgid "Open certificate"
+msgstr "Відкрити сертифікат"
+
+msgid "Certificate file not available"
+msgstr "Файл сертифіката недоступний"
+
+msgid "Export to CSV"
+msgstr "Експортувати в CSV"
+
+msgid "Acquired skills"
+msgstr "Набуті навички"
+
+msgid "No acquired skill"
+msgstr "Немає набутих навичок"
+
+msgid "Absences"
+msgstr "Відсутності"
+
+msgid "No courses"
+msgstr "Немає курсів"
+
+msgid "No session matched"
+msgstr "Не знайдено відповідних сесій"
+
+msgid "Unable to load the report"
+msgstr "Не вдалося завантажити звіт"
+
+msgid "Please select a profile"
+msgstr "Виберіть профіль"
+
+msgid "Please select a session"
+msgstr "Виберіть сесію"
+
+msgid "Please select a user"
+msgstr "Виберіть користувача"
+
+msgid "Unable to export the report"
+msgstr "Не вдалося експортувати звіт"
+
+msgid "Accepted on web"
+msgstr "Прийнято через веб"
+
+msgid "Accepted by e-mail"
+msgstr "Прийнято електронною поштою"
+
+msgid "The course title is required"
+msgstr "Назва курсу обов'язкова"
+
+msgid "Unexpected error"
+msgstr "Несподівана помилка"
+
+msgid "Separate tags with commas"
+msgstr "Розділяйте теги комами"
+
+msgid "Open link"
+msgstr "Відкрити посилання"
+
+msgid "Describe the course picture to generate"
+msgstr "Опишіть зображення курсу для генерації"
+
+msgid "Generate picture"
+msgstr "Згенерувати зображення"
+
+msgid "PDF watermark"
+msgstr "Водяний знак PDF"
+
+msgid "No watermark image"
+msgstr "Немає зображення водяного знака"
+
+msgid "Upload watermark"
+msgstr "Завантажити водяний знак"
+
+msgid "Delete watermark"
+msgstr "Видалити водяний знак"
+
+msgid "Course legal agreement file"
+msgstr "Файл угоди курсу"
+
+msgid "Upload agreement file"
+msgstr "Завантажити файл угоди"
+
+msgid "Download agreement file"
+msgstr "Завантажити файл угоди"
+
+msgid "Delete agreement file"
+msgstr "Видалити файл угоди"
+
+msgid "Custom certificate images"
+msgstr "Зображення сертифіката"
+
+msgid "Course picture updated"
+msgstr "Зображення курсу оновлено"
+
+msgid "The course picture could not be uploaded"
+msgstr "Не вдалося завантажити зображення курсу"
+
+msgid "Course picture deleted"
+msgstr "Зображення курсу видалено"
+
+msgid "Enter a description for the image"
+msgstr "Введіть опис зображення"
+
+msgid "The image generator returned an empty response"
+msgstr "Генератор зображень повернув порожню відповідь"
+
+msgid "Course picture generated"
+msgstr "Зображення курсу згенеровано"
+
+msgid "Watermark updated"
+msgstr "Водяний знак оновлено"
+
+msgid "Watermark deleted"
+msgstr "Водяний знак видалено"
+
+msgid "Agreement file updated"
+msgstr "Файл угоди оновлено"
+
+msgid "Agreement file deleted"
+msgstr "Файл угоди видалено"
+
+msgid "Certificate image updated"
+msgstr "Зображення сертифіката оновлено"
+
+msgid "Certificate image deleted"
+msgstr "Зображення сертифіката видалено"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Використовуйте редактор зображень перед завантаженням, щоб обрізати, повернути або змінити розмір зображення курсу."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Це посилання-запрошення недійсне або застаріло."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Це запрошення надіслано іншому користувачеві. Будь ласка, увійдіть за допомогою запрошеного облікового запису."
+
+msgid "The invitation could not be accepted."
+msgstr "Не вдалося прийняти запрошення."
+
+msgid "You have been subscribed successfully."
+msgstr "Вас успішно зареєстровано."
+
+msgid "This email address cannot be invited."
+msgstr "Цю електронну адресу не можна запросити."
+
+msgid "This user is already subscribed to the session."
+msgstr "Цей користувач уже зареєстрований на сесію."
+
+msgid "This user is already subscribed to the course."
+msgstr "Цей користувач уже зареєстрований на курс."
 

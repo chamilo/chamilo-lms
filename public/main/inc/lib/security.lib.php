@@ -306,7 +306,11 @@ class Security
      */
     public static function remove_XSS($var, int $user_status = null, bool $filter_terms = false)
     {
-        if ($filter_terms) {
+        if (null === $var) {
+            return '';
+        }
+
+	if ($filter_terms) {
             $var = self::filter_terms($var);
         }
 

@@ -15,7 +15,7 @@
         <BaseInputText
           id="course-reporting-keyword"
           v-model="filters.keyword"
-          :label="t('Search learners')"
+          :label="t('Search student')"
           name="keyword"
           @keyup.enter="applyFilters"
         />
@@ -23,7 +23,7 @@
 
       <div class="flex flex-wrap items-center gap-2">
         <BaseButton
-          :label="t('Search learners')"
+          :label="t('Search student')"
           icon="search"
           type="primary"
           @click="applyFilters"
@@ -39,7 +39,7 @@
           @click="printReport"
         />
         <BaseButton
-          :label="t('Export to CSV')"
+          :label="t('Export as CSV')"
           icon="file-delimited-outline"
           only-icon
           type="primary-alternative"
@@ -365,7 +365,7 @@
           <Column
             v-if="isColumnVisible('bestScore')"
             field="bestScore"
-            :header="t('Score - Only best attempts')"
+            :header="t('Only best attempts')"
           >
             <template #body="{ data }">{{ formatPercent(data.bestScore) }}</template>
           </Column>

@@ -3714,5 +3714,7 @@
     "Total requests": "Eskaera guztiak",
     "Accepts": "Onartuak",
     "Handled": "Kudeatuak",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status-era. Nginx: gaitu stub_status localhost soilik den kokapen batean, adibidez /nginx_status edo /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: gaitu mod_status (ExtendedStatus On) eta baimendu localhost /server-status-era. Nginx: gaitu stub_status localhost soilik den kokapen batean, adibidez /nginx_status edo /stub_status.",
+    "Results per user": "Emaitzak erabiltzaileko",
+    "Only best attempts": "Saiakerarik onenak soilik"
 }

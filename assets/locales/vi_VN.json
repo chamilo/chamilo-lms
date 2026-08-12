@@ -3714,5 +3714,7 @@
     "Total requests": "T\u1ed5ng s\u1ed1 y\u00eau c\u1ea7u",
     "Accepts": "Ch\u1ea5p nh\u1eadn",
     "Handled": "\u0110\u00e3 x\u1eed l\u00fd",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: b\u1eadt mod_status (ExtendedStatus On) v\u00e0 cho ph\u00e9p localhost truy c\u1eadp /server-status. Nginx: b\u1eadt stub_status tr\u00ean v\u1ecb tr\u00ed ch\u1ec9 localhost nh\u01b0 /nginx_status ho\u1eb7c /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: b\u1eadt mod_status (ExtendedStatus On) v\u00e0 cho ph\u00e9p localhost truy c\u1eadp /server-status. Nginx: b\u1eadt stub_status tr\u00ean v\u1ecb tr\u00ed ch\u1ec9 localhost nh\u01b0 /nginx_status ho\u1eb7c /stub_status.",
+    "Results per user": "K\u1ebft qu\u1ea3 theo ng\u01b0\u1eddi d\u00f9ng",
+    "Only best attempts": "Ch\u1ec9 c\u00e1c l\u1ea7n th\u1eed t\u1ed1t nh\u1ea5t"
 }

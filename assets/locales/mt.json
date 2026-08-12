@@ -3674,5 +3674,7 @@
     "Opened tables": "Tabelli miftu\u0127a",
     "Query cache": "Cache tal-mistoqsijiet",
     "Database load metrics are only available for MySQL and MariaDB.": "Il-metri\u010bi tat-tag\u0127bija tad-database huma disponibbli biss g\u0127al MySQL u MariaDB.",
-    "Threshold": "Limitu"
+    "Threshold": "Limitu",
+    "Results per user": "Ri\u017cultati g\u0127al kull utent",
+    "Only best attempts": "L-a\u0127jar tentattivi biss"
 }

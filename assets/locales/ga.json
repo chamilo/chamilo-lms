@@ -3714,5 +3714,7 @@
     "Total requests": "Iarratais ioml\u00e1na",
     "Accepts": "Glactha",
     "Handled": "L\u00e1imhse\u00e1ilte",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shu\u00edomh localhost amh\u00e1in mar /nginx_status n\u00f3 /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: cumasaigh mod_status (ExtendedStatus On) agus ceadaigh localhost chuig /server-status. Nginx: cumasaigh stub_status ar shu\u00edomh localhost amh\u00e1in mar /nginx_status n\u00f3 /stub_status.",
+    "Results per user": "Tortha\u00ed in aghaidh \u00fas\u00e1ideora",
+    "Only best attempts": "Na hiarrachta\u00ed is fearr amh\u00e1in"
 }

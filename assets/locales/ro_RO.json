@@ -3714,5 +3714,7 @@
     "Total requests": "Total cereri",
     "Accepts": "Acceptate",
     "Handled": "Gestionate",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: activa\u021bi mod_status (ExtendedStatus On) \u0219i permite\u021bi localhost la /server-status. Nginx: activa\u021bi stub_status pe o loca\u021bie doar localhost, cum ar fi /nginx_status sau /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: activa\u021bi mod_status (ExtendedStatus On) \u0219i permite\u021bi localhost la /server-status. Nginx: activa\u021bi stub_status pe o loca\u021bie doar localhost, cum ar fi /nginx_status sau /stub_status.",
+    "Results per user": "Rezultate pe utilizatori",
+    "Only best attempts": "Doar cele mai bune incercari"
 }

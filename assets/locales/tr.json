@@ -3714,5 +3714,7 @@
     "Total requests": "Toplam istek",
     "Accepts": "Kabul",
     "Handled": "\u0130\u015flendi",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status'u etkinle\u015ftirin (ExtendedStatus On) ve localhost'un /server-status'a eri\u015fimine izin verin. Nginx: localhost'a \u00f6zel bir konumda (\u00f6rne\u011fin /nginx_status veya /stub_status) stub_status'u etkinle\u015ftirin."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status'u etkinle\u015ftirin (ExtendedStatus On) ve localhost'un /server-status'a eri\u015fimine izin verin. Nginx: localhost'a \u00f6zel bir konumda (\u00f6rne\u011fin /nginx_status veya /stub_status) stub_status'u etkinle\u015ftirin.",
+    "Results per user": "Kullan\u0131c\u0131lara g\u00f6re sonu\u00e7lar",
+    "Only best attempts": "Sadece en iyi denemeler"
 }

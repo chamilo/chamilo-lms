@@ -3654,5 +3654,7 @@
     "Opened tables": "Opna\u00f0ar t\u00f6flur",
     "Query cache": "Fyrirspurnaskyndiminni",
     "Database load metrics are only available for MySQL and MariaDB.": "Gagnagrunns\u00e1lagsm\u00e6lingar eru a\u00f0eins tilt\u00e6kar fyrir MySQL og MariaDB.",
-    "Threshold": "M\u00f6rk"
+    "Threshold": "M\u00f6rk",
+    "Results per user": "Ni\u00f0urst\u00f6\u00f0ur \u00e1 notanda",
+    "Only best attempts": "A\u00f0eins bestu tilraunir"
 }

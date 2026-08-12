@@ -29988,7 +29988,7 @@ msgid "Session period"
 msgstr "Session period"
 
 msgid "Search student"
-msgstr "Search student"
+msgstr "Search for student"
 
 msgid "Create new user"
 msgstr "Create new user"

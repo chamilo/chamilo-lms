@@ -3714,5 +3714,7 @@
     "Total requests": "Heildarbei\u00f0nir",
     "Accepts": "Tekur \u00edm\u00f3ti",
     "Handled": "Vi\u00f0gj\u00f8rdar",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: virkja mod_status (ExtendedStatus On) og loyva localhost at /server-status. Nginx: virkja stub_status \u00e1 einum localhost-only sta\u00f0i sum /nginx_status ella /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: virkja mod_status (ExtendedStatus On) og loyva localhost at /server-status. Nginx: virkja stub_status \u00e1 einum localhost-only sta\u00f0i sum /nginx_status ella /stub_status.",
+    "Results per user": "Ni\u00f0urst\u00f8\u00f0ur fyri br\u00fakara",
+    "Only best attempts": "Bert besturoyndirnar"
 }

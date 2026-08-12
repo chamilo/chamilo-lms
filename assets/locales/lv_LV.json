@@ -3714,5 +3714,7 @@
     "Total requests": "Kop\u0113jie piepras\u012bjumi",
     "Accepts": "Pie\u0146emtie",
     "Handled": "Apstr\u0101d\u0101tie",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.",
+    "Results per user": "Rezult\u0101ti par lietot\u0101ju",
+    "Only best attempts": "Tikai lab\u0101kie m\u0113\u0123in\u0101jumi"
 }

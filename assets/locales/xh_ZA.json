@@ -3714,5 +3714,7 @@
     "Total requests": "Izicelo ngokupheleleyo",
     "Accepts": "Ukuvunyelwa",
     "Handled": "Kuphathwe",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: vumela i-mod_status (ExtendedStatus On) kwaye uvumele i-localhost ukuya ku-/server-status. Nginx: vumela i-stub_status kwindawo ye-localhost kuphela njenge-/nginx_status okanye i-/stub_status.",
+    "Results per user": "Iziphumo ngomsebenzisi",
+    "Only best attempts": "Zama ezona zibalaseleyo kuphela"
 }

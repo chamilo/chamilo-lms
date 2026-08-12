@@ -3674,5 +3674,7 @@
     "Opened tables": "Avatud tabelid",
     "Query cache": "P\u00e4ringute vahem\u00e4lu",
     "Database load metrics are only available for MySQL and MariaDB.": "Andmebaasi koormuse m\u00f5\u00f5dikud on saadaval ainult MySQL ja MariaDB jaoks.",
-    "Threshold": "L\u00e4vend"
+    "Threshold": "L\u00e4vend",
+    "Results per user": "Tulemused kasutaja kohta",
+    "Only best attempts": "Ainult parimad katsed"
 }

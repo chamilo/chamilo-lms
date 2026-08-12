@@ -3714,5 +3714,7 @@
     "Total requests": "Ca\u0142kowita liczba \u017c\u0105da\u0144",
     "Accepts": "Akceptacje",
     "Handled": "Obs\u0142u\u017cone",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: w\u0142\u0105cz mod_status (ExtendedStatus On) i zezw\u00f3l localhost na /server-status. Nginx: w\u0142\u0105cz stub_status w lokalizacji dost\u0119pnej tylko z localhost, np. /nginx_status lub /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: w\u0142\u0105cz mod_status (ExtendedStatus On) i zezw\u00f3l localhost na /server-status. Nginx: w\u0142\u0105cz stub_status w lokalizacji dost\u0119pnej tylko z localhost, np. /nginx_status lub /stub_status.",
+    "Results per user": "Wyniki na u\u017cytkownika",
+    "Only best attempts": "Tylko najlepsze pr\u00f3by"
 }

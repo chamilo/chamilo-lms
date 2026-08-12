@@ -3714,5 +3714,7 @@
     "Total requests": "\ucd1d \uc694\uccad \uc218",
     "Accepts": "\uc218\ub77d",
     "Handled": "\ucc98\ub9ac\ub428",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status(ExtendedStatus On)\ub97c \ud65c\uc131\ud654\ud558\uace0 localhost\uac00 /server-status\uc5d0 \uc811\uadfc\ud560 \uc218 \uc788\ub3c4\ub85d \ud5c8\uc6a9\ud558\uc138\uc694. Nginx: /nginx_status \ub610\ub294 /stub_status\uc640 \uac19\uc740 localhost \uc804\uc6a9 \uc704\uce58\uc5d0\uc11c stub_status\ub97c \ud65c\uc131\ud654\ud558\uc138\uc694."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status(ExtendedStatus On)\ub97c \ud65c\uc131\ud654\ud558\uace0 localhost\uac00 /server-status\uc5d0 \uc811\uadfc\ud560 \uc218 \uc788\ub3c4\ub85d \ud5c8\uc6a9\ud558\uc138\uc694. Nginx: /nginx_status \ub610\ub294 /stub_status\uc640 \uac19\uc740 localhost \uc804\uc6a9 \uc704\uce58\uc5d0\uc11c stub_status\ub97c \ud65c\uc131\ud654\ud558\uc138\uc694.",
+    "Results per user": "\uc0ac\uc6a9\uc790\ubcc4 \uacb0\uacfc",
+    "Only best attempts": "\ucd5c\uace0 \uc810\uc218\ub9cc"
 }

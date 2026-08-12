@@ -3714,5 +3714,7 @@
     "Total requests": "Domandis tot\u00e2ls",
     "Accepts": "Acet\u00e2ts",
     "Handled": "Gjest\u00eets",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: abilit\u00e2 mod_status (ExtendedStatus On) e permeti al localhost di /server-status. Nginx: abilit\u00e2 stub_status suntun percors riserv\u00e2t al localhost come /nginx_status o /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: abilit\u00e2 mod_status (ExtendedStatus On) e permeti al localhost di /server-status. Nginx: abilit\u00e2 stub_status suntun percors riserv\u00e2t al localhost come /nginx_status o /stub_status.",
+    "Results per user": "Result\u00e2ts par utent",
+    "Only best attempts": "Simi lis mi\u00f4rs tent\u00e2ts"
 }

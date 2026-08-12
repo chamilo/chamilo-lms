@@ -3714,5 +3714,7 @@
     "Total requests": "Jumla ya maombi",
     "Accepts": "Inakubali",
     "Handled": "Imeshughulikiwa",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: wezesha mod_status (ExtendedStatus On) na ruhusu localhost kufikia /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: wezesha mod_status (ExtendedStatus On) na ruhusu localhost kufikia /server-status. Nginx: wezesha stub_status kwenye eneo la localhost pekee kama /nginx_status au /stub_status.",
+    "Results per user": "Matokeo kwa mtumiaji",
+    "Only best attempts": "Majaribio bora pekee"
 }

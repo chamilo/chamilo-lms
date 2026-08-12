@@ -3714,5 +3714,7 @@
     "Total requests": "\u00d6sszes k\u00e9r\u00e9s",
     "Accepts": "Elfogad\u00e1sok",
     "Handled": "Kezel\u00e9sek",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: enged\u00e9lyezze a mod_status modult (ExtendedStatus On) \u00e9s enged\u00e9lyezze a localhost sz\u00e1m\u00e1ra a /server-status el\u00e9r\u00e9st. Nginx: enged\u00e9lyezze a stub_status modult egy localhost-only helysz\u00ednen, p\u00e9ld\u00e1ul /nginx_status vagy /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: enged\u00e9lyezze a mod_status modult (ExtendedStatus On) \u00e9s enged\u00e9lyezze a localhost sz\u00e1m\u00e1ra a /server-status el\u00e9r\u00e9st. Nginx: enged\u00e9lyezze a stub_status modult egy localhost-only helysz\u00ednen, p\u00e9ld\u00e1ul /nginx_status vagy /stub_status.",
+    "Results per user": "Eredm\u00e9nyek felhaszn\u00e1l\u00f3nk\u00e9nt",
+    "Only best attempts": "Csak a legjobb pr\u00f3b\u00e1lkoz\u00e1sok"
 }

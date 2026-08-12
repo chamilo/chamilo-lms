@@ -54,7 +54,7 @@
           @click="printReport"
         />
         <BaseButton
-          :label="t('Export to CSV')"
+          :label="t('Export as CSV')"
           icon="file-delimited-outline"
           only-icon
           type="primary-alternative"

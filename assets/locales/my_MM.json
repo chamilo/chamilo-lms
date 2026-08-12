@@ -3672,5 +3672,7 @@
     "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy.": "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy.",
     "Hotspot combination": "Hotspot combination",
     "Add delineation": "Add delineation",
-    "This Office document question has no answer options. Its score is assigned during correction/results review.": "This Office document question has no answer options. Its score is assigned during correction/results review."
+    "This Office document question has no answer options. Its score is assigned during correction/results review.": "This Office document question has no answer options. Its score is assigned during correction/results review.",
+    "Results per user": "\u1021\u101e\u102f\u1036\u1038\u1015\u103c\u102f\u101e\u1030\u1021\u101c\u102d\u102f\u1000\u103a \u101b\u101c\u1012\u103a\u1019\u103b\u102c\u1038",
+    "Only best attempts": "\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038\u1000\u103c\u102d\u102f\u1038\u1005\u102c\u1038\u1019\u103e\u102f\u1019\u103b\u102c\u1038\u101e\u102c"
 }

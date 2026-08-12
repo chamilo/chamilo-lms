@@ -3714,5 +3714,7 @@
     "Total requests": "I\u0161 viso u\u017eklaus\u0173",
     "Accepts": "Priimta",
     "Handled": "Apdorota",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: \u012fgalinkite mod_status (ExtendedStatus On) ir leiskite localhost pasiekti /server-status. Nginx: \u012fgalinkite stub_status tik localhost vietoje, pvz., /nginx_status arba /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: \u012fgalinkite mod_status (ExtendedStatus On) ir leiskite localhost pasiekti /server-status. Nginx: \u012fgalinkite stub_status tik localhost vietoje, pvz., /nginx_status arba /stub_status.",
+    "Results per user": "Rezultatai pagal vartotoj\u0105",
+    "Only best attempts": "Tik geriausi bandymai"
 }

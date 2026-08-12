@@ -3714,5 +3714,7 @@
     "Total requests": "\u7dcf\u30ea\u30af\u30a8\u30b9\u30c8\u6570",
     "Accepts": "\u53d7\u3051\u5165\u308c",
     "Handled": "\u51e6\u7406\u6e08\u307f",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status\u3092\u6709\u52b9\u306b\u3057\uff08ExtendedStatus On\uff09\u3001localhost\u306b/server-status\u3092\u8a31\u53ef\u3057\u3066\u304f\u3060\u3055\u3044\u3002Nginx: localhost\u9650\u5b9a\u306e\u30ed\u30b1\u30fc\u30b7\u30e7\u30f3\uff08\u4f8b: /nginx_status \u307e\u305f\u306f /stub_status\uff09\u3067stub_status\u3092\u6709\u52b9\u306b\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: mod_status\u3092\u6709\u52b9\u306b\u3057\uff08ExtendedStatus On\uff09\u3001localhost\u306b/server-status\u3092\u8a31\u53ef\u3057\u3066\u304f\u3060\u3055\u3044\u3002Nginx: localhost\u9650\u5b9a\u306e\u30ed\u30b1\u30fc\u30b7\u30e7\u30f3\uff08\u4f8b: /nginx_status \u307e\u305f\u306f /stub_status\uff09\u3067stub_status\u3092\u6709\u52b9\u306b\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
+    "Results per user": "\u30e6\u30fc\u30b6\u30fc\u3054\u3068\u306e\u7d50\u679c",
+    "Only best attempts": "\u6700\u9ad8\u30b9\u30b3\u30a2\u306e\u307f"
 }

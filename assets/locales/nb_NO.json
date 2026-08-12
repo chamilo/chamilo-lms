@@ -3674,5 +3674,7 @@
     "Opened tables": "\u00c5pnede tabeller",
     "Query cache": "Sp\u00f8rringsbuffer",
     "Database load metrics are only available for MySQL and MariaDB.": "Databasebelastningsm\u00e5linger er kun tilgjengelige for MySQL og MariaDB.",
-    "Threshold": "Grenseverdi"
+    "Threshold": "Grenseverdi",
+    "Results per user": "Resultater per bruker",
+    "Only best attempts": "Kun beste fors\u00f8k"
 }

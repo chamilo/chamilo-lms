@@ -3714,5 +3714,7 @@
     "Total requests": "Yhteens\u00e4 pyynt\u00f6j\u00e4",
     "Accepts": "Hyv\u00e4ksytyt",
     "Handled": "K\u00e4sitellyt",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: ota k\u00e4ytt\u00f6\u00f6n mod_status (ExtendedStatus On) ja salli localhost osoitteeseen /server-status. Nginx: ota k\u00e4ytt\u00f6\u00f6n stub_status localhost-osoitteessa, kuten /nginx_status tai /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: ota k\u00e4ytt\u00f6\u00f6n mod_status (ExtendedStatus On) ja salli localhost osoitteeseen /server-status. Nginx: ota k\u00e4ytt\u00f6\u00f6n stub_status localhost-osoitteessa, kuten /nginx_status tai /stub_status.",
+    "Results per user": "Tulokset k\u00e4ytt\u00e4j\u00e4 kohti",
+    "Only best attempts": "Vain parhaat yritykset"
 }

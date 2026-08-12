@@ -3714,5 +3714,7 @@
     "Total requests": "Skupno zahtev",
     "Accepts": "Sprejemi",
     "Handled": "Obravnavano",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: omogo\u010dite mod_status (ExtendedStatus On) in dovolite localhost dostop do /server-status. Nginx: omogo\u010dite stub_status na lokaciji, ki je dostopna samo z localhost, npr. /nginx_status ali /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: omogo\u010dite mod_status (ExtendedStatus On) in dovolite localhost dostop do /server-status. Nginx: omogo\u010dite stub_status na lokaciji, ki je dostopna samo z localhost, npr. /nginx_status ali /stub_status.",
+    "Results per user": "Rezultati po uporabnikih",
+    "Only best attempts": "Samo najbolj\u0161i poskusi"
 }

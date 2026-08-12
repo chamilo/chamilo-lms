@@ -3714,5 +3714,7 @@
     "Total requests": "Kabuuang kahilingan",
     "Accepts": "Tumatanggap",
     "Handled": "Hinahawakan",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang lokasyon na localhost lamang tulad ng /nginx_status o /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: paganahin ang mod_status (ExtendedStatus On) at payagan ang localhost sa /server-status. Nginx: paganahin ang stub_status sa isang lokasyon na localhost lamang tulad ng /nginx_status o /stub_status.",
+    "Results per user": "Mga resulta bawat gumagamit",
+    "Only best attempts": "Mga pinakamahusay na attempt lamang"
 }

@@ -3714,5 +3714,7 @@
     "Total requests": "K\u00ebrkesat totale",
     "Accepts": "Pranuar",
     "Handled": "Trajtuar",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: aktivizo mod_status (ExtendedStatus On) dhe lejo localhost n\u00eb /server-status. Nginx: aktivizo stub_status n\u00eb nj\u00eb vendndodhje vet\u00ebm p\u00ebr localhost si /nginx_status ose /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: aktivizo mod_status (ExtendedStatus On) dhe lejo localhost n\u00eb /server-status. Nginx: aktivizo stub_status n\u00eb nj\u00eb vendndodhje vet\u00ebm p\u00ebr localhost si /nginx_status ose /stub_status.",
+    "Results per user": "Rezultatet p\u00ebr p\u00ebrdorues",
+    "Only best attempts": "Vet\u00ebm p\u00ebrpjekjet m\u00eb t\u00eb mira"
 }

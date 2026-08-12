@@ -3714,5 +3714,7 @@
     "Total requests": "\u00c0pap\u1ecd\u0300 \u00e0w\u1ecdn \u00ecb\u00e9\u00e8r\u00e8",
     "Accepts": "\u00c0w\u1ecdn \u00ect\u1eb9\u0301w\u1ecd\u0301gb\u00e0",
     "Handled": "\u00c0w\u1ecdn t\u00ed a ti \u1e63\u00e8t\u00f2",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: \u1e63e \u00ecd\u00e0gb\u00e0s\u00f3k\u00e8 mod_status (ExtendedStatus On) k\u00ed o s\u00ec gba localhost l\u00e1\u00e0y\u00e8 s\u00ed /server-status. Nginx: \u1e63e \u00ecd\u00e0gb\u00e0s\u00f3k\u00e8 stub_status n\u00ed \u00e0\u00e0y\u00e8 localhost n\u00eckan b\u00edi /nginx_status t\u00e0b\u00ed /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: \u1e63e \u00ecd\u00e0gb\u00e0s\u00f3k\u00e8 mod_status (ExtendedStatus On) k\u00ed o s\u00ec gba localhost l\u00e1\u00e0y\u00e8 s\u00ed /server-status. Nginx: \u1e63e \u00ecd\u00e0gb\u00e0s\u00f3k\u00e8 stub_status n\u00ed \u00e0\u00e0y\u00e8 localhost n\u00eckan b\u00edi /nginx_status t\u00e0b\u00ed /stub_status.",
+    "Results per user": "Aw\u1ecdn abajade fun olumulo k\u1ecd\u1ecdkan",
+    "Only best attempts": "\u00c0w\u1ecdn \u00ecgb\u00ecy\u00e0nj\u00fa rere j\u00f9l\u1ecd n\u00eckan"
 }

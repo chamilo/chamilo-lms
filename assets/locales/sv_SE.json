@@ -3714,5 +3714,7 @@
     "Total requests": "Totalt antal f\u00f6rfr\u00e5gningar",
     "Accepts": "Accepterade",
     "Handled": "Hanterade",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: aktivera mod_status (ExtendedStatus On) och till\u00e5t localhost till /server-status. Nginx: aktivera stub_status p\u00e5 en plats som endast \u00e4r tillg\u00e4nglig fr\u00e5n localhost, t.ex. /nginx_status eller /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: aktivera mod_status (ExtendedStatus On) och till\u00e5t localhost till /server-status. Nginx: aktivera stub_status p\u00e5 en plats som endast \u00e4r tillg\u00e4nglig fr\u00e5n localhost, t.ex. /nginx_status eller /stub_status.",
+    "Results per user": "Resultat per anv\u00e4ndare",
+    "Only best attempts": "Endast b\u00e4sta f\u00f6rs\u00f6k"
 }

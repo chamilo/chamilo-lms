@@ -3714,5 +3714,7 @@
     "Total requests": "Wadarta codsiyada",
     "Accepts": "Aqbalid",
     "Handled": "Maamulid",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: karti mod_status (ExtendedStatus On) oo u oggol localhost inuu /server-status galo. Nginx: karti stub_status meel localhost-keliya ah sida /nginx_status ama /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: karti mod_status (ExtendedStatus On) oo u oggol localhost inuu /server-status galo. Nginx: karti stub_status meel localhost-keliya ah sida /nginx_status ama /stub_status.",
+    "Results per user": "Natiijooyinka isticmaale kasta",
+    "Only best attempts": "Taliyada ugu wanaagsan ee kaliya"
 }

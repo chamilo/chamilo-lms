@@ -146,7 +146,7 @@
         />
         <BaseButton
           v-if="canCsvExport"
-          :label="t('Export to CSV')"
+          :label="t('Export as CSV')"
           icon="file-delimited-outline"
           only-icon
           type="primary-alternative"

@@ -3714,5 +3714,7 @@
     "Total requests": "Celkov\u00fd po\u010det po\u017eadavk\u016f",
     "Accepts": "P\u0159ijato",
     "Handled": "Zpracov\u00e1no",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: povolte mod_status (ExtendedStatus On) a umo\u017en\u011bte localhost p\u0159\u00edstup k /server-status. Nginx: povolte stub_status na lokaci pouze pro localhost, nap\u0159. /nginx_status nebo /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: povolte mod_status (ExtendedStatus On) a umo\u017en\u011bte localhost p\u0159\u00edstup k /server-status. Nginx: povolte stub_status na lokaci pouze pro localhost, nap\u0159. /nginx_status nebo /stub_status.",
+    "Results per user": "V\u00fdsledky na u\u017eivatele",
+    "Only best attempts": "Pouze nejlep\u0161\u00ed pokusy"
 }

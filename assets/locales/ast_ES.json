@@ -3714,5 +3714,7 @@
     "Total requests": "Peticiones totales",
     "Accepts": "Aceutaes",
     "Handled": "Xestionaes",
-    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: activa mod_status (ExtendedStatus On) y permite a localhost acceder a /server-status. Nginx: activa stub_status nuna llocalizaci\u00f3n nam\u00e1i pa localhost como /nginx_status o /stub_status."
+    "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: activa mod_status (ExtendedStatus On) y permite a localhost acceder a /server-status. Nginx: activa stub_status nuna llocalizaci\u00f3n nam\u00e1i pa localhost como /nginx_status o /stub_status.",
+    "Results per user": "Resultaos por usuariu",
+    "Only best attempts": "Nam\u00e1i los meyores intentsos"
 }

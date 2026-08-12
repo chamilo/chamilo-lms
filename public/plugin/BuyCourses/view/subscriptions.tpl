@@ -107,6 +107,7 @@
 
                 <tbody class="divide-y divide-gray-25 bg-white">
                 {% for item in courses %}
+                {% set buy_data = course_buy_data[item.id]|default([]) %}
                 <tr data-item="{{ item.id }}" data-type="course" class="align-middle transition hover:bg-support-2">
                     <td class="px-6 py-4">
                         <div class="flex min-w-[20rem] items-center gap-3">
@@ -171,7 +172,7 @@
                     </td>
 
                     <td class="px-6 py-4 text-center">
-                        {% if item.buyCourseData %}
+                        {% if buy_data %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
                                             <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
@@ -186,8 +187,8 @@
 
                     {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
                     <td class="px-6 py-4 text-center text-sm text-gray-90">
-                        {% if item.buyCourseData and item.buyCourseData.tax_perc_show is defined %}
-                        {{ item.buyCourseData.tax_perc_show }} %
+                        {% if buy_data and buy_data.tax_perc_show is defined %}
+                        {{ buy_data.tax_perc_show }} %
                         {% else %}
                         <span class="text-gray-50">—</span>
                         {% endif %}
@@ -195,7 +196,7 @@
                     {% endif %}
 
                     <td class="px-6 py-4 text-right">
-                        {% if item.buyCourseData %}
+                        {% if buy_data %}
                         <a
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_subscription.php?' ~ {'id': item.id, 'type': product_type_course}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"
@@ -359,6 +360,7 @@
 
                 <tbody class="divide-y divide-gray-25 bg-white">
                 {% for item in sessions %}
+                {% set buy_data = session_buy_data[item.id]|default([]) %}
                 <tr data-item="{{ item.id }}" data-type="session" class="align-middle transition hover:bg-support-2">
                     <td class="px-6 py-4">
                         <a
@@ -378,7 +380,7 @@
                     </td>
 
                     <td class="px-6 py-4 text-center">
-                        {% if item.buyCourseData %}
+                        {% if buy_data %}
                         <span class="inline-flex items-center gap-2 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
                                             <em class="mdi mdi-check"></em>
                                             {{ 'Yes'|get_lang }}
@@ -393,8 +395,8 @@
 
                     {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
                     <td class="px-6 py-4 text-center text-sm text-gray-90">
-                        {% if item.buyCourseData and item.buyCourseData.tax_perc_show is defined %}
-                        {{ item.buyCourseData.tax_perc_show }} %
+                        {% if buy_data and buy_data.tax_perc_show is defined %}
+                        {{ buy_data.tax_perc_show }} %
                         {% else %}
                         <span class="text-gray-50">—</span>
                         {% endif %}
@@ -402,7 +404,7 @@
                     {% endif %}
 
                     <td class="px-6 py-4 text-right">
-                        {% if item.buyCourseData %}
+                        {% if buy_data %}
                         <a
                                 href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_subscription.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-info px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-info/30 focus:ring-offset-2"

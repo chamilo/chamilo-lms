@@ -18,13 +18,17 @@ final class WeakPasswordCheckerHelper
      *
      * Keep this list short because every candidate is checked against every selected user hash.
      */
+    private const int EXPENSIVE_HASH_CANDIDATE_LIMIT = 8;
+
     private const array COMMON_PASSWORD_CANDIDATES = [
         '123456',
-        '123456789',
-        '12345',
-        'qwerty',
         'password',
+        '123456789',
+        'qwerty',
         '12345678',
+        '12345',
+        'admin',
+        'admin123',
         '111111',
         '123123',
         '1234567890',
@@ -35,8 +39,6 @@ final class WeakPasswordCheckerHelper
         'password1',
         '1234',
         'password123',
-        'admin',
-        'admin123',
         'welcome',
         'welcome1',
         'letmein',
@@ -233,7 +235,7 @@ final class WeakPasswordCheckerHelper
         $weakUsers = [];
 
         foreach ($users as $user) {
-            foreach (self::COMMON_PASSWORD_CANDIDATES as $passwordCandidate) {
+            foreach ($this->getPasswordCandidates($user) as $passwordCandidate) {
                 if ($this->userRepository->isPasswordValid($user, $passwordCandidate)) {
                     $weakUsers[] = $user;
 
@@ -243,6 +245,35 @@ final class WeakPasswordCheckerHelper
         }
 
         return $weakUsers;
+    }
+
+    /**
+     * Modern password hashes are intentionally expensive to verify. Testing the whole
+     * dictionary against every Argon2/high-cost bcrypt hash makes this admin report
+     * impractically slow, so keep the highest-signal candidates first and cap only
+     * those expensive hashes. Legacy/low-cost hashes still use the complete list.
+     *
+     * @return string[]
+     */
+    private function getPasswordCandidates(User $user): array
+    {
+        $passwordHash = (string) $user->getPassword();
+
+        if ('' === $passwordHash) {
+            return [];
+        }
+
+        $passwordInfo = password_get_info($passwordHash);
+        $algorithm = (string) ($passwordInfo['algoName'] ?? '');
+        $bcryptCost = (int) ($passwordInfo['options']['cost'] ?? 0);
+        $isExpensiveHash = \in_array($algorithm, ['argon2i', 'argon2id'], true)
+            || ('bcrypt' === $algorithm && $bcryptCost >= 12);
+
+        if ($isExpensiveHash) {
+            return array_slice(self::COMMON_PASSWORD_CANDIDATES, 0, self::EXPENSIVE_HASH_CANDIDATE_LIMIT);
+        }
+
+        return self::COMMON_PASSWORD_CANDIDATES;
     }
 
     /**

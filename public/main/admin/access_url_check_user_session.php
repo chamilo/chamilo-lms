@@ -66,7 +66,7 @@ if ($show_users_with_problems) {
 
 foreach ($session_list as $session_item) {
     $session_id = $session_item['id'];
-    $html .= '<h3>'.$session_item['name'].'</h3>';
+    $html .= '<h3>'.$session_item['title'].'</h3>';
     $access_where = "(access_url_id = $url_id OR access_url_id is null )";
     if ($show_users_with_problems) {
         $access_where = '(access_url_id is null)';

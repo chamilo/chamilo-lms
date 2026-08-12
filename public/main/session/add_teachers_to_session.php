@@ -50,7 +50,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 // Build options for selects (keep original data sources)
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 $sessionList = [];
 foreach ($session_list as $row) {
     $sessionList[(int) $row['id']] = $row['title'];

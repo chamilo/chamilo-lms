@@ -81,10 +81,16 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
-        $this->initializeLegacyBridge();
-
         /** @var User $admin */
         $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE, User::class);
+
+        $this->installDemoCourses($admin, Course::OPEN_PLATFORM);
+    }
+
+    public function installDemoCourses(User $admin, int $visibility): void
+    {
+        $this->initializeLegacyBridge();
+
         $adminId = (int) $admin->getId();
         $previousToken = $this->tokenStorage->getToken();
 
@@ -106,7 +112,7 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
                     $managedAdmin->getRoles()
                 ));
 
-                $this->loadDemoCourse($definition, $managedAdmin);
+                $this->loadDemoCourse($definition, $managedAdmin, $visibility);
             }
         } finally {
             $this->clearLegacyCourseContext();
@@ -204,7 +210,7 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
     /**
      * @param array{title: string, code: string, archive: string, illustration: string, visible_tool: string} $definition
      */
-    private function loadDemoCourse(array $definition, User $admin): void
+    private function loadDemoCourse(array $definition, User $admin, int $visibility): void
     {
         if ($this->courseRepository->findOneByCode($definition['code']) instanceof Course) {
             $this->logger->info('Demo course already exists, skipping fixture import.', [
@@ -239,6 +245,7 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
                 'wanted_code' => $definition['code'],
                 'user_id' => (int) $admin->getId(),
                 'exemplary_content' => false,
+                'visibility' => $visibility,
             ];
 
             if ('' !== $archiveLanguage) {
@@ -291,6 +298,7 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
                 throw new RuntimeException(\sprintf('Could not reload demo course "%s" after restore.', $definition['code']));
             }
 
+            $managedCourse->setVisibility($visibility);
             $this->enableUserLanguageContent($managedCourse);
             $this->keepOnlyToolVisible($managedCourse, $definition['visible_tool']);
             $this->entityManager->flush();

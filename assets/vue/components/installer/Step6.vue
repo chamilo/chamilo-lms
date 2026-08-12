@@ -330,6 +330,17 @@
         class="mb-4"
       />
     </div>
+    <Message
+      :closable="false"
+      severity="info"
+      class="mb-4"
+    >
+      {{
+        t(
+          "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not.",
+        )
+      }}
+    </Message>
     <div class="formgroup-inline">
       <div class="field">
         <Button
@@ -442,13 +453,36 @@ function btnStep6OnClick() {
 function startMigration(updatePath) {
   const xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status !== 200) {
+    if (xhr.readyState !== 4) {
+      return
+    }
+
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText)
+      progressPercentage.value = response.progress_percentage
+      currentMigration.value = response.current_migration
       loading.value = false
       isButtonDisabled.value = false
-      errorDialogVisible.value = true
-      errorMessage.value = `
-        ${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}.
-      `
+
+      if (response.redirect_to_step7) {
+        successDialogVisible.value = true
+      } else {
+        errorDialogVisible.value = true
+        errorMessage.value = response.message || t("Migration failed!")
+      }
+
+      return
+    }
+
+    loading.value = false
+    isButtonDisabled.value = false
+    errorDialogVisible.value = true
+
+    try {
+      const response = JSON.parse(xhr.responseText)
+      errorMessage.value = response.message || `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
+    } catch {
+      errorMessage.value = `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
     }
   }
 
@@ -468,10 +502,6 @@ function pollMigrationStatus() {
 
         if (response.progress_percentage < 100) {
           pollMigrationStatus()
-        } else {
-          loading.value = false
-          isButtonDisabled.value = false
-          successDialogVisible.value = true
         }
       } else if (xhr.readyState === 4 && xhr.status !== 200) {
         loading.value = false

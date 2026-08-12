@@ -2121,8 +2121,25 @@ function executeMigration(): array
         createExtraConfigFile();
 
         if (strpos($result, '[OK] Successfully migrated to version') !== false) {
+            $demoCoursesInput = new ArrayInput([
+                'command' => 'chamilo:install-demo-courses-on-update',
+            ]);
+            $demoCoursesInput->setInteractive(false);
+            $demoCoursesOutput = new BufferedOutput();
+            $demoCoursesResult = $application->run($demoCoursesInput, $demoCoursesOutput);
+
+            if (0 !== $demoCoursesResult) {
+                $details = trim($demoCoursesOutput->fetch());
+                $message = 'Database migration completed, but bundled demo courses could not be installed.';
+                if ('' !== $details) {
+                    $message .= ' '.$details;
+                }
+
+                throw new RuntimeException($message);
+            }
+
             $resultStatus['status'] = true;
-            $resultStatus['message'] = 'Migration completed successfully.';
+            $resultStatus['message'] = 'Migration and bundled demo course installation completed successfully.';
             $resultStatus['progress_percentage'] = 100;
         } else {
             $resultStatus['message'] = 'Migration completed with errors.';

@@ -134,6 +134,7 @@ export function useNotification() {
       severity,
       detail: sanitizeHtml(safeMessage),
       life: "error" === severity ? ERROR_TOAST_LIFE_MS : DEFAULT_TOAST_LIFE_MS,
+      baseZIndex: 10,
     })
   }
 

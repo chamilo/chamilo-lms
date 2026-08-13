@@ -7501,7 +7501,12 @@ class Tracking
             $lastConnection = $value['max'];
         }
 
-        $sql = "SELECT * FROM track_e_access_complete
+        // Only the columns actually read below are selected: user_agent, url,
+        // ip_user, info, ch_sid, user_id, c_id and session_id are not used here
+        // and can be sizeable per row, which matters given how many rows a
+        // single user/course/session triple can accumulate over time.
+        $sql = "SELECT id, date_reg, current_id, tool, tool_id, tool_id_detail, action, action_details
+                FROM track_e_access_complete
                 WHERE
                     user_id = $userId AND
                     c_id = $courseId AND
@@ -7509,15 +7514,13 @@ class Tracking
                     login_as = 0 AND current_id <> 0";
 
         $res = Database::query($sql);
-        $reg = [];
-        while ($row = Database::fetch_assoc($res)) {
-            $reg[$row['id']] = $row;
-            $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
-        }
-
+        // Grouped directly into $sessions while fetching instead of first
+        // collecting every row into $reg: keeping both would hold the full
+        // result set in memory twice at once.
         $sessions = [];
-        foreach ($reg as $key => $value) {
-            $sessions[$value['current_id']][$value['tool']][] = $value;
+        while ($row = Database::fetch_assoc($res)) {
+            $row['date_reg'] = strtotime($row['date_reg']);
+            $sessions[$row['current_id']][$row['tool']][] = $row;
         }
 
         $quizTime = 0;

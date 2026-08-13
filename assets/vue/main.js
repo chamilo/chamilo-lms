@@ -28,7 +28,7 @@ import roomService from "./services/roomService"
 
 import makeCrudModule from "./store/modules/crud"
 import installHttpErrors from "./plugins/httpErrors"
-import uxModule from "./store/modules/ux"
+import installSessionExpiry from "./plugins/sessionExpiry"
 
 import VueFlatPickr from "vue-flatpickr-component"
 import "flatpickr/dist/flatpickr.css"
@@ -188,8 +188,6 @@ store.registerModule(
   }),
 )
 
-store.registerModule("ux", uxModule)
-
 // Vue setup.
 const app = createApp(App)
 
@@ -258,12 +256,10 @@ i18nReady.then(() => {
     }
   } catch {}
 
-  installHttpErrors({
-    store,
-    on401: (err) => console.warn("Unauthorized", err?.response?.data?.error || "Unauthorized"),
-    on403: (msg) => console.info("Forbidden shown:", msg),
-    on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),
-  })
+  // Both need Pinia active (see .use(pinia) above): they publish through the ux
+  // and security stores.
+  installHttpErrors()
+  installSessionExpiry()
 
   // The cid/sid/gid request interceptor lives on the shared api instance (config/api.js).
 

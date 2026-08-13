@@ -201,6 +201,7 @@ export function useLogin() {
       // Save user info
       securityStore.setUser(responseData)
       resetSessionNotice()
+      securityStore.clearSessionLost()
 
       // Apply locale NOW so the UI switches before we route
       applyUserLocale(responseData)

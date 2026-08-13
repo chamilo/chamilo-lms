@@ -86,10 +86,34 @@ export const useSecurityStore = defineStore("security", () => {
   const isLoading = ref(false)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
+  // Set when the server rejected a request from a client that believed it was
+  // authenticated, i.e. the session died mid-browsing. It only drives the
+  // one-off warning: the user object is left untouched on purpose, so the UI
+  // does not rearrange itself (topbar, session expiration watcher) under a user
+  // who may be in the middle of filling a form. The store is actually cleared by
+  // checkSession() the next time the router guard runs.
+  const sessionLost = ref(false)
+
   const platformConfigStore = usePlatformConfig()
 
   function setUser(newUserInfo) {
     user.value = newUserInfo
+  }
+
+  /**
+   * Flags that the server no longer recognizes this session.
+   * @returns {void}
+   */
+  function markSessionLost() {
+    sessionLost.value = true
+  }
+
+  /**
+   * Clears the lost-session flag, so a later episode can warn again.
+   * @returns {void}
+   */
+  function clearSessionLost() {
+    sessionLost.value = false
   }
 
   const hasRole = computed(() => (role) => {
@@ -227,6 +251,9 @@ export const useSecurityStore = defineStore("security", () => {
     setUser,
     isLoading,
     isAuthenticated,
+    sessionLost,
+    markSessionLost,
+    clearSessionLost,
     hasRole,
     isGranted,
     removeRole,

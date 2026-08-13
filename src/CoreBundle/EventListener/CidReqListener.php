@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
+use Chamilo\CoreBundle\Helpers\RequestExpectsJsonHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -504,7 +505,7 @@ class CidReqListener
 
     private function denyRequest(RequestEvent $event, Request $request, string $message): void
     {
-        if ($request->isXmlHttpRequest() || str_contains((string) $request->headers->get('Accept'), 'application/json')) {
+        if (RequestExpectsJsonHelper::expectsJson($request)) {
             $event->setResponse(new JsonResponse([
                 'error' => 'access_denied',
                 'message' => $message,

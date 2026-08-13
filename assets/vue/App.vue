@@ -96,14 +96,13 @@ import {
   watchEffect,
 } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import api from "./config/api"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
 import { useSecurityStore } from "./store/securityStore"
 import { usePlatformConfig } from "./store/platformConfig"
 import Toast from "primevue/toast"
 import { useNotification } from "./composables/notification"
-import { notifySessionIssue } from "./composables/sessionNotice"
+import { sessionLostMessage } from "./composables/sessionNotice"
 import { useLocale } from "./composables/locale"
 import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
@@ -118,14 +117,14 @@ import Loading from "./components/Loading.vue"
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
-import { useStore } from "vuex"
+import { useUxStore } from "./store/uxStore"
 import PluginRegion from "./components/layout/PluginRegion.vue"
 import { useCidReqStore } from "./store/cidReq"
 
 const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000
 const cidReqStore = useCidReqStore()
-const vuex = useStore()
-const forbiddenMsg = computed(() => vuex.state.ux?.forbiddenMessage)
+const uxStore = useUxStore()
+const forbiddenMsg = computed(() => uxStore.forbiddenMessage)
 
 // Controls visual visibility of the forbidden banner without mutating the store.
 const forbiddenBannerVisible = ref(true)
@@ -269,12 +268,7 @@ const isLearnpathEmbeddedRoute = computed(() => {
     return false
   }
 
-  return (
-    qp.has("lp_init") ||
-    qp.has("learnpath_id") ||
-    qp.has("learnpath_item_id") ||
-    qp.has("learnpath_item_view_id")
-  )
+  return qp.has("lp_init") || qp.has("learnpath_id") || qp.has("learnpath_item_id") || qp.has("learnpath_item_view_id")
 })
 
 const layout = computed(() => {
@@ -400,13 +394,16 @@ onUpdated(() => {
   consumeFlashesFromAppDataset()
 })
 
-api.interceptors.response.use(
-  (r) => r,
-  (error) => {
-    const s = error?.response?.status
-    if (s === 401) notifySessionIssue((msg) => notification.showWarningNotification(msg))
-    else if (s === 500) notification.showWarningNotification(error.response?.data?.detail || "Server error")
-    return Promise.reject(error)
+// The session interceptor (plugins/sessionExpiry.js) only publishes state; the
+// warning is rendered here, where the toast service is available. The flag flips
+// once per episode, so this needs no gate of its own. Every other status stays
+// with the caller's catch, which already reports it.
+watch(
+  () => securityStore.sessionLost,
+  (lost) => {
+    if (lost) {
+      notification.showWarningNotification(sessionLostMessage())
+    }
   },
 )
 
@@ -497,15 +494,42 @@ const showGlobalChat = computed(() => {
   return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value && !hideGlobalUi.value
 })
 
+/**
+ * Whether a denied request was for the page being displayed, as opposed to a
+ * background call made by a widget (topbar counters, sidebar, chat). Only the
+ * former justifies wiping the legacy markup: a denied widget must not blank out
+ * a page the user is legitimately allowed to see.
+ * @param {string} requestUrl - URL of the denied request, may be empty.
+ * @returns {boolean}
+ */
+function forbiddenAffectsCurrentPage(requestUrl) {
+  // Without the originating URL, keep the safe legacy behaviour.
+  if (!requestUrl) {
+    return true
+  }
+
+  let path = requestUrl
+
+  try {
+    path = new URL(requestUrl, window.location.origin).pathname
+  } catch {
+    // Not a parsable URL: fall through and compare it as-is.
+  }
+
+  return path.startsWith("/main/") || path === window.location.pathname
+}
+
 watch(
   forbiddenMsg,
   (msg) => {
     if (msg) {
-      const legacy = document.getElementById("legacy_content")
-      if (legacy) legacy.innerHTML = ""
+      if (forbiddenAffectsCurrentPage(uxStore.forbiddenRequestUrl)) {
+        const legacy = document.getElementById("legacy_content")
+        if (legacy) legacy.innerHTML = ""
 
-      const section = document.getElementById("sectionMainContent")
-      if (section) section.innerHTML = ""
+        const section = document.getElementById("sectionMainContent")
+        if (section) section.innerHTML = ""
+      }
 
       // Ensure the banner is visible for every new forbidden message.
       forbiddenBannerVisible.value = true
@@ -516,10 +540,12 @@ watch(
         forbiddenBannerTimer = null
       }
 
-      // Hide the banner automatically after a delay.
+      // Hide the banner automatically after a delay, clearing the store with it
+      // so the message does not linger (it also drives showBreadcrumb).
       forbiddenBannerTimer = window.setTimeout(() => {
         forbiddenBannerVisible.value = false
         forbiddenBannerTimer = null
+        uxStore.clearForbidden()
       }, FORBIDDEN_BANNER_AUTO_HIDE_MS)
 
       return
@@ -534,6 +560,13 @@ watch(
     }
   },
   { immediate: true },
+)
+
+// A denial belongs to the navigation that caused it: leaving the page clears it,
+// so the banner and showBreadcrumb do not stay stuck on the next route.
+watch(
+  () => route.fullPath,
+  () => uxStore.clearForbidden(),
 )
 
 onBeforeUnmount(() => {

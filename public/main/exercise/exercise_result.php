@@ -101,7 +101,9 @@ if (empty($objExercise)) {
             && !empty($exercise_stat_info)
             && isset($exercise_stat_info['exe_exo_id'])
         ) {
-            header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq().'&origin='.$origin);
+            // api_get_cidreq() already appends "&origin=..." (defaults to
+            // api_get_origin(), same value as $origin) - do not add it twice.
+            header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
 
             exit;
         }

@@ -318,7 +318,12 @@ $exercise_sound = $objExercise->getSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if (-1 == $remind_question_id) {
-        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&origin=".urlencode($origin);
+        // api_get_cidreq() below already appends "&origin=..." (it defaults to
+        // api_get_origin(), the same value $origin holds), so it must not be added
+        // again here - a duplicated "origin" key turns into an array on the query
+        // string, which breaks any code expecting a scalar (e.g. plugin region
+        // rendering on the resulting page).
+        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id";
         $url = api_get_path(WEB_CODE_PATH).
             'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().$extraParams;
         api_location($url);

@@ -284,6 +284,7 @@ import resourceNodeService from "../../services/resourcenode"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
+import { useNotification } from "../../composables/notification"
 import prettyBytes from "pretty-bytes"
 import { computed, ref } from "vue"
 import { useRoute } from "vue-router"
@@ -305,6 +306,7 @@ export default {
   setup() {
     const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
+    const { showErrorNotification } = useNotification()
     const route = useRoute()
     const { isAllowedToEdit } = useIsAllowedToEdit()
     const isCertificateMode = computed(() => route.query.filetype === "certificate")
@@ -314,6 +316,7 @@ export default {
     return {
       t,
       relativeDatetime,
+      showErrorNotification,
       prettyBytes,
       showNewFolderButton,
       showUploadButton,
@@ -524,21 +527,7 @@ export default {
     notifyError(message) {
       if (!message) return
 
-      if (this.$toast?.add) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: message,
-          life: 4000,
-        })
-        return
-      }
-
-      console.error("[DOC PICKER]", message)
-
-      if (typeof window !== "undefined" && typeof window.alert === "function") {
-        window.alert(message)
-      }
+      this.showErrorNotification(message)
     },
     getEntryType(entry) {
       if (this.isFolderEntry(entry)) return "folder"

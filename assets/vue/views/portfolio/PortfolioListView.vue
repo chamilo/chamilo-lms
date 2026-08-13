@@ -404,8 +404,8 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import { useRoute, useRouter } from "vue-router"
+import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
@@ -420,7 +420,7 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import portfolioService from "../../services/portfolioService"
 
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { requireConfirmation } = useConfirmation()
@@ -565,17 +565,13 @@ function managementRoute(type) {
   }
 }
 
-function actionError(error) {
-  return error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
-}
-
 async function runItemAction(item, action) {
   try {
     await portfolioService.itemAction(item.id, { action }, contextParams())
-    toast.add({ severity: "success", summary: t("Success"), detail: t("Updated"), life: 2500 })
+    showSuccessNotification(t("Updated"))
     await loadPortfolio()
   } catch (error) {
-    toast.add({ severity: "error", summary: t("Error"), detail: actionError(error), life: 5000 })
+    showErrorNotification(error)
   }
 }
 
@@ -585,10 +581,10 @@ function confirmDelete(item) {
     accept: async () => {
       try {
         await portfolioService.itemAction(item.id, { action: "delete" }, contextParams())
-        toast.add({ severity: "success", summary: t("Success"), detail: t("Deleted"), life: 3000 })
+        showSuccessNotification(t("Deleted"))
         await loadPortfolio()
       } catch (error) {
-        toast.add({ severity: "error", summary: t("Error"), detail: actionError(error), life: 5000 })
+        showErrorNotification(error)
       }
     },
   })

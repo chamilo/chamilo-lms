@@ -171,8 +171,8 @@
 <script setup>
 import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import { useRoute } from "vue-router"
+import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
@@ -186,7 +186,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import portfolioService from "../../services/portfolioService"
 
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showWarningNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 const { requireConfirmation } = useConfirmation()
 
@@ -265,7 +265,7 @@ async function loadData() {
 
 async function saveEntity() {
   if (!editor.title.trim()) {
-    toast.add({ severity: "warn", summary: t("Warning"), detail: t("Title is required"), life: 4000 })
+    showWarningNotification(t("Title is required"))
     return
   }
   isSaving.value = true
@@ -282,10 +282,10 @@ async function saveEntity() {
       contextParams(),
     )
     dialogVisible.value = false
-    toast.add({ severity: "success", summary: t("Success"), detail: t("Saved"), life: 3000 })
+    showSuccessNotification(t("Saved"))
     await loadData()
   } catch (error) {
-    toast.add({ severity: "error", summary: t("Error"), detail: errorText(error), life: 5000 })
+    showErrorNotification(error)
   } finally {
     isSaving.value = false
   }
@@ -296,7 +296,7 @@ async function toggleCategory(row) {
     await portfolioService.managementAction({ action: "toggle_category", entityId: row.id }, contextParams())
     await loadData()
   } catch (error) {
-    toast.add({ severity: "error", summary: t("Error"), detail: errorText(error), life: 5000 })
+    showErrorNotification(error)
   }
 }
 
@@ -312,10 +312,10 @@ function confirmDelete(row) {
           },
           contextParams(),
         )
-        toast.add({ severity: "success", summary: t("Success"), detail: t("Deleted"), life: 3000 })
+        showSuccessNotification(t("Deleted"))
         await loadData()
       } catch (error) {
-        toast.add({ severity: "error", summary: t("Error"), detail: errorText(error), life: 5000 })
+        showErrorNotification(error)
       }
     },
   })

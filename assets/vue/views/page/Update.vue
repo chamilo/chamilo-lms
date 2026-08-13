@@ -21,17 +21,17 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import Loading from "../../components/Loading.vue"
 import PageForm from "../../components/page/Form.vue"
 import { useDatatableUpdate } from "../../composables/datatableUpdate"
+import { useNotification } from "../../composables/notification"
 import pageService from "../../services/pageService"
 import { normalize } from "../../utils/hydra"
 
 const { item, isLoading, retrieve } = useDatatableUpdate("Page")
 const router = useRouter()
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const isSaving = ref(false)
 
@@ -51,17 +51,9 @@ async function updateItem(payload) {
   try {
     await pageService.updatePage(payload["@id"], normalize(payload))
 
-    toast.add({
-      severity: "success",
-      detail: t("{0} updated", [payload["@id"]]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} updated", [payload["@id"]]))
   } catch (error) {
-    toast.add({
-      severity: "error",
-      detail: error.message,
-      life: 5000,
-    })
+    showErrorNotification(error)
   } finally {
     isSaving.value = false
   }

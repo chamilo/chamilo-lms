@@ -434,10 +434,6 @@ if (api_is_platform_admin()) {
         'url' => 'special_exports.php',
         'label' => get_lang('Special exports'),
     ];
-    /*$items[] = [
-        'url' => 'periodic_export.php',
-        'label' => get_lang('Periodic export'),
-    ];*/
     $items[] = [
         'url' => '/admin/system-status',
         'label' => get_lang('System status'),

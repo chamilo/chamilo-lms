@@ -19,6 +19,7 @@ use Onlyoffice\DocsIntegrationSdk\Service\Callback\CallbackService;
 class OnlyofficeCallbackService extends CallbackService
 {
     private $docData;
+    private $trackResult;
 
     public function __construct($settingsManager, $jwtManager, $docData = [])
     {

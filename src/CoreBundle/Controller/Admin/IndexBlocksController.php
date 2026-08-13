@@ -657,10 +657,6 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Clean temporary files'),
         ];
 
-        /*$items[] = [
-            'url' => '/main/admin/periodic_export.php',
-            'label' => $this->translator->$this->trans('Periodic export'),
-        ];*/
         $items[] = [
             'class' => 'item-system-status',
             'route' => ['name' => 'AdminSystemStatus'],

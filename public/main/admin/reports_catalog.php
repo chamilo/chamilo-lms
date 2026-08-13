@@ -6,8 +6,9 @@
  * Reports catalog and initial report/role matrix.
  *
  * This page is an administrative registry of reporting pages. It documents the
- * expected audience and exposes canonical report URLs. Those canonical URLs
- * enforce the documented role matrix without changing the legacy report pages.
+ * expected audience and exposes stable canonical report URLs. Canonical URLs
+ * route to the current implementation while the legacy URL remains visible as
+ * an audit/reference value.
  */
 
 $cidReset = true;
@@ -73,7 +74,7 @@ echo $actionBar;
 echo '<section class="bg-white rounded-xl shadow-sm border border-gray-50 p-4 md:p-5">';
 echo '<h2 class="text-2xl font-semibold mb-2">'.Security::remove_XSS($toolName).'</h2>';
 echo '<p class="text-sm text-gray-600 m-0">'
-    .Security::remove_XSS(get_lang('This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs enforce the documented report role matrix.'))
+    .Security::remove_XSS(get_lang('This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix.'))
     .'</p>';
 echo '</section>';
 
@@ -83,6 +84,7 @@ if ('matrix' === $view) {
     renderReportsPermissionCategories();
 } else {
     renderReportsCatalog();
+    renderCourseContextDialog();
 }
 
 echo '</div>';
@@ -127,7 +129,14 @@ function renderReportsCatalog(): void
             echo '<tr>';
             echo '<td class="font-semibold">'.Security::remove_XSS($report['title']).'</td>';
             echo '<td>'.Security::remove_XSS($report['description'] ?? '').'</td>';
-            echo '<td><a href="'.Security::remove_XSS($url).'" class="text-primary underline">'
+            $canonicalLinkAttributes = '';
+            if (ReportRegistry::requiresCourseContext($report)) {
+                $canonicalLinkAttributes = ' data-report-course-context="1"'
+                    .' data-report-id="'.htmlspecialchars((string) ($report['id'] ?? ''), ENT_QUOTES, 'UTF-8').'"'
+                    .' data-report-title="'.htmlspecialchars((string) ($report['title'] ?? ''), ENT_QUOTES, 'UTF-8').'"';
+            }
+
+            echo '<td><a href="'.Security::remove_XSS($url).'" class="text-primary underline"'.$canonicalLinkAttributes.'>'
                 .Security::remove_XSS($url)
                 .'</a></td>';
             echo '<td><code>'.Security::remove_XSS($legacyUrl).'</code></td>';
@@ -140,6 +149,94 @@ function renderReportsCatalog(): void
         echo '</div>';
         echo '</section>';
     }
+}
+
+function renderCourseContextDialog(): void
+{
+    $contexts = ReportRegistry::getSelectableCourseContexts();
+    $reportUrl = api_get_path(WEB_CODE_PATH).'admin/report.php';
+
+    echo '<dialog id="report-course-context-dialog" class="w-full max-w-2xl rounded-xl border border-gray-25 bg-white p-0 shadow-xl">';
+    echo '<form method="get" action="'.Security::remove_XSS($reportUrl).'" class="m-0">';
+    echo '<input type="hidden" id="report-course-context-id" name="id" value="">';
+
+    echo '<div class="border-b border-gray-25 px-5 py-4">';
+    echo '<h3 id="report-course-context-title" class="m-0 text-xl font-semibold"></h3>';
+    echo '</div>';
+
+    echo '<div class="space-y-4 px-5 py-5">';
+    if (empty($contexts)) {
+        echo Display::return_message(get_lang('No results available'), 'warning');
+    } else {
+        echo '<div>';
+        echo '<label for="report-course-context-select" class="mb-2 block font-semibold">'.get_lang('Course').'</label>';
+        echo '<select id="report-course-context-select" name="course_context" class="form-control" required>';
+        echo '<option value="">'.get_lang('Select').'</option>';
+
+        foreach ($contexts as $key => $context) {
+            $label = $context['title'];
+
+            if ($context['session_id'] > 0 && '' !== $context['session_name']) {
+                $label .= ' - '.$context['session_name'];
+            }
+
+            echo '<option value="'.htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8').'">'
+                .Security::remove_XSS($label)
+                .'</option>';
+        }
+
+        echo '</select>';
+        echo '</div>';
+    }
+    echo '</div>';
+
+    echo '<div class="flex justify-end gap-2 border-t border-gray-25 px-5 py-4">';
+    echo '<button type="button" id="report-course-context-cancel" class="btn btn--secondary-outline">'.get_lang('Cancel').'</button>';
+    if (!empty($contexts)) {
+        echo '<button type="submit" class="btn btn--primary">'.get_lang('Select').'</button>';
+    }
+    echo '</div>';
+    echo '</form>';
+    echo '</dialog>';
+
+    echo <<<'HTML'
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dialog = document.getElementById('report-course-context-dialog')
+    const reportIdInput = document.getElementById('report-course-context-id')
+    const title = document.getElementById('report-course-context-title')
+    const courseSelect = document.getElementById('report-course-context-select')
+    const cancelButton = document.getElementById('report-course-context-cancel')
+
+    if (!dialog || typeof dialog.showModal !== 'function') {
+        return
+    }
+
+    document.querySelectorAll('[data-report-course-context="1"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault()
+
+            reportIdInput.value = link.dataset.reportId || ''
+            title.textContent = link.dataset.reportTitle || ''
+
+            if (courseSelect) {
+                courseSelect.value = ''
+            }
+
+            dialog.showModal()
+        })
+    })
+
+    cancelButton?.addEventListener('click', () => dialog.close())
+
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+            dialog.close()
+        }
+    })
+})
+</script>
+HTML;
 }
 
 function renderReportsRoleMatrix(): void

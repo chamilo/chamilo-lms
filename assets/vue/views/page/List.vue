@@ -232,7 +232,7 @@ import { useStore } from "vuex"
 import { useDatatableList } from "../../composables/datatableList"
 import { computed, inject, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
@@ -263,7 +263,7 @@ function ensureLanguageName(iso) {
   return langMap[iso]
 }
 
-const toast = useToast()
+const { showSuccessNotification } = useNotification()
 
 const layoutMenuItems = inject("layoutMenuItems")
 
@@ -321,11 +321,7 @@ const deleteMultipleItems = () => {
     deleteMultipleDialog.value = false
     selectedItems.value = []
 
-    toast.add({
-      severity: "success",
-      detail: t("Pages deleted"),
-      life: 3500,
-    })
+    showSuccessNotification(t("Pages deleted"))
   })
 
   onUpdateOptions(options.value)

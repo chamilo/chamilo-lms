@@ -144,7 +144,7 @@ import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventFo
 import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventInfo"
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
@@ -933,7 +933,7 @@ async function onCreateEventForm() {
   }
 }
 
-const toast = useToast()
+const { showSuccessNotification } = useNotification()
 
 watch(
   () => route.query.type,
@@ -950,11 +950,7 @@ watch(
       return
     }
 
-    toast.add({
-      severity: "success",
-      detail: t("{0} created", [created.resourceNode.title]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} created", [created.resourceNode.title]))
 
     reFetch()
   },
@@ -967,11 +963,7 @@ watch(
       return
     }
 
-    toast.add({
-      severity: "success",
-      detail: t("{0} updated", [updated.resourceNode.title]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} updated", [updated.resourceNode.title]))
 
     reFetch()
   },

@@ -42,12 +42,12 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
 import Button from "primevue/button"
 import courseService from "../../services/courseService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 const list = ref([])
 const offset = ref(0)
 const limit = 10
@@ -66,7 +66,7 @@ async function loadMore() {
     offset.value += limit
     hasMore.value = res.count === limit
   } catch {
-    toast.add({ severity: "error", summary: t("Error"), detail: t("Could not load data") })
+    showErrorNotification(t("Could not load data"))
   } finally {
     loading.value = false
   }
@@ -83,17 +83,9 @@ async function extend(item) {
     )
 
     item.session = { ...item.session, endDate: newEndDate }
-    toast.add({
-      severity: "success",
-      summary: t("Success"),
-      detail: t("Session extended"),
-    })
+    showSuccessNotification(t("Session extended"))
   } catch {
-    toast.add({
-      severity: "error",
-      summary: t("Error"),
-      detail: t("Action failed"),
-    })
+    showErrorNotification(t("Action failed"))
   } finally {
     actionLoading.value = false
   }

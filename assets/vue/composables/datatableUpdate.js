@@ -3,7 +3,7 @@ import { useStore } from "vuex"
 import { useRoute } from "vue-router"
 import { isEmpty } from "lodash"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "./notification"
 
 export function useDatatableUpdate(servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -12,7 +12,7 @@ export function useDatatableUpdate(servicePrefix) {
   const route = useRoute()
   const { t } = useI18n()
 
-  const toast = useToast()
+  const { showSuccessNotification } = useNotification()
 
   const isLoading = computed(() => store.getters[`${moduleName}/isLoading`])
 
@@ -69,11 +69,7 @@ export function useDatatableUpdate(servicePrefix) {
   }
 
   function onUpdated(item) {
-    toast.add({
-      severity: "success",
-      detail: t("{0} updated", [item["@id"]]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} updated", [item["@id"]]))
   }
 
   return {

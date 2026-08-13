@@ -399,6 +399,8 @@ class ReportRegistry
                 'url' => '/main/tracking/courseLog.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/',
             ],
             [
                 'id' => 'course_activity_statistics',
@@ -408,6 +410,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_activity_statistics.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/activity',
             ],
             [
                 'id' => 'course_learner_tracking_details',
@@ -417,6 +421,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_user_details.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/',
             ],
             [
                 'id' => 'gradebook_overview',
@@ -426,6 +432,7 @@ class ReportRegistry
                 'url' => '/main/gradebook/index.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
             ],
             [
                 'id' => 'gradebook_statistics',
@@ -435,6 +442,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_statistics.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_certificate_report',
@@ -453,6 +462,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/user_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_personal_stats',
@@ -462,6 +473,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/personal_stats.php',
                 'roles' => ['ROLE_STUDENT', 'ROLE_CURRENT_COURSE_STUDENT', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'reports_catalog',
@@ -480,6 +493,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_events.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/audit',
             ],
             [
                 'id' => 'course_log_tools',
@@ -489,6 +504,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_tools.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/course',
             ],
             [
                 'id' => 'course_log_resources',
@@ -498,6 +515,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_resources.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/resources',
             ],
             [
                 'id' => 'course_log_groups',
@@ -507,6 +526,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_groups.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/groups',
             ],
             [
                 'id' => 'course_session_report',
@@ -516,6 +537,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_session_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/session',
             ],
             [
                 'id' => 'course_learning_path_report',
@@ -525,6 +548,8 @@ class ReportRegistry
                 'url' => '/main/tracking/lp_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=paths',
             ],
             [
                 'id' => 'course_learning_path_results_by_user',
@@ -534,6 +559,8 @@ class ReportRegistry
                 'url' => '/main/tracking/lp_results_by_user.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=users',
             ],
             [
                 'id' => 'course_exams_tracking',
@@ -552,6 +579,8 @@ class ReportRegistry
                 'url' => '/main/tracking/question_course_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=questions',
             ],
             [
                 'id' => 'course_messages_tracking',
@@ -561,6 +590,8 @@ class ReportRegistry
                 'url' => '/main/tracking/messages.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/messages',
             ],
             [
                 'id' => 'course_total_time',
@@ -570,6 +601,8 @@ class ReportRegistry
                 'url' => '/main/tracking/total_time.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/total-time',
             ],
             [
                 'id' => 'gradebook_display_summary',
@@ -579,6 +612,7 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_display_summary.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
             ],
             [
                 'id' => 'gradebook_flat_view',
@@ -588,6 +622,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_flatview.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_evaluation_log',
@@ -597,6 +633,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_showlog_eval.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_link_log',
@@ -606,6 +644,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_showlog_link.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_result_detail',
@@ -615,6 +655,8 @@ class ReportRegistry
                 'url' => '/main/gradebook/gradebook_view_result.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_my_certificates',
@@ -679,6 +721,8 @@ class ReportRegistry
                 'url' => '/main/survey/reporting.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/survey/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_attendance_report',
@@ -688,6 +732,8 @@ class ReportRegistry
                 'url' => '/main/attendance/index.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/attendance/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_global_report',
@@ -697,6 +743,7 @@ class ReportRegistry
                 'url' => '/courses/exercise/global-report',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => false,
             ],
             [
                 'id' => 'course_exercise_report',
@@ -706,6 +753,8 @@ class ReportRegistry
                 'url' => '/main/exercise/exercise_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_history',
@@ -715,6 +764,8 @@ class ReportRegistry
                 'url' => '/main/exercise/exercise_history.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_results',
@@ -724,6 +775,8 @@ class ReportRegistry
                 'url' => '/main/exercise/result.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_question_stats',
@@ -733,6 +786,8 @@ class ReportRegistry
                 'url' => '/main/exercise/question_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_stats',
@@ -742,6 +797,8 @@ class ReportRegistry
                 'url' => '/main/exercise/stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_live_stats',
@@ -751,6 +808,8 @@ class ReportRegistry
                 'url' => '/main/exercise/live_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_lp_stats',
@@ -760,6 +819,8 @@ class ReportRegistry
                 'url' => '/main/lp/lp_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/lp/{course_resource_node_id}',
             ],
             [
                 'id' => 'course_lp_report_legacy',
@@ -769,6 +830,8 @@ class ReportRegistry
                 'url' => '/main/lp/lp_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/lp/{course_resource_node_id}',
             ],
             [
                 'id' => 'social_skills_report',
@@ -778,15 +841,6 @@ class ReportRegistry
                 'url' => '/main/social/my_skills_report.php',
                 'roles' => $learningFollowUp,
                 'permission' => 'reports.learning_analytics',
-            ],
-            [
-                'id' => 'export_periodic_export',
-                'title' => get_lang('Periodic export'),
-                'description' => get_lang('Scheduled or periodic export configuration.'),
-                'category' => self::CATEGORY_EXPORT,
-                'url' => '/main/admin/periodic_export.php',
-                'roles' => $admin,
-                'permission' => 'reports.export',
             ],
             [
                 'id' => 'export_user_export',
@@ -827,6 +881,20 @@ class ReportRegistry
         return (string) ($report['url'] ?? '#');
     }
 
+    public static function requiresCourseContext(array $report): bool
+    {
+        return true === ($report['requires_course_context'] ?? false);
+    }
+
+    public static function getEntryUrl(array $report): string
+    {
+        if (!empty($report['entry_url'])) {
+            return (string) $report['entry_url'];
+        }
+
+        return self::getLegacyUrl($report);
+    }
+
     public static function getFriendlyUrl(array $report): string
     {
         if (!empty($report['friendly_url'])) {
@@ -851,6 +919,74 @@ class ReportRegistry
         $query = array_merge(['id' => $reportId], $extraQuery);
 
         return api_get_path(WEB_CODE_PATH).'admin/report.php?'.http_build_query($query);
+    }
+
+    /**
+     * Return the current user's selectable course/session contexts.
+     *
+     * Platform administrators get all courses from the current access URL.
+     * Other users get only courses already related to them, including session
+     * courses. The canonical report endpoint validates the selected context
+     * again before redirecting.
+     */
+    public static function getSelectableCourseContexts(): array
+    {
+        $userId = api_get_user_id();
+        if ($userId <= 0) {
+            return [];
+        }
+
+        $courses = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            true,
+            true,
+            false,
+            [],
+            false,
+            !api_is_platform_admin()
+        );
+
+        $contexts = [];
+
+        foreach ($courses as $course) {
+            $courseId = (int) ($course['real_id'] ?? 0);
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $sessionId = (int) ($course['session_id'] ?? 0);
+            $courseInfo = [];
+
+            if (empty($course['title'])) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (!is_array($courseInfo)) {
+                    $courseInfo = [];
+                }
+            }
+
+            $title = (string) ($course['title'] ?? $courseInfo['title'] ?? $course['code'] ?? $courseId);
+            $sessionName = (string) ($course['session_name'] ?? '');
+
+            $key = $courseId.':'.$sessionId;
+            $contexts[$key] = [
+                'course_id' => $courseId,
+                'session_id' => $sessionId,
+                'title' => $title,
+                'session_name' => $sessionName,
+            ];
+        }
+
+        uasort(
+            $contexts,
+            static function (array $left, array $right): int {
+                $leftLabel = $left['title'].' '.$left['session_name'];
+                $rightLabel = $right['title'].' '.$right['session_name'];
+
+                return strcasecmp($leftLabel, $rightLabel);
+            }
+        );
+
+        return $contexts;
     }
 
     public static function getCurrentUserRoles(): array

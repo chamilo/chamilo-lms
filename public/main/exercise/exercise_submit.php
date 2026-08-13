@@ -633,9 +633,13 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
     $myRemindList = array_filter($myRemindList);
 }
 
+// api_get_cidreq() below already appends "&origin=..." (it defaults to
+// api_get_origin(), the same value $origin holds), so it must not be added
+// again here - a duplicated "origin" key turns into an array on the query
+// string, which breaks any code expecting a scalar (e.g. plugin region
+// rendering on the resulting page).
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
     . "&page=" . ($page ?? 1)
     . "&" . api_get_cidreq();
 
@@ -644,7 +648,6 @@ $submitBaseQuery = "exe_id=$exe_id&exerciseId=$exerciseId"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
     . "&reminder=$reminder"
     . "&" . api_get_cidreq();
 
@@ -652,7 +655,6 @@ $resultBaseQuery = "exe_id=$exe_id"
     . "&learnpath_id=$learnpath_id"
     . "&learnpath_item_id=$learnpath_item_id"
     . "&learnpath_item_view_id=$learnpath_item_view_id"
-    . "&origin=".$origin
     . "&" . api_get_cidreq();
 
 

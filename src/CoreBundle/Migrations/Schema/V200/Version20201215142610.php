@@ -38,6 +38,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
     private const int IMAGE_FLUSH_BATCH_SIZE = 20;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
     private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';
+    private const string TRACK_EXERCISE_QUIZ_INDEX = 'idx_legacy_migration_track_exercise_course_quiz';
 
     public function getDescription(): string
     {
@@ -57,6 +58,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureItemPropertyMigrationIndex();
+        $this->ensureTrackExerciseQuizMigrationIndex();
 
         $quizRepo = $this->container->get(CQuizRepository::class);
         $questionRepo = $this->container->get(CQuizQuestionRepository::class);
@@ -206,7 +208,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $conditions[] = 'EXISTS (SELECT 1 FROM c_quiz_rel_question r WHERE r.quiz_id = q.iid)';
         }
         if ($hasAttempts) {
-            $conditions[] = 'EXISTS (SELECT 1 FROM track_e_exercises te WHERE te.exe_exo_id = q.iid)';
+            $conditions[] = 'EXISTS (SELECT 1 FROM track_e_exercises te WHERE te.c_id = q.c_id AND te.exe_exo_id = q.iid)';
         }
 
         $usageCondition = implode(' OR ', $conditions);
@@ -214,7 +216,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             ? '(SELECT COUNT(*) FROM c_quiz_rel_question r WHERE r.quiz_id = q.iid)'
             : '0';
         $attemptCount = $hasAttempts
-            ? '(SELECT COUNT(*) FROM track_e_exercises te WHERE te.exe_exo_id = q.iid)'
+            ? '(SELECT COUNT(*) FROM track_e_exercises te WHERE te.c_id = q.c_id AND te.exe_exo_id = q.iid)'
             : '0';
 
         $quizzes = $this->connection->fetchAllAssociative(
@@ -799,6 +801,37 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         }
 
         return (int) $admin->getId();
+    }
+
+    private function ensureTrackExerciseQuizMigrationIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('track_e_exercises', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('track_e_exercises') as $index) {
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 2
+                    && 'c_id' === $columns[0]
+                    && 'exe_exo_id' === $columns[1]
+                ) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating migration index on exercise tracking quiz references.', [
+                'index' => self::TRACK_EXERCISE_QUIZ_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::TRACK_EXERCISE_QUIZ_INDEX.' ON track_e_exercises (c_id, exe_exo_id)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create exercise tracking migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
     }
 
     private function ensureItemPropertyMigrationIndex(): void

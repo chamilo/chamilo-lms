@@ -25,6 +25,7 @@ class IndexController extends BaseController
     #[Route('/demo', name: 'demo', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/course/{cid}/home', name: 'chamilo_core_course_home')]
     #[Route('/courses', name: 'courses', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/courses/{vueRouting}', name: 'courses_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/catalogue/{slug}', name: 'catalogue', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/resources/ccalendarevent', name: 'resources_ccalendarevent', methods: ['GET'])]
     #[Route('/resources/courses', name: 'resources_courses', methods: ['GET'])]

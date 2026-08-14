@@ -142,7 +142,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $response->questionCount = $this->countAnswerableQuestions($questions);
         $response->totalScore = $this->getTotalScore($questions);
         $requiresLegacyRuntime = true === ($settings['requiresLegacyRuntime'] ?? false);
+        $hasRuntimeQuestions = [] !== $questions;
         $canSubmit = $runsAsLearner
+            && $hasRuntimeQuestions
             && !$requiresLegacyRuntime
             && $attempt instanceof TrackEExercise
             && self::STATUS_INCOMPLETE === (string) $attempt->getStatus()
@@ -150,9 +152,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $response->canManage = $canManage;
         $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($attempt, $questions, $quiz) : null;
-        $response->canStartAttempt = $runsAsLearner;
+        $response->canStartAttempt = $runsAsLearner && $hasRuntimeQuestions;
         $response->canSubmit = $canSubmit;
-        $response->usesLegacySubmit = $requiresLegacyRuntime || !$canSubmit;
+        $response->usesLegacySubmit = $requiresLegacyRuntime;
 
         return $response;
     }

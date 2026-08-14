@@ -430,6 +430,7 @@ SQL,
         $parentResource,
         array $items = [],
         ?ResourceType $resourceType = null,
+        bool $synchronizeInverseCollections = true,
     ) {
         $courseId = (int) $course->getId();
         $id = (int) $resource->getResourceIdentifier();
@@ -596,7 +597,8 @@ SQL,
                     $resource,
                     $user,
                     $parentResource,
-                    $resourceType
+                    $resourceType,
+                    $synchronizeInverseCollections
                 );
                 $this->entityManager->persist($resourceNode);
             }

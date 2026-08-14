@@ -816,6 +816,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         User $creator,
         ResourceInterface $parentResource,
         ?ResourceType $resourceType = null,
+        bool $synchronizeInverseCollections = true,
     ): ResourceNode {
         $parentResourceNode = $parentResource->getResourceNode();
 
@@ -825,6 +826,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $parentResourceNode,
             null,
             $resourceType,
+            $synchronizeInverseCollections,
         );
     }
 
@@ -837,6 +839,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ResourceNode $parentNode,
         ?UploadedFile $file = null,
         ?ResourceType $resourceType = null,
+        bool $synchronizeInverseCollections = true,
     ): ResourceNode {
         $em = $this->getEntityManager();
 
@@ -865,9 +868,18 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setResourceType($resourceType)
         ;
 
-        $creator->addResourceNode($resourceNode);
-
-        $parentNode?->addChild($resourceNode);
+        if ($synchronizeInverseCollections) {
+            $creator->addResourceNode($resourceNode);
+            $parentNode->addChild($resourceNode);
+        } else {
+            // Bulk migrations only need the owning sides persisted. Skipping
+            // inverse collection synchronization avoids initializing very
+            // large User.resourceNodes and ResourceNode.children collections.
+            $resourceNode
+                ->setCreator($creator)
+                ->setParent($parentNode)
+            ;
+        }
 
         $resource->setResourceNode($resourceNode);
         $em->persist($resourceNode);

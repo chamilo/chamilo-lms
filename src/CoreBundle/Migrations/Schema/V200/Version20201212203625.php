@@ -54,7 +54,14 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $this->ensureCDocumentFiletypeVarchar15();
         $this->ensureItemPropertyMigrationIndex();
         $this->ensureCDocumentCidIndex();
-        $this->ensureTrackEAttemptLookupIndex();
+
+        // The composite track_e_attempt index is only needed by the student
+        // exercise-audio lookup. Avoid building it on large tracking tables
+        // when the legacy database has no such documents.
+        $hasStudentExerciseAudioDocuments = $this->hasStudentExerciseAudioDocuments();
+        if ($hasStudentExerciseAudioDocuments) {
+            $this->ensureTrackEAttemptLookupIndex();
+        }
 
         /** @var CDocumentRepository $documentRepo */
         $documentRepo = $this->container->get(CDocumentRepository::class);
@@ -192,7 +199,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         // --------------------------
         $pendingFileRows = [];
 
-        foreach ($courses as $courseData) {
+        foreach ($hasStudentExerciseAudioDocuments ? $courses : [] as $courseData) {
             $courseId = (int) ($courseData['id'] ?? 0);
             $courseDirectory = (string) ($courseData['directory'] ?? '');
 
@@ -697,6 +704,23 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 'error' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private function hasStudentExerciseAudioDocuments(): bool
+    {
+        $value = $this->connection->fetchOne(
+            'SELECT 1
+             FROM c_document
+             WHERE path LIKE :pattern
+               AND path NOT LIKE :teacherPattern
+             LIMIT 1',
+            [
+                'pattern' => '/../exercises/%',
+                'teacherPattern' => '/../exercises/teacher_audio%',
+            ]
+        );
+
+        return false !== $value;
     }
 
     private function ensureTrackEAttemptLookupIndex(): void

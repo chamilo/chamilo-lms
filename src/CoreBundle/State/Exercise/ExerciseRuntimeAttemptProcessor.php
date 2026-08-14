@@ -122,6 +122,18 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             throw new AccessDeniedHttpException('A valid authenticated user is required.');
         }
 
+        $questionIds = $this->buildQuestionList($quiz);
+        if ([] === $questionIds) {
+            return $this->createBlockedResponse(
+                $quiz,
+                $course,
+                $session,
+                $request,
+                'This exercise has no questions.',
+                []
+            );
+        }
+
         if ($this->requiresLegacyQuestionSelection($quiz)) {
             return $this->createLegacyRequiredResponse(
                 $quiz,
@@ -182,7 +194,6 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             );
         }
 
-        $questionIds = $this->buildQuestionList($quiz);
         if ($this->isQuestionLimitPerDayReached($questionIds, $course, $session, $user)) {
             return $this->createBlockedResponse(
                 $quiz,

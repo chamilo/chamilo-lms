@@ -114,7 +114,14 @@
       </header>
 
       <div
-        v-if="showLegacyRuntimeFallback"
+        v-if="!hasRuntimeQuestions"
+        class="rounded-xl border border-gray-20 bg-white p-4 text-sm text-gray-700 shadow-sm"
+      >
+        {{ t("This exercise has no questions.") }}
+      </div>
+
+      <div
+        v-else-if="showLegacyRuntimeFallback"
         class="rounded-xl border border-info/30 bg-support-1 p-4 text-sm text-support-4"
       >
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -145,7 +152,7 @@
       </div>
 
       <div
-        v-if="!showLegacyRuntimeFallback"
+        v-else
         class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
       >
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -300,7 +307,7 @@
       </div>
 
       <form
-        v-if="!isPreviewFinished && !showReviewReminderScreen && (canManage || activeAttempt)"
+        v-if="hasRuntimeQuestions && !isPreviewFinished && !showReviewReminderScreen && (canManage || activeAttempt)"
         class="space-y-4"
         @submit.prevent="submitDisabled"
       >
@@ -1694,8 +1701,11 @@ const usesPagedNavigation = computed(() => {
   return true === settings.value.oneQuestionPerPage
 })
 
+const hasRuntimeQuestions = computed(() => questions.value.length > 0)
+
 const showLegacyRuntimeFallback = computed(() => {
-  return !canManage.value
+  return hasRuntimeQuestions.value
+    && !canManage.value
     && Boolean(legacyUrls.value?.overview)
     && (true === settings.value.requiresLegacyRuntime || (Boolean(activeAttempt.value) && true === usesLegacySubmit.value))
 })
@@ -2578,7 +2588,7 @@ async function loadRuntime() {
     totalScore.value = Number(response.totalScore || 0)
     canManage.value = true === response.canManage
     isPreviewFinished.value = false
-    canStartAttempt.value = true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
+    canStartAttempt.value = hasRuntimeQuestions.value && true === response.canStartAttempt && true !== settings.value.requiresLegacyRuntime
     activeAttempt.value = response.attempt || null
     canSubmit.value = true === response.canSubmit
     usesLegacySubmit.value = true === response.usesLegacySubmit && Boolean(activeAttempt.value)
@@ -2623,7 +2633,7 @@ async function startAttempt() {
     if (response.success) {
       activeAttempt.value = response
       canSubmit.value = true === response.canFinish && true !== response.usesLegacyRuntime
-      usesLegacySubmit.value = true === response.usesLegacyRuntime || false === response.canFinish
+      usesLegacySubmit.value = true === response.usesLegacyRuntime
       attemptMessage.value = response.message || t("Attempt started")
       confirmedSavedAnswers.value = false
       applyAttemptState(response)

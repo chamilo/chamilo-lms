@@ -46,7 +46,14 @@ final class Version20201215135838 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
 
         $adminId = (int) $this->getAdmin()->getId();
-        $courseIds = $this->connection->fetchFirstColumn('SELECT id FROM course ORDER BY id');
+        $courseIds = $this->connection->fetchFirstColumn(
+            'SELECT DISTINCT cd.c_id
+             FROM c_course_description cd
+             INNER JOIN course c ON c.id = cd.c_id
+             WHERE cd.resource_node_id IS NULL
+               AND cd.c_id IS NOT NULL
+             ORDER BY cd.c_id'
+        );
 
         foreach ($courseIds as $courseIdValue) {
             $courseId = (int) $courseIdValue;
@@ -79,7 +86,9 @@ final class Version20201215135838 extends AbstractMigrationChamilo
                         $admin,
                         $resource,
                         $course,
-                        $itemPropsMap[$id] ?? []
+                        $itemPropsMap[$id] ?? [],
+                        null,
+                        false
                     );
 
                     if (false === $result) {

@@ -6,33 +6,6 @@
     v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="showBreadcrumb"
   >
-    <!-- 403 banner shown INSIDE the layout -->
-    <Transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-2"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition duration-300 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-2"
-    >
-      <div
-        v-if="forbiddenMsg && forbiddenBannerVisible"
-        class="fixed inset-x-0 top-10 z-[1000] px-4 pointer-events-none"
-        role="alert"
-        aria-live="polite"
-      >
-        <div class="mx-auto w-full max-w-2xl pointer-events-auto">
-          <div class="flex items-center gap-4 rounded-2xl p-6 bg-warning text-white/80 shadow-lg">
-            <i class="mdi mdi-alert-outline text-4xl text-white"></i>
-            <p
-              class="font-extrabold text-xl text-white"
-              v-text="forbiddenMsg"
-            />
-          </div>
-        </div>
-      </div>
-    </Transition>
-
     <div
       id="legacy_content"
       ref="legacyContainer"
@@ -121,14 +94,9 @@ import { useUxStore } from "./store/uxStore"
 import PluginRegion from "./components/layout/PluginRegion.vue"
 import { useCidReqStore } from "./store/cidReq"
 
-const FORBIDDEN_BANNER_AUTO_HIDE_MS = 10000
 const cidReqStore = useCidReqStore()
 const uxStore = useUxStore()
 const forbiddenMsg = computed(() => uxStore.forbiddenMessage)
-
-// Controls visual visibility of the forbidden banner without mutating the store.
-const forbiddenBannerVisible = ref(true)
-let forbiddenBannerTimer = null
 
 const route = useRoute()
 const router = useRouter()
@@ -381,8 +349,13 @@ function consumeFlashesFromAppDataset() {
     for (const key in flashes) {
       const notificationType = key === "danger" ? "Error" : capitalize(key)
 
+      // Warnings are the backend's channel for denied access (see
+      // ExceptionListener): they explain a redirect the user did not ask for, so
+      // they wait to be dismissed. Everything else keeps its usual timing.
+      const persistent = "Warning" === notificationType
+
       for (const flashText of flashes[key]) {
-        notification[`show${notificationType}Notification`](flashText)
+        notification[`show${notificationType}Notification`](flashText, { persistent })
       }
     }
   }
@@ -402,7 +375,7 @@ watch(
   () => securityStore.sessionLost,
   (lost) => {
     if (lost) {
-      notification.showWarningNotification(sessionLostMessage())
+      notification.showWarningNotification(sessionLostMessage(), { persistent: true })
     }
   },
 )
@@ -519,48 +492,23 @@ function forbiddenAffectsCurrentPage(requestUrl) {
   return path.startsWith("/main/") || path === window.location.pathname
 }
 
-watch(
-  forbiddenMsg,
-  (msg) => {
-    if (msg) {
-      if (forbiddenAffectsCurrentPage(uxStore.forbiddenRequestUrl)) {
-        const legacy = document.getElementById("legacy_content")
-        if (legacy) legacy.innerHTML = ""
+// Permission denials stay on screen until dismissed: they explain why the page
+// the user asked for is empty.
+watch(forbiddenMsg, (msg) => {
+  if (!msg) {
+    return
+  }
 
-        const section = document.getElementById("sectionMainContent")
-        if (section) section.innerHTML = ""
-      }
+  if (forbiddenAffectsCurrentPage(uxStore.forbiddenRequestUrl)) {
+    const legacy = document.getElementById("legacy_content")
+    if (legacy) legacy.innerHTML = ""
 
-      // Ensure the banner is visible for every new forbidden message.
-      forbiddenBannerVisible.value = true
+    const section = document.getElementById("sectionMainContent")
+    if (section) section.innerHTML = ""
+  }
 
-      // Reset any previous auto-hide timer.
-      if (forbiddenBannerTimer) {
-        window.clearTimeout(forbiddenBannerTimer)
-        forbiddenBannerTimer = null
-      }
-
-      // Hide the banner automatically after a delay, clearing the store with it
-      // so the message does not linger (it also drives showBreadcrumb).
-      forbiddenBannerTimer = window.setTimeout(() => {
-        forbiddenBannerVisible.value = false
-        forbiddenBannerTimer = null
-        uxStore.clearForbidden()
-      }, FORBIDDEN_BANNER_AUTO_HIDE_MS)
-
-      return
-    }
-
-    // If the store message is cleared, reset the visual state for future messages.
-    forbiddenBannerVisible.value = true
-
-    if (forbiddenBannerTimer) {
-      window.clearTimeout(forbiddenBannerTimer)
-      forbiddenBannerTimer = null
-    }
-  },
-  { immediate: true },
-)
+  notification.showWarningNotification(msg, { persistent: true })
+})
 
 // A denial belongs to the navigation that caused it: leaving the page clears it,
 // so the banner and showBreadcrumb do not stay stuck on the next route.
@@ -570,12 +518,6 @@ watch(
 )
 
 onBeforeUnmount(() => {
-  // Prevent timer leaks when the root component is recreated/unmounted.
-  if (forbiddenBannerTimer) {
-    window.clearTimeout(forbiddenBannerTimer)
-    forbiddenBannerTimer = null
-  }
-
   document.removeEventListener("copy", blockCopyPasteEvent, true)
   document.removeEventListener("cut", blockCopyPasteEvent, true)
   document.removeEventListener("paste", blockCopyPasteEvent, true)

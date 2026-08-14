@@ -73,11 +73,11 @@ export function useNotification() {
     showMessage(message, "info")
   }
 
-  const showWarningNotification = (message) => {
-    showMessage(message, "warn")
+  const showWarningNotification = (message, options) => {
+    showMessage(message, "warn", options)
   }
 
-  const showErrorNotification = (error) => {
+  const showErrorNotification = (error, options) => {
     let message = "Authentication failed. Please try again."
 
     // Axios-like error response
@@ -116,10 +116,17 @@ export function useNotification() {
       message = "An unexpected error occurred. Please try again later."
     }
 
-    showMessage(message, "error")
+    showMessage(message, "error", options)
   }
 
-  const showMessage = (message, severity) => {
+  /**
+   * @param {string} message
+   * @param {string} severity - PrimeVue severity: success | info | warn | error.
+   * @param {Object} [options]
+   * @param {boolean} [options.persistent] - Keep the toast until the user closes it.
+   * @returns {void}
+   */
+  const showMessage = (message, severity, { persistent = false } = {}) => {
     const safeMessage = normalizeMessage(
       message,
       "error" === severity ? "An unexpected error occurred. Please try again later." : "Notification",
@@ -130,10 +137,13 @@ export function useNotification() {
       return
     }
 
+    // PrimeVue only starts the auto-close timer when `life` is truthy.
+    const life = "error" === severity ? ERROR_TOAST_LIFE_MS : DEFAULT_TOAST_LIFE_MS
+
     toast.add({
       severity,
       detail: sanitizeHtml(safeMessage),
-      life: "error" === severity ? ERROR_TOAST_LIFE_MS : DEFAULT_TOAST_LIFE_MS,
+      life: persistent ? null : life,
       baseZIndex: 10,
     })
   }

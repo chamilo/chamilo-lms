@@ -9,12 +9,14 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -34,6 +36,7 @@ use const ENT_QUOTES;
 final class Version20201215142610 extends AbstractMigrationChamilo
 {
     private const int ORM_FLUSH_BATCH_SIZE = 100;
+    private const int SQL_QUIZ_BATCH_SIZE = 500;
     private const int SQL_QUESTION_BATCH_SIZE = 1000;
     private const int IMAGE_FLUSH_BATCH_SIZE = 20;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
@@ -80,15 +83,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
             $courseAdminId = $this->resolveCourseAdminId($course);
 
-            $this->migrateQuizzes(
+            $quizResourceTypeId = (int) $quizRepo->getResourceType()->getId();
+            $this->entityManager->clear();
+
+            $this->migrateQuizzesWithDbal(
                 $courseId,
                 $courseAdminId,
-                $quizRepo,
-                $courseRepo,
-                $userRepo
+                $quizResourceTypeId,
+                $uuidIsBinary
             );
 
-            $quizResourceTypeId = (int) $quizRepo->getResourceType()->getId();
             $this->migrateReferencedQuizzesWithoutItemPropertyWithDbal(
                 $courseId,
                 $courseAdminId,
@@ -122,24 +126,48 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         }
     }
 
-    private function migrateQuizzes(
+    /**
+     * Migrate quizzes without hydrating CQuiz/ResourceNode graphs.
+     *
+     * ResourceRepository::createNodeForResource() links every new node into the
+     * managed parent/creator collections. On large courses that makes Doctrine
+     * walk very large object graphs during flush and can exhaust memory even
+     * when the EntityManager is cleared between batches.
+     *
+     * This follows the DBAL resource-node pattern already used below for quiz
+     * questions and referenced quizzes, while preserving legacy item-property
+     * creator, visibility, session/group context and deletion semantics.
+     */
+    private function migrateQuizzesWithDbal(
         int $courseId,
         int $courseAdminId,
-        CQuizRepository $quizRepo,
-        CourseRepository $courseRepo,
-        UserRepository $userRepo
+        int $resourceTypeId,
+        bool $uuidIsBinary
     ): void {
-        [$course, $courseAdmin] = $this->reloadCourseContext(
-            $courseId,
-            $courseAdminId,
-            $courseRepo,
-            $userRepo
+        $courseRow = $this->connection->fetchAssociative(
+            'SELECT id, resource_node_id FROM course WHERE id = :courseId',
+            ['courseId' => $courseId]
         );
 
-        $resourceType = $quizRepo->getResourceType();
+        if (!$courseRow || empty($courseRow['resource_node_id'])) {
+            throw new RuntimeException("Course {$courseId} has no resource node.");
+        }
+
+        $courseNodeId = (int) $courseRow['resource_node_id'];
+        $courseNode = $this->connection->fetchAssociative(
+            'SELECT id, path, level FROM resource_node WHERE id = :nodeId',
+            ['nodeId' => $courseNodeId]
+        );
+
+        if (!$courseNode) {
+            throw new RuntimeException("Course {$courseId} resource node {$courseNodeId} was not found.");
+        }
+
+        $coursePath = rtrim((string) ($courseNode['path'] ?? ''), '/');
+        $quizLevel = ((int) ($courseNode['level'] ?? 0)) + 1;
         $itemProperties = $this->loadItemPropertiesByRef($courseId, 'quiz');
-        $quizIds = $this->connection->fetchFirstColumn(
-            'SELECT iid
+        $quizRows = $this->connection->fetchAllAssociative(
+            'SELECT iid, title
              FROM c_quiz
              WHERE c_id = :courseId
                AND resource_node_id IS NULL
@@ -147,42 +175,339 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             ['courseId' => $courseId]
         );
 
-        foreach (array_chunk(array_map('intval', $quizIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
-            $quizzesById = [];
-            foreach ($quizRepo->findBy(['iid' => $idChunk]) as $quizEntity) {
-                $quizzesById[$quizEntity->getIid()] = $quizEntity;
-            }
+        if ([] === $quizRows) {
+            return;
+        }
 
-            foreach ($idChunk as $quizId) {
-                $quiz = $quizzesById[$quizId] ?? null;
+        $displayOrderByContext = [];
+        $sessionExists = [];
+        $groupExists = [];
+        $userExists = [];
 
-                if (!$quiz instanceof CQuiz || $quiz->hasResourceNode()) {
-                    continue;
+        foreach (array_chunk($quizRows, self::SQL_QUIZ_BATCH_SIZE) as $rowChunk) {
+            $this->connection->beginTransaction();
+
+            try {
+                foreach ($rowChunk as $quizRow) {
+                    $quizId = (int) $quizRow['iid'];
+                    $quizItems = $itemProperties[$quizId] ?? [];
+
+                    if ([] === $quizItems) {
+                        // Preserve the legacy behavior: quizzes without
+                        // c_item_property are skipped here. Referenced quizzes
+                        // are repaired by migrateReferencedQuizzes... below.
+                        $this->getLogger()->warning('Missing c_item_property for quiz; resource skipped.', [
+                            'course_id' => $courseId,
+                            'quiz_iid' => $quizId,
+                        ]);
+
+                        continue;
+                    }
+
+                    $creatorId = (int) ($quizItems[0]['insert_user_id'] ?? 0);
+                    if (!$this->legacyUserExists($creatorId, $userExists)) {
+                        $creatorId = $courseAdminId;
+                    }
+
+                    $title = $this->normalizeQuizTitle((string) ($quizRow['title'] ?? ''), $quizId);
+                    $slug = 'quiz-'.$quizId;
+                    $now = $this->nowUtc();
+                    $uuid = Uuid::v4();
+                    $uuidValue = $uuidIsBinary ? $uuid->toBinary() : $uuid->toRfc4122();
+
+                    $resourceNodeId = $this->insertResourceNode(
+                        title: $title,
+                        slug: $slug,
+                        level: $quizLevel,
+                        createdAt: $now,
+                        updatedAt: $now,
+                        uuid: $uuidValue,
+                        uuidIsBinary: $uuidIsBinary,
+                        resourceTypeId: $resourceTypeId,
+                        creatorId: $creatorId,
+                        parentId: $courseNodeId
+                    );
+
+                    $segmentTitle = preg_replace('/\s+/u', ' ', trim(str_replace(['/', '\\'], '-', $title)));
+                    if (null === $segmentTitle || '' === $segmentTitle) {
+                        $segmentTitle = $slug;
+                    }
+
+                    $newPath = $coursePath.'/'.$segmentTitle.'-'.$quizId.'-'.$resourceNodeId.'/';
+
+                    $this->connection->update(
+                        'resource_node',
+                        ['path' => $newPath],
+                        ['id' => $resourceNodeId]
+                    );
+                    $this->connection->update(
+                        'c_quiz',
+                        ['resource_node_id' => $resourceNodeId],
+                        ['iid' => $quizId]
+                    );
+
+                    $this->insertQuizResourceLinksWithDbal(
+                        courseId: $courseId,
+                        resourceNodeId: $resourceNodeId,
+                        resourceTypeId: $resourceTypeId,
+                        items: $quizItems,
+                        displayOrderByContext: $displayOrderByContext,
+                        sessionExists: $sessionExists,
+                        groupExists: $groupExists
+                    );
                 }
 
-                $this->fixItemProperty(
-                    'quiz',
-                    $quizRepo,
-                    $course,
-                    $courseAdmin,
-                    $quiz,
-                    $course,
-                    $itemProperties[$quizId] ?? [],
-                    $resourceType
+                $this->connection->commit();
+            } catch (Throwable $e) {
+                if ($this->connection->isTransactionActive()) {
+                    $this->connection->rollBack();
+                }
+
+                throw new RuntimeException(
+                    "Fast quiz resource migration failed for course {$courseId}: {$e->getMessage()}",
+                    0,
+                    $e
                 );
             }
-
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-
-            [$course, $courseAdmin] = $this->reloadCourseContext(
-                $courseId,
-                $courseAdminId,
-                $courseRepo,
-                $userRepo
-            );
-            $resourceType = $quizRepo->getResourceType();
         }
+    }
+
+    /**
+     * @param array<int, bool> $cache
+     */
+    private function legacyUserExists(int $userId, array &$cache): bool
+    {
+        if ($userId <= 0) {
+            return false;
+        }
+
+        if (!\array_key_exists($userId, $cache)) {
+            $cache[$userId] = (bool) $this->connection->fetchOne(
+                'SELECT 1 FROM user WHERE id = :id LIMIT 1',
+                ['id' => $userId]
+            );
+        }
+
+        return $cache[$userId];
+    }
+
+    /**
+     * Reproduces AbstractResource::addCourseLink() / fixItemProperty() semantics
+     * without adding thousands of ResourceLink and ResourceRight entities to the
+     * Doctrine UnitOfWork.
+     *
+     * @param array<int, array<string, mixed>> $items
+     * @param array<string, int>               $displayOrderByContext
+     * @param array<int, bool>                 $sessionExists
+     * @param array<int, bool>                 $groupExists
+     */
+    private function insertQuizResourceLinksWithDbal(
+        int $courseId,
+        int $resourceNodeId,
+        int $resourceTypeId,
+        array $items,
+        array &$displayOrderByContext,
+        array &$sessionExists,
+        array &$groupExists
+    ): void {
+        /** @var array<string, int> $linksByContext */
+        $linksByContext = [];
+        $editorMask = ResourceNodeVoter::getEditorMask();
+
+        foreach ($items as $item) {
+            $legacyVisibility = (int) ($item['visibility'] ?? 0);
+            $visibility = 1 === $legacyVisibility
+                ? ResourceLink::VISIBILITY_PUBLISHED
+                : ResourceLink::VISIBILITY_DRAFT;
+
+            $sessionId = $this->resolveExistingLegacyContextId(
+                'session',
+                Session::class,
+                (int) ($item['session_id'] ?? 0),
+                $sessionExists
+            );
+            $groupId = $this->resolveExistingLegacyContextId(
+                'c_group',
+                CGroup::class,
+                (int) ($item['to_group_id'] ?? 0),
+                $groupExists
+            );
+
+            $contextKey = ($sessionId ?? 0).':'.($groupId ?? 0);
+
+            if (isset($linksByContext[$contextKey])) {
+                // addCourseLink() keeps the first link for an identical
+                // course/session/group context. Legacy visibility=2 still
+                // marks that existing link as deleted.
+                if (2 === $legacyVisibility) {
+                    $this->connection->update(
+                        'resource_link',
+                        ['deleted_at' => $this->normalizeLegacyDeletedAt((string) ($item['lastedit_date'] ?? ''))],
+                        ['id' => $linksByContext[$contextKey]]
+                    );
+                }
+
+                continue;
+            }
+
+            $displayOrder = $this->nextQuizResourceLinkDisplayOrder(
+                $courseId,
+                $resourceTypeId,
+                $sessionId,
+                $groupId,
+                $displayOrderByContext
+            );
+            $now = $this->nowUtc();
+            $deletedAt = 2 === $legacyVisibility
+                ? $this->normalizeLegacyDeletedAt((string) ($item['lastedit_date'] ?? ''))
+                : null;
+
+            $resourceLinkId = $this->insertResourceLink(
+                [
+                    'visibility' => $visibility,
+                    'start_visibility_at' => null,
+                    'end_visibility_at' => null,
+                    'display_order' => $displayOrder,
+                    'resource_type_group' => $resourceTypeId,
+                    'deleted_at' => $deletedAt,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                    'resource_node_id' => $resourceNodeId,
+                    'parent_id' => null,
+                    'c_id' => $courseId,
+                    'session_id' => $sessionId,
+                    'usergroup_id' => null,
+                    'group_id' => $groupId,
+                    'user_id' => null,
+                ]
+            );
+
+            $linksByContext[$contextKey] = $resourceLinkId;
+
+            if (ResourceLink::VISIBILITY_PUBLISHED !== $visibility) {
+                $this->connection->insert('resource_right', [
+                    'resource_link_id' => $resourceLinkId,
+                    'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER,
+                    'mask' => $editorMask,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param array<int, bool> $cache
+     */
+    private function resolveExistingLegacyContextId(
+        string $table,
+        string $entityClass,
+        int $id,
+        array &$cache
+    ): ?int {
+        if ($id <= 0) {
+            return null;
+        }
+
+        if (!\array_key_exists($id, $cache)) {
+            try {
+                // Keep the same fast lookup convention used by
+                // AbstractMigrationChamilo::fixItemProperty().
+                $cache[$id] = (bool) $this->connection->fetchOne(
+                    "SELECT 1 FROM {$table} WHERE id = :id LIMIT 1",
+                    ['id' => $id]
+                );
+            } catch (Throwable) {
+                // Preserve fixItemProperty() fallback behavior when the legacy
+                // fast table name does not match the current ORM mapping
+                // (notably groups in current Chamilo).
+                $cache[$id] = null !== $this->entityManager->find($entityClass, $id);
+            }
+        }
+
+        return $cache[$id] ? $id : null;
+    }
+
+    /**
+     * @param array<string, int> $displayOrderByContext
+     */
+    private function nextQuizResourceLinkDisplayOrder(
+        int $courseId,
+        int $resourceTypeId,
+        ?int $sessionId,
+        ?int $groupId,
+        array &$displayOrderByContext
+    ): int {
+        $contextKey = ($sessionId ?? 0).':'.($groupId ?? 0);
+
+        if (!isset($displayOrderByContext[$contextKey])) {
+            $sql = 'SELECT COALESCE(MAX(display_order), -1) + 1
+                    FROM resource_link
+                    WHERE c_id = :courseId
+                      AND resource_type_group = :resourceTypeId
+                      AND usergroup_id IS NULL
+                      AND user_id IS NULL';
+            $parameters = [
+                'courseId' => $courseId,
+                'resourceTypeId' => $resourceTypeId,
+            ];
+
+            if (null === $sessionId) {
+                $sql .= ' AND session_id IS NULL';
+            } else {
+                $sql .= ' AND session_id = :sessionId';
+                $parameters['sessionId'] = $sessionId;
+            }
+
+            if (null === $groupId) {
+                $sql .= ' AND group_id IS NULL';
+            } else {
+                $sql .= ' AND group_id = :groupId';
+                $parameters['groupId'] = $groupId;
+            }
+
+            $displayOrderByContext[$contextKey] = (int) $this->connection->fetchOne(
+                $sql,
+                $parameters
+            );
+        }
+
+        return $displayOrderByContext[$contextKey]++;
+    }
+
+    private function normalizeLegacyDeletedAt(string $lastEdit): string
+    {
+        if ('' === $lastEdit) {
+            return $this->nowUtc();
+        }
+
+        return (new \DateTime($lastEdit, new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function insertResourceLink(array $data): int
+    {
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $sql = 'INSERT INTO resource_link (
+                        visibility, start_visibility_at, end_visibility_at,
+                        display_order, resource_type_group, deleted_at,
+                        created_at, updated_at, resource_node_id, parent_id,
+                        c_id, session_id, usergroup_id, group_id, user_id
+                    ) VALUES (
+                        :visibility, :start_visibility_at, :end_visibility_at,
+                        :display_order, :resource_type_group, :deleted_at,
+                        :created_at, :updated_at, :resource_node_id, :parent_id,
+                        :c_id, :session_id, :usergroup_id, :group_id, :user_id
+                    ) RETURNING id';
+
+            return (int) $this->connection->fetchOne($sql, $data);
+        }
+
+        $this->connection->insert('resource_link', $data);
+
+        return (int) $this->connection->lastInsertId();
     }
 
     /**

@@ -143,7 +143,8 @@ final class Version20201215141131 extends AbstractMigrationChamilo
                     $resource,
                     $course,
                     $items,
-                    $resourceType
+                    $resourceType,
+                    false
                 );
 
                 if (false === $result) {
@@ -251,7 +252,8 @@ final class Version20201215141131 extends AbstractMigrationChamilo
                     $resource,
                     $parent,
                     $items,
-                    $resourceType
+                    $resourceType,
+                    false
                 );
 
                 if (false === $result) {

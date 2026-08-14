@@ -1950,7 +1950,8 @@ class MySpace
     ) {
         $from = (int) $from;
         $numberItems = (int) $numberItems;
-        $direction = Database::escape_string($direction);
+        // ORDER BY is an identifier context: escaping is not enough, only a whitelist is safe.
+        $direction = 'DESC' === strtoupper((string) $direction) ? 'DESC' : 'ASC';
         $columnName = 'name';
         if (1 === $column) {
             $columnName = 'id';

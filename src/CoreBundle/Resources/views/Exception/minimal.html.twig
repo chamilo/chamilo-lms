@@ -1,0 +1,74 @@
+{#
+    Last-resort error page: no layout, no settings, no theme, no database.
+    Rendered by ErrorController::show when the branded page cannot be built.
+    Keep it self-contained — the logo is served straight by the web server.
+#}
+{% set title = 404 == status_code ? 'Page not found'|trans : 'Something seems to have gone wrong'|trans %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <title>{{ status_code }} — {{ title }}</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7f8fa;
+            color: #2c3e50;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+        }
+        .box {
+            max-width: 32rem;
+            margin: 1.5rem;
+            padding: 2.5rem 2rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+            text-align: center;
+        }
+        .logo { width: 72px; height: 72px; }
+        .code {
+            margin: 1.5rem 0 .25rem;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #a1adb9;
+            letter-spacing: .05em;
+        }
+        h1 { margin: 0 0 .75rem; font-size: 1.25rem; }
+        p.hint { margin: 0 0 1.5rem; color: #5c6b7a; }
+        a {
+            display: inline-block;
+            padding: .6rem 1.25rem;
+            border-radius: .4rem;
+            background: #2c6fbb;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { background: #24578f; }
+    </style>
+</head>
+<body>
+    <main class="box">
+        <img
+            class="logo"
+            src="/img/icons/svg/logo.svg"
+            alt=""
+        >
+        <p class="code">{{ status_code }}</p>
+        <h1>{{ title }}</h1>
+        <p class="hint">
+            {{ 404 == status_code
+                ? 'The page you are looking for could not be found.'|trans
+                : 'Please try again later.'|trans }}
+        </p>
+        <a href="/">{{ 'Homepage'|trans }}</a>
+    </main>
+</body>
+</html>

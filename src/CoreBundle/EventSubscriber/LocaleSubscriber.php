@@ -35,6 +35,13 @@ readonly class LocaleSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
+        // Error pages run as a sub-request and inherit the locale already
+        // resolved for the main one. Resolving it again would query the database
+        // right when it may be what failed, and the error page would never render.
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
         $request = $event->getRequest();
 
         // Skip if not installed or no session is available

@@ -19,6 +19,9 @@ use Twig\Environment;
  */
 class TwigListener
 {
+    // Same value LanguageHelper::getWcagIso() falls back to.
+    private const string FALLBACK_WCAG_LOCALE = 'en-US';
+
     public function __construct(
         private readonly Environment $twig,
         private readonly SerializerInterface $serializer,
@@ -30,6 +33,16 @@ class TwigListener
 
     public function __invoke(ControllerEvent $event): void
     {
+        // Error pages are rendered through a sub-request. Querying the database
+        // here would throw again — precisely when the database is what failed —
+        // and the error page would never render. Publish neutral values instead:
+        // some templates read these globals without a default.
+        if (!$event->isMainRequest()) {
+            $this->addFallbackGlobals();
+
+            return;
+        }
+
         $currentAccessUrl = $this->accessUrlHelper->getCurrent();
         $user = $this->userHelper->getCurrent();
 
@@ -57,5 +70,15 @@ class TwigListener
         }
         $this->twig->addGlobal('languages_json', json_encode($languages));
         $this->twig->addGlobal('wcag_locale', $this->languageHelper->getWcagIso());
+    }
+
+    private function addFallbackGlobals(): void
+    {
+        $this->twig->addGlobal('is_authenticated', json_encode(false));
+        $this->twig->addGlobal('user_json', json_encode([]));
+        $this->twig->addGlobal('is_login_url', 0);
+        $this->twig->addGlobal('access_url_id', 1);
+        $this->twig->addGlobal('languages_json', json_encode([]));
+        $this->twig->addGlobal('wcag_locale', self::FALLBACK_WCAG_LOCALE);
     }
 }

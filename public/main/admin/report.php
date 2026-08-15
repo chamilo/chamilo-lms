@@ -51,15 +51,69 @@ if (ReportRegistry::requiresCourseContext($report)) {
         api_not_allowed(true);
     }
 
-    $query['cid'] = $resolvedContext['course_id'];
+    $courseId = (int) $resolvedContext['course_id'];
+    $sessionId = (int) $resolvedContext['session_id'];
+    $query['cid'] = $courseId;
 
-    if ($resolvedContext['session_id'] > 0) {
-        $query['sid'] = $resolvedContext['session_id'];
+    if ($sessionId > 0) {
+        $query['sid'] = $sessionId;
     } else {
         unset($query['sid']);
     }
 
-    $target = resolveCourseAwareReportTarget($target, $resolvedContext['course_id']);
+    $contextValues = collectReportContextValues($query);
+    $requirements = ReportRegistry::getContextRequirements($report);
+
+    foreach ($requirements as $requirement) {
+        $valueKey = $requirement.'_id';
+        if (($contextValues[$valueKey] ?? 0) <= 0) {
+            redirectToCatalogContextDialog($reportId, $courseId, $sessionId);
+        }
+    }
+
+    if (
+        in_array('user', $requirements, true)
+        && !isUserInCourseContext($courseId, $sessionId, $contextValues['user_id'])
+    ) {
+        api_not_allowed(true);
+    }
+
+    if (
+        in_array('exercise', $requirements, true)
+        && !isExerciseInCourseContext($courseId, $sessionId, $contextValues['exercise_id'])
+    ) {
+        api_not_allowed(true);
+    }
+
+    if (
+        in_array('attempt', $requirements, true)
+        && !isAttemptInExerciseContext(
+            $courseId,
+            $sessionId,
+            $contextValues['exercise_id'],
+            $contextValues['attempt_id']
+        )
+    ) {
+        api_not_allowed(true);
+    }
+
+    $target = resolveCourseAwareReportTarget(
+        $target,
+        $report,
+        $courseId,
+        $sessionId,
+        $contextValues
+    );
+
+    if (str_contains(ReportRegistry::getEntryUrl($report), '{session_id}')) {
+        unset($query['sid']);
+    }
+
+    unset(
+        $query['exercise_id'],
+        $query['attempt_id'],
+        $query['user_id']
+    );
 }
 
 if (!empty($query)) {
@@ -70,22 +124,221 @@ header('Location: '.$target);
 exit;
 
 /**
- * Resolve placeholders used by modern course tool routes.
+ * Resolve placeholders used by canonical course-aware report targets.
+ *
+ * The catalogue keeps legacy URLs as references, but canonical routing can
+ * point to modern Vue pages or to a more specific legacy report when the
+ * required context is known.
+ *
+ * @param array<string, mixed> $report
+ * @param array<string, int>   $contextValues
  */
-function resolveCourseAwareReportTarget(string $target, int $courseId): string
+function resolveCourseAwareReportTarget(
+    string $target,
+    array $report,
+    int $courseId,
+    int $sessionId,
+    array $contextValues
+): string {
+    if (str_contains($target, '{course_resource_node_id}')) {
+        $course = api_get_course_entity($courseId);
+        $resourceNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
+
+        if ($resourceNodeId <= 0) {
+            api_not_allowed(true);
+        }
+
+        $target = str_replace('{course_resource_node_id}', (string) $resourceNodeId, $target);
+    }
+
+    if (str_contains($target, '{gradebook_category_id}')) {
+        $categoryId = resolveGradebookRootCategoryId($courseId, $sessionId);
+
+        if ($categoryId <= 0) {
+            $fallback = (string) ($report['fallback_entry_url'] ?? '');
+            if ('' === $fallback) {
+                api_not_allowed(true);
+            }
+
+            return $fallback;
+        }
+
+        $target = str_replace('{gradebook_category_id}', (string) $categoryId, $target);
+    }
+
+    $target = str_replace('{session_id}', (string) $sessionId, $target);
+
+    foreach (['user_id', 'exercise_id', 'attempt_id'] as $key) {
+        $placeholder = '{'.$key.'}';
+        if (!str_contains($target, $placeholder)) {
+            continue;
+        }
+
+        $value = (int) ($contextValues[$key] ?? 0);
+        if ($value <= 0) {
+            api_not_allowed(true);
+        }
+
+        $target = str_replace($placeholder, (string) $value, $target);
+    }
+
+    return $target;
+}
+
+/**
+ * @param array<string, mixed> $query
+ *
+ * @return array{user_id: int, exercise_id: int, attempt_id: int}
+ */
+function collectReportContextValues(array $query): array
 {
-    if (!str_contains($target, '{course_resource_node_id}')) {
-        return $target;
+    return [
+        'user_id' => isset($query['user_id']) ? (int) $query['user_id'] : 0,
+        'exercise_id' => isset($query['exercise_id']) ? (int) $query['exercise_id'] : 0,
+        'attempt_id' => isset($query['attempt_id']) ? (int) $query['attempt_id'] : 0,
+    ];
+}
+
+function redirectToCatalogContextDialog(string $reportId, int $courseId, int $sessionId): never
+{
+    $url = api_get_path(WEB_CODE_PATH).'admin/reports_catalog.php?'.http_build_query([
+        'select_report' => $reportId,
+        'course_context' => $courseId.':'.$sessionId,
+    ]);
+
+    header('Location: '.$url);
+    exit;
+}
+
+function resolveGradebookRootCategoryId(int $courseId, int $sessionId): int
+{
+    $categories = Category::load(
+        null,
+        null,
+        $courseId,
+        null,
+        null,
+        $sessionId,
+        'ORDER BY id'
+    );
+
+    if (empty($categories)) {
+        $categories = Category::load(
+            0,
+            null,
+            $courseId,
+            null,
+            null,
+            $sessionId,
+            'ORDER BY id'
+        );
     }
 
-    $course = api_get_course_entity($courseId);
-    $resourceNodeId = (int) ($course?->getResourceNode()?->getId() ?? 0);
-
-    if ($resourceNodeId <= 0) {
-        api_not_allowed(true);
+    if (empty($categories) || !isset($categories[0])) {
+        return 0;
     }
 
-    return str_replace('{course_resource_node_id}', (string) $resourceNodeId, $target);
+    return (int) $categories[0]->get_id();
+}
+
+function isUserInCourseContext(int $courseId, int $sessionId, int $userId): bool
+{
+    if ($userId <= 0) {
+        return false;
+    }
+
+    $statusToFilter = $sessionId > 0 ? 0 : STUDENT;
+    $users = CourseManager::getUserListFromCourseId(
+        $courseId,
+        $sessionId,
+        null,
+        null,
+        $statusToFilter
+    );
+
+    foreach ($users as $user) {
+        if ((int) ($user['user_id'] ?? 0) === $userId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function isExerciseInCourseContext(int $courseId, int $sessionId, int $exerciseId): bool
+{
+    if ($exerciseId <= 0) {
+        return false;
+    }
+
+    $entityManager = Database::getManager();
+    $course = $entityManager->find(\Chamilo\CoreBundle\Entity\Course::class, $courseId);
+    if (!$course instanceof \Chamilo\CoreBundle\Entity\Course) {
+        return false;
+    }
+
+    $session = null;
+    if ($sessionId > 0) {
+        $session = $entityManager->find(\Chamilo\CoreBundle\Entity\Session::class, $sessionId);
+        if (!$session instanceof \Chamilo\CoreBundle\Entity\Session) {
+            return false;
+        }
+    }
+
+    $repository = $entityManager->getRepository(\Chamilo\CourseBundle\Entity\CQuiz::class);
+    if (!$repository instanceof \Chamilo\CourseBundle\Repository\CQuizRepository) {
+        return false;
+    }
+
+    $queryBuilder = $repository->findAllByCourse(
+        $course,
+        $session,
+        null,
+        null,
+        false,
+        null,
+        false
+    );
+
+    $exercise = $queryBuilder
+        ->andWhere('resource.iid = :reportExerciseId')
+        ->setParameter('reportExerciseId', $exerciseId)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    return $exercise instanceof \Chamilo\CourseBundle\Entity\CQuiz;
+}
+
+function isAttemptInExerciseContext(
+    int $courseId,
+    int $sessionId,
+    int $exerciseId,
+    int $attemptId
+): bool {
+    if ($exerciseId <= 0 || $attemptId <= 0) {
+        return false;
+    }
+
+    $attempt = Database::getManager()
+        ->getRepository(\Chamilo\CoreBundle\Entity\TrackEExercise::class)
+        ->find($attemptId);
+
+    if (!$attempt instanceof \Chamilo\CoreBundle\Entity\TrackEExercise) {
+        return false;
+    }
+
+    if ((int) $attempt->getCourse()->getId() !== $courseId) {
+        return false;
+    }
+
+    if ((int) ($attempt->getQuiz()?->getIid() ?? 0) !== $exerciseId) {
+        return false;
+    }
+
+    $attemptSessionId = (int) ($attempt->getSession()?->getId() ?? 0);
+
+    return $attemptSessionId === $sessionId;
 }
 
 /**

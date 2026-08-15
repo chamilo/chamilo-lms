@@ -422,7 +422,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/course-reporting/',
+                'context_requirements' => ['user'],
+                'entry_url' => '/resources/course-reporting/learners/{user_id}',
             ],
             [
                 'id' => 'gradebook_overview',
@@ -443,7 +444,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
                 'requires_course_context' => true,
-                'entry_url' => '/main/gradebook/index.php',
+                'entry_url' => '/main/gradebook/gradebook_flatview.php?sid={session_id}&gid=0&gradebook=1&origin=&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_certificate_report',
@@ -463,7 +465,9 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
                 'requires_course_context' => true,
-                'entry_url' => '/main/gradebook/index.php',
+                'context_requirements' => ['user'],
+                'entry_url' => '/main/gradebook/user_stats.php?sid={session_id}&gid=0&selectcat={gradebook_category_id}&userid={user_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_personal_stats',
@@ -475,6 +479,7 @@ class ReportRegistry
                 'permission' => 'reports.gradebook',
                 'requires_course_context' => true,
                 'entry_url' => '/main/gradebook/index.php',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'reports_catalog',
@@ -613,6 +618,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
                 'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/gradebook_display_summary.php?sid={session_id}&gid=0&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_flat_view',
@@ -623,7 +630,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
                 'requires_course_context' => true,
-                'entry_url' => '/main/gradebook/index.php',
+                'entry_url' => '/main/gradebook/gradebook_flatview.php?sid={session_id}&gid=0&gradebook=1&origin=&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_evaluation_log',
@@ -754,7 +762,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/report',
             ],
             [
                 'id' => 'course_exercise_history',
@@ -765,7 +774,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise', 'attempt'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/result/{attempt_id}',
             ],
             [
                 'id' => 'course_exercise_results',
@@ -776,7 +786,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise', 'attempt'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/result/{attempt_id}',
             ],
             [
                 'id' => 'course_exercise_question_stats',
@@ -787,7 +798,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/question-stats',
             ],
             [
                 'id' => 'course_exercise_stats',
@@ -798,7 +810,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/report-by-question',
             ],
             [
                 'id' => 'course_exercise_live_stats',
@@ -809,7 +822,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/exercise/{course_resource_node_id}/',
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/live-results',
             ],
             [
                 'id' => 'course_lp_stats',
@@ -884,6 +898,25 @@ class ReportRegistry
     public static function requiresCourseContext(array $report): bool
     {
         return true === ($report['requires_course_context'] ?? false);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function getContextRequirements(array $report): array
+    {
+        $requirements = $report['context_requirements'] ?? [];
+
+        if (!is_array($requirements)) {
+            return [];
+        }
+
+        $allowed = ['user', 'exercise', 'attempt'];
+
+        return array_values(array_filter(
+            array_map('strval', $requirements),
+            static fn (string $requirement): bool => in_array($requirement, $allowed, true)
+        ));
     }
 
     public static function getEntryUrl(array $report): string

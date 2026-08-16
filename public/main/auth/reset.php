@@ -62,12 +62,10 @@ if ($form->validate()) {
         Database::getManager()->persist($user);
         Database::getManager()->flush();
 
-        if ('true' === api_get_setting('security.force_renew_password_at_first_login')) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable($user->getId(), 'ask_new_password');
-            if (!empty($value) && isset($value['value']) && 1 === (int) $value['value']) {
-                $extraFieldValue->delete($value['id']);
-            }
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($user->getId(), 'ask_new_password');
+        if (!empty($value) && isset($value['value']) && 1 === (int) $value['value']) {
+            $extraFieldValue->delete($value['id']);
         }
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
@@ -204,6 +205,13 @@ class SecurityController extends AbstractController
                 'redirect' => $this->generateUrl('chamilo_core_account_change_password', [
                     'first_login' => 1,
                 ]),
+            ]);
+        }
+
+        if ($this->mustRenewPasswordOnRequest($user)) {
+            return $this->json([
+                'force_password_change' => true,
+                'redirect' => $this->generateUrl('chamilo_core_account_change_password'),
             ]);
         }
 
@@ -530,6 +538,25 @@ class SecurityController extends AbstractController
         return 'true' === $this->settingsManager->getSetting('security.force_renew_password_at_first_login', true)
             && null !== $user->getPasswordRequestedAt()
             && null === $user->getConfirmationToken();
+    }
+
+    private function mustRenewPasswordOnRequest(User $user): bool
+    {
+        $userId = $user->getId();
+        if (null === $userId) {
+            return false;
+        }
+
+        $value = $this->entityManager
+            ->getRepository(ExtraFieldValues::class)
+            ->getValueByVariableAndItem(
+                'ask_new_password',
+                $userId,
+                ExtraField::USER_FIELD_TYPE,
+            )
+        ;
+
+        return $value instanceof ExtraFieldValues && 1 === (int) $value->getFieldValue();
     }
 
     private function mustRotatePassword(User $user): bool

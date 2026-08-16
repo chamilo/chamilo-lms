@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ChangePasswordType;
 use Chamilo\CoreBundle\Form\ProfileType;
@@ -15,6 +17,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -118,6 +121,7 @@ class AccountController extends BaseController
         CsrfTokenManagerInterface $csrfTokenManager,
         SettingsManager $settingsManager,
         UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager,
     ): Response {
         $user = $this->getUser();
 
@@ -131,7 +135,9 @@ class AccountController extends BaseController
 
         $isRotation = $request->query->getBoolean('rotate', false);
         $isFirstLogin = $this->isFirstLoginPasswordChange($user, $settingsManager);
-        $isForcedPasswordChange = $isRotation || $isFirstLogin;
+        $passwordRenewalRequest = $this->getPasswordRenewalRequest($user, $entityManager);
+        $isPasswordRenewalRequested = $passwordRenewalRequest instanceof ExtraFieldValues;
+        $isForcedPasswordChange = $isRotation || $isFirstLogin || $isPasswordRenewalRequested;
 
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
@@ -241,8 +247,12 @@ class AccountController extends BaseController
                                 $user->setPlainPassword($newPassword);
                                 $user->setPasswordUpdatedAt(new DateTimeImmutable());
 
-                                if ($isFirstLogin) {
+                                if ($isFirstLogin || $isPasswordRenewalRequested) {
                                     $user->setPasswordRequestedAt(null);
+                                }
+
+                                if ($passwordRenewalRequest instanceof ExtraFieldValues) {
+                                    $entityManager->remove($passwordRenewalRequest);
                                 }
 
                                 $userRepository->updateUser($user);
@@ -273,6 +283,31 @@ class AccountController extends BaseController
         return 'true' === $settingsManager->getSetting('security.force_renew_password_at_first_login', true)
             && null !== $user->getPasswordRequestedAt()
             && null === $user->getConfirmationToken();
+    }
+
+    private function getPasswordRenewalRequest(
+        User $user,
+        EntityManagerInterface $entityManager,
+    ): ?ExtraFieldValues {
+        $userId = $user->getId();
+        if (null === $userId) {
+            return null;
+        }
+
+        $value = $entityManager
+            ->getRepository(ExtraFieldValues::class)
+            ->getValueByVariableAndItem(
+                'ask_new_password',
+                $userId,
+                ExtraField::USER_FIELD_TYPE,
+            )
+        ;
+
+        if (!$value instanceof ExtraFieldValues || 1 !== (int) $value->getFieldValue()) {
+            return null;
+        }
+
+        return $value;
     }
 
     /**

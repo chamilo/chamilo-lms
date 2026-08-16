@@ -23,6 +23,7 @@ if (!is_file(__DIR__ . '/config.php')) {
 }
 require_once __DIR__ . '/config.php';
 $apiKey = $translationAPIKey ?? '';
+$model = $translationModel ?? 'grok-4.6'; 
 
 /**
  * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
@@ -544,6 +545,7 @@ function logAction(string $logFile, string $lang, string $msgid, string $action)
 function callGrokTranslateBatch(
     string $apiUrl,
     string $apiKey,
+    string $model,
     string $targetLangCode,
     string $targetLangName,
     array $batchItems
@@ -583,7 +585,7 @@ EOT;
         . json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
     $payload = [
-        'model'    => 'grok-4-1-fast-non-reasoning',
+        'model'    => $model,
         'messages' => [
             ['role' => 'system', 'content' => $systemPrompt],
             ['role' => 'user',   'content' => $userPrompt],
@@ -962,6 +964,7 @@ foreach ($langCodes as $lang) {
                         $translations = callGrokTranslateBatch(
                             $apiUrl,
                             $apiKey,
+			    $model,
                             $lang,
                             $targetLangName,
                             $pendingBatch

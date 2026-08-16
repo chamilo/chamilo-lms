@@ -5,3 +5,4 @@ $translationAPIKey = '{your_api_key}';
 $translationAPIEndpoint = 'https://api.x.ai/v1/chat/completions';
 // Base (source) language and file
 $translationSourceLanguageCode = 'en_US';
+$translationModel = 'grok-4.6';

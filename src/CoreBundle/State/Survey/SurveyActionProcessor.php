@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
@@ -47,6 +49,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private Security $security,
+        private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
     ) {}
 
@@ -63,6 +66,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
+        $this->gradebookLinkManager->assertSessionBelongsToCourse($course, $session);
         if (!$this->canManageSurveys()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
@@ -145,7 +149,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         }
 
         if ('post_survey_action_delete' === $operationName) {
-            $this->deleteSurvey($survey);
+            $this->deleteSurvey($survey, $course);
             $response->message = 'Survey deleted.';
             $this->entityManager->flush();
 
@@ -1156,7 +1160,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         foreach ($surveyIds as $surveyId) {
             $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
             $this->assertCanWriteSurvey($survey);
-            $this->deleteSurvey($survey);
+            $this->deleteSurvey($survey, $course);
             ++$deletedCount;
         }
 
@@ -1198,8 +1202,17 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         $this->entityManager->persist($survey);
     }
 
-    private function deleteSurvey(CSurvey $survey): void
+    private function deleteSurvey(CSurvey $survey, Course $course): void
     {
+        $surveyId = (int) $survey->getIid();
+        if ($surveyId > 0) {
+            $this->gradebookLinkManager->removeAllCourseLinks(
+                $course,
+                GradebookLinkResourceResolver::LINK_SURVEY,
+                $surveyId,
+            );
+        }
+
         $this->emptySurvey($survey, null);
         $this->entityManager->remove($survey);
     }

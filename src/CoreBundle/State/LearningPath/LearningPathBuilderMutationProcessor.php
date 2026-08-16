@@ -23,7 +23,6 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
@@ -31,6 +30,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -85,6 +85,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
         private ResourceNodeRepository $resourceNodeRepository,
+        private GradebookLinkManager $gradebookLinkManager,
         private ExtraFieldRepository $extraFieldRepository,
         private CidReqHelper $cidReqHelper,
     ) {}
@@ -589,29 +590,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             return null;
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('category')
-            ->from(GradebookCategory::class, 'category')
-            ->andWhere('category.id = :categoryId')
-            ->andWhere('IDENTITY(category.course) = :courseId')
-            ->andWhere('category.gradeModel IS NULL')
-            ->setParameter('categoryId', $categoryId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-        ;
-
-        if ($session instanceof Session) {
-            $queryBuilder
-                ->andWhere('IDENTITY(category.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('category.session IS NULL');
-        }
-
-        $category = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (!$category instanceof GradebookCategory) {
-            throw new BadRequestHttpException('The selected gradebook category is invalid.');
-        }
+        $category = $this->gradebookLinkManager->requireCategory($course, $session, $categoryId, true);
 
         return (int) $category->getId();
     }

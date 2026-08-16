@@ -10,10 +10,10 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyConfiguration;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -40,13 +40,13 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
     private const int VISIBLE_TUTOR = 0;
     private const int VISIBLE_TUTOR_STUDENT = 1;
     private const int VISIBLE_PUBLIC = 2;
-    private const int GRADEBOOK_LINK_TYPE_SURVEY = 8;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private Security $security,
+        private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
     ) {}
 
@@ -67,6 +67,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
+        $this->gradebookLinkManager->assertSessionBelongsToCourse($course, $session);
         if (!$this->canManageSurveys()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
@@ -315,12 +316,17 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         ?Session $session
     ): void {
         $surveyId = (int) $survey->getIid();
-        $existingLink = $this->findGradebookLink($course, $surveyId);
+        if ($surveyId <= 0) {
+            throw new BadRequestHttpException('The survey must be saved before it can be linked to the Gradebook.');
+        }
 
         if (!$data->gradebookEnabled) {
-            if (null !== $existingLink) {
-                $this->entityManager->remove($existingLink);
-            }
+            $this->gradebookLinkManager->removeLinks(
+                $course,
+                $session,
+                GradebookLinkResourceResolver::LINK_SURVEY,
+                $surveyId,
+            );
 
             return;
         }
@@ -329,70 +335,14 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             throw new BadRequestHttpException('A gradebook category is required.');
         }
 
-        $category = $this->getGradebookCategory($data->gradebookCategoryId, $course, $session);
-        $link = $existingLink ?? new GradebookLink();
-        $link
-            ->setType(self::GRADEBOOK_LINK_TYPE_SURVEY)
-            ->setVisible(1)
-            ->setWeight($data->gradebookWeight)
-            ->setRefId($surveyId)
-            ->setCategory($category)
-            ->setCourse($course)
-            ->setMinScore(0.0)
-        ;
-
-        if (null === $link->getId()) {
-            $link->setCreatedAt(new DateTime());
-        }
-
-        $this->entityManager->persist($link);
-    }
-
-    private function getGradebookCategory(int $categoryId, Course $course, ?Session $session): GradebookCategory
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('category')
-            ->from(GradebookCategory::class, 'category')
-            ->andWhere('category.id = :categoryId')
-            ->andWhere('IDENTITY(category.course) = :courseId')
-            ->setParameter('categoryId', $categoryId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-        ;
-
-        if (null === $session) {
-            $queryBuilder->andWhere('category.session IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('IDENTITY(category.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        }
-
-        $category = $queryBuilder->getQuery()->getOneOrNullResult();
-        if (!$category instanceof GradebookCategory) {
-            throw new BadRequestHttpException('The selected gradebook category is invalid.');
-        }
-
-        return $category;
-    }
-
-    private function findGradebookLink(Course $course, int $surveyId): ?GradebookLink
-    {
-        $link = $this->entityManager->createQueryBuilder()
-            ->select('link')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :surveyId')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('type', self::GRADEBOOK_LINK_TYPE_SURVEY, Types::INTEGER)
-            ->setParameter('surveyId', $surveyId, Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return $link instanceof GradebookLink ? $link : null;
+        $this->gradebookLinkManager->upsertLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_SURVEY,
+            $surveyId,
+            (int) $data->gradebookCategoryId,
+            (float) $data->gradebookWeight,
+        );
     }
 
     private function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

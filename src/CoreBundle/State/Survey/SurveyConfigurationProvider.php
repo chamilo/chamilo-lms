@@ -10,10 +10,10 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyConfiguration;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -43,13 +43,13 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
     private const int VISIBLE_TUTOR = 0;
     private const int VISIBLE_TUTOR_STUDENT = 1;
     private const int VISIBLE_PUBLIC = 2;
-    private const int GRADEBOOK_LINK_TYPE_SURVEY = 8;
 
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private Security $security,
+        private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
     ) {}
 
@@ -66,6 +66,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
 
         $course = $this->getCourse($request);
         $session = $this->getSession($request);
+        $this->gradebookLinkManager->assertSessionBelongsToCourse($course, $session);
         if (!$this->canManageSurveys()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
@@ -134,7 +135,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         $configuration->options = $this->getOptions($course, $session, $survey);
         $configuration->questionUrl = $this->buildModernQuestionsUrl($survey, $course, $session);
 
-        $gradebookLink = $this->findGradebookLink($course, $surveyId);
+        $gradebookLink = $this->gradebookLinkManager->findLink($course, $session, GradebookLinkResourceResolver::LINK_SURVEY, $surveyId);
         if (null !== $gradebookLink) {
             $configuration->gradebookEnabled = true;
             $configuration->gradebookCategoryId = $gradebookLink->getCategory()->getId();
@@ -355,73 +356,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
      */
     private function getGradebookCategoryOptions(Course $course, ?Session $session): array
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('category')
-            ->from(GradebookCategory::class, 'category')
-            ->andWhere('IDENTITY(category.course) = :courseId')
-            ->andWhere('category.gradeModel IS NULL')
-            ->orderBy('category.id', 'ASC')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-        ;
-
-        if (null === $session) {
-            $queryBuilder->andWhere('category.session IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('IDENTITY(category.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        }
-
-        $items = [];
-        foreach ($queryBuilder->getQuery()->getResult() as $category) {
-            if (!$category instanceof GradebookCategory || null === $category->getId()) {
-                continue;
-            }
-
-            $items[] = [
-                'value' => (int) $category->getId(),
-                'label' => $this->getGradebookCategoryLabel($category),
-            ];
-        }
-
-        return $items;
-    }
-
-    private function getGradebookCategoryLabel(GradebookCategory $category): string
-    {
-        $title = trim((string) $category->getTitle());
-        $title = '' !== $title && !ctype_digit($title) ? $title : 'Default';
-
-        $parent = $category->getParent();
-        if (!$parent instanceof GradebookCategory) {
-            return $title;
-        }
-
-        $parentTitle = trim((string) $parent->getTitle());
-        $parentTitle = '' !== $parentTitle && !ctype_digit($parentTitle) ? $parentTitle : 'Default';
-
-        return $parentTitle.' / '.$title;
-    }
-
-    private function findGradebookLink(Course $course, int $surveyId): ?GradebookLink
-    {
-        $link = $this->entityManager->createQueryBuilder()
-            ->select('link', 'category')
-            ->from(GradebookLink::class, 'link')
-            ->innerJoin('link.category', 'category')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->andWhere('link.type = :type')
-            ->andWhere('link.refId = :surveyId')
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('type', self::GRADEBOOK_LINK_TYPE_SURVEY, Types::INTEGER)
-            ->setParameter('surveyId', $surveyId, Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return $link instanceof GradebookLink ? $link : null;
+        return $this->gradebookLinkManager->getCategoryOptions($course, $session);
     }
 
     private function getCourseLanguage(Course $course): string

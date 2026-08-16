@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathManagementInput;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -20,6 +19,8 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathCopyService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -60,6 +61,7 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         private SettingsManager $settingsManager,
         private SettingsCourseManager $settingsCourseManager,
         private ResourceLinkRepository $resourceLinkRepository,
+        private GradebookLinkManager $gradebookLinkManager,
         private AssetRepository $assetRepository,
         private ResourceHelper $resourceHelper,
         private CDocumentRepository $documentRepository,
@@ -231,7 +233,12 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
         }
 
         $this->shortcutRepository->removeShortCutFromCourse($learningPath, $course);
-        $this->removeGradebookLinks($learningPathId, $course, $session);
+        $this->gradebookLinkManager->removeLinks(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_LEARNING_PATH,
+            $learningPathId,
+        );
 
         if (!$hasOtherActiveLinks) {
             foreach ($this->entityManager->getRepository(SkillRelItem::class)->findBy([
@@ -268,26 +275,6 @@ final readonly class LearningPathManagementProcessor implements ProcessorInterfa
                 'learningPathId' => $learningPathId,
                 'exception' => $exception,
             ]);
-        }
-    }
-
-    private function removeGradebookLinks(int $learningPathId, Course $course, ?Session $session): void
-    {
-        foreach ($this->entityManager->getRepository(GradebookLink::class)->findBy([
-            'course' => $course,
-            'type' => 4,
-            'refId' => $learningPathId,
-        ]) as $gradebookLink) {
-            if (!$gradebookLink instanceof GradebookLink) {
-                continue;
-            }
-
-            $linkSession = $gradebookLink->getCategory()->getSession();
-            if ($linkSession?->getId() !== $session?->getId()) {
-                continue;
-            }
-
-            $this->entityManager->remove($gradebookLink);
         }
     }
 

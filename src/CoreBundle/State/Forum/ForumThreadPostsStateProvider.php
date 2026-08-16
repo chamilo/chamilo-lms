@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -62,6 +63,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CForumAttachmentRepository $attachmentRepository,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
@@ -191,10 +193,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $lockedByGradebook = $this->isForumThreadLockedByGradebook(
-            $this->entityManager,
-            $this->settingsManager,
-            $this->security,
+            $this->gradebookLinkManager,
             $course,
+            $session,
             $thread,
         );
 

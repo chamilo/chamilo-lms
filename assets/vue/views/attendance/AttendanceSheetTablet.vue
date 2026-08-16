@@ -462,6 +462,7 @@ const save = async () => {
     }))
 
     await attendanceService.saveAttendanceSheet({
+      attendanceId: attendanceId.value,
       courseId: parseInt(cid),
       sessionId: sid ? parseInt(sid) : null,
       groupId: gid ? parseInt(gid) : null,

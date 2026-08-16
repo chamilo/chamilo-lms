@@ -10,11 +10,12 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseList;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -49,7 +50,6 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
     private const ACTION_BULK_DEACTIVATE = 'bulk_deactivate';
     private const ACTION_BULK_DELETE = 'bulk_delete';
     private const VISIBILITY_PUBLISHED = 2;
-    private const LINK_TYPE_EXERCISE = 1;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const MATCHING = 4;
     private const MATCHING_DRAGGABLE = 19;
@@ -63,6 +63,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -424,10 +425,17 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to delete this exercise.');
         }
 
-        if ($this->isGradebookLocked((int) $quiz->getIid(), $course)) {
+        $exerciseId = (int) $quiz->getIid();
+        if ($this->isGradebookLocked($exerciseId, $course, $session)) {
             throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
         }
 
+        $this->gradebookLinkManager->removeLinks(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
         $this->resourceLinkRepository->removeByResourceInContext($quiz, $course, $session);
 
         return 'Exercise deleted';
@@ -481,7 +489,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         $exerciseId = (int) $quiz->getIid();
-        if ($this->isGradebookLocked($exerciseId, $course)) {
+        if ($this->isGradebookLocked($exerciseId, $course, $session)) {
             throw new AccessDeniedHttpException('This exercise is locked by the gradebook.');
         }
 
@@ -529,7 +537,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         $exerciseIds = array_values(array_filter(
             $this->getExerciseIdsFromCurrentContext($course, $session),
-            fn (int $exerciseId): bool => !$this->isGradebookLocked($exerciseId, $course),
+            fn (int $exerciseId): bool => !$this->isGradebookLocked($exerciseId, $course, $session),
         ));
 
         if ([] === $exerciseIds) {
@@ -637,33 +645,14 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         ));
     }
 
-    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return false;
-        }
-
-        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
-            return false;
-        }
-
-        $lockedLink = $this->entityManager->createQueryBuilder()
-            ->select('link.id')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.locked = :locked')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('link.type = :linkType')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('locked', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $lockedLink;
+        return $this->gradebookLinkManager->isResourceLocked(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
     private function duplicateQuestion(CQuizQuestion $sourceQuestion, Course $course, ?Session $session, int $position): CQuizQuestion

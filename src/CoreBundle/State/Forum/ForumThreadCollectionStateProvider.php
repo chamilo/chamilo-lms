@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -53,6 +54,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly CForumRepository $forumRepository,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
@@ -147,7 +149,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
                 $showHidden ? $this->countPendingPosts($thread) : 0,
                 $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
                 $canSubscribe,
-                $this->isForumThreadLockedByGradebook($this->entityManager, $this->settingsManager, $this->security, $course, $thread),
+                $this->isForumThreadLockedByGradebook($this->gradebookLinkManager, $course, $session, $thread),
                 $showPosterAvatar,
                 $course,
                 $session,

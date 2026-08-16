@@ -11,8 +11,9 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -38,7 +39,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 {
     private const VISIBILITY_PUBLISHED = 2;
-    private const LINK_TYPE_EXERCISE = 1;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const STATUS_PENDING_CORRECTION = 'pending_correction';
     private const STATUS_COMPLETED = 'completed';
@@ -48,6 +48,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
+        private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
     ) {}
 
@@ -74,7 +75,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course);
+        $lockedByGradebook = $this->isGradebookLocked((int) $quiz->getIid(), $course, $session);
         $showUsername = $this->shouldShowUsername();
         $showIp = $this->shouldShowIp();
         $attempts = $this->getAttempts($request, $quiz, $course, $session, $lockedByGradebook, $showUsername, $showIp);
@@ -533,33 +534,14 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             && !$this->isSettingEnabled('exercise.disable_clean_exercise_results_for_teachers');
     }
 
-    private function isGradebookLocked(int $exerciseId, Course $course): bool
+    private function isGradebookLocked(int $exerciseId, Course $course, ?Session $session): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return false;
-        }
-
-        if (!$this->isSettingEnabled('gradebook.gradebook_locking_enabled')) {
-            return false;
-        }
-
-        $lockedLink = $this->entityManager->createQueryBuilder()
-            ->select('link.id')
-            ->from(GradebookLink::class, 'link')
-            ->andWhere('link.locked = :locked')
-            ->andWhere('link.refId = :exerciseId')
-            ->andWhere('link.type = :linkType')
-            ->andWhere('IDENTITY(link.course) = :courseId')
-            ->setParameter('locked', 1, Types::INTEGER)
-            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
-            ->setParameter('linkType', self::LINK_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return null !== $lockedLink;
+        return $this->gradebookLinkManager->isResourceLocked(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
     }
 
     private function isSettingEnabled(string $name): bool

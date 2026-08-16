@@ -600,7 +600,7 @@ final class CourseStudentInfoHelper
             'wikis' => $base.'resources/wiki/'.$parentResourceNodeId.'/?'.$qs,
             'links' => $base.'resources/links/'.$parentResourceNodeId.'/?'.$qs,
             'surveys' => $base.'resources/survey/'.$parentResourceNodeId.'/?'.$qs,
-            'gradebook' => $base.'main/gradebook/index.php?'.$qs,
+            'gradebook' => $base.'resources/gradebook/'.$parentResourceNodeId.'/?'.$qs,
             'attendances' => $base.'resources/attendance/'.$parentResourceNodeId.'/?'.$qs,
             'dropbox' => $base.'resources/dropbox/'.$parentResourceNodeId.'/received?'.$qs,
 

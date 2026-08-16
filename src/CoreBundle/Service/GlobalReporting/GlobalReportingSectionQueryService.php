@@ -4455,6 +4455,9 @@ final readonly class GlobalReportingSectionQueryService
             );
 
             if (false !== $category) {
+                // Controlled compatibility fallback: this global HR/DRH export has a broader authorization
+                // scope than the course-context Gradebook export endpoint and must remain legacy until a
+                // dedicated authorization-safe global certificate export is available.
                 $meta['exportAllUrl'] = '/main/gradebook/gradebook_display_certificate.php?'.http_build_query(
                     [
                         'action' => 'export_all_certificates',

@@ -521,6 +521,7 @@
               class="grid gap-4 md:grid-cols-3"
             >
               <BaseSelect
+                v-if="gradebookCategoryOptions.length > 1"
                 id="exercise-gradebook-category"
                 v-model="form.gradebookCategoryId"
                 :label="t('Assessment')"
@@ -1472,7 +1473,9 @@ function buildPayload() {
     hideAttemptsTable: form.hideAttemptsTable,
     autoLaunch: form.autoLaunch,
     addToGradebook: form.addToGradebook,
-    gradebookCategoryId: form.addToGradebook ? Number(form.gradebookCategoryId || 0) : null,
+    gradebookCategoryId: form.addToGradebook
+      ? Number(form.gradebookCategoryId || gradebookCategoryOptions.value[0]?.value || 0)
+      : null,
     gradebookWeight: Number(form.gradebookWeight || 0),
     gradebookVisible: form.gradebookVisible,
     notifications: normalizeNotificationValues(form.notifications),

@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CAttendanceSheetLog;
 use Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceSheetRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,6 +48,7 @@ class AttendanceController extends AbstractController
 {
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
+        private readonly CAttendanceRepository $attendanceRepository,
         private readonly EntityManagerInterface $em,
         private readonly TranslatorInterface $translator,
         private readonly SettingsManager $settingsManager,
@@ -463,24 +465,48 @@ class AttendanceController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['attendanceData']) || empty($data['courseId'])) {
+        if (empty($data['attendanceData']) || empty($data['courseId']) || empty($data['attendanceId'])) {
             return $this->json(['error' => 'Missing required parameters'], 400);
         }
 
         $attendanceData = $data['attendanceData'];
+        $attendanceId = (int) $data['attendanceId'];
         $courseId = (int) $data['courseId'];
-        $sessionId = isset($data['sessionId']) ? (int) $data['sessionId'] : null;
-        $groupId = isset($data['groupId']) ? (int) $data['groupId'] : null;
+        $sessionId = isset($data['sessionId']) && (int) $data['sessionId'] > 0 ? (int) $data['sessionId'] : null;
+        $groupId = isset($data['groupId']) && (int) $data['groupId'] > 0 ? (int) $data['groupId'] : null;
 
-        $usersInCourse = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
-        $userIdsInCourse = array_map(fn (User $user) => $user->getId(), $usersInCourse);
-
-        // Only a teacher of the target course/session may write attendance.
+        // Resolve the exact modern course/session context before accepting any calendar IDs.
         $course = $this->em->getRepository(Course::class)->find($courseId);
         if (!$course instanceof Course) {
             return $this->json(['error' => 'Course not found'], 404);
         }
+
+        $session = null;
+        if (null !== $sessionId) {
+            $session = $this->em->getRepository(Session::class)->find($sessionId);
+            if (!$session instanceof Session || !$session->hasCourse($course)) {
+                return $this->json(['error' => 'Session not found in course'], 404);
+            }
+        }
+
+        $attendance = $this->attendanceRepository->find($attendanceId);
+        if (!$attendance instanceof CAttendance) {
+            return $this->json(['error' => 'Attendance not found'], 404);
+        }
+
+        $availableAttendanceIds = array_map(
+            static fn (CAttendance $item): int => (int) $item->getIid(),
+            $this->attendanceRepository->getAttendanceListForCourse($course, $session),
+        );
+        if (!\in_array($attendanceId, $availableAttendanceIds, true)) {
+            return $this->json(['error' => 'Attendance is not available in the requested course and session'], 403);
+        }
+
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+        $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
+
+        $usersInCourse = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
+        $userIdsInCourse = array_map(fn (User $user) => $user->getId(), $usersInCourse);
 
         $affectedRows = 0;
 
@@ -498,7 +524,7 @@ class AttendanceController extends AbstractController
                 $comment = $entry['comment'] ?? null;
 
                 $calendar = $this->attendanceCalendarRepository->find($calendarId);
-                if (!$calendar) {
+                if (!$calendar || (int) $calendar->getAttendance()->getIid() !== $attendanceId) {
                     return $this->json(['error' => "Attendance calendar with ID $calendarId not found"], 404);
                 }
 
@@ -566,7 +592,18 @@ class AttendanceController extends AbstractController
             }
 
             $calendars = $this->attendanceCalendarRepository->findBy(['iid' => $calendarIds]);
-            $attendance = $calendars[0]->getAttendance();
+
+            // Legacy parity: Gradebook attendance maximum equals the number of
+            // attendance dates that have actually been marked as done. Count the
+            // managed collection so dates marked above are included before flush.
+            $doneCalendarCount = 0;
+            foreach ($attendance->getCalendars() as $attendanceCalendar) {
+                if ($attendanceCalendar->getDoneAttendance()) {
+                    ++$doneCalendarCount;
+                }
+            }
+            $attendance->setAttendanceQualifyMax($doneCalendarCount);
+            $this->em->persist($attendance);
             $this->updateAttendanceResults($attendance);
 
             $lasteditType = $calendars[0]->getDoneAttendance()

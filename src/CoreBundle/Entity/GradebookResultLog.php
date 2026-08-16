@@ -44,6 +44,31 @@ class GradebookResultLog
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
+
+    public function getResult(): GradebookResult
+    {
+        return $this->result;
+    }
+
+    public function setResult(GradebookResult $result): self
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    public function getEvaluation(): GradebookEvaluation
+    {
+        return $this->evaluation;
+    }
+
+    public function setEvaluation(GradebookEvaluation $evaluation): self
+    {
+        $this->evaluation = $evaluation;
+
+        return $this;
+    }
+
     /**
      * Get createdAt.
      *

@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
@@ -33,6 +35,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         private readonly CAttendanceCalendarRepository $calendarRepo,
         private readonly RequestStack $requestStack,
         private readonly RoomAccessUrlHelper $roomAccessUrlHelper,
+        private readonly GradebookLinkManager $gradebookLinkManager,
     ) {}
 
     /**
@@ -69,7 +72,23 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
     private function handleSoftDelete(CAttendance $attendance): void
     {
-        $attendance->setActive(2);
+        $resourceLink = $attendance->getFirstResourceLink();
+        $course = $resourceLink->getCourse();
+        $attendanceId = (int) ($attendance->getIid() ?? 0);
+
+        if ($attendanceId > 0) {
+            $this->gradebookLinkManager->removeAllCourseLinks(
+                $course,
+                GradebookLinkResourceResolver::LINK_ATTENDANCE,
+                $attendanceId,
+            );
+        }
+
+        $attendance
+            ->setActive(2)
+            ->setAttendanceQualifyTitle('')
+            ->setAttendanceWeight(0.0)
+        ;
         $this->entityManager->persist($attendance);
     }
 

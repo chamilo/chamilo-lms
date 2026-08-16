@@ -27,6 +27,7 @@ import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
 import exercise from "./exercise"
+import gradebook from "./gradebook"
 import courseDescription from "./courseDescription"
 import courseInvitation from "./courseInvitation"
 import notebook from "./notebook"
@@ -524,6 +525,25 @@ const router = createRouter({
         breadcrumb: "Pending surveys",
       },
     },
+    {
+      path: "/my-certificates",
+      name: "MyCertificates",
+      component: () => import("../views/gradebook/MyCertificatesView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "My certificates",
+      },
+    },
+    {
+      path: "/certificates/search",
+      name: "CertificateSearch",
+      component: () => import("../views/gradebook/CertificateSearchView.vue"),
+      meta: {
+        showBreadcrumb: true,
+        breadcrumb: "Search certificates",
+      },
+    },
     fileManagerRoutes,
     ...portfolio,
     socialNetworkRoutes,
@@ -536,6 +556,7 @@ const router = createRouter({
     forum,
     survey,
     exercise,
+    gradebook,
     courseDescription,
     courseInvitation,
     notebook,

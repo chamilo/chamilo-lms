@@ -911,9 +911,15 @@ class CourseController extends ToolBaseController
     private function buildGradebookIndexUrl(Course $course, int $categoryId, Request $request): string
     {
         $params = $this->getLegacyContextParams($request, $course);
-        $params['selectcat'] = $categoryId;
+        $params['categoryId'] = $categoryId;
+        $nodeId = $course->getResourceNode()?->getId();
+        if (null === $nodeId) {
+            $params['view'] = 'overview';
 
-        return api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.http_build_query($params);
+            return api_get_path(WEB_PATH).'gradebook/redirect?'.http_build_query($params);
+        }
+
+        return api_get_path(WEB_PATH).'resources/gradebook/'.$nodeId.'/?'.http_build_query($params);
     }
 
     private function getLegacyContextParams(Request $request, Course $course): array

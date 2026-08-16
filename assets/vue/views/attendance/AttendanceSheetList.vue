@@ -734,6 +734,7 @@ const saveAttendanceSheet = async () => {
   isSaving.value = true
   try {
     await attendanceService.saveAttendanceSheet({
+      attendanceId: Number(route.params.id),
       courseId: parseInt(cid, 10),
       sessionId: sid ? parseInt(sid, 10) : null,
       groupId: gid ? parseInt(gid, 10) : null,

@@ -32,9 +32,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Patch(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        // Checked against the category's own course, not the request-context one.
+        new Put(security: "is_granted('EDIT', object.getCourse())"),
+        new Patch(security: "is_granted('EDIT', object.getCourse())"),
+        new Delete(security: "is_granted('DELETE', object.getCourse())"),
     ],
     normalizationContext: [
         'groups' => ['gradebookCategory:read'],

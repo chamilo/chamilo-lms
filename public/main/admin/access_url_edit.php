@@ -183,6 +183,7 @@ $tool_name =  isset($url_id) && $url_id > 0
     ? get_lang('Edit URL')
     : get_lang('Add URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display::display_header($tool_name);

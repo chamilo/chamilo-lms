@@ -27,6 +27,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $tool_name = get_lang('Add courses to URLs');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display::display_header($tool_name);

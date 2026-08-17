@@ -23,6 +23,7 @@ $firstLetterUserGroup = null;
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tool_name = get_lang('Add group to URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display::display_header($tool_name);

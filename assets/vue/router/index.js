@@ -680,12 +680,14 @@ router.beforeEach(async (to, from, next) => {
   const allowsAnonymousAccess = to.matched.some((record) => record.meta?.allowAnonymousAccess === true)
   const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
+  const wantsGlobalAdmin = to.matched.some((record) => record.meta?.requiresGlobalAdmin === true)
   const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
   const wantsHR = to.matched.some((record) => record.meta?.requiresHR === true)
   const wantsQuestionManager = to.matched.some((record) => record.meta?.requiresQuestionManager === true)
 
   const mustBeLogged =
-    !allowsAnonymousAccess && (needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
+    !allowsAnonymousAccess &&
+    (needsAuth || wantsAdmin || wantsGlobalAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
     // force:true - a protected route needs a real answer from the server,
@@ -708,11 +710,15 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // Role-based access control: admin / session-admin / HR / question manager
-  if (wantsAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager) {
+  // Role-based access control: admin / global-admin / session-admin / HR / question manager
+  if (wantsAdmin || wantsGlobalAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager) {
     let allowed = true
 
-    if (wantsAdmin && wantsSessionAdmin) {
+    if (wantsGlobalAdmin) {
+      // Only global admins (ROLE_GLOBAL_ADMIN), e.g. the Multi URLs dashboard.
+      // A plain ROLE_ADMIN is not enough here, unlike requiresAdmin/isAdmin below.
+      allowed = securityStore.isGranted("ROLE_GLOBAL_ADMIN")
+    } else if (wantsAdmin && wantsSessionAdmin) {
       // Route can be accessed by platform admins OR session admins
       allowed = securityStore.isGranted("ROLE_SESSION_MANAGER")
     } else if (wantsAdmin && wantsHR) {

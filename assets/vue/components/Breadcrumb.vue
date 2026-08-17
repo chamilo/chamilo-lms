@@ -245,6 +245,16 @@ function buildManualCrumbs() {
     ]
   }
 
+  // /admin/urls/users/:id, /admin/urls/courses/:id
+  if (pathSegments[1] === "urls" && ["users", "courses"].includes(pathSegments[2])) {
+    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t(pageLabel) },
+    ]
+  }
+
   const fullPath = "/" + pathSegments.join("/")
 
   if (router.getRoutes().some((r) => r.path === fullPath)) {

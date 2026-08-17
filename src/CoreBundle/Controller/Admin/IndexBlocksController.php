@@ -533,10 +533,14 @@ class IndexBlocksController extends BaseController
         ];
 
         if ($this->isGlobalAdmin) {
+            // The legacy "Configure multiple access URL" entry is intentionally not
+            // listed here anymore: it's reachable from the button on the Multi URLs
+            // dashboard itself (assets/vue/views/admin/MultiUrlList.vue), so this
+            // panel only needs the one entry point into that feature.
             $items[] = [
                 'class' => 'item-access-url',
-                'url' => '/main/admin/access_urls.php',
-                'label' => $this->translator->trans('Configure multiple access URL'),
+                'route' => ['name' => 'AdminMultiUrlList'],
+                'label' => $this->translator->trans('Multi URLs'),
             ];
         }
 

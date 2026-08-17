@@ -39489,3 +39489,39 @@ msgstr "This user is already subscribed to the session."
 
 msgid "This user is already subscribed to the course."
 msgstr "This user is already subscribed to the course."
+
+msgid "Multi URLs"
+msgstr "Multi URLs"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+
+msgid "User directory"
+msgstr "User directory"
+
+msgid "Course directory"
+msgstr "Course directory"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "User details"
+
+msgid "Course details"
+msgstr "Course details"
+
+msgid "View details"
+msgstr "View details"
+
+msgid "Average progress"
+msgstr "Average progress"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Logins (all URLs combined)"
+
+msgid "Unique logins"
+msgstr "Unique logins"

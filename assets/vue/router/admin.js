@@ -136,5 +136,23 @@ export default {
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Add users to a class" },
       component: () => import("../views/admin/UsergroupUserImport.vue"),
     },
+    {
+      name: "AdminMultiUrlList",
+      path: "urls",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Multi URLs" },
+      component: () => import("../views/admin/MultiUrlList.vue"),
+    },
+    {
+      name: "AdminMultiUrlUserDetail",
+      path: "urls/users/:id(\\d+)",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "User details" },
+      component: () => import("../views/admin/MultiUrlUserDetail.vue"),
+    },
+    {
+      name: "AdminMultiUrlCourseDetail",
+      path: "urls/courses/:id(\\d+)",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Course details" },
+      component: () => import("../views/admin/MultiUrlCourseDetail.vue"),
+    },
   ],
 }

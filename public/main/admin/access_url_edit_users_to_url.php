@@ -32,6 +32,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 // setting breadcrumbs
 $tool_name = get_lang('Edit users and URLs');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';

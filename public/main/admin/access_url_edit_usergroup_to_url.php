@@ -23,6 +23,7 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $tool_name = get_lang('Edit groups for one URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'unique' === ($_REQUEST['add_type'] ?? '') ? 'unique' : 'multiple';

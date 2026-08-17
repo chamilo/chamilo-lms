@@ -29,6 +29,7 @@ if (!api_get_multiple_access_url()) {
 // Setting breadcrumbs
 $tool_name = get_lang('Edit groups for one URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';

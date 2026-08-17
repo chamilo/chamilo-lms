@@ -25,6 +25,7 @@ $httpRequest = Container::getRequest();
 $translator = Container::$container->get('translator');;
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/urls', 'name' => get_lang('Multi URLs')];
 $tool_name = get_lang('Multiple access URL / Branding');
 Display :: display_header($tool_name);
 

@@ -108,10 +108,13 @@ Feature: Admin Platform management block
     And I wait for the page to be loaded
     Then I should not see an error
 
-  Scenario: Open Configure multiple access URL
+  Scenario: Open Multi URLs
+    # "Configure multiple access URL" no longer has its own entry here — it's
+    # reachable from the button on the Multi URLs dashboard itself, covered by
+    # adminMultiUrls.feature's "The legacy CRUD is reachable from the dashboard".
     Given I am on "/admin"
     And I wait for the page to be loaded
-    And I follow "Configure multiple access URL"
+    And I follow "Multi URLs"
     And I wait for the page to be loaded
     Then I should not see an error
 

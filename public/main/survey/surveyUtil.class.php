@@ -3384,7 +3384,7 @@ class SurveyUtil
         $array[0] = $surveyId;
         $type = $survey->getSurveyType();
 
-        $title = $survey->getTitle();
+        $title = Security::remove_XSS($survey->getTitle());
         if (self::checkHideEditionToolsByCode($survey->getCode())) {
             $array[1] = $title;
         } else {

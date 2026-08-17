@@ -279,6 +279,8 @@ define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
 define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
 define('LOG_PLUGIN_ENABLE', 'plugin_enable');
 define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
+define('LOG_SECURITY_FILE_INTEGRITY_SCAN', 'security_file_integrity_scan');
+define('LOG_SECURITY_FILE_INTEGRITY_SCAN_RESULT', 'security_file_integrity_scan_result_array');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');

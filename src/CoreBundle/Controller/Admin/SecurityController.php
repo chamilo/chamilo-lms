@@ -409,7 +409,7 @@ final class SecurityController extends BaseController
                 return $redirect;
             }
 
-            $report = $this->fileIntegrityChecker->scan();
+            $report = $this->fileIntegrityChecker->scan((int) $currentUser->getId());
         } catch (RuntimeException $e) {
             $this->addFlash('warning', $e->getMessage());
 

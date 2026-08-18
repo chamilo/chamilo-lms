@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Tracking\LearnpathQuizTimeCalculator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -7511,7 +7512,8 @@ class Tracking
                     user_id = $userId AND
                     c_id = $courseId AND
                     session_id = $sessionId AND
-                    login_as = 0 AND current_id <> 0";
+                    login_as = 0 AND current_id <> 0
+                ORDER BY current_id, tool, date_reg, id";
 
         $res = Database::query($sql);
         // Grouped directly into $sessions while fetching instead of first
@@ -7533,6 +7535,17 @@ class Tracking
             $max = 0;
             $sessionDiff = 0;
             foreach ($listPerTool as $tool => $results) {
+                if (TOOL_QUIZ === $tool) {
+                    $quizResult = LearnpathQuizTimeCalculator::calculate($results);
+                    $quizTime += $quizResult['quiz_time'];
+                    foreach ($quizResult['learnpath_time'] as $learnpathId => $time) {
+                        if (!isset($lpTime[$learnpathId])) {
+                            $lpTime[$learnpathId] = 0;
+                        }
+                        $lpTime[$learnpathId] += $time;
+                    }
+                }
+
                 $beforeItem = [];
                 foreach ($results as $item) {
                     if (empty($beforeItem)) {
@@ -7599,14 +7612,6 @@ class Tracking
                             }
                             break;
                         case TOOL_QUIZ:
-                            if (!isset($lpTime[$item['action_details']])) {
-                                $lpTime[$item['action_details']] = 0;
-                            }
-                            if ($beforeItem['action'] === 'learnpath_id') {
-                                $lpTime[$item['action_details']] += $partialTime;
-                            } else {
-                                $quizTime += $partialTime;
-                            }
                             break;
                     }
                     $beforeItem = $item;
@@ -8095,7 +8100,7 @@ class Tracking
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[] = $row['id'];
             }
-    
+
             if (!empty($list)) {
                 foreach ($list as $id) {
                     if ($update_database) {

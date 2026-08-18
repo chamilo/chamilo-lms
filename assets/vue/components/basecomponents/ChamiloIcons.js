@@ -129,6 +129,8 @@ export const chamiloIconToClass = {
   "table": "mdi mdi-table",
   "tag-outline": "mdi mdi-tag-outline",
   "text-box-plus": "",
+  "toggle-switch": "mdi mdi-toggle-switch",
+  "toggle-switch-off": "mdi mdi-toggle-switch-off-outline",
   "unselect-all": "mdi mdi-select-remove",
   "up": "mdi mdi-arrow-up-right",
   "usage": "mdi mdi-chart-donut",

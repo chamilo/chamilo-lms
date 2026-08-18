@@ -46,20 +46,27 @@ function onUrlChange() {
   loadData()
 }
 
-function addCategory(category) {
-  available.value = available.value.filter((c) => c.id !== category.id)
-  assigned.value = [...assigned.value, category]
+function addCategory(item) {
+  const category = available.value.find((c) => c.id === item.id)
+  available.value = available.value.filter((c) => c.id !== item.id)
+  if (category) {
+    assigned.value = [...assigned.value, category]
+  }
 }
 
-function removeCategory(category) {
-  assigned.value = assigned.value.filter((c) => c.id !== category.id)
-  available.value = [...available.value, category]
+function removeCategory(item) {
+  const category = assigned.value.find((c) => c.id === item.id)
+  assigned.value = assigned.value.filter((c) => c.id !== item.id)
+  if (category) {
+    available.value = [...available.value, category]
+  }
 }
 
-function addAllCategories(list) {
-  const ids = new Set(list.map((c) => c.id))
+function addAllCategories(items) {
+  const ids = new Set(items.map((i) => i.id))
+  const categoriesToMove = available.value.filter((c) => ids.has(c.id))
   available.value = available.value.filter((c) => !ids.has(c.id))
-  assigned.value = [...assigned.value, ...list]
+  assigned.value = [...assigned.value, ...categoriesToMove]
 }
 
 function removeAllCategories() {

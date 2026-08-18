@@ -62,7 +62,7 @@ function confirmSubmit(action) {
     <div class="flex justify-center gap-4 flex-wrap">
       <BaseButton
         :label="addLabel"
-        icon="plus-box"
+        icon="plus"
         type="success"
         :disabled="disabled"
         @click="confirmSubmit('add')"

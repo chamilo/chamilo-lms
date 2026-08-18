@@ -53,20 +53,27 @@ function onUrlChange() {
   loadData()
 }
 
-function addCourse(course) {
-  available.value = available.value.filter((c) => c.id !== course.id)
-  assigned.value = [...assigned.value, course]
+function addCourse(item) {
+  const course = available.value.find((c) => c.id === item.id)
+  available.value = available.value.filter((c) => c.id !== item.id)
+  if (course) {
+    assigned.value = [...assigned.value, course]
+  }
 }
 
-function removeCourse(course) {
-  assigned.value = assigned.value.filter((c) => c.id !== course.id)
-  available.value = [...available.value, course]
+function removeCourse(item) {
+  const course = assigned.value.find((c) => c.id === item.id)
+  assigned.value = assigned.value.filter((c) => c.id !== item.id)
+  if (course) {
+    available.value = [...available.value, course]
+  }
 }
 
-function addAllCourses(list) {
-  const ids = new Set(list.map((c) => c.id))
+function addAllCourses(items) {
+  const ids = new Set(items.map((i) => i.id))
+  const coursesToMove = available.value.filter((c) => ids.has(c.id))
   available.value = available.value.filter((c) => !ids.has(c.id))
-  assigned.value = [...assigned.value, ...list]
+  assigned.value = [...assigned.value, ...coursesToMove]
 }
 
 function removeAllCourses() {
@@ -129,9 +136,19 @@ onMounted(() => {
     </SectionHeader>
 
     <Tabs value="0">
-      <TabList>
-        <Tab value="0">{{ t("Single registration") }}</Tab>
-        <Tab value="1">{{ t("Multiple registration") }}</Tab>
+      <TabList class="flex gap-2 border-b border-gray-20">
+        <Tab
+          value="0"
+          class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
+        >
+          {{ t("Single registration") }}
+        </Tab>
+        <Tab
+          value="1"
+          class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
+        >
+          {{ t("Multiple registration") }}
+        </Tab>
       </TabList>
       <TabPanels>
         <TabPanel value="0">

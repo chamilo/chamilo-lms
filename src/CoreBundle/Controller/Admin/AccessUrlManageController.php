@@ -45,6 +45,12 @@ class AccessUrlManageController extends AbstractController
     #[Route('', name: 'admin_access_urls_manage_data', methods: ['GET'])]
     public function list(): JsonResponse
     {
+        // The CSRF token must be minted (and written to the session) before the
+        // session is closed below — closing it first would return a token that
+        // was never actually persisted, so every subsequent write action using
+        // it would fail CSRF validation.
+        $csrfToken = $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue();
+
         if (PHP_SESSION_ACTIVE === session_status()) {
             session_write_close();
         }
@@ -87,7 +93,7 @@ class AccessUrlManageController extends AbstractController
         return $this->json([
             'items' => $items,
             'myMissingUrls' => $myMissingUrls,
-            'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
+            'csrfToken' => $csrfToken,
         ]);
     }
 

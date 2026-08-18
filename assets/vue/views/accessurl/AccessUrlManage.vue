@@ -118,7 +118,7 @@ onMounted(() => {
     <SectionHeader :title="t('Multiple access URL / Branding')">
       <BaseButton
         :label="t('Add URL')"
-        icon="plus-box"
+        icon="plus"
         type="success"
         @click="openCreateDialog"
       />
@@ -130,7 +130,7 @@ onMounted(() => {
       />
       <BaseButton
         :label="t('Manage courses')"
-        icon="book-open-page-variant"
+        icon="courses"
         type="secondary"
         :route="{ name: 'AccessUrlCourses' }"
       />
@@ -236,7 +236,7 @@ onMounted(() => {
     <BaseDialog
       v-model:is-visible="dialogVisible"
       :title="editingItem ? t('Edit URL') : t('Add URL')"
-      header-icon="web"
+      header-icon="globe"
     >
       <div class="flex flex-col gap-4 p-4 min-w-[24rem]">
         <BaseInputText

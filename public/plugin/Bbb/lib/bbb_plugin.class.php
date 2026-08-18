@@ -202,14 +202,6 @@ class BbbPlugin extends Plugin
         $this->removeBbbRecordingsForCourse((int)$courseId);
     }
 
-    public function doWhenDeletingSession($sessionId): void
-    {
-        if ($this->get('delete_recordings_on_course_delete') !== 'true') {
-            return;
-        }
-        $this->removeBbbRecordingsForSession((int)$sessionId);
-    }
-
     private function removeBbbRecordingsForCourse(int $courseId): void
     {
         $em           = Database::getManager();
@@ -241,39 +233,9 @@ class BbbPlugin extends Plugin
         $em->flush();
     }
 
-    private function removeBbbRecordingsForSession(int $sessionId): void
-    {
-        $em           = Database::getManager();
-        $meetingRepo  = $em->getRepository(ConferenceMeeting::class);
-        $recordingRepo= $em->getRepository(ConferenceRecording::class);
-
-        $meetings = $meetingRepo->findBy([
-            'session'        => $sessionId,
-            'serviceProvider'=> 'bbb',
-        ]);
-
-        foreach ($meetings as $meeting) {
-            $recs = $recordingRepo->findBy([
-                'meeting'    => $meeting,
-                'formatType' => 'bbb',
-            ]);
-
-            foreach ($recs as $rec) {
-                if ($recordId = $this->extractRecordId($rec->getResourceUrl())) {
-                    $this->deleteRecording($recordId);
-                }
-
-                $em->remove($rec);
-            }
-
-            $em->remove($meeting);
-        }
-
-        $em->flush();
-    }
-
     // Extracts the recordID from the BBB recording URL
-    private function extractRecordId(string $url): ?string
+    // Public because BbbSessionDeletedEventSubscriber does its own cleanup
+    public function extractRecordId(string $url): ?string
     {
         if (preg_match('/[?&]recordID=([\w-]+)/', $url, $m)) {
             return $m[1];
@@ -285,7 +247,8 @@ class BbbPlugin extends Plugin
     }
 
     // Sends a deleteRecordings API request to BigBlueButton
-    private function deleteRecording(string $recordId): void
+    // Public because BbbSessionDeletedEventSubscriber does its own cleanup
+    public function deleteRecording(string $recordId): void
     {
         $host = rtrim((string)$this->get('host'), '/');
         if ($host === '') {

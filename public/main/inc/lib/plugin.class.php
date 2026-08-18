@@ -994,19 +994,6 @@ class Plugin
     }
 
     /**
-     * Overwrite to perform some actions when deleting a session.
-     *
-     * Reached from a subscriber on Events::SESSION_DELETED, not from
-     * AppPlugin::performActionsWhenDeletingItem(): a plugin that overwrites this
-     * also needs its own *EventSubscriber.php.
-     *
-     * @param int $sessionId
-     */
-    public function doWhenDeletingSession($sessionId)
-    {
-    }
-
-    /**
      * Add a link for a course tool.
      *
      * @param string      $name     The tool name

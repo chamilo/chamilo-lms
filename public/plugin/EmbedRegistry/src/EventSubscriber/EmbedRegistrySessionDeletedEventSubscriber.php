@@ -7,6 +7,7 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionDeletedEvent;
+use Chamilo\PluginBundle\EmbedRegistry\Entity\Embed;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EmbedRegistrySessionDeletedEventSubscriber implements EventSubscriberInterface
@@ -40,6 +41,10 @@ class EmbedRegistrySessionDeletedEventSubscriber implements EventSubscriberInter
             return;
         }
 
-        $this->plugin->doWhenDeletingSession($sessionId);
+        Database::getManager()
+            ->createQuery('DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.session) = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->execute()
+        ;
     }
 }

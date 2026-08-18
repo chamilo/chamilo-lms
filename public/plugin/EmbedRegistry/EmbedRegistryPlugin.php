@@ -200,22 +200,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * Hook called when a session is deleted.
-     *
-     * @param int $sessionId
-     */
-    public function doWhenDeletingSession($sessionId)
-    {
-        $em = Database::getManager();
-
-        $em->createQuery(
-            'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.session) = :sessionId'
-        )
-            ->setParameter('sessionId', (int) $sessionId)
-            ->execute();
-    }
-
-    /**
      * Get the currently active embed for a course and optional session.
      *
      * @throws \Doctrine\ORM\NonUniqueResultException

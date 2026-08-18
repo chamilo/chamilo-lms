@@ -549,30 +549,6 @@ class AppPlugin
     }
 
     /**
-     * Trigger for Plugin::doWhenDeleting[Item] functions.
-     *
-     * @param string $itemType
-     * @param int    $itemId
-     */
-    public function performActionsWhenDeletingItem($itemType, $itemId)
-    {
-        $pluginList = $this->getInstalledPluginListObject();
-
-        if (empty($pluginList)) {
-            return;
-        }
-
-        /** @var Plugin $pluginObj */
-        foreach ($pluginList as $pluginObj) {
-            switch ($itemType) {
-                case 'course':
-                    $pluginObj->doWhenDeletingCourse($itemId);
-                    break;
-            }
-        }
-    }
-
-    /**
      * Add the course settings to the course settings form.
      *
      * @param FormValidator $form

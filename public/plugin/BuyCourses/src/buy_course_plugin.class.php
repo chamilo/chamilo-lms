@@ -502,7 +502,8 @@ class BuyCoursesPlugin extends Plugin
         return $tableExists[$tableName];
     }
 
-    private function hasSubscriptionCourseInfrastructure(): bool
+    // Public because BuyCoursesCourseDeletedEventSubscriber checks it too
+    public function hasSubscriptionCourseInfrastructure(): bool
     {
         return $this->hasPluginTable(self::TABLE_SERVICES_SALE)
             && $this->hasPluginTable(self::TABLE_SUBSCRIPTION_COURSE);
@@ -527,38 +528,6 @@ class BuyCoursesPlugin extends Plugin
     public function isEnabled(): bool
     {
         return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
-    }
-
-    /**
-     * Mark the BuyCourses course relation as deleted when Chamilo removes a course.
-     *
-     * The service sale is intentionally preserved as purchase history.
-     *
-     * @param int $courseId
-     */
-    public function doWhenDeletingCourse($courseId)
-    {
-        $courseId = (int) $courseId;
-
-        if ($courseId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
-            return;
-        }
-
-        $table = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
-        $now = api_get_utc_datetime();
-
-        Database::update(
-            $table,
-            [
-                'status' => 'deleted',
-                'updated_at' => $now,
-                'deleted_at' => $now,
-                'last_action' => 'course_deleted',
-            ],
-            ['course_id = ?' => [$courseId]]
-        );
-
-        $this->clearFrozenEnrollmentsForCourse($courseId);
     }
 
     /**

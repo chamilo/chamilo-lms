@@ -976,15 +976,6 @@ class Plugin
     }
 
     /**
-     * Overwrite to perform some actions when deleting a course.
-     *
-     * @param int $courseId
-     */
-    public function doWhenDeletingCourse($courseId)
-    {
-    }
-
-    /**
      * Add a link for a course tool.
      *
      * @param string      $name     The tool name

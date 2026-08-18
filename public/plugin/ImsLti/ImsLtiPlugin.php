@@ -602,16 +602,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Avoid conflict with foreign key when deleting a course.
-     *
-     * @param int $courseId
-     */
-    public function doWhenDeletingCourse($courseId)
-    {
-        return;
-    }
-
-    /**
      * @return string
      */
     public static function getIssuerUrl()

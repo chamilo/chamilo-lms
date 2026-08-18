@@ -13,6 +13,7 @@ final class Events
     public const string USER_DELETED = 'chamilo.event.user_deleted';
 
     public const string COURSE_CREATED = 'chamilo.event.course_created';
+    public const string COURSE_DELETED = 'chamilo.event.course_deleted';
     public const string COURSE_USER_SUBSCRIPTION_CHECK = 'chamilo.event.course_user_subscription_check';
 
     public const string LOGIN_CREDENTIALS_CHECKED = 'chamilo.event.login_credentials_checked';

@@ -976,15 +976,6 @@ class Plugin
     }
 
     /**
-     * Overwrite to perform some actions when deleting a user.
-     *
-     * @param int $userId
-     */
-    public function doWhenDeletingUser($userId)
-    {
-    }
-
-    /**
      * Overwrite to perform some actions when deleting a course.
      *
      * @param int $courseId

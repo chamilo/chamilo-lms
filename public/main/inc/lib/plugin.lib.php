@@ -568,9 +568,6 @@ class AppPlugin
                 case 'course':
                     $pluginObj->doWhenDeletingCourse($itemId);
                     break;
-                case 'session':
-                    $pluginObj->doWhenDeletingSession($itemId);
-                    break;
                 case 'user':
                     $pluginObj->doWhenDeletingUser($itemId);
                     break;

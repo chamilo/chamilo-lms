@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\State\Session\SessionDeleteProcessor;
 use Chamilo\CoreBundle\State\SessionPlanStateProvider;
 use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
 use DateTime;
@@ -163,7 +164,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: true,
             name: 'create_session_with_courses_and_assign_users'
         ),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Delete(security: "is_granted('DELETE', object)", processor: SessionDeleteProcessor::class),
     ],
     normalizationContext: ['groups' => ['session:basic']],
     denormalizationContext: ['groups' => ['session:write']],

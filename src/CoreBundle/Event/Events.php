@@ -17,6 +17,7 @@ final class Events
 
     public const string LOGIN_CREDENTIALS_CHECKED = 'chamilo.event.login_credentials_checked';
 
+    public const string SESSION_DELETED = 'chamilo.event.session_deleted';
     public const string SESSION_RESUBSCRIPTION = 'chamilo.event.session_resubscription';
     public const string LOGIN_CONDITION_CHECKED = 'chamilo.event.login_condition_checked';
 

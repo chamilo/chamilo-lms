@@ -45,7 +45,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { findById, deleteById } from "../../services/accessurlService"
 import Message from "primevue/message"
 
@@ -57,6 +57,7 @@ import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 
 const notification = useNotification()
 
@@ -85,12 +86,11 @@ async function confirmSubmit() {
   notice.value = ""
   try {
     loading.value = true
-    const secToken = window.SEC_TOKEN || route.query.sec_token || ""
-    const res = await deleteById(urlId, secToken)
+    await deleteById(urlId)
 
     notification.showSuccessNotification(t("URL deleted."))
 
-    window.location.href = res.redirectUrl
+    await router.push({ name: "AccessUrlManage" })
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {

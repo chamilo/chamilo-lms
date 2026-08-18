@@ -173,8 +173,8 @@ function buildAccessUrlDeleteCrumbs() {
   }
 
   return [
-    { label: t("Administration"), url: "/main/admin/index.php" },
-    { label: t("Multiple access URL / Branding"), url: "/main/admin/access_urls.php" },
+    { label: t("Administration"), route: { name: "AdminIndex" } },
+    { label: t("Multiple access URL / Branding"), route: { name: "AccessUrlManage" } },
     { label: t("Delete access") },
   ]
 }

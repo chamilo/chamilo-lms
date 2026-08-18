@@ -247,16 +247,10 @@ onBeforeUnmount(() => {
   <div class="flex flex-col gap-8">
     <SectionHeader :title="t('Multi URLs')">
       <BaseButton
-        :label="t('Add URL')"
-        icon="plus"
-        type="success"
-        :to-url="'/main/admin/access_url_edit.php'"
-      />
-      <BaseButton
         :label="t('Configure multiple access URL')"
         icon="hammer-wrench"
         type="secondary"
-        :to-url="'/main/admin/access_urls.php'"
+        :route="{ name: 'AccessUrlManage' }"
       />
     </SectionHeader>
 
@@ -358,7 +352,7 @@ onBeforeUnmount(() => {
           <div class="flex gap-1 flex-nowrap">
             <BaseButton
               :label="t('Manage users')"
-              :to-url="`/main/admin/access_url_edit_users_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlUsers', query: { access_url_id: data.id } }"
               icon="account"
               only-icon
               size="small"
@@ -366,7 +360,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage user groups')"
-              :to-url="`/main/admin/access_url_edit_usergroup_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlUserGroups', query: { access_url_id: data.id } }"
               icon="account-group"
               only-icon
               size="small"
@@ -374,7 +368,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage courses')"
-              :to-url="`/main/admin/access_url_edit_courses_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlCourses', query: { access_url_id: data.id } }"
               icon="courses"
               only-icon
               size="small"
@@ -382,7 +376,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage course categories')"
-              :to-url="`/main/admin/access_url_edit_course_category_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlCourseCategories', query: { access_url_id: data.id } }"
               icon="file-tree-outline"
               only-icon
               size="small"

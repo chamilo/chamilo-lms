@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\State\User\UserDeleteProcessor;
 use Chamilo\CoreBundle\State\UserCollectionStateProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
@@ -62,7 +63,11 @@ use UserManager;
             security: "is_granted('VIEW', object)",
         ),
         new Put(security: "is_granted('EDIT', object)"),
-        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"),
+        new Delete(
+            security: "is_granted('DELETE', object)",
+            processor: UserDeleteProcessor::class,
+        ),
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             provider: UserCollectionStateProvider::class,

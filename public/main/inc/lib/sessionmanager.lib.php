@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -2080,6 +2081,11 @@ class SessionManager
                 api_not_allowed(true);
             }
         }
+
+        Container::getEventDispatcher()->dispatch(
+            new SessionDeletedEvent(['session' => $sessionEntity], AbstractEvent::TYPE_PRE),
+            Events::SESSION_DELETED
+        );
 
         // Delete Picture Session
         SessionManager::deleteAsset($sessionId);

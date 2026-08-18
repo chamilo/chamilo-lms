@@ -229,11 +229,4 @@ class StudentFollowUpPlugin extends Plugin
         return 20;
     }
 
-    public function doWhenDeletingUser($userId): void
-    {
-        $userId = (int) $userId;
-
-        Database::query('DELETE FROM sfu_post WHERE user_id = '.$userId);
-        Database::query('DELETE FROM sfu_post WHERE insert_user_id = '.$userId);
-    }
 }

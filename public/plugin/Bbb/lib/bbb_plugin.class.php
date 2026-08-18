@@ -3,8 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
-use Chamilo\CoreBundle\Entity\ConferenceMeeting;
-use Chamilo\CoreBundle\Entity\ConferenceRecording;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CoreBundle\Entity\Course;
@@ -191,89 +189,11 @@ class BbbPlugin extends Plugin
     }
 
     /* -----------------------------------------------------------------
-     * Cleanup hooks: delete BBB recordings when course/session is removed
+     * Recording helpers, driven by the course/session deleted subscribers
      * ----------------------------------------------------------------- */
 
-    public function doWhenDeletingCourse($courseId): void
-    {
-        if ($this->get('delete_recordings_on_course_delete') !== 'true') {
-            return;
-        }
-        $this->removeBbbRecordingsForCourse((int)$courseId);
-    }
-
-    public function doWhenDeletingSession($sessionId): void
-    {
-        if ($this->get('delete_recordings_on_course_delete') !== 'true') {
-            return;
-        }
-        $this->removeBbbRecordingsForSession((int)$sessionId);
-    }
-
-    private function removeBbbRecordingsForCourse(int $courseId): void
-    {
-        $em           = Database::getManager();
-        $meetingRepo  = $em->getRepository(ConferenceMeeting::class);
-        $recordingRepo= $em->getRepository(ConferenceRecording::class);
-
-        $meetings = $meetingRepo->createQueryBuilder('m')
-            ->where('m.course = :cid')
-            ->andWhere('m.serviceProvider = :sp')
-            ->setParameters(['cid' => $courseId, 'sp' => 'bbb'])
-            ->getQuery()->getResult();
-
-        foreach ($meetings as $meeting) {
-            $recs = $recordingRepo->findBy([
-                'meeting'    => $meeting,
-                'formatType' => 'bbb',
-            ]);
-
-            foreach ($recs as $rec) {
-                if ($recordId = $this->extractRecordId($rec->getResourceUrl())) {
-                    $this->deleteRecording($recordId);
-                }
-                $em->remove($rec);
-            }
-
-            // Optionally remove the meeting entity as well
-            $em->remove($meeting);
-        }
-        $em->flush();
-    }
-
-    private function removeBbbRecordingsForSession(int $sessionId): void
-    {
-        $em           = Database::getManager();
-        $meetingRepo  = $em->getRepository(ConferenceMeeting::class);
-        $recordingRepo= $em->getRepository(ConferenceRecording::class);
-
-        $meetings = $meetingRepo->findBy([
-            'session'        => $sessionId,
-            'serviceProvider'=> 'bbb',
-        ]);
-
-        foreach ($meetings as $meeting) {
-            $recs = $recordingRepo->findBy([
-                'meeting'    => $meeting,
-                'formatType' => 'bbb',
-            ]);
-
-            foreach ($recs as $rec) {
-                if ($recordId = $this->extractRecordId($rec->getResourceUrl())) {
-                    $this->deleteRecording($recordId);
-                }
-
-                $em->remove($rec);
-            }
-
-            $em->remove($meeting);
-        }
-
-        $em->flush();
-    }
-
     // Extracts the recordID from the BBB recording URL
-    private function extractRecordId(string $url): ?string
+    public function extractRecordId(string $url): ?string
     {
         if (preg_match('/[?&]recordID=([\w-]+)/', $url, $m)) {
             return $m[1];
@@ -285,7 +205,7 @@ class BbbPlugin extends Plugin
     }
 
     // Sends a deleteRecordings API request to BigBlueButton
-    private function deleteRecording(string $recordId): void
+    public function deleteRecording(string $recordId): void
     {
         $host = rtrim((string)$this->get('host'), '/');
         if ($host === '') {

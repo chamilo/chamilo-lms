@@ -18,7 +18,6 @@ const notification = useNotification()
 const isLoading = ref(false)
 const items = ref([])
 const myMissingUrls = ref([])
-const csrfToken = ref("")
 
 const dialogVisible = ref(false)
 const isSaving = ref(false)
@@ -31,7 +30,6 @@ async function loadData() {
     const data = await accessUrlManageService.list()
     items.value = data.items
     myMissingUrls.value = data.myMissingUrls
-    csrfToken.value = data.csrfToken
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
@@ -59,7 +57,7 @@ function openEditDialog(item) {
 async function save() {
   isSaving.value = true
   try {
-    const payload = { ...form.value, _token: csrfToken.value }
+    const payload = { ...form.value }
     const response = editingItem.value
       ? await accessUrlManageService.update(editingItem.value.id, payload)
       : await accessUrlManageService.create(payload)
@@ -86,10 +84,10 @@ async function save() {
 async function toggleStatus(item) {
   try {
     if (item.active) {
-      await accessUrlManageService.lock(item.id, csrfToken.value)
+      await accessUrlManageService.lock(item.id)
       notification.showSuccessNotification(t("The URL has been disabled"))
     } else {
-      await accessUrlManageService.unlock(item.id, csrfToken.value)
+      await accessUrlManageService.unlock(item.id)
       notification.showSuccessNotification(t("The URL has been enabled"))
     }
     await loadData()
@@ -100,7 +98,7 @@ async function toggleStatus(item) {
 
 async function registerAdmin() {
   try {
-    await accessUrlManageService.registerAdmin(csrfToken.value)
+    await accessUrlManageService.registerAdmin()
     notification.showSuccessNotification(t("Admin user assigned to this URL"))
     await loadData()
   } catch (e) {
@@ -116,6 +114,12 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-6">
     <SectionHeader :title="t('Multiple access URL / Branding')">
+      <BaseButton
+        :label="t('Back')"
+        icon="back"
+        type="plain"
+        :route="{ name: 'AdminMultiUrlList' }"
+      />
       <BaseButton
         :label="t('Add URL')"
         icon="plus"

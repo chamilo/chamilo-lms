@@ -571,6 +571,39 @@ onBeforeUnmount(() => {
           <dd class="text-lg font-medium">{{ selectedUser.email }}</dd>
         </div>
         <div>
+          <dt class="text-sm text-gray-500">{{ t("Official code") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.officialCode || t("None") }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Registration date") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.registrationDate }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Created by") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.creatorName || t("None") }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Classes") }}</dt>
+          <dd>
+            <ul
+              v-if="selectedUser.usergroups.length"
+              class="list-disc pl-5 space-y-1 text-lg font-medium"
+            >
+              <li
+                v-for="(groupTitle, index) in selectedUser.usergroups"
+                :key="index"
+              >
+                {{ groupTitle }}
+              </li>
+            </ul>
+            <span
+              v-else
+              class="text-lg font-medium"
+              >{{ t("None") }}</span
+            >
+          </dd>
+        </div>
+        <div>
           <dt class="text-sm text-gray-500">{{ t("URLs") }}</dt>
           <dd>
             <ul

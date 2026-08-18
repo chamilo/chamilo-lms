@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UrlManager;
 
@@ -24,16 +23,17 @@ use const PHP_SESSION_ACTIVE;
 /**
  * Data source for assigning users to access URLs, replacing the legacy
  * access_url_edit_users_to_url.php / access_url_add_users_to_url.php pair.
+ *
+ * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
+ * for every state-changing request the router resolves — no per-endpoint
+ * token is generated or checked here.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-users-data')]
 class AccessUrlUsersController extends AbstractController
 {
-    private const string CSRF_INTENT = 'access_url_users';
-
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('', name: 'admin_access_urls_users_data', methods: ['GET'])]
@@ -95,7 +95,6 @@ class AccessUrlUsersController extends AbstractController
             ),
             'assigned' => $assigned,
             'available' => $available,
-            'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
         ]);
     }
 
@@ -103,10 +102,6 @@ class AccessUrlUsersController extends AbstractController
     public function assign(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $accessUrlId = (int) ($data['access_url_id'] ?? 0);
         if ($accessUrlId <= 0) {
@@ -125,10 +120,6 @@ class AccessUrlUsersController extends AbstractController
     {
         $data = json_decode($request->getContent(), true) ?? [];
 
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
-
         $userIds = array_map('intval', $data['user_ids'] ?? []);
         $urlIds = array_map('intval', $data['url_ids'] ?? []);
         $action = (string) ($data['action'] ?? '');
@@ -144,6 +135,76 @@ class AccessUrlUsersController extends AbstractController
         }
 
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * Full platform user population for the bulk cross-URL assign tab, independent
+     * of any single URL's assignment state. Mirrors the legacy
+     * access_url_add_users_to_url.php safeguard: platforms with more than 1000
+     * users default to a last-name-starting-with-"A" subset instead of shipping
+     * every user in one response, unless the caller explicitly asks for a letter.
+     */
+    #[Route('/all-users', name: 'admin_access_urls_users_all', methods: ['GET'])]
+    public function allUsers(Request $request): JsonResponse
+    {
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
+        }
+
+        $totalUsers = (int) $this->em->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(User::class, 'u')
+            ->where('u.active <> :softDeleted')
+            ->andWhere('u.status <> :anonymous')
+            ->andWhere('u.status <> :fallback')
+            ->setParameter('softDeleted', User::SOFT_DELETED)
+            ->setParameter('anonymous', User::ANONYMOUS)
+            ->setParameter('fallback', User::ROLE_FALLBACK)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        // No "first_letter" param at all means the caller has no preference yet
+        // (first load): apply the size-based default. An explicit "__all__" is
+        // how the caller asks to see everyone despite that default.
+        if (!$request->query->has('first_letter')) {
+            $firstLetter = $totalUsers > 1000 ? 'A' : '';
+        } else {
+            $rawFirstLetter = (string) $request->query->get('first_letter', '');
+            $firstLetter = '__all__' === $rawFirstLetter ? '' : strtoupper(trim($rawFirstLetter));
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname, u.username AS username')
+            ->from(User::class, 'u')
+            ->where('u.active <> :softDeleted')
+            ->andWhere('u.status <> :anonymous')
+            ->andWhere('u.status <> :fallback')
+            ->setParameter('softDeleted', User::SOFT_DELETED)
+            ->setParameter('anonymous', User::ANONYMOUS)
+            ->setParameter('fallback', User::ROLE_FALLBACK)
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+        ;
+
+        if ('' !== $firstLetter) {
+            $qb->andWhere('u.lastname LIKE :firstLetter')
+                ->setParameter('firstLetter', $firstLetter.'%')
+            ;
+        }
+
+        $users = $qb->getQuery()->getArrayResult();
+
+        return $this->json([
+            'items' => array_map(static fn (array $u): array => [
+                'id' => (int) $u['id'],
+                'firstname' => $u['firstname'],
+                'lastname' => $u['lastname'],
+                'username' => $u['username'],
+            ], $users),
+            'totalUsers' => $totalUsers,
+            'appliedFirstLetter' => '' === $firstLetter ? '__all__' : $firstLetter,
+        ]);
     }
 
     /**

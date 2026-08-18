@@ -48,6 +48,7 @@ function confirmSubmit(action) {
         :options="items"
         option-label="label"
         option-value="id"
+        filter
       />
       <BaseMultiSelect
         v-model="selectedUrlIds"
@@ -56,6 +57,7 @@ function confirmSubmit(action) {
         :options="urls"
         option-label="url"
         option-value="id"
+        filter
       />
     </div>
 

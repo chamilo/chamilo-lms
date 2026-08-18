@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use DateTimeImmutable;
@@ -248,6 +249,8 @@ class AccessUrlListController extends AbstractController
         $ids = array_map(static fn (User $u): int => (int) $u->getId(), $users);
 
         $urlsByUser = [];
+        $usergroupsByUser = [];
+        $creatorNameById = [];
         if (!empty($ids)) {
             $rows = $this->em->createQueryBuilder()
                 ->select('IDENTITY(r.user) AS userId, a.id AS urlId, a.url AS url')
@@ -264,17 +267,53 @@ class AccessUrlListController extends AbstractController
                     'url' => $row['url'],
                 ];
             }
+
+            $groupRows = $this->em->createQueryBuilder()
+                ->select('IDENTITY(r.user) AS userId, g.title AS title')
+                ->from(UsergroupRelUser::class, 'r')
+                ->innerJoin('r.usergroup', 'g')
+                ->where('r.user IN (:ids)')
+                ->setParameter('ids', $ids)
+                ->orderBy('g.title', 'ASC')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            foreach ($groupRows as $row) {
+                $usergroupsByUser[(int) $row['userId']][] = $row['title'];
+            }
+
+            $creatorIds = array_values(array_unique(array_filter(
+                array_map(static fn (User $u): int => (int) $u->getCreatorId(), $users)
+            )));
+            if (!empty($creatorIds)) {
+                $creatorRows = $this->em->createQueryBuilder()
+                    ->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname')
+                    ->from(User::class, 'u')
+                    ->where('u.id IN (:ids)')
+                    ->setParameter('ids', $creatorIds)
+                    ->getQuery()
+                    ->getArrayResult()
+                ;
+                foreach ($creatorRows as $row) {
+                    $creatorNameById[(int) $row['id']] = trim($row['firstname'].' '.$row['lastname']);
+                }
+            }
         }
 
         $items = [];
         foreach ($users as $u) {
             $id = (int) $u->getId();
+            $creatorId = (int) $u->getCreatorId();
             $items[] = [
                 'id' => $id,
                 'firstname' => $u->getFirstname(),
                 'lastname' => $u->getLastname(),
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
+                'officialCode' => $u->getOfficialCode() ?? '',
+                'registrationDate' => $u->getCreatedAt()->format('Y-m-d H:i:s'),
+                'creatorName' => $creatorNameById[$creatorId] ?? '',
+                'usergroups' => $usergroupsByUser[$id] ?? [],
                 'urls' => $urlsByUser[$id] ?? [],
             ];
         }

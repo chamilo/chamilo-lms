@@ -22,10 +22,20 @@ const notification = useNotification()
 const urls = ref([])
 const assigned = ref([])
 const available = ref([])
-const csrfToken = ref("")
 const selectedUrlId = ref(Number(route.query.access_url_id) || 0)
 const isLoading = ref(false)
 const isSaving = ref(false)
+
+const bulkUsers = ref([])
+const bulkFirstLetter = ref("")
+const isBulkLoading = ref(false)
+const alphabetOptions = [
+  { value: "__all__", label: "--" },
+  ...Array.from({ length: 26 }, (_, i) => {
+    const letter = String.fromCharCode(65 + i)
+    return { value: letter, label: letter }
+  }),
+]
 
 const availableItems = computed(() =>
   available.value.map((u) => ({ id: u.id, label: `${u.username} - ${u.firstname} ${u.lastname}` })),
@@ -33,19 +43,21 @@ const availableItems = computed(() =>
 const assignedItems = computed(() =>
   assigned.value.map((u) => ({ id: u.id, label: `${u.username} - ${u.firstname} ${u.lastname}` })),
 )
-const allItemsForBulk = computed(() => [...assignedItems.value, ...availableItems.value])
+const bulkItems = computed(() =>
+  bulkUsers.value.map((u) => ({ id: u.id, label: `${u.username} - ${u.firstname} ${u.lastname}` })),
+)
 
 async function loadData() {
   isLoading.value = true
   try {
-    const data = await accessUrlManageService.listUsers(selectedUrlId.value)
+    let data = await accessUrlManageService.listUsers(selectedUrlId.value)
     urls.value = data.urls
-    assigned.value = data.assigned
-    available.value = data.available
-    csrfToken.value = data.csrfToken
     if (!selectedUrlId.value && urls.value.length) {
       selectedUrlId.value = urls.value[0].id
+      data = await accessUrlManageService.listUsers(selectedUrlId.value)
     }
+    assigned.value = data.assigned
+    available.value = data.available
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
@@ -55,6 +67,19 @@ async function loadData() {
 
 function onUrlChange() {
   loadData()
+}
+
+async function loadBulkUsers() {
+  isBulkLoading.value = true
+  try {
+    const data = await accessUrlManageService.listAllUsers(bulkFirstLetter.value)
+    bulkUsers.value = data.items
+    bulkFirstLetter.value = data.appliedFirstLetter
+  } catch (e) {
+    notification.showErrorNotification(e)
+  } finally {
+    isBulkLoading.value = false
+  }
 }
 
 function addUser(item) {
@@ -96,7 +121,6 @@ async function save() {
     await accessUrlManageService.assignUsers({
       access_url_id: selectedUrlId.value,
       user_ids: assigned.value.map((u) => u.id),
-      _token: csrfToken.value,
     })
     notification.showSuccessNotification(t("Update successful"))
   } catch (e) {
@@ -112,7 +136,6 @@ async function onBulkSubmit({ itemIds, urlIds, action }) {
       user_ids: itemIds,
       url_ids: urlIds,
       action,
-      _token: csrfToken.value,
     })
     notification.showSuccessNotification(
       "add" === action
@@ -127,6 +150,7 @@ async function onBulkSubmit({ itemIds, urlIds, action }) {
 
 onMounted(() => {
   loadData()
+  loadBulkUsers()
 })
 </script>
 
@@ -147,13 +171,13 @@ onMounted(() => {
           value="0"
           class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
         >
-          {{ t("Single registration") }}
+          {{ t("Multiple registration") }}
         </Tab>
         <Tab
           value="1"
           class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
         >
-          {{ t("Multiple registration") }}
+          {{ t("Add users to an URL") }}
         </Tab>
       </TabList>
       <TabPanels>
@@ -179,23 +203,35 @@ onMounted(() => {
               @remove="removeUser"
               @add-all="addAllUsers"
               @remove-all="removeAllUsers"
-            />
-
-            <div>
-              <BaseButton
-                :label="t('Save')"
-                type="success"
-                :is-loading="isSaving"
-                @click="save"
-              />
-            </div>
+            >
+              <template #actions>
+                <BaseButton
+                  :label="t('Save')"
+                  type="success"
+                  :is-loading="isSaving"
+                  @click="save"
+                />
+              </template>
+            </AccessUrlDualList>
           </div>
         </TabPanel>
         <TabPanel value="1">
-          <div class="pt-4">
+          <div class="flex flex-col gap-4 pt-4">
+            <BaseSelect
+              id="access-url-users-bulk-first-letter"
+              v-model="bulkFirstLetter"
+              :label="t('First letter')"
+              :options="alphabetOptions"
+              option-label="label"
+              option-value="value"
+              class="max-w-xs"
+              @update:model-value="loadBulkUsers"
+            />
+
             <AccessUrlBulkAssign
-              :items="allItemsForBulk"
+              :items="bulkItems"
               :urls="urls"
+              :disabled="isBulkLoading"
               :items-label="t('User list')"
               :add-label="t('Add users to selected URLs')"
               :remove-label="t('Remove users from selected URLs')"

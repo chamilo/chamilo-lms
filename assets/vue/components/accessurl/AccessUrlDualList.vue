@@ -81,6 +81,8 @@ const filteredAvailable = computed(() => {
         >
           <span class="mdi mdi-chevron-double-left text-red-700" />
         </button>
+
+        <slot name="actions" />
       </div>
 
       <div class="flex-1 flex flex-col gap-2 min-w-0">

@@ -4,6 +4,8 @@ import baseService from "./baseService"
  * Data source for the Access URL management pages (URL CRUD, and
  * user/course/user group/course category assignment), served by the
  * admin controllers under /admin/access-urls-*-data (not API Platform).
+ * CSRF is handled globally (origin-based) for state-changing requests, so
+ * no token needs to be minted or sent here.
  */
 export default {
   /**
@@ -32,28 +34,25 @@ export default {
 
   /**
    * @param {number} id
-   * @param {string} token
    * @returns {Promise<Object>}
    */
-  lock(id, token) {
-    return baseService.post(`/admin/access-urls-manage-data/${id}/lock`, { _token: token })
+  lock(id) {
+    return baseService.post(`/admin/access-urls-manage-data/${id}/lock`, {})
   },
 
   /**
    * @param {number} id
-   * @param {string} token
    * @returns {Promise<Object>}
    */
-  unlock(id, token) {
-    return baseService.post(`/admin/access-urls-manage-data/${id}/unlock`, { _token: token })
+  unlock(id) {
+    return baseService.post(`/admin/access-urls-manage-data/${id}/unlock`, {})
   },
 
   /**
-   * @param {string} token
    * @returns {Promise<Object>}
    */
-  registerAdmin(token) {
-    return baseService.post("/admin/access-urls-manage-data/register-admin", { _token: token })
+  registerAdmin() {
+    return baseService.post("/admin/access-urls-manage-data/register-admin", {})
   },
 
   /**
@@ -65,7 +64,16 @@ export default {
   },
 
   /**
-   * @param {Object} payload {access_url_id, user_ids, _token}
+   * @param {string} [firstLetter] Omit to let the backend decide (defaults to "A" above 1000
+   * users); pass "__all__" to explicitly show every user regardless of platform size.
+   * @returns {Promise<Object>}
+   */
+  listAllUsers(firstLetter = "") {
+    return baseService.get("/admin/access-urls-users-data/all-users", firstLetter ? { first_letter: firstLetter } : {})
+  },
+
+  /**
+   * @param {Object} payload {access_url_id, user_ids}
    * @returns {Promise<Object>}
    */
   assignUsers(payload) {
@@ -73,7 +81,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {user_ids, url_ids, action, _token}
+   * @param {Object} payload {user_ids, url_ids, action}
    * @returns {Promise<Object>}
    */
   bulkUsers(payload) {
@@ -89,7 +97,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {access_url_id, course_ids, _token}
+   * @param {Object} payload {access_url_id, course_ids}
    * @returns {Promise<Object>}
    */
   assignCourses(payload) {
@@ -97,7 +105,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {course_ids, url_ids, action, _token}
+   * @param {Object} payload {course_ids, url_ids, action}
    * @returns {Promise<Object>}
    */
   bulkCourses(payload) {
@@ -113,7 +121,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {access_url_id, group_ids, _token}
+   * @param {Object} payload {access_url_id, group_ids}
    * @returns {Promise<Object>}
    */
   assignUserGroups(payload) {
@@ -121,7 +129,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {group_ids, url_ids, action, _token}
+   * @param {Object} payload {group_ids, url_ids, action}
    * @returns {Promise<Object>}
    */
   bulkUserGroups(payload) {
@@ -137,7 +145,7 @@ export default {
   },
 
   /**
-   * @param {Object} payload {access_url_id, category_ids, _token}
+   * @param {Object} payload {access_url_id, category_ids}
    * @returns {Promise<Object>}
    */
   assignCourseCategories(payload) {

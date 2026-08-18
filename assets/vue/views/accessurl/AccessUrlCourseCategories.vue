@@ -16,7 +16,6 @@ const notification = useNotification()
 const urls = ref([])
 const assigned = ref([])
 const available = ref([])
-const csrfToken = ref("")
 const selectedUrlId = ref(Number(route.query.access_url_id) || 0)
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -27,14 +26,14 @@ const assignedItems = computed(() => assigned.value.map((c) => ({ id: c.id, labe
 async function loadData() {
   isLoading.value = true
   try {
-    const data = await accessUrlManageService.listCourseCategories(selectedUrlId.value)
+    let data = await accessUrlManageService.listCourseCategories(selectedUrlId.value)
     urls.value = data.urls
-    assigned.value = data.assigned
-    available.value = data.available
-    csrfToken.value = data.csrfToken
     if (!selectedUrlId.value && urls.value.length) {
       selectedUrlId.value = urls.value[0].id
+      data = await accessUrlManageService.listCourseCategories(selectedUrlId.value)
     }
+    assigned.value = data.assigned
+    available.value = data.available
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
@@ -85,7 +84,6 @@ async function save() {
     await accessUrlManageService.assignCourseCategories({
       access_url_id: selectedUrlId.value,
       category_ids: assigned.value.map((c) => c.id),
-      _token: csrfToken.value,
     })
     notification.showSuccessNotification(t("Update successful"))
   } catch (e) {
@@ -132,16 +130,16 @@ onMounted(() => {
         @remove="removeCategory"
         @add-all="addAllCategories"
         @remove-all="removeAllCategories"
-      />
-
-      <div>
-        <BaseButton
-          :label="t('Save')"
-          type="success"
-          :is-loading="isSaving"
-          @click="save"
-        />
-      </div>
+      >
+        <template #actions>
+          <BaseButton
+            :label="t('Save')"
+            type="success"
+            :is-loading="isSaving"
+            @click="save"
+          />
+        </template>
+      </AccessUrlDualList>
     </div>
   </div>
 </template>

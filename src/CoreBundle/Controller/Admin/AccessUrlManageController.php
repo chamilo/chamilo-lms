@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UrlManager;
 
@@ -27,30 +26,25 @@ use const PHP_SESSION_ACTIVE;
 /**
  * CRUD data source for the "Access URLs" admin page, replacing the legacy
  * access_urls.php / access_url_edit.php pair.
+ *
+ * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
+ * for every state-changing request the router resolves — no per-endpoint
+ * token is generated or checked here.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-manage-data')]
 class AccessUrlManageController extends AbstractController
 {
-    private const string CSRF_INTENT = 'access_url_manage';
-
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly UserHelper $userHelper,
     ) {}
 
     #[Route('', name: 'admin_access_urls_manage_data', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        // The CSRF token must be minted (and written to the session) before the
-        // session is closed below — closing it first would return a token that
-        // was never actually persisted, so every subsequent write action using
-        // it would fail CSRF validation.
-        $csrfToken = $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue();
-
         if (PHP_SESSION_ACTIVE === session_status()) {
             session_write_close();
         }
@@ -93,7 +87,6 @@ class AccessUrlManageController extends AbstractController
         return $this->json([
             'items' => $items,
             'myMissingUrls' => $myMissingUrls,
-            'csrfToken' => $csrfToken,
         ]);
     }
 
@@ -101,10 +94,6 @@ class AccessUrlManageController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $url = $this->normalizeUrl((string) ($data['url'] ?? ''));
         if (null === $url) {
@@ -148,10 +137,6 @@ class AccessUrlManageController extends AbstractController
     {
         $data = json_decode($request->getContent(), true) ?? [];
 
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
-
         $accessUrl = $this->em->find(AccessUrl::class, $id);
         if (null === $accessUrl) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
@@ -180,26 +165,20 @@ class AccessUrlManageController extends AbstractController
     }
 
     #[Route('/{id}/lock', name: 'admin_access_urls_manage_lock', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function lock(int $id, Request $request): JsonResponse
+    public function lock(int $id): JsonResponse
     {
-        return $this->setStatus($id, $request, false);
+        return $this->setStatus($id, false);
     }
 
     #[Route('/{id}/unlock', name: 'admin_access_urls_manage_unlock', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function unlock(int $id, Request $request): JsonResponse
+    public function unlock(int $id): JsonResponse
     {
-        return $this->setStatus($id, $request, true);
+        return $this->setStatus($id, true);
     }
 
     #[Route('/register-admin', name: 'admin_access_urls_manage_register_admin', methods: ['POST'])]
-    public function registerAdmin(Request $request): JsonResponse
+    public function registerAdmin(): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
-
         $currentUserId = (int) $this->userHelper->getCurrent()?->getId();
         if ($currentUserId <= 0) {
             throw $this->createAccessDeniedException();
@@ -230,14 +209,8 @@ class AccessUrlManageController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    private function setStatus(int $id, Request $request, bool $active): JsonResponse
+    private function setStatus(int $id, bool $active): JsonResponse
     {
-        $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
-
         if (1 === $id) {
             return $this->json(['error' => 'The default URL cannot be disabled.'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }

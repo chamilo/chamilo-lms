@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UrlManager;
 
@@ -24,16 +23,17 @@ use const PHP_SESSION_ACTIVE;
 /**
  * Data source for assigning user groups (classes) to access URLs, replacing the
  * legacy access_url_edit_usergroup_to_url.php / access_url_add_usergroup_to_url.php pair.
+ *
+ * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
+ * for every state-changing request the router resolves — no per-endpoint
+ * token is generated or checked here.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-usergroups-data')]
 class AccessUrlUserGroupsController extends AbstractController
 {
-    private const string CSRF_INTENT = 'access_url_usergroups';
-
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('', name: 'admin_access_urls_usergroups_data', methods: ['GET'])]
@@ -83,7 +83,6 @@ class AccessUrlUserGroupsController extends AbstractController
             ),
             'assigned' => $assigned,
             'available' => $available,
-            'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
         ]);
     }
 
@@ -91,10 +90,6 @@ class AccessUrlUserGroupsController extends AbstractController
     public function assign(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $accessUrlId = (int) ($data['access_url_id'] ?? 0);
         if ($accessUrlId <= 0) {
@@ -112,10 +107,6 @@ class AccessUrlUserGroupsController extends AbstractController
     public function bulk(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $groupIds = array_map('intval', $data['group_ids'] ?? []);
         $urlIds = array_map('intval', $data['url_ids'] ?? []);

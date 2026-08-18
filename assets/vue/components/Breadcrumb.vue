@@ -255,6 +255,26 @@ function buildManualCrumbs() {
     ]
   }
 
+  // /admin/urls/manage
+  if (pathSegments[1] === "urls" && pathSegments[2] === "manage") {
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t("Multiple access URL / Branding") },
+    ]
+  }
+
+  // /admin/urls/assign-users, /admin/urls/assign-courses, /admin/urls/assign-usergroups, /admin/urls/assign-course-categories
+  if (pathSegments[1] === "urls" && pathSegments[2]?.startsWith("assign-")) {
+    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t("Multiple access URL / Branding"), route: { path: "/admin/urls/manage" } },
+      { label: t(pageLabel) },
+    ]
+  }
+
   const fullPath = "/" + pathSegments.join("/")
 
   if (router.getRoutes().some((r) => r.path === fullPath)) {

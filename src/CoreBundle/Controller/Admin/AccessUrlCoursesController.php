@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UrlManager;
 
@@ -24,16 +23,17 @@ use const PHP_SESSION_ACTIVE;
 /**
  * Data source for assigning courses to access URLs, replacing the legacy
  * access_url_edit_courses_to_url.php / access_url_add_courses_to_url.php pair.
+ *
+ * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
+ * for every state-changing request the router resolves — no per-endpoint
+ * token is generated or checked here.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-courses-data')]
 class AccessUrlCoursesController extends AbstractController
 {
-    private const string CSRF_INTENT = 'access_url_courses';
-
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
     ) {}
 
     #[Route('', name: 'admin_access_urls_courses_data', methods: ['GET'])]
@@ -84,7 +84,6 @@ class AccessUrlCoursesController extends AbstractController
             ),
             'assigned' => $assigned,
             'available' => $available,
-            'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
         ]);
     }
 
@@ -92,10 +91,6 @@ class AccessUrlCoursesController extends AbstractController
     public function assign(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $accessUrlId = (int) ($data['access_url_id'] ?? 0);
         if ($accessUrlId <= 0) {
@@ -113,10 +108,6 @@ class AccessUrlCoursesController extends AbstractController
     public function bulk(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-
-        if (!$this->isCsrfTokenValid(self::CSRF_INTENT, (string) ($data['_token'] ?? ''))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
-        }
 
         $courseIds = array_map('intval', $data['course_ids'] ?? []);
         $urlIds = array_map('intval', $data['url_ids'] ?? []);

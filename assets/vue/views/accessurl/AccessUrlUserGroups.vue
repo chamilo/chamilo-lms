@@ -22,7 +22,6 @@ const notification = useNotification()
 const urls = ref([])
 const assigned = ref([])
 const available = ref([])
-const csrfToken = ref("")
 const selectedUrlId = ref(Number(route.query.access_url_id) || 0)
 const isLoading = ref(false)
 const isSaving = ref(false)
@@ -34,14 +33,14 @@ const allItemsForBulk = computed(() => [...assignedItems.value, ...availableItem
 async function loadData() {
   isLoading.value = true
   try {
-    const data = await accessUrlManageService.listUserGroups(selectedUrlId.value)
+    let data = await accessUrlManageService.listUserGroups(selectedUrlId.value)
     urls.value = data.urls
-    assigned.value = data.assigned
-    available.value = data.available
-    csrfToken.value = data.csrfToken
     if (!selectedUrlId.value && urls.value.length) {
       selectedUrlId.value = urls.value[0].id
+      data = await accessUrlManageService.listUserGroups(selectedUrlId.value)
     }
+    assigned.value = data.assigned
+    available.value = data.available
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
@@ -92,7 +91,6 @@ async function save() {
     await accessUrlManageService.assignUserGroups({
       access_url_id: selectedUrlId.value,
       group_ids: assigned.value.map((g) => g.id),
-      _token: csrfToken.value,
     })
     notification.showSuccessNotification(t("Update successful"))
   } catch (e) {
@@ -108,7 +106,6 @@ async function onBulkSubmit({ itemIds, urlIds, action }) {
       group_ids: itemIds,
       url_ids: urlIds,
       action,
-      _token: csrfToken.value,
     })
     notification.showSuccessNotification(
       "add" === action
@@ -143,13 +140,13 @@ onMounted(() => {
           value="0"
           class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
         >
-          {{ t("Single registration") }}
+          {{ t("Multiple registration") }}
         </Tab>
         <Tab
           value="1"
           class="cursor-pointer border-b-2 border-transparent px-4 py-2 text-sm text-gray-50 hover:text-primary data-[p-active=true]:border-primary data-[p-active=true]:font-semibold data-[p-active=true]:text-primary"
         >
-          {{ t("Multiple registration") }}
+          {{ t("Add group to URL") }}
         </Tab>
       </TabList>
       <TabPanels>
@@ -175,16 +172,16 @@ onMounted(() => {
               @remove="removeGroup"
               @add-all="addAllGroups"
               @remove-all="removeAllGroups"
-            />
-
-            <div>
-              <BaseButton
-                :label="t('Save')"
-                type="success"
-                :is-loading="isSaving"
-                @click="save"
-              />
-            </div>
+            >
+              <template #actions>
+                <BaseButton
+                  :label="t('Save')"
+                  type="success"
+                  :is-loading="isSaving"
+                  @click="save"
+                />
+              </template>
+            </AccessUrlDualList>
           </div>
         </TabPanel>
         <TabPanel value="1">

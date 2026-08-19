@@ -41,10 +41,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Get(
@@ -68,10 +64,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),
@@ -98,10 +90,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Get(
@@ -127,18 +115,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/global/editor',
             openapi: new Operation(
                 summary: 'Create a global exercise question',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_global_question_editor_create',
@@ -152,10 +134,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),
@@ -181,10 +159,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Post(
@@ -208,10 +182,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),
@@ -237,10 +207,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),

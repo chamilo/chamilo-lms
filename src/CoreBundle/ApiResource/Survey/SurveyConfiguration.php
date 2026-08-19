@@ -25,8 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/survey/configuration',
             openapi: new Operation(
                 summary: 'Survey configuration defaults for creation',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_survey_configuration_create',
@@ -71,8 +69,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/survey/configuration',
             openapi: new Operation(
                 summary: 'Create a survey configuration',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_survey_configuration',

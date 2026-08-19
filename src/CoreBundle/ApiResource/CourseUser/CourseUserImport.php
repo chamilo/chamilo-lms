@@ -43,10 +43,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Post(
@@ -83,10 +79,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),

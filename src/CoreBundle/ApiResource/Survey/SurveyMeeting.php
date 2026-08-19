@@ -25,8 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/survey/meeting',
             openapi: new Operation(
                 summary: 'Meeting poll creation defaults',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_survey_meeting_create',
@@ -74,8 +72,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/survey/meeting',
             openapi: new Operation(
                 summary: 'Create a meeting poll',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_survey_meeting',

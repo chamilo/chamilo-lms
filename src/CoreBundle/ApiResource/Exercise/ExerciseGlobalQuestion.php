@@ -21,8 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/questions/global',
             openapi: new Operation(
                 summary: 'Global question type selector',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_global_question_types',

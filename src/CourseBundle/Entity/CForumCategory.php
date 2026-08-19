@@ -218,10 +218,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
     ],

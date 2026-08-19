@@ -21,8 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-classes/actions/add',
             openapi: new Operation(
                 summary: 'Link a class to the current course or session',
-                parameters: [
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -38,18 +36,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Post(
             uriTemplate: '/course-classes/actions/remove',
             openapi: new Operation(
                 summary: 'Remove a class and apply legacy user unsubscription behavior',
-                parameters: [
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -65,18 +57,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                ),
             ],
         ),
         new Post(
             uriTemplate: '/course-classes/actions/remove-only',
             openapi: new Operation(
                 summary: 'Remove only the class relation and keep users subscribed',
-                parameters: [
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -91,10 +77,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
                 ),
             ],
         ),

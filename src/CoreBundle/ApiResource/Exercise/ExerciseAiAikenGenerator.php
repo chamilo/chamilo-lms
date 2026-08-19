@@ -21,8 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/ai-aiken-generator',
             openapi: new Operation(
                 summary: 'Exercise AI Aiken generator data',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_ai_aiken_generator',

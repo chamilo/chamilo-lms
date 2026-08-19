@@ -23,8 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-settings',
             openapi: new Operation(
                 summary: 'Course settings configuration for the current course context',
-                parameters: [
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_settings_configuration',
@@ -46,8 +44,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             openapi: new Operation(
                 summary: 'Save course settings for the current course context',
-                parameters: [
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'post_course_settings_configuration',

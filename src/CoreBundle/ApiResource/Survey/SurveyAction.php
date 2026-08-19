@@ -23,8 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             status: 200,
             openapi: new Operation(
                 summary: 'Delete selected surveys from the current course context',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             read: false,

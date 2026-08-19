@@ -84,8 +84,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/questions/bank/action',
             openapi: new Operation(
                 summary: 'Run a global exercise question bank action',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_global_question_bank_action',

@@ -25,8 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/configuration',
             openapi: new Operation(
                 summary: 'Exercise configuration defaults for creation',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_configuration_create',
@@ -71,8 +69,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/configuration',
             openapi: new Operation(
                 summary: 'Create an exercise configuration',
-                parameters: [
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_configuration',

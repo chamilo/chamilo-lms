@@ -543,15 +543,11 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
 
     private function validateGroupContext(Operation $operation, Course $course): void
     {
-        $groupId = max(0, (int) $this->cidReqHelper->getGroupId());
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();
         if (null === $groupNode || null === $courseNode

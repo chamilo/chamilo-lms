@@ -477,14 +477,9 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
 
     private function validateGroupContext(Operation $operation, Course $course): void
     {
-        $groupId = max(0, (int) $this->cidReqHelper->getGroupId());
-        if (0 === $groupId) {
-            return;
-        }
-
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
+            return;
         }
 
         $groupNode = $group->getResourceNode();

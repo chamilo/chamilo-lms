@@ -28,7 +28,6 @@ use GroupManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final readonly class CourseUserManager
 {
@@ -51,18 +50,9 @@ final readonly class CourseUserManager
     {
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
 
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
-        $session = null;
-
-        if ($sessionId > 0) {
-            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-            if (!$session instanceof Session) {
-                throw new BadRequestHttpException('The requested session was not found.');
-            }
-
-            if (!$session->hasCourse($course)) {
-                throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-            }
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
         }
 
         return [$course, $session];

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -54,6 +55,7 @@ final readonly class WikiReportProvider implements ProviderInterface
     private const int MAX_ITEMS_PER_PAGE = 100;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
@@ -74,12 +76,12 @@ final readonly class WikiReportProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $nodeId = $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {

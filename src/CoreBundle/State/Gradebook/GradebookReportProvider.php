@@ -77,8 +77,11 @@ final readonly class GradebookReportProvider implements ProviderInterface
         bool $exportAll = false,
         ?bool $includeScoresOverride = null,
     ): GradebookReport {
-        $course = $this->getCourse();
-        $session = $this->getSession($course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
         $groupId = $this->validateGroupContext($course);
         $this->assertCanViewReport();
@@ -214,21 +217,6 @@ final readonly class GradebookReportProvider implements ProviderInterface
         }
 
         return $report;
-    }
-
-    private function getCourse(): Course
-    {
-        return $this->cidReqHelper->requireDoctrineCourseEntity();
-    }
-
-    private function getSession(Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function validateCourseResourceNode(Request $request, Course $course): void

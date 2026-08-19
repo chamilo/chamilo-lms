@@ -76,7 +76,10 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->getSession($operation, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
@@ -454,16 +457,6 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         }
 
         return max(0, min(6, (int) ($value ?? 2)));
-    }
-
-    private function getSession(Operation $operation, Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function validateCourseResourceNode(Request $request, Course $course): void

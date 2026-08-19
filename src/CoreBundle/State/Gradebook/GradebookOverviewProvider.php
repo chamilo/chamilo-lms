@@ -69,7 +69,10 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->getSession($operation, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $user = $this->getCurrentUser();
         $this->validateCourseResourceNode($request, $course);
         $groupId = $this->validateGroupContext($operation, $course);
@@ -178,17 +181,6 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         }
 
         return $overview;
-    }
-
-    private function getSession(Operation $operation, Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function getCurrentUser(): User

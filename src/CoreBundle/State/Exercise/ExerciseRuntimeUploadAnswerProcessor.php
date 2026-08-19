@@ -83,7 +83,10 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new AccessDeniedHttpException('A valid authenticated user is required.');
         }
 
-        $course = $this->getCourse();
+        $course = $this->cidReqHelper->getCourseEntity();
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('A valid course context is required.');
+        }
         $session = $this->getSession();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : $request->request->getInt('exerciseId');
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : $request->request->getInt('attemptId');
@@ -267,16 +270,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function getCourse(): Course
-    {
-        $course = $this->cidReqHelper->getCourseEntity();
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('A valid course context is required.');
-        }
-
-        return $course;
     }
 
     private function getSession(): ?Session

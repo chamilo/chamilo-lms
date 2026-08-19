@@ -75,8 +75,11 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($operation);
-        $session = $this->getSession($operation, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
@@ -478,21 +481,6 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         }
 
         return false;
-    }
-
-    private function getCourse(Operation $operation): Course
-    {
-        return $this->cidReqHelper->requireDoctrineCourseEntity();
-    }
-
-    private function getSession(Operation $operation, Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory

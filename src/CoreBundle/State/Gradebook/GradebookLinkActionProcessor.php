@@ -81,7 +81,10 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->getSession($operation, $course);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
@@ -512,16 +515,6 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         }
 
         return false;
-    }
-
-    private function getSession(Operation $operation, Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory

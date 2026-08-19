@@ -67,8 +67,11 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
 
     public function buildReport(Request $request): GradebookEvaluationResults
     {
-        $course = $this->getCourse();
-        $session = $this->getSession($course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
         $groupId = $this->validateGroupContext($course);
         $user = $this->getCurrentUser();
@@ -192,21 +195,6 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         }
 
         return $response;
-    }
-
-    private function getCourse(): Course
-    {
-        return $this->cidReqHelper->requireDoctrineCourseEntity();
-    }
-
-    private function getSession(Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function getCurrentUser(): User

@@ -43,8 +43,11 @@ final readonly class GradebookContextResolver
         bool $requireManage = false,
         bool $validateCourseResourceNode = true,
     ): array {
-        $course = $this->getCourse();
-        $session = $this->getSession($course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         if ($validateCourseResourceNode) {
             $this->validateCourseResourceNode($request, $course);
         }
@@ -168,21 +171,6 @@ final readonly class GradebookContextResolver
         }
 
         throw new AccessDeniedHttpException('The requested learner is outside the current course context.');
-    }
-
-    private function getCourse(): Course
-    {
-        return $this->cidReqHelper->requireDoctrineCourseEntity();
-    }
-
-    private function getSession(Course $course): ?Session
-    {
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if ($session instanceof Session && !$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
     }
 
     private function validateCourseResourceNode(Request $request, Course $course): void

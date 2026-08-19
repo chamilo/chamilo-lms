@@ -73,8 +73,8 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
@@ -172,16 +172,6 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         $response->deleteFileAfterSend(true);
 
         return $response;
-    }
-
-    public function getCourse(): Course
-    {
-        return $this->cidReqHelper->requireDoctrineCourseEntity();
-    }
-
-    public function getSession(): ?Session
-    {
-        return $this->cidReqHelper->getDoctrineSessionEntity();
     }
 
     public function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -36,6 +37,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class SurveyMeetingProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
@@ -54,8 +56,8 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
 
         if ($surveyId <= 0) {
@@ -74,7 +76,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to edit this meeting poll.');
         }
 
-        return $this->buildResponse($survey, $course, $session, $request, $isEditMode);
+        return $this->buildResponse($operation, $survey, $course, $session, $request, $isEditMode);
     }
 
     public function buildCreateResponse(Course $course, ?Session $session): SurveyMeeting
@@ -106,6 +108,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     }
 
     public function buildResponse(
+        Operation $operation,
         CSurvey $survey,
         Course $course,
         ?Session $session,
@@ -122,7 +125,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         if (!$canManage || '' !== $this->getInvitationCode($request)) {
             $this->assertSurveyIsAvailable($survey);
             $invitation = $this->getInvitation($survey, $course, $session, $user, $request);
-            $selectedSlots = $this->getSelectedSlots($survey, $user, $request);
+            $selectedSlots = $this->getSelectedSlots($operation, $survey, $user, $request);
         }
 
         $response = new SurveyMeeting();
@@ -157,36 +160,6 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         ];
 
         return $response;
-    }
-
-    public function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    public function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     public function getCurrentUser(): User
@@ -315,7 +288,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     /**
      * @return array<int, int>
      */
-    private function getSelectedSlots(CSurvey $survey, User $user, Request $request): array
+    private function getSelectedSlots(Operation $operation, CSurvey $survey, User $user, Request $request): array
     {
         $rows = $this->entityManager->createQueryBuilder()
             ->select('IDENTITY(answer.question) AS questionId')
@@ -329,7 +302,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $rows
                 ->andWhere('answer.sessionId = :sessionId')

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -33,6 +34,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
     use SurveyProfileFieldsTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private SettingsManager $settingsManager,
@@ -59,8 +61,8 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $payload = $this->getPayload($request, $data);
 
         $survey = $this->surveyAnswerProvider->getSurvey($surveyId);
-        $course = $this->surveyAnswerProvider->getCourse($request, $survey);
-        $session = $this->surveyAnswerProvider->getSession($request);
+        $course = $this->surveyAnswerProvider->getCourse($operation, $request, $survey);
+        $session = $this->surveyAnswerProvider->getSession($operation, $request);
         $user = $this->surveyAnswerProvider->getCurrentUserOrNull();
         $survey = $this->surveyAnswerProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
@@ -84,14 +86,14 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $this->applySurveyProfileValues($survey, $user, $profileValues);
         }
         $answerUserKey = $this->surveyAnswerProvider->getAnswerUserKey($survey, $user, $request);
-        $this->removeExistingAnswers($survey, $answerUserKey, $request);
+        $this->removeExistingAnswers($operation, $survey, $answerUserKey, $request);
 
         foreach ($questions as $question) {
             if (!$this->isQuestionVisible($question, $answers)) {
                 continue;
             }
 
-            $this->saveQuestionAnswer($survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
+            $this->saveQuestionAnswer($operation, $survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
         }
 
         $wasAnswered = 1 === (int) $invitation->getAnswered();
@@ -113,6 +115,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         );
 
         return $this->surveyAnswerProvider->buildResponse(
+            $operation,
             $survey,
             $course,
             $session,
@@ -222,7 +225,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         return $expectedOptionId === (int) $parentAnswer;
     }
 
-    private function removeExistingAnswers(CSurvey $survey, string $answerUserKey, Request $request): void
+    private function removeExistingAnswers(Operation $operation, CSurvey $survey, string $answerUserKey, Request $request): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->delete(CSurveyAnswerEntity::class, 'answer')
@@ -234,7 +237,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
@@ -252,6 +255,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
      * @param array<string, mixed> $otherAnswers
      */
     private function saveQuestionAnswer(
+        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -268,7 +272,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         if ('multiplechoiceother' === $type) {
-            $this->saveMultipleChoiceOtherAnswer($survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
+            $this->saveMultipleChoiceOtherAnswer($operation, $survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
 
             return;
         }
@@ -280,7 +284,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('multipleresponse' === $type && \is_array($value)) {
             foreach ($value as $optionId) {
                 if ((int) $optionId > 0) {
-                    $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, 0, $request);
+                    $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, 0, $request);
                 }
             }
 
@@ -290,7 +294,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('score' === $type && \is_array($value)) {
             foreach ($value as $optionId => $score) {
                 if ((int) $optionId > 0 && '' !== (string) $score) {
-                    $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, (int) $score, $request);
+                    $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, (int) $score, $request);
                 }
             }
 
@@ -300,7 +304,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('open' === $type || 'comment' === $type) {
             $text = trim((string) $value);
             if ('' !== $text) {
-                $this->persistAnswer($survey, $question, $answerUserKey, $text, 0, $request);
+                $this->persistAnswer($operation, $survey, $question, $answerUserKey, $text, 0, $request);
             }
 
             return;
@@ -317,7 +321,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $optionValue = null !== $option ? (int) strip_tags($option->getOptionText()) : 0;
         }
 
-        $this->persistAnswer($survey, $question, $answerUserKey, (string) $optionId, $optionValue, $request);
+        $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) $optionId, $optionValue, $request);
     }
 
     /**
@@ -325,6 +329,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
      * @param array<string, mixed> $otherAnswers
      */
     private function saveMultipleChoiceOtherAnswer(
+        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -353,10 +358,11 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $storedOptionId .= '@:@'.$otherText;
         }
 
-        $this->persistAnswer($survey, $question, $answerUserKey, $storedOptionId, 0, $request);
+        $this->persistAnswer($operation, $survey, $question, $answerUserKey, $storedOptionId, 0, $request);
     }
 
     private function persistAnswer(
+        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -372,7 +378,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             ->setOptionId($optionId)
             ->setValue($value)
             ->setLpItemId($request->query->getInt('lpItemId'))
-            ->setSessionId($request->query->getInt('sid') > 0 ? $request->query->getInt('sid') : null)
+            ->setSessionId((int) $this->cidReqHelper->getSessionId() > 0 ? (int) $this->cidReqHelper->getSessionId() : null)
         ;
 
         $this->entityManager->persist($answer);

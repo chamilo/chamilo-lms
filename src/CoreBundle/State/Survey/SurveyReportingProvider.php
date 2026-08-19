@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyReporting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -53,6 +54,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     private const string REPORT_COMPLETE = 'complete';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
@@ -71,8 +73,8 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->getCourse($this->cidReqHelper->getCourseId());
+        $session = $this->getSession($this->cidReqHelper->getSessionId());
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
@@ -172,10 +174,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         return $response;
     }
 
-    public function getCourse(Request $request): Course
+    public function getCourse(?int $courseId): Course
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
+        if (null === $courseId) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
 
@@ -187,10 +188,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         return $course;
     }
 
-    public function getSession(Request $request): ?Session
+    public function getSession(?int $sessionId): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
+        if (null === $sessionId) {
             return null;
         }
 

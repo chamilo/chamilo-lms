@@ -376,15 +376,15 @@ $total_steps = 7;
 $current_step = 1;
 if (!$_POST) {
     $current_step = 1;
-} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath || $badUpdatePath))) {
+} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) && ($emptyUpdatePath || $badUpdatePath))) {
     $current_step = 2;
-} elseif (!empty($_POST['step2']) || (!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6'])))) {
+} elseif (!empty($_POST['step2']) || (isset($_POST['step2_update_8']) || isset($_POST['step2_update_6']))) {
     $current_step = 3;
-} elseif (!empty($_POST['step3'])) {
+} elseif (isset($_POST['step3'])) {
     $current_step = 4;
-} elseif (!empty($_POST['step4'])) {
+} elseif (isset($_POST['step4'])) {
     $current_step = 5;
-} elseif (!empty($_POST['step5'])) {
+} elseif (isset($_POST['step5'])) {
     $current_step = 6;
 } elseif (isset($_POST['step6'])) {
     $current_step = 7;

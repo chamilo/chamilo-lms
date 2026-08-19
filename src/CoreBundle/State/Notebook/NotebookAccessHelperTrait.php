@@ -28,36 +28,6 @@ use Throwable;
 
 trait NotebookAccessHelperTrait
 {
-    private function getNotebookCourse(EntityManagerInterface $entityManager, Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getNotebookSession(EntityManagerInterface $entityManager, Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
-    }
-
     private function assertNotebookSessionBelongsToCourse(?Session $session, Course $course): void
     {
         if (!$session instanceof Session || $session->hasCourse($course)) {

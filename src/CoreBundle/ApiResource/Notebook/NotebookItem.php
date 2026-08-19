@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Notebook\NotebookDeleteProcessor;
@@ -27,15 +28,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Get notebook form data for the current user',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             name: 'get_notebook_form',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: NotebookItemProvider::class,
         ),
         new Post(
@@ -43,15 +52,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Create a personal notebook entry',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
             name: 'post_notebook',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: NotebookItemProcessor::class,
         ),
         new Patch(
@@ -61,15 +78,23 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update a personal notebook entry',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
             name: 'put_notebook',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             processor: NotebookItemProcessor::class,
         ),
         new Delete(
@@ -79,14 +104,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete a personal notebook entry',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_HR') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             name: 'delete_notebook',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
             provider: NotebookItemProvider::class,
             processor: NotebookDeleteProcessor::class,
         ),

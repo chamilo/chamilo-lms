@@ -16,6 +16,11 @@ class Version20190210182615 extends AbstractMigrationChamilo
         return 'Session changes';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('session');

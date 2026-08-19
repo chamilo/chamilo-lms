@@ -33,7 +33,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             CREATE TABLE IF NOT EXISTS lti_lineitem (
                 id INT AUTO_INCREMENT NOT NULL,
                 tool_id INT NOT NULL,
-                evaluation INT NOT NULL,
+                evaluation INT UNSIGNED NOT NULL,
                 resource_id VARCHAR(255) DEFAULT NULL,
                 tag VARCHAR(255) DEFAULT NULL,
                 start_date DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\',
@@ -59,7 +59,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
                 id INT AUTO_INCREMENT NOT NULL,
                 resource_node_id INT DEFAULT NULL,
                 c_id INT DEFAULT NULL,
-                gradebook_eval_id INT DEFAULT NULL,
+                gradebook_eval_id INT UNSIGNED DEFAULT NULL,
                 parent_id INT DEFAULT NULL,
                 title VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,

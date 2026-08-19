@@ -48,7 +48,7 @@ class Version20251002110001 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE lti_lineitem DROP COLUMN evaluation');
         }
 
-        $this->addSql('ALTER TABLE lti_lineitem ADD evaluation INT NOT NULL');
+        $this->addSql('ALTER TABLE lti_lineitem ADD evaluation INT UNSIGNED NOT NULL');
         $this->addSql('ALTER TABLE lti_lineitem ADD CONSTRAINT FK_5C76B75D1323A575 FOREIGN KEY (evaluation) REFERENCES gradebook_evaluation (id) ON DELETE CASCADE');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5C76B75D1323A575 ON lti_lineitem (evaluation)');
 
@@ -106,7 +106,7 @@ class Version20251002110001 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE lti_external_tool DROP COLUMN gradebook_eval_id');
         }
 
-        $this->addSql('ALTER TABLE lti_external_tool ADD gradebook_eval_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE lti_external_tool ADD gradebook_eval_id INT UNSIGNED DEFAULT NULL');
         $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL');
         $this->addSql('CREATE INDEX IDX_DB0E04E482F80D8B ON lti_external_tool (gradebook_eval_id)');
 

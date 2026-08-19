@@ -13,6 +13,8 @@ use Throwable;
 class Version20170904145500 extends AbstractMigrationChamilo
 {
     private const int TRACKING_BATCH_SIZE = 1000;
+    private const int ATTEMPT_BATCH_SIZE = 50000;
+    private const string REFERENCE_STATE_TABLE = 'migration_v20170904145500_reference_state';
 
     public function getDescription(): string
     {
@@ -321,6 +323,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_A468585C1E27F6BF')) {
             $this->addSql('CREATE INDEX IDX_A468585C1E27F6BF ON c_quiz_question_rel_category (question_id)');
         }
+
+        // Keep the resumable normalization state until every schema statement above has succeeded.
+        // If this non-transactional migration stops later, the next run can safely skip already
+        // committed legacy-reference phases instead of applying id -> iid conversions twice.
+        $this->addSql('DROP TABLE IF EXISTS '.self::REFERENCE_STATE_TABLE);
     }
 
     private function normalizeLegacyQuizReferences(Schema $schema): void
@@ -336,13 +343,21 @@ class Version20170904145500 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->abortIfLegacyQuizIdsAreAmbiguous($schema);
+        $this->ensureReferenceStateTable();
+        if ($this->isReferencePhaseCompleted('normalization_complete')) {
+            $this->getLogger()->info('Legacy quiz-reference normalization was already completed in a previous migration attempt.');
+
+            return;
+        }
+
+        $this->abortIfLegacyQuizKeysAreDuplicated();
 
         $createdIndexes = [];
         $indexCandidates = [
             ['c_quiz', 'idx_legacy_migration_quiz_course_local_id', ['c_id', 'id']],
             ['c_quiz_question', 'idx_legacy_migration_question_course_local_id', ['c_id', 'id']],
             ['c_quiz_answer', 'idx_legacy_migration_answer_course_question_local_id', ['c_id', 'question_id', 'id']],
+            ['c_quiz_answer', 'idx_legacy_migration_answer_course_auto_id', ['c_id', 'id_auto']],
         ];
 
         foreach ($indexCandidates as [$tableName, $indexName, $columns]) {
@@ -368,11 +383,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
         try {
             $this->normalizeTrackExerciseQuestionLists($schema);
             $this->normalizeQuizAnswers($schema);
-            $this->abortIfLegacyAnswerIdsAreAmbiguous($schema);
             $this->normalizeTrackAttemptReferences($schema);
             $this->normalizeMatchingAnswerReferences($schema);
             $this->normalizeSimpleLegacyQuizReferences($schema);
             $this->normalizeQuizQuestionRelations($schema);
+            $this->completeReferencePhase('normalization_complete');
         } finally {
             foreach (array_reverse($createdIndexes) as $index) {
                 if (true === ($index[3] ?? false)) {
@@ -382,7 +397,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
     }
 
-    private function abortIfLegacyQuizIdsAreAmbiguous(Schema $schema): void
+    private function abortIfLegacyQuizKeysAreDuplicated(): void
     {
         $duplicateQuizIds = (int) $this->connection->fetchOne(
             'SELECT COUNT(*)
@@ -397,22 +412,6 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->abortIf(
             $duplicateQuizIds > 0,
             \sprintf('Cannot safely normalize %d duplicated c_quiz(c_id, id) keys.', $duplicateQuizIds)
-        );
-
-        $ambiguousQuizIds = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*)
-             FROM c_quiz legacy_quiz
-             INNER JOIN c_quiz normalized_quiz
-                ON normalized_quiz.c_id = legacy_quiz.c_id
-               AND normalized_quiz.iid = legacy_quiz.id
-             WHERE legacy_quiz.iid <> normalized_quiz.iid'
-        );
-        $this->abortIf(
-            $ambiguousQuizIds > 0,
-            \sprintf(
-                'Cannot safely normalize %d c_quiz values that are ambiguous between legacy id and iid.',
-                $ambiguousQuizIds
-            )
         );
 
         $duplicateQuestionIds = (int) $this->connection->fetchOne(
@@ -430,7 +429,19 @@ class Version20170904145500 extends AbstractMigrationChamilo
             \sprintf('Cannot safely normalize %d duplicated c_quiz_question(c_id, id) keys.', $duplicateQuestionIds)
         );
 
-        $ambiguousQuestionIds = (int) $this->connection->fetchOne(
+        // A legacy local id may legitimately have the same numeric value as another row's iid.
+        // They are different identifier namespaces, so this is diagnostic information, not an
+        // ambiguity by itself. Reference columns are normalized according to their legacy schema
+        // semantics and the phase state prevents a committed conversion from running twice.
+        $quizNumericCollisions = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz legacy_quiz
+             INNER JOIN c_quiz normalized_quiz
+                ON normalized_quiz.c_id = legacy_quiz.c_id
+               AND normalized_quiz.iid = legacy_quiz.id
+             WHERE legacy_quiz.iid <> normalized_quiz.iid'
+        );
+        $questionNumericCollisions = (int) $this->connection->fetchOne(
             'SELECT COUNT(*)
              FROM c_quiz_question legacy_question
              INNER JOIN c_quiz_question normalized_question
@@ -438,42 +449,16 @@ class Version20170904145500 extends AbstractMigrationChamilo
                AND normalized_question.iid = legacy_question.id
              WHERE legacy_question.iid <> normalized_question.iid'
         );
-        $this->abortIf(
-            $ambiguousQuestionIds > 0,
-            \sprintf(
-                'Cannot safely normalize %d c_quiz_question values that are ambiguous between legacy id and iid.',
-                $ambiguousQuestionIds
-            )
-        );
 
-        if (!$schema->hasTable('c_quiz_answer')) {
-            return;
-        }
-
-        $answerTable = $schema->getTable('c_quiz_answer');
-        if (!$answerTable->hasColumn('id') || !$answerTable->hasColumn('question_id')) {
-            return;
-        }
-
-        $duplicateAnswerIds = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*)
-             FROM (
-                 SELECT c_id, question_id, id
-                 FROM c_quiz_answer
-                 WHERE id IS NOT NULL
-                 GROUP BY c_id, question_id, id
-                 HAVING COUNT(*) > 1
-             ) duplicate_answers'
-        );
-        $this->abortIf(
-            $duplicateAnswerIds > 0,
-            \sprintf('Cannot safely normalize %d duplicated legacy answer keys.', $duplicateAnswerIds)
-        );
+        $this->getLogger()->info('Checked legacy quiz identifier namespaces.', [
+            'quiz_numeric_id_iid_collisions' => $quizNumericCollisions,
+            'question_numeric_id_iid_collisions' => $questionNumericCollisions,
+        ]);
     }
 
     private function normalizeTrackExerciseQuestionLists(Schema $schema): void
     {
-        if (!$schema->hasTable('track_e_exercises')) {
+        if (!$schema->hasTable('track_e_exercises') || $this->isReferencePhaseCompleted('track_question_lists')) {
             return;
         }
 
@@ -486,129 +471,128 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $hasQuestionsToCheck = $trackingTable->hasColumn('questions_to_check');
-        $courseIds = $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT c_id FROM track_e_exercises ORDER BY c_id'
-        );
-
+        $lastExerciseId = $this->getReferencePhaseCursor('track_question_lists');
         $updatedRows = 0;
         $unresolvedTokens = 0;
 
-        foreach ($courseIds as $courseIdValue) {
-            $courseId = (int) $courseIdValue;
-            $questionRows = $this->connection->fetchAllAssociative(
-                'SELECT id, iid
-                 FROM c_quiz_question
-                 WHERE c_id = :courseId',
-                ['courseId' => $courseId]
-            );
-
-            $questionMap = [];
-            $normalizedQuestionIds = [];
-            foreach ($questionRows as $questionRow) {
-                $iid = (int) $questionRow['iid'];
-                $normalizedQuestionIds[(string) $iid] = true;
-
-                if (null !== $questionRow['id']) {
-                    $questionMap[(string) (int) $questionRow['id']] = $iid;
-                }
+        while (true) {
+            $select = 'SELECT exe_id, c_id, data_tracking';
+            if ($hasQuestionsToCheck) {
+                $select .= ', questions_to_check';
             }
 
-            $lastExerciseId = 0;
+            $rows = $this->connection->fetchAllAssociative(
+                $select.'
+                 FROM track_e_exercises
+                 WHERE exe_id > :lastExerciseId
+                 ORDER BY exe_id
+                 LIMIT '.self::TRACKING_BATCH_SIZE,
+                ['lastExerciseId' => $lastExerciseId]
+            );
 
-            while (true) {
-                $select = 'SELECT exe_id, data_tracking';
-                if ($hasQuestionsToCheck) {
-                    $select .= ', questions_to_check';
-                }
+            if ([] === $rows) {
+                $this->completeReferencePhase('track_question_lists', $lastExerciseId);
 
-                $rows = $this->connection->fetchAllAssociative(
-                    $select.'
-                     FROM track_e_exercises
-                     WHERE c_id = :courseId
-                       AND exe_id > :lastExerciseId
-                     ORDER BY exe_id
-                     LIMIT '.self::TRACKING_BATCH_SIZE,
-                    [
-                        'courseId' => $courseId,
-                        'lastExerciseId' => $lastExerciseId,
-                    ]
-                );
+                break;
+            }
 
-                if ([] === $rows) {
-                    break;
-                }
-
-                $updates = [];
-                foreach ($rows as $row) {
-                    $exerciseId = (int) $row['exe_id'];
-                    $lastExerciseId = $exerciseId;
-
-                    $dataTracking = (string) ($row['data_tracking'] ?? '');
-                    $newDataTracking = $this->remapQuestionIdList(
-                        $dataTracking,
-                        $questionMap,
-                        $normalizedQuestionIds,
-                        $unresolvedTokens
-                    );
-
-                    $questionsToCheck = $hasQuestionsToCheck
-                        ? (string) ($row['questions_to_check'] ?? '')
-                        : '';
-                    $newQuestionsToCheck = $hasQuestionsToCheck
-                        ? $this->remapQuestionIdList(
-                            $questionsToCheck,
-                            $questionMap,
-                            $normalizedQuestionIds,
-                            $unresolvedTokens
-                        )
-                        : '';
-
-                    if ($newDataTracking === $dataTracking
-                        && (!$hasQuestionsToCheck || $newQuestionsToCheck === $questionsToCheck)
-                    ) {
-                        continue;
-                    }
-
-                    $updates[] = [
-                        'exe_id' => $exerciseId,
-                        'data_tracking' => $newDataTracking,
-                        'questions_to_check' => $newQuestionsToCheck,
-                    ];
-                }
-
-                if ([] === $updates) {
+            $questionMaps = [];
+            $normalizedQuestionIds = [];
+            foreach ($rows as $row) {
+                $courseId = (int) $row['c_id'];
+                if ($courseId <= 0 || isset($questionMaps[$courseId])) {
                     continue;
                 }
 
-                $sql = 'UPDATE track_e_exercises SET data_tracking = :dataTracking';
-                if ($hasQuestionsToCheck) {
-                    $sql .= ', questions_to_check = :questionsToCheck';
+                $questionRows = $this->connection->fetchAllAssociative(
+                    'SELECT id, iid
+                     FROM c_quiz_question
+                     WHERE c_id = :courseId',
+                    ['courseId' => $courseId]
+                );
+
+                $questionMaps[$courseId] = [];
+                $normalizedQuestionIds[$courseId] = [];
+                foreach ($questionRows as $questionRow) {
+                    $iid = (int) $questionRow['iid'];
+                    $normalizedQuestionIds[$courseId][(string) $iid] = true;
+
+                    if (null !== $questionRow['id']) {
+                        $questionMaps[$courseId][(string) (int) $questionRow['id']] = $iid;
+                    }
                 }
-                $sql .= ' WHERE exe_id = :exerciseId';
-                $statement = $this->connection->prepare($sql);
+            }
 
-                $this->connection->beginTransaction();
+            $updates = [];
+            foreach ($rows as $row) {
+                $exerciseId = (int) $row['exe_id'];
+                $courseId = (int) $row['c_id'];
+                $lastExerciseId = $exerciseId;
+                $questionMap = $questionMaps[$courseId] ?? [];
+                $normalizedIds = $normalizedQuestionIds[$courseId] ?? [];
 
-                try {
-                    foreach ($updates as $update) {
-                        $statement->bindValue('dataTracking', $update['data_tracking']);
-                        $statement->bindValue('exerciseId', $update['exe_id']);
-                        if ($hasQuestionsToCheck) {
-                            $statement->bindValue('questionsToCheck', $update['questions_to_check']);
-                        }
+                $dataTracking = (string) ($row['data_tracking'] ?? '');
+                $newDataTracking = $this->remapQuestionIdList(
+                    $dataTracking,
+                    $questionMap,
+                    $normalizedIds,
+                    $unresolvedTokens
+                );
 
-                        $statement->executeStatement();
-                        ++$updatedRows;
+                $questionsToCheck = $hasQuestionsToCheck
+                    ? (string) ($row['questions_to_check'] ?? '')
+                    : '';
+                $newQuestionsToCheck = $hasQuestionsToCheck
+                    ? $this->remapQuestionIdList(
+                        $questionsToCheck,
+                        $questionMap,
+                        $normalizedIds,
+                        $unresolvedTokens
+                    )
+                    : '';
+
+                if ($newDataTracking === $dataTracking
+                    && (!$hasQuestionsToCheck || $newQuestionsToCheck === $questionsToCheck)
+                ) {
+                    continue;
+                }
+
+                $updates[] = [
+                    'exe_id' => $exerciseId,
+                    'data_tracking' => $newDataTracking,
+                    'questions_to_check' => $newQuestionsToCheck,
+                ];
+            }
+
+            $sql = 'UPDATE track_e_exercises SET data_tracking = :dataTracking';
+            if ($hasQuestionsToCheck) {
+                $sql .= ', questions_to_check = :questionsToCheck';
+            }
+            $sql .= ' WHERE exe_id = :exerciseId';
+            $statement = $this->connection->prepare($sql);
+
+            $this->connection->beginTransaction();
+
+            try {
+                foreach ($updates as $update) {
+                    $statement->bindValue('dataTracking', $update['data_tracking']);
+                    $statement->bindValue('exerciseId', $update['exe_id']);
+                    if ($hasQuestionsToCheck) {
+                        $statement->bindValue('questionsToCheck', $update['questions_to_check']);
                     }
 
-                    $this->connection->commit();
-                } catch (Throwable $exception) {
-                    if ($this->connection->isTransactionActive()) {
-                        $this->connection->rollBack();
-                    }
-
-                    throw $exception;
+                    $statement->executeStatement();
+                    ++$updatedRows;
                 }
+
+                $this->storeReferencePhase('track_question_lists', $lastExerciseId, false);
+                $this->connection->commit();
+            } catch (Throwable $exception) {
+                if ($this->connection->isTransactionActive()) {
+                    $this->connection->rollBack();
+                }
+
+                throw $exception;
             }
         }
 
@@ -641,12 +625,16 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 continue;
             }
 
-            if (isset($normalizedQuestionIds[$questionId])) {
+            // These tracking columns are legacy question references. Prefer the explicit
+            // (course, legacy id) map even when the same number also exists as another iid.
+            if (isset($questionMap[$questionId])) {
+                $token = (string) $questionMap[$questionId];
+
                 continue;
             }
 
-            if (isset($questionMap[$questionId])) {
-                $token = (string) $questionMap[$questionId];
+            // Keep already-normalized values when there is no legacy mapping for the token.
+            if (isset($normalizedQuestionIds[$questionId])) {
                 continue;
             }
 
@@ -657,62 +645,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
         return implode(',', $tokens);
     }
 
-    private function abortIfLegacyAnswerIdsAreAmbiguous(Schema $schema): void
-    {
-        if (!$schema->hasTable('c_quiz_answer')) {
-            return;
-        }
-
-        $answerTable = $schema->getTable('c_quiz_answer');
-        if (!$answerTable->hasColumn('id')
-            || !$answerTable->hasColumn('c_id')
-            || !$answerTable->hasColumn('question_id')
-        ) {
-            return;
-        }
-
-        $duplicateAnswerIds = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*)
-             FROM (
-                 SELECT c_id, question_id, id
-                 FROM c_quiz_answer
-                 WHERE id IS NOT NULL
-                   AND question_id IS NOT NULL
-                 GROUP BY c_id, question_id, id
-                 HAVING COUNT(*) > 1
-             ) duplicate_answers'
-        );
-        $this->abortIf(
-            $duplicateAnswerIds > 0,
-            \sprintf(
-                'Cannot safely normalize %d duplicated c_quiz_answer keys after question normalization.',
-                $duplicateAnswerIds
-            )
-        );
-
-        $ambiguousAnswerIds = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*)
-             FROM c_quiz_answer legacy_answer
-             INNER JOIN c_quiz_answer normalized_answer
-                ON normalized_answer.c_id = legacy_answer.c_id
-               AND normalized_answer.question_id = legacy_answer.question_id
-               AND normalized_answer.iid = legacy_answer.id
-             WHERE legacy_answer.id IS NOT NULL
-               AND legacy_answer.question_id IS NOT NULL
-               AND legacy_answer.iid <> normalized_answer.iid'
-        );
-        $this->abortIf(
-            $ambiguousAnswerIds > 0,
-            \sprintf(
-                'Cannot safely normalize %d c_quiz_answer values that are ambiguous between legacy id and iid.',
-                $ambiguousAnswerIds
-            )
-        );
-    }
-
     private function normalizeTrackAttemptReferences(Schema $schema): void
     {
-        if (!$schema->hasTable('track_e_attempt')) {
+        if (!$schema->hasTable('track_e_attempt') || $this->isReferencePhaseCompleted('track_attempt')) {
             return;
         }
 
@@ -743,10 +678,36 @@ class Version20170904145500 extends AbstractMigrationChamilo
             )
         );
 
-        $lastAttemptId = 0;
+        $ambiguousAnswerReferences = (int) $this->connection->fetchOne(
+            "SELECT COUNT(*)
+             FROM track_e_attempt attempt
+             INNER JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = attempt.c_id
+               AND legacy_question.id = attempt.question_id
+             INNER JOIN (
+                 SELECT c_id, question_id, id
+                 FROM c_quiz_answer
+                 WHERE id IS NOT NULL
+                   AND question_id IS NOT NULL
+                 GROUP BY c_id, question_id, id
+                 HAVING COUNT(*) > 1
+             ) duplicate_answer
+                ON duplicate_answer.c_id = attempt.c_id
+               AND duplicate_answer.question_id = legacy_question.iid
+               AND attempt.answer REGEXP '^[0-9]+$'
+               AND CAST(attempt.answer AS UNSIGNED) = duplicate_answer.id"
+        );
+        $this->abortIf(
+            $ambiguousAnswerReferences > 0,
+            \sprintf(
+                'Cannot safely normalize %d track_e_attempt rows that reference a duplicated legacy answer id.',
+                $ambiguousAnswerReferences
+            )
+        );
+
+        $lastAttemptId = $this->getReferencePhaseCursor('track_attempt');
         $updatedRows = 0;
         $batchNumber = 0;
-        $batchSize = 50000;
 
         while (true) {
             $upperAttemptId = $this->connection->fetchOne(
@@ -754,7 +715,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
                  FROM track_e_attempt
                  WHERE id > :lastAttemptId
                  ORDER BY id
-                 LIMIT '.($batchSize - 1).', 1',
+                 LIMIT '.(self::ATTEMPT_BATCH_SIZE - 1).', 1',
                 ['lastAttemptId' => $lastAttemptId]
             );
 
@@ -768,42 +729,58 @@ class Version20170904145500 extends AbstractMigrationChamilo
             }
 
             if (false === $upperAttemptId || null === $upperAttemptId) {
+                $this->completeReferencePhase('track_attempt', $lastAttemptId);
+
                 break;
             }
 
             $upperAttemptId = (int) $upperAttemptId;
-            $updatedRows += $this->connection->executeStatement(
-                'UPDATE track_e_attempt attempt
-                 LEFT JOIN c_quiz_question legacy_question
-                    ON legacy_question.c_id = attempt.c_id
-                   AND legacy_question.id = attempt.question_id
-                 LEFT JOIN c_quiz_question normalized_question
-                    ON normalized_question.c_id = attempt.c_id
-                   AND normalized_question.iid = attempt.question_id
-                 LEFT JOIN c_quiz_answer legacy_answer
-                    ON legacy_answer.c_id = attempt.c_id
-                   AND legacy_answer.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
-                   AND CAST(legacy_answer.id AS CHAR) = attempt.answer
-                 SET attempt.answer = CASE
-                         WHEN legacy_answer.iid IS NOT NULL THEN CAST(legacy_answer.iid AS CHAR)
-                         ELSE attempt.answer
-                     END,
-                     attempt.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
-                 WHERE attempt.id > :lastAttemptId
-                   AND attempt.id <= :upperAttemptId
-                   AND COALESCE(legacy_question.iid, normalized_question.iid) IS NOT NULL
-                   AND (
-                       attempt.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
-                       OR (
-                           legacy_answer.iid IS NOT NULL
-                           AND attempt.answer <> CAST(legacy_answer.iid AS CHAR)
-                       )
-                   )',
-                [
-                    'lastAttemptId' => $lastAttemptId,
-                    'upperAttemptId' => $upperAttemptId,
-                ]
-            );
+            $this->connection->beginTransaction();
+
+            try {
+                $updatedRows += $this->connection->executeStatement(
+                    "UPDATE track_e_attempt attempt
+                     LEFT JOIN c_quiz_question legacy_question
+                        ON legacy_question.c_id = attempt.c_id
+                       AND legacy_question.id = attempt.question_id
+                     LEFT JOIN c_quiz_question normalized_question
+                        ON normalized_question.c_id = attempt.c_id
+                       AND normalized_question.iid = attempt.question_id
+                     LEFT JOIN c_quiz_answer legacy_answer
+                        ON legacy_answer.c_id = attempt.c_id
+                       AND legacy_answer.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
+                       AND attempt.answer REGEXP '^[0-9]+$'
+                       AND CAST(attempt.answer AS UNSIGNED) = legacy_answer.id
+                     SET attempt.answer = CASE
+                             WHEN legacy_answer.iid IS NOT NULL THEN CAST(legacy_answer.iid AS CHAR)
+                             ELSE attempt.answer
+                         END,
+                         attempt.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
+                     WHERE attempt.id > :lastAttemptId
+                       AND attempt.id <= :upperAttemptId
+                       AND COALESCE(legacy_question.iid, normalized_question.iid) IS NOT NULL
+                       AND (
+                           attempt.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
+                           OR (
+                               legacy_answer.iid IS NOT NULL
+                               AND attempt.answer <> CAST(legacy_answer.iid AS CHAR)
+                           )
+                       )",
+                    [
+                        'lastAttemptId' => $lastAttemptId,
+                        'upperAttemptId' => $upperAttemptId,
+                    ]
+                );
+
+                $this->storeReferencePhase('track_attempt', $upperAttemptId, false);
+                $this->connection->commit();
+            } catch (Throwable $exception) {
+                if ($this->connection->isTransactionActive()) {
+                    $this->connection->rollBack();
+                }
+
+                throw $exception;
+            }
 
             $lastAttemptId = $upperAttemptId;
             ++$batchNumber;
@@ -825,16 +802,119 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
     private function normalizeMatchingAnswerReferences(Schema $schema): void
     {
-        if (!$schema->hasTable('c_quiz_answer')) {
+        if (!$schema->hasTable('c_quiz_answer') || $this->isReferencePhaseCompleted('matching_answers')) {
             return;
         }
 
         $answerTable = $schema->getTable('c_quiz_answer');
-        foreach (['id', 'c_id', 'question_id', 'correct'] as $requiredColumn) {
+        foreach (['c_id', 'question_id', 'correct'] as $requiredColumn) {
             if (!$answerTable->hasColumn($requiredColumn)) {
                 return;
             }
         }
+
+        $hasLegacyId = $answerTable->hasColumn('id');
+        $hasLegacyAutoId = $answerTable->hasColumn('id_auto');
+        if (!$hasLegacyId && !$hasLegacyAutoId) {
+            return;
+        }
+
+        // Chamilo 1.11.x stores matching-answer targets in id_auto. Older data sets can
+        // still carry the per-question legacy id, so use that only when no id_auto match
+        // exists. The choice comes from the legacy schema, never from numeric offsets.
+        if ($hasLegacyAutoId) {
+            $ambiguousAutoReferences = (int) $this->connection->fetchOne(
+                'SELECT COUNT(*)
+                 FROM c_quiz_answer source_answer
+                 INNER JOIN c_quiz_question question
+                    ON question.c_id = source_answer.c_id
+                   AND question.iid = source_answer.question_id
+                 INNER JOIN (
+                     SELECT c_id, id_auto
+                     FROM c_quiz_answer
+                     WHERE id_auto IS NOT NULL
+                       AND id_auto > 0
+                     GROUP BY c_id, id_auto
+                     HAVING COUNT(*) > 1
+                 ) duplicate_auto
+                    ON duplicate_auto.c_id = source_answer.c_id
+                   AND duplicate_auto.id_auto = source_answer.correct
+                 WHERE question.type = 4
+                   AND source_answer.correct > 0'
+            );
+            $this->abortIf(
+                $ambiguousAutoReferences > 0,
+                \sprintf(
+                    'Cannot safely normalize %d matching-answer rows that reference a duplicated legacy id_auto.',
+                    $ambiguousAutoReferences
+                )
+            );
+        }
+
+        if ($hasLegacyId) {
+            $autoNotExistsCondition = $hasLegacyAutoId
+                ? 'AND NOT EXISTS (
+                       SELECT 1
+                       FROM c_quiz_answer auto_target
+                       WHERE auto_target.c_id = source_answer.c_id
+                         AND auto_target.id_auto = source_answer.correct
+                   )'
+                : '';
+
+            $ambiguousLocalIdReferences = (int) $this->connection->fetchOne(
+                'SELECT COUNT(*)
+                 FROM c_quiz_answer source_answer
+                 INNER JOIN c_quiz_question question
+                    ON question.c_id = source_answer.c_id
+                   AND question.iid = source_answer.question_id
+                 INNER JOIN (
+                     SELECT c_id, question_id, id
+                     FROM c_quiz_answer
+                     WHERE id IS NOT NULL
+                     GROUP BY c_id, question_id, id
+                     HAVING COUNT(*) > 1
+                 ) duplicate_local
+                    ON duplicate_local.c_id = source_answer.c_id
+                   AND duplicate_local.question_id = source_answer.question_id
+                   AND duplicate_local.id = source_answer.correct
+                 WHERE question.type = 4
+                   AND source_answer.correct > 0
+                   '.$autoNotExistsCondition
+            );
+            $this->abortIf(
+                $ambiguousLocalIdReferences > 0,
+                \sprintf(
+                    'Cannot safely normalize %d matching-answer rows that reference a duplicated per-question legacy answer id.',
+                    $ambiguousLocalIdReferences
+                )
+            );
+        }
+
+        $resolutionChecks = [];
+        if ($hasLegacyAutoId) {
+            $resolutionChecks[] = 'EXISTS (
+                SELECT 1
+                FROM c_quiz_answer auto_target
+                WHERE auto_target.c_id = source_answer.c_id
+                  AND auto_target.id_auto = source_answer.correct
+            )';
+        }
+        if ($hasLegacyId) {
+            $resolutionChecks[] = 'EXISTS (
+                SELECT 1
+                FROM c_quiz_answer local_target
+                WHERE local_target.c_id = source_answer.c_id
+                  AND local_target.question_id = source_answer.question_id
+                  AND local_target.id = source_answer.correct
+            )';
+        }
+        $resolutionChecks[] = 'EXISTS (
+            SELECT 1
+            FROM c_quiz_answer normalized_target
+            WHERE normalized_target.c_id = source_answer.c_id
+              AND normalized_target.question_id = source_answer.question_id
+              AND normalized_target.iid = source_answer.correct
+        )';
 
         $unresolvedMatchingReferences = (int) $this->connection->fetchOne(
             'SELECT COUNT(*)
@@ -842,18 +922,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
              INNER JOIN c_quiz_question question
                 ON question.c_id = source_answer.c_id
                AND question.iid = source_answer.question_id
-             LEFT JOIN c_quiz_answer legacy_target
-                ON legacy_target.c_id = source_answer.c_id
-               AND legacy_target.question_id = source_answer.question_id
-               AND legacy_target.id = source_answer.correct
-             LEFT JOIN c_quiz_answer normalized_target
-                ON normalized_target.c_id = source_answer.c_id
-               AND normalized_target.question_id = source_answer.question_id
-               AND normalized_target.iid = source_answer.correct
              WHERE question.type = 4
                AND source_answer.correct > 0
-               AND legacy_target.iid IS NULL
-               AND normalized_target.iid IS NULL'
+               AND NOT ('.implode(' OR ', $resolutionChecks).')'
         );
         $this->abortIf(
             $unresolvedMatchingReferences > 0,
@@ -863,20 +934,44 @@ class Version20170904145500 extends AbstractMigrationChamilo
             )
         );
 
-        $updatedRows = $this->connection->executeStatement(
-            'UPDATE c_quiz_answer source_answer
-             INNER JOIN c_quiz_question question
-                ON question.c_id = source_answer.c_id
-               AND question.iid = source_answer.question_id
-               AND question.type = 4
-             INNER JOIN c_quiz_answer legacy_target
-                ON legacy_target.c_id = source_answer.c_id
-               AND legacy_target.question_id = source_answer.question_id
-               AND legacy_target.id = source_answer.correct
-             SET source_answer.correct = legacy_target.iid
-             WHERE source_answer.correct > 0
-               AND source_answer.correct <> legacy_target.iid'
-        );
+        $joins = [];
+        $targets = [];
+        if ($hasLegacyAutoId) {
+            $joins[] = 'LEFT JOIN c_quiz_answer auto_target
+                ON auto_target.c_id = source_answer.c_id
+               AND auto_target.id_auto = source_answer.correct';
+            $targets[] = 'auto_target.iid';
+        }
+        if ($hasLegacyId) {
+            $autoMissing = $hasLegacyAutoId ? 'auto_target.iid IS NULL AND ' : '';
+            $joins[] = 'LEFT JOIN c_quiz_answer local_target
+                ON '.$autoMissing.'local_target.c_id = source_answer.c_id
+               AND local_target.question_id = source_answer.question_id
+               AND local_target.id = source_answer.correct';
+            $targets[] = 'local_target.iid';
+        }
+        $joins[] = 'LEFT JOIN c_quiz_answer normalized_target
+            ON normalized_target.c_id = source_answer.c_id
+           AND normalized_target.question_id = source_answer.question_id
+           AND normalized_target.iid = source_answer.correct';
+        $targets[] = 'normalized_target.iid';
+        $targetExpression = 'COALESCE('.implode(', ', $targets).')';
+
+        $updatedRows = 0;
+        $this->runReferencePhase('matching_answers', function () use (&$updatedRows, $joins, $targetExpression): void {
+            $updatedRows = $this->connection->executeStatement(
+                'UPDATE c_quiz_answer source_answer
+                 INNER JOIN c_quiz_question question
+                    ON question.c_id = source_answer.c_id
+                   AND question.iid = source_answer.question_id
+                   AND question.type = 4
+                 '.implode("\n                 ", $joins).'
+                 SET source_answer.correct = '.$targetExpression.'
+                 WHERE source_answer.correct > 0
+                   AND '.$targetExpression.' IS NOT NULL
+                   AND source_answer.correct <> '.$targetExpression
+            );
+        });
 
         $this->getLogger()->info('Normalized legacy matching-answer references.', [
             'updated_rows' => $updatedRows,
@@ -892,26 +987,30 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 && $itemProperty->hasColumn('tool')
                 && $itemProperty->hasColumn('lastedit_type')
             ) {
-                $quizProperties = $this->connection->executeStatement(
-                    "UPDATE c_item_property item
-                     INNER JOIN c_quiz quiz
-                        ON quiz.c_id = item.c_id
-                       AND quiz.id = item.ref
-                     SET item.ref = quiz.iid
-                     WHERE item.tool = 'quiz'
-                       AND item.lastedit_type IN ('QuizDeleted', 'QuizUpdated')
-                       AND item.ref <> quiz.iid"
-                );
-                $questionProperties = $this->connection->executeStatement(
-                    "UPDATE c_item_property item
-                     INNER JOIN c_quiz_question question
-                        ON question.c_id = item.c_id
-                       AND question.id = item.ref
-                     SET item.ref = question.iid
-                     WHERE item.tool = 'quiz'
-                       AND item.lastedit_type IN ('QuizQuestionUpdated', 'QuizQuestionDeleted')
-                       AND item.ref <> question.iid"
-                );
+                $quizProperties = 0;
+                $questionProperties = 0;
+                $this->runReferencePhase('item_property', function () use (&$quizProperties, &$questionProperties): void {
+                    $quizProperties = $this->connection->executeStatement(
+                        "UPDATE c_item_property item
+                         INNER JOIN c_quiz quiz
+                            ON quiz.c_id = item.c_id
+                           AND quiz.id = item.ref
+                         SET item.ref = quiz.iid
+                         WHERE item.tool = 'quiz'
+                           AND item.lastedit_type IN ('QuizDeleted', 'QuizUpdated')
+                           AND item.ref <> quiz.iid"
+                    );
+                    $questionProperties = $this->connection->executeStatement(
+                        "UPDATE c_item_property item
+                         INNER JOIN c_quiz_question question
+                            ON question.c_id = item.c_id
+                           AND question.id = item.ref
+                         SET item.ref = question.iid
+                         WHERE item.tool = 'quiz'
+                           AND item.lastedit_type IN ('QuizQuestionUpdated', 'QuizQuestionDeleted')
+                           AND item.ref <> question.iid"
+                    );
+                });
 
                 $this->getLogger()->info('Normalized legacy quiz item-property references.', [
                     'quiz_rows' => $quizProperties,
@@ -923,14 +1022,17 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if ($schema->hasTable('track_e_exercises')) {
             $trackingTable = $schema->getTable('track_e_exercises');
             if ($trackingTable->hasColumn('c_id') && $trackingTable->hasColumn('exe_exo_id')) {
-                $updatedRows = $this->connection->executeStatement(
-                    'UPDATE track_e_exercises tracking
-                     INNER JOIN c_quiz quiz
-                        ON quiz.c_id = tracking.c_id
-                       AND quiz.id = tracking.exe_exo_id
-                     SET tracking.exe_exo_id = quiz.iid
-                     WHERE tracking.exe_exo_id <> quiz.iid'
-                );
+                $updatedRows = 0;
+                $this->runReferencePhase('track_exercise_quiz', function () use (&$updatedRows): void {
+                    $updatedRows = $this->connection->executeStatement(
+                        'UPDATE track_e_exercises tracking
+                         INNER JOIN c_quiz quiz
+                            ON quiz.c_id = tracking.c_id
+                           AND quiz.id = tracking.exe_exo_id
+                         SET tracking.exe_exo_id = quiz.iid
+                         WHERE tracking.exe_exo_id <> quiz.iid'
+                    );
+                });
 
                 $unresolvedRows = (int) $this->connection->fetchOne(
                     'SELECT COUNT(*)
@@ -951,15 +1053,18 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if ($schema->hasTable('c_lp_item')) {
             $lpItem = $schema->getTable('c_lp_item');
             if ($lpItem->hasColumn('c_id') && $lpItem->hasColumn('item_type') && $lpItem->hasColumn('path')) {
-                $updatedRows = $this->connection->executeStatement(
-                    "UPDATE c_lp_item item
-                     INNER JOIN c_quiz quiz
-                        ON quiz.c_id = item.c_id
-                       AND item.path = CAST(quiz.id AS CHAR)
-                     SET item.path = CAST(quiz.iid AS CHAR)
-                     WHERE item.item_type = 'quiz'
-                       AND item.path <> CAST(quiz.iid AS CHAR)"
-                );
+                $updatedRows = 0;
+                $this->runReferencePhase('lp_quiz', function () use (&$updatedRows): void {
+                    $updatedRows = $this->connection->executeStatement(
+                        "UPDATE c_lp_item item
+                         INNER JOIN c_quiz quiz
+                            ON quiz.c_id = item.c_id
+                           AND item.path = CAST(quiz.id AS CHAR)
+                         SET item.path = CAST(quiz.iid AS CHAR)
+                         WHERE item.item_type = 'quiz'
+                           AND item.path <> CAST(quiz.iid AS CHAR)"
+                    );
+                });
 
                 $this->getLogger()->info('Normalized legacy learning-path quiz references.', [
                     'updated_rows' => $updatedRows,
@@ -970,31 +1075,32 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if ($schema->hasTable('gradebook_link')) {
             $gradebookLink = $schema->getTable('gradebook_link');
             if ($gradebookLink->hasColumn('ref_id') && $gradebookLink->hasColumn('type')) {
-                if ($gradebookLink->hasColumn('course_code')) {
-                    $updatedRows = $this->connection->executeStatement(
-                        'UPDATE gradebook_link grade_link
-                         INNER JOIN course course_row
-                            ON course_row.code = grade_link.course_code
-                         INNER JOIN c_quiz quiz
-                            ON quiz.c_id = course_row.id
-                           AND quiz.id = grade_link.ref_id
-                         SET grade_link.ref_id = quiz.iid
-                         WHERE grade_link.type = 1
-                           AND grade_link.ref_id <> quiz.iid'
-                    );
-                } elseif ($gradebookLink->hasColumn('c_id')) {
-                    $updatedRows = $this->connection->executeStatement(
-                        'UPDATE gradebook_link grade_link
-                         INNER JOIN c_quiz quiz
-                            ON quiz.c_id = grade_link.c_id
-                           AND quiz.id = grade_link.ref_id
-                         SET grade_link.ref_id = quiz.iid
-                         WHERE grade_link.type = 1
-                           AND grade_link.ref_id <> quiz.iid'
-                    );
-                } else {
-                    $updatedRows = 0;
-                }
+                $updatedRows = 0;
+                $this->runReferencePhase('gradebook_quiz', function () use ($gradebookLink, &$updatedRows): void {
+                    if ($gradebookLink->hasColumn('course_code')) {
+                        $updatedRows = $this->connection->executeStatement(
+                            'UPDATE gradebook_link grade_link
+                             INNER JOIN course course_row
+                                ON course_row.code = grade_link.course_code
+                             INNER JOIN c_quiz quiz
+                                ON quiz.c_id = course_row.id
+                               AND quiz.id = grade_link.ref_id
+                             SET grade_link.ref_id = quiz.iid
+                             WHERE grade_link.type = 1
+                               AND grade_link.ref_id <> quiz.iid'
+                        );
+                    } elseif ($gradebookLink->hasColumn('c_id')) {
+                        $updatedRows = $this->connection->executeStatement(
+                            'UPDATE gradebook_link grade_link
+                             INNER JOIN c_quiz quiz
+                                ON quiz.c_id = grade_link.c_id
+                               AND quiz.id = grade_link.ref_id
+                             SET grade_link.ref_id = quiz.iid
+                             WHERE grade_link.type = 1
+                               AND grade_link.ref_id <> quiz.iid'
+                        );
+                    }
+                });
 
                 $this->getLogger()->info('Normalized legacy gradebook exercise references.', [
                     'updated_rows' => $updatedRows,
@@ -1005,50 +1111,56 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if ($schema->hasTable('c_quiz_question_option')) {
             $table = $schema->getTable('c_quiz_question_option');
             if ($table->hasColumn('c_id') && $table->hasColumn('question_id')) {
-                $this->connection->executeStatement(
-                    'UPDATE c_quiz_question_option question_option
-                     INNER JOIN c_quiz_question question
-                        ON question.c_id = question_option.c_id
-                       AND question.id = question_option.question_id
-                     SET question_option.question_id = question.iid
-                     WHERE question_option.question_id <> question.iid'
-                );
+                $this->runReferencePhase('question_option', function (): void {
+                    $this->connection->executeStatement(
+                        'UPDATE c_quiz_question_option question_option
+                         INNER JOIN c_quiz_question question
+                            ON question.c_id = question_option.c_id
+                           AND question.id = question_option.question_id
+                         SET question_option.question_id = question.iid
+                         WHERE question_option.question_id <> question.iid'
+                    );
+                });
             }
         }
 
         if ($schema->hasTable('c_quiz_question_rel_category')) {
             $table = $schema->getTable('c_quiz_question_rel_category');
             if ($table->hasColumn('c_id') && $table->hasColumn('question_id')) {
-                $this->connection->executeStatement(
-                    'UPDATE c_quiz_question_rel_category relation
-                     INNER JOIN c_quiz_question question
-                        ON question.c_id = relation.c_id
-                       AND question.id = relation.question_id
-                     SET relation.question_id = question.iid
-                     WHERE relation.question_id <> question.iid'
-                );
+                $this->runReferencePhase('question_rel_category', function (): void {
+                    $this->connection->executeStatement(
+                        'UPDATE c_quiz_question_rel_category relation
+                         INNER JOIN c_quiz_question question
+                            ON question.c_id = relation.c_id
+                           AND question.id = relation.question_id
+                         SET relation.question_id = question.iid
+                         WHERE relation.question_id <> question.iid'
+                    );
+                });
             }
         }
 
         if ($schema->hasTable('c_quiz_rel_category')) {
             $table = $schema->getTable('c_quiz_rel_category');
             if ($table->hasColumn('c_id') && $table->hasColumn('exercise_id')) {
-                $this->connection->executeStatement(
-                    'UPDATE c_quiz_rel_category relation
-                     INNER JOIN c_quiz quiz
-                        ON quiz.c_id = relation.c_id
-                       AND quiz.id = relation.exercise_id
-                     SET relation.exercise_id = quiz.iid
-                     WHERE relation.exercise_id IS NOT NULL
-                       AND relation.exercise_id <> quiz.iid'
-                );
+                $this->runReferencePhase('quiz_rel_category', function (): void {
+                    $this->connection->executeStatement(
+                        'UPDATE c_quiz_rel_category relation
+                         INNER JOIN c_quiz quiz
+                            ON quiz.c_id = relation.c_id
+                           AND quiz.id = relation.exercise_id
+                         SET relation.exercise_id = quiz.iid
+                         WHERE relation.exercise_id IS NOT NULL
+                           AND relation.exercise_id <> quiz.iid'
+                    );
+                });
             }
         }
     }
 
     private function normalizeQuizQuestionRelations(Schema $schema): void
     {
-        if (!$schema->hasTable('c_quiz_rel_question')) {
+        if (!$schema->hasTable('c_quiz_rel_question') || $this->isReferencePhaseCompleted('quiz_question_relations')) {
             return;
         }
 
@@ -1060,10 +1172,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
             return;
         }
 
-        $orphanRows = $this->connection->fetchAllAssociative(
-            'SELECT relation.iid,
-                    COALESCE(legacy_quiz.iid, normalized_quiz.iid) AS quiz_iid,
-                    COALESCE(legacy_question.iid, normalized_question.iid) AS question_iid
+        $orphanQuizRows = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
              FROM c_quiz_rel_question relation
              LEFT JOIN c_quiz legacy_quiz
                 ON legacy_quiz.c_id = relation.c_id
@@ -1071,6 +1181,13 @@ class Version20170904145500 extends AbstractMigrationChamilo
              LEFT JOIN c_quiz normalized_quiz
                 ON normalized_quiz.c_id = relation.c_id
                AND normalized_quiz.iid = relation.exercice_id
+             WHERE relation.exercice_id <> -1
+               AND legacy_quiz.iid IS NULL
+               AND normalized_quiz.iid IS NULL'
+        );
+        $orphanQuestionRows = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz_rel_question relation
              LEFT JOIN c_quiz_question legacy_question
                 ON legacy_question.c_id = relation.c_id
                AND legacy_question.id = relation.question_id
@@ -1078,102 +1195,61 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 ON normalized_question.c_id = relation.c_id
                AND normalized_question.iid = relation.question_id
              WHERE relation.exercice_id <> -1
-               AND (
-                   (legacy_quiz.iid IS NULL AND normalized_quiz.iid IS NULL)
-                   OR (legacy_question.iid IS NULL AND normalized_question.iid IS NULL)
-               )'
+               AND legacy_question.iid IS NULL
+               AND normalized_question.iid IS NULL'
         );
-        $orphanRowCount = \count($orphanRows);
 
-        if ($orphanRowCount > 0) {
-            $orphanQuizRelationIds = [];
-            $orphanQuestionRelationIds = [];
-
-            foreach ($orphanRows as $orphanRow) {
-                $relationId = (int) $orphanRow['iid'];
-                if (null === $orphanRow['quiz_iid']) {
-                    $orphanQuizRelationIds[] = $relationId;
-                }
-                if (null === $orphanRow['question_iid']) {
-                    $orphanQuestionRelationIds[] = $relationId;
-                }
-            }
-
+        if ($orphanQuizRows > 0 || $orphanQuestionRows > 0) {
             $this->getLogger()->warning('Preserving orphan legacy quiz-question relations with null references before adding foreign keys.', [
-                'orphan_rows' => $orphanRowCount,
-                'missing_quiz_rows' => \count($orphanQuizRelationIds),
-                'missing_question_rows' => \count($orphanQuestionRelationIds),
+                'missing_quiz_rows' => $orphanQuizRows,
+                'missing_question_rows' => $orphanQuestionRows,
             ]);
 
-            $this->addSql(
+            // Re-running this CHANGE is harmless and keeps the data update below resumable.
+            $this->connection->executeStatement(
                 'ALTER TABLE c_quiz_rel_question
                  CHANGE exercice_id exercice_id INT DEFAULT NULL,
                  CHANGE question_id question_id INT DEFAULT NULL'
             );
-
-            if ([] !== $orphanQuizRelationIds) {
-                $this->addSql(
-                    'UPDATE c_quiz_rel_question
-                     SET exercice_id = NULL
-                     WHERE iid IN ('.implode(', ', $orphanQuizRelationIds).')'
-                );
-            }
-
-            if ([] !== $orphanQuestionRelationIds) {
-                $this->addSql(
-                    'UPDATE c_quiz_rel_question
-                     SET question_id = NULL
-                     WHERE iid IN ('.implode(', ', $orphanQuestionRelationIds).')'
-                );
-            }
         }
 
-        $updatedRows = $this->connection->executeStatement(
-            'UPDATE c_quiz_rel_question relation
-             LEFT JOIN c_quiz legacy_quiz
-                ON legacy_quiz.c_id = relation.c_id
-               AND legacy_quiz.id = relation.exercice_id
-             LEFT JOIN c_quiz normalized_quiz
-                ON normalized_quiz.c_id = relation.c_id
-               AND normalized_quiz.iid = relation.exercice_id
-             LEFT JOIN c_quiz_question legacy_question
-                ON legacy_question.c_id = relation.c_id
-               AND legacy_question.id = relation.question_id
-             LEFT JOIN c_quiz_question normalized_question
-                ON normalized_question.c_id = relation.c_id
-               AND normalized_question.iid = relation.question_id
-             SET relation.exercice_id = COALESCE(
-                     legacy_quiz.iid,
-                     normalized_quiz.iid,
-                     relation.exercice_id
-                 ),
-                 relation.question_id = COALESCE(
-                     legacy_question.iid,
-                     normalized_question.iid,
-                     relation.question_id
-                 )
-             WHERE relation.exercice_id <> -1
-               AND (
-                   (
-                       COALESCE(legacy_quiz.iid, normalized_quiz.iid) IS NOT NULL
-                       AND relation.exercice_id <> COALESCE(legacy_quiz.iid, normalized_quiz.iid)
-                   )
-                   OR (
-                       COALESCE(legacy_question.iid, normalized_question.iid) IS NOT NULL
-                       AND relation.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
-                   )
-               )'
-        );
+        $updatedRows = 0;
+        $this->runReferencePhase('quiz_question_relations', function () use (&$updatedRows): void {
+            $updatedRows = $this->connection->executeStatement(
+                'UPDATE c_quiz_rel_question relation
+                 LEFT JOIN c_quiz legacy_quiz
+                    ON legacy_quiz.c_id = relation.c_id
+                   AND legacy_quiz.id = relation.exercice_id
+                 LEFT JOIN c_quiz normalized_quiz
+                    ON normalized_quiz.c_id = relation.c_id
+                   AND normalized_quiz.iid = relation.exercice_id
+                 LEFT JOIN c_quiz_question legacy_question
+                    ON legacy_question.c_id = relation.c_id
+                   AND legacy_question.id = relation.question_id
+                 LEFT JOIN c_quiz_question normalized_question
+                    ON normalized_question.c_id = relation.c_id
+                   AND normalized_question.iid = relation.question_id
+                 SET relation.exercice_id = COALESCE(legacy_quiz.iid, normalized_quiz.iid),
+                     relation.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
+                 WHERE relation.exercice_id <> -1
+                   AND (
+                       relation.exercice_id <> COALESCE(legacy_quiz.iid, normalized_quiz.iid)
+                       OR relation.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
+                       OR COALESCE(legacy_quiz.iid, normalized_quiz.iid) IS NULL
+                       OR COALESCE(legacy_question.iid, normalized_question.iid) IS NULL
+                   )'
+            );
+        });
 
         $this->getLogger()->info('Normalized legacy quiz-question relations.', [
             'updated_rows' => $updatedRows,
-            'orphan_rows_preserved_with_null_reference' => $orphanRowCount,
+            'orphan_rows_preserved_with_null_reference' => $orphanQuizRows + $orphanQuestionRows,
         ]);
     }
 
     private function normalizeQuizAnswers(Schema $schema): void
     {
-        if (!$schema->hasTable('c_quiz_answer')) {
+        if (!$schema->hasTable('c_quiz_answer') || $this->isReferencePhaseCompleted('quiz_answers')) {
             return;
         }
 
@@ -1182,51 +1258,134 @@ class Version20170904145500 extends AbstractMigrationChamilo
             return;
         }
 
-        $orphanAnswerIds = array_map(
-            'intval',
-            $this->connection->fetchFirstColumn(
-                'SELECT answer_row.iid
-                 FROM c_quiz_answer answer_row
-                 LEFT JOIN c_quiz_question legacy_question
-                    ON legacy_question.c_id = answer_row.c_id
-                   AND legacy_question.id = answer_row.question_id
-                 LEFT JOIN c_quiz_question normalized_question
-                    ON normalized_question.c_id = answer_row.c_id
-                   AND normalized_question.iid = answer_row.question_id
-                 WHERE legacy_question.iid IS NULL
-                   AND normalized_question.iid IS NULL'
-            )
+        $orphanRows = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz_answer answer_row
+             LEFT JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = answer_row.c_id
+               AND legacy_question.id = answer_row.question_id
+             LEFT JOIN c_quiz_question normalized_question
+                ON normalized_question.c_id = answer_row.c_id
+               AND normalized_question.iid = answer_row.question_id
+             WHERE legacy_question.iid IS NULL
+               AND normalized_question.iid IS NULL'
         );
-        $orphanRows = \count($orphanAnswerIds);
 
         if ($orphanRows > 0) {
             $this->getLogger()->warning('Preserving orphan legacy quiz answers with a null question reference before adding the foreign key.', [
                 'orphan_rows' => $orphanRows,
             ]);
 
-            $this->addSql(
+            // Make the column nullable before the resumable data phase. Repeating this DDL after
+            // an interrupted run is safe and avoids collecting potentially large iid lists in PHP.
+            $this->connection->executeStatement(
                 'ALTER TABLE c_quiz_answer CHANGE question_id question_id INT DEFAULT NULL'
-            );
-            $this->addSql(
-                'UPDATE c_quiz_answer
-                 SET question_id = NULL
-                 WHERE iid IN ('.implode(', ', $orphanAnswerIds).')'
             );
         }
 
-        $updatedRows = $this->connection->executeStatement(
-            'UPDATE c_quiz_answer answer_row
-             INNER JOIN c_quiz_question legacy_question
-                ON legacy_question.c_id = answer_row.c_id
-               AND legacy_question.id = answer_row.question_id
-             SET answer_row.question_id = legacy_question.iid
-             WHERE answer_row.question_id <> legacy_question.iid'
-        );
+        $updatedRows = 0;
+        $this->runReferencePhase('quiz_answers', function () use ($orphanRows, &$updatedRows): void {
+            if ($orphanRows > 0) {
+                $this->connection->executeStatement(
+                    'UPDATE c_quiz_answer answer_row
+                     LEFT JOIN c_quiz_question legacy_question
+                        ON legacy_question.c_id = answer_row.c_id
+                       AND legacy_question.id = answer_row.question_id
+                     LEFT JOIN c_quiz_question normalized_question
+                        ON normalized_question.c_id = answer_row.c_id
+                       AND normalized_question.iid = answer_row.question_id
+                     SET answer_row.question_id = NULL
+                     WHERE legacy_question.iid IS NULL
+                       AND normalized_question.iid IS NULL'
+                );
+            }
+
+            $updatedRows = $this->connection->executeStatement(
+                'UPDATE c_quiz_answer answer_row
+                 INNER JOIN c_quiz_question legacy_question
+                    ON legacy_question.c_id = answer_row.c_id
+                   AND legacy_question.id = answer_row.question_id
+                 SET answer_row.question_id = legacy_question.iid
+                 WHERE answer_row.question_id <> legacy_question.iid'
+            );
+        });
 
         $this->getLogger()->info('Normalized legacy quiz-answer question references.', [
             'updated_rows' => $updatedRows,
             'orphan_rows_preserved_with_null_reference' => $orphanRows,
         ]);
+    }
+
+    private function ensureReferenceStateTable(): void
+    {
+        $this->connection->executeStatement(
+            'CREATE TABLE IF NOT EXISTS '.self::REFERENCE_STATE_TABLE.' (
+                phase VARCHAR(100) NOT NULL,
+                cursor_value BIGINT NOT NULL DEFAULT 0,
+                completed TINYINT(1) NOT NULL DEFAULT 0,
+                PRIMARY KEY (phase)
+            ) ENGINE=InnoDB'
+        );
+    }
+
+    private function isReferencePhaseCompleted(string $phase): bool
+    {
+        return 1 === (int) $this->connection->fetchOne(
+            'SELECT COALESCE(MAX(completed), 0) FROM '.self::REFERENCE_STATE_TABLE.' WHERE phase = :phase',
+            ['phase' => $phase]
+        );
+    }
+
+    private function getReferencePhaseCursor(string $phase): int
+    {
+        $cursor = $this->connection->fetchOne(
+            'SELECT cursor_value FROM '.self::REFERENCE_STATE_TABLE.' WHERE phase = :phase',
+            ['phase' => $phase]
+        );
+
+        return false === $cursor || null === $cursor ? 0 : (int) $cursor;
+    }
+
+    private function storeReferencePhase(string $phase, int $cursor, bool $completed): void
+    {
+        $this->connection->executeStatement(
+            'INSERT INTO '.self::REFERENCE_STATE_TABLE.' (phase, cursor_value, completed)
+             VALUES (:phase, :cursor, :completed)
+             ON DUPLICATE KEY UPDATE
+                cursor_value = VALUES(cursor_value),
+                completed = VALUES(completed)',
+            [
+                'phase' => $phase,
+                'cursor' => $cursor,
+                'completed' => $completed ? 1 : 0,
+            ]
+        );
+    }
+
+    private function completeReferencePhase(string $phase, int $cursor = 0): void
+    {
+        $this->storeReferencePhase($phase, $cursor, true);
+    }
+
+    private function runReferencePhase(string $phase, callable $callback): void
+    {
+        if ($this->isReferencePhaseCompleted($phase)) {
+            return;
+        }
+
+        $this->connection->beginTransaction();
+
+        try {
+            $callback();
+            $this->completeReferencePhase($phase);
+            $this->connection->commit();
+        } catch (Throwable $exception) {
+            if ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
+            }
+
+            throw $exception;
+        }
     }
 
     /**

@@ -102,7 +102,7 @@ Feature: LP tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a LP category
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=add_lp_category"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=add_lp_category"
     And I wait for the page to be loaded when ready
     When I fill in the following:
       | Title | LP category 1 |
@@ -111,7 +111,7 @@ Feature: LP tool
     Then I should see "LP category 1"
 
   Scenario: Create a LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=add_lp"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=add_lp"
     And I wait for the page to be loaded when ready
     When I fill in the following:
       | Learning path name | LP 1 |
@@ -120,7 +120,7 @@ Feature: LP tool
     Then I should see "LP 1"
 
   Scenario: Add document to LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=list"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit learnpath']" icon in the LP panel for "LP 1"
     And wait for the page to be loaded when ready
@@ -134,7 +134,7 @@ Feature: LP tool
     Then I should see "Document 1"
 
   Scenario: Enter LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=list"
     And I wait for the page to be loaded when ready
     Then I should see "LP 1"
     When I follow "LP 1"
@@ -142,7 +142,7 @@ Feature: LP tool
     Then I should see "Document 1"
 
   Scenario: Make the LP visible to students
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=list"
     And I wait for the page to be loaded when ready
     When I press "Show"
     Then I should see an icon with title "Hide"
@@ -153,7 +153,7 @@ Feature: LP tool
     And I select "No" from "form_hide_scorm_pdf_link"
     And I press "Save settings"
     And I wait for the page to be loaded when ready
-    And I am on "/main/lp/lp_controller.php?cid=1&action=list&isStudentView=true"
+    And I am on "/main/lp/lp_controller.php?cid=3&action=list&isStudentView=true"
     And I wait for the page to be loaded when ready
     Then I should see an icon with title "Export to PDF"
 
@@ -163,7 +163,7 @@ Feature: LP tool
     And I select "Yes" from "form_hide_scorm_pdf_link"
     And I press "Save settings"
     And I wait for the page to be loaded when ready
-    And I am on "/main/lp/lp_controller.php?cid=1&action=list&isStudentView=true"
+    And I am on "/main/lp/lp_controller.php?cid=3&action=list&isStudentView=true"
     And I wait for the page to be loaded when ready
     Then I should not see an icon with title "Export to PDF"
 
@@ -171,13 +171,13 @@ Feature: LP tool
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded when ready
     Then I should see "Learning paths"
-    Then I am on "/main/lp/lp_controller.php?cid=1&action=list"
+    Then I am on "/main/lp/lp_controller.php?cid=3&action=list"
     And I wait for the page to be loaded when ready
     Then I should see "LP 1"
     And I should see "LP category 1"
 
   Scenario: Delete a LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+    Given I am on "/main/lp/lp_controller.php?cid=3&action=list"
     And I wait for the page to be loaded when ready
     Then I should see "LP 1"
     And I click the ".lp-panel__action-buttons button[title='More actions']" icon in the LP panel for "LP 1"
@@ -187,7 +187,7 @@ Feature: LP tool
     Then I should not see "LP 1"
 
   Scenario: Delete a LP category
-    Given I am on "/main/lp/lp_controller.php?cid=1"
+    Given I am on "/main/lp/lp_controller.php?cid=3"
     And I wait for the page to be loaded when ready
     Then I should see "LP category 1"
     And I click the "i.mdi-dots-vertical" icon in the LP category header for "LP category 1"

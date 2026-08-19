@@ -52,7 +52,7 @@
 #   underscore; course_add.php's code generation strips it). That scenario
 #   is NOT part of the dedicated "Seed test course" CI step (which only
 #   covers plain "TEMP") — same cross-file race gotcha already fixed once
-#   for TEMP/cid=1 (course_user_registration.feature). Needs the same fix:
+#   for TEMP/cid=3 (course_user_registration.feature). Needs the same fix:
 #   a dedicated "Seed private course" CI step before the main parallel batch
 #   (see playwright.yml / package.json — added alongside this feature).
 # - session_list.php (used by the original's two "Delete session" scenarios)
@@ -189,7 +189,9 @@ Feature: Session access
   #   Round 1: reproduced this single scenario in isolation -> passed cleanly.
   #   Read CourseVoter/CourseAccessResolver end to end -> access logic is
   #   correct. Queried the live DB directly -> ywarnier has NO course_rel_user
-  #   row for TEMPPRIVATE (cid=2) that would grant access.
+  #   row for TEMPPRIVATE (cid=4 since the installer's two demo courses took
+  #   cid=1/cid=2; was cid=2 when this note was first written) that would
+  #   grant access.
   #   Round 2 (this attempt): ran the FULL feature file (all 10 scenarios,
   #   `sessionAccess.feature.spec.js`) instead of just this scenario, in case
   #   an earlier scenario's leftover state (session creation, prior access

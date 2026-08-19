@@ -40,7 +40,7 @@ Feature: Announcement tool
     And I am on course "TEMP" homepage
 
   Scenario: Create an announcement for admin user
-    Given I am on "/main/announcements/announcements.php?action=add&cid=1"
+    Given I am on "/main/announcements/announcements.php?action=add&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement test                       |
@@ -56,7 +56,7 @@ Feature: Announcement tool
     Then I should not see an error
 
   Scenario: Create an announcement for all users
-    Given I am on "/main/announcements/announcements.php?action=add&cid=1"
+    Given I am on "/main/announcements/announcements.php?action=add&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement test                       |
@@ -69,7 +69,7 @@ Feature: Announcement tool
     Then I should not see an error
 
   Scenario: Delete all announcements
-    Given I am on "/main/announcements/announcements.php?cid=1"
+    Given I am on "/main/announcements/announcements.php?cid=3"
     And I wait for the page to be loaded
     Then I select all rows in the "announcements" grid
     And I click the "span.mdi-trash-can-outline" element

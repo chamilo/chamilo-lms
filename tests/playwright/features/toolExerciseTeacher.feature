@@ -164,7 +164,29 @@ Feature: Exercise tool
   In order to use the exercise tool
   The teachers should be able to create exercises
 
-  Scenario: Create a course before testing
+  # Deliberately NOT named "Create a course before testing" (2026-08-19):
+  # that is the exact --grep string package.json's test:playwright:seed-course
+  # uses, and it used to match THIS scenario too, not just course.feature's.
+  # Both therefore ran inside the "Seed test course" CI step on a shared
+  # worker pool, so whichever finished first took course id 3 and the other
+  # got id 4 — a real coin flip (observed both ways: TEMP won on real CI,
+  # EXTEACH won locally, 43.7s vs 54.6s). Now that the whole suite pins TEMP
+  # to cid=3, that race would silently point 96 hardcoded cid=3 URLs at
+  # EXTEACH instead of TEMP roughly half the time. Renaming this scenario
+  # takes it out of the seed step altogether, which is where it always
+  # belonged: unlike TEMP (shared by 14 files, hence pre-seeded), EXTEACH is
+  # used by THIS file only, is always addressed by course CODE and never by
+  # cid (zero cid= occurrences in this file), so its own id is irrelevant and
+  # it can be created inline as this file's first scenario — `fullyParallel:
+  # false` already guarantees scenarios within one file run in order.
+  #
+  # Kept as its own dedicated course rather than merged onto TEMP: see this
+  # file's header comment above for the confirmed-real collision that causes
+  # (toolExerciseAdmin.feature does the same exercise work in TEMP, creating
+  # identically-named "Exercise 1"/"Category 1"/"Category 2"/Excel-import
+  # "Categoryname1"/"Categoryname2" items, and different feature files do run
+  # concurrently in different workers).
+  Scenario: Create the exercise teacher course before testing
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on "/main/admin/course_add.php"

@@ -83,7 +83,7 @@ Feature: Document tool
   # intercepts-pointer-events signature confirmed elsewhere in this suite's
   # CI runs (a fixed bottom-of-viewport overlay); a mitigation was already
   # applied at the suspected source (specialCase1PlatformSettings.feature's
-  # Tare Down reset order), but this scenario is still failing in real CI.
+  # Tear down reset order), but this scenario is still failing in real CI.
   # Deferred per explicit user instruction to stop re-chasing CI-only flakes
   # with more runs. Cascades into the two "Search for ..." scenarios below
   # (also @skip'd) since they depend on these documents existing.

@@ -179,9 +179,9 @@ Feature: Group tool
     # "Delete default category" (right after this one) has nothing to find.
     # Visiting group.php first, before creating "Group category 1", triggers
     # it — confirmed live: both categories coexist afterward.
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
-    And I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
+    And I am on "/main/group/group_category.php?cid=3&sid=0&action=add_category"
     And I wait for the page to be loaded when ready
     When I fill in the following:
       | title | Group category 1 |
@@ -191,7 +191,7 @@ Feature: Group tool
     Then I should not see an error
 
   Scenario: Delete default category
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     Then I should see "Default groups"
     And I should see "Group category 1"
@@ -200,7 +200,7 @@ Feature: Group tool
     Then I should not see "Default groups"
 
   Scenario: Create 5 groups
-    Given I am on "/main/group/group_creation.php?cid=1&sid=0"
+    Given I am on "/main/group/group_creation.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     Then I fill in the following:
       | number_of_groups | 5 |
@@ -230,7 +230,7 @@ Feature: Group tool
     Then I should not see an error
 
   Scenario: Create document folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -244,7 +244,7 @@ Feature: Group tool
     Then I should see "My folder in group"
 
   Scenario: Create document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -263,7 +263,7 @@ Feature: Group tool
     Then I should see "html test"
 
   Scenario: Upload a document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -285,7 +285,7 @@ Feature: Group tool
   # caused in isolation. Revisit together with the other @skip'd scenarios.
   @skip
   Scenario: Delete 2 uploaded files
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -301,7 +301,7 @@ Feature: Group tool
     Then I should not see "favicon.ico"
 
   Scenario: Delete directory
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -313,7 +313,7 @@ Feature: Group tool
     Then I should not see "My folder in group"
 
   Scenario: Add fapple to the Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0001"
     And I wait for the page to be loaded when ready
@@ -322,14 +322,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
     Then I should see "Fiona"
 
   Scenario: Add fapple to the Group 0003 not allowed because group category allows 1 user per group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
@@ -338,7 +338,7 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -346,7 +346,7 @@ Feature: Group tool
 
   # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "i.mdi-pencil" icon in the group category header for "Group category 1"
     And I wait for the page to be loaded when ready
@@ -354,14 +354,14 @@ Feature: Group tool
     And I select "10" from "groups_per_user"
     Then I press "Edit"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "i.mdi-pencil" icon in the group category header for "Group category 1"
     And I wait for the page to be loaded when ready
     Then the field "groups_per_user" should have value "10"
 
   Scenario: Add fapple to the Group 0003
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
@@ -369,14 +369,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
     Then I should see "Fiona"
 
   Scenario: Add acostea to the Group 0002
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0002"
     And I wait for the page to be loaded when ready
@@ -384,14 +384,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0002"
     And I wait for the page to be loaded when ready
     Then I should see "Andrea"
 
   Scenario: Add fapple and acostea to Group 0005
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
@@ -400,7 +400,7 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0005"
     And I wait for the page to be loaded when ready
@@ -408,42 +408,42 @@ Feature: Group tool
     Then I should see "Andrea"
 
   Scenario: Change Group 0003 settings to make announcements private
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
     Then the "announcements_state" radio button with "2" value should be checked
 
   Scenario: Change Group 0004 settings to make it private
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0004"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0004"
     And I wait for the page to be loaded when ready
     Then the "announcements_state" radio button with "2" value should be checked
 
   Scenario: Change Group 0005 settings to make announcements private between users
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "3" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
@@ -457,7 +457,7 @@ Feature: Group tool
   # together with the other @skip'd scenarios.
   @skip
   Scenario: Create an announcement for everybody inside Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -486,7 +486,7 @@ Feature: Group tool
   # together with the other @skip'd scenarios.
   @skip
   Scenario: Create an announcement for fapple inside Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -518,7 +518,7 @@ Feature: Group tool
   # together with the other @skip'd scenarios.
   @skip
   Scenario: Create an announcement for everybody inside Group 0003 (private)
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -552,7 +552,7 @@ Feature: Group tool
   # together with the other @skip'd scenarios in this file.
   @skip
   Scenario: Create an announcement for fapple inside Group 0003
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -608,7 +608,7 @@ Feature: Group tool
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
     Then I am logged as "acostea"
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page content to settle
     And I follow "Group 0005"
     And I wait for the page content to settle

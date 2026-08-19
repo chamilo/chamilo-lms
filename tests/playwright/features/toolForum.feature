@@ -15,7 +15,7 @@ Feature: Forum tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a forum category
-    Given I am on "/main/forum/index.php?action=add_category&cid=1"
+    Given I am on "/main/forum/index.php?action=add_category&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | forum_category_title   | Forum Category Test |
@@ -26,7 +26,7 @@ Feature: Forum tool
     Then I should not see an error
 
   Scenario: Create a forum
-    Given I am on "/main/forum/index.php?action=add_forum&cid=1"
+    Given I am on "/main/forum/index.php?action=add_forum&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | forum_title   | Forum Test |
@@ -37,7 +37,7 @@ Feature: Forum tool
     And I should not see an error
 
   Scenario: Create a forum thread
-    Given I am on "/main/forum/index.php?cid=1"
+    Given I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
@@ -52,7 +52,7 @@ Feature: Forum tool
     And I should not see an error
 
   Scenario: Reply to forum message
-    Given I am on "/main/forum/index.php?cid=1"
+    Given I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
@@ -82,7 +82,7 @@ Feature: Forum tool
   # flake. Reordering (quote, then delete) sidesteps this without touching
   # the app's own deliberate re-parenting behavior.
   Scenario: Quote a forum message
-    Given I am on "/main/forum/index.php?cid=1"
+    Given I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
@@ -95,7 +95,7 @@ Feature: Forum tool
     Then I should see "Quoting"
 
   Scenario: Delete a forum thread
-    Given I am on "/main/forum/index.php?cid=1"
+    Given I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     And I follow "Forum Test"
     And I wait for the page to be loaded
@@ -135,7 +135,7 @@ Feature: Forum tool
   # invariant this teardown exists to guarantee. Scoping to the exact title
   # removes that assumption instead of relying on it.
   Scenario: Delete the forum and forum category
-    Given I am on "/main/forum/index.php?cid=1"
+    Given I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     Then I click the "i.mdi-delete" icon for the forum "Forum Test"
     And I confirm the popup

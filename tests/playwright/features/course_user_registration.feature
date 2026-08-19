@@ -4,7 +4,7 @@ Feature: Subscribe users to the course
     Given I am a platform administrator
 
   Scenario: Subscribe "amann" as student to the course "TEMP"
-    Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cid=1"
+    Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cid=3"
     And wait for the page to be loaded
     Then I should see "Aimee"
     Then I follow "Register"
@@ -12,7 +12,7 @@ Feature: Subscribe users to the course
     Then I should not see an error
 
   Scenario: Unsubscribe user "amann" the course "TEMP"
-    Given I am on "/main/user/user.php?cid=1"
+    Given I am on "/main/user/user.php?cid=3"
     And I wait for the page to be loaded
     Then I should see "Aimee"
     Then I follow "Unsubscribe"
@@ -21,7 +21,7 @@ Feature: Subscribe users to the course
     Then I should not see an error
 
   Scenario: Subscribe "acostea" as student to the course "TEMP" (leave it subscribed for further tests)
-    Given I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=1"
+    Given I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=3"
     And wait for the page to be loaded
     Then I should see "Andrea"
     Then I follow "Register"
@@ -29,7 +29,7 @@ Feature: Subscribe users to the course
     Then I should not see an error
 
   Scenario: Subscribe "fapple" as student to the course "TEMP" (leave it subscribed for further tests)
-    Given I am on "/main/user/subscribe_user.php?keyword=fapple&type=5&cid=1"
+    Given I am on "/main/user/subscribe_user.php?keyword=fapple&type=5&cid=3"
     And wait for the page to be loaded
     Then I should see "Fiona"
     Then I follow "Register"
@@ -37,7 +37,7 @@ Feature: Subscribe users to the course
     Then I should not see an error
 
   Scenario: Subscribe "amann" again as student to the course "TEMP" (leave it subscribed for further tests)
-    Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cid=1"
+    Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cid=3"
     And wait for the page to be loaded
     Then I should see "Aimee"
     Then I follow "Register"

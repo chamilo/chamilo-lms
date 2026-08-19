@@ -229,13 +229,34 @@
 # is ever re-enabled by un-skipping at least one Scenario while others remain
 # skipped, expect a real spec file with `test.skip()` calls for the rest,
 # per playwright-bdd's own documented (non-buggy) behavior in that case.
-@common
+# RE-ENABLED 2026-08-19 (the @skip tags referenced above are gone): the
+# whole file was held back from execution, so SpecialCase1 had ZERO session
+# coverage — because EVERY scenario was skipped, bddgen emitted no spec file
+# at all (see the note above), which is also why this file never showed up in
+# any CI report as failing. Its only cross-file prerequisite is the session
+# extra fields (extra_domaine / extra_theme_fr / extra_theme_de /
+# extra_ecouter) created by specialCase1PlatformSettings.feature's "Add
+# minimal session extra fields" scenario, which was itself @skip'd and is now
+# re-enabled too. This file needs no cid fixture: it creates every course it
+# uses and refers to them by code, so it has zero cid= references and is
+# unaffected by the suite-wide cid=1 -> cid=3 migration.
+#
+# @long-scenario is REQUIRED here, not optional (added with the re-enable):
+# without it every scenario below inherits playwright.config.ts's default 90s
+# per-test budget, and the first one alone creates 3 courses plus documents,
+# exercises, a forum, a learning path and an assessment activity across ~180
+# steps — a single bare course creation already measures ~48s on this box, so
+# 90s cannot cover it. The tag is applied at Feature level (same as
+# specialCase1PlatformSettings.feature's own `@common @admin @long-scenario`)
+# so all 6 scenarios get the 15-minute budget the Before hook in
+# common.steps.ts grants: the 4 session-creation scenarios and the teardown
+# are smaller, but each still submits several legacy full-page-reload forms.
+@common @long-scenario
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator
   I need to create courses with content, a teacher, and 4 sessions
 
-  @skip
   Scenario: Create courses, multilingual documents, exercises, forum, learning path and assessment activity
     Given I am a platform administrator
 
@@ -419,7 +440,6 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should see "Course validation"
 
-  @skip
   Scenario: Create teacher and configure "Present session" with settings and include course
     Given I am a platform administrator
 
@@ -497,7 +517,6 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
   Scenario: Create future session "Session in the futur" and include course
     Given I am a platform administrator
 
@@ -546,7 +565,6 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
   Scenario: Create past session "Past session" and include course
     Given I am a platform administrator
 
@@ -595,7 +613,6 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
   Scenario: Create future English session "Session in the futur en" and include course
     Given I am a platform administrator
 
@@ -648,7 +665,6 @@ Feature: Special case 1 — course/session creation
   # first (they reference the courses, not the other way around), then the
   # teacher account, then the 3 courses (cascades away every document/
   # exercise/forum/LP/gradebook item created inside "Testing course fr").
-  @skip
   Scenario: Teardown special case 1 sessions
     Given I am a platform administrator
 

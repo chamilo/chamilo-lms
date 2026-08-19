@@ -33,7 +33,7 @@ Feature: Link tool
     And I am on course "TEMP" homepage
 
   Scenario: Create a link category
-    Given I am on "/main/link/link.php?action=addcategory&cid=1"
+    Given I am on "/main/link/link.php?action=addcategory&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | category_title | Link Category Test |
@@ -44,7 +44,7 @@ Feature: Link tool
     Then I should not see an error
 
   Scenario: Create a link
-    And I am on "/main/link/link.php?action=addlink&cid=1"
+    And I am on "/main/link/link.php?action=addlink&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | url   | http://www.chamilo.org |
@@ -55,7 +55,7 @@ Feature: Link tool
     And I should not see an error
 
   Scenario: Create a link with category
-    Given I am on "/main/link/link.php?action=addlink&cid=1"
+    Given I am on "/main/link/link.php?action=addlink&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | url   | http://www.chamilo.org |
@@ -66,14 +66,14 @@ Feature: Link tool
     Then I should see "Chamilo Categorized Link Test"
 
   Scenario: Delete link
-    Given I am on "/main/link/link.php?cid=1"
+    Given I am on "/main/link/link.php?cid=3"
     And I wait for the page to be loaded
     And I click the "i.mdi-delete" icon in the card for "Chamilo Link Test"
     And wait very long for the page to be loaded
     Then I should not see an error
 
   Scenario: Delete link category
-    Given I am on "/main/link/link.php?cid=1"
+    Given I am on "/main/link/link.php?cid=3"
     And I wait for the page to be loaded
     And I click the "i.mdi-delete" icon in the card for "Link Category Test"
     And wait very long for the page to be loaded

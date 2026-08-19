@@ -210,7 +210,7 @@ Feature: Assessments tool
 
   Scenario: Subscribe a learner so the assessment tool has someone to grade
     Given I am a platform administrator
-    And I am on "/main/user/subscribe_user.php?keyword=norizales&type=5&cid=1"
+    And I am on "/main/user/subscribe_user.php?keyword=norizales&type=5&cid=3"
     And wait for the page to be loaded
     Then I should see "Noa"
     Then I follow "Register"
@@ -404,7 +404,7 @@ Feature: Assessments tool
     And I press "edit_cat_form_submit"
     And I wait for the page to be loaded
     Then I should see "75"
-    And I am on "/main/user/user.php?cid=1"
+    And I am on "/main/user/user.php?cid=3"
     And I wait for the page to be loaded
     Then I should see "Orizales"
     Then I follow "Unsubscribe"

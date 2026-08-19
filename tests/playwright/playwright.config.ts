@@ -63,15 +63,15 @@ export default defineConfig({
   expect: { timeout: 15_000 },
   fullyParallel: false,
   // A real CI run hit a genuine cross-file race: course_user_registration.
-  // feature hardcodes cid=1, assuming course.feature's "Create a course
-  // before testing" scenario has already created "TEMP" (which becomes id 1
-  // on a fresh install) — an implicit ordering dependency the original Behat
-  // suite got "for free" from running everything single-threaded. With the
+  // feature hardcodes the shared course's cid, assuming course.feature's
+  // "Create a course before testing" scenario has already created "TEMP" —
+  // an implicit ordering dependency the original Behat suite got "for free"
+  // from running everything single-threaded. With the
   // default multi-worker pool, `fullyParallel: false` only serializes
   // scenarios WITHIN one file; DIFFERENT files still run concurrently across
   // workers, so course_user_registration's very first scenario could reach
-  // /main/user/subscribe_user.php?...&cid=1 before "TEMP" existed yet.
-  // 12 more remaining feature files also hardcode cid=1/depend on "TEMP", so
+  // /main/user/subscribe_user.php?...&cid=3 before "TEMP" existed yet.
+  // 13 more feature files also hardcode that cid/depend on "TEMP", so
   // this wasn't a one-off. First fix tried here was `workers: 1` (serialize
   // everything) — worked, but cost roughly 2x total CI wall-clock time.
   // Superseded by extracting "Create a course before testing" into its own
@@ -81,6 +81,17 @@ export default defineConfig({
   // "TEMP" exists before any worker in the main batch begins, regardless of
   // which file/worker gets it, without sacrificing parallelism. No `workers`
   // override needed once that dependency is resolved at its actual source.
+  //
+  // WHICH cid "TEMP" ACTUALLY GETS (2026-08-19): cid=3, not cid=1. The
+  // installer's own DemoCoursesFixtures creates "AI Act" (cid=1) and "Using
+  // Chamilo" (cid=2) before any suite seeding runs, so TEMP — the first
+  // course the suite itself creates — lands on 3. Those demo courses were
+  // added to the product AFTER this suite was written, silently invalidating
+  // the old "TEMP is cid=1" assumption: cid=1 stayed a real, working course,
+  // so affected scenarios kept PASSING while exercising the demo course
+  // instead of TEMP. Whole suite migrated cid=1 -> cid=3 in one pass. See
+  // .github/workflows/playwright.yml's "Seed test course" step for why that
+  // step must create exactly one course for the id to stay deterministic.
   outputDir: path.join(repoRoot, "var/test-results/playwright/results"),
   reporter: [
     ["list"],

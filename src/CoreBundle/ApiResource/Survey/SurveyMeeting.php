@@ -81,6 +81,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_survey_meeting',
             processor: SurveyMeetingProcessor::class,
             parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
@@ -101,6 +106,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'put_survey_meeting',
             processor: SurveyMeetingProcessor::class,
             parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
@@ -123,6 +133,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_survey_meeting_answer',
             processor: SurveyMeetingProcessor::class,
             parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',

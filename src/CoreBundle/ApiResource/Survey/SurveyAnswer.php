@@ -62,6 +62,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_survey_answer',
             processor: SurveyAnswerProcessor::class,
             parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier; falls back to publicCid or to the survey own course',
+                ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',

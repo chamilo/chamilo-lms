@@ -57,6 +57,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'post_survey_invitations_publish',
             processor: SurveyInvitationProcessor::class,
             parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',

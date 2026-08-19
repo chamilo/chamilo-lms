@@ -18,10 +18,6 @@ final class Version20250918152900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        if (!$schema->getTable('language')->getColumn('id')->getAutoincrement()) {
-            $this->addSql('ALTER TABLE language MODIFY id INT(11) NOT NULL AUTO_INCREMENT');
-        }
-
         $this->addSql("
             INSERT INTO language (original_name, english_name, isocode, available)
             SELECT 'မြန်မာဘာသာ', 'burmese', 'my_MM', 0

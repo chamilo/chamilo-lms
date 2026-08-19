@@ -18,6 +18,10 @@ final class Version20200101020000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        if (!$schema->getTable('language')->getColumn('id')->getAutoincrement()) {
+            $this->addSql('ALTER TABLE language MODIFY id INT(11) NOT NULL AUTO_INCREMENT');
+        }
+
         // resource_node.language_id
         $this->addSql('ALTER TABLE resource_node ADD language_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE resource_node ADD CONSTRAINT FK_8A5F48FF82F1BAF4 FOREIGN KEY (language_id) REFERENCES language (id) ON DELETE SET NULL');

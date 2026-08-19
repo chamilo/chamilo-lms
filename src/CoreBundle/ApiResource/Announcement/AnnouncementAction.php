@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Announcement;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementActionProcessor;
@@ -24,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Change announcement visibility',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -35,6 +33,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_announcement_visibility',
             processor: AnnouncementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/announcement/{id}/move',
@@ -43,9 +56,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Move an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -54,6 +64,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_announcement_move',
             processor: AnnouncementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/announcement/{id}/delete',
@@ -62,9 +87,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -73,15 +95,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_announcement_delete',
             processor: AnnouncementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/announcement/delete-selected',
             openapi: new Operation(
                 summary: 'Delete selected announcements',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -90,15 +124,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_announcement_delete_selected',
             processor: AnnouncementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/announcement/delete-all',
             openapi: new Operation(
                 summary: 'Delete all announcements in the current context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -107,6 +153,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_announcement_delete_all',
             processor: AnnouncementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['announcement_action:read']],

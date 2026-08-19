@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Announcement;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementItemProvider;
@@ -29,27 +30,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                         schema: ['type' => 'integer'],
                     ),
                     new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'gid',
-                        in: 'query',
-                        description: 'Course group id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
                         name: 'isStudentView',
                         in: 'query',
                         description: 'Force the read-only student view',
@@ -60,6 +40,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             name: 'get_announcement_item',
             provider: AnnouncementItemProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: [

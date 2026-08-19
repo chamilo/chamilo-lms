@@ -165,16 +165,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             }
         }
 
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
     public function getSession(Operation $operation, Request $request): ?Session

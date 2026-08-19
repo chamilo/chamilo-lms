@@ -57,5 +57,4 @@ final class ForumGradingOptionsProvider implements ProviderInterface
 
         return ForumGradingOptions::fromCategories($categories);
     }
-
 }

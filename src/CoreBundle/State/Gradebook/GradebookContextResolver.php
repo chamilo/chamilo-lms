@@ -186,15 +186,8 @@ final readonly class GradebookContextResolver
 
     private function getSession(?int $sessionId, Course $course): ?Session
     {
-        if (null === $sessionId) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new NotFoundHttpException('The requested session was not found.');
-        }
-        if (!$session->hasCourse($course)) {
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
             throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
         }
 

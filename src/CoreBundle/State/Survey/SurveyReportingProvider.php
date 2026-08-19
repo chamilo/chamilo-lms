@@ -190,16 +190,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
     public function getSession(?int $sessionId): ?Session
     {
-        if (null === $sessionId) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $this->cidReqHelper->getDoctrineSessionEntity();
     }
 
     public function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

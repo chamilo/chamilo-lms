@@ -182,17 +182,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
 
     private function getSession(Operation $operation, Course $course): ?Session
     {
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
-        if ($sessionId <= 0) {
-            return null;
-        }
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        if (!$session->hasCourse($course)) {
+        if ($session instanceof Session && !$session->hasCourse($course)) {
             throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
         }
 
@@ -273,15 +265,12 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
 
     private function validateGroupContext(Operation $operation, Course $course): int
     {
-        $groupId = max(0, (int) $this->cidReqHelper->getGroupId());
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return 0;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
+        $groupId = (int) $group->getIid();
 
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();

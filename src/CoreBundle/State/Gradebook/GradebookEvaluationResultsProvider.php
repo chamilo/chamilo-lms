@@ -196,16 +196,7 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
 
     private function getCourse(?int $courseId): Course
     {
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
     private function getSession(?int $sessionId, Course $course): ?Session

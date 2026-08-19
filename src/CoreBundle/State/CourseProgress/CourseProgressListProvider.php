@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -39,6 +40,7 @@ final readonly class CourseProgressListProvider implements ProviderInterface
     use CourseProgressAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
@@ -57,9 +59,9 @@ final readonly class CourseProgressListProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canReadCourseProgress($this->security, $this->settingsManager, $course, $session)) {

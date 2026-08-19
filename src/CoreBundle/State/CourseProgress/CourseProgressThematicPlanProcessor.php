@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
@@ -61,6 +62,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
     ];
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
@@ -87,9 +89,9 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertCanManage($request, $course, $session);
 

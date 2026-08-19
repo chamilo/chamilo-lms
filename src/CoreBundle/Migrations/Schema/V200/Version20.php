@@ -329,6 +329,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasForeignKey('FK_D86124608D93D649')) {
+            $this->addSql('ALTER TABLE personal_agenda CHANGE user user INT DEFAULT NULL');
             $this->addSql('ALTER TABLE personal_agenda ADD CONSTRAINT FK_D86124608D93D649 FOREIGN KEY (user) REFERENCES user (id) ON DELETE CASCADE');
         }
 

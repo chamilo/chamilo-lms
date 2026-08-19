@@ -247,34 +247,12 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_quiz_rel_category ADD CONSTRAINT FK_F8EC6623E934951A FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid) ON DELETE CASCADE');
         }
 
-        $table = $schema->getTable('c_quiz_rel_question');
-        if ($table->hasColumn('exercice_id')) {
-            $this->addSql('DELETE FROM c_quiz_rel_question WHERE exercice_id = -1 ');
-        }
-
-        if ($table->hasIndex('exercise')) {
-            $this->addSql('ALTER TABLE c_quiz_rel_question DROP KEY exercise');
-        }
-
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_quiz_rel_question');
-        }
-
-        $this->addSql('ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL');
-
-        if ($table->hasColumn('exercice_id')) {
-            $this->addSql(' ALTER TABLE c_quiz_rel_question CHANGE exercice_id quiz_id INT DEFAULT NULL;');
-            $this->addSql(
-                'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC853CD175 FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid) ON DELETE CASCADE;'
-            );
-            $this->addSql('CREATE INDEX exercise ON c_quiz_rel_question (quiz_id);');
-        }
-
-        if (false === $table->hasForeignKey('FK_485736AC1E27F6BF')) {
-            $this->addSql(
-                'ALTER TABLE c_quiz_rel_question ADD CONSTRAINT FK_485736AC1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE;'
-            );
-        }
+        // c_quiz_rel_question is normalized with direct SQL above. Finalize its schema
+        // immediately from a fresh database introspection instead of queueing the legacy
+        // column rename through addSql(). This migration is non-transactional and direct
+        // normalization changes the live table before Doctrine executes planned SQL, so a
+        // stale Schema snapshot can otherwise queue a second rename of exercice_id.
+        $this->finalizeQuizQuestionRelationSchema();
 
         /*if (false === $table->hasForeignKey('FK_485736AC89D40298')) {
             $this->addSql(
@@ -326,10 +304,91 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_A468585C1E27F6BF ON c_quiz_question_rel_category (question_id)');
         }
 
-        // Keep the resumable normalization state until every schema statement above has succeeded.
-        // If this non-transactional migration stops later, the next run can safely skip already
-        // committed legacy-reference phases instead of applying id -> iid conversions twice.
-        $this->addSql('DROP TABLE IF EXISTS '.self::REFERENCE_STATE_TABLE);
+    }
+
+
+    private function finalizeQuizQuestionRelationSchema(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+        if (!$schemaManager->tablesExist(['c_quiz_rel_question'])) {
+            return;
+        }
+
+        $table = $schemaManager->introspectTable('c_quiz_rel_question');
+
+        if ($table->hasColumn('exercice_id')) {
+            $this->connection->executeStatement(
+                'DELETE FROM c_quiz_rel_question WHERE exercice_id = -1'
+            );
+
+            if ($table->hasIndex('course')) {
+                $this->connection->executeStatement('DROP INDEX course ON c_quiz_rel_question');
+            }
+
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_rel_question
+                 CHANGE question_id question_id INT DEFAULT NULL,
+                 CHANGE exercice_id quiz_id INT DEFAULT NULL'
+            );
+        } elseif ($table->hasColumn('quiz_id')) {
+            if ($table->hasIndex('course')) {
+                $this->connection->executeStatement('DROP INDEX course ON c_quiz_rel_question');
+            }
+
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL'
+            );
+        } else {
+            $this->abortIf(
+                true,
+                'Cannot finalize c_quiz_rel_question: neither legacy exercice_id nor normalized quiz_id exists.'
+            );
+        }
+
+        // Refresh metadata after the possible column rename. This also makes the method
+        // safe to resume after a non-transactional partial migration.
+        $table = $schemaManager->introspectTable('c_quiz_rel_question');
+
+        if (!$table->hasColumn('quiz_id')) {
+            $this->abortIf(true, 'Cannot finalize c_quiz_rel_question: quiz_id was not created.');
+        }
+
+        if (!$table->hasForeignKey('FK_485736AC853CD175')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_rel_question
+                 ADD CONSTRAINT FK_485736AC853CD175
+                 FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasForeignKey('FK_485736AC1E27F6BF')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_rel_question
+                 ADD CONSTRAINT FK_485736AC1E27F6BF
+                 FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE'
+            );
+        }
+
+        // Keep the historical index name used by the migration, but do not recreate it if
+        // the legacy index survived the column rename and already targets quiz_id.
+        $table = $schemaManager->introspectTable('c_quiz_rel_question');
+        if (!$table->hasIndex('exercise')) {
+            $this->connection->executeStatement(
+                'CREATE INDEX exercise ON c_quiz_rel_question (quiz_id)'
+            );
+        }
+    }
+
+    public function postUp(Schema $schema): void
+    {
+        // Keep the resumable normalization state until every planned schema statement has succeeded.
+        // Doctrine executes addSql() statements after up(), so cleanup must happen in postUp().
+        // If the non-transactional migration fails during planned SQL execution, the state table
+        // remains available for a safe retry instead of applying id -> iid conversions twice.
+        $schemaManager = $this->connection->createSchemaManager();
+        if ($schemaManager->tablesExist([self::REFERENCE_STATE_TABLE])) {
+            $this->connection->executeStatement('DROP TABLE '.self::REFERENCE_STATE_TABLE);
+        }
     }
 
     private function normalizeLegacyQuizReferences(Schema $schema): void

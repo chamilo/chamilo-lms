@@ -277,6 +277,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: DocumentCollectionStateProvider::class,
+            parameters: [
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/documents/{cid}/usage',

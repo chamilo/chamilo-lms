@@ -51,6 +51,21 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: ForumThreadWriteInput::class,
             provider: ForumThreadCreateStateProvider::class,
             processor: ForumThreadProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             deserialize: false,
             read: true,
             inputFormats: [
@@ -252,6 +267,21 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new GetCollection(
             provider: ForumThreadCollectionStateProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             openapi: new Operation(
                 parameters: [
                     new Parameter(
@@ -265,27 +295,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                         name: 'resourceNode.parent',
                         in: 'query',
                         description: 'Resource node parent',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'gid',
-                        in: 'query',
-                        description: 'Group id',
                         required: false,
                         schema: ['type' => 'integer'],
                     ),

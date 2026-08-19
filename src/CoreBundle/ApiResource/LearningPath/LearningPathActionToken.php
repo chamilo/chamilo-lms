@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\ApiResource\LearningPath;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathActionTokenProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -17,6 +18,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/learning_paths/action-token',
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_learning_path_action_token',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier; without it the auto-launch setting is not read',
+                ),
+            ],
             provider: LearningPathActionTokenProvider::class,
         ),
     ],

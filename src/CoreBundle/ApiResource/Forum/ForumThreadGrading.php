@@ -32,25 +32,26 @@ use Symfony\Component\Serializer\Attribute\Groups;
                         required: true,
                         schema: ['type' => 'integer'],
                     ),
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_forum_thread_grading',
             provider: ForumThreadGradingProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Patch(
             uriTemplate: '/forum_threads/{threadId}/grading',

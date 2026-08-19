@@ -51,14 +51,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Publish survey invitations',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_survey_invitations_publish',
             processor: SurveyInvitationProcessor::class,
+            parameters: [
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['survey_invitation:read']],

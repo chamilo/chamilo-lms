@@ -281,6 +281,8 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_answer DROP FOREIGN KEY IF EXISTS FK_8A897DDB3FE509D');
         $this->addSql('ALTER TABLE c_survey_answer DROP COLUMN IF EXISTS c_id');
         $this->addSql('ALTER TABLE c_survey_answer DROP COLUMN IF EXISTS answer_id');
+        $this->addSql('ALTER TABLE c_survey_answer CHANGE question_id question_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_answer CHANGE survey_id survey_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid)');
         $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid) ON DELETE CASCADE');
 
@@ -340,6 +342,7 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_question_option DROP FOREIGN KEY IF EXISTS FK_C4B6F5F1E27F6BF');
         $this->addSql('DROP INDEX IF EXISTS fk_c4b6f5f1e27f6bf ON c_survey_question_option');
         $this->addSql('CREATE INDEX IF NOT EXISTS idx_survey_qo_qid ON c_survey_question_option (question_id)');
+        $this->addSql('ALTER TABLE c_survey_question_option CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE CASCADE');
 
         // c_attendance_calendar
@@ -376,6 +379,7 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_forum_forum DROP COLUMN IF EXISTS session_id');
         $this->addSql('DROP INDEX IF EXISTS fk_47a9c9968dfd1ef ON c_forum_forum');
         $this->addSql('CREATE INDEX IF NOT EXISTS IDX_47A9C9968DFD1EF ON c_forum_forum (lp_id)');
+        $this->addSql('ALTER TABLE c_forum_forum CHANGE lp_id lp_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9968DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid) ON DELETE SET NULL');
 
         // c_wiki_discuss
@@ -402,6 +406,7 @@ final class Version20240811221400 extends AbstractMigrationChamilo
 
         // c_thematic_advance
         $this->addSql('ALTER TABLE c_thematic_advance DROP FOREIGN KEY IF EXISTS FK_62798E97163DDA15');
+        $this->addSql('ALTER TABLE c_thematic_advance CHANGE attendance_id attendance_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE');
 
         // c_student_publication_rel_user
@@ -484,11 +489,13 @@ final class Version20240811221400 extends AbstractMigrationChamilo
 
         // c_lp_category_rel_user
         $this->addSql('ALTER TABLE c_lp_category_rel_user DROP FOREIGN KEY IF EXISTS FK_83D35829A76ED395');
+        $this->addSql('ALTER TABLE c_lp_category_rel_user CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_category_rel_user ADD CONSTRAINT FK_83D35829A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
         $this->addSql('DROP INDEX IF EXISTS idx_61f042712469de2 ON c_lp_category_rel_user');
         $this->addSql('CREATE INDEX IF NOT EXISTS IDX_83D3582912469DE2 ON c_lp_category_rel_user (category_id)');
         $this->addSql('DROP INDEX IF EXISTS idx_61f0427a76ed395 ON c_lp_category_rel_user');
         $this->addSql('CREATE INDEX IF NOT EXISTS IDX_83D35829A76ED395 ON c_lp_category_rel_user (user_id)');
+        $this->addSql('ALTER TABLE c_lp_category_rel_user CHANGE category_id category_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_category_rel_user ADD CONSTRAINT FK_61F042712469DE2 FOREIGN KEY (category_id) REFERENCES c_lp_category (iid)');
         $this->addSql('ALTER TABLE c_lp_category_rel_user ADD CONSTRAINT FK_61F0427A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
 
@@ -515,6 +522,8 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_invitation DROP COLUMN IF EXISTS survey_invitation_id');
         $this->addSql('ALTER TABLE c_survey_invitation DROP COLUMN IF EXISTS survey_code');
         $this->addSql('ALTER TABLE c_survey_invitation DROP COLUMN IF EXISTS user');
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_survey_invitation CHANGE survey_id survey_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2B3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid) ON DELETE SET NULL');
 
@@ -598,6 +607,8 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP COLUMN IF EXISTS iid');
         $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP COLUMN IF EXISTS c_id');
         $this->addSql('ALTER TABLE c_quiz_question_rel_category DROP COLUMN IF EXISTS mandatory');
+        $this->addSql('ALTER TABLE c_quiz_question_rel_category CHANGE category_id category_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_quiz_question_rel_category CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD CONSTRAINT FK_A468585C12469DE2 FOREIGN KEY (category_id) REFERENCES c_quiz_question_category (iid)');
         $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD CONSTRAINT FK_A468585C1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)');
         $this->addSql('ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (question_id, category_id)');

@@ -27,6 +27,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE session SET promotion_id = NULL WHERE promotion_id = 0 OR promotion_id NOT IN (SELECT id FROM promotion)');
         if (!$table->hasForeignKey('FK_D044D5D4139DF194')) {
+            $this->addSql('ALTER TABLE session CHANGE promotion_id promotion_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id) ON DELETE SET NULL');
             $this->addSql('CREATE INDEX IDX_D044D5D4139DF194 ON session (promotion_id);');
         }

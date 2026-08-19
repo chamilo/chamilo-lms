@@ -38,6 +38,7 @@ final class Version20240811221950 extends AbstractMigrationChamilo
         }
 
         if ($this->foreignKeyExists($schema, 'c_survey_question_option', 'FK_C4B6F5F1E27F6BF')) {
+            $this->addSql('ALTER TABLE c_survey_question_option CHANGE question_id question_id INT DEFAULT NULL;');
             $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE SET NULL;');
         }
 

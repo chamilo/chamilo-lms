@@ -158,11 +158,11 @@ class Version20180904175500 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('track_e_attempt');
 
-        if (!$table->hasIndex('course')) {
+        if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON track_e_attempt;');
         }
 
-        if (!$table->hasIndex('session_id')) {
+        if ($table->hasIndex('session_id')) {
             $this->addSql('DROP INDEX session_id ON track_e_attempt;');
         }
 

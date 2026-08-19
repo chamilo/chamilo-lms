@@ -78,6 +78,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
 
         if (false === $table->hasForeignKey('FK_47A9C99F2E82C87')) {
             $this->addSql('ALTER TABLE c_forum_forum CHANGE forum_last_post forum_last_post INT DEFAULT NULL');
+            $this->addSql('UPDATE c_forum_forum SET forum_last_post = NULL WHERE forum_last_post NOT IN (SELECT iid FROM c_forum_post)');
             $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C99F2E82C87 FOREIGN KEY (forum_last_post) REFERENCES c_forum_post (iid)');
             $this->addSql('CREATE INDEX IDX_47A9C99F2E82C87 ON c_forum_forum (forum_last_post);');
         }

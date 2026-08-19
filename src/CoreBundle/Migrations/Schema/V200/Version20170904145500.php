@@ -226,8 +226,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_quiz_rel_category');
 
         $this->addSql('UPDATE c_quiz_rel_category SET category_id = NULL WHERE category_id = 0');
+        $this->addSql('UPDATE c_quiz_rel_category SET category_id = NULL WHERE category_id NOT IN (SELECT iid FROM c_quiz_question_category)');
         $this->addSql('UPDATE c_quiz_rel_category SET count_questions = 0 WHERE count_questions IS NULL');
         $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE count_questions count_questions INT NOT NULL');
+        $this->addSql('UPDATE c_quiz_rel_category SET exercise_id = NULL WHERE exercise_id NOT IN (SELECT iid FROM c_quiz)');
         $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE exercise_id exercise_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE category_id category_id INT DEFAULT NULL');
 

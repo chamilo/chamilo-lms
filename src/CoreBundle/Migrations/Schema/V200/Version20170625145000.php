@@ -110,13 +110,13 @@ class Version20170625145000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_calendar_event_repeat_not');
         }
 
+        $this->addSql('ALTER TABLE c_calendar_event_repeat_not CHANGE cal_id cal_id INT DEFAULT NULL');
+
         if (false === $table->hasForeignKey('FK_7D4436947300D633')) {
             $this->addSql(
                 'ALTER TABLE c_calendar_event_repeat_not ADD CONSTRAINT FK_7D4436947300D633 FOREIGN KEY (cal_id) REFERENCES c_calendar_event (iid)'
             );
         }
-
-        $this->addSql('ALTER TABLE c_calendar_event_repeat_not CHANGE cal_id cal_id INT DEFAULT NULL');
 
         if (false === $table->hasIndex('IDX_7D4436947300D633')) {
             $this->addSql('CREATE INDEX IDX_7D4436947300D633 ON c_calendar_event_repeat_not (cal_id)');

@@ -77,7 +77,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
             throw new BadRequestHttpException('The current item is not an active SCORM SCO.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $item = $this->lpItemRepository->find($itemId);

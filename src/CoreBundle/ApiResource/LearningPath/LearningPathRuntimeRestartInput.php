@@ -33,6 +33,10 @@ use Symfony\Component\HttpFoundation\Response;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
             ],
             processor: LearningPathRuntimeRestartProcessor::class,
         ),

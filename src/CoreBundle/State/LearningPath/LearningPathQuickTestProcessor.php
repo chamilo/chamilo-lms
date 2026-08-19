@@ -68,7 +68,7 @@ final readonly class LearningPathQuickTestProcessor implements ProcessorInterfac
 
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);

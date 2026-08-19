@@ -43,7 +43,7 @@ final readonly class LearningPathCategoryMutationProcessor implements ProcessorI
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $categoryId = (int) ($uriVariables['id'] ?? 0);

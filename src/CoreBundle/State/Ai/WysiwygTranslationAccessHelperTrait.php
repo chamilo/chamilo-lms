@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\Ai;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -15,9 +14,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait WysiwygTranslationAccessHelperTrait
 {
-    private function resolveCourseAndAssertAccess(CidReqHelper $cidReqHelper, Security $security): ?Course
+    private function resolveCourseAndAssertAccess(Security $security): ?Course
     {
-        $courseId = (int) ($cidReqHelper->getCourseId() ?? 0);
+        $courseId = (int) ($this->cidReqHelper->getCourseId() ?? 0);
         if ($courseId <= 0) {
             if (!$security->isGranted('ROLE_ADMIN')) {
                 throw new AccessDeniedHttpException('Only administrators may use AI WYSIWYG translation outside a course.');
@@ -26,7 +25,7 @@ trait WysiwygTranslationAccessHelperTrait
             return null;
         }
 
-        $course = $cidReqHelper->getDoctrineCourseEntity();
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
         if (!$course instanceof Course) {
             throw new NotFoundHttpException('The course was not found.');
         }

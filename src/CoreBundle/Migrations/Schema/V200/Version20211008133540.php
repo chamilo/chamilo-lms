@@ -23,6 +23,7 @@ final class Version20211008133540 extends AbstractMigrationChamilo
                 'DELETE FROM c_tool_intro WHERE c_tool_id NOT IN (SELECT iid FROM c_tool)'
             );
             if (!$table->hasForeignKey('FK_D705267B1DF6B517')) {
+                $this->addSql('ALTER TABLE c_tool_intro CHANGE c_tool_id c_tool_id INT DEFAULT NULL');
                 $this->addSql(
                     'ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1DF6B517 FOREIGN KEY (c_tool_id) REFERENCES c_tool (iid) ON DELETE CASCADE'
                 );

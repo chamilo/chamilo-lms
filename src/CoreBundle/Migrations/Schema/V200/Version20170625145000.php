@@ -28,6 +28,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
 
         if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event CHANGE parent_event_id parent_event_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A0622581EE3A445A FOREIGN KEY (parent_event_id) REFERENCES c_calendar_event (iid)'
             );

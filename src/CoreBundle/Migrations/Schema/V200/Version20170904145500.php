@@ -218,6 +218,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_499A73F31E27F6BF')) {
+            $this->addSql('ALTER TABLE c_quiz_question_option CHANGE question_id question_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_quiz_question_option ADD CONSTRAINT FK_499A73F31E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE');
             $this->addSql('CREATE INDEX IDX_499A73F31E27F6BF ON c_quiz_question_option (question_id);');
         }
@@ -228,6 +229,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_quiz_rel_category SET count_questions = 0 WHERE count_questions IS NULL');
         $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE count_questions count_questions INT NOT NULL');
         $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE exercise_id exercise_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE category_id category_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_F8EC662312469DE2')) {
             $this->addSql('ALTER TABLE c_quiz_rel_category ADD CONSTRAINT FK_F8EC662312469DE2 FOREIGN KEY (category_id) REFERENCES c_quiz_question_category (iid) ON DELETE CASCADE;');

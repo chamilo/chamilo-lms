@@ -141,7 +141,7 @@ final class LearningPathContentPdfAction extends AbstractController
             throw new AccessDeniedHttpException('Learning path PDF export is disabled.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->lpRepository->find($lpId);

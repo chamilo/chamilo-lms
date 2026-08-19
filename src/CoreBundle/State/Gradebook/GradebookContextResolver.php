@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class GradebookContextResolver
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
@@ -41,12 +43,15 @@ final readonly class GradebookContextResolver
         bool $requireManage = false,
         bool $validateCourseResourceNode = true,
     ): array {
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         if ($validateCourseResourceNode) {
             $this->validateCourseResourceNode($request, $course);
         }
-        $groupId = $this->validateGroupContext($request, $course);
+        $groupId = $this->validateGroupContext($course);
         $user = $this->getCurrentUser();
         $canManage = !$this->isStudentView($request) && $this->canManageGradebook($course, $session, $user);
 
@@ -168,39 +173,6 @@ final readonly class GradebookContextResolver
         throw new AccessDeniedHttpException('The requested learner is outside the current course context.');
     }
 
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new NotFoundHttpException('The requested session was not found.');
-        }
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
-    }
-
     private function validateCourseResourceNode(Request $request, Course $course): void
     {
         $nodeId = $request->query->getInt('node');
@@ -210,17 +182,14 @@ final readonly class GradebookContextResolver
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): int
+    private function validateGroupContext(Course $course): int
     {
-        $groupId = max(0, $request->query->getInt('gid'));
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return 0;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
+        $groupId = (int) $group->getIid();
 
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();
@@ -294,7 +263,7 @@ final readonly class GradebookContextResolver
 
         $rawValue = strtolower(trim((string) $value->getFieldValue()));
 
-        return '' !== $rawValue && !in_array($rawValue, ['0', 'false', 'no', 'off'], true);
+        return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
     }
 
     private function isStudentView(Request $request): bool
@@ -304,7 +273,7 @@ final readonly class GradebookContextResolver
         }
 
         $queryValue = strtolower(trim((string) $request->query->get('isStudentView', '')));
-        if (in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
+        if (\in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
             return true;
         }
 

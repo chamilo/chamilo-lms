@@ -50,7 +50,7 @@ final readonly class LearningPathScormUpdateProcessor implements ProcessorInterf
 
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $requestedNodeId = $request->query->getInt('node');
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
         if ($requestedNodeId > 0 && $requestedNodeId !== $courseNodeId) {

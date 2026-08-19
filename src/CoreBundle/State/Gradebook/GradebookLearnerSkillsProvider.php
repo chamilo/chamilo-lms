@@ -141,7 +141,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
         return $resource;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeItem(
         SkillRelItem $relation,
         bool $validated,
@@ -173,7 +175,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                         ? '/resources/exercise/'.$courseNodeId.'/'.$itemId.'/result/'.$resultId.'?'.$query
                         : '/resources/exercise/'.$courseNodeId.'/'.$itemId.'/report?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_STUDENT_PUBLICATION:
                 $publication = $this->entityManager->getRepository(CStudentPublication::class)->find($itemId);
                 if ($publication instanceof CStudentPublication && null !== $publication->getResourceNode()?->getId()) {
@@ -183,7 +187,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                         ? '/resources/assignment/'.(int) $publication->getResourceNode()->getId().'/submission/'.$resultId.'?'.$query
                         : '/resources/assignment/'.(int) $publication->getResourceNode()->getId().'/?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_LEARNING_PATH:
                 $learningPath = $this->entityManager->getRepository(CLp::class)->find($itemId);
                 if ($learningPath instanceof CLp) {
@@ -191,7 +197,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                     $spa = true;
                     $url = '/resources/lp/'.$courseNodeId.'/'.$itemId.'/reporting?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_ATTENDANCE:
                 $attendance = $this->entityManager->getRepository(CAttendance::class)->find($itemId);
                 if ($attendance instanceof CAttendance) {
@@ -199,7 +207,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                     $spa = true;
                     $url = '/resources/attendance/'.$courseNodeId.'/'.$itemId.'/sheet-list?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_SURVEY:
                 $survey = $this->entityManager->getRepository(CSurvey::class)->find($itemId);
                 if ($survey instanceof CSurvey) {
@@ -207,7 +217,9 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                     $spa = true;
                     $url = '/resources/survey/'.$courseNodeId.'/'.$itemId.'/reporting?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_FORUM_THREAD:
                 $thread = $this->entityManager->getRepository(CForumThread::class)->find($itemId);
                 $forumId = (int) ($thread?->getForum()?->getIid() ?? 0);
@@ -216,12 +228,17 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
                     $spa = true;
                     $url = '/resources/forum/'.$courseNodeId.'/forum/'.$forumId.'/thread/'.$itemId.'?'.$query;
                 }
+
                 break;
+
             case self::SKILL_ITEM_TYPE_LINK:
                 $title = 'Link #'.$itemId;
+
                 break;
+
             case self::SKILL_ITEM_TYPE_GRADEBOOK:
                 $title = 'Assessment #'.$itemId;
+
                 break;
         }
 

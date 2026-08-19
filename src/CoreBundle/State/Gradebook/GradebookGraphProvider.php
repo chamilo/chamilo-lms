@@ -100,8 +100,8 @@ final readonly class GradebookGraphProvider implements ProviderInterface
 
     /**
      * @param list<array{score: float, display: string}> $ranges
-     * @param list<array<string, mixed>> $rows
-     * @param array<string, mixed> $settings
+     * @param list<array<string, mixed>>                 $rows
+     * @param array<string, mixed>                       $settings
      *
      * @return array<string, mixed>
      */
@@ -184,7 +184,9 @@ final readonly class GradebookGraphProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param list<array{score: float, display: string}> $ranges */
+    /**
+     * @param list<array{score: float, display: string}> $ranges
+     */
     private function resolveDisplay(float $percentage, array $ranges, bool $upperLimitIncluded): ?string
     {
         $score = max(0.0, min(100.0, $percentage));

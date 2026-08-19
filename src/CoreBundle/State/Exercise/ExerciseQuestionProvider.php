@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -25,7 +26,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use OnlyofficePlugin;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -41,6 +41,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizQuestionRepository $questionRepository,
@@ -59,8 +60,8 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if (!$this->canManageExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }
@@ -71,7 +72,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         }
 
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        $questions = $this->getQuestions($quiz, $course, $session);
+        $questions = $this->getQuestions($operation, $quiz, $course, $session);
         $isLinkedToLearningPath = $this->isExerciseLinkedToLearningPath((int) $quiz->getIid());
         $isReadOnlyFromLearningPath = $isLinkedToLearningPath && !$this->isSettingEnabled('lp.force_edit_exercise_in_lp');
 
@@ -91,36 +92,6 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $response->learningPathReadOnlyMessage = $isLinkedToLearningPath ? self::LP_READ_ONLY_MESSAGE : '';
 
         return $response;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function canManageExercises(): bool
@@ -196,7 +167,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getQuestions(CQuiz $quiz, Course $course, ?Session $session): array
+    private function getQuestions(Operation $operation, CQuiz $quiz, Course $course, ?Session $session): array
     {
         $relations = $this->entityManager->createQueryBuilder()
             ->select('relQuestion')
@@ -239,8 +210,8 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
                 'fillBlanks' => $this->getFillBlanksPreview($question),
                 'matching' => $this->getMatchingPreview($question),
                 'draggable' => $this->getDraggablePreview($question),
-                'annotation' => $this->getAnnotationPreview($question, $course, $session),
-                'hotspot' => $this->getHotspotPreview($question, $course, $session),
+                'annotation' => $this->getAnnotationPreview($operation, $question, $course, $session),
+                'hotspot' => $this->getHotspotPreview($operation, $question, $course, $session),
             ];
         }
 
@@ -250,7 +221,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     /**
      * @return array<string, string>
      */
-    private function getAnnotationPreview(CQuizQuestion $question, Course $course, ?Session $session): array
+    private function getAnnotationPreview(Operation $operation, CQuizQuestion $question, Course $course, ?Session $session): array
     {
         if (20 !== (int) $question->getType()) {
             return [];
@@ -269,6 +240,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         return [
             'imageName' => (string) $resourceFile->getOriginalName(),
             'imageUrl' => $this->appendCourseContextToUrl(
+                $operation,
                 $this->questionRepository->getHotSpotImageUrl($question),
                 $course,
                 $session
@@ -279,7 +251,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getHotspotPreview(CQuizQuestion $question, Course $course, ?Session $session): array
+    private function getHotspotPreview(Operation $operation, CQuizQuestion $question, Course $course, ?Session $session): array
     {
         if (!$this->usesHotspot((int) $question->getType())) {
             return [];
@@ -293,6 +265,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             if ($resourceFile instanceof ResourceFile) {
                 $imageName = (string) $resourceFile->getOriginalName();
                 $imageUrl = $this->appendCourseContextToUrl(
+                    $operation,
                     $this->questionRepository->getHotSpotImageUrl($question),
                     $course,
                     $session
@@ -333,7 +306,7 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         ];
     }
 
-    private function appendCourseContextToUrl(string $url, Course $course, ?Session $session): string
+    private function appendCourseContextToUrl(Operation $operation, string $url, Course $course, ?Session $session): string
     {
         if ('' === $url) {
             return '';
@@ -342,8 +315,8 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
         $request = $this->requestStack->getCurrentRequest();
         $params = [
             'cid' => (int) $course->getId(),
-            'sid' => (int) ($session?->getId() ?? $request?->query->getInt('sid', 0) ?? 0),
-            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'sid' => (int) ($session?->getId() ?? $this->cidReqHelper->getSessionId() ?? 0),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
         ];
 
         return $url.(str_contains($url, '?') ? '&' : '?').http_build_query($params);

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Survey\SurveyAnswerProcessor;
@@ -26,9 +27,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Survey answer or preview data',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'preview', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
@@ -37,6 +35,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             name: 'get_survey_answer',
             provider: SurveyAnswerProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/survey/answer/{surveyId}',
@@ -45,8 +54,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Submit survey answers',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lpItemId', in: 'query', required: false, schema: ['type' => 'integer']),
@@ -54,6 +61,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             name: 'post_survey_answer',
             processor: SurveyAnswerProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier; falls back to publicCid or to the survey own course',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['survey_answer:read']],

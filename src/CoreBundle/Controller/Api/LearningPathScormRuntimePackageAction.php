@@ -74,7 +74,7 @@ final readonly class LearningPathScormRuntimePackageAction
             throw new NotFoundHttpException('SCORM runtime package not found.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $resourceNode = $learningPath->getResourceNode();

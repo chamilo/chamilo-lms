@@ -95,7 +95,6 @@ final readonly class GradebookLinkOptionsProvider implements ProviderInterface
         return $result;
     }
 
-
     private function validateRequestedNode(Request $request, Course $course, ?Session $session): void
     {
         $nodeId = $request->query->getInt('node');

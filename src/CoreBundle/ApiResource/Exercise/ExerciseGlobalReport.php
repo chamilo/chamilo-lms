@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Exercise\ExerciseGlobalReportProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -21,14 +21,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/exercise/global-report',
             openapi: new Operation(
                 summary: 'Exercise global report export configuration',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'courseId', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('ROLE_ADMIN')",
             name: 'get_exercise_global_report',
             provider: ExerciseGlobalReportProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course to report on; the whole platform when absent',
+                ),
+                'courseId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Legacy alias of cid',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['exercise_global_report:read']],

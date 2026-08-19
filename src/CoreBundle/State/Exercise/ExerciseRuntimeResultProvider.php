@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -72,6 +73,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     private const RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK = 10;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
@@ -91,8 +93,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : 0;
         if ($exerciseId <= 0 || $attemptId <= 0) {
@@ -130,7 +132,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         $questions = [];
         if ($canManage || true === ($visibility['showQuestionDetails'] ?? false)) {
-            $questions = $this->getQuestions($quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage, $isReviewMode);
+            $questions = $this->getQuestions($operation, $quiz, $questionIds, $rowsByQuestion, $visibility, $pendingQuestionIds, $canManage, $isReviewMode);
             if (
                 true === ($visibility['hideCorrectAnsweredQuestions'] ?? false)
                 && true === ($visibility['showQuestionScore'] ?? false)
@@ -264,36 +266,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'achievedLevel' => $destinationResult->getAchievedLevel(),
             'hash' => $destinationResult->getHash(),
         ];
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function canViewExercises(): bool
@@ -1072,7 +1044,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<int, array<string, mixed>>
      */
-    private function getQuestions(CQuiz $quiz, array $questionIds, array $rowsByQuestion, array $visibility, array $pendingQuestionIds, bool $canManage, bool $isReviewMode): array
+    private function getQuestions(Operation $operation, CQuiz $quiz, array $questionIds, array $rowsByQuestion, array $visibility, array $pendingQuestionIds, bool $canManage, bool $isReviewMode): array
     {
         $relations = $this->entityManager->createQueryBuilder()
             ->select('relQuestion')
@@ -1100,6 +1072,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
             $questionId = (int) $question->getIid();
             $questions[$questionId] = $this->normalizeQuestion(
+                $operation,
                 $question,
                 $rowsByQuestion[$questionId] ?? [],
                 $visibility,
@@ -1129,7 +1102,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeQuestion(CQuizQuestion $question, array $rows, array $visibility, bool $pendingCorrection, bool $canManage, bool $isReviewMode): array
+    private function normalizeQuestion(Operation $operation, CQuizQuestion $question, array $rows, array $visibility, bool $pendingCorrection, bool $canManage, bool $isReviewMode): array
     {
         $questionScore = $this->getQuestionScore($rows);
         $maxScore = $this->getQuestionMaxScore($question);
@@ -1161,7 +1134,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'pendingCorrection' => $pendingCorrection,
             'canCorrect' => $isReviewMode && $canManage && $requiresManualCorrection,
             'feedback' => $feedback,
-            'answer' => $this->normalizeQuestionAnswer($question, $rows, $visibility, $showQuestionCorrection),
+            'answer' => $this->normalizeQuestionAnswer($operation, $question, $rows, $visibility, $showQuestionCorrection),
         ];
     }
 
@@ -1272,7 +1245,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeQuestionAnswer(CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
+    private function normalizeQuestionAnswer(Operation $operation, CQuizQuestion $question, array $rows, array $visibility, bool $showQuestionCorrection): array
     {
         $type = (int) $question->getType();
         if (\in_array($type, [1, 2, 9, 10, 11, 12, 14, 17, 21, 22], true)) {
@@ -1316,7 +1289,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         if (self::ANSWER_IN_OFFICE_DOC === $type) {
-            return $this->normalizeOnlyofficeAnswer($rows, $visibility);
+            return $this->normalizeOnlyofficeAnswer($operation, $rows, $visibility);
         }
 
         if (self::ANNOTATION === $type) {
@@ -1977,7 +1950,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeOnlyofficeAnswer(array $rows, array $visibility): array
+    private function normalizeOnlyofficeAnswer(Operation $operation, array $rows, array $visibility): array
     {
         $row = $rows[0] ?? null;
         if (!$row instanceof TrackEAttempt) {
@@ -1994,14 +1967,14 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return [
             'kind' => 'onlyoffice',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
-            'editorUrl' => $showStudentAnswers ? $this->getOnlyofficeReviewEditorUrl($row) : '',
+            'editorUrl' => $showStudentAnswers ? $this->getOnlyofficeReviewEditorUrl($operation, $row) : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
     }
 
-    private function getOnlyofficeReviewEditorUrl(TrackEAttempt $row): string
+    private function getOnlyofficeReviewEditorUrl(Operation $operation, TrackEAttempt $row): string
     {
         $attempt = $row->getTrackEExercise();
         $quiz = $attempt->getQuiz();
@@ -2036,7 +2009,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'questionId' => (int) $row->getQuestionId(),
             'cid' => (int) $course->getId(),
             'sid' => (int) ($attempt->getSession()?->getId() ?? 0),
-            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
             'origin' => 'exercise',
             'embedded' => 1,
             'readOnly' => 1,

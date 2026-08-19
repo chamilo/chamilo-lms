@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Wiki\WikiAccessHelperTrait;
 use Chamilo\CoreBundle\State\Wiki\WikiPageExportService;
@@ -41,6 +42,7 @@ final class WikiPageExportController extends AbstractController
     use WikiAccessHelperTrait;
 
     public function __construct(
+        private readonly CidReqHelper $cidReqHelper,
         private readonly EntityManagerInterface $entityManager,
         private readonly CWikiRepository $wikiRepository,
         private readonly Security $security,
@@ -120,12 +122,12 @@ final class WikiPageExportController extends AbstractController
             throw new BadRequestHttpException('A valid Wiki page id is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $nodeId = $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {

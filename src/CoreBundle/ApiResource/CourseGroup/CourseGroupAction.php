@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseGroup;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupActionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -23,6 +24,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_create_groups',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/create-subgroups',
@@ -31,6 +43,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_create_subgroups',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/create-class-groups',
@@ -39,6 +62,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_create_class_groups',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/delete',
@@ -47,6 +81,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_delete',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/empty',
@@ -55,6 +100,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_empty',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/fill',
@@ -63,6 +119,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_fill',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/toggle-visibility',
@@ -71,6 +138,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_toggle_visibility',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/self-register',
@@ -79,6 +157,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_self_register',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/self-unregister',
@@ -87,6 +176,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_self_unregister',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/delete-category',
@@ -95,6 +195,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_delete_category',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/move-category',
@@ -103,6 +214,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_move_category',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/actions/remove-class-link',
@@ -111,6 +233,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_remove_class_link',
             processor: CourseGroupActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_group_action:read']],

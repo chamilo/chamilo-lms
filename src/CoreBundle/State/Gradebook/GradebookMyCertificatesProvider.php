@@ -22,6 +22,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use const DATE_ATOM;
+
 /**
  * @implements ProviderInterface<GradebookMyCertificates>
  */

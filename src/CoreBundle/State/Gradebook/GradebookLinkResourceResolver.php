@@ -41,7 +41,9 @@ final readonly class GradebookLinkResourceResolver
     public const LINK_HOTPOTATOES = 9;
     public const LINK_FORUM_PARTICIPATION = 11;
 
-    /** @var list<int> */
+    /**
+     * @var list<int>
+     */
     private const SUPPORTED_TYPES = [
         self::LINK_EXERCISE,
         self::LINK_STUDENT_PUBLICATION,
@@ -63,7 +65,9 @@ final readonly class GradebookLinkResourceResolver
         private SettingsManager $settingsManager,
     ) {}
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     public function getAvailableTypes(Course $course, ?Session $session): array
     {
         $types = [];
@@ -83,7 +87,9 @@ final readonly class GradebookLinkResourceResolver
         return $types;
     }
 
-    /** @return list<array{id: int, title: string, description: string}> */
+    /**
+     * @return list<array{id: int, title: string, description: string}>
+     */
     public function getResourceOptions(int $type, Course $course, ?Session $session): array
     {
         $resources = $this->getResources($type, $course, $session);
@@ -124,7 +130,9 @@ final readonly class GradebookLinkResourceResolver
         throw new AccessDeniedHttpException('The requested resource is not available in the current course and session context.');
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     public function normalizeLink(
         GradebookLink $link,
         Course $course,
@@ -140,7 +148,7 @@ final readonly class GradebookLinkResourceResolver
             $resourceSummary = $this->normalizeResource($type, $resource);
             $url = $this->buildResourceUrl($type, $resource, $course, $session, $groupId, $canManage);
             $valid = true;
-        } catch (AccessDeniedHttpException|NotFoundHttpException|BadRequestHttpException) {
+        } catch (AccessDeniedHttpException|BadRequestHttpException|NotFoundHttpException) {
             $resourceSummary = [
                 'id' => $refId,
                 'title' => $this->getTypeLabel($type).' #'.$refId,
@@ -209,7 +217,9 @@ final readonly class GradebookLinkResourceResolver
         };
     }
 
-    /** @return list<object> */
+    /**
+     * @return list<object>
+     */
     private function getResources(int $type, Course $course, ?Session $session): array
     {
         return match ($type) {
@@ -238,7 +248,9 @@ final readonly class GradebookLinkResourceResolver
         };
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeResource(int $type, object $resource): array
     {
         return match ($type) {
@@ -253,7 +265,9 @@ final readonly class GradebookLinkResourceResolver
         };
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeQuiz(object $resource): array
     {
         if (!$resource instanceof CQuiz) {
@@ -267,7 +281,9 @@ final readonly class GradebookLinkResourceResolver
         ];
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeStudentPublication(object $resource): array
     {
         if (!$resource instanceof CStudentPublication) {
@@ -283,7 +299,9 @@ final readonly class GradebookLinkResourceResolver
         ];
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeLearningPath(object $resource): array
     {
         if (!$resource instanceof CLp) {
@@ -297,7 +315,9 @@ final readonly class GradebookLinkResourceResolver
         ];
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeForumThread(object $resource, bool $useQualifiedTitle): array
     {
         if (!$resource instanceof CForumThread) {
@@ -316,7 +336,9 @@ final readonly class GradebookLinkResourceResolver
         ];
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeAttendance(object $resource): array
     {
         if (!$resource instanceof CAttendance) {
@@ -332,7 +354,9 @@ final readonly class GradebookLinkResourceResolver
         ];
     }
 
-    /** @return array{id: int, title: string, description: string} */
+    /**
+     * @return array{id: int, title: string, description: string}
+     */
     private function normalizeSurvey(object $resource): array
     {
         if (!$resource instanceof CSurvey) {
@@ -452,7 +476,7 @@ final readonly class GradebookLinkResourceResolver
             }
         }
 
-        if (1 === count($matchingLearningPaths)) {
+        if (1 === \count($matchingLearningPaths)) {
             $item = array_values($matchingLearningPaths)[0];
             $learningPathId = (int) ($item->getLp()->getIid() ?? 0);
             $itemId = (int) ($item->getIid() ?? 0);

@@ -33,8 +33,8 @@ final readonly class CourseSettingsConfigurationProcessor implements ProcessorIn
             throw new BadRequestHttpException('The current request is not available.');
         }
 
-        $this->manager->saveConfiguration($data->values, $request);
-        $freshData = $this->manager->getConfiguration($request);
+        $this->manager->saveConfiguration($data->values);
+        $freshData = $this->manager->getConfiguration();
         $data->courseId = (int) $freshData['courseId'];
         $data->sessionId = isset($freshData['sessionId']) ? (int) $freshData['sessionId'] : null;
         $data->resourceNodeId = (int) $freshData['resourceNodeId'];

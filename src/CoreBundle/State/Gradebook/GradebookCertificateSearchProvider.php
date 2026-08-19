@@ -26,6 +26,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use const DATE_ATOM;
+
 /**
  * @implements ProviderInterface<GradebookCertificateSearch>
  */

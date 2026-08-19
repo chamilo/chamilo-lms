@@ -170,11 +170,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     description: 'Session identifier',
                     required: false,
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Group identifier',
-                    required: false,
-                ),
             ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
@@ -195,10 +190,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(
@@ -239,10 +230,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(

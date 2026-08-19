@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const DATE_ATOM;
+
 /**
  * @implements ProviderInterface<GradebookHistory>
  */
@@ -140,5 +142,4 @@ final readonly class GradebookHistoryProvider implements ProviderInterface
 
         return $resource;
     }
-
 }

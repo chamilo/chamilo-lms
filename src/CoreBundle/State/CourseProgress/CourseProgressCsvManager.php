@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseProgress;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -42,6 +43,7 @@ final readonly class CourseProgressCsvManager
     private const int MAX_PLAN_ITEMS_PER_THEMATIC = 100;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private ResourceLinkRepository $resourceLinkRepository,
@@ -172,9 +174,9 @@ final readonly class CourseProgressCsvManager
      */
     private function resolveWritableContext(Request $request): array
     {
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if ($this->isCourseProgressStudentView($request, (int) $course->getId())

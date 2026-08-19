@@ -33,7 +33,7 @@ final readonly class WysiwygTranslationProvider implements ProviderInterface
         array $uriVariables = [],
         array $context = [],
     ): WysiwygTranslation {
-        $course = $this->resolveCourseAndAssertAccess($this->cidReqHelper, $this->security);
+        $course = $this->resolveCourseAndAssertAccess($this->security);
         $languages = $this->translationService->getActiveLanguages();
 
         $result = new WysiwygTranslation();

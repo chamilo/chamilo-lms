@@ -38,6 +38,7 @@ final readonly class CAttendanceDeleteProcessor implements ProcessorInterface
         $course = $resourceLink->getCourse();
 
         $this->entityManager->beginTransaction();
+
         try {
             if ($attendanceId > 0) {
                 $this->gradebookLinkManager->removeAllCourseLinks(

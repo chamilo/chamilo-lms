@@ -38,7 +38,7 @@ final readonly class CourseClassActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is not available.');
         }
 
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanManage($course, $session);
         $usergroup = $this->manager->findAccessibleGroup($data->usergroupId);
 

@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Entity\GradebookResultLog;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -49,6 +50,7 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
     private const ACTION_DELETE_ATTEMPT = 'delete_attempt';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -73,10 +75,13 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
-        $this->validateGroupContext($request, $course);
+        $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
         if (!$this->canManageGradebook($course, $session, $user)) {
             throw new AccessDeniedHttpException('You are not allowed to grade learners in this context.');
@@ -454,39 +459,6 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         return max(0, min(6, (int) ($value ?? 2)));
     }
 
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
-    }
-
     private function validateCourseResourceNode(Request $request, Course $course): void
     {
         $nodeId = $request->query->getInt('node');
@@ -496,16 +468,11 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): void
+    private function validateGroupContext(Operation $operation, Course $course): void
     {
-        $groupId = max(0, $request->query->getInt('gid'));
-        if (0 === $groupId) {
-            return;
-        }
-
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
+            return;
         }
 
         $groupNode = $group->getResourceNode();

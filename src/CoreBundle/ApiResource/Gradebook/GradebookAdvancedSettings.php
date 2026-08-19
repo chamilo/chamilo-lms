@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Gradebook;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookAdvancedSettingsProvider;
@@ -22,9 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Read Gradebook advanced category options in the current course context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'parentCategoryId', in: 'query', required: false, schema: ['type' => 'integer']),
@@ -37,6 +35,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 or is_granted('ROLE_SESSION_MANAGER')",
             name: 'get_gradebook_advanced_settings',
             provider: GradebookAdvancedSettingsProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['gradebook_advanced_settings:read']],
@@ -47,11 +56,15 @@ final class GradebookAdvancedSettings
     #[Groups(['gradebook_advanced_settings:read'])]
     public string $id = 'gradebook_advanced_settings';
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, int>
+     */
     #[Groups(['gradebook_advanced_settings:read'])]
     public array $context = [];
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     #[Groups(['gradebook_advanced_settings:read'])]
     public ?array $category = null;
 
@@ -76,15 +89,21 @@ final class GradebookAdvancedSettings
     #[Groups(['gradebook_advanced_settings:read'])]
     public ?int $defaultGradeModelId = null;
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_advanced_settings:read'])]
     public array $gradeModels = [];
 
-    /** @var list<int> */
+    /**
+     * @var list<int>
+     */
     #[Groups(['gradebook_advanced_settings:read'])]
     public array $skillIds = [];
 
-    /** @var list<array{id: int, title: string}> */
+    /**
+     * @var list<array{id: int, title: string}>
+     */
     #[Groups(['gradebook_advanced_settings:read'])]
     public array $skills = [];
 

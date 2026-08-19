@@ -34,7 +34,7 @@ final readonly class CourseUserImportProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        [$course, $session] = $this->courseUserManager->resolveContext($request);
+        [$course, $session] = $this->courseUserManager->resolveContext();
         $this->courseUserManager->assertCanManage($course, $session);
         if (!$this->courseUserManager->canUnsubscribe($course, $session)) {
             throw new AccessDeniedHttpException('Course user import is disabled for the current manager.');

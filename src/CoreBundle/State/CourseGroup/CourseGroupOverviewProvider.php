@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseGroup;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupOverview;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class CourseGroupOverviewProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
     ) {}
@@ -32,8 +34,8 @@ final readonly class CourseGroupOverviewProvider implements ProviderInterface
         $resource = new CourseGroupOverview();
         $resource->groups = $this->manager->getOverviewData($request);
         $query = http_build_query(array_filter([
-            'cid' => $request->query->getInt('cid'),
-            'sid' => $request->query->getInt('sid'),
+            'cid' => (int) $this->cidReqHelper->getCourseId(),
+            'sid' => (int) $this->cidReqHelper->getSessionId(),
         ], static fn (int $value): bool => $value > 0));
         $resource->csvExportUrl = '/api/course-groups/export.csv?'.$query;
         $resource->xlsxExportUrl = '/api/course-groups/export.xlsx?'.$query;

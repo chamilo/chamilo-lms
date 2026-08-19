@@ -59,12 +59,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer']
                     ),
                     new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        required: false,
-                        schema: ['type' => 'integer']
-                    ),
-                    new Parameter(
                         name: 'title',
                         in: 'query',
                         required: false,
@@ -73,6 +67,10 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ),
             parameters: [
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Course identifier',

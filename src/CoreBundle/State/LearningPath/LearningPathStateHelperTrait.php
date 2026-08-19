@@ -71,16 +71,6 @@ trait LearningPathStateHelperTrait
     }
 
     /**
-     * CidReqListener already resolved and validated the course, so a missing entity here
-     * can only mean the request carried no course context at all.
-     */
-    private function getContextCourse(CidReqHelper $cidReqHelper): Course
-    {
-        return $cidReqHelper->getDoctrineCourseEntity()
-            ?? throw new BadRequestHttpException('Missing course id.');
-    }
-
-    /**
      * SessionVoter proves the course/session pairing for students and course coaches, but not
      * for general coaches or admins. Assert it before persisting a resource link, so an
      * unrelated pair can never be written.

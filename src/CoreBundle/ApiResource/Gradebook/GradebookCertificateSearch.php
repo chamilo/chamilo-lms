@@ -39,19 +39,27 @@ final class GradebookCertificateSearch
     #[Groups(['gradebook_certificate_search:read'])]
     public string $id = 'gradebook_certificate_search';
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_certificate_search:read'])]
     public array $users = [];
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     #[Groups(['gradebook_certificate_search:read'])]
     public ?array $selectedUser = null;
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_certificate_search:read'])]
     public array $courseCertificates = [];
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_certificate_search:read'])]
     public array $sessionCertificates = [];
 

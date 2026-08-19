@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookLinkevalLog;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -50,6 +51,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
     private const ACTION_UNLOCK = 'unlock';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -73,10 +75,13 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
-        $this->validateGroupContext($request, $course);
+        $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
 
         if ($this->isStudentView($request) || !$this->canManageGradebook($course, $session, $user)) {
@@ -245,7 +250,9 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         return $evaluation;
     }
 
-    /** @return array{0: string, 1: string, 2: float, 3: float, 4: ?float} */
+    /**
+     * @return array{0: string, 1: string, 2: float, 3: float, 4: ?float}
+     */
     private function validateEvaluationForm(
         GradebookEvaluationAction $data,
         Course $course,
@@ -316,6 +323,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
                 continue;
             }
             $modelId = (int) $courseSetting->getValue();
+
             break;
         }
 
@@ -324,6 +332,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             foreach ($setting['models'] as $model) {
                 if (\is_array($model) && (int) ($model['id'] ?? 0) === $modelId) {
                     $selectedModel = $model;
+
                     break;
                 }
             }
@@ -474,37 +483,6 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         return false;
     }
 
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
-    }
-
     private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory
     {
         return $this->entityManager->getRepository(GradebookCategory::class)->findOneBy(
@@ -522,15 +500,11 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): void
+    private function validateGroupContext(Operation $operation, Course $course): void
     {
-        $groupId = max(0, $request->query->getInt('gid'));
-        if (0 === $groupId) {
-            return;
-        }
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
+            return;
         }
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();

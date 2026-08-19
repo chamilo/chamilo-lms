@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -82,6 +83,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizQuestionRepository $questionRepository,
@@ -101,8 +103,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if (!$this->canManageExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }
@@ -113,10 +115,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         if ($questionId > 0) {
             if ($quiz instanceof CQuiz) {
-                return $this->buildExistingQuestionResponse($quiz, $questionId, $course, $session);
+                return $this->buildExistingQuestionResponse($operation, $quiz, $questionId, $course, $session);
             }
 
-            return $this->buildGlobalExistingQuestionResponse($questionId, $course, $session);
+            return $this->buildGlobalExistingQuestionResponse($operation, $questionId, $course, $session);
         }
 
         $type = $request->query->getInt('type', self::UNIQUE_ANSWER);
@@ -250,7 +252,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return $response;
     }
 
-    private function buildExistingQuestionResponse(CQuiz $quiz, int $questionId, Course $course, ?Session $session): ExerciseQuestionEditor
+    private function buildExistingQuestionResponse(Operation $operation, CQuiz $quiz, int $questionId, Course $course, ?Session $session): ExerciseQuestionEditor
     {
         $question = $this->getQuestionFromExercise($quiz, $questionId);
         $type = (int) $question->getType();
@@ -279,9 +281,9 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->categoryId = $this->getFirstCategoryId($question);
         $response->parentMediaId = (int) ($question->getParentMediaId() ?? 0);
         $response->answers = $this->getAnswers($question);
-        $this->addAnnotationData($response, $question, $course, $session);
-        $this->addOnlyofficeData($response, $quiz, $question, $course, $session);
-        $this->addHotspotData($response, $quiz, $question, $course, $session);
+        $this->addAnnotationData($operation, $response, $question, $course, $session);
+        $this->addOnlyofficeData($operation, $response, $quiz, $question, $course, $session);
+        $this->addHotspotData($operation, $response, $quiz, $question, $course, $session);
         if (!$this->usesHotspot($type) && $this->isAdaptiveScenarioQuestionType($type) && $this->isHotspotDelineationQuestionAllowed($quiz)) {
             $this->addHotspotScenarioOptions($response, $quiz, $question);
         }
@@ -296,6 +298,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     }
 
     private function buildGlobalExistingQuestionResponse(
+        Operation $operation,
         int $questionId,
         Course $course,
         ?Session $session,
@@ -329,8 +332,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $response->categoryId = $this->getFirstCategoryId($question);
         $response->parentMediaId = (int) ($question->getParentMediaId() ?? 0);
         $response->answers = $this->getAnswers($question);
-        $this->addAnnotationData($response, $question, $course, $session);
-        $this->addHotspotData($response, null, $question, $course, $session);
+        $this->addAnnotationData($operation, $response, $question, $course, $session);
+        $this->addHotspotData($operation, $response, null, $question, $course, $session);
         $this->addCalculatedData($response, $question);
         $this->addFillBlanksData($response, $question);
         $this->addMatchingData($response, $question);
@@ -469,36 +472,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         } catch (Throwable) {
             return false;
         }
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function canManageExercises(): bool
@@ -1098,7 +1071,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
-    private function addHotspotData(ExerciseQuestionEditor $response, ?CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
+    private function addHotspotData(Operation $operation, ExerciseQuestionEditor $response, ?CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
     {
         if (!$this->usesHotspot((int) $question->getType())) {
             return;
@@ -1110,6 +1083,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             if ($resourceFile instanceof ResourceFile) {
                 $response->hotspotImageName = (string) $resourceFile->getOriginalName();
                 $response->hotspotImageUrl = $this->appendCourseContextToUrl(
+                    $operation,
                     $this->questionRepository->getHotSpotImageUrl($question),
                     $course,
                     $session
@@ -1341,6 +1315,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     }
 
     private function addOnlyofficeData(
+        Operation $operation,
         ExerciseQuestionEditor $response,
         CQuiz $quiz,
         CQuizQuestion $question,
@@ -1363,11 +1338,13 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $response->onlyofficeTemplateName = (string) ($resourceFile->getOriginalName() ?: $question->getExtra() ?: $resourceNode->getTitle());
         $response->onlyofficeTemplateUrl = $this->appendCourseContextToUrl(
+            $operation,
             $this->questionRepository->getHotSpotImageUrl($question),
             $course,
             $session
         );
         $response->onlyofficeEditorUrl = $this->getOnlyofficeTemplateEditorUrl(
+            $operation,
             $quiz,
             $question,
             $resourceNode,
@@ -1378,6 +1355,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     }
 
     private function getOnlyofficeTemplateEditorUrl(
+        Operation $operation,
         CQuiz $quiz,
         CQuizQuestion $question,
         ResourceNode $resourceNode,
@@ -1398,7 +1376,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             'questionId' => $questionId,
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
-            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
             'origin' => 'exercise',
             'embedded' => 1,
             'forceEdit' => 'true',
@@ -1432,7 +1410,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         }
     }
 
-    private function addAnnotationData(ExerciseQuestionEditor $response, CQuizQuestion $question, Course $course, ?Session $session): void
+    private function addAnnotationData(Operation $operation, ExerciseQuestionEditor $response, CQuizQuestion $question, Course $course, ?Session $session): void
     {
         if (self::ANNOTATION !== (int) $question->getType()) {
             return;
@@ -1450,13 +1428,14 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $response->annotationImageName = (string) $resourceFile->getOriginalName();
         $response->annotationImageUrl = $this->appendCourseContextToUrl(
+            $operation,
             $this->questionRepository->getHotSpotImageUrl($question),
             $course,
             $session
         );
     }
 
-    private function appendCourseContextToUrl(string $url, Course $course, ?Session $session): string
+    private function appendCourseContextToUrl(Operation $operation, string $url, Course $course, ?Session $session): string
     {
         if ('' === $url) {
             return '';
@@ -1465,8 +1444,8 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $request = $this->requestStack->getCurrentRequest();
         $params = [
             'cid' => (int) $course->getId(),
-            'sid' => (int) ($session?->getId() ?? $request?->query->getInt('sid', 0) ?? 0),
-            'gid' => (int) ($request?->query->getInt('gid', 0) ?? 0),
+            'sid' => (int) ($session?->getId() ?? $this->cidReqHelper->getSessionId() ?? 0),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
         ];
 
         return $url.(str_contains($url, '?') ? '&' : '?').http_build_query($params);

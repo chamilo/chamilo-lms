@@ -32,7 +32,7 @@ final readonly class CourseGroupCategoryFormProcessor implements ProcessorInterf
             throw new BadRequestHttpException('The current request is not available.');
         }
         $categoryId = (int) ($uriVariables['categoryId'] ?? $request->attributes->get('categoryId', 0));
-        $data->categoryId = $this->manager->saveCategory($data, $request, $categoryId);
+        $data->categoryId = $this->manager->saveCategory($data, $categoryId);
         $data->success = true;
         $data->message = 'Saved';
 

@@ -46,7 +46,7 @@
       />
       <h1
         v-else-if="'update' === installerData.installType"
-        v-text="t('Update from Chamilo ' + installerData.upgradeFromVersion.join(' | '))"
+        v-text="t('Update from Chamilo ' + installerData.upgradeFromVersion[0].split('.').slice(0, 2).join('.'))"
         class="mb-4 text-center"
       />
       <h1

@@ -202,7 +202,7 @@
         severity="warning"
       >
         <strong v-text="t('Error')" /><br />
-        Chamilo {{ installerData.upgradeFromVersion.join("|") }}
+        Chamilo {{ installerData.upgradeFromVersion[0].split(".").slice(0, 2).join(".") }}
         {{ t("has not been found in that directory") }}
       </Message>
 

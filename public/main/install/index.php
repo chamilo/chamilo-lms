@@ -295,7 +295,7 @@ if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
             if (file_exists($proposedUpdatePath)) {
-                if (in_array($my_old_version, $upgradeFromVersion)) {
+                if (1 === preg_match('/^1\.11\.\d+$/', (string) $my_old_version)) {
                     $_POST['step2'] = 1;
                 } else {
                     $badUpdatePath = true;

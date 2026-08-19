@@ -58,7 +58,7 @@ final class LearningPathChamiloBackupExportAction extends AbstractController
             throw new AccessDeniedHttpException('Chamilo learning path export is disabled.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         if (null !== $group) {

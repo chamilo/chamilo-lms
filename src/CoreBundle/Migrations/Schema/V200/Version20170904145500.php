@@ -151,9 +151,27 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_quiz_answer DROP id');
         }
 
-        $this->addSql('ALTER TABLE c_quiz_answer CHANGE question_id question_id INT DEFAULT NULL');
-        if (false === $table->hasForeignKey('FK_AEBC3EFF1E27F6BF')) {
-            $this->addSql('ALTER TABLE c_quiz_answer ADD CONSTRAINT FK_AEBC3EFF1E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE');
+        $liveAnswerTable = $this->connection
+            ->createSchemaManager()
+            ->introspectTable('c_quiz_answer');
+
+        if ($liveAnswerTable->getColumn('question_id')->getNotnull()) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_answer CHANGE question_id question_id INT DEFAULT NULL'
+            );
+            $liveAnswerTable = $this->connection
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_answer');
+        }
+
+        if (!$liveAnswerTable->hasForeignKey('FK_AEBC3EFF1E27F6BF')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_answer
+                 ADD CONSTRAINT FK_AEBC3EFF1E27F6BF
+                 FOREIGN KEY (question_id)
+                 REFERENCES c_quiz_question (iid)
+                 ON DELETE CASCADE'
+            );
         }
 
         // c_quiz_question.
@@ -217,10 +235,38 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_quiz_question_option DROP id');
         }
 
-        if (!$table->hasForeignKey('FK_499A73F31E27F6BF')) {
-            $this->addSql('ALTER TABLE c_quiz_question_option CHANGE question_id question_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE c_quiz_question_option ADD CONSTRAINT FK_499A73F31E27F6BF FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid) ON DELETE CASCADE');
-            $this->addSql('CREATE INDEX IDX_499A73F31E27F6BF ON c_quiz_question_option (question_id);');
+        $liveQuestionOptionTable = $this->connection
+            ->createSchemaManager()
+            ->introspectTable('c_quiz_question_option');
+
+        if ($liveQuestionOptionTable->getColumn('question_id')->getNotnull()) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_question_option CHANGE question_id question_id INT DEFAULT NULL'
+            );
+            $liveQuestionOptionTable = $this->connection
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_question_option');
+        }
+
+        if (!$liveQuestionOptionTable->hasForeignKey('FK_499A73F31E27F6BF')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_question_option
+                 ADD CONSTRAINT FK_499A73F31E27F6BF
+                 FOREIGN KEY (question_id)
+                 REFERENCES c_quiz_question (iid)
+                 ON DELETE CASCADE'
+            );
+
+            $liveQuestionOptionTable = $this->connection
+                ->createSchemaManager()
+                ->introspectTable('c_quiz_question_option');
+        }
+
+        if (!$liveQuestionOptionTable->hasIndex('IDX_499A73F31E27F6BF')) {
+            $this->connection->executeStatement(
+                'CREATE INDEX IDX_499A73F31E27F6BF
+                 ON c_quiz_question_option (question_id)'
+            );
         }
 
         $table = $schema->getTable('c_quiz_rel_category');
@@ -309,6 +355,92 @@ class Version20170904145500 extends AbstractMigrationChamilo
     }
 
 
+    private function finalizeQuizAnswerSchema(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist(['c_quiz_answer', 'c_quiz_question'])) {
+            return;
+        }
+
+        $table = $schemaManager->introspectTable('c_quiz_answer');
+
+        if (!$table->hasColumn('question_id')) {
+            return;
+        }
+
+        if ($table->getColumn('question_id')->getNotnull()) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_answer
+                 CHANGE question_id question_id INT DEFAULT NULL'
+            );
+        }
+
+        $table = $schemaManager->introspectTable('c_quiz_answer');
+
+        if (!$table->hasForeignKey('FK_AEBC3EFF1E27F6BF')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_answer
+                 ADD CONSTRAINT FK_AEBC3EFF1E27F6BF
+                 FOREIGN KEY (question_id)
+                 REFERENCES c_quiz_question (iid)
+                 ON DELETE CASCADE'
+            );
+        }
+    }
+
+    private function finalizeQuizQuestionOptionSchema(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist([
+            'c_quiz_question_option',
+            'c_quiz_question',
+        ])) {
+            return;
+        }
+
+        $table = $schemaManager->introspectTable(
+            'c_quiz_question_option'
+        );
+
+        if (!$table->hasColumn('question_id')) {
+            return;
+        }
+
+        if ($table->getColumn('question_id')->getNotnull()) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_question_option
+                 CHANGE question_id question_id INT DEFAULT NULL'
+            );
+        }
+
+        $table = $schemaManager->introspectTable(
+            'c_quiz_question_option'
+        );
+
+        if (!$table->hasForeignKey('FK_499A73F31E27F6BF')) {
+            $this->connection->executeStatement(
+                'ALTER TABLE c_quiz_question_option
+                 ADD CONSTRAINT FK_499A73F31E27F6BF
+                 FOREIGN KEY (question_id)
+                 REFERENCES c_quiz_question (iid)
+                 ON DELETE CASCADE'
+            );
+        }
+
+        $table = $schemaManager->introspectTable(
+            'c_quiz_question_option'
+        );
+
+        if (!$table->hasIndex('IDX_499A73F31E27F6BF')) {
+            $this->connection->executeStatement(
+                'CREATE INDEX IDX_499A73F31E27F6BF
+                 ON c_quiz_question_option (question_id)'
+            );
+        }
+    }
+
     private function finalizeQuizQuestionRelationSchema(): void
     {
         $schemaManager = $this->connection->createSchemaManager();
@@ -337,9 +469,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 $this->connection->executeStatement('DROP INDEX course ON c_quiz_rel_question');
             }
 
-            $this->connection->executeStatement(
-                'ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL'
-            );
+            if ($table->getColumn('question_id')->getNotnull()) {
+                $this->connection->executeStatement(
+                    'ALTER TABLE c_quiz_rel_question CHANGE question_id question_id INT DEFAULT NULL'
+                );
+            }
         } else {
             $this->abortIf(
                 true,
@@ -383,6 +517,13 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
     public function postUp(Schema $schema): void
     {
+        // Finalize against the live database after all queued addSql() statements.
+        // This migration is non-transactional, so the initial Schema snapshot may no
+        // longer represent the actual table state after a partial or fresh upgrade.
+        $this->finalizeQuizAnswerSchema();
+        $this->finalizeQuizQuestionOptionSchema();
+        $this->finalizeQuizQuestionRelationSchema();
+
         // Keep the resumable normalization state until every planned schema statement has succeeded.
         // Doctrine executes addSql() statements after up(), so cleanup must happen in postUp().
         // If the non-transactional migration fails during planned SQL execution, the state table

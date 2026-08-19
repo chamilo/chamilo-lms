@@ -45,6 +45,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_D044D5D4EF87E278')) {
             $this->addSql('UPDATE session SET session_admin_id = NULL WHERE session_admin_id NOT IN (SELECT id FROM user)');
+            $this->addSql('ALTER TABLE session CHANGE session_admin_id session_admin_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EF87E278 FOREIGN KEY(session_admin_id) REFERENCES user(id);');
         }
 

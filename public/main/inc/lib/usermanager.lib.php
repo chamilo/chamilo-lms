@@ -6471,9 +6471,18 @@ SQL;
         ];
 
         $filtered = [];
+        // Only a global admin registered in the topmost access URL of a tree may grant
+        // ROLE_GLOBAL_ADMIN -- for anyone else the option is left off the form entirely,
+        // not merely rejected on submit (areRolesAllowedInUserForm() re-checks this too).
+        $canGrantGlobalAdmin = api_can_grant_global_admin_role();
 
         foreach ($roleOptions as $roleCode => $label) {
             $normalizedRole = api_normalize_role_code((string) $roleCode);
+
+            if ('ROLE_GLOBAL_ADMIN' === $normalizedRole && !$canGrantGlobalAdmin) {
+                continue;
+            }
+
             $mappedStatus = (int) api_status_from_roles([$normalizedRole]);
 
             if (in_array($mappedStatus, $knownStatuses, true)) {

@@ -49,6 +49,7 @@ const coursesPage = ref(1)
 const coursesPageSize = ref(20)
 
 const loginsLoading = ref(false)
+const loginsScoped = ref(false)
 const today = new Date()
 const thirtyDaysAgo = new Date(today)
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29)
@@ -164,6 +165,7 @@ async function loadLogins() {
       from: toDateOnlyString(loginsFrom.value),
       to: toDateOnlyString(loginsTo.value),
     })
+    loginsScoped.value = data.scoped
     renderLoginsChart(data.labels, data.counts, data.uniqueCounts)
   } finally {
     loginsLoading.value = false
@@ -305,17 +307,18 @@ onBeforeUnmount(() => {
       <Column
         field="url"
         :header="t('URL')"
-        sortable
       >
         <template #body="{ data }">
-          <a
-            :href="data.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 hover:underline"
-          >
-            {{ data.url }}
-          </a>
+          <span :style="{ paddingLeft: `${data.depth * 24}px` }">
+            <a
+              :href="data.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:underline"
+            >
+              {{ data.url }}
+            </a>
+          </span>
         </template>
       </Column>
       <Column
@@ -389,7 +392,9 @@ onBeforeUnmount(() => {
 
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
       <div class="mb-4 flex flex-wrap items-end justify-between gap-4">
-        <h2 class="text-base font-semibold">{{ t("Logins (all URLs combined)") }}</h2>
+        <h2 class="text-base font-semibold">
+          {{ loginsScoped ? t("Logins (your URLs)") : t("Logins (all URLs combined)") }}
+        </h2>
         <div class="flex flex-wrap gap-4">
           <BaseCalendar
             id="multi-url-logins-from"

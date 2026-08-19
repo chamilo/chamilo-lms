@@ -8,7 +8,10 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +30,10 @@ use const PHP_SESSION_ACTIVE;
  * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
  * for every state-changing request the router resolves — no per-endpoint
  * token is generated or checked here.
+ *
+ * A ROLE_GLOBAL_ADMIN registered in the topmost URL of a tree is unrestricted; one
+ * registered only in a non-root URL is scoped to that URL's subtree (AccessUrlScopeHelper)
+ * and may only list/assign URLs within it.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-usergroups-data')]
@@ -34,7 +41,19 @@ class AccessUrlUserGroupsController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly AccessUrlScopeHelper $accessUrlScope,
+        private readonly UserHelper $userHelper,
     ) {}
+
+    private function currentUser(): User
+    {
+        $user = $this->userHelper->getCurrent();
+        if (null === $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $user;
+    }
 
     #[Route('', name: 'admin_access_urls_usergroups_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
@@ -43,16 +62,23 @@ class AccessUrlUserGroupsController extends AbstractController
             session_write_close();
         }
 
+        $currentUser = $this->currentUser();
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
         $accessUrlId = (int) $request->query->get('access_url_id', 0);
+        if ($accessUrlId > 0 && !$this->accessUrlScope->isUrlManaged($currentUser, $accessUrlId)) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
 
-        $urls = $this->em->createQueryBuilder()
+        $urlsQb = $this->em->createQueryBuilder()
             ->select('a.id AS id, a.url AS url')
             ->from(AccessUrl::class, 'a')
             ->where('a.active = 1')
             ->orderBy('a.url', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $urlsQb->andWhere('a.id IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+        }
+        $urls = $urlsQb->getQuery()->getArrayResult();
 
         $assignedIds = $this->getAssignedGroupIds($accessUrlId);
 
@@ -95,6 +121,9 @@ class AccessUrlUserGroupsController extends AbstractController
         if ($accessUrlId <= 0) {
             return $this->json(['error' => 'Select a URL'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        if (!$this->accessUrlScope->isUrlManaged($this->currentUser(), $accessUrlId)) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
 
         $groupIds = array_map('intval', $data['group_ids'] ?? []);
 
@@ -114,6 +143,13 @@ class AccessUrlUserGroupsController extends AbstractController
 
         if ([] === $groupIds || [] === $urlIds || !\in_array($action, ['add', 'remove'], true)) {
             return $this->json(['error' => 'You must select at least one group and one URL'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $currentUser = $this->currentUser();
+        foreach ($urlIds as $urlId) {
+            if (!$this->accessUrlScope->isUrlManaged($currentUser, $urlId)) {
+                return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+            }
         }
 
         if ('add' === $action) {

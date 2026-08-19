@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import accessUrlManageService from "../../services/accessUrlManageService"
 import { useNotification } from "../../composables/notification"
@@ -11,6 +11,7 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
 const notification = useNotification()
@@ -18,11 +19,45 @@ const notification = useNotification()
 const isLoading = ref(false)
 const items = ref([])
 const myMissingUrls = ref([])
+// Creating a URL and registering into every URL are reserved to an unrestricted global
+// admin; default to false (hiding those actions) until the backend confirms otherwise.
+const canManageAllUrls = ref(false)
 
 const dialogVisible = ref(false)
 const isSaving = ref(false)
 const editingItem = ref(null)
-const form = ref({ url: "https://", description: "", active: false, isLoginOnly: false })
+const form = ref({ url: "https://", description: "", active: false, isLoginOnly: false, parentId: 0 })
+
+// Options for the "Parent URL" selector: every known URL except the one being edited and
+// its own descendants (walked client-side via each item's parentId), so the dropdown can't
+// offer a cycle. The backend re-validates this regardless.
+const parentOptions = computed(() => {
+  if (!editingItem.value) {
+    return items.value
+  }
+
+  const childrenByParent = {}
+  for (const item of items.value) {
+    if (item.parentId) {
+      childrenByParent[item.parentId] ||= []
+      childrenByParent[item.parentId].push(item.id)
+    }
+  }
+
+  const excluded = new Set([editingItem.value.id])
+  const queue = [editingItem.value.id]
+  while (queue.length) {
+    const current = queue.shift()
+    for (const childId of childrenByParent[current] || []) {
+      if (!excluded.has(childId)) {
+        excluded.add(childId)
+        queue.push(childId)
+      }
+    }
+  }
+
+  return items.value.filter((item) => !excluded.has(item.id))
+})
 
 async function loadData() {
   isLoading.value = true
@@ -30,6 +65,7 @@ async function loadData() {
     const data = await accessUrlManageService.list()
     items.value = data.items
     myMissingUrls.value = data.myMissingUrls
+    canManageAllUrls.value = data.canManageAllUrls
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
@@ -39,7 +75,7 @@ async function loadData() {
 
 function openCreateDialog() {
   editingItem.value = null
-  form.value = { url: "https://", description: "", active: false, isLoginOnly: false }
+  form.value = { url: "https://", description: "", active: false, isLoginOnly: false, parentId: 0 }
   dialogVisible.value = true
 }
 
@@ -50,6 +86,7 @@ function openEditDialog(item) {
     description: item.description,
     active: item.active,
     isLoginOnly: item.isLoginOnly,
+    parentId: item.parentId || 0,
   }
   dialogVisible.value = true
 }
@@ -121,6 +158,7 @@ onMounted(() => {
         :route="{ name: 'AdminMultiUrlList' }"
       />
       <BaseButton
+        v-if="canManageAllUrls"
         :label="t('Add URL')"
         icon="plus"
         type="success"
@@ -153,7 +191,7 @@ onMounted(() => {
     </SectionHeader>
 
     <div
-      v-if="myMissingUrls.length"
+      v-if="myMissingUrls.length && canManageAllUrls"
       class="rounded bg-orange-100 text-orange-800 px-4 py-3 text-sm flex items-center justify-between gap-4 flex-wrap"
     >
       <span>{{ t("Admin user should be registered here") }}: {{ myMissingUrls.map((u) => u.url).join(", ") }}</span>
@@ -174,17 +212,18 @@ onMounted(() => {
       <Column
         field="url"
         :header="t('URL')"
-        sortable
       >
         <template #body="{ data }">
-          <a
-            :href="data.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 hover:underline"
-          >
-            {{ data.url }}
-          </a>
+          <span :style="{ paddingLeft: `${data.depth * 24}px` }">
+            <a
+              :href="data.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:underline"
+            >
+              {{ data.url }}
+            </a>
+          </span>
         </template>
       </Column>
       <Column
@@ -194,7 +233,7 @@ onMounted(() => {
       <Column :header="t('Active')">
         <template #body="{ data }">
           <button
-            v-if="!data.isDefault"
+            v-if="!data.isDefault && canManageAllUrls"
             type="button"
             @click="toggleStatus(data)"
           >
@@ -202,7 +241,7 @@ onMounted(() => {
           </button>
           <BaseIcon
             v-else
-            icon="toggle-switch"
+            :icon="data.active ? 'toggle-switch' : 'toggle-switch-off'"
           />
         </template>
       </Column>
@@ -212,7 +251,10 @@ onMounted(() => {
       <Column :header="t('Created at')">
         <template #body="{ data }">{{ data.tms }}</template>
       </Column>
-      <Column :header="t('Edit')">
+      <Column
+        v-if="canManageAllUrls"
+        :header="t('Edit')"
+      >
         <template #body="{ data }">
           <div class="flex gap-1 flex-nowrap">
             <BaseButton
@@ -253,6 +295,17 @@ onMounted(() => {
           id="access-url-description"
           v-model="form.description"
           :label="t('Description')"
+        />
+        <BaseSelect
+          v-if="!editingItem || !editingItem.isDefault"
+          id="access-url-parent"
+          v-model="form.parentId"
+          name="parentId"
+          :label="t('Parent URL')"
+          :options="parentOptions"
+          option-label="url"
+          option-value="id"
+          allow-clear
         />
         <BaseCheckbox
           v-if="editingItem && !editingItem.isDefault"

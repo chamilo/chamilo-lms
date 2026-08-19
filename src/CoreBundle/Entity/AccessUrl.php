@@ -34,10 +34,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(security: "is_granted('ROLE_GLOBAL_ADMIN')"),
-        new Put(security: "is_granted('ROLE_GLOBAL_ADMIN')"),
-        new Patch(security: "is_granted('ROLE_GLOBAL_ADMIN')"),
-        new Delete(security: "is_granted('ROLE_GLOBAL_ADMIN')"),
+        new Post(
+            security: "is_granted('ROLE_GLOBAL_ADMIN')",
+            securityPostDenormalize: "is_granted('CREATE', object)"
+        ),
+        new Put(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('DELETE', object)"),
     ],
     normalizationContext: [
         'groups' => ['access_url:read'],

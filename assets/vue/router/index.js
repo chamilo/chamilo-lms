@@ -414,6 +414,7 @@ const router = createRouter({
       name: "AccessUrlDelete",
       component: () => import("../views/accessurl/DeleteAccessUrl.vue"),
       props: (route) => ({ id: Number(route.params.id) }),
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Delete access" },
     },
     {
       path: "/home",

@@ -39442,3 +39442,9 @@ msgstr ""
 
 msgid "Unique logins"
 msgstr ""
+
+msgid "Parent URL"
+msgstr ""
+
+msgid "Logins (your URLs)"
+msgstr ""

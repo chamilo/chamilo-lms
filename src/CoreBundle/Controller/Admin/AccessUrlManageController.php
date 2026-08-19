@@ -8,7 +8,10 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHierarchyHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use DateTime;
@@ -30,6 +33,13 @@ use const PHP_SESSION_ACTIVE;
  * CSRF is handled globally by CsrfProtectionListener (stateless, origin-based)
  * for every state-changing request the router resolves — no per-endpoint
  * token is generated or checked here.
+ *
+ * A ROLE_GLOBAL_ADMIN registered in the topmost URL of a tree is unrestricted; one registered
+ * only in a non-root URL is scoped to that URL's subtree for read access only — see
+ * AccessUrlScopeHelper. Creating, editing, locking/unlocking and deleting a URL (i.e. the
+ * AccessUrl entity's own CRUD, as opposed to what is assigned to it) are reserved to
+ * unrestricted admins specifically: a subtree admin may not do any of these, even for a URL
+ * within their own subtree. Same for registerAdmin() (self-registration into every URL).
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/access-urls-manage-data')]
@@ -39,8 +49,20 @@ class AccessUrlManageController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlScopeHelper $accessUrlScope,
+        private readonly AccessUrlHierarchyHelper $accessUrlHierarchy,
         private readonly UserHelper $userHelper,
     ) {}
+
+    private function currentUser(): User
+    {
+        $user = $this->userHelper->getCurrent();
+        if (null === $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $user;
+    }
 
     #[Route('', name: 'admin_access_urls_manage_data', methods: ['GET'])]
     public function list(): JsonResponse
@@ -49,8 +71,25 @@ class AccessUrlManageController extends AbstractController
             session_write_close();
         }
 
-        $urls = $this->accessUrlRepository->findAll();
-        $currentUserId = (int) $this->userHelper->getCurrent()?->getId();
+        $currentUser = $this->currentUser();
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
+
+        $urlQb = $this->em->createQueryBuilder()
+            ->select('a')
+            ->from(AccessUrl::class, 'a')
+        ;
+        if (null !== $managedUrlIds) {
+            $urlQb->andWhere('a.id IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+        }
+
+        /** @var AccessUrl[] $urls */
+        $urls = $urlQb->getQuery()->getResult();
+        // Display order: a parent immediately followed by its own children, recursively,
+        // siblings alphabetical -- so the Vue table can show the hierarchy via indentation
+        // alone (see AccessUrlHierarchyHelper).
+        $orderedUrls = $this->accessUrlHierarchy->order($urls);
+
+        $currentUserId = (int) $currentUser->getId();
 
         $registeredUrlIds = [];
         if ($currentUserId > 0) {
@@ -67,7 +106,8 @@ class AccessUrlManageController extends AbstractController
 
         $items = [];
         $myMissingUrls = [];
-        foreach ($urls as $url) {
+        foreach ($orderedUrls as $entry) {
+            $url = $entry['url'];
             $id = (int) $url->getId();
             $items[] = [
                 'id' => $id,
@@ -77,6 +117,8 @@ class AccessUrlManageController extends AbstractController
                 'isLoginOnly' => $url->isLoginOnly(),
                 'tms' => $url->getTms()?->format('Y-m-d H:i:s'),
                 'isDefault' => 1 === $id,
+                'parentId' => $url->getSuperior()?->getId(),
+                'depth' => $entry['depth'],
             ];
 
             if (1 === $url->getActive() && !\in_array($id, $registeredUrlIds, true)) {
@@ -87,12 +129,20 @@ class AccessUrlManageController extends AbstractController
         return $this->json([
             'items' => $items,
             'myMissingUrls' => $myMissingUrls,
+            // Creating a URL and registering into every URL are reserved to unrestricted
+            // admins; the Vue page uses this to hide those actions rather than only refuse
+            // them on submit.
+            'canManageAllUrls' => null === $managedUrlIds,
         ]);
     }
 
     #[Route('', name: 'admin_access_urls_manage_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
+        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+            throw $this->createAccessDeniedException('Only an unrestricted global admin may create a new access URL.');
+        }
+
         $data = json_decode($request->getContent(), true) ?? [];
 
         $url = $this->normalizeUrl((string) ($data['url'] ?? ''));
@@ -102,6 +152,15 @@ class AccessUrlManageController extends AbstractController
 
         if ($this->accessUrlRepository->exists($url)) {
             return $this->json(['error' => 'This URL already exists, please select another URL'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $parentAccessUrl = null;
+        $parentId = (int) ($data['parentId'] ?? 0);
+        if ($parentId > 0) {
+            $parentAccessUrl = $this->em->find(AccessUrl::class, $parentId);
+            if (null === $parentAccessUrl) {
+                return $this->json(['error' => 'The selected parent URL does not exist.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
         }
 
         $isLoginOnly = (bool) ($data['isLoginOnly'] ?? false);
@@ -126,6 +185,13 @@ class AccessUrlManageController extends AbstractController
             ->setIsLoginOnly($isLoginOnly)
         ;
 
+        // AccessUrlListener::prePersist() defaults a URL's parent to the login-only URL (if
+        // any) or the first URL, but only when no parent has been set yet — so an explicit
+        // choice here is respected, and omitting it keeps today's default behavior.
+        if (null !== $parentAccessUrl) {
+            $accessUrl->setSuperior($parentAccessUrl)->setParentResourceNode($parentAccessUrl->resourceNode->getId());
+        }
+
         $this->em->persist($accessUrl);
         $this->em->flush();
 
@@ -135,6 +201,10 @@ class AccessUrlManageController extends AbstractController
     #[Route('/{id}', name: 'admin_access_urls_manage_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function update(int $id, Request $request): JsonResponse
     {
+        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+            throw $this->createAccessDeniedException('Only an unrestricted global admin may edit an access URL.');
+        }
+
         $data = json_decode($request->getContent(), true) ?? [];
 
         $accessUrl = $this->em->find(AccessUrl::class, $id);
@@ -149,6 +219,21 @@ class AccessUrlManageController extends AbstractController
 
         // The default (id=1) URL can never be deactivated.
         $active = 1 === $id ? 1 : ((bool) ($data['active'] ?? false) ? 1 : 0);
+
+        if (\array_key_exists('parentId', $data) && (int) $data['parentId'] > 0) {
+            $parentId = (int) $data['parentId'];
+            $isOwnDescendant = \in_array($parentId, $this->accessUrlScope->getDescendantUrlIds($id), true);
+            if ($isOwnDescendant) {
+                return $this->json(['error' => 'The selected parent URL is not valid.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $parentAccessUrl = $this->em->find(AccessUrl::class, $parentId);
+            if (null === $parentAccessUrl) {
+                return $this->json(['error' => 'The selected parent URL does not exist.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $accessUrl->setSuperior($parentAccessUrl)->setParentResourceNode($parentAccessUrl->resourceNode->getId());
+        }
 
         $accessUrl
             ->setUrl($url)
@@ -179,9 +264,14 @@ class AccessUrlManageController extends AbstractController
     #[Route('/register-admin', name: 'admin_access_urls_manage_register_admin', methods: ['POST'])]
     public function registerAdmin(): JsonResponse
     {
-        $currentUserId = (int) $this->userHelper->getCurrent()?->getId();
+        $currentUser = $this->currentUser();
+        $currentUserId = (int) $currentUser->getId();
         if ($currentUserId <= 0) {
             throw $this->createAccessDeniedException();
+        }
+
+        if (!$this->accessUrlScope->isUnrestricted($currentUser)) {
+            throw $this->createAccessDeniedException('Only an unrestricted global admin may register into every access URL.');
         }
 
         foreach ($this->accessUrlRepository->findAll() as $url) {
@@ -213,6 +303,10 @@ class AccessUrlManageController extends AbstractController
     {
         if (1 === $id) {
             return $this->json(['error' => 'The default URL cannot be disabled.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+            throw $this->createAccessDeniedException('Only an unrestricted global admin may lock or unlock an access URL.');
         }
 
         $accessUrl = $this->em->find(AccessUrl::class, $id);

@@ -18,6 +18,11 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $gradebookEvaluationIdIsUnsigned = $schema->hasTable('gradebook_evaluation')
+            && $schema->getTable('gradebook_evaluation')->hasColumn('id')
+            && $schema->getTable('gradebook_evaluation')->getColumn('id')->getUnsigned();
+        $gradebookEvaluationIdType = $gradebookEvaluationIdIsUnsigned ? 'INT UNSIGNED' : 'INT';
+
         $table = $schema->getTable('gradebook_result_log');
         if ($table->hasColumn('id_result')) {
             $this->addSql('DELETE FROM gradebook_result_log WHERE id_result IS NULL');
@@ -25,7 +30,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE gradebook_result_log SET evaluation_id = NULL WHERE evaluation_id = 0');
-        $this->addSql('ALTER TABLE gradebook_result_log CHANGE evaluation_id evaluation_id INT UNSIGNED DEFAULT NULL');
+        $this->addSql("ALTER TABLE gradebook_result_log CHANGE evaluation_id evaluation_id {$gradebookEvaluationIdType} DEFAULT NULL");
 
         $this->addSql('UPDATE gradebook_result_log SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE user_id user_id INT DEFAULT NULL');
@@ -254,7 +259,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_B88AEB67456C5646 ON gradebook_result (evaluation_id);');
         }
 
-        $this->addSql('ALTER TABLE gradebook_result CHANGE evaluation_id evaluation_id INT UNSIGNED DEFAULT NULL;');
+        $this->addSql("ALTER TABLE gradebook_result CHANGE evaluation_id evaluation_id {$gradebookEvaluationIdType} DEFAULT NULL;");
         $this->addSql('UPDATE gradebook_result SET evaluation_id = NULL WHERE evaluation_id = 0');
 
         $this->addSql('DELETE FROM gradebook_result WHERE evaluation_id NOT IN (SELECT id FROM gradebook_evaluation) ');

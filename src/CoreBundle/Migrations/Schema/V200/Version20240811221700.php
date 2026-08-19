@@ -16,6 +16,11 @@ final class Version20240811221700 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $gradebookEvaluationIdIsUnsigned = $schema->hasTable('gradebook_evaluation')
+            && $schema->getTable('gradebook_evaluation')->hasColumn('id')
+            && $schema->getTable('gradebook_evaluation')->getColumn('id')->getUnsigned();
+        $gradebookEvaluationIdType = $gradebookEvaluationIdIsUnsigned ? 'INT UNSIGNED' : 'INT';
+
         $this->addSql('
             CREATE TABLE IF NOT EXISTS lti_token (
                 id INT AUTO_INCREMENT NOT NULL,
@@ -29,20 +34,20 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ');
 
-        $this->addSql('
+        $this->addSql("
             CREATE TABLE IF NOT EXISTS lti_lineitem (
                 id INT AUTO_INCREMENT NOT NULL,
                 tool_id INT NOT NULL,
-                evaluation INT UNSIGNED NOT NULL,
+                evaluation {$gradebookEvaluationIdType} NOT NULL,
                 resource_id VARCHAR(255) DEFAULT NULL,
                 tag VARCHAR(255) DEFAULT NULL,
-                start_date DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\',
-                end_date DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\',
+                start_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
+                end_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
                 INDEX IDX_5C76B75D8F7B22CC (tool_id),
                 UNIQUE INDEX UNIQ_5C76B75D1323A575 (evaluation),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        ');
+        ");
 
         $this->addSql('
             CREATE TABLE IF NOT EXISTS lti_platform (
@@ -54,12 +59,12 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ');
 
-        $this->addSql('
+        $this->addSql("
             CREATE TABLE IF NOT EXISTS lti_external_tool (
                 id INT AUTO_INCREMENT NOT NULL,
                 resource_node_id INT DEFAULT NULL,
                 c_id INT DEFAULT NULL,
-                gradebook_eval_id INT UNSIGNED DEFAULT NULL,
+                gradebook_eval_id {$gradebookEvaluationIdType} DEFAULT NULL,
                 parent_id INT DEFAULT NULL,
                 title VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,
@@ -72,17 +77,17 @@ final class Version20240811221700 extends AbstractMigrationChamilo
                 client_id VARCHAR(255) DEFAULT NULL,
                 login_url VARCHAR(255) DEFAULT NULL,
                 redirect_url VARCHAR(255) DEFAULT NULL,
-                advantage_services LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\',
-                version VARCHAR(255) DEFAULT \'lti1p1\' NOT NULL,
-                launch_presentation LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\',
-                replacement_params LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\',
+                advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
+                version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
+                launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+                replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
                 UNIQUE INDEX UNIQ_DB0E04E41BAD783F (resource_node_id),
                 INDEX IDX_DB0E04E491D79BD3 (c_id),
                 INDEX IDX_DB0E04E482F80D8B (gradebook_eval_id),
                 INDEX IDX_DB0E04E4727ACA70 (parent_id),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        ');
+        ");
 
         $this->addSql('
             ALTER TABLE lti_token

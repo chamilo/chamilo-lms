@@ -19,6 +19,9 @@ final class Version20200101020000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         if (!$schema->getTable('language')->getColumn('id')->getAutoincrement()) {
+            // MariaDB's AUTO_INCREMENT resequencing fails with a duplicate-key error
+            // when the table already has a row at id=0; move it out of the way first.
+            $this->addSql('UPDATE language SET id = (SELECT next_id FROM (SELECT MAX(id) + 1 AS next_id FROM language) AS t) WHERE id = 0');
             $this->addSql('ALTER TABLE language MODIFY id INT(11) NOT NULL AUTO_INCREMENT');
         }
 

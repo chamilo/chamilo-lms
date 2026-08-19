@@ -104,14 +104,14 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
         $categoryLinks = $category->getLinks();
         $categoryEvaluations = $category->getEvaluations();
         $links = array_values(array_filter(
-            is_array($categoryLinks) ? $categoryLinks : $categoryLinks->toArray(),
+            \is_array($categoryLinks) ? $categoryLinks : $categoryLinks->toArray(),
             static fn (mixed $item): bool => $item instanceof GradebookLink,
         ));
         $evaluations = array_values(array_filter(
-            is_array($categoryEvaluations) ? $categoryEvaluations : $categoryEvaluations->toArray(),
+            \is_array($categoryEvaluations) ? $categoryEvaluations : $categoryEvaluations->toArray(),
             static fn (mixed $item): bool => $item instanceof GradebookEvaluation,
         ));
-        $itemCount = count($links) + count($evaluations);
+        $itemCount = \count($links) + \count($evaluations);
         if (0 === $itemCount) {
             return;
         }
@@ -141,7 +141,9 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
         }
     }
 
-    /** @param list<array<string, mixed>> $weights */
+    /**
+     * @param list<array<string, mixed>> $weights
+     */
     private function saveWeights(
         GradebookCategory $category,
         array $weights,
@@ -166,6 +168,7 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
                     throw new AccessDeniedHttpException('A Gradebook online activity is locked.');
                 }
                 $this->updateLinkWeight($link, (float) $weight, $course, $session, $user);
+
                 continue;
             }
 
@@ -178,6 +181,7 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
                     throw new AccessDeniedHttpException('A manual evaluation is locked.');
                 }
                 $this->updateEvaluationWeight($evaluation, (float) $weight, $user);
+
                 continue;
             }
 
@@ -203,7 +207,7 @@ final readonly class GradebookWeightActionProcessor implements ProcessorInterfac
                 $course,
                 $session,
             );
-        } catch (AccessDeniedHttpException|NotFoundHttpException|BadRequestHttpException) {
+        } catch (AccessDeniedHttpException|BadRequestHttpException|NotFoundHttpException) {
             return;
         }
 

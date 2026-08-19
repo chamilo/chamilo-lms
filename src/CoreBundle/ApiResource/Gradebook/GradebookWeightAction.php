@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Gradebook;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookWeightActionProcessor;
@@ -22,9 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Update or automatically distribute Gradebook item weights',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                 ],
             ),
@@ -34,6 +32,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 or is_granted('ROLE_SESSION_MANAGER')",
             name: 'post_gradebook_weight_action',
             processor: GradebookWeightActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['gradebook_weight_action:read']],
@@ -51,7 +64,9 @@ final class GradebookWeightAction
     #[Groups(['gradebook_weight_action:write'])]
     public ?int $categoryId = null;
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_weight_action:write'])]
     public array $weights = [];
 

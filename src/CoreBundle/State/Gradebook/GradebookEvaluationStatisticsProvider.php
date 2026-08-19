@@ -177,6 +177,7 @@ final readonly class GradebookEvaluationStatisticsProvider implements ProviderIn
                 if ($scaledScore <= $normalizedBoundary) {
                     return $range['display'];
                 }
+
                 continue;
             }
 

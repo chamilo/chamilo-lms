@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -32,12 +33,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const DATE_ATOM;
+
 /**
  * @implements ProviderInterface<GradebookEvaluationResults>
  */
 final readonly class GradebookEvaluationResultsProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -63,10 +67,10 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
 
     public function buildReport(Request $request): GradebookEvaluationResults
     {
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->getCourse($this->cidReqHelper->getCourseId());
+        $session = $this->getSession($this->cidReqHelper->getSessionId(), $course);
         $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($request, $course);
+        $groupId = $this->validateGroupContext($this->cidReqHelper->getGroupId(), $course);
         $user = $this->getCurrentUser();
 
         if (!$this->canViewEvaluationResults()) {
@@ -190,9 +194,8 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         return $response;
     }
 
-    private function getCourse(Request $request): Course
+    private function getCourse(?int $courseId): Course
     {
-        $courseId = $request->query->getInt('cid');
         if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
@@ -205,9 +208,8 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         return $course;
     }
 
-    private function getSession(Request $request, Course $course): ?Session
+    private function getSession(?int $sessionId, Course $course): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
         if ($sessionId <= 0) {
             return null;
         }
@@ -243,9 +245,9 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): int
+    private function validateGroupContext(?int $groupId, Course $course): int
     {
-        $groupId = max(0, $request->query->getInt('gid'));
+        $groupId = max(0, (int) $groupId);
         if (0 === $groupId) {
             return 0;
         }
@@ -406,7 +408,9 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function getScoreOptions(Course $course, float $maxScore): array
     {
         $setting = $this->settingsManager->getSetting('exercise.score_grade_model', true);
@@ -425,6 +429,7 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
             }
 
             $modelId = (int) $courseSetting->getValue();
+
             break;
         }
 
@@ -433,6 +438,7 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
             foreach ($setting['models'] as $model) {
                 if (\is_array($model) && (int) ($model['id'] ?? 0) === $modelId) {
                     $selectedModel = $model;
+
                     break;
                 }
             }

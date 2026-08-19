@@ -324,7 +324,9 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
         return $ranges[array_key_last($ranges)]['display'];
     }
 
-    /** @return array<string, int> */
+    /**
+     * @return array<string, int>
+     */
     private function buildContext(Request $request, Course $course, ?Session $session, int $groupId): array
     {
         return [
@@ -335,7 +337,9 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeCategory(GradebookCategory $category): array
     {
         return [
@@ -345,7 +349,9 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeLearner(User $learner, bool $showEmailAddresses): array
     {
         return [
@@ -358,7 +364,6 @@ final readonly class GradebookLearnerReportProvider implements ProviderInterface
             'email' => $showEmailAddresses ? (string) ($learner->getEmail() ?? '') : '',
         ];
     }
-
 
     private function getNumberDecimals(): int
     {

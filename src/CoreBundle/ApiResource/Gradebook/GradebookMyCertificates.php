@@ -32,11 +32,15 @@ final class GradebookMyCertificates
     #[Groups(['gradebook_my_certificates:read'])]
     public string $id = 'gradebook_my_certificates';
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_my_certificates:read'])]
     public array $courseCertificates = [];
 
-    /** @var list<array<string, mixed>> */
+    /**
+     * @var list<array<string, mixed>>
+     */
     #[Groups(['gradebook_my_certificates:read'])]
     public array $sessionCertificates = [];
 

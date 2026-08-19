@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SkillRelGradebook;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -42,6 +43,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class GradebookOverviewProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -66,11 +68,11 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->getSession($operation, $course);
         $user = $this->getCurrentUser();
         $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($request, $course);
+        $groupId = $this->validateGroupContext($operation, $course);
 
         $isStudentView = $this->isStudentView($request);
         $canViewAll = !$isStudentView && $this->canViewAllGradebookItems();
@@ -178,24 +180,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         return $overview;
     }
 
-    private function getCourse(Request $request): Course
+    private function getSession(Operation $operation, Course $course): ?Session
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId <= 0) {
             return null;
         }
@@ -284,9 +271,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
             && $this->isSettingEnabled('session.allow_coach_to_edit_course_session');
     }
 
-    private function validateGroupContext(Request $request, Course $course): int
+    private function validateGroupContext(Operation $operation, Course $course): int
     {
-        $groupId = max(0, $request->query->getInt('gid'));
+        $groupId = max(0, (int) $this->cidReqHelper->getGroupId());
         if (0 === $groupId) {
             return 0;
         }
@@ -619,7 +606,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         return array_values($items);
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeEvaluation(GradebookEvaluation $evaluation, User $user, bool $canViewAll): array
     {
         $item = [
@@ -654,7 +643,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeCategory(GradebookCategory $category): array
     {
         $parent = $category->getParent();
@@ -686,7 +677,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         ];
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function buildCategoryTrail(GradebookCategory $category, GradebookCategory $rootCategory): array
     {
         $trail = [];
@@ -715,7 +708,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         return array_reverse($trail);
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function buildCategoryOptions(GradebookCategory $rootCategory, bool $canViewAll): array
     {
         $options = [];
@@ -784,6 +779,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
                 continue;
             }
             $modelId = (int) $courseSetting->getValue();
+
             break;
         }
 
@@ -792,6 +788,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
             foreach ($setting['models'] as $model) {
                 if (\is_array($model) && (int) ($model['id'] ?? 0) === $modelId) {
                     $selectedModel = $model;
+
                     break;
                 }
             }
@@ -814,7 +811,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         return $max;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function getSettings(): array
     {
         $defaultWeight = $this->settingsManager->getSetting('gradebook.gradebook_default_weight', true);
@@ -852,7 +851,9 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         ];
     }
 
-    /** @return array{exerciseMinScore: float|null, exerciseMaxScore: float|null} */
+    /**
+     * @return array{exerciseMinScore: float|null, exerciseMaxScore: float|null}
+     */
     private function getExerciseScaleSettings(): array
     {
         return [

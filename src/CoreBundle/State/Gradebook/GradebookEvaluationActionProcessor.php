@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookLinkevalLog;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -50,6 +51,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
     private const ACTION_UNLOCK = 'unlock';
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -73,10 +75,10 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->getCourse($operation);
+        $session = $this->getSession($operation, $course);
         $this->validateCourseResourceNode($request, $course);
-        $this->validateGroupContext($request, $course);
+        $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
 
         if ($this->isStudentView($request) || !$this->canManageGradebook($course, $session, $user)) {
@@ -245,7 +247,9 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         return $evaluation;
     }
 
-    /** @return array{0: string, 1: string, 2: float, 3: float, 4: ?float} */
+    /**
+     * @return array{0: string, 1: string, 2: float, 3: float, 4: ?float}
+     */
     private function validateEvaluationForm(
         GradebookEvaluationAction $data,
         Course $course,
@@ -316,6 +320,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
                 continue;
             }
             $modelId = (int) $courseSetting->getValue();
+
             break;
         }
 
@@ -324,6 +329,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             foreach ($setting['models'] as $model) {
                 if (\is_array($model) && (int) ($model['id'] ?? 0) === $modelId) {
                     $selectedModel = $model;
+
                     break;
                 }
             }
@@ -474,9 +480,9 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         return false;
     }
 
-    private function getCourse(Request $request): Course
+    private function getCourse(Operation $operation): Course
     {
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) $this->cidReqHelper->getCourseId();
         if ($courseId <= 0) {
             throw new BadRequestHttpException('A valid course id is required.');
         }
@@ -488,9 +494,9 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         return $course;
     }
 
-    private function getSession(Request $request, Course $course): ?Session
+    private function getSession(Operation $operation, Course $course): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId <= 0) {
             return null;
         }
@@ -522,9 +528,9 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): void
+    private function validateGroupContext(Operation $operation, Course $course): void
     {
-        $groupId = max(0, $request->query->getInt('gid'));
+        $groupId = max(0, (int) $this->cidReqHelper->getGroupId());
         if (0 === $groupId) {
             return;
         }

@@ -10,11 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookAdvancedSettings;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\GradeComponents;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradeComponents;
 use Chamilo\CoreBundle\Entity\GradeModel;
-use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelGradebook;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\ArrayParameterType;
@@ -133,7 +133,9 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
         return $resource;
     }
 
-    /** @return list<int> */
+    /**
+     * @return list<int>
+     */
     private function getSelectedSkillIds(GradebookCategory $category): array
     {
         $ids = [];
@@ -152,7 +154,9 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
         return array_values(array_unique($ids));
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function getGradeModels(): array
     {
         $models = $this->entityManager->getRepository(GradeModel::class)->findBy([], ['title' => 'ASC']);

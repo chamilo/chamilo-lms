@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Gradebook;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoringSettingsProvider;
@@ -22,9 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Read Gradebook score display settings for the current category',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
@@ -35,6 +33,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 or is_granted('ROLE_SESSION_MANAGER')",
             name: 'get_gradebook_scoring_settings',
             provider: GradebookScoringSettingsProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['gradebook_scoring_settings:read']],
@@ -45,11 +58,15 @@ final class GradebookScoringSettings
     #[Groups(['gradebook_scoring_settings:read'])]
     public string $id = 'gradebook_scoring_settings';
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, int>
+     */
     #[Groups(['gradebook_scoring_settings:read'])]
     public array $context = [];
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     #[Groups(['gradebook_scoring_settings:read'])]
     public ?array $category = null;
 
@@ -68,7 +85,9 @@ final class GradebookScoringSettings
     #[Groups(['gradebook_scoring_settings:read'])]
     public int $colorSplitPercent = 50;
 
-    /** @var list<array{score: float, display: string}> */
+    /**
+     * @var list<array{score: float, display: string}>
+     */
     #[Groups(['gradebook_scoring_settings:read'])]
     public array $ranges = [];
 

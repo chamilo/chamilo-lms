@@ -43,12 +43,12 @@ final readonly class GradebookContextResolver
         bool $requireManage = false,
         bool $validateCourseResourceNode = true,
     ): array {
-        $course = $this->getCourse($this->cidReqHelper->getCourseId());
-        $session = $this->getSession($this->cidReqHelper->getSessionId(), $course);
+        $course = $this->getCourse();
+        $session = $this->getSession($course);
         if ($validateCourseResourceNode) {
             $this->validateCourseResourceNode($request, $course);
         }
-        $groupId = $this->validateGroupContext($this->cidReqHelper->getGroupId(), $course);
+        $groupId = $this->validateGroupContext($course);
         $user = $this->getCurrentUser();
         $canManage = !$this->isStudentView($request) && $this->canManageGradebook($course, $session, $user);
 
@@ -170,21 +170,12 @@ final readonly class GradebookContextResolver
         throw new AccessDeniedHttpException('The requested learner is outside the current course context.');
     }
 
-    private function getCourse(?int $courseId): Course
+    private function getCourse(): Course
     {
-        if (null === $courseId) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
-    private function getSession(?int $sessionId, Course $course): ?Session
+    private function getSession(Course $course): ?Session
     {
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         if ($session instanceof Session && !$session->hasCourse($course)) {
@@ -203,17 +194,14 @@ final readonly class GradebookContextResolver
         }
     }
 
-    private function validateGroupContext(?int $groupId, Course $course): int
+    private function validateGroupContext(Course $course): int
     {
-        $groupId = max(0, (int) $groupId);
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return 0;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
+        $groupId = (int) $group->getIid();
 
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();

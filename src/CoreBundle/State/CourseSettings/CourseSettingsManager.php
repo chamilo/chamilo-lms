@@ -330,13 +330,9 @@ final readonly class CourseSettingsManager
     {
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
 
-        $session = null;
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
-        if ($sessionId > 0) {
-            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-            if (!$session instanceof Session || !$session->hasCourse($course)) {
-                throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-            }
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
         }
 
         return [$course, $session];

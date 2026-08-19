@@ -73,8 +73,8 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($this->cidReqHelper->getCourseId());
-        $session = $this->getSession($this->cidReqHelper->getSessionId());
+        $course = $this->getCourse();
+        $session = $this->getSession();
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
@@ -174,21 +174,12 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         return $response;
     }
 
-    public function getCourse(?int $courseId): Course
+    public function getCourse(): Course
     {
-        if (null === $courseId) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
-    public function getSession(?int $sessionId): ?Session
+    public function getSession(): ?Session
     {
         return $this->cidReqHelper->getDoctrineSessionEntity();
     }

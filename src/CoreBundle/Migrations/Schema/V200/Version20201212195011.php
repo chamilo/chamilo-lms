@@ -93,7 +93,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 }
 
                 $admin = $this->entityManager->getReference(User::class, $adminId);
-                $courseRepo->addResourceNode($course, $admin, $url);
+                $courseRepo->addResourceNode($course, $admin, $url, null, false);
                 $this->entityManager->persist($course);
                 ++$processed;
 
@@ -225,7 +225,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                     : null;
 
                 $tool->setParent($course);
-                $toolRepo->addResourceNode($tool, $admin, $course);
+                $toolRepo->addResourceNode($tool, $admin, $course, null, false);
                 $visibility = 1 === (int) ($row['visibility'] ?? 0)
                     ? ResourceLink::VISIBILITY_PUBLISHED
                     : ResourceLink::VISIBILITY_DRAFT;

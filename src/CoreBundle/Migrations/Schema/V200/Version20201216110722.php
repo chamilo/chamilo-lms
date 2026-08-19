@@ -146,7 +146,8 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     $resource,
                     $course,
                     [],
-                    $attendanceResourceType
+                    $attendanceResourceType,
+                    false
                 );
 
                 if (false === $ok) {

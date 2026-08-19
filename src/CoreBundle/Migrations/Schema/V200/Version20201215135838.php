@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -46,6 +47,8 @@ final class Version20201215135838 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
 
         $adminId = (int) $this->getAdmin()->getId();
+        $preservedWithoutItemProperty = 0;
+
         $courseIds = $this->connection->fetchFirstColumn(
             'SELECT DISTINCT cd.c_id
              FROM c_course_description cd
@@ -59,14 +62,26 @@ final class Version20201215135838 extends AbstractMigrationChamilo
             $courseId = (int) $courseIdValue;
             [$course, $admin] = $this->reloadCourseDescriptionContext($courseId, $adminId, $courseRepo, $userRepo);
 
-            $itemIds = $this->connection->fetchFirstColumn(
-                'SELECT iid FROM c_course_description WHERE c_id = :courseId AND resource_node_id IS NULL ORDER BY iid',
+            $itemRows = $this->connection->fetchAllAssociative(
+                'SELECT iid, session_id
+                 FROM c_course_description
+                 WHERE c_id = :courseId
+                   AND resource_node_id IS NULL
+                 ORDER BY iid',
                 ['courseId' => $courseId]
             );
 
-            $itemPropsMap = $this->fetchItemPropertiesMap('course_description', $courseId, array_map('intval', $itemIds));
+            $itemIds = [];
+            $legacySessionIdsByIid = [];
+            foreach ($itemRows as $itemRow) {
+                $iid = (int) $itemRow['iid'];
+                $itemIds[] = $iid;
+                $legacySessionIdsByIid[$iid] = (int) ($itemRow['session_id'] ?? 0);
+            }
 
-            foreach (array_chunk(array_map('intval', $itemIds), self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
+            $itemPropsMap = $this->fetchItemPropertiesMap('course_description', $courseId, $itemIds);
+
+            foreach (array_chunk($itemIds, self::ORM_FLUSH_BATCH_SIZE) as $idChunk) {
                 $resourcesById = [];
                 foreach ($courseDescriptionRepo->findBy(['iid' => $idChunk]) as $resourceEntity) {
                     $resourcesById[$resourceEntity->getIid()] = $resourceEntity;
@@ -79,6 +94,41 @@ final class Version20201215135838 extends AbstractMigrationChamilo
                         continue;
                     }
 
+                    $itemProperties = $itemPropsMap[$id] ?? [];
+                    if (empty($itemProperties)) {
+                        // Keep a direct fallback query so a failed prefetch cannot be
+                        // mistaken for genuinely missing legacy metadata.
+                        $itemProperties = $this->connection->fetchAllAssociative(
+                            'SELECT visibility, insert_user_id, session_id, to_group_id, lastedit_date
+                             FROM c_item_property
+                             WHERE tool = :tool AND c_id = :cid AND ref = :ref',
+                            [
+                                'tool' => 'course_description',
+                                'cid' => $courseId,
+                                'ref' => $id,
+                            ]
+                        );
+                    }
+
+                    if (empty($itemProperties) && 0 === ($legacySessionIdsByIid[$id] ?? 0)) {
+                        // Chamilo 1.11.x lists course-scope descriptions directly from
+                        // c_course_description. Preserve those historical rows even when
+                        // their c_item_property metadata is missing instead of dropping
+                        // them from the Chamilo 2 resource model.
+                        $resource->setParent($course);
+                        $courseDescriptionRepo->addResourceNode($resource, $admin, $course, null, false);
+                        $resource->addCourseLink(
+                            $course,
+                            null,
+                            null,
+                            ResourceLink::VISIBILITY_PUBLISHED
+                        );
+                        $this->entityManager->persist($resource);
+                        ++$preservedWithoutItemProperty;
+
+                        continue;
+                    }
+
                     $result = $this->fixItemProperty(
                         'course_description',
                         $courseDescriptionRepo,
@@ -86,7 +136,7 @@ final class Version20201215135838 extends AbstractMigrationChamilo
                         $admin,
                         $resource,
                         $course,
-                        $itemPropsMap[$id] ?? [],
+                        $itemProperties,
                         null,
                         false
                     );
@@ -108,6 +158,13 @@ final class Version20201215135838 extends AbstractMigrationChamilo
                     $userRepo
                 );
             }
+        }
+
+        if ($preservedWithoutItemProperty > 0) {
+            $this->getLogger()->warning(
+                'Preserved course descriptions without c_item_property as published course resources.',
+                ['count' => $preservedWithoutItemProperty]
+            );
         }
     }
 

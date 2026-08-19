@@ -20,6 +20,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->validateLegacySurveyReferences();
+
         $survey = $schema->getTable('c_survey');
 
         if ($survey->hasIndex('session_id')) {
@@ -199,6 +201,16 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }*/
 
         $this->addSql('ALTER TABLE c_survey_question CHANGE survey_id survey_id INT DEFAULT NULL;');
+        $this->addSql(
+            'UPDATE c_survey_question survey_question
+             LEFT JOIN c_survey normalized_survey
+                ON normalized_survey.iid = survey_question.survey_id
+             LEFT JOIN c_survey legacy_survey
+                ON legacy_survey.c_id = survey_question.c_id
+               AND legacy_survey.survey_id = survey_question.survey_id
+             SET survey_question.survey_id = COALESCE(normalized_survey.iid, legacy_survey.iid)
+             WHERE survey_question.survey_id IS NOT NULL'
+        );
 
         if (!$table->hasForeignKey('FK_92F05EE7B3FE509D')) {
             $this->addSql('ALTER TABLE c_survey_question ADD CONSTRAINT FK_92F05EE7B3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid) ON DELETE CASCADE');
@@ -235,6 +247,16 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_survey_question_option CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_survey_question_option CHANGE survey_id survey_id INT DEFAULT NULL;');
+        $this->addSql(
+            'UPDATE c_survey_question_option survey_option
+             LEFT JOIN c_survey normalized_survey
+                ON normalized_survey.iid = survey_option.survey_id
+             LEFT JOIN c_survey legacy_survey
+                ON legacy_survey.c_id = survey_option.c_id
+               AND legacy_survey.survey_id = survey_option.survey_id
+             SET survey_option.survey_id = COALESCE(normalized_survey.iid, legacy_survey.iid)
+             WHERE survey_option.survey_id IS NOT NULL'
+        );
 
         if (false === $table->hasForeignKey('FK_C4B6F5F1E27F6BF')) {
             $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE CASCADE');
@@ -294,6 +316,72 @@ class Version20180319145700 extends AbstractMigrationChamilo
             foreach ($data as $item) {
                 $id = $item['iid'];
                 $this->addSql("UPDATE c_survey SET is_mandatory = 1 WHERE iid = {$id}");
+            }
+        }
+    }
+
+    private function validateLegacySurveyReferences(): void
+    {
+        $duplicateLegacySurveyIds = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM (
+                 SELECT c_id, survey_id
+                 FROM c_survey
+                 WHERE survey_id IS NOT NULL
+                 GROUP BY c_id, survey_id
+                 HAVING COUNT(*) > 1
+             ) duplicate_surveys'
+        );
+        $this->abortIf(
+            $duplicateLegacySurveyIds > 0,
+            \sprintf(
+                'Cannot safely normalize %d duplicated c_survey(c_id, survey_id) keys.',
+                $duplicateLegacySurveyIds
+            )
+        );
+
+        foreach (['c_survey_question', 'c_survey_question_option'] as $referenceTable) {
+            $ambiguousReferences = (int) $this->connection->fetchOne(
+                "SELECT COUNT(*)
+                 FROM {$referenceTable} survey_reference
+                 INNER JOIN c_survey legacy_survey
+                    ON legacy_survey.c_id = survey_reference.c_id
+                   AND legacy_survey.survey_id = survey_reference.survey_id
+                 INNER JOIN c_survey normalized_survey
+                    ON normalized_survey.iid = survey_reference.survey_id
+                 WHERE survey_reference.survey_id IS NOT NULL
+                   AND legacy_survey.iid <> normalized_survey.iid"
+            );
+            $this->abortIf(
+                $ambiguousReferences > 0,
+                \sprintf(
+                    'Cannot safely normalize %d %s survey references that are ambiguous between legacy survey_id and iid.',
+                    $ambiguousReferences,
+                    $referenceTable
+                )
+            );
+
+            $orphanReferences = (int) $this->connection->fetchOne(
+                "SELECT COUNT(*)
+                 FROM {$referenceTable} survey_reference
+                 LEFT JOIN c_survey legacy_survey
+                    ON legacy_survey.c_id = survey_reference.c_id
+                   AND legacy_survey.survey_id = survey_reference.survey_id
+                 LEFT JOIN c_survey normalized_survey
+                    ON normalized_survey.iid = survey_reference.survey_id
+                 WHERE survey_reference.survey_id IS NOT NULL
+                   AND legacy_survey.iid IS NULL
+                   AND normalized_survey.iid IS NULL"
+            );
+
+            if ($orphanReferences > 0) {
+                $this->getLogger()->warning(
+                    'Preserving orphan legacy survey rows with a null survey reference before adding the foreign key.',
+                    [
+                        'table' => $referenceTable,
+                        'orphan_rows' => $orphanReferences,
+                    ]
+                );
             }
         }
     }

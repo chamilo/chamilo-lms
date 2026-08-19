@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupMembersProcessor;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupMembersProvider;
@@ -28,6 +29,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_members',
             provider: CourseGroupMembersProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/{groupId}/members',
@@ -39,6 +51,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_members',
             processor: CourseGroupMembersProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/course-groups/{groupId}/tutors',
@@ -49,6 +72,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_tutors',
             provider: CourseGroupMembersProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-groups/{groupId}/tutors',
@@ -60,6 +94,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_group_tutors',
             processor: CourseGroupMembersProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_group_members:read']],

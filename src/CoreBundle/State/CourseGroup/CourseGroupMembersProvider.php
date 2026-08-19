@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseGroup;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupMembers;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class CourseGroupMembersProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
     ) {}
@@ -30,7 +32,7 @@ final readonly class CourseGroupMembersProvider implements ProviderInterface
         }
         $mode = str_contains((string) $operation->getName(), 'tutors') ? 'tutors' : 'members';
         $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
-        $data = $this->manager->getMembersData($request, $groupId, $mode);
+        $data = $this->manager->getMembersData($groupId, $mode);
         $resource = new CourseGroupMembers();
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;

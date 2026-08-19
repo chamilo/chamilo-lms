@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseUser;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseUser\CourseUserActionProcessor;
@@ -22,9 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Subscribe users to the current course or session-course context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'type', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
@@ -32,15 +30,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_user_subscribe',
             processor: CourseUserActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-users/actions/unsubscribe',
             openapi: new Operation(
                 summary: 'Unsubscribe users from the current course or session-course context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'type', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
@@ -48,15 +58,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_user_unsubscribe',
             processor: CourseUserActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-users/actions/tutor',
             openapi: new Operation(
                 summary: 'Enable or disable the course tutor role for a student',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'type', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
@@ -64,6 +86,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_user_tutor',
             processor: CourseUserActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_user_action:read']],

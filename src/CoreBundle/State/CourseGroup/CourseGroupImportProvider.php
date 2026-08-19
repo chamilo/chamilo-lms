@@ -28,7 +28,7 @@ final readonly class CourseGroupImportProvider implements ProviderInterface
         if (null === $request) {
             throw new BadRequestHttpException('The current request is not available.');
         }
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanManage($course, $session);
         $resource = new CourseGroupImport();
         $resource->canImport = true;

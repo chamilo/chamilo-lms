@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
@@ -33,10 +34,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -280,6 +279,7 @@ final readonly class CourseSettingsManager
     ];
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private EntityManagerInterface $entityManager,
         private Connection $connection,
         private Security $security,
@@ -326,20 +326,12 @@ final readonly class CourseSettingsManager
     /**
      * @return array{0: Course, 1: Session|null}
      */
-    public function resolveContext(Request $request): array
+    public function resolveContext(): array
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->courseRepository->find($courseId);
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('The requested course was not found.');
-        }
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
 
         $session = null;
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
             if (!$session instanceof Session || !$session->hasCourse($course)) {
@@ -372,9 +364,9 @@ final readonly class CourseSettingsManager
     /**
      * @return array<string, mixed>
      */
-    public function getConfiguration(Request $request): array
+    public function getConfiguration(): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanEdit($course);
 
         $values = $this->getCourseValues($course, $session);
@@ -396,9 +388,9 @@ final readonly class CourseSettingsManager
     /**
      * @param array<string, mixed> $submittedValues
      */
-    public function saveConfiguration(array $submittedValues, Request $request): void
+    public function saveConfiguration(array $submittedValues): void
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanEdit($course);
         $permissions = $this->getPermissions($course);
         $currentValues = $this->getCourseValues($course, $session);

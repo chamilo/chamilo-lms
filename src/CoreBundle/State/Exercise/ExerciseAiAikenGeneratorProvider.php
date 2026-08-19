@@ -11,12 +11,12 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseAiAikenGenerator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -29,6 +29,7 @@ use const PATHINFO_EXTENSION;
 final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -50,7 +51,7 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
             throw new AccessDeniedHttpException('You are not allowed to use the AI Aiken generator in this context.');
         }
 
-        $course = $this->getCourse($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $textProviders = $this->getTextProviderOptions();
         $documentProviders = $this->getDocumentProviderOptions();
         $courseGeneratorEnabled = $this->isCourseSettingEnabled($course, 'exercise_generator');
@@ -77,21 +78,6 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
     }
 
     private function isSettingEnabled(string $settingName): bool

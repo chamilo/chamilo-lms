@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateInterval;
@@ -48,6 +49,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
     private const MAX_MINUTES = 1440;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
@@ -69,8 +71,8 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to view live exercise results.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
@@ -96,36 +98,6 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         $response->canManage = true;
 
         return $response;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function canManageExercises(): bool
@@ -386,14 +358,14 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
     /**
      * @return array<string, int|string>
      */
-    private function getContextParams(Request $request): array
+    private function getContextParams(Operation $operation): array
     {
         $params = [
-            'cid' => $request->query->getInt('cid'),
-            'gid' => $request->query->getInt('gid'),
+            'cid' => (int) $this->cidReqHelper->getCourseId(),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
         ];
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }

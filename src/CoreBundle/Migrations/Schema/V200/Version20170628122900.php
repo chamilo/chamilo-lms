@@ -71,7 +71,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
             );
         }
         $this->addSql(
-            'ALTER TABLE access_url_rel_course_category CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE course_category_id course_category_id INT DEFAULT NULL'
+            'ALTER TABLE access_url_rel_course_category CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE course_category_id course_category_id INT UNSIGNED DEFAULT NULL'
         );
 
         if (false === $table->hasColumn('parent_id')) {

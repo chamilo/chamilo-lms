@@ -16975,7 +16975,7 @@ msgid "Off"
 msgstr "Désactivé"
 
 msgid "Web server"
-msgstr "serveur Web"
+msgstr "Serveur web"
 
 msgid "Not inserted"
 msgstr "Non inséré"

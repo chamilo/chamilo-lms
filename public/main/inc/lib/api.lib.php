@@ -5727,8 +5727,18 @@ function api_global_admin_can_edit_admin(
     $iam_a_global_admin = api_is_global_platform_admin($userId);
     $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
 
+    // A global admin who is not registered in the topmost URL of a tree (i.e. scoped to a
+    // subtree) must not be able to edit ANOTHER global admin -- that would let them, for
+    // example, change the password of an unrestricted admin and take over that account.
+    // Editing their own profile is unaffected either way.
+    if ($iam_a_global_admin && $user_is_global_admin && (int) $admin_id_to_check !== (int) $userId) {
+        $currentUser = api_get_user_entity($userId);
+
+        return null !== $currentUser && Container::getAccessUrlScopeHelper()->isUnrestricted($currentUser);
+    }
+
     if ($iam_a_global_admin) {
-        // Global admin can edit everything
+        // Global admin can edit everything else.
         return true;
     }
 
@@ -5782,6 +5792,28 @@ function api_protect_global_admin_script()
     }
 
     return true;
+}
+
+/**
+ * Whether the given user (the current user, by default) may grant ROLE_GLOBAL_ADMIN to
+ * someone else, or to themselves: only a global admin registered in the topmost access URL
+ * of a tree may do this -- one scoped to a subtree may not, even though they hold the role
+ * themselves.
+ *
+ * @param int $userId
+ *
+ * @return bool
+ */
+function api_can_grant_global_admin_role($userId = 0)
+{
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
+    $user = api_get_user_entity($userId);
+
+    if (null === $user) {
+        return false;
+    }
+
+    return Container::getAccessUrlScopeHelper()->canGrantGlobalAdminRole($user);
 }
 
 /**

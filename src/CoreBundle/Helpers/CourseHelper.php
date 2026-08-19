@@ -35,6 +35,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -1727,8 +1728,10 @@ class CourseHelper
             ->execute()
         ;
 
-        $appPlugin = new AppPlugin();
-        $appPlugin->performActionsWhenDeletingItem('course', $course->getId());
+        $this->eventDispatcher->dispatch(
+            new CourseDeletedEvent(['course' => $course], AbstractEvent::TYPE_PRE),
+            Events::COURSE_DELETED
+        );
 
         // Purge Xapian index BEFORE deleting the course entity (resource links still exist)
         try {

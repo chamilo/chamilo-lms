@@ -8,6 +8,9 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeZone;
@@ -26,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
@@ -70,6 +74,7 @@ class SessionListController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {}
 
     private function resolvePlatformTimezone(): DateTimeZone
@@ -307,6 +312,17 @@ class SessionListController extends AbstractController
                 }
 
                 $sessions = $this->em->getRepository(Session::class)->findBy(['id' => $sessionIds]);
+
+                // Listeners drop what references these sessions while they still
+                // exist, and they may flush -- so announce every one of them
+                // before scheduling any removal.
+                foreach ($sessions as $session) {
+                    $this->eventDispatcher->dispatch(
+                        new SessionDeletedEvent(['session' => $session], AbstractEvent::TYPE_PRE),
+                        Events::SESSION_DELETED
+                    );
+                }
+
                 foreach ($sessions as $session) {
                     $this->em->remove($session);
                 }

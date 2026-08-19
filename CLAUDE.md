@@ -290,6 +290,16 @@ When replacing a legacy PHP page, search these locations for old links:
 - `assets/vue/components/` — Vue components linking to legacy pages (e.g., `social/MySkillsCard.vue`)
 - `public/main/inc/ajax/model.ajax.php` — jqGrid AJAX allowlists; remove the action from both the allowlist arrays and the `case` blocks
 
+### Many-to-many "assign X to Y" migrations — dual-list pattern
+
+Legacy admin tools that assign many-to-many relations (users↔URLs, courses↔URLs, groups↔sessions, etc.) typically ship as **two separate pages per relation**: an "edit" page (dual listbox scoped to one parent, with a legacy single-vs-multiple AJAX-search toggle) and an "add" page (bulk cross-assign many children × many parents at once). When migrating this shape to Vue:
+
+- **Drop the single/multiple AJAX-search toggle.** A single searchable dual-listbox (client-side keyword filter over an already-loaded list) covers both legacy modes with less UI. See `assets/vue/components/accessurl/AccessUrlDualList.vue` for the reference implementation — props are generic (`available`/`assigned` arrays of `{id, label}}`, events `add`/`remove`/`add-all`/`remove-all`), so the parent view owns the actual entity shape and mapping.
+- **Keep the bulk cross-assign screen as a second tab**, not a separate page — it is a genuinely different capability (many×many at once vs. one-parent-at-a-time), not just a UI variant. See `assets/vue/components/accessurl/AccessUrlBulkAssign.vue` (two `BaseMultiSelect`s + add/remove buttons + `useConfirmation`) used inside a PrimeVue 4 `Tabs`/`TabList`/`Tab`/`TabPanels`/`TabPanel` (imported directly from `primevue/tabs` etc. — no `Base*` wrapper exists for tabs in this project).
+- **Reuse exact legacy button/confirm-dialog strings as props**, not generic ones — the per-domain wording ("Add users to selected URLs" vs "Add courses to selected URLs") already exists in `messages.en_US.po`; inventing a generic label means adding brand-new translation keys for no reason.
+- Consolidate N legacy page-pairs into fewer Vue pages with tabs where it reduces file count without losing functionality (e.g. 9 legacy files → 5 Vue pages for the access-URL admin tools), but confirm the consolidation plan with the user first when it's a non-trivial restructuring — see `AccessUrlManage.vue` / `AccessUrlUsers.vue` / `AccessUrlCourses.vue` / `AccessUrlUserGroups.vue` / `AccessUrlCourseCategories.vue` as the reference set.
+- When a shared entity's `#[ApiResource]` uses one `security:` string for all operations but the legacy pages you're migrating enforced a **stricter** role for the mutating ones (e.g. legacy required `ROLE_GLOBAL_ADMIN` to delete, but the resource only required `ROLE_ADMIN`), split into an explicit `operations:` array so `Get`/`GetCollection` keep the looser resource-level default (other read consumers may depend on it) while `Post`/`Put`/`Patch`/`Delete` get an operation-level `security:` override matching the legacy check. Flag this to the user before changing it — it's a shared entity, not a file scoped to the page being migrated.
+
 ### Base components (forms, tables, buttons, dialogs)
 
 **Authoritative reference: the `use-base-components` skill** (`.claude/skills/use-base-components/SKILL.md`).

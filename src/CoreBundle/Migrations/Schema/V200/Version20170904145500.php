@@ -367,11 +367,12 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         try {
             $this->normalizeTrackExerciseQuestionLists($schema);
+            $this->normalizeQuizAnswers($schema);
+            $this->abortIfLegacyAnswerIdsAreAmbiguous($schema);
             $this->normalizeTrackAttemptReferences($schema);
             $this->normalizeMatchingAnswerReferences($schema);
             $this->normalizeSimpleLegacyQuizReferences($schema);
             $this->normalizeQuizQuestionRelations($schema);
-            $this->normalizeQuizAnswers($schema);
         } finally {
             foreach (array_reverse($createdIndexes) as $index) {
                 if (true === ($index[3] ?? false)) {
@@ -398,6 +399,22 @@ class Version20170904145500 extends AbstractMigrationChamilo
             \sprintf('Cannot safely normalize %d duplicated c_quiz(c_id, id) keys.', $duplicateQuizIds)
         );
 
+        $ambiguousQuizIds = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz legacy_quiz
+             INNER JOIN c_quiz normalized_quiz
+                ON normalized_quiz.c_id = legacy_quiz.c_id
+               AND normalized_quiz.iid = legacy_quiz.id
+             WHERE legacy_quiz.iid <> normalized_quiz.iid'
+        );
+        $this->abortIf(
+            $ambiguousQuizIds > 0,
+            \sprintf(
+                'Cannot safely normalize %d c_quiz values that are ambiguous between legacy id and iid.',
+                $ambiguousQuizIds
+            )
+        );
+
         $duplicateQuestionIds = (int) $this->connection->fetchOne(
             'SELECT COUNT(*)
              FROM (
@@ -411,6 +428,22 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->abortIf(
             $duplicateQuestionIds > 0,
             \sprintf('Cannot safely normalize %d duplicated c_quiz_question(c_id, id) keys.', $duplicateQuestionIds)
+        );
+
+        $ambiguousQuestionIds = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz_question legacy_question
+             INNER JOIN c_quiz_question normalized_question
+                ON normalized_question.c_id = legacy_question.c_id
+               AND normalized_question.iid = legacy_question.id
+             WHERE legacy_question.iid <> normalized_question.iid'
+        );
+        $this->abortIf(
+            $ambiguousQuestionIds > 0,
+            \sprintf(
+                'Cannot safely normalize %d c_quiz_question values that are ambiguous between legacy id and iid.',
+                $ambiguousQuestionIds
+            )
         );
 
         if (!$schema->hasTable('c_quiz_answer')) {
@@ -465,14 +498,19 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $questionRows = $this->connection->fetchAllAssociative(
                 'SELECT id, iid
                  FROM c_quiz_question
-                 WHERE c_id = :courseId
-                   AND id IS NOT NULL',
+                 WHERE c_id = :courseId',
                 ['courseId' => $courseId]
             );
 
             $questionMap = [];
+            $normalizedQuestionIds = [];
             foreach ($questionRows as $questionRow) {
-                $questionMap[(string) (int) $questionRow['id']] = (int) $questionRow['iid'];
+                $iid = (int) $questionRow['iid'];
+                $normalizedQuestionIds[(string) $iid] = true;
+
+                if (null !== $questionRow['id']) {
+                    $questionMap[(string) (int) $questionRow['id']] = $iid;
+                }
             }
 
             $lastExerciseId = 0;
@@ -509,6 +547,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
                     $newDataTracking = $this->remapQuestionIdList(
                         $dataTracking,
                         $questionMap,
+                        $normalizedQuestionIds,
                         $unresolvedTokens
                     );
 
@@ -516,7 +555,12 @@ class Version20170904145500 extends AbstractMigrationChamilo
                         ? (string) ($row['questions_to_check'] ?? '')
                         : '';
                     $newQuestionsToCheck = $hasQuestionsToCheck
-                        ? $this->remapQuestionIdList($questionsToCheck, $questionMap, $unresolvedTokens)
+                        ? $this->remapQuestionIdList(
+                            $questionsToCheck,
+                            $questionMap,
+                            $normalizedQuestionIds,
+                            $unresolvedTokens
+                        )
                         : '';
 
                     if ($newDataTracking === $dataTracking
@@ -547,18 +591,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
                 try {
                     foreach ($updates as $update) {
-                        $parameters = [
-                            'dataTracking' => $update['data_tracking'],
-                            'exerciseId' => $update['exe_id'],
-                        ];
+                        $statement->bindValue('dataTracking', $update['data_tracking']);
+                        $statement->bindValue('exerciseId', $update['exe_id']);
                         if ($hasQuestionsToCheck) {
-                            $parameters['questionsToCheck'] = $update['questions_to_check'];
-                        }
-
-                        $statement->bindValue('dataTracking', $parameters['dataTracking']);
-                        $statement->bindValue('exerciseId', $parameters['exerciseId']);
-                        if ($hasQuestionsToCheck) {
-                            $statement->bindValue('questionsToCheck', $parameters['questionsToCheck']);
+                            $statement->bindValue('questionsToCheck', $update['questions_to_check']);
                         }
 
                         $statement->executeStatement();
@@ -583,9 +619,15 @@ class Version20170904145500 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param array<string, int> $questionMap
+     * @param array<string, int>  $questionMap
+     * @param array<string, bool> $normalizedQuestionIds
      */
-    private function remapQuestionIdList(string $value, array $questionMap, int &$unresolvedTokens): string
+    private function remapQuestionIdList(
+        string $value,
+        array $questionMap,
+        array $normalizedQuestionIds,
+        int &$unresolvedTokens
+    ): string
     {
         if ('' === trim($value)) {
             return $value;
@@ -599,6 +641,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 continue;
             }
 
+            if (isset($normalizedQuestionIds[$questionId])) {
+                continue;
+            }
+
             if (isset($questionMap[$questionId])) {
                 $token = (string) $questionMap[$questionId];
                 continue;
@@ -609,6 +655,59 @@ class Version20170904145500 extends AbstractMigrationChamilo
         unset($token);
 
         return implode(',', $tokens);
+    }
+
+    private function abortIfLegacyAnswerIdsAreAmbiguous(Schema $schema): void
+    {
+        if (!$schema->hasTable('c_quiz_answer')) {
+            return;
+        }
+
+        $answerTable = $schema->getTable('c_quiz_answer');
+        if (!$answerTable->hasColumn('id')
+            || !$answerTable->hasColumn('c_id')
+            || !$answerTable->hasColumn('question_id')
+        ) {
+            return;
+        }
+
+        $duplicateAnswerIds = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM (
+                 SELECT c_id, question_id, id
+                 FROM c_quiz_answer
+                 WHERE id IS NOT NULL
+                   AND question_id IS NOT NULL
+                 GROUP BY c_id, question_id, id
+                 HAVING COUNT(*) > 1
+             ) duplicate_answers'
+        );
+        $this->abortIf(
+            $duplicateAnswerIds > 0,
+            \sprintf(
+                'Cannot safely normalize %d duplicated c_quiz_answer keys after question normalization.',
+                $duplicateAnswerIds
+            )
+        );
+
+        $ambiguousAnswerIds = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*)
+             FROM c_quiz_answer legacy_answer
+             INNER JOIN c_quiz_answer normalized_answer
+                ON normalized_answer.c_id = legacy_answer.c_id
+               AND normalized_answer.question_id = legacy_answer.question_id
+               AND normalized_answer.iid = legacy_answer.id
+             WHERE legacy_answer.id IS NOT NULL
+               AND legacy_answer.question_id IS NOT NULL
+               AND legacy_answer.iid <> normalized_answer.iid'
+        );
+        $this->abortIf(
+            $ambiguousAnswerIds > 0,
+            \sprintf(
+                'Cannot safely normalize %d c_quiz_answer values that are ambiguous between legacy id and iid.',
+                $ambiguousAnswerIds
+            )
+        );
     }
 
     private function normalizeTrackAttemptReferences(Schema $schema): void
@@ -627,15 +726,19 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $unresolvedQuestionReferences = (int) $this->connection->fetchOne(
             'SELECT COUNT(*)
              FROM track_e_attempt attempt
-             LEFT JOIN c_quiz_question question
-                ON question.c_id = attempt.c_id
-               AND question.id = attempt.question_id
-             WHERE question.iid IS NULL'
+             LEFT JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = attempt.c_id
+               AND legacy_question.id = attempt.question_id
+             LEFT JOIN c_quiz_question normalized_question
+                ON normalized_question.c_id = attempt.c_id
+               AND normalized_question.iid = attempt.question_id
+             WHERE legacy_question.iid IS NULL
+               AND normalized_question.iid IS NULL'
         );
         $this->abortIf(
             $unresolvedQuestionReferences > 0,
             \sprintf(
-                'Cannot safely normalize %d track_e_attempt rows with unresolved legacy question references.',
+                'Cannot safely normalize %d track_e_attempt rows with unresolved question references.',
                 $unresolvedQuestionReferences
             )
         );
@@ -671,23 +774,30 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $upperAttemptId = (int) $upperAttemptId;
             $updatedRows += $this->connection->executeStatement(
                 'UPDATE track_e_attempt attempt
-                 INNER JOIN c_quiz_question question
-                    ON question.c_id = attempt.c_id
-                   AND question.id = attempt.question_id
-                 LEFT JOIN c_quiz_answer answer
-                    ON answer.c_id = attempt.c_id
-                   AND answer.question_id = attempt.question_id
-                   AND CAST(answer.id AS CHAR) = attempt.answer
+                 LEFT JOIN c_quiz_question legacy_question
+                    ON legacy_question.c_id = attempt.c_id
+                   AND legacy_question.id = attempt.question_id
+                 LEFT JOIN c_quiz_question normalized_question
+                    ON normalized_question.c_id = attempt.c_id
+                   AND normalized_question.iid = attempt.question_id
+                 LEFT JOIN c_quiz_answer legacy_answer
+                    ON legacy_answer.c_id = attempt.c_id
+                   AND legacy_answer.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
+                   AND CAST(legacy_answer.id AS CHAR) = attempt.answer
                  SET attempt.answer = CASE
-                         WHEN answer.iid IS NOT NULL THEN CAST(answer.iid AS CHAR)
+                         WHEN legacy_answer.iid IS NOT NULL THEN CAST(legacy_answer.iid AS CHAR)
                          ELSE attempt.answer
                      END,
-                     attempt.question_id = question.iid
+                     attempt.question_id = COALESCE(legacy_question.iid, normalized_question.iid)
                  WHERE attempt.id > :lastAttemptId
                    AND attempt.id <= :upperAttemptId
+                   AND COALESCE(legacy_question.iid, normalized_question.iid) IS NOT NULL
                    AND (
-                       attempt.question_id <> question.iid
-                       OR (answer.iid IS NOT NULL AND attempt.answer <> CAST(answer.iid AS CHAR))
+                       attempt.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
+                       OR (
+                           legacy_answer.iid IS NOT NULL
+                           AND attempt.answer <> CAST(legacy_answer.iid AS CHAR)
+                       )
                    )',
                 [
                     'lastAttemptId' => $lastAttemptId,
@@ -731,14 +841,19 @@ class Version20170904145500 extends AbstractMigrationChamilo
              FROM c_quiz_answer source_answer
              INNER JOIN c_quiz_question question
                 ON question.c_id = source_answer.c_id
-               AND question.id = source_answer.question_id
-             LEFT JOIN c_quiz_answer target_answer
-                ON target_answer.c_id = source_answer.c_id
-               AND target_answer.question_id = source_answer.question_id
-               AND target_answer.id = source_answer.correct
+               AND question.iid = source_answer.question_id
+             LEFT JOIN c_quiz_answer legacy_target
+                ON legacy_target.c_id = source_answer.c_id
+               AND legacy_target.question_id = source_answer.question_id
+               AND legacy_target.id = source_answer.correct
+             LEFT JOIN c_quiz_answer normalized_target
+                ON normalized_target.c_id = source_answer.c_id
+               AND normalized_target.question_id = source_answer.question_id
+               AND normalized_target.iid = source_answer.correct
              WHERE question.type = 4
                AND source_answer.correct > 0
-               AND target_answer.iid IS NULL'
+               AND legacy_target.iid IS NULL
+               AND normalized_target.iid IS NULL'
         );
         $this->abortIf(
             $unresolvedMatchingReferences > 0,
@@ -752,15 +867,15 @@ class Version20170904145500 extends AbstractMigrationChamilo
             'UPDATE c_quiz_answer source_answer
              INNER JOIN c_quiz_question question
                 ON question.c_id = source_answer.c_id
-               AND question.id = source_answer.question_id
+               AND question.iid = source_answer.question_id
                AND question.type = 4
-             INNER JOIN c_quiz_answer target_answer
-                ON target_answer.c_id = source_answer.c_id
-               AND target_answer.question_id = source_answer.question_id
-               AND target_answer.id = source_answer.correct
-             SET source_answer.correct = target_answer.iid
+             INNER JOIN c_quiz_answer legacy_target
+                ON legacy_target.c_id = source_answer.c_id
+               AND legacy_target.question_id = source_answer.question_id
+               AND legacy_target.id = source_answer.correct
+             SET source_answer.correct = legacy_target.iid
              WHERE source_answer.correct > 0
-               AND source_answer.correct <> target_answer.iid'
+               AND source_answer.correct <> legacy_target.iid'
         );
 
         $this->getLogger()->info('Normalized legacy matching-answer references.', [
@@ -947,17 +1062,26 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $orphanRows = $this->connection->fetchAllAssociative(
             'SELECT relation.iid,
-                    quiz.iid AS quiz_iid,
-                    question.iid AS question_iid
+                    COALESCE(legacy_quiz.iid, normalized_quiz.iid) AS quiz_iid,
+                    COALESCE(legacy_question.iid, normalized_question.iid) AS question_iid
              FROM c_quiz_rel_question relation
-             LEFT JOIN c_quiz quiz
-                ON quiz.c_id = relation.c_id
-               AND quiz.id = relation.exercice_id
-             LEFT JOIN c_quiz_question question
-                ON question.c_id = relation.c_id
-               AND question.id = relation.question_id
+             LEFT JOIN c_quiz legacy_quiz
+                ON legacy_quiz.c_id = relation.c_id
+               AND legacy_quiz.id = relation.exercice_id
+             LEFT JOIN c_quiz normalized_quiz
+                ON normalized_quiz.c_id = relation.c_id
+               AND normalized_quiz.iid = relation.exercice_id
+             LEFT JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = relation.c_id
+               AND legacy_question.id = relation.question_id
+             LEFT JOIN c_quiz_question normalized_question
+                ON normalized_question.c_id = relation.c_id
+               AND normalized_question.iid = relation.question_id
              WHERE relation.exercice_id <> -1
-               AND (quiz.iid IS NULL OR question.iid IS NULL)'
+               AND (
+                   (legacy_quiz.iid IS NULL AND normalized_quiz.iid IS NULL)
+                   OR (legacy_question.iid IS NULL AND normalized_question.iid IS NULL)
+               )'
         );
         $orphanRowCount = \count($orphanRows);
 
@@ -1006,18 +1130,38 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $updatedRows = $this->connection->executeStatement(
             'UPDATE c_quiz_rel_question relation
-             LEFT JOIN c_quiz quiz
-                ON quiz.c_id = relation.c_id
-               AND quiz.id = relation.exercice_id
-             LEFT JOIN c_quiz_question question
-                ON question.c_id = relation.c_id
-               AND question.id = relation.question_id
-             SET relation.exercice_id = COALESCE(quiz.iid, relation.exercice_id),
-                 relation.question_id = COALESCE(question.iid, relation.question_id)
+             LEFT JOIN c_quiz legacy_quiz
+                ON legacy_quiz.c_id = relation.c_id
+               AND legacy_quiz.id = relation.exercice_id
+             LEFT JOIN c_quiz normalized_quiz
+                ON normalized_quiz.c_id = relation.c_id
+               AND normalized_quiz.iid = relation.exercice_id
+             LEFT JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = relation.c_id
+               AND legacy_question.id = relation.question_id
+             LEFT JOIN c_quiz_question normalized_question
+                ON normalized_question.c_id = relation.c_id
+               AND normalized_question.iid = relation.question_id
+             SET relation.exercice_id = COALESCE(
+                     legacy_quiz.iid,
+                     normalized_quiz.iid,
+                     relation.exercice_id
+                 ),
+                 relation.question_id = COALESCE(
+                     legacy_question.iid,
+                     normalized_question.iid,
+                     relation.question_id
+                 )
              WHERE relation.exercice_id <> -1
                AND (
-                   (quiz.iid IS NOT NULL AND relation.exercice_id <> quiz.iid)
-                   OR (question.iid IS NOT NULL AND relation.question_id <> question.iid)
+                   (
+                       COALESCE(legacy_quiz.iid, normalized_quiz.iid) IS NOT NULL
+                       AND relation.exercice_id <> COALESCE(legacy_quiz.iid, normalized_quiz.iid)
+                   )
+                   OR (
+                       COALESCE(legacy_question.iid, normalized_question.iid) IS NOT NULL
+                       AND relation.question_id <> COALESCE(legacy_question.iid, normalized_question.iid)
+                   )
                )'
         );
 
@@ -1043,10 +1187,14 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->connection->fetchFirstColumn(
                 'SELECT answer_row.iid
                  FROM c_quiz_answer answer_row
-                 LEFT JOIN c_quiz_question question
-                    ON question.c_id = answer_row.c_id
-                   AND question.id = answer_row.question_id
-                 WHERE question.iid IS NULL'
+                 LEFT JOIN c_quiz_question legacy_question
+                    ON legacy_question.c_id = answer_row.c_id
+                   AND legacy_question.id = answer_row.question_id
+                 LEFT JOIN c_quiz_question normalized_question
+                    ON normalized_question.c_id = answer_row.c_id
+                   AND normalized_question.iid = answer_row.question_id
+                 WHERE legacy_question.iid IS NULL
+                   AND normalized_question.iid IS NULL'
             )
         );
         $orphanRows = \count($orphanAnswerIds);
@@ -1068,11 +1216,11 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $updatedRows = $this->connection->executeStatement(
             'UPDATE c_quiz_answer answer_row
-             INNER JOIN c_quiz_question question
-                ON question.c_id = answer_row.c_id
-               AND question.id = answer_row.question_id
-             SET answer_row.question_id = question.iid
-             WHERE answer_row.question_id <> question.iid'
+             INNER JOIN c_quiz_question legacy_question
+                ON legacy_question.c_id = answer_row.c_id
+               AND legacy_question.id = answer_row.question_id
+             SET answer_row.question_id = legacy_question.iid
+             WHERE answer_row.question_id <> legacy_question.iid'
         );
 
         $this->getLogger()->info('Normalized legacy quiz-answer question references.', [

@@ -9,8 +9,13 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\UserAccessUrlsController;
 use Chamilo\CoreBundle\Entity\Listener\AccessUrlListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
@@ -26,6 +31,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            security: "is_granted('ROLE_GLOBAL_ADMIN')",
+            securityPostDenormalize: "is_granted('CREATE', object)"
+        ),
+        new Put(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('ROLE_GLOBAL_ADMIN') and is_granted('DELETE', object)"),
+    ],
     normalizationContext: [
         'groups' => ['access_url:read'],
     ],

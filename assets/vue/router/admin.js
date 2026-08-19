@@ -143,6 +143,36 @@ export default {
       component: () => import("../views/admin/MultiUrlList.vue"),
     },
     {
+      name: "AccessUrlManage",
+      path: "urls/manage",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Multiple access URL / Branding" },
+      component: () => import("../views/accessurl/AccessUrlManage.vue"),
+    },
+    {
+      name: "AccessUrlUsers",
+      path: "urls/assign-users",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage users" },
+      component: () => import("../views/accessurl/AccessUrlUsers.vue"),
+    },
+    {
+      name: "AccessUrlCourses",
+      path: "urls/assign-courses",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage courses" },
+      component: () => import("../views/accessurl/AccessUrlCourses.vue"),
+    },
+    {
+      name: "AccessUrlUserGroups",
+      path: "urls/assign-usergroups",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage user groups" },
+      component: () => import("../views/accessurl/AccessUrlUserGroups.vue"),
+    },
+    {
+      name: "AccessUrlCourseCategories",
+      path: "urls/assign-course-categories",
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Manage course categories" },
+      component: () => import("../views/accessurl/AccessUrlCourseCategories.vue"),
+    },
+    {
       name: "AdminMultiUrlUserDetail",
       path: "urls/users/:id(\\d+)",
       meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "User details" },

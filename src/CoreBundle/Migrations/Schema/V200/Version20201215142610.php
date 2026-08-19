@@ -743,7 +743,8 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     $category,
                     $course,
                     $itemProperties[$categoryId] ?? [],
-                    $resourceType
+                    $resourceType,
+                    false
                 );
             }
 
@@ -965,6 +966,20 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             ['courseId' => $courseId]
         );
 
+        if ([] === $imageRows) {
+            return;
+        }
+
+        $courseDirectory = (string) $this->connection->fetchOne(
+            'SELECT directory FROM course WHERE id = :courseId',
+            ['courseId' => $courseId]
+        );
+        $legacyDocumentRoot = '';
+        if ('' !== $courseDirectory) {
+            $legacyDocumentRoot = rtrim($this->getUpdateRootPath(), '/')
+                .'/app/courses/'.$courseDirectory.'/document/';
+        }
+
         $processed = 0;
         $migrated = 0;
 
@@ -972,12 +987,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $questionIds = [];
             $pictureIds = [];
             foreach ($rowChunk as $imageRow) {
-                $pictureId = (string) ($imageRow['picture'] ?? '');
-                if ('' === $pictureId || !ctype_digit($pictureId)) {
+                $questionId = (int) ($imageRow['iid'] ?? 0);
+                $picture = trim((string) ($imageRow['picture'] ?? ''));
+                if ($questionId <= 0 || '' === $picture) {
                     continue;
                 }
-                $questionIds[] = (int) $imageRow['iid'];
-                $pictureIds[] = (int) $pictureId;
+
+                $questionIds[] = $questionId;
+                if (ctype_digit($picture)) {
+                    $pictureIds[] = (int) $picture;
+                }
             }
 
             $questionsById = [];
@@ -991,47 +1010,102 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             }
 
             foreach ($rowChunk as $imageRow) {
-                $pictureId = (string) ($imageRow['picture'] ?? '');
-                if ('' === $pictureId || !ctype_digit($pictureId)) {
+                $questionId = (int) ($imageRow['iid'] ?? 0);
+                $picture = trim((string) ($imageRow['picture'] ?? ''));
+                $question = $questionsById[$questionId] ?? null;
+
+                if (!$question instanceof CQuizQuestion || '' === $picture) {
                     continue;
                 }
 
-                $questionId = (int) $imageRow['iid'];
-                $question = $questionsById[$questionId] ?? null;
-                $document = $documentsById[(int) $pictureId] ?? null;
+                $migratedResourceFile = null;
+                $documentId = ctype_digit($picture) ? (int) $picture : 0;
+                $document = $documentId > 0 ? ($documentsById[$documentId] ?? null) : null;
 
-                if (!$question instanceof CQuizQuestion
-                    || !$document instanceof CDocument
-                    || !$document->hasResourceNode()
-                    || !$document->getResourceNode()->hasResourceFile()
+                // Preferred path: reuse the file already migrated with c_document.
+                if ($document instanceof CDocument
+                    && $document->hasResourceNode()
+                    && $document->getResourceNode()->hasResourceFile()
                 ) {
+                    try {
+                        $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
+                        $contents = $documentRepo->getResourceFileContent($document);
+                        $originalName = $resourceFile->getOriginalName() ?: 'question-'.$questionId;
+                        $mimeType = $resourceFile->getMimeType() ?: 'application/octet-stream';
+
+                        $migratedResourceFile = $questionRepo->addFileFromString(
+                            $question,
+                            $originalName,
+                            $mimeType,
+                            $contents,
+                            false
+                        );
+                    } catch (Throwable) {
+                        // If migrated file metadata exists but its storage is not
+                        // readable, fall back to the original Chamilo 1.x file.
+                        $migratedResourceFile = null;
+                    }
+                }
+
+                // Legacy fallback: Chamilo 1.x can store either the c_document IID
+                // or directly the image filename in c_quiz_question.picture. The
+                // physical hotspot image remains under document/images/. This also
+                // preserves images when the document resource node exists but its
+                // ResourceFile was not created during the earlier document migration.
+                if (null === $migratedResourceFile && '' !== $legacyDocumentRoot) {
+                    $legacyRelativePath = '';
+
+                    if ($documentId > 0) {
+                        $legacyRelativePath = (string) $this->connection->fetchOne(
+                            'SELECT path
+                             FROM c_document
+                             WHERE iid = :documentId
+                               AND c_id = :courseId',
+                            [
+                                'documentId' => $documentId,
+                                'courseId' => $courseId,
+                            ]
+                        );
+                    } elseif (basename($picture) === $picture) {
+                        $legacyRelativePath = '/images/'.$picture;
+                    }
+
+                    $legacyRelativePath = ltrim($legacyRelativePath, '/');
+                    if ('' !== $legacyRelativePath
+                        && !str_contains($legacyRelativePath, '../')
+                        && !str_contains($legacyRelativePath, '..\\')
+                    ) {
+                        $legacyFilePath = $legacyDocumentRoot.$legacyRelativePath;
+
+                        if ($this->fileExists($legacyFilePath)) {
+                            $originalName = basename($legacyFilePath);
+                            $migratedResourceFile = $questionRepo->addFileFromPath(
+                                $question,
+                                $originalName,
+                                $legacyFilePath,
+                                false
+                            );
+                        }
+                    }
+                }
+
+                if (null === $migratedResourceFile) {
                     $this->getLogger()->warning('Question image source could not be migrated.', [
                         'course_id' => $courseId,
                         'question_iid' => $questionId,
-                        'document_iid' => $pictureId,
+                        'document_iid' => $documentId > 0 ? $documentId : null,
                     ]);
 
                     continue;
                 }
 
-                $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
-                $contents = $documentRepo->getResourceFileContent($document);
-                $originalName = $resourceFile->getOriginalName() ?: 'question-'.$questionId;
-                $mimeType = $resourceFile->getMimeType() ?: 'application/octet-stream';
-
-                $migratedResourceFile = $questionRepo->addFileFromString(
-                    $question,
-                    $originalName,
-                    $mimeType,
-                    $contents,
-                    false
+                $migratedResourceFile->setTitle(
+                    mb_substr(
+                        $migratedResourceFile->getOriginalName() ?: 'question-'.$questionId,
+                        0,
+                        self::RESOURCE_NODE_TITLE_MAX_LENGTH
+                    )
                 );
-
-                if (null !== $migratedResourceFile) {
-                    $migratedResourceFile->setTitle(
-                        mb_substr($originalName, 0, self::RESOURCE_NODE_TITLE_MAX_LENGTH)
-                    );
-                }
 
                 $this->entityManager->persist($question);
                 ++$processed;

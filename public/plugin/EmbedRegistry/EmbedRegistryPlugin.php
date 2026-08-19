@@ -182,40 +182,6 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * Hook called when a course is deleted.
-     *
-     * @param int $courseId
-     */
-    public function doWhenDeletingCourse($courseId)
-    {
-        $this->deleteShortcutForCourse((int) $courseId);
-
-        $em = Database::getManager();
-
-        $em->createQuery(
-            'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.course) = :courseId'
-        )
-            ->setParameter('courseId', (int) $courseId)
-            ->execute();
-    }
-
-    /**
-     * Hook called when a session is deleted.
-     *
-     * @param int $sessionId
-     */
-    public function doWhenDeletingSession($sessionId)
-    {
-        $em = Database::getManager();
-
-        $em->createQuery(
-            'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.session) = :sessionId'
-        )
-            ->setParameter('sessionId', (int) $sessionId)
-            ->execute();
-    }
-
-    /**
      * Get the currently active embed for a course and optional session.
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -456,38 +422,6 @@ class EmbedRegistryPlugin extends Plugin
 
         $connection->executeStatement('DELETE FROM '.self::TBL_SHORTCUT);
         $em->flush();
-    }
-
-    private function deleteShortcutForCourse(int $courseId): void
-    {
-        $em = Database::getManager();
-        $connection = $em->getConnection();
-        $schemaManager = $connection->createSchemaManager();
-
-        if (!$schemaManager->tablesExist([self::TBL_SHORTCUT])) {
-            return;
-        }
-
-        $shortcutId = (int) $connection->fetchOne(
-            'SELECT shortcut_id FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
-            ['courseId' => $courseId]
-        );
-
-        $connection->executeStatement(
-            'DELETE FROM '.self::TBL_SHORTCUT.' WHERE course_id = :courseId',
-            ['courseId' => $courseId]
-        );
-
-        if (0 === $shortcutId) {
-            return;
-        }
-
-        $shortcut = $em->getRepository(CShortcut::class)->find($shortcutId);
-
-        if ($shortcut instanceof CShortcut) {
-            $em->remove($shortcut);
-            $em->flush();
-        }
     }
 
     /**

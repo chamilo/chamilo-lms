@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
@@ -2684,8 +2685,10 @@ class CourseManager
             // To prevent FK mix up on some tables
             //GroupManager::deleteAllGroupsFromCourse($courseId);
 
-            $appPlugin = new AppPlugin();
-            $appPlugin->performActionsWhenDeletingItem('course', $courseId);
+            Container::getEventDispatcher()->dispatch(
+                new CourseDeletedEvent(['course' => $course], AbstractEvent::TYPE_PRE),
+                Events::COURSE_DELETED
+            );
 
             //$repo = Container::getQuizRepository();
             //$repo->deleteAllByCourse($courseEntity);

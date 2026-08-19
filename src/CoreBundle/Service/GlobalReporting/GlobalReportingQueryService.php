@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -35,6 +36,7 @@ final readonly class GlobalReportingQueryService
 
     public function __construct(
         private Connection $connection,
+        private AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
     /**
@@ -334,8 +336,12 @@ final readonly class GlobalReportingQueryService
 
     public function isUserInScope(GlobalReportingContext $context, int $userId): bool
     {
-        if ($context->isAdministrator || $context->currentUserId() === $userId) {
+        if ($context->currentUserId() === $userId) {
             return true;
+        }
+
+        if ($context->isAdministrator) {
+            return $this->accessUrlScope->isUserManaged($context->currentUser, $userId);
         }
 
         return \in_array($userId, $this->getScopedUserIds($context), true);

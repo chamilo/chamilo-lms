@@ -163,6 +163,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $ids
         );
         $processed = 0;
+        $legacyCategoryFallbacks = 0;
         [$course, $admin, $resourceType] = $this->reloadContext(
             $courseId,
             $adminId,
@@ -184,13 +185,18 @@ final class Version20201216122012 extends AbstractMigrationChamilo
 
                 $items = $itemProperties[$id] ?? [];
                 if ([] === $items) {
-                    $this->logItemPropertyInconsistency('learnpath_category', $id, (string) $resource);
-                    $this->getLogger()->warning('Learning-path category skipped: missing c_item_property.', [
-                        'course_id' => $courseId,
-                        'category_id' => $id,
-                    ]);
-
-                    continue;
+                    // Chamilo 1.11.x LP categories were persisted directly in c_lp_category
+                    // and had no independent visibility setting. They were listed by course,
+                    // while visibility was evaluated on each child LP. Preserve that legacy
+                    // behavior as a published course-level category instead of skipping it.
+                    $items = [[
+                        'visibility' => 1,
+                        'insert_user_id' => $adminId,
+                        'session_id' => 0,
+                        'to_group_id' => 0,
+                        'lastedit_date' => null,
+                    ]];
+                    ++$legacyCategoryFallbacks;
                 }
 
                 $result = $this->fixItemProperty(
@@ -226,6 +232,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             'course_id' => $courseId,
             'candidates' => \count($ids),
             'migrated' => $processed,
+            'legacy_without_item_property' => $legacyCategoryFallbacks,
         ]);
     }
 

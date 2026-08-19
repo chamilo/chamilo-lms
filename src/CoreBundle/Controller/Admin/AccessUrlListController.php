@@ -15,7 +15,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Helpers\AccessUrlHierarchyHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
@@ -37,6 +40,11 @@ use const PHP_VERSION;
  * Lists every AccessUrl with its user/course/session counts and assigned admins,
  * plus install-wide totals. Global-admin only: this is a superset of the
  * per-URL data any single-URL admin can already see.
+ *
+ * A ROLE_GLOBAL_ADMIN registered in the topmost URL of a tree is unrestricted (sees
+ * everything below, unchanged). One registered only in a non-root URL is scoped to that
+ * URL's subtree: every query below adds its managed-URL filter only when
+ * AccessUrlScopeHelper::getManagedUrlIds() returns a non-null list.
  */
 #[IsGranted('ROLE_GLOBAL_ADMIN')]
 #[Route('/admin/urls-data')]
@@ -44,9 +52,21 @@ class AccessUrlListController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly AccessUrlRepository $accessUrlRepository,
         private readonly InstalledChamiloVersionProvider $versionProvider,
+        private readonly AccessUrlScopeHelper $accessUrlScope,
+        private readonly AccessUrlHierarchyHelper $accessUrlHierarchy,
+        private readonly UserHelper $userHelper,
     ) {}
+
+    private function currentUser(): User
+    {
+        $user = $this->userHelper->getCurrent();
+        if (null === $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $user;
+    }
 
     #[Route('', name: 'admin_urls_data', methods: ['GET'])]
     public function list(): JsonResponse
@@ -56,7 +76,22 @@ class AccessUrlListController extends AbstractController
             session_write_close();
         }
 
-        $urls = $this->accessUrlRepository->findAll();
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($this->currentUser());
+
+        $urlQb = $this->em->createQueryBuilder()
+            ->select('a')
+            ->from(AccessUrl::class, 'a')
+        ;
+        if (null !== $managedUrlIds) {
+            $urlQb->andWhere('a.id IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+        }
+
+        /** @var AccessUrl[] $urls */
+        $urls = $urlQb->getQuery()->getResult();
+        // Display order: a parent immediately followed by its own children, recursively,
+        // siblings alphabetical -- so the Vue table can show the hierarchy via indentation
+        // alone (see AccessUrlHierarchyHelper).
+        $orderedUrls = $this->accessUrlHierarchy->order($urls);
         $ids = array_map(static fn (AccessUrl $url): int => (int) $url->getId(), $urls);
 
         $userCounts = [];
@@ -144,7 +179,8 @@ class AccessUrlListController extends AbstractController
         }
 
         $items = [];
-        foreach ($urls as $url) {
+        foreach ($orderedUrls as $entry) {
+            $url = $entry['url'];
             $id = (int) $url->getId();
             $items[] = [
                 'id' => $id,
@@ -155,33 +191,46 @@ class AccessUrlListController extends AbstractController
                 'courseCount' => $courseCounts[$id] ?? 0,
                 'sessionCount' => $sessionCounts[$id] ?? 0,
                 'admins' => $adminsByUrl[$id] ?? [],
+                'depth' => $entry['depth'],
             ];
         }
 
-        $totalUsers = (int) $this->em->createQueryBuilder()
-            ->select('COUNT(u.id)')
+        // Unrestricted admins keep the raw install-wide totals. A scoped admin instead gets
+        // "reachable through a managed URL" totals, via a join on the corresponding rel table.
+        $totalUsersQb = $this->em->createQueryBuilder()
+            ->select(null === $managedUrlIds ? 'COUNT(u.id)' : 'COUNT(DISTINCT u.id)')
             ->from(User::class, 'u')
             ->where('u.active <> :softDeleted')
             ->andWhere('u.status <> :anonymous')
             ->setParameter('softDeleted', User::SOFT_DELETED)
             ->setParameter('anonymous', User::ANONYMOUS)
-            ->getQuery()
-            ->getSingleScalarResult()
         ;
-
-        $totalCourses = (int) $this->em->createQueryBuilder()
-            ->select('COUNT(c.id)')
+        $totalCoursesQb = $this->em->createQueryBuilder()
+            ->select(null === $managedUrlIds ? 'COUNT(c.id)' : 'COUNT(DISTINCT c.id)')
             ->from(Course::class, 'c')
-            ->getQuery()
-            ->getSingleScalarResult()
         ;
-
-        $totalSessions = (int) $this->em->createQueryBuilder()
-            ->select('COUNT(s.id)')
+        $totalSessionsQb = $this->em->createQueryBuilder()
+            ->select(null === $managedUrlIds ? 'COUNT(s.id)' : 'COUNT(DISTINCT s.id)')
             ->from(Session::class, 's')
-            ->getQuery()
-            ->getSingleScalarResult()
         ;
+        if (null !== $managedUrlIds) {
+            $totalUsersQb->innerJoin(AccessUrlRelUser::class, 'scopeRelUser', 'WITH', 'scopeRelUser.user = u.id')
+                ->andWhere('scopeRelUser.url IN (:managedUrlIds)')
+                ->setParameter('managedUrlIds', $managedUrlIds)
+            ;
+            $totalCoursesQb->innerJoin(AccessUrlRelCourse::class, 'scopeRelCourse', 'WITH', 'scopeRelCourse.course = c.id')
+                ->where('scopeRelCourse.url IN (:managedUrlIds)')
+                ->setParameter('managedUrlIds', $managedUrlIds)
+            ;
+            $totalSessionsQb->innerJoin(AccessUrlRelSession::class, 'scopeRelSession', 'WITH', 'scopeRelSession.session = s.id')
+                ->where('scopeRelSession.url IN (:managedUrlIds)')
+                ->setParameter('managedUrlIds', $managedUrlIds)
+            ;
+        }
+
+        $totalUsers = (int) $totalUsersQb->getQuery()->getSingleScalarResult();
+        $totalCourses = (int) $totalCoursesQb->getQuery()->getSingleScalarResult();
+        $totalSessions = (int) $totalSessionsQb->getQuery()->getSingleScalarResult();
 
         return $this->json([
             'system' => [
@@ -209,6 +258,8 @@ class AccessUrlListController extends AbstractController
             session_write_close();
         }
 
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($this->currentUser());
+
         $page = max(1, (int) $request->query->get('page', '1'));
         $limit = max(1, min(100, (int) $request->query->get('limit', '20')));
         $search = trim((string) $request->query->get('search', ''));
@@ -222,6 +273,15 @@ class AccessUrlListController extends AbstractController
             ->setParameter('softDeleted', User::SOFT_DELETED)
             ->setParameter('anonymous', User::ANONYMOUS)
         ;
+
+        // A scalar subquery, not a join: joining here would multiply rows before the
+        // setFirstResult()/setMaxResults() pagination below is applied at the SQL level.
+        if (null !== $managedUrlIds) {
+            $qb->andWhere(
+                'u.id IN (SELECT IDENTITY(scopeRel.user) FROM '.AccessUrlRelUser::class.' scopeRel '
+                .'WHERE scopeRel.url IN (:managedUrlIds))'
+            )->setParameter('managedUrlIds', $managedUrlIds);
+        }
 
         if ('' !== $search) {
             $qb->andWhere('u.firstname LIKE :search OR u.lastname LIKE :search OR u.username LIKE :search')
@@ -248,33 +308,73 @@ class AccessUrlListController extends AbstractController
         $ids = array_map(static fn (User $u): int => (int) $u->getId(), $users);
 
         $urlsByUser = [];
+        $usergroupsByUser = [];
+        $creatorNameById = [];
         if (!empty($ids)) {
-            $rows = $this->em->createQueryBuilder()
+            $urlRowsQb = $this->em->createQueryBuilder()
                 ->select('IDENTITY(r.user) AS userId, a.id AS urlId, a.url AS url')
                 ->from(AccessUrlRelUser::class, 'r')
                 ->innerJoin('r.url', 'a')
                 ->where('r.user IN (:ids)')
                 ->setParameter('ids', $ids)
-                ->getQuery()
-                ->getArrayResult()
             ;
+            if (null !== $managedUrlIds) {
+                $urlRowsQb->andWhere('r.url IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+            }
+            $rows = $urlRowsQb->getQuery()->getArrayResult();
             foreach ($rows as $row) {
                 $urlsByUser[(int) $row['userId']][] = [
                     'id' => (int) $row['urlId'],
                     'url' => $row['url'],
                 ];
             }
+
+            $groupRows = $this->em->createQueryBuilder()
+                ->select('IDENTITY(r.user) AS userId, g.title AS title')
+                ->from(UsergroupRelUser::class, 'r')
+                ->innerJoin('r.usergroup', 'g')
+                ->where('r.user IN (:ids)')
+                ->setParameter('ids', $ids)
+                ->orderBy('g.title', 'ASC')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            foreach ($groupRows as $row) {
+                $usergroupsByUser[(int) $row['userId']][] = $row['title'];
+            }
+
+            $creatorIds = array_values(array_unique(array_filter(
+                array_map(static fn (User $u): int => (int) $u->getCreatorId(), $users)
+            )));
+            if (!empty($creatorIds)) {
+                $creatorRows = $this->em->createQueryBuilder()
+                    ->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname')
+                    ->from(User::class, 'u')
+                    ->where('u.id IN (:ids)')
+                    ->setParameter('ids', $creatorIds)
+                    ->getQuery()
+                    ->getArrayResult()
+                ;
+                foreach ($creatorRows as $row) {
+                    $creatorNameById[(int) $row['id']] = trim($row['firstname'].' '.$row['lastname']);
+                }
+            }
         }
 
         $items = [];
         foreach ($users as $u) {
             $id = (int) $u->getId();
+            $creatorId = (int) $u->getCreatorId();
             $items[] = [
                 'id' => $id,
                 'firstname' => $u->getFirstname(),
                 'lastname' => $u->getLastname(),
                 'username' => $u->getUsername(),
                 'email' => $u->getEmail(),
+                'officialCode' => $u->getOfficialCode() ?? '',
+                'registrationDate' => $u->getCreatedAt()->format('Y-m-d H:i:s'),
+                'creatorName' => $creatorNameById[$creatorId] ?? '',
+                'usergroups' => $usergroupsByUser[$id] ?? [],
                 'urls' => $urlsByUser[$id] ?? [],
             ];
         }
@@ -298,6 +398,8 @@ class AccessUrlListController extends AbstractController
             session_write_close();
         }
 
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($this->currentUser());
+
         $page = max(1, (int) $request->query->get('page', '1'));
         $limit = max(1, min(100, (int) $request->query->get('limit', '20')));
         $search = trim((string) $request->query->get('search', ''));
@@ -307,6 +409,15 @@ class AccessUrlListController extends AbstractController
             ->select('c')
             ->from(Course::class, 'c')
         ;
+
+        // A scalar subquery, not a join: joining here would multiply rows before the
+        // setFirstResult()/setMaxResults() pagination below is applied at the SQL level.
+        if (null !== $managedUrlIds) {
+            $qb->andWhere(
+                'c.id IN (SELECT IDENTITY(scopeRel.course) FROM '.AccessUrlRelCourse::class.' scopeRel '
+                .'WHERE scopeRel.url IN (:managedUrlIds))'
+            )->setParameter('managedUrlIds', $managedUrlIds);
+        }
 
         if ('' !== $search) {
             $qb->andWhere('c.title LIKE :search OR c.code LIKE :search')
@@ -333,15 +444,17 @@ class AccessUrlListController extends AbstractController
 
         $urlsByCourse = [];
         if (!empty($ids)) {
-            $rows = $this->em->createQueryBuilder()
+            $urlRowsQb = $this->em->createQueryBuilder()
                 ->select('IDENTITY(r.course) AS courseId, a.id AS urlId, a.url AS url')
                 ->from(AccessUrlRelCourse::class, 'r')
                 ->innerJoin('r.url', 'a')
                 ->where('r.course IN (:ids)')
                 ->setParameter('ids', $ids)
-                ->getQuery()
-                ->getArrayResult()
             ;
+            if (null !== $managedUrlIds) {
+                $urlRowsQb->andWhere('r.url IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+            }
+            $rows = $urlRowsQb->getQuery()->getArrayResult();
             foreach ($rows as $row) {
                 $urlsByCourse[(int) $row['courseId']][] = [
                     'id' => (int) $row['urlId'],
@@ -392,6 +505,12 @@ class AccessUrlListController extends AbstractController
             session_write_close();
         }
 
+        $currentUser = $this->currentUser();
+        if (!$this->accessUrlScope->isUserManaged($currentUser, $id)) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
+
         $pairs = [];
         foreach (explode(',', (string) $request->query->get('pairs', '')) as $token) {
             if ('' === $token || !str_contains($token, ':')) {
@@ -401,15 +520,17 @@ class AccessUrlListController extends AbstractController
             $pairs[] = ['courseId' => (int) $courseId, 'sessionId' => (int) $sessionId];
         }
 
-        $urlRows = $this->em->createQueryBuilder()
+        $urlRowsQb = $this->em->createQueryBuilder()
             ->select('a.id AS id, a.url AS url')
             ->from(AccessUrlRelUser::class, 'r')
             ->innerJoin('r.url', 'a')
             ->where('r.user = :userId')
             ->setParameter('userId', $id)
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $urlRowsQb->andWhere('r.url IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+        }
+        $urlRows = $urlRowsQb->getQuery()->getArrayResult();
 
         $directCourseIds = array_values(array_unique(array_map(
             static fn (array $pair): int => $pair['courseId'],
@@ -517,40 +638,66 @@ class AccessUrlListController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $currentUser = $this->currentUser();
+        if (!$this->accessUrlScope->isCourseManaged($currentUser, $id)) {
+            return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
+        }
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
+
         $connection = $this->em->getConnection();
 
+        // The "global metrics" block below must never fold in tracking data from users the
+        // caller cannot manage, so every query gets an extra user-scope filter when scoped
+        // (added as a subquery against access_url_rel_user, keyed on each table's own user
+        // column — most tables use user_id, track_e_exercises uses exe_user_id).
+        $scopeParams = [];
+        $scopeTypes = [];
+        $userScopeSql = '';
+        $exeUserScopeSql = '';
+        if (null !== $managedUrlIds) {
+            $scopeParams['managedUrlIds'] = $managedUrlIds;
+            $scopeTypes['managedUrlIds'] = ArrayParameterType::INTEGER;
+            $userScopeSql = ' AND user_id IN (SELECT user_id FROM access_url_rel_user WHERE access_url_id IN (:managedUrlIds))';
+            $exeUserScopeSql = ' AND exe_user_id IN (SELECT user_id FROM access_url_rel_user WHERE access_url_id IN (:managedUrlIds))';
+        }
+
         $learners = (int) $connection->fetchOne(
-            'SELECT COUNT(*) FROM (
-                SELECT user_id FROM course_rel_user WHERE c_id = :courseId
+            "SELECT COUNT(*) FROM (
+                SELECT user_id FROM course_rel_user WHERE c_id = :courseId{$userScopeSql}
                 UNION
-                SELECT user_id FROM session_rel_course_rel_user WHERE c_id = :courseId
-            ) learners',
-            ['courseId' => $id]
+                SELECT user_id FROM session_rel_course_rel_user WHERE c_id = :courseId{$userScopeSql}
+            ) learners",
+            ['courseId' => $id, ...$scopeParams],
+            $scopeTypes
         );
 
         $totalTimeSeconds = (int) $connection->fetchOne(
-            'SELECT COALESCE(SUM(
+            "SELECT COALESCE(SUM(
                 CASE WHEN logout_course_date IS NOT NULL AND logout_course_date >= login_course_date
                      THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
                      ELSE 0 END
-            ), 0) FROM track_e_course_access WHERE c_id = :courseId',
-            ['courseId' => $id]
+            ), 0) FROM track_e_course_access WHERE c_id = :courseId{$userScopeSql}",
+            ['courseId' => $id, ...$scopeParams],
+            $scopeTypes
         );
 
         $avgProgress = (float) $connection->fetchOne(
-            'SELECT COALESCE(AVG(progress), 0) FROM c_lp_view WHERE c_id = :courseId',
-            ['courseId' => $id]
+            "SELECT COALESCE(AVG(progress), 0) FROM c_lp_view WHERE c_id = :courseId{$userScopeSql}",
+            ['courseId' => $id, ...$scopeParams],
+            $scopeTypes
         );
 
         $avgScore = (float) $connection->fetchOne(
-            'SELECT COALESCE(AVG(CASE WHEN max_score > 0 THEN score * 100 / max_score ELSE 0 END), 0)
-               FROM track_e_exercises WHERE c_id = :courseId',
-            ['courseId' => $id]
+            "SELECT COALESCE(AVG(CASE WHEN max_score > 0 THEN score * 100 / max_score ELSE 0 END), 0)
+               FROM track_e_exercises WHERE c_id = :courseId{$exeUserScopeSql}",
+            ['courseId' => $id, ...$scopeParams],
+            $scopeTypes
         );
 
         $directLearners = (int) $connection->fetchOne(
-            'SELECT COUNT(DISTINCT user_id) FROM course_rel_user WHERE c_id = :courseId',
-            ['courseId' => $id]
+            "SELECT COUNT(DISTINCT user_id) FROM course_rel_user WHERE c_id = :courseId{$userScopeSql}",
+            ['courseId' => $id, ...$scopeParams],
+            $scopeTypes
         );
 
         $sessionRows = $this->em->createQueryBuilder()
@@ -630,34 +777,48 @@ class AccessUrlListController extends AbstractController
             $scoreBySessionKey[(int) $row['sessionKey']] = round((float) $row['avgScore'], 2);
         }
 
-        $directUrlRows = $this->em->createQueryBuilder()
+        $directUrlRowsQb = $this->em->createQueryBuilder()
             ->select('a.id AS id')
             ->from(AccessUrlRelCourse::class, 'r')
             ->innerJoin('r.url', 'a')
             ->where('r.course = :courseId')
             ->setParameter('courseId', $id)
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $directUrlRowsQb->andWhere('r.url IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+        }
+        $directUrlRows = $directUrlRowsQb->getQuery()->getArrayResult();
         $directUrlIds = array_map(static fn (array $row): int => (int) $row['id'], $directUrlRows);
 
         $sessionUrlsBySession = [];
         $allSessionUrlIds = [];
         if (!empty($sessionIds)) {
-            $sessionUrlRows = $this->em->createQueryBuilder()
+            $sessionUrlRowsQb = $this->em->createQueryBuilder()
                 ->select('IDENTITY(r.session) AS sessionId, a.id AS urlId')
                 ->from(AccessUrlRelSession::class, 'r')
                 ->innerJoin('r.url', 'a')
                 ->where('r.session IN (:sessionIds)')
                 ->setParameter('sessionIds', $sessionIds)
-                ->getQuery()
-                ->getArrayResult()
             ;
+            if (null !== $managedUrlIds) {
+                $sessionUrlRowsQb->andWhere('r.url IN (:managedUrlIds)')->setParameter('managedUrlIds', $managedUrlIds);
+            }
+            $sessionUrlRows = $sessionUrlRowsQb->getQuery()->getArrayResult();
             foreach ($sessionUrlRows as $row) {
                 $urlId = (int) $row['urlId'];
                 $sessionUrlsBySession[(int) $row['sessionId']][] = $urlId;
                 $allSessionUrlIds[] = $urlId;
             }
+        }
+
+        // A session with no remaining managed-URL link (e.g. only linked to a portal outside
+        // this admin's subtree) must not be counted or shown, even though its metrics were
+        // already computed above using the full, unfiltered session id set.
+        if (null !== $managedUrlIds) {
+            $sessionRows = array_values(array_filter(
+                $sessionRows,
+                static fn (array $row): bool => !empty($sessionUrlsBySession[(int) $row['id']] ?? [])
+            ));
         }
 
         $allUrlIds = array_values(array_unique(array_merge($directUrlIds, $allSessionUrlIds)));
@@ -728,11 +889,13 @@ class AccessUrlListController extends AbstractController
     }
 
     /**
-     * Install-wide (not per-URL) daily login counts for the "Multi URLs" dashboard's
-     * chart. Login records (track_e_login) carry no access_url_id column and cannot
-     * be attributed to a single URL, so this intentionally does not scope by URL —
-     * unlike the rest of this controller. Every row counts as a login regardless of
-     * session duration, per this feature's own requirement.
+     * Daily login counts for the "Multi URLs" dashboard's chart. Login records
+     * (track_e_login) carry no access_url_id column, so a scoped admin's figures are only
+     * an approximation: logins by users *currently* registered in one of their managed
+     * URLs, not necessarily the URL they were registered in at the time of that login.
+     * An unrestricted admin gets the same install-wide, unscoped figures as before. Every
+     * row counts as a login regardless of session duration, per this feature's own
+     * requirement.
      */
     #[Route('/logins', name: 'admin_urls_logins_data', methods: ['GET'])]
     public function logins(Request $request): JsonResponse
@@ -740,6 +903,8 @@ class AccessUrlListController extends AbstractController
         if (PHP_SESSION_ACTIVE === session_status()) {
             session_write_close();
         }
+
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($this->currentUser());
 
         $today = new DateTimeImmutable('today');
         $from = $this->parseDate($request->query->get('from'), $today->modify('-29 days'));
@@ -749,7 +914,7 @@ class AccessUrlListController extends AbstractController
             [$from, $to] = [$to, $from];
         }
 
-        $rows = $this->em->createQueryBuilder()
+        $qb = $this->em->createQueryBuilder()
             ->select(
                 'SUBSTRING(l.loginDate, 1, 10) AS day, COUNT(l.loginId) AS cnt,
                  COUNT(DISTINCT IDENTITY(l.user)) AS uniqueCnt'
@@ -759,9 +924,17 @@ class AccessUrlListController extends AbstractController
             ->setParameter('from', $from->setTime(0, 0, 0))
             ->setParameter('to', $to->setTime(23, 59, 59))
             ->groupBy('day')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        // A subquery, not a join: a join would duplicate a login row for every managed URL
+        // the logging-in user happens to belong to, inflating the plain (non-distinct) count.
+        if (null !== $managedUrlIds) {
+            $qb->andWhere(
+                'IDENTITY(l.user) IN (SELECT IDENTITY(scopeRel.user) FROM '.AccessUrlRelUser::class.' scopeRel '
+                .'WHERE scopeRel.url IN (:managedUrlIds))'
+            )->setParameter('managedUrlIds', $managedUrlIds);
+        }
+
+        $rows = $qb->getQuery()->getArrayResult();
 
         $countsByDay = [];
         $uniqueCountsByDay = [];
@@ -788,6 +961,7 @@ class AccessUrlListController extends AbstractController
             'labels' => $labels,
             'counts' => $counts,
             'uniqueCounts' => $uniqueCounts,
+            'scoped' => null !== $managedUrlIds,
         ]);
     }
 

@@ -3812,5 +3812,7 @@
     "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL.": "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL.",
     "Add URL": "Add URL",
     "Logins (all URLs combined)": "Logins (all URLs combined)",
-    "Unique logins": "Unique logins"
+    "Unique logins": "Unique logins",
+    "Parent URL": "Parent URL",
+    "Logins (your URLs)": "Logins (your URLs)"
 }

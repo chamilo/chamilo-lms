@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Framework;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
@@ -726,6 +727,11 @@ class Container
     public static function getAccessUrlUtil(): AccessUrlHelper
     {
         return self::$container->get(AccessUrlHelper::class);
+    }
+
+    public static function getAccessUrlScopeHelper(): AccessUrlScopeHelper
+    {
+        return self::$container->get(AccessUrlScopeHelper::class);
     }
 
     public static function getEventDispatcher(): EventDispatcherInterface

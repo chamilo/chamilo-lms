@@ -49,6 +49,7 @@ const coursesPage = ref(1)
 const coursesPageSize = ref(20)
 
 const loginsLoading = ref(false)
+const loginsScoped = ref(false)
 const today = new Date()
 const thirtyDaysAgo = new Date(today)
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29)
@@ -164,6 +165,7 @@ async function loadLogins() {
       from: toDateOnlyString(loginsFrom.value),
       to: toDateOnlyString(loginsTo.value),
     })
+    loginsScoped.value = data.scoped
     renderLoginsChart(data.labels, data.counts, data.uniqueCounts)
   } finally {
     loginsLoading.value = false
@@ -247,16 +249,10 @@ onBeforeUnmount(() => {
   <div class="flex flex-col gap-8">
     <SectionHeader :title="t('Multi URLs')">
       <BaseButton
-        :label="t('Add URL')"
-        icon="plus"
-        type="success"
-        :to-url="'/main/admin/access_url_edit.php'"
-      />
-      <BaseButton
         :label="t('Configure multiple access URL')"
         icon="hammer-wrench"
         type="secondary"
-        :to-url="'/main/admin/access_urls.php'"
+        :route="{ name: 'AccessUrlManage' }"
       />
     </SectionHeader>
 
@@ -311,17 +307,18 @@ onBeforeUnmount(() => {
       <Column
         field="url"
         :header="t('URL')"
-        sortable
       >
         <template #body="{ data }">
-          <a
-            :href="data.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 hover:underline"
-          >
-            {{ data.url }}
-          </a>
+          <span :style="{ paddingLeft: `${data.depth * 24}px` }">
+            <a
+              :href="data.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 hover:underline"
+            >
+              {{ data.url }}
+            </a>
+          </span>
         </template>
       </Column>
       <Column
@@ -358,7 +355,7 @@ onBeforeUnmount(() => {
           <div class="flex gap-1 flex-nowrap">
             <BaseButton
               :label="t('Manage users')"
-              :to-url="`/main/admin/access_url_edit_users_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlUsers', query: { access_url_id: data.id } }"
               icon="account"
               only-icon
               size="small"
@@ -366,7 +363,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage user groups')"
-              :to-url="`/main/admin/access_url_edit_usergroup_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlUserGroups', query: { access_url_id: data.id } }"
               icon="account-group"
               only-icon
               size="small"
@@ -374,7 +371,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage courses')"
-              :to-url="`/main/admin/access_url_edit_courses_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlCourses', query: { access_url_id: data.id } }"
               icon="courses"
               only-icon
               size="small"
@@ -382,7 +379,7 @@ onBeforeUnmount(() => {
             />
             <BaseButton
               :label="t('Manage course categories')"
-              :to-url="`/main/admin/access_url_edit_course_category_to_url.php?access_url_id=${data.id}`"
+              :route="{ name: 'AccessUrlCourseCategories', query: { access_url_id: data.id } }"
               icon="file-tree-outline"
               only-icon
               size="small"
@@ -395,7 +392,9 @@ onBeforeUnmount(() => {
 
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
       <div class="mb-4 flex flex-wrap items-end justify-between gap-4">
-        <h2 class="text-base font-semibold">{{ t("Logins (all URLs combined)") }}</h2>
+        <h2 class="text-base font-semibold">
+          {{ loginsScoped ? t("Logins (your URLs)") : t("Logins (all URLs combined)") }}
+        </h2>
         <div class="flex flex-wrap gap-4">
           <BaseCalendar
             id="multi-url-logins-from"
@@ -575,6 +574,39 @@ onBeforeUnmount(() => {
         <div>
           <dt class="text-sm text-gray-500">{{ t("Email") }}</dt>
           <dd class="text-lg font-medium">{{ selectedUser.email }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Official code") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.officialCode || t("None") }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Registration date") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.registrationDate }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Created by") }}</dt>
+          <dd class="text-lg font-medium">{{ selectedUser.creatorName || t("None") }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm text-gray-500">{{ t("Classes") }}</dt>
+          <dd>
+            <ul
+              v-if="selectedUser.usergroups.length"
+              class="list-disc pl-5 space-y-1 text-lg font-medium"
+            >
+              <li
+                v-for="(groupTitle, index) in selectedUser.usergroups"
+                :key="index"
+              >
+                {{ groupTitle }}
+              </li>
+            </ul>
+            <span
+              v-else
+              class="text-lg font-medium"
+              >{{ t("None") }}</span
+            >
+          </dd>
         </div>
         <div>
           <dt class="text-sm text-gray-500">{{ t("URLs") }}</dt>

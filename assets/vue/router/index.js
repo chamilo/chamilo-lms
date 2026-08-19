@@ -414,6 +414,7 @@ const router = createRouter({
       name: "AccessUrlDelete",
       component: () => import("../views/accessurl/DeleteAccessUrl.vue"),
       props: (route) => ({ id: Number(route.params.id) }),
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Delete access" },
     },
     {
       path: "/home",
@@ -595,6 +596,17 @@ const router = createRouter({
     roomRoutes,
     buycoursesRoutes,
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+
+    if (to.hash) {
+      return { el: to.hash }
+    }
+
+    return { top: 0 }
+  },
 })
 
 // ---------------------------------------------------------------------------

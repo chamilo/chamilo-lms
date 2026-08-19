@@ -173,8 +173,8 @@ function buildAccessUrlDeleteCrumbs() {
   }
 
   return [
-    { label: t("Administration"), url: "/main/admin/index.php" },
-    { label: t("Multiple access URL / Branding"), url: "/main/admin/access_urls.php" },
+    { label: t("Administration"), route: { name: "AdminIndex" } },
+    { label: t("Multiple access URL / Branding"), route: { name: "AccessUrlManage" } },
     { label: t("Delete access") },
   ]
 }
@@ -251,6 +251,26 @@ function buildManualCrumbs() {
     return [
       { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
       { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t(pageLabel) },
+    ]
+  }
+
+  // /admin/urls/manage
+  if (pathSegments[1] === "urls" && pathSegments[2] === "manage") {
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t("Multiple access URL / Branding") },
+    ]
+  }
+
+  // /admin/urls/assign-users, /admin/urls/assign-courses, /admin/urls/assign-usergroups, /admin/urls/assign-course-categories
+  if (pathSegments[1] === "urls" && pathSegments[2]?.startsWith("assign-")) {
+    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
+    return [
+      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
+      { label: t("Multi URLs"), route: { path: "/admin/urls" } },
+      { label: t("Multiple access URL / Branding"), route: { path: "/admin/urls/manage" } },
       { label: t(pageLabel) },
     ]
   }

@@ -21,6 +21,7 @@ final class Version20201216120654 extends AbstractMigrationChamilo
 {
     private const int ORM_FLUSH_BATCH_SIZE = 100;
     private const string CGLOSSARY_CID_INDEX = 'idx_legacy_migration_cglossary_c_id';
+    private const string RESOURCE_NODE_SLUG_INDEX = 'idx_legacy_migration_resource_node_slug';
 
     public function getDescription(): string
     {
@@ -40,6 +41,7 @@ final class Version20201216120654 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureCGlossaryCidIndex();
+        $this->ensureResourceNodeSlugIndex();
 
         $glossaryRepo = $this->container->get(CGlossaryRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
@@ -132,6 +134,38 @@ final class Version20201216120654 extends AbstractMigrationChamilo
             );
         } catch (Throwable $exception) {
             $this->getLogger()->warning('Could not create c_glossary migration index; continuing safely.', [
+                'error' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureResourceNodeSlugIndex(): void
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+            if (!\in_array('resource_node', $schemaManager->listTableNames(), true)) {
+                return;
+            }
+
+            foreach ($schemaManager->listTableIndexes('resource_node') as $index) {
+                if (self::RESOURCE_NODE_SLUG_INDEX === strtolower($index->getName())) {
+                    return;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if ([] !== $columns && 'slug' === $columns[0]) {
+                    return;
+                }
+            }
+
+            $this->getLogger()->notice('Creating migration index on resource_node slug.', [
+                'index' => self::RESOURCE_NODE_SLUG_INDEX,
+            ]);
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::RESOURCE_NODE_SLUG_INDEX.' ON resource_node (slug)'
+            );
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning('Could not create resource_node slug migration index; continuing safely.', [
                 'error' => $exception->getMessage(),
             ]);
         }

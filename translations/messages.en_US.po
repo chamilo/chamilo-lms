@@ -39525,3 +39525,9 @@ msgstr "Logins (all URLs combined)"
 
 msgid "Unique logins"
 msgstr "Unique logins"
+
+msgid "Parent URL"
+msgstr "Parent URL"
+
+msgid "Logins (your URLs)"
+msgstr "Logins (your URLs)"

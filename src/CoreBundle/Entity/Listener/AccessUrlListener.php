@@ -43,6 +43,14 @@ readonly class AccessUrlListener
             $accessUrl->setActive(1);
         }
 
+        // A caller (e.g. the URL management page's parent selector) may already have chosen
+        // an explicit parent before persisting; only fall back to the first URL when none was
+        // set. This does not apply above: a login-only URL always wins, since every other URL
+        // must funnel through it for the central-login feature to work.
+        if (null !== $accessUrl->getSuperior()) {
+            return;
+        }
+
         $accessUrl
             ->setSuperior($firstAccessUrl)
             ->setParentResourceNode($firstAccessUrl->resourceNode->getId())

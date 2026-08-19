@@ -6,6 +6,7 @@
         :options="normalizedOptions"
         display="chip"
         fluid
+        :filter="filter"
         :input-id="inputId"
         :option-label="optionLabel"
         :option-value="optionValue"
@@ -76,6 +77,11 @@ const props = defineProps({
     type: String,
     required: false,
     default: "id",
+  },
+  filter: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 })
 const emit = defineEmits(["update:modelValue"])

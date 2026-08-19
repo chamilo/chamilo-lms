@@ -457,7 +457,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                             $document,
                             $admin,
                             $parent,
-                            $documentResourceType
+                            $documentResourceType,
+                            false
                         );
                         $this->entityManager->persist($resourceNode);
                         $this->entityManager->persist($document);
@@ -473,7 +474,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                         $document,
                         $parent,
                         $items,
-                        $documentResourceType
+                        $documentResourceType,
+                        false
                     );
                     if (false === $ok) {
                         continue;

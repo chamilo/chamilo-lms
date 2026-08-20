@@ -232,7 +232,7 @@
 #   JSON string, saving never validates that referenced field variables
 #   exist, and this suite's own verification of the resulting registration
 #   form is already commented out in the original for an unrelated reason.
-@common @admin @long-scenario
+@common @admin @long-scenario @specialcase1
 Feature: Special admin settings flows (platform searches, extra fields, teardown)
   In order to exercise several admin settings quickly
   As a platform administrator

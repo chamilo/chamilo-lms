@@ -135,10 +135,16 @@ The browser-driven test suite is migrating from **Behat** to **Playwright**, usi
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
 - Config: `tests/playwright/playwright.config.ts`.
 
-Run the full suite (excludes the install/seed scenarios below):
+Run the main suite (excludes the install/seed scenarios below, and SpecialCase1):
 ```bash
 yarn test:playwright
 ```
+
+SpecialCase1 (`specialCase1PlatformSettings.feature` + `specialCase1Sessions.feature`, both tagged `@specialcase1`) runs **separately and single-threaded**, and is deliberately excluded from the command above:
+```bash
+yarn test:playwright:specialcase1
+```
+Three reasons it cannot share the parallel pool: `specialCase1Sessions` depends on session extra fields and a platform setting that `specialCase1PlatformSettings` creates, and only `--workers=1` plus `fullyParallel: false` guarantees the file order that satisfies that; it mutates ~100 platform settings, several of them globally UI-visible on every page (a cookie banner that intercepts clicks, header changes), which corrupts any file running concurrently; and its scenarios are `@long-scenario` (15-minute budget), which starves other files of workers. CI runs it as its own step after the main batch.
 
 Run/debug interactively:
 ```bash

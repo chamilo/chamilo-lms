@@ -251,6 +251,76 @@ jobs:
                     BASE_URL: http://localhost
                 run: yarn test:playwright
 
+            # MUST come before the SpecialCase1 step below, not at the end of
+            # the job with the other uploads: `playwright test` wipes its own
+            # outputDir at the START of every invocation, so the SpecialCase1
+            # run would delete this batch's HTML report, traces and
+            # screenshots before any end-of-job upload step could collect
+            # them. Two separately-named artifacts is the only way to keep
+            # both batches' evidence.
+            -   name: Upload main-batch Playwright report on failure
+                if: failure()
+                uses: actions/upload-artifact@v7
+                with:
+                    name: playwright-report-main-php${{ matrix.php-versions }}
+                    path: |
+                        var/test-results/playwright/report
+                        var/test-results/playwright/results
+                    retention-days: 7
+                    if-no-files-found: ignore
+
+            # SpecialCase1 runs in its own SEQUENTIAL step, excluded from the
+            # parallel batch above via the @specialcase1 tag (see
+            # package.json's --grep/--grep-invert pair). Three separate
+            # reasons, any one of which would justify it:
+            #
+            # 1. ORDERING. specialCase1Sessions.feature hard-depends on
+            #    specialCase1PlatformSettings.feature having run first — the
+            #    session extra fields (extra_domaine/extra_theme_fr/
+            #    extra_theme_de/extra_ecouter) its 4 session scenarios fill in
+            #    only exist because "Add minimal session extra fields" creates
+            #    them, and its teacher-creation scenario needs
+            #    admins_can_set_users_pass, which that same file enables. In
+            #    the parallel batch there was NO ordering guarantee between
+            #    two different files at all. With --workers=1 and the config's
+            #    `fullyParallel: false`, files run in sorted order, and
+            #    "specialCase1PlatformSettings" sorts before
+            #    "specialCase1Sessions" — so the dependency is satisfied by
+            #    construction.
+            # 2. COLLATERAL DAMAGE. specialCase1PlatformSettings mutates ~100
+            #    platform settings, several of which are global and UI-visible
+            #    on EVERY page (cookie_warning renders a fixed bottom banner
+            #    that intercepts pointer events; allow_registration/
+            #    allow_terms_conditions change the header on every page). Its
+            #    own "Tear down" scenario restores them, but only at the END —
+            #    so while it ran, every concurrently-executing file saw the
+            #    mutated platform. Running it alone closes that window
+            #    entirely.
+            # 3. WORKER STARVATION. Its scenarios are tagged @long-scenario
+            #    (15-minute budget) and genuinely take minutes each. Dropping
+            #    several of those into the shared worker pool measurably
+            #    starved unrelated files: the CI run that first enabled them
+            #    produced fresh 90s timeouts in companyReports.feature and
+            #    accessCompanyReports.feature, which had passed immediately
+            #    before, plus a session-bleed failure in
+            #    admin/fileIntegrity.feature.
+            #
+            # `if: always()` so this still runs when the batch above fails —
+            # SpecialCase1 derives from a real customer project, so its signal
+            # must not be hidden behind an unrelated failure elsewhere. Placed
+            # AFTER the batch (not before) so the batch sees pristine,
+            # never-yet-mutated platform settings.
+            -   name: Playwright SpecialCase1 tests
+                if: always()
+                env:
+                    BASE_URL: http://localhost
+                run: yarn test:playwright:specialcase1
+
+            # Whatever is left in outputDir at the end of the job — i.e. the
+            # SpecialCase1 step's own output, since it runs last and wiped the
+            # main batch's (uploaded separately above under
+            # playwright-report-main-*). Kept on the original artifact name so
+            # existing habits/tooling still find something here.
             -   name: Upload Playwright report on failure
                 if: failure()
                 uses: actions/upload-artifact@v7

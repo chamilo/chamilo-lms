@@ -1797,6 +1797,23 @@ Then("I delete the document {string} if present", async ({ page }, rowText: stri
 // run, but no longer fails when there isn't one.
 Then("I delete the session {string} if present", async ({ page }, sessionName: string) => {
   const row = page.locator("tr", { hasText: sessionName })
+  // Bounded wait before the count() below decides "absent". /admin/session-list
+  // is a Vue page whose table body arrives from its own async data request,
+  // well after the "I wait for the page to be loaded" (domcontentloaded) step
+  // that normally precedes this one — so a bare, instantaneous count() can read
+  // 0 for a row that renders a moment later and silently skip a session that
+  // really does exist. Confirmed exactly that: a teardown run reported PASS
+  // while leaving "Past session" behind, even though loading the same URL by
+  // hand rendered the row (with its delete icon) within ~3s.
+  // Swallowing the rejection is the whole point — a genuinely absent session
+  // must still fall through to the early return below rather than throw, which
+  // is this step's entire reason for existing. Strictly more patient than the
+  // previous bare count(), so it cannot regress a case that already worked;
+  // same reasoning as isSoonVisible() in pressButton().
+  await row
+    .first()
+    .waitFor({ state: "visible", timeout: 5000 })
+    .catch(() => {})
   if ((await row.count()) === 0) {
     return
   }

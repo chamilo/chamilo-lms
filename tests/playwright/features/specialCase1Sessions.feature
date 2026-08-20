@@ -251,7 +251,7 @@
 # so all 6 scenarios get the 15-minute budget the Before hook in
 # common.steps.ts grants: the 4 session-creation scenarios and the teardown
 # are smaller, but each still submits several legacy full-page-reload forms.
-@common @long-scenario
+@common @long-scenario @specialcase1
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator
@@ -688,33 +688,57 @@ Feature: Special case 1 — course/session creation
   Scenario: Teardown special case 1 sessions
     Given I am a platform administrator
 
+    # All four session deletions below use "I delete the session ... if
+    # present" rather than the unguarded "I click the .mdi-delete icon in the
+    # row for ..." + "I press Yes" pair they used to. Same convention, and for
+    # the same reason, as specialCase1PlatformSettings.feature's own Tear down
+    # (see that step's comment in common.steps.ts): if ANY earlier scenario in
+    # this file fails, the sessions it was supposed to create do not exist, and
+    # an unguarded delete then burns the ENTIRE 15-minute @long-scenario budget
+    # waiting for a row that will never appear — turning one upstream failure
+    # into a second, far slower, entirely derivative one. Confirmed exactly
+    # that way: a teardown run hung 15m on "Present session" purely because an
+    # earlier partial run had already removed it. The guarded step also makes
+    # this scenario idempotent, so it doubles as a reset for a half-finished
+    # previous run instead of dying on it.
+    #
+    # Deletion ORDER still matters and is deliberate: "Session in the futur en"
+    # must go BEFORE "Session in the futur", because the latter's name is a
+    # prefix of the former's, and the row lookup matches on contained text —
+    # so with both present, deleting "Session in the futur" could match the
+    # "... en" row instead.
     Given I am on "/admin/session-list?keyword=Present+session"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Present session"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Present session"
+    And I delete the session "Present session" if present
 
     Given I am on "/admin/session-list?keyword=Session+in+the+futur+en"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Session in the futur en"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Session in the futur en"
+    And I delete the session "Session in the futur en" if present
 
     Given I am on "/admin/session-list?keyword=Session+in+the+futur"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Session in the futur"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Session in the futur"
+    And I delete the session "Session in the futur" if present
 
-    Given I am on "/admin/session-list?keyword=Past+session"
+    # list_type=all is REQUIRED for this one session and no other: "Past
+    # session" is created with access dates in the past, so it ends up with
+    # status FINISHED, and this platform's `session.default_session_list_view`
+    # setting is `custom` — which SessionListController::applyListTypeFilter()
+    # restricts to PLANNED or IN PROGRESS only. Under the default view the row
+    # therefore does not exist in the table at all ("No data available"), and
+    # the delete step below hangs the whole scenario budget looking for it.
+    # The other 3 sessions in this teardown are current/future, so they show
+    # up fine without it.
+    #
+    # Note the SNAKE_CASE name: the browser-URL parameter SessionList.vue
+    # reads in onMounted is `list_type`, which it then forwards to the data
+    # endpoint as `listType` (camelCase). Using `listType` in the URL silently
+    # does nothing — confirmed both ways: /admin/session-list?listType=all
+    # still rendered only the default view, while the data endpoint itself
+    # (/admin/session-list-data?listType=all) correctly returned the session,
+    # proving the backend filter works and only the URL spelling was wrong.
+    Given I am on "/admin/session-list?list_type=all&keyword=Past+session"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Past session"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Past session"
+    And I delete the session "Past session" if present
 
     Given I am on "/admin/user-list?keyword=teacher1"
     And I wait for the page to be loaded

@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageExportAction;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -36,6 +37,7 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
@@ -69,7 +71,7 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request) || !$this->canManageWikiContext(
+        if ($this->studentViewHelper->isActive() || !$this->canManageWikiContext(
             $this->entityManager,
             $this->security,
             $this->settingsManager,

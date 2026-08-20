@@ -22,6 +22,7 @@ readonly class IsAllowedToEditHelper
         private RequestStack $requestStack,
         private CidReqHelper $cidReqHelper,
         private SessionVisibilityHelper $sessionVisibilityHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     public function check(
@@ -35,7 +36,7 @@ readonly class IsAllowedToEditHelper
         /** @var User $user */
         $user = $this->security->getUser();
 
-        $studentViewIsActive = 'studentview' === $this->requestStack->getSession()->get('studentview');
+        $studentViewIsActive = $this->studentViewHelper->isActive();
 
         $isSessionAdminAllowedToEdit = 'true' === $this->settingsManager->getSetting('session.session_admins_edit_courses_content', true);
 

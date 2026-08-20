@@ -13,13 +13,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -34,9 +34,9 @@ final readonly class LearningPathCategoryCollectionProvider implements ProviderI
         private CLpCategoryRepository $categoryRepository,
         private Security $security,
         private CidReqHelper $cidReqHelper,
-        private RequestStack $requestStack,
         private CShortcutRepository $shortcutRepository,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -83,7 +83,7 @@ final readonly class LearningPathCategoryCollectionProvider implements ProviderI
 
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $canManage = $this->canManageLearningPaths($this->security)
-            && !$this->isStudentViewRequest($this->requestStack);
+            && !$this->studentViewHelper->isActive();
 
         /** @var array<int, CLpCategory> $categories */
         $categories = $this->categoryRepository

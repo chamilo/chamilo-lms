@@ -10,9 +10,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumGradingOptions;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -23,10 +23,10 @@ final class ForumGradingOptionsProvider implements ProviderInterface
     use ForumStateHelperTrait;
 
     public function __construct(
-        private readonly RequestStack $requestStack,
         private readonly Security $security,
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -35,12 +35,7 @@ final class ForumGradingOptionsProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ForumGradingOptions
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            return ForumGradingOptions::fromCategories([]);
-        }
-
-        if (!$this->canManageForumsInCurrentView($this->security, $request)) {
+        if (!$this->canManageForumsInCurrentView($this->security, $this->studentViewHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to manage forum grading.');
         }
 

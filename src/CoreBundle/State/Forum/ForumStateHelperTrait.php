@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeImmutable;
@@ -46,18 +47,9 @@ trait ForumStateHelperTrait
             || $security->isGranted('ROLE_ADMIN');
     }
 
-    private function isStudentView(Request $request): bool
+    private function canManageForumsInCurrentView(Security $security, StudentViewHelper $studentViewHelper): bool
     {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
-    }
-
-    private function canManageForumsInCurrentView(Security $security, Request $request): bool
-    {
-        return $this->isTeacher($security) && !$this->isStudentView($request);
+        return $this->isTeacher($security) && !$studentViewHelper->isActive();
     }
 
     /**

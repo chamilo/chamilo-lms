@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -93,6 +94,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -111,7 +113,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isStudentView($request) || !$this->canManageCourseDescriptions(
+        if ($this->studentViewHelper->isActive() || !$this->canManageCourseDescriptions(
             $this->entityManager,
             $this->security,
             $this->settingsManager,
@@ -287,19 +289,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         $value = $this->settingsManager->getSetting($name, true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 
     private function getResourceLanguage(CCourseDescription $description): string

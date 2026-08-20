@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -33,6 +34,7 @@ final readonly class GradebookContextResolver
         private Security $security,
         private SettingsManager $settingsManager,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -53,7 +55,7 @@ final readonly class GradebookContextResolver
         }
         $groupId = $this->validateGroupContext($course);
         $user = $this->getCurrentUser();
-        $canManage = !$this->isStudentView($request) && $this->canManageGradebook($course, $session, $user);
+        $canManage = !$this->studentViewHelper->isActive() && $this->canManageGradebook($course, $session, $user);
 
         if ($requireManage && !$canManage) {
             throw new AccessDeniedHttpException('You are not allowed to manage the Gradebook in this context.');
@@ -264,24 +266,6 @@ final readonly class GradebookContextResolver
         $rawValue = strtolower(trim((string) $value->getFieldValue()));
 
         return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if (!$this->isSettingEnabled('course.student_view_enabled')) {
-            return false;
-        }
-
-        $queryValue = strtolower(trim((string) $request->query->get('isStudentView', '')));
-        if (\in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
-            return true;
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === strtolower((string) $request->getSession()->get('studentview', ''));
     }
 
     private function sameCategoryContext(GradebookCategory $category, Course $course, ?Session $session): bool

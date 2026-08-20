@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -41,6 +42,7 @@ final readonly class CourseProgressListProvider implements ProviderInterface
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
@@ -68,7 +70,7 @@ final readonly class CourseProgressListProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to view course progress in this context.');
         }
 
-        $studentView = $this->isCourseProgressStudentView($request, (int) $course->getId());
+        $studentView = $this->studentViewHelper->isActiveForCourse($course);
         $canManage = !$studentView && $this->canManageCourseProgress(
             $this->entityManager,
             $this->security,

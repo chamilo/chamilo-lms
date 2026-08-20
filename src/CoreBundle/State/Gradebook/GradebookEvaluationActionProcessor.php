@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -58,6 +59,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -84,7 +86,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
 
-        if ($this->isStudentView($request) || !$this->canManageGradebook($course, $session, $user)) {
+        if ($this->studentViewHelper->isActive() || !$this->canManageGradebook($course, $session, $user)) {
             throw new AccessDeniedHttpException('You are not allowed to manage manual evaluations in this context.');
         }
 
@@ -571,22 +573,6 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         $rawValue = strtolower(trim((string) $value->getFieldValue()));
 
         return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if (!$this->isSettingEnabled('course.student_view_enabled')) {
-            return false;
-        }
-        $queryValue = strtolower(trim((string) $request->query->get('isStudentView', '')));
-        if (\in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
-            return true;
-        }
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === strtolower((string) $request->getSession()->get('studentview', ''));
     }
 
     private function validateCsrfToken(string $submittedToken): void

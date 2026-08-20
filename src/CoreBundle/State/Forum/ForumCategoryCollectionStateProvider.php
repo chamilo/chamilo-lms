@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -39,6 +40,7 @@ final class ForumCategoryCollectionStateProvider implements ProviderInterface
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -81,7 +83,7 @@ final class ForumCategoryCollectionStateProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $parentNode = $this->getParentNode($this->entityManager, $request);
-        $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
+        $showHidden = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
         $languageField = $this->getForumCategoryLanguageField();
         $selectedLanguages = $this->getSelectedLanguageFilterValues($request);
 

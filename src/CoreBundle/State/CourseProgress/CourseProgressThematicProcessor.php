@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
@@ -38,6 +39,7 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
@@ -65,7 +67,7 @@ final readonly class CourseProgressThematicProcessor implements ProcessorInterfa
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
+        if ($this->studentViewHelper->isActiveForCourse($course)
             || !$this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

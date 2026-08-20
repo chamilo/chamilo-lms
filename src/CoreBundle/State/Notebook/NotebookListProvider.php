@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CNotebook;
@@ -45,6 +46,7 @@ final readonly class NotebookListProvider implements ProviderInterface
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -73,7 +75,7 @@ final readonly class NotebookListProvider implements ProviderInterface
         }
 
         $user = $this->getNotebookUser($this->userHelper);
-        $studentView = $this->isNotebookStudentView($request);
+        $studentView = $this->studentViewHelper->isActive();
         $canWrite = $this->canWriteNotebook(
             $this->entityManager,
             $this->security,

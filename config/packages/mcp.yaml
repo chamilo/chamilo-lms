@@ -33,7 +33,10 @@ mcp:
 
         Learning paths can be created in one call with create_course_learning_path, or built
         conversationally with create_empty_learning_path followed by add_learning_path_page,
-        add_learning_path_document and add_learning_path_test. After each change, use
+        add_learning_path_document, add_learning_path_test and add_learning_path_survey. A
+        survey is added as its own native step (the same TOOL_SURVEY item type the legacy
+        learning path builder uses) — never append it as a closing paragraph inside the last
+        document. The survey must already have at least one question. After each change, use
         get_learning_path_structure and only report success when the persisted structure
         contains the expected items. Use move_learning_path_item, remove_learning_path_item,
         update_learning_path_item and update_learning_path for later corrections.

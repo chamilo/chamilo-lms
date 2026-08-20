@@ -58,7 +58,7 @@ final class CourseSettingsMediaController extends AbstractController
     #[Route('/api/course-settings/picture', name: 'api_course_settings_picture_upload', methods: ['POST'])]
     public function uploadPicture(Request $request): JsonResponse
     {
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
@@ -89,7 +89,7 @@ final class CourseSettingsMediaController extends AbstractController
     #[Route('/api/course-settings/picture', name: 'api_course_settings_picture_delete', methods: ['DELETE'])]
     public function deletePicture(Request $request): JsonResponse
     {
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         if ($this->illustrationRepository->hasIllustration($course)) {
             $this->illustrationRepository->deleteIllustration($course);
@@ -103,7 +103,7 @@ final class CourseSettingsMediaController extends AbstractController
     public function uploadWatermark(Request $request): JsonResponse
     {
         $this->assertWatermarkAvailable();
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
@@ -129,7 +129,7 @@ final class CourseSettingsMediaController extends AbstractController
     public function deleteWatermark(Request $request): JsonResponse
     {
         $this->assertWatermarkAvailable();
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $target = $this->getWatermarkPath($course);
         if (is_file($target)) {
@@ -144,7 +144,7 @@ final class CourseSettingsMediaController extends AbstractController
     public function downloadCourseLegalFile(Request $request): BinaryFileResponse
     {
         $this->assertCourseLegalAvailable();
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
@@ -170,7 +170,7 @@ final class CourseSettingsMediaController extends AbstractController
     public function uploadCourseLegalFile(Request $request): JsonResponse
     {
         $this->assertCourseLegalAvailable();
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
@@ -231,7 +231,7 @@ final class CourseSettingsMediaController extends AbstractController
     public function deleteCourseLegalFile(Request $request): JsonResponse
     {
         $this->assertCourseLegalAvailable();
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
@@ -265,7 +265,7 @@ final class CourseSettingsMediaController extends AbstractController
         if (!\in_array($field, self::CERTIFICATE_MEDIA_FIELDS, true)) {
             throw new BadRequestHttpException('Invalid certificate image field.');
         }
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);
@@ -313,7 +313,7 @@ final class CourseSettingsMediaController extends AbstractController
         if (!\in_array($field, self::CERTIFICATE_MEDIA_FIELDS, true)) {
             throw new BadRequestHttpException('Invalid certificate image field.');
         }
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $file = $request->files->get('file');
         if (!$file instanceof UploadedFile || UPLOAD_ERR_OK !== $file->getError()) {
@@ -359,7 +359,7 @@ final class CourseSettingsMediaController extends AbstractController
         if (!\in_array($field, self::CERTIFICATE_MEDIA_FIELDS, true)) {
             throw new BadRequestHttpException('Invalid certificate image field.');
         }
-        [$course, $session] = $this->manager->resolveContext($request);
+        [$course, $session] = $this->manager->resolveContext();
         $this->manager->assertCanEdit($course);
         $courseId = (int) $course->getId();
         $sessionId = (int) ($session?->getId() ?? 0);

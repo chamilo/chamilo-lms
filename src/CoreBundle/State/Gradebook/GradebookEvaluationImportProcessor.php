@@ -151,6 +151,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
                 && abs((float) $existing->getScore() - $score) < 0.0000001
             ) {
                 ++$unchangedCount;
+
                 continue;
             }
             if ($existing instanceof GradebookResult && !$overwrite) {
@@ -173,6 +174,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
         $overwrittenCount = 0;
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
+
         try {
             foreach ($plan as $change) {
                 $result = $change['existing'];
@@ -180,6 +182,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
                     $this->logResult($result, $evaluation, $change['student']);
                     $result->setScore($change['score']);
                     ++$overwrittenCount;
+
                     continue;
                 }
 
@@ -202,6 +205,7 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
             if ($connection->isTransactionActive()) {
                 $connection->rollBack();
             }
+
             throw $exception;
         }
 
@@ -278,7 +282,9 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
         return $rows;
     }
 
-    /** @param array<string, string> $row */
+    /**
+     * @param array<string, string> $row
+     */
     private function validateIdentity(array $row, User $student, int $line): void
     {
         if ((string) ($row['lastname'] ?? '') !== (string) $student->getLastname()
@@ -351,7 +357,9 @@ final readonly class GradebookEvaluationImportProcessor implements ProcessorInte
         }
     }
 
-    /** @param list<string|null> $row */
+    /**
+     * @param list<string|null> $row
+     */
     private function isEmptyCsvRow(array $row): bool
     {
         foreach ($row as $value) {

@@ -78,7 +78,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): LearningPathBuilder
     {
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $filters = $context['filters'] ?? [];

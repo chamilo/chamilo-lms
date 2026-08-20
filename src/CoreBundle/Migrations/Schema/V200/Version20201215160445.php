@@ -30,6 +30,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
     private const int FILE_FLUSH_BATCH_SIZE = 25;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
     private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';
+    private const string RESOURCE_NODE_SLUG_INDEX = 'idx_legacy_migration_resource_type_slug';
 
     public function getDescription(): string
     {
@@ -46,8 +47,10 @@ final class Version20201215160445 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $this->ensureItemPropertyMigrationIndex();
+        $dropResourceNodeSlugIndex = $this->ensureResourceNodeSlugMigrationIndex();
 
-        $resourceTypeIds = [
+        try {
+            $resourceTypeIds = [
             'forum_category' => $this->getResourceTypeId('forum_categories'),
             'forum' => $this->getResourceTypeId('forums'),
             'forum_thread' => $this->getResourceTypeId('forum_threads'),
@@ -83,6 +86,11 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $fallbackAdminId,
             $uuidIsBinary
         );
+        } finally {
+            if ($dropResourceNodeSlugIndex) {
+                $this->dropResourceNodeSlugMigrationIndex();
+            }
+        }
 
         // File migration remains repository-based because it must use the
         // configured resource filesystem. It is deliberately separated from
@@ -977,6 +985,81 @@ SQL;
             $this->getLogger()->warning('Could not create c_item_property migration index; continuing safely.', [
                 'error' => $exception->getMessage(),
             ]);
+        }
+    }
+
+    private function ensureResourceNodeSlugMigrationIndex(): bool
+    {
+        try {
+            $schemaManager = $this->connection->createSchemaManager();
+
+            if (!\in_array('resource_node', $schemaManager->listTableNames(), true)) {
+                return false;
+            }
+
+            foreach ($schemaManager->listTableIndexes('resource_node') as $index) {
+                $name = strtolower($index->getName());
+
+                if (self::RESOURCE_NODE_SLUG_INDEX === $name) {
+                    // This is our migration-only index from a previous
+                    // interrupted execution. Remove it after this run.
+                    return true;
+                }
+
+                $columns = array_map('strtolower', $index->getColumns());
+                if (\count($columns) >= 2
+                    && 'resource_type_id' === $columns[0]
+                    && 'slug' === $columns[1]
+                ) {
+                    return false;
+                }
+            }
+
+            $this->getLogger()->notice(
+                'Creating temporary resource-node slug migration index.',
+                ['index' => self::RESOURCE_NODE_SLUG_INDEX]
+            );
+
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::RESOURCE_NODE_SLUG_INDEX
+                .' ON resource_node (resource_type_id, slug)'
+            );
+
+            return true;
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning(
+                'Could not create resource-node slug migration index; continuing safely.',
+                ['error' => $exception->getMessage()]
+            );
+
+            return false;
+        }
+    }
+
+    private function dropResourceNodeSlugMigrationIndex(): void
+    {
+        try {
+            $indexes = $this->connection
+                ->createSchemaManager()
+                ->listTableIndexes('resource_node');
+
+            foreach ($indexes as $index) {
+                if (self::RESOURCE_NODE_SLUG_INDEX !== strtolower($index->getName())) {
+                    continue;
+                }
+
+                $this->connection->executeStatement(
+                    'DROP INDEX '.self::RESOURCE_NODE_SLUG_INDEX
+                    .' ON resource_node'
+                );
+
+                return;
+            }
+        } catch (Throwable $exception) {
+            $this->getLogger()->warning(
+                'Could not remove temporary resource-node slug migration index.',
+                ['error' => $exception->getMessage()]
+            );
         }
     }
 

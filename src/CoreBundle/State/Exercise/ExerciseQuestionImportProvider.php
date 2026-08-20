@@ -11,7 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionImport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,8 +24,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class ExerciseQuestionImportProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
         private Security $security,
     ) {}
 
@@ -44,15 +44,15 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to import exercises in this context.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $importType = $this->normalizeImportType((string) ($uriVariables['importType'] ?? 'aiken'));
 
         $response = new ExerciseQuestionImport();
         $response->importType = $importType;
         $response->title = $this->getImportTitle($importType);
         $response->canManage = true;
-        $response->actionUrls = $this->getActionUrls($course, $session, $request);
+        $response->actionUrls = $this->getActionUrls($operation, $course, $session, $request);
         $response->sample = $this->getImportSample($importType);
         $response->learningPathContext = $this->isLearningPathImportContext($request);
 
@@ -63,36 +63,6 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function normalizeImportType(string $importType): string
@@ -125,12 +95,12 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
     /**
      * @return array<string, string>
      */
-    private function getActionUrls(Course $course, ?Session $session, Request $request): array
+    private function getActionUrls(Operation $operation, Course $course, ?Session $session, Request $request): array
     {
         $params = [
             'cid' => (int) $course->getId(),
             'sid' => (int) ($session?->getId() ?? 0),
-            'gid' => $request->query->getInt('gid'),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
             'origin' => (string) $request->query->get('origin', ''),
             'returnToLp' => (string) $request->query->get('returnToLp', ''),
             'lp_id' => $request->query->getInt('lp_id'),

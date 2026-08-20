@@ -112,11 +112,12 @@ final readonly class GradebookScoringActionProcessor implements ProcessorInterfa
 
     /**
      * @param list<array<string, mixed>> $ranges
+     *
      * @return list<array{score: float, display: string}>
      */
     private function normalizeRanges(array $ranges): array
     {
-        if (count($ranges) > 20) {
+        if (\count($ranges) > 20) {
             throw new BadRequestHttpException('A maximum of 20 Gradebook score ranges is allowed.');
         }
 

@@ -106,7 +106,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             throw new BadRequestHttpException('Request is missing.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $lp = $this->getLearningPath((int) ($uriVariables['lpId'] ?? 0));

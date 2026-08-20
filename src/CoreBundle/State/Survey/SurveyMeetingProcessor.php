@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -34,6 +35,7 @@ use Throwable;
 final readonly class SurveyMeetingProcessor implements ProcessorInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
@@ -56,13 +58,13 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
 
         $payload = $this->getPayload($request, $data);
 
-        $course = $this->surveyMeetingProvider->getCourse($request);
-        $session = $this->surveyMeetingProvider->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $operationName = (string) $operation->getName();
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
 
         if ('post_survey_meeting_answer' === $operationName) {
-            return $this->submitAnswer($surveyId, $payload, $course, $session, $request);
+            return $this->submitAnswer($operation, $surveyId, $payload, $course, $session, $request);
         }
 
         if (!$this->canManageSurveys()) {
@@ -78,6 +80,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             $this->entityManager->flush();
 
             return $this->surveyMeetingProvider->buildResponse(
+                $operation,
                 $survey,
                 $course,
                 $session,
@@ -94,6 +97,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             $this->entityManager->flush();
 
             return $this->surveyMeetingProvider->buildResponse(
+                $operation,
                 $survey,
                 $course,
                 $session,
@@ -316,7 +320,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $payload
      */
-    private function submitAnswer(int $surveyId, array $payload, Course $course, ?Session $session, Request $request): SurveyMeeting
+    private function submitAnswer(Operation $operation, int $surveyId, array $payload, Course $course, ?Session $session, Request $request): SurveyMeeting
     {
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');
@@ -334,7 +338,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         $slotIds = array_map(static fn (CSurveyQuestion $slot): int => (int) $slot->getIid(), $slots);
         $selectedSlots = array_values(array_intersect($selectedSlots, $slotIds));
 
-        $this->removeExistingAnswers($survey, (string) $user->getId(), $request);
+        $this->removeExistingAnswers($operation, $survey, (string) $user->getId(), $request);
 
         foreach ($slots as $slot) {
             if (!\in_array((int) $slot->getIid(), $selectedSlots, true)) {
@@ -349,7 +353,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
                 ->setOptionId('1')
                 ->setValue(1)
                 ->setLpItemId($request->query->getInt('lpItemId'))
-                ->setSessionId($request->query->getInt('sid') > 0 ? $request->query->getInt('sid') : null)
+                ->setSessionId((int) $this->cidReqHelper->getSessionId() > 0 ? (int) $this->cidReqHelper->getSessionId() : null)
             ;
             $this->entityManager->persist($answer);
         }
@@ -373,6 +377,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         );
 
         return $this->surveyMeetingProvider->buildResponse(
+            $operation,
             $survey,
             $course,
             $session,
@@ -383,7 +388,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         );
     }
 
-    private function removeExistingAnswers(CSurvey $survey, string $userId, Request $request): void
+    private function removeExistingAnswers(Operation $operation, CSurvey $survey, string $userId, Request $request): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->delete(CSurveyAnswer::class, 'answer')
@@ -395,7 +400,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')

@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 
+use const SORT_NUMERIC;
+
 final readonly class GradebookLearnerStatisticsCalculator
 {
     public function __construct(
@@ -70,6 +72,7 @@ final readonly class GradebookLearnerStatisticsCalculator
                 foreach ($scores as $userId => $score) {
                     if (isset($results[$userId])) {
                         $best = $results[$userId];
+
                         break;
                     }
                 }
@@ -85,7 +88,9 @@ final readonly class GradebookLearnerStatisticsCalculator
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateItem(
         GradebookCategory|GradebookEvaluation|GradebookLink $item,
         User $user,

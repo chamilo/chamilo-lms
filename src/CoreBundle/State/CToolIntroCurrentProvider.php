@@ -66,7 +66,7 @@ final readonly class CToolIntroCurrentProvider implements ProviderInterface
 
         $request = $this->requestStack->getCurrentRequest();
         if ($request instanceof Request) {
-            $introText = $this->rewriteLegacyLearningPathLinks($introText, $request, $course);
+            $introText = $this->rewriteLegacyLearningPathLinks($operation, $introText, $request, $course);
         }
 
         $intro->setIntroText($introText);
@@ -74,7 +74,7 @@ final readonly class CToolIntroCurrentProvider implements ProviderInterface
         return $intro;
     }
 
-    private function rewriteLegacyLearningPathLinks(string $introText, Request $request, Course $course): string
+    private function rewriteLegacyLearningPathLinks(Operation $operation, string $introText, Request $request, Course $course): string
     {
         if ('' === trim($introText) || !str_contains($introText, 'lp_controller.php')) {
             return $introText;
@@ -82,8 +82,8 @@ final readonly class CToolIntroCurrentProvider implements ProviderInterface
 
         $rewritten = preg_replace_callback(
             '/(href\s*=\s*)(["\'])([^"\']*lp_controller\.php[^"\']*)\2/i',
-            function (array $matches) use ($request, $course): string {
-                $newUrl = $this->buildVueLearningPathRuntimeUrl($matches[3], $request, $course);
+            function (array $matches) use ($operation, $request, $course): string {
+                $newUrl = $this->buildVueLearningPathRuntimeUrl($operation, $matches[3], $request, $course);
 
                 if (null === $newUrl) {
                     return $matches[0];
@@ -100,6 +100,7 @@ final readonly class CToolIntroCurrentProvider implements ProviderInterface
     }
 
     private function buildVueLearningPathRuntimeUrl(
+        Operation $operation,
         string $legacyUrl,
         Request $request,
         Course $course
@@ -140,9 +141,9 @@ final readonly class CToolIntroCurrentProvider implements ProviderInterface
             return null;
         }
 
-        $currentSessionId = (int) $request->query->get('sid', 0);
+        $currentSessionId = (int) $this->cidReqHelper->getSessionId();
         $linkSessionId = (int) ($params['sid'] ?? 0);
-        $groupId = (int) ($params['gid'] ?? $request->query->get('gid', 0));
+        $groupId = (int) ($params['gid'] ?? $this->cidReqHelper->getGroupId());
 
         $params['cid'] = $courseId;
         $params['sid'] = $linkSessionId > 0 ? $linkSessionId : $currentSessionId;

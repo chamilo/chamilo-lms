@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -56,6 +57,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     ];
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
@@ -80,16 +82,17 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
 
         $survey = $this->getSurvey($surveyId);
-        $course = $this->getCourse($request, $survey);
-        $session = $this->getSession($request);
+        $course = $this->getCourse($operation, $request, $survey);
+        $session = $this->getSession($operation, $request);
         $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $preview = $request->query->getBoolean('preview');
 
-        return $this->buildResponse($survey, $course, $session, $preview, $request);
+        return $this->buildResponse($operation, $survey, $course, $session, $preview, $request);
     }
 
     public function buildResponse(
+        Operation $operation,
         CSurvey $survey,
         Course $course,
         ?Session $session,
@@ -126,7 +129,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             $response->invitationCode = $invitation->getInvitationCode();
             $response->isAnswered = 1 === (int) $invitation->getAnswered();
             $response->canSubmit = !$response->isAnswered || $this->isSettingEnabled('survey.survey_allow_answered_question_edit');
-            $response->answers = $this->getExistingAnswers($survey, $this->getAnswerUserKey($survey, $user, $request), $request);
+            $response->answers = $this->getExistingAnswers($operation, $survey, $this->getAnswerUserKey($survey, $user, $request), $request);
         } else {
             $response->canSubmit = false;
         }
@@ -148,9 +151,9 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $survey;
     }
 
-    public function getCourse(Request $request, ?CSurvey $survey = null): Course
+    public function getCourse(Operation $operation, Request $request, ?CSurvey $survey = null): Course
     {
-        $courseId = $request->query->getInt('cid');
+        $courseId = (int) $this->cidReqHelper->getCourseId();
         if ($courseId <= 0) {
             $courseId = $request->query->getInt('publicCid');
         }
@@ -162,21 +165,12 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             }
         }
 
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
+        return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
-    public function getSession(Request $request): ?Session
+    public function getSession(Operation $operation, Request $request): ?Session
     {
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId <= 0) {
             $sessionId = $request->query->getInt('publicSid');
         }
@@ -488,7 +482,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getExistingAnswers(CSurvey $survey, string $answerUserKey, Request $request): array
+    private function getExistingAnswers(Operation $operation, CSurvey $survey, string $answerUserKey, Request $request): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('answer')
@@ -501,7 +495,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')

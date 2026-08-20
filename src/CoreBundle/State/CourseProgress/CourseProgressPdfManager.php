@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -42,6 +43,7 @@ final readonly class CourseProgressPdfManager
     use CourseProgressAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
@@ -97,9 +99,9 @@ final readonly class CourseProgressPdfManager
      */
     private function resolveWritableContext(Request $request): array
     {
-        $course = $this->getCourseProgressCourse($request, $this->entityManager);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertCourseProgressToolEnabled($this->entityManager, $course);
-        $session = $this->getCourseProgressSession($request, $this->entityManager);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if ($this->isCourseProgressStudentView($request, (int) $course->getId())

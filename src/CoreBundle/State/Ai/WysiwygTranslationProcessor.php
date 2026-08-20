@@ -42,7 +42,7 @@ final readonly class WysiwygTranslationProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The WYSIWYG translation payload is invalid.');
         }
 
-        $course = $this->resolveCourseAndAssertAccess($this->cidReqHelper, $this->security);
+        $course = $this->resolveCourseAndAssertAccess($this->security);
         if (!$this->translationService->isEnabled()) {
             throw new AccessDeniedHttpException('AI WYSIWYG translation is disabled.');
         }

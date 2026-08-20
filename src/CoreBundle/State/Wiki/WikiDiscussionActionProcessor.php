@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiDiscussionAction;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiMailcue;
@@ -31,6 +32,7 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
     use WikiAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
@@ -53,12 +55,12 @@ final readonly class WikiDiscussionActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getWikiCourse($this->entityManager, $request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertWikiToolEnabled($this->entityManager, $course);
         $this->assertWikiRouteNode($course, $request);
-        $session = $this->getWikiSession($this->entityManager, $request);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertWikiSessionBelongsToCourse($session, $course);
-        $group = $this->getWikiGroup($this->entityManager, $request);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
         if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {

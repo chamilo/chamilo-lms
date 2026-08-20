@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
@@ -27,7 +28,6 @@ use GroupManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final readonly class CourseUserManager
 {
@@ -35,6 +35,7 @@ final readonly class CourseUserManager
     public const int TYPE_STUDENT = CourseRelUser::STUDENT;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
@@ -45,30 +46,13 @@ final readonly class CourseUserManager
     /**
      * @return array{0: Course, 1: Session|null}
      */
-    public function resolveContext(Request $request): array
+    public function resolveContext(): array
     {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
 
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        $sessionId = $request->query->getInt('sid');
-        $session = null;
-
-        if ($sessionId > 0) {
-            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-            if (!$session instanceof Session) {
-                throw new BadRequestHttpException('The requested session was not found.');
-            }
-
-            if (!$session->hasCourse($course)) {
-                throw new AccessDeniedHttpException('The requested session does not contain the current course.');
-            }
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not contain the current course.');
         }
 
         return [$course, $session];
@@ -240,7 +224,7 @@ final readonly class CourseUserManager
      */
     public function getListData(Request $request): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanRead($course, $session);
 
         $type = $this->normalizeType($request);
@@ -320,7 +304,7 @@ final readonly class CourseUserManager
             'showSubscriptionTabs' => $this->canShowSubscriptionTabs($course, $session),
             'canInviteByEmail' => $this->canInviteByEmail($course, $session),
             'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
-                'gid' => $request->query->getInt('gid'),
+                'gid' => (int) $this->cidReqHelper->getGroupId(),
             ]),
         ];
     }
@@ -330,7 +314,7 @@ final readonly class CourseUserManager
      */
     public function getAvailableData(Request $request): array
     {
-        [$course, $session] = $this->resolveContext($request);
+        [$course, $session] = $this->resolveContext();
         $this->assertCanManage($course, $session);
         if (!$this->canSubscribe($course, $session)) {
             throw new AccessDeniedHttpException('Course user subscription is disabled for the current manager.');
@@ -407,7 +391,7 @@ final readonly class CourseUserManager
             'showClasses' => $this->canManageClasses($course, $session),
             'canInviteByEmail' => $this->canInviteByEmail($course, $session),
             'groupsUrl' => $this->buildLegacyUrl('/main/group/group.php', $course, $session, [
-                'gid' => $request->query->getInt('gid'),
+                'gid' => (int) $this->cidReqHelper->getGroupId(),
             ]),
             'canSubscribe' => $this->canSubscribe($course, $session)
                 && (self::TYPE_TEACHER === $type || '' === $this->getLimitWarning($course, $session)),

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionList;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -34,6 +35,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
     use CourseDescriptionAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CCourseDescriptionRepository $courseDescriptionRepository,
@@ -52,9 +54,9 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
-        $session = $this->getSession($request);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
         if (!$this->canReadCourseDescriptions($this->security, $this->settingsManager, $course, $session)) {
@@ -91,36 +93,6 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         $list->totalItems = \count($list->items);
 
         return $list;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     /**

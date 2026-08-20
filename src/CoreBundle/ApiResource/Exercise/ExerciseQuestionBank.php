@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Exercise\ExerciseQuestionBankProcessor;
@@ -24,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Global exercise question bank data',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'page', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'itemsPerPage', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
@@ -39,6 +37,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_global_question_bank',
             provider: ExerciseQuestionBankProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/bank',
@@ -47,9 +56,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Exercise question bank data',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'page', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'itemsPerPage', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'search', in: 'query', required: false, schema: ['type' => 'string']),
@@ -62,20 +68,37 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_bank',
             provider: ExerciseQuestionBankProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/bank/action',
             openapi: new Operation(
                 summary: 'Run a global exercise question bank action',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_global_question_bank_action',
             processor: ExerciseQuestionBankProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/bank/action',
@@ -84,14 +107,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Run an exercise question bank action',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_question_bank_action',
             processor: ExerciseQuestionBankProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['exercise_question_bank:read']],

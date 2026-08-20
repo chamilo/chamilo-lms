@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseGroup;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupForm;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class CourseGroupFormProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
     ) {}

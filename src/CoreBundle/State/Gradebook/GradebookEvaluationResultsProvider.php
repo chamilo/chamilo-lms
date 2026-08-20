@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -32,12 +33,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+use const DATE_ATOM;
+
 /**
  * @implements ProviderInterface<GradebookEvaluationResults>
  */
 final readonly class GradebookEvaluationResultsProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -63,10 +67,13 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
 
     public function buildReport(Request $request): GradebookEvaluationResults
     {
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($request, $course);
+        $groupId = $this->validateGroupContext($course);
         $user = $this->getCurrentUser();
 
         if (!$this->canViewEvaluationResults()) {
@@ -190,40 +197,6 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         return $response;
     }
 
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
-    }
-
     private function getCurrentUser(): User
     {
         $user = $this->security->getUser();
@@ -243,17 +216,14 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): int
+    private function validateGroupContext(Course $course): int
     {
-        $groupId = max(0, $request->query->getInt('gid'));
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return 0;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
+        $groupId = (int) $group->getIid();
 
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();
@@ -406,7 +376,9 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
         return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function getScoreOptions(Course $course, float $maxScore): array
     {
         $setting = $this->settingsManager->getSetting('exercise.score_grade_model', true);
@@ -425,6 +397,7 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
             }
 
             $modelId = (int) $courseSetting->getValue();
+
             break;
         }
 
@@ -433,6 +406,7 @@ final readonly class GradebookEvaluationResultsProvider implements ProviderInter
             foreach ($setting['models'] as $model) {
                 if (\is_array($model) && (int) ($model['id'] ?? 0) === $modelId) {
                     $selectedModel = $model;
+
                     break;
                 }
             }

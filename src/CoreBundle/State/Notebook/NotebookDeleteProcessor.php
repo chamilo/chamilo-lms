@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Notebook;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Notebook\NotebookItem;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -27,6 +28,7 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
     use NotebookAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CNotebookRepository $notebookRepository,
@@ -46,8 +48,8 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getNotebookCourse($this->entityManager, $request);
-        $session = $this->getNotebookSession($this->entityManager, $request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertNotebookSessionBelongsToCourse($session, $course);
 
         if (!$this->canReadNotebook(

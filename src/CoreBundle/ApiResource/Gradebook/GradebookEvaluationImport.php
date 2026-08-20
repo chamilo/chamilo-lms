@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Gradebook;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -24,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Import manual Gradebook evaluation results from CSV',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                 ],
                 requestBody: new RequestBody(
@@ -55,6 +53,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             deserialize: false,
             name: 'post_gradebook_evaluation_results_import',
             processor: GradebookEvaluationImportProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['gradebook_evaluation_import:read']],

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
+use Chamilo\CoreBundle\Service\Survey\CourseSurveyContentService;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -39,6 +40,7 @@ final readonly class ManageCourseLearningPathTool
         private CLpItemRepository $lpItemRepository,
         private CourseDocumentContentService $documentContentService,
         private CreateCourseDocumentTool $documentTool,
+        private CourseSurveyContentService $surveyContentService,
         private EntityManagerInterface $entityManager,
     ) {}
 
@@ -47,7 +49,7 @@ final readonly class ManageCourseLearningPathTool
      */
     #[McpTool(
         name: 'create_empty_learning_path',
-        description: 'Create an empty learning path in a course managed by the authenticated teacher. Use the add_learning_path_page, add_learning_path_document and add_learning_path_test tools afterwards to build it conversationally.',
+        description: 'Create an empty learning path in a course managed by the authenticated teacher. Use the add_learning_path_page, add_learning_path_document, add_learning_path_test and add_learning_path_survey tools afterwards to build it conversationally.',
     )]
     public function createEmptyLearningPath(
         int $courseId,
@@ -316,6 +318,51 @@ final readonly class ManageCourseLearningPathTool
             throw new ToolCallException($exception->getMessage());
         } catch (Throwable $throwable) {
             throw new ToolCallException('The test could not be added to the learning path because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
+        }
+    }
+
+    /**
+     * @return array{updated: true, learning_path: array<string, mixed>, items: list<array<string, mixed>>}
+     */
+    #[McpTool(
+        name: 'add_learning_path_survey',
+        description: 'Add an existing survey to a learning path as a native step, the same way the Chamilo learning path builder lets a teacher attach a survey. Identify the survey by surveyId or exact title. The survey must already have at least one question. The operation returns the persisted learning path structure.',
+    )]
+    public function addLearningPathSurvey(
+        int $courseId,
+        int $learningPathId,
+        ?int $surveyId = null,
+        ?string $surveyTitle = null,
+        ?int $afterItemId = null,
+    ): array {
+        try {
+            $context = $this->courseContext->resolve($courseId);
+            $learningPath = $this->resolveLearningPath($courseId, $learningPathId);
+            $survey = $this->surveyContentService->resolveSurvey($context['course'], $surveyId, $surveyTitle);
+            if ($survey->getQuestions()->isEmpty()) {
+                throw new InvalidArgumentException('The survey has no questions yet and cannot be added to the learning path.');
+            }
+            $this->addItem(
+                $context['course'],
+                (int) $context['user']->getId(),
+                $learningPath,
+                TOOL_SURVEY,
+                (int) $survey->getIid(),
+                $survey->getTitle(),
+                $afterItemId,
+            );
+
+            return [
+                'updated' => true,
+                'learning_path' => $this->normalizeLearningPath($courseId, $learningPath),
+                'items' => $this->normalizeItems($learningPath),
+            ];
+        } catch (ToolCallException $exception) {
+            throw $exception;
+        } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
+            throw new ToolCallException($exception->getMessage());
+        } catch (Throwable $throwable) {
+            throw new ToolCallException('The survey could not be added to the learning path because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
         }
     }
 

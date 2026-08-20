@@ -38,7 +38,7 @@ final readonly class CourseUserActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        [$course, $session] = $this->courseUserManager->resolveContext($request);
+        [$course, $session] = $this->courseUserManager->resolveContext();
         $type = $this->courseUserManager->normalizeType($request);
         $operationName = (string) $operation->getName();
 

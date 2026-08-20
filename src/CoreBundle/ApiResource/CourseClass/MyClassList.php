@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseClass;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseClass\MyClassListProvider;
@@ -28,6 +29,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_my_class_list',
             provider: MyClassListProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['my_class_list:read']],

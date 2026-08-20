@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseGroup;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupOverviewProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -22,6 +23,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_group_overview',
             provider: CourseGroupOverviewProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_group_overview:read']],

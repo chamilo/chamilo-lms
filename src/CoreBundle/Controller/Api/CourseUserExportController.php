@@ -61,7 +61,7 @@ final class CourseUserExportController extends AbstractController
      */
     private function loadAllData(Request $request): array
     {
-        [$course, $session] = $this->courseUserManager->resolveContext($request);
+        [$course, $session] = $this->courseUserManager->resolveContext();
         if (!$this->courseUserManager->canManage($course, $session)) {
             throw $this->createAccessDeniedException('You are not allowed to export users in this context.');
         }

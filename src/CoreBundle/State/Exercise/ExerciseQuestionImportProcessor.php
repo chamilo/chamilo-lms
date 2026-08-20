@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionImport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -47,6 +48,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     private const DEFAULT_TOTAL_WEIGHT = 20.0;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -71,8 +73,8 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
 
         $importType = $this->normalizeImportType((string) ($uriVariables['importType'] ?? 'aiken'));
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $uploadedFile = $request->files->get('file');
         if (!$uploadedFile instanceof UploadedFile) {
             throw new BadRequestHttpException('A file is required.');
@@ -93,36 +95,6 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function normalizeImportType(string $importType): string

@@ -105,7 +105,7 @@ final class GradebookCertificateExportController extends AbstractController
         }
 
         $orientation = strtolower($this->getSettingString('certificate.certificate_pdf_orientation'));
-        if (!in_array($orientation, ['portrait', 'landscape'], true)) {
+        if (!\in_array($orientation, ['portrait', 'landscape'], true)) {
             $orientation = 'landscape';
         }
         $tempDir = $this->cacheDir.'/mpdf';
@@ -143,11 +143,7 @@ final class GradebookCertificateExportController extends AbstractController
 
             $binary = $mpdf->Output('', Destination::STRING_RETURN);
         } catch (MpdfException $exception) {
-            throw new RuntimeException(
-                'Failed to export Gradebook certificates: '.$exception->getMessage(),
-                0,
-                $exception,
-            );
+            throw new RuntimeException('Failed to export Gradebook certificates: '.$exception->getMessage(), 0, $exception);
         }
 
         return new Response($binary, Response::HTTP_OK, [
@@ -174,7 +170,7 @@ final class GradebookCertificateExportController extends AbstractController
 
                 if (preg_match('~^https?://~i', $url)) {
                     $parts = parse_url($url);
-                    if (!is_array($parts) || !isset($parts['host'], $parts['path'])) {
+                    if (!\is_array($parts) || !isset($parts['host'], $parts['path'])) {
                         return $matches[0];
                     }
                     if ($requestHost !== strtolower((string) $parts['host'])) {
@@ -211,6 +207,6 @@ final class GradebookCertificateExportController extends AbstractController
     {
         $value = $this->settingsManager->getSetting($name, true);
 
-        return is_scalar($value) ? trim((string) $value) : '';
+        return \is_scalar($value) ? trim((string) $value) : '';
     }
 }

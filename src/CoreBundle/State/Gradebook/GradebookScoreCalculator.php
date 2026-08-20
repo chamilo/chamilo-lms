@@ -43,6 +43,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
+use const DATE_ATOM;
+
 /**
  * Authoritative read-only Gradebook score calculator.
  *
@@ -51,7 +53,9 @@ use Throwable;
  */
 final class GradebookScoreCalculator
 {
-    /** @var array<string, array<string, mixed>|null> */
+    /**
+     * @var array<string, array<string, mixed>|null>
+     */
     private array $completionEvaluationCache = [];
     private readonly CourseCompletionRuleEvaluator $courseCompletionRuleEvaluator;
 
@@ -321,7 +325,7 @@ final class GradebookScoreCalculator
         if ($this->isSettingEnabled('gradebook.allow_gradebook_stats')) {
             $scoreList = $evaluation->getUserScoreList();
             $userId = (int) $user->getId();
-            $hasResult = array_key_exists($userId, $scoreList);
+            $hasResult = \array_key_exists($userId, $scoreList);
             $score = $hasResult && is_numeric($scoreList[$userId])
                 ? (float) $scoreList[$userId]
                 : 0.0;
@@ -406,7 +410,9 @@ final class GradebookScoreCalculator
         };
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateExercise(
         GradebookLink $link,
         object $resource,
@@ -421,7 +427,7 @@ final class GradebookScoreCalculator
         if ($this->isSettingEnabled('gradebook.allow_gradebook_stats')) {
             $scoreList = $link->getUserScoreList();
             $userId = (int) $user->getId();
-            $hasResult = array_key_exists($userId, $scoreList);
+            $hasResult = \array_key_exists($userId, $scoreList);
             $score = $hasResult && is_numeric($scoreList[$userId])
                 ? (float) $scoreList[$userId]
                 : 0.0;
@@ -500,14 +506,16 @@ final class GradebookScoreCalculator
         return $this->buildResult(
             $attempt->getScore(),
             $attempt->getMaxScore(),
-            count($attempts),
+            \count($attempts),
             $this->formatDate($attempt->getExeDate()),
             $this->getLinkWeight($link),
             true,
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateAssignment(
         GradebookLink $link,
         object $resource,
@@ -547,7 +555,9 @@ final class GradebookScoreCalculator
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateLearningPath(
         GradebookLink $link,
         object $resource,
@@ -601,7 +611,9 @@ final class GradebookScoreCalculator
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateForumThread(
         GradebookLink $link,
         object $resource,
@@ -641,8 +653,8 @@ final class GradebookScoreCalculator
             );
         }
 
-        if (count($qualifications) <= 2) {
-            return $this->buildResult(0.0, $maxScore, count($qualifications), null, $this->getLinkWeight($link), false);
+        if (\count($qualifications) <= 2) {
+            return $this->buildResult(0.0, $maxScore, \count($qualifications), null, $this->getLinkWeight($link), false);
         }
 
         $score = 0.0;
@@ -651,16 +663,18 @@ final class GradebookScoreCalculator
         }
 
         return $this->buildResult(
-            $score / count($qualifications),
+            $score / \count($qualifications),
             $maxScore,
-            count($qualifications),
+            \count($qualifications),
             null,
             $this->getLinkWeight($link),
             true,
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateForumParticipation(
         GradebookLink $link,
         object $resource,
@@ -707,7 +721,9 @@ final class GradebookScoreCalculator
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateAttendance(
         GradebookLink $link,
         object $resource,
@@ -785,7 +801,9 @@ final class GradebookScoreCalculator
         );
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateSurvey(
         GradebookLink $link,
         object $resource,
@@ -877,7 +895,9 @@ final class GradebookScoreCalculator
         return null;
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getCourseCompletionCategoryResult(
         GradebookCategory $category,
         User $user,
@@ -913,7 +933,9 @@ final class GradebookScoreCalculator
         );
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getCompletionEvaluation(
         User $user,
         Course $course,
@@ -923,7 +945,7 @@ final class GradebookScoreCalculator
         $courseId = (int) $course->getId();
         $sessionId = null !== $session ? (int) $session->getId() : 0;
         $cacheKey = (int) $user->getId().':'.$courseId.':'.$sessionId.':'.$minimumScore;
-        if (!array_key_exists($cacheKey, $this->completionEvaluationCache)) {
+        if (!\array_key_exists($cacheKey, $this->completionEvaluationCache)) {
             try {
                 $evaluation = $this->courseCompletionRuleEvaluator->evaluate(
                     (int) $user->getId(),

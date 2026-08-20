@@ -89,11 +89,17 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ");
 
-        $ltiToken = $schema->getTable('lti_token');
-        $ltiExternalTool = $schema->getTable('lti_external_tool');
-        $ltiLineitem = $schema->getTable('lti_lineitem');
+        $ltiToken = $schema->hasTable('lti_token')
+            ? $schema->getTable('lti_token')
+            : null;
+        $ltiExternalTool = $schema->hasTable('lti_external_tool')
+            ? $schema->getTable('lti_external_tool')
+            : null;
+        $ltiLineitem = $schema->hasTable('lti_lineitem')
+            ? $schema->getTable('lti_lineitem')
+            : null;
 
-        if (!$ltiToken->hasForeignKey('FK_EA71C468F7B22CC')) {
+        if (null === $ltiToken || !$ltiToken->hasForeignKey('FK_EA71C468F7B22CC')) {
             $this->addSql('
                 ALTER TABLE lti_token
                 ADD CONSTRAINT FK_EA71C468F7B22CC FOREIGN KEY (tool_id)
@@ -101,7 +107,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiExternalTool->hasForeignKey('FK_DB0E04E41BAD783F')) {
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E41BAD783F')) {
             $this->addSql('
                 ALTER TABLE lti_external_tool
                 ADD CONSTRAINT FK_DB0E04E41BAD783F FOREIGN KEY (resource_node_id)
@@ -109,7 +115,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiExternalTool->hasForeignKey('FK_DB0E04E491D79BD3')) {
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E491D79BD3')) {
             $this->addSql('
                 ALTER TABLE lti_external_tool
                 ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id)
@@ -117,7 +123,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiExternalTool->hasForeignKey('FK_DB0E04E482F80D8B')) {
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E482F80D8B')) {
             $this->addSql("ALTER TABLE lti_external_tool CHANGE gradebook_eval_id gradebook_eval_id {$gradebookEvaluationIdType} DEFAULT NULL");
             $this->addSql('
                 ALTER TABLE lti_external_tool
@@ -126,7 +132,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiExternalTool->hasForeignKey('FK_DB0E04E4727ACA70')) {
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E4727ACA70')) {
             $this->addSql('
                 ALTER TABLE lti_external_tool
                 ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id)
@@ -134,7 +140,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiLineitem->hasForeignKey('FK_5C76B75D8F7B22CC')) {
+        if (null === $ltiLineitem || !$ltiLineitem->hasForeignKey('FK_5C76B75D8F7B22CC')) {
             $this->addSql('
                 ALTER TABLE lti_lineitem
                 ADD CONSTRAINT FK_5C76B75D8F7B22CC FOREIGN KEY (tool_id)
@@ -142,7 +148,7 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ');
         }
 
-        if (!$ltiLineitem->hasForeignKey('FK_5C76B75D1323A575')) {
+        if (null === $ltiLineitem || !$ltiLineitem->hasForeignKey('FK_5C76B75D1323A575')) {
             $this->addSql("ALTER TABLE lti_lineitem CHANGE evaluation evaluation {$gradebookEvaluationIdType} NOT NULL");
             $this->addSql('
                 ALTER TABLE lti_lineitem

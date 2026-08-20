@@ -9,11 +9,10 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseGlobalReport;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Read-only data provider for the migrated exercise global report selector.
@@ -27,7 +26,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class ExerciseGlobalReportProvider implements ProviderInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
+        private CidReqHelper $cidReqHelper,
         private Connection $connection,
         private Security $security,
     ) {}
@@ -38,14 +37,10 @@ final readonly class ExerciseGlobalReportProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ExerciseGlobalReport
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
         $this->assertAccessAllowed();
 
-        $selectedCourseId = max(0, $request->query->getInt('cid', $request->query->getInt('courseId')));
+        $selectedCourseId = max(0, (int) ($this->cidReqHelper->getCourseId()
+            ?? $operation->getParameters()?->get('courseId')?->getValue(0)));
         $data = new ExerciseGlobalReport();
         $data->courseOptions = $this->getCourseOptions();
         $data->selectedCourseId = $selectedCourseId;

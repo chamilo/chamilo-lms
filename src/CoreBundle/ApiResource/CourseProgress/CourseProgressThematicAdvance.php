@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseProgress\CourseProgressThematicAdvanceDeleteProcessor;
@@ -28,9 +29,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Course progress thematic advance form data',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
@@ -38,6 +36,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_progress_thematic_advance_form',
             provider: CourseProgressThematicAdvanceProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-progress/thematic-advance',
@@ -45,9 +54,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Create a course progress thematic advance',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -55,6 +61,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'post_course_progress_thematic_advance',
             processor: CourseProgressThematicAdvanceProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Patch(
             uriTemplate: '/course-progress/thematic-advance/{iid}',
@@ -64,9 +81,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -74,6 +88,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'put_course_progress_thematic_advance',
             processor: CourseProgressThematicAdvanceProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Delete(
             uriTemplate: '/course-progress/thematic-advance/{iid}',
@@ -83,9 +108,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
@@ -93,6 +115,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'delete_course_progress_thematic_advance',
             provider: CourseProgressThematicAdvanceProvider::class,
             processor: CourseProgressThematicAdvanceDeleteProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_progress_thematic_advance:read']],

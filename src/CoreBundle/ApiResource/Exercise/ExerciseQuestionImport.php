@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -28,9 +29,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Exercise question import data',
                 parameters: [
                     new Parameter(name: 'importType', in: 'path', required: true, schema: ['type' => 'string']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'origin', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'returnToLp', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lp_id', in: 'query', required: false, schema: ['type' => 'integer']),
@@ -42,6 +40,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_import',
             provider: ExerciseQuestionImportProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/import/{importType}',
@@ -50,9 +59,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Import exercise questions',
                 parameters: [
                     new Parameter(name: 'importType', in: 'path', required: true, schema: ['type' => 'string']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'origin', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'returnToLp', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lp_id', in: 'query', required: false, schema: ['type' => 'integer']),
@@ -85,6 +91,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             deserialize: false,
             name: 'post_exercise_question_import',
             processor: ExerciseQuestionImportProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['exercise_question_import:read']],

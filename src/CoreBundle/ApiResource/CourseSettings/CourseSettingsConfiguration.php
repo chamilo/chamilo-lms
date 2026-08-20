@@ -10,8 +10,8 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseSettings\CourseSettingsConfigurationProcessor;
 use Chamilo\CoreBundle\State\CourseSettings\CourseSettingsConfigurationProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -23,30 +23,42 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-settings',
             openapi: new Operation(
                 summary: 'Course settings configuration for the current course context',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_course_settings_configuration',
             provider: CourseSettingsConfigurationProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/course-settings',
             read: false,
             openapi: new Operation(
                 summary: 'Save course settings for the current course context',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'post_course_settings_configuration',
             processor: CourseSettingsConfigurationProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['course_settings:read']],

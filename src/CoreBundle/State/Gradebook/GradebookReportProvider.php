@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\GradebookScoreDisplay;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -42,6 +43,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 final readonly class GradebookReportProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
@@ -75,10 +77,13 @@ final readonly class GradebookReportProvider implements ProviderInterface
         bool $exportAll = false,
         ?bool $includeScoresOverride = null,
     ): GradebookReport {
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request, $course);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if ($session instanceof Session && !$session->hasCourse($course)) {
+            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
+        }
         $this->validateCourseResourceNode($request, $course);
-        $groupId = $this->validateGroupContext($request, $course);
+        $groupId = $this->validateGroupContext($course);
         $this->assertCanViewReport();
 
         $rootCategory = $this->findRootCategory($course, $session);
@@ -128,13 +133,13 @@ final readonly class GradebookReportProvider implements ProviderInterface
         $this->sortStudents($students, $sortBy, $sortDirection);
 
         $report->page = $exportAll ? 1 : $page;
-        $report->itemsPerPage = $exportAll ? max(1, count($students)) : $itemsPerPage;
-        $report->totalItems = count($students);
+        $report->itemsPerPage = $exportAll ? max(1, \count($students)) : $itemsPerPage;
+        $report->totalItems = \count($students);
         $report->sortBy = $sortBy;
         $report->sortDirection = $sortDirection;
 
         if (!$exportAll) {
-            $students = array_slice($students, ($page - 1) * $itemsPerPage, $itemsPerPage);
+            $students = \array_slice($students, ($page - 1) * $itemsPerPage, $itemsPerPage);
         }
         $extraFieldValues = $this->getExtraFieldValues(
             array_map(static fn (User $student): int => (int) $student->getId(), $students),
@@ -214,39 +219,6 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $report;
     }
 
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new NotFoundHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request, Course $course): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new NotFoundHttpException('The requested session was not found.');
-        }
-        if (!$session->hasCourse($course)) {
-            throw new AccessDeniedHttpException('The requested session does not belong to the current course.');
-        }
-
-        return $session;
-    }
-
     private function validateCourseResourceNode(Request $request, Course $course): void
     {
         $nodeId = $request->query->getInt('node');
@@ -256,17 +228,14 @@ final readonly class GradebookReportProvider implements ProviderInterface
         }
     }
 
-    private function validateGroupContext(Request $request, Course $course): int
+    private function validateGroupContext(Course $course): int
     {
-        $groupId = max(0, $request->query->getInt('gid'));
-        if (0 === $groupId) {
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (!$group instanceof CGroup) {
             return 0;
         }
 
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('The requested group was not found.');
-        }
+        $groupId = (int) $group->getIid();
 
         $groupNode = $group->getResourceNode();
         $courseNode = $course->getResourceNode();
@@ -351,7 +320,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return false;
     }
 
-    /** @return list<User> */
+    /**
+     * @return list<User>
+     */
     private function getStudents(Course $course, ?Session $session): array
     {
         $students = [];
@@ -427,7 +398,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $items;
     }
 
-    /** @return list<GradebookCategory> */
+    /**
+     * @return list<GradebookCategory>
+     */
     private function getDirectSubCategories(GradebookCategory $category, Course $course, ?Session $session): array
     {
         $categories = [];
@@ -442,7 +415,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $categories;
     }
 
-    /** @return list<GradebookEvaluation> */
+    /**
+     * @return list<GradebookEvaluation>
+     */
     private function getDirectEvaluations(GradebookCategory $category, Course $course): array
     {
         $evaluations = [];
@@ -457,7 +432,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $evaluations;
     }
 
-    /** @return list<GradebookLink> */
+    /**
+     * @return list<GradebookLink>
+     */
     private function getDirectLinks(GradebookCategory $category, Course $course): array
     {
         $links = [];
@@ -472,7 +449,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $links;
     }
 
-    /** @return list<GradebookEvaluation> */
+    /**
+     * @return list<GradebookEvaluation>
+     */
     private function getEvaluationsRecursive(GradebookCategory $category, Course $course, ?Session $session): array
     {
         $evaluations = $this->getDirectEvaluations($category, $course);
@@ -485,7 +464,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $evaluations;
     }
 
-    /** @return list<GradebookLink> */
+    /**
+     * @return list<GradebookLink>
+     */
     private function getLinksRecursive(GradebookCategory $category, Course $course, ?Session $session): array
     {
         $links = $this->getDirectLinks($category, $course);
@@ -498,7 +479,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $links;
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function buildColumns(GradebookCategory $category, Course $course, ?Session $session, int $groupId): array
     {
         $items = $this->getReportItems($category, $course, $session);
@@ -547,7 +530,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $columns;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function calculateItem(
         GradebookCategory|GradebookEvaluation|GradebookLink $item,
         GradebookCategory $currentCategory,
@@ -606,7 +591,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return (string) ($normalized['title'] ?? '');
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function normalizeCategory(GradebookCategory $category): array
     {
         return [
@@ -619,7 +606,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         ];
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return array<string, mixed>
+     */
     private function buildSettings(GradebookCategory $category): array
     {
         return [
@@ -648,11 +637,13 @@ final readonly class GradebookReportProvider implements ProviderInterface
         ];
     }
 
-    /** @return list<array{id: int, variable: string, label: string}> */
+    /**
+     * @return list<array{id: int, variable: string, label: string}>
+     */
     private function getExtraFieldDefinitions(): array
     {
         $setting = $this->settingsManager->getSetting('gradebook.gradebook_flatview_extrafields_columns', true);
-        if (!is_array($setting) || !isset($setting['variables']) || !is_array($setting['variables'])) {
+        if (!\is_array($setting) || !isset($setting['variables']) || !\is_array($setting['variables'])) {
             return [];
         }
 
@@ -667,7 +658,7 @@ final readonly class GradebookReportProvider implements ProviderInterface
         $definitions = [];
         foreach ($this->extraFieldRepository->getExtraFields(ExtraField::USER_FIELD_TYPE) as $field) {
             $variable = (string) $field->getVariable();
-            if (!in_array($variable, $variables, true)) {
+            if (!\in_array($variable, $variables, true)) {
                 continue;
             }
 
@@ -689,7 +680,7 @@ final readonly class GradebookReportProvider implements ProviderInterface
     }
 
     /**
-     * @param list<int> $userIds
+     * @param list<int>                                             $userIds
      * @param list<array{id: int, variable: string, label: string}> $fields
      *
      * @return array<int, array<string, string>>
@@ -739,7 +730,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param list<User> $students */
+    /**
+     * @param list<User> $students
+     */
     private function sortStudents(array &$students, string $sortBy, string $sortDirection): void
     {
         $factor = 'desc' === $sortDirection ? -1 : 1;
@@ -766,10 +759,12 @@ final readonly class GradebookReportProvider implements ProviderInterface
 
     private function normalizeSortBy(string $sortBy): string
     {
-        return in_array($sortBy, ['fullName', 'firstName', 'lastName', 'username'], true) ? $sortBy : 'fullName';
+        return \in_array($sortBy, ['fullName', 'firstName', 'lastName', 'username'], true) ? $sortBy : 'fullName';
     }
 
-    /** @return array<string, int> */
+    /**
+     * @return array<string, int>
+     */
     private function buildContext(Request $request, Course $course, ?Session $session, int $groupId): array
     {
         return [
@@ -779,7 +774,6 @@ final readonly class GradebookReportProvider implements ProviderInterface
             'node' => $request->query->getInt('node'),
         ];
     }
-
 
     /**
      * @param list<User> $students
@@ -817,7 +811,7 @@ final readonly class GradebookReportProvider implements ProviderInterface
             return $default;
         }
 
-        return in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
+        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
     }
 
     private function sameCategoryContext(GradebookCategory $category, Course $course, ?Session $session): bool
@@ -911,7 +905,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $value >= 1 && $value <= 14 ? $value : 7;
     }
 
-    /** @return list<array{score: float, display: string}> */
+    /**
+     * @return list<array{score: float, display: string}>
+     */
     private function getScoreDisplayRanges(GradebookCategory $category): array
     {
         if (!$this->isSettingEnabled('gradebook.gradebook_score_display_custom')) {
@@ -936,8 +932,8 @@ final readonly class GradebookReportProvider implements ProviderInterface
     }
 
     /**
-     * @param array<string, mixed> $result
-     * @param array<string, mixed> $settings
+     * @param array<string, mixed>                       $result
+     * @param array<string, mixed>                       $settings
      * @param list<array{score: float, display: string}> $ranges
      *
      * @return array<string, mixed>
@@ -972,7 +968,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         return $result;
     }
 
-    /** @param list<array{score: float, display: string}> $ranges */
+    /**
+     * @param list<array{score: float, display: string}> $ranges
+     */
     private function resolveScoreDisplay(float $percentage, array $ranges, bool $upperLimitIncluded): ?string
     {
         if ([] === $ranges) {
@@ -1028,7 +1026,9 @@ final readonly class GradebookReportProvider implements ProviderInterface
         };
     }
 
-    /** @param list<float> $itemWeights */
+    /**
+     * @param list<float> $itemWeights
+     */
     private function normalizeMainWeightForItems(float $mainWeight, array $itemWeights): float
     {
         if ($mainWeight <= 0.0) {

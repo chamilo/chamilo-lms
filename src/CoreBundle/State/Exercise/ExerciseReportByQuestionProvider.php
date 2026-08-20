@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseReportByQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseSpecialQuestionReportCounterService;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -88,6 +89,7 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     ];
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
@@ -110,8 +112,8 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
             throw new AccessDeniedHttpException('You are not allowed to view this report.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
         if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
@@ -129,39 +131,9 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
         $response->description = (string) $quiz->getDescription();
         $response->questions = $rows;
         $response->summary = $this->buildSummary($rows);
-        $response->actionUrls = $this->getActionUrls($quiz, $request);
+        $response->actionUrls = $this->getActionUrls($operation, $quiz, $request);
 
         return $response;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function canManageExercises(): bool
@@ -462,10 +434,10 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     /**
      * @return array<string, string>
      */
-    private function getActionUrls(CQuiz $quiz, Request $request): array
+    private function getActionUrls(Operation $operation, CQuiz $quiz, Request $request): array
     {
         $exerciseId = (int) $quiz->getIid();
-        $params = $this->getBaseParams($exerciseId, $request);
+        $params = $this->getBaseParams($operation, $exerciseId, $request);
 
         return [
             'reportByQuestionPdf' => '/api/exercise/runtime/'.$exerciseId.'/report-by-question.pdf?'.http_build_query($params),
@@ -475,22 +447,22 @@ final readonly class ExerciseReportByQuestionProvider implements ProviderInterfa
     /**
      * @return array<string, int|string>
      */
-    private function getBaseParams(int $exerciseId, Request $request): array
+    private function getBaseParams(Operation $operation, int $exerciseId, Request $request): array
     {
-        return ['exerciseId' => $exerciseId] + $this->getContextParams($request);
+        return ['exerciseId' => $exerciseId] + $this->getContextParams($operation);
     }
 
     /**
      * @return array<string, int|string>
      */
-    private function getContextParams(Request $request): array
+    private function getContextParams(Operation $operation): array
     {
         $params = [
-            'cid' => $request->query->getInt('cid'),
-            'gid' => $request->query->getInt('gid'),
+            'cid' => (int) $this->cidReqHelper->getCourseId(),
+            'gid' => (int) $this->cidReqHelper->getGroupId(),
         ];
 
-        $sessionId = $request->query->getInt('sid');
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId > 0) {
             $params['sid'] = $sessionId;
         }

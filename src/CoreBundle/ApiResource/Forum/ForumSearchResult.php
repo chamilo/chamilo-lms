@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Forum\ForumSearchStateProvider;
@@ -27,31 +28,25 @@ use Symfony\Component\Serializer\Attribute\Groups;
                         required: true,
                         schema: ['type' => 'string'],
                     ),
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'gid',
-                        in: 'query',
-                        description: 'Group id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: ForumSearchStateProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: [

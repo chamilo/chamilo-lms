@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookLearnerReport;
-use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookExportService;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationResultsProvider;
@@ -20,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+use const PHP_SESSION_ACTIVE;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 #[Route(
@@ -60,7 +60,7 @@ final readonly class GradebookExportController
 
     private function exportFlat(Request $request, string $format, Course $course): Response
     {
-        if (!in_array($format, ['csv', 'xls', 'docx', 'pdf'], true)) {
+        if (!\in_array($format, ['csv', 'xls', 'docx', 'pdf'], true)) {
             throw new BadRequestHttpException('The requested format is not supported for the Gradebook list view.');
         }
 
@@ -74,7 +74,7 @@ final readonly class GradebookExportController
 
     private function exportEvaluation(Request $request, string $format, Course $course): Response
     {
-        if (!in_array($format, ['csv', 'xml', 'pdf'], true)) {
+        if (!\in_array($format, ['csv', 'xml', 'pdf'], true)) {
             throw new BadRequestHttpException('The requested format is not supported for manual evaluation results.');
         }
 
@@ -108,7 +108,7 @@ final readonly class GradebookExportController
         $report = $this->reportProvider->buildReport($request, true, false);
         $reports = [];
         foreach ($report->rows as $row) {
-            $user = is_array($row['user'] ?? null) ? $row['user'] : [];
+            $user = \is_array($row['user'] ?? null) ? $row['user'] : [];
             $userId = (int) ($user['id'] ?? 0);
             if ($userId <= 0) {
                 continue;

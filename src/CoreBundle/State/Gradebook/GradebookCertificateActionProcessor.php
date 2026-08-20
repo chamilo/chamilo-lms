@@ -9,7 +9,9 @@ namespace Chamilo\CoreBundle\State\Gradebook;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCertificateAction;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
@@ -101,7 +103,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
     private function generateAll(GradebookCategory $category, array $resolved): int
     {
@@ -142,7 +144,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
     private function deleteOne(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
     {
@@ -155,7 +157,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
     private function deleteAll(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
     {
@@ -181,7 +183,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
     private function notifyAll(GradebookCertificateAction $data, GradebookCategory $category, array $resolved): int
     {
@@ -225,7 +227,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      */
     private function requireLearner(GradebookCertificateAction $data, array $resolved): User
     {
@@ -242,7 +244,7 @@ final readonly class GradebookCertificateActionProcessor implements ProcessorInt
     }
 
     /**
-     * @param array{course: \Chamilo\CoreBundle\Entity\Course, session: ?\Chamilo\CoreBundle\Entity\Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
+     * @param array{course: Course, session: ?Session, groupId: int, rootCategory: ?GradebookCategory, user: User, canManage: bool} $resolved
      *
      * @return list<User>
      */

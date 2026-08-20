@@ -73,7 +73,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
             throw new AccessDeniedHttpException('The learning path item is not available.');
         }
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $lp = $this->lpRepository->find($lpId);
         $item = $this->lpItemRepository->find($data->itemId);

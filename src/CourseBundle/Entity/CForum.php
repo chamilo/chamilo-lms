@@ -280,6 +280,21 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/forums/{iid}',
             security: "is_granted('VIEW', object.resourceNode)",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new GetCollection(
             uriTemplate: '/forums',
@@ -299,31 +314,21 @@ use Symfony\Component\Validator\Constraints as Assert;
                         required: false,
                         schema: ['type' => 'string'],
                     ),
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'gid',
-                        in: 'query',
-                        description: 'Group id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: ForumCollectionStateProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: [

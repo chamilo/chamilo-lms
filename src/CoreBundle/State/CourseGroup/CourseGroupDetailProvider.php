@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\CourseGroup;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CourseGroup\CourseGroupDetail;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -18,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class CourseGroupDetailProvider implements ProviderInterface
 {
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private CourseGroupManager $manager,
     ) {}
@@ -29,7 +31,7 @@ final readonly class CourseGroupDetailProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is not available.');
         }
         $groupId = (int) ($uriVariables['groupId'] ?? $request->attributes->get('groupId', 0));
-        $data = $this->manager->getDetailData($request, $groupId);
+        $data = $this->manager->getDetailData($groupId);
         $resource = new CourseGroupDetail();
         foreach ($data as $property => $value) {
             $resource->{$property} = $value;

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Announcement\AnnouncementAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -34,6 +35,7 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
     use AnnouncementAccessHelperTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CAnnouncementRepository $announcementRepository,
@@ -57,13 +59,13 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        $course = $this->getCourse($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->assertAnnouncementToolEnabled($this->entityManager, $course);
 
-        $session = $this->getSession($request);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
-        $group = $this->getGroup($request);
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertGroupBelongsToContext($group, $course, $session);
 
         if ($this->isStudentView($request) || !$this->canManageAnnouncements(
@@ -224,51 +226,6 @@ final readonly class AnnouncementActionProcessor implements ProcessorInterface
         }
 
         throw new BadRequestHttpException('The requested announcement action is not supported.');
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
-    }
-
-    private function getGroup(Request $request): ?CGroup
-    {
-        $groupId = $request->query->getInt('gid');
-        if ($groupId <= 0) {
-            return null;
-        }
-
-        $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new BadRequestHttpException('The requested group was not found.');
-        }
-
-        return $group;
     }
 
     private function getEditableAnnouncement(

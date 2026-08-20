@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -38,6 +39,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
+        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CGroupRepository $groupRepository,
@@ -60,8 +62,8 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to manage survey invitations in this context.');
         }
 
-        $course = $this->surveyInvitationProvider->getCourse($request);
-        $session = $this->surveyInvitationProvider->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
         if ($surveyId <= 0) {
             throw new BadRequestHttpException('A valid survey id is required.');

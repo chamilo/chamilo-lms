@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Exercise\ExerciseLiveResultsProvider;
@@ -24,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Exercise live results',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'minutes', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'status', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
@@ -34,6 +32,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_live_results',
             provider: ExerciseLiveResultsProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['exercise_live_results:read']],

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Wiki;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Wiki\WikiPageActionProcessor;
@@ -24,9 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Change Wiki page visibility',
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -36,6 +34,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_VISIBILITY,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/protection',
@@ -44,9 +57,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Change Wiki page edit protection',
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -56,6 +66,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_PROTECTION,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/subscription',
@@ -64,9 +89,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Subscribe or unsubscribe from Wiki page notifications',
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -76,6 +98,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_SUBSCRIPTION,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/page/{pageId}/delete',
@@ -84,9 +121,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete a Wiki page and all its versions',
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -96,15 +130,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_DELETE_PAGE,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/context/add-lock',
             openapi: new Operation(
                 summary: 'Allow or block creation of new Wiki pages in the current context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -114,15 +160,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_ADD_LOCK,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/context/subscription',
             openapi: new Operation(
                 summary: 'Subscribe or unsubscribe from all Wiki changes in the current context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -132,15 +190,27 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_CONTEXT_SUBSCRIPTION,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/wiki/context/delete',
             openapi: new Operation(
                 summary: 'Delete every Wiki page in the current context',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
@@ -150,6 +220,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: self::OPERATION_DELETE_CONTEXT,
             processor: WikiPageActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['wiki_page_action:read']],

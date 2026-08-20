@@ -657,11 +657,13 @@ SQL,
     {
         /** @var CStudentPublicationRepository $repository */
         $repository = $this->container->get(CStudentPublicationRepository::class);
-        $existingFiles = $this->loadExistingResourceFiles();
+
+        $updateRootPath = $this->getUpdateRootPath();
         $lastIid = 0;
         $processedSinceFlush = 0;
         $migrated = 0;
         $missing = 0;
+        $missingWarningSamples = 0;
         $seen = 0;
 
         while (true) {
@@ -694,30 +696,57 @@ SQL, self::RESOURCE_BATCH_SIZE),
 
             $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
+            $existingFiles = $this->loadExistingResourceFilesForNodeIds(
+                array_column($rows, 'resource_node_id')
+            );
+
             foreach ($rows as $row) {
                 ++$seen;
+
                 $iid = (int) $row['iid'];
                 $nodeId = (int) $row['resource_node_id'];
                 $fileName = (string) $row['title'];
                 $fileKey = $nodeId.':'.$fileName;
+
                 if (isset($existingFiles[$fileKey])) {
                     continue;
                 }
 
-                $filePath = $this->getUpdateRootPath().'/app/courses/'.(string) $row['directory'].'/'.ltrim((string) $row['url'], '/');
+                $filePath = $updateRootPath
+                    .'/app/courses/'
+                    .(string) $row['directory']
+                    .'/'
+                    .ltrim((string) $row['url'], '/');
+
                 if (!$this->fileExists($filePath)) {
                     ++$missing;
-                    $this->warnIf(true, "Student publication file {$iid} not found: {$filePath}");
+
+                    if ($missingWarningSamples < 20) {
+                        ++$missingWarningSamples;
+                        $this->warnIf(
+                            true,
+                            "Student publication file {$iid} not found: {$filePath}"
+                        );
+                    }
 
                     continue;
                 }
 
                 $resource = $repository->find($iid);
-                if (!$resource instanceof CStudentPublication || !$resource->hasResourceNode()) {
+
+                if (!$resource instanceof CStudentPublication
+                    || !$resource->hasResourceNode()
+                ) {
                     continue;
                 }
 
-                if ($this->addLegacyFileToResource($filePath, $repository, $resource, $iid, $fileName)) {
+                if ($this->addLegacyFileToResource(
+                    $filePath,
+                    $repository,
+                    $resource,
+                    $iid,
+                    $fileName
+                )) {
                     $this->entityManager->persist($resource);
                     $existingFiles[$fileKey] = true;
                     ++$migrated;
@@ -727,35 +756,68 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
+                    \gc_collect_cycles();
+
                     $processedSinceFlush = 0;
                 }
             }
 
-            $this->getLogger()->info('Student publication file migration progress.', [
-                'seen' => $seen,
-                'migrated' => $migrated,
-                'missing_files' => $missing,
-                'last_iid' => $lastIid,
-            ]);
+            // Bound the ORM identity map even when every legacy file in
+            // this page is missing and no successful migration occurred.
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            \gc_collect_cycles();
+
+            $processedSinceFlush = 0;
+
+            unset($rows, $existingFiles);
+
+            $this->getLogger()->info(
+                'Student publication file migration progress.',
+                [
+                    'seen' => $seen,
+                    'migrated' => $migrated,
+                    'missing_files' => $missing,
+                    'last_iid' => $lastIid,
+                ]
+            );
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
+        \gc_collect_cycles();
+
+        $this->getLogger()->info(
+            'Student publication file migration completed.',
+            [
+                'seen' => $seen,
+                'migrated' => $migrated,
+                'missing_files' => $missing,
+                'missing_warning_samples' => $missingWarningSamples,
+            ]
+        );
     }
 
     private function migrateCorrections(int $correctionResourceTypeId): void
     {
         /** @var CStudentPublicationRepository $publicationRepository */
-        $publicationRepository = $this->container->get(CStudentPublicationRepository::class);
+        $publicationRepository = $this->container->get(
+            CStudentPublicationRepository::class
+        );
 
         /** @var CStudentPublicationCorrectionRepository $correctionRepository */
-        $correctionRepository = $this->container->get(CStudentPublicationCorrectionRepository::class);
+        $correctionRepository = $this->container->get(
+            CStudentPublicationCorrectionRepository::class
+        );
 
+        $updateRootPath = $this->getUpdateRootPath();
         $admin = $this->getAdmin();
+
         $lastIid = 0;
         $processedSinceFlush = 0;
         $migrated = 0;
         $missingFiles = 0;
+        $missingWarningSamples = 0;
 
         while (true) {
             $rows = $this->connection->fetchAllAssociative(
@@ -796,20 +858,41 @@ SQL, self::RESOURCE_BATCH_SIZE),
 
             foreach ($rows as $row) {
                 $iid = (int) $row['iid'];
+
                 $publication = $publicationRepository->find($iid);
-                if (!$publication instanceof CStudentPublication || !$publication->hasResourceNode()) {
+
+                if (!$publication instanceof CStudentPublication
+                    || !$publication->hasResourceNode()
+                ) {
                     continue;
                 }
 
                 $correction = new CStudentPublicationCorrection();
-                $correction->setTitle((string) $row['title_correction']);
+                $correction->setTitle(
+                    (string) $row['title_correction']
+                );
                 $correction->setParent($publication);
-                $correctionRepository->addResourceNode($correction, $admin, $publication);
+
+                $correctionRepository->addResourceNode(
+                    $correction,
+                    $admin,
+                    $publication,
+                    synchronizeInverseCollections: false
+                );
+
                 $this->entityManager->persist($correction);
 
-                $relativePath = trim((string) ($row['url_correction'] ?? ''));
+                $relativePath = trim(
+                    (string) ($row['url_correction'] ?? '')
+                );
+
                 if ('' !== $relativePath) {
-                    $filePath = $this->getUpdateRootPath().'/app/courses/'.(string) $row['directory'].'/'.ltrim($relativePath, '/');
+                    $filePath = $updateRootPath
+                        .'/app/courses/'
+                        .(string) $row['directory']
+                        .'/'
+                        .ltrim($relativePath, '/');
+
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource(
                             $filePath,
@@ -820,37 +903,74 @@ SQL, self::RESOURCE_BATCH_SIZE),
                         );
                     } else {
                         ++$missingFiles;
-                        $this->warnIf(true, "Student publication correction file not found for publication {$iid}: {$filePath}");
+
+                        if ($missingWarningSamples < 20) {
+                            ++$missingWarningSamples;
+
+                            $this->warnIf(
+                                true,
+                                "Student publication correction file not found for publication {$iid}: {$filePath}"
+                            );
+                        }
                     }
                 }
 
                 ++$migrated;
                 ++$processedSinceFlush;
+
                 if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
+                    \gc_collect_cycles();
+
                     $processedSinceFlush = 0;
                     $admin = $this->getAdmin();
                 }
             }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            \gc_collect_cycles();
+
+            $processedSinceFlush = 0;
+            $admin = $this->getAdmin();
+
+            unset($rows);
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
+        \gc_collect_cycles();
 
-        $this->getLogger()->info('Student publication correction migration completed.', [
-            'migrated' => $migrated,
-            'missing_files' => $missingFiles,
-        ]);
+        $this->getLogger()->info(
+            'Student publication correction migration completed.',
+            [
+                'migrated' => $migrated,
+                'missing_files' => $missingFiles,
+                'missing_warning_samples' => $missingWarningSamples,
+            ]
+        );
     }
 
     private function migrateCommentFiles(): void
     {
         /** @var CStudentPublicationCommentRepository $repository */
-        $repository = $this->container->get(CStudentPublicationCommentRepository::class);
-        $existingFiles = $this->loadExistingResourceFiles();
-        $rows = $this->connection->fetchAllAssociative(
-            <<<'SQL'
+        $repository = $this->container->get(
+            CStudentPublicationCommentRepository::class
+        );
+
+        $updateRootPath = $this->getUpdateRootPath();
+
+        $lastIid = 0;
+        $processedSinceFlush = 0;
+        $migrated = 0;
+        $missing = 0;
+        $missingWarningSamples = 0;
+        $seen = 0;
+
+        while (true) {
+            $rows = $this->connection->fetchAllAssociative(
+                \sprintf(<<<'SQL'
 SELECT
     comment.iid,
     comment.resource_node_id,
@@ -862,76 +982,151 @@ INNER JOIN course
 WHERE comment.resource_node_id IS NOT NULL
   AND comment.file IS NOT NULL
   AND comment.file <> ''
+  AND comment.iid > :lastIid
 ORDER BY comment.iid
-SQL
-        );
+LIMIT %d
+SQL, self::COMMENT_BATCH_SIZE),
+                ['lastIid' => $lastIid]
+            );
 
-        $processedSinceFlush = 0;
-        $migrated = 0;
-        $missing = 0;
-
-        foreach ($rows as $row) {
-            $iid = (int) $row['iid'];
-            $nodeId = (int) $row['resource_node_id'];
-            $relativePath = (string) $row['file'];
-            $fileName = basename($relativePath);
-            $fileKey = $nodeId.':'.$fileName;
-            if (isset($existingFiles[$fileKey])) {
-                continue;
+            if ([] === $rows) {
+                break;
             }
 
-            $filePath = $this->getUpdateRootPath().'/app/courses/'.(string) $row['directory'].'/'.ltrim($relativePath, '/');
-            if (!$this->fileExists($filePath)) {
-                ++$missing;
-                $this->warnIf(true, "Student publication comment file {$iid} not found: {$filePath}");
+            $lastIid = (int) $rows[array_key_last($rows)]['iid'];
 
-                continue;
+            $existingFiles = $this->loadExistingResourceFilesForNodeIds(
+                array_column($rows, 'resource_node_id')
+            );
+
+            foreach ($rows as $row) {
+                ++$seen;
+
+                $iid = (int) $row['iid'];
+                $nodeId = (int) $row['resource_node_id'];
+                $relativePath = (string) $row['file'];
+                $fileName = basename($relativePath);
+                $fileKey = $nodeId.':'.$fileName;
+
+                if (isset($existingFiles[$fileKey])) {
+                    continue;
+                }
+
+                $filePath = $updateRootPath
+                    .'/app/courses/'
+                    .(string) $row['directory']
+                    .'/'
+                    .ltrim($relativePath, '/');
+
+                if (!$this->fileExists($filePath)) {
+                    ++$missing;
+
+                    if ($missingWarningSamples < 20) {
+                        ++$missingWarningSamples;
+
+                        $this->warnIf(
+                            true,
+                            "Student publication comment file {$iid} not found: {$filePath}"
+                        );
+                    }
+
+                    continue;
+                }
+
+                $comment = $repository->find($iid);
+
+                if (!$comment instanceof CStudentPublicationComment
+                    || !$comment->hasResourceNode()
+                ) {
+                    continue;
+                }
+
+                if ($this->addLegacyFileToResource(
+                    $filePath,
+                    $repository,
+                    $comment,
+                    $iid,
+                    $fileName
+                )) {
+                    $this->entityManager->persist($comment);
+                    $existingFiles[$fileKey] = true;
+                    ++$migrated;
+                    ++$processedSinceFlush;
+                }
+
+                if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                    \gc_collect_cycles();
+
+                    $processedSinceFlush = 0;
+                }
             }
 
-            $comment = $repository->find($iid);
-            if (!$comment instanceof CStudentPublicationComment || !$comment->hasResourceNode()) {
-                continue;
-            }
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            \gc_collect_cycles();
 
-            // Use the comment repository and actual file name. The legacy
-            // migration incorrectly used the publication repository and a
-            // stale/undefined title variable here.
-            if ($this->addLegacyFileToResource($filePath, $repository, $comment, $iid, $fileName)) {
-                $this->entityManager->persist($comment);
-                $existingFiles[$fileKey] = true;
-                ++$migrated;
-                ++$processedSinceFlush;
-            }
+            $processedSinceFlush = 0;
 
-            if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-                $processedSinceFlush = 0;
-            }
+            unset($rows, $existingFiles);
+
+            $this->getLogger()->info(
+                'Student publication comment file migration progress.',
+                [
+                    'seen' => $seen,
+                    'migrated' => $migrated,
+                    'missing_files' => $missing,
+                    'last_iid' => $lastIid,
+                ]
+            );
         }
 
         $this->entityManager->flush();
         $this->entityManager->clear();
+        \gc_collect_cycles();
 
-        $this->getLogger()->info('Student publication comment file migration completed.', [
-            'candidates' => \count($rows),
-            'migrated' => $migrated,
-            'missing_files' => $missing,
-        ]);
+        $this->getLogger()->info(
+            'Student publication comment file migration completed.',
+            [
+                'seen' => $seen,
+                'migrated' => $migrated,
+                'missing_files' => $missing,
+                'missing_warning_samples' => $missingWarningSamples,
+            ]
+        );
     }
 
     /**
      * @return array<string, true>
      */
-    private function loadExistingResourceFiles(): array
+    private function loadExistingResourceFilesForNodeIds(array $nodeIds): array
     {
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT resource_node_id, original_name FROM resource_file WHERE resource_node_id IS NOT NULL'
-        );
+        $nodeIds = array_values(array_unique(array_map('intval', $nodeIds)));
+        $nodeIds = array_values(array_filter(
+            $nodeIds,
+            static fn (int $nodeId): bool => $nodeId > 0
+        ));
+
+        if ([] === $nodeIds) {
+            return [];
+        }
+
+        $rows = $this->connection->executeQuery(
+            'SELECT resource_node_id, original_name
+             FROM resource_file
+             WHERE resource_node_id IN (:nodeIds)',
+            ['nodeIds' => $nodeIds],
+            ['nodeIds' => ArrayParameterType::INTEGER]
+        )->fetchAllAssociative();
 
         $result = [];
         foreach ($rows as $row) {
-            $result[(int) $row['resource_node_id'].':'.(string) $row['original_name']] = true;
+            $result[
+                (int) $row['resource_node_id']
+                .':'
+                .(string) $row['original_name']
+            ] = true;
         }
 
         return $result;

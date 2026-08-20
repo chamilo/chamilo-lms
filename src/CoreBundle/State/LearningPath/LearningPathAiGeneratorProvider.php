@@ -51,7 +51,7 @@ final readonly class LearningPathAiGeneratorProvider implements ProviderInterfac
 
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $this->cidReqHelper->getDoctrineSessionEntity();
         $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 

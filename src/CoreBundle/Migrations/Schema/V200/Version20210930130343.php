@@ -194,7 +194,12 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                     ->setCourseTool($cTool)
                 ;
 
-                $introRepo->addResourceNode($intro, $admin, $managedCourse);
+                $introRepo->addResourceNode(
+                    $intro,
+                    $admin,
+                    $managedCourse,
+                    synchronizeInverseCollections: false
+                );
                 $intro->addCourseLink($managedCourse, $session);
 
                 $this->entityManager->persist($intro);

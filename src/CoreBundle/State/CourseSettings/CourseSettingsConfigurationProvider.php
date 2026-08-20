@@ -29,7 +29,7 @@ final readonly class CourseSettingsConfigurationProvider implements ProviderInte
             throw new BadRequestHttpException('The current request is not available.');
         }
 
-        $data = $this->manager->getConfiguration($request);
+        $data = $this->manager->getConfiguration();
         $resource = new CourseSettingsConfiguration();
         $resource->courseId = (int) $data['courseId'];
         $resource->sessionId = isset($data['sessionId']) ? (int) $data['sessionId'] : null;

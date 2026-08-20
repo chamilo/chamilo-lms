@@ -42,7 +42,7 @@ final readonly class LearningPathCategoryReorderProcessor implements ProcessorIn
         $payload = $this->getJsonData($request);
         $this->assertLearningPathTeacher($this->security);
 
-        $course = $this->getContextCourse($this->cidReqHelper);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
 

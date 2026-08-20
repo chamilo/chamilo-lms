@@ -86,17 +86,7 @@ trait ForumStateHelperTrait
 
     private function getGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?CGroup
     {
-        $groupId = (int) ($cidReqHelper->getGroupId() ?? 0);
-        if ($groupId <= 0) {
-            return null;
-        }
-
-        $group = $entityManager->getRepository(CGroup::class)->find($groupId);
-        if (!$group instanceof CGroup) {
-            throw new NotFoundHttpException('Group not found.');
-        }
-
-        return $group;
+        return $cidReqHelper->getDoctrineGroupEntity();
     }
 
     private function getParentNode(EntityManagerInterface $entityManager, Request $request): ResourceNode

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Exercise\ExerciseQuestionEditorProcessor;
@@ -25,14 +26,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Exercise question editor for a new global question',
                 parameters: [
                     new Parameter(name: 'type', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_global_question_editor_create',
             provider: ExerciseQuestionEditorProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
@@ -41,14 +50,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Exercise question editor for an existing global question',
                 parameters: [
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_global_question_editor_edit',
             provider: ExerciseQuestionEditorProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
@@ -58,14 +75,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'type', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_editor_create',
             provider: ExerciseQuestionEditorProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Get(
             uriTemplate: '/exercise/questions/{exerciseId}/editor/{questionId}',
@@ -75,28 +100,42 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_exercise_question_editor_edit',
             provider: ExerciseQuestionEditorProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/global/editor',
             openapi: new Operation(
                 summary: 'Create a global exercise question',
-                parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
-                ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_global_question_editor_create',
             processor: ExerciseQuestionEditorProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
@@ -105,14 +144,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update a global exercise question',
                 parameters: [
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_global_question_editor_update',
             processor: ExerciseQuestionEditorProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/editor',
@@ -121,14 +168,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Create an exercise question',
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_question_editor_create',
             processor: ExerciseQuestionEditorProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/exercise/questions/{exerciseId}/editor/{questionId}',
@@ -138,14 +193,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_QUESTION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_question_editor_update',
             processor: ExerciseQuestionEditorProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['exercise_question_editor:read']],

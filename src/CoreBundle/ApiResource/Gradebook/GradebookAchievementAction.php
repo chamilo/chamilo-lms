@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Gradebook;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Gradebook\GradebookAchievementActionProcessor;
@@ -22,9 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Synchronize Gradebook achievements for the authenticated learner',
                 parameters: [
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                 ],
             ),
@@ -35,6 +33,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 and not is_granted('ROLE_ADMIN')",
             name: 'post_gradebook_achievement_sync',
             processor: GradebookAchievementActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['gradebook_achievement_action:read']],
@@ -64,7 +73,9 @@ final class GradebookAchievementAction
     #[Groups(['gradebook_achievement_action:read'])]
     public bool $customCertificateFallback = false;
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     #[Groups(['gradebook_achievement_action:read'])]
     public ?array $certificate = null;
 

@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Change announcement visibility',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -47,6 +46,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Post(
@@ -56,7 +59,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Move an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -78,6 +80,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Post(
@@ -87,7 +93,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -109,15 +114,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Post(
             uriTemplate: '/announcement/delete-selected',
             openapi: new Operation(
                 summary: 'Delete selected announcements',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             output: false,
@@ -138,15 +144,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Post(
             uriTemplate: '/announcement/delete-all',
             openapi: new Operation(
                 summary: 'Delete all announcements in the current context',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             output: false,
@@ -166,6 +173,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

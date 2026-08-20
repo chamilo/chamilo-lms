@@ -25,7 +25,6 @@ use Chamilo\CoreBundle\State\Wiki\WikiPageExportProcessor;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -46,6 +45,10 @@ use Chamilo\CoreBundle\State\Wiki\WikiPageExportProcessor;
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

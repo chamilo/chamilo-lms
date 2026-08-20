@@ -3772,5 +3772,7 @@
     "Upload agreement file": "S\u00f6zle\u015fme dosyas\u0131 y\u00fckle",
     "Download agreement file": "S\u00f6zle\u015fme dosyas\u0131n\u0131 indir",
     "Delete agreement file": "S\u00f6zle\u015fme dosyas\u0131n\u0131 sil",
-    "Custom certificate images": "\u00d6zel sertifika resimleri"
+    "Custom certificate images": "\u00d6zel sertifika resimleri",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

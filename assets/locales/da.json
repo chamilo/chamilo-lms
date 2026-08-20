@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Aftalefil slettet",
     "Certificate image updated": "Certifikatbillede opdateret",
     "Certificate image deleted": "Certifikatbillede slettet",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Brug billededitoren f\u00f8r upload for at besk\u00e6re, rotere eller \u00e6ndre st\u00f8rrelse p\u00e5 kursusbilledet."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Brug billededitoren f\u00f8r upload for at besk\u00e6re, rotere eller \u00e6ndre st\u00f8rrelse p\u00e5 kursusbilledet.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

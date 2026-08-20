@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Comhad comhaontaithe scriosta",
     "Certificate image updated": "\u00cdomh\u00e1 teastais nuashonraithe",
     "Certificate image deleted": "\u00cdomh\u00e1 teastais scriosta",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u00das\u00e1id an t-eagarth\u00f3ir \u00edomh\u00e1nna sula nd\u00e9antar uasl\u00f3d\u00e1il chun \u00edomh\u00e1 an ch\u00farsa a bhearradh, a rothl\u00fa n\u00f3 a athr\u00fa."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u00das\u00e1id an t-eagarth\u00f3ir \u00edomh\u00e1nna sula nd\u00e9antar uasl\u00f3d\u00e1il chun \u00edomh\u00e1 an ch\u00farsa a bhearradh, a rothl\u00fa n\u00f3 a athr\u00fa.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

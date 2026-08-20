@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "\u0110\u00e3 x\u00f3a t\u1ec7p th\u1ecfa thu\u1eadn",
     "Certificate image updated": "\u0110\u00e3 c\u1eadp nh\u1eadt h\u00ecnh \u1ea3nh ch\u1ee9ng ch\u1ec9",
     "Certificate image deleted": "\u0110\u00e3 x\u00f3a h\u00ecnh \u1ea3nh ch\u1ee9ng ch\u1ec9",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "S\u1eed d\u1ee5ng tr\u00ecnh ch\u1ec9nh s\u1eeda h\u00ecnh \u1ea3nh tr\u01b0\u1edbc khi t\u1ea3i l\u00ean \u0111\u1ec3 c\u1eaft, xoay ho\u1eb7c thay \u0111\u1ed5i k\u00edch th\u01b0\u1edbc h\u00ecnh \u1ea3nh kh\u00f3a h\u1ecdc."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "S\u1eed d\u1ee5ng tr\u00ecnh ch\u1ec9nh s\u1eeda h\u00ecnh \u1ea3nh tr\u01b0\u1edbc khi t\u1ea3i l\u00ean \u0111\u1ec3 c\u1eaft, xoay ho\u1eb7c thay \u0111\u1ed5i k\u00edch th\u01b0\u1edbc h\u00ecnh \u1ea3nh kh\u00f3a h\u1ecdc.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

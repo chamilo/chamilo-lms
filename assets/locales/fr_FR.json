@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Fichier d'accord supprim\u00e9",
     "Certificate image updated": "Image du certificat mise \u00e0 jour",
     "Certificate image deleted": "Image du certificat supprim\u00e9e",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utilisez l'\u00e9diteur d'image avant le t\u00e9l\u00e9versement pour recadrer, pivoter ou redimensionner l'image du cours."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utilisez l'\u00e9diteur d'image avant le t\u00e9l\u00e9versement pour recadrer, pivoter ou redimensionner l'image du cours.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

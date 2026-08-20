@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Interkonsento-dosiero forigita",
     "Certificate image updated": "Atestilbildo \u011disdatigita",
     "Certificate image deleted": "Atestilbildo forigita",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Uzu la bildredaktilon anta\u016d al\u015duto por stuci, rotacii a\u016d regrandigi la kursbildon."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Uzu la bildredaktilon anta\u016d al\u015duto por stuci, rotacii a\u016d regrandigi la kursbildon.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

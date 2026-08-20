@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Sopimustiedosto poistettu",
     "Certificate image updated": "Todistuksen kuva p\u00e4ivitetty",
     "Certificate image deleted": "Todistuksen kuva poistettu",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "K\u00e4yt\u00e4 kuvank\u00e4sittely\u00e4 ennen lataamista rajataksesi, k\u00e4\u00e4nt\u00e4\u00e4ksesi tai muuttaaksesi kurssin kuvan kokoa."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "K\u00e4yt\u00e4 kuvank\u00e4sittely\u00e4 ennen lataamista rajataksesi, k\u00e4\u00e4nt\u00e4\u00e4ksesi tai muuttaaksesi kurssin kuvan kokoa.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

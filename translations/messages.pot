@@ -20662,6 +20662,9 @@ msgstr ""
 msgid "Created by"
 msgstr ""
 
+msgid "Created by %s on %s"
+msgstr ""
+
 msgid "Hide general coach in dropbox"
 msgstr ""
 
@@ -39447,4 +39450,10 @@ msgid "Parent URL"
 msgstr ""
 
 msgid "Logins (your URLs)"
+msgstr ""
+
+msgid "The picture could not be uploaded"
+msgstr ""
+
+msgid "This field type is not fully supported yet — raw value only."
 msgstr ""

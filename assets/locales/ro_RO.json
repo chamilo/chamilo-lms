@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Fi\u0219ierul acord a fost \u0219ters",
     "Certificate image updated": "Imaginea certificatului a fost actualizat\u0103",
     "Certificate image deleted": "Imaginea certificatului a fost \u0219tears\u0103",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utiliza\u021bi editorul de imagini \u00eenainte de \u00eenc\u0103rcare pentru a decupa, roti sau redimensiona imaginea cursului."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utiliza\u021bi editorul de imagini \u00eenainte de \u00eenc\u0103rcare pentru a decupa, roti sau redimensiona imaginea cursului.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

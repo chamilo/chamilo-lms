@@ -3775,5 +3775,7 @@
     "Agreement file deleted": "Il-fajl tal-ftehim \u0121ie m\u0127assar",
     "Certificate image updated": "L-imma\u0121ni ta\u010b-\u010bertifikat \u0121iet a\u0121\u0121ornata",
     "Certificate image deleted": "L-imma\u0121ni ta\u010b-\u010bertifikat \u0121iet im\u0127assra",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "U\u017ca l-editur tal-imma\u0121ni qabel ittella' biex taqta', iddawwar jew tibdel id-daqs tal-istampa tal-kors."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "U\u017ca l-editur tal-imma\u0121ni qabel ittella' biex taqta', iddawwar jew tibdel id-daqs tal-istampa tal-kors.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

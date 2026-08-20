@@ -20675,6 +20675,9 @@ msgstr "On the wheel of skills, it shows the name of the skill when it has short
 msgid "Created by"
 msgstr "Created by"
 
+msgid "Created by %s on %s"
+msgstr "Created by %s on %s"
+
 msgid "Hide general coach in dropbox"
 msgstr "Hide general coach in dropbox"
 
@@ -39531,3 +39534,9 @@ msgstr "Parent URL"
 
 msgid "Logins (your URLs)"
 msgstr "Logins (your URLs)"
+
+msgid "The picture could not be uploaded"
+msgstr "The picture could not be uploaded"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "This field type is not fully supported yet — raw value only."

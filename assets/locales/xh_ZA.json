@@ -3766,5 +3766,7 @@
     "Agreement file deleted": "Ifayile yesivumelwano icinyiwe",
     "Certificate image updated": "Umfanekiso wesatifikethi uhlaziyiwe",
     "Certificate image deleted": "Umfanekiso wesatifikethi ucinyiwe",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Sebenzisa umhleli womfanekiso ngaphambi kokulayisha ukusika, ukujikeleza okanye ukutshintsha ubungakanani bomfanekiso wekhosi."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Sebenzisa umhleli womfanekiso ngaphambi kokulayisha ukusika, ukujikeleza okanye ukutshintsha ubungakanani bomfanekiso wekhosi.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

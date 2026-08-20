@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "\u534f\u8bae\u6587\u4ef6\u5df2\u5220\u9664",
     "Certificate image updated": "\u8bc1\u4e66\u56fe\u7247\u5df2\u66f4\u65b0",
     "Certificate image deleted": "\u8bc1\u4e66\u56fe\u7247\u5df2\u5220\u9664",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u4e0a\u4f20\u524d\u8bf7\u4f7f\u7528\u56fe\u50cf\u7f16\u8f91\u5668\u88c1\u526a\u3001\u65cb\u8f6c\u6216\u8c03\u6574\u8bfe\u7a0b\u56fe\u7247\u5927\u5c0f\u3002"
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u4e0a\u4f20\u524d\u8bf7\u4f7f\u7528\u56fe\u50cf\u7f16\u8f91\u5668\u88c1\u526a\u3001\u65cb\u8f6c\u6216\u8c03\u6574\u8bfe\u7a0b\u56fe\u7247\u5927\u5c0f\u3002",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

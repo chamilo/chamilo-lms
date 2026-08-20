@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Akordio-fitxategia ezabatu da",
     "Certificate image updated": "Ziurtagiri-irudia eguneratu da",
     "Certificate image deleted": "Ziurtagiri-irudia ezabatu da",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Erabili irudi-editorea kargatu aurretik ikastaroaren irudia moztu, biratu edo tamainaz aldatzeko."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Erabili irudi-editorea kargatu aurretik ikastaroaren irudia moztu, biratu edo tamainaz aldatzeko.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

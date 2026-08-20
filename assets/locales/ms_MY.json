@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Fail perjanjian dipadam",
     "Certificate image updated": "Imej sijil dikemas kini",
     "Certificate image deleted": "Imej sijil dipadam",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gunakan editor imej sebelum memuat naik untuk memangkas, memutar atau mengubah saiz gambar kursus."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gunakan editor imej sebelum memuat naik untuk memangkas, memutar atau mengubah saiz gambar kursus.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

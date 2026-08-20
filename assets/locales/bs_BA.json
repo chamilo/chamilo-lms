@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Datoteka sporazuma obrisana",
     "Certificate image updated": "Slika certifikata a\u017eurirana",
     "Certificate image deleted": "Slika certifikata obrisana",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Koristite ure\u0111iva\u010d slika prije otpremanja da biste izrezali, rotirali ili promijenili veli\u010dinu slike kursa."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Koristite ure\u0111iva\u010d slika prije otpremanja da biste izrezali, rotirali ili promijenili veli\u010dinu slike kursa.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

@@ -3758,5 +3758,7 @@
     "Unable to export the report": "Nuk mund t\u00eb eksportohet raporti",
     "Accepted on web": "Pranuar n\u00eb web",
     "Accepted by e-mail": "Pranuar me e-mail",
-    "The course title is required": "Titulli i kursit \u00ebsht\u00eb i detyruesh\u00ebm"
+    "The course title is required": "Titulli i kursit \u00ebsht\u00eb i detyruesh\u00ebm",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

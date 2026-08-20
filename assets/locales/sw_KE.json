@@ -3783,5 +3783,7 @@
     "Agreement file deleted": "Faili la makubaliano limefutwa",
     "Certificate image updated": "Picha ya cheti imesasishwa",
     "Certificate image deleted": "Picha ya cheti imefutwa",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Tumia kihariri cha picha kabla ya kupakia ili kupunguza, kuzungusha au kubadilisha ukubwa wa picha ya kozi."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Tumia kihariri cha picha kabla ya kupakia ili kupunguza, kuzungusha au kubadilisha ukubwa wa picha ya kozi.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

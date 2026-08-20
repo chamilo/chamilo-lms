@@ -3775,5 +3775,7 @@
     "Agreement file deleted": "Lepingu fail kustutatud",
     "Certificate image updated": "Sertifikaadi pilt uuendatud",
     "Certificate image deleted": "Sertifikaadi pilt kustutatud",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Kasuta pildiredaktorit enne \u00fcleslaadimist kursuse pildi k\u00e4rpimiseks, p\u00f6\u00f6ramiseks v\u00f5i suuruse muutmiseks."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Kasuta pildiredaktorit enne \u00fcleslaadimist kursuse pildi k\u00e4rpimiseks, p\u00f6\u00f6ramiseks v\u00f5i suuruse muutmiseks.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

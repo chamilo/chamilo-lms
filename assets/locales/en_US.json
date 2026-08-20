@@ -3814,5 +3814,17 @@
     "Logins (all URLs combined)": "Logins (all URLs combined)",
     "Unique logins": "Unique logins",
     "Parent URL": "Parent URL",
-    "Logins (your URLs)": "Logins (your URLs)"
+    "Logins (your URLs)": "Logins (your URLs)",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Don't reset password": "Don't reset password",
+    "Set password manually": "Set password manually",
+    "Role change denied due to incompatible current assignments:": "Role change denied due to incompatible current assignments:",
+    "User is teacher in some courses": "User is teacher in some courses",
+    "User is general tutor in some sessions": "User is general tutor in some sessions",
+    "User is session admin in some sessions": "User is session admin in some sessions",
+    "The status of this user cannot be changed to human resources manager.": "The status of this user cannot be changed to human resources manager.",
+    "Edit user information": "Edit user information",
+    "User updated": "User updated",
+    "Created by {0} on {1}": "Created by {0} on {1}"
 }

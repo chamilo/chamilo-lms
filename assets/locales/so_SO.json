@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Faylka heshiiska waa la tirtiray",
     "Certificate image updated": "Sawirka shahaadada waa la cusboonaysiiyay",
     "Certificate image deleted": "Sawirka shahaadada waa la tirtiray",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Isticmaal tifaftiraha sawirka ka hor intaadan soo gelin si aad u gooyo, u rogo ama u beddesho cabbirka sawirka koorsada."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Isticmaal tifaftiraha sawirka ka hor intaadan soo gelin si aad u gooyo, u rogo ama u beddesho cabbirka sawirka koorsada.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

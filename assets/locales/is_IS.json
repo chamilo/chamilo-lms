@@ -3755,5 +3755,7 @@
     "Agreement file deleted": "Samkomulagsskr\u00e1 eytt",
     "Certificate image updated": "Sk\u00edrteinismynd uppf\u00e6r\u00f0",
     "Certificate image deleted": "Vottor\u00f0smynd eytt",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Nota\u00f0u myndvinnslu \u00e1\u00f0ur en \u00fe\u00fa hle\u00f0ur upp til a\u00f0 skera, sn\u00faa e\u00f0a breyta st\u00e6r\u00f0 n\u00e1msmyndar."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Nota\u00f0u myndvinnslu \u00e1\u00f0ur en \u00fe\u00fa hle\u00f0ur upp til a\u00f0 skera, sn\u00faa e\u00f0a breyta st\u00e6r\u00f0 n\u00e1msmyndar.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

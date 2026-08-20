@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "S\u00fabor s\u00fahlasu bol odstr\u00e1nen\u00fd",
     "Certificate image updated": "Obr\u00e1zok certifik\u00e1tu bol aktualizovan\u00fd",
     "Certificate image deleted": "Obr\u00e1zok certifik\u00e1tu bol odstr\u00e1nen\u00fd",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pred nahr\u00e1van\u00edm pou\u017eite editor obr\u00e1zkov na orezanie, oto\u010denie alebo zmenu ve\u013ekosti obr\u00e1zka kurzu."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pred nahr\u00e1van\u00edm pou\u017eite editor obr\u00e1zkov na orezanie, oto\u010denie alebo zmenu ve\u013ekosti obr\u00e1zka kurzu.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

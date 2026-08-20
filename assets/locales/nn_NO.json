@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Avtaledokument sletta",
     "Certificate image updated": "Sertifikatbilete oppdatert",
     "Certificate image deleted": "Sertifikatbilete sletta",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Bruk biletredigeringa f\u00f8r opplasting for \u00e5 beskjere, rotere eller endre storleik p\u00e5 kursbiletet."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Bruk biletredigeringa f\u00f8r opplasting for \u00e5 beskjere, rotere eller endre storleik p\u00e5 kursbiletet.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

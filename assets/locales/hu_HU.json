@@ -3785,5 +3785,7 @@
     "Agreement file deleted": "Meg\u00e1llapod\u00e1s f\u00e1jl t\u00f6r\u00f6lve",
     "Certificate image updated": "Tan\u00fas\u00edtv\u00e1ny k\u00e9p friss\u00edtve",
     "Certificate image deleted": "Tan\u00fas\u00edtv\u00e1ny k\u00e9p t\u00f6r\u00f6lve",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Haszn\u00e1lja a k\u00e9pszerkeszt\u0151t felt\u00f6lt\u00e9s el\u0151tt a kurzus k\u00e9p v\u00e1g\u00e1s\u00e1hoz, elforgat\u00e1s\u00e1hoz vagy \u00e1tm\u00e9retez\u00e9s\u00e9hez."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Haszn\u00e1lja a k\u00e9pszerkeszt\u0151t felt\u00f6lt\u00e9s el\u0151tt a kurzus k\u00e9p v\u00e1g\u00e1s\u00e1hoz, elforgat\u00e1s\u00e1hoz vagy \u00e1tm\u00e9retez\u00e9s\u00e9hez.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
 }

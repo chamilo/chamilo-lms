@@ -27,20 +27,20 @@ final class Version20201215153517 extends AbstractMigrationChamilo
     {
         $announcementRepo = $this->container->get(CAnnouncementRepository::class);
         $announcementAttachmentRepo = $this->container->get(CAnnouncementAttachmentRepository::class);
-        $admin = $this->getAdmin();
 
-        $pendingAnnouncements = 0;
-        $attachmentBatch = [];
+        // Previous large migrations can leave a sizeable Doctrine identity map
+        // in the same migrations process. Start this migration from a bounded
+        // ORM state and keep clearing it between explicit batches.
+        $this->releaseBatchState();
 
-        $query = $this->entityManager->createQuery(
-            'SELECT c FROM Chamilo\CoreBundle\Entity\Course c'
+        $courseIds = $this->connection->fetchFirstColumn(
+            'SELECT id FROM course ORDER BY id'
         );
 
-        /** @var Course $course */
-        foreach ($query->toIterable() as $course) {
-            $courseId = $course->getId();
+        foreach ($courseIds as $courseIdValue) {
+            $courseId = (int) $courseIdValue;
 
-            $result = $this->connection->executeQuery(
+            $announcementIds = $this->connection->fetchFirstColumn(
                 'SELECT iid
                    FROM c_announcement
                   WHERE c_id = :courseId
@@ -48,36 +48,47 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 ['courseId' => $courseId]
             );
 
-            while (false !== ($itemData = $result->fetchAssociative())) {
-                $resource = $announcementRepo->find((int) $itemData['iid']);
+            foreach (array_chunk($announcementIds, self::ANNOUNCEMENT_BATCH_SIZE) as $idBatch) {
+                $this->releaseBatchState();
 
-                if (null === $resource || $resource->hasResourceNode()) {
-                    continue;
+                $course = $this->entityManager->find(Course::class, $courseId);
+
+                if (!$course instanceof Course) {
+                    continue 2;
                 }
 
-                $fixed = $this->fixItemProperty(
-                    'announcement',
-                    $announcementRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
+                $admin = $this->getAdmin();
 
-                if (false === $fixed) {
-                    continue;
+                foreach ($idBatch as $idValue) {
+                    $resource = $announcementRepo->find((int) $idValue);
+
+                    if (null === $resource || $resource->hasResourceNode()) {
+                        continue;
+                    }
+
+                    $fixed = $this->fixItemProperty(
+                        'announcement',
+                        $announcementRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $course,
+                        synchronizeInverseCollections: false
+                    );
+
+                    if (false === $fixed) {
+                        continue;
+                    }
+
+                    $this->entityManager->persist($resource);
                 }
 
-                $this->entityManager->persist($resource);
-                ++$pendingAnnouncements;
-
-                if ($pendingAnnouncements >= self::ANNOUNCEMENT_BATCH_SIZE) {
-                    $this->entityManager->flush();
-                    $pendingAnnouncements = 0;
-                }
+                $this->entityManager->flush();
             }
 
-            $result = $this->connection->executeQuery(
+            unset($announcementIds);
+
+            $attachmentRows = $this->connection->fetchAllAssociative(
                 'SELECT iid, path, filename
                    FROM c_announcement_attachment
                   WHERE c_id = :courseId
@@ -85,60 +96,70 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 ['courseId' => $courseId]
             );
 
-            while (false !== ($itemData = $result->fetchAssociative())) {
-                $id = (int) $itemData['iid'];
+            foreach (array_chunk($attachmentRows, self::ATTACHMENT_BATCH_SIZE) as $rowBatch) {
+                $this->releaseBatchState();
 
-                /** @var CAnnouncementAttachment|null $resource */
-                $resource = $announcementAttachmentRepo->find($id);
+                $course = $this->entityManager->find(Course::class, $courseId);
 
-                if (null === $resource || $resource->hasResourceNode()) {
-                    continue;
+                if (!$course instanceof Course) {
+                    continue 2;
                 }
 
-                $fixed = $this->fixItemProperty(
-                    'announcement_attachment',
-                    $announcementAttachmentRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
+                $admin = $this->getAdmin();
+                $attachmentBatch = [];
 
-                if (false === $fixed) {
-                    continue;
+                foreach ($rowBatch as $itemData) {
+                    $id = (int) $itemData['iid'];
+
+                    /** @var CAnnouncementAttachment|null $resource */
+                    $resource = $announcementAttachmentRepo->find($id);
+
+                    if (null === $resource || $resource->hasResourceNode()) {
+                        continue;
+                    }
+
+                    $fixed = $this->fixItemProperty(
+                        'announcement_attachment',
+                        $announcementAttachmentRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $course,
+                        synchronizeInverseCollections: false
+                    );
+
+                    if (false === $fixed) {
+                        continue;
+                    }
+
+                    $this->entityManager->persist($resource);
+
+                    $attachmentBatch[] = [
+                        'resource' => $resource,
+                        'id' => $id,
+                        'fileName' => (string) $itemData['filename'],
+                        'filePath' => $this->getUpdateRootPath()
+                            .'/app/courses/'
+                            .$course->getDirectory()
+                            .'/upload/announcements/'
+                            .$itemData['path'],
+                    ];
                 }
 
-                $this->entityManager->persist($resource);
-                $attachmentBatch[] = [
-                    'resource' => $resource,
-                    'id' => $id,
-                    'fileName' => (string) $itemData['filename'],
-                    'filePath' => $this->getUpdateRootPath()
-                        .'/app/courses/'
-                        .$course->getDirectory()
-                        .'/upload/announcements/'
-                        .$itemData['path'],
-                ];
-
-                if (\count($attachmentBatch) >= self::ATTACHMENT_BATCH_SIZE) {
+                if ([] !== $attachmentBatch) {
                     $this->flushAttachmentBatch(
                         $attachmentBatch,
                         $announcementAttachmentRepo
                     );
                 }
             }
+
+            unset($attachmentRows);
+
+            $this->releaseBatchState();
         }
 
-        if ($pendingAnnouncements > 0) {
-            $this->entityManager->flush();
-        }
-
-        if ([] !== $attachmentBatch) {
-            $this->flushAttachmentBatch(
-                $attachmentBatch,
-                $announcementAttachmentRepo
-            );
-        }
+        $this->releaseBatchState();
     }
 
     /**
@@ -167,5 +188,11 @@ final class Version20201215153517 extends AbstractMigrationChamilo
 
         $this->entityManager->flush();
         $attachmentBatch = [];
+    }
+
+    private function releaseBatchState(): void
+    {
+        $this->entityManager->clear();
+        \gc_collect_cycles();
     }
 }

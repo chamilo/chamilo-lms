@@ -22,6 +22,17 @@ class Version20180904180000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE sys_calendar CHANGE access_url_id access_url_id INT DEFAULT NULL');
 
+        // Legacy databases can contain references to access URLs that no longer
+        // exist. Preserve the calendar entry and clear only the invalid relation
+        // before enforcing the foreign key.
+        $this->addSql(
+            'UPDATE sys_calendar sc
+             LEFT JOIN access_url au ON au.id = sc.access_url_id
+             SET sc.access_url_id = NULL
+             WHERE sc.access_url_id IS NOT NULL
+               AND au.id IS NULL'
+        );
+
         if (!$table->hasForeignKey('FK_1670370E73444FD5')) {
             $this->addSql('ALTER TABLE sys_calendar ADD CONSTRAINT FK_1670370E73444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id) ON DELETE CASCADE');
         }
@@ -33,6 +44,17 @@ class Version20180904180000 extends AbstractMigrationChamilo
         $table = $schema->getTable('sys_announcement');
 
         $this->addSql('ALTER TABLE sys_announcement CHANGE access_url_id access_url_id INT DEFAULT NULL');
+
+        // Apply the same normalization to announcements before enforcing
+        // their access URL relation.
+        $this->addSql(
+            'UPDATE sys_announcement sa
+             LEFT JOIN access_url au ON au.id = sa.access_url_id
+             SET sa.access_url_id = NULL
+             WHERE sa.access_url_id IS NOT NULL
+               AND au.id IS NULL'
+        );
+
         if (!$table->hasForeignKey('FK_E4A3EAD473444FD5')) {
             $this->addSql(
                 'ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD473444FD5 FOREIGN KEY (access_url_id) REFERENCES access_url (id) ON DELETE CASCADE'

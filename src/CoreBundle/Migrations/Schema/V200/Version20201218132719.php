@@ -14,6 +14,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201218132719 extends AbstractMigrationChamilo
 {
+    private const int SURVEY_BATCH_SIZE = 100;
+
     public function getDescription(): string
     {
         return 'Migrate c_survey using prefetched item properties and batched ORM writes';
@@ -23,7 +25,10 @@ final class Version20201218132719 extends AbstractMigrationChamilo
     {
         $surveyRepo = $this->container->get(CSurveyRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
-        $admin = $this->getAdmin();
+
+        // Previous resource migrations can leave a large Doctrine identity map.
+        // Start this migration with a bounded ORM state.
+        $this->releaseBatchState();
 
         $rows = $this->connection->fetchAllAssociative(
             'SELECT iid, c_id
@@ -40,50 +45,76 @@ final class Version20201218132719 extends AbstractMigrationChamilo
             }
         }
 
+        unset($rows);
+
         $migrated = 0;
         $skipped = 0;
 
         foreach ($rowsByCourse as $courseId => $ids) {
-            $course = $courseRepo->find($courseId);
-            if (null === $course) {
-                $skipped += \count($ids);
-                $this->warnIf(true, "Course {$courseId} not found while migrating surveys.");
+            foreach (array_chunk($ids, self::SURVEY_BATCH_SIZE) as $idBatch) {
+                $this->releaseBatchState();
 
-                continue;
-            }
+                $course = $courseRepo->find($courseId);
 
-            $itemProperties = $this->fetchItemPropertiesMap('survey', $courseId, $ids);
+                if (null === $course) {
+                    $skipped += \count($idBatch);
+                    $this->warnIf(true, "Course {$courseId} not found while migrating surveys.");
 
-            foreach ($ids as $id) {
-                /** @var CSurvey|null $resource */
-                $resource = $surveyRepo->find($id);
-                if (null === $resource || $resource->hasResourceNode()) {
                     continue;
                 }
 
-                if (false === $this->fixItemProperty(
+                $admin = $this->getAdmin();
+
+                $itemProperties = $this->fetchItemPropertiesMap(
                     'survey',
-                    $surveyRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course,
-                    $itemProperties[$id] ?? []
-                )) {
-                    ++$skipped;
+                    $courseId,
+                    $idBatch
+                );
 
-                    continue;
+                foreach ($idBatch as $id) {
+                    /** @var CSurvey|null $resource */
+                    $resource = $surveyRepo->find($id);
+
+                    if (null === $resource || $resource->hasResourceNode()) {
+                        continue;
+                    }
+
+                    if (false === $this->fixItemProperty(
+                        'survey',
+                        $surveyRepo,
+                        $course,
+                        $admin,
+                        $resource,
+                        $course,
+                        $itemProperties[$id] ?? [],
+                        synchronizeInverseCollections: false
+                    )) {
+                        ++$skipped;
+
+                        continue;
+                    }
+
+                    ++$migrated;
                 }
 
-                ++$migrated;
-            }
+                $this->entityManager->flush();
 
-            $this->entityManager->flush();
+                unset($itemProperties);
+                $this->releaseBatchState();
+            }
         }
 
         $this->getLogger()->info('Survey migration completed.', [
             'migrated' => $migrated,
             'skipped' => $skipped,
         ]);
+
+        $this->releaseBatchState();
+    }
+
+    private function releaseBatchState(): void
+    {
+        $this->entityManager->clear();
+        \gc_collect_cycles();
     }
 }

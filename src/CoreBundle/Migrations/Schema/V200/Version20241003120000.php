@@ -18,6 +18,9 @@ use Exception;
 
 final class Version20241003120000 extends AbstractMigrationChamilo
 {
+    private const int CONTENT_BATCH_SIZE = 500;
+    private const int DOCUMENT_BATCH_SIZE = 250;
+
     public function getDescription(): string
     {
         return 'Update HTML content blocks and files to replace old user paths by fallbackUser paths for deleted users.';
@@ -30,6 +33,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
         $personalRepo = $this->container->get(PersonalFileRepository::class);
         $fallbackUser = $userRepo->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
+        $fallbackUserId = $fallbackUser?->getId();
 
         // Define the content fields to update
         $updateConfigurations = [
@@ -49,115 +53,227 @@ final class Version20241003120000 extends AbstractMigrationChamilo
 
         // Process the tables and update the paths in the content
         foreach ($updateConfigurations as $config) {
-            $this->updateContent($config, $fallbackUser, $personalRepo);
+            $this->updateContent($config, $fallbackUserId, $personalRepo);
         }
 
         // Process the HTML files and update paths
-        $this->updateHtmlFiles($fallbackUser, $personalRepo);
+        $this->updateHtmlFiles($fallbackUserId, $personalRepo);
     }
 
-    private function updateContent(array $config, $fallbackUser, $personalRepo): void
-    {
+    private function updateContent(
+        array $config,
+        ?int $fallbackUserId,
+        PersonalFileRepository $personalRepo
+    ): void {
         $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
 
         foreach ($fields as $field) {
-            $sql = "SELECT iid, {$field} FROM {$config['table']}";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $lastIid = 0;
 
-            foreach ($items as $item) {
-                $content = $item[$field];
-                if (\is_string($content) && '' !== trim($content)) {
-                    // Process URLs in the content
-                    $updatedContent = $this->processContentUrls($content, $fallbackUser, $personalRepo);
-                    if ($content !== $updatedContent) {
-                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newContent WHERE iid = :id";
-                        $this->connection->executeQuery($updateSql, ['newContent' => $updatedContent, 'id' => $item['iid']]);
-                    }
+            while (true) {
+                $sql = sprintf(
+                    'SELECT iid, %s
+                       FROM %s
+                      WHERE iid > :lastIid
+                      ORDER BY iid
+                      LIMIT %d',
+                    $field,
+                    $config['table'],
+                    self::CONTENT_BATCH_SIZE
+                );
+
+                $items = $this->connection->fetchAllAssociative(
+                    $sql,
+                    ['lastIid' => $lastIid]
+                );
+
+                if ([] === $items) {
+                    break;
                 }
+
+                foreach ($items as $item) {
+                    $iid = (int) $item['iid'];
+                    $lastIid = $iid;
+
+                    $content = $item[$field];
+
+                    if (!\is_string($content) || '' === trim($content)) {
+                        continue;
+                    }
+
+                    $updatedContent = $this->processContentUrls(
+                        $content,
+                        $fallbackUserId,
+                        $personalRepo
+                    );
+
+                    if ($content === $updatedContent) {
+                        continue;
+                    }
+
+                    $updateSql = sprintf(
+                        'UPDATE %s SET %s = :newContent WHERE iid = :id',
+                        $config['table'],
+                        $field
+                    );
+
+                    $this->connection->executeStatement(
+                        $updateSql,
+                        [
+                            'newContent' => $updatedContent,
+                            'id' => $iid,
+                        ]
+                    );
+                }
+
+                unset($items);
+
+                $this->entityManager->clear();
+                \gc_collect_cycles();
             }
         }
     }
 
-    private function updateHtmlFiles($fallbackUser, $personalRepo): void
-    {
-        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
-        $result = $this->connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
-
+    private function updateHtmlFiles(
+        ?int $fallbackUserId,
+        PersonalFileRepository $personalRepo
+    ): void {
         $documentRepo = $this->container->get(CDocumentRepository::class);
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
-        foreach ($items as $item) {
-            /** @var CDocument $document */
-            $document = $documentRepo->find($item['iid']);
-            if (!$document) {
-                continue;
+        $lastIid = 0;
+
+        while (true) {
+            $items = $this->connection->fetchAllAssociative(
+                sprintf(
+                    "SELECT iid
+                       FROM c_document
+                      WHERE filetype = 'file'
+                        AND iid > :lastIid
+                      ORDER BY iid
+                      LIMIT %d",
+                    self::DOCUMENT_BATCH_SIZE
+                ),
+                ['lastIid' => $lastIid]
+            );
+
+            if ([] === $items) {
+                break;
             }
 
-            $resourceNode = $document->getResourceNode();
-            if (!$resourceNode || !$resourceNode->hasResourceFile()) {
-                continue;
-            }
+            foreach ($items as $item) {
+                $iid = (int) $item['iid'];
+                $lastIid = $iid;
 
-            $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
-                continue;
-            }
-
-            try {
-                $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (\is_string($content) && '' !== trim($content)) {
-                    // Process URLs in the HTML content
-                    $updatedContent = $this->processContentUrls($content, $fallbackUser, $personalRepo);
-                    if ($content !== $updatedContent) {
-                        $documentRepo->updateResourceFileContent($document, $updatedContent);
-                        $documentRepo->update($document);
-                    }
+                /** @var CDocument|null $document */
+                $document = $documentRepo->find($iid);
+                if (!$document) {
+                    continue;
                 }
-            } catch (Exception $e) {
-                error_log("Error processing file for document ID {$item['iid']}: ".$e->getMessage());
+
+                $resourceNode = $document->getResourceNode();
+                if (!$resourceNode || !$resourceNode->hasResourceFile()) {
+                    continue;
+                }
+
+                $resourceFile = $resourceNode->getResourceFiles()->first();
+                if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
+                    continue;
+                }
+
+                try {
+                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+
+                    if (!\is_string($content) || '' === trim($content)) {
+                        continue;
+                    }
+
+                    $updatedContent = $this->processContentUrls(
+                        $content,
+                        $fallbackUserId,
+                        $personalRepo
+                    );
+
+                    if ($content === $updatedContent) {
+                        continue;
+                    }
+
+                    $documentRepo->updateResourceFileContent($document, $updatedContent);
+                    $documentRepo->update($document);
+                } catch (Exception $e) {
+                    error_log(
+                        "Error processing file for document ID {$iid}: ".$e->getMessage()
+                    );
+                }
             }
+
+            unset($items);
+
+            $this->entityManager->clear();
+            \gc_collect_cycles();
         }
     }
 
-    private function processContentUrls(string $content, $fallbackUser, $personalRepo): string
-    {
-        // Define the regular expression pattern to match URLs containing "/app/upload/users/"
+    private function processContentUrls(
+        string $content,
+        ?int $fallbackUserId,
+        PersonalFileRepository $personalRepo
+    ): string {
         $pattern = '/(href|src)="[^"]*\/app\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)"/i';
 
-        // Use a callback function to process each matched URL
-        $result = preg_replace_callback($pattern, function ($matches) use ($fallbackUser, $personalRepo) {
-            $attribute = $matches[1];      // Capture whether it's a `href` or `src`
-            $userId = (int) $matches[3];    // Capture the full userId
-            $filename = urldecode($matches[4]);  // Decode the filename
+        $result = preg_replace_callback(
+            $pattern,
+            function ($matches) use ($fallbackUserId, $personalRepo) {
+                $attribute = $matches[1];
+                $userId = (int) $matches[3];
+                $filename = urldecode($matches[4]);
 
-            error_log("Processing file: $filename for userId: $userId");
+                error_log("Processing file: $filename for userId: $userId");
 
-            $user = $this->entityManager->getRepository(User::class)->find($userId);
-            if (!$user) {
-                // If the user doesn't exist, use the fallback user
-                $user = $fallbackUser;
-                error_log("User with ID $userId not found, using fallbackUser");
-            }
+                /** @var User|null $user */
+                $user = $this->entityManager
+                    ->getRepository(User::class)
+                    ->find($userId);
 
-            // Search for the personal file by name and creator (user)
-            $personalFile = $personalRepo->getResourceByCreatorFromTitle($filename, $user, $user->getResourceNode());
-            if (null !== $personalFile) {
-                $newUrl = $personalRepo->getResourceFileUrl($personalFile);
-                if (!empty($newUrl)) {
-                    error_log("Replaced URL for $filename: $newUrl");
+                if (!$user && null !== $fallbackUserId) {
+                    /** @var User|null $user */
+                    $user = $this->entityManager
+                        ->getRepository(User::class)
+                        ->find($fallbackUserId);
 
-                    return "{$attribute}=\"{$newUrl}\"";
+                    if ($user) {
+                        error_log(
+                            "User with ID $userId not found, using fallbackUser"
+                        );
+                    }
                 }
-            }
 
-            // Return the original URL if no file was found
-            return $matches[0];
-        }, $content);
+                if (!$user) {
+                    return $matches[0];
+                }
 
-        // preg_replace_callback returns null on error (e.g. PCRE backtrack limit exceeded);
-        // fall back to the original content so the migration does not abort.
+                $personalFile = $personalRepo->getResourceByCreatorFromTitle(
+                    $filename,
+                    $user,
+                    $user->getResourceNode()
+                );
+
+                if (null !== $personalFile) {
+                    $newUrl = $personalRepo->getResourceFileUrl($personalFile);
+
+                    if (!empty($newUrl)) {
+                        error_log("Replaced URL for $filename: $newUrl");
+
+                        return "{$attribute}=\"{$newUrl}\"";
+                    }
+                }
+
+                return $matches[0];
+            },
+            $content
+        );
+
         return $result ?? $content;
     }
+
 }

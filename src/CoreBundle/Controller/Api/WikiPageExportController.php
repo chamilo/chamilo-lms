@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Wiki\WikiAccessHelperTrait;
 use Chamilo\CoreBundle\State\Wiki\WikiPageExportService;
@@ -43,6 +44,7 @@ final class WikiPageExportController extends AbstractController
 
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
         private readonly EntityManagerInterface $entityManager,
         private readonly CWikiRepository $wikiRepository,
         private readonly Security $security,
@@ -134,7 +136,7 @@ final class WikiPageExportController extends AbstractController
             throw new AccessDeniedHttpException('You are not allowed to view Wiki pages in this context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
+        $studentView = $this->studentViewHelper->isActive();
         $canManage = !$studentView && $this->canManageWikiContext(
             $this->entityManager,
             $this->security,

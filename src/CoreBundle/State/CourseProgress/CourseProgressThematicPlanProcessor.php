@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
@@ -63,6 +64,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
@@ -123,7 +125,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
 
     private function assertCanManage(Request $request, Course $course, ?Session $session): void
     {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
+        if (!$this->studentViewHelper->isActiveForCourse($course)
             && $this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

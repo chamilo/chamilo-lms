@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementListProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -20,15 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/announcement/list',
             openapi: new Operation(
-                parameters: [
-                    new Parameter(
-                        name: 'isStudentView',
-                        in: 'query',
-                        description: 'Force the read-only student view',
-                        required: false,
-                        schema: ['type' => 'boolean'],
-                    ),
-                ],
             ),
             name: 'get_announcement_list',
             provider: AnnouncementListProvider::class,
@@ -45,6 +35,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

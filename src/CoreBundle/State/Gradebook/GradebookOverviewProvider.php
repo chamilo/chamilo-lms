@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\SkillRelGradebook;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -55,6 +56,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         private GradebookContextResolver $contextResolver,
         private GradebookLearnerStatisticsCalculator $statisticsCalculator,
         private PluginHelper $pluginHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -77,7 +79,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         $this->validateCourseResourceNode($request, $course);
         $groupId = $this->validateGroupContext($operation, $course);
 
-        $isStudentView = $this->isStudentView($request);
+        $isStudentView = $this->studentViewHelper->isActive();
         $canViewAll = !$isStudentView && $this->canViewAllGradebookItems();
         $canManage = !$isStudentView && $this->canManageGradebook($course, $session, $user);
         if (!$canViewAll && !$this->canViewGradebook()) {
@@ -294,24 +296,6 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         $rawValue = strtolower(trim((string) $value->getFieldValue()));
 
         return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if (!$this->isSettingEnabled('course.student_view_enabled')) {
-            return false;
-        }
-
-        $queryValue = strtolower(trim((string) $request->query->get('isStudentView', '')));
-        if (\in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
-            return true;
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === strtolower((string) $request->getSession()->get('studentview', ''));
     }
 
     private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory

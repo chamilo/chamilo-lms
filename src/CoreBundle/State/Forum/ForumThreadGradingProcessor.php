@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -51,6 +52,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         private readonly Security $security,
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
@@ -180,7 +182,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
 
         $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $thread);
 
-        $canManage = $this->canManageForumsInCurrentView($this->security, $request);
+        $canManage = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
         if ($canManage) {
             $this->assertEditableForumResource($thread->getResourceNode(), $this->security);
         } elseif (!$this->canScoreThreadAsPeer($thread, $course, $session, $user, $qualifyUser)) {

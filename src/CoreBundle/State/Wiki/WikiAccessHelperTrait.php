@@ -322,19 +322,6 @@ trait WikiAccessHelperTrait
         return $nodeId;
     }
 
-    private function isWikiStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
-    }
-
     private function isWikiCourseSettingEnabled(
         EntityManagerInterface $entityManager,
         Course $course,

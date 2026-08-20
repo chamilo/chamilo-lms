@@ -96,11 +96,13 @@ class LegacyListener
 
         if ('true' === $this->settingsManager->getSetting('course.student_view_enabled')) {
             if ($request->query->has('isStudentView')) {
-                $isStudentView = $request->query->get('isStudentView');
+                // Same values IndexController::toggleStudentView() accepts. This is the only
+                // place the parameter is interpreted; readers go through StudentViewHelper.
+                $isStudentView = strtolower(trim((string) $request->query->get('isStudentView')));
 
-                if ('true' === $isStudentView) {
+                if (\in_array($isStudentView, ['1', 'true', 'yes', 'on'], true)) {
                     $session->set('studentview', 'studentview');
-                } elseif ('false' === $isStudentView) {
+                } elseif (\in_array($isStudentView, ['0', 'false', 'no', 'off'], true)) {
                     $session->set('studentview', 'teacherview');
                 }
             } elseif (!$session->has('studentview')) {

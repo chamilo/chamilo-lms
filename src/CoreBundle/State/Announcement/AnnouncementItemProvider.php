@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
@@ -46,6 +47,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
         private CAnnouncementRepository $announcementRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -88,7 +90,7 @@ final readonly class AnnouncementItemProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested announcement was not found.');
         }
 
-        $studentView = $this->isStudentView($request);
+        $studentView = $this->studentViewHelper->isActive();
         $canManage = !$studentView && $this->canManageAnnouncements(
             $this->entityManager,
             $this->security,

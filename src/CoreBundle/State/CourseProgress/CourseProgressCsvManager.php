@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -44,6 +45,7 @@ final readonly class CourseProgressCsvManager
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private ResourceLinkRepository $resourceLinkRepository,
@@ -179,7 +181,7 @@ final readonly class CourseProgressCsvManager
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
+        if ($this->studentViewHelper->isActiveForCourse($course)
             || !$this->canManageCourseProgress(
                 $this->entityManager,
                 $this->security,

@@ -53,8 +53,11 @@ Given("I am on the homepage", async ({ page }) => {
 // its numeric id) and asserts no visible error, matching the original's own
 // assertElementNotOnPage('.alert-danger') right after navigating.
 Given("I am on course {string} homepage", async ({ page }, courseCode: string) => {
-  await page.goto(`/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
-  await page.waitForLoadState("domcontentloaded")
+  // gotoReliably, not a bare page.goto(): a real CI failure in
+  // translateHtmlFallback.feature showed this step racing the previous
+  // course_add.php success redirect ("Navigation to .../redirect.php?cidReq=
+  // TrHtmlDe is interrupted by another navigation to .../admin/course-list").
+  await gotoReliably(page, `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
 })
 
@@ -65,10 +68,10 @@ Given("I am on course {string} homepage", async ({ page }, courseCode: string) =
 Given(
   "I am on course {string} homepage in session {string}",
   async ({ page }, courseCode: string, sessionName: string) => {
-    await page.goto(
+    await gotoReliably(
+      page,
       `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}&session_name=${encodeURIComponent(sessionName)}`,
     )
-    await page.waitForLoadState("domcontentloaded")
     await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   },
 )
@@ -325,6 +328,19 @@ Given("I am not logged", async ({ page }) => {
 // zero matches, crashing every step that ever resolves a field whose only
 // valid attribute is a bracketed multi-select name.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
+
+// The installer writes the default AccessUrl as http://localhost/ (the host
+// the web installer itself was browsed on — CI's gh-apache ServerName, and
+// a typical first-run). Admins then change that row to the real public URL.
+// Tests that assert the URL as it appears on /admin/urls must follow the
+// same rule: the displayed value is whatever we store, not the browser's
+// current host. Derived from BASE_URL (CI: http://localhost, config default:
+// http://my.chamilo.net, local playwright.chamilo.net override) so one
+// assertion works in every environment.
+function currentSiteAccessUrl(): string {
+  const base = process.env.BASE_URL || "http://my.chamilo.net"
+  return `${base.replace(/\/+$/, "")}/`
+}
 
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
@@ -831,7 +847,12 @@ When("I fill in the score for {string} with {string}", async ({ page }, username
   if (!userId) {
     throw new Error(`Could not resolve a user id for username "${username}"`)
   }
-  await page.locator(`[name="score[${userId}]"]`).fill(value)
+  // Legacy gradebook_add_result.php used name="score[<id>]". The Vue
+  // GradebookEvaluationResultsView uses id="gradebook-score-<id>" (a
+  // PrimeVue InputNumber; name is not forwarded onto the inner <input>).
+  const locator = page.locator(`[name="score[${userId}]"], #gradebook-score-${userId}`).first()
+  await locator.waitFor({ state: "visible" })
+  await fillReliably(locator, value)
 })
 
 // Ported from FeatureContext::iCheckTheRadioButton(): resolves a radio input
@@ -1299,6 +1320,33 @@ async function pressButton(page: Page, label: string) {
     const byName = page.locator(`[name="${label}"]:visible`)
     if (await isSoonVisible(byName)) {
       await byName.first().click()
+      return
+    }
+  }
+  // Prefer a visible dialog when one is open. Vue create/edit dialogs often
+  // reuse the same accessible name as the toolbar button that opened them
+  // (GradebookListView: "Add classroom activity" is both the toolbar trigger
+  // AND the dialog submit). The toolbar button sits behind the dialog mask
+  // and is not clickable; matching it first hangs the full test timeout.
+  // Confirmed via toolAssessments.feature after the gradebook Vue migration.
+  const openDialog = page.locator('[role="dialog"]:visible').last()
+  if (await openDialog.count()) {
+    const dialogExact = openDialog.getByRole("button", { name: label, exact: true })
+    const dialogEnabled = dialogExact.locator('xpath=self::*[not(@aria-disabled="true")]')
+    if (await isSoonVisible(dialogEnabled, 1000)) {
+      await dialogEnabled.first().click()
+      return
+    }
+    const dialogTitle = openDialog.getByTitle(label, { exact: true })
+    if (await isSoonVisible(dialogTitle, 1000)) {
+      await dialogTitle.first().click()
+      return
+    }
+    const dialogText = openDialog.locator("button", {
+      hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`),
+    })
+    if (await isSoonVisible(dialogText, 1000)) {
+      await dialogText.first().click()
       return
     }
   }
@@ -1829,6 +1877,28 @@ Then("I delete the session {string} if present", async ({ page }, sessionName: s
 // uses plain visible text throughout ("Course description", "Documents",
 // etc.), so the text tier is what actually matters here, but the id/title
 // tiers are kept for parity with Mink's own resolution order.
+// Not ported — new, for toolAssessments.feature's subscribe scenario. The
+// subscribe_user.php picker only lists users NOT already in the course, so
+// "Then I should see Noa" / "I follow Register" hard-fails on a reused box
+// where a previous run of this file already subscribed norizales (or a
+// later scenario's teardown didn't run). Clicking Register when it's there,
+// and treating its absence as "already subscribed", is the same outcome the
+// rest of the file needs.
+Then("I follow {string} if it is visible", async ({ page }, link: string) => {
+  const candidates = [
+    page.getByRole("link", { name: link, exact: true }),
+    page.getByRole("button", { name: link, exact: true }),
+    page.locator(`a:has-text("${link}")`),
+  ]
+  for (const locator of candidates) {
+    const first = locator.first()
+    if (await first.isVisible().catch(() => false)) {
+      await first.click()
+      return
+    }
+  }
+})
+
 When("I follow {string}", async ({ page }, link: string) => {
   if (looksLikeIdentifier(link)) {
     const byId = page.locator(`#${link}:visible`)
@@ -1952,7 +2022,6 @@ When(/^(?:|I )confirm the popup$/, async ({ page }) => {
 let lastFriendUserId: string | null = null
 
 Given("I have a friend named {string}", async ({ page }, friendUsername: string) => {
-  const adminId = 1
   const searchResponse = await page.request.get(
     `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(friendUsername)}&page_limit=10`,
   )
@@ -1963,6 +2032,18 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   }
   const friendId = String(match.id)
   lastFriendUserId = friendId
+  // Resolve admin's id WHILE still authenticated as admin. /api/users is
+  // not listable as a student (fbaggins), which is who we switch to next
+  // to accept the invitation — a first version of this lookup ran after
+  // loginAs(friendUsername) and got an empty hydra:member.
+  const adminLookup = await page.request.get("/api/users?username=admin", {
+    headers: { Accept: "application/ld+json" },
+  })
+  const { "hydra:member": adminMembers } = await adminLookup.json()
+  const adminId = adminMembers?.[0]?.id
+  if (!adminId) {
+    throw new Error("Could not resolve the admin user's id")
+  }
   await page.goto(
     `/main/inc/ajax/message.ajax.php?a=send_invitation&user_id=${encodeURIComponent(friendId)}&content=${encodeURIComponent("Add me")}`,
   )
@@ -1983,9 +2064,33 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   // page.goto(), since this needs a JSON body) so friendUsername's own
   // session cookie is used, matching "the target user's own session
   // accepts it".
-  await page.request.post("/social-network/user-action", {
-    data: { targetUserId: adminId, action: "add_friend", is_my_friend: true },
-  })
+  //
+  // Real CI failure (socialGroup.feature "Invite a friend to group"): the
+  // first version of this post used Playwright's default form encoding
+  // (`data: { ... }` without a JSON Content-Type). SocialController::user()
+  // reads json_decode($request->getContent()), so the body never parsed,
+  // add_friend never ran, and group_invitation.php rendered "You already
+  // invite all your contacts" with an empty dual-list (admin had leftover
+  // non-friend relations from other fixtures, but fbaggins was not among
+  // them). The Vue UI itself sends application/json; match that, and fail
+  // loud if the endpoint doesn't accept the friendship.
+  // Use in-page fetch (not page.request.post): CsrfProtectionListener
+  // requires Origin/Referer/Sec-Fetch-Site from a same-origin browser
+  // request. Playwright's APIRequestContext does not send those, so the
+  // first version of this post returned 200/4xx without creating the
+  // user_rel_user row — group_invitation.php then showed "You already
+  // invite all your contacts" with an empty dual-list.
+  const addFriendResult = await page.evaluate(async (targetUserId: number) => {
+    const response = await fetch("/social-network/user-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ targetUserId, action: "add_friend", is_my_friend: true }),
+    })
+    return { status: response.status, body: await response.text() }
+  }, Number(adminId))
+  if (addFriendResult.status >= 400 || !addFriendResult.body.includes("success")) {
+    throw new Error(`add_friend failed with ${addFriendResult.status}: ${addFriendResult.body}`)
+  }
   await page.goto("/logout")
   await loginAs(page, "admin")
 })
@@ -2004,11 +2109,38 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
 let lastCreatedGroupId: string | null = null
 
 Then("I remember the created group id", async ({ page }) => {
-  const match = page.url().match(/[?&]id=(\d+)/)
-  if (!match) {
-    throw new Error(`Could not find a group id in the current URL: ${page.url()}`)
+  // Success path: group_add.php redirects to group_view.php?id=<id>.
+  // Duplicate-title path: UserGroupModel::save() returns false when
+  // usergroup_exists(title), and group_add.php then api_location()'s back
+  // to itself — no id in the URL. That happens on a reused box that already
+  // has "Behat Test Group" from a previous run of this file. Look the
+  // existing group up from the groups list instead of failing; CI's fresh
+  // install still takes the success-redirect path.
+  const fromUrl = page.url().match(/[?&]id=(\d+)/)
+  if (fromUrl) {
+    lastCreatedGroupId = fromUrl[1]
+    return
   }
-  lastCreatedGroupId = match[1]
+  await gotoReliably(page, "/main/social/groups.php")
+  const myGroupsTab = page.getByRole("tab", { name: "My groups" })
+  if (await myGroupsTab.count()) {
+    await myGroupsTab.click()
+  }
+  // groups.php cards put the group title in an image overlay, not in the
+  // <a> text (the link's accessible name is empty; confirmed via a real
+  // snapshot: heading+link to group_view.php?id=2 with no text). Match by
+  // href, scoped to this user's groups tab.
+  const link = page.locator('a[href*="group_view.php?id="]').first()
+  // The card's title is an image overlay; the <a href="group_view.php?id=N">
+  // is present but CSS-hidden (Playwright: "34 × locator resolved to hidden").
+  // We only need the id from the href, not a click.
+  await link.waitFor({ state: "attached", timeout: 15_000 })
+  const href = (await link.getAttribute("href")) || ""
+  const fromList = href.match(/[?&]id=(\d+)/)
+  if (!fromList) {
+    throw new Error(`Could not find a group id in the current URL (${page.url()}) or on the groups list`)
+  }
+  lastCreatedGroupId = fromList[1]
 })
 
 // Ported from FeatureContext::iInviteAFriendToASocialGroup(), but the
@@ -2044,7 +2176,21 @@ When("I invite the friend to the social group I just created", async ({ page }) 
     throw new Error("No friend id remembered — run \"I have a friend named ...\" first.")
   }
   await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
-  await page.waitForSelector("#invitation option")
+  const alreadyInvited = page.getByText("Users already invited")
+  try {
+    await page.waitForSelector("#invitation option", { timeout: 15_000 })
+  } catch {
+    // Reused box: this group already has the friend pending, so the
+    // available list is empty and the "Users already invited" panel is
+    // the durable success signal the scenario asserts next.
+    if (await alreadyInvited.first().isVisible().catch(() => false)) {
+      return
+    }
+    const bodyText = ((await page.locator("body").textContent()) || "").replace(/\s+/g, " ").trim()
+    throw new Error(
+      `Available-friends list never populated for group ${lastCreatedGroupId} / friend ${lastFriendUserId}. Page text: ${bodyText.slice(0, 500)}`,
+    )
+  }
   await page.evaluate((value) => {
     const left = document.querySelector("#invitation") as HTMLSelectElement
     const right = document.querySelector("#invitation_to") as HTMLSelectElement
@@ -2061,6 +2207,26 @@ When("I invite the friend to the social group I just created", async ({ page }) 
 
 Then("I should see {string}", async ({ page }, text: string) => {
   await expect(page.getByText(text).first()).toBeVisible()
+})
+
+Then("I should see the current access URL", async ({ page }) => {
+  await expect(page.getByText(currentSiteAccessUrl()).first()).toBeVisible()
+})
+
+// Not ported — new. The installer always inserts access_url.id=1 as
+// http://localhost/ (see actionInstall.feature browsing CI's localhost
+// vhost). The admin UI at /admin/urls/manage is how that row gets changed
+// to the site's real public URL afterwards. adminMultiUrls.feature asserts
+// the displayed URL, so this has to run first in that file (and is
+// idempotent if the row is already correct).
+When("I set the default access URL to the current site URL", async ({ page }) => {
+  const target = currentSiteAccessUrl()
+  await gotoReliably(page, "/admin/urls/manage")
+  await expect(page.getByText("Multiple access URL").first()).toBeVisible()
+  await pressButton(page, "Edit")
+  await fillReliably(await resolveField(page, "access-url-url"), target)
+  await pressButton(page, "Save")
+  await expect(page.getByText(target).first()).toBeVisible()
 })
 
 // URL assertions — used when a success path is a redirect (e.g. extra_fields.php

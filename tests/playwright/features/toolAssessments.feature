@@ -15,14 +15,20 @@
 # toolWork.feature's own header comment for where those 4 scenarios'
 # genuine equivalents now live.
 #
-# The gradebook tool itself is CONFIRMED STILL LEGACY PHP (public/main/
-# gradebook/*.php), not migrated to Vue — checked assets/vue/views/ for a
-# gradebook/assessment directory before assuming otherwise (none exists;
-# the two other recent Vue migrations mentioned in this session's own
-# instructions — course settings, global question bank — didn't touch
-# this tool). Every Behat `i.mdi-*` icon selector below was re-verified
-# live regardless, since several turned out to have drifted anyway
-# (button ids, one icon's actual page target).
+# 2026-08-20 REAL CI FAILURE: the gradebook tool IS Vue now
+# (assets/vue/views/gradebook/GradebookListView.vue, route
+# /resources/gradebook/:node/). The Behat-era `i.mdi-pencil` /
+# `i.mdi-table-plus` / `i.mdi-account` / `i.mdi-format-list-text`
+# selectors match nothing on the live page — BaseButton renders
+# icon-only controls as <button aria-label="..."> / <a title="...">
+# with an inner span.mdi, never a bare <i class="mdi-...">. A real CI
+# snapshot of every failing scenario in this file showed the Vue
+# toolbar ("Add a category" / "Add classroom activity" / "Add online
+# activity" / "Edit") and an empty table, then a 90s hang waiting for
+# those legacy <i> tags. Rewritten against the live Vue dialogs and
+# named fields (gradebook-category-certificate-min-score,
+# gradebook-evaluation-title, etc.). The @skip'd scenarios below still
+# describe the old PHP pages and are left skipped.
 #
 # SELF-CONTAINMENT: course TEMP has ZERO subscribed learners on this box by
 # default (confirmed live: /api/course_rel_users?course=/api/courses/1
@@ -222,14 +228,14 @@ Feature: Assessments tool
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assessments"
-    And wait for the page to be loaded when ready
-    Then I click the "i.mdi-pencil" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
+    Then I should see "Minimum certification score"
+    Then I press "Edit"
     When I fill in the following:
-      | edit_cat_form_certif_min_score | 50 |
+      | gradebook-category-certificate-min-score | 50 |
     And I check "Generate certificates"
-    And I press "edit_cat_form_submit"
-    And I wait for the page to be loaded
+    And I press "Save"
+    And I wait for the page content to settle
     Then I should see "50"
 
   Scenario: Create an evaluation "exam" in course TEMP
@@ -237,20 +243,20 @@ Feature: Assessments tool
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assessments"
-    And wait for the page to be loaded when ready
-    Then I click the "i.mdi-table-plus" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
+    Then I should see "Minimum certification score"
+    Then I press "Add classroom activity"
     When I fill in the following:
-      | evaluation_title | exam |
-      | weight_mask      | 90   |
-      | add_eval_form_max | 10  |
-      | min_score        | 3    |
+      | gradebook-evaluation-title     | exam |
+      | gradebook-evaluation-weight    | 90   |
+      | gradebook-evaluation-max-score | 10   |
+      | gradebook-evaluation-min-score | 3    |
     And I check "Grade learners"
-    And I press "add_eval_form_submit"
-    And I wait for the page to be loaded
+    And I press "Add classroom activity"
+    And I wait for the page content to settle
     When I fill in the score for "norizales" with "6"
-    And I press "add_result_form_submit"
-    And I wait for the page to be loaded
+    And I press "Save"
+    And I wait for the page content to settle
     Then I should see "exam"
 
   # @skip 2026-08-06: recurring real-CI-only failure across multiple runs
@@ -327,25 +333,25 @@ Feature: Assessments tool
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assessments"
-    And wait for the page to be loaded when ready
-    Then I click the "i.mdi-format-list-text" element
-    And I wait for the page to be loaded
-    Then I click the "i.mdi-certificate" element
-    And wait for the page to be loaded when ready
+    And I wait for the page content to settle
+    Then I should see "Minimum certification score"
+    Then I press "Certificate"
+    And I wait for the page content to settle
+    Then I press "Generate"
+    And I wait for the page content to settle
     Then I should see "Noa Orizales"
-    And I follow "Certificate"
-    Then I should see "Certificate"
+    And I should see "Certificate"
 
   Scenario: Admin exports all to PDF
     Given I am a platform administrator
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assessments"
-    And wait for the page to be loaded when ready
-    Then I click the "i.mdi-account" element
-    And I wait for the page to be loaded
-    And I follow "Export all to PDF"
-    And wait for the page to be loaded when ready
+    And I wait for the page content to settle
+    Then I should see "Minimum certification score"
+    Then I press "Students list report"
+    And I wait for the page content to settle
+    And I press "Export to PDF"
     Then I should not see an error
 
   # @skip 2026-08-06: recurring real-CI-only failure across multiple runs.
@@ -395,19 +401,21 @@ Feature: Assessments tool
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow "Assessments"
-    And wait for the page to be loaded when ready
-    Then I click the "i.mdi-pencil" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
+    Then I should see "Minimum certification score"
+    Then I press "Edit"
     When I fill in the following:
-      | edit_cat_form_certif_min_score | 75 |
+      | gradebook-category-certificate-min-score | 75 |
     And I uncheck "Generate certificates"
-    And I press "edit_cat_form_submit"
-    And I wait for the page to be loaded
+    And I press "Save"
+    And I wait for the page content to settle
     Then I should see "75"
-    And I am on "/main/user/user.php?cid=3"
+    And I am on course "TEMP" homepage
     And I wait for the page to be loaded
+    And I follow "Users"
+    And I wait for the page content to settle
     Then I should see "Orizales"
-    Then I follow "Unsubscribe"
-    And I confirm the popup
-    And wait very long for the page to be loaded
+    And I click the "button[title='Unsubscribe']" icon in the row for "Orizales"
+    And I press "Yes"
+    And I wait for the page content to settle
     Then I should not see an error

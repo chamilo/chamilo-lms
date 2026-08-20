@@ -33,7 +33,7 @@
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                 >
                     <em class="mdi mdi-file-excel fa-fw"></em>
-                    {{ 'GenerateReport'|get_lang }}
+                    {{ 'GenerateReport'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
 
                 {% if paypal_enable and commissions_enable %}
@@ -106,20 +106,25 @@
                 {{ 'CourseSessionBlock'|get_plugin_lang('BuyCoursesPlugin') }}
             </a>
 
-            {% if services_are_included %}
                 <a
                     href="service_sales_report.php"
                     class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
                 >
                     {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
-            {% endif %}
 
             <a
                 href="subscription_sales_report.php"
                 class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary"
             >
                 {{ 'Subscriptions'|get_plugin_lang('BuyCoursesPlugin') }}
+            </a>
+
+            <a
+                    href="{{ export_report_url }}"
+                    class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary"
+            >
+                {{ 'Export'|get_plugin_lang('BuyCoursesPlugin') }}
             </a>
         </div>
     </nav>

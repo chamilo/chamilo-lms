@@ -18,7 +18,7 @@ use Throwable;
 
 final class Version20230904173400 extends AbstractMigrationChamilo
 {
-    private const int AGENDA_BATCH_SIZE = 250;
+    private const int AGENDA_BATCH_SIZE = 50;
     private const string DOCTRINE_STRING_TYPE_COMMENT = '(DC2Type:string)';
     private const string MAP_TABLE = 'tmp_legacy_personal_agenda_map';
     private const string PARENT_INDEX = 'idx_legacy_personal_agenda_parent_event';
@@ -39,6 +39,8 @@ final class Version20230904173400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->releaseOrmMemory();
+
         $this->ensureLongTitleColumns();
         $this->ensurePersonalAgendaParentIndex();
 
@@ -284,9 +286,19 @@ final class Version20230904173400 extends AbstractMigrationChamilo
         }
 
         $this->insertMappings($mappingRows);
-        $this->entityManager->clear();
+        $this->releaseOrmMemory();
 
         return \count($mappingRows);
+    }
+
+    private function releaseOrmMemory(): void
+    {
+        $this->entityManager->clear();
+        \gc_collect_cycles();
+
+        if (\function_exists('gc_mem_caches')) {
+            \gc_mem_caches();
+        }
     }
 
     /**
@@ -452,21 +464,37 @@ final class Version20230904173400 extends AbstractMigrationChamilo
      */
     private function loadUsers(array $userIds): array
     {
-        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
+        $userIds = array_values(
+            array_unique(
+                array_filter(array_map('intval', $userIds))
+            )
+        );
+
         if ([] === $userIds) {
             return [];
         }
 
-        $entities = $this->entityManager
-            ->createQuery('SELECT user FROM Chamilo\CoreBundle\Entity\User user WHERE user.id IN (:ids)')
-            ->setParameter('ids', $userIds)
-            ->getResult()
-        ;
-
         $result = [];
-        foreach ($entities as $entity) {
-            if ($entity instanceof User) {
-                $result[(int) $entity->getId()] = $entity;
+
+        foreach (array_chunk($userIds, 1000) as $chunk) {
+            $existingIds = $this->connection->executeQuery(
+                'SELECT id
+                 FROM user
+                 WHERE id IN (:ids)',
+                ['ids' => $chunk],
+                ['ids' => ArrayParameterType::INTEGER]
+            )->fetchFirstColumn();
+
+            foreach ($existingIds as $idValue) {
+                $id = (int) $idValue;
+
+                /** @var User $user */
+                $user = $this->entityManager->getReference(
+                    User::class,
+                    $id
+                );
+
+                $result[$id] = $user;
             }
         }
 
@@ -480,25 +508,37 @@ final class Version20230904173400 extends AbstractMigrationChamilo
      */
     private function loadParentEvents(array $eventIds): array
     {
-        $eventIds = array_values(array_unique(array_filter(array_map('intval', $eventIds))));
+        $eventIds = array_values(
+            array_unique(
+                array_filter(array_map('intval', $eventIds))
+            )
+        );
+
         if ([] === $eventIds) {
             return [];
         }
 
-        $entities = $this->entityManager
-            ->createQuery(
-                'SELECT event
-                 FROM Chamilo\CourseBundle\Entity\CCalendarEvent event
-                 WHERE event.iid IN (:ids)'
-            )
-            ->setParameter('ids', $eventIds)
-            ->getResult()
-        ;
-
         $result = [];
-        foreach ($entities as $event) {
-            if ($event instanceof CCalendarEvent) {
-                $result[(int) $event->getIid()] = $event;
+
+        foreach (array_chunk($eventIds, 1000) as $chunk) {
+            $existingIds = $this->connection->executeQuery(
+                'SELECT iid
+                 FROM c_calendar_event
+                 WHERE iid IN (:ids)',
+                ['ids' => $chunk],
+                ['ids' => ArrayParameterType::INTEGER]
+            )->fetchFirstColumn();
+
+            foreach ($existingIds as $idValue) {
+                $id = (int) $idValue;
+
+                /** @var CCalendarEvent $event */
+                $event = $this->entityManager->getReference(
+                    CCalendarEvent::class,
+                    $id
+                );
+
+                $result[$id] = $event;
             }
         }
 

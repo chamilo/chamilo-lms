@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseProgress\CourseProgressListProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -20,15 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/course-progress/list',
             openapi: new Operation(
-                parameters: [
-                    new Parameter(
-                        name: 'isStudentView',
-                        in: 'query',
-                        description: 'Force the read-only student view',
-                        required: false,
-                        schema: ['type' => 'boolean'],
-                    ),
-                ],
             ),
             name: 'get_course_progress_list',
             provider: CourseProgressListProvider::class,
@@ -41,6 +31,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

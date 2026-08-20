@@ -21,7 +21,6 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
@@ -572,18 +571,5 @@ trait AnnouncementAccessHelperTrait
         } catch (Throwable) {
             // Tracking must never break announcement actions.
         }
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 }

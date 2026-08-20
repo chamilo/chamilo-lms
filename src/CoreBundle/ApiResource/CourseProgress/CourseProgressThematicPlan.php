@@ -27,7 +27,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Course progress thematic plan data',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -43,6 +42,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Patch(
@@ -52,7 +55,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update a course progress thematic plan',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -68,6 +70,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
@@ -39,6 +40,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
@@ -70,7 +72,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertWikiGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('Wiki management actions are not available in student view.');
         }
 

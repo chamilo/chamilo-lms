@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -46,6 +47,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly Security $security,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -78,7 +80,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
             throw new AccessDeniedHttpException('A valid user is required.');
         }
 
-        $canManage = $this->canManageForumsInCurrentView($this->security, $request);
+        $canManage = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
         $canPeerGrade = $this->canPeerGradeThread($thread, $forum, $course, $session, $currentUser);
         if (!$canManage && !$canPeerGrade) {
             throw new AccessDeniedHttpException('You are not allowed to grade this forum thread.');

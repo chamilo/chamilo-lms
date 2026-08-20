@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -44,6 +45,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
         private AnnouncementScheduleManager $scheduleManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -70,7 +72,7 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
         $this->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isStudentView($request) || !$this->canManageAnnouncements(
+        if ($this->studentViewHelper->isActive() || !$this->canManageAnnouncements(
             $this->entityManager,
             $this->security,
             $this->settingsManager,

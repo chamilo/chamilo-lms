@@ -21,7 +21,6 @@ use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 trait CourseProgressAccessHelperTrait
@@ -156,26 +155,6 @@ trait CourseProgressAccessHelperTrait
         }
 
         return $session instanceof Session && $this->isSessionAdminReadingAllowed($user, $settingsManager);
-    }
-
-    private function isCourseProgressStudentView(Request $request, int $courseId): bool
-    {
-        if ($request->query->has('isStudentView') && $request->query->getBoolean('isStudentView')) {
-            return true;
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        $session = $request->getSession();
-        $legacyCourseStudentView = $session->get('student_view_course_'.$courseId);
-
-        if (null !== $legacyCourseStudentView) {
-            return (bool) $legacyCourseStudentView;
-        }
-
-        return 'studentview' === $session->get('studentview');
     }
 
     private function thematicBelongsToExactContext(

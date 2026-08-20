@@ -20,7 +20,6 @@ use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -242,19 +241,6 @@ trait NotebookAccessHelperTrait
         }
 
         return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
-    }
-
-    private function isNotebookStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
     }
 
     private function findOwnedNotebookInContext(

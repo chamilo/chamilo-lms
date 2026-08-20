@@ -97,6 +97,13 @@ if (ReportRegistry::requiresCourseContext($report)) {
         api_not_allowed(true);
     }
 
+    if (
+        in_array('learning_path', $requirements, true)
+        && !isLearningPathInCourseContext($courseId, $sessionId, $contextValues['learning_path_id'])
+    ) {
+        api_not_allowed(true);
+    }
+
     $target = resolveCourseAwareReportTarget(
         $target,
         $report,
@@ -112,7 +119,8 @@ if (ReportRegistry::requiresCourseContext($report)) {
     unset(
         $query['exercise_id'],
         $query['attempt_id'],
-        $query['user_id']
+        $query['user_id'],
+        $query['learning_path_id']
     );
 }
 
@@ -168,7 +176,7 @@ function resolveCourseAwareReportTarget(
 
     $target = str_replace('{session_id}', (string) $sessionId, $target);
 
-    foreach (['user_id', 'exercise_id', 'attempt_id'] as $key) {
+    foreach (['user_id', 'exercise_id', 'attempt_id', 'learning_path_id'] as $key) {
         $placeholder = '{'.$key.'}';
         if (!str_contains($target, $placeholder)) {
             continue;
@@ -188,7 +196,7 @@ function resolveCourseAwareReportTarget(
 /**
  * @param array<string, mixed> $query
  *
- * @return array{user_id: int, exercise_id: int, attempt_id: int}
+ * @return array{user_id: int, exercise_id: int, attempt_id: int, learning_path_id: int}
  */
 function collectReportContextValues(array $query): array
 {
@@ -196,6 +204,7 @@ function collectReportContextValues(array $query): array
         'user_id' => isset($query['user_id']) ? (int) $query['user_id'] : 0,
         'exercise_id' => isset($query['exercise_id']) ? (int) $query['exercise_id'] : 0,
         'attempt_id' => isset($query['attempt_id']) ? (int) $query['attempt_id'] : 0,
+        'learning_path_id' => isset($query['learning_path_id']) ? (int) $query['learning_path_id'] : 0,
     ];
 }
 
@@ -308,6 +317,42 @@ function isExerciseInCourseContext(int $courseId, int $sessionId, int $exerciseI
         ->getOneOrNullResult();
 
     return $exercise instanceof \Chamilo\CourseBundle\Entity\CQuiz;
+}
+
+function isLearningPathInCourseContext(int $courseId, int $sessionId, int $learningPathId): bool
+{
+    if ($learningPathId <= 0) {
+        return false;
+    }
+
+    $entityManager = Database::getManager();
+    $course = $entityManager->find(\Chamilo\CoreBundle\Entity\Course::class, $courseId);
+    if (!$course instanceof \Chamilo\CoreBundle\Entity\Course) {
+        return false;
+    }
+
+    $session = null;
+    if ($sessionId > 0) {
+        $session = $entityManager->find(\Chamilo\CoreBundle\Entity\Session::class, $sessionId);
+        if (!$session instanceof \Chamilo\CoreBundle\Entity\Session) {
+            return false;
+        }
+    }
+
+    $repository = $entityManager->getRepository(\Chamilo\CourseBundle\Entity\CLp::class);
+    if (!$repository instanceof \Chamilo\CourseBundle\Repository\CLpRepository) {
+        return false;
+    }
+
+    $learningPath = $repository
+        ->findAllByCourse($course, $session, null, null, false)
+        ->andWhere('resource.iid = :reportLearningPathId')
+        ->setParameter('reportLearningPathId', $learningPathId)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    return $learningPath instanceof \Chamilo\CourseBundle\Entity\CLp;
 }
 
 function isAttemptInExerciseContext(

@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseProgress\CourseProgressCompletionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,9 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-progress/completion',
             openapi: new Operation(
                 summary: 'Set the last completed thematic advance',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -39,6 +35,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

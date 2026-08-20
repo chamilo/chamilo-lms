@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Course description edition form data',
                 parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'descriptionType', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
@@ -46,15 +45,16 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Post(
             uriTemplate: '/course-description',
             openapi: new Operation(
                 summary: 'Create a course description',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
@@ -70,6 +70,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Patch(
@@ -79,7 +83,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update a course description',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
@@ -96,6 +99,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
+                ),
             ],
         ),
         new Delete(
@@ -105,7 +112,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete a course description',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER') or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
@@ -121,6 +127,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'isStudentView' => new QueryParameter(
+                    schema: ['type' => 'boolean'],
+                    description: 'Force the read-only student view',
                 ),
             ],
         ),

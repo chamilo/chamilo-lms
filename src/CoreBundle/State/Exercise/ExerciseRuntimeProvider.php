@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -85,6 +86,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
@@ -529,14 +531,12 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     private function isLearnerRuntimeRequest(Request $request): bool
     {
         $origin = (string) $request->query->get('origin', '');
-        $isStudentView = strtolower(trim((string) $request->query->get('isStudentView', '')));
         $preview = strtolower(trim((string) $request->query->get('preview', '')));
 
         return 'learnpath' === $origin
             || $request->query->has('lp_init')
             || $request->query->has('learnpath_id')
-            || \in_array($isStudentView, ['1', 'true', 'yes'], true)
-            || str_starts_with($isStudentView, 'true')
+            || $this->studentViewHelper->isActive()
             || \in_array($preview, ['1', 'true', 'yes'], true)
             || str_starts_with($preview, 'true');
     }

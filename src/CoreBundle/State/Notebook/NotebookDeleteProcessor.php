@@ -10,15 +10,13 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Notebook\NotebookItem;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @implements ProcessorInterface<NotebookItem, void>
@@ -29,12 +27,12 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
-        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CNotebookRepository $notebookRepository,
         private Security $security,
         private UserHelper $userHelper,
         private SettingsManager $settingsManager,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -43,11 +41,6 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertNotebookSessionBelongsToCourse($session, $course);
@@ -62,7 +55,7 @@ final readonly class NotebookDeleteProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to view Notebook in this context.');
         }
 
-        $studentView = $this->isNotebookStudentView($request);
+        $studentView = $this->studentViewHelper->isActive();
         if (!$this->canWriteNotebook(
             $this->entityManager,
             $this->security,

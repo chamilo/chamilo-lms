@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -25,7 +26,6 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -43,7 +43,7 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private LpAdvancedAccessHelper $advancedAccessHelper,
         private CidReqHelper $cidReqHelper,
-        private RequestStack $requestStack,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -91,7 +91,7 @@ readonly class LearningPathCollectionProvider implements ProviderInterface
         $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
         $title = isset($filters['title']) ? trim((string) $filters['title']) : null;
         $canManage = $this->canManageLearningPaths($this->security)
-            && !$this->isStudentViewRequest($this->requestStack);
+            && !$this->studentViewHelper->isActive();
 
         /** @var array<int, CLp> $learningPaths */
         $learningPaths = $this->learningPathRepository

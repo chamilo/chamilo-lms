@@ -82,7 +82,7 @@ final class LearningPathScormContentController extends AbstractController
             throw new NotFoundHttpException('SCORM content not found.');
         }
 
-        $course = $this->getContextCourse($cidReqHelper);
+        $course = $cidReqHelper->requireDoctrineCourseEntity();
         $session = $cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getContextGroup($entityManager, $cidReqHelper, $course);
         $resourceNode = $lp->getResourceNode();

@@ -1,3 +1,18 @@
+v7.12 - 2026-08-20
+
+### Reports and export UI cleanup
+
+- Improved BuyCourses sales report navigation with direct access to course/session, service, subscription and export reports.
+- Added missing labels for report generation, Excel export and date filters.
+- Kept service reports visible from the report navigation even when the service catalogue setting is disabled.
+=====
+
+Fix: improved the BuyCourses export report so it can export course/session sales,
+service sales and subscription sales from the same page. The export now uses the
+selected source, status, date range and search filters, shows a preview before
+exporting, and no longer downloads an apparently empty file when only service
+sales match the expected report.
+
 v7.11 - 2026-07-10
 =====
 

@@ -285,7 +285,8 @@ final class DemoCoursesFixtures extends Fixture implements FixtureGroupInterface
             $this->ensureFileOverwriteConstant();
             $restorer->set_file_option(FILE_OVERWRITE);
             $restorer->setResourcesAllSnapshot($resourcesAll);
-            $restorer->restore($course->getCode());
+            $restoreCourseSettings = !empty($legacyCourse->resources['course_settings']);
+            $restorer->restore($course->getCode(), 0, $restoreCourseSettings);
 
             // CourseRestorer may clear Doctrine while recovering from an individual
             // tool restore. Never persist the pre-restore Course/CTool graph again:

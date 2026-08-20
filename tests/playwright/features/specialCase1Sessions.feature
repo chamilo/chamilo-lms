@@ -288,7 +288,7 @@ Feature: Special case 1 — course/session creation
     Then I should see "Testing course fr"
 
     # Two HTML documents: introduction, final
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Documents"
     And I wait for the page to be loaded
@@ -313,7 +313,7 @@ Feature: Special case 1 — course/session creation
     # Exercise 1: "QRU and Image Selection exercise" — a Multiple choice
     # question (QRU) and a Unique answer with images question (the modern
     # equivalent of "image selection", see header comment)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Exercices"
     And I wait for the page content to settle
@@ -346,7 +346,7 @@ Feature: Special case 1 — course/session creation
     Then I should see "Image selection question"
 
     # Exercise 2: "Open question exercise" — a single Open question
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Exercices"
     And I wait for the page content to settle
@@ -365,7 +365,7 @@ Feature: Special case 1 — course/session creation
 
     # Forum category + forum (see header comment: restored for real, not
     # left commented out — confirmed working live)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Forums"
     And I wait for the page to be loaded
@@ -380,20 +380,40 @@ Feature: Special case 1 — course/session creation
     When I press "Ajouter un forum"
     And I fill in the following:
       | forum_title | General forum |
-    And I fill in tinymce field "forum_comment" with "General discussion forum"
+    # "forum-comment" with a HYPHEN, not the legacy "forum_comment" with an
+    # underscore: the Vue forum tool's "Ajouter un forum" DIALOG names its
+    # description editor `id="forum-comment"` (and sets no `name` attribute at
+    # all, so the id is the only way in) — confirmed live by dumping every
+    # textarea plus `window.tinymce.editors` with the dialog open. The
+    # underscore form belongs to the LEGACY full-page route
+    # /main/forum/index.php?action=add_forum, which toolForum.feature uses
+    # instead (and which is also why that file uses the different "I fill in
+    # editor field ..." step). Getting this wrong fails as "Could not find an
+    # id for field with locator: forum_comment", because resolveField()'s
+    # getByLabel("Description") tier matches a wrapper element that has no id.
+    And I fill in tinymce field "forum-comment" with "General discussion forum"
     And I press "Créer ce forum"
     And I wait for the page to be loaded
     Then I should see "General forum"
 
     # Learning Path "LP Test": add introduction, both exercises, final —
     # in that order — then a prerequisite on "final"
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Parcours d'apprentissage"
     And I wait for the page to be loaded
     And I click the "span.mdi-plus" element
     And I wait for the page to be loaded
-    And I fill in "Learning path name" with "LP Test"
+    # "lp-title" (the real id), NOT the visible label "Learning path name":
+    # resolveField()'s label tier is the LAST resort and matches the RENDERED
+    # label, which inside this deliberately-French course reads "Nom du
+    # parcours" — so an English label string can never match here, and the
+    # step hangs the whole scenario budget instead of failing fast. Confirmed
+    # live on the LP create form (/resources/lp/<node>/create): the only field
+    # is <input id="lp-title" name="title"> with <label for="lp-title">Nom du
+    # parcours</label>. Using the id also avoids the bare name "title", which
+    # is generic enough to collide on other forms.
+    And I fill in "lp-title" with "LP Test"
     And I press "Continue"
     And I wait for the page to be loaded
     And I add LP item "introduction" from the resource panel
@@ -417,7 +437,7 @@ Feature: Special case 1 — course/session creation
 
     # Course introduction, linking to the LP (see header comment: saving
     # redirects to /admin, a real app quirk, not a failure)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I click the "span.mdi-plus" element
     And I wait for the page to be loaded
@@ -426,7 +446,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
 
     # Assessments: classroom activity "Course validation"
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Cahier de notes"
     And I wait for the page content to settle

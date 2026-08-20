@@ -15717,7 +15717,7 @@ msgid "Re-use a copy inside the current test"
 msgstr "Re-use a copy inside the current test"
 
 msgid "You already invite all your contacts"
-msgstr "You already invite all your contacts"
+msgstr "You already invited all your contacts"
 
 msgid "Results hidden by the exercise setting"
 msgstr "Results hidden by the exercise setting"

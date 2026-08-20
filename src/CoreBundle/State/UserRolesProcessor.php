@@ -21,6 +21,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * may add the role, to themselves or to anyone else. Every other write passes through
  * unaffected; this only blocks the specific transition of newly gaining the role.
  *
+ * Access-URL scoping of *who* may edit a given user at all (including their password) is
+ * enforced upstream by UserVoter::EDIT (AccessUrlScopeHelper::canEditUser()) before this
+ * processor ever runs, so it is not duplicated here.
+ *
  * @implements ProcessorInterface<User, User>
  */
 final readonly class UserRolesProcessor implements ProcessorInterface

@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Security\PasswordPolicyValidator;
 use OTPHP\TOTP;
-use Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -36,7 +36,8 @@ class ChangePasswordType extends AbstractType
     private const string MFA_SECRET_V2_PREFIX = 'v2:';
 
     public function __construct(
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly PasswordPolicyValidator $passwordPolicyValidator,
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -107,7 +108,7 @@ class ChangePasswordType extends AbstractType
                 }
 
                 if ($checkPasswordRequirements) {
-                    foreach ($this->validatePassword($newPassword) as $error) {
+                    foreach ($this->passwordPolicyValidator->validate($newPassword) as $error) {
                         $form->get('newPassword')->addError(new FormError($error));
                     }
                 }
@@ -240,38 +241,5 @@ class ChangePasswordType extends AbstractType
         $pt = openssl_decrypt((string) $encryptedData, $cipherMethod, (string) $encryptionKey, 0, (string) $iv);
 
         return false === $pt ? '' : (string) $pt;
-    }
-
-    /**
-     * Validate password against security rules defined in settings.
-     */
-    private function validatePassword(string $password): array
-    {
-        $errors = [];
-        $req = Security::getPasswordRequirements()['min'];
-
-        $len = \strlen($password);
-        $lower = preg_match_all('/[a-z]/', $password);
-        $upper = preg_match_all('/[A-Z]/', $password);
-        $digits = preg_match_all('/\d/', $password);
-        $specials = preg_match_all('/[^a-zA-Z0-9]/', $password);
-
-        if ($len < $req['length']) {
-            $errors[] = $this->translator->trans('Password must be at least %length% characters long.', ['%length%' => $req['length']]);
-        }
-        if ($req['lowercase'] > 0 && $lower < $req['lowercase']) {
-            $errors[] = $this->translator->trans('Password must contain at least %count% lowercase characters.', ['%count%' => $req['lowercase']]);
-        }
-        if ($req['uppercase'] > 0 && $upper < $req['uppercase']) {
-            $errors[] = $this->translator->trans('Password must contain at least %count% uppercase characters.', ['%count%' => $req['uppercase']]);
-        }
-        if ($req['numeric'] > 0 && $digits < $req['numeric']) {
-            $errors[] = $this->translator->trans('Password must contain at least %count% numerical (0-9) characters.', ['%count%' => $req['numeric']]);
-        }
-        if ($req['specials'] > 0 && $specials < $req['specials']) {
-            $errors[] = $this->translator->trans('Password must contain at least %count% special characters.', ['%count%' => $req['specials']]);
-        }
-
-        return $errors;
     }
 }

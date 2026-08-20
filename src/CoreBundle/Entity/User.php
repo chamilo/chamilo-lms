@@ -21,6 +21,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateUserPasswordAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
@@ -80,6 +81,16 @@ use UserManager;
             normalizationContext: ['groups' => ['user_skills:read']],
             security: "is_granted('ROLE_ADMIN') or user.getId() == request.attributes.get('id')",
             name: 'get_user_skills'
+        ),
+        new Patch(
+            uriTemplate: '/users/{id}/password',
+            controller: UpdateUserPasswordAction::class,
+            openapi: new Operation(
+                summary: 'Set or reset a user\'s password.'
+            ),
+            security: "is_granted('EDIT', object)",
+            deserialize: false,
+            name: 'update_user_password',
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],

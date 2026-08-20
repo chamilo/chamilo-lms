@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 
 #[AsCommand(
     name: 'chamilo:update_vue_translations',
@@ -80,7 +81,7 @@ class UpdateVueTranslations extends Command
                     $translated = $this->escapeVueI18nSpecialChars($translated);
                     $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
                 }
-                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
+                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $fileToSave = $vueLocalePath.'en_US.json';
                 file_put_contents($fileToSave, $newLanguageToString);
 
@@ -100,7 +101,7 @@ class UpdateVueTranslations extends Command
                 $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
             }
             $newLanguage = array_filter($newLanguage);
-            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
             file_put_contents($fileToSave, $newLanguageToString);

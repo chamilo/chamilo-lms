@@ -167,6 +167,9 @@ Every new feature and every new interface added to an existing feature **must** 
 - If an entity or page is accessible to more than one role, **run all scenarios once per role that has access**. Do not test only as admin if other roles can also interact with the feature. For access-restricted pages (e.g. admin-only), add a scenario verifying that non-privileged roles are denied access (redirected or do not see the management UI).
 - Login steps available: `I am a platform administrator` (admin), `I am a teacher` (mmosquera), `I am a student` (acostea), `I am an HR manager` (ptook), `I am a student boss` (abaggins), `I am an invitee` (bproudfoot), `I am logged as "<username>"` (any other account, e.g. one just created in the scenario), `I am not logged` (explicit logout). Add a new named step to `common.steps.ts` whenever a test user with non-standard credentials is needed.
 - Each feature file must be self-contained: it creates all data it needs and deletes it at the end, leaving the database in the same state it found it — except the shared, one-time fixtures above (test users, `TEMP`/`TEMPPRIVATE` courses), which are meant to persist for the whole suite.
+- **Two SPA-timing traps that look identical to generic flakiness but have a definite root cause** — confirmed via `trace.zip`'s network log (not guessed), while stabilizing `createUser.feature`'s edit scenarios:
+  1. **Clicking into a client-side route change (`router.push`/`<router-link>`) never fires a real navigation event.** `"wait ... for the page to be loaded"` (`page.waitForLoadState("domcontentloaded"/"networkidle")`) resolves immediately regardless of whether the SPA has actually swapped routes — a script that clicks an edit-row icon then immediately checks `page.url()` after that wait can still show the OLD page's URL. Worse, if the old and new page happen to share a field `name` (e.g. a list page's own "Advanced search" filter having the same `name="email"` as the destination edit form), the next `"I fill in ..."` step silently fills the WRONG page's field instead of erroring. Fix: wait for an element unique to the destination page instead — `"I wait up to N seconds for the element {string} to appear"` with a selector/text only the target page has.
+  2. **A component whose `onMounted` async-fetches existing data (any edit form) has a fill-before-load race.** The static template (headings, labels) renders immediately on mount, before the fetch resolves; if a test fills a field in that window, the fetch's `.then()` handler overwrites the typed value with the loaded one moments later, and the eventual save submits the ORIGINAL data — no error, because nothing was actually wrong with it. Symptom: a "wrong value should be rejected" scenario times out waiting for a validation message that never appears, because the request that went out was valid. Confirmed by inspecting the actual submitted `multipart/form-data` in the trace's network log, not by re-reading the frontend code. Fix: assert the field already holds its expected LOADED value (`"the field {string} should have value {string}"`) before overwriting it — this doubles as proof the load finished.
 
 **Behat is frozen, not dropped yet.** `tests/behat/features/` (shared steps in `tests/behat/features/bootstrap/FeatureContext.php`) and `.github/workflows/behat.yml` still exist and still run in CI — they're kept passing as-is only until Playwright reaches full scenario parity, at which point Behat is deleted entirely. `behat.yml` is deliberately **not** kept in sync with `playwright.yml` (new PHP versions, CI steps, dependency bumps) — don't mirror changes into it unless explicitly asked. A same-named Behat file is still useful as a **hint** of intended scenarios when porting or writing new coverage, but never as a source of truth for selectors — field names, button labels, and dialog types all rot; verify everything against the live app.
 
@@ -308,6 +311,54 @@ When replacing a legacy PHP page, search these locations for old links:
 - `public/main/template/default/` — legacy Twig templates
 - `assets/vue/components/` — Vue components linking to legacy pages (e.g., `social/MySkillsCard.vue`)
 - `public/main/inc/ajax/model.ajax.php` — jqGrid AJAX allowlists; remove the action from both the allowlist arrays and the `case` blocks
+
+### Porting `api_get_setting()` calls verbatim
+
+Copy the exact string a legacy page passes to `api_get_setting()` — never "simplify" it by dropping what looks like a redundant category prefix (e.g. `registration.user_hide_never_expire_option` → `user_hide_never_expire_option`). `SettingsManager::validateSetting()` only resolves a bare (no-dot) name automatically when that exact string is listed in `getVariablesAndCategories()`; most settings are **not** listed there and throw `InvalidArgumentException` (`Parameter must be in format "category.name"`) at runtime — a bug that unit/functional tests catch immediately (a bare `api_get_setting()` call that never throws in a real request is not proof every other bare call is safe too). A few settings genuinely are registered bare in that resolver (e.g. `limit_session_admin_role`, `login_is_email`, `account_valid_duration`) — matching the legacy page's own exact call is what tells you which is which, not guessing from the pattern.
+
+### Native input `type` attributes can silently defeat server-side validation
+
+Don't add `type="email"` (or other browser-validated types) to a `BaseInputText` when the field's validation is meant to happen server-side with a custom message, as legacy `FormValidator` pages always do (`addEmailRule()`, `addRule(..., 'username')`, etc.). The browser's own native format check on `type="email"` fires on any non-empty value regardless of `required`, and **silently blocks the form's native submit event before Vue's `@submit.prevent` handler ever runs** — no request is sent at all (confirmed via the network trace showing no request whatsoever), so the server's own validation message can never be returned. Leave the field as the default `type="text"` and let the existing server-side check own the error message, matching the legacy page's own behavior exactly.
+
+### `User::getRoles()` is not a valid `roles[]` form payload
+
+`User::getRoles()` returns Symfony's full effective role set, which includes implicit base
+roles (`ROLE_USER`) that are **not** selectable entries in `UserManager::getAllowedRoleOptionsForUserForm()`.
+Feeding `getRoles()` straight back into a "Roles" multiselect's pre-filled value (e.g. an edit
+form) and resubmitting it verbatim fails `UserManager::areRolesAllowedInUserForm()` on save —
+the whole role set is rejected because one entry (`ROLE_USER`) isn't in the allowlist, and the
+user gets a generic 403 "Error" that looks like an access-control problem, not a validation one.
+Confirmed live: a real edit-form save reproducibly 403'd until fixed.
+
+Filter through the same canonical-role mapping the legacy page itself used before sending roles
+to the frontend:
+```php
+$optionKeyByCanon = [];
+foreach (UserManager::getAllowedRoleOptionsForUserForm() as $optKey => $label) {
+    $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = (string) $optKey;
+}
+$selected = [];
+foreach (array_map('api_normalize_role_code', $user->getRoles()) as $canon) {
+    if (isset($optionKeyByCanon[$canon])) {
+        $selected[] = $optionKeyByCanon[$canon];
+    }
+}
+```
+Never send `$user->getRoles()` directly into a data endpoint's `roles` field when the frontend
+round-trips it back into the same multiselect on save.
+
+### Prod cache must be rebuilt after adding a *new* controller class, not just after editing one
+
+Extends the constructor-change gotcha above: on a box running `APP_ENV=prod` (check `.env`
+before assuming `dev`), a **brand-new** `#[Route]`-attributed controller class is invisible to
+the compiled router until `cache:clear --env=prod` (+`cache:warmup` +`chmod -R 777 var/cache/prod`
+if `claude` and `www-data` both need to write there) runs — hitting the new route in the
+meantime doesn't 404 or 500, it silently falls through to whatever catch-all route matches next
+(e.g. `IndexController`'s `/admin/{vueRouting}` SPA-shell route), returning HTTP 200 with the
+wrong body (the SPA's HTML shell instead of the controller's JSON). This is easy to
+misdiagnose as a frontend bug (the JS looks like it "didn't get" the expected fields) when the
+real cause is a stale prod route cache. Symptom to watch for: a GET that should return JSON
+instead returns an HTML document starting with `<!DOCTYPE html>`.
 
 ### Many-to-many "assign X to Y" migrations — dual-list pattern
 

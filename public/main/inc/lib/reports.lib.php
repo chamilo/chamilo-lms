@@ -834,7 +834,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/lp/{course_resource_node_id}',
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'course_lp_report_legacy',
@@ -845,7 +846,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/lp/{course_resource_node_id}',
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'social_skills_report',
@@ -911,7 +913,7 @@ class ReportRegistry
             return [];
         }
 
-        $allowed = ['user', 'exercise', 'attempt'];
+        $allowed = ['user', 'exercise', 'attempt', 'learning_path'];
 
         return array_values(array_filter(
             array_map('strval', $requirements),
@@ -979,6 +981,22 @@ class ReportRegistry
             !api_is_platform_admin()
         );
 
+        $courseIds = array_values(array_unique(array_filter(array_map(
+            static fn (array $course): int => (int) ($course['real_id'] ?? 0),
+            $courses
+        ))));
+        $courseNodeIds = [];
+
+        if (!empty($courseIds)) {
+            $courseEntities = Database::getManager()
+                ->getRepository(\Chamilo\CoreBundle\Entity\Course::class)
+                ->findBy(['id' => $courseIds]);
+
+            foreach ($courseEntities as $courseEntity) {
+                $courseNodeIds[(int) $courseEntity->getId()] = (int) ($courseEntity->getResourceNode()?->getId() ?? 0);
+            }
+        }
+
         $contexts = [];
 
         foreach ($courses as $course) {
@@ -1004,6 +1022,7 @@ class ReportRegistry
             $contexts[$key] = [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
+                'resource_node_id' => (int) ($courseNodeIds[$courseId] ?? 0),
                 'title' => $title,
                 'session_name' => $sessionName,
             ];

@@ -650,6 +650,38 @@ every `Base*` component already renders its own label.
 
 ---
 
+### BaseAdvancedSettingsButton (collapsible "Advanced settings" section)
+
+```vue
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+
+<BaseAdvancedSettingsButton v-model="showAdvancedSettings">
+  <div class="flex flex-col gap-4">
+    <BaseInputText id="phone" v-model="form.phone" :label="t('Phone number')" name="phone" />
+    <!-- rest of the advanced/optional fields -->
+  </div>
+</BaseAdvancedSettingsButton>
+```
+
+**Props:** `modelValue` (Boolean, required) — bind with `v-model`, own state as a plain
+`ref(false)` (collapsed by default). Content goes in the **default slot** — the component
+renders it itself (in a rounded `border-gray-25 bg-gray-10` panel) only when expanded; don't
+also wrap it in your own `v-if`.
+
+**When to use it:** any form that hides a block of optional/rarely-needed fields behind a
+toggle (a legacy page's own "Advanced settings" panel, extra fields, rarely-changed options).
+This is the **only** correct component for that pattern in this project — reference usages:
+`course/Form.vue`, `links/LinkForm.vue`, `documents/Form.vue`, `glossary/GlossaryForm.vue`,
+`attendance/AttendanceForm.vue`, `lp/LpCertificateForm.vue`.
+
+**Do not** reach for a raw PrimeVue `<Fieldset :toggleable="true" collapsed>` for this — it
+renders a bordered box even while collapsed and its label styling doesn't match. This is an
+easy trap: `Fieldset` toggles superficially "look like" the same pattern, so it's worth
+actively checking for a purpose-built `Base*`/feature component before defaulting to a
+generic PrimeVue one — this project has more of them than any single skill section documents.
+
+---
+
 ### SectionHeader
 
 Use `<SectionHeader>` for section or page headings instead of a manual `<h2>` / `<div>`.

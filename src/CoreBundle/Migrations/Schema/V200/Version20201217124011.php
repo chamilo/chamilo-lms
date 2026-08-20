@@ -876,7 +876,8 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 $correctionRepository->addResourceNode(
                     $correction,
                     $admin,
-                    $publication
+                    $publication,
+                    synchronizeInverseCollections: false
                 );
 
                 $this->entityManager->persist($correction);

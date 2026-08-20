@@ -80,7 +80,7 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 ## Project Overview
 
-Chamilo LMS 2.0 — an open-source e-learning platform built on **Symfony 6.4** (PHP 8.2/8.3) with a **Vue 3** frontend. Uses **API Platform 3.0** for REST/GraphQL APIs, **Doctrine ORM** for persistence, and **Webpack Encore** for asset compilation.
+Chamilo LMS — an open-source e-learning platform built on **Symfony 7.4** (PHP 8.3/8.4/8.5) with a **Vue 3.5** frontend. Uses **API Platform 4.2** for REST/GraphQL APIs, **Doctrine ORM 3.3** for persistence, and **Webpack Encore 5** for asset compilation.
 
 ## Common Commands
 
@@ -127,28 +127,48 @@ npx prettier --check .      # Check formatting
 
 It is possible to test the application through the web, as admin, by calling locally: http://my.chamilo.net with credentials admin/admin.
 
-### Behat (browser automation tests)
+### Playwright (browser automation tests)
 
-Behat feature files live in `tests/behat/features/`. They are organised by domain (e.g. `hr/`, `admin/`). The shared step definitions are in `tests/behat/features/bootstrap/FeatureContext.php`.
+The browser-driven test suite is migrating from **Behat** to **Playwright**, using `playwright-bdd` so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. **Write new coverage here, not in Behat.**
 
-Run a specific feature file:
+- Feature files: `tests/playwright/features/*.feature` (organised by domain where it matters, e.g. `admin/`).
+- Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
+- Config: `tests/playwright/playwright.config.ts`.
+
+Run the full suite (excludes the install/seed scenarios below):
 ```bash
-vendor/bin/behat tests/behat/features/createUsers.feature
+yarn test:playwright
 ```
 
-Run all features:
+Run/debug interactively:
 ```bash
-vendor/bin/behat --suite=default tests/behat/features/
+yarn test:playwright:ui
 ```
 
-**When to write Behat tests — mandatory rule:**
-Every new feature and every new interface added to an existing feature **must** be accompanied by a Behat feature file (or additions to an existing one) that covers all user interactions: create, read, edit, and delete at minimum.
+One-time environment setup, in this order, before any course-tool feature will pass (creates the fixed test users and the `TEMP`/`TEMPPRIVATE` courses most scenarios assume exist):
+```bash
+yarn test:playwright:seed                 # test users
+yarn test:playwright:seed-course          # TEMP course
+yarn test:playwright:seed-private-course  # TEMPPRIVATE course
+yarn test:playwright:seed-settings        # settings some scenarios assume are enabled
+```
+The web installer itself is also covered (`yarn test:playwright:install`) — it's destructive (recreates the DB) and CI-only; never run it against a real environment.
 
-- Place feature files in `tests/behat/features/<domain>/` mirroring the view directory structure.
-- Form inputs in Vue dialogs/forms **must** have a `name` attribute so Behat can target them with `I fill in "name" with "value"` and `I select "option" from "name"`.
-- If an entity or page is accessible to more than one role, **run all scenarios once per role that has access**. Do not test only as admin if HR users or other roles can also interact with the feature. For access-restricted pages (e.g. admin-only), add a scenario verifying that non-privileged roles are denied access (redirected or do not see the management UI).
-- Login steps available: `I am a platform administrator`, `I am an HR user` (hr/HrHrHr11+), `I am an HR manager` (ptook), `I am a student`, `I am a teacher`. Add a new named step to `FeatureContext.php` whenever a new test user with non-standard credentials is needed.
-- Each feature file must be self-contained: it creates all data it needs and deletes it at the end, leaving the database in the same state it found it.
+**Stale-cache trap:** after editing a `.feature` file or anything in `tests/playwright/steps/`, force-regenerate the compiled specs before trusting a run — `playwright-bdd`'s own auto-regen isn't always reliable:
+```bash
+node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
+```
+
+**When to write Playwright tests — mandatory rule:**
+Every new feature and every new interface added to an existing feature **must** be accompanied by a `.feature` file (or additions to an existing one) that covers all user interactions: create, read, edit, and delete at minimum. The `add-feature-test` skill (`/add-feature-test`) automates this — it explores the live UI to confirm real selectors before writing steps, since static code reading gets them wrong often enough to matter.
+
+- Place feature files in `tests/playwright/features/`, mirroring `tests/behat/features/<domain>/` where a domain subfolder already exists.
+- Form inputs in Vue dialogs/forms **must** have a `name` attribute so steps can target them by name.
+- If an entity or page is accessible to more than one role, **run all scenarios once per role that has access**. Do not test only as admin if other roles can also interact with the feature. For access-restricted pages (e.g. admin-only), add a scenario verifying that non-privileged roles are denied access (redirected or do not see the management UI).
+- Login steps available: `I am a platform administrator` (admin), `I am a teacher` (mmosquera), `I am a student` (acostea), `I am an HR manager` (ptook), `I am a student boss` (abaggins), `I am an invitee` (bproudfoot), `I am logged as "<username>"` (any other account, e.g. one just created in the scenario), `I am not logged` (explicit logout). Add a new named step to `common.steps.ts` whenever a test user with non-standard credentials is needed.
+- Each feature file must be self-contained: it creates all data it needs and deletes it at the end, leaving the database in the same state it found it — except the shared, one-time fixtures above (test users, `TEMP`/`TEMPPRIVATE` courses), which are meant to persist for the whole suite.
+
+**Behat is frozen, not dropped yet.** `tests/behat/features/` (shared steps in `tests/behat/features/bootstrap/FeatureContext.php`) and `.github/workflows/behat.yml` still exist and still run in CI — they're kept passing as-is only until Playwright reaches full scenario parity, at which point Behat is deleted entirely. `behat.yml` is deliberately **not** kept in sync with `playwright.yml` (new PHP versions, CI steps, dependency bumps) — don't mirror changes into it unless explicitly asked. A same-named Behat file is still useful as a **hint** of intended scenarios when porting or writing new coverage, but never as a source of truth for selectors — field names, button labels, and dialog types all rot; verify everything against the live app.
 
 
 ## Architecture
@@ -189,7 +209,7 @@ CSS uses **Tailwind CSS 3.4** with SCSS. Legacy pages also use Bootstrap 5 and j
 ### Key Patterns
 
 - **Entity IRIs**: The frontend references entities by their API Platform IRI (e.g., `/api/users/1`) rather than raw IDs
-- **CidReq**: Course/session context is tracked via `cidReq` store — holds current course ID, session ID, and group ID passed as query parameters
+- **CidReq**: Course/session/group context mirrors the backend's `CidReqListener` (see "Contextual roles" below) via the `useCidReqStore` Pinia store (`assets/vue/store/cidReq.js`). The router's global `beforeResolve` guard (`assets/vue/router/index.js`) reads `cid`/`sid`/`gid` from `route.query` on every navigation and calls `setCourseAndSessionById()`, which fetches the full `course`/`session` **API resources** (not raw IDs) and re-fetches the `ROLE_CURRENT_COURSE_*` contextual roles whenever the `cid:sid:gid` triple changes. Components read IDs defensively — `cidReqStore.course?.id ?? route.query.cid` — since the store may not be populated yet on first render.
 - **Resource system**: Content entities extend `AbstractResource` and use Chamilo's resource node/link system for access control and file management
 - **Services pattern (frontend)**: Each entity type has a service file that wraps `baseService` to interact with a specific API endpoint
 
@@ -285,7 +305,6 @@ So a new setting needs both:
 
 When replacing a legacy PHP page, search these locations for old links:
 - `src/CoreBundle/Controller/Admin/IndexBlocksController.php` — admin panel block links
-- `public/main/admin/index.php` — legacy admin panel
 - `public/main/template/default/` — legacy Twig templates
 - `assets/vue/components/` — Vue components linking to legacy pages (e.g., `social/MySkillsCard.vue`)
 - `public/main/inc/ajax/model.ajax.php` — jqGrid AJAX allowlists; remove the action from both the allowlist arrays and the `case` blocks

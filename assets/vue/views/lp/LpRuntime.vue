@@ -436,6 +436,11 @@ const isReportingMode = computed(() =>
 // tools, so the state has to live in the session where each of them reads it,
 // not in a client-side flag. The URL only carries the intent; entering the
 // runtime asks /toggle_student_view for it explicitly.
+//
+// Hence the default: the LP list links here without saying anything, because
+// "open the lesson" always means "as a learner", and a learner is gated out of
+// the toggle anyway. Only the callers that mean the opposite say so — the
+// builder and the import screens pass "false" to preview as a teacher.
 const wantsStudentView = computed(
   () =>
     isCStudioPreview.value ||

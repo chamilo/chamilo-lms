@@ -89,7 +89,6 @@ const openRoute = computed(() => ({
     Object.entries({
       ...props.legacyContext,
       node: undefined,
-      isStudentView: "true",
     }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
   ),
 }))

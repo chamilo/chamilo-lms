@@ -60,7 +60,6 @@ const openRoute = computed(() => ({
     Object.entries({
       ...routeCtx.value,
       node: undefined,
-      isStudentView: "true",
     }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
   ),
 }))

@@ -2720,15 +2720,15 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future session "Session in the futur" and include course
-    # Create session Session in the futur with start = 2026-02-03 and end = 2026-02-17
+  Scenario: Create future session "Session in the future" and include course
+    # Create session Session in the future with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
     And I wait for the element "[name='title']" to appear
     And I fill in the following:
-      | title             | Session in the futur |
+      | title             | Session in the future |
     And I set hidden field "access_start_date" to "2026-02-03 00:00"
     And I set hidden field "display_start_date" to "2026-02-03 00:00"
     And I set hidden field "coach_access_start_date" to "2026-02-03 00:00"
@@ -2861,15 +2861,15 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future English session "Session in the futur en" and include course
-    # Create session Session in the futur en with start = 2026-02-03 and end = 2026-02-17
+  Scenario: Create future English session "Session in the future en" and include course
+    # Create session Session in the future en with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
     And I wait very long for the page to be loaded
     And I zoom out to maximum
     And I click the "#advanced_params" element
     And I wait for the element "[name='title']" to appear
     And I fill in the following:
-      | title             | Session in the futur en |
+      | title             | Session in the future en |
     And I set hidden field "access_start_date" to "2026-04-26 00:00"
     And I set hidden field "display_start_date" to "2026-04-26 00:00"
     And I set hidden field "coach_access_start_date" to "2026-04-26 00:00"

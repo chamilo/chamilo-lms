@@ -184,7 +184,7 @@
 #   ALL in the past relative to this environment's current date
 #   (2026-08-05) by the time this port runs — none of them would still
 #   plausibly justify their own scenario name ("Present session" being
-#   "In progress", the two "futur" sessions being "Planned"). Session
+#   "In progress", the two "future" sessions being "Planned"). Session
 #   status here is a plain, manually-chosen FormValidator select (confirmed
 #   live: choosing "In progress" and saving just sets that value, it is not
 #   silently recomputed from the dates on save) — so this is about the
@@ -192,15 +192,15 @@
 #   Shifted every session's dates forward to straddle/precede/follow
 #   2026-08-05 as appropriate, keeping each source pair's own day-span
 #   (14 days) intact: Past session now ends just before Present session
-#   starts, Present session straddles today, both "futur" sessions sit
+#   starts, Present session straddles today, both "future" sessions sit
 #   comfortably after it. Exact absolute dates are otherwise arbitrary, same
 #   as the source's own were.
 #
 # SELF-CONTAINMENT: full cleanup, not left in place. Confirmed via a grep of
 # this suite's existing tests/playwright/features/*.feature (before writing
 # a single line here) that none of "Testing course en", "Testing course fr",
-# "Special", "Present session", "Session in the futur", "Session in the
-# futur en", or "Past session" collide with anything another file already
+# "Special", "Present session", "Session in the future", "Session in the
+# future en", or "Past session" collide with anything another file already
 # depends on. Given how much this creates (3 courses with real content
 # inside one of them, a teacher account, 4 sessions), leaving all of it
 # around indefinitely was judged worse than the cost of tearing it down —
@@ -370,6 +370,7 @@ Feature: Special case 1 — course/session creation
     When I follow "Forums"
     And I wait for the page to be loaded
     And I press "Ajouter une catégorie"
+    And I wait for the page content to settle
     And I fill in the following:
       | forum_category_title   | Course discussions |
       | forum_category_comment | Discussions for this course |
@@ -479,6 +480,18 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
+    # user_edit.php only renders reset_password=2 ("Set password manually")
+    # when security.admins_can_set_users_pass is on. Fresh-install default is
+    # off — a real CI snapshot of this step showed only "Don't reset password"
+    # / "Automatically generate a new password", then a 15-minute hang on
+    # input[name=reset_password][value=2]. Enable it here rather than
+    # depending on specialCase1PlatformSettings having finished first.
+    Given I am on "/admin/settings/security"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_admins_can_set_users_pass"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
     Given I am on "/admin/user-list?keyword=teacher1"
     And I wait for the page to be loaded
     And I click the "[title='Edit']" icon in the row for "teacher1@example.test"
@@ -537,14 +550,14 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future session "Session in the futur" and include course
+  Scenario: Create future session "Session in the future" and include course
     Given I am a platform administrator
 
     When I am on "/main/session/session_add.php"
     And I wait for the page to be loaded
     And I click the "#advanced_params" element
     And I fill in the following:
-      | title | Session in the futur |
+      | title | Session in the future |
     And I set hidden field "access_start_date" to "2026-08-20 00:00"
     And I set hidden field "display_start_date" to "2026-08-20 00:00"
     And I set hidden field "coach_access_start_date" to "2026-08-20 00:00"
@@ -633,14 +646,14 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future English session "Session in the futur en" and include course
+  Scenario: Create future English session "Session in the future en" and include course
     Given I am a platform administrator
 
     When I am on "/main/session/session_add.php"
     And I wait for the page to be loaded
     And I click the "#advanced_params" element
     And I fill in the following:
-      | title | Session in the futur en |
+      | title | Session in the future en |
     And I set hidden field "access_start_date" to "2026-09-10 00:00"
     And I set hidden field "display_start_date" to "2026-09-10 00:00"
     And I set hidden field "coach_access_start_date" to "2026-09-10 00:00"
@@ -702,22 +715,22 @@ Feature: Special case 1 — course/session creation
     # this scenario idempotent, so it doubles as a reset for a half-finished
     # previous run instead of dying on it.
     #
-    # Deletion ORDER still matters and is deliberate: "Session in the futur en"
-    # must go BEFORE "Session in the futur", because the latter's name is a
+    # Deletion ORDER still matters and is deliberate: "Session in the future en"
+    # must go BEFORE "Session in the future", because the latter's name is a
     # prefix of the former's, and the row lookup matches on contained text —
-    # so with both present, deleting "Session in the futur" could match the
+    # so with both present, deleting "Session in the future" could match the
     # "... en" row instead.
     Given I am on "/admin/session-list?keyword=Present+session"
     And I wait for the page to be loaded
     And I delete the session "Present session" if present
 
-    Given I am on "/admin/session-list?keyword=Session+in+the+futur+en"
+    Given I am on "/admin/session-list?keyword=Session+in+the+future+en"
     And I wait for the page to be loaded
-    And I delete the session "Session in the futur en" if present
+    And I delete the session "Session in the future en" if present
 
-    Given I am on "/admin/session-list?keyword=Session+in+the+futur"
+    Given I am on "/admin/session-list?keyword=Session+in+the+future"
     And I wait for the page to be loaded
-    And I delete the session "Session in the futur" if present
+    And I delete the session "Session in the future" if present
 
     # list_type=all is REQUIRED for this one session and no other: "Past
     # session" is created with access dates in the past, so it ends up with

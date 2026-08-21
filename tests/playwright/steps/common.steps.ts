@@ -1323,28 +1323,37 @@ async function pressButton(page: Page, label: string) {
       return
     }
   }
-  // Prefer a visible dialog when one is open. Vue create/edit dialogs often
-  // reuse the same accessible name as the toolbar button that opened them
-  // (GradebookListView: "Add classroom activity" is both the toolbar trigger
-  // AND the dialog submit). The toolbar button sits behind the dialog mask
-  // and is not clickable; matching it first hangs the full test timeout.
-  // Confirmed via toolAssessments.feature after the gradebook Vue migration.
-  const openDialog = page.locator('[role="dialog"]:visible').last()
+  // Prefer a visible PrimeVue dialog when one is open. Vue create/edit
+  // dialogs often reuse the same accessible name as the toolbar button that
+  // opened them (GradebookListView: "Add classroom activity" is both the
+  // toolbar trigger AND the dialog submit). The toolbar button sits behind
+  // the dialog mask and is not clickable; matching it first hangs the full
+  // test timeout. Confirmed via toolAssessments.feature after the gradebook
+  // Vue migration.
+  //
+  // Exclude TinyMCE's own role=dialog chrome (.tox-dialog / .tox-tbtn): a
+  // real CI failure in toolPortfolio.feature's comment dialog showed
+  // getByTitle("Save") resolving to TinyMCE's disabled toolbar Save button
+  // (aria-disabled=true, title=Save) inside the PrimeVue dialog, then
+  // click() retrying until the test timeout because that button is never
+  // enabled. The real submit is a BaseButton, not a tox toolbar control.
+  const openDialog = page.locator(".p-dialog:visible, [role='dialog']:visible:not(.tox-dialog)").last()
   if (await openDialog.count()) {
-    const dialogExact = openDialog.getByRole("button", { name: label, exact: true })
-    const dialogEnabled = dialogExact.locator('xpath=self::*[not(@aria-disabled="true")]')
-    if (await isSoonVisible(dialogEnabled, 1000)) {
-      await dialogEnabled.first().click()
+    const notToxOrDisabled =
+      'xpath=self::*[not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]'
+    const dialogExact = openDialog.getByRole("button", { name: label, exact: true }).locator(notToxOrDisabled)
+    if (await isSoonVisible(dialogExact, 1000)) {
+      await dialogExact.first().click()
       return
     }
-    const dialogTitle = openDialog.getByTitle(label, { exact: true })
+    const dialogTitle = openDialog.locator(`button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"])`)
     if (await isSoonVisible(dialogTitle, 1000)) {
       await dialogTitle.first().click()
       return
     }
-    const dialogText = openDialog.locator("button", {
-      hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`),
-    })
+    const dialogText = openDialog
+      .locator("button", { hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
+      .locator(notToxOrDisabled)
     if (await isSoonVisible(dialogText, 1000)) {
       await dialogText.first().click()
       return
@@ -1455,7 +1464,7 @@ async function pressButton(page: Page, label: string) {
   // at all). Confirmed via a real run that even the exact getByRole tier
   // above doesn't resolve these reliably, so this targets the `title`
   // attribute directly rather than relying on accessible-name computation.
-  const byTitle = page.getByTitle(label, { exact: true })
+  const byTitle = page.locator(`button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"]), a[title="${label}"]`)
   if (await isSoonVisible(byTitle)) {
     await byTitle.first().click()
     return
@@ -1866,7 +1875,7 @@ Then("I delete the session {string} if present", async ({ page }, sessionName: s
     return
   }
   page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
-  await row.locator(".mdi-delete").first().click()
+  await row.locator("button[title='Delete'], a[title='Delete'], .mdi-delete").first().click()
   await pressButton(page, "Yes")
   await expect(page.locator("body")).not.toContainText(sessionName)
 })
@@ -1891,9 +1900,8 @@ Then("I follow {string} if it is visible", async ({ page }, link: string) => {
     page.locator(`a:has-text("${link}")`),
   ]
   for (const locator of candidates) {
-    const first = locator.first()
-    if (await first.isVisible().catch(() => false)) {
-      await first.click()
+    if (await isSoonVisible(locator, 8000)) {
+      await locator.first().click()
       return
     }
   }

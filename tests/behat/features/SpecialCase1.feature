@@ -2089,21 +2089,21 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future session "Session in the futur" and include course
+  Scenario: Create future session "Session in the future" and include course
     Given I am a platform administrator
     And I wait very long for the page to be loaded
 
-    # Create session Session in the futur with start = 2026-02-03 and end = 2026-02-17
+    # Create session Session in the future with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
     And I wait very long for the page to be loaded
     And I fill in the following:
-      | name       | Session in the futur |
+      | name       | Session in the future |
       | start_date | 2026-02-03 |
       | end_date   | 2026-02-17 |
     And I fill in select2 input "#coach_username" with id "1" and value "teacher"
     And I press "submit"
     And I wait very long for the page to be loaded
-    Then I should see "Add courses to this session (Session in the futur)"
+    Then I should see "Add courses to this session (Session in the future)"
 
     # Open advanced settings and set session status to Planned
     When I press "Advanced settings"
@@ -2211,21 +2211,21 @@ Feature: Special admin settings flows
     And I wait very long for the page to be loaded
     Then I should not see an error
 
-  Scenario: Create future English session "Session in the futur en" and include course
+  Scenario: Create future English session "Session in the future en" and include course
     Given I am a platform administrator
     And I wait very long for the page to be loaded
 
-    # Create session Session in the futur en with start = 2026-02-03 and end = 2026-02-17
+    # Create session Session in the future en with start = 2026-02-03 and end = 2026-02-17
     When I am on "/main/session/session_add.php"
     And I wait very long for the page to be loaded
     And I fill in the following:
-      | name       | Session in the futur en |
+      | name       | Session in the future en |
       | start_date | 2026-02-03 |
       | end_date   | 2026-02-17 |
     And I fill in select2 input "#coach_username" with id "1" and value "teacher"
     And I press "submit"
     And I wait very long for the page to be loaded
-    Then I should see "Add courses to this session (Session in the futur en)"
+    Then I should see "Add courses to this session (Session in the future en)"
 
     # Open advanced settings and set session status to Planned
     When I press "Advanced settings"

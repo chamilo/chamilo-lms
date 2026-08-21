@@ -309,7 +309,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I am logged as "admin"
     And I wait for the page to be loaded
 
-    Given I am on "/admin/settings/search_settings?keyword=allow_general_certificate"
+    Given I am on "/admin/settings/certificate"
     And I wait for the page to be loaded
     And I select "Yes" from "form_allow_general_certificate"
     And I press "Save settings"

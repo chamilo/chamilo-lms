@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -45,7 +45,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly CidReqHelper $cidReqHelper,
-        private readonly StudentViewHelper $studentViewHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -88,7 +88,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $parentNode = $this->getParentNode($this->entityManager, $request);
-        $showHidden = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
+        $showHidden = $this->isAllowedToEditHelper->check(coach: true);
         $user = $this->getCurrentUser();
         $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($this->cidReqHelper);
 

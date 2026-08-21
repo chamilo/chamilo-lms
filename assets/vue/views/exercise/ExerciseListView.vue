@@ -593,6 +593,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import exerciseService from "../../services/exerciseService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
@@ -999,6 +1000,8 @@ function displayText(value, fallback = "") {
 }
 
 onMounted(loadExercises)
+
+useStudentViewRefresh(loadExercises)
 
 watch(
   () => route.query,

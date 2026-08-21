@@ -449,7 +449,6 @@ function getContextParams(extra = {}) {
     type: getQueryValue(route.query.type),
     returnToLp: getQueryValue(route.query.returnToLp),
     embedded: getQueryValue(route.query.embedded),
-    isStudentView: getQueryValue(route.query.isStudentView),
     ...extra,
   }
 }

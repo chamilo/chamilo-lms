@@ -1704,7 +1704,6 @@ function getContextParams() {
     returnToLp: getQueryValue(route.query.returnToLp),
     embedded: getQueryValue(route.query.embedded),
     gradebook: getQueryValue(route.query.gradebook),
-    isStudentView: getQueryValue(route.query.isStudentView),
     preview: getQueryValue(route.query.preview),
     review: getQueryValue(route.query.review),
     mode: getQueryValue(route.query.mode),

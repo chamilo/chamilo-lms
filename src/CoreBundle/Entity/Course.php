@@ -51,7 +51,7 @@ use const SORT_NATURAL;
             normalizationContext: [
                 'groups' => ['course_catalogue:read'],
             ],
-            filters: [ExtraFieldFilter::class],
+            filters: [ExtraFieldFilter::class, SearchFilter::class, OrderFilter::class],
             provider: PublicCatalogueCourseStateProvider::class
         ),
         new GetCollection(

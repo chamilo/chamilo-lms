@@ -61,6 +61,13 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
+        // Catalogue cards then fire extra-field and vote requests from the same
+        // browser. Holding the session lock here serializes those follow-ups
+        // and can leave the Vue page on "Loading courses. Please wait."
+        if (\function_exists('session_write_close')) {
+            session_write_close();
+        }
+
         $queryBuilder = $this->createQueryBuilder();
         $queryNameGenerator = new QueryNameGenerator();
 
@@ -71,6 +78,15 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $operation,
             $context
         );
+
+        $filters = $context['filters'] ?? [];
+        $titleFilter = $filters['title'] ?? null;
+        if (\is_string($titleFilter) && '' !== $titleFilter) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->like('c.title', ':catalogueTitle'))
+                ->setParameter('catalogueTitle', '%'.$titleFilter.'%')
+            ;
+        }
 
         $this->paginationExtension->applyToCollection(
             $queryBuilder,

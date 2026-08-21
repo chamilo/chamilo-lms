@@ -91,6 +91,11 @@ Feature: Course catalogue and extra fields
     Given I am a platform administrator
 
   Scenario: Create three courses for catalogue testing
+    Given I am on "/admin/settings/catalog"
+    And I wait for the page to be loaded
+    When I select the value "false" from "form_only_show_selected_courses"
+    And I press "Save settings"
+    And I wait for the page to be loaded
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
     When I fill in "title" with "testcourse"
@@ -124,8 +129,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "test"
     And I press "Apply advanced filters"
-    And I should not see "Loading courses. Please wait."
-    And I wait for the page content to settle
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "testcourse"
     And I should see "grammartest"
     And I should not see "grammarcourse"
@@ -136,8 +140,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "course"
     And I press "Apply advanced filters"
-    And I should not see "Loading courses. Please wait."
-    And I wait for the page content to settle
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "testcourse"
     And I should see "grammarcourse"
     And I should not see "grammartest"
@@ -188,8 +191,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "extra-duration" with "22:22:22"
     And I press "Apply advanced filters"
-    And I should not see "Loading courses. Please wait."
-    And I wait for the page content to settle
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "grammartest"
     And I should not see "testcourse"
     And I should not see "grammarcourse"

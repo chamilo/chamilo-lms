@@ -180,22 +180,27 @@ async function loginAs(page: Page, username: string) {
   // pays the logout+retry cost in the genuine cross-login-call case this
   // fix targets.
   await page.goto("/login")
+  await page.waitForLoadState("domcontentloaded")
   if (!(await page.locator("#login").isVisible().catch(() => false))) {
     await page.goto("/logout")
     await page.goto("/login")
+    await page.waitForLoadState("domcontentloaded")
   }
   const loginField = page.locator("#login")
+  await expect(loginField).toBeVisible({ timeout: 15_000 })
   await loginField.click()
   await loginField.fill(username)
   const passwordField = page.locator("#password")
   await passwordField.click()
   await passwordField.fill(username)
-  await page
-    .locator(
-      "form.login-section__form button[type='submit'], button:has-text('Sign in'), input[type='submit'][value='Sign in']",
-    )
-    .first()
-    .click()
+  // Scope to the login form. A broader `button:has-text('Sign in')` can race
+  // a SPA redirect after fill: the form is already gone, click() then waits
+  // the rest of the test timeout for a Sign in button that will never return
+  // (webserverLoad's non-admin scenario: snapshot already showed Sign out).
+  const signIn = page.locator("form.login-section__form button[type='submit']")
+  if (await signIn.isVisible().catch(() => false)) {
+    await signIn.click()
+  }
   // Do not waitForURL({ waitUntil: "load" }): SPA login never fires load, and
   // that hung the full test timeout. Do not use "commit" either: a CI run
   // continued before the session cookie was stored, then the next navigation
@@ -971,6 +976,7 @@ When("I select {string} from the ajax select {string}", async ({ page }, optionT
 // "select" + N "additionally select" sequence in these .feature files, so
 // starting from a clean selection is exactly right.
 Then("I select {string} from {string}", async ({ page }, optionLabel: string, field: string) => {
+  await failIfLoginPage(page, `select "${optionLabel}" from "${field}"`)
   await (await resolveField(page, field)).selectOption({ label: optionLabel })
 })
 
@@ -985,6 +991,7 @@ Then("I select {string} from {string}", async ({ page }, optionLabel: string, fi
 // under that locale. The underlying <option value="true"|"false"> values are
 // never translated, so selecting by value sidesteps the whole problem.
 Then("I select the value {string} from {string}", async ({ page }, optionValue: string, field: string) => {
+  await failIfLoginPage(page, `select value "${optionValue}" from "${field}"`)
   await (await resolveField(page, field)).selectOption({ value: optionValue })
 })
 
@@ -1287,10 +1294,12 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
   await page.goto("/login")
   await page.locator("#login").fill("admin")
   await page.locator("#password").fill("admin")
-  await page
-    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
-    .first()
-    .click()
+  const signIn = page.locator("form.login-section__form button[type='submit']")
+  if (await signIn.isVisible().catch(() => false)) {
+    await signIn.click()
+  } else {
+    await page.locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]').first().click()
+  }
   // Same settle rule as loginAs(): leave /login, no networkidle (see comment there).
   await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
   return page
@@ -1324,7 +1333,53 @@ async function isSoonVisible(locator: ReturnType<Page["locator"]>, timeoutMs = 2
   }
 }
 
+async function failIfLoginPage(page: Page, action: string): Promise<void> {
+  if (action.includes("Sign in")) {
+    return
+  }
+  const onLogin = await page
+    .getByRole("heading", { name: "Sign in", exact: true })
+    .isVisible()
+    .catch(() => false)
+  if (onLogin) {
+    throw new Error(`Cannot ${action}: the session was lost and the login page is showing.`)
+  }
+}
+
+async function dismissBlockingUi(page: Page): Promise<void> {
+  const toastClose = page.locator(".p-toast-close-button:visible")
+  if ((await toastClose.count()) > 0) {
+    await toastClose.first().click({ timeout: 1_000 }).catch(() => {})
+  }
+}
+
+async function clickFirstOrForce(locator: ReturnType<Page["locator"]>, page: Page): Promise<void> {
+  const target = locator.first()
+  try {
+    await target.click({ timeout: 8_000 })
+  } catch {
+    await dismissBlockingUi(page)
+    await target.click({ force: true, timeout: 5_000 })
+  }
+}
+
+async function syncTinymce(page: Page): Promise<void> {
+  await page
+    .evaluate(() => {
+      const tinymce = (window as any).tinymce
+      if (tinymce?.triggerSave) {
+        tinymce.triggerSave()
+      }
+    })
+    .catch(() => {})
+}
+
 async function pressButton(page: Page, label: string) {
+  await failIfLoginPage(page, `press "${label}"`)
+  await dismissBlockingUi(page)
+  if ("Save" === label || "Save settings" === label) {
+    await syncTinymce(page)
+  }
   if (looksLikeIdentifier(label)) {
     // Same hidden-proxy-vs-visible-widget situation as resolveField() above
     // can apply to buttons too, hence :visible here as well.
@@ -1473,6 +1528,13 @@ async function pressButton(page: Page, label: string) {
   // ahead of the label text (class "fm-button-icon-left"), which becomes
   // part of the computed accessible name and breaks an {exact: true} match
   // even though a non-exact getByRole (or this CSS selector) matches fine.
+  const submitExact = page
+    .locator('button[type="submit"]:not([disabled]):not([aria-disabled="true"]):not(.tox-tbtn)')
+    .filter({ hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
+  if (await isSoonVisible(submitExact, 1000)) {
+    await submitExact.first().click()
+    return
+  }
   const fmButton = page.locator(`a.fm-button:has-text("${label}")`)
   if (await isSoonVisible(fmButton)) {
     await fmButton.first().click()
@@ -1950,6 +2012,8 @@ Then("I follow {string} if it is visible", async ({ page }, link: string) => {
 })
 
 When("I follow {string}", async ({ page }, link: string) => {
+  await failIfLoginPage(page, `follow "${link}"`)
+  await dismissBlockingUi(page)
   if (looksLikeIdentifier(link)) {
     const byId = page.locator(`#${link}:visible`)
     if (await byId.count()) {
@@ -1987,9 +2051,17 @@ When("I follow {string}", async ({ page }, link: string) => {
     await byTitle.first().click()
     return
   }
+  const roleLinkExact = page.getByRole("link", { name: link, exact: true })
+  if (await isSoonVisible(roleLinkExact, 6000)) {
+    await clickFirstOrForce(roleLinkExact, page)
+    return
+  }
+  // Non-exact last among role matches: "Exercise 1" would otherwise also
+  // match "Exercise 1 - Copy" and click() the first of two, which is usually
+  // the intended row — keep it only when an exact accessible name is absent.
   const roleLink = page.getByRole("link", { name: link })
-  if (await isSoonVisible(roleLink, 6000)) {
-    await roleLink.first().click()
+  if (await isSoonVisible(roleLink, 3000)) {
+    await clickFirstOrForce(roleLink, page)
     return
   }
   // Not in the original Mink cascade — new. toolWork.feature's Vue
@@ -1997,8 +2069,9 @@ When("I follow {string}", async ({ page }, link: string) => {
   // attribute at all (confirmed via a real DOM dump) — without an href, it
   // has no implicit "link" role, so getByRole("link") never matches it.
   // Falls back to a plain exact-text match, which works regardless of the
-  // element's actual role/tag.
-  await page.getByText(link, { exact: true }).first().click()
+  // element's actual role/tag. Visible-only: a hidden sidebar label with the
+  // same text sorts first in DOM order and is never actionable.
+  await page.getByText(link, { exact: true }).filter({ visible: true }).first().click()
 })
 
 // Not ported — new, for toolUsers.feature. Real CI failure on a fresh,
@@ -2323,6 +2396,10 @@ Then("the URL should be the site root", async ({ page }) => {
 // "Developer Copy" then "Developer" are both gone after each delete).
 Then("I should not see {string}", async ({ page }, text: string) => {
   await expect(page.locator("body")).not.toContainText(text)
+})
+
+When("I wait until I no longer see {string}", async ({ page }, text: string) => {
+  await expect(page.locator("body")).not.toContainText(text, { timeout: 30_000 })
 })
 
 // FeatureContext::waitForThePageToBeLoaded() / waitVeryLongForThePageToBeLoaded()
@@ -2734,6 +2811,7 @@ When("I press \"Next question\" until {string} appears", async ({ page }, nextTi
 })
 
 When("I start the exercise", async ({ page }) => {
+  await failIfLoginPage(page, "start the exercise")
   const startControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
     hasText: /^\s*(Start test|Proceed with the test)\s*$/,
   })

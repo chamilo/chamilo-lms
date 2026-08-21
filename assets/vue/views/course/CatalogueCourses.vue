@@ -269,6 +269,7 @@ function resetCatalogueState() {
   loadGeneration += 1
   courses.value = []
   totalCourses.value = 0
+  status.value = false
 }
 
 function getRouteFilterPayload() {
@@ -328,59 +329,85 @@ const load = async () => {
       totalCourses.value = courseCatalogue.totalItems
     }
 
+    // Paint titles as soon as the catalogue page returns. Extra-field values
+    // and votes are enrichment; waiting on them kept "Loading courses" stuck
+    // (and Matching at 0) whenever those secondary requests stalled.
+    courses.value.push(
+      ...courseCatalogue.items.map((c) => ({
+        ...c,
+        extra_fields: c.extra_fields || {},
+        subscriptionLimitEnabled: false,
+        subscriptionLimit: 0,
+        subscriptionCount: 0,
+        subscriptionLimitReached: false,
+        subscriptionLimitTooltip: "",
+      })),
+    )
+    status.value = false
+
     const courseIds = courseCatalogue.items.map((c) => c.id)
     const ids = courseIds.join(",")
 
     if (ids) {
-      const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
-        baseService.get("/catalogue/course-extra-field-values", { ids }),
-        loadCourseSubscriptionStatuses(courseIds),
-      ])
+      try {
+        const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
+          baseService.get("/catalogue/course-extra-field-values", { ids }),
+          loadCourseSubscriptionStatuses(courseIds),
+        ])
 
-      if (generation !== loadGeneration) {
-        return
-      }
+        if (generation !== loadGeneration) {
+          return
+        }
 
-      courses.value.push(
-        ...courseCatalogue.items.map((c) => {
-          const limitInfo = subscriptionStatuses[c.id] || {}
+        courses.value = courses.value.map((course) => {
+          if (!courseIds.includes(course.id)) {
+            return course
+          }
+
+          const limitInfo = subscriptionStatuses[course.id] || {}
 
           return {
-            ...c,
-            extra_fields: extraFieldsResponse[c.id] || {},
+            ...course,
+            extra_fields: extraFieldsResponse[course.id] || course.extra_fields || {},
             subscriptionLimitEnabled: Boolean(limitInfo.subscriptionLimitEnabled),
             subscriptionLimit: Number(limitInfo.subscriptionLimit || 0),
             subscriptionCount: Number(limitInfo.subscriptionCount || 0),
             subscriptionLimitReached: Boolean(limitInfo.subscriptionLimitReached),
             subscriptionLimitTooltip: limitInfo.subscriptionLimitTooltip || "",
           }
-        }),
-      )
+        })
+      } catch (error) {
+        console.error("Error loading catalogue course extras", error)
+      }
     }
 
     if (currentUserId) {
-      const votes = await userRelCourseVoteService.getUserVotes({
-        userId: currentUserId,
-        urlId: window.access_url_id,
-      })
+      try {
+        const votes = await userRelCourseVoteService.getUserVotes({
+          userId: currentUserId,
+          urlId: window.access_url_id,
+        })
 
-      if (generation !== loadGeneration) {
-        return
-      }
-
-      for (const vote of votes) {
-        let courseId
-
-        if (typeof vote.course === "object" && vote.course !== null) {
-          courseId = vote.course.id
-        } else if (typeof vote.course === "string") {
-          courseId = parseInt(vote.course.split("/").pop())
+        if (generation !== loadGeneration) {
+          return
         }
 
-        const course = courses.value.find((c) => c.id === courseId)
-        if (course) {
-          course.userVote = vote
+        for (const vote of votes) {
+          let courseId
+
+          if (typeof vote.course === "object" && vote.course !== null) {
+            courseId = vote.course.id
+          } else if (typeof vote.course === "string") {
+            courseId = parseInt(vote.course.split("/").pop())
+          }
+
+          const course = courses.value.find((c) => c.id === courseId)
+          if (course) {
+            course.userVote = vote
+          }
         }
+      } catch (error) {
+        console.error("Error loading catalogue votes", error)
       }
     }
   } catch (error) {

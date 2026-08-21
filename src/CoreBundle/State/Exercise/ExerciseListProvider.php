@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -37,6 +38,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 final readonly class ExerciseListProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const LP_READ_ONLY_MESSAGE = 'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.';
@@ -48,6 +51,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -63,7 +67,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManage = $this->canManageExercises();
+        $canManage = $this->canManageExercises($this->isAllowedToEditHelper);
         $canCreate = $canManage;
 
         if (!$canManage && !$this->canViewExercises()) {
@@ -88,13 +92,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->isExerciseTeacher($this->security);
     }
 
     /**

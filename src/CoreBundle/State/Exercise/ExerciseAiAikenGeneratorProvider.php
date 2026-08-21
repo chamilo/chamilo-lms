@@ -12,11 +12,11 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseAiAikenGenerator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -28,12 +28,14 @@ use const PATHINFO_EXTENSION;
  */
 final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -47,7 +49,7 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to use the AI Aiken generator in this context.');
         }
 
@@ -72,12 +74,6 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
         $response->message = $this->getStatusMessage($courseGeneratorEnabled, $aiHelpersEnabled, $textProviders);
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isSettingEnabled(string $settingName): bool

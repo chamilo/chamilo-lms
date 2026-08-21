@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -33,6 +34,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -41,6 +44,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -58,7 +62,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to delete this exercise attempt.');
         }
 
@@ -90,12 +94,6 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         $response->message = 'Attempt deleted';
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

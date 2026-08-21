@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseCategoryManagement;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
@@ -19,7 +20,6 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -30,6 +30,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseCategoryManagementProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const ACTION_CREATE = 'create';
     private const ACTION_UPDATE = 'update';
     private const ACTION_DELETE = 'delete';
@@ -39,9 +41,9 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private Security $security,
         private SettingsManager $settingsManager,
         private CQuizQuestionCategoryRepository $questionCategoryRepository,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -59,7 +61,7 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise categories in this context.');
         }
 
@@ -107,12 +109,6 @@ final readonly class ExerciseCategoryManagementProcessor implements ProcessorInt
         }
 
         return $categoryType;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function createCategory(string $categoryType, ExerciseCategoryManagement $data, Course $course, ?Session $session): string

@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -46,6 +47,8 @@ use Throwable;
  */
 final readonly class ExerciseConfigurationProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const FEEDBACK_TYPE_DIRECT = 1;
     private const FEEDBACK_TYPE_EXAM = 2;
     private const FEEDBACK_TYPE_POPUP = 3;
@@ -63,6 +66,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private Security $security,
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -82,7 +86,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
         }
         $this->getLanguageFromCode($data->language);
@@ -441,12 +445,6 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         }
 
         return $value;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isProgressiveAdaptiveSettingEnabled(): bool

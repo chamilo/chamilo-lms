@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseCategoryManagement;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
@@ -19,7 +20,6 @@ use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -29,6 +29,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 final readonly class ExerciseCategoryManagementProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     public const TYPE_EXERCISE = 'exercise';
     public const TYPE_QUESTION = 'question';
 
@@ -36,8 +38,8 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -51,7 +53,7 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise categories in this context.');
         }
 
@@ -86,12 +88,6 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
         }
 
         return $categoryType;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     /**

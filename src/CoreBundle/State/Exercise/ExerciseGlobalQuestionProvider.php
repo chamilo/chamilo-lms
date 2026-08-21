@@ -12,10 +12,10 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseGlobalQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,11 +27,13 @@ use const ENT_QUOTES;
  */
 final readonly class ExerciseGlobalQuestionProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private Security $security,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -47,7 +49,7 @@ final readonly class ExerciseGlobalQuestionProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to create exercise questions in this context.');
         }
 
@@ -58,12 +60,6 @@ final readonly class ExerciseGlobalQuestionProvider implements ProviderInterface
         $response->canManage = true;
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     /**

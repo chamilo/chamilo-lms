@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -34,6 +35,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseQuestionBankProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -41,6 +44,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -54,7 +58,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to manage the question bank in this context.');
         }
 
@@ -91,12 +95,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         $response->canDelete = $this->canRunRestrictedAction();
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

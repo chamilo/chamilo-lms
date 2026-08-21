@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -37,6 +38,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeReportBulkActionProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const ACTION_DELETE_SELECTED = 'delete_selected';
     private const ACTION_CLEAN_BEFORE_DATE = 'clean_before_date';
     private const ACTION_RECALCULATE_ALL = 'recalculate_all';
@@ -50,6 +53,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
         private ExerciseAttemptScoringService $scoringService,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -67,7 +71,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to run this exercise report action.');
         }
 
@@ -92,12 +96,6 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
             self::ACTION_RECALCULATE_ALL => $this->recalculateAll($data, $quiz, $course, $session),
             default => throw new BadRequestHttpException('Unsupported report bulk action.'),
         };
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

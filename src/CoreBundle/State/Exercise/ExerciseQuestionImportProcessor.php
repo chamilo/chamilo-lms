@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionImport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -25,7 +26,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -39,6 +39,8 @@ use ZipArchive;
  */
 final readonly class ExerciseQuestionImportProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -51,9 +53,9 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private Security $security,
         private CQuizQuestionCategoryRepository $questionCategoryRepository,
         private ExerciseQti2ImportService $qti2ImportService,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -67,7 +69,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to import exercises in this context.');
         }
 
@@ -89,12 +91,6 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
         }
 
         return $this->processAikenImport($uploadedFile, $request, $course, $session);
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function normalizeImportType(string $importType): string

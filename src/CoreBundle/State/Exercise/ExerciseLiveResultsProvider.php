@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateInterval;
@@ -21,7 +22,6 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -40,6 +40,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseLiveResultsProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const STATUS_COMPLETED = 'completed';
@@ -53,7 +55,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
-        private Security $security,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -67,7 +69,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('You are not allowed to view live exercise results.');
         }
 
@@ -98,12 +100,6 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         $response->canManage = true;
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -143,7 +139,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises($this->isAllowedToEditHelper)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 

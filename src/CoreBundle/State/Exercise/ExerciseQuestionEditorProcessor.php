@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -47,6 +48,8 @@ use const SYS_PLUGIN_PATH;
  */
 final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -89,6 +92,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         private CQuizQuestionRepository $questionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -108,7 +112,10 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        // The global question bank is not course scoped, so a question manager keeps access
+        // even where the course rules would deny it.
+        if (!$this->canManageExercises($this->isAllowedToEditHelper)
+            && !$this->security->isGranted('ROLE_QUESTION_MANAGER')) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }
 
@@ -752,14 +759,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             'image/gif' => 'gif',
             default => 'png',
         };
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_QUESTION_MANAGER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

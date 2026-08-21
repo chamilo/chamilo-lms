@@ -513,9 +513,6 @@ function getContextParams() {
     params.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return params;
 }
@@ -569,9 +566,6 @@ function getPageRoute(reflink = "index") {
     query.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return {
     name: "WikiPage",

@@ -438,6 +438,7 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue";
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
 import wikiService from "../../services/wikiService";
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n();
 const route = useRoute();
@@ -547,9 +548,6 @@ function getSharedQuery() {
     query.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return query;
 }
@@ -917,6 +915,8 @@ async function loadPage() {
 
 onMounted(loadPage);
 
+useStudentViewRefresh(loadPage);
+
 watch(
   () => [
     route.params.node,
@@ -924,7 +924,6 @@ watch(
     route.query.sid,
     route.query.gid,
     route.query.title,
-    route.query.isStudentView,
   ],
   loadPage,
 );

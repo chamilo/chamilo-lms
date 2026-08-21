@@ -294,6 +294,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import wikiService from "../../services/wikiService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -355,9 +356,6 @@ function getSharedQuery() {
     query.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return query
 }
@@ -580,5 +578,7 @@ async function loadHistory() {
 }
 
 onMounted(loadHistory)
+
+useStudentViewRefresh(loadHistory)
 watch(() => route.fullPath, loadHistory)
 </script>

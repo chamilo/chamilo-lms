@@ -205,6 +205,11 @@ final class AiProviderFactory
         $configJson = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
 
         if (\is_string($configJson)) {
+            $configJson = trim($configJson);
+            if ('' === $configJson) {
+                return [];
+            }
+
             $decoded = json_decode($configJson, true);
 
             if (!\is_array($decoded)) {

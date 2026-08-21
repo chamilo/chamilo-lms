@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -23,12 +21,6 @@ if (null === $course || null === $resourceNode) {
 
 $sessionId = (int) api_get_session_id();
 $groupId = (int) api_get_group_id();
-$studentViewKey = 'student_view_course_'.$courseId;
-
-if (isset($_GET['switch_student_view'])) {
-    Session::write($studentViewKey, '1' === (string) $_GET['switch_student_view'] ? 1 : 0);
-}
-
 $query = [
     'cid' => $courseId,
     'sid' => $sessionId,

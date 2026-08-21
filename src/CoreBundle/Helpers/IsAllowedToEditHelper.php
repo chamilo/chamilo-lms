@@ -146,8 +146,10 @@ readonly class IsAllowedToEditHelper
 
     /**
      * Whether an administrator froze this course's content for every session that uses it.
+     *
+     * Public because tools whose own rules go beyond check() still have to respect the lock.
      */
-    private function isCourseLockedInsideSessions(Course $course): bool
+    public function isCourseLockedInsideSessions(Course $course): bool
     {
         if ('true' !== $this->settingsManager->getSetting('session.session_courses_read_only_mode', true)) {
             return false;

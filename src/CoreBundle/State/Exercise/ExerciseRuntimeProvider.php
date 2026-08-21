@@ -21,8 +21,8 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -59,8 +59,6 @@ use const PREG_OFFSET_CAPTURE;
  */
 final readonly class ExerciseRuntimeProvider implements ProviderInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -97,6 +95,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         private CGlossaryRepository $glossaryRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -112,7 +111,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManagePermission = $this->isExerciseTeacher($this->security);
+        $canManagePermission = $this->userHelper->isTeacherOfCurrentCourse();
         $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
         $canManage = $canManagePermission && !$runsAsLearner;
 
@@ -522,7 +521,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->isExerciseTeacher($this->security);
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isLearnerRuntimeRequest(Request $request): bool

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -46,6 +47,7 @@ final readonly class ExerciseRuntimeResultEmailService
         private SettingsManager $settingsManager,
         private Environment $twig,
         private TranslatorInterface $translator,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -57,7 +59,7 @@ final readonly class ExerciseRuntimeResultEmailService
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to email exercise results.');
         }
 
@@ -79,7 +81,7 @@ final readonly class ExerciseRuntimeResultEmailService
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to email this exercise attempt.');
         }
 
@@ -198,12 +200,6 @@ final readonly class ExerciseRuntimeResultEmailService
         $this->mailer->send($email);
     }
 
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
     private function getCurrentUser(): User
     {
         $user = $this->security->getUser();
@@ -281,7 +277,7 @@ final readonly class ExerciseRuntimeResultEmailService
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 

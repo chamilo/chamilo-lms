@@ -20,8 +20,8 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -47,8 +47,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -64,6 +62,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
         private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -98,7 +97,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->isExerciseTeacher($this->security));
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->userHelper->isTeacherOfCurrentCourse());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
         if (!$question instanceof CQuizQuestion) {

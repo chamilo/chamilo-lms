@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
@@ -30,8 +29,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 final readonly class ExerciseCategoryManagementProvider implements ProviderInterface
 {
-    use ExerciseAccessHelperTrait;
-
     public const TYPE_EXERCISE = 'exercise';
     public const TYPE_QUESTION = 'question';
 
@@ -54,7 +51,7 @@ final readonly class ExerciseCategoryManagementProvider implements ProviderInter
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise categories in this context.');
         }
 

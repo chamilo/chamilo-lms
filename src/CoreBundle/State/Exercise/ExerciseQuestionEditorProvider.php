@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -49,8 +48,6 @@ use const SYS_PLUGIN_PATH;
  */
 final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -112,7 +109,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         // The global question bank is not course scoped, so a question manager keeps access
         // even where the course rules would deny it.
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)
+        if (!$this->isAllowedToEditHelper->check(coach: true)
             && !$this->security->isGranted('ROLE_QUESTION_MANAGER')) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }

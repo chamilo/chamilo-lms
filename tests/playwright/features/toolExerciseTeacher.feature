@@ -113,7 +113,7 @@
 # type-agnostic success message) while actually registering mmosquera with
 # `status: 5` (STUDENT) instead of `status: 1` (TEACHER) — which then made
 # every subsequent scenario's `canManage` check silently false
-# (ExerciseListProvider::canManageExercises() requires
+# (IsAllowedToEditHelper::check() requires
 # ROLE_CURRENT_COURSE_TEACHER/_SESSION_TEACHER), hanging every "I follow
 # 'Tests'"/"Question categories'"/"'Create exercise'" click for the full
 # 90s test timeout with no direct clue why. Fixed by asserting on the URL

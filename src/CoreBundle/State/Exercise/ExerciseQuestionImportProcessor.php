@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -40,8 +39,6 @@ use ZipArchive;
  */
 final readonly class ExerciseQuestionImportProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
@@ -70,7 +67,7 @@ final readonly class ExerciseQuestionImportProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to import exercises in this context.');
         }
 

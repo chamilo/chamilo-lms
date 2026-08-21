@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -42,8 +41,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseListActionProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const ACTION_COPY = 'copy';
     private const ACTION_DELETE = 'delete';
     private const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
@@ -87,7 +84,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
         }
 

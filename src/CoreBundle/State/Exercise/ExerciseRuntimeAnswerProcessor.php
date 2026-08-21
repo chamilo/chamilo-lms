@@ -22,9 +22,9 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -62,8 +62,6 @@ use const PATHINFO_EXTENSION;
  */
 final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -95,6 +93,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private Security $security,
         private SettingsManager $settingsManager,
         private ResourceNodeRepository $resourceNodeRepository,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -131,7 +130,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->isExerciseTeacher($this->security));
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->userHelper->isTeacherOfCurrentCourse());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
 
@@ -523,7 +522,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->isExerciseTeacher($this->security);
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool

@@ -19,9 +19,9 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -52,8 +52,6 @@ use Throwable;
  */
 final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const STATUS_COMPLETED = 'completed';
     private const STATUS_LEGACY_COMPLETED = '';
     private const ANNOTATION = 20;
@@ -85,6 +83,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -106,7 +105,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $canManage = $this->canManageExercises($this->isAllowedToEditHelper);
+        $canManage = $this->isAllowedToEditHelper->check(coach: true);
         if (!$canManage && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to view this exercise result.');
         }
@@ -277,7 +276,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->isExerciseTeacher($this->security);
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isReviewMode(TrackEExercise $attempt, bool $canManage, Request $request): bool

@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -36,8 +35,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const ACTION_REUSE = 'reuse';
     private const ACTION_DELETE = 'delete';
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
@@ -67,7 +64,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage the question bank in this context.');
         }
 

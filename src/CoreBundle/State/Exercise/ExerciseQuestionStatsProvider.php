@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -36,8 +35,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_COMPLETED = '';
 
@@ -91,7 +88,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to view these exercise statistics.');
         }
 
@@ -155,7 +152,7 @@ final readonly class ExerciseQuestionStatsProvider implements ProviderInterface
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 

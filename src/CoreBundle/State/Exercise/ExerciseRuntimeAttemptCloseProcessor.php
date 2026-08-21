@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
-use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
@@ -33,8 +32,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class ExerciseRuntimeAttemptCloseProcessor implements ProcessorInterface
 {
-    use ExerciseAccessHelperTrait;
-
     private const STATUS_INCOMPLETE = 'incomplete';
 
     public function __construct(
@@ -61,7 +58,7 @@ final readonly class ExerciseRuntimeAttemptCloseProcessor implements ProcessorIn
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises($this->isAllowedToEditHelper)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to close this exercise attempt.');
         }
 

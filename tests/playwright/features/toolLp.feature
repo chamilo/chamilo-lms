@@ -147,6 +147,12 @@ Feature: LP tool
     When I press "Show"
     Then I should see an icon with title "Hide"
 
+  # These two navigate to a LEGACY page under public/main with isStudentView in the URL.
+  # Do not "clean that up": they are the regression guard for the guard added to
+  # LegacyListener, which stops interpreting the parameter on API requests but must keep
+  # honouring it on full page loads like this one. The SPA no longer sends it anywhere.
+  # They leave the session in the student view, which is only safe because Playwright gives
+  # each test a fresh browser context.
   Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
     Given I am on "/admin/settings/lp"
     And I wait for the page to be loaded when ready

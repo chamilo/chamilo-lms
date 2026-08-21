@@ -77,6 +77,83 @@
 #   The actual authorization decision is still fully enforced afterward by
 #   `SwitchUserSubscriber`, which always delegates to
 #   `LoginAsAuthorizationChecker` regardless of who reaches the controller.
+# - **`user_add.php` itself has now been migrated to the Vue SPA** (`/admin/user-add`,
+#   data/action via `/admin/user-add-data` / `/admin/user-add-action` — see
+#   `UserAddController.php`, `UserAdd.vue`). Every scenario that used to hit the
+#   legacy page directly now targets `/admin/user-add` instead, with these
+#   selector changes:
+#   - `roles[]` is a PrimeVue MultiSelect now (`input-id="roles"`, no real
+#     `<select>` underneath) — targeted via the existing
+#     `"I press the multiselect option ... in ..."` step instead of
+#     `"I select ... from ..."`.
+#   - The "Send mail to new user" radio group lost its legacy `#send_mail_no`
+#     id (PrimeVue's `BaseRadioButtons` generates `${name}-${index}` ids
+#     instead) — targeted by its visible label ("No") via the existing
+#     `"I check the ... radio button"` step instead of a raw CSS selector.
+#   - The submit button is a plain `BaseButton` labelled "Add" (no
+#     `name="submit"` at all) — targeted by that visible text.
+#   - The manual-password field now needs an explicit
+#     `"I check the "Set password manually" radio button"` first (the legacy
+#     page's password fieldset had no such toggle when
+#     `admins_can_set_users_pass` was on — it just showed the field directly).
+# - **Real bug found (this migration, not a test-only issue): "Create a user
+#   with wrong email" never reached the backend at all.** `UserAdd.vue`'s
+#   e-mail field had `type="email"` — the browser's OWN native format check
+#   (triggered by any `type="email"` input holding a non-empty value,
+#   regardless of `required`) silently blocked the form's native submit
+#   event before Vue's `@submit.prevent` handler ever ran, so no
+#   `/admin/user-add-action` request was ever sent (confirmed via the
+#   trace's network log — no such request appears at all) and the server's
+#   own "The email address is not complete..." message never had a chance
+#   to be returned. Fixed by dropping `type="email"` (back to the default
+#   `text`), matching the legacy page's own plain `<input type="text">` +
+#   server-side-only email validation — same reasoning as why this project's
+#   `check_password`/format checks generally live server-side, not as a
+#   native HTML constraint that can pre-empt them.
+#   - Validating "wrong username"/"wrong email" now happens server-side
+#     (`UserAddController::create()`), not via client-side QuickForm rules —
+#     confirmed the same underlying checks are still reused
+#     (`UserManager::is_username_valid()`, `FILTER_VALIDATE_EMAIL`), so the
+#     same error messages still appear, just after a real round-trip instead
+#     of instant client-side validation.
+# - **`user_edit.php` has now also been migrated to the Vue SPA**
+#   (`/admin/user-edit/:userId`, data/action via `/admin/user-edit-data` /
+#   `/admin/user-edit-action` — see `UserEditController.php`, `UserEdit.vue`).
+#   Added three new scenarios ("Edit a user", "Edited user keeps the new
+#   value", "Edit a user with wrong email") covering the "edit" leg of the
+#   create/read/edit/delete matrix this file was otherwise missing, using the
+#   "student" user created earlier in this same file. The list page's row
+#   "Edit" icon (`title="Edit"`) now navigates client-side to the new route
+#   instead of the dead `/main/admin/user_edit.php` stub, so the existing
+#   `"I click the {string} icon in the row for {string}"` step reaches it
+#   unchanged. The submit button is labelled "Save" (not "Add" — this is an
+#   edit, not a create), matching this project's edit/update button
+#   convention (orange/secondary, not green/success). The "phone" field lives
+#   inside the collapsible "Advanced settings" panel (closed by default, same
+#   as on the Add page) — the existing generic `"I press {string}"` step
+#   clicks its real `<button>Advanced settings</button>` to expand it before
+#   any field inside is reachable; confirmed live this genuinely fails
+#   (`getByLabel(phone)` times out) without that step first.
+#   **Real, generalizable step-infra gap found and root-caused (not guessed) while
+#   stabilizing these 3 scenarios**: clicking the row's "Edit" icon triggers a
+#   client-side Vue Router navigation (`router.push`/`<router-link>`), which never
+#   fires a real browser navigation event — `page.waitForLoadState("domcontentloaded")`
+#   (what "wait very long for the page to be loaded" actually does) resolves
+#   immediately regardless of whether the SPA has actually swapped routes yet.
+#   Confirmed directly: a throwaway script clicking the icon then immediately
+#   checking `page.url()` after that wait still showed `/admin/user-list`, and a
+#   `page.fill('input[name=email]', ...)` right after silently succeeded by filling
+#   the LIST page's own "Advanced search" e-mail filter input (which also exists and
+#   also matches `name="email"`) instead of throwing — so the scenario would appear
+#   to "run" while operating on the wrong page entirely, then land on the real edit
+#   page moments later with none of the intended actions applied. Fixed by replacing
+#   that wait with `"I wait up to 10 seconds for the element ... to appear"` for a
+#   string unique to the destination page (`"text=Edit user information"`, the edit
+#   page's own heading) — waits for the actual route swap instead of a same page load
+#   event that never fires. Any future scenario that clicks into a client-side
+#   route change (not a full page load) should use this pattern, not the generic
+#   "wait ... for the page to be loaded" family, which is a no-op for SPA-internal
+#   navigation.
 @administration @settings-createUser
 Feature: Users management as admin
   In order to add users
@@ -93,44 +170,44 @@ Feature: Users management as admin
     And I should see "Add a user"
 
   Scenario: Create a user with only basic info
-    And I am on "/main/admin/user_add.php"
+    And I am on "/admin/user-add"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Sammy                 |
       | lastname  | Marshall              |
       | email     | smarshall@example.com |
       | username  | smarshall             |
-    And I select "Learner" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
+    And I press the multiselect option "Learner" in "roles"
+    And I check the "No" radio button
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
 
   Scenario: Create a user with wrong username
-    And I am on "/main/admin/user_add.php"
+    And I am on "/admin/user-add"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | NIÑO                  |
       | lastname  | NIÑO                  |
       | email     | example@example.com |
       | username  | NIÑO                  |
-    And I check the "#send_mail_no" radio button selector
-    And I click the "input#send_mail_no" element
-    And I press "submit"
+    And I press the multiselect option "Learner" in "roles"
+    And I check the "No" radio button
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should see "Only letters and numbers allowed"
 
   Scenario: Create a user with wrong email
-    And I am on "/main/admin/user_add.php"
+    And I am on "/admin/user-add"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Juls                  |
       | lastname  | Juls                  |
       | email     | NI -ÑO@example.com      |
       | username  | Juls                  |
-    And I check the "#send_mail_no" radio button selector
-    And I click the "input#send_mail_no" element
-    And I press "submit"
+    And I press the multiselect option "Learner" in "roles"
+    And I check the "No" radio button
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should see "The email address is not complete or contains some invalid characters"
 
@@ -166,48 +243,91 @@ Feature: Users management as admin
     And I select "Yes" from "form_admins_can_set_users_pass"
     And I press "Save"
     And wait for the page to be loaded when ready
-    Given I am on "/main/admin/user_add.php"
+    Given I am on "/admin/user-add"
     And wait very long for the page to be loaded
     And I fill in the following:
       | firstname | HRM firstname|
       | lastname  | HRM lastname |
       | email     | hrm@example.com |
       | username  | hrm             |
-      | password  | hrm             |
-    And I click the "input#send_mail_no" element
-    And I select "Human Resources Manager" from "roles[]"
+    And I check the "Set password manually" radio button
+    And I fill in "password" with "hrm"
+    And I check the "No" radio button
+    And I press the multiselect option "Human Resources Manager" in "roles"
     And wait very long for the page to be loaded
-    And I press "submit"
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
 
   Scenario: Create a teacher user
-    And I am on "/main/admin/user_add.php"
+    And I am on "/admin/user-add"
     And I wait for the page to be loaded
     And I fill in the following:
       | firstname | teacher firstname|
       | lastname  | teacher lastname |
       | email     | teacher@example.com |
       | username  | teacher  |
-    And I select "Teacher" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
+    And I press the multiselect option "Teacher" in "roles"
+    And I check the "No" radio button
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
 
   Scenario: Create a student user
-    Given I am on "/main/admin/user_add.php"
+    Given I am on "/admin/user-add"
     And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | student firstname|
       | lastname  | student lastname |
       | email     | student@example.com |
       | username  | student   |
-    And I select "Learner" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
+    And I press the multiselect option "Learner" in "roles"
+    And I check the "No" radio button
+    And I press "Add"
     And wait very long for the page to be loaded
     Then I should not see an error
+
+  Scenario: Edit a user
+    Given I am on "/admin/user-list"
+    And wait for the page to be loaded when ready
+    And I fill in "keyword" with "student"
+    And I press "Search"
+    And wait for the page to be loaded when ready
+    And I wait up to 10 seconds for the element "tr:has-text('student lastname')" to appear
+    And I click the "[title='Edit']" icon in the row for "student lastname"
+    And I wait up to 10 seconds for the element "text=Edit user information" to appear
+    And I press "Advanced settings"
+    And I fill in "phone" with "0123456789"
+    And I press "Save"
+    And wait very long for the page to be loaded
+    Then I should not see an error
+
+  Scenario: Edited user keeps the new value
+    Given I am on "/admin/user-list"
+    And wait for the page to be loaded when ready
+    And I fill in "keyword" with "student"
+    And I press "Search"
+    And wait for the page to be loaded when ready
+    And I wait up to 10 seconds for the element "tr:has-text('student lastname')" to appear
+    And I click the "[title='Edit']" icon in the row for "student lastname"
+    And I wait up to 10 seconds for the element "text=Edit user information" to appear
+    And I press "Advanced settings"
+    Then the field "phone" should have value "0123456789"
+
+  Scenario: Edit a user with wrong email
+    Given I am on "/admin/user-list"
+    And wait for the page to be loaded when ready
+    And I fill in "keyword" with "student"
+    And I press "Search"
+    And wait for the page to be loaded when ready
+    And I wait up to 10 seconds for the element "tr:has-text('student lastname')" to appear
+    And I click the "[title='Edit']" icon in the row for "student lastname"
+    And I wait up to 10 seconds for the element "text=Edit user information" to appear
+    And the field "email" should have value "student@example.com"
+    And I fill in "email" with "NI -ÑO@example.com"
+    And I press "Save"
+    And wait very long for the page to be loaded
+    Then I should see "The email address is not complete or contains some invalid characters"
 
   Scenario: HRM follows teacher
     Given I am on "/admin/user-list?keyword=hrm"

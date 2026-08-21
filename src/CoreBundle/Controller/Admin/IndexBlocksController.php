@@ -232,7 +232,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-user-add',
-            'url' => '/main/admin/user_add.php',
+            'route' => ['name' => 'AdminUserAdd'],
             'label' => $this->translator->trans('Add a user'),
         ];
 
@@ -297,23 +297,26 @@ class IndexBlocksController extends BaseController
             ];
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
+                // Matched by 'class', not 'url': both surviving items ('item-user-list',
+                // 'item-user-add') are route-based (no 'url' key at all), so matching on
+                // 'url' silently dropped them both here.
                 $items = array_filter($items, function (array $item) {
-                    $urls = [
-                        '/admin/user-list',
-                        '/main/admin/user_add.php',
+                    $classes = [
+                        'item-user-list',
+                        'item-user-add',
                     ];
 
-                    return \in_array($item['url'], $urls, true);
+                    return \in_array($item['class'], $classes, true);
                 });
             }
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
-                    $urls = [
-                        '/admin/user-list',
+                    $classes = [
+                        'item-user-list',
                     ];
 
-                    return !\in_array($item['url'], $urls, true);
+                    return !\in_array($item['class'], $classes, true);
                 });
             }
 

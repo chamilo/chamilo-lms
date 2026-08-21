@@ -1426,7 +1426,7 @@ class MessageManager
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
         $tplMailBody->assign(
             'manageUrl',
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user->getId()
+            api_get_path(WEB_PATH).'admin/user-edit/'.$user->getId()
         );
 
         $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
@@ -1471,8 +1471,8 @@ class MessageManager
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
         $userId = $user->getId();
         $url_edit = Display::url(
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId,
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
+            api_get_path(WEB_PATH).'admin/user-edit/'.$userId,
+            api_get_path(WEB_PATH).'admin/user-edit/'.$userId
         );
         $tplMailBody->assign(
             'manageUrl',

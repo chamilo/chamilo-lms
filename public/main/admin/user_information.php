@@ -120,7 +120,7 @@ if (api_is_platform_admin()) {
             ICON_SIZE_MEDIUM,
             get_lang('Edit')
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
+        api_get_path(WEB_PATH).'admin/user-edit/'.$userId
     );
 
     $actions[] = Display::url(

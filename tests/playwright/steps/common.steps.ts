@@ -840,8 +840,16 @@ When("I fill in the score for {string} with {string}", async ({ page }, username
 // group members only)" — is plainly label text, not an id/name value) and
 // checks it. getByLabel handles both a wrapping <label> and a <label for="">
 // pointing at the input, matching findField()'s own resolution.
+//
+// {exact: true} is required: createUser.feature's "No" (the "Send mail to
+// new user" radio, on the Vue user_add.php replacement) is a case-insensitive
+// SUBSTRING of an unrelated extra field's aria-label, "Event notifications"
+// ("**no**tifications") — confirmed live, a real CI failure. Same class of
+// false-positive-substring-match trap as course.feature's "TEMP"/"template"
+// gotcha; a radio button's own label is always a short, exact phrase like
+// "Yes"/"No", never one meant to substring-match something else.
 When("I check the {string} radio button", async ({ page }, label: string) => {
-  await page.getByLabel(label).check()
+  await page.getByLabel(label, { exact: true }).check()
 })
 
 // Ported from FeatureContext::iCheckTheRadioButtonBasedInSelector(). Unlike

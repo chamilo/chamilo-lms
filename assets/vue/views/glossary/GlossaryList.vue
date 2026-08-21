@@ -137,6 +137,7 @@ import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const route = useRoute()
 const router = useRouter()
@@ -191,10 +192,7 @@ watch(
   },
 )
 
-watch(
-  () => platform.isStudentViewActive,
-  () => fetchGlossaries(),
-)
+useStudentViewRefresh(fetchGlossaries)
 
 const debouncedSearch = debounce(() => {
   searchBoxTouched.value = true

@@ -36,10 +36,35 @@ readonly class SurveyHelper
             return true;
         }
 
+        // Reached only by platform and session administrators, whom the helper already cleared.
         if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
             return true;
         }
 
+        return $this->coachRightsAreExtended();
+    }
+
+    /**
+     * Whether the current user may open a survey in preview mode.
+     *
+     * The role and this tool's coach switch, with no student view gate: previewing is reading,
+     * and a teacher has to keep being able to check a survey they currently cannot edit.
+     */
+    public function canPreview(): bool
+    {
+        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+            return true;
+        }
+
+        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
+            return false;
+        }
+
+        return $this->coachRightsAreExtended();
+    }
+
+    private function coachRightsAreExtended(): bool
+    {
         return 'true' === $this->settingsManager->getSetting('survey.extend_rights_for_coach_on_survey', true);
     }
 }

@@ -88,6 +88,12 @@ export default {
       component: () => import("../views/admin/ListIcons.vue"),
     },
     {
+      name: "AdminStatistics",
+      path: "statistics",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Statistics" },
+      component: () => import("../views/admin/AdminStatisticsView.vue"),
+    },
+    {
       name: "AdminSystemStatus",
       path: "system-status",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System status" },

@@ -370,7 +370,7 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'auth/inscription.php?create_intro_page=1',
         'label' => get_lang('Setting the registration page')
     ];
-    $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
+    $items[] = ['url' => '/admin/statistics', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'my_space/company_reports.php',
         'label' => get_lang('Reports'),

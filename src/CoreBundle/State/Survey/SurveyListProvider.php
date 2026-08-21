@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
@@ -41,7 +41,6 @@ use const ENT_QUOTES;
  */
 final readonly class SurveyListProvider implements ProviderInterface
 {
-    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
@@ -51,7 +50,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -68,7 +67,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $user = $this->getCurrentUser();
-        $canManage = $this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager);
+        $canManage = $this->surveyHelper->canManage();
         $search = $this->normalizeSearchTerm($request->query->get('search', ''));
 
         $surveyList = new SurveyList();
@@ -128,7 +127,7 @@ final readonly class SurveyListProvider implements ProviderInterface
 
     private function canCreateSurveys(): bool
     {
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             return false;
         }
 

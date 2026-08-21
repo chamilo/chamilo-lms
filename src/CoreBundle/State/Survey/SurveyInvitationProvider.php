@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -25,7 +25,6 @@ use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -37,7 +36,6 @@ use Throwable;
  */
 final readonly class SurveyInvitationProvider implements ProviderInterface
 {
-    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
@@ -46,9 +44,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private CGroupRepository $groupRepository,
-        private Security $security,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -77,7 +74,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
 
     public function buildResponse(CSurvey $survey, Course $course, ?Session $session, string $message = ''): SurveyInvitation
     {
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage survey invitations in this context.');
         }
 

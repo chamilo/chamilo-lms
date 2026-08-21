@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -23,7 +23,6 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -35,18 +34,15 @@ use Throwable;
  */
 final readonly class SurveyMeetingProcessor implements ProcessorInterface
 {
-    use SurveyAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private SurveyMeetingProvider $surveyMeetingProvider,
-        private Security $security,
         private SettingsManager $settingsManager,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -71,7 +67,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             return $this->submitAnswer($operation, $surveyId, $payload, $course, $session, $request);
         }
 
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage meeting polls in this context.');
         }
 

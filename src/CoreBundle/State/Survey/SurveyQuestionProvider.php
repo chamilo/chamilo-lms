@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -21,7 +21,6 @@ use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -32,7 +31,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class SurveyQuestionProvider implements ProviderInterface
 {
-    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     /**
@@ -57,9 +55,8 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
-        private Security $security,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -75,7 +72,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
 

@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -37,8 +37,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class SurveyMeetingProvider implements ProviderInterface
 {
-    use SurveyAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -46,7 +44,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -65,7 +63,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $surveyId = isset($uriVariables['surveyId']) ? (int) $uriVariables['surveyId'] : 0;
 
         if ($surveyId <= 0) {
-            if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+            if (!$this->surveyHelper->canManage()) {
                 throw new AccessDeniedHttpException('You are not allowed to create meeting polls.');
             }
 
@@ -76,7 +74,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $mode = (string) $request->query->get('mode', 'answer');
         $isEditMode = 'edit' === $mode;
 
-        if ($isEditMode && !$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if ($isEditMode && !$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to edit this meeting poll.');
         }
 
@@ -122,7 +120,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         string $message = ''
     ): SurveyMeeting {
         $user = $this->getCurrentUser();
-        $canManage = $this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager);
+        $canManage = $this->surveyHelper->canManage();
         $invitation = null;
         $selectedSlots = [];
 

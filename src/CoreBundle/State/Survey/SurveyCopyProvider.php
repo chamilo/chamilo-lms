@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -32,8 +32,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class SurveyCopyProvider implements ProviderInterface
 {
-    use SurveyAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -41,7 +39,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -59,7 +57,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $user = $this->getCurrentUser();
 
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
 

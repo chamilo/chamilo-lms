@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -26,7 +26,6 @@ use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use MessageManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -38,7 +37,6 @@ use Throwable;
  */
 final readonly class SurveyInvitationProcessor implements ProcessorInterface
 {
-    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
@@ -48,8 +46,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         private CGroupRepository $groupRepository,
         private SurveyInvitationProvider $surveyInvitationProvider,
         private SettingsManager $settingsManager,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
-        private Security $security,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -63,7 +60,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage survey invitations in this context.');
         }
 

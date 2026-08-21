@@ -45,6 +45,12 @@ cd tests/behat
  ../../vendor/behat/behat/bin/behat -v
  ```
 
+`features/SpecialCase/existingPlatform/` and `SpecialCase1optim.feature` are internal-only (`@internal`) and are excluded from that default run. To execute them:
+
+```
+../../vendor/behat/behat/bin/behat --config behat.internal.yml
+```
+
 To run a specific feature:
 ```
 ../../vendor/behat/behat/bin/behat features/course.feature

@@ -41,7 +41,7 @@ cd "$SCRIPT_DIR"
 # this script before we can capture the exit code and extract error details.
 set +e
 php "$PROJECT_ROOT/vendor/bin/behat" \
-    --config behat.yml \
+    --config "${BEHAT_CONFIG:-behat.yml}" \
     --format pretty \
     --no-interaction \
     --stop-on-failure \

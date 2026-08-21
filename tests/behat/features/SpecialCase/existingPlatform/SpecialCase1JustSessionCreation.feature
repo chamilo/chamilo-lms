@@ -1,3 +1,4 @@
+@internal
 Feature: Special admin settings flows to create sessions for testing
 
   Background:

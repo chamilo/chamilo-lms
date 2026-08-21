@@ -1,3 +1,5 @@
+# Internal-only SpecialCase fixtures. Not used by CI or the default suite.
+#   cd tests/behat && ../../vendor/behat/behat/bin/behat --config behat.internal.yml
 default:
   extensions:
     Behat\MinkExtension:
@@ -20,10 +22,8 @@ default:
       files_path: "%paths.base%/../../"
   suites:
     default:
-      paths: ["%paths.base%/features"]
-      # existingPlatform/ and SpecialCase1optim are tagged @internal and
-      # excluded here. Run them with: behat --config behat.internal.yml
-      filters:
-        tags: "~@internal"
+      paths:
+        - "%paths.base%/features/SpecialCase/existingPlatform"
+        - "%paths.base%/features/SpecialCase/newPlatform/SpecialCase1optim.feature"
   formatters:
     pretty: true

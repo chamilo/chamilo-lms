@@ -1,3 +1,4 @@
+@internal
 Feature: Special admin content creation to be able to run specific tests.
   As a platform administrator
   I want to run a few targeted scenarios that creates necessary content to run specific tests.

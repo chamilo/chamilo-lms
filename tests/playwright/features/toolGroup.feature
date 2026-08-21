@@ -259,7 +259,7 @@ Feature: Group tool
       | title | html test |
     And I fill in the active tinymce editor with "My first HTML!!"
     Then I press "Save"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "html test"
 
   Scenario: Upload a document inside folder in group

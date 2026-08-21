@@ -184,13 +184,22 @@ async function loginAs(page: Page, username: string) {
     await page.goto("/logout")
     await page.goto("/login")
   }
-  await page.locator("#login").fill(username)
-  await page.locator("#password").fill(username)
+  const loginField = page.locator("#login")
+  await loginField.click()
+  await loginField.fill(username)
+  const passwordField = page.locator("#password")
+  await passwordField.click()
+  await passwordField.fill(username)
   await page
-    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+    .locator(
+      "form.login-section__form button[type='submit'], button:has-text('Sign in'), input[type='submit'][value='Sign in']",
+    )
     .first()
     .click()
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  // Login is an AJAX submit then a client-side navigation; waiting for the
+  // "load" event (waitForURL's default) never resolves on that path and
+  // burns the whole test timeout while the form is still on screen.
+  await page.waitForURL((url) => !url.pathname.startsWith("/login"), { waitUntil: "commit" })
   // Real CI failure: toolGroup.feature's "Create an announcement as acostea
   // ..." scenario does "I am not logged" -> "I am logged as 'acostea'" ->
   // immediately navigates to group.php, which then rendered with a genuine
@@ -626,6 +635,8 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
     const editor = (window as any).tinymce.get(id)
     editor.setContent(value)
     editor.fire("change")
+    editor.fire("input")
+    editor.save()
   }, { id: fieldId, value })
 })
 
@@ -814,6 +825,8 @@ Then("I fill in the active tinymce editor with {string}", async ({ page }, value
     const editor = (window as any).tinymce.activeEditor
     editor.setContent(value)
     editor.fire("change")
+    editor.fire("input")
+    editor.save()
   }, value)
 })
 
@@ -2339,9 +2352,9 @@ Then(/^(?:|I )wait for the page content to settle$/, async ({ page }) => {
 // :visible mirrors the original's actual intent (fail only on one that's
 // really shown).
 Then("I should not see an error", async ({ page }) => {
-  await expect(page.locator("body")).not.toContainText("Internal server error")
+  await expect(page.locator("body")).not.toContainText(/internal server error/i)
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
-  await expect(page.locator(".p-message-error")).toHaveCount(0)
+  await expect(page.locator(".p-message-error, .p-toast-message-error, .p-message-severity-error")).toHaveCount(0)
 })
 
 // Mink's "the response status code should be ..." (MinkContext::

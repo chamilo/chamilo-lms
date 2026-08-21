@@ -414,6 +414,7 @@ Feature: Exercise tool
     And I wait for the page content to settle
     And I follow "Exercise 1"
     And I wait for the page content to settle
+    Then I should see "Start test"
     And I press "Start test"
     And I wait for the page content to settle
     # Question 1 - Multiple choice

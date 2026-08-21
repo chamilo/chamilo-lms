@@ -35,6 +35,14 @@ if [ -z "$MATCH" ]; then
 fi
 FEATURE_PATH="features/${MATCH#"$SCRIPT_DIR"/features/}"
 
+# existingPlatform/ and SpecialCase1optim are tagged @internal and excluded
+# from the default suite. Point at behat.internal.yml so an intentional run
+# of those files is not filtered out.
+if [[ "$FEATURE_PATH" == features/SpecialCase/existingPlatform/* ]] \
+    || [[ "$FEATURE_PATH" == features/SpecialCase/newPlatform/SpecialCase1optim.feature ]]; then
+    export BEHAT_CONFIG=behat.internal.yml
+fi
+
 # The `2>/dev/null` suppresses the arithmetic error when $LINE is non-numeric
 # (e.g. if someone passes "all" by mistake) — it falls through to the else branch.
 if [ "$LINE" -eq 0 ] 2>/dev/null || [ "$LINE" = "0" ]; then

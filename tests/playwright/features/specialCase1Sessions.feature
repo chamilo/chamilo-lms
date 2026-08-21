@@ -296,7 +296,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     And I fill in "title" with "introduction"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
-    And I click the "span.mdi-content-save" element
+    And I click the "button:has(.mdi-content-save)" element
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "introduction"
@@ -305,7 +305,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     And I fill in "title" with "final"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
-    And I click the "span.mdi-content-save" element
+    And I click the "button:has(.mdi-content-save)" element
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "final"

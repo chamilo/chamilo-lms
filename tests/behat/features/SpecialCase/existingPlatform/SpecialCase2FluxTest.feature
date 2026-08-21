@@ -1,3 +1,4 @@
+@internal
 Feature: Special admin settings flows — case 2
   In order to exercise several admin settings quickly
   As a platform administrator

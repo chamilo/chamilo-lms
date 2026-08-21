@@ -1,3 +1,4 @@
+@internal
 Feature: Special general case tests.
 
   Background:

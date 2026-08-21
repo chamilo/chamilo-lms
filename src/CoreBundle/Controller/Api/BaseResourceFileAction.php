@@ -496,7 +496,9 @@ class BaseResourceFileAction
                 }
 
                 // HTML/SVG contentFile => create an UploadedFile from content.
-                if (!$fileParsed && !empty($content)) {
+                // An HTML editor save always sends contentFile (possibly empty);
+                // treat that as a real create rather than requiring a binary upload.
+                if (!$fileParsed && $request->request->has('contentFile')) {
                     $contentFileInfo = $this->getContentFileUploadInfo($request, (string) $title);
                     $content = $this->sanitizeContentFile((string) $content, $contentFileInfo['extension']);
 

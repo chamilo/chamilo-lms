@@ -77,6 +77,13 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $user = $this->getCurrentUser();
         $canManage = $this->canManageExercises();
 
+        // Overview is a read-only payload; release the session lock so the
+        // SPA's other same-browser requests (notifications, cidReq) are not
+        // blocked for the rest of this query.
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
+        }
+
         if (!$canManage && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to view exercises in this context.');
         }

@@ -143,6 +143,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import forumService from "../../services/forumService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t, d } = useI18n()
 const route = useRoute()
@@ -242,6 +243,12 @@ onMounted(async () => {
     if (isSearchValid.value) {
       await search()
     }
+  }
+})
+
+useStudentViewRefresh(async () => {
+  if (formSubmitted.value && isSearchValid.value) {
+    await search()
   }
 })
 </script>

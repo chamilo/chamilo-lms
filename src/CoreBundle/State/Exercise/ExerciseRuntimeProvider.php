@@ -58,6 +58,8 @@ use const PREG_OFFSET_CAPTURE;
  */
 final readonly class ExerciseRuntimeProvider implements ProviderInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -109,7 +111,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManagePermission = $this->canManageExercises();
+        $canManagePermission = $this->isExerciseTeacher($this->security);
         $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
         $canManage = $canManagePermission && !$runsAsLearner;
 
@@ -519,13 +521,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->isExerciseTeacher($this->security);
     }
 
     private function isLearnerRuntimeRequest(Request $request): bool

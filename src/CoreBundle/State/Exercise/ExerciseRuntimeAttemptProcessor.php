@@ -49,6 +49,8 @@ use Throwable;
  */
 final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const VISIBILITY_PUBLISHED = 2;
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
     private const STATUS_INCOMPLETE = 'incomplete';
@@ -103,7 +105,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManagePermission = $this->canManageExercises();
+        $canManagePermission = $this->isExerciseTeacher($this->security);
         $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
 
         if (!$canManagePermission && !$this->canViewExercises()) {
@@ -244,13 +246,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->isExerciseTeacher($this->security);
     }
 
     private function isLearnerRuntimeRequest(Request $request): bool

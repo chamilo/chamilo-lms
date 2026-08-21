@@ -50,6 +50,8 @@ use const ENT_SUBSTITUTE;
  */
 final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterface
 {
+    use ExerciseAccessHelperTrait;
+
     private const VISIBILITY_PUBLISHED = 2;
     private const STATUS_INCOMPLETE = 'incomplete';
     private const STATUS_COMPLETED = 'completed';
@@ -168,7 +170,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->isExerciseTeacher($this->security));
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
         if ([] === $questionIds) {
@@ -529,13 +531,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->isExerciseTeacher($this->security);
     }
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool

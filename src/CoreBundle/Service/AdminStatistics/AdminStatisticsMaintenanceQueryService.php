@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const PHP_INT_MAX;
+
 final readonly class AdminStatisticsMaintenanceQueryService
 {
     private const SUPPORTED_REPORTS = [
@@ -247,7 +249,7 @@ final readonly class AdminStatisticsMaintenanceQueryService
         ));
 
         $extraFieldIdsToLoad = [];
-        if ('extra' === $dupMode && 0 < $extraFieldId) {
+        if ('extra' === $dupMode && $extraFieldId > 0) {
             $extraFieldIdsToLoad[] = $extraFieldId;
         }
         foreach ($additionalFieldIds as $fieldId) {
@@ -427,7 +429,7 @@ WHERE u.active <> :softDeleted
 ORDER BY duplicate_label ASC, u.created_at ASC, u.id ASC
 SQL;
         } else {
-            if (0 >= $extraFieldId) {
+            if ($extraFieldId <= 0) {
                 return [];
             }
             $sql = <<<'SQL'
@@ -597,7 +599,7 @@ SQL;
 
         return array_values(array_unique(array_filter(
             array_map(static fn (mixed $item): int => (int) $item, $values),
-            static fn (int $item): bool => 0 < $item
+            static fn (int $item): bool => $item > 0
         )));
     }
 

@@ -26,12 +26,15 @@ use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
+
+use const PHP_INT_MAX;
 
 final readonly class AdminStatisticsQueryService
 {
@@ -729,7 +732,7 @@ final readonly class AdminStatisticsQueryService
             ->setParameter('rangeEnd', $endDate, Types::DATETIME_MUTABLE)
         ;
 
-        if (0 < $statusId) {
+        if ($statusId > 0) {
             $queryBuilder
                 ->andWhere('session.status = :statusId')
                 ->setParameter('statusId', $statusId, Types::INTEGER)
@@ -812,15 +815,15 @@ final readonly class AdminStatisticsQueryService
         $days = (int) $startDate->diff($endDate)->days;
         $numberOfWeeks = (int) floor($days / 7);
         $sessionAverage = 0.0;
-        if (0 < $numberOfWeeks) {
+        if ($numberOfWeeks > 0) {
             $sessionAverage = round($sessionCount / $numberOfWeeks, 2);
         }
         $averageUser = 0.0;
-        if (0 < $sessionCount) {
+        if ($sessionCount > 0) {
             $averageUser = round($numberUsers / $sessionCount, 2);
         }
         $averageCoach = 0.0;
-        if (0 < $uniqueCoaches) {
+        if ($uniqueCoaches > 0) {
             $averageCoach = round($sessionCount / $uniqueCoaches, 2);
         }
 
@@ -874,8 +877,8 @@ final readonly class AdminStatisticsQueryService
                 'requiresDateRange' => true,
                 'legacySessionByDate' => true,
                 'statsTitle' => $this->trans('Global statistics'),
-                'canExportXls' => 0 < $sessionCount,
-                'exportUrl' => 0 < $sessionCount ? '/api/admin/statistics/session-by-date.xls?'.$query : '',
+                'canExportXls' => $sessionCount > 0,
+                'exportUrl' => $sessionCount > 0 ? '/api/admin/statistics/session-by-date.xls?'.$query : '',
                 'courseSessions' => array_values($courseSessions),
             ],
         ]);
@@ -968,7 +971,7 @@ final readonly class AdminStatisticsQueryService
 
         try {
             return new DateTimeZone($timezone);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return new DateTimeZone('UTC');
         }
     }
@@ -1151,7 +1154,7 @@ final readonly class AdminStatisticsQueryService
                 continue;
             }
             $id = (int) $item;
-            if (0 < $id) {
+            if ($id > 0) {
                 $normalized[$id] = $id;
             }
         }

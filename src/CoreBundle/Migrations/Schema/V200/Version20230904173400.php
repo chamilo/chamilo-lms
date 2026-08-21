@@ -294,10 +294,10 @@ final class Version20230904173400 extends AbstractMigrationChamilo
     private function releaseOrmMemory(): void
     {
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
 
         if (\function_exists('gc_mem_caches')) {
-            \gc_mem_caches();
+            gc_mem_caches();
         }
     }
 

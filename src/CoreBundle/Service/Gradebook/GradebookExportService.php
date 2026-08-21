@@ -22,6 +22,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const FILTER_VALIDATE_BOOL;
+
 final readonly class GradebookExportService
 {
     public function __construct(
@@ -214,23 +218,23 @@ final readonly class GradebookExportService
 
         $rows = [];
         foreach ($report->rows as $row) {
-            $user = is_array($row['user'] ?? null) ? $row['user'] : [];
+            $user = \is_array($row['user'] ?? null) ? $row['user'] : [];
             $values = [
                 (string) ($user['firstName'] ?? ''),
                 (string) ($user['lastName'] ?? ''),
                 (string) ($user['username'] ?? ''),
                 (string) ($user['officialCode'] ?? ''),
             ];
-            $extraValues = is_array($row['extraFields'] ?? null) ? $row['extraFields'] : [];
+            $extraValues = \is_array($row['extraFields'] ?? null) ? $row['extraFields'] : [];
             foreach ($report->extraFieldColumns as $field) {
                 $values[] = (string) ($extraValues[(string) ($field['variable'] ?? '')] ?? '');
             }
-            $scores = is_array($row['scores'] ?? null) ? $row['scores'] : [];
+            $scores = \is_array($row['scores'] ?? null) ? $row['scores'] : [];
             foreach ($report->columns as $column) {
                 $score = $scores[(string) ($column['key'] ?? '')] ?? null;
-                $values[] = is_array($score) ? $this->formatScoreResult($score, $report->settings) : '';
+                $values[] = \is_array($score) ? $this->formatScoreResult($score, $report->settings) : '';
             }
-            $values[] = is_array($row['total'] ?? null)
+            $values[] = \is_array($row['total'] ?? null)
                 ? $this->formatTotal($row['total'], $report->settings)
                 : '';
             if (true === ($report->settings['customScoreStandalone'] ?? false)) {
@@ -382,6 +386,7 @@ final readonly class GradebookExportService
         if (false === $tempFile) {
             throw new RuntimeException('Failed to create a temporary DOCX export file.');
         }
+
         try {
             $document->save($tempFile, 'Word2007');
             $content = file_get_contents($tempFile);
@@ -400,9 +405,9 @@ final readonly class GradebookExportService
     }
 
     /**
-     * @param list<string>              $headers
-     * @param list<list<string>>        $rows
-     * @param array<string, string>     $summary
+     * @param list<string>          $headers
+     * @param list<list<string>>    $rows
+     * @param array<string, string> $summary
      */
     private function createPdfTableResponse(
         array $headers,
@@ -524,7 +529,9 @@ final readonly class GradebookExportService
         return $response;
     }
 
-    /** @param array<string, mixed> $settings */
+    /**
+     * @param array<string, mixed> $settings
+     */
     private function formatScoreResult(array $result, array $settings): string
     {
         if (true !== ($result['hasResult'] ?? false)) {
@@ -543,10 +550,12 @@ final readonly class GradebookExportService
         );
     }
 
-    /** @param array<string, mixed> $settings */
+    /**
+     * @param array<string, mixed> $settings
+     */
     private function formatTotal(?array $result, array $settings): string
     {
-        if (!is_array($result) || true !== ($result['hasResult'] ?? false)) {
+        if (!\is_array($result) || true !== ($result['hasResult'] ?? false)) {
             return '';
         }
         if (isset($result['display']) && \is_string($result['display']) && '' !== $result['display']) {
@@ -561,7 +570,9 @@ final readonly class GradebookExportService
         );
     }
 
-    /** @param array<string, mixed> $settings */
+    /**
+     * @param array<string, mixed> $settings
+     */
     private function formatScorePair(mixed $score, mixed $maxScore, mixed $percentage, array $settings): string
     {
         if (null === $score && null === $percentage) {
@@ -619,7 +630,7 @@ final readonly class GradebookExportService
     private function sanitizeSpreadsheetValue(string $value): string
     {
         $trimmed = ltrim($value);
-        if ('' !== $trimmed && in_array($trimmed[0], ['=', '+', '-', '@'], true)) {
+        if ('' !== $trimmed && \in_array($trimmed[0], ['=', '+', '-', '@'], true)) {
             return "'".$value;
         }
 

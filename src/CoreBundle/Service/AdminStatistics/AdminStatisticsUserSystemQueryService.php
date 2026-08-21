@@ -33,6 +33,10 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
+
+use const PHP_INT_MAX;
+use const PHP_OS_FAMILY;
 
 final readonly class AdminStatisticsUserSystemQueryService
 {
@@ -198,7 +202,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $distinctChart = $this->getDailyLoginCounts($chartStart, $now, true, $sessionDuration);
 
         return [
-            'title' => sprintf($this->trans('Last %s days'), '15'),
+            'title' => \sprintf($this->trans('Last %s days'), '15'),
             'description' => '',
             'chart' => [
                 'type' => 'line',
@@ -234,7 +238,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             'meta' => [
                 'legacyStatsGroups' => true,
                 'legacyFlatChart' => true,
-                'contentTitle' => sprintf($this->trans('Last %s days'), '15'),
+                'contentTitle' => \sprintf($this->trans('Last %s days'), '15'),
             ],
         ];
     }
@@ -321,9 +325,10 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function getPicturesReport(): array
     {
         $connection = $this->entityManager->getConnection();
+
         try {
             $columns = $connection->createSchemaManager()->listTableColumns('user');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $columns = [];
         }
 
@@ -340,7 +345,8 @@ final readonly class AdminStatisticsUserSystemQueryService
         $where = ' WHERE u.active <> :softDeleted';
         $totalUsers = (int) $connection
             ->executeQuery('SELECT COUNT(*) AS n FROM user u'.$join.$where, $params, $types)
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         $pictureWhereParts = [];
         if (isset($columns['picture_uri'])) {
@@ -361,7 +367,8 @@ final readonly class AdminStatisticsUserSystemQueryService
                     $params,
                     $types
                 )
-                ->fetchOne();
+                ->fetchOne()
+            ;
         }
 
         $values = [
@@ -459,7 +466,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             $this->trans('This day') => $now->sub(new DateInterval('P1D')),
             $this->trans('In the last 7 days') => $now->sub(new DateInterval('P7D')),
             $this->trans('In the last 31 days') => $now->sub(new DateInterval('P31D')),
-            sprintf($this->trans('Last %d months'), 6) => $now->sub(new DateInterval('P6M')),
+            \sprintf($this->trans('Last %d months'), 6) => $now->sub(new DateInterval('P6M')),
         ];
 
         $values = [];
@@ -587,7 +594,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             ],
             'meta' => [
                 'requiresDateRange' => true,
-                'canExportXls' => 0 < $totalItems,
+                'canExportXls' => $totalItems > 0,
                 'exportReport' => 'users_active',
                 'legacyFlatTable' => true,
                 'studentCount' => $studentCount,
@@ -685,7 +692,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         $diff = $start->diff($end);
-        $moreThanMonth = 1 <= $diff->y || 1 < $diff->m || (1 === $diff->m && 0 < $diff->d);
+        $moreThanMonth = $diff->y >= 1 || $diff->m > 1 || (1 === $diff->m && $diff->d > 0);
         $mainValues = $moreThanMonth
             ? $this->groupDailyValuesByMonth($registrations)
             : $this->fillRegistrationDateRange($start, $end, $registrations);
@@ -1087,12 +1094,12 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         $buckets = [
-            '0' => "0-5′",
-            '5' => "6-10′",
-            '10' => "11-15′",
-            '15' => "16-30′",
-            '30' => "31-60′",
-            '60' => "60-∞′",
+            '0' => '0-5′',
+            '5' => '6-10′',
+            '10' => '11-15′',
+            '15' => '16-30′',
+            '30' => '31-60′',
+            '60' => '60-∞′',
         ];
         $rows = [];
         foreach ($buckets as $bucket => $label) {
@@ -1167,11 +1174,11 @@ final readonly class AdminStatisticsUserSystemQueryService
         $hostingLimit = $this->settingsManagerHelper->getOverride('hosting_limit', $currentUrl);
         $diskLimitKb = \is_array($hostingLimit) ? (float) ($hostingLimit['disk_space'] ?? 0) : 0.0;
 
-        $message = sprintf($this->trans('Total space used by %s is %sGB'), $url, $sizeGb);
+        $message = \sprintf($this->trans('Total space used by %s is %sGB'), $url, $sizeGb);
         $limitGb = null;
-        if (0 < $diskLimitKb) {
+        if ($diskLimitKb > 0) {
             $limitGb = round($diskLimitKb / 1024, 1);
-            $message = sprintf(
+            $message = \sprintf(
                 $this->trans('Total space used by portal %s is %sGB (limit is set to %sGB)'),
                 $url,
                 $sizeGb,
@@ -1290,7 +1297,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             $start = 1 === $days
                 ? $now->setTime(0, 0, 0)
                 : $now->sub(new DateInterval('P'.$days.'D'))->setTime(0, 0, 0);
-            $label = 1 === $days ? $this->trans('Today') : sprintf($this->trans('Last %s days'), $days);
+            $label = 1 === $days ? $this->trans('Today') : \sprintf($this->trans('Last %s days'), $days);
             $localStart = $start->setTimezone($this->getUserTimezone())->format('Y-m-d');
             $localEnd = $end->setTimezone($this->getUserTimezone())->format('Y-m-d');
             $items[] = [
@@ -1542,7 +1549,8 @@ final readonly class AdminStatisticsUserSystemQueryService
                 ->andWhere('user.id IN (:userIds)')
                 ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
                 ->groupBy('user.active, user.locale')
-                ->getQuery()->getArrayResult();
+                ->getQuery()->getArrayResult()
+            ;
             foreach ($rows as $row) {
                 $count = (int) $row['total'];
                 if (User::ACTIVE === (int) $row['active']) {
@@ -1613,9 +1621,6 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
-     * @param array<int, int> $userIds
-     * @param array<int, array<string, string>> $extraValues
-     *
      * @return array<string, mixed>
      */
     private function hasUserExtraField(string $variable): bool
@@ -1668,7 +1673,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
-     * @param array<int, int> $userIds
+     * @param array<int, int>                   $userIds
      * @param array<int, array<string, string>> $extraValues
      *
      * @return array<string, mixed>
@@ -1679,8 +1684,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         string $variable,
         string $title,
         ?string $datasetLabel = null
-    ): array
-    {
+    ): array {
         $field = $this->entityManager->getRepository(ExtraField::class)->findOneBy([
             'itemType' => ExtraField::USER_FIELD_TYPE,
             'variable' => $variable,
@@ -1702,7 +1706,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
-     * @param array<int, int> $userIds
+     * @param array<int, int>                   $userIds
      * @param array<int, array<string, string>> $extraValues
      *
      * @return array<string, mixed>
@@ -1725,13 +1729,13 @@ final readonly class AdminStatisticsUserSystemQueryService
                 continue;
             }
             $years = $now->diff($date)->y;
-            if (16 <= $years && 17 >= $years) {
+            if ($years >= 16 && $years <= 17) {
                 ++$counts['16-17'];
             }
-            if (18 <= $years && 25 >= $years) {
+            if ($years >= 18 && $years <= 25) {
                 ++$counts['18-25'];
             }
-            if (26 <= $years && 30 >= $years) {
+            if ($years >= 26 && $years <= 30) {
                 ++$counts['26-30'];
             }
         }
@@ -1868,7 +1872,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $month = (int) $now->format('n');
         $quarter = (int) ceil($month / 3);
         $startMonth = (($quarter - 1) * 3) + 1;
-        $currentStart = new DateTimeImmutable($now->format('Y').'-'.sprintf('%02d', $startMonth).'-01', new DateTimeZone('UTC'));
+        $currentStart = new DateTimeImmutable($now->format('Y').'-'.\sprintf('%02d', $startMonth).'-01', new DateTimeZone('UTC'));
 
         $result = [];
         foreach (['current' => 0, 'pre1' => 3, 'pre2' => 6, 'pre3' => 9, 'pre4' => 12, 'pre5' => 15] as $key => $monthsBack) {
@@ -1878,7 +1882,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             $result[$key] = [
                 'start' => $start->format('Y-m-d'),
                 'end' => $end->format('Y-m-d'),
-                'title' => sprintf($this->trans('Q%s %s'), $q, $start->format('Y')),
+                'title' => \sprintf($this->trans('Q%s %s'), $q, $start->format('Y')),
             ];
         }
 
@@ -1905,7 +1909,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
-     * @param array<int, string> $headers
+     * @param array<int, string>                       $headers
      * @param array<int, array<int, int|string|float>> $rows
      *
      * @return array<string, mixed>
@@ -2033,7 +2037,8 @@ final readonly class AdminStatisticsUserSystemQueryService
             ->from(GradebookCertificate::class, 'certificate')
             ->andWhere('certificate.createdAt <= :until')
             ->setParameter('until', $until, Types::DATETIME_IMMUTABLE)
-            ->getQuery()->getSingleScalarResult();
+            ->getQuery()->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -2058,15 +2063,15 @@ final readonly class AdminStatisticsUserSystemQueryService
         $result = ['0' => 0, '5' => 0, '10' => 0, '15' => 0, '30' => 0, '60' => 0];
         foreach ($connection->executeQuery($sql, $params, $types)->fetchFirstColumn() as $durationValue) {
             $duration = (int) $durationValue;
-            if (3600 < $duration) {
+            if ($duration > 3600) {
                 ++$result['60'];
-            } elseif (1800 < $duration) {
+            } elseif ($duration > 1800) {
                 ++$result['30'];
-            } elseif (900 < $duration) {
+            } elseif ($duration > 900) {
                 ++$result['15'];
-            } elseif (600 < $duration) {
+            } elseif ($duration > 600) {
                 ++$result['10'];
-            } elseif (300 < $duration) {
+            } elseif ($duration > 300) {
                 ++$result['5'];
             } else {
                 ++$result['0'];
@@ -2131,7 +2136,8 @@ final readonly class AdminStatisticsUserSystemQueryService
                     ->setParameter('categoryId', (int) $gradebook->getId(), Types::INTEGER)
                     ->andWhere('IDENTITY(certificate.user) IN (:users)')
                     ->setParameter('users', array_values(array_unique($group['users'])), ArrayParameterType::INTEGER)
-                    ->getQuery()->getSingleColumnResult();
+                    ->getQuery()->getSingleColumnResult()
+                ;
                 $certificateUsers = array_fill_keys(array_map(static fn ($userId): int => (int) $userId, $certificateUserIds), true);
                 foreach ($group['users'] as $userId) {
                     if (isset($certificateUsers[$userId])) {
@@ -2152,7 +2158,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 
     private function incrementPercent(int $current, int $old): string
     {
-        if (0 >= $old) {
+        if ($old <= 0) {
             return ' - ';
         }
 
@@ -2251,7 +2257,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 
         try {
             return new DateTimeZone($timezone);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return new DateTimeZone('UTC');
         }
     }
@@ -2327,7 +2333,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $minutes = intdiv($seconds % 3600, 60);
         $remaining = $seconds % 60;
 
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $remaining);
+        return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remaining);
     }
 
     /**

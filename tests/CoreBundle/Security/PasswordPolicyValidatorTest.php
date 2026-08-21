@@ -26,17 +26,15 @@ final class PasswordPolicyValidatorTest extends KernelTestCase
     private function getValidator(): PasswordPolicyValidator
     {
         self::bootKernel();
-        LegacyContainer::setContainer(static::getContainer());
+        LegacyContainer::setContainer(self::getContainer());
 
         /** @var PasswordPolicyValidator $validator */
-        $validator = static::getContainer()->get(PasswordPolicyValidator::class);
-
-        return $validator;
+        return self::getContainer()->get(PasswordPolicyValidator::class);
     }
 
     private function getTranslator(): TranslatorInterface
     {
-        return static::getContainer()->get(TranslatorInterface::class);
+        return self::getContainer()->get(TranslatorInterface::class);
     }
 
     public function testPasswordMeetingDefaultRequirementsHasNoViolations(): void

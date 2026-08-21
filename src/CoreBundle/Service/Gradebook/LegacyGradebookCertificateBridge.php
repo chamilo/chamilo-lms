@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use RuntimeException;
 
+use const PATHINFO_FILENAME;
+
 /**
  * Isolates the remaining legacy certificate-rendering compatibility path.
  *

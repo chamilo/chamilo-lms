@@ -93,7 +93,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
                 // Keep each ORM batch isolated. Large legacy databases can
                 // otherwise accumulate a very large Doctrine identity map.
                 $this->entityManager->clear();
-                \gc_collect_cycles();
+                gc_collect_cycles();
 
                 $course = $courseRepo->find($courseId);
 
@@ -139,19 +139,18 @@ final class Version20201219115244 extends AbstractMigrationChamilo
 
                 $this->entityManager->flush();
                 $this->entityManager->clear();
-                \gc_collect_cycles();
+                gc_collect_cycles();
 
                 unset($ids, $itemProperties);
             }
         }
 
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
 
         $this->getLogger()->info('Wiki migration completed.', [
             'migrated' => $migrated,
             'skipped' => $skipped,
         ]);
     }
-
 }

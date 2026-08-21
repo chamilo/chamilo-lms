@@ -23,6 +23,8 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
@@ -263,11 +265,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     $this->connection->rollBack();
                 }
 
-                throw new RuntimeException(
-                    "Fast quiz resource migration failed for course {$courseId}: {$e->getMessage()}",
-                    0,
-                    $e
-                );
+                throw new RuntimeException("Fast quiz resource migration failed for course {$courseId}: {$e->getMessage()}", 0, $e);
             }
         }
     }
@@ -479,9 +477,10 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             return $this->nowUtc();
         }
 
-        return (new \DateTime($lastEdit, new \DateTimeZone('UTC')))
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->format('Y-m-d H:i:s');
+        return (new DateTime($lastEdit, new DateTimeZone('UTC')))
+            ->setTimezone(new DateTimeZone('UTC'))
+            ->format('Y-m-d H:i:s')
+        ;
     }
 
     /**

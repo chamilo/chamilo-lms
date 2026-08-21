@@ -165,7 +165,7 @@ final class AdminStatisticsExportController extends AbstractController
         return $response;
     }
 
-    private function normalizeExportValue(mixed $value): int|float|string
+    private function normalizeExportValue(mixed $value): float|int|string
     {
         if (\is_int($value) || \is_float($value)) {
             return $value;

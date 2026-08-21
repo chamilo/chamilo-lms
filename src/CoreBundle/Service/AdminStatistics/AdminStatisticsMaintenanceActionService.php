@@ -57,7 +57,7 @@ final readonly class AdminStatisticsMaintenanceActionService
         };
 
         return [
-            'message' => 0 < $affectedCount || 'delete' !== $action ? 'Update successful' : '',
+            'message' => $affectedCount > 0 || 'delete' !== $action ? 'Update successful' : '',
             'affectedCount' => $affectedCount,
         ];
     }
@@ -77,7 +77,7 @@ final readonly class AdminStatisticsMaintenanceActionService
         }
 
         if ('activate' === $action || 'deactivate' === $action) {
-            if (0 >= $userId) {
+            if ($userId <= 0) {
                 throw new BadRequestHttpException('Invalid user identifier.');
             }
             if (!$this->isUserInDuplicateReport($dupMode, $userId, $extraFieldId)) {
@@ -96,12 +96,12 @@ final readonly class AdminStatisticsMaintenanceActionService
         if ('unify' !== $action) {
             throw new BadRequestHttpException('Unsupported duplicate-user action.');
         }
-        if (0 >= $targetUserId) {
+        if ($targetUserId <= 0) {
             throw new BadRequestHttpException('Invalid target user identifier.');
         }
 
         $groupIds = $this->getDuplicateGroupUserIds($dupMode, $targetUserId, $extraFieldId);
-        if (2 > \count($groupIds)) {
+        if (\count($groupIds) < 2) {
             throw new BadRequestHttpException('No other duplicates found for this user.');
         }
 
@@ -109,13 +109,14 @@ final readonly class AdminStatisticsMaintenanceActionService
             $groupIds,
             static fn (int $id): bool => $targetUserId !== $id
         ));
+
         try {
             $mergedCount = $this->userMergeHelper->mergeUsersBatch($targetUserId, $mergeIds, null, true);
         } catch (Throwable $exception) {
             throw new BadRequestHttpException('An error occurred while unifying users.', $exception);
         }
 
-        if (0 >= $mergedCount) {
+        if ($mergedCount <= 0) {
             throw new BadRequestHttpException('No accounts were merged.');
         }
 
@@ -221,7 +222,7 @@ final readonly class AdminStatisticsMaintenanceActionService
 
     private function canDeleteUser(int $userId): bool
     {
-        if (0 >= $userId) {
+        if ($userId <= 0) {
             return false;
         }
 
@@ -346,7 +347,7 @@ final readonly class AdminStatisticsMaintenanceActionService
                 $types,
             );
 
-            return 1 < $count;
+            return $count > 1;
         }
 
         if ('email' === $dupMode) {
@@ -366,10 +367,10 @@ final readonly class AdminStatisticsMaintenanceActionService
                 $types,
             );
 
-            return 1 < $count;
+            return $count > 1;
         }
 
-        if (0 >= $extraFieldId) {
+        if ($extraFieldId <= 0) {
             return false;
         }
 
@@ -401,7 +402,7 @@ final readonly class AdminStatisticsMaintenanceActionService
             ],
         );
 
-        return 1 < $count;
+        return $count > 1;
     }
 
     /**
@@ -448,7 +449,7 @@ final readonly class AdminStatisticsMaintenanceActionService
                 .' AND TRIM(COALESCE(u.email, \'\')) <> \'\''
                 .' AND LOWER(TRIM(COALESCE(u.email, \'\'))) = :email ORDER BY u.id ASC';
         } else {
-            if (0 >= $extraFieldId) {
+            if ($extraFieldId <= 0) {
                 return [];
             }
             $value = $connection->executeQuery(
@@ -490,7 +491,7 @@ final readonly class AdminStatisticsMaintenanceActionService
         );
         $ids = $this->normalizeIds($ids);
 
-        return 2 <= \count($ids) ? $ids : [];
+        return \count($ids) >= 2 ? $ids : [];
     }
 
     /**
@@ -524,7 +525,7 @@ final readonly class AdminStatisticsMaintenanceActionService
     {
         return array_values(array_unique(array_filter(
             array_map(static fn (mixed $id): int => (int) $id, $ids),
-            static fn (int $id): bool => 0 < $id
+            static fn (int $id): bool => $id > 0
         )));
     }
 }

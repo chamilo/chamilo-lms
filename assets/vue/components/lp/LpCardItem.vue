@@ -41,10 +41,6 @@ const routeCtx = computed(() => ({
   gid: Number(route.query?.gid ?? 0),
 }))
 
-const routeStudentViewEnabled = computed(() =>
-  ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
-)
-
 const managementQuery = computed(() =>
   Object.fromEntries(
     Object.entries(route.query).filter(
@@ -65,7 +61,6 @@ const openRoute = computed(() => ({
       ...routeCtx.value,
       node: undefined,
       isStudentView: "true",
-      temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
     }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
   ),
 }))

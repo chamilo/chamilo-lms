@@ -349,13 +349,29 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 EOD;
 
-// User is not allowed if Terms and Conditions are disabled and registration is disabled too.
+// Course invitation (register + auto-subscribe to a course or whole session
+// via a one-time link). Resolved here, before the "not allowed" gate below,
+// so a valid invitation can also open that gate back up — not only the
+// later "show the form" gate further down. Deliberately independent of the
+// $courseIdRedirect/$exercise_redirect direct-link mechanism (built below):
+// this only reads its own `invitation` hash, never `c`/`s`/`e`.
+$courseInvitationGate = Container::$container->get(CourseInvitationRegistrationGate::class);
+$invitationRequest = Container::getRequest();
+$resolvedInvitation = null !== $invitationRequest ? $courseInvitationGate->resolveFromRequest($invitationRequest) : null;
+
+// Security rule: self-registration must stay blocked whenever
+// allow_registration is disabled, regardless of allow_terms_conditions
+// (that setting only lets a visitor who already has a pending
+// terms-and-conditions acceptance reach this page - it must not reopen
+// registration on its own), unless a valid course invitation link opens
+// registration back up (see $courseInvitationGate above).
 $isCreatingIntroPage = isset($_GET['create_intro_page']);
 $isPlatformAdmin = api_is_platform_admin();
+$termRegistered = Session::read('term_and_condition');
 
 $isNotAllowedHere = (
-    'false' === api_get_setting('allow_terms_conditions') &&
-    'false' === api_get_setting('allow_registration')
+    'false' === api_get_setting('allow_registration') &&
+    empty($termRegistered['user_id'])
 );
 
 if ($isNotAllowedHere && !($isCreatingIntroPage && $isPlatformAdmin)) {
@@ -394,7 +410,6 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
 
 $form = new FormValidator('registration');
 $userAlreadyRegisteredShowTerms = false;
-$termRegistered = Session::read('term_and_condition');
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $userAlreadyRegisteredShowTerms = isset($termRegistered['user_id']);
     // Ofaj change
@@ -1245,6 +1260,19 @@ if ($extraConditions && $extraFieldsLoaded) {
 $tpl = new Template($toolName);
 $textAfterRegistration = '';
 if ($form->validate()) {
+    // Defense in depth: even if the page-level gate above was somehow
+    // satisfied (e.g. allow_terms_conditions is enabled for an unrelated
+    // consent flow), never actually create a new account here unless
+    // self-registration is genuinely open, a valid course invitation
+    // applies, or this is an already-registered user completing a
+    // pending terms-and-conditions acceptance.
+    if (!$courseInvitationGate->canShowForm($resolvedInvitation) && false === $userAlreadyRegisteredShowTerms) {
+        api_not_allowed(
+            true,
+            get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.')
+        );
+    }
+
     $values = $form->getSubmitValues(1);
     // Make *sure* the login isn't too long
     if (isset($values['username'])) {

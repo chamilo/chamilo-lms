@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyQuestion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -31,6 +32,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class SurveyQuestionProvider implements ProviderInterface
 {
+    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     /**
@@ -57,6 +59,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -72,7 +75,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageSurveys()) {
+        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
 
@@ -99,19 +102,6 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         $response->questions = $this->getQuestions($survey, $response->canEdit, $response->hasAnswers);
 
         return $response;
-    }
-
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
     private function canWriteSurvey(CSurvey $survey): bool

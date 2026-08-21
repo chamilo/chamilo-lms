@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -34,6 +35,8 @@ use Throwable;
  */
 final readonly class SurveyMeetingProcessor implements ProcessorInterface
 {
+    use SurveyAccessHelperTrait;
+
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -43,6 +46,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -67,7 +71,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             return $this->submitAnswer($operation, $surveyId, $payload, $course, $session, $request);
         }
 
-        if (!$this->canManageSurveys()) {
+        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
             throw new AccessDeniedHttpException('You are not allowed to manage meeting polls in this context.');
         }
 
@@ -476,35 +480,11 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         }
     }
 
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
-    }
-
     private function isSurveyEditionGloballyHidden(): bool
     {
         $value = $this->settingsManager->getSetting('survey.hide_survey_edition', true);
 
         return true === $value || 'true' === $value || '*' === $value;
-    }
-
-    private function isSettingEnabled(string $name): bool
-    {
-        $value = $this->settingsManager->getSetting($name, true);
-
-        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     private function getCourseLanguage(Course $course): string

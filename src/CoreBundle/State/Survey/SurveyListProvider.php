@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
@@ -40,6 +41,7 @@ use const ENT_QUOTES;
  */
 final readonly class SurveyListProvider implements ProviderInterface
 {
+    use SurveyAccessHelperTrait;
     use SurveyPersonalitySupportTrait;
 
     public function __construct(
@@ -49,6 +51,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -65,7 +68,7 @@ final readonly class SurveyListProvider implements ProviderInterface
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $user = $this->getCurrentUser();
-        $canManage = $this->canManageSurveys();
+        $canManage = $this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager);
         $search = $this->normalizeSearchTerm($request->query->get('search', ''));
 
         $surveyList = new SurveyList();
@@ -123,22 +126,9 @@ final readonly class SurveyListProvider implements ProviderInterface
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
-    }
-
     private function canCreateSurveys(): bool
     {
-        if (!$this->canManageSurveys()) {
+        if (!$this->canManageSurveys($this->isAllowedToEditHelper, $this->security, $this->settingsManager)) {
             return false;
         }
 

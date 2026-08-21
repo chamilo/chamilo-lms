@@ -406,16 +406,15 @@ Feature: Exercise tool
     And wait for the page to be loaded
     Then I follow "Register" if it is visible
     And wait for the page to be loaded
-    Given I am a student
+    Given I am not logged
+    And I am a student
     And I wait for the page to be loaded
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow the course tool "Tests"
     And I wait for the page content to settle
     And I follow "Exercise 1"
-    And I wait for the page content to settle
-    Then I should see "Start test"
-    And I press "Start test"
+    And I start the exercise
     And I wait for the page content to settle
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
@@ -466,14 +465,17 @@ Feature: Exercise tool
     And I should see "85 / 105"
 
   Scenario: Teacher checks exercise results
-    Given I am on course "TEMP" homepage
+    Given I am a platform administrator
     And I wait for the page to be loaded
-    And I follow "Tests"
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Tests"
     And I wait for the page content to settle
     And I click the "[title='Results']" icon in the row for "Exercise 1"
     And I wait for the page content to settle
-    Then I should see "Learner score"
+    Then I should not see "No attempts found"
     And I should see "Attempts: 1"
+    And I should see "Costea"
     And I should see "85 / 105"
 
   Scenario: Delete an exercise

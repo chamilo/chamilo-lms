@@ -603,8 +603,7 @@ Feature: Exercise tool
     And I follow "Tests"
     And I wait for the page content to settle
     And I follow "Exercise 1"
-    And I wait for the page content to settle
-    And I press "Start test"
+    And I start the exercise
     And I wait for the page content to settle
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
@@ -659,12 +658,13 @@ Feature: Exercise tool
     And I wait for the page to be loaded
     And I am on course "EXTEACH" homepage
     And I wait for the page to be loaded
-    And I follow "Tests"
+    And I follow the course tool "Tests"
     And I wait for the page content to settle
     And I click the "[title='Results']" icon in the row for "Exercise 1"
     And I wait for the page content to settle
-    Then I should see "Learner score"
+    Then I should not see "No attempts found"
     And I should see "Attempts: 1"
+    And I should see "Costea"
     And I should see "85 / 105"
 
   Scenario: Delete an exercise

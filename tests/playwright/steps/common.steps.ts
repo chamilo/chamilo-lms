@@ -196,10 +196,13 @@ async function loginAs(page: Page, username: string) {
     )
     .first()
     .click()
-  // Login is an AJAX submit then a client-side navigation; waiting for the
-  // "load" event (waitForURL's default) never resolves on that path and
-  // burns the whole test timeout while the form is still on screen.
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"), { waitUntil: "commit" })
+  // Do not waitForURL({ waitUntil: "load" }): SPA login never fires load, and
+  // that hung the full test timeout. Do not use "commit" either: a CI run
+  // continued before the session cookie was stored, then the next navigation
+  // showed "Your session details have been lost, please login again." and
+  // every subsequent Save/settings step failed. The logout link only renders
+  // after the login XHR has been handled (Set-Cookie included).
+  await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
   // Real CI failure: toolGroup.feature's "Create an announcement as acostea
   // ..." scenario does "I am not logged" -> "I am logged as 'acostea'" ->
   // immediately navigates to group.php, which then rendered with a genuine
@@ -1289,7 +1292,7 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
     .first()
     .click()
   // Same settle rule as loginAs(): leave /login, no networkidle (see comment there).
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
   return page
 }
 
@@ -1409,7 +1412,9 @@ async function pressButton(page: Page, label: string) {
   // exists — not just as a tie-breaker when there happen to be several
   // matches — is what actually avoids ever preferring a disabled decoy.
   const exact = page.getByRole("button", { name: label, exact: true })
-  const enabledExact = exact.locator('xpath=self::*[not(@aria-disabled="true")]')
+  const enabledExact = exact.locator(
+    'xpath=self::*[not(@disabled) and not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]',
+  )
   if (await isSoonVisible(enabledExact)) {
     await enabledExact.first().click()
     return
@@ -1450,7 +1455,9 @@ async function pressButton(page: Page, label: string) {
   // tier safe without needing to special-case "Yes" by name.
   const textExact = page
     .locator("button", { hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
-    .locator("xpath=self::*[not(@aria-pressed)]")
+    .locator(
+      'xpath=self::*[not(@aria-pressed) and not(@disabled) and not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]',
+    )
   if (await isSoonVisible(textExact)) {
     await textExact.first().click()
     return
@@ -1498,8 +1505,16 @@ async function pressButton(page: Page, label: string) {
     await bySaveIcon.first().click()
     return
   }
+  // Exclude disabled/aria-disabled here too. A real hang in
+  // toolExerciseAdmin.feature's "Try exercise": after answering, ExercisePlayerView
+  // disables "Next question" while `isSavingAnswer` is true. Every exact/enabled
+  // tier above correctly skips that button, then this last-resort `:has-text()`
+  // matched it anyway and click() retried actionability until the full 90s test
+  // timeout. The until-appears loop never got a second attempt.
   await page
-    .locator(`button:has-text("${label}"), input[type="submit"][value="${label}"]`)
+    .locator(
+      `button:has-text("${label}"):not([disabled]):not([aria-disabled="true"]):not(.tox-tbtn), input[type="submit"][value="${label}"]:not([disabled])`,
+    )
     .first()
     .click()
 }
@@ -1546,6 +1561,10 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
 // only reflects once the next page has actually re-rendered.
 Then("I should see the {string} element", async ({ page }, selector: string) => {
   await expect(page.locator(selector).first()).toBeVisible()
+})
+
+Then("I should not see the {string} element", async ({ page }, selector: string) => {
+  await expect(page.locator(selector)).not.toBeVisible()
 })
 
 // Ported from FeatureContext::iWaitForTheElementToAppear() — a bounded wait
@@ -1628,6 +1647,16 @@ Then("I select all rows in the {string} grid", async ({ page }, gridName: string
 // so swallowing that specific race is safe.
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
   page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
+  // Prefer an exact cell/link match. A substring `hasText` match is how
+  // toolExerciseAdmin.feature's "Teacher checks exercise results" opened
+  // "Exercise 1 - Copy" (created by "Duplicate exercise") instead of
+  // "Exercise 1" — Copy has no student attempt, so the report stayed on
+  // "Attempts: 0" / "No attempts found".
+  const exactRow = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+  if (await isSoonVisible(exactRow.locator(selector), 2000)) {
+    await exactRow.locator(selector).first().click()
+    return
+  }
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
@@ -2268,6 +2297,17 @@ Then("the URL should not contain {string}", async ({ page }, part: string) => {
     .not.toContain(part)
 })
 
+// Pathname-only deny check. Needed because a Vue-router access deny can land
+// on /login?redirect=/admin/system-status... — the full URL still CONTAINS
+// that path as a query value, so "the URL should not contain" would false-
+// fail a genuine redirect-to-login. Polls until the Vue guard (or a Symfony
+// 302) has actually left the protected path.
+Then("the page path should not start with {string}", async ({ page }, prefix: string) => {
+  await expect
+    .poll(() => new URL(page.url()).pathname, { timeout: 15_000 })
+    .not.toMatch(new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:/|$)`))
+})
+
 // Used for the CidReqListener access-denied redirect chain (AccessDeniedHttpException
 // -> ExceptionListener flashes + redirects to the `index` route, "/"). A plain
 // "the URL should contain '/'" is unusable here since every URL's path starts
@@ -2679,13 +2719,26 @@ When("I check every {string} option on the page", async ({ page }, label: string
 // it register" below for what that actually was.
 When("I press \"Next question\" until {string} appears", async ({ page }, nextTitle: string) => {
   const heading = page.locator("h2").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(nextTitle)}\\s*$`) })
-  for (let attempt = 0; attempt < 5; attempt++) {
-    await pressButton(page, "Next question")
-    if (await isSoonVisible(heading, 3000)) {
+  const nextControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
+    hasText: /^\s*(Next question|Next page)\s*$/,
+  })
+  for (let attempt = 0; attempt < 8; attempt++) {
+    if (await isSoonVisible(nextControl, 5_000)) {
+      await nextControl.first().click()
+    }
+    if (await isSoonVisible(heading, 4_000)) {
       return
     }
   }
   await expect(heading.first()).toBeVisible()
+})
+
+When("I start the exercise", async ({ page }) => {
+  const startControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
+    hasText: /^\s*(Start test|Proceed with the test)\s*$/,
+  })
+  await expect(startControl.first()).toBeVisible({ timeout: 20_000 })
+  await startControl.first().click()
 })
 
 // Not ported — new, for specialCase1Sessions.feature's session_add.php/session_edit.php

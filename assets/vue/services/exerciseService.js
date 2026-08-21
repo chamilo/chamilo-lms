@@ -95,8 +95,11 @@ export default {
     return await baseService.post(`/api/exercise/list/action${queryString}`, payload, {}, exerciseRequestConfig())
   },
 
-  async getExerciseOverview(params = {}, exerciseId) {
-    return await baseService.get(`/api/exercise/overview/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
+  async getExerciseOverview(params = {}, exerciseId, config = {}) {
+    return await baseService.get(`/api/exercise/overview/${exerciseId}`, cleanParams(params), {
+      ...exerciseRequestConfig(),
+      ...config,
+    })
   },
 
   async checkExerciseBrowser(params = {}, exerciseId, sleep = false) {

@@ -66,13 +66,9 @@
 #   what actually produced the CI failure, not any duplicate course-creation
 #   bug — "Create three courses for catalogue testing" was independently
 #   re-verified live to create exactly one row per title, no duplicates.
-#   Fixed here (test-side only, per this suite's scope) by swapping in the
-#   existing "wait for the page content to settle" step (domcontentloaded +
-#   bounded networkidle) right after navigating to "/catalogue/courses", so
-#   the initial load and any IntersectionObserver-triggered continuation
-#   fully drain before a filter is ever applied, closing the race window.
-#   A real fix would add request cancellation/version-guarding inside
-#   CatalogueCourses.vue's load() itself.
+#   CatalogueCourses.vue's load() now ignores stale responses (a generation
+#   token bumped on every resetCatalogueState). The waits below still give
+#   the filtered request time to paint before asserting titles.
 #
 # Cleanup: the original never deleted its 3 courses ("testcourse",
 # "grammarcourse", "grammartest") or the "Duration" extra field, and this
@@ -128,7 +124,8 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "test"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I should not see "Loading courses. Please wait."
+    And I wait for the page content to settle
     Then I should see "testcourse"
     And I should see "grammartest"
     And I should not see "grammarcourse"
@@ -139,7 +136,8 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "course"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I should not see "Loading courses. Please wait."
+    And I wait for the page content to settle
     Then I should see "testcourse"
     And I should see "grammarcourse"
     And I should not see "grammartest"
@@ -190,7 +188,8 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "extra-duration" with "22:22:22"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I should not see "Loading courses. Please wait."
+    And I wait for the page content to settle
     Then I should see "grammartest"
     And I should not see "testcourse"
     And I should not see "grammarcourse"

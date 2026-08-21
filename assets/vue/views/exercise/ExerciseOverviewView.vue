@@ -489,12 +489,17 @@ async function loadOverview() {
     return
   }
 
+  const cid = getQueryValue(route.query.cid)
+  if (!cid) {
+    return
+  }
+
   const token = ++loadOverviewToken
   isLoading.value = true
   errorMessage.value = ""
 
   try {
-    const response = await exerciseService.getExerciseOverview(getContextParams(), exerciseId)
+    const response = await exerciseService.getExerciseOverview(getContextParams(), exerciseId, { timeout: 15_000 })
     if (token !== loadOverviewToken) {
       return
     }

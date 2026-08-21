@@ -227,6 +227,10 @@ function buildBaseLoadParams() {
 }
 
 let loadParams = buildBaseLoadParams()
+// Bumped whenever the result set is reset (new filters / clear). In-flight
+// load() calls compare against this so a slower unfiltered page-1/page-2
+// response cannot overwrite a later filtered result.
+let loadGeneration = 0
 
 function normalizeCategoriesQueryValue(value) {
   const normalizeOne = (item) => {
@@ -262,6 +266,7 @@ function normalizeCategoriesQueryValue(value) {
 }
 
 function resetCatalogueState() {
+  loadGeneration += 1
   courses.value = []
   totalCourses.value = 0
 }
@@ -305,16 +310,19 @@ const load = async () => {
     return
   }
 
+  const generation = loadGeneration
+  const requestParams = { ...loadParams }
+
   status.value = true
 
   try {
-    const courseCatalogue = await courseService.loadCourseCatalogue(loadParams)
+    const courseCatalogue = await courseService.loadCourseCatalogue(requestParams)
 
-    loadParams = {}
-
-    if (courseCatalogue.nextPageParams) {
-      loadParams = courseCatalogue.nextPageParams
+    if (generation !== loadGeneration) {
+      return
     }
+
+    loadParams = courseCatalogue.nextPageParams ? { ...courseCatalogue.nextPageParams } : {}
 
     if (!totalCourses.value) {
       totalCourses.value = courseCatalogue.totalItems
@@ -328,6 +336,10 @@ const load = async () => {
         baseService.get("/catalogue/course-extra-field-values", { ids }),
         loadCourseSubscriptionStatuses(courseIds),
       ])
+
+      if (generation !== loadGeneration) {
+        return
+      }
 
       courses.value.push(
         ...courseCatalogue.items.map((c) => {
@@ -351,6 +363,11 @@ const load = async () => {
         userId: currentUserId,
         urlId: window.access_url_id,
       })
+
+      if (generation !== loadGeneration) {
+        return
+      }
+
       for (const vote of votes) {
         let courseId
 
@@ -367,9 +384,13 @@ const load = async () => {
       }
     }
   } catch (error) {
-    showErrorNotification(error)
+    if (generation === loadGeneration) {
+      showErrorNotification(error)
+    }
   } finally {
-    status.value = false
+    if (generation === loadGeneration) {
+      status.value = false
+    }
   }
 }
 

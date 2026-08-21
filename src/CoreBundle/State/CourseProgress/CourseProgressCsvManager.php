@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -37,20 +37,18 @@ use const ENT_SUBSTITUTE;
 
 final readonly class CourseProgressCsvManager
 {
-    use CourseProgressAccessHelperTrait;
-
     private const int MAX_FILE_SIZE = 5_242_880;
     private const int MAX_ROWS = 10_000;
     private const int MAX_PLAN_ITEMS_PER_THEMATIC = 100;
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
-        private StudentViewHelper $studentViewHelper,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     public function export(Request $request): StreamedResponse
@@ -177,19 +175,11 @@ final readonly class CourseProgressCsvManager
     private function resolveWritableContext(Request $request): array
     {
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->studentViewHelper->isActiveForCourse($course)
-            || !$this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
+        if (!$this->courseProgressHelper->canManage($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to transfer course progress in this context.');
         }
 
@@ -430,7 +420,7 @@ final readonly class CourseProgressCsvManager
     private function removeCurrentContextThematics(Course $course, ?Session $session): void
     {
         foreach ($this->thematicRepository->getThematicListForCourse($course, $session) as $thematic) {
-            if (!$thematic instanceof CThematic || !$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+            if (!$thematic instanceof CThematic || !$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
                 continue;
             }
 

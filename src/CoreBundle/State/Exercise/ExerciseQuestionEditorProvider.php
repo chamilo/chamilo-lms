@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -90,6 +91,7 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -105,7 +107,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        // The global question bank is not course scoped, so a question manager keeps access
+        // even where the course rules would deny it.
+        if (!$this->isAllowedToEditHelper->check(coach: true)
+            && !$this->security->isGranted('ROLE_QUESTION_MANAGER')) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }
 
@@ -472,14 +477,6 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
         } catch (Throwable) {
             return false;
         }
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_QUESTION_MANAGER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

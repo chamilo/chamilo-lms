@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -45,6 +46,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -62,7 +64,7 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage the question bank in this context.');
         }
 
@@ -108,12 +110,6 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         $response->message = 1 === $addedCount ? 'Question added to the test' : 'Questions added to the test';
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz

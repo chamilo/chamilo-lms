@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -69,7 +69,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
-        private readonly StudentViewHelper $studentViewHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -136,7 +136,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
-        $canManage = $this->canManageForumsInCurrentView($this->security, $this->studentViewHelper);
+        $canManage = $this->isAllowedToEditHelper->check(coach: true);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
 

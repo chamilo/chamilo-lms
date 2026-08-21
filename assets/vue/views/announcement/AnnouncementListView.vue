@@ -318,6 +318,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -391,7 +392,6 @@ function getContextParams(extraKeys = []) {
   for (const key of [
     "origin",
     "page",
-    "isStudentView",
     "lp_id",
     "lp_item_id",
     "lp_view_id",
@@ -573,5 +573,7 @@ async function loadAnnouncements() {
 
 onMounted(loadAnnouncements)
 
-watch(() => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadAnnouncements)
+useStudentViewRefresh(loadAnnouncements)
+
+watch(() => [route.query.cid, route.query.sid, route.query.gid], loadAnnouncements)
 </script>

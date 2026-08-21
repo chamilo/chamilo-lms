@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -61,6 +62,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
         private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -95,7 +97,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->userHelper->isTeacherOfCurrentCourse());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
         if (!$question instanceof CQuizQuestion) {
@@ -261,12 +263,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool

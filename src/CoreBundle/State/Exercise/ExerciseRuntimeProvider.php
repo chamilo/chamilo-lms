@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -94,6 +95,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         private CGlossaryRepository $glossaryRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -109,7 +111,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManagePermission = $this->canManageExercises();
+        $canManagePermission = $this->userHelper->isTeacherOfCurrentCourse();
         $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
         $canManage = $canManagePermission && !$runsAsLearner;
 
@@ -519,13 +521,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isLearnerRuntimeRequest(Request $request): bool

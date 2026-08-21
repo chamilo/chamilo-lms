@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiPage;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Entity\CWikiMailcue;
@@ -34,8 +34,6 @@ use const DATE_ATOM;
  */
 final readonly class WikiPageProvider implements ProviderInterface
 {
-    use WikiAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
@@ -43,10 +41,10 @@ final readonly class WikiPageProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentFeedbackResolver $feedbackResolver,
         private WikiCategoryService $categoryService,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -61,24 +59,21 @@ final readonly class WikiPageProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $nodeId = $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $nodeId = $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
+        if (!$this->wikiHelper->canRead($course, $session, $group)) {
             throw new AccessDeniedHttpException('You are not allowed to view Wiki pages in this context.');
         }
 
         $this->registerToolAccess();
 
         $studentView = $this->studentViewHelper->isActive();
-        $canManage = !$studentView && $this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canManage = !$studentView && $this->wikiHelper->canManage(
             $course,
             $session,
             $group,
@@ -113,10 +108,7 @@ final readonly class WikiPageProvider implements ProviderInterface
             $sessionId,
             true,
         );
-        $canCreateAnyPage = !$studentView && $this->canCreateWikiPage(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canCreateAnyPage = !$studentView && $this->wikiHelper->canCreatePage(
             $course,
             $session,
             $group,
@@ -137,29 +129,24 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->addLocked = 0 === $addLock;
         $page->canChangeAddLock = $canManage && $contextHasPages;
         $page->studentView = $studentView;
-        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
-            $this->entityManager,
+        $categoriesEnabled = $this->wikiHelper->isCourseSettingEnabled(
             $course,
             'wiki_categories_enabled',
             false,
         );
         $page->categoriesEnabled = $categoriesEnabled;
         $page->canManageSettings = !$studentView
-            && $this->canManageWikiCourseSettings($this->security, $course);
+            && $this->wikiHelper->canManageCourseSettings($course);
         $page->canManageCategories = $categoriesEnabled
             && !$studentView
-            && $this->canManageWikiContext(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
+            && $this->wikiHelper->canManage(
                 $course,
                 $session,
                 null,
             );
         $page->settings = [
             'categoriesEnabled' => $categoriesEnabled,
-            'strictHtmlFiltering' => $this->isWikiCourseSettingEnabled(
-                $this->entityManager,
+            'strictHtmlFiltering' => $this->wikiHelper->isCourseSettingEnabled(
                 $course,
                 'wiki_html_strict_filtering',
                 false,
@@ -168,10 +155,7 @@ final readonly class WikiPageProvider implements ProviderInterface
 
         if (!$first instanceof CWiki || null === $first->getPageId()) {
             $page->title = $this->renderer->displayTitle($reflink);
-            $page->canEdit = !$studentView && $this->canCreateWikiPage(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
+            $page->canEdit = !$studentView && $this->wikiHelper->canCreatePage(
                 $course,
                 $session,
                 $group,
@@ -195,17 +179,14 @@ final readonly class WikiPageProvider implements ProviderInterface
             return $page;
         }
 
-        $this->assertWikiPageVisible($this->security, $latest, $canManage);
+        $this->wikiHelper->assertPageVisible($latest, $canManage);
 
         $isExactContextPage = $sourceSessionId === $sessionId;
         $page->canChangeVisibility = $canManage && $isExactContextPage;
         $page->canChangeProtection = $canManage && $isExactContextPage;
         $page->canDelete = $canManage && $isExactContextPage;
         $page->canPrint = true;
-        $page->canExportPdf = $canManage || $this->resolveWikiBoolean(
-            $this->settingsManager->getSetting('document.students_export2pdf', true),
-            true,
-        );
+        $page->canExportPdf = $canManage || $this->wikiHelper->isPlatformSettingEnabled('document.students_export2pdf', true);
         $page->canExportToDocuments = $canManage;
         $page->canSubscribe = $canManage;
         $currentUser = $this->security->getUser();
@@ -236,19 +217,13 @@ final readonly class WikiPageProvider implements ProviderInterface
         $page->subscribed = $subscription instanceof CWikiMailcue;
         $page->canEdit = !$studentView && (
             $isExactContextPage
-                ? $this->canEditWikiPage(
-                    $this->entityManager,
-                    $this->security,
-                    $this->settingsManager,
+                ? $this->wikiHelper->canEditPage(
                     $course,
                     $session,
                     $group,
                     $latest,
                 )
-                : $this->canCreateWikiPage(
-                    $this->entityManager,
-                    $this->security,
-                    $this->settingsManager,
+                : $this->wikiHelper->canCreatePage(
                     $course,
                     $session,
                     $group,

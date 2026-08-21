@@ -223,6 +223,7 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue";
 import BaseTable from "../../components/basecomponents/BaseTable.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
 import wikiService from "../../services/wikiService";
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n();
 const route = useRoute();
@@ -292,9 +293,6 @@ function getContextParams() {
     params.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return params;
 }
@@ -312,9 +310,6 @@ function getSharedQuery() {
     query.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return query;
 }
@@ -479,4 +474,6 @@ async function loadCategories(showLoading = true) {
 }
 
 onMounted(loadCategories);
+
+useStudentViewRefresh(loadCategories);
 </script>

@@ -474,6 +474,7 @@ import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -930,6 +931,8 @@ function displayText(value, fallback = "") {
 }
 
 onMounted(loadSurveys)
+
+useStudentViewRefresh(loadSurveys)
 
 watch(
   () => route.query,

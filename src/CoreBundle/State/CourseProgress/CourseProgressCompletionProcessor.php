@@ -12,8 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressCompletion;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
@@ -31,17 +30,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class CourseProgressCompletionProcessor implements ProcessorInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
-        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private CThematicAdvanceRepository $thematicAdvanceRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -64,10 +60,10 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertCanManage($course, $session);
 
         $advance = $this->getTargetAdvance($data->advanceId, $course, $session);
         $orderedAdvances = $this->getWritableOrderedAdvances($course, $session);
@@ -107,23 +103,6 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         return $result;
     }
 
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
-    {
-        if (!$this->studentViewHelper->isActiveForCourse($course)
-            && $this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to update course progress in this context.');
-    }
-
     private function getTargetAdvance(int $advanceId, Course $course, ?Session $session): CThematicAdvance
     {
         if ($advanceId <= 0) {
@@ -136,7 +115,7 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         }
 
         $thematic = $advance->getThematic();
-        if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+        if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
             throw new AccessDeniedHttpException('The requested thematic advance does not belong to the current course context.');
         }
 
@@ -158,7 +137,7 @@ final readonly class CourseProgressCompletionProcessor implements ProcessorInter
         foreach ($this->thematicRepository->findOrderedAdvancesForCourse($course, $session) as $advance) {
             $thematic = $advance->getThematic();
 
-            if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+            if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
                 continue;
             }
 

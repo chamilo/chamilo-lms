@@ -589,7 +589,6 @@ function getContextParams(extra = {}) {
     lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
     type: getQueryValue(route.query.type),
     returnToLp: getQueryValue(route.query.returnToLp),
-    isStudentView: getQueryValue(route.query.isStudentView),
     parent: getQueryValue(route.query.parent),
     node: getQueryValue(route.query.node),
     gradebook: getQueryValue(route.query.gradebook),

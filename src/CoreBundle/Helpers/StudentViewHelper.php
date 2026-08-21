@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\EventListener\LegacyListener;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -36,28 +35,6 @@ class StudentViewHelper
         $session = $this->getSessionHandler();
 
         return null !== $session && 'studentview' === $session->get('studentview');
-    }
-
-    /**
-     * Same as isActive(), plus the per-course switch the legacy course_progress page writes.
-     */
-    public function isActiveForCourse(?Course $course): bool
-    {
-        $session = $this->getSessionHandler();
-        if (null === $session) {
-            return false;
-        }
-
-        $courseId = $course?->getId();
-        if (null !== $courseId) {
-            $perCourse = $session->get('student_view_course_'.$courseId);
-
-            if (null !== $perCourse) {
-                return (bool) $perCourse;
-            }
-        }
-
-        return 'studentview' === $session->get('studentview');
     }
 
     private function getSessionHandler(): ?SessionInterface

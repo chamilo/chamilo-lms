@@ -11,6 +11,7 @@ use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -41,6 +42,7 @@ class PlatformConfigurationController extends AbstractController
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -75,7 +77,10 @@ class PlatformConfigurationController extends AbstractController
 
         $configuration = [
             'settings' => [],
-            'studentview' => $requestSession->get('studentview'),
+            // Through the helper, so the payload cannot report the student view as active
+            // after an administrator turned course.student_view_enabled off while a session
+            // still carries the key. Keeps the string shape the Vue store compares against.
+            'studentview' => $this->studentViewHelper->isActive() ? 'studentview' : 'teacherview',
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
             'oauth2_providers' => $oauth2Providers,

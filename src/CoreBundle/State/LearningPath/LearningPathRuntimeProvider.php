@@ -891,7 +891,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
 
             $params['lpItemId'] = $learningPathItemId;
             $params['invitationCode'] = 'auto';
-            $params['isStudentView'] = 'true';
 
             return $this->appendQuery('/resources/survey/'.$courseNodeId.'/'.$resourceId.'/answer', $params);
         }
@@ -1177,7 +1176,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             'sid' => (int) ($session?->getId() ?? 0),
             'gid' => (int) ($group?->getIid() ?? 0),
             'origin' => 'learnpath',
-            'isStudentView' => $this->studentViewHelper->isActive() ? 'true' : 'false',
             'gradebook' => $request->query->getInt('gradebook'),
         ];
     }
@@ -1329,7 +1327,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         User $user,
     ): string {
         $params = $this->buildContextParams($course, $session, $group, $request);
-        $params['isStudentView'] = $request->query->getString('isStudentView', 'false');
         $params['self'] = 1;
         $params['showTeachers'] = 1;
         $params['studentId'] = (int) $user->getId();

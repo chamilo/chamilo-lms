@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -63,6 +64,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -110,7 +112,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         if (!$preview) {
             $this->assertSurveyIsAvailable($survey);
             $invitation = $this->getInvitation($survey, $course, $session, $user, $request);
-        } elseif (!$this->canPreviewSurveys()) {
+        } elseif (!$this->surveyHelper->canPreview()) {
             throw new AccessDeniedHttpException('You are not allowed to preview this survey.');
         }
 
@@ -616,19 +618,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         if (null !== $availableUntil && $availableUntil < $now) {
             throw new AccessDeniedHttpException('This survey is already closed.');
         }
-    }
-
-    private function canPreviewSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
     private function isSurveyInContext(CSurvey $survey, Course $course, ?Session $session): bool

@@ -559,6 +559,7 @@ import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -1238,4 +1239,6 @@ onMounted(async () => {
     }
   }
 })
+
+useStudentViewRefresh(loadForums)
 </script>

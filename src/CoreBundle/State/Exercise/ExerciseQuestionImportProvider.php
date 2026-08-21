@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionImport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Symfony\Bundle\SecurityBundle\Security;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -26,7 +26,7 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
-        private Security $security,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -40,7 +40,7 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
             throw new BadRequestHttpException('The current request is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to import exercises in this context.');
         }
 
@@ -57,12 +57,6 @@ final readonly class ExerciseQuestionImportProvider implements ProviderInterface
         $response->learningPathContext = $this->isLearningPathImportContext($request);
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function normalizeImportType(string $importType): string

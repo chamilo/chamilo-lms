@@ -300,6 +300,7 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue";
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue";
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue";
 import wikiService from "../../services/wikiService";
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n();
 const route = useRoute();
@@ -359,9 +360,6 @@ function getSharedQuery() {
     query.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return query;
 }
@@ -512,6 +510,8 @@ function changeSubscription() {
 
 onMounted(loadDiscussion);
 
+useStudentViewRefresh(loadDiscussion);
+
 watch(
   () => [
     route.params.node,
@@ -519,7 +519,6 @@ watch(
     route.query.cid,
     route.query.sid,
     route.query.gid,
-    route.query.isStudentView,
   ],
   loadDiscussion,
 );

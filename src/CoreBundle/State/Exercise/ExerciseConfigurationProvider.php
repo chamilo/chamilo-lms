@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -31,7 +32,6 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -55,9 +55,9 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
-        private Security $security,
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -73,7 +73,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
         }
 
@@ -912,12 +912,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             ),
             static fn (int $value): bool => $value > 0
         ));
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isProgressiveAdaptiveSettingEnabled(): bool

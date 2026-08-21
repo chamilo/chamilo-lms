@@ -218,11 +218,14 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import exerciseService from "../../services/exerciseService"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
+const platformConfig = usePlatformConfig()
 
 const isLoading = ref(false)
 const isStartingAttempt = ref(false)
@@ -303,7 +306,6 @@ function getContextParams() {
   addOptionalQueryParam(params, "returnToLp")
   addOptionalQueryParam(params, "embedded")
   addOptionalQueryParam(params, "gradebook")
-  addOptionalQueryParam(params, "isStudentView")
   addOptionalQueryParam(params, "preview")
   addOptionalQueryParam(params, "attemptId")
 
@@ -366,10 +368,10 @@ function getRuntimeStartContextParams() {
   const params = { ...getContextParams() }
 
   if (
-    overview.canManage
-    && !isLearnpathContext.value
-    && !Object.prototype.hasOwnProperty.call(params, "preview")
-    && !Object.prototype.hasOwnProperty.call(params, "isStudentView")
+    overview.canManage &&
+    !isLearnpathContext.value &&
+    !platformConfig.isStudentViewActive &&
+    !Object.prototype.hasOwnProperty.call(params, "preview")
   ) {
     params.preview = 1
   }
@@ -583,6 +585,8 @@ function displayText(value, fallback = "") {
 }
 
 onMounted(loadOverview)
+
+useStudentViewRefresh(loadOverview)
 
 watch(
   () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid],

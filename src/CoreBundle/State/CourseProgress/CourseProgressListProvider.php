@@ -14,14 +14,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use DateTimeInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use IntlDateFormatter;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,16 +37,13 @@ use const ENT_SUBSTITUTE;
  */
 final readonly class CourseProgressListProvider implements ProviderInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -62,22 +58,17 @@ final readonly class CourseProgressListProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
 
-        if (!$this->canReadCourseProgress($this->security, $this->settingsManager, $course, $session)) {
+        if (!$this->courseProgressHelper->canRead($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to view course progress in this context.');
         }
 
-        $studentView = $this->studentViewHelper->isActiveForCourse($course);
-        $canManage = !$studentView && $this->canManageCourseProgress(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
-            $course,
-            $session,
-        );
+        // The helper already denies the student view, so the flag is only reported, not applied.
+        $studentView = $this->studentViewHelper->isActive();
+        $canManage = $this->courseProgressHelper->canManage($course, $session);
 
         $list = new CourseProgressList();
         $list->courseId = (int) $course->getId();
@@ -140,7 +131,7 @@ final readonly class CourseProgressListProvider implements ProviderInterface
         }
 
         $sourceSession = $contextLink?->getSession();
-        $belongsToExactContext = $this->thematicBelongsToExactContext($thematic, $course, $session);
+        $belongsToExactContext = $this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session);
         $canEdit = $canManage
             && $belongsToExactContext
             && null !== $resourceNode

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -52,6 +53,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -72,7 +74,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to view this exercise report.');
         }
 
@@ -109,12 +111,6 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         $response->extraFields = $this->getFilterableUserExtraFields();
 
         return $response;
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -154,7 +150,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 

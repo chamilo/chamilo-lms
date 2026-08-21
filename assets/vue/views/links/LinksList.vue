@@ -399,6 +399,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { getCourseContext } from "../../utils/courseContext"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const route = useRoute()
 const router = useRouter()
@@ -454,10 +455,7 @@ onMounted(() => {
   fetchLinks()
 })
 
-watch(
-  () => platform.isStudentViewActive,
-  () => fetchLinks(),
-)
+useStudentViewRefresh(fetchLinks)
 
 watch(
   () => collapsedCategoryStorageKey.value,

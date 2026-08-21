@@ -18,6 +18,8 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -80,6 +82,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -101,7 +105,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $canManage = $this->canManageExercises();
+        $canManage = $this->isAllowedToEditHelper->check(coach: true);
         if (!$canManage && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to view this exercise result.');
         }
@@ -272,13 +276,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isReviewMode(TrackEExercise $attempt, bool $canManage, Request $request): bool

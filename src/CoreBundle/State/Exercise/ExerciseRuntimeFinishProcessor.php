@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -133,6 +134,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -168,7 +170,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->userHelper->isTeacherOfCurrentCourse());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $questionIds = $this->parseQuestionIds((string) $attempt->getDataTracking());
         if ([] === $questionIds) {
@@ -529,13 +531,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool

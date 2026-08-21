@@ -20,17 +20,7 @@ const getLearningPath = async (lpId) => {
 /** Builds the Vue learner runtime URL. */
 const buildRuntimeUrl = (
   lpId,
-  {
-    cid,
-    sid = 0,
-    gid = 0,
-    node,
-    gradebook = 0,
-    origin = "learnpath",
-    isStudentView = "true",
-    itemId = 0,
-    temporaryStudentView = "",
-  } = {},
+  { cid, sid = 0, gid = 0, node, gradebook = 0, origin = "learnpath", isStudentView = "true", itemId = 0 } = {},
 ) => {
   const qs = new URLSearchParams({
     sid: Number(sid),
@@ -46,10 +36,6 @@ const buildRuntimeUrl = (
 
   if (Number(itemId) > 0) {
     qs.set("item_id", Number(itemId))
-  }
-
-  if (String(temporaryStudentView) !== "") {
-    qs.set("temporaryStudentView", String(temporaryStudentView))
   }
 
   return `/resources/lp/${Number(node)}/${Number(lpId)}/runtime?${qs.toString()}`

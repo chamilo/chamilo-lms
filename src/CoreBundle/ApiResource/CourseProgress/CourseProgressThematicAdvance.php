@@ -45,10 +45,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
-                ),
             ],
         ),
         new Post(
@@ -72,10 +68,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
                 ),
             ],
         ),
@@ -103,10 +95,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
-                ),
             ],
         ),
         new Delete(
@@ -132,10 +120,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
                 ),
             ],
         ),

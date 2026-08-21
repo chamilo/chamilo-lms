@@ -1628,6 +1628,10 @@ body.lp-runtime-document {
   text-decoration: none;
 }
 
+button.lp-runtime-menu-link {
+  width: 100%;
+}
+
 .lp-runtime-menu-link:hover {
   background: #f8fafc;
   color: rgb(var(--color-primary-base));

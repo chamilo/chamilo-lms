@@ -6,6 +6,7 @@
  *
  * Responsibilities:
  *  - Validate HMAC query signature (our own signature added when registering the hook)
+ *  - Handle signed BigBlueButton end-of-meeting callbacks
  *  - Parse payload (JSON preferred; XML and form as fallback)
  *  - Map events to per-participant metrics in ConferenceActivity.metrics (JSON)
  *  - Ensure there is an OPEN ConferenceActivity row for (meeting,user)
@@ -93,6 +94,7 @@ try {
     $mid = isset($_GET['mid']) ? (string) $_GET['mid'] : '';
     $ts  = isset($_GET['ts'])  ? (int) $_GET['ts'] : 0;   // optional but recommended to avoid replay
     $sig = isset($_GET['sig']) ? (string) $_GET['sig'] : '';
+    $callback = isset($_GET['callback']) ? (string) $_GET['callback'] : '';
 
     $plugin   = BbbPlugin::create();
     $hashAlgo = $plugin->webhooksHashAlgo(); // 'sha256' | 'sha1'
@@ -106,6 +108,27 @@ try {
     if (!$au || !$sig) {
         dbg('missing signature fields');
         http_json(400, ['ok'=>false,'error'=>'missing_signature_fields']);
+    }
+
+    if ('meeting_end' === $callback) {
+        if ('' === $mid) {
+            http_json(400, ['ok'=>false,'error'=>'missing_meeting_id']);
+        }
+
+        $expected = hash_hmac($hashAlgo, $au.'|'.$mid.'|meeting_end', $salt);
+        if (!hash_equals($expected, $sig)) {
+            error_log('[BBB webhook] bad meeting-end callback signature');
+            http_json(403, ['ok'=>false,'error'=>'bad_signature']);
+        }
+
+        $bbb = new Bbb();
+        $closed = $bbb->closeMeetingLocallyByRemoteId($mid, $au);
+
+        http_json(200, [
+            'ok' => true,
+            'meeting_id' => $mid,
+            'closed' => $closed,
+        ]);
     }
 
     // Optional anti-replay: allow 15 minutes skew
@@ -123,9 +146,7 @@ try {
 
     if (!hash_equals($expected, $sig) && !hash_equals($legacyExpected, $sig)) {
         error_log('[BBB webhook] bad signature');
-        http_response_code(403);
-        echo json_encode(['ok'=>false,'error'=>'bad_signature']);
-        exit;
+        http_json(403, ['ok'=>false,'error'=>'bad_signature']);
     }
 
     // ---------- 2) Parse incoming payload ----------

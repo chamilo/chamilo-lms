@@ -10,8 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCategoryAction;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
@@ -24,8 +22,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,9 +58,8 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private EventLoggerHelper $eventLoggerHelper,
-        private StudentViewHelper $studentViewHelper,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -90,7 +86,7 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
 
-        if ($this->studentViewHelper->isActive() || !$this->canManageGradebook($course, $session, $user)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Gradebook categories in this context.');
         }
 
@@ -488,39 +484,6 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
         }
     }
 
-    private function canManageGradebook(Course $course, ?Session $session, User $user): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
-            && $this->isSettingEnabled('session.session_admins_edit_courses_content')
-        ) {
-            return true;
-        }
-
-        if ($session instanceof Session && $this->isSessionCourseReadOnly($course)) {
-            return false;
-        }
-
-        $isCourseTeacher = $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-        if ($session instanceof Session
-            && !$isCourseTeacher
-            && Session::READ_ONLY === $session->setAccessVisibilityByUser($user)
-        ) {
-            return false;
-        }
-
-        if ($isCourseTeacher) {
-            return true;
-        }
-
-        return $session instanceof Session
-            && $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            && $this->isSettingEnabled('session.allow_coach_to_edit_course_session');
-    }
-
     private function validateGroupContext(Operation $operation, Course $course): void
     {
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
@@ -535,27 +498,6 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
         ) {
             throw new AccessDeniedHttpException('The requested group does not belong to the current course.');
         }
-    }
-
-    private function isSessionCourseReadOnly(Course $course): bool
-    {
-        if (!$this->isSettingEnabled('session.session_courses_read_only_mode')) {
-            return false;
-        }
-
-        $value = $this->extraFieldValuesRepository->getValueByVariableAndItem(
-            'session_courses_read_only_mode',
-            (int) $course->getId(),
-            ExtraField::COURSE_FIELD_TYPE,
-        );
-
-        if (!$value instanceof ExtraFieldValues) {
-            return false;
-        }
-
-        $rawValue = strtolower(trim((string) $value->getFieldValue()));
-
-        return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
     }
 
     private function findRootCategory(Course $course, ?Session $session): ?GradebookCategory

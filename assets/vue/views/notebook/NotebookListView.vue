@@ -156,6 +156,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import notebookService from "../../services/notebookService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const { showSuccessNotification, showWarningNotification, showErrorNotification } = useNotification()
@@ -218,9 +219,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -364,12 +362,13 @@ onMounted(async () => {
   loadResultMessage()
 })
 
+useStudentViewRefresh(loadNotes)
+
 watch(
   () => [
     route.query.cid,
     route.query.sid,
     route.query.gid,
-    route.query.isStudentView,
     route.query.sort,
     route.query.direction,
   ],

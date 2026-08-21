@@ -160,6 +160,7 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseProgressService from "../../services/courseProgressService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -209,9 +210,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -316,8 +314,10 @@ async function savePlans(addNewItem) {
 
 onMounted(loadPlans)
 
+useStudentViewRefresh(loadPlans)
+
 watch(
-  () => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView],
+  () => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid],
   loadPlans,
 )
 </script>

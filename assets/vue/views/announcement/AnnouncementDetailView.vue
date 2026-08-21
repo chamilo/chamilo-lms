@@ -236,6 +236,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -275,7 +276,6 @@ function getContextParams() {
   for (const key of [
     "origin",
     "page",
-    "isStudentView",
     "lp_id",
     "lp_item_id",
     "lp_view_id",
@@ -421,8 +421,10 @@ async function loadAnnouncement() {
 
 onMounted(loadAnnouncement)
 
+useStudentViewRefresh(loadAnnouncement)
+
 watch(
-  () => [route.params.id, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView],
+  () => [route.params.id, route.query.cid, route.query.sid, route.query.gid],
   loadAnnouncement,
 )
 </script>

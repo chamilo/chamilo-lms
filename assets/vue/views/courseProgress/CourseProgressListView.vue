@@ -479,9 +479,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -847,5 +844,5 @@ useStudentViewRefresh(loadCourseProgress, {
   },
 })
 
-watch(() => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadCourseProgress)
+watch(() => [route.query.cid, route.query.sid, route.query.gid], loadCourseProgress)
 </script>

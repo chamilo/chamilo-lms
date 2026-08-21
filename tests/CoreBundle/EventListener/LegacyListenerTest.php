@@ -101,6 +101,34 @@ final class LegacyListenerTest extends TestCase
         self::assertNull($this->listenAndReadState('/courses/TEMP/?isStudentView=true', enabled: false));
     }
 
+    public function testApiRequestDoesNotSwitchTheState(): void
+    {
+        // The api firewall shares the main session, so without this guard any GET to
+        // /api/* could switch the whole browsing session, with no role check and from
+        // any origin. Only /toggle_student_view is allowed to carry the parameter.
+        self::assertSame(
+            'teacherview',
+            $this->listenAndReadState('/api/forums?cid=1&isStudentView=true', current: 'teacherview')
+        );
+    }
+
+    public function testApiRequestStillInitializesTheState(): void
+    {
+        // CToolStateProvider reads a missing key as the student view, so leaving it
+        // unset on API requests would hide course tools from everyone.
+        self::assertSame('teacherview', $this->listenAndReadState('/api/forums?cid=1'));
+    }
+
+    public function testLegacyPageStillSwitchesTheState(): void
+    {
+        // The legacy student view links live under public/main, and the Playwright
+        // suite navigates to them; the guard must only catch API paths.
+        self::assertSame(
+            'studentview',
+            $this->listenAndReadState('/main/lp/lp_controller.php?cid=1&isStudentView=true')
+        );
+    }
+
     public function testSubRequestIsIgnored(): void
     {
         self::assertNull(

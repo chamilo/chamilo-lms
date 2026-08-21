@@ -95,7 +95,17 @@ class LegacyListener
         $session->set('is_allowedCreateCourse', $allowedCreateCourse);
 
         if ('true' === $this->settingsManager->getSetting('course.student_view_enabled')) {
-            if ($request->query->has('isStudentView')) {
+            // API requests must not interpret the parameter. The api firewall shares the main
+            // session (`context: main`, and `stateless: true` is commented out), so a plain GET
+            // such as /api/forums?isStudentView=true would switch the whole browsing session,
+            // with no role check and from any origin. Only /toggle_student_view may do that.
+            //
+            // Full page loads keep working, which is what the flows that rely on this need:
+            // the legacy pages under public/main, the learning path auto launch, the builder
+            // preview and the legacy to SPA bridges. None of them is served from /api.
+            $isApiRequest = str_starts_with($request->getPathInfo(), '/api/');
+
+            if (!$isApiRequest && $request->query->has('isStudentView')) {
                 // Same values IndexController::toggleStudentView() accepts. This is the only
                 // place the parameter is interpreted; readers go through StudentViewHelper.
                 $isStudentView = strtolower(trim((string) $request->query->get('isStudentView')));
@@ -106,6 +116,8 @@ class LegacyListener
                     $session->set('studentview', 'teacherview');
                 }
             } elseif (!$session->has('studentview')) {
+                // Still initialize on API requests: CToolStateProvider treats a missing key as
+                // the student view, so leaving it unset would hide course tools.
                 $session->set('studentview', 'teacherview');
             }
         }

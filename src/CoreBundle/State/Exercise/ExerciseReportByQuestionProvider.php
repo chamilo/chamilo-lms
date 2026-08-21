@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseSpecialQuestionReportCounterService;
+use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;

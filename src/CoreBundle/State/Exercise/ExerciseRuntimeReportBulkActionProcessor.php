@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
+use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeImmutable;

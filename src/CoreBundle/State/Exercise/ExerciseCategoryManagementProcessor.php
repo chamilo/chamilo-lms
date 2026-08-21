@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Traits\ExerciseAccessHelperTrait;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;

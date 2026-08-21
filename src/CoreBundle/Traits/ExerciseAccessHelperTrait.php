@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\State\Exercise;
+namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Symfony\Bundle\SecurityBundle\Security;

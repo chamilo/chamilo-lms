@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Course progress')" />
+
     <BaseToolbar class="mb-4 border-b border-gray-25 bg-white">
       <template #start>
         <div class="flex items-center gap-2">
@@ -173,6 +175,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseProgressService from "../../services/courseProgressService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()

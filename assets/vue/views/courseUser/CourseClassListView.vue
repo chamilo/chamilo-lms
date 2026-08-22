@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Classes')" />
+
     <BaseToolbar>
       <template #start>
         <div class="flex flex-wrap items-center gap-2">
@@ -233,6 +235,8 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseClassService from "../../services/courseClassService"
 import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const REGISTERED = "registered"
 const AVAILABLE = "not_registered"
@@ -409,4 +413,6 @@ watch(currentView, () => {
 })
 
 onMounted(loadClasses)
+
+useStudentViewRefresh(loadClasses)
 </script>

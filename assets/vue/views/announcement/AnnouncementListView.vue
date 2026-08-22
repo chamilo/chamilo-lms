@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-4">
+    <SectionHeader :title="t('Announcements')" />
+
     <div
       v-if="successMessage"
       class="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700"
@@ -319,6 +321,7 @@ import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -389,16 +392,7 @@ function getContextParams(extraKeys = []) {
     params.gid = gid
   }
 
-  for (const key of [
-    "origin",
-    "page",
-    "lp_id",
-    "lp_item_id",
-    "lp_view_id",
-    "returnToLp",
-    "embedded",
-    ...extraKeys,
-  ]) {
+  for (const key of ["origin", "page", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded", ...extraKeys]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }

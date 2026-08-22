@@ -1,55 +1,47 @@
 <template>
   <section class="space-y-6">
-    <BaseToolbar class="mb-4 border-b border-gray-25 bg-white">
-      <template #start>
-        <div class="flex flex-wrap items-center gap-2">
-          <BaseButton
-            icon="back"
-            :label="t('Back')"
-            only-icon
-            :route="listRoute"
-            size="normal"
-            :tooltip="t('Back')"
-            type="primary-text"
-          />
+    <SectionHeader :title="t('Announcements')">
+      <BaseButton
+        :label="t('Back')"
+        :route="listRoute"
+        :tooltip="t('Back')"
+        icon="back"
+        only-icon
+        type="primary-text"
+      />
 
-          <BaseButton
-            v-if="announcement?.canEdit"
-            icon="edit"
-            :label="t('Edit')"
-            only-icon
-            :route="editRoute"
-            size="normal"
-            :tooltip="t('Edit')"
-            type="secondary-text"
-          />
+      <BaseButton
+        v-if="announcement?.canEdit"
+        :label="t('Edit')"
+        :route="editRoute"
+        :tooltip="t('Edit')"
+        icon="edit"
+        only-icon
+        type="secondary-text"
+      />
 
-          <BaseButton
-            v-if="announcement?.canChangeVisibility"
-            :icon="Number(announcement.visibility) === 2 ? 'eye-on' : 'eye-off'"
-            :is-loading="isManaging"
-            :label="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
-            only-icon
-            size="normal"
-            :tooltip="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
-            type="secondary-text"
-            @click="changeVisibility"
-          />
+      <BaseButton
+        v-if="announcement?.canChangeVisibility"
+        :icon="Number(announcement.visibility) === 2 ? 'eye-on' : 'eye-off'"
+        :is-loading="isManaging"
+        :label="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
+        :tooltip="Number(announcement.visibility) === 2 ? t('Visible') : t('Invisible')"
+        only-icon
+        type="secondary-text"
+        @click="changeVisibility"
+      />
 
-          <BaseButton
-            v-if="announcement?.canDelete"
-            icon="delete"
-            :is-loading="isManaging"
-            :label="t('Delete')"
-            only-icon
-            size="normal"
-            :tooltip="t('Delete')"
-            type="danger-text"
-            @click="confirmDeleteAnnouncement"
-          />
-        </div>
-      </template>
-    </BaseToolbar>
+      <BaseButton
+        v-if="announcement?.canDelete"
+        :is-loading="isManaging"
+        :label="t('Delete')"
+        :tooltip="t('Delete')"
+        icon="delete"
+        only-icon
+        type="danger-text"
+        @click="confirmDeleteAnnouncement"
+      />
+    </SectionHeader>
 
     <div
       v-if="successMessage"
@@ -232,11 +224,11 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
-import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import announcementService from "../../services/announcementService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -273,15 +265,7 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of [
-    "origin",
-    "page",
-    "lp_id",
-    "lp_item_id",
-    "lp_view_id",
-    "returnToLp",
-    "embedded",
-  ]) {
+  for (const key of ["origin", "page", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded"]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -423,8 +407,5 @@ onMounted(loadAnnouncement)
 
 useStudentViewRefresh(loadAnnouncement)
 
-watch(
-  () => [route.params.id, route.query.cid, route.query.sid, route.query.gid],
-  loadAnnouncement,
-)
+watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid], loadAnnouncement)
 </script>

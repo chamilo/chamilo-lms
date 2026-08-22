@@ -1,125 +1,99 @@
 <template>
   <section class="space-y-6">
-    <div
-      v-if="canManage"
-      class="flex flex-wrap items-center gap-2"
-    >
-      <div class="exercise-list-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
+    <SectionHeader :title="t('Tests')">
+      <div
+        v-if="canManage"
+        class="exercise-list-toolbar"
+      >
         <BaseButton
           v-if="canCreate"
-          class="exercise-list-toolbar__button"
           :label="t('Create exercise')"
           :route="{ name: 'ExerciseCreate', params: route.params, query: getContextParams() }"
           icon="plus"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Add a question')"
           :route="{ name: 'ExerciseGlobalQuestionSelector', params: route.params, query: getContextParams() }"
           :icon="safeIcon('multiple-marked', 'file-text')"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage && settings.allowExerciseCategories"
-          class="exercise-list-toolbar__button"
           :label="t('Exercise categories')"
           :route="{ name: 'ExerciseCategories', params: route.params, query: getContextParams() }"
           icon="folder-open"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Question categories')"
           :route="{ name: 'ExerciseQuestionCategories', params: route.params, query: getContextParams() }"
           icon="tag-outline"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Recycle existing questions')"
           :route="{ name: 'ExerciseQuestionPool', params: route.params, query: getContextParams() }"
           :icon="safeIcon('table', 'file-text')"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Import exercises Qti2')"
           :route="{ name: 'ExerciseImportQti2', params: route.params, query: getContextParams() }"
           icon="import"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Import Aiken quiz')"
           :route="{ name: 'ExerciseImportAiken', params: route.params, query: getContextParams() }"
           icon="file-text"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage"
-          class="exercise-list-toolbar__button"
           :label="t('Import quiz from Excel')"
           :route="{ name: 'ExerciseImportExcel', params: route.params, query: getContextParams() }"
           icon="file-excel"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage && settings.exerciseGeneratorEnabled"
-          class="exercise-list-toolbar__button"
           :label="t('AI Aiken generator')"
           :route="{ name: 'ExerciseAiAikenGenerator', params: route.params, query: getContextParams() }"
           :icon="safeIcon('robot', 'settings')"
           only-icon
-          size="small"
           type="primary-text"
         />
         <BaseButton
           v-if="canManage && settings.canCleanAllResults"
-          class="exercise-list-toolbar__button"
           :label="t('Are you sure to delete all test\'s results ?')"
           :icon="safeIcon('clean-all', 'broom')"
           only-icon
-          size="small"
           type="danger-text"
           @click="confirmCleanAllResults"
         />
-        <span
-          class="mx-1 h-6 w-px bg-gray-20"
-          aria-hidden="true"
-        />
         <BaseButton
-          class="exercise-list-toolbar__button"
           :label="isSearchVisible ? t('Hide search') : t('Search')"
           :icon="isSearchVisible ? 'close' : 'search'"
           only-icon
-          size="small"
           type="primary-text"
           @click="toggleSearchForm"
         />
       </div>
-    </div>
+    </SectionHeader>
 
     <div class="border-b border-gray-20" />
 
@@ -206,261 +180,291 @@
     <template v-if="canManage">
       <BaseTable
         v-model:selected-items="selectedExercises"
-      :is-loading="isLoading"
-      :text-for-empty="t('No exercises found')"
-      :total-items="exercises.length"
-      :values="exercises"
-      data-key="iid"
-    >
-      <Column
-        selection-mode="multiple"
-        header-style="width: 3rem"
-      />
-      <Column
-        :header="t('Title')"
-        field="title"
-        sortable
+        :is-loading="isLoading"
+        :text-for-empty="t('No exercises found')"
+        :total-items="exercises.length"
+        :values="exercises"
+        data-key="iid"
       >
-        <template #body="{ data }">
-          <div class="min-w-64">
-            <div class="flex items-center gap-2">
-              <span
-                :class="chamiloIconToClass['multiple-marked']"
-                class="ch-tool-icon"
-                aria-hidden="true"
-              />
-              <router-link
-                v-if="data.canOverview"
-                class="font-semibold text-gray-90 hover:underline"
-                :to="{ name: 'ExerciseOverview', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
+        <Column
+          selection-mode="multiple"
+          header-style="width: 3rem"
+        />
+        <Column
+          :header="t('Title')"
+          field="title"
+          sortable
+        >
+          <template #body="{ data }">
+            <div class="min-w-64">
+              <div class="flex items-center gap-2">
+                <span
+                  :class="chamiloIconToClass['multiple-marked']"
+                  class="ch-tool-icon"
+                  aria-hidden="true"
+                />
+                <router-link
+                  v-if="data.canOverview"
+                  class="font-semibold text-gray-90 hover:underline"
+                  :to="{
+                    name: 'ExerciseOverview',
+                    params: { ...route.params, exerciseId: data.iid },
+                    query: getContextParams(),
+                  }"
+                >
+                  {{ displayText(data.title, t("Untitled")) }}
+                </router-link>
+                <span
+                  v-else
+                  class="font-semibold text-gray-90"
+                >
+                  {{ displayText(data.title, t("Untitled")) }}
+                </span>
+              </div>
+              <p
+                v-if="displayText(data.description)"
+                class="mt-1 text-xs text-gray-500"
               >
-                {{ displayText(data.title, t("Untitled")) }}
-              </router-link>
-              <span
-                v-else
-                class="font-semibold text-gray-90"
-              >
-                {{ displayText(data.title, t("Untitled")) }}
-              </span>
+                {{ displayText(data.description) }}
+              </p>
+              <div class="mt-2 flex flex-wrap gap-2 text-xs">
+                <span
+                  v-if="!data.visible"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Hidden") }}
+                </span>
+                <span
+                  v-if="data.isLinkedToLearningPath"
+                  class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-800"
+                  :title="t(data.learningPathReadOnlyMessage)"
+                >
+                  {{ t("Learning path") }}
+                </span>
+                <span
+                  v-if="data.duration"
+                  class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                >
+                  {{ t("Duration") }}: {{ formatDuration(data.duration) }}
+                </span>
+                <span
+                  v-if="data.maxAttempt"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Attempts") }}: {{ data.maxAttempt }}
+                </span>
+              </div>
             </div>
-            <p
-              v-if="displayText(data.description)"
-              class="mt-1 text-xs text-gray-500"
+          </template>
+        </Column>
+
+        <Column
+          v-if="settings.allowExerciseCategories"
+          :header="t('Category')"
+          field="categoryTitle"
+          sortable
+        >
+          <template #body="{ data }">
+            {{ displayText(data.categoryTitle, "-") }}
+          </template>
+        </Column>
+
+        <Column :header="t('Dates')">
+          <template #body="{ data }">
+            <div class="space-y-1 text-xs text-gray-600">
+              <div>
+                <span class="font-semibold text-gray-700">{{ t("Available from") }}:</span>
+                {{ formatDate(data.startTime) }}
+              </div>
+              <div>
+                <span class="font-semibold text-gray-700">{{ t("Until") }}:</span>
+                {{ formatDate(data.endTime) }}
+              </div>
+            </div>
+          </template>
+        </Column>
+
+        <Column :header="t('Status')">
+          <template #body="{ data }">
+            <span
+              :class="['rounded-full px-2 py-1 text-xs font-semibold', availabilityBadgeClass(data.availabilityStatus)]"
             >
-              {{ displayText(data.description) }}
-            </p>
-            <div class="mt-2 flex flex-wrap gap-2 text-xs">
-              <span
-                v-if="!data.visible"
-                class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
-              >
-                {{ t("Hidden") }}
-              </span>
-              <span
-                v-if="data.isLinkedToLearningPath"
-                class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-800"
-                :title="t(data.learningPathReadOnlyMessage)"
-              >
-                {{ t("Learning path") }}
-              </span>
-              <span
-                v-if="data.duration"
-                class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
-              >
-                {{ t("Duration") }}: {{ formatDuration(data.duration) }}
-              </span>
-              <span
-                v-if="data.maxAttempt"
-                class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
-              >
-                {{ t("Attempts") }}: {{ data.maxAttempt }}
-              </span>
+              {{ availabilityLabel(data.availabilityStatus) }}
+            </span>
+          </template>
+        </Column>
+
+        <Column
+          :header="t('Questions')"
+          field="questionCount"
+          sortable
+        >
+          <template #body="{ data }">
+            <span class="font-semibold text-gray-800">{{ data.questionCount ?? 0 }}</span>
+          </template>
+        </Column>
+
+        <Column
+          v-if="canManage"
+          :header="t('Attempts')"
+          field="attemptCount"
+          sortable
+        >
+          <template #body="{ data }">
+            <span class="font-semibold text-gray-800">{{ data.attemptCount ?? 0 }}</span>
+          </template>
+        </Column>
+
+        <Column
+          :header="t('Actions')"
+          class="w-48"
+        >
+          <template #body="{ data }">
+            <div class="flex flex-wrap justify-end gap-1">
+              <BaseButton
+                v-if="data.canOpen"
+                :label="t('Open exercise')"
+                :route="{
+                  name: 'ExercisePlayer',
+                  params: { ...route.params, exerciseId: data.iid },
+                  query: getContextParams(),
+                }"
+                icon="play-box-outline"
+                only-icon
+                size="small"
+                type="primary-text"
+              />
+              <BaseButton
+                v-if="data.canEdit"
+                :label="t('Edit questions')"
+                :route="{
+                  name: 'ExerciseQuestions',
+                  params: { ...route.params, exerciseId: data.iid },
+                  query: getContextParams(),
+                }"
+                icon="edit"
+                only-icon
+                size="small"
+                type="secondary-text"
+              />
+              <BaseButton
+                v-if="data.canConfigure"
+                :label="t('Configure')"
+                :route="{
+                  name: 'ExerciseEdit',
+                  params: { ...route.params, exerciseId: data.iid },
+                  query: getContextParams(),
+                }"
+                icon="settings"
+                only-icon
+                size="small"
+                type="secondary-text"
+              />
+              <BaseButton
+                v-if="data.canReport"
+                :label="t('Results')"
+                :route="{
+                  name: 'ExerciseReport',
+                  params: { ...route.params, exerciseId: data.iid },
+                  query: getContextParams(),
+                }"
+                icon="tracking"
+                only-icon
+                size="small"
+                type="primary-text"
+              />
+              <BaseButton
+                v-if="data.canToggleAutoLaunch"
+                :label="data.autoLaunch ? t('Disable autolaunch') : t('Enable autolaunch')"
+                :icon="safeIcon(data.autoLaunch ? 'rocket-launch' : 'rocket', 'play-box-outline')"
+                only-icon
+                size="small"
+                :type="data.autoLaunch ? 'primary-text' : 'secondary-text'"
+                @click="toggleAutoLaunch(data)"
+              />
+              <BaseButton
+                v-if="data.canCopy"
+                :label="t('Copy this exercise as a new one')"
+                icon="copy"
+                only-icon
+                size="small"
+                type="secondary-text"
+                @click="confirmCopyExercise(data)"
+              />
+              <BaseButton
+                v-if="data.canCleanResults"
+                :label="t('Clear all learners results for this exercise')"
+                :icon="safeIcon('clean-all', 'broom')"
+                only-icon
+                size="small"
+                type="danger-text"
+                @click="confirmCleanExerciseResults(data)"
+              />
+              <BaseButton
+                v-else-if="data.canCleanResultsDisabled"
+                :label="
+                  t(
+                    'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.',
+                  )
+                "
+                :icon="safeIcon('clean-all', 'broom')"
+                :disabled="true"
+                only-icon
+                size="small"
+                type="plain"
+              />
+              <BaseButton
+                v-if="data.canToggleVisibility"
+                :label="data.visible ? t('Deactivate') : t('Activate')"
+                :icon="safeIcon(data.visible ? 'eye-on' : 'eye-off', data.visible ? 'visible' : 'invisible')"
+                only-icon
+                size="small"
+                type="primary-text"
+                @click="toggleVisibility(data)"
+              />
+              <BaseButton
+                v-else-if="data.canToggleVisibilityDisabled"
+                :label="t(data.learningPathReadOnlyMessage)"
+                :icon="safeIcon('eye-off', 'invisible')"
+                :disabled="true"
+                only-icon
+                size="small"
+                type="plain"
+              />
+              <BaseButton
+                v-if="data.canExport"
+                :label="t('Export QTI2')"
+                :to-url="qti2ExportUrl(data.iid)"
+                icon="export"
+                only-icon
+                size="small"
+                type="primary-text"
+              />
+              <BaseButton
+                v-if="data.canDelete"
+                :label="t('Delete')"
+                icon="delete"
+                only-icon
+                size="small"
+                type="danger-text"
+                @click="confirmDeleteExercise(data)"
+              />
+              <BaseButton
+                v-else-if="data.canDeleteDisabled"
+                :label="
+                  t(
+                    'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.',
+                  )
+                "
+                :disabled="true"
+                icon="delete"
+                only-icon
+                size="small"
+                type="plain"
+              />
             </div>
-          </div>
-        </template>
-      </Column>
-
-      <Column
-        v-if="settings.allowExerciseCategories"
-        :header="t('Category')"
-        field="categoryTitle"
-        sortable
-      >
-        <template #body="{ data }">
-          {{ displayText(data.categoryTitle, "-") }}
-        </template>
-      </Column>
-
-      <Column :header="t('Dates')">
-        <template #body="{ data }">
-          <div class="space-y-1 text-xs text-gray-600">
-            <div>
-              <span class="font-semibold text-gray-700">{{ t("Available from") }}:</span>
-              {{ formatDate(data.startTime) }}
-            </div>
-            <div>
-              <span class="font-semibold text-gray-700">{{ t("Until") }}:</span>
-              {{ formatDate(data.endTime) }}
-            </div>
-          </div>
-        </template>
-      </Column>
-
-      <Column :header="t('Status')">
-        <template #body="{ data }">
-          <span :class="['rounded-full px-2 py-1 text-xs font-semibold', availabilityBadgeClass(data.availabilityStatus)]">
-            {{ availabilityLabel(data.availabilityStatus) }}
-          </span>
-        </template>
-      </Column>
-
-      <Column
-        :header="t('Questions')"
-        field="questionCount"
-        sortable
-      >
-        <template #body="{ data }">
-          <span class="font-semibold text-gray-800">{{ data.questionCount ?? 0 }}</span>
-        </template>
-      </Column>
-
-      <Column
-        v-if="canManage"
-        :header="t('Attempts')"
-        field="attemptCount"
-        sortable
-      >
-        <template #body="{ data }">
-          <span class="font-semibold text-gray-800">{{ data.attemptCount ?? 0 }}</span>
-        </template>
-      </Column>
-
-      <Column
-        :header="t('Actions')"
-        class="w-48"
-      >
-        <template #body="{ data }">
-          <div class="flex flex-wrap justify-end gap-1">
-            <BaseButton
-              v-if="data.canOpen"
-              :label="t('Open exercise')"
-              :route="{ name: 'ExercisePlayer', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
-              icon="play-box-outline"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="data.canEdit"
-              :label="t('Edit questions')"
-              :route="{ name: 'ExerciseQuestions', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
-              icon="edit"
-              only-icon
-              size="small"
-              type="secondary-text"
-            />
-            <BaseButton
-              v-if="data.canConfigure"
-              :label="t('Configure')"
-              :route="{ name: 'ExerciseEdit', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
-              icon="settings"
-              only-icon
-              size="small"
-              type="secondary-text"
-            />
-            <BaseButton
-              v-if="data.canReport"
-              :label="t('Results')"
-              :route="{ name: 'ExerciseReport', params: { ...route.params, exerciseId: data.iid }, query: getContextParams() }"
-              icon="tracking"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="data.canToggleAutoLaunch"
-              :label="data.autoLaunch ? t('Disable autolaunch') : t('Enable autolaunch')"
-              :icon="safeIcon(data.autoLaunch ? 'rocket-launch' : 'rocket', 'play-box-outline')"
-              only-icon
-              size="small"
-              :type="data.autoLaunch ? 'primary-text' : 'secondary-text'"
-              @click="toggleAutoLaunch(data)"
-            />
-            <BaseButton
-              v-if="data.canCopy"
-              :label="t('Copy this exercise as a new one')"
-              icon="copy"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="confirmCopyExercise(data)"
-            />
-            <BaseButton
-              v-if="data.canCleanResults"
-              :label="t('Clear all learners results for this exercise')"
-              :icon="safeIcon('clean-all', 'broom')"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmCleanExerciseResults(data)"
-            />
-            <BaseButton
-              v-else-if="data.canCleanResultsDisabled"
-              :label="t('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.')"
-              :icon="safeIcon('clean-all', 'broom')"
-              :disabled="true"
-              only-icon
-              size="small"
-              type="plain"
-            />
-            <BaseButton
-              v-if="data.canToggleVisibility"
-              :label="data.visible ? t('Deactivate') : t('Activate')"
-              :icon="safeIcon(data.visible ? 'eye-on' : 'eye-off', data.visible ? 'visible' : 'invisible')"
-              only-icon
-              size="small"
-              type="primary-text"
-              @click="toggleVisibility(data)"
-            />
-            <BaseButton
-              v-else-if="data.canToggleVisibilityDisabled"
-              :label="t(data.learningPathReadOnlyMessage)"
-              :icon="safeIcon('eye-off', 'invisible')"
-              :disabled="true"
-              only-icon
-              size="small"
-              type="plain"
-            />
-            <BaseButton
-              v-if="data.canExport"
-              :label="t('Export QTI2')"
-              :to-url="qti2ExportUrl(data.iid)"
-              icon="export"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="data.canDelete"
-              :label="t('Delete')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmDeleteExercise(data)"
-            />
-            <BaseButton
-              v-else-if="data.canDeleteDisabled"
-              :label="t('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.')"
-              :disabled="true"
-              icon="delete"
-              only-icon
-              size="small"
-              type="plain"
-            />
-          </div>
-        </template>
-      </Column>
+          </template>
+        </Column>
       </BaseTable>
 
       <div
@@ -504,7 +508,7 @@
           />
         </div>
         <span class="whitespace-nowrap text-sm text-gray-600">
-          {{ t('Selected exercises') }}: {{ selectedExercises.length }}
+          {{ t("Selected exercises") }}: {{ selectedExercises.length }}
         </span>
       </div>
     </template>
@@ -594,6 +598,7 @@ import { useConfirmation } from "../../composables/useConfirmation"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import exerciseService from "../../services/exerciseService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
@@ -617,7 +622,10 @@ const activeSearch = computed(() => getSearchQuery())
 const hasActiveFilters = computed(() => Boolean(getSearchQuery() || getCategoryQuery()))
 const categoryOptions = computed(() => [
   { label: t("All categories"), value: 0 },
-  ...categories.value.map((category) => ({ label: displayText(category.title, t("Untitled")), value: Number(category.id) })),
+  ...categories.value.map((category) => ({
+    label: displayText(category.title, t("Untitled")),
+    value: Number(category.id),
+  })),
 ])
 const bulkActionOptions = computed(() => [
   { label: t("Select an action"), value: "" },
@@ -626,11 +634,11 @@ const bulkActionOptions = computed(() => [
   { label: t("Delete"), value: "bulk_delete" },
 ])
 const selectedExerciseIds = computed(() =>
-  selectedExercises.value
-    .map((exercise) => Number(exercise?.iid || 0))
-    .filter((exerciseId) => exerciseId > 0),
+  selectedExercises.value.map((exercise) => Number(exercise?.iid || 0)).filter((exerciseId) => exerciseId > 0),
 )
-const canApplyBulkAction = computed(() => Boolean(bulkAction.value && selectedExerciseIds.value.length > 0 && !isLoading.value))
+const canApplyBulkAction = computed(() =>
+  Boolean(bulkAction.value && selectedExerciseIds.value.length > 0 && !isLoading.value),
+)
 const studentExerciseGroups = computed(() => {
   const selectedCategory = getCategoryQuery()
 

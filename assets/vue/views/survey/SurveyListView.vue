@@ -1,49 +1,43 @@
 <template>
   <section class="space-y-6">
-    <div class="space-y-3">
-      <div class="flex flex-wrap items-center gap-2">
-        <div
-          class="survey-list-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
-        >
-          <BaseButton
-            v-if="canCreate"
-            class="survey-list-toolbar__button"
-            :label="t('Create survey')"
-            :route="buildCreateRoute()"
-            icon="plus"
-            only-icon
-            size="small"
-            type="primary-text"
-          />
-          <BaseButton
-            v-if="canCreate"
-            class="survey-list-toolbar__button"
-            :label="t('Create meeting poll')"
-            :route="buildMeetingCreateRoute()"
-            icon="calendar-plus"
-            only-icon
-            size="small"
-            type="primary-text"
-          />
-          <span
-            v-if="canCreate"
-            class="mx-1 h-6 w-px bg-gray-20"
-            aria-hidden="true"
-          />
-          <BaseButton
-            class="survey-list-toolbar__button"
-            :label="isSearchVisible ? t('Hide search') : t('Search')"
-            :icon="isSearchVisible ? 'close' : 'search'"
-            only-icon
-            size="small"
-            type="primary-text"
-            @click="toggleSearchForm"
-          />
-        </div>
+    <SectionHeader :title="t('Surveys')">
+      <div class="survey-list-toolbar flex flex-wrap items-center gap-1">
+        <BaseButton
+          v-if="canCreate"
+          class="survey-list-toolbar__button"
+          :label="t('Create survey')"
+          :route="buildCreateRoute()"
+          icon="plus"
+          only-icon
+          size="small"
+          type="primary-text"
+        />
+        <BaseButton
+          v-if="canCreate"
+          class="survey-list-toolbar__button"
+          :label="t('Create meeting poll')"
+          :route="buildMeetingCreateRoute()"
+          icon="calendar-plus"
+          only-icon
+          size="small"
+          type="primary-text"
+        />
+        <span
+          v-if="canCreate"
+          class="mx-1 h-6 w-px bg-gray-20"
+          aria-hidden="true"
+        />
+        <BaseButton
+          class="survey-list-toolbar__button"
+          :label="isSearchVisible ? t('Hide search') : t('Search')"
+          :icon="isSearchVisible ? 'close' : 'search'"
+          only-icon
+          size="small"
+          type="primary-text"
+          @click="toggleSearchForm"
+        />
       </div>
-    </div>
-
-    <div class="border-b border-gray-20" />
+    </SectionHeader>
 
     <div
       v-if="activeSearch && !isSearchVisible"
@@ -475,6 +469,7 @@ import { useConfirmation } from "../../composables/useConfirmation"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()

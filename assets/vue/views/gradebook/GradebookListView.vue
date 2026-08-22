@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Assessments')" />
+
     <div
       v-if="errorMessage"
       class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
@@ -1167,6 +1169,7 @@ import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import gradebookService from "../../services/gradebookService"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()

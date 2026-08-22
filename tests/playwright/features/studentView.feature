@@ -77,6 +77,50 @@ Feature: Student view
     And I wait for the page to be loaded
     Then I should see "Add category"
 
+  # The switch only exists where a SectionHeader is mounted, so a tool whose landing view
+  # has no header silently has no switch at all — which is exactly how most course tools
+  # ended up without it. Presence per tool is therefore its own regression guard, separate
+  # from the toggle behaviour pinned above; it is asserted for every course tool the teacher
+  # can reach except Reporting, which is deliberately left out (entering the student view
+  # revokes the very permission that grants access to it).
+  #
+  # The URL step comes first on purpose: the tool card the scenario just clicked is a
+  # client-side route change, and the course homepage it leaves ALSO has the switch (mounted
+  # by CourseHome's own SectionHeader), so asserting the label straight away would pass
+  # against the old page. Waiting for the destination URL — auto-retrying — is what makes
+  # the following assertion belong to the tool page.
+  Scenario Outline: The teacher sees the student view switch in the <tool> tool
+    Given I am a teacher
+    And I wait for the page to be loaded
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "<tool>"
+    Then the URL should contain "<path>"
+    And I should see "Switch to student view"
+
+    Examples:
+      | tool               | path                           |
+      | Agenda             | /resources/ccalendarevent      |
+      | Announcements      | /resources/announcement/       |
+      | Assignments        | /resources/assignment/         |
+      | Attendances        | /resources/attendance/         |
+      | Course description | /resources/course-description/ |
+      | Course progress    | /resources/course-progress/    |
+      | Documents          | /resources/document/           |
+      | Dropbox            | /resources/dropbox/            |
+      | Tests              | /resources/exercise/           |
+      | Forum              | /resources/forum/              |
+      | Glossary           | /resources/glossary/           |
+      | Assessments        | /resources/gradebook/          |
+      | Groups             | /resources/course-users/       |
+      | Learning paths     | /resources/lp/                 |
+      | Links              | /resources/links/              |
+      | Users              | /resources/course-users/       |
+      | Notebook           | /resources/notebook/           |
+      | Portfolio          | /resources/portfolio/          |
+      | Surveys            | /resources/survey/             |
+      | Wiki               | /resources/wiki/               |
+
   # Pins the button's own visibility rule: it is gated on securityStore.isCourseAdmin,
   # which is exactly the backend gate of /toggle_student_view, so a learner never sees it.
   Scenario: The student never sees the switch

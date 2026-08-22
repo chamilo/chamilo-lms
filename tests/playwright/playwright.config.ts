@@ -62,6 +62,44 @@ export default defineConfig({
   // never slows down anything that already passes.
   expect: { timeout: 15_000 },
   fullyParallel: false,
+  // DETERMINISTIC EXECUTION (2026-08-23), a deliberate trade of wall-clock for
+  // reproducibility, decided after weeks of chasing "passes locally, fails in
+  // CI" failures.
+  //
+  // `fullyParallel: false` alone only serializes scenarios WITHIN one file.
+  // Different files still ran concurrently across workers, and this suite is
+  // full of shared mutable fixtures — above all course "TEMP", whose user list
+  // is subscribed to and unsubscribed from by course_user_registration,
+  // toolUsers, toolAssessments and toolReporting. That is a data race, and it
+  // produced failures that no amount of seeding could fix: a seed step can
+  // guarantee a fixture EXISTS at the start, but not that another file will not
+  // delete it at minute 12. Measured directly on a full local run: the seed
+  // subscribed fapple to TEMP successfully, yet by the end of the run
+  // course_rel_user for cid=3 held only acostea/admin/pperez — fapple had been
+  // unsubscribed mid-flight, which failed five toolGroup "Add fapple ..."
+  // scenarios and cascaded into six more (announcements cannot target a
+  // non-member; the two "Check ... access" scenarios read back savedUrls those
+  // announcements never wrote). 11 of 18 failures, one race.
+  //
+  // The deeper problem was that these failures were NOT reproducible: whether
+  // toolGroup passed depended on which file won a scheduling race, so the same
+  // commit could pass one CI run and fail the next, every fix was a guess, and
+  // guesses shipped as regressions. Worse, four separate "shared fixture
+  // created inside the parallel batch" bugs had each been patched with its own
+  // sequential seed step (TEMP, TEMPPRIVATE, allow_group_categories, course
+  // subscriptions) — scaffolding that had itself started causing bugs.
+  //
+  // With one worker, file execution order is fixed (Playwright sorts by path),
+  // so cross-file dependencies resolve by construction: course.feature <
+  // course_user_registration.feature < toolGroup.feature < toolUsers.feature,
+  // which is exactly the order those fixtures need. It also makes a local run
+  // and a CI run the same experiment, so "green locally" finally means
+  // something — the single biggest cause of wasted effort here.
+  //
+  // Cost is wall-clock only (roughly 1.5-3h vs ~26-42m), which is cheap against
+  // the debugging it removes. Re-introduce parallelism later per-file, and only
+  // for files proven not to touch shared fixtures.
+  workers: 1,
   // A real CI run hit a genuine cross-file race: course_user_registration.
   // feature hardcodes the shared course's cid, assuming course.feature's
   // "Create a course before testing" scenario has already created "TEMP" —

@@ -246,6 +246,26 @@ jobs:
                     BASE_URL: http://localhost
                 run: yarn test:playwright:seed-settings
 
+            # NOTE (2026-08-23): a fifth seed step ("Seed course
+            # subscriptions", subscribing acostea/fapple to TEMP) briefly lived
+            # here and was REMOVED again on purpose. It is redundant now that
+            # playwright.config.ts pins `workers: 1`: file order is fixed, and
+            # course_user_registration.feature sorts before toolGroup.feature,
+            # so the subscriptions exist by the time anything needs them.
+            #
+            # It was also actively harmful. Hoisting those scenarios out of
+            # their own file broke that file's internal narrative (it
+            # subscribes amann, unsubscribes him, then re-subscribes him as a
+            # fixture): with amann pre-subscribed, its first scenario had
+            # nobody left to select, because subscribe_user.php's picker
+            # excludes already-subscribed users. And it could never have fixed
+            # the failures it targeted anyway — a seed guarantees a fixture
+            # exists at the START, but course TEMP's user list is written by
+            # four different feature files, so under parallel execution another
+            # file could still unsubscribe fapple mid-run (measured: it did).
+            # Ordering, not more seeding, is the actual fix. See
+            # playwright.config.ts's `workers: 1` comment for the full history.
+
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost

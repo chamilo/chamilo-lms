@@ -248,8 +248,32 @@ Feature: Users management as admin
   # blocks the action once clicked. Revisit if the icon should be hidden
   # from HR entirely for a cleaner UX; not done here since only the
   # controller change was requested.
-  @skip
-  Scenario: HRM logs as teacher
+  # REWRITTEN 2026-08-22, not un-skipped as-is. The @skip note above is right
+  # that HR "log in as" was deliberately reverted to being forbidden — so the
+  # old assertion ("Then I should not see an error", i.e. the impersonation
+  # SUCCEEDS) tests behaviour this version intentionally no longer has, and
+  # could only ever be dead. Asserting the CURRENT policy instead turns a
+  # permanently-dark test into real access-control coverage, which this
+  # project's own testing rule explicitly asks for ("For access-restricted
+  # pages, add a scenario verifying that non-privileged roles are denied").
+  #
+  # Deliberately still navigates all the way to the icon and clicks it: the
+  # note above records that the icon REMAINS visible to HR by design and that
+  # only the controller-level gate stops the action, so this keeps proving both
+  # halves of that (reachable, but refused) rather than just asserting a URL is
+  # forbidden.
+  #
+  # Verified live how the refusal actually manifests, rather than assuming a
+  # 403 page: UserLoginAsController is gated by
+  # #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or
+  # is_granted("ROLE_SESSION_MANAGER")'))], which excludes ROLE_HR, and
+  # requesting /admin/user-list-login-as as an HR user answers
+  # 302 -> http://<host>/ — the same redirect-to-index-with-a-flash behaviour
+  # ExceptionListener applies to AccessDenied on plain browser navigations
+  # (already documented in sessionAccess.feature). Hence the existing
+  # "the URL should be the site root" step rather than a status-code or
+  # error-text assertion, neither of which prod actually produces.
+  Scenario: HRM cannot log in as a teacher
     Given I am not logged
     Then I am logged as "hrm"
     And I am on "/main/my_space/teachers.php"
@@ -259,12 +283,13 @@ Feature: Users management as admin
     And wait for the page to be loaded
     And I click the "i.mdi-account-key" element
     And wait very long for the page to be loaded
-    Then I should not see an error
+    Then the URL should be the site root
 
-  # @skip 2026-08-07: same policy reversal as "HRM logs as teacher" above —
-  # HR can no longer "log in as" a managed user in this version.
-  @skip
-  Scenario: HRM logs as student
+  # Same policy reversal as "HRM cannot log in as a teacher" above, and
+  # rewritten the same way — see that scenario's comment for the verified
+  # redirect-to-site-root behaviour and why this asserts denial rather than
+  # success.
+  Scenario: HRM cannot log in as a student
     Given I am not logged
     Then I am logged as "hrm"
     And I am on "/main/my_space/student.php"
@@ -274,4 +299,4 @@ Feature: Users management as admin
     And wait for the page to be loaded
     And I click the "i.mdi-account-key" element
     And wait very long for the page to be loaded
-    Then I should not see an error
+    Then the URL should be the site root

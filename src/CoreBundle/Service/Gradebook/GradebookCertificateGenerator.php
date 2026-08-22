@@ -117,8 +117,9 @@ final readonly class GradebookCertificateGenerator
 
         if (!$category->getGenerateCertificates()) {
             return [
-                ...$eligibility,
                 'eligible' => false,
+                'score' => $eligibility['score'],
+                'minimumScore' => $eligibility['minimumScore'],
                 'reason' => 'Certificate generation is disabled for this Gradebook category.',
             ];
         }

@@ -250,11 +250,8 @@ final readonly class AdminStatisticsMaintenanceActionService
     private function denyDeleteUsers(): bool
     {
         $value = $_SERVER['DENY_DELETE_USERS'] ?? $_ENV['DENY_DELETE_USERS'] ?? getenv('DENY_DELETE_USERS');
-        if (false === $value || null === $value) {
+        if (false === $value) {
             return false;
-        }
-        if (\is_bool($value)) {
-            return $value;
         }
 
         return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);

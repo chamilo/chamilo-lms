@@ -8,12 +8,13 @@
 # from the initial load and the button did nothing. Hence there is deliberately no
 # "I am on ..." step between pressing the button and asserting.
 #
-# Selector notes:
-# - The button is a BaseToggleButton wrapping BaseButton with a label and no only-icon, so
-#   PrimeVue renders a real <button> with an accessible name; the shared "I press" step
-#   resolves it through getByRole("button", { name, exact: true }).
-# - It swaps label AND icon on toggle: "Switch to student view" (eye-off) becomes
-#   "Switch to teacher view" (eye-on). Asserting on the label is enough and is stable.
+# Selector note, confirmed live: the button is a BaseToggleButton, and BaseButton renders
+# the MDI icon as a ligature glyph INSIDE the <button>, so its accessible name is
+# "󰈉 Switch to student view" — the glyph, then the label. The shared "I press" step tries
+# getByRole("button", { name, exact: true }) before falling back to a substring match, and
+# the exact tier therefore misses. These scenarios click ".studentview-button" instead,
+# which is the class the component sets on itself, and assert the label separately with
+# "I should see". Do not "simplify" them back to `I press "Switch to student view"`.
 #
 # Roles: the platform administrator reaches the button through ROLE_ADMIN and the teacher
 # through ROLE_CURRENT_COURSE_TEACHER. Both are worth running, because only the teacher
@@ -27,6 +28,50 @@ Feature: Student view
   As a teacher
   I want one button that switches my own permissions without leaving the page
 
+  # TEMP is a shared fixture, but the seed only subscribes the administrator, so the
+  # teacher and student scenarios below subscribe their own users first — the same
+  # subscribe-before-using-the-tool convention toolExerciseTeacher.feature and
+  # toolReporting.feature follow. These two are NOT idempotent: run against a user who is
+  # already subscribed, the Users tool takes a different path and they fail. They are setup,
+  # so run them once on a fresh TEMP, or skip them when the subscriptions already exist.
+  Scenario: Subscribe the teacher to the course
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Users"
+    And I wait for the page to be loaded
+    And I press "Teachers"
+    And I wait for the page content to settle
+    And I click the "[title='Add']" element
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | search | mmosquera |
+    And I press "Search"
+    And I wait for the page to be loaded
+    Then I should see "Mosquera"
+    And I click the "[title='Register']" element
+    And I wait for the page to be loaded
+    Then I should see "subscribed to the course"
+
+  Scenario: Subscribe the student to the course
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Users"
+    And I wait for the page to be loaded
+    And I click the "[title='Add']" element
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | search | acostea |
+    And I press "Search"
+    And I wait for the page to be loaded
+    Then I should see "Costea"
+    And I click the "[title='Register']" element
+    And I wait for the page to be loaded
+    Then I should see "subscribed to the course"
+
   Scenario: The administrator loses the course description actions in the student view
     Given I am a platform administrator
     And I wait for the page to be loaded
@@ -35,13 +80,14 @@ Feature: Student view
     And I follow "Course description"
     And I wait for the page to be loaded
     Then I should see the "span.mdi-image-text" element
-    When I press "Switch to student view"
-    And I wait for the page to be loaded
+    When I click the ".studentview-button" element
+    And I wait for the page content to settle
     Then I should not see the "span.mdi-image-text" element
     And I should see "Switch to teacher view"
-    When I press "Switch to teacher view"
-    And I wait for the page to be loaded
+    When I click the ".studentview-button" element
+    And I wait for the page content to settle
     Then I should see the "span.mdi-image-text" element
+    And I should see "Switch to student view"
 
   Scenario: The teacher loses the course description actions in the student view
     Given I am a teacher
@@ -50,13 +96,12 @@ Feature: Student view
     And I wait for the page to be loaded
     And I follow "Course description"
     And I wait for the page to be loaded
-    Then I should see the "span.mdi-image-text" element
-    When I press "Switch to student view"
-    And I wait for the page to be loaded
+    And I wait up to 60 seconds for the element "span.mdi-image-text" to appear
+    When I click the ".studentview-button" element
+    And I wait for the page content to settle
     Then I should not see the "span.mdi-image-text" element
-    When I press "Switch to teacher view"
-    And I wait for the page to be loaded
-    Then I should see the "span.mdi-image-text" element
+    When I click the ".studentview-button" element
+    And I wait up to 60 seconds for the element "span.mdi-image-text" to appear
 
   # Forum is the regression guard for the phase that deleted forumService's blanket
   # injection of the parameter: its views had no watcher at all, and what the student view
@@ -67,15 +112,17 @@ Feature: Student view
     And I wait for the page to be loaded
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I follow the course tool "Forums"
-    And I wait for the page to be loaded
-    Then I should see "Add category"
-    When I press "Switch to student view"
-    And I wait for the page to be loaded
-    Then I should not see "Add category"
-    When I press "Switch to teacher view"
-    And I wait for the page to be loaded
-    Then I should see "Add category"
+    # "Forum", singular: AbstractTool::getTitleToShow() has no plural case for it, so the
+    # tile label is ucfirst('forum').
+    And I follow the course tool "Forum"
+    And I wait for the page content to settle
+    Then I should see "Add a category"
+    When I click the ".studentview-button" element
+    And I wait for the page content to settle
+    Then I should not see "Add a category"
+    When I click the ".studentview-button" element
+    And I wait for the page content to settle
+    Then I should see "Add a category"
 
   # The switch only exists where a SectionHeader is mounted, so a tool whose landing view
   # has no header silently has no switch at all — which is exactly how most course tools
@@ -123,10 +170,13 @@ Feature: Student view
 
   # Pins the button's own visibility rule: it is gated on securityStore.isCourseAdmin,
   # which is exactly the backend gate of /toggle_student_view, so a learner never sees it.
+  # The "Course description" assertion is what stops this passing vacuously: without it, a
+  # student who could not reach the course at all would also "not see" the button.
   Scenario: The student never sees the switch
     Given I am a student
     And I wait for the page to be loaded
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    Then I should not see "Switch to student view"
+    Then I should see "Course description"
+    And I should not see "Switch to student view"
     And I should not see "Switch to teacher view"

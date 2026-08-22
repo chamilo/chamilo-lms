@@ -283,7 +283,18 @@ Feature: Group tool
   # flake tracked across several files this session — see courseCatalogue.
   # feature's own @skip note for the same pattern). Not yet reproduced/root-
   # caused in isolation. Revisit together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Delete 2 uploaded files
     Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
@@ -455,7 +466,18 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for everybody inside Group 0001
     Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
@@ -484,7 +506,18 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for fapple inside Group 0001
     Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
@@ -516,7 +549,18 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for everybody inside Group 0003 (private)
     Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
@@ -550,7 +594,18 @@ Feature: Group tool
   # everybody/fapple inside Group 0001"/"...0003 (private)" scenarios above —
   # same CI-runner-instability class, not reproduced locally. Revisit
   # together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for fapple inside Group 0003
     Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
@@ -604,7 +659,18 @@ Feature: Group tool
   # this scenario's own steps. See this file's header comment for the same
   # class of known-flaky note. Revisit together with the other @skip'd
   # scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
     Then I am logged as "acostea"
@@ -680,7 +746,18 @@ Feature: Group tool
   # above it (via the module-level `savedUrls` map, common.steps.ts) — with
   # those @skip'd for their own real CI failures, this has nothing to read
   # back. Revisit together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Check fapple's access to group announcements
     Given I am not logged
     Given I am logged as "fapple"
@@ -705,7 +782,18 @@ Feature: Group tool
   # above it (via the module-level `savedUrls` map, common.steps.ts) — with
   # those @skip'd for their own real CI failures, this has nothing to read
   # back. Revisit together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Check acostea's access to group announcements
     Given I am not logged
     Given I am logged as "acostea"

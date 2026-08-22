@@ -187,23 +187,49 @@ async function loginAs(page: Page, username: string) {
   // file that already logs out explicitly like toolGroup.feature) and only
   // pays the logout+retry cost in the genuine cross-login-call case this
   // fix targets.
+  // Decide whether a previous session is still active WITHOUT racing the DOM.
+  //
+  // The previous approach (kept in history above) navigated to /login first and
+  // then raced `#login` becoming visible against `a[href="/logout"]` becoming
+  // visible, treating whichever won as the truth. That race is genuinely
+  // unwinnable: on an authenticated visit /login renders the login form for a
+  // moment and only THEN gets replaced by the SPA's redirect to /home, so the
+  // form frequently wins the race even though a session is active. The
+  // logout branch is then skipped, `expect(#login).toBeVisible()` passes on
+  // that same flash, and the very next `fill()` finds the node detached —
+  // reproduced locally and identically to CI by running all of
+  // tests/playwright/features/admin/ in order: the three admin scenarios in
+  // fileIntegrity.feature leave a session behind, and its fourth scenario
+  // ("Given I am a student") then died on
+  // `locator.fill: Timeout 10000ms exceeded waiting for locator('#login')`.
+  // Run alone, the same scenario passes, which is why this only ever showed up
+  // in full-suite runs.
+  //
+  // /account/home is an authoritative, non-racy signal instead: it answers 200
+  // for everyone, embeds `"username":"<current user>"` when a session exists,
+  // and contains NO such marker at all when anonymous (all verified live).
+  // Probing it before touching /login means the logout decision is made from
+  // server state rather than from whatever the SPA happens to be painting.
+  const authenticatedUsername = async (): Promise<string | null> => {
+    const response = await page.request.get("/account/home").catch(() => null)
+    if (!response || !response.ok()) {
+      return null
+    }
+    const match = (await response.text()).match(/"username":"([^"]+)"/)
+    return match ? match[1] : null
+  }
+
+  // Still conditional, not unconditional: an earlier fix established that an
+  // unconditional extra logout round trip perturbs the delicate
+  // session-establishment timing for files that already log out explicitly
+  // (toolGroup.feature). This keeps that property — the logout only happens
+  // when a session genuinely exists — while no longer depending on the flash.
+  if (null !== (await authenticatedUsername())) {
+    await page.goto("/logout")
+  }
   await page.goto("/login")
   await page.waitForLoadState("domcontentloaded")
   const loginField = page.locator("#login")
-  const logoutLink = page.locator('a[href="/logout"]')
-  // Authenticated visits to /login redirect to home. A one-shot #login
-  // isVisible() can catch the form during that flash, then #password.click()
-  // retries on a detached node for the rest of the 15-minute @long-scenario
-  // budget (specialCase1 "Initial platform searches" / extra-fields).
-  await Promise.race([
-    loginField.waitFor({ state: "visible", timeout: 8_000 }),
-    logoutLink.waitFor({ state: "visible", timeout: 8_000 }),
-  ]).catch(() => {})
-  if (await logoutLink.isVisible().catch(() => false)) {
-    await page.goto("/logout")
-    await page.goto("/login")
-    await page.waitForLoadState("domcontentloaded")
-  }
   await expect(loginField).toBeVisible({ timeout: 15_000 })
   await loginField.fill(username, { timeout: 10_000 })
   await page.locator("#password").fill(username, { timeout: 10_000 })
@@ -274,6 +300,66 @@ async function loginAs(page: Page, username: string) {
       .first()
       .click()
     await page.waitForLoadState("domcontentloaded")
+  }
+
+  // Verify WHICH user we ended up as, not merely that *a* session exists.
+  //
+  // Real CI failure that forced this (admin/fileIntegrity.feature's
+  // "Non-administrators cannot access the file integrity page"): the scenario
+  // is only "Given I am a student" + open /admin/security/file-integrity +
+  // assert "Run a scan now" is absent, and it FAILED with the admin page fully
+  // rendered. Verified live that the application itself is correct — logging
+  // in as acostea and opening that URL redirects to / and never renders "Run a
+  // scan now", while admin stays and does — so the only way that assertion can
+  // fail is if the browser was still authenticated as the PREVIOUS user
+  // (admin) when it got there. It also passes in isolation, which is exactly
+  // the signature of leaked session state rather than a selector bug.
+  //
+  // Every success signal above is satisfied by a pre-existing session: the
+  // final `a[href="/logout"]` check just means "somebody is logged in", and
+  // the sign-in click is both conditional (`isVisible()`, a one-shot check)
+  // and has its errors swallowed (`.catch(() => {})`) — so if the form never
+  // submitted, nothing above notices and this function returns "success" while
+  // still being the old user. That is a silent wrong-user run, which is worse
+  // than a failure because it produces a confident, wrong assertion result.
+  //
+  // /account/home is served for every authenticated user (checked live for
+  // admin, acostea, mmosquera, ptook, abaggins and bproudfoot: all 200) and
+  // its HTML embeds the CURRENT user as `"username":"<name>"` — confirmed
+  // discriminating in both directions (as acostea the page contains
+  // "username":"acostea" and NOT "username":"admin", and vice versa). Cheaper
+  // and far more stable than scraping a display name out of the header, which
+  // would need a username -> full-name map per fixture.
+  //
+  // On mismatch, retry the whole login once through a real logout before
+  // giving up: the observed cause is a stale session that a single
+  // logout+login round trip clears. Failing loudly on the second attempt is
+  // still strictly better than today's silent wrong-user behaviour.
+  const currentUserIs = async (expected: string): Promise<boolean> => {
+    const response = await page.request.get("/account/home").catch(() => null)
+    if (!response || !response.ok()) {
+      // Never let this guard itself become a new failure mode: if the probe
+      // cannot run, fall through and let the scenario's own steps decide.
+      return true
+    }
+    return (await response.text()).includes(`"username":"${expected}"`)
+  }
+
+  if (!(await currentUserIs(username))) {
+    await page.goto("/logout")
+    await page.goto("/login")
+    await page.waitForLoadState("domcontentloaded")
+    await expect(loginField).toBeVisible({ timeout: 15_000 })
+    await loginField.fill(username, { timeout: 10_000 })
+    await page.locator("#password").fill(username, { timeout: 10_000 })
+    await page.locator("form.login-section__form button[type='submit']").click({ timeout: 15_000 })
+    await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
+    if (!(await currentUserIs(username))) {
+      throw new Error(
+        `loginAs("${username}") finished while authenticated as a different user. ` +
+          "The login form did not take effect and a previous session is still active.",
+      )
+    }
   }
 }
 
@@ -1276,7 +1362,36 @@ let lastNavigationResponse: import("@playwright/test").Response | null = null
 // identically to both messages.
 function isRetryableNavigationRace(error: unknown): boolean {
   const message = String(error)
-  return message.includes("is interrupted by another navigation") || message.includes("maybe frame was detached")
+  return (
+    message.includes("is interrupted by another navigation") ||
+    message.includes("maybe frame was detached") ||
+    // Third wording of the SAME race, and the one that actually broke
+    // specialCase1Sessions.feature's first scenario on CI:
+    //   page.goto: net::ERR_ABORTED at .../course_home/redirect.php?cidReq=TESTINGCOURSEFR
+    // Playwright only phrases it as "is interrupted by another navigation" when
+    // it can NAME the interrupting URL. A HISTORY TRAVERSAL cancels a pending
+    // cross-document navigation without giving it a URL to name, so the same
+    // collision surfaces as a bare net::ERR_ABORTED and fell straight through
+    // to `throw` on attempt 1 — no retry at all, despite the step already
+    // going through gotoReliably().
+    //
+    // The traversal is real and sits in product code, not the test:
+    // assets/vue/views/ctoolintro/Update.vue's onSendForm() finishes with
+    // router.go(-1), and it only runs AFTER its update request resolves. The
+    // preceding Gherkin steps cannot see that coming — the click sub-action
+    // returns in ~28ms and "wait for the page to be loaded"
+    // (domcontentloaded) resolves in ~1ms because the SPA never left the
+    // document — so the scenario moves on, fires this goto, and ~690ms later
+    // the save resolves and yanks history out from under it. This is exactly
+    // what gotoReliably exists to absorb, so it belongs in the retry set
+    // rather than being special-cased at the one call site that hit it.
+    //
+    // Scoped deliberately to ERR_ABORTED and nothing broader: a genuinely
+    // unreachable host or a real load failure reports ERR_CONNECTION_REFUSED /
+    // ERR_NAME_NOT_RESOLVED / ERR_EMPTY_RESPONSE etc., none of which match
+    // here, so a real breakage still fails fast instead of being retried 5x.
+    message.includes("net::ERR_ABORTED")
+  )
 }
 
 async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
@@ -1383,9 +1498,39 @@ async function dismissBlockingUi(page: Page): Promise<void> {
 
 async function clickFirstOrForce(locator: ReturnType<Page["locator"]>, page: Page): Promise<void> {
   const target = locator.first()
+  const urlBeforeClick = page.url()
   try {
     await target.click({ timeout: 8_000 })
   } catch {
+    // Before force-retrying, check whether the FIRST click already worked.
+    //
+    // Real CI failure (adminPlatformBlock.feature's "Open Reports catalog",
+    // reported as `locator.click: Timeout 5000ms exceeded` — note 5000, i.e.
+    // the force-retry below, not the 8s attempt above): the first click DID
+    // land and did request the navigation, but /main/admin/reports_catalog.php
+    // is a slow legacy page (measured 3.3-4.0s just to COMMIT on a warm box),
+    // and Playwright's post-click signal barrier waits for that commit — so on
+    // a loaded CI runner the 8s budget expires with the navigation still in
+    // flight and click() throws even though nothing is actually wrong.
+    //
+    // `target` is a LOCATOR, so the retry re-resolves it against whatever
+    // document is current by then — which is the destination page. That page's
+    // own action bar carries a SELF-link with the identical accessible name
+    // (Display::toolbarButton(get_lang('Reports catalog'), $baseUrl, ...) in
+    // display.lib.php), so the retry force-clicked the destination's link to
+    // itself, starting a SECOND ~4s load of the same page, which 5s could not
+    // cover either. The test therefore failed on a navigation that had already
+    // succeeded twice over. Confirmed NOT an overlay/intercept problem:
+    // elementFromPoint at the link's centre returns the link itself.
+    //
+    // Waiting for the URL to change absorbs exactly that case. It is bounded,
+    // and it only ADDS an early-success path: when the click genuinely did not
+    // navigate, the URL never changes, the wait expires, and the original
+    // dismiss + force-click behaviour runs unchanged.
+    await page.waitForURL((url) => String(url) !== urlBeforeClick, { timeout: 5_000 }).catch(() => {})
+    if (page.url() !== urlBeforeClick) {
+      return
+    }
     await dismissBlockingUi(page)
     await target.click({ force: true, timeout: 5_000 })
   }
@@ -1499,7 +1644,38 @@ async function pressButton(page: Page, label: string) {
     'xpath=self::*[not(@disabled) and not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]',
   )
   if (await isSoonVisible(enabledExact)) {
-    await enabledExact.first().click()
+    // Prefer a NON-TOGGLE match when several buttons share the accessible name.
+    //
+    // This app's persistent sidebar-collapse control is a PrimeVue
+    // ToggleButton that renders its state as the literal text "Yes"
+    // (`<button aria-pressed="true" class="p-togglebutton ... app-sidebar...">`)
+    // — a pre-existing i18n bug in the app, out of scope to fix here, but it
+    // means EVERY page has a permanently-present button whose accessible name
+    // is "Yes". "I press 'Yes'" is this suite's standard way to accept a
+    // PrimeVue ConfirmDialog, so the two collide, and the sidebar toggle wins
+    // `.first()` because it sits far earlier in DOM order (measured y=97 vs
+    // the dialog's y=397).
+    //
+    // Real CI failure this fixes (specialCase1Sessions.feature's "Teardown
+    // special case 1 sessions"): the delete icon was clicked, the confirm
+    // dialog opened, "I press 'Yes'" collapsed the SIDEBAR instead of
+    // confirming, the dialog stayed open, the session was never deleted, and
+    // the step's own `not.toContainText("Present session")` then failed 15s
+    // later still showing the row. Verified live by dumping every element whose
+    // trimmed text is exactly "Yes" before and after opening the dialog: one
+    // before (the toggle, aria-pressed="true"), two after (the toggle plus the
+    // dialog's `p-confirmdialog` accept button, aria-pressed absent).
+    //
+    // Written as a TIE-BREAKER rather than a blanket `not(@aria-pressed)`
+    // filter: if a scenario ever legitimately presses a real toggle button by
+    // its label, the non-toggle set is empty and the original locator is used
+    // unchanged, so that keeps working. The sibling exact-text-content tier
+    // further below already excludes toggles for this same reason; this closes
+    // the same hole in the role tier, which is the one that actually matched
+    // here.
+    const notToggle = enabledExact.locator("xpath=self::*[not(@aria-pressed)]")
+    const target = (await notToggle.count()) > 0 ? notToggle : enabledExact
+    await target.first().click()
     return
   }
   const exactSubmit = page.locator(`input[type="submit"][value="${label}"]`)
@@ -2006,18 +2182,63 @@ Then("I delete the session {string} if present", async ({ page }, sessionName: s
   if ((await row.count()) === 0) {
     return
   }
-  page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
-  await row
-    .locator("button[title='Delete'], button[title='Supprimer'], a[title='Delete'], a[title='Supprimer'], .mdi-delete")
-    .first()
-    .click()
-  const confirm = page.locator(".p-confirmdialog:visible, .p-dialog:visible").last()
-  const confirmYes = confirm.getByRole("button", { name: /^(Yes|Oui)$/i })
-  if (await isSoonVisible(confirmYes, 5_000)) {
-    await confirmYes.click()
-  } else {
-    await pressButton(page, "Yes")
+  // Two attempts, each: click the row's delete control, WAIT FOR THE DIALOG
+  // ITSELF, then click that dialog's accept button, then check the row really
+  // went. Retrying is what makes this robust — the previous version had no way
+  // to notice that its own confirm click had missed.
+  //
+  // Real CI + locally-reproduced failure ("Teardown special case 1 sessions"):
+  // the dialog ended up CLOSED with the session still listed, i.e. something
+  // dismissed the dialog without confirming. Two distinct traps combine here:
+  //
+  // 1. Resolving the accept button THROUGH a `.last()` of a currently-empty
+  //    set. The old code built `.p-confirmdialog:visible, .p-dialog:visible`
+  //    then `.last()` then `.getByRole(...)` and waited on that chain, at a
+  //    moment when the dialog had not been inserted yet (it animates in behind
+  //    `p-overlay-mask-enter-active`). Waiting for the DIALOG first, and only
+  //    then querying inside it, removes that whole class of problem.
+  // 2. Falling back to `pressButton(page, "Yes")`. Every page in this app
+  //    carries a permanently-visible sidebar-collapse ToggleButton whose label
+  //    renders as the literal text "Yes" (verified live: one element with text
+  //    exactly "Yes" before the dialog opens, two after). Clicking it collapses
+  //    the sidebar, and that re-render DISMISSES the confirm dialog — which is
+  //    precisely the observed end state (no dialog, row intact). pressButton
+  //    now prefers non-toggle matches, but this step no longer needs that
+  //    fallback at all: it scopes strictly to the dialog it just opened.
+  //
+  // Verified live that this exact sequence works and that the delete itself was
+  // never the problem: clicking the dialog's own Yes fires
+  // POST /admin/session-list-data-action -> 200 and the row disappears
+  // immediately (dialog text is "Confirmation / Please confirm your choice /
+  // Cancel / Yes"), reproduced on several different sessions.
+  const deleteControl = row.locator(
+    "button[title='Delete'], button[title='Supprimer'], a[title='Delete'], a[title='Supprimer'], .mdi-delete",
+  )
+  const dialog = page.locator(".p-confirmdialog, [role='alertdialog']")
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    page.once("dialog", (nativeDialog) => nativeDialog.accept().catch(() => {}))
+    await deleteControl.first().click()
+
+    await dialog
+      .first()
+      .waitFor({ state: "visible", timeout: 10_000 })
+      .catch(() => {})
+    const accept = dialog.getByRole("button", { name: /^(Yes|Oui)$/i })
+    if (await isSoonVisible(accept, 5_000)) {
+      await accept.first().click()
+    }
+    // The table refetches after the delete, so give the row a real chance to
+    // disappear before judging the attempt.
+    await row
+      .first()
+      .waitFor({ state: "detached", timeout: 10_000 })
+      .catch(() => {})
+    if ((await row.count()) === 0) {
+      break
+    }
   }
+
   await expect(page.locator(".p-confirmdialog:visible")).toHaveCount(0)
   await expect(page.locator("body")).not.toContainText(sessionName)
 })

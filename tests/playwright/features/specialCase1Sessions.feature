@@ -451,14 +451,50 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     When I follow "Cahier de notes"
     And I wait for the page content to settle
-    And I click the "a[href*='gradebook_add_eval']" element
-    And I wait for the page to be loaded
+    # The Assessments tool is fully Vue now — the legacy
+    # `a[href*='gradebook_add_eval']` link this step used to click, and the
+    # legacy `name`/`weight_mask`/`max` form it led to, are both gone. That
+    # selector matched nothing, so the step hung until the 15-minute
+    # @long-scenario budget expired (real CI + locally reproduced).
+    #
+    # toolAssessments.feature already covers this same tool against the modern
+    # UI and passes in CI, so its field ids are reused verbatim here rather than
+    # re-derived: gradebook-evaluation-title / -weight / -max-score.
+    #
+    # The control is clicked by ICON CLASS (mdi-certificate), NOT by the label
+    # "Add classroom activity" that toolAssessments.feature can use: this
+    # scenario works inside "Testing course fr", where the whole interface
+    # renders in French, so an English button label cannot match. Verified live
+    # that the Assessments toolbar buttons are icon-only with a localized
+    # `title` and a locale-independent icon class —
+    # `<button title="Add a category">` is mdi-folder-plus and
+    # `<button title="Add classroom activity">` is mdi-certificate.
+    And I click the "span.mdi-certificate" element
+    And I wait for the page content to settle
     And I fill in the following:
-      | name        | Course validation |
-      | weight_mask | 100                |
-      | max         | 1                  |
-    And I press "submit"
-    And I wait for the page to be loaded
+      | gradebook-evaluation-title     | Course validation |
+      | gradebook-evaluation-weight    | 100               |
+      | gradebook-evaluation-max-score | 1                 |
+    # ENGLISH label on purpose, even though this whole course renders in French.
+    # "Add classroom activity" is one of the strings this app does NOT actually
+    # translate — verified live by dumping the dialog inside "Testing course fr"
+    # itself: the sibling toolbar button next to it reads
+    # title="Ajouter une catégorie" (translated) while this one stays
+    # title="Add classroom activity", and the dialog's own submit button's text
+    # is likewise "Add classroom activity" while its Cancel reads "Annuler".
+    # translations/messages.fr_FR.po DOES carry a msgstr for it ("Nouvelle
+    # évaluation présentielle") — using that fails, which is exactly the trap:
+    # the .po file is not evidence of what the page renders. Same class of
+    # already-documented i18n gap as the question-type titles noted in this
+    # file's header.
+    #
+    # Unambiguous despite the toolbar button sharing the label: verified live
+    # that getByRole("button", { name: "Add classroom activity", exact: true })
+    # matches exactly ONE element, and the form is a real PrimeVue dialog
+    # (.p-dialog / role=dialog, count 1), so pressButton's dialog-scoped tier
+    # resolves it inside that dialog anyway.
+    And I press "Add classroom activity"
+    And I wait for the page content to settle
     Then I should see "Course validation"
 
   Scenario: Create teacher and configure "Present session" with settings and include course

@@ -87,7 +87,18 @@ Feature: Document tool
   # Deferred per explicit user instruction to stop re-chasing CI-only flakes
   # with more runs. Cascades into the two "Search for ..." scenarios below
   # (also @skip'd) since they depend on these documents existing.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create a text document
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -102,7 +113,18 @@ Feature: Document tool
 
   # @skip 2026-08-06: same recurring real-CI-only failure as "Create a text
   # document" above — see that scenario's own comment.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create a HTML document
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -128,7 +150,18 @@ Feature: Document tool
 
   # @skip 2026-08-06: cascades from "Create a HTML document" above (also
   # @skip'd) never actually creating "My second document" in real CI.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Search for "My second document" and edit it
     Given I follow "Documents"
     And I wait for the page to be loaded
@@ -143,7 +176,18 @@ Feature: Document tool
 
   # @skip 2026-08-06: cascades from "Create a text document" above (also
   # @skip'd) never actually creating "My first document" in real CI.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Search for "My first document" and delete it
     Given I follow "Documents"
     And I wait for the page to be loaded

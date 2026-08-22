@@ -264,7 +264,18 @@ Feature: Assessments tool
   # swapped an unbounded networkidle wait for the bounded "settle" step —
   # but it's still failing in real CI). Deferred per explicit user
   # instruction to stop re-chasing CI-only flakes with more runs.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Link an Assignment to the evaluation and edit its min score
     Given I am a platform administrator
     And I am on course "TEMP" homepage
@@ -307,7 +318,18 @@ Feature: Assessments tool
   # contamination from concurrent activity, not a real defect in this
   # scenario's own logic). Deferred per explicit user instruction to stop
   # re-chasing CI-only flakes with more runs.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Edit a result and verify it in chart view
     Given I am a platform administrator
     And I am on course "TEMP" homepage
@@ -362,7 +384,18 @@ Feature: Assessments tool
   # re-chasing CI-only flakes with more runs. Leaves the "exam" evaluation
   # undeleted when skipped — harmless to other files (course TEMP's own
   # Assessments tool isn't asserted-empty anywhere else in this suite).
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Deletes selected assessments
     Given I am a platform administrator
     And I am on course "TEMP" homepage
@@ -381,7 +414,18 @@ Feature: Assessments tool
   # @skip 2026-08-06: cascades from "Link an Assignment to the evaluation and
   # edit its min score" above (also @skip'd) never actually creating the
   # "Assessment Link Work" assignment this scenario asserts on and deletes.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Admin deletes the dedicated assignment created for the link scenario
     Given I am a platform administrator
     And I am on course "TEMP" homepage

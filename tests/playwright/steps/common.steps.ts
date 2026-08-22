@@ -19,6 +19,14 @@ Before({ tags: "@long-scenario" }, async () => {
   test.info().setTimeout(15 * 60_000)
 })
 
+// Try-exercise scenarios walk 11 question types with a draft-save on every
+// "Next question". CI spent the whole 90s budget still on question 10 with
+// the Next button stuck on "Saving". Four minutes is enough for the saves
+// without using the 15-minute specialCase1 budget.
+Before({ tags: "@slow-scenario" }, async () => {
+  test.info().setTimeout(4 * 60_000)
+})
+
 // Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
 // i.e. repo root) — attachFileToField() paths in .feature files are relative
 // to repo root, not this steps file. tests/playwright/steps -> repo root.
@@ -181,25 +189,31 @@ async function loginAs(page: Page, username: string) {
   // fix targets.
   await page.goto("/login")
   await page.waitForLoadState("domcontentloaded")
-  if (!(await page.locator("#login").isVisible().catch(() => false))) {
+  const loginField = page.locator("#login")
+  const logoutLink = page.locator('a[href="/logout"]')
+  // Authenticated visits to /login redirect to home. A one-shot #login
+  // isVisible() can catch the form during that flash, then #password.click()
+  // retries on a detached node for the rest of the 15-minute @long-scenario
+  // budget (specialCase1 "Initial platform searches" / extra-fields).
+  await Promise.race([
+    loginField.waitFor({ state: "visible", timeout: 8_000 }),
+    logoutLink.waitFor({ state: "visible", timeout: 8_000 }),
+  ]).catch(() => {})
+  if (await logoutLink.isVisible().catch(() => false)) {
     await page.goto("/logout")
     await page.goto("/login")
     await page.waitForLoadState("domcontentloaded")
   }
-  const loginField = page.locator("#login")
   await expect(loginField).toBeVisible({ timeout: 15_000 })
-  await loginField.click()
-  await loginField.fill(username)
-  const passwordField = page.locator("#password")
-  await passwordField.click()
-  await passwordField.fill(username)
+  await loginField.fill(username, { timeout: 10_000 })
+  await page.locator("#password").fill(username, { timeout: 10_000 })
   // Scope to the login form. A broader `button:has-text('Sign in')` can race
   // a SPA redirect after fill: the form is already gone, click() then waits
   // the rest of the test timeout for a Sign in button that will never return
   // (webserverLoad's non-admin scenario: snapshot already showed Sign out).
   const signIn = page.locator("form.login-section__form button[type='submit']")
   if (await signIn.isVisible().catch(() => false)) {
-    await signIn.click()
+    await signIn.click({ timeout: 15_000 }).catch(() => {})
   }
   // Do not waitForURL({ waitUntil: "load" }): SPA login never fires load, and
   // that hung the full test timeout. Do not use "commit" either: a CI run
@@ -1292,13 +1306,16 @@ async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
   const page = await (await browser.newContext({ baseURL })).newPage()
   await page.goto("/login")
-  await page.locator("#login").fill("admin")
-  await page.locator("#password").fill("admin")
+  await page.locator("#login").fill("admin", { timeout: 10_000 })
+  await page.locator("#password").fill("admin", { timeout: 10_000 })
   const signIn = page.locator("form.login-section__form button[type='submit']")
   if (await signIn.isVisible().catch(() => false)) {
-    await signIn.click()
+    await signIn.click({ timeout: 15_000 }).catch(() => {})
   } else {
-    await page.locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]').first().click()
+    await page
+      .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+      .first()
+      .click({ timeout: 15_000 })
   }
   // Same settle rule as loginAs(): leave /login, no networkidle (see comment there).
   await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
@@ -1334,14 +1351,21 @@ async function isSoonVisible(locator: ReturnType<Page["locator"]>, timeoutMs = 2
 }
 
 async function failIfLoginPage(page: Page, action: string): Promise<void> {
-  if (action.includes("Sign in")) {
+  // The logged-out homepage IS the login page (heading "Sign in" plus a
+  // "Sign up" link). registration.feature's "I follow Sign up" is a real
+  // starting action there, not a lost session.
+  if (/sign in|sign up|register|forgot|registration|password/i.test(action)) {
     return
   }
+  const lostSession = await page
+    .getByText(/session details have been lost/i)
+    .isVisible()
+    .catch(() => false)
   const onLogin = await page
     .getByRole("heading", { name: "Sign in", exact: true })
     .isVisible()
     .catch(() => false)
-  if (onLogin) {
+  if (lostSession || onLogin) {
     throw new Error(`Cannot ${action}: the session was lost and the login page is showing.`)
   }
 }
@@ -1350,6 +1374,10 @@ async function dismissBlockingUi(page: Page): Promise<void> {
   const toastClose = page.locator(".p-toast-close-button:visible")
   if ((await toastClose.count()) > 0) {
     await toastClose.first().click({ timeout: 1_000 }).catch(() => {})
+  }
+  const cookieAccept = page.getByRole("button", { name: /^(Accept|Accepter)$/i })
+  if (await cookieAccept.isVisible().catch(() => false)) {
+    await cookieAccept.click({ timeout: 2_000 }).catch(() => {})
   }
 }
 
@@ -1957,7 +1985,7 @@ Then("I delete the document {string} if present", async ({ page }, rowText: stri
 // still cleans up a stray session left behind by an earlier partial/crashed
 // run, but no longer fails when there isn't one.
 Then("I delete the session {string} if present", async ({ page }, sessionName: string) => {
-  const row = page.locator("tr", { hasText: sessionName })
+  const row = page.locator("tr").filter({ has: page.getByText(sessionName, { exact: true }) })
   // Bounded wait before the count() below decides "absent". /admin/session-list
   // is a Vue page whose table body arrives from its own async data request,
   // well after the "I wait for the page to be loaded" (domcontentloaded) step
@@ -1979,8 +2007,18 @@ Then("I delete the session {string} if present", async ({ page }, sessionName: s
     return
   }
   page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
-  await row.locator("button[title='Delete'], a[title='Delete'], .mdi-delete").first().click()
-  await pressButton(page, "Yes")
+  await row
+    .locator("button[title='Delete'], button[title='Supprimer'], a[title='Delete'], a[title='Supprimer'], .mdi-delete")
+    .first()
+    .click()
+  const confirm = page.locator(".p-confirmdialog:visible, .p-dialog:visible").last()
+  const confirmYes = confirm.getByRole("button", { name: /^(Yes|Oui)$/i })
+  if (await isSoonVisible(confirmYes, 5_000)) {
+    await confirmYes.click()
+  } else {
+    await pressButton(page, "Yes")
+  }
+  await expect(page.locator(".p-confirmdialog:visible")).toHaveCount(0)
   await expect(page.locator("body")).not.toContainText(sessionName)
 })
 
@@ -2796,14 +2834,23 @@ When("I check every {string} option on the page", async ({ page }, label: string
 // it register" below for what that actually was.
 When("I press \"Next question\" until {string} appears", async ({ page }, nextTitle: string) => {
   const heading = page.locator("h2").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(nextTitle)}\\s*$`) })
+  const saving = page.getByRole("button", { name: "Saving", exact: true })
   const nextControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
     hasText: /^\s*(Next question|Next page)\s*$/,
   })
-  for (let attempt = 0; attempt < 8; attempt++) {
-    if (await isSoonVisible(nextControl, 5_000)) {
+  const deadline = Date.now() + 50_000
+  while (Date.now() < deadline) {
+    if (await heading.first().isVisible().catch(() => false)) {
+      return
+    }
+    if (await saving.isVisible().catch(() => false)) {
+      await saving.waitFor({ state: "hidden", timeout: 20_000 }).catch(() => {})
+      continue
+    }
+    if (await isSoonVisible(nextControl, 3_000)) {
       await nextControl.first().click()
     }
-    if (await isSoonVisible(heading, 4_000)) {
+    if (await isSoonVisible(heading, 3_000)) {
       return
     }
   }
@@ -2894,9 +2941,14 @@ When("I switch the LP resource panel to {string}", async ({ page }, resourceType
 When(
   "I set the prerequisite of LP item {string} to {string} with minimum score {string}",
   async ({ page }, targetItem: string, sourceItem: string, minimumScore: string) => {
+    // specialCase1 switches the interface language to French mid-file.
+    // BaseButton only-icon uses the translated label as `title`/`aria-label`
+    // ("Pré-requis" / "Modifier les prérequis"), so an English-only title
+    // selector hung the full 15-minute budget with the French button visible.
     await page
       .locator(".rounded-lg.border.px-2.py-2", { hasText: targetItem })
-      .locator('[title="Prerequisites"]')
+      .locator('[title="Prerequisites"], [title="Pré-requis"], [aria-label="Prerequisites"], [aria-label="Pré-requis"]')
+      .first()
       .click()
     const radio = page.getByRole("radio", { name: sourceItem, exact: true })
     await radio.check()
@@ -2906,7 +2958,9 @@ When(
     if (await minimumInput.count()) {
       await minimumInput.fill(minimumScore)
     }
-    await page.getByRole("button", { name: "Save prerequisites settings" }).click()
+    await page
+      .getByRole("button", { name: /Save prerequisites settings|Modifier les prérequis/i })
+      .click()
   },
 )
 

@@ -394,6 +394,7 @@ Feature: Exercise tool
     And I wait for the page content to settle
     Then I should see "Definition of oligarchy"
 
+  @slow-scenario
   Scenario: Try exercise "Exercise 1"
     # TEMP has no students on a fresh install. course_user_registration.feature
     # also subscribes acostea, but that file runs in a different worker with

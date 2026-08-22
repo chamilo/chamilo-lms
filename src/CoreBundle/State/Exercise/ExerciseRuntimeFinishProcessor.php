@@ -161,6 +161,9 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if (\function_exists('session_write_close')) {
+            session_write_close();
+        }
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
 

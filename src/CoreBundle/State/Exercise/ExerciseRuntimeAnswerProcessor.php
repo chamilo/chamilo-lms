@@ -120,6 +120,12 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        // Draft-save is called on every Next click while the player also
+        // polls. Holding the session lock here leaves the Vue Next button
+        // stuck on "Saving" for the rest of the test timeout.
+        if (\function_exists('session_write_close')) {
+            session_write_close();
+        }
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
         $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
         $questionId = (int) ($data->questionId ?? 0);

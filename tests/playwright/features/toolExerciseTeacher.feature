@@ -595,6 +595,7 @@ Feature: Exercise tool
     And I wait for the page to be loaded
     Then I should see "subscribed to the course"
 
+  @slow-scenario
   Scenario: Try exercise "Exercise 1"
     Given I am a student
     And I wait for the page to be loaded

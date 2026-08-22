@@ -6,15 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Exercise;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -29,13 +26,13 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final readonly class ExerciseExcelTemplateService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private Security $security,
+        private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
-    public function downloadTemplate(Request $request): BinaryFileResponse
+    public function downloadTemplate(): BinaryFileResponse
     {
-        $this->assertCanDownloadTemplate($request);
+        $this->assertCanDownloadTemplate();
 
         $spreadsheet = $this->createTemplateSpreadsheet();
         $path = $this->createTemporaryFilePath();
@@ -52,50 +49,15 @@ final readonly class ExerciseExcelTemplateService
         return $response;
     }
 
-    private function assertCanDownloadTemplate(Request $request): void
+    private function assertCanDownloadTemplate(): void
     {
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            && !$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-        ) {
+        if (!$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('You are not allowed to download the exercise import template in this context.');
         }
 
-        $course = $this->getCourse($request);
-        $this->getSession($request);
-
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        // The template itself carries no course data, so the course is only required to
+        // pin the request to a context the teacher role was resolved against.
+        $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
     private function createTemplateSpreadsheet(): Spreadsheet

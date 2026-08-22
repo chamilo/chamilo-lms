@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -25,7 +27,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,8 +47,9 @@ final readonly class ExerciseRuntimeReportExportService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
-        private Security $security,
         private SettingsManager $settingsManager,
+        private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
     public function exportCsv(int $exerciseId, Request $request): StreamedResponse
@@ -125,44 +127,14 @@ final readonly class ExerciseRuntimeReportExportService
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canExportReport()) {
+        if (!$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('You are not allowed to export this exercise report.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
         return $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -202,7 +174,7 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canExportReport()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 
@@ -214,8 +186,8 @@ final readonly class ExerciseRuntimeReportExportService
      */
     private function buildExportData(CQuiz $quiz, Request $request): array
     {
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $showOfficialCode = $this->shouldShowOfficialCode();
         $loadExtraData = $this->getBooleanQuery($request, 'extraData', 'extra_data');
         $includeAllUsers = $this->getBooleanQuery($request, 'includeAllUsers', 'include_all_users');
@@ -765,12 +737,6 @@ final readonly class ExerciseRuntimeReportExportService
         }
 
         return $values;
-    }
-
-    private function canExportReport(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function shouldShowOfficialCode(): bool

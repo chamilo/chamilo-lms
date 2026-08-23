@@ -226,7 +226,38 @@ Feature: Session access
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
-    And I am on "/course/2/home?sid=2000&gid=0"
+    # ROOT-CAUSED 2026-08-23. This used to navigate to the hardcoded path
+    # "/course/2/home?sid=2000&gid=0" and it was simply the WRONG COURSE.
+    #
+    # Course 2 has not been TEMPPRIVATE since the installer started shipping
+    # demo courses: DemoCoursesFixtures now creates "AI Act" (1) and "Using
+    # Chamilo" (2) before any suite seeding, so TEMPPRIVATE moved to 4. Exactly
+    # the same shift that forced the suite-wide cid=1 -> cid=3 migration, but in
+    # PATH form ("/course/N/home"), which that pass did not cover.
+    #
+    # Why it failed rather than just testing the wrong thing: visibility. The
+    # demo course "Using Chamilo" is visibility=2 (OPEN_PLATFORM), so ANY
+    # logged-in user may enter it and access is legitimately GRANTED — the
+    # scenario then failed asserting a denial that correctly never happened.
+    # TEMPPRIVATE is visibility=1 (PRIVATE), where the denial is real. Measured
+    # all three as ywarnier:
+    #   /course/2/home?sid=2000                     -> stays on the course (granted)
+    #   /course/4/home?sid=2000                     -> 302 to "/"  (denied)
+    #   redirect.php?cidReq=TEMPPRIVATE&sid=2000    -> 302 to "/"  (denied)
+    #
+    # This also explains the "never reproduced locally" note above, which is now
+    # obsolete: on the older long-lived dev box course 2 genuinely WAS
+    # TEMPPRIVATE, so the denial happened and the scenario passed. Only a fresh
+    # install — i.e. every CI run — shifts the ids. The comment above even
+    # records the symptom verbatim ("lands GRANTED on /course/2/home"); the
+    # missing step was noticing that course 2 was no longer the private course.
+    #
+    # Addressed by course CODE rather than by id 4, deliberately: hardcoding an
+    # id is what broke this in the first place, and course_home/redirect.php
+    # resolves the code while still honouring the bogus sid, so it exercises the
+    # identical CidReqListener branch (a session id that does not resolve) with
+    # nothing left to drift.
+    And I am on "/main/course_home/redirect.php?cidReq=TEMPPRIVATE&sid=2000"
     And wait for the page to be loaded when ready
     Then the URL should be the site root
 

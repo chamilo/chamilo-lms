@@ -294,7 +294,17 @@ Feature: Assessments tool
     And I wait for the page to be loaded
     And I follow "Assessments"
     And wait for the page to be loaded when ready
-    Then I click the "i.mdi-link-plus" element
+    # Tag-agnostic ".mdi-*", NOT "i.mdi-*": the Assessments tool is Vue now
+    # (/resources/gradebook/<node>/) and its icons are rendered by BaseButton as
+    # <span class="p-button-icon mdi mdi-...">, never <i>. Measured on the live
+    # page: i.mdi-link-plus / i.mdi-pencil / i.mdi-chart-box all match ZERO
+    # elements, while .mdi-link-plus matches 1 and .mdi-pencil matches 3, every
+    # one of them a SPAN. The "i." prefix is a leftover from the legacy
+    # displaygradebook.php era (which really did emit <i> via
+    # Display::getMdiIcon), and because resolveField/click waits rather than
+    # failing fast, it presented as a 90s timeout instead of "no such element".
+    # Same fix already applied in sessionAccess.feature for the same reason.
+    Then I click the ".mdi-link-plus" element
     And I wait for the page to be loaded
     When I select "Assignments" from "create_link_select_link"
     And wait for the page to be loaded when ready
@@ -338,7 +348,17 @@ Feature: Assessments tool
     And wait for the page to be loaded when ready
     And I follow "exam"
     And I wait for the page to be loaded
-    Then I click the "i.mdi-pencil" icon in the row for "Orizales"
+    # Tag-agnostic ".mdi-*", NOT "i.mdi-*": the Assessments tool is Vue now
+    # (/resources/gradebook/<node>/) and its icons are rendered by BaseButton as
+    # <span class="p-button-icon mdi mdi-...">, never <i>. Measured on the live
+    # page: i.mdi-link-plus / i.mdi-pencil / i.mdi-chart-box all match ZERO
+    # elements, while .mdi-link-plus matches 1 and .mdi-pencil matches 3, every
+    # one of them a SPAN. The "i." prefix is a leftover from the legacy
+    # displaygradebook.php era (which really did emit <i> via
+    # Display::getMdiIcon), and because resolveField/click waits rather than
+    # failing fast, it presented as a 90s timeout instead of "no such element".
+    # Same fix already applied in sessionAccess.feature for the same reason.
+    Then I click the ".mdi-pencil" icon in the row for "Orizales"
     And I wait for the page to be loaded
     When I fill in the following:
       | score | 8 |
@@ -346,7 +366,17 @@ Feature: Assessments tool
     And I wait for the page to be loaded
     Then I follow "Assessments"
     And I wait for the page to be loaded
-    And I click the "i.mdi-chart-box" element
+    # Tag-agnostic ".mdi-*", NOT "i.mdi-*": the Assessments tool is Vue now
+    # (/resources/gradebook/<node>/) and its icons are rendered by BaseButton as
+    # <span class="p-button-icon mdi mdi-...">, never <i>. Measured on the live
+    # page: i.mdi-link-plus / i.mdi-pencil / i.mdi-chart-box all match ZERO
+    # elements, while .mdi-link-plus matches 1 and .mdi-pencil matches 3, every
+    # one of them a SPAN. The "i." prefix is a leftover from the legacy
+    # displaygradebook.php era (which really did emit <i> via
+    # Display::getMdiIcon), and because resolveField/click waits rather than
+    # failing fast, it presented as a 90s timeout instead of "no such element".
+    # Same fix already applied in sessionAccess.feature for the same reason.
+    And I click the ".mdi-chart-box" element
     And wait for the page to be loaded when ready
     Then I should see "8 / 10"
 
@@ -403,8 +433,33 @@ Feature: Assessments tool
     And I follow "Assessments"
     And wait for the page to be loaded when ready
     Then I follow "Select all"
-    And I press "Action"
-    And I click the "span:has-text('Delete selected')" element
+    # The bulk-action UI is a PrimeVue Select + Apply + ConfirmDialog, not a
+    # button called "Action". Reconstructed from the live page, step by step:
+    #   - "Action" is a <label> inside span.p-floatlabel, i.e. the FLOATING
+    #     LABEL of a PrimeVue Select — there is no button with that name, so
+    #     `I press "Action"` could never match anything. There is also no native
+    #     <select> at all (PrimeVue 4 renders a div[role=combobox]), so the
+    #     "I select ... from ..." steps do not apply either.
+    #   - Scoping to span.p-floatlabel is what makes the combobox unambiguous:
+    #     the page has TWO [role=combobox] elements and the other one is the
+    #     paginator (its options are 10/20/50/100).
+    #   - The option is "Delete", NOT "Delete selected" — the real option list
+    #     is ["Select an action", "Set visible", "Set invisible", "Delete"].
+    #   - Choosing the option does nothing on its own; an "Apply" button commits
+    #     it, and that raises a ConfirmDialog reading "Confirmation / Delete
+    #     all? / Cancel / Yes".
+    # Verified end to end: after Yes the table shows "No data available", the
+    # "Deleted" message appears and "exam" is gone.
+    #
+    # "Apply" goes through `I press` deliberately: getByRole("button",
+    # { name: /^Apply$/i }) matches ZERO elements even though a visible button
+    # whose text is exactly "Apply" exists — the same PrimeVue accessible-name
+    # quirk already documented for pressButton, whose text-content tier does
+    # match it.
+    And I click the "span.p-floatlabel [role='combobox']" element
+    And I click the "[role='option']:has-text('Delete')" element
+    And I press "Apply"
+    And I press "Yes"
     And wait for the page to be loaded when ready
     Then I should see "Deleted"
     And I should not see "exam"

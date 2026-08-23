@@ -113,11 +113,19 @@
 # - Recipient targeting (choosing specific users instead of "Everyone" in
 #   the announcement form) is enforced independently of the group's own
 #   access level: even a group MEMBER who isn't the chosen recipient gets
-#   the same "You are not allowed to view this announcement." (confirmed
-#   live). The access-denied message itself is no longer the bare word
-#   "not allowed" but a full sentence that still CONTAINS that substring
-#   ("You are not allowed to view this announcement."), so the original's
-#   `Then I should see "not allowed"` assertions keep working unchanged.
+#   the same denial (confirmed live).
+#   STALE AS OF 2026-08-23 — the wording below has since CHANGED, and that is
+#   what broke "Check acostea's/fapple's access to group announcements". This
+#   comment used to say the message was "You are not allowed to view this
+#   announcement.", i.e. a full sentence that still CONTAINED the substring
+#   "not allowed", so the original `Then I should see "not allowed"`
+#   assertions kept working. It no longer does: the Vue view now renders
+#   "An error occurred / Access to this resource has been denied. You don't
+#   seem to have the necessary permissions to access it." (verified live —
+#   GET /api/announcement/1?cid=3&gid=1 answers 403 for a non-member, 200 with
+#   full content for a member), which contains no "not allowed" substring at
+#   all. The assertions were updated accordingly; see the note on the acostea
+#   scenario below. Product drift, not a test-authoring error.
 # - The Vue announcement form's recipients field defaults to a removable
 #   "Everyone" chip; targeting a specific user means removing that chip
 #   first, then picking the user from the same multiselect dropdown
@@ -797,18 +805,35 @@ Feature: Group tool
   Scenario: Check acostea's access to group announcements
     Given I am not logged
     Given I am logged as "acostea"
+    # ASSERTION CORRECTED 2026-08-23: was `Then I should see "not allowed"`.
+    # The application is right and the test was wrong. Verified live for acostea
+    # (a member of groups 0002/0005 but NOT 0001/0003) opening the saved
+    # announcement URL: GET /api/announcement/1?cid=3&gid=1 answers 403 and the
+    # Vue view renders "An error occurred / Access to this resource has been
+    # denied. You don't seem to have the necessary permissions to access it." —
+    # a message that never contains the substring "not allowed", so the old
+    # assertion could not pass no matter how long it waited. fapple, who IS a
+    # member, gets 200 and the real content on the identical URL, so the access
+    # control itself works exactly as this scenario intends to prove.
+    #
+    # Note the suite has SEVERAL different denial messages depending on which
+    # mechanism refuses: "You are not allowed" for course/session access via
+    # CidReqListener (see sessionAccess.feature), a redirect to the site root
+    # for AccessDenied on plain navigations, and this resource-permission text
+    # for a denied Vue API resource. They are not interchangeable — assert the
+    # one the mechanism under test actually produces.
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"

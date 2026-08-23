@@ -70,6 +70,24 @@ class SessionRelCourse
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?Room $room = null;
 
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $trackingProgress = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $score = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $bestScore = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?int $timeSpentSeconds = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?bool $certificateAvailable = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?bool $completed = null;
+
     public function __construct()
     {
         $this->nbrUsers = 0;
@@ -137,5 +155,65 @@ class SessionRelCourse
     public function setPosition(int $position): void
     {
         $this->position = $position;
+    }
+
+    public function getTrackingProgress(): ?float
+    {
+        return $this->trackingProgress;
+    }
+
+    public function setTrackingProgress(?float $trackingProgress): void
+    {
+        $this->trackingProgress = $trackingProgress;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    public function getBestScore(): ?float
+    {
+        return $this->bestScore;
+    }
+
+    public function setBestScore(?float $bestScore): void
+    {
+        $this->bestScore = $bestScore;
+    }
+
+    public function getTimeSpentSeconds(): ?int
+    {
+        return $this->timeSpentSeconds;
+    }
+
+    public function setTimeSpentSeconds(?int $timeSpentSeconds): void
+    {
+        $this->timeSpentSeconds = $timeSpentSeconds;
+    }
+
+    public function getCertificateAvailable(): ?bool
+    {
+        return $this->certificateAvailable;
+    }
+
+    public function setCertificateAvailable(?bool $certificateAvailable): void
+    {
+        $this->certificateAvailable = $certificateAvailable;
+    }
+
+    public function getCompleted(): ?bool
+    {
+        return $this->completed;
+    }
+
+    public function setCompleted(?bool $completed): void
+    {
+        $this->completed = $completed;
     }
 }

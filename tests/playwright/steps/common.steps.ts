@@ -562,7 +562,45 @@ async function resolveField(page: Page, field: string) {
   // This fallback tier is only reached when id/name both miss, which is rare
   // but not impossible under CI timing (see resolveField above) — when it IS
   // reached, it must actually match, not hang for the rest of the test.
-  return page.getByLabel(new RegExp(`^\\s*\\*?\\s*${escapeRegExp(field)}\\s*$`, "i"))
+  const byLabel = page.getByLabel(new RegExp(`^\\s*\\*?\\s*${escapeRegExp(field)}\\s*$`, "i"))
+
+  // FAIL FAST when NOTHING matches, instead of handing back a locator that
+  // silently absorbs the entire test budget.
+  //
+  // This is the single biggest time-sink in debugging this suite. When a field
+  // identifier is wrong or the field has genuinely moved, all three tiers miss,
+  // and the caller then performs an auto-waiting action (fill/selectOption/
+  // clear) on a locator that will never resolve — burning the full 90s, or a
+  // full FIFTEEN MINUTES for anything tagged @long-scenario, and reporting it
+  // as an opaque timeout on the label regex rather than "this field does not
+  // exist". Several multi-hour investigations in this suite were exactly that:
+  // a stale identifier (legacy `forum_comment` vs the Vue dialog's
+  // `forum-comment`, the English label "Learning path name" vs the real id
+  // `lp-title`, the long-dead `gradebook_add_eval` link) presenting as a hang.
+  //
+  // A bounded 15s existence check (matching the config's own expect timeout)
+  // preserves every legitimate case — a field rendered late by an async fetch
+  // still resolves, which is precisely what the tier comments above describe —
+  // while converting "wrong identifier" from a 15-minute mystery into an
+  // immediate, self-explaining error naming all three things that were tried.
+  //
+  // Deliberately does NOT throw when the element exists but is merely hidden or
+  // disabled: that is a real, different condition the callers' own actionability
+  // waits should report in their own words.
+  await byLabel
+    .first()
+    .waitFor({ state: "attached", timeout: 15_000 })
+    .catch(() => {})
+  if (0 === (await byLabel.count())) {
+    throw new Error(
+      `No form field found for "${field}". Tried, in order: #${field} (id), ` +
+        `[name="${field}"], and a label matching /^\\s*\\*?\\s*${field}\\s*$/i. ` +
+        "If the page has migrated to Vue, the real id is often hyphenated " +
+        "(e.g. legacy forum_comment -> forum-comment) — dump the live DOM " +
+        "rather than trusting the legacy name or a .po translation.",
+    )
+  }
+  return byLabel
 }
 
 // A plain .fill() sets the DOM value and dispatches one `input` event, which
@@ -632,6 +670,36 @@ When("I fill in {string} for {string}", async ({ page }, value: string, field: s
 // "with" form ("I fill in 'title' with 'TEMP'").
 When("I fill in {string} with {string}", async ({ page }, field: string, value: string) => {
   await fillReliably(await resolveField(page, field), value)
+})
+
+// Not ported — new. Submits a search/filter field by pressing Enter IN the
+// field, rather than hunting for a separate submit button.
+//
+// Added for toolUsers.feature's course-user Subscribe view, where
+// `I press "Search"` demonstrably fails to apply the filter: the failure
+// snapshot shows the list still unfiltered (page 1 of ~60 available users,
+// all Baggins/Boffin/Bolger) so the target user's row is simply not present,
+// and the following assertion fails with a confusing "element(s) not found"
+// about a name that does exist in the database. Verified live that pressing
+// Enter in that same field DOES filter, reducing the table to the single
+// expected row — the form's native submit path is reliable where locating the
+// button was not.
+//
+// Worth knowing why the button is hard to hit there: its accessible name does
+// not match `getByRole("button", { name: "Search", exact: true })` at all
+// (confirmed live: 0 matches, the PrimeVue icon+label composition quirk
+// already documented in pressButton), so pressButton falls through several
+// tiers before reaching a text-content match — and this view additionally
+// re-renders its list asynchronously around that moment. Pressing Enter
+// sidesteps the whole question of which element is the submit control.
+//
+// Deliberately a separate step rather than a change to pressButton: plenty of
+// other pages have a real, reliably-clickable "Search" button and there is no
+// reason to route those through the keyboard.
+When("I submit the field {string}", async ({ page }, field: string) => {
+  const target = (await resolveField(page, field)).first()
+  await target.click()
+  await target.press("Enter")
 })
 
 // Mink's "I fill in the following:" (MinkContext::fillFields(), via Behat's
@@ -2588,7 +2656,32 @@ When("I invite the friend to the social group I just created", async ({ page }) 
 })
 
 Then("I should see {string}", async ({ page }, text: string) => {
-  await expect(page.getByText(text).first()).toBeVisible()
+  // `.filter({ visible: true })` before `.first()`, so this picks the first
+  // VISIBLE match rather than the first match in DOM order.
+  //
+  // getByText() matches by case-insensitive SUBSTRING, which makes short or
+  // common assertion strings collide with unrelated content — and if the
+  // colliding element happens to be hidden, the assertion fails with a
+  // baffling `unexpected value "hidden"` about an element nobody was looking
+  // for. Real instance: admin/fileIntegrity.feature asserted "Actions" (a
+  // column header) and resolved instead to a hidden <li> in a collapsed
+  // file-report list, because
+  // "tests/CoreBundle/.../TrainingSatisfactionSurveyCreatorTest.php" contains
+  // "...Satisfaction'S'urvey..." -> "actionsurvey" -> "actions".
+  //
+  // Substring matching is deliberately KEPT rather than switched to
+  // { exact: true }: most callers assert a name or phrase nested inside a
+  // larger element (a table row, a toast, a heading), so exact matching would
+  // break a great many currently-correct assertions. Filtering to visible
+  // fixes the actual failure mode — picking an element the user cannot see —
+  // without changing what counts as a match. Strictly more permissive than
+  // before for passing cases; it can only change the outcome where the old
+  // code would have chosen a hidden element and failed.
+  //
+  // Note this does NOT rescue a genuinely ambiguous VISIBLE match (the
+  // "TEMP" matching the word "template" trap documented in course.feature).
+  // For short strings, prefer asserting something distinctive.
+  await expect(page.getByText(text).filter({ visible: true }).first()).toBeVisible()
 })
 
 Then("I should see the current access URL", async ({ page }) => {

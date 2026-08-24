@@ -1204,12 +1204,62 @@ Then("I additionally select {string} from {string}", async ({ page }, optionLabe
 // current value already is (not a hardcoded assumed default, which could be
 // wrong for a given instance and would itself be an unwanted mutation)
 // before any scenario in that file mutates it, then restore exactly that
-// once after the file's last scenario finishes. BeforeAll/AfterAll here are
-// Playwright's own per-file hooks (scoped to whichever file has a scenario
-// carrying the given tag), not a single global per-worker lifetime — so
-// tagging four different files with four different tags gives each one its
-// own independent snapshot-at-start/restore-at-end cycle, without any of
-// them stepping on each other.
+// once after the file's last scenario finishes.
+//
+// CORRECTION (2026-08-25) — the paragraph that used to sit here claimed these
+// were "Playwright's own per-file hooks ... not a single global per-worker
+// lifetime", and that each tag therefore got its own independent restore
+// cycle. That is wrong for AfterAll, and believing it is what let the bug
+// below ship. playwright-bdd's own source says so explicitly
+// (node_modules/playwright-bdd/dist/runtime/bddWorkerFixtures.js):
+//
+//   "We can't detect when the last test for tagged AfterAll hook is executed
+//    ... The solution: collect and run all AfterAll hooks in worker teardown
+//    phase."
+//
+// So BeforeAll really is per-file, but EVERY tagged AfterAll in the worker is
+// deferred and run together at the very end, inside one `$registerAfterAllHooks`
+// fixture teardown governed by a SINGLE budget (the config `timeout`, 90s).
+// Two consequences that drive the design below:
+//
+//  1. The budget is GLOBAL across all guards, not per guard. Under `workers: 1`
+//     one worker runs every file, so all ~9 restores land in that one teardown.
+//     Nine restores x (admin page load + Save + settle) does not fit in 90s.
+//  2. The restores therefore happen AFTER every test has finished, so they
+//     cannot protect any test in the same run — their only real job is leaving
+//     a persistent box clean for the NEXT run (CI reinstalls the DB each time,
+//     so this matters locally far more than in CI).
+//
+// Given (2), a restore that cannot finish must never fail the run: a cleanup
+// failure is not a test failure. Blowing the budget made CI report the whole
+// job red on a run where all 410 tests PASSED — a maximally confusing signal.
+// Hence the shared deadline and the per-restore try/catch below: the teardown
+// does as much as it can inside a budget it is guaranteed to fit in, and
+// reports anything it had to skip instead of throwing.
+//
+// The deadline is module-level and lazily initialised on first use precisely
+// because it must be shared by every guard, not restarted by each one.
+const TEARDOWN_BUDGET_MS = 50_000
+let teardownDeadline: number | null = null
+
+function teardownBudgetExhausted(): boolean {
+  if (null === teardownDeadline) {
+    teardownDeadline = Date.now() + TEARDOWN_BUDGET_MS
+  }
+  return Date.now() > teardownDeadline
+}
+
+// 50s of restoring, inside a 90s fixture budget, deliberately leaves ~40s of
+// slack: the check happens BEFORE each restore, so one already-in-flight
+// restore (whose gotoReliably() can itself retry a slow admin page) still has
+// room to finish without tripping the fixture timeout.
+function warnSkippedRestore(field: string, reason: string): void {
+  // Deliberately console.warn and not a throw — see the note above on why a
+  // cleanup failure must not fail the run. This still surfaces in CI logs, so
+  // a box that stops getting restored is visible rather than silent.
+  console.warn(`[settings-guard] did NOT restore "${field}" (${reason}). It may be left mutated.`)
+}
+
 function registerSettingsGuard(tag: string, pages: { path: string; field: string }[]) {
   const snapshot = new Map<string, string[]>()
 
@@ -1242,48 +1292,42 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
     for (const { path, field } of pages) {
       const values = snapshot.get(field)
       if (!values) continue
-      await gotoReliably(page, path)
-      await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
-      // "Save settings" (not "Save"): matches the literal button text on
-      // every /admin/settings/* page confirmed live (both the
-      // search_settings?keyword=... pages and category pages like
-      // /admin/settings/lp) — pressButton()'s early exact-match tiers need
-      // the literal text, not a substring; "Save" alone only happens to
-      // work via its much later substring-fallback tier.
-      await pressButton(page, "Save settings")
-      // "Save settings" is a form submit — likely POST-redirect-GET under
-      // the hood. The NEXT iteration's own gotoReliably() now absorbs a
-      // still-lagging redirect from this Save if one occurs, so this wait
-      // just needs to be reasonable, not airtight.
-      //
-      // BOUNDED, and that bound is load-bearing rather than cosmetic. This
-      // wait sits inside a LOOP, and every AfterAll hook in the worker shares
-      // ONE 90s fixture budget — so an unbounded networkidle here (this app's
-      // background polling can keep the network from ever going quiet, the
-      // same hang already documented at the LP-deletion helper below) does not
-      // merely slow the teardown down: it burns the budget, playwright-bdd
-      // reports `Fixture "$registerAfterAllHooks" timeout of 90000ms exceeded
-      // during teardown`, and every restore still queued behind it is
-      // ABANDONED — leaving those platform settings mutated for whatever runs
-      // next. That is the exact leaked-setting class these guards exist to
-      // prevent, so the guard must never be the thing that causes it.
-      //
-      // Observed for real, in both environments: the CI run on ba69565dde8
-      // hit it twice (restores of show_glossary_in_extra_tools and
-      // admins_can_set_users_pass cut off mid-flight, surfacing as confusing
-      // extra errors attached to unrelated failing tests in toolReporting/
-      // toolAssessments, which carry no @settings tag at all), and the local
-      // 410-pass run hit it once at end-of-run — silently, since the run was
-      // already reported green. Confirmed by the aftermath: course_catalog_
-      // settings was left at courseCatalogue.feature's mutated value on this
-      // box, contradicting registerTextSettingsGuard()'s own note that it is
-      // blank here. A dropped restore is invisible in the test result, so the
-      // bound is the only thing standing between a slow teardown and a silent
-      // leak — and a leak is STICKY: the next run's BeforeAll snapshots the
-      // mutated value as its new baseline and faithfully restores to that.
-      await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
+      if (teardownBudgetExhausted()) {
+        warnSkippedRestore(field, "shared teardown budget exhausted")
+        continue
+      }
+      try {
+        await gotoReliably(page, path)
+        await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
+        // "Save settings" (not "Save"): matches the literal button text on
+        // every /admin/settings/* page confirmed live (both the
+        // search_settings?keyword=... pages and category pages like
+        // /admin/settings/lp) — pressButton()'s early exact-match tiers need
+        // the literal text, not a substring; "Save" alone only happens to
+        // work via its much later substring-fallback tier.
+        await pressButton(page, "Save settings")
+        // "Save settings" is a form submit — likely POST-redirect-GET under
+        // the hood. The NEXT iteration's own gotoReliably() absorbs a
+        // still-lagging redirect from this Save if one occurs, so this wait
+        // just needs to be reasonable, not airtight.
+        //
+        // 3s, not 10s, and that number is the whole fix rather than a tweak.
+        // This app has persistent background polling (notifications, chat
+        // presence), so networkidle frequently NEVER settles here and the wait
+        // runs to its full bound every time. At 10s x 9 restores that is 90s
+        // of pure waiting — the entire shared fixture budget, spent doing
+        // nothing, which is precisely how a run with 410/410 passing tests
+        // still reported a red CI job. Measured, not assumed: the failing CI
+        // teardown died on the 6th of 9 restores.
+        await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {})
+      } catch (error) {
+        // One bad restore must not abandon the ones queued behind it — that
+        // was the old failure mode, where a single slow field silently took
+        // every later setting down with it.
+        warnSkippedRestore(field, String(error).split("\n")[0])
+      }
     }
-    await page.context().close()
+    await page.context().close().catch(() => {})
   })
 }
 
@@ -1382,17 +1426,26 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
   AfterAll({ tags: tag }, async () => {
     if (!guardPage || snapshot === null) return
     const page = guardPage
-    await gotoReliably(page, path)
-    await settle(page)
-    await page.locator(`#${field}`).fill(snapshot)
-    await pressButton(page, "Save settings")
-    // Bounded for the same budget reason spelled out in registerSettingsGuard()'s
-    // AfterAll above — this helper's own settle() already uses the bounded form,
-    // so this trailing wait was the one inconsistency. Note this guard shares the
-    // single 90s teardown budget with EVERY other guard's AfterAll, so it can be
-    // starved by them even though its own restore is just one field.
-    await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
-    await page.context().close()
+    // Shares the SINGLE global teardown budget with every registerSettingsGuard()
+    // above (see the long note there) — so it checks the same deadline and can be
+    // starved by them even though its own restore is just one field. Whether it
+    // gets skipped is therefore an ordering accident, which is exactly why the
+    // skip has to be announced rather than silent.
+    if (teardownBudgetExhausted()) {
+      warnSkippedRestore(field, "shared teardown budget exhausted")
+      await page.context().close().catch(() => {})
+      return
+    }
+    try {
+      await gotoReliably(page, path)
+      await settle(page)
+      await page.locator(`#${field}`).fill(snapshot)
+      await pressButton(page, "Save settings")
+      await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {})
+    } catch (error) {
+      warnSkippedRestore(field, String(error).split("\n")[0])
+    }
+    await page.context().close().catch(() => {})
   })
 }
 

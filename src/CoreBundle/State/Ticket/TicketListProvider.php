@@ -39,6 +39,9 @@ final readonly class TicketListProvider implements ProviderInterface
 {
     private const int DEFAULT_ITEMS_PER_PAGE = 20;
     private const int MAX_ITEMS_PER_PAGE = 100;
+    private const int STATUS_CLOSED = 4;
+    private const string VIEW_ACTIVE = 'active';
+    private const string VIEW_CLOSED = 'closed';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -102,6 +105,7 @@ final readonly class TicketListProvider implements ProviderInterface
         );
 
         $queryBuilder = $this->createTicketQueryBuilder($accessUrl, $project, $userId, $isAdmin, $managedCategoryIds);
+        $this->applyViewFilter($queryBuilder, $request);
         $this->applyFilters($queryBuilder, $request);
 
         $countQueryBuilder = clone $queryBuilder;
@@ -249,6 +253,41 @@ final readonly class TicketListProvider implements ProviderInterface
         }
 
         return $queryBuilder;
+    }
+
+    private function applyViewFilter(QueryBuilder $queryBuilder, Request $request): void
+    {
+        $view = trim((string) $request->query->get('view', ''));
+
+        if ('' === $view) {
+            // Keep direct legacy/status-filter links working. Without an explicit
+            // status filter, the main ticket list defaults to active tickets.
+            if ($request->query->getInt('statusId') > 0) {
+                return;
+            }
+
+            $view = self::VIEW_ACTIVE;
+        }
+
+        if (self::VIEW_ACTIVE === $view) {
+            $queryBuilder
+                ->andWhere('status.id != :closedStatusId')
+                ->setParameter('closedStatusId', self::STATUS_CLOSED, Types::INTEGER)
+            ;
+
+            return;
+        }
+
+        if (self::VIEW_CLOSED === $view) {
+            $queryBuilder
+                ->andWhere('status.id = :closedStatusId')
+                ->setParameter('closedStatusId', self::STATUS_CLOSED, Types::INTEGER)
+            ;
+
+            return;
+        }
+
+        throw new BadRequestHttpException('The requested ticket view is invalid.');
     }
 
     private function applyFilters(QueryBuilder $queryBuilder, Request $request): void

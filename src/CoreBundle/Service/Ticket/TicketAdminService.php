@@ -40,6 +40,8 @@ final readonly class TicketAdminService
     private const int STATUS_CLOSED = 4;
     private const int STATUS_FORWARDED = 5;
     private const int STATUS_NEW = 1;
+    private const string VIEW_ACTIVE = 'active';
+    private const string VIEW_CLOSED = 'closed';
 
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -390,6 +392,7 @@ final readonly class TicketAdminService
         }
         $project = $this->getAvailableProject($projectId, $accessUrl);
         $queryBuilder = $this->createExportQueryBuilder($accessUrl, $project);
+        $this->applyExportViewFilter($queryBuilder, $filters);
         $this->applyExportFilters($queryBuilder, $filters);
         $rows = $queryBuilder
             ->select([
@@ -760,6 +763,37 @@ final readonly class TicketAdminService
             ->setParameter('accessUrlId', (int) $accessUrl->getId(), Types::INTEGER)
             ->setParameter('projectId', (int) $project->getId(), Types::INTEGER)
         ;
+    }
+
+    /**
+     * @param array<string, mixed> $filters
+     */
+    private function applyExportViewFilter(QueryBuilder $queryBuilder, array $filters): void
+    {
+        $view = trim((string) ($filters['view'] ?? ''));
+        if ('' === $view) {
+            return;
+        }
+
+        if (self::VIEW_ACTIVE === $view) {
+            $queryBuilder
+                ->andWhere('status.id != :closedStatusId')
+                ->setParameter('closedStatusId', self::STATUS_CLOSED, Types::INTEGER)
+            ;
+
+            return;
+        }
+
+        if (self::VIEW_CLOSED === $view) {
+            $queryBuilder
+                ->andWhere('status.id = :closedStatusId')
+                ->setParameter('closedStatusId', self::STATUS_CLOSED, Types::INTEGER)
+            ;
+
+            return;
+        }
+
+        throw new BadRequestHttpException('The requested ticket view is invalid.');
     }
 
     /**

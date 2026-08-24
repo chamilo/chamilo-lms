@@ -270,6 +270,14 @@
         </div>
       </section>
 
+      <div
+        v-if="Number(detail.ticket.status?.id) === 4"
+        class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700"
+        role="status"
+      >
+        {{ t("Ticket closed") }}
+      </div>
+
       <form
         v-if="detail.canReply"
         class="space-y-6 rounded-xl border border-gray-20 bg-white p-6 shadow-sm"
@@ -391,14 +399,6 @@
         </div>
       </form>
 
-      <div
-        v-else-if="Number(detail.ticket.status?.id) === 4"
-        class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700"
-        role="status"
-      >
-        {{ t("Ticket closed") }}
-      </div>
-
       <BaseDialog
         v-model:is-visible="historyVisible"
         :title="t('Assignment history')"
@@ -483,8 +483,14 @@ const unconfirmedStatusId = computed(() => {
 })
 
 const listQuery = computed(() => {
+  const query = { ...route.query }
   const projectId = detail.value?.ticket?.project?.id
-  return projectId ? { project_id: String(projectId) } : {}
+
+  if (projectId && !query.project_id) {
+    query.project_id = String(projectId)
+  }
+
+  return query
 })
 
 watch(

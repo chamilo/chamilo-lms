@@ -39549,3 +39549,27 @@ msgstr "The picture could not be uploaded"
 
 msgid "This field type is not fully supported yet — raw value only."
 msgstr "This field type is not fully supported yet — raw value only."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "This course is close to its user subscription limit (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Space is limited through your course properties. To increase your limit, get a"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "User subscriptions are limited through your course properties. To increase your limit, get a"
+
+msgid "pro plan"
+msgstr "pro plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+
+msgid "Tired of writing questions?"
+msgstr "Tired of writing questions?"
+
+msgid "Upgrade your plan"
+msgstr "Upgrade your plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "to a pro plan to get help from an AI to generate quality questions for you."

@@ -89,12 +89,13 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
     const quota = json?.quota || {}
     const availableBytes = Number(quota.availableBytes)
     const availablePercent = Number(quota.availablePercent)
+    const showUpgradeCta = Boolean(quota.showUpgradeCta)
 
     if (!Number.isFinite(availableBytes) || !Number.isFinite(availablePercent)) {
       return null
     }
 
-    const info = { availableBytes, availablePercent, fetchedAt: now }
+    const info = { availableBytes, availablePercent, showUpgradeCta, fetchedAt: now }
     quotaCache.set(key, info)
     return info
   } catch (e) {

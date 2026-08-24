@@ -16,6 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class DocumentUsageAction extends AbstractController
 {
     private const int BYTES_PER_MB = 1048576;
+    private const float UPGRADE_CTA_AVAILABLE_PERCENT_THRESHOLD = 5.0;
 
     public function __construct(
         private readonly CourseRepository $courseRepository,
@@ -87,6 +88,9 @@ final class DocumentUsageAction extends AbstractController
                 'availableBytes' => null === $availableBytes ? null : (int) $availableBytes,
                 'availableMb' => null === $availableBytes ? null : $this->bytesToMegabytes((int) $availableBytes),
                 'availablePercent' => $availablePercent,
+                'showUpgradeCta' => $quotaBytes > 0
+                    && $availablePercent <= self::UPGRADE_CTA_AVAILABLE_PERCENT_THRESHOLD
+                    && $this->courseHelper->shouldOfferBuyCoursesDocumentQuotaUpgrade($course),
             ],
         ]);
     }

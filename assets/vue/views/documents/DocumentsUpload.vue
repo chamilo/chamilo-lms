@@ -15,7 +15,24 @@
       class="mb-4 rounded border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
       role="alert"
     >
-      {{ quotaWarningMessage }}
+      <p>{{ quotaWarningMessage }}</p>
+      <p
+        v-if="quotaInfo.showUpgradeCta"
+        class="mt-1"
+      >
+        {{ t("Space is limited through your course properties. To increase your limit, get a") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("pro plan") }}
+        </a>
+        {{
+          t(
+            "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan.",
+          )
+        }}
+      </p>
     </div>
 
     <div class="mb-4">
@@ -255,7 +272,7 @@ const { t } = useI18n()
 const { uppyLocale } = useUppyLocale()
 const platformConfigStore = usePlatformConfig()
 
-const LOW_QUOTA_THRESHOLD_PERCENT = 2
+const LOW_QUOTA_THRESHOLD_PERCENT = 5
 const QUOTA_STALE_MS = 30_000
 
 function normalizePickerType(raw) {
@@ -347,6 +364,7 @@ const quotaWarningMessage = ref("")
 const quotaInfo = ref({
   availableBytes: null,
   availablePercent: null,
+  showUpgradeCta: false,
   fetchedAt: 0,
 })
 
@@ -527,7 +545,7 @@ async function refreshQuota(force = false) {
     staleMs: QUOTA_STALE_MS,
   })
 
-  quotaInfo.value = info || { availableBytes: null, availablePercent: null, fetchedAt: 0 }
+  quotaInfo.value = info || { availableBytes: null, availablePercent: null, showUpgradeCta: false, fetchedAt: 0 }
 
   const msg = documentsService.getQuotaWarningMessage(t, info, {
     thresholdPercent: LOW_QUOTA_THRESHOLD_PERCENT,

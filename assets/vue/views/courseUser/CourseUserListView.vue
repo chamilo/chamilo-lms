@@ -163,7 +163,24 @@
       v-if="warningMessage"
       class="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-800"
     >
-      {{ warningMessage }}
+      <p>{{ warningMessage }}</p>
+      <p
+        v-if="showUpgradeCta"
+        class="mt-1"
+      >
+        {{ t("User subscriptions are limited through your course properties. To increase your limit, get a") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("pro plan") }}
+        </a>
+        {{
+          t(
+            "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan.",
+          )
+        }}
+      </p>
     </div>
 
     <div
@@ -416,6 +433,7 @@ const loading = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const warningMessage = ref("")
+const showUpgradeCta = ref(false)
 const selectedUserIds = ref([])
 const searchVisible = ref(false)
 const searchDraft = ref("")
@@ -481,6 +499,7 @@ async function loadUsers() {
     users.value = response.items || []
     totalItems.value = Number(response.totalItems || 0)
     warningMessage.value = response.warning || ""
+    showUpgradeCta.value = Boolean(response.showUpgradeCta)
     extraFields.value = response.extraFields || []
     hiddenFields.value = response.hiddenFields || []
     permissions.value = {

@@ -196,6 +196,11 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     {
         $invitationCode = $this->getInvitationCode($request);
         if ('auto' === $invitationCode) {
+            // The auto code mints an invitation on the spot, so it has to stay inside the course.
+            if (!$this->belongsToCurrentCourseContext()) {
+                throw new AccessDeniedHttpException('You are not allowed to answer this meeting poll.');
+            }
+
             return $this->getOrCreateAutoInvitation($survey, $course, $session, $user);
         }
 
@@ -438,6 +443,15 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     private function getInvitationCode(Request $request): string
     {
         return trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
+    }
+
+    /**
+     * Teachers, coaches and administrators reach this through the student roles they imply.
+     */
+    private function belongsToCurrentCourseContext(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
     }
 
     private function getOrCreateAutoInvitation(CSurvey $survey, Course $course, ?Session $session, User $user): CSurveyInvitation

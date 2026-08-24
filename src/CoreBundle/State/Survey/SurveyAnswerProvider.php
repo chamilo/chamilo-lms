@@ -229,6 +229,12 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
                 throw new AccessDeniedHttpException('A valid user is required.');
             }
 
+            // The auto code mints an invitation on the spot. Outside the anonymous link, which
+            // exists to be shared, only members of the course context may obtain one.
+            if ('1' !== (string) $survey->getAnonymous() && !$this->belongsToCurrentCourseContext()) {
+                throw new AccessDeniedHttpException('You are not allowed to answer this survey.');
+            }
+
             return $this->getOrCreateAutoInvitation($survey, $course, $session, $user);
         }
 
@@ -543,6 +549,15 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     private function getInvitationCode(Request $request): string
     {
         return trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
+    }
+
+    /**
+     * Teachers, coaches and administrators reach this through the student roles they imply.
+     */
+    private function belongsToCurrentCourseContext(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
     }
 
     private function getOrCreateAnonymousAutoInvitation(CSurvey $survey, Course $course, ?Session $session, Request $request): CSurveyInvitation

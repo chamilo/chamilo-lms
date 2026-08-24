@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u8bc1\u4e66\u56fe\u7247\u5df2\u5220\u9664",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u4e0a\u4f20\u524d\u8bf7\u4f7f\u7528\u56fe\u50cf\u7f16\u8f91\u5668\u88c1\u526a\u3001\u65cb\u8f6c\u6216\u8c03\u6574\u8bfe\u7a0b\u56fe\u7247\u5927\u5c0f\u3002",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "仅字母",
+    "Only letters and spaces": "仅字母和空格",
+    "Only letters, numbers and spaces": "仅字母、数字和空格",
+    "Mobile phone number is incomplete or contains invalid characters": "手机号码不完整或包含无效字符",
+    "Include the country dial code": "包含国家拨号码",
+    "Only PNG, JPG or GIF images allowed": "只允许PNG, JPG 或 GIF 格式的图片"
 }

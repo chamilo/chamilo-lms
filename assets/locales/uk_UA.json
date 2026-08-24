@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u0417\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u043d\u044f \u0441\u0435\u0440\u0442\u0438\u0444\u0456\u043a\u0430\u0442\u0430 \u0432\u0438\u0434\u0430\u043b\u0435\u043d\u043e",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0412\u0438\u043a\u043e\u0440\u0438\u0441\u0442\u043e\u0432\u0443\u0439\u0442\u0435 \u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u044c \u043f\u0435\u0440\u0435\u0434 \u0437\u0430\u0432\u0430\u043d\u0442\u0430\u0436\u0435\u043d\u043d\u044f\u043c, \u0449\u043e\u0431 \u043e\u0431\u0440\u0456\u0437\u0430\u0442\u0438, \u043f\u043e\u0432\u0435\u0440\u043d\u0443\u0442\u0438 \u0430\u0431\u043e \u0437\u043c\u0456\u043d\u0438\u0442\u0438 \u0440\u043e\u0437\u043c\u0456\u0440 \u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u043d\u044f \u043a\u0443\u0440\u0441\u0443.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Лише літери",
+    "Only letters and spaces": "Лише літери та пробіли",
+    "Only letters, numbers and spaces": "Лише літери, цифри та пробіли",
+    "Mobile phone number is incomplete or contains invalid characters": "Номер мобільного телефону неповний або містить некоректні символи",
+    "Include the country dial code": "Включіть код країни",
+    "Only PNG, JPG or GIF images allowed": "Дозволені лише зображення PNG, JPG або GIF"
 }

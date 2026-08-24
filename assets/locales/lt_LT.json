@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Sertifikato paveiksl\u0117lis i\u0161trintas",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Prie\u0161 \u012fkeldami naudokite paveiksl\u0117li\u0173 redaktori\u0173, kad apkarptum\u0117te, pasuktum\u0117te ar pakeistum\u0117te kurso paveiksl\u0117lio dyd\u012f.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Tik raidės",
+    "Only letters and spaces": "Tik raidės ir tarpai",
+    "Only letters, numbers and spaces": "Tik raidės, skaičiai ir tarpai",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiliojo telefono numeris yra neišsamus arba turi netinkamus simbolius",
+    "Include the country dial code": "Įtraukite šalies skambinimo kodą",
+    "Only PNG, JPG or GIF images allowed": "Tiktai PNG, JPG ar GIF paveikslėliai leidžiami"
 }

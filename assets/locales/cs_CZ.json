@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Obr\u00e1zek certifik\u00e1tu byl odstran\u011bn",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "P\u0159ed nahr\u00e1n\u00edm pou\u017eijte editor obr\u00e1zk\u016f k o\u0159\u00edznut\u00ed, oto\u010den\u00ed nebo zm\u011bn\u011b velikosti obr\u00e1zku kurzu.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Pouze písmena",
+    "Only letters and spaces": "Pouze písmena a mezery",
+    "Only letters, numbers and spaces": "Pouze písmena, číslice a mezery",
+    "Mobile phone number is incomplete or contains invalid characters": "Číslo mobilního telefonu je neúplné nebo obsahuje neplatné znaky",
+    "Include the country dial code": "Zahrňte kód země",
+    "Only PNG, JPG or GIF images allowed": "Povoleny pouze obrázky PNG, JPG nebo GIF"
 }

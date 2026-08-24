@@ -3757,5 +3757,11 @@
     "Certificate image deleted": "Vottor\u00f0smynd eytt",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Nota\u00f0u myndvinnslu \u00e1\u00f0ur en \u00fe\u00fa hle\u00f0ur upp til a\u00f0 skera, sn\u00faa e\u00f0a breyta st\u00e6r\u00f0 n\u00e1msmyndar.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Aðeins bókstafir",
+    "Only letters and spaces": "Aðeins bókstafir og bil",
+    "Only letters, numbers and spaces": "Aðeins bókstafir, tölustafir og bil",
+    "Mobile phone number is incomplete or contains invalid characters": "Farsímanúmer er ófullbúið eða inniheldur ógilda stafi",
+    "Include the country dial code": "Hafa með landskóða",
+    "Only PNG, JPG or GIF images allowed": "Aðeins PNG, JPG eða GIF myndir leyfðar"
 }

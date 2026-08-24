@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Gambar sertifikat dihapus",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gunakan editor gambar sebelum mengunggah untuk memotong, memutar, atau mengubah ukuran gambar kursus.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Hanya huruf",
+    "Only letters and spaces": "Hanya huruf dan spasi",
+    "Only letters, numbers and spaces": "Hanya huruf, angka dan spasi",
+    "Mobile phone number is incomplete or contains invalid characters": "Nomor telepon seluler tidak lengkap atau mengandung karakter tidak valid",
+    "Include the country dial code": "Sertakan kode dial negara",
+    "Only PNG, JPG or GIF images allowed": "Hanya gambar bertype PNG, JPG atau GIF yang diijinkan"
 }

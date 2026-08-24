@@ -3768,5 +3768,11 @@
     "Certificate image deleted": "Umfanekiso wesatifikethi ucinyiwe",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Sebenzisa umhleli womfanekiso ngaphambi kokulayisha ukusika, ukujikeleza okanye ukutshintsha ubungakanani bomfanekiso wekhosi.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Eebhala kuphela",
+    "Only letters and spaces": "Eebhala nezithuba kuphela",
+    "Only letters, numbers and spaces": "Eebhala, iinombolo nezithuba kuphela",
+    "Mobile phone number is incomplete or contains invalid characters": "Inombolo yefowuni eshukumayo ayaphelelanga okanye ineenqaku ezingasebenziyo",
+    "Include the country dial code": "Banda ikhowudi yokudayela yelizwe",
+    "Only PNG, JPG or GIF images allowed": "Imifanekiso yePNG, JPG okanye GIF kuphela ivumelekile"
 }

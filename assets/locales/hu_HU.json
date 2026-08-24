@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Tan\u00fas\u00edtv\u00e1ny k\u00e9p t\u00f6r\u00f6lve",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Haszn\u00e1lja a k\u00e9pszerkeszt\u0151t felt\u00f6lt\u00e9s el\u0151tt a kurzus k\u00e9p v\u00e1g\u00e1s\u00e1hoz, elforgat\u00e1s\u00e1hoz vagy \u00e1tm\u00e9retez\u00e9s\u00e9hez.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Csak betűk",
+    "Only letters and spaces": "Csak betűk és szóközök",
+    "Only letters, numbers and spaces": "Csak betűk, számok és szóközök",
+    "Mobile phone number is incomplete or contains invalid characters": "A mobiltelefonszám hiányos vagy érvénytelen karaktereket tartalmaz",
+    "Include the country dial code": "Tartalmazza az ország hívókódját",
+    "Only PNG, JPG or GIF images allowed": "Csak a PNG, JPG és GIF képformátumok engedélyezettek."
 }

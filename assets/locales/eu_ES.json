@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Ziurtagiri-irudia ezabatu da",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Erabili irudi-editorea kargatu aurretik ikastaroaren irudia moztu, biratu edo tamainaz aldatzeko.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Letrak soilik",
+    "Only letters and spaces": "Letrak eta espazioak soilik",
+    "Only letters, numbers and spaces": "Letra, zenbaki eta espazioak soilik",
+    "Mobile phone number is incomplete or contains invalid characters": "Telefono mugikorren zenbakia ez dago osatua edo karaktere baliogabeak dauzka",
+    "Include the country dial code": "Sartu herrialdearen dei-kodea",
+    "Only PNG, JPG or GIF images allowed": "PNG, JPG edo GIF irudiak bakarrik onartzen dira"
 }

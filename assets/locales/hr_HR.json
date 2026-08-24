@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Slika certifikata izbrisana",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Koristite ure\u0111iva\u010d slika prije prijenosa kako biste izrezali, rotirali ili promijenili veli\u010dinu slike te\u010daja.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Samo slova",
+    "Only letters and spaces": "Samo slova i razmaci",
+    "Only letters, numbers and spaces": "Samo slova, brojevi i razmaci",
+    "Mobile phone number is incomplete or contains invalid characters": "Broj mobitela je nepotpun ili sadrži nevaljane znakove",
+    "Include the country dial code": "Uključite pozivni kod zemlje",
+    "Only PNG, JPG or GIF images allowed": "Dozvoljene su slike samo PNG, JPG ili GIF formata"
 }

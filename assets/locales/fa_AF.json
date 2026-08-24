@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u062a\u0635\u0648\u06cc\u0631 \u06af\u0648\u0627\u0647\u06cc\u200c\u0646\u0627\u0645\u0647 \u062d\u0630\u0641 \u0634\u062f",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0642\u0628\u0644 \u0627\u0632 \u0628\u0627\u0631\u06af\u0630\u0627\u0631\u06cc\u060c \u0627\u0632 \u0648\u06cc\u0631\u0627\u06cc\u0634\u06af\u0631 \u062a\u0635\u0648\u06cc\u0631 \u0628\u0631\u0627\u06cc \u0628\u0631\u0634\u060c \u0686\u0631\u062e\u0634 \u06cc\u0627 \u062a\u063a\u06cc\u06cc\u0631 \u0627\u0646\u062f\u0627\u0632\u0647 \u062a\u0635\u0648\u06cc\u0631 \u062f\u0648\u0631\u0647 \u0627\u0633\u062a\u0641\u0627\u062f\u0647 \u06a9\u0646\u06cc\u062f.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "فقط حروف",
+    "Only letters and spaces": "فقط حروف و فاصله",
+    "Only letters, numbers and spaces": "فقط حروف، اعداد و فاصله",
+    "Mobile phone number is incomplete or contains invalid characters": "شماره تلفن همراه ناقص است یا کاراکترهای نامعتبر دارد",
+    "Include the country dial code": "کد تماس کشور را شامل شوید",
+    "Only PNG, JPG or GIF images allowed": "فقط تصاویر PNG، JPG یا GIF مجاز است"
 }

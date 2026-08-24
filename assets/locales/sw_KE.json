@@ -3785,5 +3785,11 @@
     "Certificate image deleted": "Picha ya cheti imefutwa",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Tumia kihariri cha picha kabla ya kupakia ili kupunguza, kuzungusha au kubadilisha ukubwa wa picha ya kozi.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Herufi pekee",
+    "Only letters and spaces": "Herufi na nafasi pekee",
+    "Only letters, numbers and spaces": "Herufi, nambari na nafasi pekee",
+    "Mobile phone number is incomplete or contains invalid characters": "Nambari ya simu ya mkononi iko duni au ina herufi batili",
+    "Include the country dial code": "Jumuisha nambari ya simu ya nchi",
+    "Only PNG, JPG or GIF images allowed": "Picha za PNG, JPG au GIF pekee zinazoruhusiwa"
 }

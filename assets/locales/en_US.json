@@ -963,7 +963,7 @@
     "Issued at": "Issued at",
     "Load more": "Load more",
     "Session period": "Session period",
-    "Search student": "Search student",
+    "Search student": "Search for student",
     "Create new user": "Create new user",
     "Matching students": "Matching students",
     "Active": "Active",
@@ -3826,5 +3826,11 @@
     "The status of this user cannot be changed to human resources manager.": "The status of this user cannot be changed to human resources manager.",
     "Edit user information": "Edit user information",
     "User updated": "User updated",
-    "Created by {0} on {1}": "Created by {0} on {1}"
+    "Created by {0} on {1}": "Created by {0} on {1}",
+    "Only letters": "Only letters",
+    "Only letters and spaces": "Only letters and spaces",
+    "Only letters, numbers and spaces": "Only letters, numbers and spaces",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobile phone number is incomplete or contains invalid characters",
+    "Include the country dial code": "Include the country dial code",
+    "Only PNG, JPG or GIF images allowed": "Only PNG, JPG or GIF images allowed"
 }

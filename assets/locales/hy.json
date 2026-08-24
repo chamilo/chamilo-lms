@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u054e\u056f\u0561\u0575\u0561\u056f\u0561\u0576\u056b \u057a\u0561\u057f\u056f\u0565\u0580\u0568 \u057b\u0576\u057b\u057e\u0565\u0581",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0546\u056f\u0561\u0580\u0568 \u057e\u0565\u0580\u0562\u0565\u057c\u0576\u0565\u056c\u0578\u0582\u0581 \u0561\u057c\u0561\u057b \u0585\u0563\u057f\u0561\u0563\u0578\u0580\u056e\u0565\u0584 \u057a\u0561\u057f\u056f\u0565\u0580\u0576\u0565\u0580\u056b \u056d\u0574\u0562\u0561\u0563\u0580\u056b\u0579\u0568\u055d \u0564\u0561\u057d\u0568\u0576\u0569\u0561\u0581\u056b \u0576\u056f\u0561\u0580\u0568 \u056f\u057f\u0580\u0565\u056c\u0578\u0582, \u057a\u057f\u057f\u0565\u056c\u0578\u0582 \u056f\u0561\u0574 \u0579\u0561\u0583\u0561\u0583\u0578\u056d\u0565\u056c\u0578\u0582 \u0570\u0561\u0574\u0561\u0580:",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Միայն տառեր",
+    "Only letters and spaces": "Միայն տառեր և բացատներ",
+    "Only letters, numbers and spaces": "Միայն տառեր, թվեր և բացատներ",
+    "Mobile phone number is incomplete or contains invalid characters": "Բջջային հեռախոսահամարը անավարտ է կամ պարունակում է անվավեր նշաններ",
+    "Include the country dial code": "Ներառեք երկրի կոդը",
+    "Only PNG, JPG or GIF images allowed": "Թույլատրվում են միայն PNG, JPG կամ GIF նկարներ"
 }

@@ -99,11 +99,18 @@ Feature: Reporting tool
     And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I click the "[title='Add']" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
+    # Wait for a Subscribe-view-only control before touching the search box:
+    # both the course-users LIST view and SUBSCRIBE view contain
+    # [name="search"], and "I wait for the page to be loaded"
+    # (domcontentloaded) is a no-op for this client-side route change, so the
+    # fill could land on the wrong input while the view was still swapping.
+    # Same fix and reasoning as toolUsers.feature's own subscribe step.
+    And I wait for the element "[title='Register']" to appear
     And I fill in the following:
       | search | pperez |
-    And I press "Search"
-    And I wait for the page to be loaded
+    And I submit the field "search"
+    And I wait for the page content to settle
     Then I should see "Perez"
     And I click the "[title='Register']" element
     And I wait for the page to be loaded
@@ -151,7 +158,26 @@ Feature: Reporting tool
     And I follow the course tool "Users"
     And I wait for the page to be loaded
     Then I should see "Perez"
-    And I click the "[title='Unsubscribe']" element
+    # ROW-SCOPED unsubscribe. This was an UNSCOPED
+    # `I click the "[title='Unsubscribe']" element`, which clicks whichever
+    # Unsubscribe button comes first in DOM order — and course TEMP has several
+    # subscribed learners (acostea, fapple, amann, pperez), so it unsubscribed
+    # SOMEBODY ELSE. Two consequences, both observed:
+    #   1. This scenario then failed its own final assertion, because Perez was
+    #      of course still subscribed ("expect(body).not.toContainText('Perez')").
+    #   2. Far worse, it silently stripped another file's fixture. This is the
+    #      best explanation for a failure that took a long time to attribute:
+    #      a full run ended with fapple missing from course_rel_user even
+    #      though the seed had subscribed him, which broke five toolGroup
+    #      "Add fapple to Group 000X" scenarios and cascaded into six more.
+    #      Under parallel execution this file can run alongside toolGroup, so
+    #      the victim was effectively random.
+    # Unlike toolUsers.feature's equivalent scenario, this one never searches
+    # first, so it cannot rely on the list being narrowed to a single row —
+    # scoping to the row is the only correct fix. Uses the existing row-scoped
+    # step, the same convention class.feature/courseCategory.feature already
+    # use for exactly this hazard.
+    And I click the "[title='Unsubscribe']" icon in the row for "Perez"
     And I press "Yes"
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
     Then I should not see "Perez"

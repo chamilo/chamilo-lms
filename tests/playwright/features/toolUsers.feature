@@ -106,7 +106,15 @@ Feature: Users tool
     And I press "Search"
     And I wait for the page to be loaded
     Then I should see "amann"
-    And I click the "[title='Unsubscribe']" element
+    # Row-scoped as defence in depth. This file's header argues an unscoped
+    # click is safe here because the preceding search narrows the Learners list
+    # to one row — true when the filter actually applied, but the filter
+    # applying is precisely what could not be relied on (see the Subscribe-view
+    # note further down). An unscoped Unsubscribe that fires against an
+    # unfiltered list silently removes another user, and toolReporting.feature
+    # proved that failure mode is real and destructive: it stripped a fixture
+    # other files depend on. Scoping costs nothing and removes the possibility.
+    And I click the "[title='Unsubscribe']" icon in the row for "amann"
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "amann"

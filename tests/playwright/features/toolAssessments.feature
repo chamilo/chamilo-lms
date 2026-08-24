@@ -306,21 +306,54 @@ Feature: Assessments tool
     # Same fix already applied in sessionAccess.feature for the same reason.
     Then I click the ".mdi-link-plus" element
     And I wait for the page to be loaded
-    When I select "Assignments" from "create_link_select_link"
-    And wait for the page to be loaded when ready
+    # REWRITTEN 2026-08-23 against the live Vue "Add online activity" dialog.
+    # Every identifier below was dumped from the real page; the previous ones
+    # were all legacy leftovers that matched nothing:
+    #   create_link_select_link -> #gradebook-link-type   (a PrimeVue combobox,
+    #       NOT a native <select>, so "I select ... from ..." cannot drive it)
+    #   weight_mask             -> #gradebook-link-weight
+    #   min_score               -> #gradebook-link-min-score
+    #   add_link_submit         -> the dialog's own "Add online activity" button
+    #       (it reuses the toolbar label, same pattern as the evaluation dialog)
+    #   [title='Edit weight']   -> [title='Edit']  (the row action is plain
+    #       "Edit"; no "Edit weight" control exists any more)
+    #   edit_link_form_submit   -> "Save" (the Edit dialog is header "Edit" with
+    #       buttons ["Cancel", "Save"])
+    #
+    # A genuinely NEW step is also required: the form now has TWO comboboxes,
+    # a Type and then a resource picker (#gradebook-link-resource), where the
+    # old single select apparently sufficed. Verified live that Type offers
+    # ["Assignments"] and the resource picker then offers
+    # ["Assessment Link Work"], and that submitting adds the row.
+    #
+    # The two message assertions are replaced rather than retranslated: neither
+    # "The link has been added" nor "Assessment edited" is rendered any more
+    # (checked the page text after each submit — no add/edit confirmation text
+    # at all). Asserting the resulting STATE is stronger than asserting a toast
+    # that may not exist: the row must appear, and after editing, re-opening the
+    # dialog must show the new minimum score actually persisted.
+    And I click the "#gradebook-link-type" element
+    And I click the "[role='option']:has-text('Assignments')" element
+    And I wait for the page content to settle
+    And I click the "#gradebook-link-resource" element
+    And I click the "[role='option']:has-text('Assessment Link Work')" element
     When I fill in the following:
-      | weight_mask | 10 |
-      | min_score   | 2  |
-    And I press "add_link_submit"
-    And I wait for the page to be loaded
-    Then I should see "The link has been added"
-    Then I click the "[title='Edit weight']" icon in the row for "Assessment Link Work"
-    And I wait for the page to be loaded
+      | gradebook-link-weight    | 10 |
+      | gradebook-link-min-score | 2  |
+    And I press "Add online activity"
+    And I wait for the page content to settle
+    Then I should see "Assessment Link Work"
+    Then I click the "[title='Edit']" icon in the row for "Assessment Link Work"
+    And I wait for the page content to settle
     When I fill in the following:
-      | min_score | 3 |
-    And I press "edit_link_form_submit"
-    And I wait for the page to be loaded
-    Then I should see "Assessment edited"
+      | gradebook-link-min-score | 3 |
+    And I press "Save"
+    And I wait for the page content to settle
+    # Re-open the row's Edit dialog and read the value back, so this genuinely
+    # proves the edit persisted instead of just proving the row still exists.
+    Then I click the "[title='Edit']" icon in the row for "Assessment Link Work"
+    And I wait for the page content to settle
+    Then the field "gradebook-link-min-score" should have value "3"
 
   # @skip 2026-08-06: recurring real-CI-only failure across multiple runs.
   # A prior investigation found no deterministic bug (one clean local run
@@ -358,12 +391,26 @@ Feature: Assessments tool
     # Display::getMdiIcon), and because resolveField/click waits rather than
     # failing fast, it presented as a 90s timeout instead of "no such element".
     # Same fix already applied in sessionAccess.feature for the same reason.
-    Then I click the ".mdi-pencil" icon in the row for "Orizales"
-    And I wait for the page to be loaded
-    When I fill in the following:
-      | score | 8 |
-    And I press "edit_result_form_submit"
-    And I wait for the page to be loaded
+    # REWRITTEN 2026-08-23: scores are edited INLINE now, not through a
+    # pencil-icon dialog. Verified on the live results view
+    # (/resources/gradebook/231/evaluations/<id>/results): the learner row is
+    # "norizales | Orizales | Noa | <score input> / 10" and the page contains
+    # ZERO .mdi-pencil elements — the only row action is Delete. So the old
+    # sequence (click a pencil, fill a "score" field, press
+    # "edit_result_form_submit") had three separate identifiers that cannot
+    # match anything, and presented as a 90s timeout on the pencil.
+    #
+    # Note the icon fix applied elsewhere in this file was necessary but not
+    # sufficient here: ".mdi-pencil" is the right SHAPE of selector, there is
+    # simply no pencil on this particular view at all.
+    #
+    # Reuses "I fill in the score for ... with ..." + "Save", which is exactly
+    # what this file's own "Create an evaluation" scenario already does for the
+    # initial grade (line ~257) and which passes — so this now drives the score
+    # the same proven way instead of inventing a second mechanism.
+    When I fill in the score for "norizales" with "8"
+    And I press "Save"
+    And I wait for the page content to settle
     Then I follow "Assessments"
     And I wait for the page to be loaded
     # Tag-agnostic ".mdi-*", NOT "i.mdi-*": the Assessments tool is Vue now
@@ -376,7 +423,21 @@ Feature: Assessments tool
     # Display::getMdiIcon), and because resolveField/click waits rather than
     # failing fast, it presented as a 90s timeout instead of "no such element".
     # Same fix already applied in sessionAccess.feature for the same reason.
-    And I click the ".mdi-chart-box" element
+     # "[title='List view']", NOT an mdi icon class. My first pass here changed
+    # "i.mdi-chart-box" to ".mdi-chart-box" assuming the <i>-vs-<span> trap that
+    # genuinely applied to the other icons in this file. That was WRONG: on this
+    # page .mdi-chart-box is the GLOBAL SIDEBAR "Reporting" nav link, not a
+    # gradebook control at all, so clicking it never reached any report (the URL
+    # did not even change) and the assertion below then failed on a page that
+    # was never the intended one.
+    #
+    # The gradebook's own report controls are two title-bearing links, dumped
+    # live: [title='List view'] -> /resources/gradebook/<node>/reports/list and
+    # [title='Students list report'] -> .../reports/students. Only the LIST view
+    # renders the per-learner score in the "8 / 10" form this scenario asserts
+    # (verified: its row reads "Noa Orizales norizales 8 / 10 - 72 % (72 / 100)",
+    # whereas the students report shows the learner without that score cell).
+    And I click the "[title='List view']" element
     And wait for the page to be loaded when ready
     Then I should see "8 / 10"
 

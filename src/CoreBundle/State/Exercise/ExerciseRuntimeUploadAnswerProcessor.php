@@ -40,6 +40,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const PATHINFO_EXTENSION;
+
 /**
  * Uploads a learner file, oral recording or completed Office document answer and attaches it to a track_e_attempt row as AttemptFile.
  *
@@ -111,9 +113,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             [self::UPLOAD_ANSWER, self::ORAL_EXPRESSION, self::ANSWER_IN_OFFICE_DOC],
             true
         )) {
-            throw new BadRequestHttpException(
-                'This endpoint only supports upload answer, oral expression and Office document questions.'
-            );
+            throw new BadRequestHttpException('This endpoint only supports upload answer, oral expression and Office document questions.');
         }
 
         if (!$this->questionBelongsToAttempt($questionId, $attempt)) {
@@ -593,9 +593,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         if (!\in_array($extension, self::OFFICE_DOCUMENT_ALLOWED_EXTENSIONS, true)) {
-            throw new BadRequestHttpException(
-                'Only DOC, DOCX, XLS and XLSX files are accepted for Office document questions.'
-            );
+            throw new BadRequestHttpException('Only DOC, DOCX, XLS and XLSX files are accepted for Office document questions.');
         }
 
         $templateResourceNode = $question->getResourceNode();
@@ -615,9 +613,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         );
         $templateExtension = strtolower((string) pathinfo($templateName, PATHINFO_EXTENSION));
         if ('' !== $templateExtension && $extension !== $templateExtension) {
-            throw new BadRequestHttpException(
-                'The completed Office document must use the same file format as the template.'
-            );
+            throw new BadRequestHttpException('The completed Office document must use the same file format as the template.');
         }
     }
 

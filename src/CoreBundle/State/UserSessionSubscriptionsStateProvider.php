@@ -255,10 +255,10 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
                     : null
             );
             $sessionCourse->setCertificateAvailable(
-                array_key_exists('certificateAvailable', $stats) ? (bool) $stats['certificateAvailable'] : null
+                \array_key_exists('certificateAvailable', $stats) ? (bool) $stats['certificateAvailable'] : null
             );
             $sessionCourse->setCompleted(
-                array_key_exists('completed', $stats) ? (bool) $stats['completed'] : null
+                \array_key_exists('completed', $stats) ? (bool) $stats['completed'] : null
             );
         }
     }

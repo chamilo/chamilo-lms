@@ -26,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             normalizationContext: ['groups' => ['room:list']],
         ),
         new Get(

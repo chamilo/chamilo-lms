@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'Branch',
     operations: [
         new GetCollection(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             normalizationContext: ['groups' => ['branch:list']],
         ),
         new Get(

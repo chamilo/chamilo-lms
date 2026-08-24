@@ -22,7 +22,12 @@ use Stringable;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(security: "object.getSocialPost() != null and is_granted('VIEW', object.getSocialPost())"),
+        // SocialPostVoter has no administrator bypass, so ROLE_ADMIN is spelled out here to keep
+        // the access administrators already had on this resource.
+        new Get(
+            security: "is_granted('ROLE_ADMIN')
+                or (object.getSocialPost() != null and is_granted('VIEW', object.getSocialPost()))"
+        ),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(
             controller: CreateSocialPostAttachmentAction::class,

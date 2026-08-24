@@ -169,6 +169,24 @@
 #   restarted browser process; expected to be a non-issue for real CI,
 #   which launches a fresh browser per file/worker rather than reusing one
 #   across an entire multi-hour local session.
+#
+# @slow-scenario (4-minute budget instead of the default 90s), applied at
+# Feature level because the whole file is heavy, not one outlier: the CI run on
+# ba69565dde8 had 7 of these 24 scenarios over 45s, and the three group-
+# announcement ones at 80s/77s/77s — i.e. 89% of the 90s budget consumed, on a
+# runner that was NOT under parallel load (workers: 1). Every one of them
+# PASSED, so this is pre-emptive: 10 seconds of headroom is not a margin, and a
+# timeout here would present as the announcement UI being broken rather than as
+# a scenario that merely needed longer. Cheap insurance — the tag only raises
+# the ceiling, so nothing gets slower and fast scenarios are unaffected.
+#
+# Why these are inherently slow (not a fixable inefficiency): each announcement
+# scenario walks the full compose flow — open the group, open Announcements,
+# resolve a recipient list that is populated per-group, fill a TinyMCE body,
+# Preview, then Save — and the recipient-list and TinyMCE steps each wait on
+# their own async load. Raising the ceiling is the right fix rather than
+# trimming coverage.
+@slow-scenario
 Feature: Group tool
   In order to use the group tool
   The teachers should be able to create groups

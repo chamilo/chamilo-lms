@@ -1255,7 +1255,33 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
       // the hood. The NEXT iteration's own gotoReliably() now absorbs a
       // still-lagging redirect from this Save if one occurs, so this wait
       // just needs to be reasonable, not airtight.
-      await page.waitForLoadState("networkidle")
+      //
+      // BOUNDED, and that bound is load-bearing rather than cosmetic. This
+      // wait sits inside a LOOP, and every AfterAll hook in the worker shares
+      // ONE 90s fixture budget — so an unbounded networkidle here (this app's
+      // background polling can keep the network from ever going quiet, the
+      // same hang already documented at the LP-deletion helper below) does not
+      // merely slow the teardown down: it burns the budget, playwright-bdd
+      // reports `Fixture "$registerAfterAllHooks" timeout of 90000ms exceeded
+      // during teardown`, and every restore still queued behind it is
+      // ABANDONED — leaving those platform settings mutated for whatever runs
+      // next. That is the exact leaked-setting class these guards exist to
+      // prevent, so the guard must never be the thing that causes it.
+      //
+      // Observed for real, in both environments: the CI run on ba69565dde8
+      // hit it twice (restores of show_glossary_in_extra_tools and
+      // admins_can_set_users_pass cut off mid-flight, surfacing as confusing
+      // extra errors attached to unrelated failing tests in toolReporting/
+      // toolAssessments, which carry no @settings tag at all), and the local
+      // 410-pass run hit it once at end-of-run — silently, since the run was
+      // already reported green. Confirmed by the aftermath: course_catalog_
+      // settings was left at courseCatalogue.feature's mutated value on this
+      // box, contradicting registerTextSettingsGuard()'s own note that it is
+      // blank here. A dropped restore is invisible in the test result, so the
+      // bound is the only thing standing between a slow teardown and a silent
+      // leak — and a leak is STICKY: the next run's BeforeAll snapshots the
+      // mutated value as its new baseline and faithfully restores to that.
+      await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
     }
     await page.context().close()
   })
@@ -1360,7 +1386,12 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
     await settle(page)
     await page.locator(`#${field}`).fill(snapshot)
     await pressButton(page, "Save settings")
-    await page.waitForLoadState("networkidle")
+    // Bounded for the same budget reason spelled out in registerSettingsGuard()'s
+    // AfterAll above — this helper's own settle() already uses the bounded form,
+    // so this trailing wait was the one inconsistency. Note this guard shares the
+    // single 90s teardown budget with EVERY other guard's AfterAll, so it can be
+    // starved by them even though its own restore is just one field.
+    await page.waitForLoadState("networkidle", { timeout: 10_000 }).catch(() => {})
     await page.context().close()
   })
 }

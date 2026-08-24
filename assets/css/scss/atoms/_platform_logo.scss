@@ -4,6 +4,6 @@
   }
 
   img, picture {
-    @apply h-10 max-h-10 w-auto block;
+    @apply block h-auto max-h-[60px] max-w-[190px] w-auto;
   }
 }

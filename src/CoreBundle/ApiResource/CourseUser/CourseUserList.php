@@ -120,6 +120,9 @@ final class CourseUserList
     public string $warning = '';
 
     #[Groups(['course_user_list:read'])]
+    public bool $showUpgradeCta = false;
+
+    #[Groups(['course_user_list:read'])]
     public string $sessionManagementUrl = '';
 
     #[Groups(['course_user_list:read'])]

@@ -475,6 +475,24 @@
           {{ usageQuotaSummary.availablePercentLabel }}
         </div>
       </div>
+
+      <p
+        v-if="usageQuotaSummary.showUpgradeCta"
+        class="mt-3 rounded border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-900"
+      >
+        {{ t("Space is limited through your course properties. To increase your limit, get a") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("pro plan") }}
+        </a>
+        {{
+          t(
+            "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan.",
+          )
+        }}
+      </p>
     </div>
 
     <BaseChart :data="usageData" />
@@ -2276,6 +2294,7 @@ const usageQuotaSummary = computed(() => {
     usedLabel: formatBytesAsMb(usedBytes),
     availableLabel: formatBytesAsMb(availableBytes),
     availablePercentLabel: formatPercent(q.availablePercent),
+    showUpgradeCta: Boolean(q.showUpgradeCta),
   }
 })
 

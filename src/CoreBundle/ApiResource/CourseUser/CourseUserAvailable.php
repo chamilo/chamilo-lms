@@ -108,6 +108,9 @@ final class CourseUserAvailable
     #[Groups(['course_user_available:read'])]
     public string $warning = '';
 
+    #[Groups(['course_user_available:read'])]
+    public bool $showUpgradeCta = false;
+
     public function getId(): string
     {
         return $this->id;

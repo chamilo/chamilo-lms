@@ -106,6 +106,7 @@ class CourseHelper
         private readonly CDocumentRepository $documentRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly PluginHelper $pluginHelper,
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -2066,6 +2067,143 @@ class CourseHelper
 
             return false;
         }
+    }
+
+    public function shouldOfferBuyCoursesDocumentQuotaUpgrade(Course $course): bool
+    {
+        $baseQuotaMb = $this->resolveDocumentsToolQuotaMb();
+        if ($baseQuotaMb <= 0) {
+            return false;
+        }
+
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $effectiveQuotaMb = $plugin->getEffectiveDocumentQuotaMbForCourse(
+                (int) $course->getId(),
+                $baseQuotaMb,
+            );
+            if ($effectiveQuotaMb > $baseQuotaMb) {
+                return false;
+            }
+
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && (int) ($plugin->getActiveDocumentQuotaMb($userId) ?? 0) > $baseQuotaMb) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceBenefit(
+                BuyCoursesPlugin::EXTRA_FIELD_DOCUMENT_QUOTA,
+                $baseQuotaMb,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:documentQuotaUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    public function shouldOfferBuyCoursesHostingLimitUpgrade(Course $course): bool
+    {
+        $baseLimit = $this->getGlobalUsersPerCourseLimit();
+        if ($baseLimit <= 0) {
+            return false;
+        }
+
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $effectiveLimit = $plugin->getEffectiveUsersPerCourseLimitForCourse((int) $course->getId());
+            if ($effectiveLimit > $baseLimit) {
+                return false;
+            }
+
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && (int) ($plugin->getActiveHostingLimit($userId) ?? 0) > $baseLimit) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceBenefit(
+                BuyCoursesPlugin::EXTRA_FIELD_HOSTING_LIMIT,
+                $baseLimit,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:hostingLimitUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    public function shouldOfferBuyCoursesExerciseGeneratorUpgrade(Course $course): bool
+    {
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && $plugin->userHasActiveAiCourseFeatureService(
+                $userId,
+                BuyCoursesPlugin::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+            )) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceAiFeature(
+                BuyCoursesPlugin::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:exerciseGeneratorUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function getBuyCoursesPluginForUpgradeCta(): ?BuyCoursesPlugin
+    {
+        if (!$this->pluginHelper->isPluginEnabled('BuyCourses')) {
+            return null;
+        }
+
+        try {
+            $plugin = BuyCoursesPlugin::create();
+
+            return $plugin->isEnabled() ? $plugin : null;
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:upgradeCtaPluginCheckFailed', [
+                'message' => $exception->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    private function resolveBuyCoursesUpgradeUserId(Course $course): int
+    {
+        $user = $this->security->getUser();
+        if ($user instanceof User) {
+            return (int) $user->getId();
+        }
+
+        $owner = $this->getCourseOwnerForQuota($course);
+
+        return $owner instanceof User ? (int) $owner->getId() : 0;
     }
 
     public function resolveDocumentsToolQuotaMbForCourse(Course $course): int

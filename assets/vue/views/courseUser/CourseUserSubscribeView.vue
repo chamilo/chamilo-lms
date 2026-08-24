@@ -107,7 +107,24 @@
       v-if="warningMessage"
       class="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-800"
     >
-      {{ warningMessage }}
+      <p>{{ warningMessage }}</p>
+      <p
+        v-if="showUpgradeCta"
+        class="mt-1"
+      >
+        {{ t("User subscriptions are limited through your course properties. To increase your limit, get a") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("pro plan") }}
+        </a>
+        {{
+          t(
+            "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan.",
+          )
+        }}
+      </p>
     </div>
 
     <div
@@ -271,6 +288,7 @@ const savingUserId = ref(null)
 const errorMessage = ref("")
 const successMessage = ref("")
 const warningMessage = ref("")
+const showUpgradeCta = ref(false)
 const selectedUserIds = ref([])
 const searchDraft = ref("")
 const activeSearch = ref("")
@@ -337,6 +355,7 @@ async function loadUsers() {
     showEmail.value = Boolean(response.showEmail)
     westernNameOrder.value = response.westernNameOrder !== false
     warningMessage.value = response.warning || ""
+    showUpgradeCta.value = Boolean(response.showUpgradeCta)
     selectedUserIds.value = selectedUserIds.value.filter((id) => users.value.some((user) => user.id === id))
   } catch (error) {
     console.error("[CourseUser] Failed to load available users", error)

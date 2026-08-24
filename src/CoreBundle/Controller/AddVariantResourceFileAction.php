@@ -10,15 +10,22 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AddVariantResourceFileAction
 {
+    public function __construct(
+        private readonly Security $security,
+    ) {}
+
     public function __invoke(Request $request, EntityManagerInterface $em): ResourceFile
     {
         $uploadedFile = $request->files->get('file');
@@ -34,6 +41,13 @@ class AddVariantResourceFileAction
         $resourceNode = $em->getRepository(ResourceNode::class)->find($resourceNodeId);
         if (!$resourceNode) {
             throw new NotFoundHttpException('ResourceNode not found');
+        }
+
+        // The operation is already restricted to administrators, which is what the documents
+        // list requires to offer the action; edit permission on the target node is the
+        // object-level half of that same check.
+        if (!$this->security->isGranted(ResourceNodeVoter::EDIT, $resourceNode)) {
+            throw new AccessDeniedException('Unauthorised access to resource');
         }
 
         $accessUrlId = $request->request->get('accessUrlId');

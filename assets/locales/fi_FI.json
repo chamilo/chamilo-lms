@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Todistuksen kuva poistettu",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "K\u00e4yt\u00e4 kuvank\u00e4sittely\u00e4 ennen lataamista rajataksesi, k\u00e4\u00e4nt\u00e4\u00e4ksesi tai muuttaaksesi kurssin kuvan kokoa.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Vain kirjaimia",
+    "Only letters and spaces": "Vain kirjaimia ja välilyöntejä",
+    "Only letters, numbers and spaces": "Vain kirjaimia, numeroita ja välilyöntejä",
+    "Mobile phone number is incomplete or contains invalid characters": "Matkapuhelinnumero on väärä tai sisältää epäkelpoja merkkejä",
+    "Include the country dial code": "Sisällytä maakoodi",
+    "Only PNG, JPG or GIF images allowed": "Ainoastaan PNG, JPG tai GIF kuvat sallittu"
 }

@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Pr\u00f3gvt\u00e1knmynd strika\u00f0",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "N\u00fdt myndaredigeran \u00e1\u00f0renn t\u00fa leggur inn fyri at skera, snara ella broyta st\u00f8dd \u00e1 kurst\u00e1knmyndini.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Bert bókstavir",
+    "Only letters and spaces": "Bert bókstavir og millumrøð",
+    "Only letters, numbers and spaces": "Bert bókstavir, tal og millumrøð",
+    "Mobile phone number is incomplete or contains invalid characters": "Fartelefonnummarið væntar tøl ella nýtir stavir",
+    "Include the country dial code": "Tak við landsins símanúmer",
+    "Only PNG, JPG or GIF images allowed": "Bert PNG, JPG ella GIF myndir loyvdar"
 }

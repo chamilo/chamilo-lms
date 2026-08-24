@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u09b8\u09a8\u09a6\u09aa\u09a4\u09cd\u09b0\u09c7\u09b0 \u099b\u09ac\u09bf \u09ae\u09c1\u099b\u09c7 \u09ab\u09c7\u09b2\u09be \u09b9\u09df\u09c7\u099b\u09c7",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0995\u09cb\u09b0\u09cd\u09b8\u09c7\u09b0 \u099b\u09ac\u09bf \u0995\u09cd\u09b0\u09aa, \u0998\u09cb\u09b0\u09be\u09a4\u09c7 \u09ac\u09be \u0986\u0995\u09be\u09b0 \u09aa\u09b0\u09bf\u09ac\u09b0\u09cd\u09a4\u09a8 \u0995\u09b0\u09a4\u09c7 \u0986\u09aa\u09b2\u09cb\u09a1 \u0995\u09b0\u09be\u09b0 \u0986\u0997\u09c7 \u099b\u09ac\u09bf \u09b8\u09ae\u09cd\u09aa\u09be\u09a6\u0995 \u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0 \u0995\u09b0\u09c1\u09a8\u0964",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "শুধু অক্ষর",
+    "Only letters and spaces": "শুধু অক্ষর এবং স্পেস",
+    "Only letters, numbers and spaces": "শুধু অক্ষর, সংখ্যা এবং স্পেস",
+    "Mobile phone number is incomplete or contains invalid characters": "মোবাইল ফোন নম্বর অসম্পূর্ণ বা অবৈধ অক্ষর ধারণ করে",
+    "Include the country dial code": "দেশের ডায়াল কোড অন্তর্ভুক্ত করুন",
+    "Only PNG, JPG or GIF images allowed": "শুধুমাত্র PNG, JPG বা GIF চিত্র অনুমোদিত"
 }

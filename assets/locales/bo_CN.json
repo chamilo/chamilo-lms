@@ -3000,5 +3000,11 @@
     "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.": "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status.",
     "Only best attempts": "\u0f58\u0f7c\u0f0b\u0f62\u0fa9\u0f7a\u0f51\u0f0b\u0f45\u0f53\u0f0b\u0f42\u0fb1\u0f72\u0f0b\u0f60\u0f56\u0fb2\u0f7c\u0f66\u0f0b\u0f66\u0fa4\u0fb1\u0f7c\u0f51\u0f0b\u0f63\u0fb7\u0f42\u0f0b\u0f54\u0f60\u0f72\u0f0b\u0f5a\u0f7c\u0f42\u0f66\u0f0b\u0f63\u0f0b\u0f66\u0f99\u0f7c\u0f58\u0f66\u0f0b",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "ཚིག་ཚིག་ལྷག་ཙམ་",
+    "Only letters and spaces": "ཡི་གེ་དང་བར་སྟོང་ཁོ་ན།",
+    "Only letters, numbers and spaces": "ཡི་གེ། ཨང་ཀི་དང་བར་སྟོང་ཁོ་ན།",
+    "Mobile phone number is incomplete or contains invalid characters": "གློག་འཁོར་གྱི་སྐད་འཕྲིན་གྱི་གྲངས་མཉམ་མེད་ཡོད་ནས་ལ་གློག་འཁོར་གྱི་སྐད་འཕྲིན་གྱི་གྲངས་ལ་མི་རིགས་པའི་མཚན་འབྱུང་ཡོད་",
+    "Include the country dial code": "རྒྱལ་ཁབ་ཀྱི་སྐད་འཕྲིན་གྱི་རྒྱུན་མཁྱེན་སྤྲོད་པར་བྱའོ་",
+    "Only PNG, JPG or GIF images allowed": "པི་ཨེན་གི། ཇེ་ཇི་པི་ཡང་ན་གིཕ་གཏོགས་ཀྱི་གཟུགས་བརྙན་ཚིགས་མང་པོ་མིན་པར་བཀོལ།"
 }

@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Imagjin dal certific\u00e2t eliminade",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Dopre l'edit\u00f4r di imagjins prime di cjari\u00e2 s\u00f9 par tai\u00e2, volt\u00e2 o ridimension\u00e2 la imagjin dal cors.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Nom letaris",
+    "Only letters and spaces": "Nom letaris e spacis",
+    "Only letters, numbers and spaces": "Nom letaris, numaris e spacis",
+    "Mobile phone number is incomplete or contains invalid characters": "Numar di celulâr incomplet o cun caratars no valîts",
+    "Include the country dial code": "Includi il cûs di marcjadui dal paîs",
+    "Only PNG, JPG or GIF images allowed": "Nol si permitin che immagini PNG, JPG o GIF"
 }

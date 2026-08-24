@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Imatge de certificat suprimit",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utilizatz l'editor d'imatge abans de mandar per retalhar, virar o redimensionar l'imatge del cors.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Solament letras",
+    "Only letters and spaces": "Solament letres e espacis",
+    "Only letters, numbers and spaces": "Solament letres, nombres e espacis",
+    "Mobile phone number is incomplete or contains invalid characters": "Lo numèro de telephon portatile es incomplet o conten de caractèrs invalids",
+    "Include the country dial code": "Inclòser lo còde de país",
+    "Only PNG, JPG or GIF images allowed": "Solament las imatges PNG, JPG o GIF son autorizats"
 }

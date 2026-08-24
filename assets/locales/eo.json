@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Atestilbildo forigita",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Uzu la bildredaktilon anta\u016d al\u015duto por stuci, rotacii a\u016d regrandigi la kursbildon.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Nur literoj",
+    "Only letters and spaces": "Nur literoj kaj spacoj",
+    "Only letters, numbers and spaces": "Nur literoj, nombroj kaj spacoj",
+    "Mobile phone number is incomplete or contains invalid characters": "Numero de poŝtelefono estas nekompleta aŭ entenas nevalidajn signojn",
+    "Include the country dial code": "Inkluzivi la landkodon por telefono",
+    "Only PNG, JPG or GIF images allowed": "Permesitaj estas nur bildoj PNG-, JPG- aŭ GIF-aj"
 }

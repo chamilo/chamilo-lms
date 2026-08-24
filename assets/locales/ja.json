@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "\u4fee\u4e86\u8a3c\u753b\u50cf\u3092\u524a\u9664\u3057\u307e\u3057\u305f",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u30b3\u30fc\u30b9\u753b\u50cf\u3092\u30a2\u30c3\u30d7\u30ed\u30fc\u30c9\u3059\u308b\u524d\u306b\u753b\u50cf\u30a8\u30c7\u30a3\u30bf\u3067\u30c8\u30ea\u30df\u30f3\u30b0\u3001\u56de\u8ee2\u3001\u307e\u305f\u306f\u30b5\u30a4\u30ba\u5909\u66f4\u3092\u884c\u3063\u3066\u304f\u3060\u3055\u3044\u3002",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "文字のみ",
+    "Only letters and spaces": "文字とスペースのみ",
+    "Only letters, numbers and spaces": "文字、数字、スペースのみ",
+    "Mobile phone number is incomplete or contains invalid characters": "携帯電話番号が不完全または無効な文字を含んでいます",
+    "Include the country dial code": "国コードを含める",
+    "Only PNG, JPG or GIF images allowed": "PNG、JPG または GIF 画像のみが使用することができます"
 }

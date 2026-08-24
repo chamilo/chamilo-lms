@@ -9265,6 +9265,15 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "One or more fields contain invalid values."
+msgstr ""
+
 msgid "Anonymous"
 msgstr ""
 

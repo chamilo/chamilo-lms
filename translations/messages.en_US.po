@@ -9269,6 +9269,15 @@ msgstr "Time report for session %s"
 msgid "Error"
 msgstr "Error"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "The user was created, but one of the additional profile fields could not be saved."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "The user was updated, but one of the additional profile fields could not be saved."
+
+msgid "One or more fields contain invalid values."
+msgstr "One or more fields contain invalid values."
+
 msgid "Anonymous"
 msgstr "Anonymous"
 

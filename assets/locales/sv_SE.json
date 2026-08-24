@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Certifikatbilden har tagits bort",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Anv\u00e4nd bildredigeraren innan uppladdning f\u00f6r att besk\u00e4ra, rotera eller \u00e4ndra storlek p\u00e5 kursbilden.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Endast bokstäver",
+    "Only letters and spaces": "Endast bokstäver och mellanslag",
+    "Only letters, numbers and spaces": "Endast bokstäver, siffror och mellanslag",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiltelefonnummer är ofullständigt eller innehåller ogiltiga tecken",
+    "Include the country dial code": "Inkludera landets riktnummer",
+    "Only PNG, JPG or GIF images allowed": "Bara bilder av typen PNG, JPG och GIF är tillåtna"
 }

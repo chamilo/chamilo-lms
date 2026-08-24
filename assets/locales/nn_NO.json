@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Sertifikatbilete sletta",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Bruk biletredigeringa f\u00f8r opplasting for \u00e5 beskjere, rotere eller endre storleik p\u00e5 kursbiletet.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Berre bokstavar",
+    "Only letters and spaces": "Berre bokstavar og mellomrom",
+    "Only letters, numbers and spaces": "Berre bokstavar, tal og mellomrom",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiltelefonnummeret er ukomplett eller inneheld ugyldige teikn",
+    "Include the country dial code": "Inkluder landtelefonkode",
+    "Only PNG, JPG or GIF images allowed": "Berre PNG, JPG eller GIF bilete tillatne"
 }

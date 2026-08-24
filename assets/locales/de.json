@@ -3787,5 +3787,11 @@
     "Certificate image deleted": "Zertifikatsbild gel\u00f6scht",
     "Use the image editor before uploading to crop, rotate or resize the course picture.": "Verwenden Sie den Bildeditor vor dem Hochladen, um das Kursbild zuzuschneiden, zu drehen oder zu skalieren.",
     "The picture could not be uploaded": "The picture could not be uploaded",
-    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only."
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Nur Buchstaben",
+    "Only letters and spaces": "Nur Buchstaben und Leerzeichen",
+    "Only letters, numbers and spaces": "Nur Buchstaben, Zahlen und Leerzeichen",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiltelefonnummer ist unvollständig oder enthält ungültige Zeichen",
+    "Include the country dial code": "Bitte Landesvorwahl angeben",
+    "Only PNG, JPG or GIF images allowed": "Es sind nur Bilddateien im PNG, JPG oder GIF Format erlaubt."
 }

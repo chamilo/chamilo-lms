@@ -43,7 +43,9 @@ class AddVariantResourceFileAction
             throw new NotFoundHttpException('ResourceNode not found');
         }
 
-        // Require edit permission on the owning resource node (admins pass via ROLE_ADMIN).
+        // The operation is already restricted to administrators, which is what the documents
+        // list requires to offer the action; edit permission on the target node is the
+        // object-level half of that same check.
         if (!$this->security->isGranted(ResourceNodeVoter::EDIT, $resourceNode)) {
             throw new AccessDeniedException('Unauthorised access to resource');
         }

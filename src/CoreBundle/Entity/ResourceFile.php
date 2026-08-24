@@ -100,7 +100,7 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
                     ]),
                 ),
             ),
-            security: 'is_granted(\'ROLE_USER\')',
+            security: 'is_granted(\'ROLE_ADMIN\')',
             deserialize: false,
             name: 'add_variant'
         ),

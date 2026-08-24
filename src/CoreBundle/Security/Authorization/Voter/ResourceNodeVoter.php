@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
@@ -17,12 +18,18 @@ use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -243,12 +250,14 @@ class ResourceNodeVoter extends Voter
             $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
             $groupId = $this->courseFromRequest->getGroupId($request) ?? 0;
 
-            // Detect learning path context from request parameters.
+            // Detect learning path context from request parameters. The identifiers are
+            // attacker-controlled, so the referenced item has to actually point at this
+            // resource: presence alone must never unlock a hidden one.
             $lpId = $request->query->getInt('lp_id', 0);
-            $lpItemId = $request->query->getInt('lp_item_id', 0);
-            $origin = (string) $request->query->get('origin', '');
+            $lpItemId = $request->query->getInt('lp_item_id', 0)
+                ?: $request->query->getInt('item_id', 0);
 
-            $isFromLearningPath = $lpId > 0 || $lpItemId > 0 || 'learnpath' === $origin;
+            $isFromLearningPath = $this->isLearningPathItemForResource($resourceNode, $lpId, $lpItemId);
 
             // Try Session values.
             if (empty($courseId) && $request->hasSession()) {
@@ -788,5 +797,56 @@ class ResourceNodeVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * Tells whether the learning path item named in the request really is the one holding
+     * this resource, which is what allows a student to open it while it stays hidden in its
+     * own tool. The item type to entity mapping mirrors LearningPathRuntimeProvider.
+     */
+    private function isLearningPathItemForResource(ResourceNode $resourceNode, int $lpId, int $lpItemId): bool
+    {
+        if ($lpItemId <= 0) {
+            return false;
+        }
+
+        $item = $this->entityManager->getRepository(CLpItem::class)->find($lpItemId);
+
+        if (!$item instanceof CLpItem) {
+            return false;
+        }
+
+        if ($lpId > 0 && (int) $item->getLp()->getIid() !== $lpId) {
+            return false;
+        }
+
+        $path = (string) $item->getPath();
+
+        if (!ctype_digit($path)) {
+            return false;
+        }
+
+        $resourceClass = match (strtolower(trim($item->getItemType()))) {
+            'document', 'video', 'readout_text', 'final_item' => CDocument::class,
+            'quiz' => CQuiz::class,
+            'link' => CLink::class,
+            'student_publication', 'assignments' => CStudentPublication::class,
+            'forum' => CForum::class,
+            'thread' => CForumThread::class,
+            'survey' => CSurvey::class,
+            default => null,
+        };
+
+        if (null === $resourceClass) {
+            return false;
+        }
+
+        $resource = $this->entityManager->getRepository($resourceClass)->find((int) $path);
+
+        if (!$resource instanceof ResourceInterface) {
+            return false;
+        }
+
+        return $resource->getResourceNode()?->getId() === $resourceNode->getId();
     }
 }

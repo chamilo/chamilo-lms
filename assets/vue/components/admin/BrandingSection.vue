@@ -22,7 +22,7 @@
             :key="headerImgKey"
             :src="headerPreviewUrl"
             alt="Header logo"
-            class="h-10 object-contain"
+            class="h-auto max-h-[60px] max-w-[190px] w-auto object-contain"
             @error="onImgError"
           />
           <span v-if="!hasHeaderCustom" class="text-xs opacity-70">

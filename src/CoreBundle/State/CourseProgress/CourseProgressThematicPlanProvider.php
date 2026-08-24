@@ -12,12 +12,10 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,8 +32,6 @@ use const ENT_SUBSTITUTE;
  */
 final readonly class CourseProgressThematicPlanProvider implements ProviderInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     /**
      * @var array<int, string>
      */
@@ -61,12 +57,10 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
-        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -81,32 +75,15 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertCanManage($course, $session);
 
         $thematicId = isset($uriVariables['thematicId']) ? (int) $uriVariables['thematicId'] : 0;
         $thematic = $this->getEditableThematic($thematicId, $course, $session);
 
         return $this->buildResponse($thematic);
-    }
-
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
-    {
-        if (!$this->studentViewHelper->isActiveForCourse($course)
-            && $this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to manage thematic plans in this context.');
     }
 
     private function getEditableThematic(int $thematicId, Course $course, ?Session $session): CThematic
@@ -120,7 +97,7 @@ final readonly class CourseProgressThematicPlanProvider implements ProviderInter
             throw new NotFoundHttpException('The requested thematic was not found.');
         }
 
-        if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+        if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
             throw new AccessDeniedHttpException('The requested thematic does not belong to the current course context.');
         }
 

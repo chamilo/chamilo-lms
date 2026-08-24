@@ -193,6 +193,6 @@ final class Version20201215153517 extends AbstractMigrationChamilo
     private function releaseBatchState(): void
     {
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
     }
 }

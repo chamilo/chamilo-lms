@@ -546,7 +546,6 @@ function getContextParams() {
   for (const key of [
     "origin",
     "page",
-    "isStudentView",
     "lp_id",
     "lp_item_id",
     "lp_view_id",
@@ -1047,7 +1046,7 @@ watch(
   },
 )
 
-watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadForm)
+watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid], loadForm)
 
 onMounted(loadForm)
 </script>

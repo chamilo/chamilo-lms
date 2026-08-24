@@ -9,11 +9,12 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,15 +36,16 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
-        private Security $security,
         private ExerciseRuntimeAttemptPdfService $attemptPdfService,
+        private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
     public function exportAllAttemptsZip(int $exerciseId, Request $request): BinaryFileResponse
     {
         $quiz = $this->getValidatedExercise($exerciseId, $request);
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $attempts = $this->getAttempts($quiz, $course, $session, $request);
         $zipPath = $this->createZipFile();
 
@@ -81,44 +83,14 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canExportAttempts()) {
+        if (!$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('You are not allowed to export attempts for this exercise.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
 
         return $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -158,7 +130,7 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canExportAttempts()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 
@@ -231,12 +203,6 @@ final readonly class ExerciseRuntimeAllAttemptsExportService
         }
 
         return $attempts;
-    }
-
-    private function canExportAttempts(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function createZipFile(): string

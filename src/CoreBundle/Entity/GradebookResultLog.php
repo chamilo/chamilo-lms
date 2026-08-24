@@ -44,7 +44,6 @@ class GradebookResultLog
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-
     public function getResult(): GradebookResult
     {
         return $this->result;

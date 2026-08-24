@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeImmutable;
@@ -45,11 +44,6 @@ trait ForumStateHelperTrait
         return $security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             || $security->isGranted('ROLE_ADMIN');
-    }
-
-    private function canManageForumsInCurrentView(Security $security, StudentViewHelper $studentViewHelper): bool
-    {
-        return $this->isTeacher($security) && !$studentViewHelper->isActive();
     }
 
     /**

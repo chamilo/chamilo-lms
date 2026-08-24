@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Users')" />
+
     <BaseToolbar>
       <template #start>
         <div
@@ -396,6 +398,8 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseUserService from "../../services/courseUserService"
 import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const STUDENT = 5
 const TEACHER = 1
@@ -680,4 +684,6 @@ onMounted(() => {
   activeFilter.value = activeDraft.value
   loadUsers()
 })
+
+useStudentViewRefresh(loadUsers)
 </script>

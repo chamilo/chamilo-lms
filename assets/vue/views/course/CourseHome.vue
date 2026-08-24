@@ -230,6 +230,7 @@ import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 import PluginRegion from "../../components/layout/PluginRegion.vue"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -590,10 +591,7 @@ onMounted(() => {
   enforceCourseLegalAgreement()
 })
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  () => loadCourseTools(false),
-)
+useStudentViewRefresh(() => loadCourseTools(false))
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

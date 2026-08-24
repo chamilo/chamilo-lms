@@ -1096,7 +1096,6 @@ function getContextParams() {
     "lp_item_id",
     "type",
     "returnToLp",
-    "isStudentView",
     "gradebook",
     "lpTool",
   ]) {
@@ -1122,7 +1121,7 @@ function buildLearningPathBackRoute() {
   const node = Number(getQueryValue(route.query.node) || route.params.node || 0)
   const query = {}
 
-  for (const key of ["cid", "sid", "gid", "gradebook", "isStudentView"]) {
+  for (const key of ["cid", "sid", "gid", "gradebook"]) {
     const value = getQueryValue(route.query[key])
     if (value !== undefined && value !== null && String(value) !== "") {
       query[key] = value

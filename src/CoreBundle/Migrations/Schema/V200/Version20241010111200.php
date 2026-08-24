@@ -66,7 +66,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
 
             while (true) {
                 $items = $this->connection->fetchAllAssociative(
-                    sprintf(
+                    \sprintf(
                         'SELECT iid, %s
                            FROM %s
                           WHERE iid > :lastIid
@@ -102,7 +102,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $updateSql = sprintf(
+                    $updateSql = \sprintf(
                         'UPDATE %s SET %s = :newText WHERE iid = :id',
                         $config['table'],
                         $field
@@ -120,7 +120,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
                 unset($items);
 
                 $this->entityManager->clear();
-                \gc_collect_cycles();
+                gc_collect_cycles();
             }
         }
     }
@@ -137,7 +137,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
 
         while (true) {
             $items = $this->connection->fetchAllAssociative(
-                sprintf(
+                \sprintf(
                     "SELECT iid
                        FROM c_document
                       WHERE filetype = 'file'
@@ -204,7 +204,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             unset($items);
 
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
         }
     }
 

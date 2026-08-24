@@ -12,13 +12,12 @@ use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageExportAction;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,19 +32,16 @@ use Throwable;
  */
 final readonly class WikiPageExportProcessor implements ProcessorInterface
 {
-    use WikiAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
-        private Security $security,
-        private SettingsManager $settingsManager,
         private WikiPageExportService $exportService,
         #[Autowire('%kernel.cache_dir%')]
         private string $cacheDir,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -64,17 +60,14 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $nodeId = $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $nodeId = $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->studentViewHelper->isActive() || !$this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        if ($this->studentViewHelper->isActive() || !$this->wikiHelper->canManage(
             $course,
             $session,
             $group,
@@ -114,8 +107,7 @@ final readonly class WikiPageExportProcessor implements ProcessorInterface
             $wiki,
             $nodeId,
             ['cid' => $courseId, 'sid' => $sessionId, 'gid' => $groupId],
-            $this->isWikiCourseSettingEnabled(
-                $this->entityManager,
+            $this->wikiHelper->isCourseSettingEnabled(
                 $course,
                 'wiki_html_strict_filtering',
                 false,

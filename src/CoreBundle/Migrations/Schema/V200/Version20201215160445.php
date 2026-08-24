@@ -51,41 +51,41 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
         try {
             $resourceTypeIds = [
-            'forum_category' => $this->getResourceTypeId('forum_categories'),
-            'forum' => $this->getResourceTypeId('forums'),
-            'forum_thread' => $this->getResourceTypeId('forum_threads'),
-            'forum_post' => $this->getResourceTypeId('forum_posts'),
-        ];
+                'forum_category' => $this->getResourceTypeId('forum_categories'),
+                'forum' => $this->getResourceTypeId('forums'),
+                'forum_thread' => $this->getResourceTypeId('forum_threads'),
+                'forum_post' => $this->getResourceTypeId('forum_posts'),
+            ];
 
-        $fallbackAdminId = $this->getFallbackAdminId();
-        $uuidIsBinary = $this->detectUuidIsBinary();
+            $fallbackAdminId = $this->getFallbackAdminId();
+            $uuidIsBinary = $this->detectUuidIsBinary();
 
-        $this->getLogger()->info('Starting fast forum migration.', [
-            'small_batch_size' => self::SMALL_BATCH_SIZE,
-            'post_batch_size' => self::POST_BATCH_SIZE,
-            'uuid_is_binary' => $uuidIsBinary,
-        ]);
+            $this->getLogger()->info('Starting fast forum migration.', [
+                'small_batch_size' => self::SMALL_BATCH_SIZE,
+                'post_batch_size' => self::POST_BATCH_SIZE,
+                'uuid_is_binary' => $uuidIsBinary,
+            ]);
 
-        $this->migrateCategories(
-            $resourceTypeIds['forum_category'],
-            $fallbackAdminId,
-            $uuidIsBinary
-        );
-        $this->migrateForums(
-            $resourceTypeIds['forum'],
-            $fallbackAdminId,
-            $uuidIsBinary
-        );
-        $this->migrateThreads(
-            $resourceTypeIds['forum_thread'],
-            $fallbackAdminId,
-            $uuidIsBinary
-        );
-        $this->migratePosts(
-            $resourceTypeIds['forum_post'],
-            $fallbackAdminId,
-            $uuidIsBinary
-        );
+            $this->migrateCategories(
+                $resourceTypeIds['forum_category'],
+                $fallbackAdminId,
+                $uuidIsBinary
+            );
+            $this->migrateForums(
+                $resourceTypeIds['forum'],
+                $fallbackAdminId,
+                $uuidIsBinary
+            );
+            $this->migrateThreads(
+                $resourceTypeIds['forum_thread'],
+                $fallbackAdminId,
+                $uuidIsBinary
+            );
+            $this->migratePosts(
+                $resourceTypeIds['forum_post'],
+                $fallbackAdminId,
+                $uuidIsBinary
+            );
         } finally {
             if ($dropResourceNodeSlugIndex) {
                 $this->dropResourceNodeSlugMigrationIndex();
@@ -1041,7 +1041,8 @@ SQL;
         try {
             $indexes = $this->connection
                 ->createSchemaManager()
-                ->listTableIndexes('resource_node');
+                ->listTableIndexes('resource_node')
+            ;
 
             foreach ($indexes as $index) {
                 if (self::RESOURCE_NODE_SLUG_INDEX !== strtolower($index->getName())) {

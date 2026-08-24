@@ -71,7 +71,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
             $lastIid = 0;
 
             while (true) {
-                $sql = sprintf(
+                $sql = \sprintf(
                     'SELECT iid, %s
                        FROM %s
                       WHERE iid > :lastIid
@@ -111,7 +111,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $updateSql = sprintf(
+                    $updateSql = \sprintf(
                         'UPDATE %s SET %s = :newContent WHERE iid = :id',
                         $config['table'],
                         $field
@@ -129,7 +129,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
                 unset($items);
 
                 $this->entityManager->clear();
-                \gc_collect_cycles();
+                gc_collect_cycles();
             }
         }
     }
@@ -145,7 +145,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
 
         while (true) {
             $items = $this->connection->fetchAllAssociative(
-                sprintf(
+                \sprintf(
                     "SELECT iid
                        FROM c_document
                       WHERE filetype = 'file'
@@ -210,7 +210,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
             unset($items);
 
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
         }
     }
 
@@ -233,13 +233,15 @@ final class Version20241003120000 extends AbstractMigrationChamilo
                 /** @var User|null $user */
                 $user = $this->entityManager
                     ->getRepository(User::class)
-                    ->find($userId);
+                    ->find($userId)
+                ;
 
                 if (!$user && null !== $fallbackUserId) {
                     /** @var User|null $user */
                     $user = $this->entityManager
                         ->getRepository(User::class)
-                        ->find($fallbackUserId);
+                        ->find($fallbackUserId)
+                    ;
 
                     if ($user) {
                         error_log(
@@ -275,5 +277,4 @@ final class Version20241003120000 extends AbstractMigrationChamilo
 
         return $result ?? $content;
     }
-
 }

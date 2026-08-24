@@ -1,10 +1,10 @@
 <template>
   <section class="space-y-6">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <div
-        v-if="!isLearnpathContext"
-        class="exercise-overview-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
-      >
+    <SectionHeader
+      v-if="!isLearnpathContext"
+      :title="t('Tests')"
+    >
+      <div class="exercise-overview-toolbar flex flex-wrap items-center gap-1">
         <BaseButton
           :label="t('Return to exercises list')"
           :route="{ name: 'ExerciseList', params: route.params, query: getContextParams() }"
@@ -32,7 +32,7 @@
           type="primary-text"
         />
       </div>
-    </div>
+    </SectionHeader>
 
     <div
       v-if="errorMessage"
@@ -218,11 +218,15 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import exerciseService from "../../services/exerciseService"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
+const platformConfig = usePlatformConfig()
 
 const isLoading = ref(false)
 const isStartingAttempt = ref(false)
@@ -303,7 +307,6 @@ function getContextParams() {
   addOptionalQueryParam(params, "returnToLp")
   addOptionalQueryParam(params, "embedded")
   addOptionalQueryParam(params, "gradebook")
-  addOptionalQueryParam(params, "isStudentView")
   addOptionalQueryParam(params, "preview")
   addOptionalQueryParam(params, "attemptId")
 
@@ -366,10 +369,10 @@ function getRuntimeStartContextParams() {
   const params = { ...getContextParams() }
 
   if (
-    overview.canManage
-    && !isLearnpathContext.value
-    && !Object.prototype.hasOwnProperty.call(params, "preview")
-    && !Object.prototype.hasOwnProperty.call(params, "isStudentView")
+    overview.canManage &&
+    !isLearnpathContext.value &&
+    !platformConfig.isStudentViewActive &&
+    !Object.prototype.hasOwnProperty.call(params, "preview")
   ) {
     params.preview = 1
   }
@@ -583,6 +586,8 @@ function displayText(value, fallback = "") {
 }
 
 onMounted(loadOverview)
+
+useStudentViewRefresh(loadOverview)
 
 watch(
   () => [route.params.exerciseId, route.query.cid, route.query.sid, route.query.gid],

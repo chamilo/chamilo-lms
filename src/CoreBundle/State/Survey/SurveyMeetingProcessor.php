@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyMeeting;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -22,7 +23,6 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -40,9 +40,9 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
         private SurveyMeetingProvider $surveyMeetingProvider,
-        private Security $security,
         private SettingsManager $settingsManager,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -67,7 +67,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
             return $this->submitAnswer($operation, $surveyId, $payload, $course, $session, $request);
         }
 
-        if (!$this->canManageSurveys()) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage meeting polls in this context.');
         }
 
@@ -476,35 +476,11 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
         }
     }
 
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
-    }
-
     private function isSurveyEditionGloballyHidden(): bool
     {
         $value = $this->settingsManager->getSetting('survey.hide_survey_edition', true);
 
         return true === $value || 'true' === $value || '*' === $value;
-    }
-
-    private function isSettingEnabled(string $name): bool
-    {
-        $value = $this->settingsManager->getSetting($name, true);
-
-        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
     }
 
     private function getCourseLanguage(Course $course): string

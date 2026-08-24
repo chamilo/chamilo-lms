@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -115,7 +117,7 @@ class UserEditControllerTest extends WebTestCase
 
         $em = $this->getEntityManager();
         $em->clear();
-        $refreshed = $em->getRepository(\Chamilo\CoreBundle\Entity\User::class)->find($target->getId());
+        $refreshed = $em->getRepository(User::class)->find($target->getId());
         $this->assertSame('UpdatedFirst', $refreshed->getFirstname());
         $this->assertSame('UpdatedLast', $refreshed->getLastname());
     }
@@ -185,8 +187,9 @@ class UserEditControllerTest extends WebTestCase
     public function testHideNeverExpireOptionForcesExpirationForSessionAdminEvenIfClientSaysOtherwise(): void
     {
         $client = static::createClient();
-        static::getContainer()->get(\Chamilo\CoreBundle\Settings\SettingsManager::class)
-            ->updateSetting('registration.user_hide_never_expire_option', 'true');
+        static::getContainer()->get(SettingsManager::class)
+            ->updateSetting('registration.user_hide_never_expire_option', 'true')
+        ;
 
         $sessionAdmin = $this->createUser('user_edit_ctrl_session_admin_expiry', '', '', 'ROLE_SESSION_MANAGER');
         $client->loginUser($sessionAdmin);
@@ -218,15 +221,16 @@ class UserEditControllerTest extends WebTestCase
 
         $em = $this->getEntityManager();
         $em->clear();
-        $refreshed = $em->getRepository(\Chamilo\CoreBundle\Entity\User::class)->find($target->getId());
+        $refreshed = $em->getRepository(User::class)->find($target->getId());
         $this->assertNotNull($refreshed->getExpirationDate());
     }
 
     public function testManualPasswordResetIgnoredWhenAdminsCanSetUsersPassIsDisabled(): void
     {
         $client = static::createClient();
-        static::getContainer()->get(\Chamilo\CoreBundle\Settings\SettingsManager::class)
-            ->updateSetting('security.admins_can_set_users_pass', 'false');
+        static::getContainer()->get(SettingsManager::class)
+            ->updateSetting('security.admins_can_set_users_pass', 'false')
+        ;
 
         $client->loginUser($this->getUser('admin'));
         $target = $this->createUser('user_edit_ctrl_pass_disabled');
@@ -261,7 +265,7 @@ class UserEditControllerTest extends WebTestCase
     public function testManualPasswordTooWeakFailsWhenCheckPasswordEnabled(): void
     {
         $client = static::createClient();
-        $settingsManager = static::getContainer()->get(\Chamilo\CoreBundle\Settings\SettingsManager::class);
+        $settingsManager = static::getContainer()->get(SettingsManager::class);
         $settingsManager->updateSetting('security.admins_can_set_users_pass', 'true');
         $settingsManager->updateSetting('security.check_password', 'true');
 
@@ -295,7 +299,7 @@ class UserEditControllerTest extends WebTestCase
     public function testManualPasswordStrongEnoughIsUsable(): void
     {
         $client = static::createClient();
-        $settingsManager = static::getContainer()->get(\Chamilo\CoreBundle\Settings\SettingsManager::class);
+        $settingsManager = static::getContainer()->get(SettingsManager::class);
         $settingsManager->updateSetting('security.admins_can_set_users_pass', 'true');
         $settingsManager->updateSetting('security.check_password', 'true');
 
@@ -327,7 +331,7 @@ class UserEditControllerTest extends WebTestCase
 
         $em = $this->getEntityManager();
         $em->clear();
-        $refreshed = $em->getRepository(\Chamilo\CoreBundle\Entity\User::class)->find($target->getId());
+        $refreshed = $em->getRepository(User::class)->find($target->getId());
         $hasher = static::getContainer()->get(UserPasswordHasherInterface::class);
         $this->assertTrue($hasher->isPasswordValid($refreshed, 'Str0ng#Passw0rd!'));
     }

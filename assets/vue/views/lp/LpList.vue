@@ -180,6 +180,7 @@ import EmptyState from "../../components/EmptyState.vue"
 import { LP_LIST_LOADED } from "../../constants/events"
 import { useNotification } from "../../composables/notification"
 import api from "../../config/api"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -197,24 +198,7 @@ const layoutSaveQueued = ref(false)
 
 const rawCanEdit = ref(false)
 const allowChamiloExport = ref(false)
-const routeStudentViewFlag = computed(() => {
-  if (!Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    return null
-  }
-
-  const value = String(route.query?.isStudentView ?? "").toLowerCase()
-
-  if (["1", "true", "yes", "on"].includes(value)) {
-    return true
-  }
-
-  if (["0", "false", "no", "off"].includes(value)) {
-    return false
-  }
-
-  return null
-})
-const isStudentView = computed(() => routeStudentViewFlag.value ?? platformConfig.isStudentViewActive)
+const isStudentView = computed(() => platformConfig.isStudentViewActive)
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 const managementQuery = computed(() =>
   Object.fromEntries(
@@ -564,38 +548,16 @@ watch([filteredItems, categories], () => {
   }
 })
 
-function syncStudentViewStateFromRoute() {
-  if (null !== routeStudentViewFlag.value) {
-    platformConfig.setStudentViewEnabled(routeStudentViewFlag.value)
-
-    return
-  }
-
-  if (platformConfig.isStudentViewActive) {
-    router.replace({
-      name: route.name,
-      params: route.params,
-      query: { ...route.query, isStudentView: "true" },
-    })
-  }
-}
-
 onMounted(async () => {
-  syncStudentViewStateFromRoute()
-
   await nextTick()
   syncCStudioCreateButtonVisibility()
 })
 
-watch(
-  () => route.query?.isStudentView,
-  async () => {
-    syncStudentViewStateFromRoute()
-    await load(false)
-    await nextTick()
-    syncCStudioCreateButtonVisibility()
-  },
-)
+useStudentViewRefresh(async () => {
+  await load(false)
+  await nextTick()
+  syncCStudioCreateButtonVisibility()
+})
 
 watch(
   [canEdit, isStudentView],
@@ -781,14 +743,12 @@ const load = async (notifyOnError = true) => {
       cid: legacyContext.value.cid,
       sid: legacyContext.value.sid ?? 0,
       gid: legacyContext.value.gid ?? 0,
-      isStudentView: isStudentView.value ? "true" : "false",
     })
 
     const raw = await lpService.getLearningPaths({
       "resourceNode.parent": route.params?.node ?? 0,
       sid: legacyContext.value.sid ?? 0,
       gid: legacyContext.value.gid ?? 0,
-      isStudentView: isStudentView.value ? "true" : "false",
       pagination: false,
     })
 
@@ -995,21 +955,4 @@ const ringDash = (val) => {
   return `${d} ${circumference}`
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
-
-watch(
-  () => platformConfig.isStudentViewActive,
-  async (val) => {
-    const nextValue = val ? "true" : "false"
-
-    if (String(route.query?.isStudentView ?? "") === nextValue) {
-      return
-    }
-
-    await router.replace({
-      name: route.name,
-      params: route.params,
-      query: { ...route.query, isStudentView: nextValue },
-    })
-  },
-)
 </script>

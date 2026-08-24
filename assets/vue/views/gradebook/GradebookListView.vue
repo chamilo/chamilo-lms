@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Assessments')" />
+
     <div
       v-if="errorMessage"
       class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
@@ -1166,6 +1168,8 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import gradebookService from "../../services/gradebookService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -1417,10 +1421,6 @@ function getContextParams(includeCategory = true) {
     node: route.params.node,
   }
 
-  const isStudentView = getQueryValue(route.query.isStudentView)
-  if (isStudentView !== undefined && isStudentView !== null && isStudentView !== "") {
-    params.isStudentView = isStudentView
-  }
 
   if (includeCategory) {
     const categoryId = Number(getQueryValue(route.query.categoryId) || 0)
@@ -2552,13 +2552,14 @@ watch(
 )
 
 onMounted(loadOverview)
+
+useStudentViewRefresh(loadOverview)
 watch(
   () => [
     route.query.cid,
     route.query.sid,
     route.query.gid,
     route.query.categoryId,
-    route.query.isStudentView,
     route.params.node,
   ],
   () => loadOverview(),

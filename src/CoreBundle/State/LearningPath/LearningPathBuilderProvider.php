@@ -1056,7 +1056,6 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             'origin' => 'learnpath',
             'lp_init' => 1,
             'embedded' => 1,
-            'isStudentView' => 'true',
         ];
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
 

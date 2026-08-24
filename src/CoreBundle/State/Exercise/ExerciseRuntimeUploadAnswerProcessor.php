@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -40,7 +41,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Uploads a learner file/audio answer and attaches it to a track_e_attempt row as AttemptFile, matching legacy manual answer tracking.
+ * Uploads a learner file, oral recording or completed Office document answer and attaches it to a track_e_attempt row as AttemptFile.
  *
  * @implements ProcessorInterface<ExerciseRuntimeUploadAnswer, ExerciseRuntimeUploadAnswer>
  */
@@ -51,8 +52,10 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     private const STATUS_INCOMPLETE = 'incomplete';
     private const ORAL_EXPRESSION = 13;
     private const UPLOAD_ANSWER = 23;
+    private const ANSWER_IN_OFFICE_DOC = 30;
     private const ATTEMPT_FILE_RESOURCE_TYPE = 'attempt_file';
     private const ORAL_EXPRESSION_ALLOWED_EXTENSIONS = ['wav', 'ogg'];
+    private const OFFICE_DOCUMENT_ALLOWED_EXTENSIONS = ['doc', 'docx', 'xls', 'xlsx'];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -61,6 +64,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private ResourceNodeRepository $resourceNodeRepository,
         private Security $security,
         private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -95,15 +99,21 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
         }
 
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->canManageExercises());
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session, $this->userHelper->isTeacherOfCurrentCourse());
         $attempt = $this->getIncompleteAttempt($attemptId, $quiz, $course, $session, $user);
         $question = $this->getQuestionFromExercise($questionId, $quiz);
         if (!$question instanceof CQuizQuestion) {
             throw new NotFoundHttpException('The requested question was not found in this exercise.');
         }
 
-        if (!\in_array((int) $question->getType(), [self::UPLOAD_ANSWER, self::ORAL_EXPRESSION], true)) {
-            throw new BadRequestHttpException('This endpoint only supports upload answer and oral expression questions.');
+        if (!\in_array(
+            (int) $question->getType(),
+            [self::UPLOAD_ANSWER, self::ORAL_EXPRESSION, self::ANSWER_IN_OFFICE_DOC],
+            true
+        )) {
+            throw new BadRequestHttpException(
+                'This endpoint only supports upload answer, oral expression and Office document questions.'
+            );
         }
 
         if (!$this->questionBelongsToAttempt($questionId, $attempt)) {
@@ -157,12 +167,22 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         $this->entityManager->flush();
 
+        if (self::ANSWER_IN_OFFICE_DOC === (int) $question->getType()) {
+            $firstResourceNode = $resourceNodes[0] ?? null;
+            if ($firstResourceNode instanceof ResourceNode && null !== $firstResourceNode->getId()) {
+                $attemptRow->setAnswer('onlyoffice:'.(int) $firstResourceNode->getId());
+                $this->entityManager->flush();
+            }
+        }
+
         $response = new ExerciseRuntimeUploadAnswer();
         $response->exerciseId = $exerciseId;
         $response->attemptId = $attemptId;
         $response->questionId = $questionId;
         $response->success = true;
-        $response->message = 'Draft answer saved';
+        $response->message = self::ANSWER_IN_OFFICE_DOC === (int) $question->getType()
+            ? 'Office document saved'
+            : 'Draft answer saved';
         $response->files = $this->normalizeAttemptFiles($attemptRow);
         $response->savedAnswer = $this->getSavedAnswerRows($attemptId, $questionId);
         $response->answeredQuestionIds = $this->getAnsweredQuestionIds($attemptId);
@@ -261,12 +281,6 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isVisibleThroughLearnpath(CQuiz $quiz, Course $course, ?Session $session): bool
@@ -560,17 +574,50 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
     private function validateUploadedFileForQuestion(UploadedFile $uploadedFile, CQuizQuestion $question): void
     {
-        if (self::ORAL_EXPRESSION !== (int) $question->getType()) {
-            return;
-        }
-
+        $type = (int) $question->getType();
         $extension = strtolower((string) $uploadedFile->getClientOriginalExtension());
         if ('' === $extension) {
             $extension = strtolower((string) $uploadedFile->guessExtension());
         }
 
-        if (!\in_array($extension, self::ORAL_EXPRESSION_ALLOWED_EXTENSIONS, true)) {
-            throw new BadRequestHttpException('Only WAV and OGG audio files are accepted for oral expression questions.');
+        if (self::ORAL_EXPRESSION === $type) {
+            if (!\in_array($extension, self::ORAL_EXPRESSION_ALLOWED_EXTENSIONS, true)) {
+                throw new BadRequestHttpException('Only WAV and OGG audio files are accepted for oral expression questions.');
+            }
+
+            return;
+        }
+
+        if (self::ANSWER_IN_OFFICE_DOC !== $type) {
+            return;
+        }
+
+        if (!\in_array($extension, self::OFFICE_DOCUMENT_ALLOWED_EXTENSIONS, true)) {
+            throw new BadRequestHttpException(
+                'Only DOC, DOCX, XLS and XLSX files are accepted for Office document questions.'
+            );
+        }
+
+        $templateResourceNode = $question->getResourceNode();
+        if (!$templateResourceNode instanceof ResourceNode) {
+            throw new BadRequestHttpException('This Office document question does not have a template document.');
+        }
+
+        $templateResourceFile = $templateResourceNode->getResourceFiles()->first();
+        if (!$templateResourceFile instanceof ResourceFile) {
+            throw new BadRequestHttpException('This Office document question does not have a template document.');
+        }
+
+        $templateName = (string) (
+            $templateResourceFile->getOriginalName()
+            ?: $templateResourceFile->getTitle()
+            ?: $question->getExtra()
+        );
+        $templateExtension = strtolower((string) pathinfo($templateName, PATHINFO_EXTENSION));
+        if ('' !== $templateExtension && $extension !== $templateExtension) {
+            throw new BadRequestHttpException(
+                'The completed Office document must use the same file format as the template.'
+            );
         }
     }
 

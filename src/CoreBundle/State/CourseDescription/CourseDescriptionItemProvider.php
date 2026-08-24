@@ -14,7 +14,8 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\CourseDescriptionHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -31,8 +32,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class CourseDescriptionItemProvider implements ProviderInterface
 {
-    use CourseDescriptionAccessHelperTrait;
-
     /**
      * @var array<int, string>
      */
@@ -94,7 +93,8 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         private CCourseDescriptionRepository $courseDescriptionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
-        private StudentViewHelper $studentViewHelper,
+        private CourseDescriptionHelper $courseDescriptionHelper,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -109,17 +109,11 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseDescriptionToolEnabled($this->entityManager, $course);
+        $this->courseDescriptionHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
+        $this->courseDescriptionHelper->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->studentViewHelper->isActive() || !$this->canManageCourseDescriptions(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
-            $course,
-            $session,
-        )) {
+        if (!$this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage course descriptions in this context.');
         }
         $descriptionId = isset($uriVariables['iid'])

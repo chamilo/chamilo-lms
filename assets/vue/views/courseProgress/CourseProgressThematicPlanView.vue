@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Course progress')" />
+
     <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-6 text-center text-sm text-gray-600 shadow-sm"
@@ -160,6 +162,8 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseProgressService from "../../services/courseProgressService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -209,9 +213,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -316,8 +317,10 @@ async function savePlans(addNewItem) {
 
 onMounted(loadPlans)
 
+useStudentViewRefresh(loadPlans)
+
 watch(
-  () => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView],
+  () => [route.params.thematicId, route.query.cid, route.query.sid, route.query.gid],
   loadPlans,
 )
 </script>

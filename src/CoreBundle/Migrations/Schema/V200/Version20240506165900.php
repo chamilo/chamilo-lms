@@ -56,7 +56,7 @@ final class Version20240506165900 extends AbstractMigrationChamilo
             $lastIid = 0;
 
             while (true) {
-                $sql = sprintf(
+                $sql = \sprintf(
                     'SELECT iid, %s
                        FROM %s
                       WHERE iid > :lastIid
@@ -92,7 +92,7 @@ final class Version20240506165900 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $updateSql = sprintf(
+                    $updateSql = \sprintf(
                         'UPDATE %s SET %s = :newText WHERE iid = :id',
                         $config['table'],
                         $field
@@ -113,7 +113,7 @@ final class Version20240506165900 extends AbstractMigrationChamilo
                 // users/resources after every DBAL content batch so very large
                 // legacy tables cannot grow the Doctrine identity map.
                 $this->entityManager->clear();
-                \gc_collect_cycles();
+                gc_collect_cycles();
             }
         }
     }

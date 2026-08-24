@@ -58,8 +58,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
         CGroupRepository $groupRepo,
         CGroupCategoryRepository $groupCategoryRepo,
         int $adminId
-    ): int
-    {
+    ): int {
         $lastIid = 0;
         $migrated = 0;
 
@@ -118,8 +117,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
         SessionRepository $sessionRepo,
         CGroupRepository $groupRepo,
         int $adminId
-    ): int
-    {
+    ): int {
         $lastIid = 0;
         $migrated = 0;
 

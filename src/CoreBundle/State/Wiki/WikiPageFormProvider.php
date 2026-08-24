@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -31,8 +31,6 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  */
 final readonly class WikiPageFormProvider implements ProviderInterface
 {
-    use WikiAccessHelperTrait;
-
     private const int LOCK_TIMEOUT_SECONDS = 1200;
 
     public function __construct(
@@ -42,10 +40,10 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
         private WikiPageRenderer $renderer,
         private WikiAssignmentService $assignmentService,
         private WikiCategoryService $categoryService,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -60,18 +58,18 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
         if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('Wiki pages cannot be edited in student view.');
         }
 
-        if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
+        if (!$this->wikiHelper->canRead($course, $session, $group)) {
             throw new AccessDeniedHttpException('You are not allowed to edit Wiki pages in this context.');
         }
 
@@ -138,19 +136,13 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             $reflink = $sourcePage->getReflink();
         }
 
-        $canManage = $this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canManage = $this->wikiHelper->canManage(
             $course,
             $session,
             $group,
         );
         $addLock = $this->wikiRepository->findContextAddLock($courseId, $groupId, $sessionId);
-        $canCreate = $this->canCreateWikiPage(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canCreate = $this->wikiHelper->canCreatePage(
             $course,
             $session,
             $group,
@@ -158,14 +150,11 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             $addLock,
         );
         if ($sourcePage instanceof CWiki) {
-            $this->assertWikiPageVisible($this->security, $sourcePage, $canManage);
+            $this->wikiHelper->assertPageVisible($sourcePage, $canManage);
         }
 
         $canEdit = $exactPage instanceof CWiki
-            ? $this->canEditWikiPage(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
+            ? $this->wikiHelper->canEditPage(
                 $course,
                 $session,
                 $group,
@@ -182,14 +171,12 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             $this->assertEditLockAvailable($exactPage, $canManage);
         }
 
-        $strictHtmlFiltering = $this->isWikiCourseSettingEnabled(
-            $this->entityManager,
+        $strictHtmlFiltering = $this->wikiHelper->isCourseSettingEnabled(
             $course,
             'wiki_html_strict_filtering',
             false,
         );
-        $categoriesEnabled = $this->isWikiCourseSettingEnabled(
-            $this->entityManager,
+        $categoriesEnabled = $this->wikiHelper->isCourseSettingEnabled(
             $course,
             'wiki_categories_enabled',
             false,
@@ -205,10 +192,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $form->categoriesEnabled = $categoriesEnabled;
         $form->canManageCategories = $categoriesEnabled
             && !$this->studentViewHelper->isActive()
-            && $this->canManageWikiContext(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
+            && $this->wikiHelper->canManage(
                 $course,
                 $session,
                 null,
@@ -416,7 +400,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
 
     private function isPlatformSettingEnabled(string $name): bool
     {
-        return $this->resolveWikiBoolean($this->settingsManager->getSetting($name, true), false);
+        return $this->wikiHelper->isPlatformSettingEnabled($name, false);
     }
 
     private function toTimestamp(?DateTimeInterface $value): ?int

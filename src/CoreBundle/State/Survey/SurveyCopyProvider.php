@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -38,6 +39,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -55,7 +57,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $user = $this->getCurrentUser();
 
-        if (!$this->canManageSurveys()) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
 
@@ -96,23 +98,6 @@ final readonly class SurveyCopyProvider implements ProviderInterface
         }
 
         return $user;
-    }
-
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
     private function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

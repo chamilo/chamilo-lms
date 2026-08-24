@@ -153,7 +153,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $liveAnswerTable = $this->connection
             ->createSchemaManager()
-            ->introspectTable('c_quiz_answer');
+            ->introspectTable('c_quiz_answer')
+        ;
 
         if ($liveAnswerTable->getColumn('question_id')->getNotnull()) {
             $this->connection->executeStatement(
@@ -161,7 +162,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
             );
             $liveAnswerTable = $this->connection
                 ->createSchemaManager()
-                ->introspectTable('c_quiz_answer');
+                ->introspectTable('c_quiz_answer')
+            ;
         }
 
         if (!$liveAnswerTable->hasForeignKey('FK_AEBC3EFF1E27F6BF')) {
@@ -237,7 +239,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         $liveQuestionOptionTable = $this->connection
             ->createSchemaManager()
-            ->introspectTable('c_quiz_question_option');
+            ->introspectTable('c_quiz_question_option')
+        ;
 
         if ($liveQuestionOptionTable->getColumn('question_id')->getNotnull()) {
             $this->connection->executeStatement(
@@ -245,7 +248,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
             );
             $liveQuestionOptionTable = $this->connection
                 ->createSchemaManager()
-                ->introspectTable('c_quiz_question_option');
+                ->introspectTable('c_quiz_question_option')
+            ;
         }
 
         if (!$liveQuestionOptionTable->hasForeignKey('FK_499A73F31E27F6BF')) {
@@ -259,7 +263,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
             $liveQuestionOptionTable = $this->connection
                 ->createSchemaManager()
-                ->introspectTable('c_quiz_question_option');
+                ->introspectTable('c_quiz_question_option')
+            ;
         }
 
         if (!$liveQuestionOptionTable->hasIndex('IDX_499A73F31E27F6BF')) {
@@ -351,9 +356,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_A468585C1E27F6BF')) {
             $this->addSql('CREATE INDEX IDX_A468585C1E27F6BF ON c_quiz_question_rel_category (question_id)');
         }
-
     }
-
 
     private function finalizeQuizAnswerSchema(): void
     {
@@ -815,8 +818,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         array $questionMap,
         array $normalizedQuestionIds,
         int &$unresolvedTokens
-    ): string
-    {
+    ): string {
         if ('' === trim($value)) {
             return $value;
         }
@@ -1603,7 +1605,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
                 $existingColumns = array_map('strtolower', $index->getColumns());
                 $expectedColumns = array_map('strtolower', $columns);
 
-                if ($expectedColumns === array_slice($existingColumns, 0, \count($expectedColumns))) {
+                if ($expectedColumns === \array_slice($existingColumns, 0, \count($expectedColumns))) {
                     return false;
                 }
             }
@@ -1637,6 +1639,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
             foreach ($schemaManager->listTableIndexes($tableName) as $index) {
                 if (strtolower($index->getName()) === strtolower($indexName)) {
                     $indexExists = true;
+
                     break;
                 }
             }

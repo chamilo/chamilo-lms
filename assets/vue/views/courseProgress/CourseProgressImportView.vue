@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -113,6 +113,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import courseProgressService from "../../services/courseProgressService"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -153,9 +154,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -226,13 +224,11 @@ async function importCourseProgress() {
 
 onMounted(loadImportForm)
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  async () => {
+useStudentViewRefresh(loadImportForm, {
+  before: () => {
     selectedFile.value = null
     replaceCurrentProgress.value = false
     fileInputKey.value += 1
-    await loadImportForm()
   },
-)
+})
 </script>

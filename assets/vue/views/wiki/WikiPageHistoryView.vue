@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Wiki')" />
+
     <BaseToolbar class="border-b border-gray-25 bg-white">
       <template #start>
         <div class="flex items-center gap-2">
@@ -294,6 +296,8 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import wikiService from "../../services/wikiService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -355,9 +359,6 @@ function getSharedQuery() {
     query.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return query
 }
@@ -580,5 +581,7 @@ async function loadHistory() {
 }
 
 onMounted(loadHistory)
+
+useStudentViewRefresh(loadHistory)
 watch(() => route.fullPath, loadHistory)
 </script>

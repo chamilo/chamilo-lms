@@ -1486,6 +1486,13 @@ Then("I should see the {string} element", async ({ page }, selector: string) => 
   await expect(page.locator(selector).first()).toBeVisible()
 })
 
+// The negative counterpart. Asserts on the first match rather than the count,
+// so it reads as "this element is gone" for the callers that toggle a state and
+// expect an icon or action to disappear without navigating.
+Then("I should not see the {string} element", async ({ page }, selector: string) => {
+  await expect(page.locator(selector).first()).toBeHidden()
+})
+
 // Ported from FeatureContext::iWaitForTheElementToAppear() — a bounded wait
 // for a CSS selector to become visible, distinct from the id/name-based
 // resolveField() cascade above (this is for arbitrary icons/markers, e.g.

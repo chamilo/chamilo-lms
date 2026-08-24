@@ -56,10 +56,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
-                ),
             ],
         ),
         new Post(
@@ -89,10 +85,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'gid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
-                ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
                 ),
             ],
         ),

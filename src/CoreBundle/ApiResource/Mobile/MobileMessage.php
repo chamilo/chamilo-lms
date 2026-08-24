@@ -38,14 +38,14 @@ use const DATE_ATOM;
         ),
         new Get(
             uriTemplate: '/mobile_messages/{id}',
-            requirements: ['id' => '\d+'],
+            requirements: ['id' => '\\d+'],
             security: "is_granted('ROLE_USER')",
             name: 'get_mobile_message',
             provider: MobileMessageProvider::class,
         ),
         new Post(
             uriTemplate: '/mobile_messages/{id}/read',
-            requirements: ['id' => '\d+'],
+            requirements: ['id' => '\\d+'],
             status: Response::HTTP_OK,
             security: "is_granted('ROLE_USER')",
             input: false,
@@ -55,7 +55,7 @@ use const DATE_ATOM;
         ),
         new Post(
             uriTemplate: '/mobile_messages/{id}/star',
-            requirements: ['id' => '\d+'],
+            requirements: ['id' => '\\d+'],
             status: Response::HTTP_OK,
             security: "is_granted('ROLE_USER')",
             input: MobileMessageStarInput::class,
@@ -74,7 +74,7 @@ use const DATE_ATOM;
         ),
         new Delete(
             uriTemplate: '/mobile_messages/{id}',
-            requirements: ['id' => '\d+'],
+            requirements: ['id' => '\\d+'],
             status: Response::HTTP_NO_CONTENT,
             security: "is_granted('ROLE_USER')",
             input: false,
@@ -140,6 +140,17 @@ final class MobileMessage
     #[Groups(['mobile_message:read'])]
     public ?int $parentId = null;
 
+    public static function createPlainTextPreview(string $content): string
+    {
+        $spacedContent = preg_replace(
+            '/<\\/?(?:p|div|li|h[1-6]|section|article)\\b[^>]*>|<br\\b[^>]*>/iu',
+            ' ',
+            $content
+        ) ?? $content;
+
+        return trim(preg_replace('/\\s+/u', ' ', strip_tags($spacedContent)) ?? '');
+    }
+
     public static function fromMessage(
         Message $message,
         User $user,
@@ -155,7 +166,8 @@ final class MobileMessage
 
         $resolvedBox = MessageRelUser::TYPE_SENDER === $relation->getReceiverType() ? 'sent' : 'inbox';
         $content = Security::remove_XSS($message->getContent(), STUDENT);
-        $plainContent = trim(preg_replace('/\s+/u', ' ', strip_tags($content)) ?? '');
+        $plainContent = self::createPlainTextPreview($content);
+
         $recipientIds = [];
         $recipientNames = [];
 

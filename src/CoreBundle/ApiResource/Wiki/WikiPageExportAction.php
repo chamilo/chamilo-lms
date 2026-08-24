@@ -46,10 +46,6 @@ use Chamilo\CoreBundle\State\Wiki\WikiPageExportProcessor;
                     schema: ['type' => 'integer'],
                     description: 'Group identifier',
                 ),
-                'isStudentView' => new QueryParameter(
-                    schema: ['type' => 'boolean'],
-                    description: 'Force the read-only student view',
-                ),
             ],
         ),
     ],

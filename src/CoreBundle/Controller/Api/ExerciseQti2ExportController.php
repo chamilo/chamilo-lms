@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ExportService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -26,8 +25,8 @@ final class ExerciseQti2ExportController extends AbstractController
         requirements: ['exerciseId' => '\d+'],
         methods: ['GET']
     )]
-    public function __invoke(int $exerciseId, Request $request): BinaryFileResponse
+    public function __invoke(int $exerciseId): BinaryFileResponse
     {
-        return $this->exportService->exportExerciseZip($exerciseId, $request);
+        return $this->exportService->exportExerciseZip($exerciseId);
     }
 }

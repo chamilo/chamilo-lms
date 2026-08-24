@@ -30,6 +30,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
+use const DATE_ATOM;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const PATHINFO_FILENAME;
+
 final readonly class GradebookCertificateGenerator
 {
     public function __construct(
@@ -112,8 +117,9 @@ final readonly class GradebookCertificateGenerator
 
         if (!$category->getGenerateCertificates()) {
             return [
-                ...$eligibility,
                 'eligible' => false,
+                'score' => $eligibility['score'],
+                'minimumScore' => $eligibility['minimumScore'],
                 'reason' => 'Certificate generation is disabled for this Gradebook category.',
             ];
         }
@@ -323,7 +329,6 @@ final readonly class GradebookCertificateGenerator
         return str_replace(array_keys($replacements), array_values($replacements), $template);
     }
 
-
     private function requiresLegacyTemplateCompatibility(string $template): bool
     {
         if (preg_match_all('/\(\([A-Za-z0-9_]+\)\)/', $template, $matches) < 1) {
@@ -423,7 +428,7 @@ final readonly class GradebookCertificateGenerator
     {
         $value = $this->settingsManager->getSetting($name, true);
 
-        return is_scalar($value) ? trim((string) $value) : '';
+        return \is_scalar($value) ? trim((string) $value) : '';
     }
 
     private function escape(string $value): string

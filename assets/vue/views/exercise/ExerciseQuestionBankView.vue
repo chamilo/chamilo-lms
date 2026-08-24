@@ -364,7 +364,6 @@ function getContextParams() {
     "lp_item_id",
     "type",
     "returnToLp",
-    "isStudentView",
     "gradebook",
     "lpTool",
   ]) {

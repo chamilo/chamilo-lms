@@ -550,6 +550,57 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
 - **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.
 
+### Student view and "may this user edit here"
+
+**The student view is one platform-wide session state, never a request parameter.** It lives in the
+`studentview` session key, and exactly two places write it: `GET /toggle_student_view`
+(`IndexController`, role-checked) and `LegacyListener`, which interprets an `isStudentView` query
+parameter **only on non-API requests**. That guard matters: the `api` firewall shares the main
+session, so without it a plain `GET /api/...?isStudentView=true` would switch the whole browsing
+session from any origin, with no role check. No `#[ApiResource]` operation declares the parameter and
+no provider reads it — if you find yourself adding it back, you are re-opening that hole.
+
+Readers use `StudentViewHelper::isActive()`. There is no per-course variant: 1.11.x has no
+equivalent, and the observable behaviour is global.
+
+**Editing rights go through `IsAllowedToEditHelper::check()`** (`src/CoreBundle/Helpers/`), the port
+of `api_is_allowed_to_edit()`. It answers admin and session-admin rights, the course teacher, the
+session coach with `allow_coach_to_edit_course_session`, `Session::READ_ONLY`,
+`session_courses_read_only_mode`, and the student view — so a provider that calls it needs none of
+that itself. Pass `course:`/`session:` when you already resolved them.
+
+Two rules that are easy to get wrong:
+
+- **Never route a read gate through it.** `check()` returns `false` in the student view, but a
+  teacher must still *see* a tool they cannot currently change, and must still reach an unpublished
+  resource to preview it. Use `UserHelper::isTeacherOfCurrentCourse()` (the role alone) for those, or
+  `check(checkStudentView: false)` when the caller wants the raw permission — the exercise runtime is
+  the reference.
+- **It deliberately deviates from 1.11 inside a session.** The legacy function discarded the course
+  teacher there and returned only the coach term, which was safe because entering a session demoted
+  the base-course teacher; `CourseAccessResolver` does not. Reproducing it would deny every
+  base-course teacher in every tool. `IsAllowedToEditHelperTest` pins this.
+
+**Tool-specific rules compose on top, in an injectable helper — not in a trait that takes services
+as arguments.** `SurveyHelper`, `WikiHelper`, `CourseDescriptionHelper` and `CourseProgressHelper`
+are the pattern: they inject what they need and add only what the shared helper cannot know
+(`survey.extend_rights_for_coach_on_survey`, the wiki's group tutor and DRH terms, per-tool course
+settings), gating the whole expression once by the student view. Where a tool's rule turned out to be
+pure delegation (Gradebook, Forum, exercise authoring) no helper exists at all: call `check()`
+directly.
+
+Out of scope on purpose: `AnnouncementAccessHelperTrait`, whose coach rule uses
+`announcement.allow_coach_to_edit_announcements` rather than the generic session setting, and which
+also grants students through a course setting — routing it through `check()` would swap one
+administrator setting for another silently.
+
+**Frontend:** the state is read from `platformConfig.isStudentViewActive`, and any view rendering
+server-computed permissions must refetch on the toggle via the `useStudentViewRefresh` composable
+(`assets/vue/composables/`). Never put `isStudentView` in an API call or a Vue route query. The one
+exception is navigation into the learning path runtime, which signals intent in the URL and turns it
+into an explicit `/toggle_student_view` call: a lesson embeds content from other tools, so the state
+has to be in the session where each of them reads it.
+
 ### Securing a per-user owned `#[ApiResource]` (Voter + Extension + Processor)
 
 For **CoreBundle** resources that are **not** course-scoped but are **owned by one user** (e.g. `PushSubscription`, personal tokens, per-user settings rows), do **not** try to express ownership with `security: "... and object.getUser() == user"`. That expression returns **403** (leaks the row's existence), silently blocks admins unless you also `or is_granted('ROLE_ADMIN')`, and duplicates the rule across operations. Each concern has its own idiomatic tool — **an API Platform Voter acts on a single item only**, so split the work three ways:

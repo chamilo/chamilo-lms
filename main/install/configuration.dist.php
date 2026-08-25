@@ -1580,6 +1580,8 @@ $_configuration['required_extra_fields_in_profile'] = [
 //$_configuration['gradebook_score_display_custom_standalone'] = false;
 
 // Blocks "my files" access to anon users
+// Deprecated: anonymous users are always blocked in main/social/download_my_files.php,
+// which also checks that the requester is allowed to read the owner personal files.
 //$_configuration['block_my_files_access'] = false;
 
 // Allow .htaccess files in SCORM packages

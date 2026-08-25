@@ -37,11 +37,13 @@ use Graphp\GraphViz\GraphViz;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
@@ -271,6 +273,7 @@ class SessionController extends AbstractController
     }
 
     #[Route('/{id}/send-course-notification', name: 'chamilo_core_session_send_course_notification', methods: ['POST'])]
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')"))]
     public function sendCourseNotification(
         int $id,
         Request $request,
@@ -294,6 +297,12 @@ class SessionController extends AbstractController
         $user = $userRepo->find($studentId);
         if (!$user) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // The notification is for a student of this session: activating an account and adding it
+        // to the portal below must never reach a user picked freely by id.
+        if (!$session->hasUserInSession($user, Session::STUDENT)) {
+            return $this->json(['error' => 'User is not a student of this session'], Response::HTTP_FORBIDDEN);
         }
 
         $email = $user->getEmail();

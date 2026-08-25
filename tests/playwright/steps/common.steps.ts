@@ -766,6 +766,41 @@ When("I attach the file {string} to the upload dropzone", async ({ page }, fileP
   await page.locator('input[type="file"]').first().setInputFiles(path.join(repoRoot, filePath))
 })
 
+// How long to wait for a TinyMCE instance to finish mounting. 20s matches the
+// TINYMCE_READY_TIMEOUT already used by the ticket-settings step below, which
+// was tuned against real CI.
+//
+// The bound matters far more than its exact value. `page.waitForFunction()` with
+// NO timeout inherits the whole test timeout — which for an @long-scenario is
+// FIFTEEN MINUTES. Real CI failure (2026-08-25): specialCase1Sessions' "Create
+// courses, multilingual documents, exercises, forum, learning path and
+// assessment activity" burned its entire 900s budget inside one such wait and
+// then reported only `page.waitForFunction: Test timeout of 900000ms exceeded`
+// — no editor id, no step name, and a page snapshot showing the dashboard
+// rather than any editor, i.e. fifteen minutes spent to learn nothing.
+//
+// Same lesson as resolveField()'s fail-fast rewrite: an unbounded wait does not
+// buy reliability, it converts a precise failure into an expensive mystery.
+const TINYMCE_MOUNT_TIMEOUT = 20_000
+
+// Wait for a specific TinyMCE editor, failing FAST and by name. `whatFor`
+// should say which step is waiting, since the editor id alone is rarely enough
+// to locate the culprit in a long scenario.
+async function waitForTinymceEditor(page: Page, editorId: string, whatFor: string): Promise<void> {
+  try {
+    await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), editorId, {
+      timeout: TINYMCE_MOUNT_TIMEOUT,
+    })
+  } catch {
+    throw new Error(
+      `TinyMCE editor "#${editorId}" never mounted within ${TINYMCE_MOUNT_TIMEOUT}ms (${whatFor}). ` +
+        `The element exists but tinymce.get("${editorId}") stayed undefined — usually the page ` +
+        `navigated away/redirected before the editor initialised, or the legacy_app bundle that ` +
+        `boots TinyMCE never loaded on this page. Current URL: ${page.url()}`,
+    )
+  }
+}
+
 // Ported from FeatureContext::iFillInWysiwygOnFieldWith(). The legacy admin
 // pages (e.g. careers.php) use a TinyMCE editor bound to a hidden <textarea>,
 // not a plain field — window.setContentFromEditor(id, content) (assets/js/
@@ -779,7 +814,7 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
   if (!fieldId) {
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await waitForTinymceEditor(page, fieldId, `filling editor field "${field}"`)
   await page.evaluate(
     ({ id, value }) => (window as any).setContentFromEditor(id, value),
     { id: fieldId, value },
@@ -806,7 +841,7 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
   if (!fieldId) {
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await waitForTinymceEditor(page, fieldId, `filling tinymce field "${field}"`)
   await page.evaluate(({ id, value }) => {
     const editor = (window as any).tinymce.get(id)
     editor.setContent(value)
@@ -996,7 +1031,19 @@ When(
 // ever have ONE editor open at a time, `tinymce.activeEditor` reliably
 // identifies it without needing an id.
 Then("I fill in the active tinymce editor with {string}", async ({ page }, value: string) => {
-  await page.waitForFunction(() => Boolean((window as any).tinymce?.activeEditor))
+  // Bounded for the same reason as waitForTinymceEditor() — see its comment.
+  // Unbounded, this inherits the test timeout (15 minutes on an @long-scenario).
+  try {
+    await page.waitForFunction(() => Boolean((window as any).tinymce?.activeEditor), undefined, {
+      timeout: TINYMCE_MOUNT_TIMEOUT,
+    })
+  } catch {
+    throw new Error(
+      `No active TinyMCE editor appeared within ${TINYMCE_MOUNT_TIMEOUT}ms. ` +
+        `tinymce.activeEditor stayed undefined, so the dialog holding the editor probably never ` +
+        `opened (or closed again before this step ran). Current URL: ${page.url()}`,
+    )
+  }
   await page.evaluate((value) => {
     const editor = (window as any).tinymce.activeEditor
     editor.setContent(value)
@@ -3115,7 +3162,7 @@ async function fillExerciseAnswerCell(page: Page, idPrefix: string, rowNumber: n
   const locator = page.locator(`textarea[id^="${idPrefix}${rowNumber - 1}-"]`)
   await locator.first().waitFor({ state: "attached" })
   const id = await locator.first().getAttribute("id")
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await waitForTinymceEditor(page, id as string, "filling a table-row editor")
   await page.evaluate(
     ({ id, value }) => {
       const editor = (window as any).tinymce.get(id)
@@ -3166,7 +3213,7 @@ When("I fill in matching pair {int} with {string}", async ({ page }, pairNumber:
   if (!id) {
     throw new Error(`Could not find matching pair ${pairNumber}'s answer editor.`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await waitForTinymceEditor(page, id as string, "filling a table-row editor")
   await page.evaluate(
     ({ id, value }) => {
       const editor = (window as any).tinymce.get(id)

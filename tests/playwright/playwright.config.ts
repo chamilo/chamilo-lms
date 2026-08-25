@@ -134,6 +134,21 @@ export default defineConfig({
   reporter: [
     ["list"],
     ["html", { open: "never", outputFolder: path.join(repoRoot, "var/test-results/playwright/report") }],
+    // Machine-readable twin of the html report, consumed by
+    // tests/playwright/scripts/check-results.mjs so CI can decide pass/fail on
+    // TEST OUTCOMES rather than on `playwright test`'s exit code.
+    //
+    // Why that distinction earns a whole extra reporter: the exit code is
+    // non-zero for anything that went wrong anywhere, including work that is
+    // not a test. Twice now a run finished 410/410 green and still failed the
+    // job, because a settings-restore hook in the worker-teardown phase blew
+    // its budget AFTER the last test had already passed. The html report is
+    // only readable by a human (its data is a base64 zip inside a <template>
+    // tag), so it cannot gate anything automatically.
+    //
+    // NOTE: the json reporter's `stats` has expected/unexpected/flaky/skipped
+    // but NO `total` — the checker sums them. Don't assume `total` exists.
+    ["json", { outputFile: path.join(repoRoot, "var/test-results/playwright/results.json") }],
   ],
   use: {
     baseURL: process.env.BASE_URL || "http://my.chamilo.net",

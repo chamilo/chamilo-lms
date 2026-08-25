@@ -20,8 +20,10 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -64,6 +66,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private ResourceNodeRepository $resourceNodeRepository,
+        private UploadFilenamePolicy $uploadFilenamePolicy,
         private Security $security,
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
@@ -91,11 +94,16 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : $request->request->getInt('exerciseId');
-        $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : $request->request->getInt('attemptId');
-        $questionId = $request->request->getInt('questionId');
-        $secondsSpent = max(0, $request->request->getInt('secondsSpent'));
-        $reviewLater = $request->request->has('reviewLater') ? $request->request->getBoolean('reviewLater') : null;
+        $jsonPayload = $this->getJsonPayload($request);
+        $exerciseId = isset($uriVariables['exerciseId'])
+            ? (int) $uriVariables['exerciseId']
+            : $this->getRequestInt($request, $jsonPayload, 'exerciseId');
+        $attemptId = isset($uriVariables['attemptId'])
+            ? (int) $uriVariables['attemptId']
+            : $this->getRequestInt($request, $jsonPayload, 'attemptId');
+        $questionId = $this->getRequestInt($request, $jsonPayload, 'questionId');
+        $secondsSpent = max(0, $this->getRequestInt($request, $jsonPayload, 'secondsSpent'));
+        $reviewLater = $this->getRequestNullableBool($request, $jsonPayload, 'reviewLater');
 
         if ($exerciseId <= 0 || $attemptId <= 0 || $questionId <= 0) {
             throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
@@ -122,9 +130,22 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         $this->assertAttemptAcceptsAnswer($attempt, $quiz, $questionId);
 
-        $uploadedFiles = $this->getUploadedFiles($request);
+        $uploadedFiles = $this->getUploadedFiles($request, $jsonPayload);
         if ([] === $uploadedFiles) {
-            throw new BadRequestHttpException('A file is required for this answer.');
+            $existingAttemptRow = $this->getExistingFileAttemptRow($attemptId, $questionId);
+            if (!$existingAttemptRow instanceof TrackEAttempt) {
+                throw new BadRequestHttpException('A file is required for this answer.');
+            }
+
+            if (null !== $reviewLater) {
+                $this->syncReviewQuestion($attempt, $questionId, true === $reviewLater);
+            }
+
+            $navigationAction = strtolower(trim($this->getRequestString($request, $jsonPayload, 'navigationAction')));
+            $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, $navigationAction);
+            $this->entityManager->flush();
+
+            return $this->buildResponse($exerciseId, $attemptId, $questionId, $existingAttemptRow, $question);
         }
 
         $resourceNodes = [];
@@ -163,7 +184,8 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             $this->syncReviewQuestion($attempt, $questionId, true === $reviewLater);
         }
 
-        $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, strtolower(trim((string) $request->request->get('navigationAction', ''))));
+        $navigationAction = strtolower(trim($this->getRequestString($request, $jsonPayload, 'navigationAction')));
+        $this->lockPreventBackwardsStepIfNeeded($attempt, $quiz, $questionId, $navigationAction);
 
         $this->entityManager->flush();
 
@@ -175,6 +197,38 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             }
         }
 
+        return $this->buildResponse($exerciseId, $attemptId, $questionId, $attemptRow, $question);
+    }
+
+    private function getExistingFileAttemptRow(int $attemptId, int $questionId): ?TrackEAttempt
+    {
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('saved')
+            ->addSelect('attemptFile', 'resourceNode', 'resourceFile')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->innerJoin('attemptFile.resourceNode', 'resourceNode')
+            ->leftJoin('resourceNode.resourceFiles', 'resourceFile')
+            ->andWhere('IDENTITY(saved.trackExercise) = :attemptId')
+            ->andWhere('saved.questionId = :questionId')
+            ->setParameter('attemptId', $attemptId, Types::INTEGER)
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->orderBy('saved.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $row instanceof TrackEAttempt ? $row : null;
+    }
+
+    private function buildResponse(
+        int $exerciseId,
+        int $attemptId,
+        int $questionId,
+        TrackEAttempt $attemptRow,
+        CQuizQuestion $question,
+    ): ExerciseRuntimeUploadAnswer {
         $response = new ExerciseRuntimeUploadAnswer();
         $response->exerciseId = $exerciseId;
         $response->attemptId = $attemptId;
@@ -555,9 +609,11 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
     }
 
     /**
+     * @param array<string, mixed> $jsonPayload
+     *
      * @return array<int, UploadedFile>
      */
-    private function getUploadedFiles(Request $request): array
+    private function getUploadedFiles(Request $request, array $jsonPayload): array
     {
         $file = $request->files->get('file');
         if ($file instanceof UploadedFile) {
@@ -565,11 +621,126 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         $files = $request->files->all('files');
-        if (!\is_array($files)) {
+        if (\is_array($files)) {
+            $uploadedFiles = array_values(array_filter(
+                $files,
+                static fn (mixed $item): bool => $item instanceof UploadedFile
+            ));
+            if ([] !== $uploadedFiles) {
+                return $uploadedFiles;
+            }
+        }
+
+        if ([] === $jsonPayload) {
             return [];
         }
 
-        return array_values(array_filter($files, static fn (mixed $item): bool => $item instanceof UploadedFile));
+        $fileName = trim((string) ($jsonPayload['fileName'] ?? ''));
+        $mimeType = trim((string) ($jsonPayload['mimeType'] ?? 'application/octet-stream'));
+        $base64Content = trim((string) ($jsonPayload['base64Content'] ?? ''));
+        if ('' === $fileName || '' === $base64Content) {
+            return [];
+        }
+
+        $content = base64_decode($base64Content, true);
+        if (false === $content) {
+            throw new BadRequestHttpException('The uploaded file content is not valid base64.');
+        }
+
+        $maxFileSize = UploadedFile::getMaxFilesize();
+        if ($maxFileSize > 0 && \strlen($content) > $maxFileSize) {
+            throw new BadRequestHttpException('The uploaded file exceeds the server upload limit.');
+        }
+
+        $decision = $this->uploadFilenamePolicy->filter($fileName);
+        if (!($decision['allowed'] ?? false)) {
+            throw new BadRequestHttpException('File upload rejected by extension policy.');
+        }
+
+        $safeFileName = (string) ($decision['filename'] ?? $fileName);
+
+        return [CreateUploadedFileHelper::fromString($safeFileName, $mimeType ?: 'application/octet-stream', $content)];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getJsonPayload(Request $request): array
+    {
+        if (!str_contains(strtolower((string) $request->headers->get('Content-Type', '')), 'json')) {
+            return [];
+        }
+
+        try {
+            $payload = $request->toArray();
+        } catch (\Throwable) {
+            throw new BadRequestHttpException('The JSON upload payload is invalid.');
+        }
+
+        return \is_array($payload) ? $payload : [];
+    }
+
+    /**
+     * @param array<string, mixed> $jsonPayload
+     */
+    private function getRequestInt(Request $request, array $jsonPayload, string $key): int
+    {
+        if ($request->request->has($key)) {
+            return $request->request->getInt($key);
+        }
+
+        $value = $jsonPayload[$key] ?? null;
+
+        return \is_numeric($value) ? (int) $value : 0;
+    }
+
+    /**
+     * @param array<string, mixed> $jsonPayload
+     */
+    private function getRequestNullableBool(Request $request, array $jsonPayload, string $key): ?bool
+    {
+        if ($request->request->has($key)) {
+            return $request->request->getBoolean($key);
+        }
+
+        if (!array_key_exists($key, $jsonPayload)) {
+            return null;
+        }
+
+        $value = $jsonPayload[$key];
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        if (\is_int($value) || \is_float($value)) {
+            return 0 !== (int) $value;
+        }
+
+        if (\is_string($value)) {
+            $normalized = strtolower(trim($value));
+            if (\in_array($normalized, ['1', 'true', 'yes', 'on'], true)) {
+                return true;
+            }
+            if (\in_array($normalized, ['0', 'false', 'no', 'off', ''], true)) {
+                return false;
+            }
+        }
+
+        throw new BadRequestHttpException(\sprintf('The "%s" value must be boolean.', $key));
+    }
+
+    /**
+     * @param array<string, mixed> $jsonPayload
+     */
+    private function getRequestString(Request $request, array $jsonPayload, string $key): string
+    {
+        if ($request->request->has($key)) {
+            return (string) $request->request->get($key, '');
+        }
+
+        $value = $jsonPayload[$key] ?? '';
+
+        return \is_scalar($value) ? (string) $value : '';
     }
 
     private function validateUploadedFileForQuestion(UploadedFile $uploadedFile, CQuizQuestion $question): void

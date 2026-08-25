@@ -266,10 +266,31 @@ jobs:
             # Ordering, not more seeding, is the actual fix. See
             # playwright.config.ts's `workers: 1` comment for the full history.
 
+            # The step result is decided by check-results.mjs, NOT by
+            # `playwright test`'s exit code. That is deliberate: the exit code is
+            # non-zero for anything that went wrong anywhere in the process,
+            # including work that is not a test, so it cannot distinguish "a test
+            # regressed" from "a cleanup hook was slow". Twice in two days this
+            # job went red on runs that were 410/410 green, because playwright-bdd
+            # defers every tagged AfterAll into one worker-teardown phase that
+            # blew its 90s budget AFTER the last test had already passed.
+            #
+            # A cleanup step running once every test has finished cannot
+            # invalidate those tests, and two attempts at making that teardown fit
+            # its budget both failed — so the durable fix is to stop asking the
+            # exit code a question it cannot answer. The checker still fails the
+            # build on any failed test, and on a TRUNCATED run (--min-tests),
+            # which is the loophole a naive `|| true` would leave open. Non-test
+            # errors are printed as warnings so they stay visible and fixable.
             -   name: Playwright tests
                 env:
                     BASE_URL: http://localhost
-                run: yarn test:playwright
+                run: |
+                    yarn test:playwright || echo "::warning::playwright exited non-zero — deferring to the result check below"
+                    node tests/playwright/scripts/check-results.mjs \
+                      --report var/test-results/playwright/results.json \
+                      --min-tests 410 \
+                      --label "main batch"
 
             # MUST come before the SpecialCase1 step below, not at the end of
             # the job with the other uploads: `playwright test` wipes its own
@@ -286,6 +307,7 @@ jobs:
                     path: |
                         var/test-results/playwright/report
                         var/test-results/playwright/results
+                        var/test-results/playwright/results.json
                     retention-days: 7
                     if-no-files-found: ignore
 
@@ -330,11 +352,20 @@ jobs:
             # must not be hidden behind an unrelated failure elsewhere. Placed
             # AFTER the batch (not before) so the batch sees pristine,
             # never-yet-mutated platform settings.
+            # Same exit-code-vs-results reasoning as the main batch above.
+            # --min-tests is this batch's own floor (11 scenarios), not the
+            # suite-wide one — a shared floor would let a truncated SpecialCase1
+            # run slip through.
             -   name: Playwright SpecialCase1 tests
                 if: always()
                 env:
                     BASE_URL: http://localhost
-                run: yarn test:playwright:specialcase1
+                run: |
+                    yarn test:playwright:specialcase1 || echo "::warning::playwright exited non-zero — deferring to the result check below"
+                    node tests/playwright/scripts/check-results.mjs \
+                      --report var/test-results/playwright/results.json \
+                      --min-tests 11 \
+                      --label "SpecialCase1"
 
             # Whatever is left in outputDir at the end of the job — i.e. the
             # SpecialCase1 step's own output, since it runs last and wiped the
@@ -349,6 +380,7 @@ jobs:
                     path: |
                         var/test-results/playwright/report
                         var/test-results/playwright/results
+                        var/test-results/playwright/results.json
                     retention-days: 7
                     if-no-files-found: ignore
 

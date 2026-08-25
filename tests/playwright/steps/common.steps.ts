@@ -1297,8 +1297,25 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
         continue
       }
       try {
-        await gotoReliably(page, path)
-        await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
+        // Deliberately NOT gotoReliably() here, even though every other
+        // navigation in this file uses it. It retries up to 5 times, and with
+        // no `navigationTimeout` configured each attempt gets page.goto's own
+        // 30s default — so one call can occupy 150s. Inside a teardown whose
+        // TOTAL budget is 90s that is not a retry policy, it is an overrun
+        // waiting to happen, and it is why the 50s deadline above was not
+        // enough on its own: the deadline is only consulted BETWEEN restores,
+        // so a single call that runs long sails straight past it.
+        //
+        // A bounded single attempt is the right trade for cleanup: worst case
+        // per restore drops from ~150s to ~15s, so nine restores fit inside the
+        // deadline with room to spare, and a restore that genuinely cannot load
+        // its page is exactly the one we want to skip-and-warn rather than
+        // retry four more times.
+        await page.goto(path, { timeout: 10_000, waitUntil: "domcontentloaded" })
+        await page.locator(`#${field}`).selectOption(
+          values.map((value) => ({ value })),
+          { timeout: 5_000 },
+        )
         // "Save settings" (not "Save"): matches the literal button text on
         // every /admin/settings/* page confirmed live (both the
         // search_settings?keyword=... pages and category pages like
@@ -1437,9 +1454,11 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
       return
     }
     try {
-      await gotoReliably(page, path)
+      // Bounded single attempt, same reasoning as registerSettingsGuard()'s
+      // teardown above (gotoReliably's 5 x 30s can outlast the whole budget).
+      await page.goto(path, { timeout: 10_000, waitUntil: "domcontentloaded" })
       await settle(page)
-      await page.locator(`#${field}`).fill(snapshot)
+      await page.locator(`#${field}`).fill(snapshot, { timeout: 5_000 })
       await pressButton(page, "Save settings")
       await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {})
     } catch (error) {

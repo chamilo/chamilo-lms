@@ -676,7 +676,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $theme = null;
     #[ORM\Column(name: 'hr_dept_id', type: 'smallint', unique: false, nullable: true)]
     protected ?int $hrDeptId = null;
-    #[Groups(['user:write'])]
+    // Not writable through the API: its setter creates the AccessUrlRelUser row, which would let
+    // anyone editing their own account join any portal. UserListener sets it on creation instead.
     protected ?AccessUrl $currentUrl = null;
 
     /**

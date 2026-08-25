@@ -150,9 +150,62 @@ export default defineConfig({
     // but NO `total` — the checker sums them. Don't assume `total` exists.
     ["json", { outputFile: path.join(repoRoot, "var/test-results/playwright/results.json") }],
   ],
+  // One retry, paired with `trace: "on-first-retry"` below — the two are a set,
+  // do not change one without the other.
+  //
+  // Not here to paper over flaky TESTS. The suite is deterministic by
+  // construction now (workers: 1, fixed file order), and every test-level flake
+  // chased this month turned out to be a real bug. This exists for a failure
+  // class that no amount of test-fixing can reach: Playwright's own internals.
+  //
+  // Observed twice in five CI runs, byte-identical both times:
+  //
+  //   TypeError: browserContext._wrapApiCall:
+  //     Cannot read properties of undefined (reading 'traceName')
+  //
+  // Zero seconds, no stack, no error-context.md — the test never began. It hit
+  // toolDropbox's "Admin opens Dropbox..." on 2026-08-25 and course.feature's
+  // "Make sure the surveys tool is available" on 2026-08-26, and each of those
+  // passed in every other run, INCLUDING the run where the other one failed. It
+  // is one roving error landing on an arbitrary victim, not a regression — but
+  // it is attributed to a test, so check-results.mjs cannot tell it apart from a
+  // genuine failure. A retry can: a real failure fails twice, this does not.
+  //
+  // With retries, a test that passes on the second attempt is reported `flaky`
+  // rather than failed, and check-results.mjs surfaces flaky as a WARNING
+  // without failing the build — so this stops turning CI red while staying
+  // visible. If a `flaky` count starts creeping up, that is a real signal;
+  // do not let it become background noise.
+  //
+  // Cost: a retry of specialCase1Sessions' @long-scenario can add ~15 minutes.
+  // Judged acceptable against a red build on a green suite.
+  retries: 1,
   use: {
     baseURL: process.env.BASE_URL || "http://my.chamilo.net",
-    trace: "retain-on-failure",
+    // "on-first-retry", NOT "retain-on-failure" — this is the half that removes
+    // the CAUSE rather than absorbing the symptom.
+    //
+    // The error above is tracing bookkeeping failing: the failing read is
+    // `traceName: this._state.traceName`, i.e. a browser context is asked for
+    // its trace state when no chunk is active on it. This suite has contexts in
+    // exactly that shape — the 7 settings guards each call browser.newContext()
+    // inside BeforeAll (see registerSettingsGuard in steps/common.steps.ts), so
+    // they are created OUTSIDE any test and stay open for the whole run, yet
+    // Playwright's tracing instrumentation still knows about them. Under
+    // "retain-on-failure" the runner manages a trace chunk at every test
+    // boundary, which is when it trips over one of those.
+    //
+    // "on-first-retry" does no tracing at all on the first attempt, so there is
+    // no per-test chunk bookkeeping to break. Tracing turns on only for a retry
+    // — precisely when a trace is worth having.
+    //
+    // The trade, stated plainly: a test that fails once and passes on retry
+    // leaves NO trace for that first failure. Accepted because the retry itself
+    // produces a fully traced run of the same test, and because a first-attempt
+    // trace is worth less than a build that is not red for a reason unrelated to
+    // the tests. If you ever need to debug a genuinely one-shot failure, flip
+    // this back to "retain-on-failure" for that run.
+    trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
   projects: [

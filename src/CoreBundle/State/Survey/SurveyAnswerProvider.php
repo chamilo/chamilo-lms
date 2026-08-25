@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -65,6 +66,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -231,7 +233,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
             // The auto code mints an invitation on the spot. Outside the anonymous link, which
             // exists to be shared, only members of the course context may obtain one.
-            if ('1' !== (string) $survey->getAnonymous() && !$this->belongsToCurrentCourseContext()) {
+            if ('1' !== (string) $survey->getAnonymous() && !$this->userHelper->isMemberOfCurrentCourse()) {
                 throw new AccessDeniedHttpException('You are not allowed to answer this survey.');
             }
 
@@ -549,15 +551,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     private function getInvitationCode(Request $request): string
     {
         return trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
-    }
-
-    /**
-     * Teachers, coaches and administrators reach this through the student roles they imply.
-     */
-    private function belongsToCurrentCourseContext(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
     }
 
     private function getOrCreateAnonymousAutoInvitation(CSurvey $survey, Course $course, ?Session $session, Request $request): CSurveyInvitation

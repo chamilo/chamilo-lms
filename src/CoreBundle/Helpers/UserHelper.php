@@ -38,4 +38,16 @@ readonly class UserHelper
         return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
+
+    /**
+     * Whether the current user belongs to the current course context, base course or session.
+     *
+     * Only the student roles are named because the role hierarchy has each teacher role imply
+     * its student one, and ROLE_ADMIN imply all of them.
+     */
+    public function isMemberOfCurrentCourse(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+    }
 }

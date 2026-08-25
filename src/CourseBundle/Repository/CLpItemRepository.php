@@ -52,6 +52,32 @@ final class CLpItemRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /**
+     * Minimal data needed to know which resource an item points at, without hydrating it.
+     *
+     * @return null|array{itemType: string, path: string, lpId: int}
+     */
+    public function findResourceTargetData(int $iid): ?array
+    {
+        $row = $this->createQueryBuilder('i')
+            ->select('i.itemType AS itemType', 'i.path AS path', 'IDENTITY(i.lp) AS lpId')
+            ->where('i.iid = :iid')
+            ->setParameter('iid', $iid)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!\is_array($row)) {
+            return null;
+        }
+
+        return [
+            'itemType' => (string) $row['itemType'],
+            'path' => (string) $row['path'],
+            'lpId' => (int) $row['lpId'],
+        ];
+    }
+
     public function findLearningPathsUsingDocument(int $resourceFileId): array
     {
         return $this->createQueryBuilder('i')

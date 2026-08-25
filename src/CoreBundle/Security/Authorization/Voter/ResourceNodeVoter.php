@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
@@ -16,13 +15,13 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLink;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -30,6 +29,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -67,6 +67,7 @@ class ResourceNodeVoter extends Voter
         private PageHelper $pageHelper,
         private readonly ResourceAclHelper $resourceAclHelper,
         private readonly CourseFromRequestHelper $courseFromRequest,
+        private readonly CLpItemRepository $lpItemRepository,
     ) {}
 
     public static function getReaderMask(): int
@@ -240,7 +241,8 @@ class ResourceNodeVoter extends Voter
         $courseId = 0;
         $sessionId = 0;
         $groupId = 0;
-        $isFromLearningPath = false;
+        $lpId = 0;
+        $lpItemId = 0;
 
         if (null !== $request) {
             // Context from the request URL (cid/sid/gid or their 1.11.x forms).
@@ -250,14 +252,13 @@ class ResourceNodeVoter extends Voter
             $sessionId = $this->courseFromRequest->getSessionId($request) ?? 0;
             $groupId = $this->courseFromRequest->getGroupId($request) ?? 0;
 
-            // Detect learning path context from request parameters. The identifiers are
+            // Learning path context from request parameters. The identifiers are
             // attacker-controlled, so the referenced item has to actually point at this
-            // resource: presence alone must never unlock a hidden one.
+            // resource: presence alone must never unlock a hidden one. That check is
+            // deferred to the only branch reading it, so it costs nothing otherwise.
             $lpId = $request->query->getInt('lp_id', 0);
             $lpItemId = $request->query->getInt('lp_item_id', 0)
                 ?: $request->query->getInt('item_id', 0);
-
-            $isFromLearningPath = $this->isLearningPathItemForResource($resourceNode, $lpId, $lpItemId);
 
             // Try Session values.
             if (empty($courseId) && $request->hasSession()) {
@@ -404,7 +405,8 @@ class ResourceNodeVoter extends Voter
             // Exception: when the resource is being opened from a learning path item,
             // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
             if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_STUDENT)
-                && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
+                && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                    || $this->isLearningPathItemForResource($resourceNode, $lpId, $lpItemId))
             ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
@@ -810,23 +812,29 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
-        $item = $this->entityManager->getRepository(CLpItem::class)->find($lpItemId);
+        $resourceNodeId = $resourceNode->getId();
 
-        if (!$item instanceof CLpItem) {
+        if (null === $resourceNodeId) {
             return false;
         }
 
-        if ($lpId > 0 && (int) $item->getLp()->getIid() !== $lpId) {
+        $item = $this->lpItemRepository->findResourceTargetData($lpItemId);
+
+        if (null === $item) {
             return false;
         }
 
-        $path = (string) $item->getPath();
+        if ($lpId > 0 && $item['lpId'] !== $lpId) {
+            return false;
+        }
+
+        $path = $item['path'];
 
         if (!ctype_digit($path)) {
             return false;
         }
 
-        $resourceClass = match (strtolower(trim($item->getItemType()))) {
+        $resourceClass = match (strtolower(trim($item['itemType']))) {
             'document', 'video', 'readout_text', 'final_item' => CDocument::class,
             'quiz' => CQuiz::class,
             'link' => CLink::class,
@@ -841,12 +849,10 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
-        $resource = $this->entityManager->getRepository($resourceClass)->find((int) $path);
+        $repository = $this->entityManager->getRepository($resourceClass);
 
-        if (!$resource instanceof ResourceInterface) {
-            return false;
-        }
-
-        return $resource->getResourceNode()?->getId() === $resourceNode->getId();
+        // Existence check only, no hydration: the node id is all this needs.
+        return $repository instanceof ResourceRepository
+            && $repository->isAttachedToResourceNode((int) $path, $resourceNodeId);
     }
 }

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -45,6 +46,7 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -196,6 +198,11 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
     {
         $invitationCode = $this->getInvitationCode($request);
         if ('auto' === $invitationCode) {
+            // The auto code mints an invitation on the spot, so it has to stay inside the course.
+            if (!$this->userHelper->isMemberOfCurrentCourse()) {
+                throw new AccessDeniedHttpException('You are not allowed to answer this meeting poll.');
+            }
+
             return $this->getOrCreateAutoInvitation($survey, $course, $session, $user);
         }
 

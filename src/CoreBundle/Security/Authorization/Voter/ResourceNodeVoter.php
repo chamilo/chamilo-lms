@@ -209,12 +209,21 @@ class ResourceNodeVoter extends Voter
                 return true;
             }
 
+            if (!$user instanceof User) {
+                return false;
+            }
+
             // The context roles are handed out on open courses to any authenticated
             // visitor, and they describe the course of the request rather than the one
             // the submission belongs to. Neither is good enough to hand over somebody
             // else's work, so membership of the submission's own course is required.
-            return $user instanceof User
-                && $this->belongsToResourceCourse($resourceNode, $user);
+            if (self::VIEW === $attribute) {
+                return $this->belongsToResourceCourse($resourceNode, $user);
+            }
+
+            // Everything else changes the submission, which its author (cleared above) and
+            // the teachers of its course may do — never a fellow student of that course.
+            return $this->teachesResourceCourse($resourceNode, $user);
         }
 
         if ('files' === $resourceNode->getResourceType()->getTitle()) {
@@ -738,6 +747,37 @@ class ResourceNodeVoter extends Voter
             }
 
             if ($linkCourse->hasUserAsTeacher($user) || $linkCourse->hasSubscriptionByUser($user)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The teaching half of belongsToResourceCourse(): the course the resource belongs to, not the
+     * one the request carries, and without the student terms that method also accepts.
+     */
+    private function teachesResourceCourse(ResourceNode $resourceNode, User $user): bool
+    {
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            $linkCourse = $link->getCourse();
+            if (!$linkCourse instanceof Course) {
+                continue;
+            }
+
+            $linkSession = $link->getSession();
+            if ($linkSession instanceof Session) {
+                if ($linkSession->hasUserAsGeneralCoach($user)
+                    || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
+                ) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if ($linkCourse->hasUserAsTeacher($user)) {
                 return true;
             }
         }

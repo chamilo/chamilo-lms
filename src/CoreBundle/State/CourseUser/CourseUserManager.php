@@ -243,7 +243,7 @@ final readonly class CourseUserManager
         }
 
         if ($state['showUpgradeCta']) {
-            $state['warning'] = sprintf(
+            $state['warning'] = \sprintf(
                 get_lang('This course is close to its user subscription limit (%d/%d).'),
                 $count,
                 $limit,

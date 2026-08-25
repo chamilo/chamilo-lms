@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 use const PATHINFO_EXTENSION;
 
@@ -673,7 +674,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         try {
             $payload = $request->toArray();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new BadRequestHttpException('The JSON upload payload is invalid.');
         }
 
@@ -691,7 +692,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         $value = $jsonPayload[$key] ?? null;
 
-        return \is_numeric($value) ? (int) $value : 0;
+        return is_numeric($value) ? (int) $value : 0;
     }
 
     /**
@@ -703,7 +704,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             return $request->request->getBoolean($key);
         }
 
-        if (!array_key_exists($key, $jsonPayload)) {
+        if (!\array_key_exists($key, $jsonPayload)) {
             return null;
         }
 

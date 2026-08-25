@@ -86,6 +86,20 @@ class TemplateController extends AbstractController
     #[Route('/document-templates/{documentId}/is-template', methods: ['GET'])]
     public function isDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
     {
+        // Same gate as creating and deleting the template: the answer is only for someone who
+        // may edit the document's course, never for anyone walking through document ids.
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $document->getFirstResourceLink()?->getCourse();
+        if (!$course instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
 
         return $this->json([

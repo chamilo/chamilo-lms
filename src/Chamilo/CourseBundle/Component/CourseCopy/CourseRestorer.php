@@ -289,36 +289,6 @@ class CourseRestorer
     }
 
     /**
-     * Validates a relative path coming from an (untrusted) course backup
-     * archive before it is used in file operations.
-     *
-     * Rejects non-strings, path traversal (`..`) and null bytes, and optionally
-     * enforces that the path stays within an expected sub-directory. This
-     * prevents a tampered backup from escaping the course directory and writing
-     * an arbitrary file (ZIP-slip -> arbitrary file write -> RCE).
-     *
-     * @param mixed  $path
-     * @param string $requiredPrefix Sub-tree the path must start with (optional)
-     *
-     * @return bool True when the path is safe to use
-     */
-    private function isSafeBackupPath($path, $requiredPrefix = '')
-    {
-        if (!is_string($path)
-            || false !== strpos($path, '..')
-            || false !== strpos($path, "\0")
-        ) {
-            return false;
-        }
-
-        if ('' !== $requiredPrefix && 0 !== strpos($path, $requiredPrefix)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Restore documents.
      *
      * @param int    $session_id
@@ -4090,6 +4060,36 @@ class CourseRestorer
                 file_put_contents($documentPath, $contents);
                 break;
         }
+    }
+
+    /**
+     * Validates a relative path coming from an (untrusted) course backup
+     * archive before it is used in file operations.
+     *
+     * Rejects non-strings, path traversal (`..`) and null bytes, and optionally
+     * enforces that the path stays within an expected sub-directory. This
+     * prevents a tampered backup from escaping the course directory and writing
+     * an arbitrary file (ZIP-slip -> arbitrary file write -> RCE).
+     *
+     * @param mixed  $path
+     * @param string $requiredPrefix Sub-tree the path must start with (optional)
+     *
+     * @return bool True when the path is safe to use
+     */
+    private function isSafeBackupPath($path, $requiredPrefix = '')
+    {
+        if (!is_string($path)
+            || false !== strpos($path, '..')
+            || false !== strpos($path, "\0")
+        ) {
+            return false;
+        }
+
+        if ('' !== $requiredPrefix && 0 !== strpos($path, $requiredPrefix)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

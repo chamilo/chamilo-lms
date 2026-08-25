@@ -47,77 +47,6 @@ class QuizExport extends ActivityExport
     }
 
     /**
-     * Moodle requires a valid question behaviour.
-     */
-    private function sanitizePreferredBehaviour($raw): string
-    {
-        $behaviour = trim((string) $raw);
-
-        $allowed = [
-            'deferredfeedback',
-            'adaptive',
-            'adaptivenopenalty',
-            'immediatefeedback',
-            'interactive',
-            'manualgraded',
-            'deferredcbm',
-            'immediatecbm',
-            'interactivecountback',
-        ];
-
-        if ($behaviour === '' || !in_array($behaviour, $allowed, true)) {
-            return 'deferredfeedback';
-        }
-
-        return $behaviour;
-    }
-
-    /**
-     * Normalize an integer-like value.
-     */
-    private function sanitizeInt($raw, int $default): int
-    {
-        if ($raw === null) {
-            return $default;
-        }
-        if (is_string($raw) && trim($raw) === '') {
-            return $default;
-        }
-        return is_numeric($raw) ? (int) $raw : $default;
-    }
-
-    /**
-     * Parse a float or return null when missing.
-     */
-    private function parseNullableFloat($raw): ?float
-    {
-        if ($raw === null) {
-            return null;
-        }
-        if (is_string($raw) && trim($raw) === '') {
-            return null;
-        }
-        return is_numeric($raw) ? (float) $raw : null;
-    }
-
-    /**
-     * Moodle quiz navmethod accepted values.
-     */
-    private function sanitizeNavMethod($raw): string
-    {
-        $v = trim((string) $raw);
-        return in_array($v, ['free', 'sequential'], true) ? $v : 'free';
-    }
-
-    /**
-     * Build a stable question category id per exported quiz occurrence.
-     */
-    private function buildQuizQuestionCategoryId(int $moduleId): int
-    {
-        return 1000000000 + max(1, $moduleId);
-    }
-
-    /**
      * Retrieves the quiz data.
      */
     public function getData(int $quizId, int $sectionId, ?int $moduleId = null): array
@@ -281,6 +210,80 @@ class QuizExport extends ActivityExport
         $xmlContent .= '      </question>'.PHP_EOL;
 
         return $xmlContent;
+    }
+
+    /**
+     * Moodle requires a valid question behaviour.
+     */
+    private function sanitizePreferredBehaviour($raw): string
+    {
+        $behaviour = trim((string) $raw);
+
+        $allowed = [
+            'deferredfeedback',
+            'adaptive',
+            'adaptivenopenalty',
+            'immediatefeedback',
+            'interactive',
+            'manualgraded',
+            'deferredcbm',
+            'immediatecbm',
+            'interactivecountback',
+        ];
+
+        if ($behaviour === '' || !in_array($behaviour, $allowed, true)) {
+            return 'deferredfeedback';
+        }
+
+        return $behaviour;
+    }
+
+    /**
+     * Normalize an integer-like value.
+     */
+    private function sanitizeInt($raw, int $default): int
+    {
+        if ($raw === null) {
+            return $default;
+        }
+        if (is_string($raw) && trim($raw) === '') {
+            return $default;
+        }
+
+        return is_numeric($raw) ? (int) $raw : $default;
+    }
+
+    /**
+     * Parse a float or return null when missing.
+     */
+    private function parseNullableFloat($raw): ?float
+    {
+        if ($raw === null) {
+            return null;
+        }
+        if (is_string($raw) && trim($raw) === '') {
+            return null;
+        }
+
+        return is_numeric($raw) ? (float) $raw : null;
+    }
+
+    /**
+     * Moodle quiz navmethod accepted values.
+     */
+    private function sanitizeNavMethod($raw): string
+    {
+        $v = trim((string) $raw);
+
+        return in_array($v, ['free', 'sequential'], true) ? $v : 'free';
+    }
+
+    /**
+     * Build a stable question category id per exported quiz occurrence.
+     */
+    private function buildQuizQuestionCategoryId(int $moduleId): int
+    {
+        return 1000000000 + max(1, $moduleId);
     }
 
     /**
@@ -682,6 +685,7 @@ class QuizExport extends ActivityExport
             return '/';
         }
         $path = preg_replace('#/+#', '/', $path);
+
         return rtrim($path, '/').'/';
     }
 

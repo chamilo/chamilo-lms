@@ -150,38 +150,6 @@ class MoodleExport
         );
     }
 
-    private static function getDebugElapsedTime(): string
-    {
-        if (!defined('MoodleExportDebugStartTime')) {
-            define('MoodleExportDebugStartTime', microtime(true));
-        }
-
-        return number_format(microtime(true) - MoodleExportDebugStartTime, 3, '.', '');
-    }
-
-    private function debugLog(string $message, array $context = []): void
-    {
-        self::debugStaticLog($message, $context);
-    }
-
-    private function countActivitiesByModule(array $activities): array
-    {
-        $counts = [];
-
-        foreach ($activities as $activity) {
-            $moduleName = (string) ($activity['modulename'] ?? 'unknown');
-            if (!isset($counts[$moduleName])) {
-                $counts[$moduleName] = 0;
-            }
-
-            $counts[$moduleName]++;
-        }
-
-        ksort($counts);
-
-        return $counts;
-    }
-
     /**
      * Export the Moodle course in .mbz format.
      */
@@ -426,6 +394,224 @@ class MoodleExport
     }
 
     /**
+     * Export questions data to XML file.
+     */
+    public function exportQuestionsXml(array $questionsData, string $exportDir): void
+    {
+        $quizExport = new QuizExport($this->course);
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xml .= '<question_categories>'.PHP_EOL;
+
+        $rootByContext = [];
+        $writtenCats = [];
+
+        foreach ($questionsData as $quiz) {
+            $ctx = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($ctx <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            if (!isset($rootByContext[$ctx])) {
+                $rootId = $this->buildRootQuestionCategoryId($ctx);
+                $rootByContext[$ctx] = $rootId;
+
+                $xml .= '  <question_category id="'.$rootId.'">'.PHP_EOL;
+                $xml .= '    <name>Top</name>'.PHP_EOL;
+                $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
+                $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+                $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+                $xml .= '    <info>Top category</info>'.PHP_EOL;
+                $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
+                $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+                $xml .= '    <parent>0</parent>'.PHP_EOL;
+                $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
+                $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+                $xml .= '    <questions></questions>'.PHP_EOL;
+                $xml .= '  </question_category>'.PHP_EOL;
+            }
+        }
+
+        foreach ($questionsData as $quiz) {
+            if (empty($quiz['questions'])) {
+                continue;
+            }
+
+            $ctx = (int) ($quiz['contextid'] ?? 0);
+            $courseId = (int) ($quiz['courseid'] ?? 0);
+
+            if ($ctx <= 0 || $courseId <= 0) {
+                continue;
+            }
+
+            $rootId = (int) ($rootByContext[$ctx] ?? 0);
+            if ($rootId <= 0) {
+                $rootId = $this->buildRootQuestionCategoryId($ctx);
+                $rootByContext[$ctx] = $rootId;
+            }
+
+            $catId = (int) ($quiz['question_category_id'] ?? 0);
+            if ($catId <= 0) {
+                $moduleId = (int) ($quiz['moduleid'] ?? 0);
+                $catId = 1000000000 + max(1, $moduleId);
+            }
+
+            $catKey = $ctx.':'.$catId;
+            if (isset($writtenCats[$catKey])) {
+                continue;
+            }
+            $writtenCats[$catKey] = true;
+
+            $xml .= '  <question_category id="'.$catId.'">'.PHP_EOL;
+            $xml .= '    <name>Default for '.htmlspecialchars((string) ($quiz['name'] ?? 'Quiz')).'</name>'.PHP_EOL;
+            $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
+            $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
+            $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
+            $xml .= '    <info>Default questions category</info>'.PHP_EOL;
+            $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
+            $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+            $xml .= '    <parent>'.$rootId.'</parent>'.PHP_EOL;
+            $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
+            $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+            $xml .= '    <questions>'.PHP_EOL;
+
+            foreach ($quiz['questions'] as $question) {
+                $xml .= $quizExport->exportQuestion($question);
+            }
+
+            $xml .= '    </questions>'.PHP_EOL;
+            $xml .= '  </question_category>'.PHP_EOL;
+        }
+
+        $xml .= '</question_categories>'.PHP_EOL;
+
+        file_put_contents($exportDir.'/questions.xml', $xml);
+    }
+
+    /**
+     * Sets the admin user data.
+     */
+    public function setAdminUserData(int $id, string $username, string $email): void
+    {
+        self::$adminUserData = [
+            'id' => $id,
+            'contextid' => $id,
+            'username' => $username,
+            'idnumber' => '',
+            'email' => $email,
+            'phone1' => '',
+            'phone2' => '',
+            'institution' => '',
+            'department' => '',
+            'address' => '',
+            'city' => 'London',
+            'country' => 'GB',
+            'lastip' => '127.0.0.1',
+            'picture' => '0',
+            'description' => '',
+            'descriptionformat' => 1,
+            'imagealt' => '$@NULL@$',
+            'auth' => 'manual',
+            'firstname' => 'Admin',
+            'lastname' => 'User',
+            'confirmed' => 1,
+            'policyagreed' => 0,
+            'deleted' => 0,
+            'lang' => 'en',
+            'theme' => '',
+            'timezone' => 99,
+            'firstaccess' => time(),
+            'lastaccess' => time() - (60 * 60 * 24 * 7),
+            'lastlogin' => time() - (60 * 60 * 24 * 2),
+            'currentlogin' => time(),
+            'mailformat' => 1,
+            'maildigest' => 0,
+            'maildisplay' => 1,
+            'autosubscribe' => 1,
+            'trackforums' => 0,
+            'timecreated' => time(),
+            'timemodified' => time(),
+            'trustbitmask' => 0,
+            'preferences' => [
+                ['name' => 'core_message_migrate_data', 'value' => 1],
+                ['name' => 'auth_manual_passwordupdatetime', 'value' => time()],
+                ['name' => 'email_bounce_count', 'value' => 1],
+                ['name' => 'email_send_count', 'value' => 1],
+                ['name' => 'login_failed_count_since_success', 'value' => 0],
+                ['name' => 'filepicker_recentrepository', 'value' => 5],
+                ['name' => 'filepicker_recentlicense', 'value' => 'unknown'],
+            ],
+        ];
+    }
+
+    /**
+     * Returns hardcoded data for the admin user.
+     */
+    public static function getAdminUserData(): array
+    {
+        return self::$adminUserData;
+    }
+
+    /**
+     * Store backup course mapping used by question bank and question files.
+     */
+    public static function setBackupCourseContext(int $courseId, int $contextId): void
+    {
+        self::$backupCourseId = $courseId;
+        self::$backupCourseContextId = $contextId;
+    }
+
+    /**
+     * Get the exported backup course id.
+     */
+    public static function getBackupCourseId(): int
+    {
+        return self::$backupCourseId;
+    }
+
+    /**
+     * Get the exported backup course context id.
+     */
+    public static function getBackupCourseContextId(): int
+    {
+        return self::$backupCourseContextId;
+    }
+
+    private static function getDebugElapsedTime(): string
+    {
+        if (!defined('MoodleExportDebugStartTime')) {
+            define('MoodleExportDebugStartTime', microtime(true));
+        }
+
+        return number_format(microtime(true) - MoodleExportDebugStartTime, 3, '.', '');
+    }
+
+    private function debugLog(string $message, array $context = []): void
+    {
+        self::debugStaticLog($message, $context);
+    }
+
+    private function countActivitiesByModule(array $activities): array
+    {
+        $counts = [];
+
+        foreach ($activities as $activity) {
+            $moduleName = (string) ($activity['modulename'] ?? 'unknown');
+            if (!isset($counts[$moduleName])) {
+                $counts[$moduleName] = 0;
+            }
+
+            $counts[$moduleName]++;
+        }
+
+        ksort($counts);
+
+        return $counts;
+    }
+
+    /**
      * Merge file definitions avoiding duplicate files.xml ids.
      */
     private function mergeUniqueFiles(array $files): array
@@ -539,172 +725,11 @@ class MoodleExport
     }
 
     /**
-     * Export questions data to XML file.
-     */
-    public function exportQuestionsXml(array $questionsData, string $exportDir): void
-    {
-        $quizExport = new QuizExport($this->course);
-
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
-        $xml .= '<question_categories>'.PHP_EOL;
-
-        $rootByContext = [];
-        $writtenCats = [];
-
-        foreach ($questionsData as $quiz) {
-            $ctx = (int) ($quiz['contextid'] ?? 0);
-            $courseId = (int) ($quiz['courseid'] ?? 0);
-
-            if ($ctx <= 0 || $courseId <= 0) {
-                continue;
-            }
-
-            if (!isset($rootByContext[$ctx])) {
-                $rootId = $this->buildRootQuestionCategoryId($ctx);
-                $rootByContext[$ctx] = $rootId;
-
-                $xml .= '  <question_category id="'.$rootId.'">'.PHP_EOL;
-                $xml .= '    <name>Top</name>'.PHP_EOL;
-                $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
-                $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
-                $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
-                $xml .= '    <info>Top category</info>'.PHP_EOL;
-                $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
-                $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
-                $xml .= '    <parent>0</parent>'.PHP_EOL;
-                $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
-                $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
-                $xml .= '    <questions></questions>'.PHP_EOL;
-                $xml .= '  </question_category>'.PHP_EOL;
-            }
-        }
-
-        foreach ($questionsData as $quiz) {
-            if (empty($quiz['questions'])) {
-                continue;
-            }
-
-            $ctx = (int) ($quiz['contextid'] ?? 0);
-            $courseId = (int) ($quiz['courseid'] ?? 0);
-
-            if ($ctx <= 0 || $courseId <= 0) {
-                continue;
-            }
-
-            $rootId = (int) ($rootByContext[$ctx] ?? 0);
-            if ($rootId <= 0) {
-                $rootId = $this->buildRootQuestionCategoryId($ctx);
-                $rootByContext[$ctx] = $rootId;
-            }
-
-            $catId = (int) ($quiz['question_category_id'] ?? 0);
-            if ($catId <= 0) {
-                $moduleId = (int) ($quiz['moduleid'] ?? 0);
-                $catId = 1000000000 + max(1, $moduleId);
-            }
-
-            $catKey = $ctx.':'.$catId;
-            if (isset($writtenCats[$catKey])) {
-                continue;
-            }
-            $writtenCats[$catKey] = true;
-
-            $xml .= '  <question_category id="'.$catId.'">'.PHP_EOL;
-            $xml .= '    <name>Default for '.htmlspecialchars((string) ($quiz['name'] ?? 'Quiz')).'</name>'.PHP_EOL;
-            $xml .= '    <contextid>'.$ctx.'</contextid>'.PHP_EOL;
-            $xml .= '    <contextlevel>50</contextlevel>'.PHP_EOL;
-            $xml .= '    <contextinstanceid>'.$courseId.'</contextinstanceid>'.PHP_EOL;
-            $xml .= '    <info>Default questions category</info>'.PHP_EOL;
-            $xml .= '    <infoformat>0</infoformat>'.PHP_EOL;
-            $xml .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
-            $xml .= '    <parent>'.$rootId.'</parent>'.PHP_EOL;
-            $xml .= '    <sortorder>999</sortorder>'.PHP_EOL;
-            $xml .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
-            $xml .= '    <questions>'.PHP_EOL;
-
-            foreach ($quiz['questions'] as $question) {
-                $xml .= $quizExport->exportQuestion($question);
-            }
-
-            $xml .= '    </questions>'.PHP_EOL;
-            $xml .= '  </question_category>'.PHP_EOL;
-        }
-
-        $xml .= '</question_categories>'.PHP_EOL;
-
-        file_put_contents($exportDir.'/questions.xml', $xml);
-    }
-
-    /**
      * Build a stable root question category id per contextid.
      */
     private function buildRootQuestionCategoryId(int $contextId): int
     {
         return 800000000 + max(1, $contextId);
-    }
-
-    /**
-     * Sets the admin user data.
-     */
-    public function setAdminUserData(int $id, string $username, string $email): void
-    {
-        self::$adminUserData = [
-            'id' => $id,
-            'contextid' => $id,
-            'username' => $username,
-            'idnumber' => '',
-            'email' => $email,
-            'phone1' => '',
-            'phone2' => '',
-            'institution' => '',
-            'department' => '',
-            'address' => '',
-            'city' => 'London',
-            'country' => 'GB',
-            'lastip' => '127.0.0.1',
-            'picture' => '0',
-            'description' => '',
-            'descriptionformat' => 1,
-            'imagealt' => '$@NULL@$',
-            'auth' => 'manual',
-            'firstname' => 'Admin',
-            'lastname' => 'User',
-            'confirmed' => 1,
-            'policyagreed' => 0,
-            'deleted' => 0,
-            'lang' => 'en',
-            'theme' => '',
-            'timezone' => 99,
-            'firstaccess' => time(),
-            'lastaccess' => time() - (60 * 60 * 24 * 7),
-            'lastlogin' => time() - (60 * 60 * 24 * 2),
-            'currentlogin' => time(),
-            'mailformat' => 1,
-            'maildigest' => 0,
-            'maildisplay' => 1,
-            'autosubscribe' => 1,
-            'trackforums' => 0,
-            'timecreated' => time(),
-            'timemodified' => time(),
-            'trustbitmask' => 0,
-            'preferences' => [
-                ['name' => 'core_message_migrate_data', 'value' => 1],
-                ['name' => 'auth_manual_passwordupdatetime', 'value' => time()],
-                ['name' => 'email_bounce_count', 'value' => 1],
-                ['name' => 'email_send_count', 'value' => 1],
-                ['name' => 'login_failed_count_since_success', 'value' => 0],
-                ['name' => 'filepicker_recentrepository', 'value' => 5],
-                ['name' => 'filepicker_recentlicense', 'value' => 'unknown'],
-            ],
-        ];
-    }
-
-    /**
-     * Returns hardcoded data for the admin user.
-     */
-    public static function getAdminUserData(): array
-    {
-        return self::$adminUserData;
     }
 
     /**
@@ -2056,31 +2081,6 @@ class MoodleExport
     private function buildBackupCourseContextId(int $courseId): int
     {
         return 700000000 + max(1, $courseId);
-    }
-
-    /**
-     * Store backup course mapping used by question bank and question files.
-     */
-    public static function setBackupCourseContext(int $courseId, int $contextId): void
-    {
-        self::$backupCourseId = $courseId;
-        self::$backupCourseContextId = $contextId;
-    }
-
-    /**
-     * Get the exported backup course id.
-     */
-    public static function getBackupCourseId(): int
-    {
-        return self::$backupCourseId;
-    }
-
-    /**
-     * Get the exported backup course context id.
-     */
-    public static function getBackupCourseContextId(): int
-    {
-        return self::$backupCourseContextId;
     }
 
     /**

@@ -38,7 +38,7 @@ use ChamiloSession as Session;
 
 /* INIT SECTION */
 
-die('DEPRECATED');
+exit('DEPRECATED');
 
 $debug = 0;
 

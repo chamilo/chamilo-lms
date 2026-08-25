@@ -49,10 +49,9 @@ $allowedPages = [
 
 $page = isset($_GET['page']) ? basename($_GET['page']) : 'session_course_list.php';
 
-if (!in_array($page,$allowedPages)) {
+if (!in_array($page, $allowedPages)) {
     $page = 'session_course_list.php';
 }
-
 
 $interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("SessionList")];
 $interbreadcrumb[] = [

@@ -10,11 +10,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/courses')]
 class CoursesController extends AbstractController
@@ -42,11 +42,14 @@ class CoursesController extends AbstractController
 
         $pathList = explode('/', $path);
 
+        // Same slugger Gedmo's SluggableListener uses to write ResourceNode slugs.
+        $slugger = new AsciiSlugger();
+
         /** @var CDocument|null $document */
         $document = null;
         $parent = $course;
         foreach ($pathList as $pathPart) {
-            $pathPart = Urlizer::urlize($pathPart);
+            $pathPart = $slugger->slug($pathPart)->lower()->toString();
             $document = $documentRepository->findCourseResourceBySlugIgnoreVisibility($pathPart, $parent->getResourceNode(), $course);
             if (null !== $document) {
                 $parent = $document;

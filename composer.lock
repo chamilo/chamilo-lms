@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "465d8dc83075fa4c811dee9cc8b578ae",
+    "content-hash": "c526d75baebc9869af928045d807e48f",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -789,56 +789,6 @@
                 "source": "https://github.com/beberlei/DoctrineExtensions/tree/v1.5.0"
             },
             "time": "2024-03-03T17:55:15+00:00"
-        },
-        {
-            "name": "behat/transliterator",
-            "version": "v1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Behat/Transliterator.git",
-                "reference": "baac5873bac3749887d28ab68e2f74db3a4408af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/baac5873bac3749887d28ab68e2f74db3a4408af",
-                "reference": "baac5873bac3749887d28ab68e2f74db3a4408af",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "chuyskywalker/rolling-curl": "^3.1",
-                "php-yaoi/php-yaoi": "^1.0",
-                "phpunit/phpunit": "^8.5.25 || ^9.5.19"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Behat\\Transliterator\\": "src/Behat/Transliterator"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Artistic-1.0"
-            ],
-            "description": "String transliterator",
-            "keywords": [
-                "i18n",
-                "slug",
-                "transliterator"
-            ],
-            "support": {
-                "issues": "https://github.com/Behat/Transliterator/issues",
-                "source": "https://github.com/Behat/Transliterator/tree/v1.5.0"
-            },
-            "abandoned": true,
-            "time": "2022-03-30T09:27:43+00:00"
         },
         {
             "name": "bigbluebutton/bigbluebutton-api-php",
@@ -5103,59 +5053,6 @@
                 }
             ],
             "time": "2025-04-26T11:19:48+00:00"
-        },
-        {
-            "name": "jeroendesloovere/vcard",
-            "version": "v1.7.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jeroendesloovere/vcard.git",
-                "reference": "11a1cc62ffc2074838b138e9ae0790951004dd8e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jeroendesloovere/vcard/zipball/11a1cc62ffc2074838b138e9ae0790951004dd8e",
-                "reference": "11a1cc62ffc2074838b138e9ae0790951004dd8e",
-                "shasum": ""
-            },
-            "require": {
-                "behat/transliterator": "~1.0",
-                "php": ">=7.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "JeroenDesloovere\\VCard\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeroen Desloovere",
-                    "email": "info@jeroendesloovere.be",
-                    "homepage": "http://jeroendesloovere.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This VCard PHP class can generate a vCard with some data. When using an iOS device it will export as a .ics file because iOS devices don't support the default .vcf files.",
-            "homepage": "https://github.com/jeroendesloovere/vcard",
-            "keywords": [
-                ".vcf",
-                "generator",
-                "php",
-                "vCard"
-            ],
-            "support": {
-                "issues": "https://github.com/jeroendesloovere/vcard/issues",
-                "source": "https://github.com/jeroendesloovere/vcard/tree/v1.7.4"
-            },
-            "time": "2023-09-07T19:46:46+00:00"
         },
         {
             "name": "jimmiw/php-time-ago",

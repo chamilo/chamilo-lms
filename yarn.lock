@@ -2877,6 +2877,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/leaflet@npm:^1":
+  version: 1.9.22
+  resolution: "@types/leaflet@npm:1.9.22"
+  dependencies:
+    "@types/geojson": "npm:*"
+  checksum: 10c0/ce2e09d0f208244478c6103ba64726b33a474f89f303860c7b0494ca1bb44f1744285d93c90093c95669497c7dbdc7c206495af0b741fe6e251bf106b0415593
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:^4.17.24":
   version: 4.17.24
   resolution: "@types/lodash@npm:4.17.24"
@@ -4697,6 +4706,7 @@ __metadata:
     "@tailwindcss/typography": "npm:^0.5.19"
     "@tinymce/tinymce-vue": "npm:^5.1.1"
     "@types/d3": "npm:^7.4.3"
+    "@types/leaflet": "npm:^1"
     "@types/lodash": "npm:^4.17.24"
     "@types/qs": "npm:^6.15.1"
     "@uppy/audio": "npm:^2.2.2"
@@ -4752,6 +4762,7 @@ __metadata:
     js-cookie: "npm:^2.2.1"
     jspdf: "npm:^4.2.1"
     jsplumb: "npm:^2.15.6"
+    leaflet: "npm:^1.9.4"
     linkifyjs: "npm:4.3.3"
     litepicker: "npm:^2.0.12"
     lodash: "npm:^4.18.1"
@@ -7762,6 +7773,13 @@ __metadata:
     picocolors: "npm:^1.1.1"
     shell-quote: "npm:^1.8.4"
   checksum: 10c0/bb0ab182086afaf1c391abd38d6fc9d5391cb43d0c2da1d96176f79e9995635cdf34dcfd8df3f756bb82d7bbbb7d37014d5eb312f337350889c0cff92db53dab
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: 10c0/f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
   languageName: node
   linkType: hard
 

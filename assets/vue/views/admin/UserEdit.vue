@@ -334,7 +334,9 @@
             <ExtraFieldInput
               v-model="extraValues[field.variable]"
               :disabled="frozenExtraFields.has(field.variable)"
+              :error-text="extraFieldErrors[field.variable] || ''"
               :field="field"
+              :is-invalid="Boolean(extraFieldErrors[field.variable])"
             />
           </div>
 
@@ -438,6 +440,7 @@ const isSaving = ref(false)
 const showPassword = ref(false)
 const showAdvancedSettings = ref(false)
 const extraValues = reactive({})
+const extraFieldErrors = reactive({})
 const emailTemplateSelection = reactive({})
 const errorMessage = ref("")
 const conflictMessages = ref([])
@@ -585,6 +588,9 @@ function defaultExtraValue(field) {
   if ([5, 13].includes(field.valueType)) {
     return field.defaultValue ? [field.defaultValue] : []
   }
+  if ([8, 24, 25, 26, 27].includes(field.valueType)) {
+    return ["", "", ""]
+  }
 
   return field.defaultValue || ""
 }
@@ -657,6 +663,43 @@ function buildFormData() {
     }
     const value = extraValues[field.variable]
     const key = `extra_${field.variable}`
+
+    if (9 === field.valueType) {
+      continue
+    }
+
+    if ([24, 25].includes(field.valueType)) {
+      const [address, coordinates] = Array.isArray(value) ? value : [value || "", ""]
+      if (address) {
+        payload.set(key, address)
+      }
+      if (coordinates) {
+        payload.set(`${key}_coordinates`, coordinates)
+      }
+      continue
+    }
+
+    if ([8, 26, 27].includes(field.valueType)) {
+      const [first, second, third] = Array.isArray(value) ? value : ["", "", ""]
+      if (first || second || third) {
+        payload.set(`${key}[${key}]`, first || "")
+        payload.set(`${key}[${key}_second]`, second || "")
+        if (27 === field.valueType) {
+          payload.set(`${key}[${key}_third]`, third || "")
+        }
+      }
+      continue
+    }
+
+    if ([16, 18].includes(field.valueType)) {
+      if (value instanceof File) {
+        payload.set(key, value, value.name)
+      } else if (value?.remove) {
+        payload.set(`${key}_remove`, "1")
+      }
+      continue
+    }
+
     if (Array.isArray(value)) {
       value.forEach((v) => payload.append(`${key}[]`, v))
     } else if (value) {
@@ -695,6 +738,7 @@ async function submit() {
   isSaving.value = true
   errorMessage.value = ""
   conflictMessages.value = []
+  Object.keys(extraFieldErrors).forEach((key) => delete extraFieldErrors[key])
   try {
     await baseService.post("/admin/user-edit-action", buildFormData())
     await uploadPictureIfAny()
@@ -704,6 +748,10 @@ async function submit() {
   } catch (e) {
     conflictMessages.value = e?.response?.data?.conflicts || []
     errorMessage.value = e?.response?.data?.error || t("Error")
+    const fieldErrors = e?.response?.data?.fieldErrors
+    if (fieldErrors && "object" === typeof fieldErrors) {
+      Object.assign(extraFieldErrors, fieldErrors)
+    }
     showErrorNotification(errorMessage.value)
   } finally {
     isSaving.value = false

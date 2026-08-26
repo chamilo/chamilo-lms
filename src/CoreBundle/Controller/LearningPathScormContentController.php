@@ -40,11 +40,11 @@ final class LearningPathScormContentController extends AbstractController
         '/learning-path/scorm/{cid}/{sid}/{gid}/{lpId}/{itemId}/{path}',
         name: 'chamilo_core_learning_path_scorm_content',
         requirements: [
-            'cid' => '\d+',
-            'sid' => '\d+',
-            'gid' => '\d+',
-            'lpId' => '\d+',
-            'itemId' => '\d+',
+            'cid' => '\\d+',
+            'sid' => '\\d+',
+            'gid' => '\\d+',
+            'lpId' => '\\d+',
+            'itemId' => '\\d+',
             'path' => '.+',
         ],
         methods: ['GET'],
@@ -135,7 +135,11 @@ final class LearningPathScormContentController extends AbstractController
             fpassthru($stream);
             fclose($stream);
         });
-        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $fileName);
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE,
+            $fileName,
+            $this->createAsciiFilenameFallback($fileName),
+        );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType);
         $response->headers->set('Content-Length', (string) $filesystem->fileSize($filePath));
@@ -150,5 +154,20 @@ final class LearningPathScormContentController extends AbstractController
         $extension = strtolower((string) pathinfo($path, PATHINFO_EXTENSION));
 
         return \in_array($extension, ['htm', 'html', 'xht', 'xhtml'], true);
+    }
+
+    private function createAsciiFilenameFallback(string $fileName): string
+    {
+        $fallback = '';
+        $length = \strlen($fileName);
+
+        for ($i = 0; $i < $length; ++$i) {
+            $character = $fileName[$i];
+            $code = \ord($character);
+
+            $fallback .= '%' === $character || $code < 32 || $code > 126 ? '_' : $character;
+        }
+
+        return $fallback;
     }
 }

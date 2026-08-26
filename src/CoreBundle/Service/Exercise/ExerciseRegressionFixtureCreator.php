@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionEditor;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\State\Exercise\ExerciseQuestionEditorProcessor;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -20,22 +21,32 @@ use RuntimeException;
 final readonly class ExerciseRegressionFixtureCreator
 {
     private const int MAX_TITLE_PREFIX_LENGTH = 120;
+    private const int MAX_TOPIC_LENGTH = 300;
+    private const int MAX_LANGUAGE_LENGTH = 32;
+    private const int MAX_PROVIDER_LENGTH = 64;
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ExerciseQuestionEditorProcessor $questionEditorProcessor,
         private ExerciseRegressionFixtureQuestionFactory $questionFactory,
+        private ExerciseRegressionTopicContentGenerator $topicContentGenerator,
+        private ExerciseRegressionTopicContentApplicator $topicContentApplicator,
+        private AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
     /**
      * Create the complete current Exercises question-type regression suite.
      *
-     * Chamilo cannot legally host hotspot delineation together with the
-     * standard question types: type 8 requires immediate/adaptive feedback,
-     * while that mode rejects every type except 1 and 8. The suite therefore
-     * contains one standard exercise plus one adaptive exercise.
+     * Without a topic, the historical deterministic QA fixtures are preserved.
+     * With a topic, the same 30 question-type structures and deterministic
+     * binary assets are kept, while the visible pedagogical content is generated
+     * through Chamilo's configured AI text provider and validated before writes.
      *
      * @return array{
+     *     mode: string,
+     *     topic: string|null,
+     *     language: string,
+     *     ai_provider: string|null,
      *     distinct_question_type_count: int,
      *     total_question_count: int,
      *     unsupported_legacy_types: list<array{type: int, reason: string}>,
@@ -57,6 +68,9 @@ final readonly class ExerciseRegressionFixtureCreator
         User $user,
         string $titlePrefix = 'Exercise question type regression',
         bool $publish = false,
+        ?string $topic = null,
+        string $language = 'en',
+        ?string $aiProvider = null,
     ): array {
         $titlePrefix = trim(strip_tags($titlePrefix));
         if ('' === $titlePrefix) {
@@ -64,6 +78,30 @@ final readonly class ExerciseRegressionFixtureCreator
         }
         if (mb_strlen($titlePrefix) > self::MAX_TITLE_PREFIX_LENGTH) {
             throw new InvalidArgumentException('The regression suite title prefix cannot be longer than 120 characters.');
+        }
+
+        $topic = null !== $topic ? trim(strip_tags($topic)) : null;
+        if ('' === $topic) {
+            $topic = null;
+        }
+        if (null !== $topic && mb_strlen($topic) > self::MAX_TOPIC_LENGTH) {
+            throw new InvalidArgumentException('The regression suite topic cannot be longer than 300 characters.');
+        }
+
+        $language = trim(strip_tags($language));
+        if ('' === $language) {
+            $language = 'en';
+        }
+        if (mb_strlen($language) > self::MAX_LANGUAGE_LENGTH || 1 !== preg_match('/^[A-Za-z][A-Za-z0-9_-]*$/', $language)) {
+            throw new InvalidArgumentException('The regression suite language is invalid.');
+        }
+
+        $aiProvider = null !== $aiProvider ? trim(strip_tags($aiProvider)) : null;
+        if ('' === $aiProvider) {
+            $aiProvider = null;
+        }
+        if (null !== $aiProvider && mb_strlen($aiProvider) > self::MAX_PROVIDER_LENGTH) {
+            throw new InvalidArgumentException('The AI provider name is too long.');
         }
 
         $visibility = $publish
@@ -77,6 +115,7 @@ final readonly class ExerciseRegressionFixtureCreator
             0,
             $visibility,
             CQuiz::ALL_ON_ONE_PAGE,
+            $topic,
         );
         $adaptiveQuiz = $this->buildQuiz(
             $course,
@@ -85,28 +124,46 @@ final readonly class ExerciseRegressionFixtureCreator
             1,
             $visibility,
             CQuiz::ONE_PER_PAGE,
+            $topic,
         );
 
         $standardPayloads = $this->buildPayloads($this->questionFactory->standardTypes());
         $adaptivePayloads = $this->buildPayloads($this->questionFactory->adaptiveTypes());
 
-        // Fail before any write when a platform prerequisite is missing.
+        // Fail before any AI call or write when a platform prerequisite is missing.
         // This catches enable_quiz_scenario and OnlyOffice availability using
         // exactly the same validation as the Vue editor.
-        foreach ($standardPayloads as $payload) {
-            $this->questionEditorProcessor->validateProgrammaticCreate($standardQuiz, $payload);
-        }
-        foreach ($adaptivePayloads as $payload) {
-            $this->questionEditorProcessor->validateProgrammaticCreate($adaptiveQuiz, $payload);
+        $this->validatePayloads($standardQuiz, $standardPayloads);
+        $this->validatePayloads($adaptiveQuiz, $adaptivePayloads);
+
+        $resolvedProvider = null;
+        if (null !== $topic) {
+            $generated = $this->topicContentGenerator->generate(
+                $course,
+                $topic,
+                $language,
+                $aiProvider,
+            );
+            $resolvedProvider = $generated['provider'];
+
+            $this->topicContentApplicator->apply($standardPayloads, $generated['content']);
+            $this->topicContentApplicator->apply($adaptivePayloads, $generated['content']);
+
+            // Revalidate the fully enriched payloads before any persistence.
+            $this->validatePayloads($standardQuiz, $standardPayloads);
+            $this->validatePayloads($adaptiveQuiz, $adaptivePayloads);
         }
 
-        return $this->entityManager->wrapInTransaction(function () use (
+        $result = $this->entityManager->wrapInTransaction(function () use (
             $course,
             $standardQuiz,
             $adaptiveQuiz,
             $standardPayloads,
             $adaptivePayloads,
             $publish,
+            $topic,
+            $language,
+            $resolvedProvider,
         ): array {
             $this->entityManager->persist($standardQuiz);
             $this->entityManager->persist($adaptiveQuiz);
@@ -117,12 +174,11 @@ final readonly class ExerciseRegressionFixtureCreator
 
             $this->entityManager->flush();
 
-            $exercises = [
-                $this->normalizeExercise($course, $standardQuiz, $standardQuestions, $publish),
-                $this->normalizeExercise($course, $adaptiveQuiz, $adaptiveQuestions, $publish),
-            ];
-
             return [
+                'mode' => null === $topic ? 'deterministic' : 'topic',
+                'topic' => $topic,
+                'language' => $language,
+                'ai_provider' => $resolvedProvider,
                 'distinct_question_type_count' => \count($this->questionFactory->supportedTypes()),
                 'total_question_count' => \count($standardQuestions) + \count($adaptiveQuestions),
                 'unsupported_legacy_types' => [
@@ -131,9 +187,28 @@ final readonly class ExerciseRegressionFixtureCreator
                         'reason' => 'Legacy HOT_SPOT_ORDER is not exposed by the current Vue question selector and is not supported by ExerciseQuestionEditorProcessor.',
                     ],
                 ],
-                'exercises' => $exercises,
+                'exercises' => [
+                    $this->normalizeExercise($course, $standardQuiz, $standardQuestions, $publish),
+                    $this->normalizeExercise($course, $adaptiveQuiz, $adaptiveQuestions, $publish),
+                ],
             ];
         });
+
+        if (null !== $topic && null !== $resolvedProvider) {
+            $this->aiDisclosureHelper->logAudit(
+                targetKey: 'course:'.(int) $course->getId().':exercise_regression_topic:'.sha1($topic.'|'.$language),
+                userId: (int) $user->getId(),
+                meta: [
+                    'feature' => 'exercise_regression_topic_suite',
+                    'provider' => $resolvedProvider,
+                    'language' => $language,
+                    'question_type_count' => \count($this->questionFactory->supportedTypes()),
+                ],
+                courseId: (int) $course->getId(),
+            );
+        }
+
+        return $result;
     }
 
     /**
@@ -149,6 +224,14 @@ final readonly class ExerciseRegressionFixtureCreator
         );
     }
 
+    /** @param list<ExerciseQuestionEditor> $payloads */
+    private function validatePayloads(CQuiz $quiz, array $payloads): void
+    {
+        foreach ($payloads as $payload) {
+            $this->questionEditorProcessor->validateProgrammaticCreate($quiz, $payload);
+        }
+    }
+
     private function buildQuiz(
         Course $course,
         User $user,
@@ -156,10 +239,15 @@ final readonly class ExerciseRegressionFixtureCreator
         int $feedbackType,
         int $visibility,
         int $displayType,
+        ?string $topic,
     ): CQuiz {
+        $description = null === $topic
+            ? '<p>Deterministic MCP regression fixture for Chamilo Exercises.</p>'
+            : '<p>Topic-aware MCP regression suite covering every current Chamilo Exercises question type.</p>';
+
         return (new CQuiz())
             ->setTitle($title)
-            ->setDescription('<p>Deterministic MCP regression fixture for Chamilo Exercises.</p>')
+            ->setDescription($description)
             ->setSound('')
             ->setAccessCondition('')
             ->setTextWhenFinished('')
@@ -204,10 +292,6 @@ final readonly class ExerciseRegressionFixtureCreator
 
         foreach ($payloads as $payload) {
             if (ExerciseRegressionFixtureQuestionFactory::CALCULATED_ANSWER === (int) $payload->type && $mediaQuestionId > 0) {
-                // ExerciseRuntimeProvider groups questions by MEDIA_QUESTION parent.
-                // Attach one real answerable question so the regression suite
-                // exercises that structural page behavior instead of leaving the
-                // media block orphaned and invisible at runtime.
                 $payload->parentMediaId = $mediaQuestionId;
             }
 

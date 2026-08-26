@@ -9,6 +9,9 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionEditor;
 use InvalidArgumentException;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+
 final class ExerciseRegressionTopicContentApplicator
 {
     /**
@@ -23,119 +26,147 @@ final class ExerciseRegressionTopicContentApplicator
             }
 
             $type = (int) $payload->type;
+
             switch ($type) {
                 case ExerciseRegressionFixtureQuestionFactory::UNIQUE_ANSWER:
                     $this->applySingleChoice($payload, $content['single_choice']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER:
                     $this->applyMultipleChoice($payload, $content['multiple_choice'], 5.0);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::FILL_IN_BLANKS:
                     $this->applyFillBlanks($payload, $content['fill_blanks'], false);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MATCHING:
                 case ExerciseRegressionFixtureQuestionFactory::MATCHING_DRAGGABLE:
                     $this->applyMatching($payload, $content['matching'], false);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::FREE_ANSWER:
                     $this->applyPrompt($payload, $content['open']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::HOT_SPOT:
                 case ExerciseRegressionFixtureQuestionFactory::HOT_SPOT_DELINEATION:
                     $this->applyHotspot($payload, $content['hotspot']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_COMBINATION:
                     $this->applyMultipleChoice($payload, $content['multiple_choice'], 0.0);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::UNIQUE_ANSWER_NO_OPTION:
                     $this->applySingleChoiceWithUnknown($payload, $content['single_choice']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_TRUE_FALSE:
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                     $this->applyTrueFalse($payload, $content['true_false']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::ORAL_EXPRESSION:
                     $this->applyPrompt($payload, $content['oral']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::GLOBAL_MULTIPLE_ANSWER:
                     $this->applyMultipleChoice($payload, $content['multiple_choice'], 0.0);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MEDIA_QUESTION:
                     $payload->title = (string) $content['media']['title'];
                     $payload->description = $this->paragraph((string) $content['media']['context']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::CALCULATED_ANSWER:
                     $this->applyCalculated($payload, $content['calculated']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::UNIQUE_ANSWER_IMAGE:
                     $this->applyImageChoice($payload, $content['image_choice']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::DRAGGABLE:
                     $this->applyOrdering($payload, $content['ordering']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::ANNOTATION:
                     $this->applyPrompt($payload, $content['annotation']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::READING_COMPREHENSION:
                     $payload->title = (string) $content['reading']['title'];
                     $payload->description = $this->paragraph((string) $content['reading']['passage']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::UPLOAD_ANSWER:
                     $this->applyPrompt($payload, $content['upload']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MATCHING_COMBINATION:
                 case ExerciseRegressionFixtureQuestionFactory::MATCHING_DRAGGABLE_COMBINATION:
                     $this->applyMatching($payload, $content['matching'], true);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::HOT_SPOT_COMBINATION:
                     $this->applyHotspot($payload, $content['hotspot']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::FILL_IN_BLANKS_COMBINATION:
                     $this->applyFillBlanks($payload, $content['fill_blanks'], true);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                     $this->applyDropdownCombination($payload, $content['multiple_choice']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::MULTIPLE_ANSWER_DROPDOWN:
                     $this->applyDropdown($payload, $content['dropdown']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::ANSWER_IN_OFFICE_DOC:
                     $this->applyPrompt($payload, $content['office']);
+
                     break;
 
                 case ExerciseRegressionFixtureQuestionFactory::PAGE_BREAK:
                     $payload->title = (string) $content['page_break']['title'];
                     $payload->description = $this->paragraph((string) $content['page_break']['text']);
+
                     break;
             }
         }
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applySingleChoice(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -147,7 +178,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applySingleChoiceWithUnknown(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -168,7 +201,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyMultipleChoice(ExerciseQuestionEditor $payload, array $block, float $correctScore): void
     {
         $payload->title = (string) $block['question'];
@@ -180,7 +215,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyFillBlanks(ExerciseQuestionEditor $payload, array $block, bool $combination): void
     {
         $answers = array_map(
@@ -203,7 +240,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyMatching(ExerciseQuestionEditor $payload, array $block, bool $combination): void
     {
         $pairs = $block['pairs'];
@@ -219,14 +258,18 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyPrompt(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
         $payload->description = $this->paragraph((string) $block['question']);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyTrueFalse(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -253,7 +296,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyCalculated(ExerciseQuestionEditor $payload, array $block): void
     {
         $unit = trim((string) $block['unit']);
@@ -264,7 +309,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyImageChoice(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -285,7 +332,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyOrdering(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -296,7 +345,9 @@ final class ExerciseRegressionTopicContentApplicator
         $this->applyFeedback($payload, $block);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyHotspot(ExerciseQuestionEditor $payload, array $block): void
     {
         $payload->title = (string) $block['question'];
@@ -306,14 +357,18 @@ final class ExerciseRegressionTopicContentApplicator
         }
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyDropdownCombination(ExerciseQuestionEditor $payload, array $block): void
     {
         $this->applyMultipleChoice($payload, $block, 0.0);
         $payload->dropdownListText = implode("\n", $block['options']);
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyDropdown(ExerciseQuestionEditor $payload, array $block): void
     {
         $this->applySingleChoice($payload, $block);
@@ -345,7 +400,9 @@ final class ExerciseRegressionTopicContentApplicator
         return $answers;
     }
 
-    /** @param array<string, mixed> $block */
+    /**
+     * @param array<string, mixed> $block
+     */
     private function applyFeedback(ExerciseQuestionEditor $payload, array $block): void
     {
         $feedback = trim((string) ($block['feedback'] ?? ''));

@@ -107,7 +107,7 @@ final readonly class LearningPathScormImportProcessor implements ProcessorInterf
     private function assertRequestBodyWithinPostLimit(Request $request): void
     {
         $contentLength = (int) $request->server->get('CONTENT_LENGTH', 0);
-        $postMaxSize = $this->iniSizeToBytes((string) ini_get('post_max_size'));
+        $postMaxSize = $this->iniSizeToBytes((string) \ini_get('post_max_size'));
 
         if ($contentLength <= 0 || $postMaxSize <= 0 || $contentLength <= $postMaxSize) {
             return;
@@ -115,10 +115,7 @@ final readonly class LearningPathScormImportProcessor implements ProcessorInterf
 
         $limitMiB = max(1, (int) floor($postMaxSize / 1024 / 1024));
 
-        throw new HttpException(
-            Response::HTTP_REQUEST_ENTITY_TOO_LARGE,
-            'The uploaded SCORM package exceeds the server request limit of '.$limitMiB.' MiB.',
-        );
+        throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'The uploaded SCORM package exceeds the server request limit of '.$limitMiB.' MiB.');
     }
 
     private function iniSizeToBytes(string $value): int

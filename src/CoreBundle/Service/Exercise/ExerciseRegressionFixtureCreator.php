@@ -224,7 +224,9 @@ final readonly class ExerciseRegressionFixtureCreator
         );
     }
 
-    /** @param list<ExerciseQuestionEditor> $payloads */
+    /**
+     * @param list<ExerciseQuestionEditor> $payloads
+     */
     private function validatePayloads(CQuiz $quiz, array $payloads): void
     {
         foreach ($payloads as $payload) {

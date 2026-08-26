@@ -83,7 +83,18 @@ Feature: Users tool
   # flake tracked across several files this session — see courseCatalogue.
   # feature's own @skip note for the same pattern). Not yet reproduced/root-
   # caused in isolation. Revisit together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Admin searches for 'amann' and unsubscribes the user
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
@@ -95,7 +106,15 @@ Feature: Users tool
     And I press "Search"
     And I wait for the page to be loaded
     Then I should see "amann"
-    And I click the "[title='Unsubscribe']" element
+    # Row-scoped as defence in depth. This file's header argues an unscoped
+    # click is safe here because the preceding search narrows the Learners list
+    # to one row — true when the filter actually applied, but the filter
+    # applying is precisely what could not be relied on (see the Subscribe-view
+    # note further down). An unscoped Unsubscribe that fires against an
+    # unfiltered list silently removes another user, and toolReporting.feature
+    # proved that failure mode is real and destructive: it stripped a fixture
+    # other files depend on. Scoping costs nothing and removes the possibility.
+    And I click the "[title='Unsubscribe']" icon in the row for "amann"
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "amann"
@@ -103,12 +122,64 @@ Feature: Users tool
     # subscribed to TEMP (see header comment) — re-subscribe her (as a
     # learner, the tab this scenario never leaves) so the shared box is left
     # exactly as this scenario found it.
+    # "wait for the page content to settle" (networkidle-based), NOT "wait for
+    # the page to be loaded" (domcontentloaded), on BOTH sides of this search.
+    #
+    # This subscribe view is a Vue route: clicking "Add" is a client-side
+    # navigation that never leaves the document, so domcontentloaded resolves
+    # INSTANTLY and guarantees nothing. The steps then filled the search box and
+    # pressed Search while the view's own initial, UNFILTERED user load was
+    # still in flight — and that stale response lands afterwards and overwrites
+    # the filtered result. Exactly the stale-response race already found and
+    # fixed for the course catalogue (CatalogueCourses.vue now version-guards
+    # its load()); this view has no such guard.
+    #
+    # Why it presented as a mystery rather than an obvious "search didn't work":
+    # the available-users list is paginated 20/page sorted by last name, so
+    # unfiltered page 1 is Baggins/Boffin/Bolger/Brandybuck... and "Mann" is
+    # simply not on it. Verified live that every individual piece works once
+    # given time to settle — [name="search"] resolves to exactly one visible
+    # input (#available-user-search) and clicking Search filters the list down
+    # to the single row "AimeeMann". Reproduced the failure deterministically in
+    # all three configurations (local parallel, local sequential, real CI),
+    # which is what distinguished it from the ordering races around it.
+    #
+    # The earlier search in this same scenario got away with the weaker wait
+    # only because the subscribed-users list is tiny (4 users on TEMP), so
+    # "amann" is visible whether or not the filter ever applied — not a reason
+    # to trust it there either.
     And I click the "[title='Add']" element
-    And I wait for the page to be loaded
+    And I wait for the page content to settle
+    # Wait for a control that exists ONLY on the Subscribe view before touching
+    # the search box. This is the actual fix for this scenario.
+    #
+    # The trap: on the LIST view, [name="search"] is hidden until the "Search"
+    # icon is clicked — which this scenario did click, earlier, for its first
+    # search. So while the Subscribe view is still rendering after the "Add"
+    # click, the only VISIBLE [name="search"] on the page is the LIST view's
+    # one. resolveField() prefers a visible match when the name is ambiguous,
+    # so the filter text went into the wrong input, was submitted against the
+    # wrong list, and the Subscribe view then finished rendering UNFILTERED.
+    # Verified from the failure snapshot: the page shows ~60 available users
+    # with "Register" buttons and page 1 full of Baggins/Boffin/Bolger, i.e.
+    # the Subscribe view with no filter applied, so the target row genuinely
+    # is not present and the assertion below fails on a name that does exist.
+    # Also verified that the same sequence works when the view is given time
+    # to render first — which is exactly what this wait guarantees.
+    #
+    # "[title='Register']" is the discriminator: it is a per-row action of the
+    # Subscribe view and never appears on the list view.
+    And I wait for the element "[title='Register']" to appear
     And I fill in the following:
       | search | amann |
-    And I press "Search"
-    And I wait for the page to be loaded
+    # "I submit the field" (Enter in the field), NOT `I press "Search"`: see
+    # that step's own comment in common.steps.ts. The Search button's
+    # accessible name does not match getByRole exactly here, and this view
+    # re-renders its list asynchronously, so the button click did not reliably
+    # apply the filter — leaving the table on unfiltered page 1 where the
+    # target row does not appear at all.
+    And I submit the field "search"
+    And I wait for the page content to settle
     # The Subscribe view's own table has no Login/username column (confirmed
     # live — only Code/First name/Last name/active/Action), unlike the list
     # view above, so this asserts on her last name instead of "amann".

@@ -227,6 +227,10 @@ function buildBaseLoadParams() {
 }
 
 let loadParams = buildBaseLoadParams()
+// Bumped whenever the result set is reset (new filters / clear). In-flight
+// load() calls compare against this so a slower unfiltered page-1/page-2
+// response cannot overwrite a later filtered result.
+let loadGeneration = 0
 
 function normalizeCategoriesQueryValue(value) {
   const normalizeOne = (item) => {
@@ -262,8 +266,10 @@ function normalizeCategoriesQueryValue(value) {
 }
 
 function resetCatalogueState() {
+  loadGeneration += 1
   courses.value = []
   totalCourses.value = 0
+  status.value = false
 }
 
 function getRouteFilterPayload() {
@@ -305,71 +311,113 @@ const load = async () => {
     return
   }
 
+  const generation = loadGeneration
+  const requestParams = { ...loadParams }
+
   status.value = true
 
   try {
-    const courseCatalogue = await courseService.loadCourseCatalogue(loadParams)
+    const courseCatalogue = await courseService.loadCourseCatalogue(requestParams)
 
-    loadParams = {}
-
-    if (courseCatalogue.nextPageParams) {
-      loadParams = courseCatalogue.nextPageParams
+    if (generation !== loadGeneration) {
+      return
     }
+
+    loadParams = courseCatalogue.nextPageParams ? { ...courseCatalogue.nextPageParams } : {}
 
     if (!totalCourses.value) {
       totalCourses.value = courseCatalogue.totalItems
     }
 
+    // Paint titles as soon as the catalogue page returns. Extra-field values
+    // and votes are enrichment; waiting on them kept "Loading courses" stuck
+    // (and Matching at 0) whenever those secondary requests stalled.
+    courses.value.push(
+      ...courseCatalogue.items.map((c) => ({
+        ...c,
+        extra_fields: c.extra_fields || {},
+        subscriptionLimitEnabled: false,
+        subscriptionLimit: 0,
+        subscriptionCount: 0,
+        subscriptionLimitReached: false,
+        subscriptionLimitTooltip: "",
+      })),
+    )
+    status.value = false
+
     const courseIds = courseCatalogue.items.map((c) => c.id)
     const ids = courseIds.join(",")
 
     if (ids) {
-      const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
-        baseService.get("/catalogue/course-extra-field-values", { ids }),
-        loadCourseSubscriptionStatuses(courseIds),
-      ])
+      try {
+        const [extraFieldsResponse, subscriptionStatuses] = await Promise.all([
+          baseService.get("/catalogue/course-extra-field-values", { ids }),
+          loadCourseSubscriptionStatuses(courseIds),
+        ])
 
-      courses.value.push(
-        ...courseCatalogue.items.map((c) => {
-          const limitInfo = subscriptionStatuses[c.id] || {}
+        if (generation !== loadGeneration) {
+          return
+        }
+
+        courses.value = courses.value.map((course) => {
+          if (!courseIds.includes(course.id)) {
+            return course
+          }
+
+          const limitInfo = subscriptionStatuses[course.id] || {}
 
           return {
-            ...c,
-            extra_fields: extraFieldsResponse[c.id] || {},
+            ...course,
+            extra_fields: extraFieldsResponse[course.id] || course.extra_fields || {},
             subscriptionLimitEnabled: Boolean(limitInfo.subscriptionLimitEnabled),
             subscriptionLimit: Number(limitInfo.subscriptionLimit || 0),
             subscriptionCount: Number(limitInfo.subscriptionCount || 0),
             subscriptionLimitReached: Boolean(limitInfo.subscriptionLimitReached),
             subscriptionLimitTooltip: limitInfo.subscriptionLimitTooltip || "",
           }
-        }),
-      )
+        })
+      } catch (error) {
+        console.error("Error loading catalogue course extras", error)
+      }
     }
 
     if (currentUserId) {
-      const votes = await userRelCourseVoteService.getUserVotes({
-        userId: currentUserId,
-        urlId: window.access_url_id,
-      })
-      for (const vote of votes) {
-        let courseId
+      try {
+        const votes = await userRelCourseVoteService.getUserVotes({
+          userId: currentUserId,
+          urlId: window.access_url_id,
+        })
 
-        if (typeof vote.course === "object" && vote.course !== null) {
-          courseId = vote.course.id
-        } else if (typeof vote.course === "string") {
-          courseId = parseInt(vote.course.split("/").pop())
+        if (generation !== loadGeneration) {
+          return
         }
 
-        const course = courses.value.find((c) => c.id === courseId)
-        if (course) {
-          course.userVote = vote
+        for (const vote of votes) {
+          let courseId
+
+          if (typeof vote.course === "object" && vote.course !== null) {
+            courseId = vote.course.id
+          } else if (typeof vote.course === "string") {
+            courseId = parseInt(vote.course.split("/").pop())
+          }
+
+          const course = courses.value.find((c) => c.id === courseId)
+          if (course) {
+            course.userVote = vote
+          }
         }
+      } catch (error) {
+        console.error("Error loading catalogue votes", error)
       }
     }
   } catch (error) {
-    showErrorNotification(error)
+    if (generation === loadGeneration) {
+      showErrorNotification(error)
+    }
   } finally {
-    status.value = false
+    if (generation === loadGeneration) {
+      status.value = false
+    }
   }
 }
 

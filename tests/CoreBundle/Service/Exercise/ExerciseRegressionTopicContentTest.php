@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Service\Exercise\ExerciseRegressionTopicContentParser;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+use const JSON_THROW_ON_ERROR;
+
 final class ExerciseRegressionTopicContentTest extends TestCase
 {
     public function testParserAcceptsCompleteTopicContent(): void

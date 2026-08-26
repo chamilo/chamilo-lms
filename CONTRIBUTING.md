@@ -433,9 +433,11 @@ with this purpose into your own repository, forked from the original Chamilo rep
 As new major features are added, automated tests should be added that ensure
 that the feature continues to work for the foreseeable future.
 
-In Chamilo, we rely on "Behat":http://docs.behat.org/en/latest/ to do
-Automated Behavior Testing. You can find examples and information on how to
-run Behat tests in the tests/behat/ folder of your Chamilo installation.
+In Chamilo, we rely on "Playwright":https://playwright.dev/ (with
+"playwright-bdd":https://vitalets.github.io/playwright-bdd/, so the scenarios
+stay plain Gherkin) to do Automated Behavior Testing. You can find the feature
+files in tests/playwright/features/, the shared step definitions in
+tests/playwright/steps/, and run them with `yarn test:playwright`.
 
 Tests are run automatically for every new contribution, courtesy of Github
 actions, so you can follow your feature in time and see whether something

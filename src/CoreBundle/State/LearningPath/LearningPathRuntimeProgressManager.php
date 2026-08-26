@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\LearningPath;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
+use Chamilo\CoreBundle\Service\LearningPath\ArticulateRiseSuspendDataDecoder;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -27,6 +28,7 @@ final readonly class LearningPathRuntimeProgressManager
         private EntityManagerInterface $entityManager,
         private CLpItemRepository $lpItemRepository,
         private EventDispatcherInterface $eventDispatcher,
+        private ArticulateRiseSuspendDataDecoder $articulateRiseSuspendDataDecoder,
     ) {}
 
     public function initializeItemViews(CLp $lp, CLpView $view): void
@@ -156,6 +158,7 @@ final readonly class LearningPathRuntimeProgressManager
         $this->completeParentSections($items, $latestViews, $view);
         $latestViews = $this->indexLatestItemViews($view);
 
+        $this->promoteLegacyArticulateRiseContentMaker($lp, $items, $latestViews);
         $progress = $this->calculateProgress($lp, $items, $latestViews);
         $view->setProgress($progress);
         $this->entityManager->flush();
@@ -179,6 +182,11 @@ final readonly class LearningPathRuntimeProgressManager
         $scormProgress = $this->calculateScormProgress($lp, $items, $latestViews);
         if (null !== $scormProgress) {
             return $scormProgress;
+        }
+
+        $articulateRiseProgress = $this->calculateArticulateRiseProgress($lp, $items, $latestViews);
+        if (null !== $articulateRiseProgress) {
+            return $articulateRiseProgress;
         }
 
         $totalItems = 0;
@@ -408,6 +416,93 @@ final readonly class LearningPathRuntimeProgressManager
         }
 
         return $depth;
+    }
+
+    /**
+     * @param array<int, CLpItem>     $items
+     * @param array<int, CLpItemView> $latestViews
+     */
+    private function calculateArticulateRiseProgress(CLp $lp, array $items, array $latestViews): ?int
+    {
+        if (CLp::SCORM_TYPE !== $lp->getLpType()) {
+            return null;
+        }
+
+        $scormItems = [];
+        foreach ($items as $item) {
+            if ('sco' === strtolower(trim($item->getItemType()))) {
+                $scormItems[] = $item;
+            }
+        }
+        if (1 !== \count($scormItems)) {
+            return null;
+        }
+
+        $item = $scormItems[0];
+        $itemView = $latestViews[(int) $item->getIid()] ?? null;
+        if (!$itemView instanceof CLpItemView) {
+            return null;
+        }
+
+        if ($this->isCompletedStatus($itemView->getStatus())) {
+            return 100;
+        }
+
+        $suspendData = trim((string) ($itemView->getSuspendData() ?? ''));
+        if ('' === $suspendData) {
+            return null;
+        }
+
+        $contentMaker = trim($lp->getContentMaker());
+        if (ArticulateRiseSuspendDataDecoder::CONTENT_MAKER !== $contentMaker
+            && !$this->isGenericScormContentMaker($contentMaker)
+        ) {
+            return null;
+        }
+        if (ArticulateRiseSuspendDataDecoder::CONTENT_MAKER !== $contentMaker
+            && !$this->articulateRiseSuspendDataDecoder->isRiseSuspendData($suspendData)
+        ) {
+            return null;
+        }
+
+        return $this->articulateRiseSuspendDataDecoder->extractProgress($suspendData);
+    }
+
+    /**
+     * @param array<int, CLpItem>     $items
+     * @param array<int, CLpItemView> $latestViews
+     */
+    private function promoteLegacyArticulateRiseContentMaker(CLp $lp, array $items, array $latestViews): void
+    {
+        if (CLp::SCORM_TYPE !== $lp->getLpType() || !$this->isGenericScormContentMaker($lp->getContentMaker())) {
+            return;
+        }
+
+        $scormItems = array_values(array_filter(
+            $items,
+            static fn (CLpItem $item): bool => 'sco' === strtolower(trim($item->getItemType())),
+        ));
+        if (1 !== \count($scormItems)) {
+            return;
+        }
+
+        $item = $scormItems[0];
+        $itemView = $latestViews[(int) $item->getIid()] ?? null;
+        if (!$itemView instanceof CLpItemView) {
+            return;
+        }
+
+        $suspendData = trim((string) ($itemView->getSuspendData() ?? ''));
+        if ('' === $suspendData || !$this->articulateRiseSuspendDataDecoder->isRiseSuspendData($suspendData)) {
+            return;
+        }
+
+        $lp->setContentMaker(ArticulateRiseSuspendDataDecoder::CONTENT_MAKER);
+    }
+
+    private function isGenericScormContentMaker(string $contentMaker): bool
+    {
+        return \in_array(strtolower(trim($contentMaker)), ['', 'scorm', 'chamilo'], true);
     }
 
     /**

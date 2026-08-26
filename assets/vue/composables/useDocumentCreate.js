@@ -29,7 +29,10 @@ export function useDocumentCreate() {
     formRef.v$.$touch()
 
     if (!formRef.v$.$invalid) {
-      return createWithFormData(formRef.v$.item.$model)
+      // Prefer the live form item (includes TinyMCE contentFile and other
+      // unvalidated fields) over v$.item.$model, which only mirrors keys
+      // declared in validations().
+      return createWithFormData(formRef.item ?? formRef.v$.item.$model)
     }
 
     return null

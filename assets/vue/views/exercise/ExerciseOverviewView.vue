@@ -482,6 +482,8 @@ async function startAndOpenPlayer() {
   }
 }
 
+let loadOverviewToken = 0
+
 async function loadOverview() {
   const exerciseId = getExerciseId()
   if (exerciseId <= 0) {
@@ -490,20 +492,34 @@ async function loadOverview() {
     return
   }
 
+  const cid = getQueryValue(route.query.cid)
+  if (!cid) {
+    return
+  }
+
+  const token = ++loadOverviewToken
   isLoading.value = true
   errorMessage.value = ""
 
   try {
-    const response = await exerciseService.getExerciseOverview(getContextParams(), exerciseId)
+    const response = await exerciseService.getExerciseOverview(getContextParams(), exerciseId, { timeout: 15_000 })
+    if (token !== loadOverviewToken) {
+      return
+    }
     Object.assign(overview, response || {})
     overview.currentUserAttempts = Array.isArray(response?.currentUserAttempts) ? response.currentUserAttempts : []
     browserCheckStatus.value = "idle"
     browserCheckMessage.value = ""
   } catch (error) {
+    if (token !== loadOverviewToken) {
+      return
+    }
     console.error("Error loading exercise overview", error)
     errorMessage.value = t("Could not load exercise overview")
   } finally {
-    isLoading.value = false
+    if (token === loadOverviewToken) {
+      isLoading.value = false
+    }
   }
 }
 

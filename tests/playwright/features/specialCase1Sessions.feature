@@ -184,7 +184,7 @@
 #   ALL in the past relative to this environment's current date
 #   (2026-08-05) by the time this port runs — none of them would still
 #   plausibly justify their own scenario name ("Present session" being
-#   "In progress", the two "futur" sessions being "Planned"). Session
+#   "In progress", the two "future" sessions being "Planned"). Session
 #   status here is a plain, manually-chosen FormValidator select (confirmed
 #   live: choosing "In progress" and saving just sets that value, it is not
 #   silently recomputed from the dates on save) — so this is about the
@@ -192,15 +192,15 @@
 #   Shifted every session's dates forward to straddle/precede/follow
 #   2026-08-05 as appropriate, keeping each source pair's own day-span
 #   (14 days) intact: Past session now ends just before Present session
-#   starts, Present session straddles today, both "futur" sessions sit
+#   starts, Present session straddles today, both "future" sessions sit
 #   comfortably after it. Exact absolute dates are otherwise arbitrary, same
 #   as the source's own were.
 #
 # SELF-CONTAINMENT: full cleanup, not left in place. Confirmed via a grep of
 # this suite's existing tests/playwright/features/*.feature (before writing
 # a single line here) that none of "Testing course en", "Testing course fr",
-# "Special", "Present session", "Session in the futur", "Session in the
-# futur en", or "Past session" collide with anything another file already
+# "Special", "Present session", "Session in the future", "Session in the
+# future en", or "Past session" collide with anything another file already
 # depends on. Given how much this creates (3 courses with real content
 # inside one of them, a teacher account, 4 sessions), leaving all of it
 # around indefinitely was judged worse than the cost of tearing it down —
@@ -229,13 +229,34 @@
 # is ever re-enabled by un-skipping at least one Scenario while others remain
 # skipped, expect a real spec file with `test.skip()` calls for the rest,
 # per playwright-bdd's own documented (non-buggy) behavior in that case.
-@common
+# RE-ENABLED 2026-08-19 (the @skip tags referenced above are gone): the
+# whole file was held back from execution, so SpecialCase1 had ZERO session
+# coverage — because EVERY scenario was skipped, bddgen emitted no spec file
+# at all (see the note above), which is also why this file never showed up in
+# any CI report as failing. Its only cross-file prerequisite is the session
+# extra fields (extra_domaine / extra_theme_fr / extra_theme_de /
+# extra_ecouter) created by specialCase1PlatformSettings.feature's "Add
+# minimal session extra fields" scenario, which was itself @skip'd and is now
+# re-enabled too. This file needs no cid fixture: it creates every course it
+# uses and refers to them by code, so it has zero cid= references and is
+# unaffected by the suite-wide cid=1 -> cid=3 migration.
+#
+# @long-scenario is REQUIRED here, not optional (added with the re-enable):
+# without it every scenario below inherits playwright.config.ts's default 90s
+# per-test budget, and the first one alone creates 3 courses plus documents,
+# exercises, a forum, a learning path and an assessment activity across ~180
+# steps — a single bare course creation already measures ~48s on this box, so
+# 90s cannot cover it. The tag is applied at Feature level (same as
+# specialCase1PlatformSettings.feature's own `@common @admin @long-scenario`)
+# so all 6 scenarios get the 15-minute budget the Before hook in
+# common.steps.ts grants: the 4 session-creation scenarios and the teardown
+# are smaller, but each still submits several legacy full-page-reload forms.
+@common @long-scenario @specialcase1
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator
   I need to create courses with content, a teacher, and 4 sessions
 
-  @skip
   Scenario: Create courses, multilingual documents, exercises, forum, learning path and assessment activity
     Given I am a platform administrator
 
@@ -267,7 +288,7 @@ Feature: Special case 1 — course/session creation
     Then I should see "Testing course fr"
 
     # Two HTML documents: introduction, final
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Documents"
     And I wait for the page to be loaded
@@ -275,7 +296,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     And I fill in "title" with "introduction"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
-    And I click the "span.mdi-content-save" element
+    And I click the "button:has(.mdi-content-save)" element
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "introduction"
@@ -284,7 +305,7 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     And I fill in "title" with "final"
     And I fill in tinymce field "item_content" with "<p class='ck ck-texte'><span dir='ltr' lang='en'>English content</span><span dir='ltr' lang='fr'>Contenu en français</span></p>"
-    And I click the "span.mdi-content-save" element
+    And I click the "button:has(.mdi-content-save)" element
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "final"
@@ -292,7 +313,7 @@ Feature: Special case 1 — course/session creation
     # Exercise 1: "QRU and Image Selection exercise" — a Multiple choice
     # question (QRU) and a Unique answer with images question (the modern
     # equivalent of "image selection", see header comment)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Exercices"
     And I wait for the page content to settle
@@ -325,7 +346,7 @@ Feature: Special case 1 — course/session creation
     Then I should see "Image selection question"
 
     # Exercise 2: "Open question exercise" — a single Open question
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Exercices"
     And I wait for the page content to settle
@@ -344,11 +365,12 @@ Feature: Special case 1 — course/session creation
 
     # Forum category + forum (see header comment: restored for real, not
     # left commented out — confirmed working live)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Forums"
     And I wait for the page to be loaded
     And I press "Ajouter une catégorie"
+    And I wait for the page content to settle
     And I fill in the following:
       | forum_category_title   | Course discussions |
       | forum_category_comment | Discussions for this course |
@@ -359,20 +381,40 @@ Feature: Special case 1 — course/session creation
     When I press "Ajouter un forum"
     And I fill in the following:
       | forum_title | General forum |
-    And I fill in tinymce field "forum_comment" with "General discussion forum"
+    # "forum-comment" with a HYPHEN, not the legacy "forum_comment" with an
+    # underscore: the Vue forum tool's "Ajouter un forum" DIALOG names its
+    # description editor `id="forum-comment"` (and sets no `name` attribute at
+    # all, so the id is the only way in) — confirmed live by dumping every
+    # textarea plus `window.tinymce.editors` with the dialog open. The
+    # underscore form belongs to the LEGACY full-page route
+    # /main/forum/index.php?action=add_forum, which toolForum.feature uses
+    # instead (and which is also why that file uses the different "I fill in
+    # editor field ..." step). Getting this wrong fails as "Could not find an
+    # id for field with locator: forum_comment", because resolveField()'s
+    # getByLabel("Description") tier matches a wrapper element that has no id.
+    And I fill in tinymce field "forum-comment" with "General discussion forum"
     And I press "Créer ce forum"
     And I wait for the page to be loaded
     Then I should see "General forum"
 
     # Learning Path "LP Test": add introduction, both exercises, final —
     # in that order — then a prerequisite on "final"
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Parcours d'apprentissage"
     And I wait for the page to be loaded
     And I click the "span.mdi-plus" element
     And I wait for the page to be loaded
-    And I fill in "Learning path name" with "LP Test"
+    # "lp-title" (the real id), NOT the visible label "Learning path name":
+    # resolveField()'s label tier is the LAST resort and matches the RENDERED
+    # label, which inside this deliberately-French course reads "Nom du
+    # parcours" — so an English label string can never match here, and the
+    # step hangs the whole scenario budget instead of failing fast. Confirmed
+    # live on the LP create form (/resources/lp/<node>/create): the only field
+    # is <input id="lp-title" name="title"> with <label for="lp-title">Nom du
+    # parcours</label>. Using the id also avoids the bare name "title", which
+    # is generic enough to collide on other forms.
+    And I fill in "lp-title" with "LP Test"
     And I press "Continue"
     And I wait for the page to be loaded
     And I add LP item "introduction" from the resource panel
@@ -396,7 +438,7 @@ Feature: Special case 1 — course/session creation
 
     # Course introduction, linking to the LP (see header comment: saving
     # redirects to /admin, a real app quirk, not a failure)
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I click the "span.mdi-plus" element
     And I wait for the page to be loaded
@@ -405,21 +447,56 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
 
     # Assessments: classroom activity "Course validation"
-    Given I am on course "Testing course fr" homepage
+    Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Cahier de notes"
     And I wait for the page content to settle
-    And I click the "a[href*='gradebook_add_eval']" element
-    And I wait for the page to be loaded
+    # The Assessments tool is fully Vue now — the legacy
+    # `a[href*='gradebook_add_eval']` link this step used to click, and the
+    # legacy `name`/`weight_mask`/`max` form it led to, are both gone. That
+    # selector matched nothing, so the step hung until the 15-minute
+    # @long-scenario budget expired (real CI + locally reproduced).
+    #
+    # toolAssessments.feature already covers this same tool against the modern
+    # UI and passes in CI, so its field ids are reused verbatim here rather than
+    # re-derived: gradebook-evaluation-title / -weight / -max-score.
+    #
+    # The control is clicked by ICON CLASS (mdi-certificate), NOT by the label
+    # "Add classroom activity" that toolAssessments.feature can use: this
+    # scenario works inside "Testing course fr", where the whole interface
+    # renders in French, so an English button label cannot match. Verified live
+    # that the Assessments toolbar buttons are icon-only with a localized
+    # `title` and a locale-independent icon class —
+    # `<button title="Add a category">` is mdi-folder-plus and
+    # `<button title="Add classroom activity">` is mdi-certificate.
+    And I click the "span.mdi-certificate" element
+    And I wait for the page content to settle
     And I fill in the following:
-      | name        | Course validation |
-      | weight_mask | 100                |
-      | max         | 1                  |
-    And I press "submit"
-    And I wait for the page to be loaded
+      | gradebook-evaluation-title     | Course validation |
+      | gradebook-evaluation-weight    | 100               |
+      | gradebook-evaluation-max-score | 1                 |
+    # ENGLISH label on purpose, even though this whole course renders in French.
+    # "Add classroom activity" is one of the strings this app does NOT actually
+    # translate — verified live by dumping the dialog inside "Testing course fr"
+    # itself: the sibling toolbar button next to it reads
+    # title="Ajouter une catégorie" (translated) while this one stays
+    # title="Add classroom activity", and the dialog's own submit button's text
+    # is likewise "Add classroom activity" while its Cancel reads "Annuler".
+    # translations/messages.fr_FR.po DOES carry a msgstr for it ("Nouvelle
+    # évaluation présentielle") — using that fails, which is exactly the trap:
+    # the .po file is not evidence of what the page renders. Same class of
+    # already-documented i18n gap as the question-type titles noted in this
+    # file's header.
+    #
+    # Unambiguous despite the toolbar button sharing the label: verified live
+    # that getByRole("button", { name: "Add classroom activity", exact: true })
+    # matches exactly ONE element, and the form is a real PrimeVue dialog
+    # (.p-dialog / role=dialog, count 1), so pressButton's dialog-scoped tier
+    # resolves it inside that dialog anyway.
+    And I press "Add classroom activity"
+    And I wait for the page content to settle
     Then I should see "Course validation"
 
-  @skip
   Scenario: Create teacher and configure "Present session" with settings and include course
     Given I am a platform administrator
 
@@ -438,6 +515,18 @@ Feature: Special case 1 — course/session creation
     And I press "submit"
     And I wait for the page to be loaded
     Then I should not see an error
+
+    # user_edit.php only renders reset_password=2 ("Set password manually")
+    # when security.admins_can_set_users_pass is on. Fresh-install default is
+    # off — a real CI snapshot of this step showed only "Don't reset password"
+    # / "Automatically generate a new password", then a 15-minute hang on
+    # input[name=reset_password][value=2]. Enable it here rather than
+    # depending on specialCase1PlatformSettings having finished first.
+    Given I am on "/admin/settings/security"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_admins_can_set_users_pass"
+    And I press "Save settings"
+    And I wait for the page to be loaded
 
     Given I am on "/admin/user-list?keyword=teacher1"
     And I wait for the page to be loaded
@@ -497,15 +586,14 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
-  Scenario: Create future session "Session in the futur" and include course
+  Scenario: Create future session "Session in the future" and include course
     Given I am a platform administrator
 
     When I am on "/main/session/session_add.php"
     And I wait for the page to be loaded
     And I click the "#advanced_params" element
     And I fill in the following:
-      | title | Session in the futur |
+      | title | Session in the future |
     And I set hidden field "access_start_date" to "2026-08-20 00:00"
     And I set hidden field "display_start_date" to "2026-08-20 00:00"
     And I set hidden field "coach_access_start_date" to "2026-08-20 00:00"
@@ -546,7 +634,6 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
   Scenario: Create past session "Past session" and include course
     Given I am a platform administrator
 
@@ -595,15 +682,14 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should not see an error
 
-  @skip
-  Scenario: Create future English session "Session in the futur en" and include course
+  Scenario: Create future English session "Session in the future en" and include course
     Given I am a platform administrator
 
     When I am on "/main/session/session_add.php"
     And I wait for the page to be loaded
     And I click the "#advanced_params" element
     And I fill in the following:
-      | title | Session in the futur en |
+      | title | Session in the future en |
     And I set hidden field "access_start_date" to "2026-09-10 00:00"
     And I set hidden field "display_start_date" to "2026-09-10 00:00"
     And I set hidden field "coach_access_start_date" to "2026-09-10 00:00"
@@ -648,37 +734,60 @@ Feature: Special case 1 — course/session creation
   # first (they reference the courses, not the other way around), then the
   # teacher account, then the 3 courses (cascades away every document/
   # exercise/forum/LP/gradebook item created inside "Testing course fr").
-  @skip
   Scenario: Teardown special case 1 sessions
     Given I am a platform administrator
 
+    # All four session deletions below use "I delete the session ... if
+    # present" rather than the unguarded "I click the .mdi-delete icon in the
+    # row for ..." + "I press Yes" pair they used to. Same convention, and for
+    # the same reason, as specialCase1PlatformSettings.feature's own Tear down
+    # (see that step's comment in common.steps.ts): if ANY earlier scenario in
+    # this file fails, the sessions it was supposed to create do not exist, and
+    # an unguarded delete then burns the ENTIRE 15-minute @long-scenario budget
+    # waiting for a row that will never appear — turning one upstream failure
+    # into a second, far slower, entirely derivative one. Confirmed exactly
+    # that way: a teardown run hung 15m on "Present session" purely because an
+    # earlier partial run had already removed it. The guarded step also makes
+    # this scenario idempotent, so it doubles as a reset for a half-finished
+    # previous run instead of dying on it.
+    #
+    # Deletion ORDER still matters and is deliberate: "Session in the future en"
+    # must go BEFORE "Session in the future", because the latter's name is a
+    # prefix of the former's, and the row lookup matches on contained text —
+    # so with both present, deleting "Session in the future" could match the
+    # "... en" row instead.
     Given I am on "/admin/session-list?keyword=Present+session"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Present session"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Present session"
+    And I delete the session "Present session" if present
 
-    Given I am on "/admin/session-list?keyword=Session+in+the+futur+en"
+    Given I am on "/admin/session-list?keyword=Session+in+the+future+en"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Session in the futur en"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Session in the futur en"
+    And I delete the session "Session in the future en" if present
 
-    Given I am on "/admin/session-list?keyword=Session+in+the+futur"
+    Given I am on "/admin/session-list?keyword=Session+in+the+future"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Session in the futur"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Session in the futur"
+    And I delete the session "Session in the future" if present
 
-    Given I am on "/admin/session-list?keyword=Past+session"
+    # list_type=all is REQUIRED for this one session and no other: "Past
+    # session" is created with access dates in the past, so it ends up with
+    # status FINISHED, and this platform's `session.default_session_list_view`
+    # setting is `custom` — which SessionListController::applyListTypeFilter()
+    # restricts to PLANNED or IN PROGRESS only. Under the default view the row
+    # therefore does not exist in the table at all ("No data available"), and
+    # the delete step below hangs the whole scenario budget looking for it.
+    # The other 3 sessions in this teardown are current/future, so they show
+    # up fine without it.
+    #
+    # Note the SNAKE_CASE name: the browser-URL parameter SessionList.vue
+    # reads in onMounted is `list_type`, which it then forwards to the data
+    # endpoint as `listType` (camelCase). Using `listType` in the URL silently
+    # does nothing — confirmed both ways: /admin/session-list?listType=all
+    # still rendered only the default view, while the data endpoint itself
+    # (/admin/session-list-data?listType=all) correctly returned the session,
+    # proving the backend filter works and only the URL spelling was wrong.
+    Given I am on "/admin/session-list?list_type=all&keyword=Past+session"
     And I wait for the page to be loaded
-    And I click the ".mdi-delete" icon in the row for "Past session"
-    And I press "Yes"
-    And I wait for the page to be loaded
-    Then I should not see "Past session"
+    And I delete the session "Past session" if present
 
     Given I am on "/admin/user-list?keyword=teacher1"
     And I wait for the page to be loaded

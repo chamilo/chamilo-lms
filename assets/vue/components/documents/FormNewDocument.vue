@@ -186,7 +186,7 @@
         type="primary"
         icon="save"
         :label="$t('Save')"
-        @click.prevent="$emit('submit')"
+        @click.prevent="saveFromFormSubmit"
       />
     </div>
 
@@ -287,6 +287,7 @@ export default {
       item: {
         title: { required },
         comment: {},
+        contentFile: {},
       },
     }
   },

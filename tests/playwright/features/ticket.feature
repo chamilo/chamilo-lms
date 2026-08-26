@@ -31,6 +31,27 @@
 #   heavily-used component, not a functional bug (the page itself works);
 #   not fixed here. Swapped the assertion for "Ticket number" (a real,
 #   locale-stable column header, confirmed rendered) instead.
+# @slow-scenario (4-minute budget, see the Before hook in common.steps.ts).
+# Four scenarios here ("Create a Ticket project/category/status/priority") go
+# through the "I create a ticket setting …" step, whose TinyMCE-readiness guard
+# is deliberately defensive: up to MAX_ATTEMPTS=3 tries, each waiting
+# TINYMCE_READY_TIMEOUT=20s for window.tinymce.get(<id>) to exist, closing and
+# reopening the dialog between tries. That is a 60-second worst case before any
+# click or login overhead — which simply CANNOT fit the config's default 90s
+# test budget, so under load the test timeout kills the step mid-retry and its
+# own recovery strategy never gets to finish. Observed exactly that in a full
+# 409-test local run: "Create a Ticket priority" died at 90s with
+# 'TinyMCE editor "ticket-setting-description" never became ready, even after
+# closing and reopening the dialog 2 times', while the same scenario passes in
+# 7.1s when run on its own.
+#
+# The underlying flakiness is a REAL, pre-existing product race, not a test
+# bug: TinyEditor.php queues each editor's config on DOMContentLoaded and
+# App.vue drains that queue, so a config queued after App.vue's one-time drain
+# is only picked up via the 'chamilo:editor-queued' event — narrow enough that
+# a loaded CI runner can still lose it. Raising the budget lets the retry that
+# already exists for this actually run, rather than papering over the race.
+@slow-scenario
 Feature: Ticket
   In order to manage support requests
   Users should be able to use the Ticket Vue interface according to their permissions

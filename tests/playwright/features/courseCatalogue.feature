@@ -66,13 +66,9 @@
 #   what actually produced the CI failure, not any duplicate course-creation
 #   bug — "Create three courses for catalogue testing" was independently
 #   re-verified live to create exactly one row per title, no duplicates.
-#   Fixed here (test-side only, per this suite's scope) by swapping in the
-#   existing "wait for the page content to settle" step (domcontentloaded +
-#   bounded networkidle) right after navigating to "/catalogue/courses", so
-#   the initial load and any IntersectionObserver-triggered continuation
-#   fully drain before a filter is ever applied, closing the race window.
-#   A real fix would add request cancellation/version-guarding inside
-#   CatalogueCourses.vue's load() itself.
+#   CatalogueCourses.vue's load() now ignores stale responses (a generation
+#   token bumped on every resetCatalogueState). The waits below still give
+#   the filtered request time to paint before asserting titles.
 #
 # Cleanup: the original never deleted its 3 courses ("testcourse",
 # "grammarcourse", "grammartest") or the "Duration" extra field, and this
@@ -94,7 +90,30 @@ Feature: Course catalogue and extra fields
   Background:
     Given I am a platform administrator
 
+  # @slow-scenario (4-minute budget, see the Before hook in common.steps.ts)
+  # because this scenario legitimately does ~3x the work of a normal one and
+  # measurably does not fit the config's default 90s: a real CI run timed out
+  # at 91268ms — i.e. it overran by under 1.3 SECONDS. The run's own step
+  # timings show nothing was broken, just slow: the Background login took
+  # 8192ms, the catalogue-settings save ~13.6s, and each of the three
+  # create-then-verify cycles ~20s (legacy course_add.php nav + fill + submit,
+  # then a full Vue /admin/course-list SPA boot and keyword search). The first
+  # two "I should see" assertions PASSED after 6095ms and 6672ms respectively;
+  # the third, identical one was killed after only 3859ms of its own 15s
+  # window, so it was aborted roughly 2-3s before it would have passed too.
+  # Being only ~5-10% over budget is exactly the profile that flips between
+  # pass and fail depending on CI load, which is why this scenario passed in
+  # earlier runs and then started failing without any change to it.
+  # @slow-scenario rather than @long-scenario: 4 minutes is ~2.6x the measured
+  # need, whereas the 15-minute budget would let a genuine hang here burn a
+  # quarter of an hour before reporting.
+  @slow-scenario
   Scenario: Create three courses for catalogue testing
+    Given I am on "/admin/settings/catalog"
+    And I wait for the page to be loaded
+    When I select the value "false" from "form_only_show_selected_courses"
+    And I press "Save settings"
+    And I wait for the page to be loaded
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
     When I fill in "title" with "testcourse"
@@ -128,7 +147,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "test"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "testcourse"
     And I should see "grammartest"
     And I should not see "grammarcourse"
@@ -139,7 +158,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "search_by_title" with "course"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "testcourse"
     And I should see "grammarcourse"
     And I should not see "grammartest"
@@ -190,7 +209,7 @@ Feature: Course catalogue and extra fields
     And I press "Advanced search"
     When I fill in "extra-duration" with "22:22:22"
     And I press "Apply advanced filters"
-    And I wait for the page to be loaded
+    And I wait until I no longer see "Loading courses. Please wait."
     Then I should see "grammartest"
     And I should not see "testcourse"
     And I should not see "grammarcourse"
@@ -202,7 +221,18 @@ Feature: Course catalogue and extra fields
   # run right after a fresh install; only reproduces under CI's own concurrency
   # profile. Revisit once toolExerciseAdmin/toolGroup's own concurrent-load issues
   # (also @skip'd this session) are addressed — likely the same root class.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Clean up the test courses and the Duration extra field
     Given I am on "/admin/course-list?keyword=testcourse"
     And I wait for the page to be loaded

@@ -19,9 +19,18 @@ Before({ tags: "@long-scenario" }, async () => {
   test.info().setTimeout(15 * 60_000)
 })
 
-// Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
-// i.e. repo root) — attachFileToField() paths in .feature files are relative
-// to repo root, not this steps file. tests/playwright/steps -> repo root.
+// Try-exercise scenarios walk 11 question types with a draft-save on every
+// "Next question". CI spent the whole 90s budget still on question 10 with
+// the Next button stuck on "Saving". Four minutes is enough for the saves
+// without using the 15-minute specialCase1 budget.
+Before({ tags: "@slow-scenario" }, async () => {
+  test.info().setTimeout(4 * 60_000)
+})
+
+// File paths in .feature files are relative to the repo root, not to this
+// steps file (inherited from Mink's `files_path`, which the old Behat config
+// pointed at the repo root too). tests/playwright/steps -> repo root.
+// Fixture files of our own live in tests/playwright/fixtures/.
 const repoRoot = path.resolve(__dirname, "../../..")
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.
@@ -53,8 +62,11 @@ Given("I am on the homepage", async ({ page }) => {
 // its numeric id) and asserts no visible error, matching the original's own
 // assertElementNotOnPage('.alert-danger') right after navigating.
 Given("I am on course {string} homepage", async ({ page }, courseCode: string) => {
-  await page.goto(`/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
-  await page.waitForLoadState("domcontentloaded")
+  // gotoReliably, not a bare page.goto(): a real CI failure in
+  // translateHtmlFallback.feature showed this step racing the previous
+  // course_add.php success redirect ("Navigation to .../redirect.php?cidReq=
+  // TrHtmlDe is interrupted by another navigation to .../admin/course-list").
+  await gotoReliably(page, `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}`)
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
 })
 
@@ -65,10 +77,10 @@ Given("I am on course {string} homepage", async ({ page }, courseCode: string) =
 Given(
   "I am on course {string} homepage in session {string}",
   async ({ page }, courseCode: string, sessionName: string) => {
-    await page.goto(
+    await gotoReliably(
+      page,
       `/main/course_home/redirect.php?cidReq=${encodeURIComponent(courseCode)}&session_name=${encodeURIComponent(sessionName)}`,
     )
-    await page.waitForLoadState("domcontentloaded")
     await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
   },
 )
@@ -152,6 +164,51 @@ Then("I should be on the modern homepage of course {string}", async ({ page }, c
 // a fast nor a trustworthy "page is ready" signal on this app. Downstream
 // steps' own locator auto-wait / explicit "wait for the page..." covers
 // destination-page readiness.
+// Clears the terms-and-conditions interstitial if a login landed on it.
+//
+// The "Registration > Enable terms and conditions" platform setting
+// (public/main/auth/tc.php) defaults OFF, so this is a no-op almost always. It
+// matters because specialCase1PlatformSettings turns it ON partway through its
+// own run, and every LATER login in the suite then lands here instead of its
+// normal destination — a login that genuinely succeeded but stopped one page
+// short. Left unhandled, the symptom appears much later and looks unrelated:
+// subsequent navigations bounce to /login?redirect=... with "You are not allowed
+// to see this page".
+//
+// Extracted into a helper so it can be called at BOTH points in loginAs() that
+// need it — before the logout-link assertion (where it is load-bearing, since
+// tc.php has no logout link) and again after the post-login navigation settles.
+// Duplicating the block instead would invite the two copies to drift.
+async function acceptTermsInterstitialIfPresent(page: Page): Promise<void> {
+  // Detect by URL **or** by the presence of the accept control. URL alone is not
+  // enough: a redirect chain into tc.php can still be in flight when this runs,
+  // so page.url() may report the previous page (proven — see the call log quoted
+  // at the call site). Checking the DOM as well makes the detection independent
+  // of whether navigation has settled.
+  const acceptButton = page.locator('button:has-text("Accept Terms and Conditions")')
+  const onInterstitial =
+    page.url().includes("/main/auth/tc.php") || (await acceptButton.first().isVisible().catch(() => false))
+  if (!onInterstitial) {
+    return
+  }
+  // registration.hide_legal_accept_checkbox=Yes makes ChamiloHelper::displayLegalTermsPage()
+  // render legal_accept as <input type="hidden" value="1"> instead of a real checkbox (already
+  // implicitly accepted) — real CI failure: specialCase1PlatformSettings.feature's "Add minimal
+  // session extra fields" turns this setting ON mid-scenario, then a later login (studentone)
+  // lands on this same tc.php interstitial and .check() threw "Not a checkbox or radio button"
+  // on the now-hidden field. Only check() it when it's actually a checkbox.
+  const legalAccept = page.locator('input[name="legal_accept"]')
+  if ("checkbox" === (await legalAccept.getAttribute("type").catch(() => null))) {
+    await legalAccept.check().catch(() => {})
+  }
+  await page
+    .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
+    .first()
+    .click({ timeout: 15_000 })
+    .catch(() => {})
+  await page.waitForLoadState("domcontentloaded")
+}
+
 async function loginAs(page: Page, username: string) {
   // Real CI failure: admin/fileIntegrity.feature's "Non-administrators
   // cannot access ..." scenario has a Background that logs in as admin,
@@ -176,18 +233,160 @@ async function loginAs(page: Page, username: string) {
   // file that already logs out explicitly like toolGroup.feature) and only
   // pays the logout+retry cost in the genuine cross-login-call case this
   // fix targets.
-  await page.goto("/login")
-  if (!(await page.locator("#login").isVisible().catch(() => false))) {
-    await page.goto("/logout")
-    await page.goto("/login")
+  // Decide whether a previous session is still active WITHOUT racing the DOM.
+  //
+  // The previous approach (kept in history above) navigated to /login first and
+  // then raced `#login` becoming visible against `a[href="/logout"]` becoming
+  // visible, treating whichever won as the truth. That race is genuinely
+  // unwinnable: on an authenticated visit /login renders the login form for a
+  // moment and only THEN gets replaced by the SPA's redirect to /home, so the
+  // form frequently wins the race even though a session is active. The
+  // logout branch is then skipped, `expect(#login).toBeVisible()` passes on
+  // that same flash, and the very next `fill()` finds the node detached —
+  // reproduced locally and identically to CI by running all of
+  // tests/playwright/features/admin/ in order: the three admin scenarios in
+  // fileIntegrity.feature leave a session behind, and its fourth scenario
+  // ("Given I am a student") then died on
+  // `locator.fill: Timeout 10000ms exceeded waiting for locator('#login')`.
+  // Run alone, the same scenario passes, which is why this only ever showed up
+  // in full-suite runs.
+  //
+  // /account/home is an authoritative, non-racy signal instead: it answers 200
+  // for everyone, embeds `"username":"<current user>"` when a session exists,
+  // and contains NO such marker at all when anonymous (all verified live).
+  // Probing it before touching /login means the logout decision is made from
+  // server state rather than from whatever the SPA happens to be painting.
+  // TRI-STATE on purpose: "authenticated as X" / "definitely anonymous" /
+  // "could not tell". The first version of this returned `string | null` and so
+  // collapsed the last two into null — and that collapse is exactly how this
+  // step failed in CI on 2026-08-26 (specialCase1PlatformSettings, twice in one
+  // run). If the probe request throws, answers non-2xx, or returns a body
+  // without the marker, "I could not determine the session state" was reported
+  // as "there is no session". The logout was then skipped even though a session
+  // WAS live, /login redirected straight to /home, `#login` never rendered, and
+  // the failure surfaced 15s later as `expect(locator('#login')).toBeVisible()
+  // failed — element(s) not found` with a page snapshot showing the fully
+  // authenticated dashboard.
+  //
+  // Guessing "anonymous" is the DANGEROUS guess: it skips a logout that was
+  // needed. Guessing "logged in" merely costs one harmless /logout round trip
+  // (logout while anonymous just redirects). So unknown must resolve toward
+  // logging out, never away from it.
+  type AuthProbe = { state: "authenticated"; username: string } | { state: "anonymous" } | { state: "unknown" }
+
+  const probeAuth = async (): Promise<AuthProbe> => {
+    const response = await page.request.get("/account/home").catch(() => null)
+    if (!response || !response.ok()) {
+      return { state: "unknown" }
+    }
+    const body = await response.text().catch(() => null)
+    if (null === body) {
+      return { state: "unknown" }
+    }
+    const match = body.match(/"username":"([^"]+)"/)
+    return match ? { state: "authenticated", username: match[1] } : { state: "anonymous" }
   }
-  await page.locator("#login").fill(username)
-  await page.locator("#password").fill(username)
-  await page
-    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+
+  const authenticatedUsername = async (): Promise<string | null> => {
+    const probe = await probeAuth()
+    return "authenticated" === probe.state ? probe.username : null
+  }
+
+  // Still conditional, not unconditional: an earlier fix established that an
+  // unconditional extra logout round trip perturbs the delicate
+  // session-establishment timing for files that already log out explicitly
+  // (toolGroup.feature). This keeps that property — the logout only happens
+  // when a session genuinely exists — while no longer depending on the flash.
+  // "not definitely anonymous", NOT "definitely authenticated" — see probeAuth().
+  // Only a positive anonymous answer earns the skip; unknown takes the logout.
+  if ("anonymous" !== (await probeAuth()).state) {
+    await page.goto("/logout")
+  }
+  await page.goto("/login")
+  await page.waitForLoadState("domcontentloaded")
+  const loginField = page.locator("#login")
+
+  // Self-heal the one failure this step cannot otherwise recover from: the login
+  // form is absent because we are still logged in, so /login bounced to /home.
+  // The tri-state probe above makes that far less likely, but it cannot be
+  // airtight — the session can also be established by something other than this
+  // step. Rather than spending the full 15s assertion budget to then report
+  // "element(s) not found" (which reads as "the login page is broken" and sent
+  // this investigation looking at the wrong thing entirely), check for the
+  // tell-tale signature and fix it in place.
+  //
+  // Cheap by construction: the extra probe only runs when #login is genuinely
+  // missing after a short wait, so the healthy path is unaffected.
+  if (!(await loginField.isVisible().catch(() => false))) {
+    const stillLoggedIn = await page
+      .locator('a[href="/logout"]')
+      .isVisible()
+      .catch(() => false)
+    if (stillLoggedIn) {
+      await page.goto("/logout")
+      await page.goto("/login")
+      await page.waitForLoadState("domcontentloaded")
+    }
+  }
+
+  await expect(loginField).toBeVisible({ timeout: 15_000 })
+  await loginField.fill(username, { timeout: 10_000 })
+  await page.locator("#password").fill(username, { timeout: 10_000 })
+  // Scope to the login form. A broader `button:has-text('Sign in')` can race
+  // a SPA redirect after fill: the form is already gone, click() then waits
+  // the rest of the test timeout for a Sign in button that will never return
+  // (webserverLoad's non-admin scenario: snapshot already showed Sign out).
+  const signIn = page.locator("form.login-section__form button[type='submit']")
+  if (await signIn.isVisible().catch(() => false)) {
+    await signIn.click({ timeout: 15_000 }).catch(() => {})
+  }
+  // The terms-and-conditions interstitial MUST be cleared here — before the
+  // logout-link assertion below, not after it.
+  //
+  // It used to sit ~40 lines further down, which made it dead code in exactly
+  // the situation it was written for: tc.php carries NO `a[href="/logout"]`, so
+  // whenever a login landed on the interstitial the assertion below burned its
+  // full 25s and threw, and control never reached the handler. The failure then
+  // read as "login produced no session" when the truth was "login succeeded and
+  // stopped on an interstitial".
+  //
+  // Cost of getting this order wrong, measured: specialCase1PlatformSettings
+  // enables "Registration > Enable terms and conditions" partway through its own
+  // run, so every LATER login in that file hit this. On 2026-08-26 that was one
+  // hard failure plus one flaky in CI, and locally it reproduced as scenario 2
+  // flaky + scenario 4 failed — all four with the same signature
+  // (`a[href="/logout"]` not found, call log showing a pending navigation to
+  // /main/auth/tc.php).
+  // Wait for whichever of the TWO possible post-login outcomes materialises,
+  // rather than assuming it is the normal one. A point-in-time
+  // `page.url().includes("/main/auth/tc.php")` check cannot do this and a first
+  // attempt at exactly that failed: the observed call log was
+  //
+  //   waiting for ".../main/auth/tc.php?return=%2Fsessions" navigation to finish...
+  //   navigated to ".../login"
+  //
+  // i.e. the redirect chain to the interstitial was still IN FLIGHT, so the URL
+  // did not read as tc.php yet, the check returned early, and the logout-link
+  // assertion then sat for 25s while the browser navigated somewhere that has no
+  // logout link. Racing the two DOM outcomes has no such window — whichever
+  // lands first wins, and neither needs the URL to have settled.
+  const logoutLink = page.locator('a[href="/logout"]')
+  const termsControl = page
+    .locator('button:has-text("Accept Terms and Conditions"), input[name="legal_accept"]')
     .first()
-    .click()
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  await Promise.race([
+    logoutLink.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+    termsControl.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+  ])
+  await acceptTermsInterstitialIfPresent(page)
+
+  // Do not waitForURL({ waitUntil: "load" }): SPA login never fires load, and
+  // that hung the full test timeout. Do not use "commit" either: a CI run
+  // continued before the session cookie was stored, then the next navigation
+  // showed "Your session details have been lost, please login again." and
+  // every subsequent Save/settings step failed. The logout link only renders
+  // after the login XHR has been handled (Set-Cookie included).
+  await expect(logoutLink).toBeVisible({ timeout: 25_000 })
   // Real CI failure: toolGroup.feature's "Create an announcement as acostea
   // ..." scenario does "I am not logged" -> "I am logged as 'acostea'" ->
   // immediately navigates to group.php, which then rendered with a genuine
@@ -224,22 +423,79 @@ async function loginAs(page: Page, username: string) {
   // interstitial here — a no-op the overwhelming rest of the time, when the
   // setting is off and tc.php never appears — is cheap insurance against the
   // same contamination hitting some other file's login next.
-  if (page.url().includes("/main/auth/tc.php")) {
-    // registration.hide_legal_accept_checkbox=Yes makes ChamiloHelper::displayLegalTermsPage()
-    // render legal_accept as <input type="hidden" value="1"> instead of a real checkbox (already
-    // implicitly accepted) — real CI failure: specialCase1PlatformSettings.feature's "Add minimal
-    // session extra fields" turns this setting ON mid-scenario, then a later login (studentone)
-    // lands on this same tc.php interstitial and .check() threw "Not a checkbox or radio button"
-    // on the now-hidden field. Only check() it when it's actually a checkbox.
-    const legalAccept = page.locator('input[name="legal_accept"]')
-    if ("checkbox" === (await legalAccept.getAttribute("type"))) {
-      await legalAccept.check()
+  // Second call, deliberately. The one that matters is BEFORE the logout-link
+  // assertion above; this one catches an interstitial that appears only after
+  // the post-login navigation settles. Both are no-ops when the setting is off.
+  await acceptTermsInterstitialIfPresent(page)
+
+  // Verify WHICH user we ended up as, not merely that *a* session exists.
+  //
+  // Real CI failure that forced this (admin/fileIntegrity.feature's
+  // "Non-administrators cannot access the file integrity page"): the scenario
+  // is only "Given I am a student" + open /admin/security/file-integrity +
+  // assert "Run a scan now" is absent, and it FAILED with the admin page fully
+  // rendered. Verified live that the application itself is correct — logging
+  // in as acostea and opening that URL redirects to / and never renders "Run a
+  // scan now", while admin stays and does — so the only way that assertion can
+  // fail is if the browser was still authenticated as the PREVIOUS user
+  // (admin) when it got there. It also passes in isolation, which is exactly
+  // the signature of leaked session state rather than a selector bug.
+  //
+  // Every success signal above is satisfied by a pre-existing session: the
+  // final `a[href="/logout"]` check just means "somebody is logged in", and
+  // the sign-in click is both conditional (`isVisible()`, a one-shot check)
+  // and has its errors swallowed (`.catch(() => {})`) — so if the form never
+  // submitted, nothing above notices and this function returns "success" while
+  // still being the old user. That is a silent wrong-user run, which is worse
+  // than a failure because it produces a confident, wrong assertion result.
+  //
+  // /account/home is served for every authenticated user (checked live for
+  // admin, acostea, mmosquera, ptook, abaggins and bproudfoot: all 200) and
+  // its HTML embeds the CURRENT user as `"username":"<name>"` — confirmed
+  // discriminating in both directions (as acostea the page contains
+  // "username":"acostea" and NOT "username":"admin", and vice versa). Cheaper
+  // and far more stable than scraping a display name out of the header, which
+  // would need a username -> full-name map per fixture.
+  //
+  // On mismatch, retry the whole login once through a real logout before
+  // giving up: the observed cause is a stale session that a single
+  // logout+login round trip clears. Failing loudly on the second attempt is
+  // still strictly better than today's silent wrong-user behaviour.
+  const currentUserIs = async (expected: string): Promise<boolean> => {
+    const response = await page.request.get("/account/home").catch(() => null)
+    if (!response || !response.ok()) {
+      // Never let this guard itself become a new failure mode: if the probe
+      // cannot run, fall through and let the scenario's own steps decide.
+      return true
     }
-    await page
-      .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
-      .first()
-      .click()
+    return (await response.text()).includes(`"username":"${expected}"`)
+  }
+
+  if (!(await currentUserIs(username))) {
+    await page.goto("/logout")
+    await page.goto("/login")
     await page.waitForLoadState("domcontentloaded")
+    await expect(loginField).toBeVisible({ timeout: 15_000 })
+    await loginField.fill(username, { timeout: 10_000 })
+    await page.locator("#password").fill(username, { timeout: 10_000 })
+    await page.locator("form.login-section__form button[type='submit']").click({ timeout: 15_000 })
+    // Same two-outcome race + interstitial accept as the primary path above.
+    // This retry branch is a near-duplicate of that flow and originally omitted
+    // the T&C handling, which is where the failure moved to once the primary
+    // path was fixed: with terms enabled mid-run, BOTH logins land on tc.php, so
+    // fixing only the first just relocated the 25s timeout a few lines down.
+    await Promise.race([
+      logoutLink.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+      termsControl.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+    ])
+    await acceptTermsInterstitialIfPresent(page)
+    await expect(logoutLink).toBeVisible({ timeout: 25_000 })
+    if (!(await currentUserIs(username))) {
+      throw new Error(
+        `loginAs("${username}") finished while authenticated as a different user. ` +
+          "The login form did not take effect and a previous session is still active.",
+      )
+    }
   }
 }
 
@@ -325,6 +581,19 @@ Given("I am not logged", async ({ page }) => {
 // zero matches, crashing every step that ever resolves a field whose only
 // valid attribute is a bracketed multi-select name.
 const looksLikeIdentifier = (value: string) => /^[\w-]+$/.test(value)
+
+// The installer writes the default AccessUrl as http://localhost/ (the host
+// the web installer itself was browsed on — CI's gh-apache ServerName, and
+// a typical first-run). Admins then change that row to the real public URL.
+// Tests that assert the URL as it appears on /admin/urls must follow the
+// same rule: the displayed value is whatever we store, not the browser's
+// current host. Derived from BASE_URL (CI: http://localhost, config default:
+// http://my.chamilo.net, local playwright.chamilo.net override) so one
+// assertion works in every environment.
+function currentSiteAccessUrl(): string {
+  const base = process.env.BASE_URL || "http://my.chamilo.net"
+  return `${base.replace(/\/+$/, "")}/`
+}
 
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
@@ -429,7 +698,45 @@ async function resolveField(page: Page, field: string) {
   // This fallback tier is only reached when id/name both miss, which is rare
   // but not impossible under CI timing (see resolveField above) — when it IS
   // reached, it must actually match, not hang for the rest of the test.
-  return page.getByLabel(new RegExp(`^\\s*\\*?\\s*${escapeRegExp(field)}\\s*$`, "i"))
+  const byLabel = page.getByLabel(new RegExp(`^\\s*\\*?\\s*${escapeRegExp(field)}\\s*$`, "i"))
+
+  // FAIL FAST when NOTHING matches, instead of handing back a locator that
+  // silently absorbs the entire test budget.
+  //
+  // This is the single biggest time-sink in debugging this suite. When a field
+  // identifier is wrong or the field has genuinely moved, all three tiers miss,
+  // and the caller then performs an auto-waiting action (fill/selectOption/
+  // clear) on a locator that will never resolve — burning the full 90s, or a
+  // full FIFTEEN MINUTES for anything tagged @long-scenario, and reporting it
+  // as an opaque timeout on the label regex rather than "this field does not
+  // exist". Several multi-hour investigations in this suite were exactly that:
+  // a stale identifier (legacy `forum_comment` vs the Vue dialog's
+  // `forum-comment`, the English label "Learning path name" vs the real id
+  // `lp-title`, the long-dead `gradebook_add_eval` link) presenting as a hang.
+  //
+  // A bounded 15s existence check (matching the config's own expect timeout)
+  // preserves every legitimate case — a field rendered late by an async fetch
+  // still resolves, which is precisely what the tier comments above describe —
+  // while converting "wrong identifier" from a 15-minute mystery into an
+  // immediate, self-explaining error naming all three things that were tried.
+  //
+  // Deliberately does NOT throw when the element exists but is merely hidden or
+  // disabled: that is a real, different condition the callers' own actionability
+  // waits should report in their own words.
+  await byLabel
+    .first()
+    .waitFor({ state: "attached", timeout: 15_000 })
+    .catch(() => {})
+  if (0 === (await byLabel.count())) {
+    throw new Error(
+      `No form field found for "${field}". Tried, in order: #${field} (id), ` +
+        `[name="${field}"], and a label matching /^\\s*\\*?\\s*${field}\\s*$/i. ` +
+        "If the page has migrated to Vue, the real id is often hyphenated " +
+        "(e.g. legacy forum_comment -> forum-comment) — dump the live DOM " +
+        "rather than trusting the legacy name or a .po translation.",
+    )
+  }
+  return byLabel
 }
 
 // A plain .fill() sets the DOM value and dispatches one `input` event, which
@@ -501,6 +808,36 @@ When("I fill in {string} with {string}", async ({ page }, field: string, value: 
   await fillReliably(await resolveField(page, field), value)
 })
 
+// Not ported — new. Submits a search/filter field by pressing Enter IN the
+// field, rather than hunting for a separate submit button.
+//
+// Added for toolUsers.feature's course-user Subscribe view, where
+// `I press "Search"` demonstrably fails to apply the filter: the failure
+// snapshot shows the list still unfiltered (page 1 of ~60 available users,
+// all Baggins/Boffin/Bolger) so the target user's row is simply not present,
+// and the following assertion fails with a confusing "element(s) not found"
+// about a name that does exist in the database. Verified live that pressing
+// Enter in that same field DOES filter, reducing the table to the single
+// expected row — the form's native submit path is reliable where locating the
+// button was not.
+//
+// Worth knowing why the button is hard to hit there: its accessible name does
+// not match `getByRole("button", { name: "Search", exact: true })` at all
+// (confirmed live: 0 matches, the PrimeVue icon+label composition quirk
+// already documented in pressButton), so pressButton falls through several
+// tiers before reaching a text-content match — and this view additionally
+// re-renders its list asynchronously around that moment. Pressing Enter
+// sidesteps the whole question of which element is the submit control.
+//
+// Deliberately a separate step rather than a change to pressButton: plenty of
+// other pages have a real, reliably-clickable "Search" button and there is no
+// reason to route those through the keyboard.
+When("I submit the field {string}", async ({ page }, field: string) => {
+  const target = (await resolveField(page, field)).first()
+  await target.click()
+  await target.press("Enter")
+})
+
 // Mink's "I fill in the following:" (MinkContext::fillFields(), via Behat's
 // TableNode::getRowsHash()) treats EVERY row as a field/value pair — there is
 // no header row in this table shape. playwright-bdd's DataTable mirrors
@@ -565,6 +902,41 @@ When("I attach the file {string} to the upload dropzone", async ({ page }, fileP
   await page.locator('input[type="file"]').first().setInputFiles(path.join(repoRoot, filePath))
 })
 
+// How long to wait for a TinyMCE instance to finish mounting. 20s matches the
+// TINYMCE_READY_TIMEOUT already used by the ticket-settings step below, which
+// was tuned against real CI.
+//
+// The bound matters far more than its exact value. `page.waitForFunction()` with
+// NO timeout inherits the whole test timeout — which for an @long-scenario is
+// FIFTEEN MINUTES. Real CI failure (2026-08-25): specialCase1Sessions' "Create
+// courses, multilingual documents, exercises, forum, learning path and
+// assessment activity" burned its entire 900s budget inside one such wait and
+// then reported only `page.waitForFunction: Test timeout of 900000ms exceeded`
+// — no editor id, no step name, and a page snapshot showing the dashboard
+// rather than any editor, i.e. fifteen minutes spent to learn nothing.
+//
+// Same lesson as resolveField()'s fail-fast rewrite: an unbounded wait does not
+// buy reliability, it converts a precise failure into an expensive mystery.
+const TINYMCE_MOUNT_TIMEOUT = 20_000
+
+// Wait for a specific TinyMCE editor, failing FAST and by name. `whatFor`
+// should say which step is waiting, since the editor id alone is rarely enough
+// to locate the culprit in a long scenario.
+async function waitForTinymceEditor(page: Page, editorId: string, whatFor: string): Promise<void> {
+  try {
+    await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), editorId, {
+      timeout: TINYMCE_MOUNT_TIMEOUT,
+    })
+  } catch {
+    throw new Error(
+      `TinyMCE editor "#${editorId}" never mounted within ${TINYMCE_MOUNT_TIMEOUT}ms (${whatFor}). ` +
+        `The element exists but tinymce.get("${editorId}") stayed undefined — usually the page ` +
+        `navigated away/redirected before the editor initialised, or the legacy_app bundle that ` +
+        `boots TinyMCE never loaded on this page. Current URL: ${page.url()}`,
+    )
+  }
+}
+
 // Ported from FeatureContext::iFillInWysiwygOnFieldWith(). The legacy admin
 // pages (e.g. careers.php) use a TinyMCE editor bound to a hidden <textarea>,
 // not a plain field — window.setContentFromEditor(id, content) (assets/js/
@@ -578,7 +950,7 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
   if (!fieldId) {
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await waitForTinymceEditor(page, fieldId, `filling editor field "${field}"`)
   await page.evaluate(
     ({ id, value }) => (window as any).setContentFromEditor(id, value),
     { id: fieldId, value },
@@ -605,11 +977,13 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
   if (!fieldId) {
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), fieldId)
+  await waitForTinymceEditor(page, fieldId, `filling tinymce field "${field}"`)
   await page.evaluate(({ id, value }) => {
     const editor = (window as any).tinymce.get(id)
     editor.setContent(value)
     editor.fire("change")
+    editor.fire("input")
+    editor.save()
   }, { id: fieldId, value })
 })
 
@@ -793,11 +1167,25 @@ When(
 // ever have ONE editor open at a time, `tinymce.activeEditor` reliably
 // identifies it without needing an id.
 Then("I fill in the active tinymce editor with {string}", async ({ page }, value: string) => {
-  await page.waitForFunction(() => Boolean((window as any).tinymce?.activeEditor))
+  // Bounded for the same reason as waitForTinymceEditor() — see its comment.
+  // Unbounded, this inherits the test timeout (15 minutes on an @long-scenario).
+  try {
+    await page.waitForFunction(() => Boolean((window as any).tinymce?.activeEditor), undefined, {
+      timeout: TINYMCE_MOUNT_TIMEOUT,
+    })
+  } catch {
+    throw new Error(
+      `No active TinyMCE editor appeared within ${TINYMCE_MOUNT_TIMEOUT}ms. ` +
+        `tinymce.activeEditor stayed undefined, so the dialog holding the editor probably never ` +
+        `opened (or closed again before this step ran). Current URL: ${page.url()}`,
+    )
+  }
   await page.evaluate((value) => {
     const editor = (window as any).tinymce.activeEditor
     editor.setContent(value)
     editor.fire("change")
+    editor.fire("input")
+    editor.save()
   }, value)
 })
 
@@ -831,7 +1219,12 @@ When("I fill in the score for {string} with {string}", async ({ page }, username
   if (!userId) {
     throw new Error(`Could not resolve a user id for username "${username}"`)
   }
-  await page.locator(`[name="score[${userId}]"]`).fill(value)
+  // Legacy gradebook_add_result.php used name="score[<id>]". The Vue
+  // GradebookEvaluationResultsView uses id="gradebook-score-<id>" (a
+  // PrimeVue InputNumber; name is not forwarded onto the inner <input>).
+  const locator = page.locator(`[name="score[${userId}]"], #gradebook-score-${userId}`).first()
+  await locator.waitFor({ state: "visible" })
+  await fillReliably(locator, value)
 })
 
 // Ported from FeatureContext::iCheckTheRadioButton(): resolves a radio input
@@ -942,6 +1335,7 @@ When("I select {string} from the ajax select {string}", async ({ page }, optionT
 // "select" + N "additionally select" sequence in these .feature files, so
 // starting from a clean selection is exactly right.
 Then("I select {string} from {string}", async ({ page }, optionLabel: string, field: string) => {
+  await failIfLoginPage(page, `select "${optionLabel}" from "${field}"`)
   await (await resolveField(page, field)).selectOption({ label: optionLabel })
 })
 
@@ -956,6 +1350,7 @@ Then("I select {string} from {string}", async ({ page }, optionLabel: string, fi
 // under that locale. The underlying <option value="true"|"false"> values are
 // never translated, so selecting by value sidesteps the whole problem.
 Then("I select the value {string} from {string}", async ({ page }, optionValue: string, field: string) => {
+  await failIfLoginPage(page, `select value "${optionValue}" from "${field}"`)
   await (await resolveField(page, field)).selectOption({ value: optionValue })
 })
 
@@ -1000,12 +1395,62 @@ Then("I additionally select {string} from {string}", async ({ page }, optionLabe
 // current value already is (not a hardcoded assumed default, which could be
 // wrong for a given instance and would itself be an unwanted mutation)
 // before any scenario in that file mutates it, then restore exactly that
-// once after the file's last scenario finishes. BeforeAll/AfterAll here are
-// Playwright's own per-file hooks (scoped to whichever file has a scenario
-// carrying the given tag), not a single global per-worker lifetime — so
-// tagging four different files with four different tags gives each one its
-// own independent snapshot-at-start/restore-at-end cycle, without any of
-// them stepping on each other.
+// once after the file's last scenario finishes.
+//
+// CORRECTION (2026-08-25) — the paragraph that used to sit here claimed these
+// were "Playwright's own per-file hooks ... not a single global per-worker
+// lifetime", and that each tag therefore got its own independent restore
+// cycle. That is wrong for AfterAll, and believing it is what let the bug
+// below ship. playwright-bdd's own source says so explicitly
+// (node_modules/playwright-bdd/dist/runtime/bddWorkerFixtures.js):
+//
+//   "We can't detect when the last test for tagged AfterAll hook is executed
+//    ... The solution: collect and run all AfterAll hooks in worker teardown
+//    phase."
+//
+// So BeforeAll really is per-file, but EVERY tagged AfterAll in the worker is
+// deferred and run together at the very end, inside one `$registerAfterAllHooks`
+// fixture teardown governed by a SINGLE budget (the config `timeout`, 90s).
+// Two consequences that drive the design below:
+//
+//  1. The budget is GLOBAL across all guards, not per guard. Under `workers: 1`
+//     one worker runs every file, so all ~9 restores land in that one teardown.
+//     Nine restores x (admin page load + Save + settle) does not fit in 90s.
+//  2. The restores therefore happen AFTER every test has finished, so they
+//     cannot protect any test in the same run — their only real job is leaving
+//     a persistent box clean for the NEXT run (CI reinstalls the DB each time,
+//     so this matters locally far more than in CI).
+//
+// Given (2), a restore that cannot finish must never fail the run: a cleanup
+// failure is not a test failure. Blowing the budget made CI report the whole
+// job red on a run where all 410 tests PASSED — a maximally confusing signal.
+// Hence the shared deadline and the per-restore try/catch below: the teardown
+// does as much as it can inside a budget it is guaranteed to fit in, and
+// reports anything it had to skip instead of throwing.
+//
+// The deadline is module-level and lazily initialised on first use precisely
+// because it must be shared by every guard, not restarted by each one.
+const TEARDOWN_BUDGET_MS = 50_000
+let teardownDeadline: number | null = null
+
+function teardownBudgetExhausted(): boolean {
+  if (null === teardownDeadline) {
+    teardownDeadline = Date.now() + TEARDOWN_BUDGET_MS
+  }
+  return Date.now() > teardownDeadline
+}
+
+// 50s of restoring, inside a 90s fixture budget, deliberately leaves ~40s of
+// slack: the check happens BEFORE each restore, so one already-in-flight
+// restore (whose gotoReliably() can itself retry a slow admin page) still has
+// room to finish without tripping the fixture timeout.
+function warnSkippedRestore(field: string, reason: string): void {
+  // Deliberately console.warn and not a throw — see the note above on why a
+  // cleanup failure must not fail the run. This still surfaces in CI logs, so
+  // a box that stops getting restored is visible rather than silent.
+  console.warn(`[settings-guard] did NOT restore "${field}" (${reason}). It may be left mutated.`)
+}
+
 function registerSettingsGuard(tag: string, pages: { path: string; field: string }[]) {
   const snapshot = new Map<string, string[]>()
 
@@ -1038,22 +1483,59 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
     for (const { path, field } of pages) {
       const values = snapshot.get(field)
       if (!values) continue
-      await gotoReliably(page, path)
-      await page.locator(`#${field}`).selectOption(values.map((value) => ({ value })))
-      // "Save settings" (not "Save"): matches the literal button text on
-      // every /admin/settings/* page confirmed live (both the
-      // search_settings?keyword=... pages and category pages like
-      // /admin/settings/lp) — pressButton()'s early exact-match tiers need
-      // the literal text, not a substring; "Save" alone only happens to
-      // work via its much later substring-fallback tier.
-      await pressButton(page, "Save settings")
-      // "Save settings" is a form submit — likely POST-redirect-GET under
-      // the hood. The NEXT iteration's own gotoReliably() now absorbs a
-      // still-lagging redirect from this Save if one occurs, so this wait
-      // just needs to be reasonable, not airtight.
-      await page.waitForLoadState("networkidle")
+      if (teardownBudgetExhausted()) {
+        warnSkippedRestore(field, "shared teardown budget exhausted")
+        continue
+      }
+      try {
+        // Deliberately NOT gotoReliably() here, even though every other
+        // navigation in this file uses it. It retries up to 5 times, and with
+        // no `navigationTimeout` configured each attempt gets page.goto's own
+        // 30s default — so one call can occupy 150s. Inside a teardown whose
+        // TOTAL budget is 90s that is not a retry policy, it is an overrun
+        // waiting to happen, and it is why the 50s deadline above was not
+        // enough on its own: the deadline is only consulted BETWEEN restores,
+        // so a single call that runs long sails straight past it.
+        //
+        // A bounded single attempt is the right trade for cleanup: worst case
+        // per restore drops from ~150s to ~15s, so nine restores fit inside the
+        // deadline with room to spare, and a restore that genuinely cannot load
+        // its page is exactly the one we want to skip-and-warn rather than
+        // retry four more times.
+        await page.goto(path, { timeout: 10_000, waitUntil: "domcontentloaded" })
+        await page.locator(`#${field}`).selectOption(
+          values.map((value) => ({ value })),
+          { timeout: 5_000 },
+        )
+        // "Save settings" (not "Save"): matches the literal button text on
+        // every /admin/settings/* page confirmed live (both the
+        // search_settings?keyword=... pages and category pages like
+        // /admin/settings/lp) — pressButton()'s early exact-match tiers need
+        // the literal text, not a substring; "Save" alone only happens to
+        // work via its much later substring-fallback tier.
+        await pressButton(page, "Save settings")
+        // "Save settings" is a form submit — likely POST-redirect-GET under
+        // the hood. The NEXT iteration's own gotoReliably() absorbs a
+        // still-lagging redirect from this Save if one occurs, so this wait
+        // just needs to be reasonable, not airtight.
+        //
+        // 3s, not 10s, and that number is the whole fix rather than a tweak.
+        // This app has persistent background polling (notifications, chat
+        // presence), so networkidle frequently NEVER settles here and the wait
+        // runs to its full bound every time. At 10s x 9 restores that is 90s
+        // of pure waiting — the entire shared fixture budget, spent doing
+        // nothing, which is precisely how a run with 410/410 passing tests
+        // still reported a red CI job. Measured, not assumed: the failing CI
+        // teardown died on the 6th of 9 restores.
+        await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {})
+      } catch (error) {
+        // One bad restore must not abandon the ones queued behind it — that
+        // was the old failure mode, where a single slow field silently took
+        // every later setting down with it.
+        warnSkippedRestore(field, String(error).split("\n")[0])
+      }
     }
-    await page.context().close()
+    await page.context().close().catch(() => {})
   })
 }
 
@@ -1152,12 +1634,28 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
   AfterAll({ tags: tag }, async () => {
     if (!guardPage || snapshot === null) return
     const page = guardPage
-    await gotoReliably(page, path)
-    await settle(page)
-    await page.locator(`#${field}`).fill(snapshot)
-    await pressButton(page, "Save settings")
-    await page.waitForLoadState("networkidle")
-    await page.context().close()
+    // Shares the SINGLE global teardown budget with every registerSettingsGuard()
+    // above (see the long note there) — so it checks the same deadline and can be
+    // starved by them even though its own restore is just one field. Whether it
+    // gets skipped is therefore an ordering accident, which is exactly why the
+    // skip has to be announced rather than silent.
+    if (teardownBudgetExhausted()) {
+      warnSkippedRestore(field, "shared teardown budget exhausted")
+      await page.context().close().catch(() => {})
+      return
+    }
+    try {
+      // Bounded single attempt, same reasoning as registerSettingsGuard()'s
+      // teardown above (gotoReliably's 5 x 30s can outlast the whole budget).
+      await page.goto(path, { timeout: 10_000, waitUntil: "domcontentloaded" })
+      await settle(page)
+      await page.locator(`#${field}`).fill(snapshot, { timeout: 5_000 })
+      await pressButton(page, "Save settings")
+      await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {})
+    } catch (error) {
+      warnSkippedRestore(field, String(error).split("\n")[0])
+    }
+    await page.context().close().catch(() => {})
   })
 }
 
@@ -1226,7 +1724,36 @@ let lastNavigationResponse: import("@playwright/test").Response | null = null
 // identically to both messages.
 function isRetryableNavigationRace(error: unknown): boolean {
   const message = String(error)
-  return message.includes("is interrupted by another navigation") || message.includes("maybe frame was detached")
+  return (
+    message.includes("is interrupted by another navigation") ||
+    message.includes("maybe frame was detached") ||
+    // Third wording of the SAME race, and the one that actually broke
+    // specialCase1Sessions.feature's first scenario on CI:
+    //   page.goto: net::ERR_ABORTED at .../course_home/redirect.php?cidReq=TESTINGCOURSEFR
+    // Playwright only phrases it as "is interrupted by another navigation" when
+    // it can NAME the interrupting URL. A HISTORY TRAVERSAL cancels a pending
+    // cross-document navigation without giving it a URL to name, so the same
+    // collision surfaces as a bare net::ERR_ABORTED and fell straight through
+    // to `throw` on attempt 1 — no retry at all, despite the step already
+    // going through gotoReliably().
+    //
+    // The traversal is real and sits in product code, not the test:
+    // assets/vue/views/ctoolintro/Update.vue's onSendForm() finishes with
+    // router.go(-1), and it only runs AFTER its update request resolves. The
+    // preceding Gherkin steps cannot see that coming — the click sub-action
+    // returns in ~28ms and "wait for the page to be loaded"
+    // (domcontentloaded) resolves in ~1ms because the SPA never left the
+    // document — so the scenario moves on, fires this goto, and ~690ms later
+    // the save resolves and yanks history out from under it. This is exactly
+    // what gotoReliably exists to absorb, so it belongs in the retry set
+    // rather than being special-cased at the one call site that hit it.
+    //
+    // Scoped deliberately to ERR_ABORTED and nothing broader: a genuinely
+    // unreachable host or a real load failure reports ERR_CONNECTION_REFUSED /
+    // ERR_NAME_NOT_RESOLVED / ERR_EMPTY_RESPONSE etc., none of which match
+    // here, so a real breakage still fails fast instead of being retried 5x.
+    message.includes("net::ERR_ABORTED")
+  )
 }
 
 async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
@@ -1256,14 +1783,19 @@ async function gotoReliably(page: Page, path: string, maxAttempts = 5) {
 async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Browser, baseURL?: string) {
   const page = await (await browser.newContext({ baseURL })).newPage()
   await page.goto("/login")
-  await page.locator("#login").fill("admin")
-  await page.locator("#password").fill("admin")
-  await page
-    .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
-    .first()
-    .click()
+  await page.locator("#login").fill("admin", { timeout: 10_000 })
+  await page.locator("#password").fill("admin", { timeout: 10_000 })
+  const signIn = page.locator("form.login-section__form button[type='submit']")
+  if (await signIn.isVisible().catch(() => false)) {
+    await signIn.click({ timeout: 15_000 }).catch(() => {})
+  } else {
+    await page
+      .locator('button:has-text("Sign in"), input[type="submit"][value="Sign in"]')
+      .first()
+      .click({ timeout: 15_000 })
+  }
   // Same settle rule as loginAs(): leave /login, no networkidle (see comment there).
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"))
+  await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
   return page
 }
 
@@ -1295,7 +1827,94 @@ async function isSoonVisible(locator: ReturnType<Page["locator"]>, timeoutMs = 2
   }
 }
 
+async function failIfLoginPage(page: Page, action: string): Promise<void> {
+  // The logged-out homepage IS the login page (heading "Sign in" plus a
+  // "Sign up" link). registration.feature's "I follow Sign up" is a real
+  // starting action there, not a lost session.
+  if (/sign in|sign up|register|forgot|registration|password/i.test(action)) {
+    return
+  }
+  const lostSession = await page
+    .getByText(/session details have been lost/i)
+    .isVisible()
+    .catch(() => false)
+  const onLogin = await page
+    .getByRole("heading", { name: "Sign in", exact: true })
+    .isVisible()
+    .catch(() => false)
+  if (lostSession || onLogin) {
+    throw new Error(`Cannot ${action}: the session was lost and the login page is showing.`)
+  }
+}
+
+async function dismissBlockingUi(page: Page): Promise<void> {
+  const toastClose = page.locator(".p-toast-close-button:visible")
+  if ((await toastClose.count()) > 0) {
+    await toastClose.first().click({ timeout: 1_000 }).catch(() => {})
+  }
+  const cookieAccept = page.getByRole("button", { name: /^(Accept|Accepter)$/i })
+  if (await cookieAccept.isVisible().catch(() => false)) {
+    await cookieAccept.click({ timeout: 2_000 }).catch(() => {})
+  }
+}
+
+async function clickFirstOrForce(locator: ReturnType<Page["locator"]>, page: Page): Promise<void> {
+  const target = locator.first()
+  const urlBeforeClick = page.url()
+  try {
+    await target.click({ timeout: 8_000 })
+  } catch {
+    // Before force-retrying, check whether the FIRST click already worked.
+    //
+    // Real CI failure (adminPlatformBlock.feature's "Open Reports catalog",
+    // reported as `locator.click: Timeout 5000ms exceeded` — note 5000, i.e.
+    // the force-retry below, not the 8s attempt above): the first click DID
+    // land and did request the navigation, but /main/admin/reports_catalog.php
+    // is a slow legacy page (measured 3.3-4.0s just to COMMIT on a warm box),
+    // and Playwright's post-click signal barrier waits for that commit — so on
+    // a loaded CI runner the 8s budget expires with the navigation still in
+    // flight and click() throws even though nothing is actually wrong.
+    //
+    // `target` is a LOCATOR, so the retry re-resolves it against whatever
+    // document is current by then — which is the destination page. That page's
+    // own action bar carries a SELF-link with the identical accessible name
+    // (Display::toolbarButton(get_lang('Reports catalog'), $baseUrl, ...) in
+    // display.lib.php), so the retry force-clicked the destination's link to
+    // itself, starting a SECOND ~4s load of the same page, which 5s could not
+    // cover either. The test therefore failed on a navigation that had already
+    // succeeded twice over. Confirmed NOT an overlay/intercept problem:
+    // elementFromPoint at the link's centre returns the link itself.
+    //
+    // Waiting for the URL to change absorbs exactly that case. It is bounded,
+    // and it only ADDS an early-success path: when the click genuinely did not
+    // navigate, the URL never changes, the wait expires, and the original
+    // dismiss + force-click behaviour runs unchanged.
+    await page.waitForURL((url) => String(url) !== urlBeforeClick, { timeout: 5_000 }).catch(() => {})
+    if (page.url() !== urlBeforeClick) {
+      return
+    }
+    await dismissBlockingUi(page)
+    await target.click({ force: true, timeout: 5_000 })
+  }
+}
+
+async function syncTinymce(page: Page): Promise<void> {
+  await page
+    .evaluate(() => {
+      const tinymce = (window as any).tinymce
+      if (tinymce?.triggerSave) {
+        tinymce.triggerSave()
+      }
+    })
+    .catch(() => {})
+}
+
 async function pressButton(page: Page, label: string) {
+  await failIfLoginPage(page, `press "${label}"`)
+  await dismissBlockingUi(page)
+  if ("Save" === label || "Save settings" === label) {
+    await syncTinymce(page)
+  }
   if (looksLikeIdentifier(label)) {
     // Same hidden-proxy-vs-visible-widget situation as resolveField() above
     // can apply to buttons too, hence :visible here as well.
@@ -1307,6 +1926,42 @@ async function pressButton(page: Page, label: string) {
     const byName = page.locator(`[name="${label}"]:visible`)
     if (await isSoonVisible(byName)) {
       await byName.first().click()
+      return
+    }
+  }
+  // Prefer a visible PrimeVue dialog when one is open. Vue create/edit
+  // dialogs often reuse the same accessible name as the toolbar button that
+  // opened them (GradebookListView: "Add classroom activity" is both the
+  // toolbar trigger AND the dialog submit). The toolbar button sits behind
+  // the dialog mask and is not clickable; matching it first hangs the full
+  // test timeout. Confirmed via toolAssessments.feature after the gradebook
+  // Vue migration.
+  //
+  // Exclude TinyMCE's own role=dialog chrome (.tox-dialog / .tox-tbtn): a
+  // real CI failure in toolPortfolio.feature's comment dialog showed
+  // getByTitle("Save") resolving to TinyMCE's disabled toolbar Save button
+  // (aria-disabled=true, title=Save) inside the PrimeVue dialog, then
+  // click() retrying until the test timeout because that button is never
+  // enabled. The real submit is a BaseButton, not a tox toolbar control.
+  const openDialog = page.locator(".p-dialog:visible, [role='dialog']:visible:not(.tox-dialog)").last()
+  if (await openDialog.count()) {
+    const notToxOrDisabled =
+      'xpath=self::*[not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]'
+    const dialogExact = openDialog.getByRole("button", { name: label, exact: true }).locator(notToxOrDisabled)
+    if (await isSoonVisible(dialogExact, 1000)) {
+      await dialogExact.first().click()
+      return
+    }
+    const dialogTitle = openDialog.locator(`button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"])`)
+    if (await isSoonVisible(dialogTitle, 1000)) {
+      await dialogTitle.first().click()
+      return
+    }
+    const dialogText = openDialog
+      .locator("button", { hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
+      .locator(notToxOrDisabled)
+    if (await isSoonVisible(dialogText, 1000)) {
+      await dialogText.first().click()
       return
     }
   }
@@ -1347,9 +2002,42 @@ async function pressButton(page: Page, label: string) {
   // exists — not just as a tie-breaker when there happen to be several
   // matches — is what actually avoids ever preferring a disabled decoy.
   const exact = page.getByRole("button", { name: label, exact: true })
-  const enabledExact = exact.locator('xpath=self::*[not(@aria-disabled="true")]')
+  const enabledExact = exact.locator(
+    'xpath=self::*[not(@disabled) and not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]',
+  )
   if (await isSoonVisible(enabledExact)) {
-    await enabledExact.first().click()
+    // Prefer a NON-TOGGLE match when several buttons share the accessible name.
+    //
+    // This app's persistent sidebar-collapse control is a PrimeVue
+    // ToggleButton that renders its state as the literal text "Yes"
+    // (`<button aria-pressed="true" class="p-togglebutton ... app-sidebar...">`)
+    // — a pre-existing i18n bug in the app, out of scope to fix here, but it
+    // means EVERY page has a permanently-present button whose accessible name
+    // is "Yes". "I press 'Yes'" is this suite's standard way to accept a
+    // PrimeVue ConfirmDialog, so the two collide, and the sidebar toggle wins
+    // `.first()` because it sits far earlier in DOM order (measured y=97 vs
+    // the dialog's y=397).
+    //
+    // Real CI failure this fixes (specialCase1Sessions.feature's "Teardown
+    // special case 1 sessions"): the delete icon was clicked, the confirm
+    // dialog opened, "I press 'Yes'" collapsed the SIDEBAR instead of
+    // confirming, the dialog stayed open, the session was never deleted, and
+    // the step's own `not.toContainText("Present session")` then failed 15s
+    // later still showing the row. Verified live by dumping every element whose
+    // trimmed text is exactly "Yes" before and after opening the dialog: one
+    // before (the toggle, aria-pressed="true"), two after (the toggle plus the
+    // dialog's `p-confirmdialog` accept button, aria-pressed absent).
+    //
+    // Written as a TIE-BREAKER rather than a blanket `not(@aria-pressed)`
+    // filter: if a scenario ever legitimately presses a real toggle button by
+    // its label, the non-toggle set is empty and the original locator is used
+    // unchanged, so that keeps working. The sibling exact-text-content tier
+    // further below already excludes toggles for this same reason; this closes
+    // the same hole in the role tier, which is the one that actually matched
+    // here.
+    const notToggle = enabledExact.locator("xpath=self::*[not(@aria-pressed)]")
+    const target = (await notToggle.count()) > 0 ? notToggle : enabledExact
+    await target.first().click()
     return
   }
   const exactSubmit = page.locator(`input[type="submit"][value="${label}"]`)
@@ -1388,7 +2076,9 @@ async function pressButton(page: Page, label: string) {
   // tier safe without needing to special-case "Yes" by name.
   const textExact = page
     .locator("button", { hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
-    .locator("xpath=self::*[not(@aria-pressed)]")
+    .locator(
+      'xpath=self::*[not(@aria-pressed) and not(@disabled) and not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]',
+    )
   if (await isSoonVisible(textExact)) {
     await textExact.first().click()
     return
@@ -1404,6 +2094,13 @@ async function pressButton(page: Page, label: string) {
   // ahead of the label text (class "fm-button-icon-left"), which becomes
   // part of the computed accessible name and breaks an {exact: true} match
   // even though a non-exact getByRole (or this CSS selector) matches fine.
+  const submitExact = page
+    .locator('button[type="submit"]:not([disabled]):not([aria-disabled="true"]):not(.tox-tbtn)')
+    .filter({ hasText: new RegExp(`^\\s*${escapeRegExp(label)}\\s*$`) })
+  if (await isSoonVisible(submitExact, 1000)) {
+    await submitExact.first().click()
+    return
+  }
   const fmButton = page.locator(`a.fm-button:has-text("${label}")`)
   if (await isSoonVisible(fmButton)) {
     await fmButton.first().click()
@@ -1415,7 +2112,7 @@ async function pressButton(page: Page, label: string) {
   // at all). Confirmed via a real run that even the exact getByRole tier
   // above doesn't resolve these reliably, so this targets the `title`
   // attribute directly rather than relying on accessible-name computation.
-  const byTitle = page.getByTitle(label, { exact: true })
+  const byTitle = page.locator(`button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"]), a[title="${label}"]`)
   if (await isSoonVisible(byTitle)) {
     await byTitle.first().click()
     return
@@ -1436,8 +2133,16 @@ async function pressButton(page: Page, label: string) {
     await bySaveIcon.first().click()
     return
   }
+  // Exclude disabled/aria-disabled here too. A real hang in
+  // toolExerciseAdmin.feature's "Try exercise": after answering, ExercisePlayerView
+  // disables "Next question" while `isSavingAnswer` is true. Every exact/enabled
+  // tier above correctly skips that button, then this last-resort `:has-text()`
+  // matched it anyway and click() retried actionability until the full 90s test
+  // timeout. The until-appears loop never got a second attempt.
   await page
-    .locator(`button:has-text("${label}"), input[type="submit"][value="${label}"]`)
+    .locator(
+      `button:has-text("${label}"):not([disabled]):not([aria-disabled="true"]):not(.tox-tbtn), input[type="submit"][value="${label}"]:not([disabled])`,
+    )
     .first()
     .click()
 }
@@ -1489,6 +2194,10 @@ Then("I should see the {string} element", async ({ page }, selector: string) => 
 // The negative counterpart. Asserts on the first match rather than the count,
 // so it reads as "this element is gone" for the callers that toggle a state and
 // expect an icon or action to disappear without navigating.
+//
+// `.first()` is load-bearing, not cosmetic: without it a selector matching more
+// than one element raises a strict-mode violation instead of asserting, which
+// fails as a confusing harness error rather than a clean assertion.
 Then("I should not see the {string} element", async ({ page }, selector: string) => {
   await expect(page.locator(selector).first()).toBeHidden()
 })
@@ -1573,6 +2282,16 @@ Then("I select all rows in the {string} grid", async ({ page }, gridName: string
 // so swallowing that specific race is safe.
 Then("I click the {string} icon in the row for {string}", async ({ page }, selector: string, rowText: string) => {
   page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
+  // Prefer an exact cell/link match. A substring `hasText` match is how
+  // toolExerciseAdmin.feature's "Teacher checks exercise results" opened
+  // "Exercise 1 - Copy" (created by "Duplicate exercise") instead of
+  // "Exercise 1" — Copy has no student attempt, so the report stayed on
+  // "Attempts: 0" / "No attempts found".
+  const exactRow = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+  if (await isSoonVisible(exactRow.locator(selector), 2000)) {
+    await exactRow.locator(selector).first().click()
+    return
+  }
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
@@ -1796,28 +2515,100 @@ Then("I delete the document {string} if present", async ({ page }, rowText: stri
   await expect(page.locator("body")).not.toContainText(rowText)
 })
 
-// Not ported — new, for specialCase1PlatformSettings.feature's "Tare Down"
+// Not ported — new, for specialCase1PlatformSettings.feature's "Tear down"
 // scenario's own cleanup of "Order By Id Test Session" (created by "Add
 // minimal session extra fields", the scenario right before this one in the
 // same file). That scenario has a real, unresolved, real-CI-only "browser
 // has been closed" crash (2026-08-06, never reproduced locally — see its own
 // header comment) but can't be @skip'd: specialCase1Sessions.feature hard-
 // depends on the session extra fields it creates. If it ever crashes BEFORE
-// actually creating "Order By Id Test Session", Tare Down's own cleanup step
+// actually creating "Order By Id Test Session", Tear down's own cleanup step
 // used to fail outright trying to click a delete icon in a row that was
 // never created, compounding one real-CI crash into two reported failures.
 // Reuses the exact "if present" guard convention from "I delete the
-// document ... if present" above so Tare Down keeps working either way:
+// document ... if present" above so Tear down keeps working either way:
 // still cleans up a stray session left behind by an earlier partial/crashed
 // run, but no longer fails when there isn't one.
 Then("I delete the session {string} if present", async ({ page }, sessionName: string) => {
-  const row = page.locator("tr", { hasText: sessionName })
+  const row = page.locator("tr").filter({ has: page.getByText(sessionName, { exact: true }) })
+  // Bounded wait before the count() below decides "absent". /admin/session-list
+  // is a Vue page whose table body arrives from its own async data request,
+  // well after the "I wait for the page to be loaded" (domcontentloaded) step
+  // that normally precedes this one — so a bare, instantaneous count() can read
+  // 0 for a row that renders a moment later and silently skip a session that
+  // really does exist. Confirmed exactly that: a teardown run reported PASS
+  // while leaving "Past session" behind, even though loading the same URL by
+  // hand rendered the row (with its delete icon) within ~3s.
+  // Swallowing the rejection is the whole point — a genuinely absent session
+  // must still fall through to the early return below rather than throw, which
+  // is this step's entire reason for existing. Strictly more patient than the
+  // previous bare count(), so it cannot regress a case that already worked;
+  // same reasoning as isSoonVisible() in pressButton().
+  await row
+    .first()
+    .waitFor({ state: "visible", timeout: 5000 })
+    .catch(() => {})
   if ((await row.count()) === 0) {
     return
   }
-  page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
-  await row.locator(".mdi-delete").first().click()
-  await pressButton(page, "Yes")
+  // Two attempts, each: click the row's delete control, WAIT FOR THE DIALOG
+  // ITSELF, then click that dialog's accept button, then check the row really
+  // went. Retrying is what makes this robust — the previous version had no way
+  // to notice that its own confirm click had missed.
+  //
+  // Real CI + locally-reproduced failure ("Teardown special case 1 sessions"):
+  // the dialog ended up CLOSED with the session still listed, i.e. something
+  // dismissed the dialog without confirming. Two distinct traps combine here:
+  //
+  // 1. Resolving the accept button THROUGH a `.last()` of a currently-empty
+  //    set. The old code built `.p-confirmdialog:visible, .p-dialog:visible`
+  //    then `.last()` then `.getByRole(...)` and waited on that chain, at a
+  //    moment when the dialog had not been inserted yet (it animates in behind
+  //    `p-overlay-mask-enter-active`). Waiting for the DIALOG first, and only
+  //    then querying inside it, removes that whole class of problem.
+  // 2. Falling back to `pressButton(page, "Yes")`. Every page in this app
+  //    carries a permanently-visible sidebar-collapse ToggleButton whose label
+  //    renders as the literal text "Yes" (verified live: one element with text
+  //    exactly "Yes" before the dialog opens, two after). Clicking it collapses
+  //    the sidebar, and that re-render DISMISSES the confirm dialog — which is
+  //    precisely the observed end state (no dialog, row intact). pressButton
+  //    now prefers non-toggle matches, but this step no longer needs that
+  //    fallback at all: it scopes strictly to the dialog it just opened.
+  //
+  // Verified live that this exact sequence works and that the delete itself was
+  // never the problem: clicking the dialog's own Yes fires
+  // POST /admin/session-list-data-action -> 200 and the row disappears
+  // immediately (dialog text is "Confirmation / Please confirm your choice /
+  // Cancel / Yes"), reproduced on several different sessions.
+  const deleteControl = row.locator(
+    "button[title='Delete'], button[title='Supprimer'], a[title='Delete'], a[title='Supprimer'], .mdi-delete",
+  )
+  const dialog = page.locator(".p-confirmdialog, [role='alertdialog']")
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    page.once("dialog", (nativeDialog) => nativeDialog.accept().catch(() => {}))
+    await deleteControl.first().click()
+
+    await dialog
+      .first()
+      .waitFor({ state: "visible", timeout: 10_000 })
+      .catch(() => {})
+    const accept = dialog.getByRole("button", { name: /^(Yes|Oui)$/i })
+    if (await isSoonVisible(accept, 5_000)) {
+      await accept.first().click()
+    }
+    // The table refetches after the delete, so give the row a real chance to
+    // disappear before judging the attempt.
+    await row
+      .first()
+      .waitFor({ state: "detached", timeout: 10_000 })
+      .catch(() => {})
+    if ((await row.count()) === 0) {
+      break
+    }
+  }
+
+  await expect(page.locator(".p-confirmdialog:visible")).toHaveCount(0)
   await expect(page.locator("body")).not.toContainText(sessionName)
 })
 
@@ -1827,7 +2618,30 @@ Then("I delete the session {string} if present", async ({ page }, sessionName: s
 // uses plain visible text throughout ("Course description", "Documents",
 // etc.), so the text tier is what actually matters here, but the id/title
 // tiers are kept for parity with Mink's own resolution order.
+// Not ported — new, for toolAssessments.feature's subscribe scenario. The
+// subscribe_user.php picker only lists users NOT already in the course, so
+// "Then I should see Noa" / "I follow Register" hard-fails on a reused box
+// where a previous run of this file already subscribed norizales (or a
+// later scenario's teardown didn't run). Clicking Register when it's there,
+// and treating its absence as "already subscribed", is the same outcome the
+// rest of the file needs.
+Then("I follow {string} if it is visible", async ({ page }, link: string) => {
+  const candidates = [
+    page.getByRole("link", { name: link, exact: true }),
+    page.getByRole("button", { name: link, exact: true }),
+    page.locator(`a:has-text("${link}")`),
+  ]
+  for (const locator of candidates) {
+    if (await isSoonVisible(locator, 8000)) {
+      await locator.first().click()
+      return
+    }
+  }
+})
+
 When("I follow {string}", async ({ page }, link: string) => {
+  await failIfLoginPage(page, `follow "${link}"`)
+  await dismissBlockingUi(page)
   if (looksLikeIdentifier(link)) {
     const byId = page.locator(`#${link}:visible`)
     if (await byId.count()) {
@@ -1865,9 +2679,17 @@ When("I follow {string}", async ({ page }, link: string) => {
     await byTitle.first().click()
     return
   }
+  const roleLinkExact = page.getByRole("link", { name: link, exact: true })
+  if (await isSoonVisible(roleLinkExact, 6000)) {
+    await clickFirstOrForce(roleLinkExact, page)
+    return
+  }
+  // Non-exact last among role matches: "Exercise 1" would otherwise also
+  // match "Exercise 1 - Copy" and click() the first of two, which is usually
+  // the intended row — keep it only when an exact accessible name is absent.
   const roleLink = page.getByRole("link", { name: link })
-  if (await isSoonVisible(roleLink, 6000)) {
-    await roleLink.first().click()
+  if (await isSoonVisible(roleLink, 3000)) {
+    await clickFirstOrForce(roleLink, page)
     return
   }
   // Not in the original Mink cascade — new. toolWork.feature's Vue
@@ -1875,8 +2697,9 @@ When("I follow {string}", async ({ page }, link: string) => {
   // attribute at all (confirmed via a real DOM dump) — without an href, it
   // has no implicit "link" role, so getByRole("link") never matches it.
   // Falls back to a plain exact-text match, which works regardless of the
-  // element's actual role/tag.
-  await page.getByText(link, { exact: true }).first().click()
+  // element's actual role/tag. Visible-only: a hidden sidebar label with the
+  // same text sorts first in DOM order and is never actionable.
+  await page.getByText(link, { exact: true }).filter({ visible: true }).first().click()
 })
 
 // Not ported — new, for toolUsers.feature. Real CI failure on a fresh,
@@ -1950,7 +2773,6 @@ When(/^(?:|I )confirm the popup$/, async ({ page }) => {
 let lastFriendUserId: string | null = null
 
 Given("I have a friend named {string}", async ({ page }, friendUsername: string) => {
-  const adminId = 1
   const searchResponse = await page.request.get(
     `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(friendUsername)}&page_limit=10`,
   )
@@ -1961,6 +2783,18 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   }
   const friendId = String(match.id)
   lastFriendUserId = friendId
+  // Resolve admin's id WHILE still authenticated as admin. /api/users is
+  // not listable as a student (fbaggins), which is who we switch to next
+  // to accept the invitation — a first version of this lookup ran after
+  // loginAs(friendUsername) and got an empty hydra:member.
+  const adminLookup = await page.request.get("/api/users?username=admin", {
+    headers: { Accept: "application/ld+json" },
+  })
+  const { "hydra:member": adminMembers } = await adminLookup.json()
+  const adminId = adminMembers?.[0]?.id
+  if (!adminId) {
+    throw new Error("Could not resolve the admin user's id")
+  }
   await page.goto(
     `/main/inc/ajax/message.ajax.php?a=send_invitation&user_id=${encodeURIComponent(friendId)}&content=${encodeURIComponent("Add me")}`,
   )
@@ -1981,9 +2815,33 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   // page.goto(), since this needs a JSON body) so friendUsername's own
   // session cookie is used, matching "the target user's own session
   // accepts it".
-  await page.request.post("/social-network/user-action", {
-    data: { targetUserId: adminId, action: "add_friend", is_my_friend: true },
-  })
+  //
+  // Real CI failure (socialGroup.feature "Invite a friend to group"): the
+  // first version of this post used Playwright's default form encoding
+  // (`data: { ... }` without a JSON Content-Type). SocialController::user()
+  // reads json_decode($request->getContent()), so the body never parsed,
+  // add_friend never ran, and group_invitation.php rendered "You already
+  // invite all your contacts" with an empty dual-list (admin had leftover
+  // non-friend relations from other fixtures, but fbaggins was not among
+  // them). The Vue UI itself sends application/json; match that, and fail
+  // loud if the endpoint doesn't accept the friendship.
+  // Use in-page fetch (not page.request.post): CsrfProtectionListener
+  // requires Origin/Referer/Sec-Fetch-Site from a same-origin browser
+  // request. Playwright's APIRequestContext does not send those, so the
+  // first version of this post returned 200/4xx without creating the
+  // user_rel_user row — group_invitation.php then showed "You already
+  // invite all your contacts" with an empty dual-list.
+  const addFriendResult = await page.evaluate(async (targetUserId: number) => {
+    const response = await fetch("/social-network/user-action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ targetUserId, action: "add_friend", is_my_friend: true }),
+    })
+    return { status: response.status, body: await response.text() }
+  }, Number(adminId))
+  if (addFriendResult.status >= 400 || !addFriendResult.body.includes("success")) {
+    throw new Error(`add_friend failed with ${addFriendResult.status}: ${addFriendResult.body}`)
+  }
   await page.goto("/logout")
   await loginAs(page, "admin")
 })
@@ -2002,11 +2860,38 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
 let lastCreatedGroupId: string | null = null
 
 Then("I remember the created group id", async ({ page }) => {
-  const match = page.url().match(/[?&]id=(\d+)/)
-  if (!match) {
-    throw new Error(`Could not find a group id in the current URL: ${page.url()}`)
+  // Success path: group_add.php redirects to group_view.php?id=<id>.
+  // Duplicate-title path: UserGroupModel::save() returns false when
+  // usergroup_exists(title), and group_add.php then api_location()'s back
+  // to itself — no id in the URL. That happens on a reused box that already
+  // has "Behat Test Group" from a previous run of this file. Look the
+  // existing group up from the groups list instead of failing; CI's fresh
+  // install still takes the success-redirect path.
+  const fromUrl = page.url().match(/[?&]id=(\d+)/)
+  if (fromUrl) {
+    lastCreatedGroupId = fromUrl[1]
+    return
   }
-  lastCreatedGroupId = match[1]
+  await gotoReliably(page, "/main/social/groups.php")
+  const myGroupsTab = page.getByRole("tab", { name: "My groups" })
+  if (await myGroupsTab.count()) {
+    await myGroupsTab.click()
+  }
+  // groups.php cards put the group title in an image overlay, not in the
+  // <a> text (the link's accessible name is empty; confirmed via a real
+  // snapshot: heading+link to group_view.php?id=2 with no text). Match by
+  // href, scoped to this user's groups tab.
+  const link = page.locator('a[href*="group_view.php?id="]').first()
+  // The card's title is an image overlay; the <a href="group_view.php?id=N">
+  // is present but CSS-hidden (Playwright: "34 × locator resolved to hidden").
+  // We only need the id from the href, not a click.
+  await link.waitFor({ state: "attached", timeout: 15_000 })
+  const href = (await link.getAttribute("href")) || ""
+  const fromList = href.match(/[?&]id=(\d+)/)
+  if (!fromList) {
+    throw new Error(`Could not find a group id in the current URL (${page.url()}) or on the groups list`)
+  }
+  lastCreatedGroupId = fromList[1]
 })
 
 // Ported from FeatureContext::iInviteAFriendToASocialGroup(), but the
@@ -2042,7 +2927,21 @@ When("I invite the friend to the social group I just created", async ({ page }) 
     throw new Error("No friend id remembered — run \"I have a friend named ...\" first.")
   }
   await page.goto(`/main/social/group_invitation.php?id=${encodeURIComponent(lastCreatedGroupId)}`)
-  await page.waitForSelector("#invitation option")
+  const alreadyInvited = page.getByText("Users already invited")
+  try {
+    await page.waitForSelector("#invitation option", { timeout: 15_000 })
+  } catch {
+    // Reused box: this group already has the friend pending, so the
+    // available list is empty and the "Users already invited" panel is
+    // the durable success signal the scenario asserts next.
+    if (await alreadyInvited.first().isVisible().catch(() => false)) {
+      return
+    }
+    const bodyText = ((await page.locator("body").textContent()) || "").replace(/\s+/g, " ").trim()
+    throw new Error(
+      `Available-friends list never populated for group ${lastCreatedGroupId} / friend ${lastFriendUserId}. Page text: ${bodyText.slice(0, 500)}`,
+    )
+  }
   await page.evaluate((value) => {
     const left = document.querySelector("#invitation") as HTMLSelectElement
     const right = document.querySelector("#invitation_to") as HTMLSelectElement
@@ -2058,7 +2957,52 @@ When("I invite the friend to the social group I just created", async ({ page }) 
 })
 
 Then("I should see {string}", async ({ page }, text: string) => {
-  await expect(page.getByText(text).first()).toBeVisible()
+  // `.filter({ visible: true })` before `.first()`, so this picks the first
+  // VISIBLE match rather than the first match in DOM order.
+  //
+  // getByText() matches by case-insensitive SUBSTRING, which makes short or
+  // common assertion strings collide with unrelated content — and if the
+  // colliding element happens to be hidden, the assertion fails with a
+  // baffling `unexpected value "hidden"` about an element nobody was looking
+  // for. Real instance: admin/fileIntegrity.feature asserted "Actions" (a
+  // column header) and resolved instead to a hidden <li> in a collapsed
+  // file-report list, because
+  // "tests/CoreBundle/.../TrainingSatisfactionSurveyCreatorTest.php" contains
+  // "...Satisfaction'S'urvey..." -> "actionsurvey" -> "actions".
+  //
+  // Substring matching is deliberately KEPT rather than switched to
+  // { exact: true }: most callers assert a name or phrase nested inside a
+  // larger element (a table row, a toast, a heading), so exact matching would
+  // break a great many currently-correct assertions. Filtering to visible
+  // fixes the actual failure mode — picking an element the user cannot see —
+  // without changing what counts as a match. Strictly more permissive than
+  // before for passing cases; it can only change the outcome where the old
+  // code would have chosen a hidden element and failed.
+  //
+  // Note this does NOT rescue a genuinely ambiguous VISIBLE match (the
+  // "TEMP" matching the word "template" trap documented in course.feature).
+  // For short strings, prefer asserting something distinctive.
+  await expect(page.getByText(text).filter({ visible: true }).first()).toBeVisible()
+})
+
+Then("I should see the current access URL", async ({ page }) => {
+  await expect(page.getByText(currentSiteAccessUrl()).first()).toBeVisible()
+})
+
+// Not ported — new. The installer always inserts access_url.id=1 as
+// http://localhost/ (see actionInstall.feature browsing CI's localhost
+// vhost). The admin UI at /admin/urls/manage is how that row gets changed
+// to the site's real public URL afterwards. adminMultiUrls.feature asserts
+// the displayed URL, so this has to run first in that file (and is
+// idempotent if the row is already correct).
+When("I set the default access URL to the current site URL", async ({ page }) => {
+  const target = currentSiteAccessUrl()
+  await gotoReliably(page, "/admin/urls/manage")
+  await expect(page.getByText("Multiple access URL").first()).toBeVisible()
+  await pressButton(page, "Edit")
+  await fillReliably(await resolveField(page, "access-url-url"), target)
+  await pressButton(page, "Save")
+  await expect(page.getByText(target).first()).toBeVisible()
 })
 
 // URL assertions — used when a success path is a redirect (e.g. extra_fields.php
@@ -2079,6 +3023,17 @@ Then("the URL should not contain {string}", async ({ page }, part: string) => {
     .not.toContain(part)
 })
 
+// Pathname-only deny check. Needed because a Vue-router access deny can land
+// on /login?redirect=/admin/system-status... — the full URL still CONTAINS
+// that path as a query value, so "the URL should not contain" would false-
+// fail a genuine redirect-to-login. Polls until the Vue guard (or a Symfony
+// 302) has actually left the protected path.
+Then("the page path should not start with {string}", async ({ page }, prefix: string) => {
+  await expect
+    .poll(() => new URL(page.url()).pathname, { timeout: 15_000 })
+    .not.toMatch(new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:/|$)`))
+})
+
 // Used for the CidReqListener access-denied redirect chain (AccessDeniedHttpException
 // -> ExceptionListener flashes + redirects to the `index` route, "/"). A plain
 // "the URL should contain '/'" is unusable here since every URL's path starts
@@ -2094,6 +3049,10 @@ Then("the URL should be the site root", async ({ page }) => {
 // "Developer Copy" then "Developer" are both gone after each delete).
 Then("I should not see {string}", async ({ page }, text: string) => {
   await expect(page.locator("body")).not.toContainText(text)
+})
+
+When("I wait until I no longer see {string}", async ({ page }, text: string) => {
+  await expect(page.locator("body")).not.toContainText(text, { timeout: 30_000 })
 })
 
 // FeatureContext::waitForThePageToBeLoaded() / waitVeryLongForThePageToBeLoaded()
@@ -2163,9 +3122,9 @@ Then(/^(?:|I )wait for the page content to settle$/, async ({ page }) => {
 // :visible mirrors the original's actual intent (fail only on one that's
 // really shown).
 Then("I should not see an error", async ({ page }) => {
-  await expect(page.locator("body")).not.toContainText("Internal server error")
+  await expect(page.locator("body")).not.toContainText(/internal server error/i)
   await expect(page.locator(".alert-danger:visible")).toHaveCount(0)
-  await expect(page.locator(".p-message-error")).toHaveCount(0)
+  await expect(page.locator(".p-message-error, .p-toast-message-error, .p-message-severity-error")).toHaveCount(0)
 })
 
 // Mink's "the response status code should be ..." (MinkContext::
@@ -2354,7 +3313,7 @@ async function fillExerciseAnswerCell(page: Page, idPrefix: string, rowNumber: n
   const locator = page.locator(`textarea[id^="${idPrefix}${rowNumber - 1}-"]`)
   await locator.first().waitFor({ state: "attached" })
   const id = await locator.first().getAttribute("id")
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await waitForTinymceEditor(page, id as string, "filling a table-row editor")
   await page.evaluate(
     ({ id, value }) => {
       const editor = (window as any).tinymce.get(id)
@@ -2405,7 +3364,7 @@ When("I fill in matching pair {int} with {string}", async ({ page }, pairNumber:
   if (!id) {
     throw new Error(`Could not find matching pair ${pairNumber}'s answer editor.`)
   }
-  await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), id)
+  await waitForTinymceEditor(page, id as string, "filling a table-row editor")
   await page.evaluate(
     ({ id, value }) => {
       const editor = (window as any).tinymce.get(id)
@@ -2490,13 +3449,36 @@ When("I check every {string} option on the page", async ({ page }, label: string
 // it register" below for what that actually was.
 When("I press \"Next question\" until {string} appears", async ({ page }, nextTitle: string) => {
   const heading = page.locator("h2").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(nextTitle)}\\s*$`) })
-  for (let attempt = 0; attempt < 5; attempt++) {
-    await pressButton(page, "Next question")
-    if (await isSoonVisible(heading, 3000)) {
+  const saving = page.getByRole("button", { name: "Saving", exact: true })
+  const nextControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
+    hasText: /^\s*(Next question|Next page)\s*$/,
+  })
+  const deadline = Date.now() + 50_000
+  while (Date.now() < deadline) {
+    if (await heading.first().isVisible().catch(() => false)) {
+      return
+    }
+    if (await saving.isVisible().catch(() => false)) {
+      await saving.waitFor({ state: "hidden", timeout: 20_000 }).catch(() => {})
+      continue
+    }
+    if (await isSoonVisible(nextControl, 3_000)) {
+      await nextControl.first().click()
+    }
+    if (await isSoonVisible(heading, 3_000)) {
       return
     }
   }
   await expect(heading.first()).toBeVisible()
+})
+
+When("I start the exercise", async ({ page }) => {
+  await failIfLoginPage(page, "start the exercise")
+  const startControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
+    hasText: /^\s*(Start test|Proceed with the test)\s*$/,
+  })
+  await expect(startControl.first()).toBeVisible({ timeout: 20_000 })
+  await startControl.first().click()
 })
 
 // Not ported — new, for specialCase1Sessions.feature's session_add.php/session_edit.php
@@ -2574,9 +3556,14 @@ When("I switch the LP resource panel to {string}", async ({ page }, resourceType
 When(
   "I set the prerequisite of LP item {string} to {string} with minimum score {string}",
   async ({ page }, targetItem: string, sourceItem: string, minimumScore: string) => {
+    // specialCase1 switches the interface language to French mid-file.
+    // BaseButton only-icon uses the translated label as `title`/`aria-label`
+    // ("Pré-requis" / "Modifier les prérequis"), so an English-only title
+    // selector hung the full 15-minute budget with the French button visible.
     await page
       .locator(".rounded-lg.border.px-2.py-2", { hasText: targetItem })
-      .locator('[title="Prerequisites"]')
+      .locator('[title="Prerequisites"], [title="Pré-requis"], [aria-label="Prerequisites"], [aria-label="Pré-requis"]')
+      .first()
       .click()
     const radio = page.getByRole("radio", { name: sourceItem, exact: true })
     await radio.check()
@@ -2586,7 +3573,9 @@ When(
     if (await minimumInput.count()) {
       await minimumInput.fill(minimumScore)
     }
-    await page.getByRole("button", { name: "Save prerequisites settings" }).click()
+    await page
+      .getByRole("button", { name: /Save prerequisites settings|Modifier les prérequis/i })
+      .click()
   },
 )
 

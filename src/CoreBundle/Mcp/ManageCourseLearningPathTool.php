@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
@@ -756,7 +757,7 @@ final readonly class ManageCourseLearningPathTool
             array_splice($items, $targetIndex, 0, [$learningPathItem]);
         }
 
-        $learningPath->setModifiedOn(new \DateTime());
+        $learningPath->setModifiedOn(new DateTime());
         $this->entityManager->persist($learningPath);
         $this->persistItemOrder($learningPath, $items);
     }

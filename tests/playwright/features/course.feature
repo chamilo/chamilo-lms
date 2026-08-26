@@ -1,5 +1,5 @@
 # features/courseTools.feature#
-# This test leaves course cid=1 titled "TEMP" available for other tests
+# This test leaves course cid=3 titled "TEMP" available for other tests
 @common @tools
 Feature: Course tools basic testing
   In order to use a course
@@ -71,7 +71,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the learning path tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/lp/lp_controller.php?action=list&cid=1"
+    And I am on "/main/lp/lp_controller.php?action=list&cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -79,7 +79,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the links tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/link/link.php?cid=1"
+    And I am on "/main/link/link.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -87,7 +87,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the tests tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/exercise/exercise.php?cid=1"
+    And I am on "/main/exercise/exercise.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -95,7 +95,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the announcements tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/announcements/announcements.php?cid=1"
+    And I am on "/main/announcements/announcements.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -103,7 +103,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the assessments tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/gradebook/index.php?cid=1"
+    And I am on "/main/gradebook/index.php?cid=3"
     # Original Behat text was "wait the page to be loaded when ready" (missing
     # "for") — no such step was ever defined in FeatureContext.php, so this
     # scenario always errored out at this exact line in the original suite
@@ -116,7 +116,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the glossary tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/glossary/index.php?cid=1"
+    And I am on "/main/glossary/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -138,7 +138,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the agenda tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/calendar/agenda_js.php?cid=1"
+    And I am on "/main/calendar/agenda_js.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -146,7 +146,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the forums tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/forum/index.php?cid=1"
+    And I am on "/main/forum/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -154,7 +154,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the dropbox tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/dropbox/index.php?cid=1"
+    And I am on "/main/dropbox/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -162,7 +162,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the users tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/user/user.php?cid=1"
+    And I am on "/main/user/user.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -170,7 +170,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the groups tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/group/group.php?cid=1"
+    And I am on "/main/group/group.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -180,7 +180,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the chat tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/resources/chat/?cid=1"
+    And I am on "/resources/chat/?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -196,7 +196,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the surveys tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/survey/index.php?cid=1"
+    And I am on "/main/survey/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -204,7 +204,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the wiki tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/wiki/index.php?cid=1"
+    And I am on "/main/wiki/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -212,7 +212,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the notebook tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/notebook/index.php?cid=1"
+    And I am on "/main/notebook/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -230,7 +230,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the reporting tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/tracking/courseLog.php?cid=1"
+    And I am on "/main/tracking/courseLog.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -238,7 +238,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the settings tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/course_info/infocours.php?cid=1"
+    And I am on "/main/course_info/infocours.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -246,7 +246,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the backup tool is available
     Given I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I am on "/main/course_info/maintenance.php?cid=1"
+    And I am on "/main/course_info/maintenance.php?cid=3"
     And I wait for the page to be loaded
     Then I should not see an error
 
@@ -279,7 +279,18 @@ Feature: Course tools basic testing
   # feature's and toolGroup.feature's own header comments for the same
   # confirmed-not-reproducible conclusion). Deferred rather than re-chased a
   # third time; revisit if a future CI run points to something more specific.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Enter to public password-protected course
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded

@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 use InvalidArgumentException;
 use JsonException;
 
+use const JSON_THROW_ON_ERROR;
+
 final class ExerciseRegressionTopicContentParser
 {
     private const int MAX_SHORT_TEXT_LENGTH = 600;

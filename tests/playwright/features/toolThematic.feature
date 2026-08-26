@@ -35,7 +35,7 @@ Feature: Course progress tool
     Given I am a platform administrator
 
   Scenario: Create a thematic section
-    Given I am on "/main/course_progress/index.php?cid=1&action=thematic_add"
+    Given I am on "/main/course_progress/index.php?cid=3&action=thematic_add"
     And I wait for the page to be loaded
     Then I fill in the following:
       | title | Thematic 1 Test |
@@ -45,7 +45,7 @@ Feature: Course progress tool
     Then I should see "Thematic 1 Test"
 
   Scenario: Read and update the thematic plan
-    Given I am on "/main/course_progress/index.php?cid=1"
+    Given I am on "/main/course_progress/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 Test"
     When I click the "a[title='Thematic plan']" element
@@ -61,7 +61,7 @@ Feature: Course progress tool
     And I should see "Objective 1 description"
 
   Scenario: Update a thematic section
-    Given I am on "/main/course_progress/index.php?cid=1"
+    Given I am on "/main/course_progress/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 Test"
     When I click the "a[title='Edit']" element
@@ -75,7 +75,7 @@ Feature: Course progress tool
     Then I should see "Thematic 1 Test Edited"
 
   Scenario: Delete a thematic section
-    Given I am on "/main/course_progress/index.php?cid=1"
+    Given I am on "/main/course_progress/index.php?cid=3"
     And I wait for the page to be loaded
     Then I should see "Thematic 1 Test Edited"
     When I click the "button[aria-label='Delete']" element

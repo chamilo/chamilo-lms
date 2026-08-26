@@ -8,8 +8,8 @@ description: >
   Playwright/Gherkin test suite for it in tests/playwright/features/. Use when
   the user describes a feature and asks for test coverage, wants to "add
   tests for X", asks to confirm a feature "keeps working", or runs
-  /add-feature-test. Companion to the Behat→Playwright migration described in
-  CLAUDE.md — read that file's "Discovered Patterns" section first, it documents
+  /add-feature-test. Companion to the Playwright suite described in CLAUDE.md —
+  read that file's "Discovered Patterns" section first, it documents
   conventions this skill assumes (resolveField/pressButton cascades, base
   component mapping, breadcrumb rules, etc.).
 ---
@@ -65,20 +65,23 @@ the reference examples for this.
 
 ## Step 2 — Check for existing coverage (don't duplicate)
 
-1. `tests/behat/features/*.feature` — if a same-topic file exists, it's a
-   **hint** of intended scenarios (what create/edit/delete flows the original
-   author thought mattered) — never a source of truth for selectors. Every
-   field name, button label, and dialog type it assumes must still be
-   verified live in Step 4; these files rot constantly (name→title renames,
-   dead pages, changed widgets, typo'd step phrases that never even matched
-   in the original suite).
-2. `tests/playwright/features/*.feature` — if a file for this feature
+1. `tests/playwright/features/*.feature` — if a file for this feature
    **already exists**, this is an EXTEND task: read it fully, understand what
    it already covers, and only add what's missing (new scenarios, new roles,
    edge cases) rather than starting over or duplicating scenarios.
-3. If genuinely new (no Behat equivalent — e.g. a feature added since the
-   Behat suite was written), design scenarios from CLAUDE.md's own mandatory
-   Behat rule (it applies here too): cover create/read/update/delete at
+2. The deleted Behat suite — the files are in git history
+   (`git show 98c77757ea6:tests/behat/features/<name>.feature`;
+   `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the list, 84 files
+   at that commit). If a
+   same-topic file existed there, it's a **hint** of intended scenarios (what
+   create/edit/delete flows the original author thought mattered) — never a
+   source of truth for selectors. Every field name, button label, and dialog
+   type it assumes must still be verified live in Step 4; those files rotted
+   constantly (name→title renames, dead pages, changed widgets, typo'd step
+   phrases that never even matched in the original suite).
+3. If genuinely new (nothing in either place — e.g. a feature added since
+   then), design scenarios from CLAUDE.md's own mandatory
+   rule (it applies here too): cover create/read/update/delete at
    minimum; run the full scenario set once per role if the page is reachable
    by more than one role; add an explicit access-denied scenario for
    role-restricted pages.
@@ -187,8 +190,8 @@ Other recurring traps to actively check for:
   header checkbox before the grid's own AJAX data call has rendered any rows
   toggles the checkbox's own visual state but selects nothing.
 - **`name` → `title` field-rename drift** recurs across pages migrated from
-  1.11.x — if a Behat-era field name doesn't resolve, check for this exact
-  rename before assuming something else changed.
+  1.11.x — if a field name taken from an older test doesn't resolve, check for
+  this exact rename before assuming something else changed.
 - **Cross-file test interference on shared fixtures.** Any feature touching
   the shared `TEMP` course (cid=1) can run concurrently, in a different
   worker, with any OTHER feature file also touching it — don't assume
@@ -199,10 +202,11 @@ Other recurring traps to actively check for:
 
 ## Step 6 — Write the feature file
 
-- Path: `tests/playwright/features/<name>.feature`, matching the Behat file's
-  name if a same-topic one exists.
+- Path: `tests/playwright/features/<name>.feature`, keeping the name the old
+  Behat file used if a same-topic one existed (the other files here follow that
+  naming).
 - Start with a header comment documenting what was actually verified live vs.
-  assumed, and any real drift found from the Behat original (if any) — this
+  assumed, and any real drift found from the old Behat scenario (if any) — this
   is a load-bearing convention in every existing file in this directory, not
   decoration. A future reader (including a future you) needs to know *why*
   a selector/assertion is what it is, not just what it is.

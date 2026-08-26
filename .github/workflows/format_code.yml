@@ -42,6 +42,20 @@ jobs:
             - name: Install dependencies with composer
               run: composer install --no-progress
 
+            # A cold run over src/ + tests takes ~3.5 minutes; ECS caches per
+            # file content, so restoring the previous run's cache brings a
+            # typical pull request down to seconds. The key includes ecs.php
+            # and composer.lock so changing a rule or a dependency version
+            # invalidates it instead of trusting stale results.
+            - name: Cache ecs results
+              uses: actions/cache@v6
+              with:
+                  path: var/cache/ecs
+                  key: ${{ runner.os }}-ecs-${{ hashFiles('ecs.php', 'composer.lock') }}-${{ github.sha }}
+                  restore-keys: |
+                      ${{ runner.os }}-ecs-${{ hashFiles('ecs.php', 'composer.lock') }}-
+                      ${{ runner.os }}-ecs-
+
             - name: ecs (easy-coding-standard)
               id: analyse
               run: vendor/bin/ecs check

@@ -140,7 +140,12 @@ async function submit() {
     formData.append("contentMaker", contentMaker.value)
     formData.append("allowHtaccess", allowHtaccess.value ? "1" : "0")
 
-    await lpService.importScormPackage(contextParams.value, formData)
+    const result = await lpService.importScormPackage(contextParams.value, formData)
+    if (!Array.isArray(result?.items) || result.items.length === 0) {
+      showErrorNotification(t("An error occurred"))
+      return
+    }
+
     showSuccessNotification(t("File upload succeeded!"))
     await router.push({ name: "LpList", query: route.query })
   } catch (error) {

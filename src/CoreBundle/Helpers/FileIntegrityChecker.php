@@ -441,9 +441,11 @@ class FileIntegrityChecker
         }
 
         $this->updateRunProgress($status, $items, null, $completed);
-        flock($this->runLockHandle, LOCK_UN);
-        fclose($this->runLockHandle);
+
+        $handle = $this->runLockHandle;
         $this->runLockHandle = null;
+        flock($handle, LOCK_UN);
+        fclose($handle);
     }
 
     /**
@@ -570,7 +572,11 @@ class FileIntegrityChecker
 
         $filterIterator = new RecursiveCallbackFilterIterator(
             $directoryIterator,
-            static function (SplFileInfo $file, string $key, RecursiveDirectoryIterator $iterator): bool {
+            static function (mixed $file, mixed $key, RecursiveDirectoryIterator $iterator): bool {
+                if (!$file instanceof SplFileInfo) {
+                    return false;
+                }
+
                 // Never follow symlinks: avoids escaping the project root and traversal loops.
                 if ($file->isLink()) {
                     return false;

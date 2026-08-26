@@ -38,12 +38,16 @@ final class MobileMessagePushListener
         if (
             !$message instanceof Message
             || Message::MESSAGE_TYPE_INBOX !== $message->getMsgType()
-            || null === $message->getId()
         ) {
             return;
         }
 
-        $this->pendingMessages[$message->getId()] = $message;
+        $messageId = $message->getId();
+        if (null === $messageId) {
+            return;
+        }
+
+        $this->pendingMessages[$messageId] = $message;
     }
 
     public function postFlush(PostFlushEventArgs $args): void

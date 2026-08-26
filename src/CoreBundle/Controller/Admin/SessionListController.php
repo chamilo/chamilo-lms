@@ -100,8 +100,8 @@ class SessionListController extends AbstractController
     #[Route('', name: 'admin_session_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $page = max(1, (int) $request->query->get('page', 1));
-        $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
+        $page = max(1, (int) $request->query->get('page', '1'));
+        $limit = max(1, min(200, (int) $request->query->get('limit', '20')));
         $keyword = trim((string) $request->query->get('keyword', ''));
         $categoryFilter = $request->query->get('category');
 

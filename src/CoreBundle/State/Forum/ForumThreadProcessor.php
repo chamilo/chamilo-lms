@@ -294,9 +294,6 @@ final class ForumThreadProcessor implements ProcessorInterface
         ]);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function toggleThreadLock(Request $request, mixed $data): JsonResponse
     {
         $payload = $this->getJsonData($request);

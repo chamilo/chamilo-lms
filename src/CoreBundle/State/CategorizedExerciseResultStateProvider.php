@@ -233,6 +233,8 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             $objQuestionTmp = Question::read($questionId, $objExercise->course);
 
             // We're inside *one* question. Go through each possible answer for this question
+
+            /** @var array{score: float|int, weight: float|int, ...}|false $result */
             $result = $objExercise->manage_answer(
                 $exerciseTracking->getExeId(),
                 $questionId,
@@ -446,7 +448,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         $isHRM = $this->security->isGranted('ROLE_HR');
         $isSessionAdmin = $this->security->isGranted('ROLE_SESSION_MANAGER');
         $isCourseTutor = $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        $isAllowedToEdit = api_is_allowed_to_edit(false, true);
 
         return $isAllowedToEdit || $isCourseTutor || $isSessionAdmin || $isHRM || $isStudentBoss;
     }

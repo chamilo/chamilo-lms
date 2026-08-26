@@ -202,7 +202,8 @@ final class GenericizeLegacyRuleSourcesCommand extends Command
      * @param array{
      *     item_type: int,
      *     variable: string,
-     *     generic_source: string
+     *     generic_source: string,
+     *     ...
      * } $mapping
      *
      * @return list<string>
@@ -236,7 +237,8 @@ SQL,
      * @param array{
      *     item_type: int,
      *     variable: string,
-     *     generic_source: string
+     *     generic_source: string,
+     *     ...
      * } $mapping
      */
     private function countRows(array $mapping, string $source): int
@@ -263,7 +265,8 @@ SQL,
      * @param array{
      *     item_type: int,
      *     variable: string,
-     *     generic_source: string
+     *     generic_source: string,
+     *     ...
      * } $mapping
      */
     private function updateRows(array $mapping, string $legacySource): int

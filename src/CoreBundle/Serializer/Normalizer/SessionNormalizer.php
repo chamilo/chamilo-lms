@@ -37,7 +37,10 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
             );
         }
 
-        return $this->normalizer->normalize($data, $format, $context);
+        $normalized = $this->normalizer->normalize($data, $format, $context);
+        \assert(\is_array($normalized));
+
+        return $normalized;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

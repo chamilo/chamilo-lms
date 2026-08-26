@@ -146,7 +146,7 @@ trait ForumWriteHelperTrait
     {
         return [[
             'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
-            'cid' => $course->getId(),
+            'cid' => (int) $course->getId(),
             'sid' => $session?->getId() ?? 0,
             'gid' => $group?->getIid() ?? 0,
         ]];

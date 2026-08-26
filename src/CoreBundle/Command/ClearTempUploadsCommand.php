@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'cache:clear-uploads',
@@ -22,7 +23,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class ClearTempUploadsCommand extends Command
 {
     public function __construct(
-        private readonly TempUploadHelper $helper
+        private readonly TempUploadHelper $helper,
+        private readonly KernelInterface $kernel,
     ) {
         parent::__construct();
     }
@@ -52,10 +54,7 @@ HELP
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $kernelContainer = $this->getApplication()?->getKernel()?->getContainer();
-        if ($kernelContainer) {
-            Container::setContainer($kernelContainer);
-        }
+        Container::setContainer($this->kernel->getContainer());
 
         $io = new SymfonyStyle($input, $output);
         $olderThan = (int) $input->getOption('older-than');

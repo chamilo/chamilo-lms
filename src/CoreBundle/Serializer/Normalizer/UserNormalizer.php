@@ -27,6 +27,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
         $context[self::ALREADY_CALLED] = true;
 
         $result = $this->normalizer->normalize($data, $format, $context);
+        \assert(\is_array($result));
 
         $result['fullName'] = $this->nameConventionHelper->getPersonName($data);
 

@@ -51,6 +51,12 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         ];
     }
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<CourseRelUser>|CourseRelUser|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $currentUser = $this->userHelper->getCurrent();

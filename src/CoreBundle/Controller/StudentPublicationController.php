@@ -214,8 +214,8 @@ class StudentPublicationController extends AbstractController
             // Management capabilities are exposed only when the student context is valid.
         }
 
-        $page = (int) $request->query->get('page', 1);
-        $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
+        $page = (int) $request->query->get('page', '1');
+        $itemsPerPage = (int) $request->query->get('itemsPerPage', '10');
         $order = $request->query->all('order');
 
         [$submissions, $total] = $repo->findAssignmentSubmissionsPaginated(
@@ -273,8 +273,8 @@ class StudentPublicationController extends AbstractController
         // Teacher-only listing: must be allowed to edit the assignment's course resource.
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
-        $page = (int) $request->query->get('page', 1);
-        $itemsPerPage = (int) $request->query->get('itemsPerPage', 10);
+        $page = (int) $request->query->get('page', '1');
+        $itemsPerPage = (int) $request->query->get('itemsPerPage', '10');
         $order = $request->query->all('order');
 
         [$submissions, $total] = $repo->findAllSubmissionsByAssignment(

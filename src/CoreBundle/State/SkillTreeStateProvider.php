@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\SkillTreeNode;
 use Chamilo\CoreBundle\DataTransformer\SkillTreeNodeTransformer;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Repository\SkillRepository;
@@ -30,6 +31,12 @@ readonly class SkillTreeStateProvider implements ProviderInterface
         );
     }
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return array<never, never>|Collection<int, SkillTreeNode>
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|Collection
     {
         /** @var Skill $root */

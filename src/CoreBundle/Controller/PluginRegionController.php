@@ -100,8 +100,8 @@ class PluginRegionController extends AbstractController
                 continue;
             }
 
-            $key = preg_replace('/[^a-zA-Z0-9_]/', '', $key);
-            $context[$key] = htmlspecialchars($value);
+            $key = (string) preg_replace('/[^a-zA-Z0-9_]/', '', (string) $key);
+            $context[$key] = htmlspecialchars((string) $value);
         }
 
         return $context;

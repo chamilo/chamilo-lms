@@ -63,7 +63,7 @@ class AccessUrlUsersController extends AbstractController
 
         $currentUser = $this->currentUser();
         $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
-        $accessUrlId = (int) $request->query->get('access_url_id', 0);
+        $accessUrlId = (int) $request->query->get('access_url_id', '0');
         if ($accessUrlId > 0 && !$this->accessUrlScope->isUrlManaged($currentUser, $accessUrlId)) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }

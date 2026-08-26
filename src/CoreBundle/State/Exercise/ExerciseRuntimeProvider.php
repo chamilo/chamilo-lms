@@ -396,7 +396,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     }
 
     /**
-     * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string, inlineUrl: string}>
+     * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string, inlineUrl: string, onlyofficeEditorUrl: string}>
      */
     private function normalizeSavedAttemptFiles(Operation $operation, TrackEAttempt $attemptRow, Course $course, ?Session $session): array
     {
@@ -1921,7 +1921,12 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             $resourceFile = $resourceNode->getResourceFiles()->first();
             if ($resourceFile instanceof ResourceFile) {
                 $templateName = (string) ($resourceFile->getOriginalName() ?: $templateName ?: $resourceNode->getTitle());
-                $templateUrl = $this->appendCourseContextToUrl($operation, $this->questionRepository->getHotSpotImageUrl($question), $course, $session);
+                $templateUrl = $this->appendCourseContextToUrl(
+                    $operation,
+                    $this->questionRepository->getResourceFileUrl($question),
+                    $course,
+                    $session
+                );
             }
         }
 

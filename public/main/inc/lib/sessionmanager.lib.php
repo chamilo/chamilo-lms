@@ -2173,11 +2173,11 @@ class SessionManager
      * @author Carlos Vargas from existing code
      * @author Julio Montoya. Cleaning code.
      *
-     * @param int   $sessionId
-     * @param array $userList
-     * @param int   $session_visibility
-     * @param bool  $empty_users
-     * @param bool  $registerUsersToAllCourses
+     * @param int      $sessionId
+     * @param array    $userList
+     * @param int|null $session_visibility null falls back to the session's own visibility
+     * @param bool     $empty_users
+     * @param bool     $registerUsersToAllCourses
      *
      * @return bool
      */

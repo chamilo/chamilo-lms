@@ -140,6 +140,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
 
+        // The thread comes from the URL and the rights below are computed for the course in the
+        // request, so the thread has to belong to that course — otherwise managing one course
+        // would read the threads of every other one.
+        if (!$this->threadBelongsToContext($thread, $course, $session, $group)) {
+            throw new NotFoundHttpException('Forum thread not found.');
+        }
+
         if (!$canManage) {
             $this->assertResourceIsVisible($thread->getResourceNode());
             $this->assertResourceIsVisible($forum->getResourceNode());
@@ -268,6 +275,27 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         if (null === $resourceNode || !$this->security->isGranted('VIEW', $resourceNode)) {
             throw new AccessDeniedHttpException('You are not allowed to access this resource.');
         }
+    }
+
+    /**
+     * A thread of the base course is reachable from a session of that course, hence the fallbacks.
+     */
+    private function threadBelongsToContext(
+        CForumThread $thread,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group
+    ): bool {
+        $resourceNode = $thread->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            return false;
+        }
+
+        $link = $resourceNode->getResourceLinkByContext($course, $session, $group)
+            ?? $resourceNode->getResourceLinkByContext($course, $session)
+            ?? $resourceNode->getResourceLinkByContext($course);
+
+        return null !== $link;
     }
 
     private function getCurrentUser(): User

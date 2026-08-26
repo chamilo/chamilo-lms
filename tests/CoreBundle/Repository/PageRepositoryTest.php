@@ -56,6 +56,7 @@ class PageRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($page);
         $em->persist($page);
 
+        /** @var ArrayCollection<int, Page> $collection */
         $collection = new ArrayCollection();
         $collection->add($page);
         $category->setPages($collection);

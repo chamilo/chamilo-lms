@@ -45,6 +45,7 @@ final readonly class CreateCourseIllustrationTool
     /**
      * @return array{
      *     created: true,
+     *     course_features_enabled: list<string>,
      *     illustration: array{
      *         document_id: int,
      *         resource_node_id: int,
@@ -102,6 +103,7 @@ final readonly class CreateCourseIllustrationTool
     /**
      * @return array{
      *     created: true,
+     *     course_features_enabled: list<string>,
      *     illustration: array{
      *         document_id: int,
      *         resource_node_id: int,

@@ -78,7 +78,7 @@ class LoginAttemptLoggerHelper
         $fileObject->seek(PHP_INT_MAX);
         $fileObject->seek($fileObject->key() - 1);
         $line = $fileObject->current();
-        if (empty($line)) {
+        if (!\is_string($line) || '' === $line) {
             return '';
         }
 

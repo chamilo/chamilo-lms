@@ -176,7 +176,7 @@ final readonly class AdminStatisticsMaintenanceQueryService
                 'username' => (string) ($row['username'] ?? ''),
                 'email' => (string) ($row['email'] ?? ''),
                 'profile' => $this->getUserStatusLabel((int) $row['status']),
-                'authenticationSource' => \is_array($authSources) ? implode(', ', array_map('strval', $authSources)) : (string) $authSources,
+                'authenticationSource' => implode(', ', $authSources),
                 'registeredDate' => (string) ($row['created_at'] ?? ''),
                 'lastAccess' => (string) ($row['login_date'] ?? ''),
                 'active' => (int) $row['active'],

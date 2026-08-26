@@ -41,10 +41,29 @@ use Symfony\Component\Serializer\Attribute\Groups;
                                     'questionId' => ['type' => 'integer'],
                                     'secondsSpent' => ['type' => 'integer'],
                                     'reviewLater' => ['type' => 'boolean'],
+                                    'navigationAction' => ['type' => 'string'],
                                     'file' => [
                                         'type' => 'string',
                                         'format' => 'binary',
                                         'description' => 'Upload answer file, oral expression audio file or completed Office document',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'required' => ['questionId'],
+                                'properties' => [
+                                    'questionId' => ['type' => 'integer'],
+                                    'secondsSpent' => ['type' => 'integer'],
+                                    'reviewLater' => ['type' => 'boolean'],
+                                    'navigationAction' => ['type' => 'string'],
+                                    'fileName' => ['type' => 'string'],
+                                    'mimeType' => ['type' => 'string'],
+                                    'base64Content' => [
+                                        'type' => 'string',
+                                        'description' => 'Base64-encoded file content for native/mobile clients',
                                     ],
                                 ],
                             ],

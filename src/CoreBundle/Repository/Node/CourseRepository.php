@@ -95,6 +95,9 @@ class CourseRepository extends ResourceRepository
      *
      * @return Course[]
      */
+    /**
+     * @return array<int, array{id: int, title: string, code: string}>
+     */
     public function getCoursesInfoByUser(User $user, AccessUrl $url, int $status, string $keyword = ''): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

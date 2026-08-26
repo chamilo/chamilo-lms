@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
 
 /**
- * @implements ProcessorInterface<CAttendance, void>
+ * @implements ProcessorInterface<CAttendance, mixed>
  */
 final readonly class CAttendanceDeleteProcessor implements ProcessorInterface
 {

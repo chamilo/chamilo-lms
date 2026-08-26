@@ -194,6 +194,7 @@ class ExtraFieldType extends AbstractType
                 ? (bool) $editableMap[$variable]
                 : (bool) $extraField->isChangeable();
 
+            /** @var array<string, mixed> $defaultOptions */
             $defaultOptions = [
                 'label' => $text,
                 'required' => false,

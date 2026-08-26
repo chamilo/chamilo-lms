@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
@@ -42,6 +43,7 @@ class ProcessUserDataRequestsCommand extends Command
         private readonly EntityManager $em,
         private readonly TranslatorInterface $translator,
         private readonly MailHelper $mailHelper,
+        private readonly KernelInterface $kernel,
     ) {
         parent::__construct();
     }
@@ -58,7 +60,7 @@ class ProcessUserDataRequestsCommand extends Command
     {
         Database::setManager($this->em);
 
-        $container = $this->getApplication()->getKernel()->getContainer();
+        $container = $this->kernel->getContainer();
         Container::setContainer($container);
 
         $io = new SymfonyStyle($input, $output);
@@ -160,7 +162,8 @@ class ProcessUserDataRequestsCommand extends Command
                 $this->translator->trans(
                     'The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s',
                 ),
-                [$userInfo['complete_name'], $link]
+                $userInfo['complete_name'],
+                $link
             );
 
             if ($email) {

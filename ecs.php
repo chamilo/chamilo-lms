@@ -4,26 +4,16 @@
 
 declare(strict_types=1);
 
-use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\DisallowLongArraySyntaxSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
-use PhpCsFixer\Fixer\Casing\ConstantCaseFixer;
-use PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
-use PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
 use PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer;
-use PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer;
-use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
-use PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer;
 use PhpCsFixer\Fixer\FunctionNotation\FopenFlagsFixer;
 use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
-use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
-use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
@@ -44,33 +34,30 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->dynamicSets(['@Symfony']);
     $ecsConfig->import(SetList::PSR_12);
     $ecsConfig->dynamicSets(['@PhpCsFixer']);
-    $ecsConfig->import(SetList::DOCTRINE_ANNOTATIONS);
     $ecsConfig->dynamicSets(['@Symfony:risky']);
 
-    $ecsConfig->rule(DisallowLongArraySyntaxSniff::class);
-    $ecsConfig->rule(TrailingCommaInMultilineFixer::class);
-    $ecsConfig->rule(PhpdocNoPackageFixer::class);
+    // Only rules the sets above do NOT already enable, or whose configuration
+    // deviates from theirs, belong here — anything else is a no-op that hides
+    // which set actually decides the rule.
     $ecsConfig->rule(UselessFunctionDocCommentSniff::class);
     $ecsConfig->rule(PropertyTypeHintSniff::class);
+    // @Symfony leaves less_and_greater undecided; we do not want Yoda there.
     $ecsConfig->ruleWithConfiguration(
         YodaStyleFixer::class,
         ['equal' => true, 'identical' => true, 'less_and_greater' => false]
     );
-    $ecsConfig->rule(NoSuperfluousPhpdocTagsFixer::class);
     $ecsConfig->rule(VoidReturnFixer::class);
     $ecsConfig->rule(DeclareStrictTypesFixer::class);
-    $ecsConfig->rule(NoEmptyPhpdocFixer::class);
-    $ecsConfig->rule(NoUselessElseFixer::class);
+    // Only @PhpCsFixer enables this one, and it is a documented convention.
     $ecsConfig->rule(NoUselessReturnFixer::class);
-    $ecsConfig->rule(ModernizeTypesCastingFixer::class);
-    $ecsConfig->rule(ConstantCaseFixer::class);
-    $ecsConfig->rule(OrderedClassElementsFixer::class);
+    // @Symfony's default is 'one'.
     $ecsConfig->ruleWithConfiguration(
         ConcatSpaceFixer::class,
         [
             'spacing' => 'none',
         ]
     );
+    // @Symfony imports nothing.
     $ecsConfig->ruleWithConfiguration(
         GlobalNamespaceImportFixer::class,
         [
@@ -79,6 +66,11 @@ return static function (ECSConfig $ecsConfig): void {
             'import_functions' => false,
         ]
     );
+
+    // A full run over src/ + tests takes minutes; the cache brings a run with
+    // few changed files down to seconds. Keep it inside the project so CI can
+    // persist it between jobs.
+    $ecsConfig->cacheDirectory(__DIR__.'/var/cache/ecs');
 
     $ecsConfig->paths([
         __DIR__.'/src',
@@ -91,18 +83,15 @@ return static function (ECSConfig $ecsConfig): void {
         __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
         __DIR__.'/src/CoreBundle/Traits/Repository/*',
         __DIR__.'/src/CourseBundle/Component/*',
-        __DIR__.'/src/DataFixtures/*',
         __DIR__.'/src/CoreBundle/Entity/ResourceInterface.php',
         IncrementStyleFixer::class => 'post',
         PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
         PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT,
         PhpCsFixer\Fixer\PhpUnit\PhpUnitInternalClassFixer::class,
-        DoctrineAnnotationArrayAssignmentFixer::class,
         SingleLineCommentStyleFixer::class,
         NotOperatorWithSuccessorSpaceFixer::class,
         //\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class,
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer::class,
-        PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationSpacesFixer::class,
         PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer::class,
         ClassAttributesSeparationFixer::class,
         FopenFlagsFixer::class,

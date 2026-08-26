@@ -1188,6 +1188,13 @@
               >
                 {{ data[column.key] }}
               </a>
+              <a
+                v-else-if="activeReport === 'users_online' && column.key === 'fullName' && data.detailsUrl"
+                :href="data.detailsUrl"
+                class="text-primary underline hover:text-primary/80"
+              >
+                {{ data[column.key] }}
+              </a>
               <span v-else-if="activeReport === 'tool_usage' && column.key === 'lastUpdated'">
                 {{ data[column.key] }}
               </span>
@@ -1236,7 +1243,7 @@ import Chart from "primevue/chart"
 import Column from "primevue/column"
 import Message from "primevue/message"
 import ProgressSpinner from "primevue/progressspinner"
-import { computed, defineComponent, h, reactive, ref, watch } from "vue"
+import { computed, defineComponent, h, onBeforeUnmount, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -1329,6 +1336,7 @@ const reportGroups = [
   {
     label: "Users",
     items: [
+      { report: "users_online", label: "Users online" },
       { report: "users", label: "Number of users" },
       { report: "recentlogins", label: "Logins" },
       { report: "logins", type: "month", label: "Logins" },
@@ -1339,7 +1347,6 @@ const reportGroups = [
       { report: "no_login_users", label: "Not logged in for some time" },
       { report: "zombies", label: "Zombies" },
       { report: "users_active", label: "Users statistics" },
-      { report: "users_online", label: "Users online" },
       { report: "new_user_registrations", label: "New users registrations" },
       { report: "subscription_by_day", label: "Course/Session subscriptions by day" },
       { report: "duplicated_users", label: "Duplicate users" },
@@ -1375,6 +1382,9 @@ const zombieSortField = ref("firstname")
 const zombieSortOrder = ref(-1)
 const maintenanceLoading = ref(false)
 const tableRows = ref(20)
+const ONLINE_REFRESH_INTERVAL_MS = 15_000
+let usersOnlineRefreshTimer = null
+let usersOnlineRefreshInFlight = false
 const courseLastVisitSortField = ref("courseId")
 const courseLastVisitSortOrder = ref(1)
 const userSessionSortField = ref("url")
@@ -1666,6 +1676,10 @@ function queryParameters(pageOverride = null, rowsOverride = null) {
   if (usesDateRange.value && hasDateRange.value) {
     parameters.rangeStart = formatDateForRequest(filters.dateRange[0])
     parameters.rangeEnd = formatDateForRequest(filters.dateRange[1])
+  }
+  if (activeReport.value === "users_online") {
+    parameters.page = pageOverride || Number(route.query.page_nr || 1)
+    parameters.itemsPerPage = rowsOverride || Number(route.query.per_page || 10)
   }
   if (activeReport.value === "users_active") {
     parameters.page = pageOverride || Number(route.query.page_nr || route.query.table_users_active_page_nr || 1)
@@ -2198,6 +2212,40 @@ async function loadAllQuarterlySections() {
   }
 }
 
+function stopUsersOnlineRefresh() {
+  if (usersOnlineRefreshTimer !== null) {
+    window.clearInterval(usersOnlineRefreshTimer)
+    usersOnlineRefreshTimer = null
+  }
+}
+
+async function refreshUsersOnlineReport() {
+  if (activeReport.value !== "users_online" || loading.value || usersOnlineRefreshInFlight) {
+    return
+  }
+
+  usersOnlineRefreshInFlight = true
+  try {
+    const data = await adminStatisticsService.getReport(queryParameters())
+    if (activeReport.value === "users_online") {
+      applyResponse(data)
+    }
+  } catch {
+    // Keep the last successful data visible when a background refresh fails.
+  } finally {
+    usersOnlineRefreshInFlight = false
+  }
+}
+
+function startUsersOnlineRefresh() {
+  stopUsersOnlineRefresh()
+  if (activeReport.value !== "users_online") {
+    return
+  }
+
+  usersOnlineRefreshTimer = window.setInterval(refreshUsersOnlineReport, ONLINE_REFRESH_INTERVAL_MS)
+}
+
 function exportFilename(response, fallback) {
   const disposition = String(response?.headers?.["content-disposition"] || "")
   const match = disposition.match(/filename\*?=(?:UTF-8'')?([^;]+)/iu)
@@ -2373,7 +2421,7 @@ function formatDateTime(value) {
 }
 
 function isDateColumn(key) {
-  return ["lastAccess", "lastUpdated", "startDate", "endDate"].includes(key)
+  return ["lastAccess", "lastUpdated", "lastActivity", "startDate", "endDate"].includes(key)
 }
 
 function formatNumber(value) {
@@ -2396,11 +2444,15 @@ function stripHtml(value) {
 watch(
   () => route.query,
   async () => {
+    stopUsersOnlineRefresh()
     initializeFiltersFromRoute()
     await loadReport()
+    startUsersOnlineRefresh()
   },
   { deep: true, immediate: true },
 )
+
+onBeforeUnmount(stopUsersOnlineRefresh)
 </script>
 
 <style scoped>

@@ -19,9 +19,10 @@ Before({ tags: "@long-scenario" }, async () => {
   test.info().setTimeout(15 * 60_000)
 })
 
-// Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
-// i.e. repo root) — attachFileToField() paths in .feature files are relative
-// to repo root, not this steps file. tests/playwright/steps -> repo root.
+// File paths in .feature files are relative to the repo root, not to this
+// steps file (inherited from Mink's `files_path`, which the old Behat config
+// pointed at the repo root too). tests/playwright/steps -> repo root.
+// Fixture files of our own live in tests/playwright/fixtures/.
 const repoRoot = path.resolve(__dirname, "../../..")
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.

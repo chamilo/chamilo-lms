@@ -524,7 +524,7 @@ Feature: Exercise tool
     And I follow "Import quiz from Excel"
     And I wait for the page content to settle
     Then I should see "Import quiz from Excel"
-    And I attach the file "/tests/fixtures/exercise.xls" to the upload dropzone
+    And I attach the file "/tests/playwright/fixtures/exercise.xls" to the upload dropzone
     When I press "Upload"
     And I wait for the page content to settle
     Then I should see "File imported"

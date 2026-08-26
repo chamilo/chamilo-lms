@@ -179,6 +179,13 @@ export default defineConfig({
   //
   // Cost: a retry of specialCase1Sessions' @long-scenario can add ~15 minutes.
   // Judged acceptable against a red build on a green suite.
+  //
+  // NOT universal: package.json's test:playwright:specialcase1 overrides this
+  // with `--retries=0 --trace=retain-on-failure`, because a retry shares the
+  // DATABASE with the attempt that just failed and SpecialCase1's scenarios are
+  // heavily non-idempotent — a retry there turns one clear failure into a second,
+  // different, more confusing one. See that step's comment in playwright.yml.
+  // Keep the two in sync: changing the values here does NOT change that batch.
   retries: 1,
   use: {
     baseURL: process.env.BASE_URL || "http://my.chamilo.net",

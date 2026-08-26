@@ -356,6 +356,24 @@ jobs:
             # --min-tests is this batch's own floor (11 scenarios), not the
             # suite-wide one — a shared floor would let a truncated SpecialCase1
             # run slip through.
+            #
+            # NOTE: test:playwright:specialcase1 deliberately passes
+            # `--retries=0 --trace=retain-on-failure`, overriding the config's
+            # `retries: 1` / `trace: "on-first-retry"`. Retries are WRONG for this
+            # batch, and measured to be: a retry gets a fresh browser but the SAME
+            # database, and these scenarios are heavily non-idempotent (they create
+            # sessions, courses and extra fields). Observed on 2026-08-26 — "Add
+            # minimal session extra fields" failed attempt 0 on the terms-and-
+            # conditions interstitial, then attempt 1 failed with a COMPLETELY
+            # different error ("Add courses to this session" not found) because
+            # attempt 0 had already created the session. One clear failure became
+            # two confusing ones.
+            # `--trace=retain-on-failure` is the necessary partner: with retries
+            # off, "on-first-retry" would never capture a trace at all, so a
+            # SpecialCase1 failure would arrive with no evidence.
+            # The main batch keeps retries — its scenarios largely clean up after
+            # themselves, and there the retry is what absorbs the roving
+            # `browserContext._wrapApiCall ... traceName` Playwright-internal error.
             -   name: Playwright SpecialCase1 tests
                 if: always()
                 env:

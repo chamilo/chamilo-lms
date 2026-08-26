@@ -163,6 +163,51 @@ Then("I should be on the modern homepage of course {string}", async ({ page }, c
 // a fast nor a trustworthy "page is ready" signal on this app. Downstream
 // steps' own locator auto-wait / explicit "wait for the page..." covers
 // destination-page readiness.
+// Clears the terms-and-conditions interstitial if a login landed on it.
+//
+// The "Registration > Enable terms and conditions" platform setting
+// (public/main/auth/tc.php) defaults OFF, so this is a no-op almost always. It
+// matters because specialCase1PlatformSettings turns it ON partway through its
+// own run, and every LATER login in the suite then lands here instead of its
+// normal destination — a login that genuinely succeeded but stopped one page
+// short. Left unhandled, the symptom appears much later and looks unrelated:
+// subsequent navigations bounce to /login?redirect=... with "You are not allowed
+// to see this page".
+//
+// Extracted into a helper so it can be called at BOTH points in loginAs() that
+// need it — before the logout-link assertion (where it is load-bearing, since
+// tc.php has no logout link) and again after the post-login navigation settles.
+// Duplicating the block instead would invite the two copies to drift.
+async function acceptTermsInterstitialIfPresent(page: Page): Promise<void> {
+  // Detect by URL **or** by the presence of the accept control. URL alone is not
+  // enough: a redirect chain into tc.php can still be in flight when this runs,
+  // so page.url() may report the previous page (proven — see the call log quoted
+  // at the call site). Checking the DOM as well makes the detection independent
+  // of whether navigation has settled.
+  const acceptButton = page.locator('button:has-text("Accept Terms and Conditions")')
+  const onInterstitial =
+    page.url().includes("/main/auth/tc.php") || (await acceptButton.first().isVisible().catch(() => false))
+  if (!onInterstitial) {
+    return
+  }
+  // registration.hide_legal_accept_checkbox=Yes makes ChamiloHelper::displayLegalTermsPage()
+  // render legal_accept as <input type="hidden" value="1"> instead of a real checkbox (already
+  // implicitly accepted) — real CI failure: specialCase1PlatformSettings.feature's "Add minimal
+  // session extra fields" turns this setting ON mid-scenario, then a later login (studentone)
+  // lands on this same tc.php interstitial and .check() threw "Not a checkbox or radio button"
+  // on the now-hidden field. Only check() it when it's actually a checkbox.
+  const legalAccept = page.locator('input[name="legal_accept"]')
+  if ("checkbox" === (await legalAccept.getAttribute("type").catch(() => null))) {
+    await legalAccept.check().catch(() => {})
+  }
+  await page
+    .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
+    .first()
+    .click({ timeout: 15_000 })
+    .catch(() => {})
+  await page.waitForLoadState("domcontentloaded")
+}
+
 async function loginAs(page: Page, username: string) {
   // Real CI failure: admin/fileIntegrity.feature's "Non-administrators
   // cannot access ..." scenario has a Background that logs in as admin,
@@ -210,13 +255,40 @@ async function loginAs(page: Page, username: string) {
   // and contains NO such marker at all when anonymous (all verified live).
   // Probing it before touching /login means the logout decision is made from
   // server state rather than from whatever the SPA happens to be painting.
-  const authenticatedUsername = async (): Promise<string | null> => {
+  // TRI-STATE on purpose: "authenticated as X" / "definitely anonymous" /
+  // "could not tell". The first version of this returned `string | null` and so
+  // collapsed the last two into null — and that collapse is exactly how this
+  // step failed in CI on 2026-08-26 (specialCase1PlatformSettings, twice in one
+  // run). If the probe request throws, answers non-2xx, or returns a body
+  // without the marker, "I could not determine the session state" was reported
+  // as "there is no session". The logout was then skipped even though a session
+  // WAS live, /login redirected straight to /home, `#login` never rendered, and
+  // the failure surfaced 15s later as `expect(locator('#login')).toBeVisible()
+  // failed — element(s) not found` with a page snapshot showing the fully
+  // authenticated dashboard.
+  //
+  // Guessing "anonymous" is the DANGEROUS guess: it skips a logout that was
+  // needed. Guessing "logged in" merely costs one harmless /logout round trip
+  // (logout while anonymous just redirects). So unknown must resolve toward
+  // logging out, never away from it.
+  type AuthProbe = { state: "authenticated"; username: string } | { state: "anonymous" } | { state: "unknown" }
+
+  const probeAuth = async (): Promise<AuthProbe> => {
     const response = await page.request.get("/account/home").catch(() => null)
     if (!response || !response.ok()) {
-      return null
+      return { state: "unknown" }
     }
-    const match = (await response.text()).match(/"username":"([^"]+)"/)
-    return match ? match[1] : null
+    const body = await response.text().catch(() => null)
+    if (null === body) {
+      return { state: "unknown" }
+    }
+    const match = body.match(/"username":"([^"]+)"/)
+    return match ? { state: "authenticated", username: match[1] } : { state: "anonymous" }
+  }
+
+  const authenticatedUsername = async (): Promise<string | null> => {
+    const probe = await probeAuth()
+    return "authenticated" === probe.state ? probe.username : null
   }
 
   // Still conditional, not unconditional: an earlier fix established that an
@@ -224,12 +296,38 @@ async function loginAs(page: Page, username: string) {
   // session-establishment timing for files that already log out explicitly
   // (toolGroup.feature). This keeps that property — the logout only happens
   // when a session genuinely exists — while no longer depending on the flash.
-  if (null !== (await authenticatedUsername())) {
+  // "not definitely anonymous", NOT "definitely authenticated" — see probeAuth().
+  // Only a positive anonymous answer earns the skip; unknown takes the logout.
+  if ("anonymous" !== (await probeAuth()).state) {
     await page.goto("/logout")
   }
   await page.goto("/login")
   await page.waitForLoadState("domcontentloaded")
   const loginField = page.locator("#login")
+
+  // Self-heal the one failure this step cannot otherwise recover from: the login
+  // form is absent because we are still logged in, so /login bounced to /home.
+  // The tri-state probe above makes that far less likely, but it cannot be
+  // airtight — the session can also be established by something other than this
+  // step. Rather than spending the full 15s assertion budget to then report
+  // "element(s) not found" (which reads as "the login page is broken" and sent
+  // this investigation looking at the wrong thing entirely), check for the
+  // tell-tale signature and fix it in place.
+  //
+  // Cheap by construction: the extra probe only runs when #login is genuinely
+  // missing after a short wait, so the healthy path is unaffected.
+  if (!(await loginField.isVisible().catch(() => false))) {
+    const stillLoggedIn = await page
+      .locator('a[href="/logout"]')
+      .isVisible()
+      .catch(() => false)
+    if (stillLoggedIn) {
+      await page.goto("/logout")
+      await page.goto("/login")
+      await page.waitForLoadState("domcontentloaded")
+    }
+  }
+
   await expect(loginField).toBeVisible({ timeout: 15_000 })
   await loginField.fill(username, { timeout: 10_000 })
   await page.locator("#password").fill(username, { timeout: 10_000 })
@@ -241,13 +339,53 @@ async function loginAs(page: Page, username: string) {
   if (await signIn.isVisible().catch(() => false)) {
     await signIn.click({ timeout: 15_000 }).catch(() => {})
   }
+  // The terms-and-conditions interstitial MUST be cleared here — before the
+  // logout-link assertion below, not after it.
+  //
+  // It used to sit ~40 lines further down, which made it dead code in exactly
+  // the situation it was written for: tc.php carries NO `a[href="/logout"]`, so
+  // whenever a login landed on the interstitial the assertion below burned its
+  // full 25s and threw, and control never reached the handler. The failure then
+  // read as "login produced no session" when the truth was "login succeeded and
+  // stopped on an interstitial".
+  //
+  // Cost of getting this order wrong, measured: specialCase1PlatformSettings
+  // enables "Registration > Enable terms and conditions" partway through its own
+  // run, so every LATER login in that file hit this. On 2026-08-26 that was one
+  // hard failure plus one flaky in CI, and locally it reproduced as scenario 2
+  // flaky + scenario 4 failed — all four with the same signature
+  // (`a[href="/logout"]` not found, call log showing a pending navigation to
+  // /main/auth/tc.php).
+  // Wait for whichever of the TWO possible post-login outcomes materialises,
+  // rather than assuming it is the normal one. A point-in-time
+  // `page.url().includes("/main/auth/tc.php")` check cannot do this and a first
+  // attempt at exactly that failed: the observed call log was
+  //
+  //   waiting for ".../main/auth/tc.php?return=%2Fsessions" navigation to finish...
+  //   navigated to ".../login"
+  //
+  // i.e. the redirect chain to the interstitial was still IN FLIGHT, so the URL
+  // did not read as tc.php yet, the check returned early, and the logout-link
+  // assertion then sat for 25s while the browser navigated somewhere that has no
+  // logout link. Racing the two DOM outcomes has no such window — whichever
+  // lands first wins, and neither needs the URL to have settled.
+  const logoutLink = page.locator('a[href="/logout"]')
+  const termsControl = page
+    .locator('button:has-text("Accept Terms and Conditions"), input[name="legal_accept"]')
+    .first()
+  await Promise.race([
+    logoutLink.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+    termsControl.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+  ])
+  await acceptTermsInterstitialIfPresent(page)
+
   // Do not waitForURL({ waitUntil: "load" }): SPA login never fires load, and
   // that hung the full test timeout. Do not use "commit" either: a CI run
   // continued before the session cookie was stored, then the next navigation
   // showed "Your session details have been lost, please login again." and
   // every subsequent Save/settings step failed. The logout link only renders
   // after the login XHR has been handled (Set-Cookie included).
-  await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
+  await expect(logoutLink).toBeVisible({ timeout: 25_000 })
   // Real CI failure: toolGroup.feature's "Create an announcement as acostea
   // ..." scenario does "I am not logged" -> "I am logged as 'acostea'" ->
   // immediately navigates to group.php, which then rendered with a genuine
@@ -284,23 +422,10 @@ async function loginAs(page: Page, username: string) {
   // interstitial here — a no-op the overwhelming rest of the time, when the
   // setting is off and tc.php never appears — is cheap insurance against the
   // same contamination hitting some other file's login next.
-  if (page.url().includes("/main/auth/tc.php")) {
-    // registration.hide_legal_accept_checkbox=Yes makes ChamiloHelper::displayLegalTermsPage()
-    // render legal_accept as <input type="hidden" value="1"> instead of a real checkbox (already
-    // implicitly accepted) — real CI failure: specialCase1PlatformSettings.feature's "Add minimal
-    // session extra fields" turns this setting ON mid-scenario, then a later login (studentone)
-    // lands on this same tc.php interstitial and .check() threw "Not a checkbox or radio button"
-    // on the now-hidden field. Only check() it when it's actually a checkbox.
-    const legalAccept = page.locator('input[name="legal_accept"]')
-    if ("checkbox" === (await legalAccept.getAttribute("type"))) {
-      await legalAccept.check()
-    }
-    await page
-      .locator('button:has-text("Accept Terms and Conditions"), input[type="submit"]')
-      .first()
-      .click()
-    await page.waitForLoadState("domcontentloaded")
-  }
+  // Second call, deliberately. The one that matters is BEFORE the logout-link
+  // assertion above; this one catches an interstitial that appears only after
+  // the post-login navigation settles. Both are no-ops when the setting is off.
+  await acceptTermsInterstitialIfPresent(page)
 
   // Verify WHICH user we ended up as, not merely that *a* session exists.
   //
@@ -353,7 +478,17 @@ async function loginAs(page: Page, username: string) {
     await loginField.fill(username, { timeout: 10_000 })
     await page.locator("#password").fill(username, { timeout: 10_000 })
     await page.locator("form.login-section__form button[type='submit']").click({ timeout: 15_000 })
-    await expect(page.locator('a[href="/logout"]')).toBeVisible({ timeout: 25_000 })
+    // Same two-outcome race + interstitial accept as the primary path above.
+    // This retry branch is a near-duplicate of that flow and originally omitted
+    // the T&C handling, which is where the failure moved to once the primary
+    // path was fixed: with terms enabled mid-run, BOTH logins land on tc.php, so
+    // fixing only the first just relocated the 25s timeout a few lines down.
+    await Promise.race([
+      logoutLink.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+      termsControl.waitFor({ state: "visible", timeout: 25_000 }).catch(() => {}),
+    ])
+    await acceptTermsInterstitialIfPresent(page)
+    await expect(logoutLink).toBeVisible({ timeout: 25_000 })
     if (!(await currentUserIs(username))) {
       throw new Error(
         `loginAs("${username}") finished while authenticated as a different user. ` +

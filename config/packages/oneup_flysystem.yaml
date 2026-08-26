@@ -8,16 +8,12 @@ oneup_flysystem:
                 location: '%kernel.cache_dir%/upload/assets'
 
         asset_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_ASSET_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_ASSET_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_asset_adapter
 
         asset_cache_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_ASSET_CACHE_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_ASSET_CACHE_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_asset_cache_adapter
 
         asset_awss3_adapter:
             awss3v3:
@@ -53,16 +49,12 @@ oneup_flysystem:
                 location: '%kernel.cache_dir%/upload/resource'
 
         resource_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_RESOURCE_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_RESOURCE_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_resource_adapter
 
         resource_cache_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_RESOURCE_CACHE_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_resource_cache_adapter
 
         resource_google_adapter:
             googlecloudstorage:
@@ -95,10 +87,8 @@ oneup_flysystem:
                 location: '%kernel.project_dir%/var/themes'
 
         themes_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_THEMES_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_THEMES_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_themes_adapter
 
         themes_awss3_adapter:
             awss3v3:
@@ -118,10 +108,8 @@ oneup_flysystem:
                 location: '%kernel.project_dir%/var/upload/plugins'
 
         plugins_azure_adapter:
-            azureblob:
-                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
-                container: '%env(AZURE_STORAGE_PLUGINS_CONTAINER)%'
-                prefix: '%env(AZURE_STORAGE_PLUGINS_PREFIX)%'
+            custom:
+                service: chamilo.storage.azure_plugins_adapter
 
         plugins_awss3_adapter:
             awss3v3:

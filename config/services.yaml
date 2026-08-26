@@ -210,10 +210,58 @@ services:
                 projectId: '%env(GOOGLE_STORAGE_CLOUD_PROJECT_ID)%'
                 keyFilePath: '%env(resolve:GOOGLE_STORAGE_KEY_FILE_PATH)%'
 
-    MicrosoftAzure\Storage\Blob\BlobRestProxy:
-        factory: ['MicrosoftAzure\Storage\Blob\BlobRestProxy', 'createBlobService']
+    AzureOss\Storage\Blob\BlobServiceClient:
+        factory: ['AzureOss\Storage\Blob\BlobServiceClient', 'fromConnectionString']
         arguments:
             - '%env(AZURE_STORAGE_CONNECTION_STRING)%'
+
+    chamilo.storage.azure_asset_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_ASSET_CONTAINER)%'
+            - '%env(AZURE_STORAGE_ASSET_PREFIX)%'
+
+    chamilo.storage.azure_asset_cache_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_ASSET_CACHE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_ASSET_CACHE_PREFIX)%'
+
+    chamilo.storage.azure_resource_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_RESOURCE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_RESOURCE_PREFIX)%'
+
+    chamilo.storage.azure_resource_cache_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_RESOURCE_CACHE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
+    chamilo.storage.azure_themes_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_THEMES_CONTAINER)%'
+            - '%env(AZURE_STORAGE_THEMES_PREFIX)%'
+
+    chamilo.storage.azure_plugins_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_PLUGINS_CONTAINER)%'
+            - '%env(AZURE_STORAGE_PLUGINS_PREFIX)%'
 
     Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter: ~
 

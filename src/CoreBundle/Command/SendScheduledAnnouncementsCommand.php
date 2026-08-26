@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
 #[AsCommand(
@@ -31,6 +32,7 @@ class SendScheduledAnnouncementsCommand extends Command
         private readonly ScheduledAnnouncementHelper $scheduledAnnouncementHelper,
         private readonly ScheduledCourseAnnouncementProcessor $scheduledCourseAnnouncementProcessor,
         private readonly EntityManager $em,
+        private readonly KernelInterface $kernel,
     ) {
         parent::__construct();
     }
@@ -52,7 +54,7 @@ class SendScheduledAnnouncementsCommand extends Command
     {
         Database::setManager($this->em);
 
-        $container = $this->getApplication()->getKernel()->getContainer();
+        $container = $this->kernel->getContainer();
         Container::setContainer($container);
 
         $io = new SymfonyStyle($input, $output);

@@ -253,6 +253,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
         $repository = $this->em->getRepository(Course::class);
 
         $original = $baseCode;
+
+        /** @var int $suffix */
         $suffix = 0;
         $tryLimit = 100;
 

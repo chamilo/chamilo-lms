@@ -191,9 +191,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -280,5 +277,5 @@ async function saveThematic() {
 
 onMounted(loadForm)
 
-watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadForm)
+watch(() => [route.params.id, route.query.cid, route.query.sid, route.query.gid], loadForm)
 </script>

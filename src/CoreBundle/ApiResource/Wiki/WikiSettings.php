@@ -27,7 +27,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Read Wiki settings for the current course',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -56,7 +55,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update Wiki settings for the current course',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

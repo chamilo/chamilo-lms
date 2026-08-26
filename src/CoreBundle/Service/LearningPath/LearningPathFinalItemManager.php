@@ -561,7 +561,7 @@ HTML;
         if ('' === $siteName) {
             $siteName = 'Chamilo';
         }
-        $tweetText = sprintf(
+        $tweetText = \sprintf(
             $this->translator->trans('I have achieved skill %s on %s'),
             $skill->getTitle(),
             $siteName,

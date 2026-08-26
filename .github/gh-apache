@@ -3,7 +3,7 @@
     ServerName localhost
     SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
-    # CI-only: this vhost file is exclusively used by playwright.yml/behat.yml
+    # CI-only: this vhost file is exclusively used by playwright.yml
     # on the Actions runner, never for a real deployment, so it's safe to set
     # this unconditionally here. Gives public/main/install/index.php a
     # deterministic admin password ("admin") via getenv() instead of the

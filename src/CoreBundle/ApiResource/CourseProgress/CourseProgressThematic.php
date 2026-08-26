@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Course progress thematic form data',
                 parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
@@ -51,9 +50,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-progress/thematic',
             openapi: new Operation(
                 summary: 'Create a course progress thematic',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -78,7 +74,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update a course progress thematic',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -104,7 +99,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete a course progress thematic from the current context',
                 parameters: [
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

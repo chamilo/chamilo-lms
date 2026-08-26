@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Announcement\AnnouncementAccessHelperTrait;
@@ -41,6 +42,7 @@ final readonly class AnnouncementAttachmentController
         private Security $security,
         private SettingsManager $settingsManager,
         private UploadFilenamePolicy $uploadFilenamePolicy,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     #[Route(
@@ -52,7 +54,7 @@ final readonly class AnnouncementAttachmentController
     public function download(int $announcementId, int $attachmentId, Request $request): Response
     {
         [$course, $session, $group] = $this->resolveContext($request);
-        $announcement = $this->getReadableAnnouncement($announcementId, $course, $session, $group, $request);
+        $announcement = $this->getReadableAnnouncement($announcementId, $course, $session, $group);
         $attachment = $this->getAttachment($announcement, $attachmentId);
 
         if (null === $attachment->getResourceNode() || !$attachment->getResourceNode()->hasResourceFile()) {
@@ -101,7 +103,7 @@ final readonly class AnnouncementAttachmentController
     {
         [$course, $session, $group] = $this->resolveContext($request);
         $this->assertAttachmentsEnabled();
-        $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group, $request);
+        $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group);
         $files = $this->getUploadedFiles($request);
         if ([] === $files) {
             throw new BadRequestHttpException('At least one attachment is required.');
@@ -184,7 +186,7 @@ final readonly class AnnouncementAttachmentController
     {
         [$course, $session, $group] = $this->resolveContext($request);
         $this->assertAttachmentsEnabled();
-        $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group, $request);
+        $announcement = $this->getEditableAnnouncement($announcementId, $course, $session, $group);
         $attachment = $this->getAttachment($announcement, $attachmentId);
 
         $announcement->removeAttachment($attachment);
@@ -241,14 +243,13 @@ final readonly class AnnouncementAttachmentController
         Course $course,
         ?Session $session,
         ?CGroup $group,
-        Request $request,
     ): CAnnouncement {
         $announcement = $this->announcementRepository->find($announcementId);
         if (!$announcement instanceof CAnnouncement) {
             throw new NotFoundHttpException('The requested announcement was not found.');
         }
 
-        $studentView = $this->isStudentView($request);
+        $studentView = $this->studentViewHelper->isActive();
         $canManage = !$studentView && $this->canManageAnnouncements(
             $this->entityManager,
             $this->security,
@@ -277,9 +278,8 @@ final readonly class AnnouncementAttachmentController
         Course $course,
         ?Session $session,
         ?CGroup $group,
-        Request $request,
     ): CAnnouncement {
-        if ($this->isStudentView($request)) {
+        if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('You are not allowed to edit this announcement.');
         }
 

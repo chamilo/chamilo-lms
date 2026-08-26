@@ -138,8 +138,8 @@ class AiController extends AbstractController
             return new JsonResponse(['documents' => []], 403);
         }
 
-        $cid = (int) $request->query->get('cid', 0);
-        $sid = (int) $request->query->get('sid', 0);
+        $cid = (int) $request->query->get('cid', '0');
+        $sid = (int) $request->query->get('sid', '0');
 
         if (0 === $cid) {
             return new JsonResponse(['documents' => []], 400);
@@ -283,10 +283,10 @@ class AiController extends AbstractController
             return new JsonResponse(['prompt' => ''], 403);
         }
 
-        $cid = (int) $request->query->get('cid', 0);
-        $sid = (int) $request->query->get('sid', 0);
-        $n = (int) $request->query->get('n', 15);
-        $resourceFileId = (int) $request->query->get('resource_file_id', 0);
+        $cid = (int) $request->query->get('cid', '0');
+        $sid = (int) $request->query->get('sid', '0');
+        $n = (int) $request->query->get('n', '15');
+        $resourceFileId = (int) $request->query->get('resource_file_id', '0');
 
         if ($n < 1) {
             $n = 1;
@@ -2588,7 +2588,7 @@ class AiController extends AbstractController
                 return new JsonResponse(['success' => false, 'text' => 'Access denied.'], 403);
             }
 
-            $cid = (int) $request->query->get('cid', 0);
+            $cid = (int) $request->query->get('cid', '0');
 
             if ($cid > 0 && !$this->isAiFeatureEnabledForCourse('video_generator', $cid)) {
                 return $this->buildAiFeatureDisabledResponse();
@@ -4078,7 +4078,7 @@ class AiController extends AbstractController
         }
 
         // 2) Query string (rare for /ai/* but keep it)
-        $cid = (int) $request->query->get('cid', 0);
+        $cid = (int) $request->query->get('cid', '0');
         if ($cid > 0) {
             return $cid;
         }
@@ -4146,7 +4146,7 @@ class AiController extends AbstractController
         }
 
         // 2) Query string
-        $sid = (int) $request->query->get('sid', 0);
+        $sid = (int) $request->query->get('sid', '0');
         if ($sid > 0) {
             return $sid;
         }

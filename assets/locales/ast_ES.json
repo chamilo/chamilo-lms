@@ -3420,6 +3420,7 @@
     "Hide preview": "Anubrir previsualizaci\u00f3n",
     "Shape": "Forma",
     "Coordinates": "Coordenaes",
+    "Search for this location": "Guetar esta ubinaci\u00f3n",
     "Blanks": "Espacios en blancu",
     "Switchable blanks": "Espacios en blancu intercambiables",
     "Blank": "Espaciu en blancu",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Ficheru d'alcuerdu desanici\u00e1u",
     "Certificate image updated": "Imaxe del certific\u00e1u anovada",
     "Certificate image deleted": "Imaxe del certific\u00e1u desaniciada",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Usa l'editor d'im\u00e1xenes enantes de xubir pa retayar, rotar o redimensionar la imaxe del cursu."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Usa l'editor d'im\u00e1xenes enantes de xubir pa retayar, rotar o redimensionar la imaxe del cursu.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Namái lletres",
+    "Only letters and spaces": "Namái lletres y espacios",
+    "Only letters, numbers and spaces": "Namái lletres, númberos y espacios",
+    "Mobile phone number is incomplete or contains invalid characters": "El númberu de móvil ye incompletu o contién carauteres inválidos",
+    "Include the country dial code": "Incluyi el códigu de marcación del país",
+    "Only PNG, JPG or GIF images allowed": "Namás tán permitíes imáxenes PNG, JPG y GIF"
 }

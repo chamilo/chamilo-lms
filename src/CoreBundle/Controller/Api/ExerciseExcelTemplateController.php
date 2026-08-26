@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseExcelTemplateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -25,8 +24,8 @@ final class ExerciseExcelTemplateController extends AbstractController
         name: 'chamilo_core_exercise_excel_import_template',
         methods: ['GET']
     )]
-    public function __invoke(Request $request): BinaryFileResponse
+    public function __invoke(): BinaryFileResponse
     {
-        return $this->templateService->downloadTemplate($request);
+        return $this->templateService->downloadTemplate();
     }
 }

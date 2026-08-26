@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionListProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -20,15 +19,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/course-description/list',
             openapi: new Operation(
-                parameters: [
-                    new Parameter(
-                        name: 'isStudentView',
-                        in: 'query',
-                        description: 'Force the read-only student view',
-                        required: false,
-                        schema: ['type' => 'boolean'],
-                    ),
-                ],
             ),
             name: 'get_course_description_list',
             provider: CourseDescriptionListProvider::class,

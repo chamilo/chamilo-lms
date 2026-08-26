@@ -3420,6 +3420,7 @@
     "Hide preview": "Ocultar visualiza\u00e7\u00e3o",
     "Shape": "Forma",
     "Coordinates": "Coordenadas",
+    "Search for this location": "Procurar por este local",
     "Blanks": "Espa\u00e7os em branco",
     "Switchable blanks": "Espa\u00e7os em branco altern\u00e1veis",
     "Blank": "Espa\u00e7o em branco",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Arquivo de acordo exclu\u00eddo",
     "Certificate image updated": "Imagem do certificado atualizada",
     "Certificate image deleted": "Imagem do certificado exclu\u00edda",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Use o editor de imagens antes de enviar para recortar, girar ou redimensionar a imagem do curso."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Use o editor de imagens antes de enviar para recortar, girar ou redimensionar a imagem do curso.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Somente as letras",
+    "Only letters and spaces": "Somente letras e espaços",
+    "Only letters, numbers and spaces": "Somente letras, números e espaços",
+    "Mobile phone number is incomplete or contains invalid characters": "Número de telefone celular incompleto ou contém caracteres inválidos",
+    "Include the country dial code": "Incluir o código de discagem do país",
+    "Only PNG, JPG or GIF images allowed": "Só PNG, JPG ou GIF imagens permitido"
 }

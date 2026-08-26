@@ -3420,6 +3420,7 @@
     "Hide preview": "Pasl\u0113pt priek\u0161skat\u012bjumu",
     "Shape": "Forma",
     "Coordinates": "Koordin\u0101tas",
+    "Search for this location": "Mekl\u0113t \u0161o atra\u0161an\u0101s vietu",
     "Blanks": "Tuk\u0161umi",
     "Switchable blanks": "P\u0101rsl\u0113dzami tuk\u0161umi",
     "Blank": "Tuk\u0161ums",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Vieno\u0161an\u0101s fails dz\u0113sts",
     "Certificate image updated": "Sertifik\u0101ta att\u0113ls atjaunin\u0101ts",
     "Certificate image deleted": "Sertifik\u0101ta att\u0113ls dz\u0113sts",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pirms aug\u0161upiel\u0101des izmantojiet att\u0113lu redaktoru, lai apgrieztu, pagrieztu vai main\u012btu kursa att\u0113la izm\u0113ru."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pirms aug\u0161upiel\u0101des izmantojiet att\u0113lu redaktoru, lai apgrieztu, pagrieztu vai main\u012btu kursa att\u0113la izm\u0113ru.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Tikai burti",
+    "Only letters and spaces": "Tikai burti un atstarpes",
+    "Only letters, numbers and spaces": "Tikai burti, cipari un atstarpes",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobilā telefona numurs ir nepilnīgs vai satur nederīgus rakstzīmes",
+    "Include the country dial code": "Iekļaut valsts izsaukuma kodu",
+    "Only PNG, JPG or GIF images allowed": "Tikai PNG, JPG vai GIF formāta attēli ir atļauti"
 }

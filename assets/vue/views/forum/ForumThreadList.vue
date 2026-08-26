@@ -515,6 +515,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import forumService from "../../services/forumService"
 import { useSecurityStore } from "../../store/securityStore"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t, d } = useI18n()
 const route = useRoute()
@@ -1186,4 +1187,6 @@ onMounted(async () => {
     }
   }
 })
+
+useStudentViewRefresh(loadThreads)
 </script>

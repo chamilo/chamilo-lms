@@ -69,6 +69,28 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ]);
     }
 
+    /**
+     * Whether the resource with the given identifier is the one attached to that node,
+     * without hydrating it. The identifier field is read from the mapping because
+     * CourseBundle resources are keyed by iid and CoreBundle ones by id.
+     */
+    public function isAttachedToResourceNode(int $id, int $resourceNodeId): bool
+    {
+        $idField = $this->getClassMetadata()->getSingleIdentifierFieldName();
+
+        $count = (int) $this->createQueryBuilder('resource')
+            ->select('COUNT(resource)')
+            ->where(\sprintf('resource.%s = :id', $idField))
+            ->andWhere('resource.resourceNode = :resourceNode')
+            ->setParameter('id', $id)
+            ->setParameter('resourceNode', $resourceNodeId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
     public function create(AbstractResource $resource): void
     {
         $this->getEntityManager()->persist($resource);

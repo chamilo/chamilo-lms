@@ -53,6 +53,23 @@ export default {
       component: () => import("../views/admin/UserList.vue"),
     },
     {
+      name: "AdminUserAdd",
+      path: "user-add",
+      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Add a user" },
+      component: () => import("../views/admin/UserAdd.vue"),
+    },
+    {
+      name: "AdminUserEdit",
+      path: "user-edit/:userId",
+      meta: {
+        requiresAdmin: true,
+        requiresSessionAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Edit user information",
+      },
+      component: () => import("../views/admin/UserEdit.vue"),
+    },
+    {
       name: "AdminQuestionBank",
       path: "questions",
       meta: { requiresQuestionManager: true, showBreadcrumb: true, breadcrumb: "Questions" },
@@ -69,6 +86,12 @@ export default {
       path: "list-icons",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Icons" },
       component: () => import("../views/admin/ListIcons.vue"),
+    },
+    {
+      name: "AdminStatistics",
+      path: "statistics",
+      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Statistics" },
+      component: () => import("../views/admin/AdminStatisticsView.vue"),
     },
     {
       name: "AdminSystemStatus",

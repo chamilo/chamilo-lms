@@ -36,7 +36,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'matchAllCategories', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'target', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'userId', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

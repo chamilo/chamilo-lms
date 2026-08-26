@@ -3420,6 +3420,7 @@
     "Hide preview": "\u0e0b\u0e48\u0e2d\u0e19\u0e15\u0e31\u0e27\u0e2d\u0e22\u0e48\u0e32\u0e07",
     "Shape": "\u0e23\u0e39\u0e1b\u0e23\u0e48\u0e32\u0e07",
     "Coordinates": "\u0e1e\u0e34\u0e01\u0e31\u0e14",
+    "Search for this location": "\u0e04\u0e49\u0e19\u0e2b\u0e32\u0e15\u0e33\u0e41\u0e2b\u0e19\u0e48\u0e07\u0e19\u0e35\u0e49",
     "Blanks": "\u0e0a\u0e48\u0e2d\u0e07\u0e27\u0e48\u0e32\u0e07",
     "Switchable blanks": "\u0e0a\u0e48\u0e2d\u0e07\u0e27\u0e48\u0e32\u0e07\u0e17\u0e35\u0e48\u0e2a\u0e25\u0e31\u0e1a\u0e44\u0e14\u0e49",
     "Blank": "\u0e0a\u0e48\u0e2d\u0e07\u0e27\u0e48\u0e32\u0e07",
@@ -3760,5 +3761,13 @@
     "Agreement file deleted": "\u0e25\u0e1a\u0e44\u0e1f\u0e25\u0e4c\u0e02\u0e49\u0e2d\u0e15\u0e01\u0e25\u0e07\u0e41\u0e25\u0e49\u0e27",
     "Certificate image updated": "\u0e2d\u0e31\u0e1b\u0e40\u0e14\u0e15\u0e20\u0e32\u0e1e\u0e43\u0e1a\u0e23\u0e31\u0e1a\u0e23\u0e2d\u0e07\u0e41\u0e25\u0e49\u0e27",
     "Certificate image deleted": "\u0e25\u0e1a\u0e20\u0e32\u0e1e\u0e43\u0e1a\u0e23\u0e31\u0e1a\u0e23\u0e2d\u0e07\u0e41\u0e25\u0e49\u0e27",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0e43\u0e0a\u0e49\u0e15\u0e31\u0e27\u0e41\u0e01\u0e49\u0e44\u0e02\u0e20\u0e32\u0e1e\u0e01\u0e48\u0e2d\u0e19\u0e2d\u0e31\u0e1b\u0e42\u0e2b\u0e25\u0e14\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e04\u0e23\u0e2d\u0e1a\u0e15\u0e31\u0e14 \u0e2b\u0e21\u0e38\u0e19 \u0e2b\u0e23\u0e37\u0e2d\u0e1b\u0e23\u0e31\u0e1a\u0e02\u0e19\u0e32\u0e14\u0e20\u0e32\u0e1e\u0e2b\u0e25\u0e31\u0e01\u0e2a\u0e39\u0e15\u0e23"
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u0e43\u0e0a\u0e49\u0e15\u0e31\u0e27\u0e41\u0e01\u0e49\u0e44\u0e02\u0e20\u0e32\u0e1e\u0e01\u0e48\u0e2d\u0e19\u0e2d\u0e31\u0e1b\u0e42\u0e2b\u0e25\u0e14\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e04\u0e23\u0e2d\u0e1a\u0e15\u0e31\u0e14 \u0e2b\u0e21\u0e38\u0e19 \u0e2b\u0e23\u0e37\u0e2d\u0e1b\u0e23\u0e31\u0e1a\u0e02\u0e19\u0e32\u0e14\u0e20\u0e32\u0e1e\u0e2b\u0e25\u0e31\u0e01\u0e2a\u0e39\u0e15\u0e23",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "เฉพาะตัวอักษร",
+    "Only letters and spaces": "เฉพาะตัวอักษรและช่องว่าง",
+    "Only letters, numbers and spaces": "เฉพาะตัวอักษร ตัวเลข และช่องว่าง",
+    "Mobile phone number is incomplete or contains invalid characters": "หมายเลขโทรศัพท์มือถือไม่สมบูรณ์หรือมีอักขระไม่ถูกต้อง",
+    "Include the country dial code": "รวมรหัสโทรศัพท์ประเทศ",
+    "Only PNG, JPG or GIF images allowed": "อนุญาตเฉพาะไฟล์ภาพ สกุล.png,jpgและ.gif"
 }

@@ -451,14 +451,14 @@ class DeepSeekProvider implements AiProviderInterface, AiDocumentProviderInterfa
      */
     private function resolveTextOptions(array $options): array
     {
-        $url = (string) (($options['url'] ?? null) ?? $this->apiUrl);
-        $model = (string) (($options['model'] ?? null) ?? $this->model);
+        $url = (string) ($options['url'] ?? $this->apiUrl);
+        $model = (string) ($options['model'] ?? $this->model);
 
-        $temperature = (float) (($options['temperature'] ?? null) ?? $this->temperature);
+        $temperature = (float) ($options['temperature'] ?? $this->temperature);
 
         // Accept either max_tokens or max_output_tokens (normalize to max_tokens).
         $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokens ?? null) ?? $this->maxTokens);
+        $maxTokens = (int) ($maxTokens ?? $this->maxTokens);
 
         if ($maxTokens <= 0) {
             $maxTokens = $this->maxTokens > 0 ? $this->maxTokens : 1000;

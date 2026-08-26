@@ -3420,6 +3420,7 @@
     "Hide preview": "Skjul forh\u00e5ndsvisning",
     "Shape": "Form",
     "Coordinates": "Koordinater",
+    "Search for this location": "S\u00f8g efter denne placering",
     "Blanks": "Blanke felter",
     "Switchable blanks": "Skiftbare blanke felter",
     "Blank": "Blankt felt",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Aftalefil slettet",
     "Certificate image updated": "Certifikatbillede opdateret",
     "Certificate image deleted": "Certifikatbillede slettet",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Brug billededitoren f\u00f8r upload for at besk\u00e6re, rotere eller \u00e6ndre st\u00f8rrelse p\u00e5 kursusbilledet."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Brug billededitoren f\u00f8r upload for at besk\u00e6re, rotere eller \u00e6ndre st\u00f8rrelse p\u00e5 kursusbilledet.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Kun bogstaver",
+    "Only letters and spaces": "Kun bogstaver og mellemrum",
+    "Only letters, numbers and spaces": "Kun bogstaver, tal og mellemrum",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiltelefonnummeret er ufuldstændigt eller indeholder ugyldige tegn",
+    "Include the country dial code": "Inkluder landets opkaldskode",
+    "Only PNG, JPG or GIF images allowed": "Det er kun muligt at anvende PNG, JPG eller GIF billeder"
 }

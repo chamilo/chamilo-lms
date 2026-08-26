@@ -25,7 +25,6 @@ use Chamilo\CoreBundle\State\Wiki\WikiPageExportProcessor;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

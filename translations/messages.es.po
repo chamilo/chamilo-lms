@@ -40624,3 +40624,27 @@ msgstr "Este usuario ya está suscrito a la sesión."
 msgid "This user is already subscribed to the course."
 msgstr "Este usuario ya está suscrito al curso."
 
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Este curso está cerca de su límite de inscripción de usuarios (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "El espacio está limitado por las propiedades de tu curso. Para aumentar tu límite, obtén un"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Las inscripciones de usuarios están limitadas por las propiedades de tu curso. Para aumentar tu límite, obtén un"
+
+msgid "pro plan"
+msgstr "plan pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "e importa la copia de seguridad de este curso mediante Mantenimiento del curso a tu nuevo curso de pago, o abre un ticket para solicitar la conversión de este curso en un curso pro una vez adquirido este plan."
+
+msgid "Tired of writing questions?"
+msgstr "¿Cansado de escribir preguntas?"
+
+msgid "Upgrade your plan"
+msgstr "Mejora tu plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "a un plan pro para recibir ayuda de una IA que genere preguntas de calidad para ti."
+

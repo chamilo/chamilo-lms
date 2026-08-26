@@ -190,11 +190,7 @@ final class RepairGroupForumsWithoutItemPropertyCommand extends Command
                         $this->connection->rollBack();
                     }
 
-                    throw new RuntimeException(
-                        'Group forum repair failed after legacy forum '.$lastIid.': '.$e->getMessage(),
-                        0,
-                        $e
-                    );
+                    throw new RuntimeException('Group forum repair failed after legacy forum '.$lastIid.': '.$e->getMessage(), 0, $e);
                 }
             }
 
@@ -358,6 +354,7 @@ SQL,
             $key = $this->groupKey((int) $groupRow['c_id'], (int) $groupRow['id']);
             if (isset($groupsByKey[$key])) {
                 $ambiguousGroupKeys[$key] = true;
+
                 continue;
             }
             $groupsByKey[$key] = $groupRow;
@@ -496,10 +493,7 @@ SQL,
         );
 
         if ($count > 0) {
-            throw new RuntimeException(
-                "Detected a pre-existing deterministic resource slug '{$slug}' for legacy forum {$forumId}. "
-                .'Refusing to create a duplicate resource node; audit partial data first.'
-            );
+            throw new RuntimeException("Detected a pre-existing deterministic resource slug '{$slug}' for legacy forum {$forumId}. ".'Refusing to create a duplicate resource node; audit partial data first.');
         }
     }
 

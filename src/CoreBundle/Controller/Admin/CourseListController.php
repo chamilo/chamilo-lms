@@ -50,8 +50,8 @@ class CourseListController extends AbstractController
     #[Route('', name: 'admin_course_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $page = max(1, (int) $request->query->get('page', 1));
-        $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
+        $page = max(1, (int) $request->query->get('page', '1'));
+        $limit = max(1, min(200, (int) $request->query->get('limit', '20')));
         $sortField = (string) $request->query->get('sortField', 'title');
         $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $view = (string) $request->query->get('view', 'simple');

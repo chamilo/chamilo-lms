@@ -3420,6 +3420,7 @@
     "Hide preview": "Ascunde previzualizarea",
     "Shape": "Form\u0103",
     "Coordinates": "Coordonate",
+    "Search for this location": "Caut\u0103 aceast\u0103 loca\u021bie",
     "Blanks": "Spa\u021bii libere",
     "Switchable blanks": "Spa\u021bii libere comutabile",
     "Blank": "Spa\u021biu liber",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Fi\u0219ierul acord a fost \u0219ters",
     "Certificate image updated": "Imaginea certificatului a fost actualizat\u0103",
     "Certificate image deleted": "Imaginea certificatului a fost \u0219tears\u0103",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utiliza\u021bi editorul de imagini \u00eenainte de \u00eenc\u0103rcare pentru a decupa, roti sau redimensiona imaginea cursului."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utiliza\u021bi editorul de imagini \u00eenainte de \u00eenc\u0103rcare pentru a decupa, roti sau redimensiona imaginea cursului.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Doar litere",
+    "Only letters and spaces": "Doar litere și spații",
+    "Only letters, numbers and spaces": "Doar litere, numere și spații",
+    "Mobile phone number is incomplete or contains invalid characters": "Numărul mobil introdus este incomplet sau conține caractere nevalide",
+    "Include the country dial code": "Include prefixul țarii",
+    "Only PNG, JPG or GIF images allowed": "Doar imagini de tipul PNG, JPG sau GIF permise"
 }

@@ -487,6 +487,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import forumService from "../../services/forumService"
 import { useSecurityStore } from "../../store/securityStore"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t, d } = useI18n()
 const { relativeDatetime } = useFormatDate()
@@ -1302,5 +1303,7 @@ async function deleteAttachment(attachment) {
 }
 
 onMounted(loadPosts)
+
+useStudentViewRefresh(loadPosts)
 onBeforeUnmount(disconnectPostObserver)
 </script>

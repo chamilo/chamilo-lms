@@ -756,7 +756,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
-                    \gc_collect_cycles();
+                    gc_collect_cycles();
 
                     $processedSinceFlush = 0;
                 }
@@ -766,7 +766,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
             // this page is missing and no successful migration occurred.
             $this->entityManager->flush();
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
 
             $processedSinceFlush = 0;
 
@@ -785,7 +785,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
 
         $this->entityManager->flush();
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
 
         $this->getLogger()->info(
             'Student publication file migration completed.',
@@ -921,7 +921,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
                 if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
-                    \gc_collect_cycles();
+                    gc_collect_cycles();
 
                     $processedSinceFlush = 0;
                     $admin = $this->getAdmin();
@@ -930,7 +930,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
 
             $this->entityManager->flush();
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
 
             $processedSinceFlush = 0;
             $admin = $this->getAdmin();
@@ -940,7 +940,7 @@ SQL, self::RESOURCE_BATCH_SIZE),
 
         $this->entityManager->flush();
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
 
         $this->getLogger()->info(
             'Student publication correction migration completed.',
@@ -1057,7 +1057,7 @@ SQL, self::COMMENT_BATCH_SIZE),
                 if ($processedSinceFlush >= self::FILE_FLUSH_BATCH_SIZE) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
-                    \gc_collect_cycles();
+                    gc_collect_cycles();
 
                     $processedSinceFlush = 0;
                 }
@@ -1065,7 +1065,7 @@ SQL, self::COMMENT_BATCH_SIZE),
 
             $this->entityManager->flush();
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
 
             $processedSinceFlush = 0;
 
@@ -1084,7 +1084,7 @@ SQL, self::COMMENT_BATCH_SIZE),
 
         $this->entityManager->flush();
         $this->entityManager->clear();
-        \gc_collect_cycles();
+        gc_collect_cycles();
 
         $this->getLogger()->info(
             'Student publication comment file migration completed.',

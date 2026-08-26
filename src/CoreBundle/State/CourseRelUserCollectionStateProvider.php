@@ -28,7 +28,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * @template-implements ProviderInterface<CourseRelUser>
+ * @template-implements ProviderInterface<object>
  */
 final class CourseRelUserCollectionStateProvider implements ProviderInterface
 {
@@ -49,6 +49,12 @@ final class CourseRelUserCollectionStateProvider implements ProviderInterface
         $this->extensions = [$filterExtension, $orderExtension, $paginationExtension];
     }
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<object>|object|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if (!$operation instanceof GetCollection) {
@@ -139,10 +145,15 @@ final class CourseRelUserCollectionStateProvider implements ProviderInterface
         // URL, not of a managed subtree.
         $currentUrl = $this->accessUrlHelper->getCurrent();
 
-        return (null !== $currentUrl && null !== $currentUrl->getId()) ? [$currentUrl->getId()] : null;
+        return (null !== $currentUrl && null !== $currentUrl->getId()) ? [(int) $currentUrl->getId()] : null;
     }
 
-    private function applyExtensionsAndGetResult(QueryBuilder $qb, Operation $operation, array $context): array|object
+    /**
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<object>
+     */
+    private function applyExtensionsAndGetResult(QueryBuilder $qb, Operation $operation, array $context): iterable
     {
         $queryNameGenerator = new QueryNameGenerator();
         $items = [];

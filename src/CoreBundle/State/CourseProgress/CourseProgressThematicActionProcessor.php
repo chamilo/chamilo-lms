@@ -12,8 +12,8 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -34,8 +34,6 @@ use Throwable;
  */
 final readonly class CourseProgressThematicActionProcessor implements ProcessorInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -44,7 +42,7 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         private CAttendanceRepository $attendanceRepository,
         private ResourceLinkRepository $resourceLinkRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -67,10 +65,10 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertCanManage($course, $session);
 
         switch ($operation->getName()) {
             case 'post_course_progress_thematic_copy':
@@ -95,23 +93,6 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
         $data->totalAverage = $this->thematicRepository->calculateTotalAverageForCourse($course, $session);
 
         return $data;
-    }
-
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
-    {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
-            && $this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to manage course progress in this context.');
     }
 
     private function copyThematic(
@@ -281,7 +262,7 @@ final readonly class CourseProgressThematicActionProcessor implements ProcessorI
             throw new NotFoundHttpException('The requested thematic was not found.');
         }
 
-        if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+        if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
             throw new AccessDeniedHttpException('The requested thematic does not belong to the current course context.');
         }
 

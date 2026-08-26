@@ -3420,6 +3420,7 @@
     "Hide preview": "Oculta la previsualitzaci\u00f3",
     "Shape": "Forma",
     "Coordinates": "Coordenades",
+    "Search for this location": "Cerca aquesta ubicaci\u00f3",
     "Blanks": "Buits",
     "Switchable blanks": "Buits commutables",
     "Blank": "Buit",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Fitxer d'acord suprimit",
     "Certificate image updated": "Imatge de certificat actualitzada",
     "Certificate image deleted": "Imatge de certificat suprimida",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utilitzeu l'editor d'imatges abans de pujar per retallar, girar o redimensionar la imatge del curs."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Utilitzeu l'editor d'imatges abans de pujar per retallar, girar o redimensionar la imatge del curs.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Només lletres",
+    "Only letters and spaces": "Només lletres i espais",
+    "Only letters, numbers and spaces": "Només lletres, números i espais",
+    "Mobile phone number is incomplete or contains invalid characters": "El número de telèfon mòbil que ha escrit està incomplet o conté caràcters no vàlids",
+    "Include the country dial code": "Inclogui el prefix de trucada del país",
+    "Only PNG, JPG or GIF images allowed": "Solament estan permeses imatges PNG, JPG i GIF"
 }

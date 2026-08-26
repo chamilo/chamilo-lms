@@ -129,7 +129,7 @@ It is possible to test the application through the web, as admin, by calling loc
 
 ### Playwright (browser automation tests)
 
-The browser-driven test suite is migrating from **Behat** to **Playwright**, using `playwright-bdd` so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. **Write new coverage here, not in Behat.**
+The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. It replaced Behat, which has been removed entirely (see the note at the end of this section). This is the only browser-driven suite: all new coverage goes here.
 
 - Feature files: `tests/playwright/features/*.feature` (organised by domain where it matters, e.g. `admin/`).
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
@@ -168,13 +168,18 @@ node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
 **When to write Playwright tests — mandatory rule:**
 Every new feature and every new interface added to an existing feature **must** be accompanied by a `.feature` file (or additions to an existing one) that covers all user interactions: create, read, edit, and delete at minimum. The `add-feature-test` skill (`/add-feature-test`) automates this — it explores the live UI to confirm real selectors before writing steps, since static code reading gets them wrong often enough to matter.
 
-- Place feature files in `tests/playwright/features/`, mirroring `tests/behat/features/<domain>/` where a domain subfolder already exists.
+- Place feature files in `tests/playwright/features/`, using a domain subfolder (e.g. `admin/`) where one already exists for that area.
 - Form inputs in Vue dialogs/forms **must** have a `name` attribute so steps can target them by name.
 - If an entity or page is accessible to more than one role, **run all scenarios once per role that has access**. Do not test only as admin if other roles can also interact with the feature. For access-restricted pages (e.g. admin-only), add a scenario verifying that non-privileged roles are denied access (redirected or do not see the management UI).
 - Login steps available: `I am a platform administrator` (admin), `I am a teacher` (mmosquera), `I am a student` (acostea), `I am an HR manager` (ptook), `I am a student boss` (abaggins), `I am an invitee` (bproudfoot), `I am logged as "<username>"` (any other account, e.g. one just created in the scenario), `I am not logged` (explicit logout). Add a new named step to `common.steps.ts` whenever a test user with non-standard credentials is needed.
 - Each feature file must be self-contained: it creates all data it needs and deletes it at the end, leaving the database in the same state it found it — except the shared, one-time fixtures above (test users, `TEMP`/`TEMPPRIVATE` courses), which are meant to persist for the whole suite.
+- **Two SPA-timing traps that look identical to generic flakiness but have a definite root cause** — confirmed via `trace.zip`'s network log (not guessed), while stabilizing `createUser.feature`'s edit scenarios:
+  1. **Clicking into a client-side route change (`router.push`/`<router-link>`) never fires a real navigation event.** `"wait ... for the page to be loaded"` (`page.waitForLoadState("domcontentloaded"/"networkidle")`) resolves immediately regardless of whether the SPA has actually swapped routes — a script that clicks an edit-row icon then immediately checks `page.url()` after that wait can still show the OLD page's URL. Worse, if the old and new page happen to share a field `name` (e.g. a list page's own "Advanced search" filter having the same `name="email"` as the destination edit form), the next `"I fill in ..."` step silently fills the WRONG page's field instead of erroring. Fix: wait for an element unique to the destination page instead — `"I wait up to N seconds for the element {string} to appear"` with a selector/text only the target page has.
+  2. **A component whose `onMounted` async-fetches existing data (any edit form) has a fill-before-load race.** The static template (headings, labels) renders immediately on mount, before the fetch resolves; if a test fills a field in that window, the fetch's `.then()` handler overwrites the typed value with the loaded one moments later, and the eventual save submits the ORIGINAL data — no error, because nothing was actually wrong with it. Symptom: a "wrong value should be rejected" scenario times out waiting for a validation message that never appears, because the request that went out was valid. Confirmed by inspecting the actual submitted `multipart/form-data` in the trace's network log, not by re-reading the frontend code. Fix: assert the field already holds its expected LOADED value (`"the field {string} should have value {string}"`) before overwriting it — this doubles as proof the load finished.
 
-**Behat is frozen, not dropped yet.** `tests/behat/features/` (shared steps in `tests/behat/features/bootstrap/FeatureContext.php`) and `.github/workflows/behat.yml` still exist and still run in CI — they're kept passing as-is only until Playwright reaches full scenario parity, at which point Behat is deleted entirely. `behat.yml` is deliberately **not** kept in sync with `playwright.yml` (new PHP versions, CI steps, dependency bumps) — don't mirror changes into it unless explicitly asked. A same-named Behat file is still useful as a **hint** of intended scenarios when porting or writing new coverage, but never as a source of truth for selectors — field names, button labels, and dialog types all rot; verify everything against the live app.
+**Behat is gone.** `tests/behat/`, `.github/workflows/behat.yml` and the `behat/*` composer dependencies have all been deleted — Playwright is the only browser-driven suite. Do not add Behat scenarios, and do not restore the directory.
+
+The old scenarios remain in git history and are still useful when writing new coverage for an area Behat once covered: `git show 98c77757ea6:tests/behat/features/<name>.feature`, or `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the full list (84 files at that commit). Treat anything found there as a **hint** of intended scenarios — never as a source of truth for selectors, since field names, button labels and dialog types have all rotted since. Verify everything against the live app.
 
 
 ## Architecture
@@ -281,6 +286,8 @@ The pipeline is: `translations/messages.pot` → `translations/messages.en_US.po
 - Vue `{0}` / `{1}` placeholders are stored as `%s` / `%d` in `.po` files; the command converts them automatically.
 - `t()` from `useI18n()` and `$t()` in templates behave identically when `legacy: false` is set (which it is). If a key returns untranslated, it is missing from the locale files — not a code bug.
 - **Placeholders in `assets/locales/en_US.json` values must use `{0}`, `{1}`, etc.** (vue-i18n positional syntax) — never `%s` or `%d`. In the corresponding `.po`/`.pot` entries, use `%s` / `%d`; the generation command converts them to `{0}` / `{1}` automatically. Call site: `t("key", [value])` with an array, not `t("key", { count: value })` (named params).
+- **`chamilo:update_vue_translations` does NOT add new keys** — it only re-syncs whatever keys already exist in `assets/locales/en_US.json`, pulling each one's translation from the `.po` catalog for every other locale. Adding a brand-new key that's already an existing legacy string (e.g. reusing `FormValidator`'s own labels in a new Vue component) still requires manually adding it to `en_US.json` yourself first — only then does re-running the command populate the other ~70 locale files with the real (already-translated) value instead of leaving the key entirely absent there.
+- **Running the command re-serializes *every* locale file with `JSON_UNESCAPED_UNICODE`,** turning any previously `\uXXXX`-escaped accented character into a raw UTF-8 character across the *entire* file — same content, different bytes. If the files hadn't been regenerated in a while, this alone produces a multi-thousand-line diff across ~70 files that has nothing to do with the actual change. Don't ship that diff: capture just the new key(s)' translated values from the regenerated files, `git checkout --` the untouched locale files back to their original encoding, then hand-append only the new key/value lines (matching the pattern already used for the existing keys) so the diff stays scoped to what actually changed.
 
 ### Doctrine / DQL gotchas
 
@@ -314,6 +321,54 @@ When replacing a legacy PHP page, search these locations for old links:
 - `public/main/template/default/` — legacy Twig templates
 - `assets/vue/components/` — Vue components linking to legacy pages (e.g., `social/MySkillsCard.vue`)
 - `public/main/inc/ajax/model.ajax.php` — jqGrid AJAX allowlists; remove the action from both the allowlist arrays and the `case` blocks
+
+### Porting `api_get_setting()` calls verbatim
+
+Copy the exact string a legacy page passes to `api_get_setting()` — never "simplify" it by dropping what looks like a redundant category prefix (e.g. `registration.user_hide_never_expire_option` → `user_hide_never_expire_option`). `SettingsManager::validateSetting()` only resolves a bare (no-dot) name automatically when that exact string is listed in `getVariablesAndCategories()`; most settings are **not** listed there and throw `InvalidArgumentException` (`Parameter must be in format "category.name"`) at runtime — a bug that unit/functional tests catch immediately (a bare `api_get_setting()` call that never throws in a real request is not proof every other bare call is safe too). A few settings genuinely are registered bare in that resolver (e.g. `limit_session_admin_role`, `login_is_email`, `account_valid_duration`) — matching the legacy page's own exact call is what tells you which is which, not guessing from the pattern.
+
+### Native input `type` attributes can silently defeat server-side validation
+
+Don't add `type="email"` (or other browser-validated types) to a `BaseInputText` when the field's validation is meant to happen server-side with a custom message, as legacy `FormValidator` pages always do (`addEmailRule()`, `addRule(..., 'username')`, etc.). The browser's own native format check on `type="email"` fires on any non-empty value regardless of `required`, and **silently blocks the form's native submit event before Vue's `@submit.prevent` handler ever runs** — no request is sent at all (confirmed via the network trace showing no request whatsoever), so the server's own validation message can never be returned. Leave the field as the default `type="text"` and let the existing server-side check own the error message, matching the legacy page's own behavior exactly.
+
+### `User::getRoles()` is not a valid `roles[]` form payload
+
+`User::getRoles()` returns Symfony's full effective role set, which includes implicit base
+roles (`ROLE_USER`) that are **not** selectable entries in `UserManager::getAllowedRoleOptionsForUserForm()`.
+Feeding `getRoles()` straight back into a "Roles" multiselect's pre-filled value (e.g. an edit
+form) and resubmitting it verbatim fails `UserManager::areRolesAllowedInUserForm()` on save —
+the whole role set is rejected because one entry (`ROLE_USER`) isn't in the allowlist, and the
+user gets a generic 403 "Error" that looks like an access-control problem, not a validation one.
+Confirmed live: a real edit-form save reproducibly 403'd until fixed.
+
+Filter through the same canonical-role mapping the legacy page itself used before sending roles
+to the frontend:
+```php
+$optionKeyByCanon = [];
+foreach (UserManager::getAllowedRoleOptionsForUserForm() as $optKey => $label) {
+    $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = (string) $optKey;
+}
+$selected = [];
+foreach (array_map('api_normalize_role_code', $user->getRoles()) as $canon) {
+    if (isset($optionKeyByCanon[$canon])) {
+        $selected[] = $optionKeyByCanon[$canon];
+    }
+}
+```
+Never send `$user->getRoles()` directly into a data endpoint's `roles` field when the frontend
+round-trips it back into the same multiselect on save.
+
+### Prod cache must be rebuilt after adding a *new* controller class, not just after editing one
+
+Extends the constructor-change gotcha above: on a box running `APP_ENV=prod` (check `.env`
+before assuming `dev`), a **brand-new** `#[Route]`-attributed controller class is invisible to
+the compiled router until `cache:clear --env=prod` (+`cache:warmup` +`chmod -R 777 var/cache/prod`
+if `claude` and `www-data` both need to write there) runs — hitting the new route in the
+meantime doesn't 404 or 500, it silently falls through to whatever catch-all route matches next
+(e.g. `IndexController`'s `/admin/{vueRouting}` SPA-shell route), returning HTTP 200 with the
+wrong body (the SPA's HTML shell instead of the controller's JSON). This is easy to
+misdiagnose as a frontend bug (the JS looks like it "didn't get" the expected fields) when the
+real cause is a stale prod route cache. Symptom to watch for: a GET that should return JSON
+instead returns an HTML document starting with `<!DOCTYPE html>`.
 
 ### Many-to-many "assign X to Y" migrations — dual-list pattern
 
@@ -502,6 +557,57 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 - **`Post` (create) can't use object-level checks.** On create the `resourceNode` does not exist yet, so `is_granted('CREATE', object)` / `object.resourceNode` fails closed. Gate creation with the contextual teacher roles through an operation-own `security:` (not `securityPostDenormalize`), which also avoids inheriting a resource-level `security:` that may omit `SESSION_TEACHER` and would otherwise block session teachers. `CToolIntro` is the reference.
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
 - **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.
+
+### Student view and "may this user edit here"
+
+**The student view is one platform-wide session state, never a request parameter.** It lives in the
+`studentview` session key, and exactly two places write it: `GET /toggle_student_view`
+(`IndexController`, role-checked) and `LegacyListener`, which interprets an `isStudentView` query
+parameter **only on non-API requests**. That guard matters: the `api` firewall shares the main
+session, so without it a plain `GET /api/...?isStudentView=true` would switch the whole browsing
+session from any origin, with no role check. No `#[ApiResource]` operation declares the parameter and
+no provider reads it — if you find yourself adding it back, you are re-opening that hole.
+
+Readers use `StudentViewHelper::isActive()`. There is no per-course variant: 1.11.x has no
+equivalent, and the observable behaviour is global.
+
+**Editing rights go through `IsAllowedToEditHelper::check()`** (`src/CoreBundle/Helpers/`), the port
+of `api_is_allowed_to_edit()`. It answers admin and session-admin rights, the course teacher, the
+session coach with `allow_coach_to_edit_course_session`, `Session::READ_ONLY`,
+`session_courses_read_only_mode`, and the student view — so a provider that calls it needs none of
+that itself. Pass `course:`/`session:` when you already resolved them.
+
+Two rules that are easy to get wrong:
+
+- **Never route a read gate through it.** `check()` returns `false` in the student view, but a
+  teacher must still *see* a tool they cannot currently change, and must still reach an unpublished
+  resource to preview it. Use `UserHelper::isTeacherOfCurrentCourse()` (the role alone) for those, or
+  `check(checkStudentView: false)` when the caller wants the raw permission — the exercise runtime is
+  the reference.
+- **It deliberately deviates from 1.11 inside a session.** The legacy function discarded the course
+  teacher there and returned only the coach term, which was safe because entering a session demoted
+  the base-course teacher; `CourseAccessResolver` does not. Reproducing it would deny every
+  base-course teacher in every tool. `IsAllowedToEditHelperTest` pins this.
+
+**Tool-specific rules compose on top, in an injectable helper — not in a trait that takes services
+as arguments.** `SurveyHelper`, `WikiHelper`, `CourseDescriptionHelper` and `CourseProgressHelper`
+are the pattern: they inject what they need and add only what the shared helper cannot know
+(`survey.extend_rights_for_coach_on_survey`, the wiki's group tutor and DRH terms, per-tool course
+settings), gating the whole expression once by the student view. Where a tool's rule turned out to be
+pure delegation (Gradebook, Forum, exercise authoring) no helper exists at all: call `check()`
+directly.
+
+Out of scope on purpose: `AnnouncementAccessHelperTrait`, whose coach rule uses
+`announcement.allow_coach_to_edit_announcements` rather than the generic session setting, and which
+also grants students through a course setting — routing it through `check()` would swap one
+administrator setting for another silently.
+
+**Frontend:** the state is read from `platformConfig.isStudentViewActive`, and any view rendering
+server-computed permissions must refetch on the toggle via the `useStudentViewRefresh` composable
+(`assets/vue/composables/`). Never put `isStudentView` in an API call or a Vue route query. The one
+exception is navigation into the learning path runtime, which signals intent in the URL and turns it
+into an explicit `/toggle_student_view` call: a lesson embeds content from other tools, so the state
+has to be in the session where each of them reads it.
 
 ### Securing a per-user owned `#[ApiResource]` (Voter + Extension + Processor)
 

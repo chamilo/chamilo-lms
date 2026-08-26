@@ -142,6 +142,9 @@ class PageCategory
         return $this->pages;
     }
 
+    /**
+     * @param Collection<int, Page> $pages
+     */
     public function setPages(Collection $pages): self
     {
         $this->pages = $pages;

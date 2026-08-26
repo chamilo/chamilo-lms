@@ -3420,6 +3420,7 @@
     "Hide preview": "\ubbf8\ub9ac\ubcf4\uae30 \uc228\uae30\uae30",
     "Shape": "\ub3c4\ud615",
     "Coordinates": "\uc88c\ud45c",
+    "Search for this location": "\uc774 \uc704\uce58 \uac80\uc0c9",
     "Blanks": "\ube48\uce78",
     "Switchable blanks": "\uc804\ud658 \uac00\ub2a5\ud55c \ube48\uce78",
     "Blank": "\ube48\uce78",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "\ub3d9\uc758\uc11c \ud30c\uc77c\uc774 \uc0ad\uc81c\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
     "Certificate image updated": "\uc218\ub8cc\uc99d \uc774\ubbf8\uc9c0\uac00 \uc5c5\ub370\uc774\ud2b8\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
     "Certificate image deleted": "\uc218\ub8cc\uc99d \uc774\ubbf8\uc9c0\uac00 \uc0ad\uc81c\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\uac15\uc758 \uc774\ubbf8\uc9c0\ub97c \uc5c5\ub85c\ub4dc\ud558\uae30 \uc804\uc5d0 \uc774\ubbf8\uc9c0 \ud3b8\uc9d1\uae30\ub97c \uc0ac\uc6a9\ud558\uc5ec \uc790\ub974\uae30, \ud68c\uc804 \ub610\ub294 \ud06c\uae30 \uc870\uc815\uc744 \uc218\ud589\ud558\uc138\uc694."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\uac15\uc758 \uc774\ubbf8\uc9c0\ub97c \uc5c5\ub85c\ub4dc\ud558\uae30 \uc804\uc5d0 \uc774\ubbf8\uc9c0 \ud3b8\uc9d1\uae30\ub97c \uc0ac\uc6a9\ud558\uc5ec \uc790\ub974\uae30, \ud68c\uc804 \ub610\ub294 \ud06c\uae30 \uc870\uc815\uc744 \uc218\ud589\ud558\uc138\uc694.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "문자만",
+    "Only letters and spaces": "문자와 공백만",
+    "Only letters, numbers and spaces": "문자, 숫자, 공백만",
+    "Mobile phone number is incomplete or contains invalid characters": "휴대폰 번호가 불완전하거나 잘못된 문자를 포함합니다",
+    "Include the country dial code": "국가 다이얼 코드를 포함하세요",
+    "Only PNG, JPG or GIF images allowed": "PNG, JPG 또는 GIF 형식의 파일만 허용됩니다"
 }

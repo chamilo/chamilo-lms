@@ -84,7 +84,7 @@ class ToolChainTest extends AbstractApiTest
 
         $toolChain = self::getContainer()->get(ToolChain::class);
 
-        $tools = $toolChain->getTools();
+        $tools = [...$toolChain->getTools()];
 
         foreach ($tools as $tool) {
             $name = $tool->getTitle();
@@ -122,11 +122,11 @@ class ToolChainTest extends AbstractApiTest
         self::bootKernel();
 
         $toolChain = self::getContainer()->get(ToolChain::class);
-        $countBefore = \count($toolChain->getTools());
+        $countBefore = \count([...$toolChain->getTools()]);
 
         $toolChain->createTools();
 
-        $tools = $toolChain->getTools();
+        $tools = [...$toolChain->getTools()];
 
         $this->assertCount($countBefore, $tools);
 
@@ -171,6 +171,7 @@ class ToolChainTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($resourceType);
         $em->persist($resourceType);
 
+        /** @var ArrayCollection<int, ResourceType> $collection */
         $collection = new ArrayCollection();
         $collection->add($resourceType);
 

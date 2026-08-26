@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Portfolio')" />
+
     <BaseToolbar class="mb-4 border-b border-gray-25 bg-white">
       <template #start>
         <BaseButton
@@ -418,6 +420,8 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import portfolioService from "../../services/portfolioService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const { showSuccessNotification, showErrorNotification } = useNotification()
@@ -663,4 +667,6 @@ watch(
   },
   { immediate: true },
 )
+
+useStudentViewRefresh(loadPortfolio)
 </script>

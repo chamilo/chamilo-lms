@@ -24,11 +24,6 @@ use const PATHINFO_EXTENSION;
 
 final class Version20201212203625 extends AbstractMigrationChamilo
 {
-    /**
-     * System folder filetypes (no file upload for these).
-     *
-     * @var string[]
-     */
     private const int DOCUMENT_BATCH_SIZE = 100;
     private const int AUDIO_ASSET_FLUSH_BATCH_SIZE = 50;
     private const string ITEM_PROPERTY_INDEX = 'idx_legacy_migration_item_property_tool_ref_course';

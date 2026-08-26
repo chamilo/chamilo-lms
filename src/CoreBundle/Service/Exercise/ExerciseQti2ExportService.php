@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -16,10 +18,8 @@ use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -48,12 +48,13 @@ final readonly class ExerciseQti2ExportService
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private Security $security,
+        private CidReqHelper $cidReqHelper,
+        private UserHelper $userHelper,
     ) {}
 
-    public function exportExerciseZip(int $exerciseId, Request $request): BinaryFileResponse
+    public function exportExerciseZip(int $exerciseId): BinaryFileResponse
     {
-        $quiz = $this->getValidatedExercise($exerciseId, $request);
+        $quiz = $this->getValidatedExercise($exerciseId);
         $xml = $this->buildExerciseXml($quiz);
         $this->assertXmlCanBeParsed($xml);
 
@@ -76,50 +77,21 @@ final readonly class ExerciseQti2ExportService
         return $response;
     }
 
-    private function getValidatedExercise(int $exerciseId, Request $request): CQuiz
+    private function getValidatedExercise(int $exerciseId): CQuiz
     {
         if ($exerciseId <= 0) {
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canExportExercises()) {
+        if (!$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('You are not allowed to export this exercise.');
         }
 
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
-
-        return $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
+        return $this->getExerciseFromCurrentContext(
+            $exerciseId,
+            $this->cidReqHelper->requireDoctrineCourseEntity(),
+            $this->cidReqHelper->getDoctrineSessionEntity(),
+        );
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -169,7 +141,7 @@ final readonly class ExerciseQti2ExportService
             throw new NotFoundHttpException('The requested exercise was not found.');
         }
 
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canExportExercises()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->userHelper->isTeacherOfCurrentCourse()) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 
@@ -420,12 +392,6 @@ final readonly class ExerciseQti2ExportService
         }
 
         return $zipPath;
-    }
-
-    private function canExportExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function formatDescription(string $text): string

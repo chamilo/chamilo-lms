@@ -46,20 +46,6 @@ trait ForumStateHelperTrait
             || $security->isGranted('ROLE_ADMIN');
     }
 
-    private function isStudentView(Request $request): bool
-    {
-        if ($request->query->has('isStudentView')) {
-            return $request->query->getBoolean('isStudentView');
-        }
-
-        return 'studentview' === $request->getSession()->get('studentview');
-    }
-
-    private function canManageForumsInCurrentView(Security $security, Request $request): bool
-    {
-        return $this->isTeacher($security) && !$this->isStudentView($request);
-    }
-
     /**
      * CidReqListener already resolved and validated the course, so a missing entity here
      * can only mean the request carried no course context at all.

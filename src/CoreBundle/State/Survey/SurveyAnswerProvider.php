@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -63,6 +65,8 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private SurveyHelper $surveyHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -110,7 +114,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         if (!$preview) {
             $this->assertSurveyIsAvailable($survey);
             $invitation = $this->getInvitation($survey, $course, $session, $user, $request);
-        } elseif (!$this->canPreviewSurveys()) {
+        } elseif (!$this->surveyHelper->canPreview()) {
             throw new AccessDeniedHttpException('You are not allowed to preview this survey.');
         }
 
@@ -225,6 +229,12 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
             if (!$user instanceof User) {
                 throw new AccessDeniedHttpException('A valid user is required.');
+            }
+
+            // The auto code mints an invitation on the spot. Outside the anonymous link, which
+            // exists to be shared, only members of the course context may obtain one.
+            if ('1' !== (string) $survey->getAnonymous() && !$this->userHelper->isMemberOfCurrentCourse()) {
+                throw new AccessDeniedHttpException('You are not allowed to answer this survey.');
             }
 
             return $this->getOrCreateAutoInvitation($survey, $course, $session, $user);
@@ -505,6 +515,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             $queryBuilder->andWhere('answer.sessionId IS NULL');
         }
 
+        /** @var array<string, mixed> $answers */
         $answers = [];
         foreach ($queryBuilder->getQuery()->getResult() as $answer) {
             if (!$answer instanceof CSurveyAnswer) {
@@ -616,19 +627,6 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         if (null !== $availableUntil && $availableUntil < $now) {
             throw new AccessDeniedHttpException('This survey is already closed.');
         }
-    }
-
-    private function canPreviewSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
     private function isSurveyInContext(CSurvey $survey, Course $course, ?Session $session): bool

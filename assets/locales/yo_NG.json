@@ -3420,6 +3420,7 @@
     "Hide preview": "T\u1ecd\u0301j\u00fa \u00e0k\u1ecd\u0301t\u00e1n",
     "Shape": "\u00ccr\u00eds\u00ed",
     "Coordinates": "\u00c0w\u1ecdn ip\u00f2",
+    "Search for this location": "Wa fun ipo yii",
     "Blanks": "\u00c0w\u1ecdn \u00e0\u00e0y\u00e8 \u00f2f\u00ecfo",
     "Switchable blanks": "\u00c0w\u1ecdn \u00e0\u00e0y\u00e8 \u00f2f\u00ecfo t\u00ed a l\u00e8 y\u00ed pad\u00e0",
     "Blank": "\u00c0\u00e0y\u00e8 \u00f2f\u00ecfo",
@@ -3766,5 +3767,13 @@
     "Agreement file deleted": "F\u00e1\u00ecl\u00ec \u00e0d\u00e9h\u00f9n ti par\u1eb9\u0301",
     "Certificate image updated": "\u00c0w\u00f2r\u00e1n \u00ecw\u00e9-\u1eb9\u0300r\u00ed ti \u1e63e \u00ect\u00fan\u1e63e",
     "Certificate image deleted": "\u00c0w\u00f2r\u00e1n \u00ecw\u00e9-\u1eb9\u0300r\u00ed ti par\u1eb9\u0301",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Lo ol\u00f9\u1e63\u00e0t\u00fan\u1e63e \u00e0w\u00f2r\u00e1n \u1e63\u00e1\u00e1j\u00fa gbigb\u00e9 w\u1ecdl\u00e9 l\u00e1ti g\u00e9, y\u00ed t\u00e0b\u00ed t\u00fan \u00ecw\u1ecdn \u00e0w\u00f2r\u00e1n \u1eb9\u0300k\u1ecd\u0301 \u1e63e."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Lo ol\u00f9\u1e63\u00e0t\u00fan\u1e63e \u00e0w\u00f2r\u00e1n \u1e63\u00e1\u00e1j\u00fa gbigb\u00e9 w\u1ecdl\u00e9 l\u00e1ti g\u00e9, y\u00ed t\u00e0b\u00ed t\u00fan \u00ecw\u1ecdn \u00e0w\u00f2r\u00e1n \u1eb9\u0300k\u1ecd\u0301 \u1e63e.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Awọn lẹta nikan",
+    "Only letters and spaces": "Awọn lẹta ati awọn aaye nikan",
+    "Only letters, numbers and spaces": "Awọn lẹta, awọn nọmba ati awọn aaye nikan",
+    "Mobile phone number is incomplete or contains invalid characters": "Nọ́mba fọ́n alágbèéká kò pé kún tàbí ó ni àwùjọ ìdààmú tí kò yẹ",
+    "Include the country dial code": "Kọ̀wọ̀ kódì ìpè orílẹ̀-èdè",
+    "Only PNG, JPG or GIF images allowed": "Awọn aworan PNG, JPG tabi GIF nikan ni a gba laaye"
 }

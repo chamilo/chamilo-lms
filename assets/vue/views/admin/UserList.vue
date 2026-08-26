@@ -3,7 +3,7 @@
     <SectionHeader :title="t('User list')">
       <BaseButton
         :label="t('Add a user')"
-        :to-url="'/main/admin/user_add.php'"
+        :route="{ name: 'AdminUserAdd' }"
         icon="user-add"
         type="success"
       />
@@ -315,7 +315,7 @@
           >
             <BaseButton
               :label="t('Edit')"
-              :to-url="`/main/admin/user_edit.php?user_id=${data.id}`"
+              :route="{ name: 'AdminUserEdit', params: { userId: data.id } }"
               icon="edit"
               only-icon
               size="small"
@@ -384,7 +384,7 @@
               v-if="viewer.isPlatformAdmin || viewer.isSessionAdmin"
               :disabled="data.isAnonymous"
               :label="t('Edit')"
-              :to-url="data.isAnonymous ? null : `/main/admin/user_edit.php?user_id=${data.id}`"
+              :route="data.isAnonymous ? null : { name: 'AdminUserEdit', params: { userId: data.id } }"
               icon="edit"
               only-icon
               size="small"

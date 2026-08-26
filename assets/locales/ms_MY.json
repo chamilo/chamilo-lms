@@ -3420,6 +3420,7 @@
     "Hide preview": "Sembunyikan pratonton",
     "Shape": "Bentuk",
     "Coordinates": "Koordinat",
+    "Search for this location": "Cari lokasi ini",
     "Blanks": "Kosong",
     "Switchable blanks": "Kosong boleh tukar",
     "Blank": "Kosong",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Fail perjanjian dipadam",
     "Certificate image updated": "Imej sijil dikemas kini",
     "Certificate image deleted": "Imej sijil dipadam",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gunakan editor imej sebelum memuat naik untuk memangkas, memutar atau mengubah saiz gambar kursus."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gunakan editor imej sebelum memuat naik untuk memangkas, memutar atau mengubah saiz gambar kursus.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Hanya huruf",
+    "Only letters and spaces": "Hanya huruf dan ruang",
+    "Only letters, numbers and spaces": "Hanya huruf, nombor dan ruang",
+    "Mobile phone number is incomplete or contains invalid characters": "Nombor telefon mudah alih tidak lengkap atau mengandungi aksara tidak sah",
+    "Include the country dial code": "Sertakan kod jalur negara",
+    "Only PNG, JPG or GIF images allowed": "Hanya imej PNG, JPG atau GIF dibenarkan"
 }

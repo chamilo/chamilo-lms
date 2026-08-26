@@ -9269,6 +9269,15 @@ msgstr "Time report for session %s"
 msgid "Error"
 msgstr "Error"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "The user was created, but one of the additional profile fields could not be saved."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "The user was updated, but one of the additional profile fields could not be saved."
+
+msgid "One or more fields contain invalid values."
+msgstr "One or more fields contain invalid values."
+
 msgid "Anonymous"
 msgstr "Anonymous"
 
@@ -15717,7 +15726,7 @@ msgid "Re-use a copy inside the current test"
 msgstr "Re-use a copy inside the current test"
 
 msgid "You already invite all your contacts"
-msgstr "You already invite all your contacts"
+msgstr "You already invited all your contacts"
 
 msgid "Results hidden by the exercise setting"
 msgstr "Results hidden by the exercise setting"
@@ -20674,6 +20683,9 @@ msgstr "On the wheel of skills, it shows the name of the skill when it has short
 
 msgid "Created by"
 msgstr "Created by"
+
+msgid "Created by %s on %s"
+msgstr "Created by %s on %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Hide general coach in dropbox"
@@ -39531,3 +39543,33 @@ msgstr "Parent URL"
 
 msgid "Logins (your URLs)"
 msgstr "Logins (your URLs)"
+
+msgid "The picture could not be uploaded"
+msgstr "The picture could not be uploaded"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "This field type is not fully supported yet — raw value only."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "This course is close to its user subscription limit (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Space is limited through your course properties. To increase your limit, get a"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "User subscriptions are limited through your course properties. To increase your limit, get a"
+
+msgid "pro plan"
+msgstr "pro plan"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+
+msgid "Tired of writing questions?"
+msgstr "Tired of writing questions?"
+
+msgid "Upgrade your plan"
+msgstr "Upgrade your plan"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "to a pro plan to get help from an AI to generate quality questions for you."

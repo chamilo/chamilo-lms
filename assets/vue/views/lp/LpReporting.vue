@@ -10,6 +10,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import lpService from "../../services/lpService"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const props = defineProps({
   embedded: {
@@ -22,6 +23,7 @@ const emit = defineEmits(["close"])
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const platformConfig = usePlatformConfig()
 const { requireConfirmation } = useConfirmation()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
@@ -250,7 +252,7 @@ function goBack() {
       query: {
         ...contextParams.value,
         gradebook: route.query.gradebook || undefined,
-        isStudentView: route.query.isStudentView || "false",
+        isStudentView: platformConfig.isStudentViewActive ? "true" : "false",
         item_id: Number(route.query.returnItemId || 0) || undefined,
         origin: "learnpath",
       },

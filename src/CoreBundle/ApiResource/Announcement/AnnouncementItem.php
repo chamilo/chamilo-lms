@@ -29,13 +29,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                         required: true,
                         schema: ['type' => 'integer'],
                     ),
-                    new Parameter(
-                        name: 'isStudentView',
-                        in: 'query',
-                        description: 'Force the read-only student view',
-                        required: false,
-                        schema: ['type' => 'boolean'],
-                    ),
                 ],
             ),
             name: 'get_announcement_item',

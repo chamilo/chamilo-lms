@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'title', in: 'query', required: false, schema: ['type' => 'string']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

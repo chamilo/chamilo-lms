@@ -45,7 +45,7 @@ readonly class LocaleSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Skip if not installed or no session is available
-        $installed = $this->parameterBag->has('installed') && 1 === (int) $this->parameterBag->get('installed');
+        $installed = $this->parameterBag->has('installed') && 1 === (int) (string) $this->parameterBag->get('installed');
         if (!$installed || !$request->hasSession()) {
             return;
         }

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -45,6 +46,7 @@ final class ForumSearchStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -90,7 +92,7 @@ final class ForumSearchStateProvider implements ProviderInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
+        $showHidden = $this->isAllowedToEditHelper->check(coach: true);
         $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($this->cidReqHelper);
         $terms = $this->getSearchTerms($query);
         if ([] === $terms) {

@@ -56,6 +56,20 @@
         {{ isEditMode ? t("Edit test") : t("Create a new test") }}
       </h1>
 
+      <div
+        v-if="!isEditMode && settings.showBuyCoursesUpgradeCta"
+        class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900"
+      >
+        {{ t("Tired of writing questions?") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("Upgrade your plan") }}
+        </a>
+        {{ t("to a pro plan to get help from an AI to generate quality questions for you.") }}
+      </div>
+
       <div class="border-b border-gray-20" />
 
       <BaseInputText
@@ -1096,7 +1110,6 @@ function getContextParams() {
     "lp_item_id",
     "type",
     "returnToLp",
-    "isStudentView",
     "gradebook",
     "lpTool",
   ]) {
@@ -1122,7 +1135,7 @@ function buildLearningPathBackRoute() {
   const node = Number(getQueryValue(route.query.node) || route.params.node || 0)
   const query = {}
 
-  for (const key of ["cid", "sid", "gid", "gradebook", "isStudentView"]) {
+  for (const key of ["cid", "sid", "gid", "gradebook"]) {
     const value = getQueryValue(route.query[key])
     if (value !== undefined && value !== null && String(value) !== "") {
       query[key] = value

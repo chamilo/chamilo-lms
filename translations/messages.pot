@@ -9265,6 +9265,15 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr ""
+
+msgid "One or more fields contain invalid values."
+msgstr ""
+
 msgid "Anonymous"
 msgstr ""
 
@@ -20660,6 +20669,9 @@ msgid "On the wheel of skills, it shows the name of the skill when it has short 
 msgstr ""
 
 msgid "Created by"
+msgstr ""
+
+msgid "Created by %s on %s"
 msgstr ""
 
 msgid "Hide general coach in dropbox"
@@ -39447,4 +39459,34 @@ msgid "Parent URL"
 msgstr ""
 
 msgid "Logins (your URLs)"
+msgstr ""
+
+msgid "The picture could not be uploaded"
+msgstr ""
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr ""
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr ""
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr ""
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr ""
+
+msgid "pro plan"
+msgstr ""
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr ""
+
+msgid "Tired of writing questions?"
+msgstr ""
+
+msgid "Upgrade your plan"
+msgstr ""
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
 msgstr ""

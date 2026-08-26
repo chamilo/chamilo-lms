@@ -3420,6 +3420,7 @@
     "Hide preview": "Fshih parapamjen",
     "Shape": "Forma",
     "Coordinates": "Koordinatat",
+    "Search for this location": "K\u00ebrko p\u00ebr k\u00ebt\u00eb vendndodhje",
     "Blanks": "Boshll\u00ebqet",
     "Switchable blanks": "Boshll\u00ebqe t\u00eb nd\u00ebrrueshme",
     "Blank": "Boshll\u00ebk",
@@ -3758,5 +3759,13 @@
     "Unable to export the report": "Nuk mund t\u00eb eksportohet raporti",
     "Accepted on web": "Pranuar n\u00eb web",
     "Accepted by e-mail": "Pranuar me e-mail",
-    "The course title is required": "Titulli i kursit \u00ebsht\u00eb i detyruesh\u00ebm"
+    "The course title is required": "Titulli i kursit \u00ebsht\u00eb i detyruesh\u00ebm",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Vetëm shkronja",
+    "Only letters and spaces": "Vetëm shkronja dhe hapësira",
+    "Only letters, numbers and spaces": "Vetëm shkronja, numra dhe hapësira",
+    "Mobile phone number is incomplete or contains invalid characters": "Numri i telefonit mobil është i paplotë ose përmban karaktere të pavlefshme",
+    "Include the country dial code": "Përfshini kodin dializues të vendit",
+    "Only PNG, JPG or GIF images allowed": "Lejohen vetëm imazhe PNG, JPG ose GIF"
 }

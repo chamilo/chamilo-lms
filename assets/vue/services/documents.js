@@ -89,12 +89,13 @@ async function getQuotaUsage(courseId, { sid = 0, gid = 0, force = false, staleM
     const quota = json?.quota || {}
     const availableBytes = Number(quota.availableBytes)
     const availablePercent = Number(quota.availablePercent)
+    const showUpgradeCta = Boolean(quota.showUpgradeCta)
 
     if (!Number.isFinite(availableBytes) || !Number.isFinite(availablePercent)) {
       return null
     }
 
-    const info = { availableBytes, availablePercent, fetchedAt: now }
+    const info = { availableBytes, availablePercent, showUpgradeCta, fetchedAt: now }
     quotaCache.set(key, info)
     return info
   } catch (e) {
@@ -326,7 +327,7 @@ export default {
     const response = await baseService.postRaw(
       "/api/documents/download-all",
       { rootNodeId },
-      { responseType: "blob", params },
+      { responseType: "blob", params, headers: { Accept: "application/zip" } },
     )
 
     return response.data
@@ -338,7 +339,11 @@ export default {
    * @returns {Promise<Blob>}
    */
   async downloadSelected(ids) {
-    const response = await baseService.postRaw("/api/documents/download-selected", { ids }, { responseType: "blob" })
+    const response = await baseService.postRaw(
+      "/api/documents/download-selected",
+      { ids },
+      { responseType: "blob", headers: { Accept: "application/zip, application/octet-stream" } },
+    )
 
     return response.data
   },

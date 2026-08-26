@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -23,7 +24,6 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -49,9 +49,9 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CSurveyRepository $surveyRepository,
-        private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
+        private SurveyHelper $surveyHelper,
     ) {}
 
     /**
@@ -68,7 +68,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->gradebookLinkManager->assertSessionBelongsToCourse($course, $session);
-        if (!$this->canManageSurveys()) {
+        if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage surveys in this context.');
         }
 
@@ -144,19 +144,6 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         }
 
         return $configuration;
-    }
-
-    private function canManageSurveys(): bool
-    {
-        if ($this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
-            return true;
-        }
-
-        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) {
-            return false;
-        }
-
-        return $this->isSettingEnabled('survey.extend_rights_for_coach_on_survey');
     }
 
     private function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

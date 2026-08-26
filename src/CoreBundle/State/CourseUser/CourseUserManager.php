@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
@@ -31,6 +32,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 final readonly class CourseUserManager
 {
+    private const int UPGRADE_CTA_REMAINING_USERS_THRESHOLD = 5;
+
     public const int TYPE_TEACHER = CourseRelUser::TEACHER;
     public const int TYPE_STUDENT = CourseRelUser::STUDENT;
 
@@ -41,6 +44,7 @@ final readonly class CourseUserManager
         private SettingsManager $settingsManager,
         private IllustrationRepository $illustrationRepository,
         private AccessUrlHelper $accessUrlHelper,
+        private CourseHelper $courseHelper,
     ) {}
 
     /**
@@ -201,22 +205,52 @@ final readonly class CourseUserManager
 
     public function getLimitWarning(Course $course, ?Session $session): string
     {
+        return $this->getUsersPerCourseLimitState($course, $session)['warning'];
+    }
+
+    /**
+     * @return array{warning: string, reached: bool, showUpgradeCta: bool}
+     */
+    private function getUsersPerCourseLimitState(Course $course, ?Session $session): array
+    {
+        $state = [
+            'warning' => '',
+            'reached' => false,
+            'showUpgradeCta' => false,
+        ];
+
         if ($session instanceof Session || !$this->canManage($course, $session)) {
-            return '';
+            return $state;
         }
 
         $courseId = (int) $course->getId();
         $limit = CourseManager::getEffectiveUsersPerCourseLimit($courseId);
         if ($limit <= 0) {
-            return '';
+            return $state;
         }
 
         $count = CourseManager::countStudentsForUsersPerCourseLimit($courseId);
-        if ($count < $limit) {
-            return '';
+        $state['reached'] = $count >= $limit;
+
+        $warningFrom = max(0, $limit - self::UPGRADE_CTA_REMAINING_USERS_THRESHOLD);
+        $state['showUpgradeCta'] = $count >= $warningFrom
+            && $this->courseHelper->shouldOfferBuyCoursesHostingLimitUpgrade($course);
+
+        if ($state['reached']) {
+            $state['warning'] = CourseManager::getUsersPerCourseLimitCancelMessage($courseId);
+
+            return $state;
         }
 
-        return CourseManager::getUsersPerCourseLimitCancelMessage($courseId);
+        if ($state['showUpgradeCta']) {
+            $state['warning'] = \sprintf(
+                get_lang('This course is close to its user subscription limit (%d/%d).'),
+                $count,
+                $limit,
+            );
+        }
+
+        return $state;
     }
 
     /**
@@ -267,7 +301,9 @@ final readonly class CourseUserManager
         $items = $this->paginate($items, $request);
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
-        $limitWarning = self::TYPE_STUDENT === $type ? $this->getLimitWarning($course, $session) : '';
+        $limitState = self::TYPE_STUDENT === $type
+            ? $this->getUsersPerCourseLimitState($course, $session)
+            : ['warning' => '', 'reached' => false, 'showUpgradeCta' => false];
 
         return [
             'items' => $items,
@@ -276,7 +312,7 @@ final readonly class CourseUserManager
             'sessionId' => $session?->getId(),
             'type' => $type,
             'canManage' => $canManage,
-            'canSubscribe' => $this->canSubscribe($course, $session) && '' === $limitWarning,
+            'canSubscribe' => $this->canSubscribe($course, $session) && !$limitState['reached'],
             'canUnsubscribe' => $this->canUnsubscribe($course, $session),
             'canImport' => $canManage && $this->canUnsubscribe($course, $session),
             'canSetTutor' => $this->canSetTutor($course, $session),
@@ -295,7 +331,8 @@ final readonly class CourseUserManager
                 && $this->isEnabled($this->settingsManager->getSetting('show_email_addresses', true)),
             'westernNameOrder' => api_is_western_name_order(),
             'showLegalAgreement' => $canManage && 1 === (int) $course->getActivateLegal(),
-            'warning' => $limitWarning,
+            'warning' => $limitState['warning'],
+            'showUpgradeCta' => $limitState['showUpgradeCta'],
             'sessionManagementUrl' => $this->buildLegacyUrl('/main/user/session_list.php', $course, $session),
             'showSessionManagement' => $canManage && $this->isEnabled(
                 $this->settingsManager->getSetting('allow_tutors_to_assign_students_to_session', true),
@@ -380,6 +417,10 @@ final readonly class CourseUserManager
             ];
         }
 
+        $limitState = self::TYPE_STUDENT === $type
+            ? $this->getUsersPerCourseLimitState($course, $session)
+            : ['warning' => '', 'reached' => false, 'showUpgradeCta' => false];
+
         return [
             'items' => $items,
             'totalItems' => $totalItems,
@@ -394,11 +435,12 @@ final readonly class CourseUserManager
                 'gid' => (int) $this->cidReqHelper->getGroupId(),
             ]),
             'canSubscribe' => $this->canSubscribe($course, $session)
-                && (self::TYPE_TEACHER === $type || '' === $this->getLimitWarning($course, $session)),
+                && (self::TYPE_TEACHER === $type || !$limitState['reached']),
             'showEmail' => $showEmail,
             'westernNameOrder' => api_is_western_name_order(),
             'extraFields' => $this->getProfilingFields(),
-            'warning' => self::TYPE_STUDENT === $type ? $this->getLimitWarning($course, $session) : '',
+            'warning' => $limitState['warning'],
+            'showUpgradeCta' => $limitState['showUpgradeCta'],
         ];
     }
 

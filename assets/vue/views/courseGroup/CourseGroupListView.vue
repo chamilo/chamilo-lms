@@ -1,5 +1,7 @@
 <template>
   <section class="space-y-6">
+    <SectionHeader :title="t('Groups')" />
+
     <BaseToolbar>
       <template #start>
         <div
@@ -479,6 +481,8 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseGroupService from "../../services/courseGroupService"
 import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const STUDENT = 5
 const TEACHER = 1
@@ -647,4 +651,6 @@ function downloadGroupExport(groupId) {
 }
 
 onMounted(loadGroups)
+
+useStudentViewRefresh(loadGroups)
 </script>

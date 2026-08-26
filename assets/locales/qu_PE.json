@@ -3420,6 +3420,7 @@
     "Hide preview": "Qhawariyta pakay",
     "Shape": "Qhapaq",
     "Coordinates": "Maypi kay",
+    "Search for this location": "Kay lluqllapi maskhay",
     "Blanks": "Ch'usaq",
     "Switchable blanks": "Kutichina ch'usaq",
     "Blank": "Ch'usaq",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Kamachi qillqa qullusqa",
     "Certificate image updated": "Sutinchana rikch'a musuqchasqa",
     "Certificate image deleted": "Sutinchana rikch'a qullusqa",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Yachachina rikch'ata churaymanta \u00f1awpaqta rikch'a ruwaqta llamk'achiy, kuchuy, muyuchiy icha sayachiy."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Yachachina rikch'ata churaymanta \u00f1awpaqta rikch'a ruwaqta llamk'achiy, kuchuy, muyuchiy icha sayachiy.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Letarakunaq llapan",
+    "Only letters and spaces": "Letarakuna huch'aywan llapan",
+    "Only letters, numbers and spaces": "Letarakuna, números huch'aywan llapan",
+    "Mobile phone number is incomplete or contains invalid characters": "Wakin telefononqa mana tukuykunachu o mana allin sutikuna kanchu",
+    "Include the country dial code": "Markan telefonon sutinta juntakuy",
+    "Only PNG, JPG or GIF images allowed": "Wankikunataqa kay hinallapi churanaqa PNG, JPG, GIF nisqakunapi"
 }

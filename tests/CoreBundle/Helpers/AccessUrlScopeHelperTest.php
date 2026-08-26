@@ -24,7 +24,7 @@ class AccessUrlScopeHelperTest extends KernelTestCase
 {
     use ChamiloTestTrait;
 
-    private function createUserOnUrl(string $username, AccessUrl $url): User
+    private function createUserOnUrl(string $username, AccessUrl $url, string $role = ''): User
     {
         /** @var UserRepository $repo */
         $repo = static::getContainer()->get(UserRepository::class);
@@ -41,6 +41,10 @@ class AccessUrlScopeHelperTest extends KernelTestCase
             ->setCurrentUrl($url)
             ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $url)
         ;
+
+        if ('' !== $role) {
+            $user->addRole($role);
+        }
 
         $repo->updateUser($user);
 
@@ -156,6 +160,64 @@ class AccessUrlScopeHelperTest extends KernelTestCase
         $this->assertTrue($scope->isUserManaged($tree['childAdmin'], (int) $tree['grandchildAdmin']->getId()));
         $this->assertFalse($scope->isUserManaged($tree['childAdmin'], (int) $tree['rootAdmin']->getId()));
         $this->assertTrue($scope->isUserManaged($tree['rootAdmin'], (int) $tree['childAdmin']->getId()));
+    }
+
+    public function testCanEditUserAlwaysAllowsSelf(): void
+    {
+        self::bootKernel();
+        $tree = $this->buildTree();
+
+        /** @var AccessUrlScopeHelper $scope */
+        $scope = static::getContainer()->get(AccessUrlScopeHelper::class);
+
+        $this->assertTrue($scope->canEditUser($tree['childAdmin'], $tree['childAdmin']));
+        $this->assertTrue($scope->canEditUser($tree['grandchildAdmin'], $tree['grandchildAdmin']));
+    }
+
+    public function testCanEditUserUnrestrictedAdminMayEditAnyone(): void
+    {
+        self::bootKernel();
+        $tree = $this->buildTree();
+
+        /** @var AccessUrlScopeHelper $scope */
+        $scope = static::getContainer()->get(AccessUrlScopeHelper::class);
+
+        $this->assertTrue($scope->canEditUser($tree['rootAdmin'], $tree['childAdmin']));
+        $this->assertTrue($scope->canEditUser($tree['rootAdmin'], $tree['grandchildAdmin']));
+    }
+
+    public function testCanEditUserGlobalAdminManagesItsWholeSubtreeButNotAbove(): void
+    {
+        self::bootKernel();
+        $tree = $this->buildTree();
+        $tree['childAdmin']->addRole('ROLE_GLOBAL_ADMIN');
+
+        /** @var AccessUrlScopeHelper $scope */
+        $scope = static::getContainer()->get(AccessUrlScopeHelper::class);
+
+        // A ROLE_GLOBAL_ADMIN scoped to "child" manages the whole subtree, including
+        // "grandchild"...
+        $this->assertTrue($scope->canEditUser($tree['childAdmin'], $tree['grandchildAdmin']));
+        // ...but never a user registered above its own scope.
+        $this->assertFalse($scope->canEditUser($tree['childAdmin'], $tree['rootAdmin']));
+    }
+
+    public function testCanEditUserPlainAdminIsConfinedToItsExactUrlEvenWithChildren(): void
+    {
+        self::bootKernel();
+        $tree = $this->buildTree();
+
+        /** @var AccessUrlScopeHelper $scope */
+        $scope = static::getContainer()->get(AccessUrlScopeHelper::class);
+
+        // childAdmin here deliberately holds no ROLE_GLOBAL_ADMIN: unlike the global-admin
+        // case above, a plain admin must NOT get the descendant ("grandchild") expansion
+        // just because the URL they are registered on happens to have children.
+        $this->assertFalse($scope->canEditUser($tree['childAdmin'], $tree['grandchildAdmin']));
+
+        // Still allowed to edit a peer actually registered on their own exact URL.
+        $peerOnChild = $this->createUserOnUrl('scope_child_peer_'.uniqid(), $tree['child']);
+        $this->assertTrue($scope->canEditUser($tree['childAdmin'], $peerOnChild));
     }
 
     public function testCanGrantGlobalAdminRoleOnlyForAnUnrestrictedGlobalAdmin(): void

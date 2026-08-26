@@ -108,7 +108,7 @@ class ReportRegistry
                 'title' => get_lang('Global statistics'),
                 'description' => get_lang('Main platform statistics dashboard.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php',
+                'url' => '/admin/statistics',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -117,7 +117,7 @@ class ReportRegistry
                 'title' => get_lang('Courses'),
                 'description' => get_lang('Number of courses and course distribution report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courses',
+                'url' => '/admin/statistics?report=courses',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -126,7 +126,7 @@ class ReportRegistry
                 'title' => get_lang('Tools access'),
                 'description' => get_lang('Platform-wide access to course tools.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=tools',
+                'url' => '/admin/statistics?report=tools',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -135,7 +135,7 @@ class ReportRegistry
                 'title' => get_lang('Tool-based resource count'),
                 'description' => get_lang('Number of resources per tool.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=tool_usage',
+                'url' => '/admin/statistics?report=tool_usage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -144,7 +144,7 @@ class ReportRegistry
                 'title' => get_lang('Latest access'),
                 'description' => get_lang('Latest access to courses.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courselastvisit',
+                'url' => '/admin/statistics?report=courselastvisit',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -153,7 +153,7 @@ class ReportRegistry
                 'title' => get_lang('Number of courses by language'),
                 'description' => get_lang('Course distribution by language.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=coursebylanguage',
+                'url' => '/admin/statistics?report=coursebylanguage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -162,7 +162,7 @@ class ReportRegistry
                 'title' => get_lang('Courses usage'),
                 'description' => get_lang('Course usage report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courses_usage',
+                'url' => '/admin/statistics?report=courses_usage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -171,7 +171,7 @@ class ReportRegistry
                 'title' => get_lang('Number of users'),
                 'description' => get_lang('Platform user count report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users',
+                'url' => '/admin/statistics?report=users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -180,7 +180,7 @@ class ReportRegistry
                 'title' => get_lang('Logins'),
                 'description' => get_lang('Recent logins chart.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=recentlogins',
+                'url' => '/admin/statistics?report=recentlogins',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -189,7 +189,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Month').')',
                 'description' => get_lang('Login distribution by month.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=month',
+                'url' => '/admin/statistics?report=logins&type=month',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -198,7 +198,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Day').')',
                 'description' => get_lang('Login distribution by day.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=day',
+                'url' => '/admin/statistics?report=logins&type=day',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -207,7 +207,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Hour').')',
                 'description' => get_lang('Login distribution by hour.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=hour',
+                'url' => '/admin/statistics?report=logins&type=hour',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -216,7 +216,7 @@ class ReportRegistry
                 'title' => get_lang('Number of users').' ('.get_lang('Picture').')',
                 'description' => get_lang('Users with profile picture.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=pictures',
+                'url' => '/admin/statistics?report=pictures',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -225,7 +225,7 @@ class ReportRegistry
                 'title' => get_lang('Logins by date'),
                 'description' => get_lang('Login report filtered by date.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins_by_date',
+                'url' => '/admin/statistics?report=logins_by_date',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -234,7 +234,7 @@ class ReportRegistry
                 'title' => get_lang('Not logged in for some time'),
                 'description' => get_lang('Users who have not logged in recently.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=no_login_users',
+                'url' => '/admin/statistics?report=no_login_users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -243,7 +243,7 @@ class ReportRegistry
                 'title' => get_lang('Zombies'),
                 'description' => get_lang('Inactive or suspicious user accounts report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=zombies',
+                'url' => '/admin/statistics?report=zombies',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -252,7 +252,7 @@ class ReportRegistry
                 'title' => get_lang('Users statistics'),
                 'description' => get_lang('Users activity statistics.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users_active',
+                'url' => '/admin/statistics?report=users_active',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -261,7 +261,7 @@ class ReportRegistry
                 'title' => get_lang('Users online'),
                 'description' => get_lang('Currently online users report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users_online',
+                'url' => '/admin/statistics?report=users_online',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -270,7 +270,7 @@ class ReportRegistry
                 'title' => get_lang('New users registrations'),
                 'description' => get_lang('New user registrations over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=new_user_registrations',
+                'url' => '/admin/statistics?report=new_user_registrations',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -279,7 +279,7 @@ class ReportRegistry
                 'title' => get_lang('Course/Session subscriptions by day'),
                 'description' => get_lang('Course and session subscriptions over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=subscription_by_day',
+                'url' => '/admin/statistics?report=subscription_by_day',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -288,7 +288,7 @@ class ReportRegistry
                 'title' => get_lang('Duplicate users'),
                 'description' => get_lang('Duplicate user detection and maintenance report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=duplicated_users',
+                'url' => '/admin/statistics?report=duplicated_users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -297,7 +297,7 @@ class ReportRegistry
                 'title' => get_lang('Portal user session stats'),
                 'description' => get_lang('Platform user/session statistics.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=user_session',
+                'url' => '/admin/statistics?report=user_session',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -306,7 +306,7 @@ class ReportRegistry
                 'title' => get_lang('Quarterly report'),
                 'description' => get_lang('Quarterly platform report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=quarterly_report',
+                'url' => '/admin/statistics?report=quarterly_report',
                 'roles' => $adminSession,
                 'permission' => 'reports.platform',
             ],
@@ -324,7 +324,7 @@ class ReportRegistry
                 'title' => get_lang('Number of messages received'),
                 'description' => get_lang('Social messages received report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=messagereceived',
+                'url' => '/admin/statistics?report=messagereceived',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -333,7 +333,7 @@ class ReportRegistry
                 'title' => get_lang('Number of messages sent'),
                 'description' => get_lang('Social messages sent report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=messagesent',
+                'url' => '/admin/statistics?report=messagesent',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -342,7 +342,7 @@ class ReportRegistry
                 'title' => get_lang('Contacts count'),
                 'description' => get_lang('Social contacts count report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=friends',
+                'url' => '/admin/statistics?report=friends',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -351,7 +351,7 @@ class ReportRegistry
                 'title' => get_lang('Sessions by date'),
                 'description' => get_lang('Sessions created over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=session_by_date',
+                'url' => '/admin/statistics?report=session_by_date',
                 'roles' => $adminSession,
                 'permission' => 'reports.platform',
             ],
@@ -834,7 +834,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/lp/{course_resource_node_id}',
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'course_lp_report_legacy',
@@ -845,7 +846,8 @@ class ReportRegistry
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
                 'requires_course_context' => true,
-                'entry_url' => '/resources/lp/{course_resource_node_id}',
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'social_skills_report',
@@ -911,7 +913,7 @@ class ReportRegistry
             return [];
         }
 
-        $allowed = ['user', 'exercise', 'attempt'];
+        $allowed = ['user', 'exercise', 'attempt', 'learning_path'];
 
         return array_values(array_filter(
             array_map('strval', $requirements),
@@ -979,6 +981,22 @@ class ReportRegistry
             !api_is_platform_admin()
         );
 
+        $courseIds = array_values(array_unique(array_filter(array_map(
+            static fn (array $course): int => (int) ($course['real_id'] ?? 0),
+            $courses
+        ))));
+        $courseNodeIds = [];
+
+        if (!empty($courseIds)) {
+            $courseEntities = Database::getManager()
+                ->getRepository(\Chamilo\CoreBundle\Entity\Course::class)
+                ->findBy(['id' => $courseIds]);
+
+            foreach ($courseEntities as $courseEntity) {
+                $courseNodeIds[(int) $courseEntity->getId()] = (int) ($courseEntity->getResourceNode()?->getId() ?? 0);
+            }
+        }
+
         $contexts = [];
 
         foreach ($courses as $course) {
@@ -1004,6 +1022,7 @@ class ReportRegistry
             $contexts[$key] = [
                 'course_id' => $courseId,
                 'session_id' => $sessionId,
+                'resource_node_id' => (int) ($courseNodeIds[$courseId] ?? 0),
                 'title' => $title,
                 'session_name' => $sessionName,
             ];

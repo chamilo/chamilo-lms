@@ -104,7 +104,7 @@ readonly class ResourceAclHelper
         $askedMask = (string) self::getPermissionMask([$attribute]);
 
         if ($this->security->getToken() instanceof NullToken) {
-            return (bool) $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $resourceLink->getId(), $askedMask);
+            return (bool) $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', (string) $resourceLink->getId(), $askedMask);
         }
 
         $user = $this->security->getUser();
@@ -125,7 +125,7 @@ readonly class ResourceAclHelper
                 continue;
             }
 
-            if ($acl->isAllowed($role, $resourceLink->getId(), $askedMask)) {
+            if ($acl->isAllowed($role, (string) $resourceLink->getId(), $askedMask)) {
                 return true;
             }
         }

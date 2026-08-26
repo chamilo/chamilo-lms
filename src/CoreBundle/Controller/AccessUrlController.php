@@ -299,7 +299,7 @@ class AccessUrlController extends AbstractController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['users']) || empty($data['access_url'] || empty($data['auth_source']))) {
+        if (empty($data['users']) || empty($data['access_url']) || empty($data['auth_source'])) {
             throw new Exception('Missing required parameters');
         }
 

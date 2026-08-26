@@ -3411,6 +3411,7 @@
     "Hide preview": "\u1021\u1005\u1019\u103a\u1038\u1000\u103c\u100a\u1037\u103a\u1019\u103e\u102f\u1000\u102d\u102f \u1016\u103d\u1000\u103a\u1015\u102b",
     "Shape": "\u1015\u102f\u1036\u101e\u100f\u1039\u100c\u102c\u1014\u103a",
     "Coordinates": "\u1000\u102d\u102f\u1029\u1012\u102d\u1014\u102d\u1010\u103a\u1019\u103b\u102c\u1038",
+    "Search for this location": "\u1024\u1010\u100a\u103a\u1014\u1031\u101b\u102c\u1000\u102d\u102f \u101b\u103e\u102c\u1016\u103d\u1031\u1015\u102b",
     "Blanks": "\u1000\u103d\u1000\u103a\u101c\u1015\u103a\u1019\u103b\u102c\u1038",
     "Switchable blanks": "\u1015\u103c\u1031\u102c\u1004\u103a\u1038\u101c\u1032\u1014\u102d\u102f\u1004\u103a\u101e\u1031\u102c \u1000\u103d\u1000\u103a\u101c\u1015\u103a\u1019\u103b\u102c\u1038",
     "Blank": "\u1000\u103d\u1000\u103a\u101c\u1015\u103a",
@@ -3674,5 +3675,13 @@
     "Add delineation": "Add delineation",
     "This Office document question has no answer options. Its score is assigned during correction/results review.": "This Office document question has no answer options. Its score is assigned during correction/results review.",
     "Results per user": "\u1021\u101e\u102f\u1036\u1038\u1015\u103c\u102f\u101e\u1030\u1021\u101c\u102d\u102f\u1000\u103a \u101b\u101c\u1012\u103a\u1019\u103b\u102c\u1038",
-    "Only best attempts": "\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038\u1000\u103c\u102d\u102f\u1038\u1005\u102c\u1038\u1019\u103e\u102f\u1019\u103b\u102c\u1038\u101e\u102c"
+    "Only best attempts": "\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038\u1000\u103c\u102d\u102f\u1038\u1005\u102c\u1038\u1019\u103e\u102f\u1019\u103b\u102c\u1038\u101e\u102c",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "အက္ခရာများသာ",
+    "Only letters and spaces": "အက္ခရာများနှင့် နေရာလွတ်များသာ",
+    "Only letters, numbers and spaces": "အက္ခရာများ၊ ဂဏန်းများနှင့် နေရာလွတ်များသာ",
+    "Mobile phone number is incomplete or contains invalid characters": "မိုဘိုင်းဖုန်းနံပါတ်သည် မပြည့်စုံပါ သို့မဟုတ် မမှန်ကန်သောအက္ခရာများ ပါဝင်သည်",
+    "Include the country dial code": "နိုင်ငံဖုန်းကုဒ်ကို ထည့်သွင်းပါ",
+    "Only PNG, JPG or GIF images allowed": "PNG၊ JPG သို့မဟုတ် GIF ပုံများကိုသာ ခွင့်ပြုသည်"
 }

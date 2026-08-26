@@ -13,7 +13,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
@@ -35,16 +36,15 @@ use Throwable;
  */
 final readonly class WikiPageActionProcessor implements ProcessorInterface
 {
-    use WikiAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
         private WikiNotificationService $notificationService,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -63,21 +63,18 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('Wiki management actions are not available in student view.');
         }
 
-        if (!$this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        if (!$this->wikiHelper->canManage(
             $course,
             $session,
             $group,

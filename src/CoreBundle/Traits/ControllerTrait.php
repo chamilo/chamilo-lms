@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Helpers\GlideHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
@@ -54,6 +55,7 @@ trait ControllerTrait
         $services[] = ResourceFactory::class;
         $services[] = ResourceNodeRepository::class;
         $services[] = SettingsFormFactory::class;
+        $services[] = UserHelper::class;
 
         /*
             The following classes are needed in order to load the resources files when using the /r/ path

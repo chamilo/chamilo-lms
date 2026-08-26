@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -46,6 +48,8 @@ final readonly class ExerciseRuntimeResultEmailService
         private SettingsManager $settingsManager,
         private Environment $twig,
         private TranslatorInterface $translator,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -57,13 +61,13 @@ final readonly class ExerciseRuntimeResultEmailService
             throw new BadRequestHttpException('A valid exercise id is required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to email exercise results.');
         }
 
         $sender = $this->getCurrentUser();
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $attempts = $this->getReviewedAttempts($quiz, $course, $session, $request);
 
@@ -79,13 +83,13 @@ final readonly class ExerciseRuntimeResultEmailService
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to email this exercise attempt.');
         }
 
         $sender = $this->getCurrentUser();
-        $course = $this->getCourse($request);
-        $session = $this->getSession($request);
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
         $attempt = $this->getAttempt($attemptId, $quiz, $course, $session);
         $result = $this->sendAttempts([$attempt], $quiz, $course, $session, $sender, $request, $node);
@@ -198,12 +202,6 @@ final readonly class ExerciseRuntimeResultEmailService
         $this->mailer->send($email);
     }
 
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
     private function getCurrentUser(): User
     {
         $user = $this->security->getUser();
@@ -212,36 +210,6 @@ final readonly class ExerciseRuntimeResultEmailService
         }
 
         return $user;
-    }
-
-    private function getCourse(Request $request): Course
-    {
-        $courseId = $request->query->getInt('cid');
-        if ($courseId <= 0) {
-            throw new BadRequestHttpException('A valid course id is required.');
-        }
-
-        $course = $this->entityManager->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('The requested course was not found.');
-        }
-
-        return $course;
-    }
-
-    private function getSession(Request $request): ?Session
-    {
-        $sessionId = $request->query->getInt('sid');
-        if ($sessionId <= 0) {
-            return null;
-        }
-
-        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
-        if (!$session instanceof Session) {
-            throw new BadRequestHttpException('The requested session was not found.');
-        }
-
-        return $session;
     }
 
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
@@ -281,7 +249,7 @@ final readonly class ExerciseRuntimeResultEmailService
         }
 
         $visibility = \is_array($row) ? (int) ($row['linkVisibility'] ?? 0) : 0;
-        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->canManageExercises()) {
+        if (0 !== $visibility && self::VISIBILITY_PUBLISHED !== $visibility && !$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('The requested exercise is not visible.');
         }
 

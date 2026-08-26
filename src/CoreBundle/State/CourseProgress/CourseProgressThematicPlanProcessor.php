@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\ApiResource\CourseProgress\CourseProgressThematicPlan;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
@@ -34,8 +34,6 @@ use const ENT_SUBSTITUTE;
  */
 final readonly class CourseProgressThematicPlanProcessor implements ProcessorInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     private const int MAX_ITEMS = 100;
 
     /**
@@ -67,7 +65,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -90,10 +88,10 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
-        $this->assertCanManage($request, $course, $session);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertCanManage($course, $session);
 
         $thematicId = isset($uriVariables['thematicId']) ? (int) $uriVariables['thematicId'] : 0;
         $thematic = $this->getEditableThematic($thematicId, $course, $session);
@@ -121,23 +119,6 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
         return $this->buildResponse($thematic);
     }
 
-    private function assertCanManage(Request $request, Course $course, ?Session $session): void
-    {
-        if (!$this->isCourseProgressStudentView($request, (int) $course->getId())
-            && $this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to manage thematic plans in this context.');
-    }
-
     private function getEditableThematic(int $thematicId, Course $course, ?Session $session): CThematic
     {
         if ($thematicId <= 0) {
@@ -149,7 +130,7 @@ final readonly class CourseProgressThematicPlanProcessor implements ProcessorInt
             throw new NotFoundHttpException('The requested thematic was not found.');
         }
 
-        if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+        if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
             throw new AccessDeniedHttpException('The requested thematic does not belong to the current course context.');
         }
 

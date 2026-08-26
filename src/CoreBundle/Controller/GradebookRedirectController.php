@@ -94,7 +94,9 @@ final class GradebookRedirectController extends AbstractController
         return new RedirectResponse($path.'?'.http_build_query($query));
     }
 
-    /** @param list<string> $keys */
+    /**
+     * @param list<string> $keys
+     */
     private function firstPositiveInt(Request $request, array $keys): int
     {
         foreach ($keys as $key) {
@@ -113,7 +115,7 @@ final class GradebookRedirectController extends AbstractController
             throw new BadRequestHttpException($error);
         }
 
-        return sprintf($format, $id);
+        return \sprintf($format, $id);
     }
 
     private function historyPath(int $node, string $kind, int $itemId): string

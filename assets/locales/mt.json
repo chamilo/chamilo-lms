@@ -3412,6 +3412,7 @@
     "Hide preview": "A\u0127bi l-anteprima",
     "Shape": "Forma",
     "Coordinates": "Koordinati",
+    "Search for this location": "Fittex din il-lokalit\u00e0",
     "Blanks": "Vo\u010bijiet vojta",
     "Switchable blanks": "Vo\u010bijiet vojta li jistg\u0127u jinbidlu",
     "Blank": "Vo\u010bi vojta",
@@ -3775,5 +3776,13 @@
     "Agreement file deleted": "Il-fajl tal-ftehim \u0121ie m\u0127assar",
     "Certificate image updated": "L-imma\u0121ni ta\u010b-\u010bertifikat \u0121iet a\u0121\u0121ornata",
     "Certificate image deleted": "L-imma\u0121ni ta\u010b-\u010bertifikat \u0121iet im\u0127assra",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "U\u017ca l-editur tal-imma\u0121ni qabel ittella' biex taqta', iddawwar jew tibdel id-daqs tal-istampa tal-kors."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "U\u017ca l-editur tal-imma\u0121ni qabel ittella' biex taqta', iddawwar jew tibdel id-daqs tal-istampa tal-kors.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Ittri biss",
+    "Only letters and spaces": "Ittri u spazji biss",
+    "Only letters, numbers and spaces": "Ittri, numri u spazji biss",
+    "Mobile phone number is incomplete or contains invalid characters": "In-numru tat-telefon mobbli huwa mhux komplut jew fih karattri invalidi",
+    "Include the country dial code": "Inkludi l-kodiċi tad-djal tal-pajjiż",
+    "Only PNG, JPG or GIF images allowed": "Immaġini PNG, JPG jew GIF biss huma permessi"
 }

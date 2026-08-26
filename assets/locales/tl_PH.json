@@ -3420,6 +3420,7 @@
     "Hide preview": "Itago ang preview",
     "Shape": "Hugis",
     "Coordinates": "Mga Koordinasyon",
+    "Search for this location": "Maghanap sa lokasyong ito",
     "Blanks": "Mga Blangko",
     "Switchable blanks": "Mga Blangkong Mapapalitan",
     "Blank": "Blangko",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Natanggal ang file ng kasunduan",
     "Certificate image updated": "Na-update ang larawan ng sertipiko",
     "Certificate image deleted": "Natanggal ang larawan ng sertipiko",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gamitin ang image editor bago mag-upload para i-crop, i-rotate o baguhin ang laki ng larawan ng kurso."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gamitin ang image editor bago mag-upload para i-crop, i-rotate o baguhin ang laki ng larawan ng kurso.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Titulang letra lamang",
+    "Only letters and spaces": "Titik lamang at espasyo",
+    "Only letters, numbers and spaces": "Titik, numero at espasyo lamang",
+    "Mobile phone number is incomplete or contains invalid characters": "Hindi kumpleto ang mobile phone number o naglalaman ng hindi wasto na mga character",
+    "Include the country dial code": "Isama ang country dial code",
+    "Only PNG, JPG or GIF images allowed": "Tanging PNG, JPG o GIF na mga imahe ang pinapayagan"
 }

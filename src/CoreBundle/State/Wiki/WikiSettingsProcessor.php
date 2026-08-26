@@ -10,8 +10,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiSettings;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -20,13 +21,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /** @implements ProcessorInterface<WikiSettings, void> */
 final readonly class WikiSettingsProcessor implements ProcessorInterface
 {
-    use WikiAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
-        private Security $security,
         private SettingsCourseManager $settingsCourseManager,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -45,13 +45,13 @@ final readonly class WikiSettingsProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request) || !$this->canManageWikiCourseSettings($this->security, $course)) {
+        if ($this->studentViewHelper->isActive() || !$this->wikiHelper->canManageCourseSettings($course)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Wiki settings.');
         }
 

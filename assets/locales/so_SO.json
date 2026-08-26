@@ -3420,6 +3420,7 @@
     "Hide preview": "Qari aragga",
     "Shape": "Qaab",
     "Coordinates": "Meelaha",
+    "Search for this location": "Raadi goobtaan",
     "Blanks": "Meelaha bannaan",
     "Switchable blanks": "Meelaha bannaan ee la beddeli karo",
     "Blank": "Meel bannaan",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Faylka heshiiska waa la tirtiray",
     "Certificate image updated": "Sawirka shahaadada waa la cusboonaysiiyay",
     "Certificate image deleted": "Sawirka shahaadada waa la tirtiray",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Isticmaal tifaftiraha sawirka ka hor intaadan soo gelin si aad u gooyo, u rogo ama u beddesho cabbirka sawirka koorsada."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Isticmaal tifaftiraha sawirka ka hor intaadan soo gelin si aad u gooyo, u rogo ama u beddesho cabbirka sawirka koorsada.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Xuruufta kaliya",
+    "Only letters and spaces": "Xaraf iyo meelo kaliya",
+    "Only letters, numbers and spaces": "Xaraf, nambaro iyo meelo kaliya",
+    "Mobile phone number is incomplete or contains invalid characters": "Lambarka taleefanka gacanta waa dhamaystirnayn ama waxa uu leeyahay xarfo aan ansax ahayn",
+    "Include the country dial code": "Ku dar lambarka garaaqa dalka",
+    "Only PNG, JPG or GIF images allowed": "Soo saaraha PNG, JPG ama GIF kaliya ayaa la oggol yahay"
 }

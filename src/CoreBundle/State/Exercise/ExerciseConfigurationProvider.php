@@ -18,7 +18,10 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -31,7 +34,6 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -55,9 +57,11 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
-        private Security $security,
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private CourseHelper $courseHelper,
     ) {}
 
     /**
@@ -73,7 +77,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
         }
 
@@ -93,7 +97,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->mode = 'create';
         $configuration->canCreate = true;
         $configuration->canEdit = false;
-        $configuration->settings = $this->getSettings();
+        $configuration->settings = $this->getSettings($course);
         $configuration->options = $this->getOptions($course, $session, null);
         $configuration->listUrl = '';
         $configuration->questionsUrl = '';
@@ -181,7 +185,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->textWhenFinishedFailure = (string) $quiz->getTextWhenFinishedFailure();
         $configuration->canCreate = true;
         $configuration->canEdit = true;
-        $configuration->settings = $this->getSettings();
+        $configuration->settings = $this->getSettings($course);
         $configuration->options = $this->getOptions($course, $session, $quiz);
         $configuration->listUrl = '';
         $configuration->questionsUrl = $this->buildLegacyQuestionsUrl($quiz, $course, $session);
@@ -234,9 +238,16 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getSettings(): array
+    private function getSettings(Course $course): array
     {
+        $exerciseGeneratorEnabled = $this->aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'exercise_generator',
+            (int) $course->getId(),
+        );
+
         return [
+            'showBuyCoursesUpgradeCta' => !$exerciseGeneratorEnabled
+                && $this->courseHelper->shouldOfferBuyCoursesExerciseGeneratorUpgrade($course),
             'allowExerciseCategories' => $this->isSettingEnabled('exercise.allow_exercise_categories'),
             'allowShowPreviousButtonSetting' => $this->isSettingEnabled('exercise.allow_quiz_show_previous_button_setting'),
             'allowQuizResultsPageConfig' => $this->isSettingEnabled('exercise.allow_quiz_results_page_config'),
@@ -912,12 +923,6 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             ),
             static fn (int $value): bool => $value > 0
         ));
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
     }
 
     private function isProgressiveAdaptiveSettingEnabled(): bool

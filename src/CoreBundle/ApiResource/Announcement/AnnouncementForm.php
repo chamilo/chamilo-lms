@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Announcement create or edit form data',
                 parameters: [
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'remind_inactive', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'remindallinactives', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'since', in: 'query', required: false, schema: ['type' => 'string']),
@@ -57,9 +56,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/announcement/preview',
             openapi: new Operation(
                 summary: 'Preview announcement recipients',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -85,9 +81,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/announcement',
             openapi: new Operation(
                 summary: 'Create an announcement',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -116,7 +109,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Update an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

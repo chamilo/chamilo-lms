@@ -23,4 +23,31 @@ readonly class UserHelper
 
         return $user instanceof UserInterface ? $user : null;
     }
+
+    /**
+     * Whether the current user teaches the current course context, base course or session.
+     *
+     * Mirrors the legacy api_is_course_admin(). This is the role on its own: it says nothing
+     * about whether the user may edit anything right now, since the student view and the
+     * session rules do not enter into it. Use IsAllowedToEditHelper::check() for that, and
+     * this one for read gates, which must keep letting a teacher see a tool they cannot
+     * currently change.
+     */
+    public function isTeacherOfCurrentCourse(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+    }
+
+    /**
+     * Whether the current user belongs to the current course context, base course or session.
+     *
+     * Only the student roles are named because the role hierarchy has each teacher role imply
+     * its student one, and ROLE_ADMIN imply all of them.
+     */
+    public function isMemberOfCurrentCourse(): bool
+    {
+        return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT');
+    }
 }

@@ -460,9 +460,12 @@ const submitting = ref(false)
 const route = useRoute()
 const parentResourceNodeId = parseInt(route.params.node ?? "0", 10)
 const securityStore = useSecurityStore()
+const platform = usePlatformConfig()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
-const isStudentView = route.query.isStudentView === "true"
-const forceStudentView = !isEditor || isStudentView
+// Reads the store rather than the URL: the state lives in the server session, and
+// this was the one place that only matched the exact string "true", so ?isStudentView=1
+// silently did nothing here.
+const forceStudentView = computed(() => !isEditor || platform.isStudentViewActive)
 
 const { relativeDatetime } = useFormatDate()
 const comments = ref([])
@@ -487,7 +490,7 @@ async function deleteComment(commentItem) {
 
 const aiAssistedRaw = ref(false)
 const aiAssistedDirty = ref(false)
-const canShowAiAssistedToggle = computed(() => !forceStudentView)
+const canShowAiAssistedToggle = computed(() => !forceStudentView.value)
 
 function onAiAssistedUserToggle(val) {
   aiAssistedDirty.value = true
@@ -605,7 +608,6 @@ const maxHelpText = computed(() => {
 // ----------------------------
 // AI Task Grader state
 // ----------------------------
-const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
@@ -631,7 +633,7 @@ const taskGraderEnabled = computed(() => {
 })
 
 const canUseAiTaskGrader = computed(() => {
-  return !!(!forceStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
+  return !!(!forceStudentView.value && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
 
 // Normalize providers from API:

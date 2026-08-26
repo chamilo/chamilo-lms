@@ -1642,7 +1642,7 @@ class CourseController extends ToolBaseController
         }
 
         $userId = (int) $user->getId();
-        $sessionId = (int) $request->query->get('sid', 0);
+        $sessionId = (int) $request->query->get('sid', '0');
 
         if (0 === $sessionId) {
             $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
@@ -1776,8 +1776,8 @@ class CourseController extends ToolBaseController
         }
 
         $userId = (int) $user->getId();
-        $sessionId = (int) $request->query->get('sid', 0);
-        $limit = (int) $request->query->get('limit', 20);
+        $sessionId = (int) $request->query->get('sid', '0');
+        $limit = (int) $request->query->get('limit', '20');
         if ($limit <= 0) {
             $limit = 20;
         }

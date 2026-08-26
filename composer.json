@@ -202,11 +202,7 @@
     "process-timeout": 900
   },
   "require-dev": {
-    "behat/behat": "^3.29",
-    "behat/mink": "^1.13",
-    "behat/mink-selenium2-driver": "^1.7",
     "dama/doctrine-test-bundle": "^8.0",
-    "friends-of-behat/mink-extension": "^2.7",
     "hautelook/alice-bundle": "^2.14",
     "justinrainbow/json-schema": "^5.2",
     "phpstan/phpstan": "^1.12",

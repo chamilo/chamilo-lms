@@ -1382,9 +1382,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      */
     public function getCourseCoaches(): Collection
     {
-        return $this->getCourseCoachesSubscriptions()
-            ->map(fn (SessionRelCourseRelUser $subscription) => $subscription->getUser())
-        ;
+        /** @var ArrayCollection<int, User> $coaches */
+        $coaches = new ArrayCollection();
+
+        foreach ($this->getCourseCoachesSubscriptions() as $subscription) {
+            $user = $subscription->getUser();
+            if ($user instanceof User) {
+                $coaches->add($user);
+            }
+        }
+
+        return $coaches;
     }
 
     /**

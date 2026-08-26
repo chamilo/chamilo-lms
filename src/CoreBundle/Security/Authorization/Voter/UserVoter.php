@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -30,7 +31,8 @@ class UserVoter extends Voter
     public function __construct(
         private AccessDecisionManagerInterface $accessDecisionManager,
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
+        private AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -59,16 +61,36 @@ class UserVoter extends Voter
             return false;
         }
 
-        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
-            return true;
-        }
-
         /** @var User $user */
         $user = $subject;
 
         if (self::EDIT === $attribute) {
-            // Only the owner can edit private data
-            return (int) $currentUser->getId() === (int) $user->getId();
+            // The owner can always edit their own data. Otherwise, an admin may only edit
+            // a user within their access-URL scope -- see AccessUrlScopeHelper::canEditUser().
+            if ((int) $currentUser->getId() === (int) $user->getId()) {
+                return true;
+            }
+
+            if (!$this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+                return false;
+            }
+
+            return $this->accessUrlScope->canEditUser($currentUser, $user);
+        }
+
+        if (self::DELETE === $attribute) {
+            // Same access-URL scope as EDIT (see canEditUser()) -- an admin may only
+            // delete a user within their scope. UserDeleteProcessor separately blocks
+            // deleting one's own account regardless.
+            if (!$this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+                return false;
+            }
+
+            return $this->accessUrlScope->canEditUser($currentUser, $user);
+        }
+
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+            return true;
         }
 
         if (self::VIEW === $attribute) {

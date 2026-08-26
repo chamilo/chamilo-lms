@@ -140,6 +140,17 @@ final class MobileMessage
     #[Groups(['mobile_message:read'])]
     public ?int $parentId = null;
 
+    public static function createPlainTextPreview(string $content): string
+    {
+        $spacedContent = preg_replace(
+            '/<\/?(?:p|div|li|h[1-6]|section|article)\b[^>]*>|<br\b[^>]*>/iu',
+            ' ',
+            $content
+        ) ?? $content;
+
+        return trim(preg_replace('/\s+/u', ' ', strip_tags($spacedContent)) ?? '');
+    }
+
     public static function fromMessage(
         Message $message,
         User $user,
@@ -155,7 +166,8 @@ final class MobileMessage
 
         $resolvedBox = MessageRelUser::TYPE_SENDER === $relation->getReceiverType() ? 'sent' : 'inbox';
         $content = Security::remove_XSS($message->getContent(), STUDENT);
-        $plainContent = trim(preg_replace('/\s+/u', ' ', strip_tags($content)) ?? '');
+        $plainContent = self::createPlainTextPreview($content);
+
         $recipientIds = [];
         $recipientNames = [];
 

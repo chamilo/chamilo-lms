@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -90,9 +91,8 @@ trait ResourceControllerTrait
             if ($this->hasCourse()) {
                 $parentResourceNode = $this->getCourse()->getResourceNode();
             } elseif ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                /** @var User $user */
-                $user = $this->userHelper->getCurrent();
-                if ($user) {
+                $user = $this->container->get(UserHelper::class)->getCurrent();
+                if ($user instanceof User) {
                     $parentResourceNode = $user->getResourceNode();
                 }
             }

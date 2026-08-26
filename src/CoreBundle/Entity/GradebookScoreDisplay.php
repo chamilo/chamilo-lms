@@ -68,7 +68,6 @@ class GradebookScoreDisplay
         return $this;
     }
 
-
     public function getCategory(): GradebookCategory
     {
         return $this->category;

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -29,7 +30,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * @implements ProviderInterface<array<string, mixed>>
+ * @implements ProviderInterface<CForum>
  */
 final class ForumCollectionStateProvider implements ProviderInterface
 {
@@ -44,6 +45,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -86,7 +88,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $parentNode = $this->getParentNode($this->entityManager, $request);
-        $showHidden = $this->canManageForumsInCurrentView($this->security, $request);
+        $showHidden = $this->isAllowedToEditHelper->check(coach: true);
         $user = $this->getCurrentUser();
         $displayGroupForums = $this->shouldDisplayGroupForumsInGeneralTool($this->cidReqHelper);
 
@@ -161,11 +163,16 @@ final class ForumCollectionStateProvider implements ProviderInterface
 
         $categoryIds = [];
         foreach ($queryBuilder->getQuery()->getResult() as $category) {
-            if (!$category instanceof CForumCategory || null === $category->getIid()) {
+            if (!$category instanceof CForumCategory) {
                 continue;
             }
 
-            $categoryIds[$category->getIid()] = true;
+            $categoryId = $category->getIid();
+            if (null === $categoryId) {
+                continue;
+            }
+
+            $categoryIds[$categoryId] = true;
         }
 
         return $categoryIds;

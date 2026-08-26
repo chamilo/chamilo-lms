@@ -3412,6 +3412,7 @@
     "Hide preview": "Peida eelvaade",
     "Shape": "Kuju",
     "Coordinates": "Koordinaadid",
+    "Search for this location": "Otsi seda asukohta",
     "Blanks": "T\u00fchikud",
     "Switchable blanks": "Vahetatavad t\u00fchikud",
     "Blank": "T\u00fchik",
@@ -3775,5 +3776,13 @@
     "Agreement file deleted": "Lepingu fail kustutatud",
     "Certificate image updated": "Sertifikaadi pilt uuendatud",
     "Certificate image deleted": "Sertifikaadi pilt kustutatud",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Kasuta pildiredaktorit enne \u00fcleslaadimist kursuse pildi k\u00e4rpimiseks, p\u00f6\u00f6ramiseks v\u00f5i suuruse muutmiseks."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Kasuta pildiredaktorit enne \u00fcleslaadimist kursuse pildi k\u00e4rpimiseks, p\u00f6\u00f6ramiseks v\u00f5i suuruse muutmiseks.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Ainult tähed",
+    "Only letters and spaces": "Ainult tähed ja tühikud",
+    "Only letters, numbers and spaces": "Ainult tähed, numbrid ja tühikud",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiiltelefoni number on puudulik või sisaldab vigaseid märke",
+    "Include the country dial code": "Kaasa riigi suunakood",
+    "Only PNG, JPG or GIF images allowed": "Lubatud on ainult PNG, JPG või GIF pildid"
 }

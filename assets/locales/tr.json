@@ -3420,6 +3420,7 @@
     "Hide preview": "\u00d6nizlemeyi gizle",
     "Shape": "\u015eekil",
     "Coordinates": "Koordinatlar",
+    "Search for this location": "Bu konumu ara",
     "Blanks": "Bo\u015fluklar",
     "Switchable blanks": "De\u011fi\u015ftirilebilir bo\u015fluklar",
     "Blank": "Bo\u015fluk",
@@ -3772,5 +3773,13 @@
     "Upload agreement file": "S\u00f6zle\u015fme dosyas\u0131 y\u00fckle",
     "Download agreement file": "S\u00f6zle\u015fme dosyas\u0131n\u0131 indir",
     "Delete agreement file": "S\u00f6zle\u015fme dosyas\u0131n\u0131 sil",
-    "Custom certificate images": "\u00d6zel sertifika resimleri"
+    "Custom certificate images": "\u00d6zel sertifika resimleri",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Yalnızca harfler",
+    "Only letters and spaces": "Yalnızca harfler ve boşluklar",
+    "Only letters, numbers and spaces": "Yalnızca harfler, rakamlar ve boşluklar",
+    "Mobile phone number is incomplete or contains invalid characters": "Cep telefonu numarası eksik veya geçersiz karakterler içeriyor",
+    "Include the country dial code": "Ülke arama kodunu dahil edin",
+    "Only PNG, JPG or GIF images allowed": "Sadece PNG, JPG veya GIF tipindeki görüntüler kabul edilir"
 }

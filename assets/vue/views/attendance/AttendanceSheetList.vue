@@ -547,7 +547,7 @@
   </div>
 </template>
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SignaturePad from "signature_pad"
@@ -565,6 +565,7 @@ import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
 import { DateTime } from "luxon"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -648,11 +649,13 @@ const signedCount = computed(
 )
 const totalCount = computed(() => filteredDates.value.length)
 
-const isTodayScheduled = computed(() => attendanceDates.value.some((date) => {
-  if (!date.dateTime) return false
-  const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
-  return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
-}))
+const isTodayScheduled = computed(() =>
+  attendanceDates.value.some((date) => {
+    if (!date.dateTime) return false
+    const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
+    return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
+  }),
+)
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -937,20 +940,17 @@ onMounted(async () => {
 })
 
 // Recompute when the global Student View toggle changes
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  async () => {
-    await loadAttendanceDataForCurrentMode()
-    updateAvailableFilters()
+useStudentViewRefresh(async () => {
+  await loadAttendanceDataForCurrentMode()
+  updateAvailableFilters()
 
-    if (isTeacherUI.value) {
-      selectedFilter.value = "today"
-      filterAttendanceSheets()
-    } else {
-      filteredDates.value = attendanceDates.value
-    }
-  },
-)
+  if (isTeacherUI.value) {
+    selectedFilter.value = "today"
+    filterAttendanceSheets()
+  } else {
+    filteredDates.value = attendanceDates.value
+  }
+})
 
 const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, state) => {
   acc[state.id] = state

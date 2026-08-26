@@ -34,7 +34,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, computed, watch } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import AttendanceTable from "../../components/attendance/AttendanceTable.vue"
@@ -42,11 +42,11 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -149,12 +149,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
   }
 }
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  () => {
-    fetchAttendances()
-  },
-)
+useStudentViewRefresh(fetchAttendances)
 
 onMounted(fetchAttendances)
 </script>

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
@@ -29,8 +30,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class CourseProgressThematicProvider implements ProviderInterface
 {
-    use CourseProgressAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
@@ -38,6 +37,7 @@ final readonly class CourseProgressThematicProvider implements ProviderInterface
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     /**
@@ -52,19 +52,11 @@ final readonly class CourseProgressThematicProvider implements ProviderInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
-            || !$this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
+        if (!$this->courseProgressHelper->canManage($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage course progress in this context.');
         }
 
@@ -102,7 +94,7 @@ final readonly class CourseProgressThematicProvider implements ProviderInterface
             throw new NotFoundHttpException('The requested thematic was not found.');
         }
 
-        if (!$this->thematicBelongsToExactContext($thematic, $course, $session)) {
+        if (!$this->courseProgressHelper->thematicBelongsToExactContext($thematic, $course, $session)) {
             throw new AccessDeniedHttpException('The requested thematic does not belong to the current course context.');
         }
 

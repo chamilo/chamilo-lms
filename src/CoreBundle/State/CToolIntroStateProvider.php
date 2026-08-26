@@ -26,6 +26,12 @@ final readonly class CToolIntroStateProvider implements ProviderInterface
         private CourseLinkSessionHelper $courseLinkSessionHelper,
     ) {}
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<CToolIntro>|CToolIntro|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if ($operation instanceof CollectionOperationInterface) {

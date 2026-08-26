@@ -397,6 +397,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseProgressService from "../../services/courseProgressService"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -478,9 +479,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -838,15 +836,13 @@ onMounted(async () => {
   await consumeSavedMessage()
 })
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  async () => {
+useStudentViewRefresh(loadCourseProgress, {
+  before: () => {
     selectedThematicIds.value = []
     successMessage.value = ""
     actionErrorMessage.value = ""
-    await loadCourseProgress()
   },
-)
+})
 
-watch(() => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadCourseProgress)
+watch(() => [route.query.cid, route.query.sid, route.query.gid], loadCourseProgress)
 </script>

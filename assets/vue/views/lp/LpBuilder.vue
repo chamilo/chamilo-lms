@@ -16,6 +16,7 @@ import LpCertificateForm from "../../components/lp/LpCertificateForm.vue"
 import LpInlineDocumentForm from "../../components/lp/LpInlineDocumentForm.vue"
 import LpInlineDocumentUpload from "../../components/lp/LpInlineDocumentUpload.vue"
 import LpItemAudioForm from "../../components/lp/LpItemAudioForm.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
 import lpService from "../../services/lpService"
@@ -725,53 +726,53 @@ function goBack() {
 
 <template>
   <div class="space-y-4">
-    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-20 pb-3">
-      <div class="flex items-center gap-1">
-        <BaseButton
-          :label="t('Back')"
-          icon="back"
-          only-icon
-          type="primary-text"
-          @click="goBack"
-        />
-        <BaseButton
-          :label="t('Preview')"
-          :to-url="previewUrl"
-          icon="eye-on"
-          only-icon
-          type="primary-text"
-        />
-        <BaseButton
-          :label="t('Settings')"
-          :route="{ name: 'LpSettings', params: { lpId }, query: route.query }"
-          icon="settings"
-          only-icon
-          type="secondary-text"
-        />
-        <BaseButton
-          v-if="builder?.bulkAuthorPrice?.enabled"
-          :label="t('Author')"
-          icon="join-group"
-          only-icon
-          type="secondary-text"
-          @click="openBulkAuthorPrice"
-        />
-      </div>
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Edit learnpath')"
+    >
+      <BaseButton
+        :label="t('Back')"
+        icon="back"
+        only-icon
+        type="primary-text"
+        @click="goBack"
+      />
+      <BaseButton
+        :label="t('Preview')"
+        :to-url="previewUrl"
+        icon="eye-on"
+        only-icon
+        type="primary-text"
+      />
+      <BaseButton
+        :label="t('Settings')"
+        :route="{ name: 'LpSettings', params: { lpId }, query: route.query }"
+        icon="settings"
+        only-icon
+        type="secondary-text"
+      />
+      <BaseButton
+        v-if="builder?.bulkAuthorPrice?.enabled"
+        :label="t('Author')"
+        icon="join-group"
+        only-icon
+        type="secondary-text"
+        @click="openBulkAuthorPrice"
+      />
 
-      <div class="w-full sm:w-80">
-        <BaseSelect
-          id="lp-builder-prerequisite-options"
-          v-model="prerequisiteAction"
-          :disabled="!canManage"
-          :label="t('Prerequisites options')"
-          :options="prerequisiteOptions"
-          name="prerequisiteAction"
-          option-label="label"
-          option-value="value"
-          @change="applyPrerequisiteAction"
-        />
-      </div>
-    </div>
+      <BaseSelect
+        id="lp-builder-prerequisite-options"
+        v-model="prerequisiteAction"
+        class="!mb-0 w-full sm:w-80"
+        :disabled="!canManage"
+        :label="t('Prerequisites options')"
+        :options="prerequisiteOptions"
+        name="prerequisiteAction"
+        option-label="label"
+        option-value="value"
+        @change="applyPrerequisiteAction"
+      />
+    </SectionHeader>
 
     <div
       v-if="loading"

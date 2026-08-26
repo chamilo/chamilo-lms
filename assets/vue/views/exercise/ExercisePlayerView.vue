@@ -2460,7 +2460,6 @@ function getContextParams() {
   addOptionalQueryParam(params, "returnToLp")
   addOptionalQueryParam(params, "embedded")
   addOptionalQueryParam(params, "gradebook")
-  addOptionalQueryParam(params, "isStudentView")
   addOptionalQueryParam(params, "preview")
   addOptionalQueryParam(params, "attemptId")
 
@@ -4700,7 +4699,6 @@ watch(
     route.query.gid,
     route.query.attemptId,
     route.query.preview,
-    route.query.isStudentView,
   ],
   () => loadRuntime(),
 )

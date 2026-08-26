@@ -24,7 +24,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Gradebook overview for the current course context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'categoryId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),

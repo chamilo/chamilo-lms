@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -19,7 +20,6 @@ use Chamilo\CourseBundle\Repository\CThematicRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-use Doctrine\ORM\EntityManagerInterface;
 use IntlDateFormatter;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
@@ -40,15 +40,13 @@ use const PHP_SESSION_ACTIVE;
 
 final readonly class CourseProgressPdfManager
 {
-    use CourseProgressAccessHelperTrait;
-
     public function __construct(
         private CidReqHelper $cidReqHelper,
-        private EntityManagerInterface $entityManager,
         private CThematicRepository $thematicRepository,
         private Security $security,
         private SettingsManager $settingsManager,
         private TranslatorInterface $translator,
+        private CourseProgressHelper $courseProgressHelper,
     ) {}
 
     public function export(Request $request, ?int $thematicId = null): Response
@@ -100,19 +98,11 @@ final readonly class CourseProgressPdfManager
     private function resolveWritableContext(Request $request): array
     {
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertCourseProgressToolEnabled($this->entityManager, $course);
+        $this->courseProgressHelper->assertToolEnabled($course);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertSessionBelongsToCourse($session, $course);
+        $this->courseProgressHelper->assertSessionBelongsToCourse($session, $course);
 
-        if ($this->isCourseProgressStudentView($request, (int) $course->getId())
-            || !$this->canManageCourseProgress(
-                $this->entityManager,
-                $this->security,
-                $this->settingsManager,
-                $course,
-                $session,
-            )
-        ) {
+        if (!$this->courseProgressHelper->canManage($course, $session)) {
             throw new AccessDeniedHttpException('You are not allowed to export course progress in this context.');
         }
 

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -89,6 +90,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         private CQuizQuestionRepository $questionRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -108,7 +110,10 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        if (!$this->canManageExercises()) {
+        // The global question bank is not course scoped, so a question manager keeps access
+        // even where the course rules would deny it.
+        if (!$this->isAllowedToEditHelper->check(coach: true)
+            && !$this->security->isGranted('ROLE_QUESTION_MANAGER')) {
             throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
         }
 
@@ -143,6 +148,38 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         return $this->buildGlobalResponse($operation, $question, $course, $session);
+    }
+
+    /**
+     * Validate a question payload for trusted internal callers that already
+     * resolved course ownership and AccessUrl scope.
+     */
+    public function validateProgrammaticCreate(CQuiz $quiz, ExerciseQuestionEditor $data): void
+    {
+        $this->assertQuestionTypeAllowedByFeedback($quiz, (int) $data->type);
+        $this->validatePayload($data);
+        $this->validateAnnotationImageOnCreate($data, true);
+        $this->validateHotspotImageOnCreate($data, true);
+        $this->validateOnlyofficeTemplateOnCreate($data, true);
+    }
+
+    /**
+     * Create a question through the same validation and persistence path used
+     * by the Vue editor. Security and course ownership must be checked by the
+     * trusted caller before invoking this method.
+     */
+    public function createProgrammaticQuestion(
+        CQuiz $quiz,
+        ExerciseQuestionEditor $data,
+        Course $course,
+        ?Session $session = null,
+    ): CQuizQuestion {
+        $this->validateProgrammaticCreate($quiz, $data);
+
+        $question = $this->createQuestion($quiz, $data, $course, $session);
+        $this->entityManager->flush();
+
+        return $question;
     }
 
     private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
@@ -754,14 +791,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         };
     }
 
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_QUESTION_MANAGER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-    }
-
     private function getExerciseFromCurrentContext(int $exerciseId, Course $course, ?Session $session): CQuiz
     {
         $quiz = $this->quizRepository->find($exerciseId);
@@ -915,7 +944,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool}>
+     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool, correctChoice?: int}>
      */
     private function getCleanAnswers(ExerciseQuestionEditor $data): array
     {
@@ -1396,7 +1425,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool}>
+     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool, correctChoice?: int}>
      */
     private function normalizeAnswersForType(ExerciseQuestionEditor $data, array $optionIidsByPosition = []): array
     {
@@ -1570,6 +1599,57 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $value = $this->settingsManager->getSetting('exercise.allow_quiz_question_feedback', true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isImageZoomEnabled(): bool
+    {
+        $value = $this->settingsManager->getSetting('exercise.quiz_image_zoom', true);
+        if (\is_array($value)) {
+            return isset($value['options']) || true === ($value['value'] ?? false) || '1' === (string) ($value['value'] ?? '');
+        }
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    /**
+     * @return array<int, array{label: string, value: int}>
+     */
+    private function getCategoryOptions(Course $course, ?Session $session): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('category')
+            ->from(CQuizQuestionCategory::class, 'category')
+            ->innerJoin('category.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('courseId', (int) $course->getId())
+            ->orderBy('category.title', 'ASC')
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId())
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        $items = [];
+        foreach ($queryBuilder->getQuery()->getResult() as $category) {
+            if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+                continue;
+            }
+
+            $items[] = [
+                'label' => $category->getTitle(),
+                'value' => (int) $category->getIid(),
+            ];
+        }
+
+        return $items;
     }
 
     /**

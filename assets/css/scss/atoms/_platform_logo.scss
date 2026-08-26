@@ -1,9 +1,15 @@
 .platform-logo {
   a {
-    @apply block;
+    @apply flex items-center justify-center;
   }
 
   img, picture {
-    @apply h-10 max-h-10 w-auto block;
+    @apply block h-auto max-h-[60px] max-w-[190px] w-auto;
   }
+}
+
+// Keep the logged-in platform logo centered on the same 15rem axis as the expanded sidebar.
+// The topbar start area already has 1rem left spacing, so 13rem leaves the same space on the right.
+.app-topbar__start > .platform-logo {
+  @apply sm:w-52;
 }

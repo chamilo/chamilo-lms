@@ -146,6 +146,46 @@ final class AccessUrlScopeHelper
     }
 
     /**
+     * An actor may always act on their own account. Acting on another user -- editing OR
+     * deleting them, see UserVoter::EDIT / UserVoter::DELETE -- is otherwise confined by
+     * the actor's URL scope:
+     *
+     * - unrestricted (registered at the topmost URL of a tree): may act on anyone, unchanged.
+     * - ROLE_GLOBAL_ADMIN scoped to a subtree: may act on any user registered on that URL or
+     *   any of its descendants (same rule as isUserManaged()).
+     * - any other admin: confined to exactly the URL(s) they are directly registered to --
+     *   no descendant expansion, even if one of those URLs itself has children. A plain
+     *   admin managing one portal must not be able to reach users of a child portal just
+     *   because the URLs happen to share a tree.
+     */
+    public function canEditUser(User $actor, User $target): bool
+    {
+        if ((int) $actor->getId() === (int) $target->getId()) {
+            return true;
+        }
+
+        if ($this->isUnrestricted($actor)) {
+            return true;
+        }
+
+        if ($actor->hasRole('ROLE_GLOBAL_ADMIN')) {
+            return $this->isUserManaged($actor, (int) $target->getId());
+        }
+
+        return false !== $this->connection->fetchOne(
+            'SELECT 1
+               FROM access_url_rel_user actor_reg
+               INNER JOIN access_url_rel_user target_reg
+                   ON target_reg.access_url_id = actor_reg.access_url_id
+              WHERE actor_reg.user_id = :actorId
+                AND target_reg.user_id = :targetId
+              LIMIT 1',
+            ['actorId' => (int) $actor->getId(), 'targetId' => (int) $target->getId()],
+            ['actorId' => Types::INTEGER, 'targetId' => Types::INTEGER],
+        );
+    }
+
+    /**
      * @return int[] every access URL id in the subtree rooted at $urlId (including $urlId itself)
      */
     public function getDescendantUrlIds(int $urlId): array

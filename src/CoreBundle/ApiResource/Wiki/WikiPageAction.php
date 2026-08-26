@@ -26,7 +26,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -58,7 +57,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -90,7 +88,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -122,7 +119,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'pageId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -152,7 +148,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Allow or block creation of new Wiki pages in the current context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -182,7 +177,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Subscribe or unsubscribe from all Wiki changes in the current context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -212,7 +206,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete every Wiki page in the current context',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

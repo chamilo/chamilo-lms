@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -22,8 +21,9 @@ use Stringable;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        // Kept because API Platform needs an item operation to build this resource's IRI; reading
+        // the attachments of a post goes through /social_posts/{id}/attachments.
+        new Get(security: "object.getSocialPost() != null and is_granted('VIEW', object.getSocialPost())"),
         new Post(
             controller: CreateSocialPostAttachmentAction::class,
             openapi: new Operation(

@@ -80,7 +80,7 @@ final class MigrateFinalExamAccessCommand extends Command
      * the command matches them against the migrated resource display order
      * and never stores them in runtime configuration.
      *
-     * @var array<string, int>
+     * @var array<int|string, int>
      */
     private const array LEGACY_FINAL_EXAM_LOCAL_IDS = [
         '2120' => 7,

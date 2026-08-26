@@ -321,6 +321,13 @@ class BaseResourceFileAction
         ];
     }
 
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     *
+     * @return array<string, mixed>
+     */
     public function handleCreateFileRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
@@ -407,7 +414,7 @@ class BaseResourceFileAction
                     // Handle overwrite/rename/nothing when same title already exists under parent
                     if (!empty($fileExistsOption)) {
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
-                        if ($existingDocument) {
+                        if ($existingDocument instanceof CDocument) {
                             if ('overwrite' === $fileExistsOption) {
                                 // Quota check with delta: new - old
                                 $oldBytes = 0;
@@ -630,6 +637,11 @@ class BaseResourceFileAction
         ];
     }
 
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $repo
+     */
     protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em): AbstractResource
     {
         $contentData = $request->getContent();

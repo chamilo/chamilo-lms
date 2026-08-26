@@ -27,9 +27,10 @@ Before({ tags: "@slow-scenario" }, async () => {
   test.info().setTimeout(4 * 60_000)
 })
 
-// Mirrors Mink's `files_path` (tests/behat/behat.yml: "%paths.base%/../../",
-// i.e. repo root) — attachFileToField() paths in .feature files are relative
-// to repo root, not this steps file. tests/playwright/steps -> repo root.
+// File paths in .feature files are relative to the repo root, not to this
+// steps file (inherited from Mink's `files_path`, which the old Behat config
+// pointed at the repo root too). tests/playwright/steps -> repo root.
+// Fixture files of our own live in tests/playwright/fixtures/.
 const repoRoot = path.resolve(__dirname, "../../..")
 
 // Ported from tests/behat/features/bootstrap/FeatureContext.php.
@@ -1232,8 +1233,16 @@ When("I fill in the score for {string} with {string}", async ({ page }, username
 // group members only)" — is plainly label text, not an id/name value) and
 // checks it. getByLabel handles both a wrapping <label> and a <label for="">
 // pointing at the input, matching findField()'s own resolution.
+//
+// {exact: true} is required: createUser.feature's "No" (the "Send mail to
+// new user" radio, on the Vue user_add.php replacement) is a case-insensitive
+// SUBSTRING of an unrelated extra field's aria-label, "Event notifications"
+// ("**no**tifications") — confirmed live, a real CI failure. Same class of
+// false-positive-substring-match trap as course.feature's "TEMP"/"template"
+// gotcha; a radio button's own label is always a short, exact phrase like
+// "Yes"/"No", never one meant to substring-match something else.
 When("I check the {string} radio button", async ({ page }, label: string) => {
-  await page.getByLabel(label).check()
+  await page.getByLabel(label, { exact: true }).check()
 })
 
 // Ported from FeatureContext::iCheckTheRadioButtonBasedInSelector(). Unlike
@@ -2182,8 +2191,15 @@ Then("I should see the {string} element", async ({ page }, selector: string) => 
   await expect(page.locator(selector).first()).toBeVisible()
 })
 
+// The negative counterpart. Asserts on the first match rather than the count,
+// so it reads as "this element is gone" for the callers that toggle a state and
+// expect an icon or action to disappear without navigating.
+//
+// `.first()` is load-bearing, not cosmetic: without it a selector matching more
+// than one element raises a strict-mode violation instead of asserting, which
+// fails as a confusing harness error rather than a clean assertion.
 Then("I should not see the {string} element", async ({ page }, selector: string) => {
-  await expect(page.locator(selector)).not.toBeVisible()
+  await expect(page.locator(selector).first()).toBeHidden()
 })
 
 // Ported from FeatureContext::iWaitForTheElementToAppear() — a bounded wait

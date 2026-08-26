@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Change announcement visibility',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -56,7 +55,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Move an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -87,7 +85,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Delete an announcement',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -115,9 +112,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/announcement/delete-selected',
             openapi: new Operation(
                 summary: 'Delete selected announcements',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             output: false,
@@ -144,9 +138,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/announcement/delete-all',
             openapi: new Operation(
                 summary: 'Delete all announcements in the current context',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             output: false,

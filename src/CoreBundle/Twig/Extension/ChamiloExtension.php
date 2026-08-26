@@ -73,8 +73,7 @@ class ChamiloExtension extends AbstractExtension
         return [
             new TwigFunction('chamilo_settings_all', $this->getSettings(...)),
             new TwigFunction('chamilo_settings_get', $this->getSettingsParameter(...)),
-            new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
-            new TwigFunction('password_checker_js', [$this, 'getPasswordCheckerJs'], ['is_safe' => ['html']]),
+            new TwigFunction('password_checker_js', $this->getPasswordCheckerJs(...), ['is_safe' => ['html']]),
             new TwigFunction('theme_asset', $this->getThemeAssetUrl(...)),
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
             new TwigFunction(

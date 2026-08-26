@@ -36,10 +36,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'get_survey_answer',
             provider: SurveyAnswerProvider::class,
             parameters: [
+                // Not required: an invitee answering from a link has no course context, and the
+                // provider then resolves the course from the survey itself, as the Post does.
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
-                    description: 'Course identifier',
-                    required: true,
+                    description: 'Course identifier; falls back to publicCid or to the survey own course',
                 ),
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],

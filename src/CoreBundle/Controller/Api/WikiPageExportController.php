@@ -10,19 +10,17 @@ use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\State\Wiki\WikiAccessHelperTrait;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CoreBundle\State\Wiki\WikiPageExportService;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,17 +37,14 @@ use const PHP_SESSION_ACTIVE;
 #[IsGranted('ROLE_USER')]
 final class WikiPageExportController extends AbstractController
 {
-    use WikiAccessHelperTrait;
-
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
-        private readonly EntityManagerInterface $entityManager,
+        private readonly StudentViewHelper $studentViewHelper,
         private readonly CWikiRepository $wikiRepository,
-        private readonly Security $security,
-        private readonly SettingsManager $settingsManager,
         private readonly WikiPageExportService $exportService,
         #[Autowire('%kernel.cache_dir%')]
         private readonly string $cacheDir,
+        private readonly WikiHelper $wikiHelper,
     ) {}
 
     #[Route(
@@ -62,10 +57,7 @@ final class WikiPageExportController extends AbstractController
     {
         [$wiki, $course, $session, $group, $nodeId, $canManage] = $this->getAuthorizedPage($pageId, $request);
 
-        if (!$canManage && !$this->resolveWikiBoolean(
-            $this->settingsManager->getSetting('document.students_export2pdf', true),
-            true,
-        )) {
+        if (!$canManage && !$this->wikiHelper->isPlatformSettingEnabled('document.students_export2pdf', true)) {
             throw new AccessDeniedHttpException('PDF download is not allowed for learners.');
         }
 
@@ -123,22 +115,19 @@ final class WikiPageExportController extends AbstractController
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $nodeId = $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $nodeId = $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if (!$this->canReadWikiContext($this->security, $this->settingsManager, $course, $session, $group)) {
+        if (!$this->wikiHelper->canRead($course, $session, $group)) {
             throw new AccessDeniedHttpException('You are not allowed to view Wiki pages in this context.');
         }
 
-        $studentView = $this->isWikiStudentView($request);
-        $canManage = !$studentView && $this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $studentView = $this->studentViewHelper->isActive();
+        $canManage = !$studentView && $this->wikiHelper->canManage(
             $course,
             $session,
             $group,
@@ -168,7 +157,7 @@ final class WikiPageExportController extends AbstractController
             throw new NotFoundHttpException('The requested Wiki page was not found in this context.');
         }
 
-        $this->assertWikiPageVisible($this->security, $wiki, $canManage);
+        $this->wikiHelper->assertPageVisible($wiki, $canManage);
 
         return [$wiki, $course, $session, $group, $nodeId, $canManage];
     }
@@ -192,8 +181,7 @@ final class WikiPageExportController extends AbstractController
                 'sid' => (int) ($session?->getId() ?? 0),
                 'gid' => (int) ($group?->getIid() ?? 0),
             ],
-            $this->isWikiCourseSettingEnabled(
-                $this->entityManager,
+            $this->wikiHelper->isCourseSettingEnabled(
                 $course,
                 'wiki_html_strict_filtering',
                 false,

@@ -29,7 +29,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Course progress thematic advance form data',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'id', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
@@ -54,7 +53,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Create a course progress thematic advance',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -81,7 +79,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -108,7 +105,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'query', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'iid', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

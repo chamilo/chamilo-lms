@@ -187,7 +187,8 @@ function renderCourseContextDialog(): void
                 $label .= ' - '.$context['session_name'];
             }
 
-            echo '<option value="'.htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8').'">'
+            echo '<option value="'.htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8').'"'
+                .' data-course-resource-node-id="'.(int) ($context['resource_node_id'] ?? 0).'">'
                 .Security::remove_XSS($label)
                 .'</option>';
         }
@@ -205,6 +206,13 @@ function renderCourseContextDialog(): void
         echo '<div id="report-exercise-context-wrapper" class="hidden">';
         echo '<label for="report-exercise-context-select" class="mb-2 block font-semibold">'.get_lang('Exercise').'</label>';
         echo '<select id="report-exercise-context-select" name="exercise_id" class="form-control" disabled>';
+        echo '<option value="">'.get_lang('Select').'</option>';
+        echo '</select>';
+        echo '</div>';
+
+        echo '<div id="report-learning-path-context-wrapper" class="hidden">';
+        echo '<label for="report-learning-path-context-select" class="mb-2 block font-semibold">'.get_lang('Learning path').'</label>';
+        echo '<select id="report-learning-path-context-select" name="learning_path_id" class="form-control" disabled>';
         echo '<option value="">'.get_lang('Select').'</option>';
         echo '</select>';
         echo '</div>';
@@ -257,6 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const userSelect = document.getElementById('report-user-context-select')
     const exerciseWrapper = document.getElementById('report-exercise-context-wrapper')
     const exerciseSelect = document.getElementById('report-exercise-context-select')
+    const learningPathWrapper = document.getElementById('report-learning-path-context-wrapper')
+    const learningPathSelect = document.getElementById('report-learning-path-context-select')
     const attemptWrapper = document.getElementById('report-attempt-context-wrapper')
     const attemptSelect = document.getElementById('report-attempt-context-select')
     const status = document.getElementById('report-context-status')
@@ -333,9 +343,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return null
         }
 
+        const selectedOption = courseSelect.options[courseSelect.selectedIndex]
+
         return {
             cid: Number(match[1]),
             sid: Number(match[2]),
+            node: Number(selectedOption?.dataset?.courseResourceNodeId || 0),
         }
     }
 
@@ -356,6 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (requirements.has('attempt')) {
             ready = ready && Number(attemptSelect?.value || 0) > 0
+        }
+
+        if (requirements.has('learning_path')) {
+            ready = ready && Number(learningPathSelect?.value || 0) > 0
         }
 
         submitButton.disabled = !ready
@@ -429,6 +446,51 @@ document.addEventListener('DOMContentLoaded', () => {
         )
     }
 
+    const loadLearningPaths = async (context, sequence) => {
+        if (!requirements.has('learning_path') || !learningPathSelect) {
+            return
+        }
+
+        setSelectLoading(learningPathSelect)
+
+        if (Number(context.node || 0) <= 0) {
+            clearSelect(learningPathSelect)
+            learningPathSelect.disabled = true
+            setStatus(config.errorLabel || 'An error occurred')
+            return
+        }
+
+        const params = new URLSearchParams({
+            'resourceNode.parent': String(context.node),
+            cid: String(context.cid),
+            sid: String(context.sid),
+            gid: '0',
+            pagination: 'false',
+        })
+
+        const payload = await requestJson(`${config.apiBaseUrl}/learning_paths?${params.toString()}`)
+        if (sequence !== loadSequence) {
+            return
+        }
+
+        const items = Array.isArray(payload)
+            ? payload
+            : Array.isArray(payload.items)
+                ? payload.items
+                : Array.isArray(payload.member)
+                    ? payload.member
+                    : Array.isArray(payload['hydra:member'])
+                        ? payload['hydra:member']
+                        : []
+
+        fillSelect(
+            learningPathSelect,
+            items,
+            'iid',
+            (item) => item.title || `#${item.iid}`,
+        )
+    }
+
     const loadAttempts = async () => {
         if (!requirements.has('attempt') || !attemptSelect) {
             return
@@ -491,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         clearSelect(userSelect)
         clearSelect(exerciseSelect)
+        clearSelect(learningPathSelect)
         clearSelect(attemptSelect)
 
         if (userSelect) {
@@ -499,6 +562,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (exerciseSelect) {
             exerciseSelect.disabled = !requirements.has('exercise')
+        }
+
+        if (learningPathSelect) {
+            learningPathSelect.disabled = !requirements.has('learning_path')
         }
 
         if (attemptSelect) {
@@ -521,6 +588,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (requirements.has('exercise')) {
                 jobs.push(loadExercises(context, sequence))
+            }
+
+            if (requirements.has('learning_path')) {
+                jobs.push(loadLearningPaths(context, sequence))
             }
 
             await Promise.all(jobs)
@@ -546,10 +617,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         userWrapper?.classList.toggle('hidden', !requirements.has('user'))
         exerciseWrapper?.classList.toggle('hidden', !requirements.has('exercise'))
+        learningPathWrapper?.classList.toggle('hidden', !requirements.has('learning_path'))
         attemptWrapper?.classList.toggle('hidden', !requirements.has('attempt'))
 
         clearSelect(userSelect)
         clearSelect(exerciseSelect)
+        clearSelect(learningPathSelect)
         clearSelect(attemptSelect)
 
         if (userSelect) {
@@ -557,6 +630,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (exerciseSelect) {
             exerciseSelect.disabled = true
+        }
+        if (learningPathSelect) {
+            learningPathSelect.disabled = true
         }
         if (attemptSelect) {
             attemptSelect.disabled = true
@@ -588,6 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
     userSelect?.addEventListener('change', updateSubmitState)
+    learningPathSelect?.addEventListener('change', updateSubmitState)
     attemptSelect?.addEventListener('change', updateSubmitState)
 
     cancelButton?.addEventListener('click', () => dialog.close())

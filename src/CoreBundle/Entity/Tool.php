@@ -103,6 +103,9 @@ class Tool implements Stringable
         return $this->resourceTypes;
     }
 
+    /**
+     * @param Collection<int, ResourceType> $resourceTypes
+     */
     public function setResourceTypes(Collection $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;

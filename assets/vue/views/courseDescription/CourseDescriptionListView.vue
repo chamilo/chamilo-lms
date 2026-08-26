@@ -1,23 +1,18 @@
 <template>
   <section class="space-y-6">
-    <BaseToolbar
-      v-if="canManage"
-      class="mb-4 border-b border-gray-25 bg-white"
-    >
-      <template #start>
+    <SectionHeader :title="t('Course Description')">
+      <template v-if="canManage">
         <BaseButton
           v-for="type in toolbarTypes"
           :key="type.value"
           :icon="type.icon"
           :label="t(type.label)"
-          only-icon
-          size="large"
-          type="primary-text"
-          class="!flex !h-12 !w-12 !items-center !justify-center !rounded-xl !p-0 [&_.p-button-icon]:!text-2xl"
           :route="getToolbarRoute(type.value)"
+          only-icon
+          type="primary-text"
         />
       </template>
-    </BaseToolbar>
+    </SectionHeader>
 
     <div
       v-if="successMessage"
@@ -137,10 +132,11 @@ import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
-import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import courseDescriptionService from "../../services/courseDescriptionService"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -198,9 +194,6 @@ function getContextParams() {
     params.gid = gid
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    params.isStudentView = getQueryValue(route.query.isStudentView)
-  }
 
   return params
 }
@@ -316,5 +309,7 @@ async function loadDescriptions() {
 
 onMounted(loadDescriptions)
 
-watch(() => [route.query.cid, route.query.sid, route.query.gid, route.query.isStudentView], loadDescriptions)
+useStudentViewRefresh(loadDescriptions)
+
+watch(() => [route.query.cid, route.query.sid, route.query.gid], loadDescriptions)
 </script>

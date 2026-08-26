@@ -11,7 +11,8 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageHistory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -33,19 +34,18 @@ use Throwable;
  */
 final readonly class WikiPageRestoreProcessor implements ProcessorInterface
 {
-    use WikiAccessHelperTrait;
-
     private const int LOCK_TIMEOUT_SECONDS = 1200;
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -64,14 +64,14 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $nodeId = $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $nodeId = $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('Wiki versions cannot be restored in student view.');
         }
 
@@ -116,20 +116,14 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
             throw new ConflictHttpException('The current Wiki version cannot be restored.');
         }
 
-        $canManage = $this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canManage = $this->wikiHelper->canManage(
             $course,
             $session,
             $group,
         );
-        $this->assertWikiPageVisible($this->security, $latest, $canManage);
+        $this->wikiHelper->assertPageVisible($latest, $canManage);
 
-        if (!$this->canEditWikiPage(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        if (!$this->wikiHelper->canEditPage(
             $course,
             $session,
             $group,

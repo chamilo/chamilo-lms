@@ -370,6 +370,7 @@ final class CourseStudentInfoHelper
         $toolAccessMap = $this->fetchLastAccessPerToolMapFromTrackLastAccess($userId, $courseId, $sessionId);
         $typeRows = $this->fetchLastChangeByTypeForCourse($userId, $courseId, $sessionId);
 
+        /** @var array<string, array<string, mixed>> $toolMap */
         $toolMap = [];
 
         foreach ($typeRows as $row) {
@@ -933,8 +934,7 @@ final class CourseStudentInfoHelper
         ]);
 
         try {
-            $courseCode = $course->getCode();
-            $value = Tracking::get_time_spent_on_the_course($userId, $courseCode, $sessionId);
+            $value = Tracking::get_time_spent_on_the_course($userId, (int) $course->getId(), $sessionId);
 
             $this->log('computeTimeSpentSeconds: Tracking returned', [
                 'raw' => $value,
@@ -972,8 +972,9 @@ final class CourseStudentInfoHelper
         }
 
         try {
-            $category = Category::load($categoryId);
-            if (!$category) {
+            // Category::load() returns a list; the certificate rules apply to the root category.
+            $category = Category::load($categoryId)[0] ?? null;
+            if (!$category instanceof Category) {
                 $this->log('computeCertificateAvailable: Category::load returned empty', [
                     'category_id' => $categoryId,
                 ]);

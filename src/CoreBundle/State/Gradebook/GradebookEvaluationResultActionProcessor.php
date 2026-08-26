@@ -10,8 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookEvaluationResultAction;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookResult;
@@ -20,7 +18,7 @@ use Chamilo\CoreBundle\Entity\GradebookResultLog;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -56,8 +54,8 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         private Security $security,
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private UserRepository $userRepository,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -83,7 +81,7 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         $this->validateCourseResourceNode($request, $course);
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
-        if (!$this->canManageGradebook($course, $session, $user)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
             throw new AccessDeniedHttpException('You are not allowed to grade learners in this context.');
         }
 
@@ -574,59 +572,6 @@ final readonly class GradebookEvaluationResultActionProcessor implements Process
         );
 
         return array_values(array_filter($users, static fn (mixed $user): bool => $user instanceof User));
-    }
-
-    private function canManageGradebook(Course $course, ?Session $session, User $user): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
-            && $this->isSettingEnabled('session.session_admins_edit_courses_content')
-        ) {
-            return true;
-        }
-
-        if ($session instanceof Session && $this->isSessionCourseReadOnly($course)) {
-            return false;
-        }
-
-        $isCourseTeacher = $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-        if ($session instanceof Session
-            && !$isCourseTeacher
-            && Session::READ_ONLY === $session->setAccessVisibilityByUser($user)
-        ) {
-            return false;
-        }
-
-        if ($isCourseTeacher) {
-            return true;
-        }
-
-        return $session instanceof Session
-            && $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            && $this->isSettingEnabled('session.allow_coach_to_edit_course_session');
-    }
-
-    private function isSessionCourseReadOnly(Course $course): bool
-    {
-        if (!$this->isSettingEnabled('session.session_courses_read_only_mode')) {
-            return false;
-        }
-
-        $value = $this->extraFieldValuesRepository->getValueByVariableAndItem(
-            'session_courses_read_only_mode',
-            (int) $course->getId(),
-            ExtraField::COURSE_FIELD_TYPE,
-        );
-        if (!$value instanceof ExtraFieldValues) {
-            return false;
-        }
-
-        $rawValue = strtolower(trim((string) $value->getFieldValue()));
-
-        return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
     }
 
     private function validateCsrfToken(string $submittedToken): void

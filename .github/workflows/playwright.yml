@@ -1,17 +1,12 @@
 name: Playwright tests 🎭
 
-# Runs alongside behat.yml, not instead of it — only a small subset of
-# scenarios has been ported to Playwright so far (see tests/playwright/).
-# Environment provisioning steps up through MySQL are copied from
-# behat.yml on purpose, to stand up the same environment the Behat suite
-# runs against.
+# The only browser-driven suite in CI — it replaced the Behat workflow, whose
+# environment provisioning steps (up through MySQL) this one inherits.
 #
-# Unlike behat.yml, there is no Chrome/Chromedriver/Selenium/Java/Xvfb
-# stack here at all: tests/behat/features/actionInstall.feature (the
-# scenario that actually installs Chamilo by clicking through the legacy
-# web installer at /main/install/index.php) has been ported to Playwright
-# too (tests/playwright/features/actionInstall.feature), so Playwright's
-# own browser now handles both installing the app and testing it — one
+# There is deliberately no Chrome/Chromedriver/Selenium/Java/Xvfb stack here:
+# tests/playwright/features/actionInstall.feature installs Chamilo by clicking
+# through the legacy web installer at /main/install/index.php, so Playwright's
+# own browser handles both installing the app and testing it — one
 # browser-automation stack for the whole job, not two.
 on: [ push, pull_request ]
 
@@ -289,7 +284,7 @@ jobs:
                     yarn test:playwright || echo "::warning::playwright exited non-zero — deferring to the result check below"
                     node tests/playwright/scripts/check-results.mjs \
                       --report var/test-results/playwright/results.json \
-                      --min-tests 410 \
+                      --min-tests 439 \
                       --label "main batch"
 
             # MUST come before the SpecialCase1 step below, not at the end of

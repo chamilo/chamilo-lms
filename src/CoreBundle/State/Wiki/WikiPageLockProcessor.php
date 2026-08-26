@@ -11,7 +11,8 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Wiki\WikiPageForm;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\WikiHelper;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
@@ -31,17 +32,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final readonly class WikiPageLockProcessor implements ProcessorInterface
 {
-    use WikiAccessHelperTrait;
-
     private const int LOCK_TIMEOUT_SECONDS = 1200;
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CWikiRepository $wikiRepository,
         private Security $security,
-        private SettingsManager $settingsManager,
+        private WikiHelper $wikiHelper,
     ) {}
 
     /**
@@ -60,14 +60,14 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $this->assertWikiToolEnabled($this->entityManager, $course);
-        $this->assertWikiRouteNode($course, $request);
+        $this->wikiHelper->assertToolEnabled($course);
+        $this->wikiHelper->assertRouteNode($course, $request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $this->assertWikiSessionBelongsToCourse($session, $course);
+        $this->wikiHelper->assertSessionBelongsToCourse($session, $course);
         $group = $this->cidReqHelper->getDoctrineGroupEntity();
-        $this->assertWikiGroupBelongsToContext($group, $course, $session);
+        $this->wikiHelper->assertGroupBelongsToContext($group, $course, $session);
 
-        if ($this->isWikiStudentView($request)) {
+        if ($this->studentViewHelper->isActive()) {
             throw new AccessDeniedHttpException('Wiki pages cannot be edited in student view.');
         }
 
@@ -94,15 +94,12 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
             throw new NotFoundHttpException('The requested Wiki page was not found in the current context.');
         }
 
-        $canManage = $this->canManageWikiContext(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        $canManage = $this->wikiHelper->canManage(
             $course,
             $session,
             $group,
         );
-        $this->assertWikiPageVisible($this->security, $wiki, $canManage);
+        $this->wikiHelper->assertPageVisible($wiki, $canManage);
         $operationName = (string) $operation->getName();
 
         if ('post_wiki_page_unlock' === $operationName) {
@@ -119,10 +116,7 @@ final readonly class WikiPageLockProcessor implements ProcessorInterface
             return $this->buildResponse($wiki, false);
         }
 
-        if (!$this->canEditWikiPage(
-            $this->entityManager,
-            $this->security,
-            $this->settingsManager,
+        if (!$this->wikiHelper->canEditPage(
             $course,
             $session,
             $group,

@@ -81,6 +81,10 @@ final readonly class ScormPackageImporter
 
         $inspection = $this->inspectArchive($packagePath);
         $manifest = $this->manifestParser->parse($inspection['manifestXml']);
+        $detectedContentMaker = $manifest['contentMaker'] ?? null;
+        if (\is_string($detectedContentMaker) && '' !== trim($detectedContentMaker)) {
+            $contentMaker = $detectedContentMaker;
+        }
         $this->validateManifestResources(
             $manifest,
             $inspection['entries'],
@@ -219,6 +223,11 @@ final readonly class ScormPackageImporter
             $inspection['manifestDirectory'],
             $learningPath->getContentLocal(),
         );
+
+        $detectedContentMaker = $manifest['contentMaker'] ?? null;
+        if (\is_string($detectedContentMaker) && '' !== trim($detectedContentMaker)) {
+            $learningPath->setContentMaker($detectedContentMaker);
+        }
 
         $organization = $this->selectUpdateOrganization($manifest, $learningPath);
         $this->assertUpdateVersion($manifest, $learningPath);

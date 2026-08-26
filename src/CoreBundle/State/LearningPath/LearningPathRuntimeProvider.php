@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
@@ -93,6 +94,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
     ) {}
 
     /**
@@ -116,7 +118,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         $canEdit = $this->canManageLearningPaths($this->security);
-        $canManage = $canEdit && !$this->isStudentViewRequest($this->requestStack);
+        $canManage = $canEdit && !$this->studentViewHelper->isActive();
         $this->assertRuntimeAccess($lp, $course, $session, $group, $user, $canEdit);
 
         $items = $this->getLearningPathItems($lp);
@@ -889,7 +891,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
 
             $params['lpItemId'] = $learningPathItemId;
             $params['invitationCode'] = 'auto';
-            $params['isStudentView'] = 'true';
 
             return $this->appendQuery('/resources/survey/'.$courseNodeId.'/'.$resourceId.'/answer', $params);
         }
@@ -1175,7 +1176,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             'sid' => (int) ($session?->getId() ?? 0),
             'gid' => (int) ($group?->getIid() ?? 0),
             'origin' => 'learnpath',
-            'isStudentView' => $this->isStudentViewRequest($this->requestStack) ? 'true' : 'false',
             'gradebook' => $request->query->getInt('gradebook'),
         ];
     }
@@ -1327,7 +1327,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         User $user,
     ): string {
         $params = $this->buildContextParams($course, $session, $group, $request);
-        $params['isStudentView'] = $request->query->getString('isStudentView', 'false');
         $params['self'] = 1;
         $params['showTeachers'] = 1;
         $params['studentId'] = (int) $user->getId();

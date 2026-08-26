@@ -10,8 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookLinkAction;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradebookLinkevalLog;
@@ -19,8 +17,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
-use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -58,11 +55,10 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private Security $security,
-        private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private GradebookLinkResourceResolver $resourceResolver,
         private EventLoggerHelper $eventLoggerHelper,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -89,7 +85,7 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         $this->validateGroupContext($operation, $course);
         $user = $this->getCurrentUser();
 
-        if ($this->isStudentView($request) || !$this->canManageGradebook($course, $session, $user)) {
+        if (!$this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
             throw new AccessDeniedHttpException('You are not allowed to manage Gradebook online activities in this context.');
         }
 
@@ -560,73 +556,6 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         return $user;
     }
 
-    private function canManageGradebook(Course $course, ?Session $session, User $user): bool
-    {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
-            && $this->isSettingEnabled('session.session_admins_edit_courses_content')
-        ) {
-            return true;
-        }
-        if ($session instanceof Session && $this->isSessionCourseReadOnly($course)) {
-            return false;
-        }
-
-        $isCourseTeacher = $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-        if ($session instanceof Session
-            && !$isCourseTeacher
-            && Session::READ_ONLY === $session->setAccessVisibilityByUser($user)
-        ) {
-            return false;
-        }
-        if ($isCourseTeacher) {
-            return true;
-        }
-
-        return $session instanceof Session
-            && $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            && $this->isSettingEnabled('session.allow_coach_to_edit_course_session');
-    }
-
-    private function isSessionCourseReadOnly(Course $course): bool
-    {
-        if (!$this->isSettingEnabled('session.session_courses_read_only_mode')) {
-            return false;
-        }
-
-        $value = $this->extraFieldValuesRepository->getValueByVariableAndItem(
-            'session_courses_read_only_mode',
-            (int) $course->getId(),
-            ExtraField::COURSE_FIELD_TYPE,
-        );
-        if (!$value instanceof ExtraFieldValues) {
-            return false;
-        }
-
-        $rawValue = strtolower(trim((string) $value->getFieldValue()));
-
-        return '' !== $rawValue && !\in_array($rawValue, ['0', 'false', 'no', 'off'], true);
-    }
-
-    private function isStudentView(Request $request): bool
-    {
-        if (!$this->isSettingEnabled('course.student_view_enabled')) {
-            return false;
-        }
-
-        $queryValue = strtolower(trim((string) $request->query->get('isStudentView', '')));
-        if (\in_array($queryValue, ['1', 'true', 'yes', 'on'], true)) {
-            return true;
-        }
-        if (!$request->hasSession()) {
-            return false;
-        }
-
-        return 'studentview' === strtolower((string) $request->getSession()->get('studentview', ''));
-    }
-
     private function validateCsrfToken(string $submittedToken): void
     {
         if ('' === trim($submittedToken)
@@ -634,18 +563,5 @@ final readonly class GradebookLinkActionProcessor implements ProcessorInterface
         ) {
             throw new AccessDeniedHttpException('Invalid CSRF token.');
         }
-    }
-
-    private function isSettingEnabled(string $name): bool
-    {
-        $value = $this->settingsManager->getSetting($name, true);
-        if (\is_bool($value)) {
-            return $value;
-        }
-        if (!\is_scalar($value)) {
-            return false;
-        }
-
-        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 }

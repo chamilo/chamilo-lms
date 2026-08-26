@@ -24,7 +24,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Read Wiki categories for the current course and session',
                 parameters: [
                     new Parameter(name: 'node', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

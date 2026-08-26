@@ -15,8 +15,10 @@ use ApiPlatform\State\ProviderInterface;
 use ArrayIterator;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -36,9 +38,15 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,
         private readonly PaginationExtension $paginationExtension,
+        private readonly CourseStudentInfoHelper $courseStudentInfoHelper,
     ) {}
 
     /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<Session>|Session|null
+     *
      * @throws Exception
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -65,9 +73,8 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         if ('user_session_subscriptions_past' === $operation->getName()) {
             $sessions = $this->sessionRepository->getPastSessionsOfUserInUrl($user, $url);
 
-            // Ensure duration sessions have daysLeft for display consistency
             foreach ($sessions as $session) {
-                $this->ensureDaysLeftHydrated($session, $user);
+                $this->hydrateSessionForUser($session, $user);
             }
 
             return $sessions;
@@ -77,7 +84,6 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             return $this->getCurrentSessionsPagedAndFiltered($context, $user, $url);
         }
 
-        // Upcoming can stay as a pure DB filter (duration sessions won't be upcoming anyway)
         $qb = $this->sessionRepository->getUpcomingSessionsOfUserInUrl($user, $url);
 
         $this->paginationExtension->applyToCollection(
@@ -93,7 +99,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         if ($paginator instanceof Paginator) {
             $sessions = iterator_to_array($paginator);
             foreach ($sessions as $session) {
-                $this->ensureDaysLeftHydrated($session, $user);
+                $this->hydrateSessionForUser($session, $user);
             }
 
             return new TraversablePaginator(
@@ -105,9 +111,10 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         if (is_iterable($paginator)) {
+            /** @var array<int, Session> $sessions */
             $sessions = \is_array($paginator) ? $paginator : iterator_to_array($paginator);
             foreach ($sessions as $session) {
-                $this->ensureDaysLeftHydrated($session, $user);
+                $this->hydrateSessionForUser($session, $user);
             }
 
             return $sessions;
@@ -142,7 +149,6 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         $wantedOffset = ($page - 1) * $itemsPerPage;
         $wantedEnd = $wantedOffset + $itemsPerPage;
 
-        // Base query: current sessions candidates (includes duration sessions)
         $baseQb = $this->sessionRepository->getCurrentSessionsOfUserInUrl($user, $url);
 
         $scanOffset = 0;
@@ -163,10 +169,8 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             }
 
             foreach ($chunk as $session) {
-                // Always hydrate daysLeft for duration sessions (for UI display)
                 $this->ensureDaysLeftHydrated($session, $user);
 
-                // Hide expired duration sessions for non-coaches
                 if ($session->getDuration() > 0 && !$session->hasCoach($user)) {
                     $daysLeft = $session->getDaysLeft();
 
@@ -175,8 +179,8 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
                     }
                 }
 
-                // Accepted session after filtering
                 if ($totalAccepted >= $wantedOffset && $totalAccepted < $wantedEnd) {
+                    $this->hydrateSessionTracking($session, $user);
                     $pageItems[] = $session;
                 }
 
@@ -192,6 +196,77 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             $itemsPerPage,
             $totalAccepted
         );
+    }
+
+    private function hydrateSessionForUser(Session $session, User $user): void
+    {
+        $this->ensureDaysLeftHydrated($session, $user);
+        $this->hydrateSessionTracking($session, $user);
+    }
+
+    private function hydrateSessionTracking(Session $session, User $user): void
+    {
+        $userId = (int) $user->getId();
+        $sessionId = (int) $session->getId();
+        if ($userId <= 0 || $sessionId <= 0) {
+            return;
+        }
+
+        $courseIds = [];
+        foreach ($session->getCourses() as $sessionCourse) {
+            if (!$sessionCourse instanceof SessionRelCourse) {
+                continue;
+            }
+
+            $courseId = (int) $sessionCourse->getCourse()->getId();
+            if ($courseId > 0) {
+                $courseIds[] = $courseId;
+            }
+        }
+
+        $courseIds = array_values(array_unique($courseIds));
+        if (empty($courseIds)) {
+            return;
+        }
+
+        $statsByCourse = $this->courseStudentInfoHelper->getStudentInfoBatchForCourses(
+            $userId,
+            $courseIds,
+            $sessionId
+        );
+
+        foreach ($session->getCourses() as $sessionCourse) {
+            if (!$sessionCourse instanceof SessionRelCourse) {
+                continue;
+            }
+
+            $courseId = (int) $sessionCourse->getCourse()->getId();
+            $stats = $statsByCourse[(string) $courseId] ?? null;
+            if (!\is_array($stats)) {
+                continue;
+            }
+
+            $sessionCourse->setTrackingProgress(
+                isset($stats['progress']) && is_numeric($stats['progress']) ? (float) $stats['progress'] : null
+            );
+            $sessionCourse->setScore(
+                isset($stats['score']) && is_numeric($stats['score']) ? (float) $stats['score'] : null
+            );
+            $sessionCourse->setBestScore(
+                isset($stats['bestScore']) && is_numeric($stats['bestScore']) ? (float) $stats['bestScore'] : null
+            );
+            $sessionCourse->setTimeSpentSeconds(
+                isset($stats['timeSpentSeconds']) && is_numeric($stats['timeSpentSeconds'])
+                    ? max(0, (int) $stats['timeSpentSeconds'])
+                    : null
+            );
+            $sessionCourse->setCertificateAvailable(
+                \array_key_exists('certificateAvailable', $stats) ? (bool) $stats['certificateAvailable'] : null
+            );
+            $sessionCourse->setCompleted(
+                \array_key_exists('completed', $stats) ? (bool) $stats['completed'] : null
+            );
+        }
     }
 
     /**

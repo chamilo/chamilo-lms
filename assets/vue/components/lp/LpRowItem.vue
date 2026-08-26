@@ -70,10 +70,6 @@ const canCopyLearningPath = computed(() => {
   return props.canCopy && !isCStudioLearningPath.value && type !== 3 && (type !== 2 || props.canCopyScorm)
 })
 
-const routeStudentViewEnabled = computed(() =>
-  ["1", "true", "yes", "on"].includes(String(route.query.isStudentView || "").toLowerCase()),
-)
-
 const managementQuery = computed(() =>
   Object.fromEntries(
     Object.entries(route.query).filter(
@@ -93,8 +89,6 @@ const openRoute = computed(() => ({
     Object.entries({
       ...props.legacyContext,
       node: undefined,
-      isStudentView: "true",
-      temporaryStudentView: routeStudentViewEnabled.value ? undefined : "true",
     }).filter(([, value]) => value !== undefined && value !== null && value !== ""),
   ),
 }))

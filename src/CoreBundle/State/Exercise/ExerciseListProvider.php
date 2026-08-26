@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -48,6 +50,8 @@ final readonly class ExerciseListProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -63,7 +67,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManage = $this->canManageExercises();
+        $canManage = $this->isAllowedToEditHelper->check(coach: true);
         $canCreate = $canManage;
 
         if (!$canManage && !$this->canViewExercises()) {
@@ -88,13 +92,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     /**

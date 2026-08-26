@@ -58,7 +58,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
             $lastIid = 0;
 
             while (true) {
-                $sql = sprintf(
+                $sql = \sprintf(
                     'SELECT iid, %s
                        FROM %s
                       WHERE iid > :lastIid
@@ -94,7 +94,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $updateSql = sprintf(
+                    $updateSql = \sprintf(
                         'UPDATE %s SET %s = :newText WHERE iid = :id',
                         $config['table'],
                         $field
@@ -123,7 +123,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
 
         while (true) {
             $items = $this->connection->fetchAllAssociative(
-                sprintf(
+                \sprintf(
                     "SELECT iid
                        FROM c_document
                       WHERE filetype = 'file'
@@ -184,7 +184,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
             // Document processing uses ORM repositories and resource graphs.
             // Release managed entities after every bounded batch.
             $this->entityManager->clear();
-            \gc_collect_cycles();
+            gc_collect_cycles();
         }
     }
 

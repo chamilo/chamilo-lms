@@ -3420,6 +3420,7 @@
     "Hide preview": "Voorvertoning verbergen",
     "Shape": "Vorm",
     "Coordinates": "Co\u00f6rdinaten",
+    "Search for this location": "Zoek naar deze locatie",
     "Blanks": "Lege plekken",
     "Switchable blanks": "Wisselbare lege plekken",
     "Blank": "Lege plek",
@@ -3767,5 +3768,13 @@
     "Agreement file deleted": "Overeenkomstbestand verwijderd",
     "Certificate image updated": "Certificaatafbeelding bijgewerkt",
     "Certificate image deleted": "Certificaatafbeelding verwijderd",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gebruik de afbeeldingseditor voordat u uploadt om de cursuspictogram bij te snijden, te draaien of te schalen."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Gebruik de afbeeldingseditor voordat u uploadt om de cursuspictogram bij te snijden, te draaien of te schalen.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Alleen letters",
+    "Only letters and spaces": "Alleen letters en spaties",
+    "Only letters, numbers and spaces": "Alleen letters, cijfers en spaties",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobiele telefoonnummer is incompleet of bevat ongeldige karakters",
+    "Include the country dial code": "Gebruik een landencode",
+    "Only PNG, JPG or GIF images allowed": "Enkel afbeeldingen van het type PNG, JPG of GIF zijn toegestaan."
 }

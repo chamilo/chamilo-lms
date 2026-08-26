@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Course progress thematic advance list',
                 parameters: [
                     new Parameter(name: 'thematicId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

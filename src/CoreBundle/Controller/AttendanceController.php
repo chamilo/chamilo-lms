@@ -57,7 +57,7 @@ class AttendanceController extends AbstractController
     #[Route('/full-data', name: 'chamilo_core_attendance_get_full_data', methods: ['GET'])]
     public function getFullAttendanceData(Request $request): JsonResponse
     {
-        $attendanceId = (int) $request->query->get('attendanceId', 0);
+        $attendanceId = (int) $request->query->get('attendanceId', '0');
 
         if (!$attendanceId) {
             return $this->json(['error' => 'Attendance ID is required'], 400);
@@ -83,7 +83,7 @@ class AttendanceController extends AbstractController
         CAttendanceCalendarRepository $calendarRepository,
         CAttendanceSheetRepository $sheetRepository
     ): JsonResponse {
-        $courseId = (int) $request->query->get('courseId', 0);
+        $courseId = (int) $request->query->get('courseId', '0');
         $sessionId = $request->query->get('sessionId') ? (int) $request->query->get('sessionId') : null;
         $groupId = $request->query->get('groupId') ? (int) $request->query->get('groupId') : null;
 
@@ -144,10 +144,10 @@ class AttendanceController extends AbstractController
     #[Route('/list_with_done_count', name: 'attendance_list_with_done_count', methods: ['GET'])]
     public function listWithDoneCount(Request $request): JsonResponse
     {
-        $courseId = (int) $request->query->get('cid', 0);
+        $courseId = (int) $request->query->get('cid', '0');
         $sessionId = $request->query->get('sid') ? (int) $request->query->get('sid') : null;
         $groupId = $request->query->get('gid') ? (int) $request->query->get('gid') : null;
-        $parentNode = (int) $request->query->get('resourceNode.parent', 0);
+        $parentNode = (int) $request->query->get('resourceNode.parent', '0');
 
         $attendances = $this->em->getRepository(CAttendance::class)->findBy([
             'active' => 1,
@@ -799,7 +799,7 @@ class AttendanceController extends AbstractController
         CAttendanceCalendarRepository $calendarRepo,
         CAttendanceSheetRepository $sheetRepo
     ): JsonResponse {
-        $cid = (int) $request->query->get('cid', 0);
+        $cid = (int) $request->query->get('cid', '0');
         $sid = $request->query->get('sid') ? (int) $request->query->get('sid') : null;
         $gid = $request->query->get('gid') ? (int) $request->query->get('gid') : null;
 

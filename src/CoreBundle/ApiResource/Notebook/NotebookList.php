@@ -23,7 +23,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'List the current user notebook entries in a course context',
                 parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(
                         name: 'sort',
                         in: 'query',

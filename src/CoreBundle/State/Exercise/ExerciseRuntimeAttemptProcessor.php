@@ -15,6 +15,8 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -77,11 +79,13 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
+        private StudentViewHelper $studentViewHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private UserHelper $userHelper,
     ) {}
 
     /**
@@ -101,7 +105,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $canManagePermission = $this->canManageExercises();
+        $canManagePermission = $this->userHelper->isTeacherOfCurrentCourse();
         $runsAsLearner = !$canManagePermission || $this->isLearnerRuntimeRequest($request);
 
         if (!$canManagePermission && !$this->canViewExercises()) {
@@ -242,26 +246,18 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
     {
         return $this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
-            || $this->canManageExercises();
-    }
-
-    private function canManageExercises(): bool
-    {
-        return $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-            || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+            || $this->userHelper->isTeacherOfCurrentCourse();
     }
 
     private function isLearnerRuntimeRequest(Request $request): bool
     {
         $origin = (string) $request->query->get('origin', '');
-        $isStudentView = strtolower(trim((string) $request->query->get('isStudentView', '')));
         $preview = strtolower(trim((string) $request->query->get('preview', '')));
 
         return 'learnpath' === $origin
             || $request->query->has('lp_init')
             || $request->query->has('learnpath_id')
-            || \in_array($isStudentView, ['1', 'true', 'yes'], true)
-            || str_starts_with($isStudentView, 'true')
+            || $this->studentViewHelper->isActive()
             || \in_array($preview, ['1', 'true', 'yes'], true)
             || str_starts_with($preview, 'true');
     }

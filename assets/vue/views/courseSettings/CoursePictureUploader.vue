@@ -15,6 +15,13 @@
       :uppy="uppy"
     />
     <p class="text-caption text-gray-500">
+      {{
+        t(
+          "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens.",
+        )
+      }}
+    </p>
+    <p class="text-caption text-gray-500">
       {{ t("Use the image editor before uploading to crop, rotate or resize the course picture.") }}
     </p>
   </div>

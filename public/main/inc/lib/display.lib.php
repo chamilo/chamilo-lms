@@ -2285,7 +2285,7 @@ HTML;
     {
         $editProfileUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
         if ($asAdmin) {
-            $editProfileUrl = api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=".intval($userId);
+            $editProfileUrl = api_get_path(WEB_PATH).'admin/user-edit/'.(int) $userId;
         }
 
         return $editProfileUrl;

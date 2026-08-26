@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-        errorLevel="7"
+        errorLevel="6"
         resolveFromConfigFile="true"
         cacheDirectory="var/cache/psalm"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

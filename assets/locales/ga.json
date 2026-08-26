@@ -3420,6 +3420,7 @@
     "Hide preview": "Folaigh r\u00e9amhamharc",
     "Shape": "Cruth",
     "Coordinates": "Comhordan\u00e1id\u00ed",
+    "Search for this location": "Cuardaigh an su\u00edomh seo",
     "Blanks": "Bearna\u00ed",
     "Switchable blanks": "Bearna\u00ed inathraithe",
     "Blank": "Bearna",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Comhad comhaontaithe scriosta",
     "Certificate image updated": "\u00cdomh\u00e1 teastais nuashonraithe",
     "Certificate image deleted": "\u00cdomh\u00e1 teastais scriosta",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u00das\u00e1id an t-eagarth\u00f3ir \u00edomh\u00e1nna sula nd\u00e9antar uasl\u00f3d\u00e1il chun \u00edomh\u00e1 an ch\u00farsa a bhearradh, a rothl\u00fa n\u00f3 a athr\u00fa."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "\u00das\u00e1id an t-eagarth\u00f3ir \u00edomh\u00e1nna sula nd\u00e9antar uasl\u00f3d\u00e1il chun \u00edomh\u00e1 an ch\u00farsa a bhearradh, a rothl\u00fa n\u00f3 a athr\u00fa.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Litreacha amháin",
+    "Only letters and spaces": "Litreacha agus spásanna amháin",
+    "Only letters, numbers and spaces": "Litreacha, uimhreacha agus spásanna amháin",
+    "Mobile phone number is incomplete or contains invalid characters": "Tá uimhir an fhóin shoghluaiste neamhiomlán nó tá carachtair neamhbhailí ann",
+    "Include the country dial code": "Cuir cód dhiailiú na tíre san áireamh",
+    "Only PNG, JPG or GIF images allowed": "Íomhánna PNG, JPG nó GIF amháin ceadaithe"
 }

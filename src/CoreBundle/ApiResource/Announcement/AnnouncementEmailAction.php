@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 summary: 'Send an announcement by email',
                 parameters: [
                     new Parameter(name: 'id', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
                 ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

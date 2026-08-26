@@ -3420,6 +3420,7 @@
     "Hide preview": "Skrij predogled",
     "Shape": "Oblika",
     "Coordinates": "Koordinate",
+    "Search for this location": "Iskanje po tej lokaciji",
     "Blanks": "Prazna mesta",
     "Switchable blanks": "Preklopna prazna mesta",
     "Blank": "Prazno mesto",
@@ -3785,5 +3786,13 @@
     "Agreement file deleted": "Datoteka sporazuma izbrisana",
     "Certificate image updated": "Slika potrdila posodobljena",
     "Certificate image deleted": "Slika potrdila izbrisana",
-    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pred nalaganjem uporabite urejevalnik slik, da obre\u017eete, zasukate ali spremenite velikost slike te\u010daja."
+    "Use the image editor before uploading to crop, rotate or resize the course picture.": "Pred nalaganjem uporabite urejevalnik slik, da obre\u017eete, zasukate ali spremenite velikost slike te\u010daja.",
+    "The picture could not be uploaded": "The picture could not be uploaded",
+    "This field type is not fully supported yet — raw value only.": "This field type is not fully supported yet — raw value only.",
+    "Only letters": "Zgolj črke",
+    "Only letters and spaces": "Zgolj črke in številke",
+    "Only letters, numbers and spaces": "Zgolj črke, številke in presledek",
+    "Mobile phone number is incomplete or contains invalid characters": "Mobilna številka ni podana v celoti ali vsebuje neustrezne znake",
+    "Include the country dial code": "Vključi klicno kodo države",
+    "Only PNG, JPG or GIF images allowed": "Dovoljene so le slike s končnicami PNG, JPG ali GIF"
 }

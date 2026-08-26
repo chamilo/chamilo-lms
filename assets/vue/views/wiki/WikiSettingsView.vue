@@ -171,9 +171,6 @@ function getSharedQuery() {
     query.gid = gid;
   }
 
-  if (Object.prototype.hasOwnProperty.call(route.query, "isStudentView")) {
-    query.isStudentView = getQueryValue(route.query.isStudentView);
-  }
 
   return query;
 }

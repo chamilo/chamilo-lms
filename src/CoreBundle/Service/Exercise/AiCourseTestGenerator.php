@@ -63,6 +63,7 @@ final readonly class AiCourseTestGenerator
      *     total_score: float,
      *     published: bool,
      *     provider_used: string,
+     *     generation_mode: string,
      *     ai_assisted: true,
      *     source: array{type: 'topic'|'document', document_id: int|null, title: string},
      *     questions: list<array{question_id: int, title: string, score: float}>,
@@ -113,6 +114,7 @@ final readonly class AiCourseTestGenerator
      *
      * @return array{
      *     provider_used: string,
+     *     generation_mode: 'ai'|'deterministic_fallback',
      *     source_type: 'topic'|'document',
      *     source_title: string,
      *     source_text: string,
@@ -251,6 +253,7 @@ final readonly class AiCourseTestGenerator
      *
      * @param array{
      *     provider_used: string,
+     *     generation_mode: string,
      *     source_type: 'topic'|'document',
      *     source_title: string,
      *     source_text: string,
@@ -272,6 +275,7 @@ final readonly class AiCourseTestGenerator
      *     total_score: float,
      *     published: bool,
      *     provider_used: string,
+     *     generation_mode: string,
      *     ai_assisted: true,
      *     source: array{type: 'topic'|'document', document_id: int|null, title: string},
      *     questions: list<array{question_id: int, title: string, score: float}>,
@@ -610,6 +614,8 @@ PROMPT;
     {
         $generated = $this->normalizeAikenSyntax($generated);
         $questions = [];
+
+        /** @var array{title: string, answers: array<string, string>, correct: string, feedback: string}|null $current */
         $current = null;
 
         foreach (explode("\n", $generated) as $line) {

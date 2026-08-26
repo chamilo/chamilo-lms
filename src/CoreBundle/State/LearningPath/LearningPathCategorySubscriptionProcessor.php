@@ -304,7 +304,10 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
         if (null === $session) {
             foreach ($course->getStudentSubscriptions() as $subscription) {
                 if ($subscription instanceof CourseRelUser) {
-                    $users[(int) $subscription->getUser()->getId()] = $subscription->getUser();
+                    $user = $subscription->getUser();
+                    if ($user instanceof User) {
+                        $users[(int) $user->getId()] = $user;
+                    }
                 }
             }
 
@@ -318,7 +321,10 @@ final readonly class LearningPathCategorySubscriptionProcessor implements Proces
             ) {
                 continue;
             }
-            $users[(int) $subscription->getUser()->getId()] = $subscription->getUser();
+            $user = $subscription->getUser();
+            if ($user instanceof User) {
+                $users[(int) $user->getId()] = $user;
+            }
         }
 
         return $users;

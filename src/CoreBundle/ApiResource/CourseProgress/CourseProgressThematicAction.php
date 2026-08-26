@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseProgress\CourseProgressThematicActionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,9 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-progress/thematic/actions/copy',
             openapi: new Operation(
                 summary: 'Copy a course progress thematic',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -46,9 +42,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-progress/thematic/actions/move',
             openapi: new Operation(
                 summary: 'Move a course progress thematic',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
@@ -70,9 +63,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             uriTemplate: '/course-progress/thematic/actions/bulk-delete',
             openapi: new Operation(
                 summary: 'Delete course progress thematics from the current context',
-                parameters: [
-                    new Parameter(name: 'isStudentView', in: 'query', required: false, schema: ['type' => 'boolean']),
-                ],
             ),
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,

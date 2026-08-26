@@ -170,6 +170,8 @@ final class UploadFilenamePolicy
             'gif',
             'mp4',
             'webm',
+            'wav',
+            'ogg',
             'h5p',
             'zip',
             'mbz',

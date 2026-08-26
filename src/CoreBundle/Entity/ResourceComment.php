@@ -143,6 +143,9 @@ class ResourceComment
         return $this->children;
     }
 
+    /**
+     * @param Collection<int, self> $children
+     */
     public function setChildren(Collection $children): self
     {
         $this->children = $children;

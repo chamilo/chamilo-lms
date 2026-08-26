@@ -21,7 +21,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
@@ -50,7 +50,7 @@ final readonly class CreateCourseDocumentTool
         private CourseRelUserRepository $courseRelUserRepository,
         private CDocumentRepository $documentRepository,
         private CreateDocumentFileAction $createDocumentFileAction,
-        private EntityManager $entityManager,
+        private EntityManagerInterface $entityManager,
         private KernelInterface $kernel,
         private TranslatorInterface $translator,
         private CourseRepository $courseRepository,

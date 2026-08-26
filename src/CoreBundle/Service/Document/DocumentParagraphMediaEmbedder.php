@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -39,7 +39,7 @@ final readonly class DocumentParagraphMediaEmbedder
     public function __construct(
         private CDocumentRepository $documentRepository,
         private ResourceNodeRepository $resourceNodeRepository,
-        private EntityManager $entityManager,
+        private EntityManagerInterface $entityManager,
         private DocumentListCacheInvalidator $cacheInvalidator,
         private ResourceHelper $resourceHelper,
         private AiDisclosureHelper $aiDisclosureHelper,

@@ -87,7 +87,7 @@ class UserManager
      * @param string $officialCode Any official code (optional)
      * @param string $language User language    (optional)
      * @param string $phone Phone number    (optional)
-     * @param string $pictureUri Picture URI        (optional)
+     * @param string|null $pictureUri Picture URI        (optional, unused)
      * @param ?array $authSources Authentication source (defaults to 'platform', dependind on constant)
      * @param string $expirationDate Account expiration date (optional, defaults to null)
      * @param int    $active Whether the account is enabled or disabled by default
@@ -1063,12 +1063,12 @@ class UserManager
      * @param string $lastname        The user's lastname
      * @param string $username        The user's username (login)
      * @param string $password        The user's password
-     * @param string $auth_sources     The authentication source (default: "platform")
+     * @param array  $auth_sources    The authentication sources (default: "platform")
      * @param string $email           The user's e-mail address
      * @param int    $status          The user's status
      * @param string $official_code   The user's official code (usually just an internal institutional code)
      * @param string $phone           The user's phone number
-     * @param string $picture_uri     The user's picture URL (internal to the Chamilo directory)
+     * @param string|null $picture_uri The user's picture URL (internal to the Chamilo directory, unused)
      * @param string $expiration_date The date at which this user will be automatically disabled
      * @param int    $active          Whether this account needs to be enabled (1) or disabled (0)
      * @param int    $creator_id      The user ID of the person who registered this user (optional, defaults to null)
@@ -1873,7 +1873,7 @@ class UserManager
     /**
      * Gets the current user image.
      *
-     * @param string $userId
+     * @param int    $userId
      * @param int    $size        it can be USER_IMAGE_SIZE_SMALL,
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId

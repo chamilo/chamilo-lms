@@ -335,11 +335,7 @@ final class ChatController extends AbstractController
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (\is_string($ret)) {
-            return JsonResponse::fromJsonString((string) $ret);
-        }
-
-        return new JsonResponse($ret ?? []);
+        return new JsonResponse($ret);
     }
 
     #[Route(path: '/account/chat/api/contacts', name: 'chamilo_core_chat_api_contacts', options: ['expose' => true], methods: ['POST'])]
@@ -369,11 +365,11 @@ final class ChatController extends AbstractController
         }
 
         $mode = (string) $req->query->get('mode', 'min');
-        $sinceId = (int) $req->query->get('since_id', 0);
-        $peerId = (int) $req->query->get('peer_id', 0);
+        $sinceId = (int) $req->query->get('since_id', '0');
+        $peerId = (int) $req->query->get('peer_id', '0');
         $presenceRaw = (string) $req->query->get('presence_ids', '');
         $presenceIds = $this->parseIdsFromRaw($presenceRaw);
-        $includeContacts = (bool) $req->query->get('include_contacts', false);
+        $includeContacts = (bool) $req->query->get('include_contacts', '');
 
         if (!$this->isGlobalChatEnabled()) {
             $payload = [
@@ -456,8 +452,8 @@ final class ChatController extends AbstractController
             return new JsonResponse([]);
         }
 
-        $peerId = (int) $req->query->get('user_id', 0);
-        $sinceId = (int) $req->query->get('since_id', 0);
+        $peerId = (int) $req->query->get('user_id', '0');
+        $sinceId = (int) $req->query->get('since_id', '0');
 
         if (AiTutorChatService::FRIEND_AI === $peerId) {
             $course = $this->resolveCourseFromRequest($req, $doctrine);
@@ -896,8 +892,8 @@ final class ChatController extends AbstractController
             return new JsonResponse([]);
         }
 
-        $peerId = (int) $req->query->get('user_id', 0);
-        $visible = (int) $req->query->get('visible_messages', 0);
+        $peerId = (int) $req->query->get('user_id', '0');
+        $visible = (int) $req->query->get('visible_messages', '0');
 
         if (AiTutorChatService::FRIEND_AI === $peerId) {
             // Course-only AI tutor history

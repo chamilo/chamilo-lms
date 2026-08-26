@@ -1190,8 +1190,8 @@ class GroupManager
      *
      * @param string $title                     The title of the new category
      * @param string $description               The description of the new category
-     * @param int    $selfRegistrationAllowed   allow users to self register
-     * @param int    $selfUnRegistrationAllowed allow user to self unregister
+     * @param bool   $selfRegistrationAllowed   allow users to self register
+     * @param bool   $selfUnRegistrationAllowed allow user to self unregister
      * @param int    $documentAccess            document access
      *
      * @return mixed

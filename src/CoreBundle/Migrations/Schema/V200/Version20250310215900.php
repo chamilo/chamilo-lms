@@ -20,6 +20,13 @@ use Exception;
 
 final class Version20250310215900 extends AbstractMigrationChamilo
 {
+    /**
+     * Legacy plugin meeting id => migrated ConferenceMeeting id.
+     *
+     * @var array<int|string, int|null>
+     */
+    private array $meetingIdMap = [];
+
     public function getDescription(): string
     {
         return 'Migrates data from BBB and Zoom plugins to the new conference system using Doctrine persistence.';

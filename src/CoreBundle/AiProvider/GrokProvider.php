@@ -1167,12 +1167,12 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
      */
     private function resolveTextOptions(array $options): array
     {
-        $url = (string) (($options['url'] ?? null) ?? $this->textApiUrl);
-        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
-        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+        $url = (string) ($options['url'] ?? $this->textApiUrl);
+        $model = (string) ($options['model'] ?? $this->textModel);
+        $temperature = (float) ($options['temperature'] ?? $this->textTemperature);
 
         $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokens ?? null) ?? $this->textMaxTokens);
+        $maxTokens = (int) ($maxTokens ?? $this->textMaxTokens);
 
         if ($maxTokens <= 0) {
             $maxTokens = $this->textMaxTokens > 0 ? $this->textMaxTokens : 1000;

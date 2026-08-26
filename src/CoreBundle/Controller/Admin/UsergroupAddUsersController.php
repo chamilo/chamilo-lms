@@ -49,7 +49,7 @@ class UsergroupAddUsersController extends AbstractController
         }
 
         $isSocialGroup = Usergroup::SOCIAL_CLASS === $usergroup->getGroupType();
-        $relationType = (int) $request->query->get('relation', Usergroup::GROUP_USER_PERMISSION_READER);
+        $relationType = (int) $request->query->get('relation', (string) Usergroup::GROUP_USER_PERMISSION_READER);
         if (!\in_array($relationType, self::ALLOWED_RELATION_TYPES, true)) {
             $relationType = Usergroup::GROUP_USER_PERMISSION_READER;
         }

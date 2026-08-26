@@ -29,7 +29,7 @@ final class ExerciseRegressionFixtureQuestionFactoryTest extends TestCase
         self::assertCount(29, $standard);
         self::assertNotContains(8, $standard);
         self::assertNotSame(31, $standard[0]);
-        self::assertNotSame(31, $standard[\count($standard) - 1]);
+        self::assertNotSame(31, end($standard));
         self::assertSame([8], $factory->adaptiveTypes());
     }
 
@@ -42,7 +42,7 @@ final class ExerciseRegressionFixtureQuestionFactoryTest extends TestCase
 
             self::assertSame($type, $payload->type);
             self::assertNotSame('', trim(strip_tags($payload->title)));
-            self::assertStringContainsString(sprintf('T%02d', $type), $payload->title);
+            self::assertStringContainsString(\sprintf('T%02d', $type), $payload->title);
         }
     }
 

@@ -1674,6 +1674,9 @@ final readonly class CourseSettingsManager
                 continue;
             }
             $user = $relation->getUser();
+            if (!$user instanceof User) {
+                continue;
+            }
             $users[(int) $user->getId()] = $user;
         }
 

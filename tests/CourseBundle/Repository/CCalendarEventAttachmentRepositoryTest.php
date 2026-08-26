@@ -12,7 +12,7 @@ use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Datetime;
+use DateTime;
 
 class CCalendarEventAttachmentRepositoryTest extends AbstractApiTest
 {
@@ -30,8 +30,8 @@ class CCalendarEventAttachmentRepositoryTest extends AbstractApiTest
         $repoAttachment = self::getContainer()->get(CCalendarEventAttachmentRepository::class);
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         // 1. Add event.
         $event = (new CCalendarEvent())

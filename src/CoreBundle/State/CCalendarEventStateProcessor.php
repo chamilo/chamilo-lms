@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Promotion;
@@ -58,9 +57,9 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
 
         $this->applyCareerAndPromotionRules($data);
 
-        $data->getReminders()->forAll(function (int $i, AgendaReminder $reminder) {
-            return $reminder->decodeDateInterval();
-        });
+        foreach ($data->getReminders() as $reminder) {
+            $reminder->decodeDateInterval();
+        }
 
         /** @var CCalendarEvent $result */
         $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);

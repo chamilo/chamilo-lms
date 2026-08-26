@@ -88,7 +88,7 @@ final class ExerciseRuntimeAnswer
     public string $message = '';
 
     /**
-     * @var array<int, array{answer: string, position: int|null}>
+     * @var array<int, array{answer: string, position: int|null, secondsSpent?: int}>
      */
     #[Groups(['exercise_runtime_answer:read'])]
     public array $savedAnswer = [];

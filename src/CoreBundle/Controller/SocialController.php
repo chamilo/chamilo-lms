@@ -459,7 +459,7 @@ class SocialController extends AbstractController
         }
 
         UserManager::createDataPrivacyExtraFields();
-        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, 1);
+        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, '1');
         UserManager::update_extra_field_value($targetUserId, $justificationFieldToUpdate, $explanation);
 
         $emailOfficer = (string) $settingsManager->getSetting('profile.data_protection_officer_email');

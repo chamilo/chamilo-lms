@@ -18,7 +18,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use RuntimeException;
 use Security;
@@ -41,7 +41,7 @@ final readonly class CourseDocumentContentService
     public function __construct(
         private CDocumentRepository $documentRepository,
         private ResourceNodeRepository $resourceNodeRepository,
-        private EntityManager $entityManager,
+        private EntityManagerInterface $entityManager,
         private DocumentListCacheInvalidator $cacheInvalidator,
         private ResourceHelper $resourceHelper,
         private TranslateHtmlLanguageService $translateHtmlLanguageService,

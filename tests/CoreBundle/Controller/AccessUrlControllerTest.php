@@ -97,6 +97,7 @@ class AccessUrlControllerTest extends WebTestCase
         // The temp path itself needs no .csv suffix -- UploadedFile's 2nd ctor argument is what
         // the app sees as the original filename, independent of where the tmp data actually sits.
         $path = tempnam(sys_get_temp_dir(), 'access_url_import_test_');
+        self::assertIsString($path);
         file_put_contents($path, "username,url\n{$username},{$url}\n");
         $this->uploadedCsvPaths[] = $path;
 

@@ -26,6 +26,6 @@ class RemoveOnAttributes extends HTMLPurifier_Filter
         $html = str_replace("\0", '', $html);
         $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
 
-        return preg_replace($pattern, '', $html);
+        return (string) preg_replace($pattern, '', $html);
     }
 }

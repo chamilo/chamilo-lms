@@ -40,6 +40,7 @@ final readonly class CreateCourseTestTool
     /**
      * @return array{
      *     created: true,
+     *     course_features_enabled: list<string>,
      *     test: array{
      *         quiz_id: int,
      *         resource_node_id: int,
@@ -49,6 +50,7 @@ final readonly class CreateCourseTestTool
      *         total_score: float,
      *         published: bool,
      *         provider_used: string,
+     *         generation_mode: string,
      *         ai_assisted: true,
      *         source: array{type: 'topic'|'document', document_id: int|null, title: string},
      *         questions: list<array{question_id: int, title: string, score: float}>,
@@ -100,18 +102,22 @@ final readonly class CreateCourseTestTool
 
     /**
      * @return array{
-     *     quiz_id: int,
-     *     resource_node_id: int,
-     *     title: string,
-     *     question_count: int,
-     *     question_type: 'unique_answer',
-     *     total_score: float,
-     *     published: bool,
-     *     provider_used: string,
-     *     ai_assisted: true,
-     *     source: array{type: 'topic'|'document', document_id: int|null, title: string},
-     *     questions: list<array{question_id: int, title: string, score: float}>,
-     *     content_url: string
+     *     course_features_enabled: list<string>,
+     *     test: array{
+     *         quiz_id: int,
+     *         resource_node_id: int,
+     *         title: string,
+     *         question_count: int,
+     *         question_type: 'unique_answer',
+     *         total_score: float,
+     *         published: bool,
+     *         provider_used: string,
+     *         generation_mode: string,
+     *         ai_assisted: true,
+     *         source: array{type: 'topic'|'document', document_id: int|null, title: string},
+     *         questions: list<array{question_id: int, title: string, score: float}>,
+     *         content_url: string
+     *     }
      * }
      */
     private function doCreateCourseTest(

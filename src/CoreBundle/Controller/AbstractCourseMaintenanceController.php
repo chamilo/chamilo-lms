@@ -426,7 +426,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             }
 
             // Strict mode
-            set_error_handler(static function (): void {});
+            set_error_handler(static fn (int $errno, string $errstr): bool => true);
 
             try {
                 // Untrusted backup bytes: never instantiate arbitrary classes (PHP Object
@@ -446,7 +446,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             // Relaxed fallback (no class instantiation) + deincomplete to stdClass
             if (!$ok) {
                 $err2 = null;
-                set_error_handler(static function (): void {});
+                set_error_handler(static fn (int $errno, string $errstr): bool => true);
 
                 try {
                     // No class instantiation at all (UnserializeApi default => allowed_classes:false).
@@ -1061,6 +1061,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
         };
 
         // Categories
+        /** @var array<int, array<string, mixed>> $cats */
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
@@ -1236,6 +1237,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
         $catRaw = $res['link_category'] ?? $res['Link_Category'] ?? [];
         $linkRaw = $res['link'] ?? $res['Link'] ?? [];
 
+        /** @var array<int, array<string, mixed>> $cats */
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
@@ -2142,7 +2144,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
     /**
      * Filter course resources using a simplified selection structure (documents/links/forums).
      *
-     * @param array<string,array<string,bool>> $selected
+     * @param array<string, array<array-key, bool>> $selected
      */
     protected function filterCourseResources(object $course, array $selected): void
     {

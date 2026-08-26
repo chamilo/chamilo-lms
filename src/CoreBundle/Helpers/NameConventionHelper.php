@@ -38,7 +38,7 @@ class NameConventionHelper
 
     public function getFormat(): array
     {
-        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? $this->parameterBag->get('locale');
+        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? (string) $this->parameterBag->get('locale');
 
         $format = $this->getDefaultList()[$locale] ?? null;
         if (null === $format) {

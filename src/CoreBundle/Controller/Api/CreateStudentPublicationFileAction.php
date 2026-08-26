@@ -33,7 +33,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         Security $security,
         SettingsManager $settingsManager
     ): CStudentPublication {
-        $cid = (int) $request->query->get('cid', 0);
+        $cid = (int) $request->query->get('cid', '0');
         if ($cid > 0) {
             $course = $em->getRepository(Course::class)->find($cid);
             if (!$course || !$security->isGranted(CourseVoter::VIEW, $course)) {

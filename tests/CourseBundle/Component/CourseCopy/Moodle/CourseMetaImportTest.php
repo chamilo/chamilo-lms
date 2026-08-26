@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CourseBundle\Component\CourseCopy\Moodle;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -100,6 +101,7 @@ final class CourseMetaImportTest extends TestCase
         self::assertTrue($ok);
         self::assertCount(2, $resources['course_settings']);
 
+        /** @var list<stdClass> $rows */
         $rows = array_values($resources['course_settings']);
         self::assertSame('show_course_in_user_language', $rows[0]->variable);
         self::assertSame('1', $rows[0]->value);

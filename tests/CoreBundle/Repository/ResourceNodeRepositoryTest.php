@@ -51,8 +51,8 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $path = $user->getResourceNode()->getSlug().'-'.$user->getResourceNode()->getId().'/'.$resourceNode->getSlug().'-'.$resourceNode->getId().'/';
         $this->assertSame($path, $resourceNode->getPathForDisplay());
         $array = [
-            $user->getResourceNode()->getId() => $user->getResourceNode()->getSlug(),
-            $resourceNode->getId() => $resourceNode->getSlug(),
+            (int) $user->getResourceNode()->getId() => $user->getResourceNode()->getSlug(),
+            (int) $resourceNode->getId() => $resourceNode->getSlug(),
         ];
 
         $this->assertSame($array, $resourceNode->getPathForDisplayToArray());
@@ -111,6 +111,8 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
             ->setAuthor($user)
             ->setResourceNode($resourceNode)
         ;
+
+        /** @var ArrayCollection<int, ResourceComment> $collection */
         $collection = new ArrayCollection();
         $collection->add($comment2);
         $comment->setChildren($collection);

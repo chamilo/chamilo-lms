@@ -76,7 +76,7 @@ abstract class AbstractScimController extends AbstractController
 
         $providedToken = $matches[1];
 
-        if (!hash_equals($this->getParameter('scim_token'), $providedToken)) {
+        if (!hash_equals((string) $this->getParameter('scim_token'), $providedToken)) {
             throw $invalidTokenException;
         }
     }

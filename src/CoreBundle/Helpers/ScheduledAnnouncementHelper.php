@@ -333,7 +333,7 @@ class ScheduledAnnouncementHelper
     private function getUserProgress(int $userId, $courseInfo, Session $session): string
     {
         if (!empty($courseInfo) && $session) {
-            $progress = Tracking::get_avg_student_progress($userId, $courseInfo['real_id'], [], $session->getId());
+            $progress = Tracking::get_avg_student_progress($userId, api_get_course_entity($courseInfo['real_id']), [], $session);
 
             return is_numeric($progress) ? $progress.'%' : '0%';
         }

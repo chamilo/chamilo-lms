@@ -36,7 +36,7 @@ final class AuditCompletionRulesCommand extends Command
      * Semantic hints extracted from the legacy score formulas. They are used
      * only to audit candidates; they never change data or runtime scoring.
      *
-     * @var array<string, array<int, array{role: string, weight: float}>>
+     * @var array<int|string, array<int, array{role: string, weight: float}>>
      */
     private const array LEGACY_EXERCISE_HINTS = [
         '1301' => [
@@ -1649,8 +1649,8 @@ SQL,
     }
 
     /**
-     * @param array<string, int>          $summary
-     * @param list<array{status: string}> $flatviewOnlyRules
+     * @param array<string, int>               $summary
+     * @param list<array{status: string, ...}> $flatviewOnlyRules
      */
     private function addFlatviewOnlySummary(array &$summary, array $flatviewOnlyRules): void
     {

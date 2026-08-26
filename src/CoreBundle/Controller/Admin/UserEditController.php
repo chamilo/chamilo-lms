@@ -71,7 +71,7 @@ final class UserEditController extends AbstractController
     #[Route('/admin/user-edit-data', name: 'admin_user_edit_data', methods: ['GET'])]
     public function data(Request $request): JsonResponse
     {
-        $userId = (int) $request->query->get('user_id', 0);
+        $userId = (int) $request->query->get('user_id', '0');
         $user = $userId > 0 ? $this->userRepository->find($userId) : null;
         if (!$user instanceof User) {
             return $this->json(['error' => $this->translator->trans('User not found')], Response::HTTP_NOT_FOUND);

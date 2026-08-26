@@ -2,9 +2,7 @@ import path from "node:path"
 import { defineConfig, devices } from "@playwright/test"
 import { defineBddConfig } from "playwright-bdd"
 
-// Spike config: proves the Behat -> Playwright migration path works.
-// Points at a single copied .feature file to keep the blast radius small
-// while the approach is being validated; scope will expand once proven.
+// Config for the project's only browser-driven suite, which replaced Behat.
 //
 // playwright-bdd resolves `features`/`steps`/its generated output dir
 // relative to this config file's own directory, so .features-gen lands

@@ -742,7 +742,7 @@ Work through the target file(s) in this order:
    a. Identify the correct Base* component from the mapping above.
    b. Note the existing `v-model`, `name`, and any event handlers (`@input`, `@change`, etc.).
    c. Apply the label translation rule (raw key for BaseTextArea, `t()` for all others).
-   d. Preserve `name` attributes — Behat tests target inputs by name.
+   d. Preserve `name` attributes — Playwright tests target inputs by name.
    e. For `BaseCalendar` replacements, check initialization values and filter comparisons.
    f. For `BaseSelect` replacements, prepare an options computed if the source data uses
    non-standard or unsafe property names (like `@id`).

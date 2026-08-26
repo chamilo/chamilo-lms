@@ -635,7 +635,7 @@ final readonly class ScormRuntimeManager
             }
         } elseif ($this->shouldFinalizeWithoutStatus($terminated, $reason)
             && !$statusWasSet
-            && !\in_array($status, ['completed', 'passed', 'failed', 'browsed'], true)
+            && !\in_array($status, ['completed', 'passed', 'failed', 'browsed', 'incomplete'], true)
         ) {
             $status = $this->resolveMasteryStatus($item, $rawScore, null) ?? 'completed';
         }

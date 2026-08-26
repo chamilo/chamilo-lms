@@ -102,7 +102,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             'logins_by_date' => $this->getLoginsByDateReport($parameters),
             'no_login_users' => $this->getNoLoginUsersReport(),
             'users_active' => $this->getUsersActiveReport($parameters),
-            'users_online' => $this->getUsersOnlineReport(),
+            'users_online' => $this->getUsersOnlineReport($parameters),
             'new_user_registrations' => $this->getNewUserRegistrationsReport($parameters),
             'subscription_by_day' => $this->getSubscriptionByDayReport($parameters),
             'user_session' => $this->getUserSessionReport($parameters),
@@ -604,20 +604,24 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
+     * @param array<string, mixed> $parameters
+     *
      * @return array<string, mixed>
      */
-    private function getUsersOnlineReport(): array
+    private function getUsersOnlineReport(array $parameters): array
     {
+        $page = $this->normalizePositiveInt($parameters['page'] ?? 1, 1, 1, PHP_INT_MAX);
+        $itemsPerPage = $this->normalizePositiveInt($parameters['itemsPerPage'] ?? 10, 10, 5, 100);
         $timeLimit = max(0, (int) $this->settingsManager->getSetting('display.time_limit_whosonline'));
-        $cutoff = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->modify('-'.$timeLimit.' minutes');
-        $onlineCount = $this->countOnlineUsers($cutoff);
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $cutoff = $now->modify('-'.$timeLimit.' minutes');
 
         $online = [];
         $tests = [];
         foreach (self::ONLINE_INTERVALS as $minutes) {
             $online[] = [
                 'label' => $this->trans('Users online')." ({$minutes}')",
-                'value' => $onlineCount,
+                'value' => $this->countOnlineUsers($now->modify('-'.$minutes.' minutes')),
                 'minutes' => $minutes,
             ];
             $tests[] = [
@@ -627,14 +631,29 @@ final readonly class AdminStatisticsUserSystemQueryService
             ];
         }
 
+        $onlineUsers = $this->getOnlineUsersPage($cutoff, $page, $itemsPerPage);
+
         return [
             'title' => $this->trans('Users online'),
             'description' => '',
+            'table' => [
+                'columns' => [
+                    ['key' => 'fullName', 'label' => $this->trans('Name')],
+                    ['key' => 'username', 'label' => $this->trans('Username')],
+                    ['key' => 'lastActivity', 'label' => $this->trans('Last activity')],
+                ],
+                'items' => $onlineUsers['items'],
+                'totalItems' => $onlineUsers['totalItems'],
+                'page' => $page,
+                'itemsPerPage' => $itemsPerPage,
+                'lazy' => true,
+            ],
             'meta' => [
                 'generatedAt' => (new DateTimeImmutable('now', $this->getUserTimezone()))->format('Y-m-d H:i:s'),
                 'onlineCards' => $online,
                 'testCards' => $tests,
                 'configuredOnlineMinutes' => $timeLimit,
+                'refreshIntervalSeconds' => 15,
             ],
         ];
     }
@@ -1745,7 +1764,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function countOnlineUsers(DateTimeImmutable $cutoff): int
     {
         $connection = $this->entityManager->getConnection();
-        $sql = 'SELECT COUNT(o.login_id) total FROM track_e_online o INNER JOIN user u ON u.id = o.login_user_id '
+        $sql = 'SELECT COUNT(DISTINCT o.login_user_id) total FROM track_e_online o INNER JOIN user u ON u.id = o.login_user_id '
             .'WHERE u.active <> :softDeleted AND u.status <> :anonymous AND o.login_date >= :cutoff';
         $params = [
             'softDeleted' => User::SOFT_DELETED,
@@ -1760,6 +1779,76 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         return (int) $connection->executeQuery($sql, $params, $types)->fetchOne();
+    }
+
+    /**
+     * @return array{items: array<int, array<string, mixed>>, totalItems: int}
+     */
+    private function getOnlineUsersPage(DateTimeImmutable $cutoff, int $page, int $itemsPerPage): array
+    {
+        $connection = $this->entityManager->getConnection();
+        $where = [
+            'u.active <> :softDeleted',
+            'u.status <> :anonymous',
+            'o.login_date >= :cutoff',
+        ];
+        $params = [
+            'softDeleted' => User::SOFT_DELETED,
+            'anonymous' => 6,
+            'cutoff' => $cutoff->format('Y-m-d H:i:s'),
+        ];
+        $types = [
+            'softDeleted' => Types::INTEGER,
+            'anonymous' => Types::INTEGER,
+            'cutoff' => Types::STRING,
+        ];
+
+        if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
+            $where[] = 'o.access_url_id = :urlId';
+            $params['urlId'] = $this->getCurrentAccessUrlId();
+            $types['urlId'] = Types::INTEGER;
+        }
+
+        $whereSql = implode(' AND ', $where);
+        $totalItems = (int) $connection->executeQuery(
+            'SELECT COUNT(DISTINCT o.login_user_id) FROM track_e_online o '
+            .'INNER JOIN user u ON u.id = o.login_user_id WHERE '.$whereSql,
+            $params,
+            $types
+        )->fetchOne();
+
+        $rows = $connection->executeQuery(
+            'SELECT u.id, u.firstname, u.lastname, u.username, MAX(o.login_date) AS last_activity '
+            .'FROM track_e_online o INNER JOIN user u ON u.id = o.login_user_id '
+            .'WHERE '.$whereSql.' '
+            .'GROUP BY u.id, u.firstname, u.lastname, u.username '
+            .'ORDER BY last_activity DESC, u.id ASC '
+            .'LIMIT '.max(0, ($page - 1) * $itemsPerPage).', '.$itemsPerPage,
+            $params,
+            $types
+        )->fetchAllAssociative();
+
+        $items = [];
+        foreach ($rows as $row) {
+            $userId = (int) $row['id'];
+            $lastActivity = DateTimeImmutable::createFromFormat(
+                'Y-m-d H:i:s',
+                (string) ($row['last_activity'] ?? ''),
+                new DateTimeZone('UTC')
+            );
+            $items[] = [
+                'id' => $userId,
+                'fullName' => trim((string) ($row['firstname'] ?? '').' '.(string) ($row['lastname'] ?? '')),
+                'username' => (string) ($row['username'] ?? ''),
+                'lastActivity' => $lastActivity instanceof DateTimeImmutable ? $lastActivity->format(DateTimeInterface::ATOM) : '',
+                'detailsUrl' => '/main/admin/user_information.php?user_id='.$userId,
+            ];
+        }
+
+        return [
+            'items' => $items,
+            'totalItems' => $totalItems,
+        ];
     }
 
     private function countUsersActiveInTest(int $minutes): int

@@ -428,7 +428,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     protected Collection $children;
 
     /**
-     * @var Collection|CForumAttachment[]
+     * @var Collection<int, CForumAttachment>
      */
     #[Groups(['forum_post:read'])]
     #[ORM\OneToMany(targetEntity: CForumAttachment::class, mappedBy: 'post', cascade: ['persist', 'remove'], orphanRemoval: true)]

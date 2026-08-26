@@ -515,6 +515,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             $queryBuilder->andWhere('answer.sessionId IS NULL');
         }
 
+        /** @var array<string, mixed> $answers */
         $answers = [];
         foreach ($queryBuilder->getQuery()->getResult() as $answer) {
             if (!$answer instanceof CSurveyAnswer) {

@@ -32,6 +32,12 @@ final readonly class MobileMessageProvider implements ProviderInterface
         private RequestStack $requestStack,
     ) {}
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<MobileMessage>|MobileMessage|null
+     */
     public function provide(
         Operation $operation,
         array $uriVariables = [],

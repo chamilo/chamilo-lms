@@ -196,7 +196,7 @@ final readonly class AnnouncementEmailRecipientResolver
             }
 
             $user = $subscription->getUser();
-            if (User::ACTIVE !== $user->getActive() || null === $user->getId()) {
+            if (!$user instanceof User || User::ACTIVE !== $user->getActive() || null === $user->getId()) {
                 continue;
             }
 

@@ -276,7 +276,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
     }
 
     /**
-     * @return array<string, array<int, array<string, mixed>>>
+     * @return array<string, array<array-key, mixed>>
      */
     private function getChoices(CSurvey $survey): array
     {
@@ -329,7 +329,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array<int, array{value: int, label: string}>>
      */
     private function getParentOptionChoices(CSurvey $survey): array
     {

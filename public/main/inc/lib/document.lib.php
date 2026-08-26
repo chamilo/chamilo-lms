@@ -3511,21 +3511,21 @@ This folder contains all sessions that have been opened in the chat. Although th
     /**
      * Adds a new document to the database.
      *
-     * @param array  $courseInfo
-     * @param string $path
-     * @param string $fileType
-     * @param int    $fileSize
-     * @param string $title
-     * @param string $comment
-     * @param int    $readonly
-     * @param int    $visibility       see ResourceLink constants
-     * @param int    $groupId          group.id
-     * @param int    $sessionId        Session ID, if any
-     * @param int    $userId           creator user id
-     * @param bool   $sendNotification
-     * @param string $content
-     * @param int    $parentId
-     * @param string $realPath
+     * @param array       $courseInfo
+     * @param string      $path
+     * @param string      $fileType
+     * @param int|null    $fileSize
+     * @param string      $title
+     * @param string|null $comment
+     * @param int|null    $readonly
+     * @param int|null    $visibility       see ResourceLink constants; null keeps addCourseLink()'s default
+     * @param int|null    $groupId          group.id
+     * @param int|null    $sessionId        Session ID, if any
+     * @param int|null    $userId           creator user id
+     * @param bool        $sendNotification
+     * @param string|null $content
+     * @param int|null    $parentId
+     * @param string      $realPath
      *
      * @return CDocument|false
      */

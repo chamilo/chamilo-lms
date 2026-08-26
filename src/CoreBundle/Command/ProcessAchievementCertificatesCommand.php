@@ -207,7 +207,7 @@ final class ProcessAchievementCertificatesCommand extends Command
             }
 
             $notification = $this->resolveNotification($courseId);
-            if ([] === $notification) {
+            if (!isset($notification['subject'], $notification['message'])) {
                 throw new RuntimeException(\sprintf('Course %d has no unambiguous certificate notification subject/message configuration.', $courseId));
             }
 
@@ -407,7 +407,7 @@ final class ProcessAchievementCertificatesCommand extends Command
     }
 
     /**
-     * @return array{complete: bool, score: float|int|null}
+     * @return array{complete: bool, score: float|int|null, ...}
      */
     private function evaluateCandidate(
         string $completionMode,
@@ -466,7 +466,7 @@ final class ProcessAchievementCertificatesCommand extends Command
     }
 
     /**
-     * @return array{subject: string, message: string}
+     * @return array{subject?: string, message?: string}
      */
     private function resolveNotification(int $courseId): array
     {

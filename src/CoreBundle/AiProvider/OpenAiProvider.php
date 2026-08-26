@@ -75,10 +75,10 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/chat/completions');
-        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
-        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.7));
+        $model = (string) ($options['model'] ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $temperature = (float) ($options['temperature'] ?? ($cfg['temperature'] ?? 0.7));
         $maxTokensOpt = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokensOpt ?? null) ?? ($cfg['max_tokens'] ?? 1000));
+        $maxTokens = (int) ($maxTokensOpt ?? ($cfg['max_tokens'] ?? 1000));
 
         $normalizedMessages = $this->normalizeChatMessages($messages);
         if (empty($normalizedMessages)) {
@@ -175,10 +175,10 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/chat/completions');
-        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
-        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.7));
+        $model = (string) ($options['model'] ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $temperature = (float) ($options['temperature'] ?? ($cfg['temperature'] ?? 0.7));
         $maxTokensOpt = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokensOpt ?? null) ?? ($cfg['max_tokens'] ?? 1000));
+        $maxTokens = (int) ($maxTokensOpt ?? ($cfg['max_tokens'] ?? 1000));
 
         $payload = [
             'model' => $model,
@@ -280,9 +280,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         }
 
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/responses');
-        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o'));
-        $maxOutputTokens = (int) (($options['max_output_tokens'] ?? null) ?? ($cfg['max_output_tokens'] ?? 900));
-        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.2));
+        $model = (string) ($options['model'] ?? ($cfg['model'] ?? 'gpt-4o'));
+        $maxOutputTokens = (int) ($options['max_output_tokens'] ?? ($cfg['max_output_tokens'] ?? 900));
+        $temperature = (float) ($options['temperature'] ?? ($cfg['temperature'] ?? 0.2));
 
         $payload = [
             'model' => $model,
@@ -410,9 +410,9 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
 
         $prompt = trim((string) ($options['prompt'] ?? 'Describe this image for full-text search indexing. Return only concise searchable plain text. Include visible text if any.'));
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/responses');
-        $model = (string) (($options['model'] ?? null) ?? ($cfg['model'] ?? 'gpt-4o-mini'));
-        $maxOutputTokens = (int) (($options['max_output_tokens'] ?? null) ?? ($cfg['max_output_tokens'] ?? 500));
-        $temperature = (float) (($options['temperature'] ?? null) ?? ($cfg['temperature'] ?? 0.1));
+        $model = (string) ($options['model'] ?? ($cfg['model'] ?? 'gpt-4o-mini'));
+        $maxOutputTokens = (int) ($options['max_output_tokens'] ?? ($cfg['max_output_tokens'] ?? 500));
+        $temperature = (float) ($options['temperature'] ?? ($cfg['temperature'] ?? 0.1));
 
         $payload = [
             'model' => $model,
@@ -506,8 +506,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             $cfg = $this->getTypeConfig('text');
         }
 
-        $url = (string) (($options['url'] ?? null) ?? ($cfg['transcription_url'] ?? 'https://api.openai.com/v1/audio/transcriptions'));
-        $model = (string) (($options['model'] ?? null) ?? ($cfg['transcription_model'] ?? 'whisper-1'));
+        $url = (string) ($options['url'] ?? ($cfg['transcription_url'] ?? 'https://api.openai.com/v1/audio/transcriptions'));
+        $model = (string) ($options['model'] ?? ($cfg['transcription_model'] ?? 'whisper-1'));
         $prompt = trim((string) ($options['prompt'] ?? ''));
 
         try {
@@ -577,7 +577,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
     private function uploadFileForResponses(string $filename, string $mimeType, string $binaryContent): ?string
     {
         $cfg = $this->getTypeConfig('files');
-        $url = (string) (($cfg['url'] ?? null) ?? 'https://api.openai.com/v1/files');
+        $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/files');
 
         try {
             $filePart = new DataPart($binaryContent, $filename, $mimeType);
@@ -875,7 +875,7 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         if ($this->isGptImageModel($normalizedModel) && 'standard' === strtolower($quality)) {
             $quality = 'auto';
         }
-        $n = (int) (($options['n'] ?? null) ?? ($cfg['n'] ?? 1));
+        $n = (int) ($options['n'] ?? ($cfg['n'] ?? 1));
 
         $promptTrimmed = trim($prompt);
         $promptForLog = mb_substr($promptTrimmed, 0, 200);
@@ -893,9 +893,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
             'n' => $n,
         ];
 
-        // Do not send response_format. New OpenAI image models reject it, and the
-        // provider already supports both b64_json and url responses.
-        unset($payload['response_format']);
+        // response_format is deliberately absent. New OpenAI image models reject it,
+        // and the provider already supports both b64_json and url responses.
 
         try {
             $response = $this->httpClient->request('POST', $url, [
@@ -979,8 +978,8 @@ class OpenAiProvider implements AiProviderInterface, AiImageProviderInterface, A
         $cfg = $this->getTypeConfig('video');
         $url = (string) ($cfg['url'] ?? 'https://api.openai.com/v1/videos');
         $model = (string) ($cfg['model'] ?? 'sora-2');
-        $seconds = (string) (($options['seconds'] ?? null) ?? ($cfg['seconds'] ?? '8'));
-        $size = (string) (($options['size'] ?? null) ?? ($cfg['size'] ?? '720x1280'));
+        $seconds = (string) ($options['seconds'] ?? ($cfg['seconds'] ?? '8'));
+        $size = (string) ($options['size'] ?? ($cfg['size'] ?? '720x1280'));
 
         $model = strtolower(trim($model));
         $seconds = trim((string) $seconds);

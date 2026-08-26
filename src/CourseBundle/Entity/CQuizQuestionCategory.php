@@ -34,7 +34,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected ?string $description = null;
 
     /**
-     * @var Collection|CQuizQuestion[]
+     * @var Collection<int, CQuizQuestion>
      */
     #[ORM\ManyToMany(targetEntity: CQuizQuestion::class, mappedBy: 'categories')]
     protected Collection $questions;

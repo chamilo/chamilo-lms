@@ -30,8 +30,9 @@ class MailTransportDecorator
             $dsn = 'null://null';
         }
 
+        // Transports is keyed by name; 'main' is Symfony's own name for a single-DSN mailer.
         return new Transports([
-            $this->inner->fromString($dsn),
+            'main' => $this->inner->fromString($dsn),
         ]);
     }
 }

@@ -70,7 +70,7 @@ final class SearchController extends AbstractController
 
         $languageIso = $this->resolveRequestLanguageIso($request);
 
-        $page = max(1, (int) $request->query->get('page', 1));
+        $page = max(1, (int) $request->query->get('page', '1'));
         $itemsPerPage = $this->resolveItemsPerPage($request);
         $offset = ($page - 1) * $itemsPerPage;
 
@@ -126,7 +126,7 @@ final class SearchController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $q = trim((string) $request->query->get('q', ''));
-        $page = max(1, (int) $request->query->get('page', 1));
+        $page = max(1, (int) $request->query->get('page', '1'));
         $itemsPerPage = $this->resolveItemsPerPage($request);
         $offset = ($page - 1) * $itemsPerPage;
 
@@ -1279,7 +1279,7 @@ final class SearchController extends AbstractController
 
     private function resolveItemsPerPage(Request $request): int
     {
-        $itemsPerPage = (int) $request->query->get('itemsPerPage', self::DEFAULT_RESULTS_PER_PAGE);
+        $itemsPerPage = (int) $request->query->get('itemsPerPage', (string) self::DEFAULT_RESULTS_PER_PAGE);
 
         if ($itemsPerPage <= 0) {
             return self::DEFAULT_RESULTS_PER_PAGE;

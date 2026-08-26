@@ -284,7 +284,10 @@ class CidReqListener
                 ChamiloSession::write('gid', $groupId);
             }
 
-            $origin = self::normalizeOrigin($request->query->get('origin', $request->request->get('origin')));
+            $bodyOrigin = $request->request->get('origin');
+            $origin = self::normalizeOrigin(
+                $request->query->get('origin', null !== $bodyOrigin ? (string) $bodyOrigin : null)
+            );
             if (null !== $origin) {
                 $sessionHandler->set('origin', $origin);
             } else {

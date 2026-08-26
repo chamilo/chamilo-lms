@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * @implements ProviderInterface<array<string, mixed>>
+ * @implements ProviderInterface<CForum>
  */
 final class ForumCollectionStateProvider implements ProviderInterface
 {
@@ -163,11 +163,16 @@ final class ForumCollectionStateProvider implements ProviderInterface
 
         $categoryIds = [];
         foreach ($queryBuilder->getQuery()->getResult() as $category) {
-            if (!$category instanceof CForumCategory || null === $category->getIid()) {
+            if (!$category instanceof CForumCategory) {
                 continue;
             }
 
-            $categoryIds[$category->getIid()] = true;
+            $categoryId = $category->getIid();
+            if (null === $categoryId) {
+                continue;
+            }
+
+            $categoryIds[$categoryId] = true;
         }
 
         return $categoryIds;

@@ -111,7 +111,7 @@ final class ExerciseRuntimeAttempt
     public bool $canFinish = false;
 
     /**
-     * @var array<int|string, array<int, array{answer: string, position: int|null}>>
+     * @var array<int|string, array<int, array{answer: string, position: int|null, secondsSpent?: int}>>
      */
     #[Groups(['exercise_runtime_attempt:read'])]
     public array $savedAnswers = [];

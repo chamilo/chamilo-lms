@@ -31,7 +31,7 @@ class UserLoginAsController extends AbstractController
     #[Route('/admin/user-list-login-as', name: 'admin_user_login_as', methods: ['GET'])]
     public function loginAs(Request $request): RedirectResponse
     {
-        $userId = (int) $request->query->get('user_id', 0);
+        $userId = (int) $request->query->get('user_id', '0');
         $token = (string) $request->query->get('sec_token', '');
 
         if (!$this->isCsrfTokenValid('login_as', $token)) {

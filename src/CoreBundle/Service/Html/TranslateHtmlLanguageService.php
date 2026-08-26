@@ -442,7 +442,8 @@ final class TranslateHtmlLanguageService
     /**
      * @param array{
      *     hasMarkers: bool,
-     *     presentLanguages: list<string>
+     *     presentLanguages: list<string>,
+     *     ...
      * } $inspection
      */
     private function languageAlreadyPresent(

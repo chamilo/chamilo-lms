@@ -753,7 +753,7 @@ class CourseHelper
             $agenda->addEvent(
                 $formattedNow,
                 $formattedNow,
-                0,
+                'false',
                 $this->translator->trans('Course creation'),
                 $this->translator->trans('This course was created at this time'),
                 ['everyone' => 'everyone']
@@ -806,7 +806,7 @@ class CourseHelper
                 $this->translator->trans('This is an announcement example'),
                 $this->translator->trans('This is an announcement example. Only trainers are allowed to publish announcements.'),
                 ['everyone' => 'everyone'],
-                null,
+                [],
                 null,
                 (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
             );

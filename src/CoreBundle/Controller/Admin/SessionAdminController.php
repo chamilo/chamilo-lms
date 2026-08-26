@@ -96,8 +96,8 @@ class SessionAdminController extends BaseController
         AccessUrlHelper $accessUrlHelper,
     ): JsonResponse {
         // Extract and validate pagination parameters from the query
-        $offset = max(0, (int) $request->query->get('offset', 0));
-        $limit = max(1, (int) $request->query->get('limit', 50));
+        $offset = max(0, (int) $request->query->get('offset', '0'));
+        $limit = max(1, (int) $request->query->get('limit', '50'));
 
         // Determine current access URL context
         $url = $accessUrlHelper->getCurrent();
@@ -222,8 +222,8 @@ class SessionAdminController extends BaseController
         GradebookCertificateRepository $repo,
         AccessUrlHelper $accessUrlHelper
     ): JsonResponse {
-        $offset = max(0, (int) $request->query->get('offset', 0));
-        $limit = max(1, (int) $request->query->get('limit', 10));
+        $offset = max(0, (int) $request->query->get('offset', '0'));
+        $limit = max(1, (int) $request->query->get('limit', '10'));
 
         $urlId = $accessUrlHelper->getCurrent()->getId();
 

@@ -944,7 +944,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool}>
+     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool, correctChoice?: int}>
      */
     private function getCleanAnswers(ExerciseQuestionEditor $data): array
     {
@@ -1425,7 +1425,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
     }
 
     /**
-     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool}>
+     * @return array<int, array{answer: string, correct: bool, comment: string, score: float, position: int, isUnknown: bool, correctChoice?: int}>
      */
     private function normalizeAnswersForType(ExerciseQuestionEditor $data, array $optionIidsByPosition = []): array
     {
@@ -1599,6 +1599,57 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $value = $this->settingsManager->getSetting('exercise.allow_quiz_question_feedback', true);
 
         return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isImageZoomEnabled(): bool
+    {
+        $value = $this->settingsManager->getSetting('exercise.quiz_image_zoom', true);
+        if (\is_array($value)) {
+            return isset($value['options']) || true === ($value['value'] ?? false) || '1' === (string) ($value['value'] ?? '');
+        }
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    /**
+     * @return array<int, array{label: string, value: int}>
+     */
+    private function getCategoryOptions(Course $course, ?Session $session): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('category')
+            ->from(CQuizQuestionCategory::class, 'category')
+            ->innerJoin('category.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->setParameter('courseId', (int) $course->getId())
+            ->orderBy('category.title', 'ASC')
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(links.session) = :sessionId OR links.session IS NULL)')
+                ->setParameter('sessionId', (int) $session->getId())
+            ;
+        } else {
+            $queryBuilder->andWhere('links.session IS NULL');
+        }
+
+        $items = [];
+        foreach ($queryBuilder->getQuery()->getResult() as $category) {
+            if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+                continue;
+            }
+
+            $items[] = [
+                'label' => $category->getTitle(),
+                'value' => (int) $category->getIid(),
+            ];
+        }
+
+        return $items;
     }
 
     /**

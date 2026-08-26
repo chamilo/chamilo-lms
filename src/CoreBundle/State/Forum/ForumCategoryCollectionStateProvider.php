@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @implements ProviderInterface<array<string, mixed>>
+ * @implements ProviderInterface<CForumCategory>
  */
 final class ForumCategoryCollectionStateProvider implements ProviderInterface
 {

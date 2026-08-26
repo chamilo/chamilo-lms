@@ -204,9 +204,10 @@ class ResourceListener
         if (null !== $request && null === $parentNode) {
             $currentRequest = $request->getCurrentRequest();
             if (null !== $currentRequest) {
+                $bodyParentResourceNodeId = $currentRequest->request->get('parentResourceNodeId');
                 $resourceNodeIdFromRequest = $currentRequest->query->get(
                     'parentResourceNodeId',
-                    $currentRequest->request->get('parentResourceNodeId')
+                    null !== $bodyParentResourceNodeId ? (string) $bodyParentResourceNodeId : null
                 );
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();

@@ -2046,7 +2046,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
     }
 
     /**
-     * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string}>
+     * @return array<int, array{id: int, name: string, size: int, mimeType: string, url: string, inlineUrl: string}>
      */
     private function normalizeAttemptFiles(TrackEAttempt $row, bool $withInlineUrl = false): array
     {

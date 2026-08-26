@@ -602,6 +602,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     public function getTeachersSubscriptions(): Collection
     {
+        /** @var ArrayCollection<int, CourseRelUser> $teacherSubscriptions */
         $teacherSubscriptions = new ArrayCollection();
 
         foreach ($this->users as $subscription) {

@@ -6,11 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\AttemptFile;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
@@ -222,22 +226,12 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $this->assertInstanceOf(TrackEAttempt::class, $trackExercise->getAttemptByQuestionId(1));
         $this->assertNull($trackExercise->getAttemptByQuestionId(99));
 
-        $file = $this->getUploadedFile();
         $em = $this->getEntityManager();
-
-        // Create asset.
-        $asset = (new Asset())
-            ->setTitle('test')
-            ->setCategory(Asset::EXERCISE_ATTEMPT)
-            ->setFile($file)
-        ;
-        $em->persist($asset);
-        $em->flush();
 
         $feedback = (new AttemptFeedback())
             ->setUser($student)
             ->setComment('great!')
-            ->setAsset($asset)
+            ->setResourceNode($this->createAttemptResourceNode($teacher))
         ;
         $attempt->addAttemptFeedback($feedback);
         $this->assertHasNoEntityViolations($feedback);
@@ -245,23 +239,15 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertNotNull($feedback->getId());
-        $this->assertNotNull($feedback->getAsset());
+        $this->assertNotNull($feedback->getResourceNode());
         $this->assertNotNull($feedback->getUser());
         $this->assertNotNull($feedback->getAttempt());
         $this->assertNotNull($feedback->getCreatedAt());
         $this->assertNotNull($feedback->getUpdatedAt());
 
-        $asset = (new Asset())
-            ->setTitle('test')
-            ->setCategory(Asset::EXERCISE_ATTEMPT)
-            ->setFile($file)
-        ;
-        $em->persist($asset);
-        $em->flush();
-
         $attemptFile = (new AttemptFile())
             ->setComment('great!')
-            ->setAsset($asset)
+            ->setResourceNode($this->createAttemptResourceNode($student))
         ;
         $attempt->addAttemptFile($attemptFile);
         $this->assertHasNoEntityViolations($attemptFile);
@@ -270,7 +256,7 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertNotNull($attemptFile->getId());
-        $this->assertNotNull($attemptFile->getAsset());
+        $this->assertNotNull($attemptFile->getResourceNode());
         $this->assertNotNull($attemptFile->getAttempt());
         $this->assertNotNull($attemptFile->getCreatedAt());
         $this->assertNotNull($attemptFile->getUpdatedAt());
@@ -295,5 +281,48 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
 
         $student = $this->getUser('student');
         $this->assertNotNull($student);
+    }
+
+    /**
+     * Attempt feedbacks and files hold their upload in a ResourceNode, the same way
+     * ExerciseRuntimeAnswerProcessor builds them at runtime.
+     */
+    private function createAttemptResourceNode(User $creator): ResourceNode
+    {
+        $em = $this->getEntityManager();
+
+        $tool = $em->getRepository(Tool::class)->findOneBy(['title' => 'quiz']);
+        $this->assertInstanceOf(Tool::class, $tool);
+
+        $resourceType = $em->getRepository(ResourceType::class)->findOneBy(['title' => 'attempt_file']);
+        if (!$resourceType instanceof ResourceType) {
+            $resourceType = (new ResourceType())
+                ->setTitle('attempt_file')
+                ->setTool($tool)
+            ;
+            $em->persist($resourceType);
+        }
+
+        $file = $this->getUploadedFile();
+        $resourceFile = (new ResourceFile())
+            ->setTitle($file->getFilename())
+            ->setOriginalName($file->getFilename())
+            ->setMimeType('image/png')
+            ->setSize((int) $file->getSize())
+            ->setFile($file)
+        ;
+
+        $node = (new ResourceNode())
+            ->setTitle($file->getFilename())
+            ->setResourceType($resourceType)
+            ->setCreator($creator)
+        ;
+        $node->addResourceFile($resourceFile);
+
+        $em->persist($node);
+        $em->persist($resourceFile);
+        $em->flush();
+
+        return $node;
     }
 }

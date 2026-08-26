@@ -42,6 +42,11 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
     ) {}
 
     /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<Session>|Session|null
+     *
      * @throws Exception
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -106,6 +111,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         if (is_iterable($paginator)) {
+            /** @var array<int, Session> $sessions */
             $sessions = \is_array($paginator) ? $paginator : iterator_to_array($paginator);
             foreach ($sessions as $session) {
                 $this->hydrateSessionForUser($session, $user);

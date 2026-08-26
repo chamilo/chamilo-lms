@@ -841,9 +841,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public static function getPasswordConstraints(): array
     {
         return [
-            new Assert\Length(['min' => 5]),
-            new Assert\Regex(['pattern' => '/^[a-z\-_0-9]+$/i', 'htmlPattern' => '/^[a-z\-_0-9]+$/i']),
-            new Assert\Regex(['pattern' => '/[0-9]{2}/', 'htmlPattern' => '/[0-9]{2}/']),
+            new Assert\Length(min: 5),
+            new Assert\Regex(pattern: '/^[a-z\-_0-9]+$/i', htmlPattern: '/^[a-z\-_0-9]+$/i'),
+            new Assert\Regex(pattern: '/[0-9]{2}/', htmlPattern: '/[0-9]{2}/'),
         ];
     }
 
@@ -2499,7 +2499,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             return [];
         }
 
-        return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
+        return array_values(array_filter(
+            $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray(),
+            static fn (?string $authentication): bool => null !== $authentication
+        ));
     }
 
     /**

@@ -54,7 +54,7 @@ final readonly class GlobalReportingExportController
             $exportData = $this->createAdminCourseExportData($data);
         } elseif ('admin-users' === $section) {
             $exportData = $this->createAdminUserExportData($data);
-        } elseif ('learner-detail' === $section && (int) $request->query->get('courseId', 0) > 0) {
+        } elseif ('learner-detail' === $section && (int) $request->query->get('courseId', '0') > 0) {
             $exportData = $this->createLearnerCourseExportData($data);
         } else {
             $columns = array_values(array_filter(

@@ -171,7 +171,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     protected ?Room $room = null;
 
     /**
-     * @var Collection|CAttendanceCalendar[]
+     * @var Collection<int, CAttendanceCalendar>
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceCalendar::class, cascade: ['persist', 'remove'])]
     #[Groups(['attendance:read'])]

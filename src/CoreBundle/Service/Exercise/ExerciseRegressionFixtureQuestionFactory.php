@@ -145,35 +145,43 @@ final class ExerciseRegressionFixtureQuestionFactory
         switch ($type) {
             case self::UNIQUE_ANSWER:
                 $data->answers = $this->choiceAnswers(['Lima', 'Cusco', 'Arequipa', 'Piura'], [0], 10.0);
+
                 break;
 
             case self::MULTIPLE_ANSWER:
                 $data->answers = $this->choiceAnswers(['2', '3', '4', '6'], [0, 1], 5.0);
+
                 break;
 
             case self::FILL_IN_BLANKS:
                 $this->configureFillBlanks($data, false);
+
                 break;
 
             case self::MATCHING:
             case self::MATCHING_DRAGGABLE:
                 $this->configureMatching($data, false);
+
                 break;
 
             case self::FREE_ANSWER:
                 $data->description = '<p>Write a short explanation of why regression testing matters.</p>';
+
                 break;
 
             case self::HOT_SPOT:
                 $this->configureHotspot($data, false, false);
+
                 break;
 
             case self::HOT_SPOT_DELINEATION:
                 $this->configureHotspot($data, false, true);
+
                 break;
 
             case self::MULTIPLE_ANSWER_COMBINATION:
                 $data->answers = $this->choiceAnswers(['Mercury', 'Venus', 'Earth', 'Pluto'], [1, 2], 0.0);
+
                 break;
 
             case self::UNIQUE_ANSWER_NO_OPTION:
@@ -187,28 +195,34 @@ final class ExerciseRegressionFixtureQuestionFactory
                     'position' => 666,
                     'isUnknown' => true,
                 ];
+
                 break;
 
             case self::MULTIPLE_ANSWER_TRUE_FALSE:
                 $this->configureTrueFalse($data);
+
                 break;
 
             case self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                 $this->configureTrueFalse($data);
+
                 break;
 
             case self::ORAL_EXPRESSION:
                 $data->description = '<p>Record a short spoken answer.</p>';
+
                 break;
 
             case self::GLOBAL_MULTIPLE_ANSWER:
                 $data->answers = $this->choiceAnswers(['PHP', 'JavaScript', 'HTML', 'SQL'], [0, 1, 3], 0.0);
+
                 break;
 
             case self::MEDIA_QUESTION:
                 $data->description = '<p><strong>Media block:</strong> use this content as context for nearby questions.</p>';
                 $data->score = 0.0;
                 $data->globalScore = 0.0;
+
                 break;
 
             case self::CALCULATED_ANSWER:
@@ -220,6 +234,7 @@ final class ExerciseRegressionFixtureQuestionFactory
                 ];
                 $data->calculatedVariations = 2;
                 $data->calculatedComment = 'The result is x + y.';
+
                 break;
 
             case self::UNIQUE_ANSWER_IMAGE:
@@ -228,6 +243,7 @@ final class ExerciseRegressionFixtureQuestionFactory
                     $this->answer('<p><img src="'.$image.'" alt="Correct regression image"></p>', true, 10.0, 1),
                     $this->answer('<p><img src="'.$image.'" alt="Alternative regression image"></p>', false, 0.0, 2),
                 ];
+
                 break;
 
             case self::DRAGGABLE:
@@ -235,6 +251,7 @@ final class ExerciseRegressionFixtureQuestionFactory
                     ['answer' => 'First', 'targetPosition' => 1, 'score' => 5.0, 'position' => 1],
                     ['answer' => 'Second', 'targetPosition' => 2, 'score' => 5.0, 'position' => 2],
                 ];
+
                 break;
 
             case self::ANNOTATION:
@@ -242,44 +259,53 @@ final class ExerciseRegressionFixtureQuestionFactory
                 $data->annotationImageData = $this->imageDataUri();
                 $data->annotationImageName = 'chamilo-regression-annotation.png';
                 $data->annotationImageMimeType = 'image/png';
+
                 break;
 
             case self::READING_COMPREHENSION:
                 $data->description = '<p>Chamilo is an open-source learning management system. Read this passage before continuing.</p>';
                 $data->score = 0.0;
                 $data->globalScore = 0.0;
+
                 break;
 
             case self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                 $this->configureTrueFalse($data);
                 $data->unknownScore = 0.0;
+
                 break;
 
             case self::UPLOAD_ANSWER:
                 $data->description = '<p>Upload a small file as the learner answer.</p>';
+
                 break;
 
             case self::MATCHING_COMBINATION:
             case self::MATCHING_DRAGGABLE_COMBINATION:
                 $this->configureMatching($data, true);
+
                 break;
 
             case self::HOT_SPOT_COMBINATION:
                 $this->configureHotspot($data, true, false);
+
                 break;
 
             case self::FILL_IN_BLANKS_COMBINATION:
                 $this->configureFillBlanks($data, true);
+
                 break;
 
             case self::MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                 $data->answers = $this->choiceAnswers(['Red', 'Green', 'Blue'], [0, 2], 0.0);
                 $data->dropdownListText = "Red\nGreen\nBlue";
+
                 break;
 
             case self::MULTIPLE_ANSWER_DROPDOWN:
                 $data->answers = $this->choiceAnswers(['Spring', 'Summer', 'Winter'], [1], 10.0);
                 $data->dropdownListText = "Spring\nSummer\nWinter";
+
                 break;
 
             case self::ANSWER_IN_OFFICE_DOC:
@@ -287,12 +313,14 @@ final class ExerciseRegressionFixtureQuestionFactory
                 $data->onlyofficeTemplateName = 'chamilo-regression-answer.docx';
                 $data->onlyofficeTemplateMimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
                 $data->onlyofficeTemplateData = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,'.$this->officeTemplateBase64();
+
                 break;
 
             case self::PAGE_BREAK:
                 $data->description = '<p>Regression page break.</p>';
                 $data->score = 0.0;
                 $data->globalScore = 0.0;
+
                 break;
         }
 

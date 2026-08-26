@@ -394,9 +394,6 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         return round((float) ($queryBuilder->getQuery()->getSingleScalarResult() ?? 0), 2);
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     private function findIncompleteAttempt(
         CQuiz $quiz,
         Course $course,

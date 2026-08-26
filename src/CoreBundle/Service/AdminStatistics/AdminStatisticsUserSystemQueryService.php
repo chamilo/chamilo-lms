@@ -1620,9 +1620,6 @@ final readonly class AdminStatisticsUserSystemQueryService
         return array_values(array_filter($charts, static fn (array $chart): bool => [] !== ($chart['data']['labels'] ?? [])));
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function hasUserExtraField(string $variable): bool
     {
         return $this->entityManager->getRepository(ExtraField::class)->findOneBy([
@@ -2042,7 +2039,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     }
 
     /**
-     * @return array<string, int>
+     * @return array<int, int>
      */
     private function getSessionsByDuration(string $start, string $end): array
     {

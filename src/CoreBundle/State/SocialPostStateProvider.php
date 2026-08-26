@@ -27,6 +27,12 @@ readonly class SocialPostStateProvider implements ProviderInterface
         private SettingsManager $settingsManager,
     ) {}
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<SocialPost>|SocialPost|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {

@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use finfo;
 use InvalidArgumentException;
 use RuntimeException;
@@ -51,7 +51,7 @@ final readonly class GeneratedMediaStorageService
         private HttpClientInterface $httpClient,
         private CDocumentRepository $documentRepository,
         private CreateDocumentFileAction $createDocumentFileAction,
-        private EntityManager $entityManager,
+        private EntityManagerInterface $entityManager,
         private KernelInterface $kernel,
         private TranslatorInterface $translator,
         private CourseRepository $courseRepository,

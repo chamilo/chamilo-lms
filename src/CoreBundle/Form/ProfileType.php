@@ -307,6 +307,8 @@ class ProfileType extends AbstractType
             }
 
             $isEditable = $isCoreEditable($key);
+
+            /** @var array<string, mixed> $opts */
             $opts = [
                 'label' => $fieldConfig['label'],
                 'required' => $required,
@@ -392,6 +394,7 @@ class ProfileType extends AbstractType
             $tzCfg = $fieldsMap['timezone'];
             $isEditable = $isCoreEditable('timezone');
 
+            /** @var array<string, mixed> $opts */
             $opts = [
                 'label' => $tzCfg['label'],
                 'required' => $tzCfg['required'],

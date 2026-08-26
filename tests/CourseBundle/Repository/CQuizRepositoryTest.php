@@ -31,7 +31,6 @@ class CQuizRepositoryTest extends AbstractApiTest
             ->setPreventBackwards(1)
             ->setHideQuestionNumber(1)
             ->setNotifications('')
-            ->setActive(1)
             ->setType(1)
             ->setAutoLaunch(false)
             ->setFeedbackType(1)

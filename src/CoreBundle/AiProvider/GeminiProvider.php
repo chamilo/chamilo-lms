@@ -1296,17 +1296,17 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
      */
     private function resolveTextOptions(array $options): array
     {
-        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
-        $template = (string) (($options['url_template'] ?? null) ?? $this->textUrlTemplate);
+        $model = (string) ($options['model'] ?? $this->textModel);
+        $template = (string) ($options['url_template'] ?? $this->textUrlTemplate);
 
         // Allow direct "url" override too.
         $url = isset($options['url']) ? (string) $options['url'] : $this->buildUrl($template, $model);
 
-        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+        $temperature = (float) ($options['temperature'] ?? $this->textTemperature);
 
         // Accept either max_output_tokens or max_tokens
         $max = $options['max_output_tokens'] ?? ($options['max_tokens'] ?? null);
-        $max = (int) (($max ?? null) ?? $this->textMaxOutputTokens);
+        $max = (int) ($max ?? $this->textMaxOutputTokens);
 
         if ($max <= 0) {
             $max = $this->textMaxOutputTokens > 0 ? $this->textMaxOutputTokens : 1000;
@@ -1331,22 +1331,22 @@ final class GeminiProvider implements AiProviderInterface, AiImageProviderInterf
      *
      * @param array<string,mixed> $options
      *
-     * @return array{url:string,model:string,request_format:string,n:int,response_modalities:array<int,string>}
+     * @return array{url:string,model:string,request_format:string,n:int,response_modalities:array<int,string>,aspect_ratio:string}
      */
     private function resolveImageOptions(array $options): array
     {
-        $model = (string) (($options['model'] ?? null) ?? $this->imageModel);
-        $template = (string) (($options['url_template'] ?? null) ?? $this->imageUrlTemplate);
+        $model = (string) ($options['model'] ?? $this->imageModel);
+        $template = (string) ($options['url_template'] ?? $this->imageUrlTemplate);
         $url = isset($options['url']) ? (string) $options['url'] : $this->buildUrl($template, $model);
 
-        $format = (string) (($options['request_format'] ?? null) ?? $this->imageRequestFormat);
+        $format = (string) ($options['request_format'] ?? $this->imageRequestFormat);
 
         $aspectRatio = trim((string) ($options['aspect_ratio'] ?? ''));
         if (!\in_array($aspectRatio, ['1:1', '16:9', '9:16'], true)) {
             $aspectRatio = '';
         }
 
-        $n = (int) (($options['n'] ?? null) ?? $this->imageN);
+        $n = (int) ($options['n'] ?? $this->imageN);
         if ($n <= 0) {
             $n = 1;
         }

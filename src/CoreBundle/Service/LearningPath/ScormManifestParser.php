@@ -27,7 +27,8 @@ final class ScormManifestParser
      *         title: string,
      *         items: array<int, array<string, mixed>>
      *     }>,
-     *     resources: array<string, array{href: string, scormType: string}>
+     *     resources: array<string, array{href: string, scormType: string}>,
+     *     contentMaker: string|null
      * }
      */
     public function parse(string $xml): array
@@ -48,6 +49,7 @@ final class ScormManifestParser
 
         $xpath = new DOMXPath($document);
         $resources = $this->parseResources($xpath);
+        $contentMaker = $this->detectContentMaker($xpath, $resources);
         $organizationsNode = $xpath->query('/*[local-name()="manifest"]/*[local-name()="organizations"]')->item(0);
         if (!$organizationsNode instanceof DOMElement) {
             throw new RuntimeException('The SCORM manifest does not contain an organizations element.');
@@ -104,7 +106,45 @@ final class ScormManifestParser
             'encoding' => $document->encoding ?: 'UTF-8',
             'organizations' => $organizations,
             'resources' => $resources,
+            'contentMaker' => $contentMaker,
         ];
+    }
+
+    /**
+     * @param array<string, array{href: string, scormType: string}> $resources
+     */
+    private function detectContentMaker(DOMXPath $xpath, array $resources): ?string
+    {
+        $scoCount = 0;
+        foreach ($resources as $resource) {
+            if ('sco' === $resource['scormType']) {
+                ++$scoCount;
+            }
+        }
+        if (1 !== $scoCount) {
+            return null;
+        }
+
+        $fileNodes = $xpath->query('//*[local-name()="resources"]/*[local-name()="resource"]/*[local-name()="file"]');
+        if (false === $fileNodes) {
+            return null;
+        }
+
+        foreach ($fileNodes as $fileNode) {
+            if (!$fileNode instanceof DOMElement) {
+                continue;
+            }
+
+            $href = str_replace('\\', '/', rawurldecode(trim($fileNode->getAttribute('href'))));
+            $href = strtolower($href);
+            if (str_starts_with($href, 'scormcontent/lib/rise/')
+                || str_contains($href, '/scormcontent/lib/rise/')
+            ) {
+                return ArticulateRiseSuspendDataDecoder::CONTENT_MAKER;
+            }
+        }
+
+        return null;
     }
 
     /**

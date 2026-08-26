@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Mcp;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseLearningPathItemFactory;
 use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use Chamilo\CoreBundle\Service\Survey\CourseSurveyContentService;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -41,6 +42,7 @@ final readonly class ManageCourseLearningPathTool
         private CourseDocumentContentService $documentContentService,
         private CreateCourseDocumentTool $documentTool,
         private CourseSurveyContentService $surveyContentService,
+        private ExerciseLearningPathItemFactory $exerciseLearningPathItemFactory,
         private EntityManagerInterface $entityManager,
     ) {}
 
@@ -294,16 +296,12 @@ final readonly class ManageCourseLearningPathTool
         ?int $afterItemId = null,
     ): array {
         try {
-            $context = $this->courseContext->resolve($courseId);
+            $this->courseContext->resolve($courseId);
             $learningPath = $this->resolveLearningPath($courseId, $learningPathId);
             $quiz = $this->resolveQuiz($courseId, $testId, $testTitle);
-            $this->addItem(
-                $context['course'],
-                (int) $context['user']->getId(),
+            $this->addExerciseItem(
                 $learningPath,
-                TOOL_QUIZ,
-                (int) $quiz->getIid(),
-                $quiz->getTitle(),
+                $quiz,
                 $afterItemId,
             );
 
@@ -663,6 +661,104 @@ final readonly class ManageCourseLearningPathTool
         }
 
         return $matches[0];
+    }
+
+    private function addExerciseItem(CLp $learningPath, CQuiz $quiz, ?int $afterItemId): void
+    {
+        // Exercises can contain modern-only question types. Build the CLpItem
+        // directly instead of routing test attachment through legacy Question classes.
+        $rootItem = $this->lpItemRepository->getRootItem((int) $learningPath->getIid());
+        if (!$rootItem instanceof CLpItem) {
+            throw new RuntimeException('The learning path root item could not be resolved.');
+        }
+
+        $items = $this->getFirstLevelItems($learningPath);
+        if (null !== $afterItemId) {
+            $valid = false;
+            foreach ($items as $item) {
+                if ((int) $item->getIid() === $afterItemId) {
+                    $valid = true;
+
+                    break;
+                }
+            }
+            if (!$valid) {
+                throw new InvalidArgumentException('The afterItemId value does not identify a first-level item in this learning path.');
+            }
+        }
+
+        $exerciseId = (int) $quiz->getIid();
+        if ($exerciseId <= 0) {
+            throw new RuntimeException('The exercise must be persisted before it can be added to a learning path.');
+        }
+
+        $learningPathItem = null;
+        foreach ($learningPath->getItems() as $candidate) {
+            if (TOOL_QUIZ === $candidate->getItemType() && (string) $exerciseId === (string) $candidate->getPath()) {
+                $learningPathItem = $candidate;
+
+                break;
+            }
+        }
+
+        if (!$learningPathItem instanceof CLpItem) {
+            $displayOrder = 2;
+            foreach ($items as $item) {
+                $displayOrder = max($displayOrder, (int) $item->getDisplayOrder() + 1);
+            }
+
+            $learningPathItem = $this->exerciseLearningPathItemFactory->create(
+                $learningPath,
+                $quiz,
+                $exerciseId,
+                $rootItem,
+                $displayOrder,
+            );
+            $this->entityManager->persist($learningPathItem);
+            $this->entityManager->flush();
+        } elseif ((int) $learningPathItem->getParent()?->getIid() !== (int) $rootItem->getIid()) {
+            throw new InvalidArgumentException('The test is already attached inside a nested learning path section.');
+        }
+
+        $itemId = (int) $learningPathItem->getIid();
+        if ($itemId <= 0) {
+            throw new RuntimeException('The exercise learning path item could not be persisted.');
+        }
+
+        $items = $this->getFirstLevelItems($learningPath);
+        $learningPathItem = null;
+        foreach ($items as $index => $item) {
+            if ((int) $item->getIid() === $itemId) {
+                $learningPathItem = $item;
+                array_splice($items, $index, 1);
+
+                break;
+            }
+        }
+        if (!$learningPathItem instanceof CLpItem) {
+            throw new RuntimeException('The persisted exercise item could not be resolved in the learning path.');
+        }
+
+        if (null === $afterItemId) {
+            $items[] = $learningPathItem;
+        } else {
+            $targetIndex = null;
+            foreach ($items as $index => $item) {
+                if ((int) $item->getIid() === $afterItemId) {
+                    $targetIndex = $index + 1;
+
+                    break;
+                }
+            }
+            if (null === $targetIndex) {
+                throw new RuntimeException('The target learning path item could not be resolved after creating the exercise item.');
+            }
+            array_splice($items, $targetIndex, 0, [$learningPathItem]);
+        }
+
+        $learningPath->setModifiedOn(new \DateTime());
+        $this->entityManager->persist($learningPath);
+        $this->persistItemOrder($learningPath, $items);
     }
 
     private function addItem(

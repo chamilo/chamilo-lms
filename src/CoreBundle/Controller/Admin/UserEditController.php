@@ -7,11 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -20,6 +22,7 @@ use Database;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use ExtraFieldValue;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -31,6 +34,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 use UserManager;
 
 use const FILTER_VALIDATE_EMAIL;
@@ -44,9 +48,15 @@ use const UPLOAD_ERR_OK;
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 final class UserEditController extends AbstractController
 {
+    // FIELD_TYPE_TAG's values are submitted as an array too (one entry per
+    // chip the user committed) -- ExtraFieldValue::saveFieldValues() already
+    // accepts either an array or a bare string for it, but only the array
+    // form actually creates one tag per entry; a bare string (the old plain-
+    // text fallback) got saved as a single tag containing the whole string.
     private const array MULTIPLE_VALUE_TYPES = [
         ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
         ExtraField::FIELD_TYPE_CHECKBOX,
+        ExtraField::FIELD_TYPE_TAG,
     ];
 
     /**
@@ -64,8 +74,10 @@ final class UserEditController extends AbstractController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly AccessUrlScopeHelper $accessUrlScope,
         private readonly EntityManagerInterface $entityManager,
+        private readonly AssetRepository $assetRepository,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly TranslatorInterface $translator,
+        private readonly LoggerInterface $logger,
     ) {}
 
     #[Route('/admin/user-edit-data', name: 'admin_user_edit_data', methods: ['GET'])]
@@ -281,15 +293,106 @@ final class UserEditController extends AbstractController
         $sendMail = (int) $payload->get('sendMail', 0);
         $emailTemplate = (array) $payload->all('emailTemplateOption');
 
+        $extraFieldErrors = $this->validateExtraFieldValues($request);
+        if ([] !== $extraFieldErrors) {
+            return $this->json([
+                'error' => $this->translator->trans('One or more fields contain invalid values.'),
+                'fieldErrors' => $extraFieldErrors,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $groupedValueTypes = [
+            ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+            ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+            ExtraField::FIELD_TYPE_TRIPLE_SELECT,
+        ];
+        $geolocationValueTypes = [
+            ExtraField::FIELD_TYPE_GEOLOCALIZATION,
+            ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES,
+        ];
+        $fileValueTypes = [
+            ExtraField::FIELD_TYPE_FILE_IMAGE,
+            ExtraField::FIELD_TYPE_FILE,
+        ];
+
+        // Grouped/geolocation/file values are deliberately kept out of $extra:
+        // UserManager::update_user() applies $extra itself through its own
+        // per-field update_extra_field_value() loop, a narrower code path than
+        // the explicit, well-tested saveFieldValues() call this controller
+        // makes further down. Routing a nested array (grouped selects) or a
+        // raw upload array (file fields) through that narrower path risks a
+        // type error before the explicit call ever runs, for no benefit since
+        // that explicit call re-saves the definitive value anyway.
         $extra = [];
+        $extraDeferred = [];
+        $removedExtraFiles = [];
         foreach ($this->buildExtraFieldDefinitions() as $field) {
             $key = 'extra_'.$field['variable'];
+            $valueType = $field['valueType'];
 
-            if (\in_array($field['valueType'], self::MULTIPLE_VALUE_TYPES, true)) {
+            if (ExtraField::FIELD_TYPE_DIVIDER === $valueType) {
+                continue;
+            }
+
+            if (\in_array($valueType, self::MULTIPLE_VALUE_TYPES, true)) {
                 $values = $payload->all($key);
                 if ([] !== $values) {
                     $extra[$key] = $values;
                 }
+
+                continue;
+            }
+
+            if (\in_array($valueType, $geolocationValueTypes, true)) {
+                if ($payload->has($key)) {
+                    $extraDeferred[$key] = $payload->get($key);
+                }
+                $coordinatesKey = $key.'_coordinates';
+                if ($payload->has($coordinatesKey)) {
+                    $extraDeferred[$coordinatesKey] = $payload->get($coordinatesKey);
+                }
+
+                continue;
+            }
+
+            if (\in_array($valueType, $groupedValueTypes, true)) {
+                $group = (array) $payload->all($key);
+                if ([] !== $group) {
+                    $extraDeferred[$key] = $group;
+                }
+
+                continue;
+            }
+
+            if (\in_array($valueType, $fileValueTypes, true)) {
+                if ('1' === (string) $payload->get($key.'_remove', '0')) {
+                    $removedExtraFiles[] = $field['variable'];
+
+                    continue;
+                }
+
+                $uploadedFile = $request->files->get($key);
+                if ($uploadedFile instanceof UploadedFile) {
+                    $extraDeferred[$key] = [
+                        'name' => $uploadedFile->getClientOriginalName(),
+                        'type' => $uploadedFile->getClientMimeType(),
+                        'tmp_name' => $uploadedFile->getPathname(),
+                        'error' => $uploadedFile->getError(),
+                        'size' => $uploadedFile->getSize(),
+                    ];
+                }
+
+                continue;
+            }
+
+            if (ExtraField::FIELD_TYPE_MOBILE_PHONE_NUMBER === $valueType && $payload->has($key)) {
+                $extra[$key] = self::filterMobilePhoneNumber((string) $payload->get($key));
+
+                continue;
+            }
+
+            if (ExtraField::FIELD_TYPE_DURATION === $valueType && $payload->has($key)) {
+                $extra[$key] = self::durationToSeconds((string) $payload->get($key));
 
                 continue;
             }
@@ -342,8 +445,31 @@ final class UserEditController extends AbstractController
         }
 
         $extra['item_id'] = $userId;
-        $extraFieldValue = new ExtraFieldValue('user');
-        $extraFieldValue->saveFieldValues($extra);
+        foreach ($extraDeferred as $deferredKey => $deferredValue) {
+            $extra[$deferredKey] = $deferredValue;
+        }
+        foreach ($removedExtraFiles as $variable) {
+            $this->deleteExtraFieldValue($userId, $variable);
+        }
+
+        try {
+            (new ExtraFieldValue('user'))->saveFieldValues($extra);
+        } catch (Throwable $exception) {
+            // The user's other fields are already saved at this point (see
+            // UserManager::update_user() above) -- only the additional profile
+            // fields failed. Log the real cause (prod hides it from the
+            // response) and say so plainly instead of leaking a bare "Error"
+            // with no indication of what actually happened.
+            $this->logger->error('Failed to save extra field values while editing a user.', [
+                'userId' => $userId,
+                'exception' => $exception,
+            ]);
+
+            return $this->json([
+                'error' => $this->translator->trans('The user was updated, but one of the additional profile fields could not be saved.'),
+                'userId' => $userId,
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return $this->json(['success' => true, 'userId' => $userId]);
     }
@@ -530,19 +656,59 @@ final class UserEditController extends AbstractController
         $extraField = new ExtraField('user');
         $fields = $extraField->get_all([], 'option_order');
 
+        $hierarchicalTypes = [
+            ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+            ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+            ExtraField::FIELD_TYPE_TRIPLE_SELECT,
+        ];
+
         $items = [];
         foreach ($fields as $field) {
-            $options = [];
-            foreach ($field['options'] ?: [] as $option) {
-                $options[] = [
-                    'value' => $option['option_value'],
-                    'label' => $option['display_text'],
-                ];
+            $valueType = (int) $field['value_type'];
+
+            if (ExtraField::FIELD_TYPE_TIMEZONE === $valueType) {
+                // FIELD_TYPE_TIMEZONE has no rows in extra_field_option at all --
+                // the legacy page populates its <select> straight from PHP's own
+                // DateTimeZone::listIdentifiers() (via api_get_timezones()), not
+                // from stored options, so the normal loop below would otherwise
+                // always leave it with zero choices.
+                $options = [];
+                foreach (array_keys(api_get_timezones()) as $timezone) {
+                    if ('' === $timezone) {
+                        continue;
+                    }
+                    $options[] = ['value' => $timezone, 'label' => $timezone];
+                }
+            } elseif (\in_array($valueType, $hierarchicalTypes, true)) {
+                // Cascading selects: legacy chains options via option_value,
+                // where '0' marks a top-level option and any other value is
+                // the parent option's own id (see
+                // ExtraField::extra_field_double_select_convert_array_to_ordered_array()
+                // / tripleSelectConvertArrayToOrderedArray()). The submitted
+                // value for each level is the option's id, not option_value,
+                // so both are exposed and the frontend builds the tree itself
+                // instead of porting the legacy AJAX cascade endpoint.
+                $options = [];
+                foreach ($field['options'] ?: [] as $option) {
+                    $options[] = [
+                        'id' => (int) $option['id'],
+                        'parentId' => (int) $option['option_value'],
+                        'label' => $option['display_text'],
+                    ];
+                }
+            } else {
+                $options = [];
+                foreach ($field['options'] ?: [] as $option) {
+                    $options[] = [
+                        'value' => $option['option_value'],
+                        'label' => $option['display_text'],
+                    ];
+                }
             }
 
             $items[] = [
                 'variable' => $field['variable'],
-                'valueType' => (int) $field['value_type'],
+                'valueType' => $valueType,
                 'displayText' => $field['display_text'],
                 'helperText' => $field['helper_text'] ?? '',
                 'defaultValue' => $field['default_value'] ?? '',
@@ -554,28 +720,241 @@ final class UserEditController extends AbstractController
     }
 
     /**
-     * @return array<string, mixed> extra_<variable> => current value (string, or list<string> for multi-value fields)
+     * Server-side enforcement of the same rules FormValidator attaches to these
+     * extra-field types (public/main/inc/lib/formvalidator/FormValidator.class.php
+     * and the Rule/MobilePhoneNumber.php callback) -- the client already blocks
+     * these live, but a request bypassing the SPA must not be able to store a
+     * value the legacy form itself would have rejected.
+     *
+     * @return array<string, string> variable => translated error message
      */
-    private function buildExtraFieldValues(int $userId): array
+    private function validateExtraFieldValues(Request $request): array
     {
-        $extraFieldValue = new ExtraFieldValue('user');
-        $rows = $extraFieldValue->getAllValuesByItem($userId);
-        if (false === $rows) {
-            return [];
-        }
+        $payload = $request->request;
+        $errors = [];
+        $allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        // These all submit an ARRAY at this key -- grouped selects as
+        // extra_<var>[extra_<var>]=..., and SELECT_MULTIPLE/CHECKBOX/TAG as
+        // repeated extra_<var>[]=... entries. InputBag::get() throws
+        // BadRequestException on a non-scalar value, so none of them may ever
+        // reach it (confirmed live: any user with a real checkbox or tag value
+        // -- i.e. basically every real user -- 500'd on save until this list
+        // covered these three too, not just the grouped selects).
+        $nonScalarValueTypes = [
+            ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+            ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+            ExtraField::FIELD_TYPE_TRIPLE_SELECT,
+            ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+            ExtraField::FIELD_TYPE_CHECKBOX,
+            ExtraField::FIELD_TYPE_TAG,
+        ];
 
-        $values = [];
-        foreach ($rows as $row) {
-            $variable = $row['variable'];
-            $valueType = (int) $row['value_type'];
+        foreach ($this->buildExtraFieldDefinitions() as $field) {
+            $key = 'extra_'.$field['variable'];
 
-            if (\in_array($valueType, self::MULTIPLE_VALUE_TYPES, true)) {
-                $values[$variable][] = $row['field_value'];
+            if (\in_array($field['valueType'], $nonScalarValueTypes, true)) {
+                continue;
+            }
+
+            if (ExtraField::FIELD_TYPE_FILE_IMAGE === $field['valueType']) {
+                $uploadedFile = $request->files->get($key);
+                if ($uploadedFile instanceof UploadedFile) {
+                    $extension = strtolower((string) $uploadedFile->getClientOriginalExtension());
+                    if (!\in_array($extension, $allowedImageExtensions, true)) {
+                        $errors[$field['variable']] = $this->translator->trans('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedImageExtensions).')';
+                    }
+                }
 
                 continue;
             }
 
-            $values[$variable] = $row['field_value'];
+            if (!$payload->has($key)) {
+                continue;
+            }
+
+            $value = trim((string) $payload->get($key));
+            if ('' === $value) {
+                continue;
+            }
+
+            $error = match ($field['valueType']) {
+                ExtraField::FIELD_TYPE_MOBILE_PHONE_NUMBER => preg_match('/^\d{11}$/', self::filterMobilePhoneNumber($value))
+                    ? null
+                    : $this->translator->trans('Mobile phone number is incomplete or contains invalid characters'),
+                ExtraField::FIELD_TYPE_LETTERS_ONLY => preg_match('/^[a-zA-ZñÑ]+$/', $value)
+                    ? null
+                    : $this->translator->trans('Only letters'),
+                ExtraField::FIELD_TYPE_ALPHANUMERIC => preg_match('/^[a-zA-Z0-9ñÑ]+$/', $value)
+                    ? null
+                    : $this->translator->trans('Only letters (a-z) and numbers (0-9)'),
+                ExtraField::FIELD_TYPE_LETTERS_SPACE => preg_match('/^[a-zA-ZñÑ\s]+$/', $value)
+                    ? null
+                    : $this->translator->trans('Only letters and spaces'),
+                ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE => preg_match('/^[a-zA-Z0-9ñÑ\s]+$/', $value)
+                    ? null
+                    : $this->translator->trans('Only letters, numbers and spaces'),
+                ExtraField::FIELD_TYPE_DURATION => preg_match('/^\d+:[0-5]?\d:[0-5]?\d$/', $value)
+                    ? null
+                    : $this->translator->trans('Invalid format'),
+                default => null,
+            };
+
+            if (null !== $error) {
+                $errors[$field['variable']] = $error;
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Mirrors FormValidator's mobile_phone_number_filter(): strips '+', '(', ')'
+     * and left-trims leading zeros, before the exactly-11-digits rule is checked.
+     */
+    private static function filterMobilePhoneNumber(string $value): string
+    {
+        return ltrim(str_replace(['+', '(', ')'], '', $value), '0');
+    }
+
+    /**
+     * Mirrors the inline QuickForm filter ExtraField::addElements() attaches to
+     * FIELD_TYPE_DURATION: "hh:mm:ss" text converted to a raw integer-seconds
+     * string (or '0' when the text doesn't match, same as the legacy filter).
+     */
+    private static function durationToSeconds(string $value): string
+    {
+        if (!preg_match('/^(\d+):([0-5]?\d):([0-5]?\d)$/', $value, $matches)) {
+            return '0';
+        }
+
+        return (string) ((int) $matches[1] * 3600 + (int) $matches[2] * 60 + (int) $matches[3]);
+    }
+
+    /**
+     * Inverse of durationToSeconds(), mirroring ExtraField::formatDuration()
+     * (private in that class, so re-implemented here rather than exposed).
+     */
+    private static function secondsToDuration(int $seconds): string
+    {
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+        $remainingSeconds = $seconds % 60;
+
+        return \sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+    }
+
+    /**
+     * Removes an existing FILE/FILE_IMAGE extra field value for one user, used
+     * when the edit form's "delete" action clears a previously uploaded file.
+     * Only the ExtraFieldValues row is removed -- the underlying Asset (and its
+     * stored file) is left in place, matching this codebase's general policy
+     * against deleting files outright.
+     */
+    private function deleteExtraFieldValue(int $userId, string $variable): void
+    {
+        $fieldInfo = (new ExtraField('user'))->get_handler_field_info_by_field_variable($variable);
+        if (!$fieldInfo) {
+            return;
+        }
+
+        $repository = $this->entityManager->getRepository(ExtraFieldValues::class);
+        $row = $repository->findOneBy(['itemId' => $userId, 'field' => $fieldInfo['id']]);
+        if ($row instanceof ExtraFieldValues) {
+            $this->entityManager->remove($row);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @return array<string, mixed> extra_<variable> => current value (string, or list<string> for multi-value fields)
+     */
+    private function buildExtraFieldValues(int $userId): array
+    {
+        // Deliberately NOT ExtraFieldValue::getAllValuesByItem(): it intersects its
+        // result with ExtraField::get_all(['filter = ?' => 1]), and every extra_field
+        // row on this platform (like most) has filter=0 -- that call always returns
+        // an empty array here, silently dropping every existing value regardless of
+        // type. getAllValuesByItemAndField() (per-field, no such intersection) is the
+        // correct primitive; looping it once per field is one query per field, which
+        // is fine for an admin edit page loaded once per visit.
+        $extraFieldValue = new ExtraFieldValue('user');
+        $fileValueTypes = [ExtraField::FIELD_TYPE_FILE_IMAGE, ExtraField::FIELD_TYPE_FILE];
+
+        $values = [];
+        foreach ((new ExtraField('user'))->get_all([], 'option_order') as $field) {
+            $variable = $field['variable'];
+            $valueType = (int) $field['value_type'];
+
+            // FIELD_TYPE_TAG never has a row in the generic extra_field_values table --
+            // tags live in their own tag/user_rel_tag tables instead, exactly like the
+            // legacy page's own get_handler_extra_data() special-cases this same type.
+            if (ExtraField::FIELD_TYPE_TAG === $valueType) {
+                $values[$variable] = array_values(array_map(
+                    static fn (array $tag): string => $tag['tag'],
+                    UserManager::get_user_tags($userId, (int) $field['id']) ?: []
+                ));
+
+                continue;
+            }
+
+            $rows = $extraFieldValue->getAllValuesByItemAndField($userId, (int) $field['id']);
+            if (!$rows) {
+                continue;
+            }
+
+            // TAG already returned above; only SELECT_MULTIPLE/CHECKBOX remain here.
+            if (\in_array($valueType, [ExtraField::FIELD_TYPE_SELECT_MULTIPLE, ExtraField::FIELD_TYPE_CHECKBOX], true)) {
+                $values[$variable] = array_column($rows, 'field_value');
+
+                continue;
+            }
+
+            $fieldValue = (string) $rows[0]['field_value'];
+
+            // GEOLOCALIZATION(_COORDINATES): saved as "<address>::<lat,lng>"
+            // (or just "<address>" if no coordinates were ever set).
+            if (\in_array($valueType, [ExtraField::FIELD_TYPE_GEOLOCALIZATION, ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES], true)) {
+                $values[$variable] = array_pad(explode('::', $fieldValue, 2), 2, '');
+
+                continue;
+            }
+
+            // DOUBLE_SELECT / SELECT_WITH_TEXT_FIELD: saved as "<first>::<second>".
+            if (\in_array($valueType, [ExtraField::FIELD_TYPE_DOUBLE_SELECT, ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD], true)) {
+                $values[$variable] = array_pad(explode('::', $fieldValue, 2), 3, '');
+
+                continue;
+            }
+
+            // TRIPLE_SELECT: saved as "<level1>;<level2>;<level3>".
+            if (ExtraField::FIELD_TYPE_TRIPLE_SELECT === $valueType) {
+                $values[$variable] = array_pad(explode(';', $fieldValue, 3), 3, '');
+
+                continue;
+            }
+
+            // FILE_IMAGE/FILE: field_value is just a "1" marker -- the real,
+            // usable value is the asset's resolved URL.
+            if (\in_array($valueType, $fileValueTypes, true)) {
+                $url = '';
+                $assetId = $rows[0]['asset_id'] ?? null;
+                $asset = $assetId ? $this->assetRepository->find($assetId) : null;
+                if ($asset) {
+                    $url = $this->assetRepository->getAssetUrl($asset);
+                }
+                $values[$variable] = $url;
+
+                continue;
+            }
+
+            // DURATION: stored as raw integer seconds, displayed as "hh:mm:ss".
+            if (ExtraField::FIELD_TYPE_DURATION === $valueType) {
+                $values[$variable] = is_numeric($fieldValue) ? self::secondsToDuration((int) $fieldValue) : '';
+
+                continue;
+            }
+
+            $values[$variable] = $fieldValue;
         }
 
         return $values;

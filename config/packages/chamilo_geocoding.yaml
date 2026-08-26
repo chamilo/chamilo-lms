@@ -1,0 +1,22 @@
+##
+# Address -> coordinates fallback for the "Geolocalization" extra field type.
+#
+# Chamilo has no bundled Google Maps geocoding UI; when GOOGLE_MAPS_API_KEY
+# (see config/packages/oh_google_map_form_type.yaml) is not configured,
+# admins can opt into OpenStreetMap's free Nominatim API instead. Its public
+# instance is shared and its usage policy caps requests at 1/second —
+# NominatimRateLimiter enforces this platform-wide through a lock file
+# (var/nominatim-geocode-request.lock). See
+# https://operations.osmfoundation.org/policies/nominatim/
+#
+# Enabled by default. Also disabled automatically whenever GOOGLE_MAPS_API_KEY
+# is set. To disable it for a given environment (e.g. an install that doesn't
+# want to depend on Nominatim's shared instance at all), override the
+# parameter below in that environment's own config, e.g.
+# config/packages/prod/chamilo_geocoding.yaml:
+#   parameters:
+#       chamilo.geocoding.nominatim_enabled: false
+##
+
+parameters:
+    chamilo.geocoding.nominatim_enabled: true

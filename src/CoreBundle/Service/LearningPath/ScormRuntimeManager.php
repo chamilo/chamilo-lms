@@ -633,11 +633,21 @@ final readonly class ScormRuntimeManager
             ) {
                 $status = $this->resolveMasteryStatus($item, $rawScore, $scaledScore) ?? $status;
             }
-        } elseif ($this->shouldFinalizeWithoutStatus($terminated, $reason)
-            && !$statusWasSet
-            && !\in_array($status, ['completed', 'passed', 'failed', 'browsed', 'incomplete'], true)
-        ) {
-            $status = $this->resolveMasteryStatus($item, $rawScore, null) ?? 'completed';
+        } else {
+            $completeIncompleteOnLeave = 'incomplete' === $status
+                && $this->isTruthy(
+                    $this->settingsManager->getSetting('lp.scorm_complete_on_leave_when_incomplete', true),
+                );
+
+            if ($this->shouldFinalizeWithoutStatus($terminated, $reason)
+                && !$statusWasSet
+                && (
+                    !\in_array($status, ['completed', 'passed', 'failed', 'browsed', 'incomplete'], true)
+                    || $completeIncompleteOnLeave
+                )
+            ) {
+                $status = $this->resolveMasteryStatus($item, $rawScore, null) ?? 'completed';
+            }
         }
 
         if ('' !== $status && 'unknown' !== $status) {

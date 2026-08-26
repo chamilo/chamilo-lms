@@ -150,6 +150,38 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         return $this->buildGlobalResponse($operation, $question, $course, $session);
     }
 
+    /**
+     * Validate a question payload for trusted internal callers that already
+     * resolved course ownership and AccessUrl scope.
+     */
+    public function validateProgrammaticCreate(CQuiz $quiz, ExerciseQuestionEditor $data): void
+    {
+        $this->assertQuestionTypeAllowedByFeedback($quiz, (int) $data->type);
+        $this->validatePayload($data);
+        $this->validateAnnotationImageOnCreate($data, true);
+        $this->validateHotspotImageOnCreate($data, true);
+        $this->validateOnlyofficeTemplateOnCreate($data, true);
+    }
+
+    /**
+     * Create a question through the same validation and persistence path used
+     * by the Vue editor. Security and course ownership must be checked by the
+     * trusted caller before invoking this method.
+     */
+    public function createProgrammaticQuestion(
+        CQuiz $quiz,
+        ExerciseQuestionEditor $data,
+        Course $course,
+        ?Session $session = null,
+    ): CQuizQuestion {
+        $this->validateProgrammaticCreate($quiz, $data);
+
+        $question = $this->createQuestion($quiz, $data, $course, $session);
+        $this->entityManager->flush();
+
+        return $question;
+    }
+
     private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
     {
         if ($this->isSettingEnabled('lp.force_edit_exercise_in_lp')) {

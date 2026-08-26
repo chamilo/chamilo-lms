@@ -113,11 +113,19 @@
 # - Recipient targeting (choosing specific users instead of "Everyone" in
 #   the announcement form) is enforced independently of the group's own
 #   access level: even a group MEMBER who isn't the chosen recipient gets
-#   the same "You are not allowed to view this announcement." (confirmed
-#   live). The access-denied message itself is no longer the bare word
-#   "not allowed" but a full sentence that still CONTAINS that substring
-#   ("You are not allowed to view this announcement."), so the original's
-#   `Then I should see "not allowed"` assertions keep working unchanged.
+#   the same denial (confirmed live).
+#   STALE AS OF 2026-08-23 — the wording below has since CHANGED, and that is
+#   what broke "Check acostea's/fapple's access to group announcements". This
+#   comment used to say the message was "You are not allowed to view this
+#   announcement.", i.e. a full sentence that still CONTAINED the substring
+#   "not allowed", so the original `Then I should see "not allowed"`
+#   assertions kept working. It no longer does: the Vue view now renders
+#   "An error occurred / Access to this resource has been denied. You don't
+#   seem to have the necessary permissions to access it." (verified live —
+#   GET /api/announcement/1?cid=3&gid=1 answers 403 for a non-member, 200 with
+#   full content for a member), which contains no "not allowed" substring at
+#   all. The assertions were updated accordingly; see the note on the acostea
+#   scenario below. Product drift, not a test-authoring error.
 # - The Vue announcement form's recipients field defaults to a removable
 #   "Everyone" chip; targeting a specific user means removing that chip
 #   first, then picking the user from the same multiselect dropdown
@@ -161,6 +169,24 @@
 #   restarted browser process; expected to be a non-issue for real CI,
 #   which launches a fresh browser per file/worker rather than reusing one
 #   across an entire multi-hour local session.
+#
+# @slow-scenario (4-minute budget instead of the default 90s), applied at
+# Feature level because the whole file is heavy, not one outlier: the CI run on
+# ba69565dde8 had 7 of these 24 scenarios over 45s, and the three group-
+# announcement ones at 80s/77s/77s — i.e. 89% of the 90s budget consumed, on a
+# runner that was NOT under parallel load (workers: 1). Every one of them
+# PASSED, so this is pre-emptive: 10 seconds of headroom is not a margin, and a
+# timeout here would present as the announcement UI being broken rather than as
+# a scenario that merely needed longer. Cheap insurance — the tag only raises
+# the ceiling, so nothing gets slower and fast scenarios are unaffected.
+#
+# Why these are inherently slow (not a fixable inefficiency): each announcement
+# scenario walks the full compose flow — open the group, open Announcements,
+# resolve a recipient list that is populated per-group, fill a TinyMCE body,
+# Preview, then Save — and the recipient-list and TinyMCE steps each wait on
+# their own async load. Raising the ceiling is the right fix rather than
+# trimming coverage.
+@slow-scenario
 Feature: Group tool
   In order to use the group tool
   The teachers should be able to create groups
@@ -179,9 +205,9 @@ Feature: Group tool
     # "Delete default category" (right after this one) has nothing to find.
     # Visiting group.php first, before creating "Group category 1", triggers
     # it — confirmed live: both categories coexist afterward.
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
-    And I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
+    And I am on "/main/group/group_category.php?cid=3&sid=0&action=add_category"
     And I wait for the page to be loaded when ready
     When I fill in the following:
       | title | Group category 1 |
@@ -191,7 +217,7 @@ Feature: Group tool
     Then I should not see an error
 
   Scenario: Delete default category
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     Then I should see "Default groups"
     And I should see "Group category 1"
@@ -200,7 +226,7 @@ Feature: Group tool
     Then I should not see "Default groups"
 
   Scenario: Create 5 groups
-    Given I am on "/main/group/group_creation.php?cid=1&sid=0"
+    Given I am on "/main/group/group_creation.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     Then I fill in the following:
       | number_of_groups | 5 |
@@ -230,7 +256,7 @@ Feature: Group tool
     Then I should not see an error
 
   Scenario: Create document folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -244,7 +270,7 @@ Feature: Group tool
     Then I should see "My folder in group"
 
   Scenario: Create document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -259,11 +285,11 @@ Feature: Group tool
       | title | html test |
     And I fill in the active tinymce editor with "My first HTML!!"
     Then I press "Save"
-    And I wait for the page to be loaded when ready
+    And I wait for the page to be loaded
     Then I should see "html test"
 
   Scenario: Upload a document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -283,9 +309,20 @@ Feature: Group tool
   # flake tracked across several files this session — see courseCatalogue.
   # feature's own @skip note for the same pattern). Not yet reproduced/root-
   # caused in isolation. Revisit together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Delete 2 uploaded files
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -301,7 +338,7 @@ Feature: Group tool
     Then I should not see "favicon.ico"
 
   Scenario: Delete directory
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -313,7 +350,7 @@ Feature: Group tool
     Then I should not see "My folder in group"
 
   Scenario: Add fapple to the Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0001"
     And I wait for the page to be loaded when ready
@@ -322,14 +359,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
     Then I should see "Fiona"
 
   Scenario: Add fapple to the Group 0003 not allowed because group category allows 1 user per group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
@@ -338,7 +375,7 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -346,7 +383,7 @@ Feature: Group tool
 
   # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "i.mdi-pencil" icon in the group category header for "Group category 1"
     And I wait for the page to be loaded when ready
@@ -354,14 +391,14 @@ Feature: Group tool
     And I select "10" from "groups_per_user"
     Then I press "Edit"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "i.mdi-pencil" icon in the group category header for "Group category 1"
     And I wait for the page to be loaded when ready
     Then the field "groups_per_user" should have value "10"
 
   Scenario: Add fapple to the Group 0003
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
@@ -369,14 +406,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
     Then I should see "Fiona"
 
   Scenario: Add acostea to the Group 0002
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0002"
     And I wait for the page to be loaded when ready
@@ -384,14 +421,14 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0002"
     And I wait for the page to be loaded when ready
     Then I should see "Andrea"
 
   Scenario: Add fapple and acostea to Group 0005
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Group members']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
@@ -400,7 +437,7 @@ Feature: Group tool
     And I press "group_members_rightSelected"
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0005"
     And I wait for the page to be loaded when ready
@@ -408,42 +445,42 @@ Feature: Group tool
     Then I should see "Andrea"
 
   Scenario: Change Group 0003 settings to make announcements private
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0003"
     And I wait for the page to be loaded when ready
     Then the "announcements_state" radio button with "2" value should be checked
 
   Scenario: Change Group 0004 settings to make it private
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0004"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0004"
     And I wait for the page to be loaded when ready
     Then the "announcements_state" radio button with "2" value should be checked
 
   Scenario: Change Group 0005 settings to make announcements private between users
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
     Then I check the "announcements_state" radio button with "3" value
     Then I press "Save settings"
     And I wait for the page to be loaded when ready
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I click the "a[title='Edit']" icon in the row for "Group 0005"
     And I wait for the page to be loaded when ready
@@ -455,9 +492,20 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for everybody inside Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -484,9 +532,20 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for fapple inside Group 0001
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0001"
     And I wait for the page to be loaded when ready
@@ -516,9 +575,20 @@ Feature: Group tool
   # (now @skip'd) "Check fapple's/acostea's access to group announcements"
   # scenarios depend on. Not yet reproduced/root-caused in isolation. Revisit
   # together with the other @skip'd scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for everybody inside Group 0003 (private)
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -550,9 +620,20 @@ Feature: Group tool
   # everybody/fapple inside Group 0001"/"...0003 (private)" scenarios above —
   # same CI-runner-instability class, not reproduced locally. Revisit
   # together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement for fapple inside Group 0003
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page to be loaded when ready
     And I follow "Group 0003"
     And I wait for the page to be loaded when ready
@@ -604,11 +685,22 @@ Feature: Group tool
   # this scenario's own steps. See this file's header comment for the same
   # class of known-flaky note. Revisit together with the other @skip'd
   # scenarios.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Create an announcement as acostea and send only to fapple
     Given I am not logged
     Then I am logged as "acostea"
-    Given I am on "/main/group/group.php?cid=1&sid=0"
+    Given I am on "/main/group/group.php?cid=3&sid=0"
     And I wait for the page content to settle
     And I follow "Group 0005"
     And I wait for the page content to settle
@@ -680,7 +772,18 @@ Feature: Group tool
   # above it (via the module-level `savedUrls` map, common.steps.ts) — with
   # those @skip'd for their own real CI failures, this has nothing to read
   # back. Revisit together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Check fapple's access to group announcements
     Given I am not logged
     Given I am logged as "fapple"
@@ -705,22 +808,50 @@ Feature: Group tool
   # above it (via the module-level `savedUrls` map, common.steps.ts) — with
   # those @skip'd for their own real CI failures, this has nothing to read
   # back. Revisit together with the other @skip'd scenarios in this file.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: Check acostea's access to group announcements
     Given I am not logged
     Given I am logged as "acostea"
+    # ASSERTION CORRECTED 2026-08-23: was `Then I should see "not allowed"`.
+    # The application is right and the test was wrong. Verified live for acostea
+    # (a member of groups 0002/0005 but NOT 0001/0003) opening the saved
+    # announcement URL: GET /api/announcement/1?cid=3&gid=1 answers 403 and the
+    # Vue view renders "An error occurred / Access to this resource has been
+    # denied. You don't seem to have the necessary permissions to access it." —
+    # a message that never contains the substring "not allowed", so the old
+    # assertion could not pass no matter how long it waited. fapple, who IS a
+    # member, gets 200 and the real content on the identical URL, so the access
+    # control itself works exactly as this scenario intends to prove.
+    #
+    # Note the suite has SEVERAL different denial messages depending on which
+    # mechanism refuses: "You are not allowed" for course/session access via
+    # CidReqListener (see sessionAccess.feature), a redirect to the site root
+    # for AccessDenied on plain navigations, and this resource-permission text
+    # for a denied Vue API resource. They are not interchangeable — assert the
+    # one the mechanism under test actually produces.
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
     And I wait for the page content to settle
-    Then I should see "not allowed"
+    Then I should see "Access to this resource has been denied"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     And I wait for the page content to settle
     And I should see "Announcement description only for fapple Group 0005"

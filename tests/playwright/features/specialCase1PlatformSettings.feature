@@ -1,7 +1,9 @@
 # Ported from tests/behat/features/SpecialCase/newPlatform/SpecialCase1.feature
-# (scenarios "Initial platform searches and basic settings", "Add user extra
-# fields", "Add minimal session extra fields") plus tests/behat/features/
-# SpecialCase/newPlatform/teardown.feature ("Tare Down"). The other two
+# (scenarios "Initial platform searches and basic settings" — since split in
+# two, see the SPLIT POINT comment at "Verify settings that require creating
+# courses and users" — plus "Add user extra fields", "Add minimal session
+# extra fields") plus tests/behat/features/
+# SpecialCase/newPlatform/teardown.feature ("Tear down"). The other two
 # scenarios in the source SpecialCase1.feature file (course/session/exercise/
 # forum/LP/assessment creation) are OUT OF SCOPE here — a separate port
 # covers those; this file only touches platform-wide settings, extra-field
@@ -12,8 +14,8 @@
 # suite's `fullyParallel: false` only serializes scenarios WITHIN a single
 # file (different .feature files still run concurrently across workers, see
 # playwright.config.ts's own extensive comments on this exact class of race).
-# "Tare Down" must run strictly after the 3 settings-mutating scenarios above
-# it — putting all 4 in one file guarantees that ordering without needing the
+# "Tear down" must run strictly after the 4 settings-mutating scenarios above
+# it — putting all 5 in one file guarantees that ordering without needing the
 # generic @settings-* registerSettingsGuard() mechanism (which snapshots/
 # restores a small ad-hoc list rather than mirroring a full, intentional
 # teardown scenario). A real, scripted teardown is more faithful to the
@@ -68,7 +70,7 @@
 #   `admins_can_set_users_pass` once up front (same fix createUser.feature's
 #   "Create a HRM user" already uses) and drops the now-redundant second
 #   round-trip entirely, since the first fill now genuinely works. Restored
-#   to No in "Tare Down" (the original neither needed nor restored this,
+#   to No in "Tear down" (the original neither needed nor restored this,
 #   since its own approach never made the setting necessary).
 # - Third student ("studentthree", used later in scenario 3 for the default-
 #   menu-entry check) is created the same simplified way.
@@ -131,7 +133,7 @@
 #   WorkflowsSettingsSchema.php's ChoiceType) — the source scenario's
 #   "my_sessions" (and the original teardown's "my_courses") are option
 #   VALUES, not labels, and would never match a Playwright
-#   `selectOption({label})` lookup. Fixed both here and in "Tare Down".
+#   `selectOption({label})` lookup. Fixed both here and in "Tear down".
 # - REAL BUG CONFIRMED (not just assumed) in the source's login-lockout
 #   verification (captcha_number_mistakes_to_block_account /
 #   captcha_time_to_block, 6 wrong logins as "acostea"): both settings are
@@ -149,7 +151,7 @@
 #   that logs in as "acostea" (this suite's `fullyParallel: false` only
 #   serializes scenarios within one file, not across files/workers — see
 #   playwright.config.ts's own extensive documentation of this exact class of
-#   race). Both settings are still set here (so "Tare Down" has something
+#   race). Both settings are still set here (so "Tear down" has something
 #   real to reverse and the setting-save path itself is exercised), but the
 #   actual 6-wrong-logins UI simulation is dropped, not blindly ported.
 # - Two verification blocks the ORIGINAL scenario itself already found
@@ -230,7 +232,7 @@
 #   JSON string, saving never validates that referenced field variables
 #   exist, and this suite's own verification of the resulting registration
 #   form is already commented out in the original for an unrelated reason.
-@common @admin @long-scenario
+@common @admin @long-scenario @specialcase1
 Feature: Special admin settings flows (platform searches, extra fields, teardown)
   In order to exercise several admin settings quickly
   As a platform administrator
@@ -307,7 +309,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I am logged as "admin"
     And I wait for the page to be loaded
 
-    Given I am on "/admin/settings/search_settings?keyword=allow_general_certificate"
+    Given I am on "/admin/settings/certificate"
     And I wait for the page to be loaded
     And I select "Yes" from "form_allow_general_certificate"
     And I press "Save settings"
@@ -325,7 +327,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I wait for the page to be loaded
 
     # Active tools on create — toggle every checkbox (round-tripped again,
-    # identically, by "Tare Down" below, so the net effect after the whole
+    # identically, by "Tear down" below, so the net effect after the whole
     # file runs is neutral regardless of the setting's starting state)
     Given I am on "/admin/settings/search_settings?keyword=active_tools_on_create"
     And I wait for the page to be loaded
@@ -432,6 +434,32 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "Save settings"
     And I wait for the page to be loaded
 
+  # SPLIT POINT (2026-08-19) — this used to be the second half of "Initial
+  # platform searches and basic settings" above, one single scenario. That
+  # scenario exceeded the 15-minute @long-scenario budget (see the Before
+  # hook in common.steps.ts) and died partway through, right at the "Force
+  # Edit Course" title fill immediately below: ~100 consecutive settings
+  # toggles, each a full navigate + select + Save + page load, ate the whole
+  # budget before the verification work down here could even start.
+  #
+  # Confirmed it was genuinely the time budget and not a broken selector
+  # before splitting: course_add.php renders exactly ONE name="title" field
+  # (checked live with allow_course_multiple_languages both Yes and No — that
+  # setting, toggled a few steps above, does not multiply the field), so
+  # resolveField() only fell through to its getByLabel() tier because the
+  # page had not loaded within what remained of the budget, not because the
+  # field is missing or ambiguous. Splitting therefore fixes the actual
+  # cause; it is not papering over a selector bug.
+  #
+  # Safe to split at exactly this line: everything above is pure settings
+  # mutation, everything below is verification that needs real courses/users
+  # created first. Scenario order is guaranteed (the config's
+  # `fullyParallel: false` serializes scenarios within one file) and the
+  # settings set above are persisted in the DB, so this scenario still sees
+  # force_edit_exercise_in_lp=Yes et al. The file's Background re-logs in as
+  # the platform administrator before each scenario, so no extra setup step
+  # is needed here either.
+  Scenario: Verify settings that require creating courses and users
     # Verify force_edit_exercise_in_lp: exercise added to LP remains editable
     Given I am on "/main/admin/course_add.php"
     And I wait for the page to be loaded
@@ -1247,25 +1275,25 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
   # Skipping this scenario would silently break a DIFFERENT, unrelated file
   # instead of just losing this one's own coverage — worse than the crash
   # itself. Left running. One real, separate, verified fix DID come out of
-  # investigating this crash: Tare Down (below) used to reset the global
+  # investigating this crash: Tear down (below) used to reset the global
   # `cookie_warning` and `hide_legal_accept_checkbox` settings as its very
-  # last steps, ~230 steps in — if Tare Down itself ever failed to reach the
+  # last steps, ~230 steps in — if Tear down itself ever failed to reach the
   # end (plausible under the same CI load), the cookie-consent banner this
   # scenario turns on would stay stuck rendering on every page for the rest
   # of the CI run, plausibly explaining unrelated-looking Save-button click
-  # timeouts seen elsewhere in the same run (e.g. toolDocument.feature). Tare
-  # Down now resets both first, before anything else, so that specific
+  # timeouts seen elsewhere in the same run (e.g. toolDocument.feature). Tear
+  # down now resets both first, before anything else, so that specific
   # collateral damage can no longer happen regardless of this scenario's own
   # outcome. Its "Order By Id Test Session" cleanup step was also made
   # tolerant of the session not existing (see "I delete the session ... if
   # present" in common.steps.ts), both as a safety net if this scenario ever
   # does need to be skipped in the future, and because a crash INSIDE this
-  # scenario (before the session gets created) would otherwise make Tare
-  # Down fail too, compounding a single crash into two reported failures.
+  # scenario (before the session gets created) would otherwise make Tear
+  # down fail too, compounding a single crash into two reported failures.
   #
   # @skip 2026-08-06: recurring real-CI-only crash across multiple runs
   # ("browser has been closed" mid-scenario), never reliably reproducible
-  # locally. A mitigation was already applied (Tare Down's critical setting
+  # locally. A mitigation was already applied (Tear down's critical setting
   # resets moved to run first, so a crash here can no longer leave settings
   # stuck platform-wide for the rest of a CI run — see that scenario's own
   # header comment), but the crash itself remains unresolved. Deferred per
@@ -1274,7 +1302,6 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
   # feature (which depends on the session extra fields this scenario
   # creates) is itself already fully @skip'd, so no other file is currently
   # affected by this one being skipped too.
-  @skip
   Scenario: Add minimal session extra fields
     # 1) Je commence mon apprentissage sur la plateforme le (Date)
     Given I am on "/main/admin/extra_fields.php?type=session&action=add"
@@ -1964,7 +1991,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I wait for the page to be loaded
     Then I should not see an error
 
-  Scenario: Tare Down
+  Scenario: Tear down
     Given I am a platform administrator
     And I wait for the page to be loaded
 

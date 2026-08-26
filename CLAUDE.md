@@ -129,16 +129,22 @@ It is possible to test the application through the web, as admin, by calling loc
 
 ### Playwright (browser automation tests)
 
-The browser-driven test suite is migrating from **Behat** to **Playwright**, using `playwright-bdd` so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. **Write new coverage here, not in Behat.**
+The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. It replaced Behat, which has been removed entirely (see the note at the end of this section). This is the only browser-driven suite: all new coverage goes here.
 
 - Feature files: `tests/playwright/features/*.feature` (organised by domain where it matters, e.g. `admin/`).
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
 - Config: `tests/playwright/playwright.config.ts`.
 
-Run the full suite (excludes the install/seed scenarios below):
+Run the main suite (excludes the install/seed scenarios below, and SpecialCase1):
 ```bash
 yarn test:playwright
 ```
+
+SpecialCase1 (`specialCase1PlatformSettings.feature` + `specialCase1Sessions.feature`, both tagged `@specialcase1`) runs **separately and single-threaded**, and is deliberately excluded from the command above:
+```bash
+yarn test:playwright:specialcase1
+```
+Three reasons it cannot share the parallel pool: `specialCase1Sessions` depends on session extra fields and a platform setting that `specialCase1PlatformSettings` creates, and only `--workers=1` plus `fullyParallel: false` guarantees the file order that satisfies that; it mutates ~100 platform settings, several of them globally UI-visible on every page (a cookie banner that intercepts clicks, header changes), which corrupts any file running concurrently; and its scenarios are `@long-scenario` (15-minute budget), which starves other files of workers. CI runs it as its own step after the main batch.
 
 Run/debug interactively:
 ```bash
@@ -162,7 +168,7 @@ node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
 **When to write Playwright tests — mandatory rule:**
 Every new feature and every new interface added to an existing feature **must** be accompanied by a `.feature` file (or additions to an existing one) that covers all user interactions: create, read, edit, and delete at minimum. The `add-feature-test` skill (`/add-feature-test`) automates this — it explores the live UI to confirm real selectors before writing steps, since static code reading gets them wrong often enough to matter.
 
-- Place feature files in `tests/playwright/features/`, mirroring `tests/behat/features/<domain>/` where a domain subfolder already exists.
+- Place feature files in `tests/playwright/features/`, using a domain subfolder (e.g. `admin/`) where one already exists for that area.
 - Form inputs in Vue dialogs/forms **must** have a `name` attribute so steps can target them by name.
 - If an entity or page is accessible to more than one role, **run all scenarios once per role that has access**. Do not test only as admin if other roles can also interact with the feature. For access-restricted pages (e.g. admin-only), add a scenario verifying that non-privileged roles are denied access (redirected or do not see the management UI).
 - Login steps available: `I am a platform administrator` (admin), `I am a teacher` (mmosquera), `I am a student` (acostea), `I am an HR manager` (ptook), `I am a student boss` (abaggins), `I am an invitee` (bproudfoot), `I am logged as "<username>"` (any other account, e.g. one just created in the scenario), `I am not logged` (explicit logout). Add a new named step to `common.steps.ts` whenever a test user with non-standard credentials is needed.
@@ -171,7 +177,9 @@ Every new feature and every new interface added to an existing feature **must** 
   1. **Clicking into a client-side route change (`router.push`/`<router-link>`) never fires a real navigation event.** `"wait ... for the page to be loaded"` (`page.waitForLoadState("domcontentloaded"/"networkidle")`) resolves immediately regardless of whether the SPA has actually swapped routes — a script that clicks an edit-row icon then immediately checks `page.url()` after that wait can still show the OLD page's URL. Worse, if the old and new page happen to share a field `name` (e.g. a list page's own "Advanced search" filter having the same `name="email"` as the destination edit form), the next `"I fill in ..."` step silently fills the WRONG page's field instead of erroring. Fix: wait for an element unique to the destination page instead — `"I wait up to N seconds for the element {string} to appear"` with a selector/text only the target page has.
   2. **A component whose `onMounted` async-fetches existing data (any edit form) has a fill-before-load race.** The static template (headings, labels) renders immediately on mount, before the fetch resolves; if a test fills a field in that window, the fetch's `.then()` handler overwrites the typed value with the loaded one moments later, and the eventual save submits the ORIGINAL data — no error, because nothing was actually wrong with it. Symptom: a "wrong value should be rejected" scenario times out waiting for a validation message that never appears, because the request that went out was valid. Confirmed by inspecting the actual submitted `multipart/form-data` in the trace's network log, not by re-reading the frontend code. Fix: assert the field already holds its expected LOADED value (`"the field {string} should have value {string}"`) before overwriting it — this doubles as proof the load finished.
 
-**Behat is frozen, not dropped yet.** `tests/behat/features/` (shared steps in `tests/behat/features/bootstrap/FeatureContext.php`) and `.github/workflows/behat.yml` still exist and still run in CI — they're kept passing as-is only until Playwright reaches full scenario parity, at which point Behat is deleted entirely. `behat.yml` is deliberately **not** kept in sync with `playwright.yml` (new PHP versions, CI steps, dependency bumps) — don't mirror changes into it unless explicitly asked. A same-named Behat file is still useful as a **hint** of intended scenarios when porting or writing new coverage, but never as a source of truth for selectors — field names, button labels, and dialog types all rot; verify everything against the live app.
+**Behat is gone.** `tests/behat/`, `.github/workflows/behat.yml` and the `behat/*` composer dependencies have all been deleted — Playwright is the only browser-driven suite. Do not add Behat scenarios, and do not restore the directory.
+
+The old scenarios remain in git history and are still useful when writing new coverage for an area Behat once covered: `git show 98c77757ea6:tests/behat/features/<name>.feature`, or `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the full list (84 files at that commit). Treat anything found there as a **hint** of intended scenarios — never as a source of truth for selectors, since field names, button labels and dialog types have all rotted since. Verify everything against the live app.
 
 
 ## Architecture

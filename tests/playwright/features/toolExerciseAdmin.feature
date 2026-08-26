@@ -394,16 +394,28 @@ Feature: Exercise tool
     And I wait for the page content to settle
     Then I should see "Definition of oligarchy"
 
+  @slow-scenario
   Scenario: Try exercise "Exercise 1"
-    Given I am a student
+    # TEMP has no students on a fresh install. course_user_registration.feature
+    # also subscribes acostea, but that file runs in a different worker with
+    # no ordering guarantee — a real CI run bounced the student to /login
+    # with "You're not allowed in this course" before "I follow Tests".
+    # Subscribe here so this scenario is self-contained; Register is a no-op
+    # if she is already in the course.
+    Given I am a platform administrator
+    And I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait for the page to be loaded
+    Given I am not logged
+    And I am a student
     And I wait for the page to be loaded
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
-    And I follow "Tests"
+    And I follow the course tool "Tests"
     And I wait for the page content to settle
     And I follow "Exercise 1"
-    And I wait for the page content to settle
-    And I press "Start test"
+    And I start the exercise
     And I wait for the page content to settle
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
@@ -454,14 +466,17 @@ Feature: Exercise tool
     And I should see "85 / 105"
 
   Scenario: Teacher checks exercise results
-    Given I am on course "TEMP" homepage
+    Given I am a platform administrator
     And I wait for the page to be loaded
-    And I follow "Tests"
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Tests"
     And I wait for the page content to settle
     And I click the "[title='Results']" icon in the row for "Exercise 1"
     And I wait for the page content to settle
-    Then I should see "Learner score"
+    Then I should not see "No attempts found"
     And I should see "Attempts: 1"
+    And I should see "Costea"
     And I should see "85 / 105"
 
   Scenario: Delete an exercise

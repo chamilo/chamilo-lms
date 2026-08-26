@@ -7,7 +7,7 @@
 #   feature's own "skilldis"-is-id-4 assumption (see the original's own
 #   comments, kept verbatim below) holds as long as skill1/skill11/skilldis
 #   are the first 3 skills created after Root, same category of assumption
-#   as the documented cid=1/TEMP policy elsewhere in this suite.
+#   as the documented cid=3/TEMP policy elsewhere in this suite.
 # - The original's last scenario ("Set a badge to a skill") is NOT ported —
 #   its own comment doubly flags it ("need to be completed once the
 #   funcionality is ready" + "a mettre en commentaire", i.e. "should be

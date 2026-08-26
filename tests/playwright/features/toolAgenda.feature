@@ -60,7 +60,7 @@ Feature: Agenda tool
     Then I should not see an error
 
   Scenario: Create an event inside course TEMP
-    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
+    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=3"
     And I wait for the page to be loaded
     When I fill in the following:
       | title | Event in course |

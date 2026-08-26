@@ -69,10 +69,10 @@ the reference examples for this.
    **already exists**, this is an EXTEND task: read it fully, understand what
    it already covers, and only add what's missing (new scenarios, new roles,
    edge cases) rather than starting over or duplicating scenarios.
-2. The deleted Behat suite — `tests/playwright/PORTING-TODO.md` lists what it
-   covered and Playwright still doesn't, and the files themselves are in git
-   history (`git show 98c77757ea6:tests/behat/features/<name>.feature`;
-   `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the list). If a
+2. The deleted Behat suite — the files are in git history
+   (`git show 98c77757ea6:tests/behat/features/<name>.feature`;
+   `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the list, 84 files
+   at that commit). If a
    same-topic file existed there, it's a **hint** of intended scenarios (what
    create/edit/delete flows the original author thought mattered) — never a
    source of truth for selectors. Every field name, button label, and dialog

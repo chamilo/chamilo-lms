@@ -81,6 +81,15 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $user = $this->getCurrentUser();
         $canManage = $this->isAllowedToEditHelper->check(coach: true);
 
+        // Overview is a read-only payload; release the native session file
+        // lock so sibling XHRs from the same browser are not blocked. Do not
+        // call Symfony Session::save() here — that can start a second empty
+        // session in the same request and the kernel then persists it over
+        // the real login ("Your session details have been lost").
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
+        }
+
         if (!$canManage && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to view exercises in this context.');
         }

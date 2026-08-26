@@ -288,6 +288,7 @@ onMounted(() => {
         <BaseInputText
           id="access-url-url"
           v-model="form.url"
+          name="url"
           :label="t('URL')"
           type="url"
         />

@@ -8,6 +8,21 @@ Feature: Multi URLs admin dashboard
   # Analytics, login/intrusion monitoring and export are deferred follow-ups,
   # not covered here. Gated by ROLE_GLOBAL_ADMIN, not the weaker ROLE_ADMIN.
 
+  # The installer writes access_url.id=1 as http://localhost/ (the host the
+  # web installer was browsed on). Admins then change that row to the real
+  # public URL via /admin/urls/manage. This file's detail-page scenarios
+  # assert the displayed URL, so that change has to happen here, once,
+  # before any of those assertions — otherwise they look for
+  # http://my.chamilo.net/ (or whatever BASE_URL is) and time out on the
+  # installer's leftover http://localhost/. Idempotent if already updated.
+  Scenario: The default access URL is the current site URL
+    Given I am a platform administrator
+    And I set the default access URL to the current site URL
+    And I am on "/admin/urls"
+    And wait for the page to be loaded
+    Then I should see the current access URL
+    And I should not see an error
+
   Scenario: The dashboard lists at least one URL
     Given I am a platform administrator
     And I am on "/admin/urls"
@@ -101,16 +116,22 @@ Feature: Multi URLs admin dashboard
     # The install has 61 users sorted by lastname, so "John Doe" is not on
     # the User directory's default first page — searching narrows it down
     # to guarantee the row (and its Information icon) are actually visible.
+    #
+    # Email is actionInstall.feature's own emailForm value (admin@example.com),
+    # NOT the older installer default webmaster@localhost.localdomain this
+    # file originally asserted — that string is never written by the current
+    # install scenario, so a real CI run timed out looking for it while the
+    # row already showed admin@example.com.
     Given I am a platform administrator
     And I am on "/admin/urls"
     And wait for the page to be loaded
     Then I should see "Email"
     And I fill in "usersSearch" with "admin"
     And I press "Search"
-    Then I should see "webmaster@localhost.localdomain"
+    Then I should see "admin@example.com"
     And I click the "button[aria-label='Information']" icon in the row for "John Doe"
     Then I should see "User details"
-    And I should see "webmaster@localhost.localdomain"
+    And I should see "admin@example.com"
 
   Scenario: A course's info modal shows its URL distribution
     Given I am a platform administrator
@@ -121,10 +142,10 @@ Feature: Multi URLs admin dashboard
     And I should see "AIACT"
 
   Scenario: The View details icon opens the per-URL user detail page
-    # admin belongs to both URLs in this install and has courses attributed
-    # to each, so this is the one user guaranteed to exercise more than one
-    # URL block on the detail page (verified live: "AI Act" is the only
-    # course shared between http://my.chamilo.net/ and http://your.chamilo.net/).
+    # A second hostname (your.chamilo.net) is not created by the installer
+    # and is not added here: enabling multiple URLs would leak into every
+    # other parallel worker (users/courses become URL-scoped). The detail
+    # page is still asserted against the (now-updated) default URL.
     Given I am a platform administrator
     And I am on "/admin/urls"
     And wait for the page to be loaded
@@ -135,15 +156,11 @@ Feature: Multi URLs admin dashboard
     Then the URL should contain "/admin/urls/users/"
     And I should see "User details"
     And I should see "John Doe"
-    And I should see "http://my.chamilo.net/"
-    And I should see "http://your.chamilo.net/"
+    And I should see the current access URL
     And I should see "AI Act"
     And I should not see an error
 
   Scenario: The View details icon opens the per-course detail page
-    # "AI Act" is the only course shared between both URLs in this install
-    # (verified live), so it's the one course guaranteed to exercise more
-    # than one URL block on the detail page.
     Given I am a platform administrator
     And I am on "/admin/urls"
     And wait for the page to be loaded
@@ -152,8 +169,7 @@ Feature: Multi URLs admin dashboard
     Then the URL should contain "/admin/urls/courses/"
     And I should see "Course details"
     And I should see "AI Act"
-    And I should see "http://my.chamilo.net/"
-    And I should see "http://your.chamilo.net/"
+    And I should see the current access URL
     And I should see "Direct enrollment belongs to the course as a whole"
     And I should not see an error
 

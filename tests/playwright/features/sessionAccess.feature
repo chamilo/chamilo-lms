@@ -52,7 +52,7 @@
 #   underscore; course_add.php's code generation strips it). That scenario
 #   is NOT part of the dedicated "Seed test course" CI step (which only
 #   covers plain "TEMP") — same cross-file race gotcha already fixed once
-#   for TEMP/cid=1 (course_user_registration.feature). Needs the same fix:
+#   for TEMP/cid=3 (course_user_registration.feature). Needs the same fix:
 #   a dedicated "Seed private course" CI step before the main parallel batch
 #   (see playwright.yml / package.json — added alongside this feature).
 # - session_list.php (used by the original's two "Delete session" scenarios)
@@ -189,7 +189,9 @@ Feature: Session access
   #   Round 1: reproduced this single scenario in isolation -> passed cleanly.
   #   Read CourseVoter/CourseAccessResolver end to end -> access logic is
   #   correct. Queried the live DB directly -> ywarnier has NO course_rel_user
-  #   row for TEMPPRIVATE (cid=2) that would grant access.
+  #   row for TEMPPRIVATE (cid=4 since the installer's two demo courses took
+  #   cid=1/cid=2; was cid=2 when this note was first written) that would
+  #   grant access.
   #   Round 2 (this attempt): ran the FULL feature file (all 10 scenarios,
   #   `sessionAccess.feature.spec.js`) instead of just this scenario, in case
   #   an earlier scenario's leftover state (session creation, prior access
@@ -209,11 +211,53 @@ Feature: Session access
   #   preference for deferring over a third chase, `@skip`-ing just this
   #   scenario (not the whole file — its sibling scenarios above/below must
   #   keep running). Revisit if a future CI trace narrows the cause further.
-  @skip
+  # RE-ENABLED 2026-08-22. The @skip note kept below is preserved as history,
+  # but its premise no longer holds: every one of those deferrals attributed the
+  # failure to "concurrent-worker-load" / "real-CI-only" flakiness whose
+  # suspected source was specialCase1PlatformSettings.feature mutating ~100
+  # global platform settings (notably cookie_warning, a fixed bottom-of-viewport
+  # overlay that intercepts pointer events) and its @long-scenario tests
+  # starving the shared worker pool. SpecialCase1 has since been moved OUT of the
+  # parallel batch into its own sequential CI step (@specialcase1 tag, see
+  # package.json + playwright.yml), which removes that interference at the
+  # source. Direct evidence it was real: toolAssessments.feature's five
+  # NON-skipped scenarios were failing in CI before that change and pass after
+  # it. Re-enabled to be judged on real results instead of staying dark.
   Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
-    And I am on "/course/2/home?sid=2000&gid=0"
+    # ROOT-CAUSED 2026-08-23. This used to navigate to the hardcoded path
+    # "/course/2/home?sid=2000&gid=0" and it was simply the WRONG COURSE.
+    #
+    # Course 2 has not been TEMPPRIVATE since the installer started shipping
+    # demo courses: DemoCoursesFixtures now creates "AI Act" (1) and "Using
+    # Chamilo" (2) before any suite seeding, so TEMPPRIVATE moved to 4. Exactly
+    # the same shift that forced the suite-wide cid=1 -> cid=3 migration, but in
+    # PATH form ("/course/N/home"), which that pass did not cover.
+    #
+    # Why it failed rather than just testing the wrong thing: visibility. The
+    # demo course "Using Chamilo" is visibility=2 (OPEN_PLATFORM), so ANY
+    # logged-in user may enter it and access is legitimately GRANTED — the
+    # scenario then failed asserting a denial that correctly never happened.
+    # TEMPPRIVATE is visibility=1 (PRIVATE), where the denial is real. Measured
+    # all three as ywarnier:
+    #   /course/2/home?sid=2000                     -> stays on the course (granted)
+    #   /course/4/home?sid=2000                     -> 302 to "/"  (denied)
+    #   redirect.php?cidReq=TEMPPRIVATE&sid=2000    -> 302 to "/"  (denied)
+    #
+    # This also explains the "never reproduced locally" note above, which is now
+    # obsolete: on the older long-lived dev box course 2 genuinely WAS
+    # TEMPPRIVATE, so the denial happened and the scenario passed. Only a fresh
+    # install — i.e. every CI run — shifts the ids. The comment above even
+    # records the symptom verbatim ("lands GRANTED on /course/2/home"); the
+    # missing step was noticing that course 2 was no longer the private course.
+    #
+    # Addressed by course CODE rather than by id 4, deliberately: hardcoding an
+    # id is what broke this in the first place, and course_home/redirect.php
+    # resolves the code while still honouring the bogus sid, so it exercises the
+    # identical CidReqListener branch (a session id that does not resolve) with
+    # nothing left to drift.
+    And I am on "/main/course_home/redirect.php?cidReq=TEMPPRIVATE&sid=2000"
     And wait for the page to be loaded when ready
     Then the URL should be the site root
 

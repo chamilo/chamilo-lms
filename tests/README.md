@@ -35,8 +35,16 @@ compiled specs before trusting a run:
 node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
 ```
 
-Scenarios that the old Behat suite covered and Playwright does not yet are listed in
-`playwright/PORTING-TODO.md`.
+The old Behat suite has been removed. Its scenarios remain in git history and are worth
+consulting when adding coverage for an area it once tested:
+
+```
+git ls-tree -r --name-only 98c77757ea6 tests/behat        # the 84 files it had
+git show 98c77757ea6:tests/behat/features/<name>.feature  # read one
+```
+
+Treat those as a hint of which flows were considered worth testing — never as a source of
+truth for selectors, which have rotted since. Verify against the live app.
 
 ## PHPUnit
 

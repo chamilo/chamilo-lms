@@ -4,9 +4,9 @@
 #   field bound via window.setContentFromEditor (same helper career.feature
 #   uses), handled by the existing "I fill in editor field ... with ..." step.
 # - "Invite a friend to group" originally hardcoded social group id "1",
-#   same category of assumption as the documented cid=1 policy — but a REAL
+#   same category of assumption as the documented cid=3 policy — but a REAL
 #   CI run proved this one false even on a genuinely fresh install: unlike
-#   cid=1/TEMP (which gets its own dedicated, sequential "Seed test course"
+#   cid=3/TEMP (which gets its own dedicated, sequential "Seed test course"
 #   CI step specifically so no other file can race it), usergroup rows have
 #   no such protection, and class.feature (a DIFFERENT file, running
 #   concurrently in a different worker) also inserts rows into that same

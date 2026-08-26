@@ -36,7 +36,22 @@ Feature: File integrity monitoring
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "File integrity"
-    And I should see "Actions"
+    # "Run a scan now" rather than the generic "Actions" this used to assert.
+    # `I should see` is a getByText() substring match and getByText is
+    # CASE-INSENSITIVE, so "Actions" matches far more than the intended column
+    # header: this page lists file paths from the integrity report, and
+    # "tests/CoreBundle/Service/Survey/TrainingSatisfactionSurveyCreatorTest.php"
+    # contains "...Satisfaction'S'urvey..." -> "actionsurvey" -> "actions".
+    # That `<li>` sits before the header in DOM order AND is inside a collapsed
+    # (hidden) list, so `.first()` resolved to it and the visibility check
+    # failed with `unexpected value "hidden"` — reproduced locally.
+    # It happens to pass on CI today only because the report there does not
+    # list that path, i.e. it is latent rather than fixed.
+    # "Run a scan now" is the page's real admin-only action, is what the
+    # non-admin scenario below already keys on, and is long/specific enough not
+    # to collide with arbitrary file paths. Same substring-match trap already
+    # documented for "TEMP" matching "template" elsewhere in this suite.
+    And I should see "Run a scan now"
 
   Scenario: Global administrator can run a scan on demand
     Given I am on "/admin/security/file-integrity"

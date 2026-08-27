@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AccessUrlHierarchyHelper;
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
@@ -54,16 +53,6 @@ class AccessUrlManageController extends AbstractController
         private readonly UserHelper $userHelper,
     ) {}
 
-    private function currentUser(): User
-    {
-        $user = $this->userHelper->getCurrent();
-        if (null === $user) {
-            throw $this->createAccessDeniedException();
-        }
-
-        return $user;
-    }
-
     #[Route('', name: 'admin_access_urls_manage_data', methods: ['GET'])]
     public function list(): JsonResponse
     {
@@ -71,7 +60,7 @@ class AccessUrlManageController extends AbstractController
             session_write_close();
         }
 
-        $currentUser = $this->currentUser();
+        $currentUser = $this->userHelper->getCurrent();
         $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($currentUser);
 
         $urlQb = $this->em->createQueryBuilder()
@@ -89,7 +78,7 @@ class AccessUrlManageController extends AbstractController
         // alone (see AccessUrlHierarchyHelper).
         $orderedUrls = $this->accessUrlHierarchy->order($urls);
 
-        $currentUserId = (int) $currentUser->getId();
+        $currentUserId = (int) $currentUser?->getId();
 
         $registeredUrlIds = [];
         if ($currentUserId > 0) {
@@ -139,7 +128,7 @@ class AccessUrlManageController extends AbstractController
     #[Route('', name: 'admin_access_urls_manage_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+        if (!$this->accessUrlScope->isUnrestricted($this->userHelper->getCurrent())) {
             throw $this->createAccessDeniedException('Only an unrestricted global admin may create a new access URL.');
         }
 
@@ -201,7 +190,7 @@ class AccessUrlManageController extends AbstractController
     #[Route('/{id}', name: 'admin_access_urls_manage_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function update(int $id, Request $request): JsonResponse
     {
-        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+        if (!$this->accessUrlScope->isUnrestricted($this->userHelper->getCurrent())) {
             throw $this->createAccessDeniedException('Only an unrestricted global admin may edit an access URL.');
         }
 
@@ -264,8 +253,8 @@ class AccessUrlManageController extends AbstractController
     #[Route('/register-admin', name: 'admin_access_urls_manage_register_admin', methods: ['POST'])]
     public function registerAdmin(): JsonResponse
     {
-        $currentUser = $this->currentUser();
-        $currentUserId = (int) $currentUser->getId();
+        $currentUser = $this->userHelper->getCurrent();
+        $currentUserId = (int) $currentUser?->getId();
         if ($currentUserId <= 0) {
             throw $this->createAccessDeniedException();
         }
@@ -305,7 +294,7 @@ class AccessUrlManageController extends AbstractController
             return $this->json(['error' => 'The default URL cannot be disabled.'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$this->accessUrlScope->isUnrestricted($this->currentUser())) {
+        if (!$this->accessUrlScope->isUnrestricted($this->userHelper->getCurrent())) {
             throw $this->createAccessDeniedException('Only an unrestricted global admin may lock or unlock an access URL.');
         }
 

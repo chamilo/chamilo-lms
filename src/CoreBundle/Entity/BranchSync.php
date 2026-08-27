@@ -219,12 +219,7 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * Get branchIp.
-     *
-     * @return string
-     */
-    public function getBranchIp()
+    public function getBranchIp(): ?string
     {
         return $this->branchIp;
     }
@@ -266,132 +261,72 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * Get dwnSpeed.
-     *
-     * @return int
-     */
-    public function getDwnSpeed()
+    public function getDwnSpeed(): ?int
     {
         return $this->dwnSpeed;
     }
 
-    /**
-     * Set dwnSpeed.
-     *
-     * @return BranchSync
-     */
-    public function setDwnSpeed(?int $dwnSpeed)
+    public function setDwnSpeed(?int $dwnSpeed): self
     {
         $this->dwnSpeed = $dwnSpeed;
 
         return $this;
     }
 
-    /**
-     * Get upSpeed.
-     *
-     * @return int
-     */
-    public function getUpSpeed()
+    public function getUpSpeed(): ?int
     {
         return $this->upSpeed;
     }
 
-    /**
-     * Set upSpeed.
-     *
-     * @return BranchSync
-     */
-    public function setUpSpeed(?int $upSpeed)
+    public function setUpSpeed(?int $upSpeed): self
     {
         $this->upSpeed = $upSpeed;
 
         return $this;
     }
 
-    /**
-     * Get delay.
-     *
-     * @return int
-     */
-    public function getDelay()
+    public function getDelay(): ?int
     {
         return $this->delay;
     }
 
-    /**
-     * Set delay.
-     *
-     * @return BranchSync
-     */
-    public function setDelay(?int $delay)
+    public function setDelay(?int $delay): self
     {
         $this->delay = $delay;
 
         return $this;
     }
 
-    /**
-     * Get adminMail.
-     *
-     * @return string
-     */
-    public function getAdminMail()
+    public function getAdminMail(): ?string
     {
         return $this->adminMail;
     }
 
-    /**
-     * Set adminMail.
-     *
-     * @return BranchSync
-     */
-    public function setAdminMail(?string $adminMail)
+    public function setAdminMail(?string $adminMail): self
     {
         $this->adminMail = $adminMail;
 
         return $this;
     }
 
-    /**
-     * Get adminName.
-     *
-     * @return string
-     */
-    public function getAdminName()
+    public function getAdminName(): ?string
     {
         return $this->adminName;
     }
 
-    /**
-     * Set adminName.
-     *
-     * @return BranchSync
-     */
-    public function setAdminName(?string $adminName)
+    public function setAdminName(?string $adminName): self
     {
         $this->adminName = $adminName;
 
         return $this;
     }
 
-    /**
-     * Get adminPhone.
-     *
-     * @return string
-     */
-    public function getAdminPhone()
+    public function getAdminPhone(): ?string
     {
         return $this->adminPhone;
     }
 
-    /**
-     * Set adminPhone.
-     *
-     * @return BranchSync
-     */
-    public function setAdminPhone(?string $adminPhone)
+    public function setAdminPhone(?string $adminPhone): self
     {
         $this->adminPhone = $adminPhone;
 

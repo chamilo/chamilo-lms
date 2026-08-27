@@ -78,6 +78,13 @@
           :placeholder="t('e.g. 2.3522')"
         />
 
+        <BaseLeafletMap
+          draggable
+          :latitude="parsedLatitude"
+          :longitude="parsedLongitude"
+          @marker-moved="onMarkerMoved"
+        />
+
         <BaseInputNumber
           id="item_dwn_speed"
           v-model="v$.item.dwnSpeed.$model"
@@ -183,6 +190,7 @@ import { computed, onMounted, ref, watch, nextTick } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
+import BaseLeafletMap from "../basecomponents/BaseLeafletMap.vue"
 import useVuelidate from "@vuelidate/core"
 import { required, maxLength, email, decimal, integer, between } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
@@ -196,19 +204,25 @@ const emit = defineEmits(["update:modelValue", "submit"])
 
 const { t } = useI18n()
 
-const parentOptions = ref([])
+const allBranches = ref([])
 const showAdvanced = ref(false)
 
 onMounted(async () => {
   try {
     const { items } = await baseService.getCollection("/api/branches")
-    parentOptions.value = items
-      .filter((b) => !props.modelValue["@id"] || b["@id"] !== props.modelValue["@id"])
-      .map((b) => ({ name: b.title, id: b["@id"] }))
+    allBranches.value = items
   } catch (e) {
     console.error("Failed to load branches", e)
   }
 })
+
+// A branch can't be its own parent. Computed (not filtered once in
+// onMounted) because on the edit page props.modelValue["@id"] is still
+// unset when allBranches loads -- Update.vue fetches the item separately
+// and it can resolve after this component has already mounted.
+const parentOptions = computed(() =>
+  allBranches.value.filter((b) => b["@id"] !== props.modelValue["@id"]).map((b) => ({ name: b.title, id: b["@id"] })),
+)
 
 const advancedFields = ["branchIp", "latitude", "longitude", "dwnSpeed", "upSpeed", "delay", "adminMail", "adminName", "adminPhone", "parent"]
 
@@ -235,6 +249,20 @@ const validations = {
 }
 
 const v$ = useVuelidate(validations, { item: computed(() => props.modelValue) })
+
+function parseCoordinate(value, min, max) {
+  const number = parseFloat(value)
+
+  return Number.isFinite(number) && number >= min && number <= max ? number : null
+}
+
+const parsedLatitude = computed(() => parseCoordinate(v$.value.item.latitude.$model, -90, 90))
+const parsedLongitude = computed(() => parseCoordinate(v$.value.item.longitude.$model, -180, 180))
+
+function onMarkerMoved({ latitude, longitude }) {
+  v$.value.item.latitude.$model = latitude.toFixed(6)
+  v$.value.item.longitude.$model = longitude.toFixed(6)
+}
 
 watch(
   () => props.modelValue,

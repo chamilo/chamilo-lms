@@ -28,7 +28,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             'force_wiki_paste_as_plain_text' => '',
             'enabled_googlemaps' => '',
             'enabled_imgmap' => '',
-            'enabled_support_svg' => '',
+            'enabled_support_svg' => 'false',
             'enabled_insertHtml' => '',
             'htmlpurifier_wiki' => '',
             'enable_iframe_inclusion' => '',

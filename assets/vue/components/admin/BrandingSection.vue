@@ -42,7 +42,7 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between gap-3">
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >SVG</span
           >
@@ -63,13 +63,15 @@
             v-if="headerSvgExists === true"
             :is-loading="isSaving"
             :label="t('Remove SVG')"
+            class="ml-auto"
             icon="delete"
+            size="small"
             type="danger"
             @click="removeFile('header_svg')"
           />
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between gap-3">
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >PNG</span
           >
@@ -90,7 +92,9 @@
             v-if="headerPngExists === true"
             :is-loading="isSaving"
             :label="t('Remove PNG')"
+            class="ml-auto"
             icon="delete"
+            size="small"
             type="danger"
             @click="removeFile('header_png')"
           />
@@ -166,7 +170,7 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between gap-3">
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >SVG</span
           >
@@ -187,13 +191,15 @@
             v-if="emailSvgExists === true"
             :is-loading="isSaving"
             :label="t('Remove SVG')"
+            class="ml-auto"
             icon="delete"
+            size="small"
             type="danger"
             @click="removeFile('email_svg')"
           />
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center justify-between gap-3">
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >PNG</span
           >
@@ -214,7 +220,9 @@
             v-if="emailPngExists === true"
             :is-loading="isSaving"
             :label="t('Remove PNG')"
+            class="ml-auto"
             icon="delete"
+            size="small"
             type="danger"
             @click="removeFile('email_png')"
           />

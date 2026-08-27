@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Service\StudentSuccess\StudentSuccessAnalysisStorage;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -705,6 +706,7 @@ class AiController extends AbstractController
         int $courseId,
         CourseRepository $courseRepository,
         AiCourseAnalyzerService $courseAnalyzerService,
+        StudentSuccessAnalysisStorage $studentSuccessAnalysisStorage,
         CsrfTokenManagerInterface $csrfTokenManager,
     ): Response {
         /** @var Course|null $course */
@@ -760,6 +762,32 @@ class AiController extends AbstractController
                                 $includeStandaloneDocuments,
                                 $includeStandaloneExercises,
                             );
+
+                            $structuredResponse = $result['structuredResponse'] ?? null;
+                            if (\is_array($structuredResponse) && [] !== $structuredResponse) {
+                                try {
+                                    $studentSuccessAnalysisStorage->storeCourseAnalysis(
+                                        $course,
+                                        $session,
+                                        $structuredResponse,
+                                        [
+                                            'source' => 'course_analyser',
+                                            'provider' => $selectedProvider,
+                                            'teacherPrompt' => $prompt,
+                                            'payloadStats' => \is_array($result['payloadStats'] ?? null)
+                                                ? $result['payloadStats']
+                                                : [],
+                                            'responseMode' => (string) ($result['responseMode'] ?? 'full'),
+                                            'responseRepaired' => (bool) ($result['responseRepaired'] ?? false),
+                                        ],
+                                    );
+                                } catch (Throwable $storageException) {
+                                    error_log(
+                                        '[AI][course_analyzer] Could not persist Student Success course analysis: '
+                                        .$storageException->getMessage()
+                                    );
+                                }
+                            }
                         } catch (Throwable $exception) {
                             $error = 'The AI analysis could not be completed: '.$exception->getMessage();
                         }

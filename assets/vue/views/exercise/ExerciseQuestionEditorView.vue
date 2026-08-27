@@ -932,6 +932,16 @@
           <p class="text-sm text-gray-70">
             {{ t("Use the selected markers to define blanks. Example: The capital of Peru is [Lima].") }}
           </p>
+          <p class="text-sm text-gray-70">
+            {{
+              t(
+                "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota].",
+              )
+            }}
+          </p>
+          <p class="text-sm text-gray-70">
+            {{ t("To allow several correct answers, separate them with ||. Example: 1||one||uno.") }}
+          </p>
         </div>
 
         <BaseTinyEditor

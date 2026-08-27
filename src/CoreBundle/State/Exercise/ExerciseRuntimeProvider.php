@@ -46,6 +46,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const PREG_OFFSET_CAPTURE;
 
 /**
@@ -1547,7 +1549,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $blankIndex = 0;
 
         if (preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
-            foreach ($matches[0] as $match) {
+            foreach ($matches[0] as $index => $match) {
                 $fullMatch = (string) $match[0];
                 $position = (int) $match[1];
                 $plainText = substr($text, $offset, $position - $offset);
@@ -1556,11 +1558,20 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                     $segments[] = ['type' => 'text', 'text' => $plainText];
                 }
 
-                $segments[] = [
+                $segment = [
                     'type' => 'blank',
                     'position' => $blankIndex + 1,
                     'inputSize' => (int) ($sizes[$blankIndex] ?? 200),
                 ];
+
+                $blankContent = (string) ($matches[1][$index][0] ?? '');
+                $menuOptions = $this->getFillBlankMenuOptions($blankContent);
+                if ([] !== $menuOptions) {
+                    shuffle($menuOptions);
+                    $segment['options'] = $menuOptions;
+                }
+
+                $segments[] = $segment;
 
                 $offset = $position + \strlen($fullMatch);
                 ++$blankIndex;
@@ -1573,6 +1584,27 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         }
 
         return $segments;
+    }
+
+    /**
+     * A blank written with a single "|" (e.g. [Lima|Paris|Bogota]) is a menu:
+     * the first item is the correct answer, the rest are distractors. A
+     * double "||" (e.g. [Lima||Cusco]) means "several accepted free-text
+     * answers" instead and must not be treated as a menu. Mirrors the
+     * detection in ExerciseAttemptScoringService::isFillBlankStudentAnswerGood().
+     *
+     * @return array<int, string>
+     */
+    private function getFillBlankMenuOptions(string $blankContent): array
+    {
+        if (!str_contains($blankContent, '|') || str_contains($blankContent, '||')) {
+            return [];
+        }
+
+        return array_map(
+            static fn (string $option): string => trim(html_entity_decode($option, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')),
+            explode('|', $blankContent),
+        );
     }
 
     /**

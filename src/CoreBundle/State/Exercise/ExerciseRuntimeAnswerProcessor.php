@@ -1248,7 +1248,11 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             function (array $matches) use (&$blankIndex, $blankValues, $start, $end): string {
                 ++$blankIndex;
                 $correctAnswer = (string) ($matches[1] ?? '');
-                $studentAnswer = $this->escapeFillBlankValue($blankValues[$blankIndex] ?? '');
+                $rawStudentAnswer = $blankValues[$blankIndex] ?? '';
+                if (!$this->isFillBlankMenu($correctAnswer)) {
+                    $rawStudentAnswer = trim((string) $rawStudentAnswer);
+                }
+                $studentAnswer = $this->escapeFillBlankValue($rawStudentAnswer);
 
                 return $start.$correctAnswer.$end.$start.$studentAnswer.$end.$start.'0'.$end;
             },
@@ -1289,6 +1293,18 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private function escapeFillBlankValue(mixed $value): string
     {
         return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    /**
+     * A blank written with a single "|" (menu/dropdown) submits one of its
+     * exact option values, which never has stray whitespace — only free-text
+     * inputs (plain blanks and "||" several-answer blanks) need trimming of
+     * accidental leading/trailing spaces. Mirrors the detection in
+     * ExerciseAttemptScoringService::isFillBlankStudentAnswerGood().
+     */
+    private function isFillBlankMenu(string $blankContent): bool
+    {
+        return str_contains($blankContent, '|') && !str_contains($blankContent, '||');
     }
 
     /**

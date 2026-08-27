@@ -8,8 +8,10 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useTranslatedHtml } from "../../../composables/useTranslatedHtml"
 
+const { t } = useI18n()
 const { displayTranslatedHtml } = useTranslatedHtml()
 
 const props = defineProps({
@@ -31,6 +33,15 @@ const emit = defineEmits(["update:modelValue"])
 
 const container = ref(null)
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
 const renderedHtml = computed(() =>
   props.segments
     .map((segment) => {
@@ -39,6 +50,15 @@ const renderedHtml = computed(() =>
       }
 
       const position = Math.max(1, Number(segment?.position || 1))
+
+      if (Array.isArray(segment?.options) && segment.options.length) {
+        const optionsHtml = segment.options
+          .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+          .join("")
+
+        return `<select class="mx-1 inline-block rounded border border-gray-30 px-2 py-1 text-sm" data-fill-blank-position="${position}" name="question_${props.questionId}_blank_${position}"><option value="">-- ${escapeHtml(t("Select an option"))} --</option>${optionsHtml}</select>`
+      }
+
       const width = Math.min(Math.max(Number(segment?.inputSize || 160), 80), 320)
 
       return `<input autocomplete="off" class="mx-1 inline-block rounded border border-gray-30 px-2 py-1 text-sm" data-fill-blank-position="${position}" name="question_${props.questionId}_blank_${position}" style="width: ${width}px" type="text">`
@@ -52,17 +72,18 @@ function hydrateInputs() {
     return
   }
 
-  root.querySelectorAll("input[data-fill-blank-position]").forEach((input) => {
-    const position = Math.max(1, Number(input.dataset.fillBlankPosition || 1))
+  root.querySelectorAll("input[data-fill-blank-position], select[data-fill-blank-position]").forEach((field) => {
+    const position = Math.max(1, Number(field.dataset.fillBlankPosition || 1))
     const value = String(props.modelValue?.[position] ?? "")
 
-    if (input.value !== value) {
-      input.value = value
+    if (field.value !== value) {
+      field.value = value
     }
 
-    input.oninput = (event) => {
+    const eventName = field instanceof HTMLSelectElement ? "onchange" : "oninput"
+    field[eventName] = (event) => {
       const target = event.target
-      if (!(target instanceof HTMLInputElement)) {
+      if (!(target instanceof HTMLInputElement) && !(target instanceof HTMLSelectElement)) {
         return
       }
 

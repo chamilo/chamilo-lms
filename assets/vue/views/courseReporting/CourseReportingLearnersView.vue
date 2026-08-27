@@ -453,14 +453,25 @@
 
           <Column :header="t('Details')">
             <template #body="{ data }">
-              <BaseButton
-                :label="t('Course tracking details')"
-                icon="file-text"
-                only-icon
-                size="small"
-                type="primary-alternative"
-                :route="learnerDetailRoute(data.id)"
-              />
+              <div class="flex items-center gap-2">
+                <BaseButton
+                  :label="t('Course tracking details')"
+                  icon="file-text"
+                  only-icon
+                  size="small"
+                  type="primary-alternative"
+                  :route="learnerDetailRoute(data.id)"
+                />
+                <BaseButton
+                  v-if="configuration.canUseStudentSuccessAiCoach && data.role === 'student'"
+                  :label="t('Student Success AI Coach')"
+                  icon="robot"
+                  only-icon
+                  size="small"
+                  type="primary-alternative"
+                  @click="openStudentSuccessCoach(data)"
+                />
+              </div>
             </template>
           </Column>
         </BaseTable>
@@ -524,6 +535,13 @@
         </table>
       </div>
     </section>
+  <StudentSuccessAiCoachDialog
+    v-model:visible="studentSuccessDialogVisible"
+    :learner="selectedStudentSuccessLearner"
+    :course-id="Number(configuration.courseId || cid || 0)"
+    :session-id="Number(configuration.sessionId || 0)"
+    :course-title="configuration.courseTitle || ''"
+  />
   </div>
 </template>
 
@@ -544,6 +562,7 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 import courseReportingService from "../../services/courseReportingService"
 import CourseReportingTabs from "./CourseReportingTabs.vue"
+import StudentSuccessAiCoachDialog from "../../components/courseReporting/StudentSuccessAiCoachDialog.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -551,6 +570,9 @@ const router = useRouter()
 const { cid, sid, gid, contextQuery } = useRouteCourseContext()
 
 const configuration = reactive({
+  courseId: 0,
+  courseTitle: "",
+  canUseStudentSuccessAiCoach: false,
   tabs: [],
   teachers: [],
   sessions: [],
@@ -608,6 +630,8 @@ const isExporting = ref(false)
 const errorMessage = ref("")
 const tableSortField = ref("lastname")
 const tableSortOrder = ref(1)
+const studentSuccessDialogVisible = ref(false)
+const selectedStudentSuccessLearner = ref(null)
 
 const allColumns = [
   { value: "officialCode", label: "Code" },
@@ -933,6 +957,11 @@ function learnerDetailRoute(userId) {
     params: { userId },
     query: contextQuery.value,
   }
+}
+
+function openStudentSuccessCoach(learner) {
+  selectedStudentSuccessLearner.value = learner
+  studentSuccessDialogVisible.value = true
 }
 
 async function toggleTeachers() {

@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Service\StudentSuccess\StudentSuccessAnalysisStorage;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
@@ -30,6 +32,7 @@ final class CourseReportingQueryService
     public function __construct(
         private readonly Connection $connection,
         private readonly ExtraFieldRepository $extraFieldRepository,
+        private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
     ) {}
 
     /**
@@ -82,6 +85,10 @@ final class CourseReportingQueryService
         $extraFields = [];
 
         foreach ($this->extraFieldRepository->getExtraFields(ExtraField::USER_FIELD_TYPE) as $field) {
+            if (StudentSuccessAnalysisStorage::USER_ANALYSIS_VARIABLE === $field->getVariable()) {
+                continue;
+            }
+
             $extraFields[] = [
                 'id' => (int) $field->getId(),
                 'variable' => $field->getVariable(),
@@ -103,6 +110,8 @@ final class CourseReportingQueryService
             'allowMessageTracking' => $context->allowMessageTracking,
             'showEmailAddresses' => $context->showEmailAddresses,
             'showCharts' => !$context->hideCharts,
+            'canUseStudentSuccessAiCoach' => ($context->isAdministrator || $context->isTeacher)
+                && $this->aiFeatureAccessHelper->isFeatureEnabledForCourse('course_analyser', $courseId),
             'groups' => array_map(
                 static fn (array $row): array => [
                     'label' => (string) $row['title'],

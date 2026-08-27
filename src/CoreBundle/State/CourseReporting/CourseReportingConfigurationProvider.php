@@ -43,6 +43,7 @@ final readonly class CourseReportingConfigurationProvider implements ProviderInt
         $resource->allowMessageTracking = (bool) $data['allowMessageTracking'];
         $resource->showEmailAddresses = (bool) $data['showEmailAddresses'];
         $resource->showCharts = (bool) $data['showCharts'];
+        $resource->canUseStudentSuccessAiCoach = (bool) ($data['canUseStudentSuccessAiCoach'] ?? false);
         $resource->groups = $data['groups'];
         $resource->classes = $data['classes'];
         $resource->teachers = $data['teachers'];

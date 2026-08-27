@@ -78,6 +78,9 @@ final class CourseReportingConfiguration
     #[Groups(['course_reporting_configuration:read'])]
     public bool $showCharts = true;
 
+    #[Groups(['course_reporting_configuration:read'])]
+    public bool $canUseStudentSuccessAiCoach = false;
+
     /**
      * @var array<int, array<string, mixed>>
      */

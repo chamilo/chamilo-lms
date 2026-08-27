@@ -1368,6 +1368,8 @@
               v-if="canMoveNext"
               :disabled="isSavingAnswer || isTimeExpired || isQuestionTimeExpired || isAutoAdvancingTimedQuestion"
               :label="nextNavigationLabel"
+              icon="next"
+              icon-position="right"
               type="primary"
               @click="goToNextQuestion"
             />

@@ -35,7 +35,7 @@
         </div>
       </section>
 
-      <div class="border-t border-gray-100"></div>
+      <BaseDivider />
 
       <section class="space-y-3">
         <div class="text-[11px] uppercase tracking-wide opacity-70 mb-1">
@@ -59,14 +59,14 @@
             class="text-xs opacity-60"
             >{{ t("No SVG uploaded") }}</span
           >
-          <button
+          <BaseButton
             v-if="headerSvgExists === true"
-            class="btn btn--danger ml-auto"
+            :is-loading="isSaving"
+            :label="t('Remove SVG')"
+            icon="delete"
+            type="danger"
             @click="removeFile('header_svg')"
-            :disabled="isSaving"
-          >
-            {{ t("Remove SVG") }}
-          </button>
+          />
         </div>
 
         <div class="flex items-center gap-3">
@@ -86,18 +86,18 @@
             class="text-xs opacity-60"
             >{{ t("No PNG uploaded") }}</span
           >
-          <button
+          <BaseButton
             v-if="headerPngExists === true"
-            class="btn btn--danger ml-auto"
+            :is-loading="isSaving"
+            :label="t('Remove PNG')"
+            icon="delete"
+            type="danger"
             @click="removeFile('header_png')"
-            :disabled="isSaving"
-          >
-            {{ t("Remove PNG") }}
-          </button>
+          />
         </div>
       </section>
 
-      <div class="border-t border-gray-100"></div>
+      <BaseDivider />
 
       <section class="grid grid-cols-1 gap-3">
         <div>
@@ -119,13 +119,13 @@
       </section>
 
       <div class="flex items-center gap-2">
-        <button
-          class="btn btn--success"
+        <BaseButton
+          :is-loading="isSaving"
+          :label="t('Save header logo')"
+          icon="save"
+          type="success"
           @click="uploadHeader"
-          :disabled="isSaving"
-        >
-          {{ isSaving ? t("Saving...") : t("Save header logo") }}
-        </button>
+        />
       </div>
     </div>
 
@@ -159,7 +159,7 @@
         </div>
       </section>
 
-      <div class="border-t border-gray-100"></div>
+      <BaseDivider />
 
       <section class="space-y-3">
         <div class="text-[11px] uppercase tracking-wide opacity-70 mb-1">
@@ -183,14 +183,14 @@
             class="text-xs opacity-60"
             >{{ t("No SVG uploaded") }}</span
           >
-          <button
+          <BaseButton
             v-if="emailSvgExists === true"
-            class="btn btn--danger ml-auto"
+            :is-loading="isSaving"
+            :label="t('Remove SVG')"
+            icon="delete"
+            type="danger"
             @click="removeFile('email_svg')"
-            :disabled="isSaving"
-          >
-            {{ t("Remove SVG") }}
-          </button>
+          />
         </div>
 
         <div class="flex items-center gap-3">
@@ -210,18 +210,18 @@
             class="text-xs opacity-60"
             >{{ t("No PNG uploaded") }}</span
           >
-          <button
+          <BaseButton
             v-if="emailPngExists === true"
-            class="btn btn--danger ml-auto"
+            :is-loading="isSaving"
+            :label="t('Remove PNG')"
+            icon="delete"
+            type="danger"
             @click="removeFile('email_png')"
-            :disabled="isSaving"
-          >
-            {{ t("Remove PNG") }}
-          </button>
+          />
         </div>
       </section>
 
-      <div class="border-t border-gray-100"></div>
+      <BaseDivider />
 
       <section class="grid grid-cols-1 gap-3">
         <div>
@@ -243,13 +243,13 @@
       </section>
 
       <div class="flex items-center gap-2">
-        <button
-          class="btn btn--success"
+        <BaseButton
+          :is-loading="isSaving"
+          :label="t('Save email logo')"
+          icon="save"
+          type="success"
           @click="uploadEmail"
-          :disabled="isSaving"
-        >
-          {{ isSaving ? t("Saving...") : t("Save email logo") }}
-        </button>
+        />
       </div>
     </div>
   </div>
@@ -258,7 +258,9 @@
 <script setup>
 import { ref, computed, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import BaseDivider from "../basecomponents/BaseDivider.vue"
 import themeLogoService from "../../services/themeLogoService"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const props = defineProps({
   slug: { type: String, required: true },

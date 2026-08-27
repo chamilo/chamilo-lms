@@ -31830,6 +31830,9 @@ msgstr ""
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr ""
 
+msgid "PNG recommended width: %spx."
+msgstr ""
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr ""
 
@@ -31864,6 +31867,9 @@ msgid "Click to insert"
 msgstr ""
 
 msgid "Preferred: SVG. PNG max size: %spx."
+msgstr ""
+
+msgid "PNG max size: %spx."
 msgstr ""
 
 msgid "View badge"

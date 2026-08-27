@@ -123,6 +123,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);
         $configuration['settings']['platform.use_virtual_keyboard'] = $settingsManager->getSetting('platform.use_virtual_keyboard', true);
         $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
+        $configuration['settings']['editor.enabled_support_svg'] = $settingsManager->getSetting('editor.enabled_support_svg', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
         $configuration['plugins']['dashboard'] = $this->getDashboardFrontendConfig();

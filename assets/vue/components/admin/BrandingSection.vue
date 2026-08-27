@@ -10,7 +10,9 @@
       <div>
         <h5 class="font-semibold text-base">{{ t("Header logo") }}</h5>
         <p class="text-xs opacity-70 mt-1">
-          {{ t("Preferred: SVG. PNG max size: {0}px.", ["190×60"]) }}
+          {{
+            isSvgEnabled ? t("Preferred: SVG. PNG max size: {0}px.", ["190×60"]) : t("PNG max size: {0}px.", ["190×60"])
+          }}
         </p>
       </div>
 
@@ -42,7 +44,10 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div class="flex items-center justify-between gap-3">
+        <div
+          v-if="isSvgEnabled"
+          class="flex items-center justify-between gap-3"
+        >
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >SVG</span
           >
@@ -104,7 +109,7 @@
       <BaseDivider />
 
       <section class="grid grid-cols-1 gap-3">
-        <div>
+        <div v-if="isSvgEnabled">
           <label class="text-xs block mb-1">{{ t("Upload SVG logo to platform header") }}</label>
           <input
             type="file"
@@ -138,7 +143,11 @@
       <div>
         <h5 class="font-semibold text-base">{{ t("Email logo") }}</h5>
         <p class="text-xs opacity-70 mt-1">
-          {{ t("Preferred: SVG. PNG recommended width: {0}px.", ["540"]) }}
+          {{
+            isSvgEnabled
+              ? t("Preferred: SVG. PNG recommended width: {0}px.", ["540"])
+              : t("PNG recommended width: {0}px.", ["540"])
+          }}
         </p>
       </div>
 
@@ -170,7 +179,10 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div class="flex items-center justify-between gap-3">
+        <div
+          v-if="isSvgEnabled"
+          class="flex items-center justify-between gap-3"
+        >
           <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
             >SVG</span
           >
@@ -232,7 +244,7 @@
       <BaseDivider />
 
       <section class="grid grid-cols-1 gap-3">
-        <div>
+        <div v-if="isSvgEnabled">
           <label class="text-xs block mb-1">{{ t("Upload SVG logo for e-mails") }}</label>
           <input
             type="file"
@@ -269,6 +281,11 @@ import { useI18n } from "vue-i18n"
 import BaseDivider from "../basecomponents/BaseDivider.vue"
 import themeLogoService from "../../services/themeLogoService"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
+
+const platformConfigStore = usePlatformConfig()
+
+const isSvgEnabled = computed(() => "true" === platformConfigStore.getSetting("editor.enabled_support_svg"))
 
 const props = defineProps({
   slug: { type: String, required: true },

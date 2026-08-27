@@ -133,10 +133,7 @@ class Room
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -172,10 +169,7 @@ class Room
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getGeolocation()
+    public function getGeolocation(): ?string
     {
         return $this->geolocation;
     }
@@ -187,10 +181,7 @@ class Room
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }
@@ -202,10 +193,7 @@ class Room
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIpMask()
+    public function getIpMask(): ?string
     {
         return $this->ipMask;
     }

@@ -284,57 +284,51 @@ onMounted(() => {
       :title="editingItem ? t('Edit URL') : t('Add URL')"
       header-icon="globe"
     >
-      <div class="flex flex-col gap-4 p-4 min-w-[24rem]">
-        <BaseInputText
-          id="access-url-url"
-          v-model="form.url"
-          name="url"
-          :label="t('URL')"
-          type="url"
+      <BaseInputText
+        id="access-url-url"
+        v-model="form.url"
+        name="url"
+        :label="t('URL')"
+        type="url"
+      />
+      <BaseTextArea
+        id="access-url-description"
+        v-model="form.description"
+        :label="t('Description')"
+      />
+      <BaseSelect
+        v-if="!editingItem || !editingItem.isDefault"
+        id="access-url-parent"
+        v-model="form.parentId"
+        name="parentId"
+        :label="t('Parent URL')"
+        :options="parentOptions"
+        option-label="url"
+        option-value="id"
+        allow-clear
+      />
+      <BaseCheckbox
+        v-if="editingItem && !editingItem.isDefault"
+        id="access-url-active"
+        v-model="form.active"
+        name="active"
+        :label="t('active')"
+      />
+      <BaseCheckbox
+        id="access-url-login-only"
+        v-model="form.isLoginOnly"
+        name="isLoginOnly"
+        :label="t('Login-only URL')"
+      />
+      <template #footer>
+        <BaseButton
+          :is-loading="isSaving"
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="save"
         />
-        <BaseTextArea
-          id="access-url-description"
-          v-model="form.description"
-          :label="t('Description')"
-        />
-        <BaseSelect
-          v-if="!editingItem || !editingItem.isDefault"
-          id="access-url-parent"
-          v-model="form.parentId"
-          name="parentId"
-          :label="t('Parent URL')"
-          :options="parentOptions"
-          option-label="url"
-          option-value="id"
-          allow-clear
-        />
-        <BaseCheckbox
-          v-if="editingItem && !editingItem.isDefault"
-          id="access-url-active"
-          v-model="form.active"
-          name="active"
-          :label="t('active')"
-        />
-        <BaseCheckbox
-          id="access-url-login-only"
-          v-model="form.isLoginOnly"
-          name="isLoginOnly"
-          :label="t('Login-only URL')"
-        />
-        <div class="flex justify-end gap-4 mt-2">
-          <BaseButton
-            :label="t('Cancel')"
-            type="plain"
-            @click="dialogVisible = false"
-          />
-          <BaseButton
-            :label="t('Save')"
-            type="success"
-            :is-loading="isSaving"
-            @click="save"
-          />
-        </div>
-      </div>
+      </template>
     </BaseDialog>
   </div>
 </template>

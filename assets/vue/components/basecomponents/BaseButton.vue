@@ -17,7 +17,7 @@
       :title="onlyIcon ? label : undefined"
     >
       <span
-        v-if="icon"
+        v-if="icon && iconPosition !== 'right'"
         class="p-button-icon"
         :class="chamiloIconToClass[icon]"
       />
@@ -26,6 +26,11 @@
         class="p-button-label"
         v-text="label"
       />
+      <span
+        v-if="icon && iconPosition === 'right'"
+        class="p-button-icon p-button-icon-right"
+        :class="chamiloIconToClass[icon]"
+      />
     </BaseAppLink>
   </Button>
   <Button
@@ -33,6 +38,7 @@
     :aria-label="onlyIcon ? label : undefined"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
+    :icon-pos="iconPosition"
     :label="onlyIcon ? undefined : label"
     :loading="isLoading"
     :variant="primerVariantProperty"
@@ -70,6 +76,11 @@ const props = defineProps({
     type: String,
     required: true,
     validator: iconValidator,
+  },
+  iconPosition: {
+    type: String,
+    default: "left",
+    validator: (value) => ["left", "right"].includes(value),
   },
   type: {
     type: String,

@@ -20,6 +20,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * Builds the local, teacher-only learning activity payload used by the

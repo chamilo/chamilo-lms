@@ -36,7 +36,7 @@
   <Button
     v-else
     :aria-label="onlyIcon ? label : undefined"
-    :disabled="disabled"
+    :disabled="disabled || isLoading"
     :icon="chamiloIconToClass[icon]"
     :icon-pos="iconPosition"
     :label="onlyIcon ? undefined : label"

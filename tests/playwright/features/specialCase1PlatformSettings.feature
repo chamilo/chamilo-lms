@@ -530,56 +530,73 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I wait for the page to be loaded when ready
 
     # Create two students to test internal messaging autocomplete.
-    # "... when ready" (networkidle), not the usual plain domcontentloaded,
-    # on these 3 navigations specifically: a real CI run hung the full
-    # remaining test budget waiting for "firstname" to even attach — the
-    # preceding Save's own still-settling redirect activity was confirmed
-    # capable of silently re-navigating this legacy full-page-reload form
-    # out from under us a moment after our own goto() had already resolved
-    # (the same class of race gotoReliably's own comment documents, just one
-    # step later than gotoReliably itself can guard against). Letting the
-    # network genuinely go quiet first closes that window.
-    Given I am on "/main/admin/user_add.php"
-    And I wait for the page to be loaded when ready
+    #
+    # "/admin/user-add", NOT "/main/admin/user_add.php". Master commit
+    # d89fa1a9395 ("Admin: Convert users add/edit pages to Vue") blanked the
+    # legacy page down to the project's 124-byte deprecated stub, so the old
+    # path serves an empty document — the CI run of 2026-08-26 failed here with
+    # `No form field found for "firstname"`, resolveField() correctly reporting
+    # that the page has no fields at all. All three blocks below mirror
+    # createUser.feature's "Create a HRM user" scenario, which is the proven
+    # path for creating a user with a KNOWN password in a single pass.
+    #
+    # The comment that used to sit here explained why these three navigations
+    # used "... when ready" (networkidle): a legacy full-page-reload form being
+    # re-navigated out from under the test by the preceding Save's still-settling
+    # redirect. That race was a property of the legacy page. The Vue form is a
+    # client-side route, so this follows createUser.feature and waits with
+    # "wait very long for the page to be loaded" instead.
+    #
+    # `password` has also left the fill table: the Vue form keeps that field
+    # behind a "Set password manually" radio, and that radio only renders while
+    # admins_can_set_users_pass is on — which the Save just above turns on.
+    Given I am on "/admin/user-add"
+    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Student |
       | lastname  | One     |
       | email     | student.one@example.test |
       | username  | studentone |
-      | password  | studentone |
-    And I select "Learner" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
-    And I wait for the page to be loaded
+    And I check the "Set password manually" radio button
+    And I fill in "password" with "studentone"
+    And I check the "No" radio button
+    And I press the multiselect option "Learner" in "roles"
+    And wait very long for the page to be loaded
+    And I press "Add"
+    And wait very long for the page to be loaded
     Then I should not see an error
 
-    Given I am on "/main/admin/user_add.php"
-    And I wait for the page to be loaded when ready
+    Given I am on "/admin/user-add"
+    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Student |
       | lastname  | Two     |
       | email     | student.two@example.test |
       | username  | studenttwo |
-      | password  | studenttwo |
-    And I select "Learner" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
-    And I wait for the page to be loaded
+    And I check the "Set password manually" radio button
+    And I fill in "password" with "studenttwo"
+    And I check the "No" radio button
+    And I press the multiselect option "Learner" in "roles"
+    And wait very long for the page to be loaded
+    And I press "Add"
+    And wait very long for the page to be loaded
     Then I should not see an error
 
     # Third student (no subscriptions) for the default-menu-entry check later
-    Given I am on "/main/admin/user_add.php"
-    And I wait for the page to be loaded when ready
+    Given I am on "/admin/user-add"
+    And I wait very long for the page to be loaded
     And I fill in the following:
       | firstname | Student |
       | lastname  | Three   |
       | email     | student.three@example.test |
       | username  | studentthree |
-      | password  | studentthree |
-    And I select "Learner" from "roles[]"
-    And I click the "input#send_mail_no" element
-    And I press "submit"
-    And I wait for the page to be loaded
+    And I check the "Set password manually" radio button
+    And I fill in "password" with "studentthree"
+    And I check the "No" radio button
+    And I press the multiselect option "Learner" in "roles"
+    And wait very long for the page to be loaded
+    And I press "Add"
+    And wait very long for the page to be loaded
     Then I should not see an error
 
     # Login as first student and open messaging

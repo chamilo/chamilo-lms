@@ -42,7 +42,23 @@ Feature: Student view
     And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I press "Teachers"
-    And I wait for the page content to settle
+    # Gate on the tab having ACTUALLY switched before touching "Add".
+    #
+    # CourseUserListView.vue builds the Add link as buildSubscribeRoute() ->
+    # { query: { type: userType.value } }, so the role a new subscription gets is
+    # decided by whichever tab is active AT CLICK TIME. Pressing "Teachers" and
+    # then waiting for "page content to settle" does not establish that:
+    # that wait is networkidle-based, and this app's background polling makes it
+    # resolve on a lull rather than on the re-render.
+    #
+    # The CI run of 2026-08-26 proved the consequence, and it was silent:
+    # mmosquera was subscribed as a LEARNER. The course API reported TEMP's
+    # teachers as [admin] only while listing her under users, so she never got
+    # ROLE_CURRENT_COURSE_TEACHER, and all 22 teacher scenarios below failed on
+    # a missing "Switch to student view" — pointing at the button, the selector
+    # and the tools, none of which were at fault. Asserting type=1 in the URL is
+    # the deterministic signal that the tab is live.
+    Then the URL should contain "type=1"
     And I click the "[title='Add']" element
     And I wait for the page to be loaded
     And I fill in the following:
@@ -53,24 +69,42 @@ Feature: Student view
     And I click the "[title='Register']" element
     And I wait for the page to be loaded
     Then I should see "subscribed to the course"
+    # Verify the ROLE, not merely that a subscription happened. The assertion
+    # above is satisfied identically by a learner subscription, which is exactly
+    # how this fixture spent a whole CI run doing the wrong thing while
+    # reporting success. A fixture that cannot detect its own failure mode is
+    # what turns one silent mistake into 22 misleading ones.
+    And I click the "[title='Back']" element
+    And I wait for the page to be loaded
+    Then the URL should contain "type=1"
+    And I should see "Mosquera"
 
-  Scenario: Subscribe the student to the course
+  # Asserts acostea's subscription rather than creating it, because by the time
+  # this file runs she is ALREADY subscribed and re-subscribing is impossible.
+  #
+  # Under `workers: 1` Playwright runs files in sorted order, which is fixed:
+  # course_user_registration.feature is file #24 and this one is #39. That file's
+  # own scenario is literally named 'Subscribe "acostea" as student to the course
+  # "TEMP" (leave it subscribed for further tests)'. The subscribe view excludes
+  # users who are already subscribed, so the version of this scenario that
+  # searched for her and clicked Register found no "Costea" row at all — which is
+  # precisely the non-idempotency the header comment above warns about, and how
+  # it failed in CI on 2026-08-26.
+  #
+  # Asserting is the right shape here: acostea being a course learner is a
+  # PRECONDITION of the scenarios below, not something this file owns. If the
+  # provider file ever stops leaving her subscribed, this fails immediately and
+  # says so, instead of the student scenario failing later for a reason that
+  # looks unrelated.
+  Scenario: The student is subscribed to the course
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow the course tool "Users"
     And I wait for the page to be loaded
-    And I click the "[title='Add']" element
-    And I wait for the page to be loaded
-    And I fill in the following:
-      | search | acostea |
-    And I press "Search"
-    And I wait for the page to be loaded
-    Then I should see "Costea"
-    And I click the "[title='Register']" element
-    And I wait for the page to be loaded
-    Then I should see "subscribed to the course"
+    Then the URL should contain "type=5"
+    And I should see "Costea"
 
   Scenario: The administrator loses the course description actions in the student view
     Given I am a platform administrator

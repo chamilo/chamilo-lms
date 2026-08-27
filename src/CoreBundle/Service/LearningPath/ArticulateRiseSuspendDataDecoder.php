@@ -62,7 +62,20 @@ final class ArticulateRiseSuspendDataDecoder
             return null;
         }
 
-        return $this->decodePayload($wrapper);
+        $decoded = $this->decodePayload($wrapper);
+        if (!\is_array($decoded)) {
+            return null;
+        }
+
+        $wrapperCoursePackageVersion = $wrapper['cpv'] ?? null;
+        if (!array_key_exists('cpv', $decoded)
+            && \is_string($wrapperCoursePackageVersion)
+            && '' !== trim($wrapperCoursePackageVersion)
+        ) {
+            $decoded['cpv'] = $wrapperCoursePackageVersion;
+        }
+
+        return $decoded;
     }
 
     /**

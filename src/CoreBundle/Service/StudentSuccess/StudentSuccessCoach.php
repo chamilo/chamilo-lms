@@ -15,9 +15,11 @@ use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Service\Mcp\McpTextAiService;
 use JsonException;
 use RuntimeException;
+use Stringable;
 use Throwable;
 
 use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -420,7 +422,7 @@ PROMPT
 
     private function cleanText(mixed $value, int $maxLength): string
     {
-        if (!\is_scalar($value) && !$value instanceof \Stringable) {
+        if (!\is_scalar($value) && !$value instanceof Stringable) {
             return '';
         }
 

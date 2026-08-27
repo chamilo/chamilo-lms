@@ -56,6 +56,6 @@ final class ArticulateRiseSuspendDataDecoderTest extends TestCase
         self::assertNull($this->decoder->extractProgress('{"v":3,"d":[999]}'));
         self::assertNull($this->decoder->extractProgress('{"progress":{"p":150}}'));
         self::assertFalse($this->decoder->isRiseSuspendData('{"progress":{"p":23},"cpv":""}'));
-        self::assertFalse($this->decoder->isRiseSuspendData('{"progress":{"p":23}}')); 
+        self::assertFalse($this->decoder->isRiseSuspendData('{"progress":{"p":23}}'));
     }
 }

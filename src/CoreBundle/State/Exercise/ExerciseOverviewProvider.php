@@ -33,6 +33,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const PHP_SESSION_ACTIVE;
+
 /**
  * Legacy-compatible start page data for one exercise.
  *

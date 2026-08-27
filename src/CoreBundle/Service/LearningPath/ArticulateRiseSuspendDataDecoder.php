@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 
 use JsonException;
 
+use const JSON_THROW_ON_ERROR;
+
 final class ArticulateRiseSuspendDataDecoder
 {
     public const string CONTENT_MAKER = 'Articulate Rise';
@@ -39,7 +41,7 @@ final class ArticulateRiseSuspendDataDecoder
         return \is_string($coursePackageVersion)
             && '' !== trim($coursePackageVersion)
             && \is_array($progress)
-            && $this->extractProgressFromDecoded($decoded) !== null;
+            && null !== $this->extractProgressFromDecoded($decoded);
     }
 
     /**
@@ -48,7 +50,7 @@ final class ArticulateRiseSuspendDataDecoder
     private function decodeSuspendData(string $suspendData): ?array
     {
         $suspendData = trim($suspendData);
-        if ('' === $suspendData || self::MAX_SUSPEND_DATA_LENGTH < \strlen($suspendData)) {
+        if ('' === $suspendData || \strlen($suspendData) > self::MAX_SUSPEND_DATA_LENGTH) {
             return null;
         }
 
@@ -68,7 +70,7 @@ final class ArticulateRiseSuspendDataDecoder
         }
 
         $wrapperCoursePackageVersion = $wrapper['cpv'] ?? null;
-        if (!array_key_exists('cpv', $decoded)
+        if (!\array_key_exists('cpv', $decoded)
             && \is_string($wrapperCoursePackageVersion)
             && '' !== trim($wrapperCoursePackageVersion)
         ) {
@@ -97,7 +99,7 @@ final class ArticulateRiseSuspendDataDecoder
         }
 
         $percentage = (float) $percentage;
-        if (0.0 > $percentage || 100.0 < $percentage) {
+        if ($percentage < 0.0 || $percentage > 100.0) {
             return null;
         }
 
@@ -111,7 +113,7 @@ final class ArticulateRiseSuspendDataDecoder
      */
     private function decodePayload(array $wrapper): ?array
     {
-        if (!array_key_exists('d', $wrapper)) {
+        if (!\array_key_exists('d', $wrapper)) {
             return $wrapper;
         }
 
@@ -127,7 +129,7 @@ final class ArticulateRiseSuspendDataDecoder
             return null;
         }
 
-        if (self::MAX_DECOMPRESSED_LENGTH < \strlen($json)) {
+        if (\strlen($json) > self::MAX_DECOMPRESSED_LENGTH) {
             return null;
         }
 
@@ -148,17 +150,17 @@ final class ArticulateRiseSuspendDataDecoder
     private function decompressLzw(array $compressed): ?string
     {
         $count = \count($compressed);
-        if (0 === $count || self::MAX_COMPRESSED_CODES < $count) {
+        if (0 === $count || $count > self::MAX_COMPRESSED_CODES) {
             return null;
         }
 
         $dictionary = [];
         for ($index = 0; $index < 256; ++$index) {
-            $dictionary[$index] = chr($index);
+            $dictionary[$index] = \chr($index);
         }
 
         $firstCode = $compressed[0] ?? null;
-        if (!\is_int($firstCode) || 0 > $firstCode || 255 < $firstCode) {
+        if (!\is_int($firstCode) || $firstCode < 0 || $firstCode > 255) {
             return null;
         }
 
@@ -168,7 +170,7 @@ final class ArticulateRiseSuspendDataDecoder
 
         for ($index = 1; $index < $count; ++$index) {
             $code = $compressed[$index];
-            if (!\is_int($code) || 0 > $code) {
+            if (!\is_int($code) || $code < 0) {
                 return null;
             }
 
@@ -181,7 +183,7 @@ final class ArticulateRiseSuspendDataDecoder
             }
 
             $result .= $entry;
-            if (self::MAX_DECOMPRESSED_LENGTH < \strlen($result)) {
+            if (\strlen($result) > self::MAX_DECOMPRESSED_LENGTH) {
                 return null;
             }
 

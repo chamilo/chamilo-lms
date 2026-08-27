@@ -59,8 +59,10 @@ final class StudentSuccessController extends AbstractController
 
         /** @var Course $course */
         $course = $context['course'];
+
         /** @var Session|null $session */
         $session = $context['session'];
+
         /** @var User $student */
         $student = $context['student'];
 
@@ -214,8 +216,10 @@ final class StudentSuccessController extends AbstractController
 
         /** @var Course $course */
         $course = $context['course'];
+
         /** @var Session|null $session */
         $session = $context['session'];
+
         /** @var User $student */
         $student = $context['student'];
         $sessionId = (int) ($session?->getId() ?? 0);
@@ -251,8 +255,10 @@ final class StudentSuccessController extends AbstractController
 
         /** @var Course $course */
         $course = $context['course'];
+
         /** @var Session|null $session */
         $session = $context['session'];
+
         /** @var User $student */
         $student = $context['student'];
 

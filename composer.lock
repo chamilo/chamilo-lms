@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c526d75baebc9869af928045d807e48f",
+    "content-hash": "3ab1d6e7dbdbe9c1721479add3f73141",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -675,6 +675,195 @@
             "time": "2026-07-15T18:08:26+00:00"
         },
         {
+            "name": "azure-oss/identity",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-oss-for-azure/azure-identity-php.git",
+                "reference": "419e221cb1b29a8189f19c1e253bb6a54c1accc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-oss-for-azure/azure-identity-php/zipball/419e221cb1b29a8189f19c1e253bb6a54c1accc1",
+                "reference": "419e221cb1b29a8189f19c1e253bb6a54c1accc1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "php": "^8.1",
+                "php-http/discovery": "^1.20",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.1"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.10",
+                "laravel/pint": "^1.27",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^13.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Provides a PSR-18 HTTP client and PSR-17 factories (used by default when installed)."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AzureOss\\Identity\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/Azure-OSS/azure-identity-php/issues",
+                "source": "https://github.com/Azure-OSS/azure-identity-php/tree/1.0.0"
+            },
+            "time": "2026-03-13T18:32:57+00:00"
+        },
+        {
+            "name": "azure-oss/storage-blob",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-oss-for-azure/azure-storage-blob-php.git",
+                "reference": "e425bb7ce9715b53b5765611695d06277ed7d58d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-oss-for-azure/azure-storage-blob-php/zipball/e425bb7ce9715b53b5765611695d06277ed7d58d",
+                "reference": "e425bb7ce9715b53b5765611695d06277ed7d58d",
+                "shasum": ""
+            },
+            "require": {
+                "azure-oss/storage-common": "^2.0",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.8 || ^8.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AzureOss\\Storage\\Blob\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brecht Vermeersch",
+                    "email": "brechtvermeersch@outlook.be"
+                },
+                {
+                    "name": "Pim Jansen",
+                    "email": "pimjansen@gmail.com"
+                }
+            ],
+            "description": "Azure Blob Storage PHP SDK",
+            "keywords": [
+                "azure",
+                "php",
+                "sdk",
+                "storage"
+            ],
+            "support": {
+                "source": "https://github.com/php-oss-for-azure/azure-storage-blob-php/tree/2.3.0"
+            },
+            "time": "2026-08-20T13:21:39+00:00"
+        },
+        {
+            "name": "azure-oss/storage-blob-flysystem",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-oss-for-azure/azure-storage-blob-flysystem-php.git",
+                "reference": "0d5fcd8c2cb7f3756e0d1576cbef6bbc29074644"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-oss-for-azure/azure-storage-blob-flysystem-php/zipball/0d5fcd8c2cb7f3756e0d1576cbef6bbc29074644",
+                "reference": "0d5fcd8c2cb7f3756e0d1576cbef6bbc29074644",
+                "shasum": ""
+            },
+            "require": {
+                "azure-oss/storage-blob": "^2.2",
+                "league/flysystem": "^3.28",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AzureOss\\Storage\\BlobFlysystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brecht Vermeersch",
+                    "email": "brechtvermeersch@outlook.be"
+                },
+                {
+                    "name": "Pim Jansen",
+                    "email": "pimjansen@gmail.com"
+                }
+            ],
+            "description": "Flysystem adapter for Azure Storage PHP",
+            "support": {
+                "source": "https://github.com/php-oss-for-azure/azure-storage-blob-flysystem-php/tree/2.2.1"
+            },
+            "time": "2026-08-20T13:21:39+00:00"
+        },
+        {
+            "name": "azure-oss/storage-common",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-oss-for-azure/azure-storage-common-php.git",
+                "reference": "f658c5c60a4adf36b0b23381a30038553fa40df6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-oss-for-azure/azure-storage-common-php/zipball/f658c5c60a4adf36b0b23381a30038553fa40df6",
+                "reference": "f658c5c60a4adf36b0b23381a30038553fa40df6",
+                "shasum": ""
+            },
+            "require": {
+                "azure-oss/identity": "^1.0",
+                "caseyamcl/guzzle_retry_middleware": "^2.13 || ^3.0",
+                "guzzlehttp/guzzle": "^7.8 || ^8.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AzureOss\\Storage\\Common\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brecht Vermeersch",
+                    "email": "brechtvermeersch@outlook.be"
+                }
+            ],
+            "description": "Shared primitives for Azure Storage PHP SDK packages",
+            "support": {
+                "source": "https://github.com/php-oss-for-azure/azure-storage-common-php/tree/2.2.0"
+            },
+            "time": "2026-08-20T13:21:39+00:00"
+        },
+        {
             "name": "bacon/bacon-qr-code",
             "version": "2.0.8",
             "source": {
@@ -984,6 +1173,79 @@
                 }
             ],
             "time": "2023-12-11T17:09:12+00:00"
+        },
+        {
+            "name": "caseyamcl/guzzle_retry_middleware",
+            "version": "v2.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caseyamcl/guzzle_retry_middleware.git",
+                "reference": "17c9299cde438b00bbeb099c6480319a81636a60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caseyamcl/guzzle_retry_middleware/zipball/17c9299cde438b00bbeb099c6480319a81636a60",
+                "reference": "17c9299cde438b00bbeb099c6480319a81636a60",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3|^7.0",
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "jaschilz/php-coverage-badger": "^2.0",
+                "nesbot/carbon": "^2.0|^3.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^7.5|^8.0|^9.0",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symfony/var-dumper": "^5.0|^6.0|^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleRetry\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Casey McLaughlin",
+                    "email": "caseyamcl@gmail.com",
+                    "homepage": "https://caseymclaughlin.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Guzzle v6+ retry middleware that handles 429/503 status codes and connection timeouts",
+            "homepage": "https://github.com/caseyamcl/guzzle_retry_middleware",
+            "keywords": [
+                "Guzzle",
+                "back-off",
+                "caseyamcl",
+                "guzzle_retry_middleware",
+                "middleware",
+                "retry",
+                "retry-after"
+            ],
+            "support": {
+                "issues": "https://github.com/caseyamcl/guzzle_retry_middleware/issues",
+                "source": "https://github.com/caseyamcl/guzzle_retry_middleware/tree/v2.13.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/caseyamcl",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-07-11T12:33:22+00:00"
         },
         {
             "name": "chamilo/google-map-form-type-bundle",
@@ -6225,47 +6487,6 @@
             "time": "2026-07-01T23:25:49+00:00"
         },
         {
-            "name": "league/flysystem-azure-blob-storage",
-            "version": "3.31.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/flysystem-azure-blob-storage.git",
-                "reference": "1d1cf31cab62bd85cfbab91687d35e668423401f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-azure-blob-storage/zipball/1d1cf31cab62bd85cfbab91687d35e668423401f",
-                "reference": "1d1cf31cab62bd85cfbab91687d35e668423401f",
-                "shasum": ""
-            },
-            "require": {
-                "league/flysystem": "^3.10.0",
-                "microsoft/azure-storage-blob": "^1.1",
-                "php": "^8.0.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "League\\Flysystem\\AzureBlobStorage\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Frank de Jonge",
-                    "email": "info@frankdejonge.nl"
-                }
-            ],
-            "support": {
-                "source": "https://github.com/thephpleague/flysystem-azure-blob-storage/tree/3.31.0"
-            },
-            "abandoned": "azure-oss/storage-blob-flysystem",
-            "time": "2026-01-23T15:30:45+00:00"
-        },
-        {
             "name": "league/flysystem-google-cloud-storage",
             "version": "3.34.0",
             "source": {
@@ -7557,103 +7778,6 @@
                 "source": "https://github.com/michelf/php-markdown/tree/1.9.1"
             },
             "time": "2021-11-24T02:52:38+00:00"
-        },
-        {
-            "name": "microsoft/azure-storage-blob",
-            "version": "1.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Azure/azure-storage-blob-php.git",
-                "reference": "1023ce1dbf062351a32ca5ec72ad1fd4a504f1bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Azure/azure-storage-blob-php/zipball/1023ce1dbf062351a32ca5ec72ad1fd4a504f1bf",
-                "reference": "1023ce1dbf062351a32ca5ec72ad1fd4a504f1bf",
-                "shasum": ""
-            },
-            "require": {
-                "microsoft/azure-storage-common": "~1.5",
-                "php": ">=5.6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "MicrosoftAzure\\Storage\\Blob\\": "src/Blob"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Azure Storage PHP Client Library",
-                    "email": "dmsh@microsoft.com"
-                }
-            ],
-            "description": "This project provides a set of PHP client libraries that make it easy to access Microsoft Azure Storage Blob APIs.",
-            "keywords": [
-                "azure",
-                "blob",
-                "php",
-                "sdk",
-                "storage"
-            ],
-            "support": {
-                "issues": "https://github.com/Azure/azure-storage-blob-php/issues",
-                "source": "https://github.com/Azure/azure-storage-blob-php/tree/v1.5.4"
-            },
-            "abandoned": true,
-            "time": "2022-09-02T02:13:06+00:00"
-        },
-        {
-            "name": "microsoft/azure-storage-common",
-            "version": "1.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Azure/azure-storage-common-php.git",
-                "reference": "8ca7b1bf4c9ca7c663e75a02a0035b05b37196a0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Azure/azure-storage-common-php/zipball/8ca7b1bf4c9ca7c663e75a02a0035b05b37196a0",
-                "reference": "8ca7b1bf4c9ca7c663e75a02a0035b05b37196a0",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "~6.0|^7.0",
-                "php": ">=5.6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "MicrosoftAzure\\Storage\\Common\\": "src/Common"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Azure Storage PHP Client Library",
-                    "email": "dmsh@microsoft.com"
-                }
-            ],
-            "description": "This project provides a set of common code shared by Azure Storage Blob, Table, Queue and File PHP client libraries.",
-            "keywords": [
-                "azure",
-                "common",
-                "php",
-                "sdk",
-                "storage"
-            ],
-            "support": {
-                "issues": "https://github.com/Azure/azure-storage-common-php/issues",
-                "source": "https://github.com/Azure/azure-storage-common-php/tree/v1.5.2"
-            },
-            "time": "2021-10-09T03:03:47+00:00"
         },
         {
             "name": "minishlink/web-push",

@@ -327,7 +327,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             }
         }
 
-        if ($this->isAllowedToSeeResults()) {
+        if ($this->isAllowedToSeeResults($exerciseTracking)) {
             $show_results = true;
         }
 
@@ -442,14 +442,18 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         return $stats;
     }
 
-    private function isAllowedToSeeResults(): bool
+    /**
+     * Whether the exercise's own results_disabled setting is overridden for this user, i.e. the
+     * $is_allowedToEdit of the legacy exercise_show.php.
+     *
+     * The roles this used to read — ROLE_STUDENT_BOSS, ROLE_HR, ROLE_SESSION_MANAGER — were
+     * global, and ROLE_CURRENT_COURSE_SESSION_TEACHER answers for the course named in the
+     * request, so any holder of them overrode the setting on every attempt of the platform.
+     * TrackEExerciseVoter weighs each of them against this attempt's own owner, course
+     * and session.
+     */
+    private function isAllowedToSeeResults(TrackEExercise $trackExercise): bool
     {
-        $isStudentBoss = $this->security->isGranted('ROLE_STUDENT_BOSS');
-        $isHRM = $this->security->isGranted('ROLE_HR');
-        $isSessionAdmin = $this->security->isGranted('ROLE_SESSION_MANAGER');
-        $isCourseTutor = $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
-        $isAllowedToEdit = api_is_allowed_to_edit(false, true);
-
-        return $isAllowedToEdit || $isCourseTutor || $isSessionAdmin || $isHRM || $isStudentBoss;
+        return $this->security->isGranted(TrackEExerciseVoter::MANAGE, $trackExercise);
     }
 }

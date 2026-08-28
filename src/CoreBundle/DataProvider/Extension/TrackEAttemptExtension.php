@@ -9,20 +9,19 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
-use Chamilo\CoreBundle\Entity\User;
-use Doctrine\DBAL\Types\Types;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
+use Chamilo\CoreBundle\Security\ExerciseAttemptScopeFactory;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 readonly class TrackEAttemptExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private Security $security,
+        private ExerciseAttemptScopeFactory $exerciseAttemptScopeFactory,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     public function applyToCollection(
@@ -40,38 +39,16 @@ readonly class TrackEAttemptExtension implements QueryCollectionExtensionInterfa
             return;
         }
 
-        $user = $this->security->getUser();
+        $scope = $this->exerciseAttemptScopeFactory->fromToken($this->security->getToken());
 
-        if (!$user instanceof UserInterface) {
-            return;
+        // Never fall through without a WHERE: that would hand back the whole table.
+        if (null === $scope) {
+            throw new AccessDeniedException('Access denied to exercise attempts.');
         }
 
-        \assert($user instanceof User);
-
         $alias = $queryBuilder->getRootAliases()[0];
+        $queryBuilder->innerJoin("$alias.trackExercise", 'tee');
 
-        $teacherExistsDql = \sprintf(
-            'SELECT 1 FROM %s cru WHERE cru.course = tee.course AND cru.user = :current_user AND cru.status = :teacher_status',
-            CourseRelUser::class
-        );
-
-        $coachExistsDql = \sprintf(
-            'SELECT 1 FROM %s srcru WHERE srcru.course = tee.course AND srcru.session = tee.session AND srcru.user = :current_user AND srcru.status = :coach_status',
-            SessionRelCourseRelUser::class
-        );
-
-        $queryBuilder
-            ->innerJoin("$alias.trackExercise", 'tee')
-            ->andWhere(
-                $queryBuilder->expr()->orX(
-                    'tee.user = :current_user',
-                    $queryBuilder->expr()->exists($teacherExistsDql),
-                    $queryBuilder->expr()->exists($coachExistsDql),
-                )
-            )
-            ->setParameter('current_user', $user->getId(), Types::INTEGER)
-            ->setParameter('teacher_status', CourseRelUser::TEACHER, Types::INTEGER)
-            ->setParameter('coach_status', Session::COURSE_COACH, Types::INTEGER)
-        ;
+        $this->trackEExerciseRepository->addViewCriteria($queryBuilder, 'tee', $scope);
     }
 }

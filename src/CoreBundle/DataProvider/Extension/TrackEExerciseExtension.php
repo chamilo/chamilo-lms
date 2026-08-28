@@ -10,7 +10,8 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
+use Chamilo\CoreBundle\Security\ExerciseAttemptScopeFactory;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -18,7 +19,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
-        private readonly Security $security
+        private readonly Security $security,
+        private readonly ExerciseAttemptScopeFactory $exerciseAttemptScopeFactory,
+        private readonly TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     public function applyToCollection(
@@ -36,21 +39,19 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        $alias = $queryBuilder->getRootAliases()[0];
+        $scope = $this->exerciseAttemptScopeFactory->fromToken($this->security->getToken());
 
-        /** @var User|null $user */
-        $user = $this->security->getUser();
-
-        if (!$user) {
-            throw new AccessDeniedException();
+        // The previous version only narrowed the query for students, so every other role read
+        // the attempts of the whole platform.
+        if (null === $scope) {
+            throw new AccessDeniedException('Access denied to exercise attempts.');
         }
 
-        if ($user->isStudent()) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq("$alias.user", ':user')
-            );
-
-            $queryBuilder->setParameter('user', $user->getId());
-        }
+        // The root alias is the TrackEExercise itself, so no join is needed here.
+        $this->trackEExerciseRepository->addViewCriteria(
+            $queryBuilder,
+            $queryBuilder->getRootAliases()[0],
+            $scope
+        );
     }
 }

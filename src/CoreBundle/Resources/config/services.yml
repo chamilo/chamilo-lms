@@ -19,7 +19,7 @@ services:
 
     Chamilo\CoreBundle\:
       resource: '../../*'
-      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Tool/LegacyPluginCourseTool.php}'
+      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Security/ExerciseAttemptScope.php,Tool/LegacyPluginCourseTool.php}'
       public: true
 
     Doctrine\Migrations\Version\DbalMigrationFactory: ~

@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * A grading row is readable exactly when the attempt it belongs to is.
+ * An answer row is readable exactly when the attempt it belongs to is.
  *
- * @extends Voter<'VIEW', TrackEAttemptQualify>
+ * @extends Voter<'VIEW', TrackEAttempt>
  */
-class TrackEAttemptQualifyVoter extends Voter
+class TrackEAttemptVoter extends Voter
 {
     public const string VIEW = 'VIEW';
 
@@ -27,21 +27,19 @@ class TrackEAttemptQualifyVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $subject instanceof TrackEAttemptQualify && self::VIEW === $attribute;
+        return $subject instanceof TrackEAttempt && self::VIEW === $attribute;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
-        \assert($subject instanceof TrackEAttemptQualify);
-
-        $trackExercise = $subject->getTrackExercise();
-
-        if (null === $trackExercise) {
-            return false;
-        }
+        \assert($subject instanceof TrackEAttempt);
 
         // Delegate through the AccessDecisionManager, not Security::isGranted, so the nested
         // decision runs against the exact token passed to this voter.
-        return $this->accessDecisionManager->decide($token, [TrackEExerciseVoter::VIEW], $trackExercise);
+        return $this->accessDecisionManager->decide(
+            $token,
+            [TrackEExerciseVoter::VIEW],
+            $subject->getTrackEExercise()
+        );
     }
 }

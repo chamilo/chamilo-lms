@@ -754,6 +754,28 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Whether $bossUserId is a student boss of $targetUserId through the UserRelUser BOSS
+     * relation. Native replacement for UserManager::userIsBossOfStudent().
+     */
+    public function isUserBossOfStudent(int $targetUserId, int $bossUserId): bool
+    {
+        $count = (int) $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(uru.id)')
+            ->from(UserRelUser::class, 'uru')
+            ->where('uru.user = :target')
+            ->andWhere('uru.friend = :boss')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('target', $targetUserId)
+            ->setParameter('boss', $bossUserId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_BOSS)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
      * Get number of users in URL.
      *
      * @return int

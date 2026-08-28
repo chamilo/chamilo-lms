@@ -105,7 +105,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             throw new BadRequestHttpException('A valid exercise and attempt are required.');
         }
 
-        $canManage = $this->isAllowedToEditHelper->check(coach: true);
+        // tutor: true restores the course tutor, whom result.php reached through its
+        // api_is_course_tutor() term. Same criterion as TrackEExerciseVoter.
+        $canManage = $this->isAllowedToEditHelper->check(tutor: true, coach: true);
         if (!$canManage && !$this->canViewExercises()) {
             throw new AccessDeniedHttpException('You are not allowed to view this exercise result.');
         }

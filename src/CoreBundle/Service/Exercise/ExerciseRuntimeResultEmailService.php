@@ -297,7 +297,7 @@ final readonly class ExerciseRuntimeResultEmailService
             ->select('DISTINCT attempt', 'user')
             ->from(TrackEExercise::class, 'attempt')
             ->innerJoin('attempt.user', 'user')
-            ->innerJoin('attempt.revisedAttempts', 'qualify', 'WITH', 'qualify.author > 0')
+            ->innerJoin('attempt.revisedAttempts', 'qualify', 'WITH', 'qualify.author > 0 AND qualify.final = true')
             ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(attempt.course) = :courseId')
             ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)

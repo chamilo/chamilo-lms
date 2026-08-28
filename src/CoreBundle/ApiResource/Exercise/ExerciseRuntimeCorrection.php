@@ -69,6 +69,16 @@ final class ExerciseRuntimeCorrection
     #[Groups(['exercise_runtime_correction:read', 'exercise_runtime_correction:write'])]
     public string $teacherComment = '';
 
+    /**
+     * Whether this correction is final (validated) or a draft save.
+     *
+     * A draft save (false) persists the entered marks/comment and keeps a history
+     * entry in track_e_attempt_qualify, but with final = false, so the attempt is
+     * not considered "revised" and the question stays pending review.
+     */
+    #[Groups(['exercise_runtime_correction:write'])]
+    public bool $final = true;
+
     #[Groups(['exercise_runtime_correction:write'])]
     public bool $sendNotification = false;
 

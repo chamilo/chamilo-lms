@@ -37997,6 +37997,9 @@ msgstr ""
 msgid "Draft saved"
 msgstr ""
 
+msgid "Save as draft"
+msgstr ""
+
 msgid "Statement"
 msgstr ""
 

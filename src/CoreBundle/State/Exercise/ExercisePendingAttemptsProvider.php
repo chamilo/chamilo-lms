@@ -383,6 +383,7 @@ EXISTS (
     FROM track_e_attempt_qualify taq
     WHERE taq.exe_id = te.exe_id
       AND taq.author > 0
+      AND taq.final = 1
     LIMIT 1
 )
 SQL;
@@ -398,6 +399,7 @@ CASE
         FROM track_e_attempt_qualify taq
         WHERE taq.exe_id = te.exe_id
           AND taq.author > 0
+      AND taq.final = 1
         LIMIT 1
     ) THEN 1
     ELSE 0
@@ -415,6 +417,7 @@ COALESCE((
         ON author.id = taq.author
     WHERE taq.exe_id = te.exe_id
       AND taq.author > 0
+      AND taq.final = 1
     ORDER BY taq.insert_date DESC
     LIMIT 1
 ), '')
@@ -429,6 +432,7 @@ COALESCE((
     FROM track_e_attempt_qualify taq
     WHERE taq.exe_id = te.exe_id
       AND taq.author > 0
+      AND taq.final = 1
     ORDER BY taq.insert_date DESC
     LIMIT 1
 ), '')

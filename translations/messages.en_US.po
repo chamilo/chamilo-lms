@@ -38080,6 +38080,9 @@ msgstr "Finishing"
 msgid "Draft saved"
 msgstr "Draft saved"
 
+msgid "Save as draft"
+msgstr "Save as draft"
+
 msgid "Statement"
 msgstr "Statement"
 

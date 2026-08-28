@@ -207,7 +207,7 @@ class ExerciseResult
                 } else {
                     $sql_exe = "SELECT exe_id
                             FROM $tblTrackAttemptQualify
-                            WHERE author != '' AND exe_id = ".(int) $result['exid']."
+                            WHERE author != '' AND final = 1 AND exe_id = ".(int) $result['exid']."
                             LIMIT 1";
                     $query = Database::query($sql_exe);
                     if (Database::num_rows($query) > 0) {

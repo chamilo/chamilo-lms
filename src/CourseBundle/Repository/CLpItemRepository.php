@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -16,6 +17,8 @@ final class CLpItemRepository extends ServiceEntityRepository
 {
     use NestedTreeRepositoryTrait;
     use NonResourceRepository;
+
+    private const string ITEM_TYPE_QUIZ = 'quiz';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -76,6 +79,51 @@ final class CLpItemRepository extends ServiceEntityRepository
             'path' => (string) $row['path'],
             'lpId' => (int) $row['lpId'],
         ];
+    }
+
+    /**
+     * Whether the learning path really contains this exercise as the given item, through a link
+     * that is published in the course and session.
+     */
+    public function hasPublishedQuizItem(
+        int $itemId,
+        int $learningPathId,
+        int $exerciseId,
+        int $courseId,
+        ?int $sessionId
+    ): bool {
+        $queryBuilder = $this->createQueryBuilder('item')
+            ->select('item.iid')
+            ->innerJoin('item.lp', 'lp')
+            ->innerJoin('lp.resourceNode', 'lpNode')
+            ->innerJoin('lpNode.resourceLinks', 'lpLinks')
+            ->andWhere('item.iid = :itemId')
+            ->andWhere('IDENTITY(item.lp) = :learningPathId')
+            ->andWhere('item.itemType = :itemType')
+            ->andWhere('(item.path = :exerciseIdString OR item.ref = :exerciseIdString)')
+            ->andWhere('IDENTITY(lpLinks.course) = :courseId')
+            ->andWhere('lpLinks.visibility = :publishedVisibility')
+            ->andWhere('lpLinks.deletedAt IS NULL')
+            ->andWhere('lpLinks.endVisibilityAt IS NULL')
+            ->setParameter('itemId', $itemId)
+            ->setParameter('learningPathId', $learningPathId)
+            ->setParameter('itemType', self::ITEM_TYPE_QUIZ)
+            ->setParameter('exerciseIdString', (string) $exerciseId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('publishedVisibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ->setMaxResults(1)
+        ;
+
+        if (null !== $sessionId) {
+            $queryBuilder
+                ->andWhere('(IDENTITY(lpLinks.session) = :sessionId OR lpLinks.session IS NULL)')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $queryBuilder->andWhere('lpLinks.session IS NULL');
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     public function findLearningPathsUsingDocument(int $resourceFileId): array

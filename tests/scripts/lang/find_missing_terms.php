@@ -88,7 +88,7 @@ foreach ($dirsToScan as $dir) {
             }
         }
 
-        $lines = file($path);
+        $lines = coalesceWrappedCalls(file($path));
         foreach ($lines as $num => $line) {
             $terms = extractTermsFromLine($line, $isVue);
             $hiddenTerms = extractHiddenTermsFromLine($line, $isVue);
@@ -327,6 +327,53 @@ function registerPotMsgid(array &$msgids, string $rawMsgid): void
     }
 }
 
+/**
+ * The extraction regexes below match a whole call on a single physical line
+ * (e.g. `t\s*\(...\)`). Prettier is free to wrap a long string's call across
+ * several lines (opening paren, string, and closing paren each on their own
+ * line), which leaves no single physical line containing the full call, so it
+ * is silently never scanned. Re-join such calls into one logical line, keyed
+ * at their starting line number, before the per-line extraction runs.
+ *
+ * Detection is a plain parenthesis count, not a parser: a line containing one
+ * of the trigger tokens with more "(" than ")" absorbs following lines until
+ * balanced. Lookahead is capped so a stray unbalanced line can't drag in the
+ * rest of a large legacy file.
+ */
+function coalesceWrappedCalls(array $lines): array
+{
+    $triggerPattern = '/\b(?:t|get_lang|trans)\s*\(|\$t\s*\(|\bv-t\s*=/';
+    $maxLookaheadLines = 20;
+    $count = count($lines);
+
+    for ($start = 0; $start < $count; $start++) {
+        if (!preg_match($triggerPattern, $lines[$start])) {
+            continue;
+        }
+
+        $open = substr_count($lines[$start], '(');
+        $close = substr_count($lines[$start], ')');
+        if ($open <= $close) {
+            continue;
+        }
+
+        $joined = $lines[$start];
+        $absorbed = 0;
+        $cursor = $start;
+        while ($open > $close && $absorbed < $maxLookaheadLines && ($cursor + 1) < $count) {
+            $cursor++;
+            $joined .= $lines[$cursor];
+            $open += substr_count($lines[$cursor], '(');
+            $close += substr_count($lines[$cursor], ')');
+            $lines[$cursor] = ''; // merged into $start; leave the slot empty so it isn't scanned twice
+            $absorbed++;
+        }
+        $lines[$start] = $joined;
+    }
+
+    return $lines;
+}
+
 function extractTermsFromLine(string $line, bool $isVue): array
 {
     $terms = [];
@@ -337,23 +384,23 @@ function extractTermsFromLine(string $line, bool $isVue): array
         addUnescapedTerms($matches, $terms);
 
         // 2. {{ $t("term") }}
-        preg_match_all('/\{\{\s*\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)\s*\}\}/', $line, $matches);
+        preg_match_all('/\{\{\s*\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)\s*\}\}/s', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 3. :label="$t('term')"
-        preg_match_all('/:\w+\s*=\s*["\']\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)["\']/', $line, $matches);
+        preg_match_all('/:\w+\s*=\s*["\']\$t\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)["\']/s', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 4. t("term") - exact t(
-        preg_match_all('/\bt\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)/', $line, $matches);
+        preg_match_all('/\bt\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*?)?\)/s', $line, $matches);
         addUnescapedTerms($matches, $terms);
     } else {
         // get_lang("term")
-        preg_match_all('/(?<!\$this->)(?<!\$plugin->)\bget_lang\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/', $line, $matches);
+        preg_match_all('/(?<!\$this->)(?<!\$plugin->)\bget_lang\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/s', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // trans("term"), ->trans("term"), .trans("term")
-        preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/', $line, $matches);
+        preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])'.QUOTED_CONTENT.'\1\s*(?:,.*)?\)/s', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // 'display_text' => 'term',
@@ -378,7 +425,7 @@ function extractHiddenTermsFromLine(string $line, bool $isVue): array
 
     // $this->get_lang("term") or $plugin->get_lang("term")
     // Group 1: this|plugin, Group 2: quote, Group 3: term content
-    preg_match_all('/\$(this|plugin)->get_lang\s*\(\s*(["\'])((?:\\\\.|(?!\2)[^\\\\])*)\2\s*(?:,.*)?\)/', $line, $matches);
+    preg_match_all('/\$(this|plugin)->get_lang\s*\(\s*(["\'])((?:\\\\.|(?!\2)[^\\\\])*)\2\s*(?:,.*)?\)/s', $line, $matches);
     // Shift groups: addUnescapedTerms expects group 1=quote, group 2=term
     if (!empty($matches[0])) {
         $shifted = [
